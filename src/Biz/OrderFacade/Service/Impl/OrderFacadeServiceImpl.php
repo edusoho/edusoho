@@ -46,7 +46,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    private function getRefundDays()
+    public function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
 
@@ -78,6 +78,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'num' => $product->num,
             'unit' => $product->unit,
             'create_extra' => $product->getCreateExtra(),
+            'snapshot' => $product->getSnapShot(),
         );
 
         $orderItem = MathToolkit::multiply(
@@ -117,8 +118,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
     }
 
-    public function createSpecialOrder(Product $product, $userId, $params = array())
+    /**
+     * @param $type 用于查找相应的实现类， 目前分为 'OrderFacade' 和 'Marketing'
+     */
+    public function createSpecialOrder(Product $product, $userId, $params = array(), $type = 'OrderFacade')
     {
+        $sepcialOrderService = $this->createService($type.':SpecialOrderService');
+
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
@@ -128,6 +134,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'create_extra' => empty($params['create_extra']) ? '' : $params['create_extra'],
             'deducts' => empty($params['deducts']) ? array() : $params['deducts'],
         );
+
+        $orderFields = $sepcialOrderService->beforeCreateOrder($orderFields, $params);
 
         $orderItems = $this->makeOrderItems($product);
 
@@ -146,6 +154,9 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'pay_time' => 0,
             'order_sn' => $order['sn'],
         );
+
+        $data = $sepcialOrderService->beforePayOrder($data, $params);
+
         $order = $this->getWorkflowService()->paid($data);
 
         return $order;

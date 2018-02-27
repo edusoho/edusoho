@@ -232,25 +232,25 @@ class OrderExtension extends \Twig_Extension
         $text = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('orderDisplayStatus', $displayStatus);
         switch ($displayStatus) {
             case 'notPaid':
-                $majorClass = 'cd-status-warning';
+                $majorClass = 'es-status-warning';
                 break;
             case 'paid':
-                $majorClass = 'cd-status-info';
+                $majorClass = 'es-status-info';
                 break;
             case 'refunded':
-                $majorClass = 'cd-status-danger';
+                $majorClass = 'es-status-danger';
                 break;
             case 'closed':
-                $majorClass = 'cd-status-disabled';
+                $majorClass = 'es-status-disabled';
                 break;
             case 'finished':
-                $majorClass = 'cd-status-success';
+                $majorClass = 'es-status-success';
                 break;
             default:
-                $majorClass = 'cd-status-disabled';
+                $majorClass = 'es-status-disabled';
         }
 
-        return sprintf('<span class="cd-status %s">%s</span>', $majorClass, $text);
+        return sprintf('<span class="es-status %s">%s</span>', $majorClass, $text);
     }
 
     public function getName()

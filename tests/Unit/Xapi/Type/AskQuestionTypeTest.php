@@ -11,6 +11,34 @@ class AskQuestionTypeTest extends BaseTestCase
 {
     public function testPackage()
     {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                    ),
+                ),
+            )
+        );
+
         $threadService = $this->mockBiz(
             'Course:ThreadService',
             array(
@@ -129,6 +157,34 @@ class AskQuestionTypeTest extends BaseTestCase
     {
         $biz = $this->getBiz();
         $obj = $biz['xapi.push.asked_question'];
+
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                    ),
+                ),
+            )
+        );
 
         $this->mockBiz('Course:ThreadService', array(
             array('functionName' => 'getThread', 'returnValue' => array('id' => 1, 'type' => 'discussion', 'title' => 'thread title', 'content' => 'thread content',  'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1)),

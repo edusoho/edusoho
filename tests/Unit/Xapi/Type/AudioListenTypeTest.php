@@ -14,6 +14,34 @@ class AudioListenTypeTest extends BaseTestCase
         $biz = $this->getBiz();
         $obj = $biz['xapi.push.listen_audio'];
 
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                    ),
+                ),
+            )
+        );
+
         $this->mockBiz('Xapi:XapiService', array(
             array('functionName' => 'getWatchLog', 'returnValue' => array('id' => 1, 'title' => 'log title', 'content' => 'log content', 'watched_time' => 100, 'task_id' => 1, 'course_id' => 1, 'courseSetId' => 1)),
             array('functionName' => 'getXapiSdk', 'returnValue' => $this->getXapiService()->getXapiSdk()),

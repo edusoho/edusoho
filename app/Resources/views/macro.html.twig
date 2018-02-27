@@ -101,7 +101,7 @@
 {% macro paginator(paginator, class) %}
   {% if paginator|default() and paginator.lastPage > 1 %}
     <nav class=" {{ class|default('text-center') }}">
-      <ul class="pagination">
+      <ul class="pagination cd-pagination">
         {% if paginator.currentPage != paginator.firstPage %}
           <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}"><i class="cd-icon cd-icon-first-page"></i></a></li>
           <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
@@ -146,7 +146,7 @@
 
   {% if paginator.lastPage > 1 %}
     <nav class="{{ class|default('text-center') }}">
-      <ul class="pagination">
+      <ul class="pagination cd-pagination">
         {% if paginator.currentPage != paginator.firstPage %}
           <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><a href="javascript:;"><i class="cd-icon cd-icon-first-page"></i></a></li>
           <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
@@ -169,17 +169,29 @@
 {% endmacro %}
 
 {% macro table_filter(header, choices, key, dataTarget, selectedChoice, default = '') %}
-  <div class="dropdown">
+  <div class="cd-dropdown cd-dropdown-filter" data-toggle="cd-dropdown">
     {{ header }}
-    <a href="javascript:;" class="{% if selectedChoice == '' %}cd-link-gray-light{% else %}cd-link-primary{% endif %}" data-toggle="dropdown">
-      <i class="cd-icon cd-icon-filter cd-text-xs"></i>
+    <a href="javascript:;" class="{% if selectedChoice == '' %}cd-link-assist{% else %}cd-link-primary{% endif %}">
+      <i class="cd-icon cd-icon-filter cd-text-sm"></i>
     </a>
-    <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">
+    <ul class="dropdown-menu">
       {% if default %}
-        <li class="{% if selectedChoice == '' %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="">{{ default }}</a></li>
+        <li class="{% if selectedChoice == '' %}active{% endif %}"><a href="javascript:;" data-toggle="cd-table-filter" data-target="{{ dataTarget }}" data-filter-key="{{ key }}" data-filter-value="">{{ default }}</a></li>
       {% endif %}
       {% for choiceKey,choice in choices %}
-        <li class="{% if selectedChoice == choiceKey %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="{{ key }}={{ choiceKey }}">{{ choice }}</a></li>
+        <li class="{% if selectedChoice == choiceKey %}active{% endif %}"><a href="javascript:;" data-toggle="cd-table-filter" data-target="{{ dataTarget }}" data-filter-key="{{ key }}"  data-filter-value="{{ choiceKey }}">{{ choice }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endmacro %}
+
+{% macro cd_select(options, checkedOption, name, className = '', id = '') %}
+  <div class="cd-select {{ className }}" id="{{ id }}">
+    <input type="hidden" value="{{ checkedOption }}" name="{{name}}" />
+    <div class="select-value">{{ options[checkedOption]|default('') }}</div>
+    <ul class="select-options">
+      {% for optionKey, option in options %}
+        <li class="{% if optionKey == checkedOption %}checked{% endif %}" data-value="{{optionKey}}">{{ option }}</li>
       {% endfor %}
     </ul>
   </div>
