@@ -49,13 +49,13 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        $items =  $this->getTasksAndChapters($course['id'], $tasks);
-        
+        $items = $this->getTasksAndChapters($course['id'], $tasks);
+
         return array(
             'data' => array(
                 'items' => $items,
             ),
-            'template' => 'lesson-manage/normal-list.html.twig'
+            'template' => 'lesson-manage/normal-list.html.twig',
         );
     }
 
@@ -68,18 +68,18 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $tasks = array($task);
         $chapter['tasks'] = $tasks;
         if (1 == $taskNum) {
-            $template =  'lesson-manage/normal/lesson.html.twig';
+            $template = 'lesson-manage/normal/lesson.html.twig';
         } else {
             $template = 'lesson-manage/normal/tasks.html.twig';
         }
-        
+
         return array(
             'data' => array(
                 'course' => $course,
                 'lesson' => $chapter,
-                'tasks' => $tasks
+                'tasks' => $tasks,
             ),
-            'template' =>  $template,
+            'template' => $template,
         );
     }
 
@@ -212,7 +212,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
                 $chapter['tasks'] = $tasks[$chapterId];
             }
             $items[] = $chapter;
-        } 
+        }
 
         return $items;
     }

@@ -22,7 +22,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         return true;
     }
-    
+
     protected function getFinishedTaskPerDay($course, $tasks)
     {
         $taskNum = $course['taskNum'];
@@ -40,13 +40,13 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        $items =  $this->prepareCourseItems($course['id'], $tasks);
+        $items = $this->prepareCourseItems($course['id'], $tasks);
 
         return array(
             'data' => array(
                 'items' => $items,
             ),
-            'template' => 'lesson-manage/default-list.html.twig'
+            'template' => 'lesson-manage/default-list.html.twig',
         );
     }
 
@@ -56,12 +56,13 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
         $lesson = $this->getChapterDao()->get($task['categoryId']);
         $lesson['tasks'] = $tasks;
+
         return array(
             'data' => array(
                 'course' => $course,
                 'lesson' => $lesson,
             ),
-            'template' => 'lesson-manage/default/lesson.html.twig'
+            'template' => 'lesson-manage/default/lesson.html.twig',
         );
     }
 
@@ -238,6 +239,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $chapter = $this->getCourseService()->createChapter($chapter);
         $task['categoryId'] = $chapter['id'];
         $task['mode'] = 'lesson';
+
         return parent::createTask($task);
     }
 
