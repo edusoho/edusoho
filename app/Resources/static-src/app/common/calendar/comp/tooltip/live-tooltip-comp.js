@@ -27,11 +27,11 @@ export default class LiveTooltip extends BaseTooltipComp {
       html: true,
       content: `<i class="es-icon es-icon-history pull-left"></i>
                 <div class="schedule-popover-content__item cd-mb8">
-                  <span class="schedule-popover-content__time cd-text-gray-dark">${date} ${weekDay}</span>
-                  <div class="schedule-popover-content__time cd-text-gray">${startTime} ~ ${endTime}</div>
+                  <span class="schedule-popover-content__time cd-dark-major">${date} ${weekDay}</span>
+                  <div class="schedule-popover-content__time cd-dark-minor">${startTime} ~ ${endTime}</div>
                 </div>
                 <i class="es-icon es-icon-eventnote pull-left"></i>
-                <div class="cd-text-gray schedule-popover-content__item">${params.event}</div>`,
+                <div class="cd-dark-minor schedule-popover-content__item">${params.event}</div>`,
       template: `<div class="popover schedule-popover ${popoverType}" role="tooltip">
                   <div class="schedule-popover-content popover-content">
                   </div>

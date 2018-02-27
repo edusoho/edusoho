@@ -22,21 +22,19 @@ class DeleteAction {
     cd.confirm({
       title: Translator.trans('user.account.refund_cancel_title'),
       content: Translator.trans('site.data.delete_name_hint', {'name':name}),
-      confirmText: Translator.trans('site.confirm'),
+      okText: Translator.trans('site.confirm'),
       cancelText: Translator.trans('site.close'),
-      confirm() {
-        $.post($btn.data('url'), function() {
-          if ($.isFunction(self.onSuccess)) {
-            self.onSuccess.call(self.$element);
-          } else {
-            $btn.closest('[data-role=item]').remove();
-            notify('success', Translator.trans('site.delete_success_hint'));
-            window.location.reload();
-          }
-        });
-      }
-    })
-
+    }).on('ok', () => {
+      $.post($btn.data('url'), function() {
+        if ($.isFunction(self.onSuccess)) {
+          self.onSuccess.call(self.$element);
+        } else {
+          $btn.closest('[data-role=item]').remove();
+          notify('success', Translator.trans('site.delete_success_hint'));
+          window.location.reload();
+        }
+      });
+    });
   }
 
   _batchDelete(event) {
@@ -56,15 +54,13 @@ class DeleteAction {
     cd.confirm({
       title: Translator.trans('user.account.refund_cancel_title'),
       content: Translator.trans('site.data.delete_check_name_hint', {'name':name}),
-      confirmText: Translator.trans('site.confirm'),
+      okText: Translator.trans('site.confirm'),
       cancelText: Translator.trans('site.close'),
-      confirm() {
-        $.post($btn.data('url'), {ids:ids}, function(){
-          window.location.reload();
-        });
-      }
-    })
-
+    }).on('ok', () => {
+      $.post($btn.data('url'), {ids:ids}, function() {
+        window.location.reload();
+      });
+    });
   }
 }
 

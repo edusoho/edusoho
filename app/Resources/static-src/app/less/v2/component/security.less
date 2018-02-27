@@ -1,8 +1,8 @@
-.cd-security {
+.es-security {
   // line-height: 40px;
   font-size: 14px;
   font-weight: 500;
-  &.cd-security-danger {
+  &.es-security-danger {
     .security-icon i {
       color: @brand-danger;
     }
@@ -13,7 +13,7 @@
       color: @brand-danger;
     }
   }
-  &.cd-security-warning {
+  &.es-security-warning {
     .security-icon i {
       color: @brand-warning;
     }
@@ -24,7 +24,7 @@
       color: @brand-warning;
     }
   }
-  &.cd-security-success {
+  &.es-security-success {
     .security-icon i {
       color: @brand-success;
     }
@@ -48,13 +48,14 @@
     display: inline-block;
     vertical-align: middle;
     margin-right: 12px;
-    color: @cd-gray-dark;
+    color: @cd-dark-major;
   }
   .security-progress {
     width: 40px;
     height: 8px;
     display: inline-block;
     background: @cd-bg-dark;
+    border-radius: 4px;
     + .security-progress {
       margin-left: 4px;
     }

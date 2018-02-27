@@ -1,7 +1,8 @@
 import Swiper from 'swiper';
 import Cookies from 'js-cookie';
 
-import 'common/codeages-design/js/codeages-design';
+// import 'common/codeages-design/js/codeages-design';
+import * as cd from 'codeages-design';
 import 'common/tabs-lavalamp';
 import 'common/card';
 import 'common/bootstrap-modal-hack';
@@ -9,6 +10,8 @@ import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import notify from "common/notify";
 import './alert';
+
+window.cd = cd;
 
 let rpn = new RewardPointNotify();
 rpn.display();
@@ -65,13 +68,9 @@ $(document).ajaxSend(function (a, b, c) {
   let $dom = $(`[data-url="${url}"]`);
   if ($dom.data('loading')) {
     let loading;
-    if ($dom.data('loading-class')) {
-      loading = cd.loading({
-        loadingClass: $dom.data('loading-class')
-      });
-    } else {
-      loading = cd.loading();
-    }
+    loading = cd.loading({
+      isFixed: $dom.data('is-fixed')
+    });
 
     let loadingBox = $($dom.data('target') || $dom);
     loadingBox.html(loading);

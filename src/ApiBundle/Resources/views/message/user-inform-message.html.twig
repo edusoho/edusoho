@@ -5,8 +5,8 @@
       <img src="{{ filepath(fromUser.smallAvatar, 'avatar.png') }}">
     </div>
     <div class="inform-message-item__info">
-      <div class="cd-mb8 cd-text-gray">{{ fromUser.nickname }}</div>
-      <div class="cd-text-gray-dark">{{ conversation.latestMessageContent|sub_text(13) }}</div>
+      <div class="cd-mb8 cd-dark-minor">{{ fromUser.nickname }}</div>
+      <div class="cd-dark-major">{{ conversation.latestMessageContent|sub_text(13) }}</div>
     </div>
   </a>
 {% endfor %}
