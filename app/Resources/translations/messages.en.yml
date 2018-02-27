@@ -1473,7 +1473,7 @@ course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
 course.plan_task.preparation_tips: 'Students can learn to learn by looking at tasks such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
-course.plan_task.empty: 'It''s empty, add a task now.'
+course.plan_task.empty: 'It's empty, add a lesson now.'
 course.plan_task.task_unpublished: （unpublish）
 course.plan_task.is_optional_task: Optional
 course.plan_task.edit_tips: 'Create the live session'
