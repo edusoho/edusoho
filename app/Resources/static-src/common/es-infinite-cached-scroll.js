@@ -1,4 +1,4 @@
-import ESInfiniteScroll from 'common/es-infinite-scroll';
+import { isEmpty } from 'common/utils';
 import 'waypoints/lib/jquery.waypoints.min';
 import Emitter from "common/es-event-emitter";
 
@@ -40,7 +40,6 @@ import Emitter from "common/es-event-emitter";
      <!-- 当页面上看到此节点时，会自动显示下一页 -->
      <div class="js-down-loading-more" style="min-height: 1px"></div>
  */
-let current;
 
 export default class ESInfiniteCachedScroll extends Emitter {
   /**
@@ -78,7 +77,6 @@ export default class ESInfiniteCachedScroll extends Emitter {
    */
   constructor(options) {
     super();
-    current = this;
 
     this._options = options;
     this._initConfig();
@@ -87,16 +85,17 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   _initUpLoading() {
+    const self = this;
     // 滚动到 class='js-down-loading-more' 的dom节点时，自动刷新下一页
     let waypoint = new Waypoint({
       element: $('.js-down-loading-more')[0],
       handler: function(direction) {
         if (direction == 'down') {
-          if (current._isLastPage) {
+          if (self._isLastPage) {
             waypoint.disable();
           } else {
             waypoint.disable();
-            current._displayCurrentPageDataAndSwitchToNext();
+            self._displayCurrentPageDataAndSwitchToNext();
             Waypoint.refreshAll();
             waypoint.enable();
           }
@@ -113,20 +112,20 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   _displayCurrentPageDataAndSwitchToNext() {
+    this._displayData();
     if (!this._isLastPage) {
-      this._displayData();
-
-      if (!this._isLastPage) {
-        this._currentPage++;
-      }
+      this._currentPage++;
     }
   }
 
   _displayData() {
+    if (this._isLastPage) {
+      return;
+    }
     let startIndex = this._getStartIndex();
     for (let index = 0; index < this._pageSize; index++) {
       let data = this._options['data'][index + startIndex];
-      if (data != null) {
+      if (!isEmpty(data)) {
         this._generateSingleCachedData(data);
       } else {
         this._isLastPage = true;
@@ -138,19 +137,20 @@ export default class ESInfiniteCachedScroll extends Emitter {
     let clonedHtml = $(this._options['dataTemplateNode']).html();
 
     let currentData = data;
+    const self = this;
     //所有花括号里面的内容都替换掉为相应变量值,
     // 如{lock} 替换为 this._options.context.lock 或 data.lock, 如果找不到，则不替换
     let replacedHtml = clonedHtml.replace(
       /({\w+})/g,
       function(param) {
-        return current._replace(param, currentData, '{', '}');
+        return self._replace(param, currentData, '{', '}');
       }
     );
 
     replacedHtml = replacedHtml.replace(
       /(%7B\w+%7D)/g,
       function(param) {
-        return current._replace(param, currentData, '%7B', '%7D');
+        return self._replace(param, currentData, '%7B', '%7D');
       }
     );
 
@@ -176,7 +176,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
   _replace(param, currentData, firstReplaceStr, secondReplaceStr) {
     let paramName = param.split(firstReplaceStr)[1].split(secondReplaceStr)[0];
-    let context = current._options.context;
+    let context = this._options.context;
     if (typeof context[paramName] == 'function') {
       return context[paramName](currentData, context);
     } else if (typeof currentData[paramName] != 'undefined') {
