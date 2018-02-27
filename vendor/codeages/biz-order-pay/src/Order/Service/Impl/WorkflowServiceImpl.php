@@ -22,7 +22,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $this->validateLogin();
         $data = array(
             'order' => $order,
-            'orderItems' => $orderItems
+            'orderItems' => $orderItems,
         );
         $order = $this->getOrderContext()->created($data);
 
@@ -30,11 +30,12 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             $data = array(
                 'order_sn' => $order['sn'],
                 'pay_time' => time(),
-                'payment' => 'none'
+                'payment' => 'none',
             );
 
             return $this->paid($data);
         }
+
         return $order;
     }
 
@@ -56,6 +57,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         if (empty($order)) {
             return $order;
         }
+
         return $this->getOrderContext($order['id'])->paid($data);
     }
 
@@ -84,9 +86,9 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $options = $this->biz['order.final_options'];
 
         $orders = $this->getOrderDao()->search(array(
-            'created_time_LT' => time()-$options['closed_expired_time'],
-            'statuses' => array('created', 'paying')
-        ), array('id'=>'DESC'), 0, 1000);
+            'created_time_LT' => time() - $options['closed_expired_time'],
+            'statuses' => array('created', 'paying'),
+        ), array('id' => 'DESC'), 0, 1000);
 
         foreach ($orders as $order) {
             $this->close($order['id']);
@@ -108,19 +110,19 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $orderRefunds = $this->getOrderRefundDao()->search(
             array(
                 'status' => 'auditing',
-                'order_ids' => $orderIds
+                'order_ids' => $orderIds,
             ),
             array(),
             0,
             PHP_INT_MAX
         );
         $orderRefunds = ArrayToolkit::index($orderRefunds, 'order_id');
-        
+
         foreach ($orders as $order) {
             if (!empty($orderRefunds[$order['id']])) {
                 continue;
             }
-            
+
             $this->finished($order['id']);
         }
     }
@@ -128,6 +130,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function applyOrderItemRefund($id, $data)
     {
         $orderItem = $this->getOrderItemDao()->get($id);
+
         return $this->applyOrderItemsRefund($orderItem['order_id'], array($id), $data);
     }
 
@@ -135,6 +138,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $orderItems = $this->getOrderItemDao()->findByOrderId($orderId);
         $orderItemIds = ArrayToolkit::column($orderItems, 'id');
+
         return $this->applyOrderItemsRefund($orderId, $orderItemIds, $data);
     }
 
@@ -144,6 +148,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $data['orderId'] = $orderId;
         $data['orderItemIds'] = $orderItemIds;
         $refund = $this->getOrderRefundContext()->start($data);
+
         return $refund;
     }
 
@@ -157,6 +162,9 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
         if (!empty($order['trade_sn'])) {
             $this->getPayService()->applyRefundByTradeSn($order['trade_sn'], $data);
+        } else {
+            // 微营销过来的订单没有交易记录，需要能支持退款
+            $this->setRefunded($id, $data);
         }
 
         return $refund;
@@ -175,6 +183,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $refund = $this->getOrderRefundContext($id)->refunded($data);
         $this->getOrderContext($refund['order_id'])->refunded();
+
         return $refund;
     }
 
@@ -216,6 +225,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
         $newOrder = $this->getOrderService()->getOrder($orderId);
         $newAdjustDeduct['order'] = $newOrder;
+
         return $newAdjustDeduct;
     }
 
@@ -224,7 +234,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $totalDeductAmountExcludeAdjust = 0;
         $adjustDeduct = array();
         foreach ($deducts as $deduct) {
-            if ($deduct['deduct_type'] == 'adjust_price') {
+            if ('adjust_price' == $deduct['deduct_type']) {
                 $adjustDeduct = $deduct;
             } else {
                 $totalDeductAmountExcludeAdjust += $deduct['deduct_amount'];
@@ -238,7 +248,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $orderRefundContext = $this->biz['order_refund_context'];
 
-        if ($id == 0) {
+        if (0 == $id) {
             return $orderRefundContext;
         }
 
@@ -256,7 +266,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $orderContext = $this->biz['order_context'];
 
-        if ($orderId == 0) {
+        if (0 == $orderId) {
             return $orderContext;
         }
 

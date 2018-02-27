@@ -156,6 +156,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
+        $biz->register(new \Biz\DefaultSdkProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {

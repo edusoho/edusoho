@@ -4,9 +4,5 @@ namespace Biz\Marketing\Service;
 
 interface MarketingService
 {
-    public function addUserToCourse($postData);
-
-    public function addUserToClassroom($postData);
-
-    public function getDrpService();
+    public function join($postData);
 }
