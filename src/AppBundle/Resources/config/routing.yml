@@ -1178,6 +1178,11 @@ edu_cloud_sms_send:
     defaults: { _controller: AppBundle:EduCloud:smsSend }
     methods: [POST]
 
+edu_cloud_sms_send_registration:
+    path:  /edu_cloud/sms_send_registration
+    defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
+    methods: [POST]
+
 edu_cloud_sms_check:
     path:  /edu_cloud/sms_check/{type}
     defaults: { _controller: AppBundle:EduCloud:smsCheck }

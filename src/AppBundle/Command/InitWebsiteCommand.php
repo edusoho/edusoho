@@ -42,23 +42,42 @@ class InitWebsiteCommand extends BaseCommand
             return;
         }
 
-        $this->initServiceKernel();
-
-        $initializer = new SystemInitializer($output);
-        $initializer->init();
-        $this->initTopBanner();
         $accessKey = $input->getArgument('accessKey');
         $secretKey = $input->getArgument('secretKey');
         $siteName = $input->getArgument('siteName');
-        $setting = array(
-            'auth' => array('register_mode' => 'email_or_mobile'),
-            'storage' => array('upload_mode' => 'cloud',
-                               'cloud_access_key' => $accessKey,
-                               'cloud_secret_key' => $secretKey,
-                               'cloud_key_applied' => 1,
-            ),
-            'site' => array('name' => $siteName),
-        );
+
+        $this->initServiceKernel();
+
+        $initializer = new SystemInitializer($output);
+        if (!$this->hasUsedFiles()) {
+            $initializer->init();
+            $this->initTopBanner();
+            $initializer->initRegisterSetting($user);
+            $setting = array(
+                'auth' => array('register_mode' => 'email'),
+                'storage' => array('upload_mode' => 'cloud',
+                                   'cloud_access_key' => $accessKey,
+                                   'cloud_secret_key' => $secretKey,
+                                   'cloud_key_applied' => 1,
+                ),
+                'site' => array('name' => $siteName),
+            );
+        } else {
+            //生成演示数据
+            $result = $this->initUsedData();
+            $this->logger($result, $output);
+            //将演示数据中的用户角色降为教师
+            $this->updateUsedUserData();
+            $setting = array(
+                'storage' => array('upload_mode' => 'cloud',
+                                   'cloud_access_key' => $accessKey,
+                                   'cloud_secret_key' => $secretKey,
+                                   'cloud_key_applied' => 1,
+                ),
+                'site' => array('name' => $siteName),
+            );
+        }
+
         $this->initSetting($setting);
         $this->logger('网校设置授权成功', $output);
 
@@ -71,7 +90,6 @@ class InitWebsiteCommand extends BaseCommand
 
         $initializer->initFolders();
         $initializer->initLockFile();
-        $initializer->initRegisterSetting($user);
 
         $this->logger('网校创建成功', $output);
     }
@@ -89,7 +107,7 @@ class InitWebsiteCommand extends BaseCommand
     {
         $registerUser = array(
             'nickname' => $user['username'],
-            'emailOrMobile' => $user['email'],
+            'email' => $user['email'],
             'password' => $user['password'],
         );
         $registerUser = $this->getAuthService()->register($registerUser);
@@ -127,8 +145,7 @@ class InitWebsiteCommand extends BaseCommand
     protected function initDb()
     {
         try {
-            $pdo = new \PDO("mysql:host={$this->db_host};port={$this->db_port}", "{$this->db_user}", "{$this->db_password}");
-            $pdo->exec("USE `{$this->db_name}`;");
+            $pdo = $this->getDb();
             $sqlFile = $this->getContainer()->getParameter('kernel.root_dir').'/../web/install/edusoho.sql';
             $sql = file_get_contents($sqlFile);
             $result = $pdo->exec($sql);
@@ -159,6 +176,53 @@ class InitWebsiteCommand extends BaseCommand
             'mode' => $blockTemplate['mode'],
         );
         $this->getBlockService()->createBlock($fields);
+    }
+
+    protected function hasUsedFiles()
+    {
+        $sqlFile = $this->getContainer()->getParameter('kernel.root_dir').'/../web/install/edusoho_init_*.sql';
+        $files = glob($sqlFile);
+
+        if ($files) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function initUsedData()
+    {
+        $sqlFile = $this->getContainer()->getParameter('kernel.root_dir').'/../web/install/edusoho_init_*.sql';
+        $files = glob($sqlFile);
+        if ($files) {
+            $db = $this->getDb();
+
+            foreach ($files as $file) {
+                $sql = file_get_contents($file);
+                $result = $db->exec($sql);
+            }
+
+            return '创建演示数据成功';
+        } else {
+            return '无演示数据脚本文件';
+        }
+    }
+
+    protected function updateUsedUserData()
+    {
+        $this->getUserService()->changeUserRoles(1, array(
+            'ROLE_USER',
+            'ROLE_TEACHER',
+        ));
+    }
+
+    protected function getDb()
+    {
+        $pdo = new \PDO("mysql:host={$this->db_host};port={$this->db_port}", "{$this->db_user}", "{$this->db_password}");
+        $pdo->exec('SET NAMES utf8');
+        $pdo->exec("USE `{$this->db_name}`;");
+
+        return $pdo;
     }
 
     protected function getSettingService()

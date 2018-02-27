@@ -812,6 +812,43 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(1, $result);
     }
 
+    public function testGetTimeSec()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(),
+                    'withParams' => array('magic'),
+                ),
+            )
+        );
+
+        $watchTimeSec = $this->getTaskService()->getTimeSec('watch');
+        $this->assertEquals(120, $watchTimeSec);
+
+        $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
+        $this->assertEquals(60, $learnTimeSec);
+
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('watch_time_sec' => 170, 'learn_time_sec' => 70),
+                    'withParams' => array('magic'),
+                ),
+            )
+        );
+
+        $watchTimeSec = $this->getTaskService()->getTimeSec('watch');
+        $this->assertEquals(170, $watchTimeSec);
+
+        $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
+        $this->assertEquals(70, $learnTimeSec);
+    }
+
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)
     {
         return array(

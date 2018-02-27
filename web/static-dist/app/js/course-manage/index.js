@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/course-manage/index"],{"46d3fd179253522f9cd7":function(d,c,e){"use strict"}},["46d3fd179253522f9cd7"]);
+webpackJsonp(["app/js/course-manage/index"],{0:function(e,s){e.exports=jQuery},"46d3fd179253522f9cd7":function(e,s,d){"use strict";var o=d("4e68e437f5b716377a9d");(0,o.closeCourse)(),(0,o.deleteCourse)(),(0,o.publishCourse)()}},["46d3fd179253522f9cd7"]);

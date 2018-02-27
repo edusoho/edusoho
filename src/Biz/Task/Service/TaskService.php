@@ -197,6 +197,8 @@ interface TaskService
      */
     public function findToLearnTasksByCourseIdForMission($courseId);
 
+    public function getTimeSec($type);
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     /**

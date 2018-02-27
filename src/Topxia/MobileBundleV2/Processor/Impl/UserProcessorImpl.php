@@ -10,7 +10,6 @@ use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -45,8 +44,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', '上传失败 ～请重新尝试!');
         }
 
-        $host = $this->request->getSchemeAndHttpHost();
-        $record['url'] = $host.$this->controller->get('web.twig.extension')->getFilePath($record['uri']);
+        $urlPath = $this->controller->get('web.twig.extension')->getFilePath($record['uri']);
+        if ($this->isAbsoluteUrl($urlPath)) {
+            $url = $this->request->getScheme().':'.ltrim($urlPath, ':');
+        } else {
+            $url = $this->getBaseUrl().$urlPath;
+        }
+        $record['url'] = $url;
         $record['createdTime'] = date('c', $record['createdTime']);
         unset($record['uri']);
 
@@ -122,7 +126,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             );
         }
 
-        if (isset($options['deleteOriginFile']) && $options['deleteOriginFile'] == 0) {
+        if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
             $fields[] = array(
                 'type' => 'origin',
                 'id' => $record['id'],
@@ -144,7 +148,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if ($oldNickname == $nickname) {
             return;
         }
-        if ($isNickname['nickname_enabled'] == 0) {
+        if (0 == $isNickname['nickname_enabled']) {
             throw new \RuntimeException('网校设置不能修改昵称!');
         }
 
@@ -159,7 +163,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $coinEnabled = $this->controller->setting('coin.coin_enabled');
-        if (empty($coinEnabled) || $coinEnabled == 0) {
+        if (empty($coinEnabled) || 0 == $coinEnabled) {
             return $this->createErrorResponse('error', '网校虚拟币未开启！');
         }
 
@@ -314,7 +318,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $message = preg_replace_callback('/<div class=\"([\\w-]+)\">([^>]*)<\/div>/', function ($matches) {
             $content = $matches[2];
             $className = $matches[1];
-            if ($className == 'notification-footer') {
+            if ('notification-footer' == $className) {
                 return '<br><br><font color=#CFCFCF><fontsize>'.$content.'</fontsize></font>';
             }
 
@@ -357,15 +361,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     private function filterUserProfile($userProfile)
     {
         foreach ($userProfile as $key => $value) {
-            if (stripos($key, 'intField') === 0 || stripos($key, 'dateField') === 0) {
+            if (0 === stripos($key, 'intField') || 0 === stripos($key, 'dateField')) {
                 unset($userProfile[$key]);
                 continue;
             }
-            if (stripos($key, 'textField') === 0) {
+            if (0 === stripos($key, 'textField')) {
                 unset($userProfile[$key]);
                 continue;
             }
-            if (stripos($key, 'floatField') === 0 || stripos($key, 'varcharField') === 0) {
+            if (0 === stripos($key, 'floatField') || 0 === stripos($key, 'varcharField')) {
                 unset($userProfile[$key]);
                 continue;
             }
@@ -376,10 +380,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function smsSend()
     {
-
         $auth = $this->getSettingService()->get('auth', array());
-        if (!(isset($auth['register_mode']) &&  in_array( $auth['register_mode'] , array('mobile', 'email_or_mobile')))) {
-           return $this->createErrorResponse('register_mode_closed', '网校未开启手机注册');
+        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+            return $this->createErrorResponse('register_mode_closed', '网校未开启手机注册');
         }
 
         $phoneNumber = $this->getParam('phoneNumber');
@@ -418,7 +421,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
     {
-        if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
+        if (!((0 == strlen($smsLastTime)) || (($currentTime - $smsLastTime) > $allowedTime))) {
             return false;
         }
 
@@ -445,7 +448,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             throw new \RuntimeException('用户未登录');
         }
 
-        if ($this->getCloudSmsKey("cloud_sms.{$smsType}") != 'on') {
+        if ('on' != $this->getCloudSmsKey("cloud_sms.{$smsType}")) {
             throw new \RuntimeException('网站未开启该使用场景短信验证');
         }
     }
@@ -475,7 +478,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result = array('meta' => null);
 
         $auth = $this->getSettingService()->get('auth', array());
-        if (isset($auth['register_mode']) && $auth['register_mode'] == 'closed') {
+        if (isset($auth['register_mode']) && 'closed' == $auth['register_mode']) {
             return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
         }
 
@@ -502,7 +505,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (!SimpleValidator::password($password)) {
                 return $this->createErrorResponse('password_invalid', '密码格式不正确');
             }
-            $registTypeName = $auth['register_mode'] == 'email' ? 'email' : 'emailOrMobile';
+            $registTypeName = 'email' == $auth['register_mode'] ? 'email' : 'emailOrMobile';
             try {
                 $user = $this->controller->getAuthService()->register(array(
                     $registTypeName => $email,
@@ -521,7 +524,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
                 return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
             }
-            if ($this->controller->setting('cloud_sms.sms_enabled') == '1') {
+            if ('1' == $this->controller->setting('cloud_sms.sms_enabled')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
 
                 $limiterResult = SmsToolkit::smsCheckRatelimiter($this->request, 'sms_registration', $smsCode);
@@ -531,7 +534,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
 
                 if ($result) {
-                    $registTypeName = $auth['register_mode'] == 'mobile' ? 'mobile' : 'emailOrMobile';
+                    $registTypeName = 'mobile' == $auth['register_mode'] ? 'mobile' : 'emailOrMobile';
                     try {
                         $user = $this->controller->getAuthService()->register(array(
                             $registTypeName => $sessionField['to'],
@@ -583,7 +586,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     private function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
         $smsType = $sessionField['sms_type'];
-        if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
+        if ((0 == strlen($smsType)) || (0 == strlen($scenario))) {
             return false;
         }
         if ($smsType != $scenario) {
@@ -592,13 +595,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $currentTime = time();
         $smsLastTime = isset($sessionField['sms_last_time']) ? $sessionField['sms_last_time'] : 0;
-        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
+        if ((0 == strlen($smsLastTime)) || (($currentTime - $smsLastTime) > $allowedTime)) {
             return false;
         }
 
         $smsCode = $sessionField['sms_code'];
         $smsCodePosted = $requestField['sms_code'];
-        if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
+        if ((0 == strlen($smsCodePosted)) || (0 == strlen($smsCode))) {
             return false;
         }
 
@@ -608,7 +611,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $toMobile = $sessionField['to'];
         $mobile = $requestField['mobile'];
-        if ((strlen($toMobile) == 0) || (strlen($mobile) == 0)) {
+        if ((0 == strlen($toMobile)) || (0 == strlen($mobile))) {
             return false;
         }
         if ($toMobile != $mobile) {
@@ -636,14 +639,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
         }
         $oldToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $this->controller->getToken($this->request));
-        if (empty($oldToken) || $oldToken['type'] != MobileBaseController::TOKEN_TYPE) {
+        if (empty($oldToken) || MobileBaseController::TOKEN_TYPE != $oldToken['type']) {
             $user = null;
         } else {
             $user = $this->controller->getUserService()->getUser($oldToken['userId']);
         }
 
         $newToken = null;
-        if ($user != null) {
+        if (null != $user) {
             if ($user['locked']) {
                 return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
             }
@@ -652,12 +655,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $user = array_merge($user, $userProfile);
 
             $this->getTokenService()->deleteTokenByTypeAndUserId(MobileBaseController::TOKEN_TYPE, $user['id']);
-            
+
             $newToken = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
                 'userId' => $user['id'],
                 'duration' => 3600 * 24 * 30,
             ));
-            
+
             $biz = ServiceKernel::instance()->getBiz();
             $biz['dispatcher']->dispatch('user.login', new Event($user));
         }
@@ -755,7 +758,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return null;
         }
 
-        if ($user['type'] == 'system') {
+        if ('system' == $user['type']) {
             return null;
         }
 

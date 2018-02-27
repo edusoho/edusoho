@@ -756,7 +756,7 @@ course.create.setup_introduction: 'Set title and self introduction'
 course.create.finish: Finish
 course.create.unfinish: Unfinish
 course.create.user_avatar: 'User avatar'
-course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Recommend size: 270×270px. Image size should not exceed <strong>2M</strong>.</p>'
+course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Recommend size: 270×270px. Image size should not exceed <strong>2MB</strong>.</p>'
 course.create.upload_btn: Upload
 course.create.rank: Title
 course.create.introduction: 'About me'
@@ -1074,7 +1074,7 @@ course.teach_plan_manage: 'Programs'
 course.cover: 'Course cover'
 course.cover_image: 'Cover'
 course.cover_image.content_title: 'Cover'
-course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2M</strong>.\n"
+course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
@@ -1969,7 +1969,7 @@ classroom.thread.create.event_time: 'Activity Time'
 classroom.thread.create.event_start_time: 'Activity start time'
 classroom.thread.create.event_location: 'Activity Location'
 classroom.thread.create.cover_image: 'Cover'
-classroom.thread.create.cover_image.placeholder: 'Recommended image size 200×112px'
+classroom.thread.create.cover_image.placeholder: 'Recommended image size 200×112px, image size should not exceed 2MB'
 classroom.thread.create.views_btn: View...
 classroom.thread.create.maxUsers: 'Maximum people'
 classroom.thread.create.maxUsers.placeholder: Unlimited
@@ -2086,7 +2086,7 @@ classroom.category: Category
 classroom.price_label: Price(CNY)
 classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
 classroom.amount: "Equals to%price%\n"
-classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525×350px. <br> The file limits to <strong>2M</strong>.\n"
+classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525×350px. <br> The file limits to <strong>2MB</strong>.\n"
 classroom.commitment_service_label: Commitment
 classroom.activiy: Activity
 classroom.activity_tips: "Arrange online and offline %name% activities, make the learning with more fun and keep closer relationships with your classmates.\n"
@@ -2315,6 +2315,7 @@ user.settings.email_menu: Email
 user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
+user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
@@ -2880,11 +2881,11 @@ group.detail.group_settings.group_edit.name: 'Group name'
 group.detail.group_settings.group_edit.introduction: 'Group Info'
 group.detail.group_settings.logo_setup: 'Image setting'
 group.detail.group_settings.logo_setup.current_logo: 'Current image'
-group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size: 180×180px. \n"
+group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2MB</strong>. Recommend size: 180×180px. \n"
 group.detail.group_settings.logo_setup.upload_btn: 'Upload new image'
 group.detail.group_settings.background_image_setup: 'Background setting'
 group.detail.group_settings.background_image_setup.current_image: 'Current background'
-group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size: 1140×150px. \n"
+group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2MB</strong>. Recommend size: 1140×150px. \n"
 group.detail.new_group_members: 'New member'
 group.detail.new_group_members.empty: 'No member'
 group.detail.hot_group: 'Popular group'
@@ -3167,7 +3168,7 @@ my.teaching.open_course.Basic_Info.category: Category
 my.teaching.open_course.Basic_Info.about: About
 my.teaching.open_course.Basic_Info.about.help_block: 'Please config the IFrame whitelist in [admin center] - [system] - [site setting] - [security] if you need'
 my.teaching.open_course.course_picture.title: 'Course Cover'
-my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270px. <br>File size shouldn't larger than ##你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过\n"
+my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270px. <br>File size shouldn't larger than \n"
 my.teaching.open_course.lesson.add_btn: 'Add lesson'
 my.teaching.open_course.lesson.tips: 'Open course can only add one lesson'
 my.teaching.open_course.lesson.manage: 'Lessons'
@@ -4221,10 +4222,10 @@ admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
-admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.'
+admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">如何制作合适的图片？</a>'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
-admin.setting.site.favicon.help_block: 'Please upload images with format of ICO. Recommended image size is 16×16px or 32×32px.'
+admin.setting.site.favicon.help_block: 'Please upload images with format of ICO. Recommended image size is 16×16px or 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">如何制作合适的图片？</a>'
 admin.setting.site.seo_keywords: 'SEO Keyword'
 admin.setting.site.seo_keywords.help_block: 'Please use "," to separate multiple Keywords'
 admin.setting.site.seo_description: 'SEO Description'
@@ -4484,11 +4485,11 @@ admin.custom_page_manage.custom_page_template: Template
 admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
-admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format'
+admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format.Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.mobile_manage.banner_label: 'Slider Image'
 admin.mobile_manage.upload_btn: Upload
 admin.mobile_manage.delete_btn: Delete
-admin.mobile_manage.img_tips: 'Upload the picture with format png,gif,jpg'
+admin.mobile_manage.img_tips: 'Upload the picture with format png, jpg'
 admin.mobile_manage.default_click_radio: 'Default (No trigger operations)'
 admin.mobile_manage.goto_link_radio: 'Upload the picture which type is png,gif,jpg'
 admin.mobile_manage.goto_inside_course_radio: 'Redirecting to internal courses'
@@ -4829,7 +4830,7 @@ admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
-admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded'
+admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded <strong>2MB</strong>. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.user.manage.user_avatar.upload_btn: 'Upload New Photo'
 admin.user.manage.user_avatar.fields.partner_avatar: 'Forum Avatar'
 admin.user.manage.user_avatar.using_current_avatar_btn: 'Use This Avatar'
@@ -5053,11 +5054,11 @@ admin.edu_cloud.edu_video.play_water_mark_tips: 'The watermark will be broadcast
 admin.edu_cloud.edu_video.open_embed_watermark: 'Open embedded watermark'
 admin.edu_cloud.edu_video.open_embed_watermark_tips: 'Can better protect the video copyright; upload the watermark embedded in the video encoding, can not be deleted; not embedded in the watermark video will play the player when the watermark.'
 admin.edu_cloud.edu_video.play_water_mark_picture: 'Player Watermark Image'
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px.'
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.edu_cloud.edu_video.picture_upload_btn: 'Upload Picture'
 admin.edu_cloud.edu_video.picture_delete_btn: Delete
 admin.edu_cloud.edu_video.play_embed_watermark: 'Video embedded watermark image'
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px.'
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.edu_cloud.edu_video.video_embed_watermark_picture: 'Video embedded watermark image'
 admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, the current website domain name and student username will be displayed randomly at random time in the video playback.'
 admin.edu_cloud.edu_video.finger_print_time_label: 'Cloud video fingerprint display duration'
@@ -5437,11 +5438,15 @@ admin.user_auth.Protection.none: None
 admin.user_auth.Protection.low: Low
 admin.user_auth.Protection.middle: Middle
 admin.user_auth.Protection.high: High
-admin.user_auth.Protection.low.Explanation: 'Program description'
-admin.user_auth.Protection.low.Verification_code: 'Users need to fill in the verification code when they register.'
-admin.user_auth.Protection.low.30_times: '30 register times allowed with the same IP in 24 hours.'
-admin.user_auth.Protection.low.10_times: '10 register times allowed with the same IP in 24 hours.'
-admin.user_auth.Protection.low.sign_up_count: '1 register time allowed with the same IP in a hour.'
+admin.user_auth.Protection.Explaination: 'Program description'
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.middle.30_times: '30 register times allowed with the same IP in 24 hours.'
+admin.user_auth.Protection.high.10_times: '10 register times allowed with the same IP in 24 hours.'
+admin.user_auth.Protection.high.sign_up_count: '1 register time allowed with the same IP in a hour.'
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+
 admin.user_auth.Setup_welcome_message: 'Welcome message settings'
 admin.user_auth.Setup_welcome_message.send: 'Send a welcome message'
 admin.user_auth.Setup_welcome_message.send.help_block: 'Welcome message will sent to the new user through site messages.'
@@ -5556,7 +5561,7 @@ admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
-admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px.'
+admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.role_manage.keyword_type: '-- Keyword type--'
 admin.role_manage.nameLike: 'Role name'
 admin.role_manage.codeLike: Coding
@@ -5617,7 +5622,7 @@ admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
-admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px.'
+admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.setting_course.classroom.setting_classroom_name: 'Class''s name'
 admin.setting_course.classroom.setting_classroom_name.help_block: 'Users will see is the class''s name'
 admin.setting_course.classroom.setting_classroom_name.tips: 'Please note: The following settings related to the basic mode of class operation, be care or your settings, and do not change it often!'
@@ -5657,13 +5662,20 @@ admin.magic_setting.uc_phpwind: 'Turn on phpwind settings'
 admin.magic_setting.login_limit: 'Account and log off the set'
 admin.magic_setting.file_single_size_limit: Single file set upload size
 admin.magic_setting.file_single_size_limit_tip: MByte,be used by editor upload only
+admin.magic_setting.learn_time_sec: learn time report cycle
+admin.magic_setting.learn_time_sec_tip: second
+admin.magic_setting.watch_time_sec: watch time report cycle
+admin.magic_setting.watch_time_sec_tip: second
+
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
 admin.magic_setting.zero_for_open: '0 To enable'
 admin.magic_setting.zero_for_close: '0 Is off'
 admin.magic_setting.true_for_open: 'True For open'
 admin.magic_setting.false_for_close: 'False Is off'
-admin.magic_setting.export_max_limit_tips: 'The recommended maximum of not more than 20000'
+admin.magic_setting.max_limit_tips: 'The recommended maximum of not more than %number%'
+admin.magic_setting.sync_user_data: 同步用户学习的总量数据分页
+
 admin.redis_setting.need_careful_tips: 'Matters needing attention'
 admin.redis_setting.redis_config_case: 'Redis Configuration example'
 admin.redis_setting.redis_cluster_config_case: 'Redis Cluster configuration example'
@@ -5861,7 +5873,7 @@ admin.coin_setting.description: Description
 admin.coin_setting.description_hint: 'Virtual coin can be usd as payment in the site'
 admin.coin_setting.promotion_proposal: 'Promotion recommendation'
 admin.coin_setting.promotion_proposal_hint: '1 Virtual coin can be used to price the courses; <br>2 Virtual coin recharge can enhance customer loyalty; <br>3 Virtual coin is recommended to use with recharge cards (business applications); <br>'
-admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload'
+admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.coin_setting.coin_description: 'Virtual coin Description'
 admin.coin_setting.content_hint: 'It can be used to describe virtual coin''s usage, access methods and other related content'
 admin.coin_setting.update_submit_btn: 'Submit updates'
@@ -5906,7 +5918,7 @@ admin.article_setting.publish_time_tips: 'Content show in chronological order'
 admin.article_setting.image.content_title: 'Set thumbnail'
 admin.article_setting.image: Thumbnail
 admin.article_setting.image.tips: 'Tip: Select the crop area.'
-admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2M.'
+admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.article_setting.image.choose_btn: 'Select upload file'
 admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
@@ -5979,7 +5991,7 @@ admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
 admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gif, jpg format.'
 admin.mobile_setting.online_school_about_hint: 'This profile will be displayed in the app''s " About Us" part'
-admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.'
+admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">如何制作合适的图片？</a>'
 admin.mobile_setting.app_custom_setting_option: 'Custom APP Set'
 admin.mobile_setting.app_custom_name: 'APP name'
 admin.mobile_setting.app_custom_about: 'APP Profile'
@@ -5988,7 +6000,7 @@ admin.mobile_setting.app_custom_logo_hint: 'Please upload pictures in png, gif, 
 admin.mobile_setting.app_custom_cover: 'APP Cover Image'
 admin.mobile_setting.app_custom_cover_hint: 'Please upload pictures in png, gif or jpg format. Recommend size 225×400px.'
 admin.mobile_setting.splash_setting: 'Setup launch pictures'
-admin.mobile_setting.splash_setting_hint: 'Maximum 5 launch pictures, recommend size: 640×960px. Users will see the launch pictures when enter the site in App for first time.admin.mobile_setting.splash1: Launch picture 1admin.mobile_setting.splash2: Launch picture 2admin.mobile_setting.splash3: Launch picture 3admin.mobile_setting.splash4: Launch picture 4admin.mobile_setting.splash5: Launch picture 5'
+admin.mobile_setting.splash_setting_hint: 'Please upload images with format of PNG,GIF,JPG. Maximum 5 launch pictures, recommend size: 640×960px. Image size should not exceed 2MB.Users will see the launch pictures when enter the site in App for first time.admin.mobile_setting.splash1: Launch picture 1admin.mobile_setting.splash2: Launch picture 2admin.mobile_setting.splash3: Launch picture 3admin.mobile_setting.splash4: Launch picture 4admin.mobile_setting.splash5: Launch picture 5'
 admin.mobile_setting.splash: 'Launch image %splashNum%'
 admin.coin_model.currency_tips: "1, Could not manually update the user's virtual coin  balance.<br> 2, To recharge, please install plugin <a href=\"%appCenterUrl%\">study card </a>or<a href=\"%appCenterUrl%\">account recharge</a><br> 3、Virtual currency for the price: site to virtual currency as a payment currency, courses and members to virtual currency price and settlement <br> 4、Virtual currency for the price, the mobile side still shows the price of CNY (mobile side does not support virtual currency payment) <br> 5、Once you use the method (use and exchange rate), please do not change <br> 6、The use of the switch will make the course price will change according to the exchange rate<br> 7、If you participate in the promotional activities of the course, update the price will have a corresponding discount\n"
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
@@ -6947,7 +6959,7 @@ user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
 user.learn.statistics.exit.course.num: 退出计划数
 user.learn.statistics.finished.task.num: 学完任务数
-user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.learned.seconds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）

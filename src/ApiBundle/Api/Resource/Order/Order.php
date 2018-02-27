@@ -33,7 +33,7 @@ class Order extends AbstractResource
             if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
                 return array(
                     'id' => $order['id'],
-                    'sn' => $order['sn']
+                    'sn' => $order['sn'],
                 );
             } else {
                 $this->handleParams($params, $order);
@@ -42,10 +42,9 @@ class Order extends AbstractResource
 
                 return array(
                     'id' => $trade['tradeSn'],
-                    'sn' => $trade['tradeSn']
+                    'sn' => $trade['tradeSn'],
                 );
             }
-
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }
