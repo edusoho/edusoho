@@ -5,6 +5,7 @@ return PhpCsFixer\Config::create()
     ->setRules(array(
         '@Symfony' => true,
         'phpdoc_summary' => false,
+        'array_syntax' => array('syntax' => 'long'),
     ))
     ->setFinder(
         PhpCsFixer\Finder::create()

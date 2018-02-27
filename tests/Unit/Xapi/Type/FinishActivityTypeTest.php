@@ -9,6 +9,34 @@ class FinishActivityTypeTest extends BaseTestCase
 {
     public function testPackage()
     {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                    ),
+                ),
+            )
+        );
+
         $taskResultService = $this->mockBiz('Task:TaskResultService',
             array(
                 array(
@@ -130,6 +158,35 @@ class FinishActivityTypeTest extends BaseTestCase
         $packageInfo = $type->packages(array());
 
         $this->assertEmpty($packageInfo);
+
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                    ),
+                ),
+            )
+        );
+
         $taskResultService = $this->mockBiz('Task:TaskResultService',
             array(
                 array(

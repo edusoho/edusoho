@@ -802,3 +802,6 @@ admin.data.lab.setting.error: 发生异常了，请重试！
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: --选择所属栏目--
+
+
+Bad credentials.: 用户名或密码错误

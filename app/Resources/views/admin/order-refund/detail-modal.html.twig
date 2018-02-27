@@ -50,12 +50,12 @@
       <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
     </tr>
 
-    {% if order.paid_cash_amount %}
+    {% if order.paid_cash_amount and order.payment|default(null) != null %}
       <tr>
         <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('payment', order.payment) }}</td>
         <td width="75%">
           <span class="text-muted">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
-          {% if paymentTrade.platform_sn is not null %}
+          {% if paymentTrade.platform_sn|default(null) is not null %}
             <span class="pull-right">
               <a class="es-icon es-icon-help text-normal link-gray"
                  data-toggle="popover" data-trigger="hover"
