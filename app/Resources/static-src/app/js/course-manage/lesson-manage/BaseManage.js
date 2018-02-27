@@ -130,7 +130,7 @@ export default class Manage {
       placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function ($item, container) {
         // 任务课时内拖动
-        if ($item.hasClass('js-task-manage-item') && 
+        if ($item.hasClass('js-task-manage-item') && ($item.data('type') === 'normal') &&
           container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
             return false;
         }
