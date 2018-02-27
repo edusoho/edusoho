@@ -1,6 +1,7 @@
 {% extends 'courseset-manage/layout.html.twig' %}
-{% block title %}{{ 'course.plan_task.manage'|trans }} - {{ parent() }}{% endblock %} {%
-do script(['app/js/course-manage/index.js']) %}
+{% block title %}
+  {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
+{% endblock %}
 
 {% block course_header %}
   {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
