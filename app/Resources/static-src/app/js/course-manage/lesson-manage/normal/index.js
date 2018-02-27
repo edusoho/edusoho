@@ -1,4 +1,4 @@
-import ShowUnpublish from './../ShowUnpublish';
+import {hiddenUnpublishTask, addLesson} from './../header-util';
 import BaseManage from './../BaseManage';
 
 class NormalManage extends BaseManage {
@@ -18,4 +18,6 @@ class NormalManage extends BaseManage {
 
 new NormalManage('#sortable-list');
 
-new ShowUnpublish('input[name="isShowPublish"]');
+hiddenUnpublishTask();
+addLesson();
+

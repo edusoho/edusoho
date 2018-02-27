@@ -44,7 +44,13 @@ class TaskManageController extends BaseController
     {
         $course = $this->tryManageCourse($courseId);
 
-        $categoryId = $request->query->get('categoryId');
+        $categoryId = $request->query->get('categoryId', 0);
+
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'],'categoryId' => $categoryId));
+        if ($taskCount >= 5) {
+            return $this->createJsonResponse(array('code' => false, 'message' => 'lesson_tasks_no_more_than_5'));
+        }
+
         //categoryId  所属课时
         $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
@@ -54,7 +60,7 @@ class TaskManageController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        return $this->render(
+        $html = $this->renderView(
             'task-manage/modal.html.twig',
             array(
                 'mode' => 'create',
@@ -64,6 +70,8 @@ class TaskManageController extends BaseController
                 'taskMode' => $taskMode,
             )
         );
+
+        return $this->createJsonResponse(array('code' => true, 'message', 'html' => $html));
     }
 
     public function batchCreateTasksAction(Request $request, $courseId)

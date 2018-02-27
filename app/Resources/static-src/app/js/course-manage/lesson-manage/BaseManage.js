@@ -24,6 +24,7 @@ export default class Manage {
     this._deleteChapter();
     this._collapse();
     this._publish();
+    this._createTask();
   }
 
   _collapse() {
@@ -246,5 +247,23 @@ export default class Manage {
     
     let num = $('.js-settings-item.active').length;
     this.$taskNumber.text(num);
+  }
+
+  _createTask() {
+    this.$element.on('click', '.js-create-task-btn', function(event) {
+      let url = $(this).data('url');
+
+      $.get(url, function (response) {
+        if (response.code) {
+          $('#modal').html('');
+          $('#modal').append(response.html);
+          $('#modal').modal({'backdrop':'static','show':true});
+        } else {
+          notify('danger', Translator.trans(response.message));
+        }
+      }).fail(function(response){
+        notify('error', response.responseJSON.error.message);
+      });
+    })
   }
 }
