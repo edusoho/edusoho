@@ -18,7 +18,6 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\System\Service\SettingService;
 use Biz\IM\Service\ConversationService;
-use Biz\Question\Service\QuestionService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Announcement\Service\AnnouncementService;
@@ -365,14 +364,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
     }
 
     protected function getQuestionDao()
