@@ -1,8 +1,10 @@
 {% for task in tasks|default() %}
-{% set file =  files[task.activityId]|default(null) %}
+  {% set activity = task.activity|default() %}
+  {% set file = task.activity.ext.file|default(null) %}
+
   <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
     <div class="item-content js-item-content text-overflow">
-      <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrs" data-role="task"></i>
+      <i class="es-icon {{ activity_metas(activity.mediaType).icon }} mrs" data-role="task"></i>
       {% if task.isOptional %}
         <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
@@ -10,23 +12,24 @@
       {% endif %}
       {{ task.title|sub_text(30) }}
 
-      {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
+       {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
         <span class="cd-tag cd-tag-red ml5">{{'course.plan_task.convert_failed'|trans}}</span>
       {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
         <span class="cd-tag cd-tag-orange ml5">{{'course.plan_task.converting'|trans}}</span>
       {% endif %}
-      {% if task.activity.mediaType is same as('live') %}
-        {% if not task.activity.ext.roomCreated|default(true) %}
+
+      {% if activity.mediaType is same as('live') %}
+        {% if not activity.ext.roomCreated|default(true) %}
           <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
-        {% elseif task.activity.endTime < date().timestamp %}
+        {% elseif activity.endTime < date().timestamp %}
           <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
         {% else %}
           <span class="color-success mls">
-          {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
+          {{ activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ activity.endTime|date('H:i')|trans }}</span>
         {% endif %}
       {% else %}
-        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="mls">
-          （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
+        {% if activity.length|activity_length_format(activity.mediaType) %}<span class="mls">
+          （{{ activity.length|activity_length_format(activity.mediaType) }}）</span>{% endif %}
       {% endif %}
     </div>
     <div class="item-actions">
@@ -47,17 +50,7 @@
               {{'course.plan_task.delete_btn'|trans}}
             </a>
           </li>
-          {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
-            {% set file = task.activity.ext.file|default(null) %}
-            {% if file.storage|default(null) == 'cloud' %}
-              <li class="mark-manage">
-                <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank">
-                {{'course.plan_task.lesson-marker_btn'|trans}}
-                </a>
-              </li>
-              <li class="divider mark-manage-divider" style="display:none;"></li>
-            {% endif %}
-          {% endif %}
+          {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}
           {{ slot('task.menu.extension', {'task': task}) }}
         </ul>
       </div>

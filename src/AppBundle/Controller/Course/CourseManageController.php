@@ -413,8 +413,6 @@ class CourseManageController extends BaseController
         }
         
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-        //normal 会用到
-        //$files = $this->prepareTaskActivityFiles($tasks);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
         return $this->render(
@@ -804,26 +802,6 @@ class CourseManageController extends BaseController
         $this->getCourseService()->sortCourseItems($courseId, $ids);
 
         return $this->createJsonResponse(array('result' => true));
-    }
-
-    public function prepareTaskActivityFiles($tasks)
-    {
-        $tasks = ArrayToolkit::index($tasks, 'id');
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-
-        $activities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
-
-        $files = array();
-        array_walk(
-            $activities,
-            function ($activity) use (&$files) {
-                if (in_array($activity['mediaType'], array('video', 'audio', 'doc'))) {
-                    $files[$activity['id']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
-                }
-            }
-        );
-
-        return $files;
     }
 
     public function ordersAction(Request $request, $courseSetId, $courseId)

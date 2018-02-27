@@ -50,7 +50,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $course = $this->getCourseService()->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         $items =  $this->getTasksAndChapters($course['id'], $tasks);
-
+        
         return array(
             'data' => array(
                 'items' => $items,
