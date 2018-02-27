@@ -9,11 +9,6 @@
   {% set status = lesson.status|default('create') == 'published' ? 1 : 0 %}
   <ul class="dropdown-menu task-manage-item__dropdown">
     <li>
-      <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_chapter_delete', {courseId:course.id, chapterId:lesson.id}) }}">
-        {{ 'form.btn.delete'|trans }}
-      </a>
-    </li>
-    <li>
       <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_chapter_publish', {courseId:course.id, chapterId:lesson.id}) }}">
         {{'course.plan_task.publish_btn'|trans}}
       </a>
@@ -21,6 +16,11 @@
     <li>
       <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_chapter_unpublish', {courseId:course.id, chapterId:lesson.id}) }}">
         {{'course.plan_task.unpublish_btn'|trans}}
+      </a>
+    </li>
+    <li>
+      <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_chapter_delete', {courseId:course.id, chapterId:lesson.id}) }}">
+        {{ 'form.btn.delete'|trans }}
       </a>
     </li>
   </ul>

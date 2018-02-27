@@ -42,11 +42,6 @@
           <i class="es-icon es-icon-morehoriz"></i>
         </a>
         <ul class="dropdown-menu task-manage-item__dropdown">
-          <li>
-            <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
-              {{'course.plan_task.delete_btn'|trans}}
-            </a>
-          </li>
           {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
             {% set file = task.activity.ext.file|default(null) %}
             {% if file.storage|default(null) == 'cloud' %}
@@ -58,6 +53,11 @@
               <li class="divider mark-manage-divider" style="display:none;"></li>
             {% endif %}
           {% endif %}
+          <li>
+            <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+              {{'course.plan_task.delete_btn'|trans}}
+            </a>
+          </li>
           {{ slot('task.menu.extension', {'task': task}) }}
         </ul>
       </div>
