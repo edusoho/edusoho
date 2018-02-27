@@ -1,5 +1,9 @@
 {% extends 'v2/layout.html.twig' %}
 
+{% block meta %}
+  {{ parent() }}
+  <meta name="format-detection" content="telephone=no">
+{% endblock %}
 
 {% block header %}
   {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
