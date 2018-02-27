@@ -367,14 +367,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createService('Task:TaskService');
     }
 
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
