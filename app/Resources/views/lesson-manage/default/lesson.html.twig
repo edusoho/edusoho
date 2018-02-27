@@ -5,11 +5,7 @@
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
     <div class="item-content text-overflow js-item-content">
-      <i class="mrs es-icon
-        {% if activity_metas(task.activity.mediaType) %}
-          {{ activity_metas(task.activity.mediaType).icon }}
-        {% endif %}">
-      </i><span class="lesson-unpublish-status
+      <span class="lesson-unpublish-status
         {% if lesson.status == 'published' %}
           hidden
         {% endif %}">
@@ -26,7 +22,7 @@
         {% if not task.activity.ext.roomCreated|default(true) %}
           <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
         {% elseif task.activity.endTime < date().timestamp %}
-          <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
+          <span class="color-gray cd-ml8">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
         {% else %}
           <span class="color-success mls">
           {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>

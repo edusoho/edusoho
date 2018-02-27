@@ -10,6 +10,7 @@ const sortList = (options, callback = (data) => {}) => {
 
   let settings = Object.assign({}, defaultOptions, options);
   let $element = settings.element instanceof jQuery ? settings.element : $(settings.element);
+  let adjustment;
   let $list = $element.sortable(Object.assign({}, settings, {
     onDrop: function (item, container, _super) {
       _super(item, container);
@@ -23,7 +24,23 @@ const sortList = (options, callback = (data) => {}) => {
     },
     serialize: function(parent, children, isContainer) {
       return isContainer ? children : parent.attr('id');
-    }
+    },
+     // set item relative to cursor position
+    onDragStart: function (item, container, _super) {
+      let offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+      adjustment = {
+        left: pointer.left - offset.left,
+        top: pointer.top - offset.top
+      };
+      _super(item, container);
+    },
+    onDrag: function (item, position) {
+      item.css({
+        left: position.left - adjustment.left,
+        top: position.top - adjustment.top
+      });
+    },
   }));
 };
 

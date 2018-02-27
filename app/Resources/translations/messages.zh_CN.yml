@@ -1636,9 +1636,9 @@ course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式
 course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
-course.plan_task.total_tasks: 活动总数：
+course.plan_task.total_tasks: 课时总数：
 course.plan_task.everyday_finish_tasks: >
-  日均约需完成：<span class="color-warning">%taskPerDay%</span> 个任务
+  日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
 course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: 任务
 course.plan_task.batch_create_btn: 批量添加

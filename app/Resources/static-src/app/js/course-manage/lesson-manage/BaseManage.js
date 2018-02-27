@@ -137,6 +137,7 @@ export default class Manage {
       element: self.$element,
       ajax: false,
       group: 'nested',
+      placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function ($item, container) {
         return self._sortRules($item, container);
       }
@@ -147,8 +148,8 @@ export default class Manage {
 
   _sortRules($item, container) {
     // 任务课时内拖动
-    if ($item.hasClass('js-task-manage-item') && 
-      container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
+    if ($item.hasClass('js-task-manage-item') &&
+      container.target.closest('.js-task-manage-lesson').attr('id') != $item.closest('.js-task-manage-lesson').attr('id')) {
         return false;
     }
     // 章节只能挂在总节点下

@@ -50,18 +50,45 @@
     }
   }
   .task-manage-lesson-tasks {
-    padding: 0 24px 24px 24px;
+    padding: 16px 0 20px;
     list-style-type: none;
+    .task-manage-item {
+      margin-bottom: 4px;
+      &:hover {
+        cursor: -webkit-grabbing;
+        cursor: -moz-grabbing;
+        cursor: grabbing;
+      }
+      opacity: 1 !important;
+      &.dragged {
+        .cd-box-shadow-z(3px);
+        .transform(rotate(1deg));
+      }
+    }
+    .task-dragged-placeholder {
+      height: 28px !important;
+      background-color: #eee !important;
+    }
     .item-content {
-      margin-top: 16px;
-      padding: 0;
-      height: 22px;
-      line-height: 22px;
+      padding-left: 24px;
+      padding-right: 24px;
+      height: 28px;
+      line-height: 28px;
       color: @cd-dark-minor;
       background-color: #fff;
+      i {
+        color: @cd-dark-assist;
+      }
+      &:hover {
+        .cd-box-shadow-z(3px);
+      }
     }
-    .task-manage-item {
-      margin-bottom: 0;
+    .item-actions {
+      height:28px;
+      line-height:28px;
+      .task-manage-item__dropdown {
+        top: 16px;
+      }
     }
   }
   .task-manage-item {
