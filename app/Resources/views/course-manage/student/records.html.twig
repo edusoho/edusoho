@@ -1,4 +1,4 @@
-{% extends course_count(course.courseSetId) > 1 ? 'course-manage/tasks/new-layout.html.twig' : 'courseset-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
 
 {% block title %}{{'course.student_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'students' %}
