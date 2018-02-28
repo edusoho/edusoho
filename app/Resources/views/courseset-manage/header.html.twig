@@ -52,7 +52,7 @@
         </button>
         <ul class="dropdown-menu">
           <li>
-            <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{'预览课程'|trans}}</a>
+            <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
           </li>
         </ul>
       </div>
@@ -60,12 +60,12 @@
   </div>
 
   <div class="courseset-manage-header-data">
-    <span class="cd-text-gray">学员人数</span>
+    <span class="cd-text-gray">{{ 'course.student_member'|trans }}</span>
     <div class="cd-mt16 cd-text-gray-dark"><span class="courseset-manage-header-data__num">1515</span>人</div>
   </div>
 
   <div class="courseset-manage-header-data">
-    <span class="cd-text-gray">学习计划</span>
+    <span class="cd-text-gray">{{ 'course.learn_plan'|trans }}</span>
     <div class="cd-mt16 cd-text-gray-dark"><span class="courseset-manage-header-data__num">2</span>个</div>
   </div>
 </div>

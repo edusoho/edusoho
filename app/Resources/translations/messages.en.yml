@@ -789,6 +789,8 @@ course.activity: Activity
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
+course.teaching_plan.free_mode: 自由式学习模式
+course.teaching_plan.locked_mode: 解锁式学习模式
 course.teaching_plan.create: 'Add'
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
@@ -1045,7 +1047,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
-course.order: 'Check order'
+course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
 course.order.conditions: 'Filter'
@@ -1098,6 +1100,10 @@ course.status.unpublished: Unpublished
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
+course.student_member: 学员人数
+course.learn_plan: 学习计划
+course.preview.course: 预览课程
+course.preview.plan: 预览计划
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'

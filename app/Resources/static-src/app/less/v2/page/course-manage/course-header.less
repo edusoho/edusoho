@@ -18,7 +18,15 @@
   font-size: 16px;
   line-height: 1;
   font-weight: 500;
-  color: @cd-dark-major;
+  a {
+    width: 350px;
+    @media (max-width: @screen-md-max) {
+      width: 300px;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 150px;
+    }
+  }
 }
 
 .course-manage-header-info__type {
@@ -107,10 +115,7 @@
     @media (max-width: @screen-md-max) {
       width: 300px;
     }
-    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-      width: 150px;
-    }
-    @media (max-width: @screen-xs-max) {
+    @media (max-width: @screen-sm-max) {
       width: 150px;
     }
   }
@@ -140,7 +145,7 @@
   }
   text-align: center;
   line-height: 1;
-  & + .courseset-manage-header-data {
+  & + & {
     .cd-box-shadow-inset(-1px 0 0 0);
   }
 }
