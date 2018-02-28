@@ -6,17 +6,17 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ChapterEventSubscriber extends EventSubscriber implements EventSubscriberInterface
+class LessonEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'course.chapter.publish' => 'onCourseChpaterPublish',
-            'course.chapter.unpublish' => 'onCourseChpaterUnPublish',
+            'course.lesson.publish' => 'onCourseLessonPublish',
+            'course.lesson.unpublish' => 'onCourseLessonUnPublish',
         );
     }
 
-    public function onCourseChpaterPublish(Event $event)
+    public function onCourseLessonPublish(Event $event)
     {
         $chapter = $event->getSubject();
 
@@ -31,7 +31,7 @@ class ChapterEventSubscriber extends EventSubscriber implements EventSubscriberI
         }
     }
 
-    public function onCourseChpaterUnPublish(Event $event)
+    public function onCourseLessonUnPublish(Event $event)
     {
         $chapter = $event->getSubject();
 
@@ -49,21 +49,5 @@ class ChapterEventSubscriber extends EventSubscriber implements EventSubscriberI
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    protected function getCourseDao()
-    {
-        return $this->getBiz()->dao('Course:CourseDao');
     }
 }

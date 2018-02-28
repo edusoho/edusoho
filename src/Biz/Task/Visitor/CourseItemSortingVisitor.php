@@ -246,6 +246,8 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
         foreach ($copiedTasks as $copiedTask) {
             $newFields = $this->taskBatchUpdateHelper->get('id', $copiedTask['copyId']);
+            //在不考虑跨课时拖动的情况下，categoryId不变
+            $newFields['categoryId'] = $copiedTask['categoryId'];
             $this->taskBatchUpdateHelper->add('id', $copiedTask['id'], $newFields);
         }
 

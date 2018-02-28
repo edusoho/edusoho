@@ -33,6 +33,30 @@ class LessonManageController extends BaseController
         return $this->createJsonResponse(array('code' => true, 'message', 'html' => $html));
     }
 
+    public function publishAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseLessonService()->publishLesson($lessonId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function unpublishAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseLessonService()->unpublishLesson($lessonId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function deleteAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseLessonService()->deleteLesson($lessonId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
     /**
      * @return CourseService
      */

@@ -12,6 +12,9 @@ class CourseChapter extends AbstractSychronizer
     {
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($sourceChapter['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
 
         $helper = $this->getBatchHelper(self::BATCH_CREATE_HELPER, $this->getCourseChapterDao());
         foreach ($copiedCourses as $copyCourse) {
@@ -31,6 +34,10 @@ class CourseChapter extends AbstractSychronizer
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
         $copiedChapters = $this->getCourseChapterDao()->findByCopyId($sourceId);
 
+        if (empty($copiedCourses)) {
+            return;
+        }
+        
         $helper = $this->getBatchHelper(self::BATCH_UPDATE_HELPER, $this->getCourseChapterDao());
         foreach ($copiedChapters as $copiedChapter) {
             $newFields = $sourceChapter;

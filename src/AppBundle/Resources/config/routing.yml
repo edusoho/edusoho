@@ -1735,13 +1735,17 @@ course_manage_chapter_delete:
     defaults: { _controller: AppBundle:Course/ChapterManage:delete }
     methods: [POST]
 
-course_manage_chapter_publish:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/publish
-    defaults: { _controller: AppBundle:Course/ChapterManage:publish }
+course_manage_lesson_publish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/publish
+    defaults: { _controller: AppBundle:Course/LessonManage:publish }
 
-course_manage_chapter_unpublish:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/unpublish
-    defaults: { _controller: AppBundle:Course/ChapterManage:unpublish }
+course_manage_lesson_unpublish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
+    defaults: { _controller: AppBundle:Course/LessonManage:unpublish }
+
+course_manage_lesson_delete:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/delete
+    defaults: { _controller: AppBundle:Course/LessonManage:delete }
 
 course_manage_change_lesson_show_status:
     path:  /course/{courseId}/manage/change/lesson/show/status

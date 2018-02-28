@@ -103,7 +103,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             );
             $categoryTaskCount = $this->getTaskDao()->count($conditions);
             if (empty($categoryTaskCount)) {
-                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+                $this->getCourseLessonService()->deleteLesson($task['categoryId']);
             }
 
             $this->biz['db']->commit();

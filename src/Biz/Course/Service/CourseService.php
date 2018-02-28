@@ -53,12 +53,6 @@ interface CourseService
 
     public function deleteChapter($courseId, $chapterId);
 
-    public function publishChapter($chapterId);
-
-    public function publishChapterByCourseId($courseId);
-
-    public function unpublishChapter($chapterId);
-
     public function findChaptersByCourseId($courseId);
 
     public function updateCourse($id, $fields);

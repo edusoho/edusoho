@@ -587,7 +587,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $this->dispatchEvent('course.publish', $course);
 
-        $this->publishChapterByCourseId($course['id']);
+        $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
     }
 
     protected function validateExpiryMode($course)
@@ -930,43 +930,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return array();
-    }
-
-    public function publishChapter($chapterId)
-    {
-        $chapter = $this->getChapterDao()->get($chapterId);
-        if (empty($chapter) && $chapter['type'] != 'lesson') {
-            throw new $this->createInvalidArgumentException('Argument Invalid');
-        }
-
-        $this->getChapterDao()->update($chapterId, array('status' => 'published'));
-
-        $this->dispatchEvent('course.chapter.publish', new Event($chapter));
-    }
-
-    public function publishChapterByCourseId($courseId)
-    {
-        $chapters = $this->getChapterDao()->findLessonsByCourseId($courseId);
-
-        if (empty($chapters)) {
-            return;
-        }
-
-        foreach ($chapters as $chapter) {
-            $this->publishChapter($chapter['id']);
-        }
-    }
-
-    public function unpublishChapter($chapterId)
-    {
-        $chapter = $this->getChapterDao()->get($chapterId);
-        if (empty($chapter) && $chapter['type'] != 'lesson') {
-            throw new $this->createInvalidArgumentException('Argument Invalid');
-        }
-
-        $this->getChapterDao()->update($chapterId, array('status' => 'unpublished'));
-
-        $this->dispatchEvent('course.chapter.unpublish', new Event($chapter));
     }
 
     public function countUserLearningCourses($userId, $filters = array())
@@ -2159,6 +2122,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 
     /**
