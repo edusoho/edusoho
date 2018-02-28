@@ -1214,7 +1214,7 @@ course.replay_manage.live_show.edit: 录播显示编辑
 course.replay_manage.upload_modal.edit_replay: 编辑回放视频
 course.replay_manage.upload_modal.add_replay: 添加回放视频
 
-course.teach_plan_manage: 教学计划管理
+course.teach_plan_manage: 教学计划
 
 course.cover: 课程封面
 course.cover_image: 封面图片
@@ -1256,6 +1256,8 @@ course.status.finished: 已完结
 course.status.published: 已发布
 course.student_member: 学员人数
 course.learn_plan: 学习计划
+course.student.cell: 个
+course.plan.cell: 人
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
 course.share: 分享
@@ -1404,8 +1406,8 @@ course.task_toolbar.tasks: 目录
 course.task_toolbar.notes: 笔记
 course.task_toolbar.questions: 问答
 
-course.base: 基本信息
-course.base.content_title: 基础信息
+course.base: 课程信息
+course.base.content_title: 课程信息
 course.base.title: 标题
 course.base.sub_title: 副标题
 course.base.tag: 标签
@@ -1424,7 +1426,7 @@ course.detail.content_title: 详细信息
 course.detail.summary: 课程简介
 course.detail.target: 课程目标
 course.detail.intended-students: 适应人群
-course.question_manage: 题目管理
+course.question_manage: 课程题库
 course.question_manage.your_answer: 你的回答：
 course.question_manage.you_no_answer: 未回答
 course.question_manage.teacher_reviewing: 老师正在批阅！
@@ -1436,7 +1438,7 @@ course.question_manage.no_answer: 你未答题
 course.question_manage.answer: 正确答案是
 course.question_manage.preview_btn: 预览
 course.question_manage.more_btn: 更多
-course.question_manage.content_title: 题目管理
+course.question_manage.content_title: 课程题库
 course.question_manage.filter.question_type: --按题型--
 course.question_manage.filter.course: 按课程
 course.question_manage.filter.keywords: 关键字
@@ -1500,9 +1502,9 @@ course.question_manage.manage.steom_tips: >
 course.question_manage.manage.material: 材料
 course.question_manage.edit: 编辑题目
 
-course.testpaper_manage: 试卷管理
+course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
-course.testpaper_manage.content_title: 试卷管理
+course.testpaper_manage.content_title: 课程试卷
 course.testpaper_manage.create_btn: 创建试卷
 course.testpaper_manage.name: 名称
 course.testpaper_manage.status: 状态
