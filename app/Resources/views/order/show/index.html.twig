@@ -18,7 +18,7 @@
 
       {{ slot('order.show.deducts', {'product': product}) }}
       
-      {% if not product.hideCoupon|default() %}
+      {% if product.couponEnable|default() %}
         {% include 'order/show/coupon-item.html.twig' %}
       {% endif %}
     

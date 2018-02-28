@@ -104,7 +104,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
      *
      * @var bool
      */
-    public $hideCoupon = false;
+    public $couponEnable = true;
 
     /**
      * 封面
