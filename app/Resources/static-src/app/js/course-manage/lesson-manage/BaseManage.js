@@ -66,11 +66,11 @@ export default class Manage {
     {
       case 'chapter':
         let $position = this.$element.find('#chapter-'+this.position);
-        $position = $position.nextUntil('.js-task-manage-chapter').last();
-        if (0 == $position.length) {
-          this.$element.append(elm);
-        } else {
+        let $last = $position.nextUntil('.js-task-manage-chapter').last();
+        if (0 == $last.length) {
           $position.after(elm);
+        } else {
+          $last.after(elm);
         }
         break;
       case 'task':
