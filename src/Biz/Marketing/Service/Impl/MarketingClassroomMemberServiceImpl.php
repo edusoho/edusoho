@@ -22,8 +22,9 @@ class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
             'source' => $data['source'],
             'create_extra' => $data,
             'deducts' => empty($data['deducts']) ? array() : $data['deducts'],
+            'pay_time' => $data['pay_time'],
         );
 
-        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
+        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params, 'Marketing');
     }
 }

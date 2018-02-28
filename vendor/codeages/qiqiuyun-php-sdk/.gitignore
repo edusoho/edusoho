@@ -1,5 +1,6 @@
 .idea/
-composer.lock
 vendor/
-.php_cs.cache
 /var
+/test.php
+composer.lock
+.php_cs.cache

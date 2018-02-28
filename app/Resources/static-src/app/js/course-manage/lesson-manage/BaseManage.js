@@ -134,6 +134,7 @@ export default class Manage {
   _sort() {
     // 拖动，及拖动规则
     let self = this;
+    let adjustment;
     sortList({
       element: self.$element,
       ajax: false,
@@ -141,7 +142,27 @@ export default class Manage {
       placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function ($item, container) {
         return self._sortRules($item, container);
-      }
+      },
+      onDragStart: function (item, container, _super) {
+        let offset = item.offset(),
+            pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function (item, position) {
+        const height = item.height();
+        $('.task-dragged-placeholder').css({
+          'height': height,
+          'background-color': '#eee'
+        });
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+      },
     }, (data) => {
       self.sortList();
     });

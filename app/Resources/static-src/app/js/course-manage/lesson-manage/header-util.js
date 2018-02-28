@@ -1,15 +1,17 @@
 import notify from 'common/notify';
 
 export const hiddenUnpublishTask = () => {
-  $('input[name="isShowPublish"]').change(function(){
-    const url = $(this).data('url');
-    const status = $(this).parent('.js-switch').hasClass('checked') ? 0 : 1;
-
-    $.post(url, {status:status})
-    .success(function(response) {
+  cd.onoff({
+    el: '.js-switch'
+  }).on('change', (value) => {
+    let $ele = $('#isShowPublish');
+    const url = $ele.data('url');
+    const status = $ele.parent().hasClass('checked') ? 1 : 0;
+    $.post(url, { status: status })
+    .success((response) => {
       notify('success', Translator.trans('site.save_success_hint'));
     })
-    .error(function(response){
+    .error((response) => {
       notify('error', response.error.message);
     })
   })

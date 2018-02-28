@@ -89,10 +89,9 @@ user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
 
-# 临时隐藏 distributor
-#distributor_register:
-#    path:  /distributor_register
-#    defaults: { _controller: AppBundle:Register:distributorIndex }
+distributor_register:
+   path:  /distributor_register
+   defaults: { _controller: AppBundle:Register:distributorIndex }
 
 register:
     path:  /register
@@ -1720,15 +1719,6 @@ course_task_plugin_thread_answer:
 course_manage_chapter_manage:
     path:  /course/{courseId}/manage/chapter/manage
     defaults: { _controller: AppBundle:Course/ChapterManage:manage}
-
-#course_chapter
-course_manage_chapter_create:
-    path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: AppBundle:Course/ChapterManage:create }
-
-course_manage_chapter_edit:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: AppBundle:Course/ChapterManage:edit }
 
 course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete

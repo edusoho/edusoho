@@ -15,9 +15,17 @@ define(function(require, exports, module) {
       }
     );
 
+    $('.mockSelector').change(
+      function() {
+        $('.tagContent').hide();
+        displayedTabContent = $('.mockSelector').val();
+        $('.tagContent.' + displayedTabContent).show();
+      }
+    );
+
     $('.sendedType').change(
       function() {
-        if ($('.sendedType') != '') {
+        if ($('.sendedType').val() != '') {
           $('.sendedData').val('');
           $.post(
             $('.sendedType').data('url'), { type: $('.sendedType').val() },
@@ -43,6 +51,20 @@ define(function(require, exports, module) {
         }
       }
     );
+
+    $('.sendMarketingBtn').click(
+      function() {
+        $('.sendMarketingResult').html('');
+        $.post(
+          $('.sendMarketingBtn').data('url'), { 'url': $('.defaultUrl').val(), 'body': $('.sendedMarketingData').val() },
+          function(data) {
+            $('.sendMarketingResult').html(data.result);
+          }
+        );
+      }
+    );
+
+    $('.defaultUrl').val('/callback/marketing?ac=orders.accept');
   };
 
 });

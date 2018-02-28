@@ -734,6 +734,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->getUserByType($type);
     }
 
+    public function getUserByUUID($uuid)
+    {
+        return $this->getUserDao()->getByUUID($uuid);
+    }
+
     /**
      * @registration type属性使用了原先的 $type 参数, 不填，则为default （原先的接口参数为 $registration, $type)
      *
@@ -1823,6 +1828,23 @@ class UserServiceImpl extends BaseService implements UserService
         if ($newMessageNum >= 0 && $num > 0) {
             $this->getUserDao()->update($id, array('newMessageNum' => $newMessageNum));
             $user->__set('newMessageNum', $newMessageNum);
+        }
+    }
+
+    public function makeUUID()
+    {
+        return sha1(uniqid(mt_rand(), true));
+    }
+
+    public function generateUUID()
+    {
+        $uuid = $this->makeUUID();
+        $user = $this->getUserByUUID($uuid);
+
+        if (empty($user)) {
+            return $uuid;
+        } else {
+            return $this->generateUUID();
         }
     }
 

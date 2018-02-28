@@ -110,6 +110,7 @@ class User extends BaseResource
         $simple['nickname'] = $res['nickname'];
         $simple['title']    = $res['title'];
         $simple['avatar']   = $this->getFileUrl($res['smallAvatar']);
+        $simple['uuid'] = $res['uuid'];
 
         return $simple;
     }

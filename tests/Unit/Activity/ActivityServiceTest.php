@@ -265,6 +265,10 @@ class ActivityServiceTest extends BaseTestCase
                     'functionName' => 'updateCourseStatistics',
                     'returnValue' => 1,
                 ),
+                array(
+                    'functionName' => 'createChapter',
+                    'returnValue' => array('id' => 1, 'status' => 'create'),
+                ),
             )
         );
 

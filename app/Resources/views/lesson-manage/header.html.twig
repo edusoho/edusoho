@@ -8,7 +8,7 @@
     {{ 'course.plan_lesson.hidden'|trans }}
   </span>
   <label class="cd-switch task-list-header__switch js-switch {% if not course.isShowUnpublish %}checked{% endif %}">
-    <input type="checkbox" name="isShowPublish" data-toggle="cd-switch" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
+    <input type="checkbox" name="isShowPublish" id="isShowPublish" data-toggle="cd-switch" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
   </label>
 
   <div class="pull-right">

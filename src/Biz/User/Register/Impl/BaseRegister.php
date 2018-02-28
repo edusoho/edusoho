@@ -120,6 +120,8 @@ abstract class BaseRegister
             $user['orgCode'] = $registration['orgCode'];
         }
 
+        $user['uuid'] = $this->getUserService()->generateUUID();
+
         return array($user, $registration);
     }
 

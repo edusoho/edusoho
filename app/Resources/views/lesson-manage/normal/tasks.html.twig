@@ -39,7 +39,7 @@
       <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
         <i class="es-icon es-icon-removeredeye"></i>
       </a>
-
+      
       <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
         <a  class="cd-link-assist" href="javascript:;">
           <i class="es-icon es-icon-morehoriz"></i>
@@ -54,7 +54,6 @@
           {{ slot('task.menu.extension', {'task': task}) }}
         </ul>
       </div>
-
     </div>
   </li>
 {% endfor %}
