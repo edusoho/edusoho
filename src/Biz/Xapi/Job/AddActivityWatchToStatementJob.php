@@ -11,6 +11,13 @@ class AddActivityWatchToStatementJob extends AbstractJob
 {
     public function execute()
     {
+        for ($i = 1; $i <= 5; ++$i) {
+            $this->watchLogToSatement();
+        }
+    }
+
+    private function watchLogToSatement()
+    {
         $conditions = array(
             'is_push' => 0,
             'updated_time_LT' => time() - 60 * 60,
@@ -18,7 +25,10 @@ class AddActivityWatchToStatementJob extends AbstractJob
 
         $orderBy = array('created_time' => 'ASC');
 
-        $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, 10);
+        $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, 500);
+        if (empty($watchLogs)) {
+            return;
+        }
 
         $activityIds = ArrayToolkit::column($watchLogs, 'activity_id');
         $activities = $this->getActivityService()->findActivities($activityIds);

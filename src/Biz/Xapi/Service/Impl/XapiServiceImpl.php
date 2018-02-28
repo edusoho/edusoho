@@ -31,8 +31,13 @@ class XapiServiceImpl extends BaseService implements XapiService
 
     public function batchCreateStatements($statements)
     {
+        if (empty($this->biz['user'])) {
+            throw new AccessDeniedException('user is not login.');
+        }
         $batchCreateHelper = new BatchCreateHelper($this->getStatementDao());
         foreach ($statements as $statement) {
+            $statement['version'] = $this->biz['xapi.options']['version'];
+            $statement['uuid'] = $this->generateUUID();
             $batchCreateHelper->add($statement);
         }
         $batchCreateHelper->flush();
