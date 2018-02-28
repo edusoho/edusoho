@@ -91,7 +91,7 @@ export default class Manage {
     this.handleEmptyShow();
     this._flushTaskNumber();
     this.clearPosition();
-    this.afterAddItem();
+    this.afterAddItem($elm);
   }
 
   clearPosition() {
