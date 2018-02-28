@@ -1,16 +1,10 @@
 import {
   closeCourse,
   publishCourse,
-  deleteCourse
+  deleteCourse,
 } from './help';
 
 
 closeCourse();
 deleteCourse();
 publishCourse();
-
-
-
-
-
-

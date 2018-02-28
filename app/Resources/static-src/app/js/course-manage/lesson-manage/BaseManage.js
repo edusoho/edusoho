@@ -16,8 +16,9 @@ export default class Manage {
       self.sortList();
     });
 
-    this.$element.on('click','[data-toggle]', function(e){
+    $('[data-position]').on('click', function(e){
       let $this = $(this);
+
       self.position = $this.data('position');
       self.type = $this.data('type');
     });
@@ -54,8 +55,10 @@ export default class Manage {
     let $elm = $(elm);
     let $exsit = $('#'+$elm.attr('id'));
 
+    //编辑时，替换元素
     if ($exsit.length > 0) {
-      $exsit.replaceWith(elm);
+      $exsit.replaceWith($elm);
+      this.afterAddItem($elm);
 
       return;
     }
@@ -88,10 +91,11 @@ export default class Manage {
     }
     this.handleEmptyShow();
     this._flushTaskNumber();
-    this._clearPosition();
+    this.clearPosition();
+    this.afterAddItem($elm);
   }
 
-  _clearPosition() {
+  clearPosition() {
     this.position = '';
     this.type = '';
   }
@@ -286,5 +290,9 @@ export default class Manage {
         notify('error', response.error.message);
       });
     })
+  }
+  
+  afterAddItem($elm) {
+    console.log('afterAddItem');
   }
 }
