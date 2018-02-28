@@ -2,14 +2,13 @@
 
 namespace QiQiuYun\SDK\Service;
 
-use QiQiuYun\SDK\Util\SignUtil;
 use QiQiuYun\SDK\Helper\MarketingHelper;
-use QiQiuYun\SDK\Exception\DrpException;
 use QiQiuYun\SDK\Exception\SDKException;
 
 class DrpService extends BaseService
 {
-    protected $baseUri = 'http://test.fx.edusoho.cn';
+    protected $host = 'fx.qiqiuyun.net';
+
     private $loginPath = '/merchant/login';
     private $postDataPath = '/merchant_data/actions/report';
 
@@ -35,12 +34,13 @@ class DrpService extends BaseService
      */
     public function generateLoginForm($user, $site)
     {
-        $jsonStr = SignUtil::serialize(array('user' => $user, 'site' => $site));
-        $jsonStr = SignUtil::cut($jsonStr);
-        $sign = SignUtil::sign($this->auth, $jsonStr);
-        $action = $this->baseUri.$this->loginPath;
+        $data = array('site' => $site, 'user' => $user);
+        ksort($data);
+        $signingText = json_encode($data);
+        $signature = $this->auth->makeRequestAuthorization($this->loginPath, $signingText);
+        $action = $this->getRequestUri($this->loginPath);
 
-        return MarketingHelper::generateLoginForm($action, $user, $site, $sign);
+        return MarketingHelper::generateLoginForm($action, $user, $site, $signature);
     }
 
     /**
@@ -54,22 +54,23 @@ class DrpService extends BaseService
      *               - time 链接生成时间
      *               - nonce 参与签名计算的随机字符串
      *
-     * @throws DrpException 签名不通过
+     * @throws SDKException 签名不通过
      */
     public function parseRegisterToken($token)
     {
         $token = explode(':', $token);
         if (7 !== count($token)) {
-            throw new DrpException('非法请求:token格式不合法');
+            throw new SDKException('非法请求:token格式不合法');
         }
-
         list($merchantId, $agencyId, $couponPrice, $couponExpiryDay, $time, $nonce, $expectSign) = $token;
 
-        $json = SignUtil::serialize(array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay));
-        $signText = implode('\n', array($time, $nonce, $json));
-        $actualSign = $this->auth->sign($signText);
+        $data = array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay);
+        ksort($data);
+        $dataStr = json_encode($data);
+        $signingText = implode("\n", array($nonce, $time, $dataStr));
+        $actualSign = $this->auth->makeSignature($signingText);
         if ($expectSign != $actualSign) {
-            throw new DrpException('非法请求:sign值不一致');
+            throw new SDKException('非法请求:sign值不一致');
         }
 
         return array('coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay, 'time' => $time, 'nonce' => $nonce);
@@ -107,40 +108,14 @@ class DrpService extends BaseService
      *
      * @throws DrpException 上报数据异常
      */
-    public function postData($type, $data)
+    public function postData($type, array $data)
     {
-        if (empty($data) || empty($type)) {
+        if (empty($type) || empty($data)) {
             throw new SDKException("Required 'data' and 'type'");
         }
-        if (!is_array($data)) {
-            throw new SDKException("'data' must be instanceof Array");
-        }
+        $data = array('type' => $type, 'data' => $data);
+        ksort($data);
 
-        return $this->doPost($type, $data);
-    }
-
-    private function doPost($type, $data)
-    {
-        $jsonStr = SignUtil::serialize(array('data' => $data, 'type' => $type));
-        $jsonStr = SignUtil::cut($jsonStr);
-        $sign = SignUtil::sign($this->auth, $jsonStr);
-
-        $response = $this->client->request(
-            'POST',
-            $this->postDataPath,
-            array(
-                'json' => array(
-                    'data' => $data,
-                    'type' => $type,
-                    'sign' => $sign,
-                ),
-            )
-        );
-        $result = json_decode($response->getBody(), true);
-        if (isset($result['error'])) {
-            throw new DrpException($result['error']['message'], $result['error']['code']);
-        }
-
-        return $result;
+        return $this->request('POST', $this->postDataPath, $data);
     }
 }

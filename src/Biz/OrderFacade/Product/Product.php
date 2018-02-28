@@ -182,6 +182,11 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return array();
     }
 
+    public function getSnapShot()
+    {
+        return array();
+    }
+
     /**
      * @return Currency
      */

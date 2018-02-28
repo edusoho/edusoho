@@ -143,17 +143,16 @@ class Coupon {
   selectCoupon() {
     cd.radio({
       el: '.js-existing-coupon',
-      cb: (event) => {
-        const $this = $(event.currentTarget);
-        const code = $this.data('code');
-        const deductAmount = $this.data('deductAmount');
-        this.$couponCode.val(code);
+    }).on('change', (event) => {
+      const $this = $(event.currentTarget);
+      const code = $this.data('code');
+      const deductAmount = $this.data('deductAmount');
+      this.$couponCode.val(code);
 
-        this.$selectCouponBtn.trigger('click');
+      this.$selectCouponBtn.trigger('click');
 
-        this.useCouponAfter(deductAmount, code);
-      }
-    });
+      this.useCouponAfter(deductAmount, code);
+    })
   }
 
 }

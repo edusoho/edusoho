@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="col-md-5">
-        <div class="cd-id-card" id="id-card-front">
+        <div class="es-id-card" id="id-card-front">
           <div class="card-icon">
             <i class="cd-icon cd-icon-id-front"></i>
           </div>
@@ -71,10 +71,11 @@
             <input id="faceImg" type="file" name="faceImg" accept="image/bmp,image/jpeg,image/png"
             class="js-upload-input" data-target="#id-card-front">
           </label>
+          <p class="card-img-tip cd-text-sm cd-dark-minor">{{ 'user.settings.upload.img.tip'|trans }}</p>
         </div>
       </div>
       <div class="col-md-5 col-md-offset-1">
-        <div class="cd-id-card" id="id-card-back">
+        <div class="es-id-card" id="id-card-back">
           <div class="card-icon">
             <i class="cd-icon cd-icon-id-back"></i>
           </div>
@@ -83,11 +84,12 @@
             <input id="backImg" type="file" name="backImg" accept="image/bmp,image/jpeg,image/png"
             class="js-upload-input" data-target="#id-card-back">
           </label>
+          <p class="card-img-tip cd-text-sm cd-dark-minor">{{ 'user.settings.upload.img.tip'|trans }}</p>
         </div>
       </div>
-      <div class="col-md-11">
-        <div class="cd-mb16 cd-text-medium cd-text-gray-dark">{{'user.settings.verification.notice'|trans}}</div>
-        <div class="cd-text-xs cd-text-gray cd-line-height-sm cd-mb32">
+      <div class="col-md-11 cd-mt16">
+        <div class="cd-mb16 cd-text-medium cd-dark-major">{{'user.settings.verification.notice'|trans}}</div>
+        <div class="cd-text-sm cd-dark-minor cd-mb32" style="line-height: 20px">
           {{'user.settings.verification.notice_content'|trans|raw}}
         </div>
       </div>

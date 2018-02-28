@@ -411,37 +411,20 @@ class CourseManageController extends BaseController
                 )
             );
         }
-
+        
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
-        $files = $this->prepareTaskActivityFiles($tasks);
-
-        $courseItems = $this->getCourseService()->findCourseItems($courseId);
-        $taskPerDay = $this->getFinishedTaskPerDay($course, $tasks);
+        $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
         return $this->render(
-            $this->createCourseStrategy($course)->getTasksTemplate(),
-            array(
-                'files' => $files,
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'items' => $courseItems,
-                'taskPerDay' => $taskPerDay,
+            $tasksListJsonData['template'],
+            array_merge(
+                array(
+                    'courseSet' => $courseSet,
+                    'course' => $course,
+                ),
+                $tasksListJsonData['data']
             )
         );
-    }
-
-    protected function getFinishedTaskPerDay($course, $tasks)
-    {
-        $taskNum = $course['taskNum'];
-        if ('days' == $course['expiryMode']) {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
-        } else {
-            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
-        }
-
-        return round($finishedTaskPerDay, 0);
     }
 
     public function prepareExpiryMode($data)
@@ -819,26 +802,6 @@ class CourseManageController extends BaseController
         $this->getCourseService()->sortCourseItems($courseId, $ids);
 
         return $this->createJsonResponse(array('result' => true));
-    }
-
-    public function prepareTaskActivityFiles($tasks)
-    {
-        $tasks = ArrayToolkit::index($tasks, 'id');
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-
-        $activities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
-
-        $files = array();
-        array_walk(
-            $activities,
-            function ($activity) use (&$files) {
-                if (in_array($activity['mediaType'], array('video', 'audio', 'doc'))) {
-                    $files[$activity['id']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
-                }
-            }
-        );
-
-        return $files;
     }
 
     public function ordersAction(Request $request, $courseSetId, $courseId)

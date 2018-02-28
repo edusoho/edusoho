@@ -23,18 +23,47 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return true;
     }
 
-    public function getTasksTemplate()
+    protected function getFinishedTaskPerDay($course, $tasks)
     {
-        return 'lesson-manage/default-list.html.twig';
+        $taskNum = $course['taskNum'];
+        if ('days' == $course['expiryMode']) {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
+        } else {
+            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
+        }
+
+        return round($finishedTaskPerDay, 0);
     }
 
-    public function getJsonTemplate($task)
+    public function getTasksListJsonData($courseId)
     {
-        if (!empty($task['mode']) && 'lesson' != $task['mode']) {
-            return '';
-        }
-        
-        return 'lesson-manage/default/lesson.html.twig';
+        $course = $this->getCourseService()->getCourse($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $items = $this->prepareCourseItems($course['id'], $tasks);
+
+        return array(
+            'data' => array(
+                'items' => $items,
+            ),
+            'template' => 'lesson-manage/default-list.html.twig',
+        );
+    }
+
+    public function getTasksJsonData($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
+        $lesson = $this->getChapterDao()->get($task['categoryId']);
+        $lesson['tasks'] = $tasks;
+
+        return array(
+            'data' => array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ),
+            'template' => 'lesson-manage/default/lesson.html.twig',
+        );
     }
 
     public function createTask($field)
@@ -110,7 +139,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
     }
 
-    public function prepareCourseItems($courseId, $tasks, $limitNum)
+    public function prepareCourseItems($courseId, $tasks, $limitNum = 0)
     {
         if ($limitNum) {
             $tasks = array_slice($tasks, 0, $limitNum);
@@ -210,6 +239,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $chapter = $this->getCourseService()->createChapter($chapter);
         $task['categoryId'] = $chapter['id'];
         $task['mode'] = 'lesson';
+
         return parent::createTask($task);
     }
 

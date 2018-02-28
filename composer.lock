@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "74a429ffafe8faadd141ce290caa8750",
+    "content-hash": "d71700b94a1ff73aceb4f7d827d43844",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.9",
+            "version": "v0.9.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
+                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/c319ccece125b07da681f4893dfa50bf5bbb99f7",
-                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/6d8a27d1a77da92aab9942bc9739bed051fe7b57",
+                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57",
                 "shasum": ""
             },
             "require": {
@@ -341,20 +341,20 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-01-18T02:33:43+00:00"
+            "time": "2018-01-30T03:05:11+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.14",
+            "version": "v0.1.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed"
+                "reference": "52f71578e425471a6b57ab40f37acb87beb655e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
-                "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/52f71578e425471a6b57ab40f37acb87beb655e5.zip",
+                "reference": "52f71578e425471a6b57ab40f37acb87beb655e5",
                 "shasum": ""
             },
             "require": {
@@ -363,13 +363,15 @@
                 "wenqinruan/omnipay-alipay": "^2.3"
             },
             "require-dev": {
-                "mockery/mockery": "^0.9.9"
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "4.8.36"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Codeages\\Biz\\Order\\": "src/Order/",
-                    "Codeages\\Biz\\Pay\\": "src/Pay/"
+                    "Codeages\\Biz\\Pay\\": "src/Pay/",
+                    "Codeages\\Biz\\Invoice\\": "src/Invoice/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -377,7 +379,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-01-25T02:38:55+00:00"
+            "time": "2018-02-07T03:54:31+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -463,26 +465,26 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.1.0",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0"
+                "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0.zip",
-                "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
+                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7be9669159fc6de4279aeb1ae754f6b52352f1d8.zip",
+                "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
                 "php": ">=5.3.3",
                 "psr/log": "^1.0"
             },
             "require-dev": {
                 "monolog/monolog": "^1.18",
-                "phpunit/phpunit": "^4 || ^5 || ^6",
-                "silex/silex": "^2.0"
+                "phpunit/phpunit": "^4 || ^5 || ^6"
             },
             "type": "library",
             "autoload": {
@@ -502,7 +504,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-01-26T03:47:46+00:00"
+            "time": "2018-02-06T08:30:40+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -2474,6 +2476,7 @@
                 "xls",
                 "xlsx"
             ],
+            "abandoned": "phpoffice/phpspreadsheet",
             "time": "2015-05-01T07:00:55+00:00"
         },
         {
@@ -2531,7 +2534,7 @@
             "version": "3.7.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/piwik/device-detector.git",
+                "url": "https://github.com/matomo-org/device-detector.git",
                 "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30"
             },
             "dist": {

@@ -1,18 +1,20 @@
-<li id="chapter-{{ lesson.id }}" class="task-manage-item js-task-manage-item drag clearfix">
+<li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix">
   {% set tasks = array_index(lesson.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
 
   <div class="item-default-header clearfix">
+    <div class="item-line"></div>
     <div class="item-content text-overflow js-item-content">
-      <i class="mrm es-icon
-        {% if activity_metas(task.activity.mediaType) %}
-          {{ activity_metas(task.activity.mediaType).icon }}
+      <span class="lesson-unpublish-status
+        {% if lesson.status == 'published' %}
+          hidden
         {% endif %}">
-      </i>
-      {% if lesson.number == 0 %}
-        <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+         {{'course.plan_task.task_unpublished'|trans}}
+      </span>
+      {% if task.isOptional == 1 %}
+        <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
-        {{'site.data.task'|trans}}<span class="number">{{ lesson.number }}</span>：
+        {{'course.lesson'|trans}}<span class="number mls">{{ lesson.number }}</span>：
       {% endif %}
       {{ lesson.title|sub_text(30) }}
 
@@ -20,38 +22,29 @@
         {% if not task.activity.ext.roomCreated|default(true) %}
           <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
         {% elseif task.activity.endTime < date().timestamp %}
-          <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
+          <span class="color-gray cd-ml8">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
         {% else %}
           <span class="color-success mls">
           {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
         {% endif %}
       {% else %}
-        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="color-gray mls">
+        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="mls">
           （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
       {% endif %}
-      <span class="color-warning publish-status
-        {% if lesson.status == 'published' %}
-          hidden
-        {% endif %}">
-         {{'course.plan_task.task_unpublished'|trans}}
-      </span>
     </div>
 
     <div class="item-actions">
-      <a class="btn gray-darker" data-role='update-task' href="javascript:;"
-        data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
-        <i class="es-icon es-icon-edit mrs"></i>{{'course.plan_task.edit_btn'|trans}}
+      <a class="cd-mr24" data-role='update-task' href="javascript:;"
+        data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
+        <i class="es-icon es-icon-edit"></i>
       </a>
-      <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id, courseId:task.courseId, preview:1}) }}"
-        target="_blank">
-        <i class="es-icon es-icon-removeredeye mrs"></i>
-        {{'course.plan_task.preview_btn'|trans}}
+      <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id, courseId:task.courseId, preview:1}) }}" target="_blank">
+        <i class="es-icon es-icon-removeredeye"></i>
       </a>
 
       {% include 'lesson-manage/default/lesson-manage.html.twig' %}
     </div>
-  </div> 
+  </div>
 
   {% include 'lesson-manage/default/tasks.html.twig' %}
 </li>

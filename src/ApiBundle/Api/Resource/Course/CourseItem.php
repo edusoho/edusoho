@@ -50,9 +50,9 @@ class CourseItem extends AbstractResource
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
-                    $taskSeq++;
+                    ++$taskSeq;
                 }
-                $number++;
+                ++$number;
                 continue;
             }
 
@@ -60,7 +60,7 @@ class CourseItem extends AbstractResource
             $item['seq'] = '0';
             $item['number'] = $originItem['number'];
             $item['title'] = $originItem['title'];
-            $item['task'] =  null;
+            $item['task'] = null;
             $newItems[] = $item;
         }
 
