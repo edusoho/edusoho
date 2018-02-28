@@ -429,7 +429,7 @@ class CourseController extends CourseBaseController
     {
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 10000));
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
