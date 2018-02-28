@@ -17,8 +17,11 @@
       {% include product.showTemplate %}
 
       {{ slot('order.show.deducts', {'product': product}) }}
-      {% include 'order/show/coupon-item.html.twig' %}
-
+      
+      {% if not product.hideCoupon|default() %}
+        {% include 'order/show/coupon-item.html.twig' %}
+      {% endif %}
+    
       <div class="cd-pv16" id="order-center-price-list">
         <div class="order-center-price">
           <div class="order-center-price__title">{{'order.confirm.price'|trans}}</div>
