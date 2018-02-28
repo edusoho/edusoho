@@ -4,13 +4,18 @@
 
   <div class="item-default-header clearfix">
     <div class="item-content text-overflow js-item-content">
-      <i class="mrm es-icon
+      <span class="lesson-unpublish-status
+        {% if lesson.status == 'published' %}
+          hidden
+        {% endif %}">
+         {{'course.plan_task.task_unpublished'|trans}}
+      </span><i class="mrm es-icon
         {% if activity_metas(task.activity.mediaType) %}
           {{ activity_metas(task.activity.mediaType).icon }}
         {% endif %}">
       </i>
       {% if lesson.number == 0 %}
-        <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+        <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
         {{'course.activity'|trans}}<span class="number mls">{{ lesson.number }}</span>：
       {% endif %}
@@ -26,15 +31,9 @@
           {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
         {% endif %}
       {% else %}
-        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="color-gray mls">
+        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="mls">
           （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
       {% endif %}
-      <span class="color-warning publish-status
-        {% if lesson.status == 'published' %}
-          hidden
-        {% endif %}">
-         {{'course.plan_task.task_unpublished'|trans}}
-      </span>
     </div>
 
     <div class="item-actions">

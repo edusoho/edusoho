@@ -1,28 +1,23 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends course_count(course.courseSetId) > 1 ? 'course-manage/tasks/new-layout.html.twig' : 'courseset-manage/layout.html.twig' %}
 
 {% block title %}{{ 'course.replay_manage'|trans }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'replay' %}
 {% do script(['app/js/course-manage/live-replay/index.js']) %}
 
-{% block main %}
-  <div class="panel panel-default panel-col lesson-manage-panel">
-    <div class="panel-heading">
-      {{ 'course.replay_manage.content_title'|trans }}
-    </div>
+{% block page_title %}{{ 'course.replay_manage.content_title'|trans }}{% endblock %}
 
+{% block main_body %}
+  <div class="lesson-manage-section">
     {% if tasks is empty %}
       <div class="empty">{{ 'course.replay_manage.empty'|trans }}</div>
     {% endif %}
 
-    <div class="panel-body">
-      <ul class="lesson-list sortable-list" id="course-item-list">
-        {% for task in tasks %}
-          {% include 'course-manage/live-replay/list-item.html.twig' with {course: course, task: task, activity: task.activity } %}
-        {% endfor %}
-      </ul>
-      <div class="color-warning">{{'course.replay_manage.tips'|trans}}</div>
-    </div>
+    <ul class="lesson-list sortable-list ml0" id="course-item-list">
+      {% for task in tasks %}
+        {% include 'course-manage/live-replay/list-item.html.twig' with {course: course, task: task, activity: task.activity } %}
+      {% endfor %}
+    </ul>
+    <div class="color-warning">{{'course.replay_manage.tips'|trans}}</div>
   </div>
-
 {% endblock %}

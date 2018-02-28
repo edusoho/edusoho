@@ -1,17 +1,11 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends course_count(course.courseSetId) > 1 ? 'course-manage/tasks/new-layout.html.twig' : 'courseset-manage/layout.html.twig' %}
 
 {% block title %}{{'course.student_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'students' %}
 
-{% block main %}
-  <div class="panel panel-default">
-      <div class="panel-heading">
-        {{'course.student_manage'|trans}}
-      </div>
-      <div class="panel-body">
-        {% include 'course-manage/student/panel-nav.html.twig'  with {'panelNav': type} %}
-        {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'course', targetId: course.id, operatType: type})) }}
-      </div>
-    </div>
-  </div>
+{% block page_title %}{{ 'course.student_manage'|trans }}{% endblock %}
+
+{% block main_body %}
+  {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': type} %}
+  {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'course', targetId: course.id, operatType: type})) }}
 {% endblock %}

@@ -1000,7 +1000,7 @@ course.marketing_setup.study_award:　学习奖励
 course.marketing_setup.task_award: 完成单个任务
 course.marketing_setup.course_award: 完成教学计划
 
-course.teacher_setup: 教师设置
+course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
 
@@ -1185,7 +1185,7 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
 course.members_manage.import_failed_tips: 课程未发布,不可导入学员
-course.order: 订单查询
+course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
 course.order.conditions: 筛选条件
@@ -1611,7 +1611,7 @@ course.course_files.re_try_convert_video_to_audio: 重新转码
 
 course.plan_overview: 教学统计
 
-course.plan_task: 计划任务
+course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
   在
   <input class="form-control width-150" id="deadline" name="deadline" value="">
@@ -1626,7 +1626,7 @@ course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
 course.plan_task.publish_btn: 发布
 course.plan_task.manage: 教训计划管理
-course.plan_task.content_title: 计划任务
+course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: 任务未解锁
 course.plan_task.task: 任务学习
 course.plan_task.practice: 练习
@@ -1655,7 +1655,7 @@ course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
 course.plan_task.empty: 什么都没有，快去添加一个学习任务!
 course.plan_task.add_task_btn: 任务
-course.plan_task.task_unpublished: （未发布）
+course.plan_task.task_unpublished: 未发布
 course.plan_task.is_optional_task: 选修
 course.plan_task.edit_tips: 编辑以创建直播教室
 course.plan_task.live_finish_tips: 直播已经结束
