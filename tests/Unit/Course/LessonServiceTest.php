@@ -3,7 +3,6 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
 
 class LessonServiceTest extends BaseTestCase
 {
@@ -13,7 +12,7 @@ class LessonServiceTest extends BaseTestCase
             array(
                 'functionName' => 'count',
                 'returnValue' => 3,
-            )
+            ),
         ));
         $result = $this->getCourseLessonService()->countLessons(1);
 
@@ -25,16 +24,16 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'published', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'published', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'findByCopyId',
                 'returnValue' => array(),
-            )
+            ),
         ));
 
         $result = $this->getCourseLessonService()->publishLesson(1);
@@ -51,7 +50,7 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'unit','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'unit', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
             ),
         ));
 
@@ -66,11 +65,11 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'published', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'published', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'findByCopyId',
@@ -78,7 +77,7 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findLessonsByCourseId',
-                'returnValue' => array(array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0)),
+                'returnValue' => array(array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0)),
             ),
         ));
 
@@ -92,16 +91,16 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'published', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'published', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'findByCopyId',
                 'returnValue' => array(),
-            )
+            ),
         ));
 
         $result = $this->getCourseLessonService()->unpublishLesson(1);
@@ -118,7 +117,7 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'unit','courseId' => 1, 'status' => 'published', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'unit', 'courseId' => 1, 'status' => 'published', 'copyId' => 0),
             ),
         ));
 
@@ -137,7 +136,7 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'unit','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'unit', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
             ),
         ));
 
@@ -149,7 +148,7 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'lesson','courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'delete',
@@ -158,7 +157,7 @@ class LessonServiceTest extends BaseTestCase
             array(
                 'functionName' => 'batchDelete',
                 'returnValue' => array(),
-            )
+            ),
         ));
 
         $this->mockBiz('Task:TaskService', array(

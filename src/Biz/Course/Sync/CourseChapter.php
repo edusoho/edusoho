@@ -37,7 +37,7 @@ class CourseChapter extends AbstractSychronizer
         if (empty($copiedCourses)) {
             return;
         }
-        
+
         $helper = $this->getBatchHelper(self::BATCH_UPDATE_HELPER, $this->getCourseChapterDao());
         foreach ($copiedChapters as $copiedChapter) {
             $newFields = $sourceChapter;
