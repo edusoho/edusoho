@@ -71,7 +71,7 @@
         '></i>{{tasks.homework.title|trans}}"
         data-url="{{ path('course_manage_task_update', {id:tasks.homework.id,courseId:tasks.homework.courseId, type:'homework', categoryId: lesson.id}) }}">
       {% endif %}
-    <i class="es-icon es-icon-writefill mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
+    <i class="es-icon es-icon-zuoye mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
       {{'course.plan_task.homework'|trans}}
     </a>
     <i class="es-icon es-icon-angledoubleright after"></i>

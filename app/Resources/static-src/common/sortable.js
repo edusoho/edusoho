@@ -23,7 +23,7 @@ const sortList = (options, callback = (data) => {}) => {
     },
     serialize: function(parent, children, isContainer) {
       return isContainer ? children : parent.attr('id');
-    }
+    },
   }));
 };
 

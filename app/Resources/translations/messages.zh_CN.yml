@@ -1373,7 +1373,7 @@ course.btn.back_course_edit: 返回课程编辑
 course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
-course.btn.publish_task: 发布教学计划
+course.btn.publish_task: 发布计划
 
 # 课程扩展
 course.tab.tasks: '目录'
@@ -1611,7 +1611,7 @@ course.course_files.re_try_convert_video_to_audio: 重新转码
 
 course.plan_overview: 计划概览
 
-course.plan_task: 计划任务
+course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
   在
   <input class="form-control width-150" id="deadline" name="deadline" value="">
@@ -1626,7 +1626,7 @@ course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
 course.plan_task.publish_btn: 发布
 course.plan_task.manage: 教训计划管理
-course.plan_task.content_title: 计划任务
+course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: 任务未解锁
 course.plan_task.task: 任务学习
 course.plan_task.practice: 练习
@@ -1636,9 +1636,10 @@ course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式
 course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
-course.plan_task.total_tasks: 任务总数：
+course.plan_task.total_tasks: 课时总数：
 course.plan_task.everyday_finish_tasks: >
-  日均约需完成：<span class="color-warning">%taskPerDay%</span> 个任务
+  日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
+course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: 任务
 course.plan_task.batch_create_btn: 批量添加
 course.plan_task.add_chapter_btn: 添加%chapter_name%
@@ -1653,9 +1654,9 @@ course.plan_task.delete_btn: 删除
 course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习任务，导入学习。
 course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
-course.plan_task.empty: 什么都没有，快去添加一个学习任务!
+course.plan_task.empty: 什么都没有，快去添加一个课时
 course.plan_task.add_task_btn: 任务
-course.plan_task.task_unpublished: （未发布）
+course.plan_task.task_unpublished: 未发布
 course.plan_task.is_optional_task: 选修
 course.plan_task.edit_tips: 编辑以创建直播教室
 course.plan_task.live_finish_tips: 直播已经结束

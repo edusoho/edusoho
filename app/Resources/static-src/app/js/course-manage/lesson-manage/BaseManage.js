@@ -28,8 +28,8 @@ export default class Manage {
 
   _collapse() {
     let collapseTexts = [
-      '<i class="es-icon es-icon-keyboardarrowup mr5"></i>'+Translator.trans('site.data.expand'),
-      '<i class="es-icon es-icon-keyboardarrowdown mr5"></i>'+Translator.trans('site.data.collapse')
+      '<i class="es-icon es-icon-chevronright cd-mr16"></i>',
+      '<i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i>'
     ]
     this.$element.on('click', '.js-toggle-show', (event) => {
       let $this = $(event.currentTarget);
@@ -123,13 +123,15 @@ export default class Manage {
   _sort() {
     // 拖动，及拖动规则
     let self = this;
+    let adjustment;
     sortList({
       element: self.$element,
       ajax: false,
       group: 'nested',
+      placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function ($item, container) {
         // 任务课时内拖动
-        if ($item.hasClass('js-task-manage-item') && 
+        if ($item.hasClass('js-task-manage-item') && ($item.data('type') === 'normal') &&
           container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
             return false;
         }
@@ -137,7 +139,7 @@ export default class Manage {
         if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
           if(!container.target.hasClass('sortable-list')) {
             return false;
-          }   
+          }
         }
         // 课时不能不能在课时下
         if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
@@ -145,7 +147,27 @@ export default class Manage {
         }
 
         return true;
-      }
+      },
+      onDragStart: function (item, container, _super) {
+        let offset = item.offset(),
+            pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function (item, position) {
+        const height = item.height();
+        $('.task-dragged-placeholder').css({
+          'height': height,
+          'background-color': '#eee'
+        });
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+      },
     }, (data) => {
       self.sortList();
     });
