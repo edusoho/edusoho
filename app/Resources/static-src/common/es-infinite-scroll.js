@@ -4,7 +4,7 @@ import Emitter from "common/es-event-emitter";
 
 export default class ESInfiniteScroll extends Emitter {
 
-  constructor (options) {
+  constructor(options) {
     super();
 
     this.options = options;

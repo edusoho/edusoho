@@ -144,11 +144,14 @@ class TaskServiceTest extends BaseTestCase
     public function testGetNextTask()
     {
         $task = $this->mockTask();
+        $lesson = $this->getCourseService()->createChapter(array('title' => 'lesson', 'type' => 'lesson', 'status' => 'published', 'courseId' => $task['fromCourseId']));
+        $task['categoryId'] = $lesson['id'];
         $firstTask = $this->getTaskService()->createTask($task);
 
         $task = $this->mockSimpleTask(1);
         $task['status'] = 'published';
         $task['seq'] = 2;
+        $task['categoryId'] = $lesson['id'];
         $secondTask = $this->getTaskService()->createTask($task);
 
         $this->assertEquals($task['title'], $firstTask['title']);
@@ -161,12 +164,15 @@ class TaskServiceTest extends BaseTestCase
         $this->getTaskService()->finishTask($firstTask['id']);
 
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
+
         $this->assertEquals($secondTask['id'], $nextTask['id']);
     }
 
     public function testCanLearnTask()
     {
         $task = $this->mockTask();
+        $lesson = $this->getCourseService()->createChapter(array('title' => 'lesson', 'type' => 'lesson', 'status' => 'published', 'courseId' => $task['fromCourseId']));
+        $task['categoryId'] = $lesson['id'];
         $firstTask = $this->getTaskService()->createTask($task);
 
         $task['seq'] = 2;
@@ -256,23 +262,6 @@ class TaskServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $this->getTaskService()->publishTask($task['id']);
-    }
-
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     */
-    public function testPublishTaskWithAccessDeniedException2()
-    {
-        $courseSet = $this->createNewCourseSet();
-        $course = $this->createNewCourse($courseSet['id']);
-
-        $task = $this->getTaskService()->createTask($this->mockSimpleTask($course['id'], $courseSet['id']));
-        $this->getTaskService()->publishTask($task['id']);
-        $newTask = $this->getTaskService()->getTask($task['id']);
-
-        $this->assertEquals('published', $newTask['status']);
 
         $this->getTaskService()->publishTask($task['id']);
     }

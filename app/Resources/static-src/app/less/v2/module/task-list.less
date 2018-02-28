@@ -23,7 +23,7 @@
       color: @cd-dark-minor;
     }
     .item-actions {
-      right: 24px;
+      right: 28px;
     }
   }
   .task-manage-unit {
@@ -38,18 +38,49 @@
   }
   .task-manage-lesson {
     margin-left: 40px;
+    .cd-box-shadow-z(3px);
+    .cd-border-radius;
     .item-line {
       margin-left: -40px;
       width: 40px;
     }
+    .item-content {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
   .task-manage-lesson-tasks {
+    padding: 16px 0 20px;
     list-style-type: none;
-    padding-left: 0;
     background-color: #fff;
-    .cd-border-radius;
+    .task-manage-item {
+      margin-bottom: 4px;
+      &:hover {
+        cursor: move;
+      }
+      opacity: 1 !important;
+      &.dragged {
+        .cd-box-shadow-z(3px);
+        .transform(rotate(1deg));
+      }
+    }
     .item-content {
+      padding-left: 24px;
+      padding-right: 24px;
+      height: 28px;
+      line-height: 28px;
       color: @cd-dark-minor;
+      background-color: #fff;
+      i {
+        color: @cd-dark-assist;
+      }
+    }
+    .item-actions {
+      height: 28px;
+      line-height: 28px;
+      .task-manage-item__dropdown {
+        top: 16px;
+      }
     }
   }
   .task-manage-item {
@@ -104,4 +135,17 @@
   top: 43px !important;
   width: 90px;
   text-align: center !important;
+}
+
+.task-manage-chapter,
+.task-manage-unit,
+.task-manage-lesson {
+  &.dragged {
+    opacity: 1 !important;
+    .cd-box-shadow-z(3px);
+    .transform(rotate(1deg));
+  }
+  &:hover {
+    cursor: move;
+  }
 }

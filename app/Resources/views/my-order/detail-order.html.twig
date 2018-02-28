@@ -82,7 +82,7 @@
             </td>
             <td width="75%">
               <span class="color-danger">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
-              {% if paymentTrade.platform_sn is not null %}
+              {% if paymentTrade.platform_sn|default(null) is not null %}
                 <span class="pull-right">
                   <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
                      data-toggle="popover" data-trigger="hover"

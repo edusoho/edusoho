@@ -1,8 +1,7 @@
 {% extends 'course-manage/tasks/layout.html.twig' %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
 
-{% block page_title %}课时管理{% endblock %}
-{% block main_body %}
+{% block main %}
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">

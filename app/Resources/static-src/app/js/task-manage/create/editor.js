@@ -86,12 +86,10 @@ class Editor {
 
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
-        const html = response.html;
         this.$element.modal('hide');
-        if (html) {
-          $('#sortable-list').trigger('addItem', html)
+        if (response) {
+          $('#sortable-list').trigger('addItem', response)
         }
-        // this.showDefaultSetting($item);
         // this.initIntro();
       })
       .fail((response) => {
@@ -112,13 +110,6 @@ class Editor {
         intro.initTaskDetailIntro('.js-settings-list');
       }
     }, 500);
-  }
-
-  showDefaultSetting($item = null) {
-    if ($item && $item.hasClass('js-task-manage-item')) {
-      $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
-      $item.addClass('active').find('.js-settings-list').slideDown();
-    }
   }
 
   _onDelete(event) {

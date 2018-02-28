@@ -108,7 +108,6 @@
                 {{ 'course.question_marker_statistics'|trans }}</a>
             </li>
           {% endif %}
-
           {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
             <li class="cd-sidebar__item {% if side_nav == 'orders' %}active{% endif %}">
               <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }}
@@ -119,6 +118,5 @@
       {% endif %}
     </ul>
   </div>
-
 
 {% endblock %}

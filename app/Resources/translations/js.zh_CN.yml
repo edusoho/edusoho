@@ -337,6 +337,10 @@ coin.invite_url_copy_success_hint: 已复制邀请链接到剪切板，快去分
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
 
+course.chapter: '第%number%%chapter_name%: %title%'
+course.unit: '第%number%%part_name%: %title%'
+course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
@@ -802,3 +806,6 @@ admin.data.lab.setting.error: 发生异常了，请重试！
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: --选择所属栏目--
+
+
+Bad credentials.: 用户名或密码错误

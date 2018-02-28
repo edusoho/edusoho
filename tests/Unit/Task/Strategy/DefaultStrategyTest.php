@@ -23,18 +23,6 @@ class DefaultStrategyTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testGetTasksTemplate()
-    {
-        $result = $this->getDefaultStrategy()->getTasksTemplate();
-        $this->assertEquals('course-manage/tasks/default-tasks.html.twig', $result);
-    }
-
-    public function testGetTaskItemTemplate()
-    {
-        $result = $this->getDefaultStrategy()->getTaskItemTemplate();
-        $this->assertEquals('task-manage/item/default-list-item.html.twig', $result);
-    }
-
     public function testCreateTask()
     {
         $field = array(
@@ -208,6 +196,17 @@ class DefaultStrategyTest extends BaseTestCase
             'mode' => 'lesson',
             'courseId' => '1',
             'categoryId' => '1',
+        );
+
+        $this->mockBiz(
+            'Course:CourseDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'status' => 'published', 'title' => 'title', 'courseSetId' => 3, 'parentId' => 0),
+                    'withParams' => array(1),
+                ),
+            )
         );
         $this->getDefaultStrategy()->deleteTask($task);
         $this->getTaskDao()->shouldHaveReceived('delete')->times(2);

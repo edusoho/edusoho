@@ -252,12 +252,7 @@ class DiscuzAuthProviderTest extends BaseTestCase
 
     private function createRandConfig()
     {
-        $availableDefinedConstants = array();
-        for ($i = 0; $i < 10000; ++$i) {
-            $availableDefinedConstants[0] = 'a'.$i;
-        }
-
-        $randNum = rand(0, 9999);
+        $randNum = rand(0, PHP_INT_MAX);
 
         $randConfig = 'config_'.$randNum;
 
