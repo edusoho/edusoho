@@ -26,31 +26,6 @@
       {% endblock %}
 
       {% block main %}
-        <div class="cd-main">
-          <div class="cd-main__heading">
-            {% block main_heading %}
-              <div class="cd-main__title">
-                {% block page_title %}{% endblock %}
-              </div>
-            {% endblock %}
-          </div>
-          <div class="cd-main__body">
-            {% block main_body %}
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  {{ course.title }}
-                    <button class="btn btn-success btn-sm pull-right js-publish-course"
-                      data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                      {{ 'course.plan_task.publish_btn'|trans }}
-                    </button>
-                </div>
-                <div class="panel-body">
-                  {% block course %} {% endblock %}
-                </div>
-              </div>
-            {% endblock %}
-          </div>
-        </div>
       {% endblock %}
     </div>
   </div>
