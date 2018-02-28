@@ -29,6 +29,12 @@ class DefaultManage extends BaseManage {
       }
     });
   }
+
+  afterAddItem($elm) {
+    if ($elm.find('.js-item-content').length > 0) {
+        $elm.find('.js-item-content').trigger('click');
+    }
+  }
 }
 
 new DefaultManage('#sortable-list');

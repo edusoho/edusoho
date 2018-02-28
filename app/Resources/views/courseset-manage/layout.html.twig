@@ -3,8 +3,6 @@
 {% block title %}{{'course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 {% set use_webapck_loader = true %}
 
-{% do script(['libs/jquery-intro.js']) %}
-
 {% block content %}
   {% block course_header %}
     {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}

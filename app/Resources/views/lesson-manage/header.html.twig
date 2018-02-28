@@ -12,13 +12,13 @@
   </label>
 
   <div class="pull-right">
-    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16" id="step-3" data-toggle="modal" data-position data-target="#modal" data-backdrop="static" data-keyboard="false"
       data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
       {{ 'course.manage.create_lesson'|trans }}
     </button>
 
     {% if courseSet.type|default('') == 'normal' %}
-      <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add"
+      <button data-position="" class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add"
         {% if setting('storage.upload_mode', 'local') == 'local' %}
           data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
           data-content="{{'course.plan_task.batch_create_tips'|trans}}"
@@ -37,13 +37,13 @@
 
       <ul class="dropdown-menu task-list-header__dropdown" role="menu">
         <li>
-          <a href="javascript:;" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
+          <a href="javascript:;" id="chapter-create-btn" data-position data-toggle="modal" data-target="#modal" data-backdrop="static"
             data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id}) }}">
             {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|trans}) }}
           </a>
         </li>
         <li>
-          <a href="javascript:;" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
+          <a href="javascript:;" id="chapter-create-btn" data-position data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
             {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('unit')|trans}) }}
           </a>
         </li>
