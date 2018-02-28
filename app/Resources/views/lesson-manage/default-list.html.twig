@@ -4,7 +4,7 @@
 {% block main %}
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
-    {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
+    {% include 'lesson-manage/header.html.twig' with {taskMode: 'lesson'}  %}
     <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
       {% for key, item in items %}
         {% if item.type == 'lesson' %}

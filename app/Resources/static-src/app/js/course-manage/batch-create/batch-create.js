@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-import { sortablelist } from "app/js/course-manage/help";
 
 class BatchCreate {
   constructor(options) {
@@ -107,7 +106,7 @@ class BatchCreate {
         if (response && response.error) {
           notify('danger', response.error)
         } else {
-          self.$sortable.append(response.html);
+          self.$sortable.trigger('addItem', response);
         }
       },
       error: function(response) {
@@ -117,7 +116,6 @@ class BatchCreate {
       complete: function (response) {
         console.log('complete', response);
         if (isLast) {
-          sortablelist(self.$sortable);
           $('#modal').modal('hide');
         }
       }

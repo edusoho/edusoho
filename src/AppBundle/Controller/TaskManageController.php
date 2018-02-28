@@ -138,31 +138,9 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
-
-        $template = $this->createCourseStrategy($course)->getJsonTemplate($task);
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
-        if (empty($template)) {
-            return $this->createJsonResponse(true);
-        }
 
-        $tasks = 'normal' == $course['courseType'] ? array($task) : $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
-        $lesson = $this->getChapterDao()->get($task['categoryId']);
-        $lesson['tasks'] = $tasks;
-
-        $html = $this->renderView(
-            $template,
-            array(
-                'course' => $course,
-                'lesson' => $lesson,
-                'tasks' => $tasks,
-            )
-        );
-
-        return $this->createJsonResponse(
-            array(
-                'html' => $html,
-            )
-        );
+        return $this->getTaskJsonView($task);
     }
 
     public function updateAction(Request $request, $courseId, $id)
@@ -181,9 +159,9 @@ class TaskManageController extends BaseController
                 $task['isOptional'] = 0;
             }
 
-            $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
+            $task = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
 
-            return $this->createJsonResponse(true);
+            return $this->getTaskJsonView($task);
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -200,6 +178,21 @@ class TaskManageController extends BaseController
                 'taskMode' => $taskMode,
             )
         );
+    }
+
+    //创建任务或修改任务返回的html
+    private function getTaskJsonView($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $taskJsonData = $this->createCourseStrategy($course)->getTasksJsonData($task);
+        if (empty($taskJsonData)) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse($this->renderView(
+            $taskJsonData['template'],
+            $taskJsonData['data']
+        ));
     }
 
     public function publishAction(Request $request, $courseId, $id)

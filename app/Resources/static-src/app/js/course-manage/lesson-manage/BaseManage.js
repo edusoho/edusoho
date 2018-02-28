@@ -50,6 +50,14 @@ export default class Manage {
   }
 
   addItem(elm) {
+    let $elm = $(elm);
+    let $exsit = $('#'+$elm.attr('id'));
+
+    if ($exsit.length > 0) {
+      $exsit.replaceWith(elm);
+
+      return;
+    }
     //添加章节课时
     switch(this.type)
     {
@@ -78,6 +86,7 @@ export default class Manage {
         this.$element.append(elm);
     }
     this.handleEmptyShow();
+    this._flushTaskNumber();
     this._clearPosition();
   }
 
@@ -93,22 +102,23 @@ export default class Manage {
       let $this = $(this);
       let $parent = $this.closest('.task-manage-item');
       let text = self._getDeleteText($this);
-
+      
       cd.confirm({
         title: Translator.trans('site.delete'),
         content: text,
-        confirmText: Translator.trans('site.confirm'),
-        cancelText: Translator.trans('site.close'),
-        confirm() {
-          $parent.remove();
-          self.sortList();
-          self.handleEmptyShow();
-          
-          $.post($this.data('url'), function (data) {
-          });
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        if ('task' == $this.data('type') &&  $parent.siblings().length == 0) {
+          $parent.closest('.js-task-manage-lesson').remove();
         }
+        $parent.remove();
+        self.sortList();
+        self.handleEmptyShow();
+        $.post($this.data('url'), function (data) {
+        });
+        self._flushTaskNumber();
       })
-
     });
   }
 
@@ -130,23 +140,7 @@ export default class Manage {
       group: 'nested',
       placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function ($item, container) {
-        // 任务课时内拖动
-        if ($item.hasClass('js-task-manage-item') && ($item.data('type') === 'normal') &&
-          container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
-            return false;
-        }
-        // 章节只能挂在总节点下
-        if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
-          if(!container.target.hasClass('sortable-list')) {
-            return false;
-          }
-        }
-        // 课时不能不能在课时下
-        if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
-            return false;
-        }
-
-        return true;
+        return self._sortRules($item, container);
       },
       onDragStart: function (item, container, _super) {
         let offset = item.offset(),
@@ -173,6 +167,26 @@ export default class Manage {
     });
   }
 
+  _sortRules($item, container) {
+    // 任务课时内拖动
+    if ($item.hasClass('js-task-manage-item') &&
+      container.target.closest('.js-task-manage-lesson').attr('id') != $item.closest('.js-task-manage-lesson').attr('id')) {
+        return false;
+    }
+    // 章节只能挂在总节点下
+    if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
+      if(!container.target.hasClass('sortable-list')) {
+        return false;
+      }   
+    }
+    // 课时不能不能在课时下
+    if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
+        return false;
+    }
+
+    return true;
+  }
+
   handleEmptyShow() {
     if (0 === $('#sortable-list').find('li').length) {
       $('.js-task-empty').removeClass('hidden');
@@ -194,7 +208,7 @@ export default class Manage {
 
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item'];
+    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item:not(.js-optional-task)'];
     for(let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     } 
@@ -226,7 +240,7 @@ export default class Manage {
       $.post($this.data('url'), function (data) {   
         let $parentLi = $this.closest('.task-manage-item');
 
-        $parentLi.find('.publish-item, .js-delete, .publish-status').removeClass('hidden');
+        $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').removeClass('hidden');
         $parentLi.find('.unpublish-item').addClass('hidden');
         notify('success', Translator.trans('course.manage.task_unpublish_success_hint'));
       }).fail(function(data){
@@ -238,11 +252,20 @@ export default class Manage {
       $.post($(event.target).data('url'), function (data) {
         let $parentLi = $(event.target).closest('.task-manage-item');
         notify('success', Translator.trans('course.manage.task_publish_success_hint'));
-        $parentLi.find('.publish-item, .js-delete, .publish-status').addClass('hidden')
+        $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').addClass('hidden')
         $parentLi.find('.unpublish-item').removeClass('hidden')
       }).fail(function(data){
         notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
       });
     })
+  }
+
+  _flushTaskNumber() {
+    if (!this.$taskNumber) {
+      this.$taskNumber = $('#task-num');
+    }
+    
+    let num = $('.js-settings-item.active').length;
+    this.$taskNumber.text(num);
   }
 }

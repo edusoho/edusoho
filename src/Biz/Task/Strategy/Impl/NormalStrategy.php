@@ -45,21 +45,42 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
-    public function getTasksTemplate()
+    public function getTasksListJsonData($courseId)
     {
-        return 'lesson-manage/normal-list.html.twig';
+        $course = $this->getCourseService()->getCourse($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $items = $this->getTasksAndChapters($course['id'], $tasks);
+
+        return array(
+            'data' => array(
+                'items' => $items,
+            ),
+            'template' => 'lesson-manage/normal-list.html.twig',
+        );
     }
 
-    public function getJsonTemplate($task)
+    public function getTasksJsonData($task)
     {
-        if (!empty($task['categoryId'])) {
-            $chapter = $this->getChapterDao()->get($task['categoryId']);
-            if ('lesson' == $chapter['type']) {
-                return 'lesson-manage/normal/tasks.html.twig';
-            }
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $taskNum = $this->getTaskService()->countTasksByChpaterId($task['categoryId']);
+        $chapter = $this->getChapterDao()->get($task['categoryId']);
+        $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+        $tasks = array($task);
+        $chapter['tasks'] = $tasks;
+        if (1 == $taskNum) {
+            $template = 'lesson-manage/normal/lesson.html.twig';
+        } else {
+            $template = 'lesson-manage/normal/tasks.html.twig';
         }
 
-        return 'lesson-manage/normal/lesson.html.twig';
+        return array(
+            'data' => array(
+                'course' => $course,
+                'lesson' => $chapter,
+                'tasks' => $tasks,
+            ),
+            'template' => $template,
+        );
     }
 
     public function deleteTask($task)
@@ -159,7 +180,15 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function prepareCourseItems($courseId, $tasks, $limitNum)
+    // 获得章，节，课时，任务
+    // return  array(
+    //     'chapter',
+    //     'unit',
+    //     'lesson' => array(
+    //         'task'
+    //     )
+    // )
+    protected function getTasksAndChapters($courseId, $tasks)
     {
         $items = array();
         uasort(
@@ -183,12 +212,12 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
                 $chapter['tasks'] = $tasks[$chapterId];
             }
             $items[] = $chapter;
-        } 
+        }
 
         return $items;
     }
 
-    public function oldPrepareCourseItems($courseId, $tasks, $limitNum)
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
         $items = array();
         foreach ($tasks as $task) {

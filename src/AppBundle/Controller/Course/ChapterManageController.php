@@ -14,18 +14,9 @@ class ChapterManageController extends BaseController
         $chapterId = $request->query->get('chapterId', 0);
         $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
 
-        $type = $request->query->get('type');
-        $type = in_array($type, array('chapter', 'unit', 'lesson')) ? $type : 'chapter';
-      
         if ($request->getMethod() == 'POST') {
-            if (empty($chapter)) {
-                $chapter = $request->request->all();
-                $chapter['courseId'] = $courseId;
-                $chapter = $this->getCourseService()->createChapter($chapter);  
-            } else {
-                $title = $request->request->get('title');
-                $chapter = $this->getCourseService()->updateChapter($courseId, $chapterId, array('title' => $title));
-            }
+            $fields = $request->request->all();
+            $chapter = empty($chapter) ? $this->create($fields, $courseId) : $this->editor($chapterId, $courseId, $fields);
 
             return $this->render('lesson-manage/chapter/item.html.twig', array(
                 'course' => $course,
@@ -33,63 +24,29 @@ class ChapterManageController extends BaseController
             ));
         }
 
+        $type = $request->query->get('type', 'chapter');
+
         return $this->render('lesson-manage/chapter/modal.html.twig', array(
             'course' => $course,
             'type' => $type,
             'chapter' => $chapter,
-        ));    
-    }
-
-    public function createAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $type = $request->query->get('type');
-        $parentId = $request->query->get('parentId');
-        $type = in_array($type, array('chapter', 'unit', 'lesson')) ? $type : 'chapter';
-
-        if ($request->getMethod() == 'POST') {
-            $chapter = $request->request->all();
-            $chapter['courseId'] = $course['id'];
-            $chapter = $this->getCourseService()->createChapter($chapter);
-
-            return $this->render('course-manage/chapter/list-item.html.twig', array(
-                'course' => $course,
-                'chapter' => $chapter,
-            ));
-        }
-
-        return $this->render('course-manage/chapter/chapter-modal.html.twig', array(
-            'course' => $course,
-            'type' => $type,
-            'parentId' => $parentId,
         ));
     }
 
-    public function editAction(Request $request, $courseId, $chapterId)
+    protected function editor($chapterId, $courseId, $fields)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
-
-        if (empty($chapter)) {
-            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
+        if (empty($fields['title'])) {
+            return $this->getCourseService()->getChapter($courseId, $chapterId);
         }
 
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-            $fields['courseId'] = $course['id'];
-            $chapter = $this->getCourseService()->updateChapter($courseId, $chapterId, $fields);
+        return $this->getCourseService()->updateChapter($courseId, $chapterId, array('title' => $fields['title']));
+    }
 
-            return $this->render('course-manage/chapter/list-item.html.twig', array(
-                'course' => $course,
-                'chapter' => $chapter,
-            ));
-        }
+    protected function create($chapter, $courseId)
+    {
+        $chapter['courseId'] = $courseId;
 
-        return $this->render('course-manage/chapter/chapter-modal.html.twig', array(
-            'course' => $course,
-            'chapter' => $chapter,
-            'type' => $chapter['type'],
-        ));
+        return $this->getCourseService()->createChapter($chapter);
     }
 
     public function deleteAction(Request $request, $courseId, $chapterId)
