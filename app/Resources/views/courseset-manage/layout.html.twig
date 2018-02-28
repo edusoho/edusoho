@@ -12,7 +12,10 @@
           </ol>
         {% endblock %}
         {% block course_header %}
-          {# {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }} #}
+          {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+        {% endblock %}
+        {% block navbar %}
+          {% include 'courseset-manage/navbar.html.twig' %}
         {% endblock %}
       </div>
     </div>
