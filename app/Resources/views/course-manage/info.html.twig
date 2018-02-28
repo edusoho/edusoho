@@ -7,150 +7,150 @@
 {% block page_title %}{{ 'course.plan_setup'|trans }}{% endblock %}
 
 {% block main_body %}
-  <div role="course-manage-info">
-    {{ web_macro.flash_messages() }}
-    <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-      <div class="form-group">
-        <div class="col-sm-2 control-label">
-        <label for="title" class="control-label-required">{{'course.plan_setup.name'|trans}}</label>
+    <div role="course-manage-info">
+      {{ web_macro.flash_messages() }}
+      <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+          <label for="title" class="control-label-required">{{'course.plan_setup.name'|trans}}</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
+            <input type="hidden" name="id" value="{{course.id|default(0)}}">
+            <input class="form-control" type="text" id="title" name="title" value="{{course.title|default('')}}">
+          </div>
         </div>
-        <div class="col-sm-8">
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
-          <input type="hidden" name="id" value="{{course.id|default(0)}}">
-          <input class="form-control" type="text" id="title" name="title" value="{{course.title|default('')}}">
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">{{'course.plan_setup.mode'|trans}}</label>
+          <div class="col-sm-8 form-control-static">
+             {% if course.learnMode|default('freeMode') == 'freeMode' %}
+               {{'course.plan_setup.mode.free'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.free_tips'|trans}}"></a>
+             {% else %}
+               {{'course.plan_setup.mode.locked'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.locked_tips'|trans}}"></a>
+               <p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{''|trans}}</p>
+             {% endif %}
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="" class="col-sm-2 control-label">{{'course.plan_setup.mode'|trans}}</label>
-        <div class="col-sm-8 form-control-static">
-           {% if course.learnMode|default('freeMode') == 'freeMode' %}
-             {{'course.plan_setup.mode.free'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.free_tips'|trans}}"></a>
-           {% else %}
-             {{'course.plan_setup.mode.locked'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.locked_tips'|trans}}"></a>
-             <p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{''|trans}}</p>
-           {% endif %}
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="" class="col-sm-2 control-label">{{'course.plan_setup.finish_rule'|trans}}</label>
-        <div class="col-sm-8 radios">
-          <label>
-            <input type="radio" name="enableFinish" value="0" {% if course.enableFinish|default('0') == 0 %}checked{% endif %}> {{'course.plan_setup.finish_rule.depend_on_finish_condition'|trans}}
-            <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans}}"></a>
-          </label>
-          <label>
-            <input type="radio" name="enableFinish" value="1" {% if course.enableFinish|default('0') == 1 %}checked{% endif %}> {{'course.plan_setup.finish_rule.nothing'|trans}}
-          </label>
-        </div>
-      </div>
-      
-      {% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
-        <div class="form-group" id="audio-modal-id">
-          <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
-          <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">{{'course.plan_setup.finish_rule'|trans}}</label>
+          <div class="col-sm-8 radios">
             <label>
-              <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
-              {{ 'course.info.video.convert.audio.start'|trans }}
+              <input type="radio" name="enableFinish" value="0" {% if course.enableFinish|default('0') == 0 %}checked{% endif %}> {{'course.plan_setup.finish_rule.depend_on_finish_condition'|trans}}
+              <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans}}"></a>
             </label>
             <label>
-              <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
-              {{ 'course.info.video.convert.audio.close'|trans }}
+              <input type="radio" name="enableFinish" value="1" {% if course.enableFinish|default('0') == 1 %}checked{% endif %}> {{'course.plan_setup.finish_rule.nothing'|trans}}
             </label>
-            <div>
-              <label>1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</label>
-              <label>2.{{ 'course.video.convert.audio.status'|trans }}：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'course.video.convert.audio.detail'|trans }}</a></label>
+          </div>
+        </div>
+        
+        {% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
+          <div class="form-group" id="audio-modal-id">
+            <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
+            <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
+              <label>
+                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
+                {{ 'course.info.video.convert.audio.start'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
+                {{ 'course.info.video.convert.audio.close'|trans }}
+              </label>
+              <div>
+                <label>1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</label>
+                <label>2.{{ 'course.video.convert.audio.status'|trans }}：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'course.video.convert.audio.detail'|trans }}</a></label>
+              </div>
             </div>
           </div>
-        </div>
-      {% endif %}
-      {#移动到营销设置#}
-      {#<div class="form-group">
-        <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
-        {% if course.status|default('draft') == 'draft' %}
-          <div class="col-sm-8 radios">
-              {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
-              <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
-                {{'学习有效期'|trans}}
-                <input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}">
-                {{'天'|trans}}
-                <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
-              </div>
-              <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
+        {% endif %}
+        {#移动到营销设置#}
+        {#<div class="form-group">
+          <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
+          {% if course.status|default('draft') == 'draft' %}
+            <div class="col-sm-8 radios">
+                {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
+                <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
+                  {{'学习有效期'|trans}}
+                  <input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}">
+                  {{'天'|trans}}
+                  <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
+                </div>
+                <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
+                  {{'开始日期'|trans}}
+                  <input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px">
+                  {{'结束日期'|trans}}
+                  <input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                </div>
+                <p class="help-block mtm mbm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
+                <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
+            </div>
+          {% else %}
+            <div class="col-sm-8 form-control-static">
+              {% if course.expiryMode|default('days') != 'date' %}
+                随到随学
+                <div class="mbm mtm" id="expiry-days">
+                  {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" >{{'天'|trans}}
+                  <a class="es-icon es-icon-info ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
+                </div>
+              {% else %}
+                指定日期学习
+                <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}"></a>
+                <div class="mbm mtm" id="expiry-date">
                 {{'开始日期'|trans}}
-                <input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px">
+                <input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
                 {{'结束日期'|trans}}
-                <input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
-              </div>
-              <p class="help-block mtm mbm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
-              <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
-          </div>
-        {% else %}
-          <div class="col-sm-8 form-control-static">
-            {% if course.expiryMode|default('days') != 'date' %}
-              随到随学
-              <div class="mbm mtm" id="expiry-days">
-                {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" >{{'天'|trans}}
-                <a class="es-icon es-icon-info ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
-              </div>
-            {% else %}
-              指定日期学习
-              <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}"></a>
-              <div class="mbm mtm" id="expiry-date">
-              {{'开始日期'|trans}}
-              <input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
-              {{'结束日期'|trans}}
-              <input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
-              </div>
-            {% endif %}
-            <p class="help-block mtm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
+                <input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                </div>
+              {% endif %}
+              <p class="help-block mtm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
+            </div>
+          {% endif %}
+        </div>#}
+        {% if courseSet.type == 'live' %}
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="maxStudentNum-field">{{'course.plan_setup.member_numbers'|trans}}</label>
+            <div class="col-md-10 controls">
+              <input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large"
+                value="{{ course.maxStudentNum|default('') }}" data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}" data-explain=""> {{'site.data.people'|trans}}
+              <div class="help-block" style="display:none;"></div></div>
+            <div class="col-md-offset-2 col-md-10 js-course-rule">
+              <p class="alert-warning"></p>
+              <a href="{{ path('content_course_rule') }}" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
+            </div>
           </div>
         {% endif %}
-      </div>#}
-      {% if courseSet.type == 'live' %}
+
         <div class="form-group">
-          <label class="col-md-2 control-label" for="maxStudentNum-field">{{'course.plan_setup.member_numbers'|trans}}</label>
-          <div class="col-md-10 controls">
-            <input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large"
-              value="{{ course.maxStudentNum|default('') }}" data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}" data-explain=""> {{'site.data.people'|trans}}
-            <div class="help-block" style="display:none;"></div></div>
-          <div class="col-md-offset-2 col-md-10 js-course-rule">
-            <p class="alert-warning"></p>
-            <a href="{{ path('content_course_rule') }}" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
+          <div class="col-md-2 control-label">
+            <label>{{'course.plan_setup.summary'|trans}}</label>
+          </div>
+          <div class="col-md-8 controls">
+            <textarea class="form-control invisible" name="summary" rows="10" id="summary" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'summary') }}</textarea>
           </div>
         </div>
-      {% endif %}
-
-      <div class="form-group">
-        <div class="col-md-2 control-label">
-          <label>{{'course.plan_setup.summary'|trans}}</label>
+        <div class="form-group dynamic-collection" id="course-goals-form-group">
+          <div class="col-md-2 control-label">
+            <label>{{'course.plan_setup.target'|trans}}</label>
+          </div>
+          <div class="col-md-8 controls">
+            <div id="course-goals" data-field-name="goals" data-init-value="{{course.goals|default([])|json_encode_utf8()}}"></div>
+          </div>
         </div>
-        <div class="col-md-8 controls">
-          <textarea class="form-control invisible" name="summary" rows="10" id="summary" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'summary') }}</textarea>
+        <div class="form-group" id="course-audiences-form-group">
+          <div class="col-md-2 control-label">
+            <label>{{'course.plan_setup.audiences'|trans}}</label>
+          </div>
+          <div class="col-md-8 controls">
+            <div id="intended-students" data-field-name="audiences" data-init-value="{{course.audiences|default([])|json_encode_utf8()}}"></div>
+          </div>
         </div>
-      </div>
-      <div class="form-group dynamic-collection" id="course-goals-form-group">
-        <div class="col-md-2 control-label">
-          <label>{{'course.plan_setup.target'|trans}}</label>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+            <div id="test"></div>
+          </div>
         </div>
-        <div class="col-md-8 controls">
-          <div id="course-goals" data-field-name="goals" data-init-value="{{course.goals|default([])|json_encode_utf8()}}"></div>
-        </div>
-      </div>
-      <div class="form-group" id="course-audiences-form-group">
-        <div class="col-md-2 control-label">
-          <label>{{'course.plan_setup.audiences'|trans}}</label>
-        </div>
-        <div class="col-md-8 controls">
-          <div id="intended-students" data-field-name="audiences" data-init-value="{{course.audiences|default([])|json_encode_utf8()}}"></div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-8">
-          <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-          <div id="test"></div>
-        </div>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
 {% endblock %}
