@@ -1,4 +1,4 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.testpaper_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'testpaper-check' %}
