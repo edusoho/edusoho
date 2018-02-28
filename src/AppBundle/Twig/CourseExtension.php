@@ -97,7 +97,7 @@ class CourseExtension extends \Twig_Extension
             'chapter' => 'chapter_name',
             'unit' => 'part_name',
             'part' => 'part_name',
-        );  
+        );
 
         return $courseSetting[$settingKey[$type]];
     }
