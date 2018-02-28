@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
+use AppBundle\Common\TimeMachine;
 
 class ClassroomServiceTest extends BaseTestCase
 {
@@ -545,10 +546,6 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testUpdateClassroomTeachers()
-    {
-    }
-
     public function testPublishClassroom()
     {
         $textClassroom = array(
@@ -734,10 +731,6 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
         $this->assertEquals(false, $enabled);
-    }
-
-    public function testFindCoursesByCoursesIds()
-    {
     }
 
     public function testDeleteClassroomCourses()
@@ -1214,6 +1207,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testBecomeTeacher()
     {
+        TimeMachine::setMockedTime(1517464454);
         $this->mockBiz(
             'Classroom:ClassroomDao',
             array(
@@ -1248,7 +1242,7 @@ class ClassroomServiceTest extends BaseTestCase
                             'levelId' => 0,
                             'role' => array('teacher'),
                             'remark' => '',
-                            'createdTime' => time(),
+                            'createdTime' => TimeMachine::time(),
                         ),
                     ),
                 ),
@@ -1394,7 +1388,7 @@ class ClassroomServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->getClassroomService()->updateAssistants(1, array(1, 2));
+        $result = $this->getClassroomService()->updateAssistants(1, array(1, 2));
         $this->getClassroomMemberDao()->shouldHaveReceived(
             'update',
             array(1, array('role' => array('student', 'assistant')))
@@ -1404,6 +1398,7 @@ class ClassroomServiceTest extends BaseTestCase
             array(3, array('role' => array('student')))
         );
         $this->getClassroomDao()->shouldHaveReceived('update');
+        $this->assertNull($result);
     }
 
     public function testBecomeAuditor()

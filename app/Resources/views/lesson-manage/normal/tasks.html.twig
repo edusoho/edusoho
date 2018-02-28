@@ -1,8 +1,13 @@
 {% for task in tasks|default() %}
+<<<<<<< HEAD
   {% set activity = task.activity|default() %}
   {% set file = task.activity.ext.file|default(null) %}
 
   <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
+=======
+{% set file =  files[task.activityId]|default(null) %}
+  <li class="task-manage-item js-task-manage-item drag clearfix" id="task-{{ task.id }}" data-type="normal">
+>>>>>>> feature/35988-lesson-layout-lesson-drag-single-lesson-again
     <div class="item-content js-item-content text-overflow">
       <i class="es-icon {{ activity_metas(activity.mediaType).icon }} mrs" data-role="task"></i>
       {% if task.isOptional %}
@@ -45,12 +50,29 @@
           <i class="es-icon es-icon-morehoriz"></i>
         </a>
         <ul class="dropdown-menu task-manage-item__dropdown">
+<<<<<<< HEAD
+=======
+          {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
+            {% set file = task.activity.ext.file|default(null) %}
+            {% if file.storage|default(null) == 'cloud' %}
+              <li class="mark-manage">
+                <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank">
+                {{'course.plan_task.lesson-marker_btn'|trans}}
+                </a>
+              </li>
+              <li class="divider mark-manage-divider" style="display:none;"></li>
+            {% endif %}
+          {% endif %}
+>>>>>>> feature/35988-lesson-layout-lesson-drag-single-lesson-again
           <li>
             <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
               {{'course.plan_task.delete_btn'|trans}}
             </a>
           </li>
+<<<<<<< HEAD
           {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}
+=======
+>>>>>>> feature/35988-lesson-layout-lesson-drag-single-lesson-again
           {{ slot('task.menu.extension', {'task': task}) }}
         </ul>
       </div>

@@ -3,9 +3,9 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class UserDaoImpl extends GeneralDaoImpl implements UserDao
+class UserDaoImpl extends AdvancedDaoImpl implements UserDao
 {
     protected $table = 'user';
 
@@ -22,6 +22,11 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function getByNickname($nickname)
     {
         return $this->getByFields(array('nickname' => $nickname));
+    }
+
+    public function getByUUID($uuid)
+    {
+        return $this->getByFields(array('uuid' => $uuid));
     }
 
     public function countByMobileNotEmpty()

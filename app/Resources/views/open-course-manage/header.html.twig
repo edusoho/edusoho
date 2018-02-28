@@ -1,7 +1,7 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script(['app/js/open-course-manage/header/index.js'])%}
 
-<div class="es-section course-manage-header mbl clearfix">
+<div class="es-section course-manage-header clearfix">
   <a href="{{ path('open_course_show', {courseId:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
   </a>

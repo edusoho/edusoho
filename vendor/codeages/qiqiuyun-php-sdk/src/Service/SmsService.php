@@ -2,62 +2,58 @@
 
 namespace QiQiuYun\SDK\Service;
 
-use QiQiuYun\SDK\Exception\ResponseException;
-
+/**
+ * 短信服务
+ */
 class SmsService extends BaseService
 {
-    
+    protected $host = 'sms-service.qiqiuyun.net';
+
     /**
-     * 单个发送
+     * 单发文本短信
+     *
+     * @see http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
      *
      * @param $params array 发送参数
-     * http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
      */
-    public function sendSingle($params)
+    public function sendToOne(array $params)
     {
-        $rawResponse = $this->client->request('POST', '/messages', array(
-            'json' => $params,
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature('/messages', $params),
-            ),
-        ));
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-        
-        return $response; 
+        return $this->request('POST', '/messages', $params);
     }
 
     /**
-     * 群发
+     * 群发文本短信
+     *
+     * @see http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
      *
      * @param $params array 发送参数
-     * http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
      */
-    public function sendBatch($params)
+    public function sendToMany(array $params)
     {
-        $rawResponse = $this->client->request('POST', '/messages/batch_messages', array(
-            'json' => $params,
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature('/messages/batch_messages', $params),
-            ),
-        ));
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-        
-        return $response; 
+        return $this->request('POST', '/messages/batch_messages', $params);
     }
 
-    protected function makeSignature($uri, $body = '', $lifeTime = 600)
+    /**
+     * 添加签名
+     *
+     * @see http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
+     *
+     * @param $params array 签名参数
+     */
+    public function addSign(array $params)
     {
-        $deadline = time() + $lifeTime;
-        $rowBody = json_encode($body);
-        return $this->auth->generateSignature($deadline, $uri, $rowBody, true);
+        return $this->request('POST', '/signs', $params);
     }
 
+    /**
+     * 添加签名
+     *
+     * @see http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
+     *
+     * @param $params array 模板参数
+     */
+    public function addTemplate(array $params)
+    {
+        return $this->request('POST', '/templates', $params);
+    }
 }

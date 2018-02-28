@@ -27,6 +27,7 @@ class ClassroomMember extends AbstractResource
 
         if ($member) {
             $this->getOCUtil()->single($member, array('userId'));
+            $member['isOldUser'] = true;
 
             return $member;
         }

@@ -7,14 +7,16 @@ export default class ShowUnpublish {
   }
 
   _event() {
-    this.$element.on('change', function(){
-      const url = $(this).data('url');
-      const status = $(this).parent('.js-switch').hasClass('checked') ? 0 : 1;
-      $.post(url, {status:status})
-      .success(function(response) {
+    cd.onoff({
+      el: '.js-switch'
+    }).on('change', (value) => {
+      const url = this.$element.data('url');
+      const status = this.$element.parent().hasClass('checked') ? 1 : 0;
+      $.post(url, { status: status })
+      .success((response) => {
         notify('success', Translator.trans('site.save_success_hint'));
       })
-      .error(function(response){
+      .error((response) => {
         notify('error', response.error.message);
       })
     })

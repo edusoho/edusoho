@@ -197,6 +197,17 @@ class DefaultStrategyTest extends BaseTestCase
             'courseId' => '1',
             'categoryId' => '1',
         );
+
+        $this->mockBiz(
+            'Course:CourseDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'status' => 'published', 'title' => 'title', 'courseSetId' => 3, 'parentId' => 0),
+                    'withParams' => array(1),
+                ),
+            )
+        );
         $this->getDefaultStrategy()->deleteTask($task);
         $this->getTaskDao()->shouldHaveReceived('delete')->times(2);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(2);
