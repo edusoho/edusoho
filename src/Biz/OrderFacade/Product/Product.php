@@ -100,7 +100,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $unit = '';
 
     /**
-     * 是否可以隐藏优惠券的使用
+     * 是否可以使用优惠券
      *
      * @var bool
      */
