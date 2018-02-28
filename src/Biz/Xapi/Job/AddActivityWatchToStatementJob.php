@@ -2,6 +2,7 @@
 
 namespace Biz\Xapi\Job;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -19,18 +20,26 @@ class AddActivityWatchToStatementJob extends AbstractJob
 
         $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, 10);
 
+        $activityIds = ArrayToolkit::column($watchLogs, 'activity_id');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+        $statements = array();
+        $logIds = array();
+
         foreach ($watchLogs as $watchLog) {
-            $activity = $this->getActivityService()->getActivity($watchLog['activity_id']);
-            $statement = array(
+            $activity = $activities[$watchLog['activity_id']];
+            $statements[] = array(
                 'user_id' => $watchLog['user_id'],
                 'verb' => 'audio' == $activity['mediaType'] ? 'listen' : 'watch',
                 'target_id' => $watchLog['id'],
                 'target_type' => $activity['mediaType'],
                 'occur_time' => $watchLog['updated_time'],
             );
-
-            $this->getXapiService()->createStatement($statement);
-            $this->getXapiService()->updateWatchLog($watchLog['id'], array('is_push' => 1));
+            $logIds[] = $watchLog['id'];
+        }
+        if (!empty($statements)) {
+            $this->getXapiService()->batchCreateStatements($statements);
+            $this->getXapiService()->batchUpdateWatchLogPushed($logIds);
         }
     }
 

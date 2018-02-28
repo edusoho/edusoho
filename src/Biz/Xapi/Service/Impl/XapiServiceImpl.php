@@ -11,6 +11,7 @@ use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
+use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use QiQiuYun\SDK\QiQiuYunSDK;
 
@@ -26,6 +27,15 @@ class XapiServiceImpl extends BaseService implements XapiService
         $statement['uuid'] = $this->generateUUID();
 
         return $this->getStatementDao()->create($statement);
+    }
+
+    public function batchCreateStatements($statements)
+    {
+        $batchCreateHelper = new BatchCreateHelper($this->getStatementDao());
+        foreach ($statements as $statement) {
+            $batchCreateHelper->add($statement);
+        }
+        $batchCreateHelper->flush();
     }
 
     public function getStatement($id)
@@ -130,6 +140,17 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function updateWatchLog($id, $watchLog)
     {
         return $this->getActivityWatchLogDao()->update($id, $watchLog);
+    }
+
+    public function batchUpdateWatchLogPushed($watchLogIds)
+    {
+        $batchUpdateHelper = new BatchUpdateHelper($this->getActivityWatchLogDao());
+        foreach ($watchLogIds as $id) {
+            $batchUpdateHelper->add('id', $id, array(
+                'is_push' => 1,
+            ));
+        }
+        $batchUpdateHelper->flush();
     }
 
     public function searchWatchLogs($conditions, $orderBys, $start, $limit)
