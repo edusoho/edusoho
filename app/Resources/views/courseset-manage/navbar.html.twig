@@ -47,7 +47,5 @@
     {% endif %}
   </li>
 
-  <li class="cd-sidebar__item {% if side_nav == 'plan' %}active{% endif %}">
-    <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}"><i class="es-icon es-icon-morehoriz"></i></a>
-  </li>
+  {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
 </ul>
