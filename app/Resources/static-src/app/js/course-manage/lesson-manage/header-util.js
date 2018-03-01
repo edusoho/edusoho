@@ -4,9 +4,10 @@ export const hiddenUnpublishTask = () => {
   cd.onoff({
     el: '.js-switch'
   }).on('change', (value) => {
-    let $ele = $('#isShowPublish');
+    let $ele = $('.js-switch');
     const url = $ele.data('url');
-    const status = $ele.parent().hasClass('checked') ? 1 : 0;
+    const status = $ele.parent().hasClass('checked') ? 0 : 1;
+    
     $.post(url, { status: status })
     .success((response) => {
       notify('success', Translator.trans('site.save_success_hint'));
