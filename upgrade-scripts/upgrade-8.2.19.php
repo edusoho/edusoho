@@ -16,7 +16,6 @@ class EduSohoUpgrade extends AbstractUpdater
         parent::__construct($biz);
 
         $this->userUpdateHelper = new BatchUpdateHelper($this->getUserDao());
-        $this->generateUUID();
     }
 
     public function update($index = 0)
@@ -123,7 +122,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateUserUUID($page)
     {
         $limit = 1000;
-        $start = ($page - 1) * $limit;
         $sql = "SELECT COUNT(id) FROM `user` WHERE uuid = '';"; 
         $count = $this->getConnection()->fetchColumn($sql);
 
@@ -131,7 +129,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
 
-        $sql = "SELECT id FROM `user` WHERE uuid = '' LIMIT {$start}, {$limit};";
+        $sql = "SELECT id FROM `user` WHERE uuid = '' LIMIT {$limit};";
         $users = $this->getConnection()->fetchAll($sql);
 
         foreach ($users as $user) {
@@ -161,7 +159,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function generateUUID()
     {
-        $count = 10000;
+        $count = 1000;
 
         $exists = array();
         if ($this->isFieldExist('user', 'uuid')) {
@@ -176,8 +174,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->batchUUIDs[] = $uuid;
             }
         }
-
-        return $this->batchUUIDs;
     }
 
     protected function generateIndex($step, $page)
