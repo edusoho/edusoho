@@ -1186,8 +1186,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
-        $total = $this->controller->getCourseService()->countUserLearnedCourses($user['id']);
-        $courses = $this->controller->getCourseService()->findUserLearnedCourses($user['id'], $start, $limit);
+        $total = $this->getCourseSetService()->countUserLearnCourseSets($user['id']);
+        $courseSets = $this->getCourseSetService()->searchUserLearnCourseSets($user['id'], $start, $limit);
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
 
         $result = array(
             'start' => $start,
@@ -1209,8 +1212,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
-        $total = $this->controller->getCourseService()->countUserLearningCourses($userId);
-        $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
+        $total = $this->getCourseSetService()->countUserLearnCourseSets($userId);
+        $courseSets = $this->getCourseSetService()->searchUserLearnCourseSets($userId, $start, $limit);
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
 
         $count = $this->controller->getTaskResultService()->countTaskResults(array(
             'userId' => $userId,
@@ -1260,14 +1266,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $total = $this->controller->getCourseSetService()->countUserTeachingCourseSets($userId, $conditions);
 
-        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
+        $courseSets = $this->getCourseSetService()->searchUserTeachingCourseSets(
             $userId,
             $conditions,
             $start,
             $limit
         );
 
-        $courseSetIds = ArrayToolkit::column($sets, 'id');
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
 
         return array(

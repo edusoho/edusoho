@@ -270,10 +270,10 @@ class MobileBaseController extends BaseController
 
         $teacherIds = array();
 
-        foreach ($courses as $course) {
+        foreach ($courses as $key => $course) {
             if (isset($course['teacherIds']) && !empty($course['teacherIds'])) {
                 if (!is_array($course['teacherIds'])) {
-                    $course['teacherIds'] = explode('|', $course['teacherIds']);
+                    $courses[$key]['teacherIds'] = $course['teacherIds'] = explode('|', $course['teacherIds']);
                 }
                 $teacherIds = array_merge($teacherIds, $course['teacherIds']);
             }
