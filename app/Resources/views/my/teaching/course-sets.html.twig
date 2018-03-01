@@ -3,22 +3,46 @@
 
 {% block title %}{{ 'my.teaching.page_title'|trans }} - {{ parent() }}{% endblock %}
 
+{% do script(['libs/fullcalendar.js', 'app/js/my/teaching-courseset/index.js'])  %}
+
 {% set side_nav = 'my-teaching-courses' %}
 
 {% set type="question" %}
 
 {% block main %}
-  <div class="panel panel-default" role="my-teaching-course-sets">
-    <div class="panel-heading">
+  <div class="my-teaching-courseset" role="my-teaching-course-sets">
+    <div class="cd-mb24">
       <span class="pull-right">
-        <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm">
-        <span class="es-icon es-icon-anonymous-iconfont"></span> {{ 'my.teaching.course_set.create'|trans }}</a>
+        <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
       </span>
-      {{ 'my.teaching.course_set.content_title'|trans }}
+    {# </div> #}
+      <div class="cd-select my-teaching-courseset__select" id="select-single">
+        <input type="hidden" value="option1" />
+        <div class="select-value">{{ 'my.teaching.course_set.normal'|trans }}</div>
+        <ul class="select-options">
+          <li class="checked" data-value="option1">{{ 'my.teaching.course_set.normal'|trans }}</li>
+          <li data-value="option2">{{ 'my.teaching.course_set.live'|trans }}</li>
+          <li data-value="option3">{{ 'my.teaching.course_set.classroom'|trans({'%classroom%': setting("classroom.name")|default("classroom"|trans)}) }}</li>
+          <li data-value="option4">{{ 'my.teaching.open_course.normal'|trans }}</li>
+          <li data-value="option5">{{ 'my.teaching.open_course.live'|trans }}</li>
+        </ul>
+      </div>
     </div>
-
-    <div class="panel-body">
-      {% include 'my/teaching/course-tab.html.twig' %}
+      {# {% include 'my/teaching/course-tab.html.twig' %} #}
+      {# {% for courseSet in courseSets %}
+        {% include 'courseset-manage/header.html.twig' with { side_nav: side_nav } %}
+      {% else %}
+        <div class="empty">
+          <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
+            {% if filter|default('normal') == 'live' %}
+              {{ 'my.teaching.course_set.live_empty_hint'|trans }}
+            {% else %}
+              {{ 'my.teaching.course_set.empty_hint'|trans }}
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %} #}
+      
       <table class="table table-striped" id="course-table" style="word-break:break-all;">
         <thead>
         <tr>
@@ -120,9 +144,9 @@
         {% endfor %}
         </tbody>
       </table>
-      <nav class="text-center">
+      {# <nav class="text-center">
         {{ web_macro.paginator(paginator) }}
-      </nav>
+      </nav> #}
     </div>
   </div>
 {% endblock %}

@@ -36,9 +36,11 @@
     </div>
   </div>
 
-  {# 课程发布按钮 #}
-  <div class="courseset-manage-header-btn hidden-xs">
-
+<div class="courseset-manage-header-btn hidden-xs">
+  {% if side_nav|default(null) == 'my-teaching-courses' %}
+    <div class="cd-btn cd-btn-ghost-primary">{{ 'course.manage_btn'|trans }}</div>
+  {% else %}
+    {# 课程发布按钮 #}
     {% if courseSet.status == 'published' %}
       <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
     {% endif %}
@@ -57,7 +59,8 @@
         </ul>
       </div>
     {% endif %}
-  </div>
+  {% endif %}
+</div>
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.student_member'|trans }}</span>
@@ -70,6 +73,6 @@
   </div>
 </div>
 
-{% if courseSet.status == 'closed' %}
-  <div class="alert alert-warning">{{'course.remove_students_tips'|trans}}</div>
+{% if courseSet.status == 'closed' and side_nav|default(null) != 'my-teaching-courses' %}
+  <div class="cd-alert cd-alert-warning">{{'course.remove_students_tips'|trans}}</div>
 {% endif %}
