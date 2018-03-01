@@ -7,8 +7,8 @@
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
-    <li><a href="#">如何构建合理的建筑结构超出二十一个字就截取</a></li>
-    <li class="active">这是我的第二个默认教学计划</li>
+    <li><a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{courseSet.title|plain_text(21)}}</a></li>
+    <li class="active">{{course.title}}</li>
   </ol>
 {% endblock %}
 
