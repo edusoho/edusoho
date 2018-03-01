@@ -163,9 +163,12 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $count = 10000;
 
-        $sql = "SELECT uuid FROM user WHERE uuid != '';";
-        $users = $this->getConnection()->fetchAll($sql);
-        $exists = ArrayToolkit::column($users, 'uuid');
+        $exists = array();
+        if ($this->isFieldExist('user', 'uuid')) {
+            $sql = "SELECT uuid FROM user WHERE uuid != '';";
+            $users = $this->getConnection()->fetchAll($sql);
+            $exists = ArrayToolkit::column($users, 'uuid');
+        }
 
         for ($i = 1; $i<=$count; $i++) {
             $uuid = $this->getUserService()->makeUUID();
