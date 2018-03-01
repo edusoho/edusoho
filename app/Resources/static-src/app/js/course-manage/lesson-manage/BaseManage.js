@@ -68,25 +68,25 @@ export default class Manage {
         let $position = this.$element.find('#chapter-'+this.position);
         let $last = $position.nextUntil('.js-task-manage-chapter').last();
         if (0 == $last.length) {
-          $position.after(elm);
+          $position.after($elm);
         } else {
-          $last.after(elm);
+          $last.after($elm);
         }
         break;
       case 'task':
-        this.$element.find('#chapter-'+this.position+' .js-lesson-box').append(elm);
+        this.$element.find('#chapter-'+this.position+' .js-lesson-box').append($elm);
         break;
       case 'lesson':
         let $unit = this.$element.find('#chapter-'+this.position);
         let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
         if (0 == $lesson.length) {
-          $unit.after(elm);
+          $unit.after($elm);
         } else {
-          $lesson.after(elm);
+          $lesson.after($elm);
         }
         break;
       default:
-        this.$element.append(elm);
+        this.$element.append($elm);
     }
     this.handleEmptyShow();
     this._flushTaskNumber();
@@ -230,11 +230,13 @@ export default class Manage {
 
   _sortUnitNumber() {
      // 排序 节 的序号
-    let num = 1;
-    this.$element.find('.js-task-manage-unit').each(function(){
-      let $item = $(this);
-      $item.find('.number').text(num);
-      num = $item.next().hasClass('task-manage-chapter') ? 1 : num+1;
+    let num;
+    this.$element.find('.js-task-manage-chapter').each(function(){
+      let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
+      num = 1;
+      $unit.each(function(){
+        $(this).find('.number').text(num++);
+      });
     });
   }
 
