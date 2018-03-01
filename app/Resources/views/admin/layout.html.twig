@@ -169,11 +169,16 @@
         <script aysnc="aysnc" src="{{ cloud_sdk_url('faq') }}"></script>
         <script aysnc="aysnc">
           {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : app.request.getScheme() ~ '://www.qiqiuyu.com' %}
-          new FaqSDK({
-            id: 'faq-sdk',
-            apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&host={{ app.request.getHost() }}&url={{ app.request.getRequestUri() }}',
-            color: '#43bc60',
-          });
+          try {
+            new FaqSDK({
+              id: 'faq-sdk',
+              apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&host={{ app.request.getHost() }}&url={{ app.request.getRequestUri() }}',
+              color: '#43bc60',
+            });
+          }
+          catch(err){
+            console.log(err);
+          }
         </script>
       {% endif %}
     {% endblock %}

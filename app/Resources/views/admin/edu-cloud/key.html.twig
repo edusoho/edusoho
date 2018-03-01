@@ -51,7 +51,7 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
     {% elseif info.error|default(null) == 'error' %}
-      {{'admin.cloud_setting.network_error_hint'|trans}}
+      <div class="alert alert-danger">{{'admin.cloud_setting.network_error_hint'|trans}}</div>
     {% else %}
       {{ 'admin.cloud_setting.buy_package_hint'|trans({'%servicePriceUrl%': 'http://www.edusoho.com/services/price?type=price'})|raw }}
     {% endif %}

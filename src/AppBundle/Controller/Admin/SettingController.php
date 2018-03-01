@@ -71,8 +71,11 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
             $this->setFlashMessage('success', 'site.save.success');
         }
-
-        $result = CloudAPIFactory::create('leaf')->get('/me');
+        try {
+            $result = CloudAPIFactory::create('leaf')->get('/me');       
+        } catch (\Exception $e) {
+            return $this->render('admin/system/mobile.setting.error.html.twig');
+        }
 
         $mobileCode = ((array_key_exists('mobileCode', $result) && !empty($result['mobileCode'])) ? $result['mobileCode'] : 'edusohov3');
 
