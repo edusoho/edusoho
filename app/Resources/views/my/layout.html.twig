@@ -1,11 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib','my-teaching-live-calendar'] %}
-    {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
-  {% else %}
-    {{ 'my.learning.menu_heading'|trans }} - {{ parent() }}
-  {% endif %}
+  {{ 'my.learning.menu_heading'|trans }} - {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -21,46 +17,6 @@
             <li class="list-group-item
            {% if side_nav == 'growth' %} active {% endif %}">
               <a href="{{ path('my') }}">{{ 'plugin.point.growth'|trans }}</a>
-            </li>
-          </ul>
-        {% endif %}
-        {% if app.user.isTeacher() %}
-          <ul class="list-group">
-            <li class="list-group-heading">{{ 'my.teaching.menu_heading'|trans }}</li>
-            <li class="list-group-item {% if side_nav == 'my-teaching-courses' %} active {% endif %}">
-              <a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a>
-            </li>
-
-            <li class="list-group-item {% if side_nav == 'my-teaching-live-calendar' %} active {% endif %}">
-              <a href="{{ path('my_teaching_live_calendar') }}">{{ 'my.teaching.live_schedule_menu'|trans }}</a>
-            </li>
-
-            <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-              <a href="{{ path('my_teaching_classrooms') }}">{{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("classroom"|trans)}) }}
-              </a>
-            </li>
-
-            <li class="list-group-item {% if side_nav == 'my-teaching-questions' %}active {% endif %}">
-              <a href="{{ path('my_teaching_threads', {type:'question'}) }}">
-                {{ 'my.teaching.question_menu'|trans }}
-              </a>
-            </li>
-            <li class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}">
-              <a href="{{ path('my_teaching_threads', {type:'discussion'}) }}">                
-                {{ 'my.teaching.discussion_menu'|trans }}
-              </a>
-            </li>
-
-            <li class="list-group-item {% if side_nav == 'my-testpaper-check' %} active {% endif %}">
-              <a href="{{ path('my_testpaper_check_list',{status:'reviewing'}) }}">{{ 'my.teaching.testpaper_check_menu'|trans }}</a>
-            </li>
-
-            <li class="list-group-item {% if side_nav == 'my-homework-check' %} active {% endif %}">
-              <a href="{{ path('my_homework_check_list',{status:'reviewing'}) }}">{{ 'my.teaching.homework_check_menu'|trans }}</a>
-            </li>
-
-            <li class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}">
-              <a href="{{ path('material_lib_browsing') }}">{{ 'my.teaching.material_lib_menu'|trans }}</a>
             </li>
           </ul>
         {% endif %}
@@ -116,37 +72,4 @@
 
   {% block main_mobile %}{% endblock %}
 
-{% endblock %}
-
-{% extends 'v2/layout.html.twig' %}
-
-{% block title %}
-  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib','my-teaching-live-calendar'] %}
-    {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
-  {% else %}
-    {{ 'my.learning.menu_heading'|trans }} - {{ parent() }}
-  {% endif %}
-{% endblock %}
-
-{% block full_content %}
-  {% block top_content %}
-    <div class="my-header-section">
-      <div class="container cd-container">
-        {% block navbar %}
-          {% include 'my/navbar.html.twig' %}
-        {% endblock %}
-      </div>
-    </div>
-  {% endblock %}
-  <div class="container cd-container">
-    <div class="cd-content">
-      {% block sidebar %}
-      {% endblock %}
-
-      {% block main %}
-      {% endblock %}
-
-      {% block main_mobile %}{% endblock %}
-    </div>
-  </div>
 {% endblock %}
