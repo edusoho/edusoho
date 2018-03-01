@@ -1,14 +1,14 @@
 import {
-  taskSortable,
-  courseFunctionRemask,
-  closeCourse,
-  deleteCourse,
-  showSettings,
-  deleteTask,
-  publishTask,
-  unpublishTask,
-  updateTaskNum,
-  TaskListHeaderFixed
+	taskSortable,
+	courseFunctionRemask,
+	closeCourse,
+	deleteCourse,
+	showSettings,
+	deleteTask,
+	publishTask,
+	unpublishTask,
+	updateTaskNum,
+	TaskListHeaderFixed
 } from './help';
 
 import { toggleIcon } from 'app/common/widget/chapter-animate';
@@ -28,10 +28,10 @@ TaskListHeaderFixed();
 // @TODO拆分，这个js被几个页面引用了有的页面根本不用js
 
 $('#sortable-list').on('click', '.js-chapter-toggle-show', (event) => {
-  let $this = $(event.currentTarget);
-  let $chapter = $this.closest('.js-task-manage-chapter');
-  $chapter.nextUntil('.js-task-manage-chapter').animate({ height: 'toggle', opacity: 'toggle' }, "normal");
-  toggleIcon($chapter, 'es-icon-keyboardarrowdown', 'es-icon-keyboardarrowup');
+	let $this = $(event.currentTarget);
+	let $chapter = $this.closest('.js-task-manage-chapter');
+	$chapter.nextUntil('.js-task-manage-chapter').animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+	toggleIcon($chapter, 'es-icon-keyboardarrowdown', 'es-icon-keyboardarrowup');
 });
 
 

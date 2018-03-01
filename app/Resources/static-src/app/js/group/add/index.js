@@ -3,8 +3,8 @@ let $groupIntroduce = $('#groupIntroduce');
 let btn = '#group-save-btn';
 
 var editor = CKEDITOR.replace('groupIntroduce', {
-  toolbar: 'Full',
-  fileSingleSizeLimit: app.fileSingleSizeLimit,
+	toolbar: 'Full',
+	fileSingleSizeLimit: app.fileSingleSizeLimit,
 	filebrowserImageUploadUrl: $groupIntroduce.data('imageUploadUrl'),
 	allowedContent: true,
 	height: 300
@@ -30,6 +30,6 @@ let $groupCreateValidator = $userGroupForm.validate({
 
 $(btn).click(() => {
 	if ($groupCreateValidator.form()) {
-		$userGroupForm.submit()
+		$userGroupForm.submit();
 	}
-})
+});

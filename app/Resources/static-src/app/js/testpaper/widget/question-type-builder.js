@@ -16,29 +16,29 @@ class QuestionTypeBuilder
 	static getTypeBuilder(type) {
 		let questionBuilder = null;
 		switch (type) {
-			case 'choice':
-				questionBuilder = new ChoiceQuesiton();
-				break;
-			case 'determine':
-				questionBuilder = new DetermineQuestion();
-				break;
-			case 'essay':
-				questionBuilder = new EssayQuestion();
-				break;
-			case 'fill':
-				questionBuilder = new FillQuestion();
-				break;
-			case 'single_choice':
-				questionBuilder = new SingleChoiceQuestion();
-				break;
-			case 'uncertain_choice':
-				questionBuilder = new UncertainChoiceQuesiton();
-				break;
-			default:
-				questionBuilder = null;
+		case 'choice':
+			questionBuilder = new ChoiceQuesiton();
+			break;
+		case 'determine':
+			questionBuilder = new DetermineQuestion();
+			break;
+		case 'essay':
+			questionBuilder = new EssayQuestion();
+			break;
+		case 'fill':
+			questionBuilder = new FillQuestion();
+			break;
+		case 'single_choice':
+			questionBuilder = new SingleChoiceQuestion();
+			break;
+		case 'uncertain_choice':
+			questionBuilder = new UncertainChoiceQuesiton();
+			break;
+		default:
+			questionBuilder = null;
 		}
 
-		return questionBuilder
+		return questionBuilder;
 	}
 }
 

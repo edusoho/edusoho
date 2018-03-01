@@ -8,11 +8,11 @@ let token = $message.data('token');
 let $countDown = $('.js-count-down');
 
 if (os === 'iOS') {
-  window.webkit.messageHandlers.login.postMessage(token);
+	window.webkit.messageHandlers.login.postMessage(token);
 } else if (os === 'Android') {
-  window.android.login(token);
+	window.android.login(token);
 } else {
-  if (duration > 0 && gotoUrl) {
-    countDown($countDown, duration, gotoUrl);
-  }
+	if (duration > 0 && gotoUrl) {
+		countDown($countDown, duration, gotoUrl);
+	}
 }

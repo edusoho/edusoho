@@ -1,3 +1,3 @@
 $('[data-tooltip="tooltip"]').tooltip({
-  trigger: 'hover',
-})
+	trigger: 'hover',
+});

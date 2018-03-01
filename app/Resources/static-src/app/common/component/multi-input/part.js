@@ -1,3 +1,3 @@
 export const getRandomString = () => {
-  return  Math.random().toString().replace('.','');
-}
+	return  Math.random().toString().replace('.','');
+};

@@ -2,45 +2,45 @@ let intervalId = 0;
 let tryCount = 1;
 
 function getRoomUrl() {
-  if (tryCount > 10) {
-    clearInterval(intervalId);
+	if (tryCount > 10) {
+		clearInterval(intervalId);
 
-    let html = Translator.trans('进入直播教室错误，请联系管理员，')+"<a href='javascript:document.location.reload()'>"+Translator.trans('重试')+"</a>"+Translator.trans('或')+"<a href='javascript:window.close();'>"+Translator.trans('关闭')+"</a>"
+		let html = Translator.trans('进入直播教室错误，请联系管理员，')+'<a href=\'javascript:document.location.reload()\'>'+Translator.trans('重试')+'</a>'+Translator.trans('或')+'<a href=\'javascript:window.close();\'>'+Translator.trans('关闭')+'</a>';
     
-    $("#classroom-url").html(html);
-    return;
-  }
-  $.ajax({
-    url: $("#classroom-url").data("url"),
-    success: function(data) {
-      if (data.error) {
-        clearInterval(intervalId);
+		$('#classroom-url').html(html);
+		return;
+	}
+	$.ajax({
+		url: $('#classroom-url').data('url'),
+		success: function(data) {
+			if (data.error) {
+				clearInterval(intervalId);
 
-        let html = data.error+Translator.trans('，')+"<a href='javascript:document.location.reload()'>"+Translator.trans('重试')+"</a>"+Translator.trans('或')+"<a href='javascript:window.close();'>"+Translator.trans('关闭')+"</a>";
+				let html = data.error+Translator.trans('，')+'<a href=\'javascript:document.location.reload()\'>'+Translator.trans('重试')+'</a>'+Translator.trans('或')+'<a href=\'javascript:window.close();\'>'+Translator.trans('关闭')+'</a>';
         
-        $("#classroom-url").html(html);
-        return;
-      }
+				$('#classroom-url').html(html);
+				return;
+			}
 
-      if (data.url) {
-        let url = data.url;
-        if (data.param) {
-          url = url+"?param="+data.param;
-        }
-        let html = '<iframe name="classroom" src="'+url+'" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
+			if (data.url) {
+				let url = data.url;
+				if (data.param) {
+					url = url+'?param='+data.param;
+				}
+				let html = '<iframe name="classroom" src="'+url+'" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
 
-        $("body").html(html);
+				$('body').html(html);
 
-        clearInterval(intervalId);
-      }
+				clearInterval(intervalId);
+			}
 
-      tryCount ++;
-    },
-    error: function() {
-      //var html = "进入直播教室错误，请联系管理员，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
-      //$("#classroom-url").html(html);
-    }
-  })
+			tryCount ++;
+		},
+		error: function() {
+			//var html = "进入直播教室错误，请联系管理员，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
+			//$("#classroom-url").html(html);
+		}
+	});
 }
 
 getRoomUrl();

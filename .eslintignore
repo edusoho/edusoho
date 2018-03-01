@@ -1,0 +1,3 @@
+app/Resources/static-src/libs/
+app/Resources/static-src/common/fex-webuploader/webuploader.js
+app/Resources/static-src/common/autocomplete/*.js

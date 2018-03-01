@@ -7,7 +7,7 @@ class ChoiceQuesiton
 		let answers = [];
 		$('input[name='+questionId+']:checked').each(function(){
 			answers.push($(this).val());
-		})
+		});
 
 		return answers;
 	}

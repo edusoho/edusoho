@@ -1,1 +1,1 @@
-$("#site-navbar").find('.notification-badge-container .badge').remove();
+$('#site-navbar').find('.notification-badge-container .badge').remove();

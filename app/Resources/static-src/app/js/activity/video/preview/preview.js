@@ -17,7 +17,7 @@ export  default class VideoPlay {
 	_playerSwf() {
 		const swf_dom = 'swf-player';
 		swfobject.embedSWF($('#' + swf_dom).data('url'),
-			swf_dom, '100%', '100%', "9.0.0", null, null, {
+			swf_dom, '100%', '100%', '9.0.0', null, null, {
 				wmode: 'opaque',
 				allowFullScreen: 'true'
 			});
@@ -31,7 +31,7 @@ export  default class VideoPlay {
 			type: 'parent'
 		});
 
-		messenger.on("ended", function () {
+		messenger.on('ended', function () {
 			$('#task-preview-player').html($('.js-time-limit-dev').html());
 		});
 

@@ -1,5 +1,5 @@
 echo.init();
 
 $('#free').on('click', function(event) {
-  window.location.href = $(this).val();
+	window.location.href = $(this).val();
 });

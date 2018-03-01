@@ -18,7 +18,7 @@ onFullScreen();
 function initDocPlayer() {
 	new QiQiuYun.Player({
 		id: 'document-content',
-        playServer: app.cloudPlayServer,
+		playServer: app.cloudPlayServer,
 		resNo: $element.data('resNo'),
 		token: $element.data('token'),
 		user: {
@@ -36,7 +36,7 @@ function onFullScreen() {
 			return;
 		}
 		var isPageFullScreen = e.data;
-		if (typeof(isPageFullScreen) != "boolean") {
+		if (typeof(isPageFullScreen) != 'boolean') {
 			return;
 		}
 		var docContent = $('#task-content-iframe', window.parent.document);
@@ -45,7 +45,7 @@ function onFullScreen() {
 			docContent.width('100%');
 		} else {
 			docContent.addClass('screen-full');
-			docContent.width(window.document.body.offsetWidth + "px");
+			docContent.width(window.document.body.offsetWidth + 'px');
 		}
 	};
 }

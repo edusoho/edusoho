@@ -3,28 +3,28 @@ import { Browser, isMobileDevice } from 'common/utils';
 
 export const initScrollbar = ()=> {
 	let $paneCard = $('.js-panel-card');
-  $paneCard.perfectScrollbar();
+	$paneCard.perfectScrollbar();
 	$paneCard.perfectScrollbar('update');
-}
+};
 
 export const testpaperCardFixed =()=> {
-  console.log('ok');
-  if (isMobileDevice()) return;
+	console.log('ok');
+	if (isMobileDevice()) return;
 
- 	let $testpaperCard = $(".js-testpaper-card");
+ 	let $testpaperCard = $('.js-testpaper-card');
 	if ($testpaperCard.length <= 0 ) {
 		return;
 	}
 	let testpaperCard_top = $testpaperCard.offset().top;
 	$(window).scroll(function(event) {
-			let scrollTop = $(window).scrollTop();
-			if (scrollTop >= testpaperCard_top) {
-				$testpaperCard.addClass('affix')
-			} else {
-				$testpaperCard.removeClass('affix');
-			}
+		let scrollTop = $(window).scrollTop();
+		if (scrollTop >= testpaperCard_top) {
+			$testpaperCard.addClass('affix');
+		} else {
+			$testpaperCard.removeClass('affix');
+		}
 	});
-}
+};
 
 export const testpaperCardLocation = () => {
 	$('.js-btn-index').click((event)=>{
@@ -32,8 +32,8 @@ export const testpaperCardLocation = () => {
 		if($('.js-testpaper-heading').length <= 0) {
 			$btn.addClass('doing').siblings('.doing').removeClass('doing');
 		}
-	})
-}
+	});
+};
 
 export const onlyShowError = ()=> {
 	$('#showWrong').change((event)=>{
@@ -52,21 +52,21 @@ export const onlyShowError = ()=> {
 			}
 		});
 		initScrollbar();
-	})
-}
+	});
+};
 
 export const initWatermark = ()=> {
 	let $testpaperWatermark = $('.js-testpaper-watermark');
-  if ($testpaperWatermark.length > 0) {
-    $.get($testpaperWatermark.data('watermark-url'), function(response){
-      $testpaperWatermark.each(function(){
-        $(this).WaterMark({
-          'yPosition': 'center',
-          'style': {'font-size':10},
-          'opacity': 0.6,
-          'contents': response
-        });
-      })
-    });
-  }
-}
+	if ($testpaperWatermark.length > 0) {
+		$.get($testpaperWatermark.data('watermark-url'), function(response){
+			$testpaperWatermark.each(function(){
+				$(this).WaterMark({
+					'yPosition': 'center',
+					'style': {'font-size':10},
+					'opacity': 0.6,
+					'contents': response
+				});
+			});
+		});
+	}
+};

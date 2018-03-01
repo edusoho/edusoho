@@ -185,7 +185,7 @@
 	}
 	
 	function escapeRegExp (str) {
-		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 	}
 	
 	function getCaretPosition(input) {
@@ -229,28 +229,28 @@
 			return safe_call.call(this,callback2,args);
 		}
 		return defaultValue;
-	};
+	}
 
 	function __safe( callbackName,source,args,defaultValue ){
 		var undefinedVar;
 		return safe_call.call( this, (isset(this.source[source])&&
 			Object.prototype.hasOwnProperty.call(this.source[source], callbackName)) ? this.source[source][callbackName] : undefinedVar, args, function(){
 			return safe_call.call(this,
-					isset(this[callbackName][source])?
-						this[callbackName][source]:(
-							isset(this[callbackName][0])?
-								this[callbackName][0]:(
-									Object.prototype.hasOwnProperty.call(this, callbackName)?
-										this[callbackName]:
-										undefinedVar
-								)
-						),
-					args,
-					defaultSetting[callbackName][source]||defaultSetting[callbackName][0]||defaultSetting[callbackName],
-					defaultValue
+				isset(this[callbackName][source])?
+					this[callbackName][source]:(
+						isset(this[callbackName][0])?
+							this[callbackName][0]:(
+								Object.prototype.hasOwnProperty.call(this, callbackName)?
+									this[callbackName]:
+									undefinedVar
+							)
+					),
+				args,
+				defaultSetting[callbackName][source]||defaultSetting[callbackName][0]||defaultSetting[callbackName],
+				defaultValue
 			);
 		},defaultValue);
-	};
+	}
 
 	function __get( property,source ){
 		if(!isset(source))
@@ -271,7 +271,7 @@
 		}
 		
 		return null;
-	};
+	}
 
 	function loadRemote( url,sourceObject,done,debug ){
 		 if (sourceObject.xhr) {
@@ -286,12 +286,12 @@
 		 },sourceObject.ajax))
 		 
 		 .done(function( data ){
-			done&&done.apply(this,$.makeArray(arguments));
+				done&&done.apply(this,$.makeArray(arguments));
 		 })
 		 
 		 .fail(function( jqXHR, textStatus ){
-			if( debug )
-				console.log("Request failed: " + textStatus);
+				if( debug )
+					console.log('Request failed: ' + textStatus);
 		 });
 	}
 
@@ -300,7 +300,7 @@
 		var right = false,source;
 		
 		for (source = 0;source < data.length;source += 1) {
-			if( right = __safe.call(this,"findRight",source,[data[source],query,source]) ){
+			if( right = __safe.call(this,'findRight',source,[data[source],query,source]) ){
 				return {right:right,source:source};
 			}
 		}
@@ -321,17 +321,17 @@
 				data[source]
 			);
 		}
-	};
+	}
 
 
 	function collectData( query,datasource,callback ){
 		var options = this,source;
 		
 		if( $.isFunction(options.source) ){
-				options.source.apply(options,[query,function(items){
-					datasource = [items];
-					safe_call.call(options,callback,[query]);
-				},datasource,0]);
+			options.source.apply(options,[query,function(items){
+				datasource = [items];
+				safe_call.call(options,callback,[query]);
+			},datasource,0]);
 		}else{
 			for (source = 0;source < options.source.length;source += 1) {
 				if ($.isArray(options.source[source])) {
@@ -345,11 +345,11 @@
 								
 							if (items && $.isArray(items)) {
 								switch (options.appendMethod) {
-									case 'replace':
-										datasource[source] = items;
+								case 'replace':
+									datasource[source] = items;
 									break;
-									default:
-										datasource[source] = datasource[source].concat(items);
+								default:
+									datasource[source] = datasource[source].concat(items);
 								}
 							}
 								
@@ -358,34 +358,34 @@
 					}(source));
 				} else {
 					switch (options.source[source].type) {
-						case 'remote':
-							if (isset(options.source[source].url)) {
-								if (!isset(options.source[source].minLength) || query.length >= options.source[source].minLength){
-									var url = __safe.call(options,'replace',source,[options.source[source].url,query],'');
-									if (!datasource[source]) {
-										datasource[source] = [];
-									}
-									(function (source) {
-										loadRemote(url,options.source[source], function(resp){
-											datasource[source] = resp;
-											safe_call.call(options,callback,[query]);
-										},options.debug);
-									}(source));
+					case 'remote':
+						if (isset(options.source[source].url)) {
+							if (!isset(options.source[source].minLength) || query.length >= options.source[source].minLength){
+								var url = __safe.call(options,'replace',source,[options.source[source].url,query],'');
+								if (!datasource[source]) {
+									datasource[source] = [];
 								}
+								(function (source) {
+									loadRemote(url,options.source[source], function(resp){
+										datasource[source] = resp;
+										safe_call.call(options,callback,[query]);
+									},options.debug);
+								}(source));
 							}
+						}
 						break;
-						default:
-							if( isset(options.source[source]['data']) ){
-								datasource[source] = options.source[source]['data'];
-							}else{
-								datasource[source] = options.source[source];
-							}
+					default:
+						if( isset(options.source[source]['data']) ){
+							datasource[source] = options.source[source]['data'];
+						}else{
+							datasource[source] = options.source[source];
+						}
 					}
 				}
 			}
 		}
 		safe_call.call(options,callback,[query]);
-	};
+	}
 
 	function preparseData( data,query ){
 		for( var source=0;source<data.length;source++ ){
@@ -396,7 +396,7 @@
 				data[source]
 			);
 		}
-	};
+	}
 
 	function renderData( data,query ){
 		var  source, i, $div, $divs = [];
@@ -421,7 +421,7 @@
 		}
 		
 		return $divs;
-	};
+	}
 
 	function getItem( $div,dataset ){
 		if( isset($div.data('source')) && 
@@ -429,10 +429,10 @@
 			isset(dataset[$div.data('source')]) && 
 			isset(dataset[$div.data('source')][$div.data('pid')]) 
 		){
-			return dataset[$div.data('source')][$div.data('pid')]
+			return dataset[$div.data('source')][$div.data('pid')];
 		}
 		return false;
-	};
+	}
 
 	function getValue( $div,dataset ){
 		var item = getItem($div,dataset);
@@ -449,7 +449,7 @@
 				return $div.html();
 			}
 		}
-	};
+	}
 
 	defaultSetting = {
 		minLength: 0,
@@ -557,8 +557,8 @@
 		
 		render: [
 			function (item, source, pid, query) {
-				var value = __safe.call(this, "getValue", source, [item, source], defaultSetting.getValue[0].call(this, item, source)),
-					title = __safe.call(this, "getTitle", source, [item, source], defaultSetting.getTitle[0].call(this, item, source)),
+				var value = __safe.call(this, 'getValue', source, [item, source], defaultSetting.getValue[0].call(this, item, source)),
+					title = __safe.call(this, 'getTitle', source, [item, source], defaultSetting.getTitle[0].call(this, item, source)),
 					_value = '',
 					_query = '',
 					_title = '',
@@ -601,7 +601,7 @@
 	};
 	function init( that,options ){
 		if( $(that).hasClass('xdsoft_input') )
-				return;
+			return;
 		
 		var $box = $('<div class="xdsoft_autocomplete"></div>'),
 			$dropdown = $('<div class="xdsoft_autocomplete_dropdown"></div>'),
@@ -666,7 +666,7 @@
 				$dropdown.find('div').removeClass('active');
 				$(this).addClass('active');
 				$input.trigger('pick.xdsoft');
-			})
+			});
 
 		function manageData(){
 			if ($input.val()!=currentValue){
@@ -703,88 +703,88 @@
 			var key = event.keyCode, right;
 			
 			switch( key ){
-				case AKEY: case CKEY: case VKEY: case ZKEY: case YKEY:
-					if (event.shiftKey || event.ctrlKey) {
-						return true;
-					}
-				break;
-				case SHIFTKEY:	
-				case CTRLKEY:
+			case AKEY: case CKEY: case VKEY: case ZKEY: case YKEY:
+				if (event.shiftKey || event.ctrlKey) {
 					return true;
+				}
 				break;
-				case ARROWRIGHT:	
-				case ARROWLEFT:
-					if (ctrlDown || shiftDown || event.shiftKey || event.ctrlKey) {
-						return true;
-					}
-					value = $input.val();
-					pos = getCaretPosition($input[0]);
-					if (key === ARROWRIGHT && pos === value.length) {
-						if (right = findRight.call(options, dataset, value)){
-							$input.trigger('pick.xdsoft', [
-								__safe.call(options,
-									'getValue', right.source,
-									[right.right, right.source]
-								)
-							]);
-						} else {
-							$input.trigger('pick.xdsoft');
-						}
-						event.preventDefault();
-						return false;
-					}
-					return true;
-				case TAB:
+			case SHIFTKEY:	
+			case CTRLKEY:
 				return true;
-				case ENTER:
-					if (iOpen) {
-						$input.trigger('pick.xdsoft');
-						event.preventDefault();
-						return false;
-					} else {
-						return true;
-					}
 				break;
-				case ESC:
-					$input
-						.val(currentValue)
-						.trigger('close.xdsoft');
+			case ARROWRIGHT:	
+			case ARROWLEFT:
+				if (ctrlDown || shiftDown || event.shiftKey || event.ctrlKey) {
+					return true;
+				}
+				value = $input.val();
+				pos = getCaretPosition($input[0]);
+				if (key === ARROWRIGHT && pos === value.length) {
+					if (right = findRight.call(options, dataset, value)){
+						$input.trigger('pick.xdsoft', [
+							__safe.call(options,
+								'getValue', right.source,
+								[right.right, right.source]
+							)
+						]);
+					} else {
+						$input.trigger('pick.xdsoft');
+					}
 					event.preventDefault();
 					return false;
-				case ARROWDOWN:
-				case ARROWUP:
-					if (!iOpen) {
-						$input.trigger('open.xdsoft');
-						$input.trigger('updateContent.xdsoft');
-						event.preventDefault();
-						return false;
-					}
-					
-					active = $dropdown.find('div.active');
-					
-					var next = key==ARROWDOWN?'next':'prev', timepick = true;
-					
-					if( active.length ){
-						active.removeClass('active');
-						if( active[next]().length ){
-							active[next]().addClass('active');
-						}else{
-							$input.val(currentValue);
-							timepick = false;
-						}
-					}else{
-						$dropdown.children().eq(key==ARROWDOWN?0:-1).addClass('active');
-					}
-					
-					if( timepick ){
-						$input.trigger('timepick.xdsoft');
-					}
-					
-					$dropdown
-						.trigger('updatescroll.xdsoft');
-					
+				}
+				return true;
+			case TAB:
+				return true;
+			case ENTER:
+				if (iOpen) {
+					$input.trigger('pick.xdsoft');
 					event.preventDefault();
-					return false;	
+					return false;
+				} else {
+					return true;
+				}
+				break;
+			case ESC:
+				$input
+					.val(currentValue)
+					.trigger('close.xdsoft');
+				event.preventDefault();
+				return false;
+			case ARROWDOWN:
+			case ARROWUP:
+				if (!iOpen) {
+					$input.trigger('open.xdsoft');
+					$input.trigger('updateContent.xdsoft');
+					event.preventDefault();
+					return false;
+				}
+					
+				active = $dropdown.find('div.active');
+					
+				var next = key==ARROWDOWN?'next':'prev', timepick = true;
+					
+				if( active.length ){
+					active.removeClass('active');
+					if( active[next]().length ){
+						active[next]().addClass('active');
+					}else{
+						$input.val(currentValue);
+						timepick = false;
+					}
+				}else{
+					$dropdown.children().eq(key==ARROWDOWN?0:-1).addClass('active');
+				}
+					
+				if( timepick ){
+					$input.trigger('timepick.xdsoft');
+				}
+					
+				$dropdown
+					.trigger('updatescroll.xdsoft');
+					
+				event.preventDefault();
+				return false;	
 			}
 			return;
 		}
@@ -795,7 +795,7 @@
 			.on('pick.xdsoft', function( event,_value ){
 
 				$input
-					.trigger('timepick.xdsoft',_value)
+					.trigger('timepick.xdsoft',_value);
 				
 				currentSelect = currentValue = $input.val();
 				
@@ -888,7 +888,7 @@
 					},options.dropdownStyle));
 					
 					if (options.showHint) {
-						var style = getComputedStyle($input[0], "");
+						var style = getComputedStyle($input[0], '');
 						
 						$hint[0].style.cssText = style.cssText;
 						
@@ -928,7 +928,7 @@
 							'box-shadow':'none'
 						});
 						
-						$input.css('font-size',$input.css('fontSize'))// fix bug with em font size
+						$input.css('font-size',$input.css('fontSize'));// fix bug with em font size
 						
 						$hint.innerHeight($input.innerHeight());
 						
@@ -952,7 +952,7 @@
 						try{
 							$input[0].style.setProperty('background', 'transparent', 'important');
 						} catch(e) {
-							$input.css('background','transparent')
+							$input.css('background','transparent');
 						}
 
 						$box
@@ -980,7 +980,7 @@
 			});
 			$input
 				.trigger('updateHelperPosition.xdsoft');
-		})
+		});
 		
 		$input	
 			.on('close.xdsoft',function(){
@@ -1031,7 +1031,7 @@
 				}
 				
 				$dropdown
-					.css('maxHeight', hght+'px')
+					.css('maxHeight', hght+'px');
 			})
 			
 			.on('open.xdsoft',function(){
@@ -1053,9 +1053,9 @@
 				//currentInput = false;
 				$input.data('xdsoft_autocomplete',null);
 				$input
-					.off('.xdsoft')
+					.off('.xdsoft');
 			});
-	};
+	}
 	
 	publics = {
 		destroy: function () {

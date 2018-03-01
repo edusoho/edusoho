@@ -9,16 +9,16 @@ ReactDOM.render(
 		addable={true}  
 		dataSource= {$('#course-teachers').data('init-value')}  
 		outputDataElement='teachers' 
-    inputName="ids[]"
-		searchable={{enable:true,url:$('#course-teachers').data('query-url') + "?q="}} 
+		inputName="ids[]"
+		searchable={{enable:true,url:$('#course-teachers').data('query-url') + '?q='}} 
 	/>,
-  document.getElementById('course-teachers')
+	document.getElementById('course-teachers')
 );
 
 $('.js-btn-save').on('click', function(event){
-  if($("input[name=teachers]").val() !== '[]'){
-    $('#teachers-form').submit();
-  }else{
-    notify('warning', Translator.trans('course.manage.min_teacher_num_error_hint'));
-  }
+	if($('input[name=teachers]').val() !== '[]'){
+		$('#teachers-form').submit();
+	}else{
+		notify('warning', Translator.trans('course.manage.min_teacher_num_error_hint'));
+	}
 });

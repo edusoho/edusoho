@@ -10,7 +10,11 @@ module.exports = {
       "echo": true,
       "res": true,
       "define": true,
-      
+      "app": true,
+      "Waypoint": true,
+      "cd": true,
+      "CKEDITOR": true,
+      "Browser": true,
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -25,6 +29,8 @@ module.exports = {
     ],
     "rules": {
         "no-console": "off",
+        "no-empty": 2,
+        "no-unused-vars": 1,
         "indent": [
             "error",
             "tab"

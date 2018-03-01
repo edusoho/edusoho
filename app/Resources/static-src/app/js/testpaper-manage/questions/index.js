@@ -5,7 +5,7 @@ import QuestionOperate from '../../../common/component/question-operate';
 import QuestionManage from './manage';
 
 let $testpaperItemsManager = $('#testpaper-items-manager');
-new QuestionOperate($testpaperItemsManager,$("#modal"));
+new QuestionOperate($testpaperItemsManager,$('#modal'));
 new QuestionManage($testpaperItemsManager);
 new BatchSelect($testpaperItemsManager);
 

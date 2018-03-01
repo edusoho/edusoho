@@ -18,7 +18,7 @@ class Datermine extends QuestionFormBase {
 			messages: {
 				required: Translator.trans('course.question.create.right_answer_required_error_hint')
 			}
-		})
+		});
 
 	}
 }

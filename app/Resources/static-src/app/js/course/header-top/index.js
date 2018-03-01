@@ -8,7 +8,7 @@ discountCountdown();
 ancelRefund();
 
 function ancelRefund() {
-	$(".cancel-refund").on('click', function () {
+	$('.cancel-refund').on('click', function () {
 		if (!confirm(Translator.trans('course_set.refund_cancel_hint'))) {
 			return false;
 		}
@@ -39,7 +39,7 @@ function discountCountdown() {
 	if (remainTime >= 0) {
 		var endtime = new Date(new Date().valueOf() + remainTime * 1000);
 		$('#discount-endtime-countdown').countdown(endtime, function (event) {
-      var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format_hint')));
+			var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format_hint')));
 		}).on('finish.countdown', function () {
 			$(this).html(Translator.trans('course_set.show.time_finish_hint'));
 			setTimeout(function () {
