@@ -1,12 +1,20 @@
 .my-header-section {
+  margin-bottom: 8px;
   background-color: #fff;
-  .courseset-header-section-nav__heading {
+  .nav-header-section__heading {
+    float: left;
+    margin-right: 60px;
+    display: inline;
+    font-size: 20px;
     line-height: 64px !important;
   }
-  .courseset-header-section-nav.nav > li {
-    margin-right: 60px;
+  .nav-header-section__item {
+    margin-right: 60px !important;
+    @media (max-width: @screen-md-max) {
+      margin-right: 3% !important;
+    }
     a {
-      padding: 24px 0;
+      padding: 24px 0 !important;
     }
   }
 }
