@@ -322,7 +322,7 @@ class DefaultStrategyTest extends BaseTestCase
             'status' => 'published',
         );
         $task = $this->getDefaultStrategy()->unpublishTask($task);
-        
+
         $this->getTaskDao()->shouldHaveReceived('update')->times(1);
         $this->assertEquals('unpublished', $task['status']);
     }
