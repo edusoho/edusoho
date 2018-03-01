@@ -1,5 +1,5 @@
-<ul class="nav nav-tabs courseset-header-section-nav clearfix">
-  <li class="cd-sidebar__item {% if side_nav == 'base' %}active{% endif %}">
+<ul class="nav nav-tabs nav-header-section clearfix">
+  <li class="nav-header-section__item {% if side_nav == 'base' %}active{% endif %}">
     {% if courseSet.locked %}
       <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'base'}) }}">
         <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.base'|trans }}
@@ -9,11 +9,11 @@
     {% endif %}
   </li>
 
-  <li class="cd-sidebar__item {% if side_nav == 'plan' %}active{% endif %}">
-    <a class="courseset-header-section-nav__link" href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">{{ 'course.teach_plan_manage'|trans }}</a>
+  <li class="nav-header-section__item {% if side_nav == 'plan' %}active{% endif %}">
+    <a class="nav-header-section__link" href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">{{ 'course.teach_plan_manage'|trans }}</a>
   </li>
 
-  <li class="cd-sidebar__item {% if side_nav == 'files' %}active{% endif %}">
+  <li class="nav-header-section__item {% if side_nav == 'files' %}active{% endif %}">
     {% if courseSet.locked %}
       <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
         <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_files'|trans }}
@@ -23,7 +23,7 @@
     {% endif %}
   </li>
 
-  <li class="cd-sidebar__item {% if side_nav == 'testpaper' %}active{% endif %}">
+  <li class="nav-header-section__item {% if side_nav == 'testpaper' %}active{% endif %}">
     {% if courseSet.locked %}
       <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'testpaper'}) }}">
         <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.testpaper_manage'|trans }}
@@ -35,7 +35,7 @@
     {% endif %}
   </li>
 
-  <li class="cd-sidebar__item {% if side_nav == 'question' %}active{% endif %}">
+  <li class="nav-header-section__item {% if side_nav == 'question' %}active{% endif %}">
     {% if courseSet.locked %}
       <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
         <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.question_manage'|trans }}
