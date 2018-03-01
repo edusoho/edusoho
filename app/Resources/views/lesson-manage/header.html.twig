@@ -7,13 +7,12 @@
   <span class="cd-dark-assist cd-mr8 cd-ml8">
     {{ 'course.plan_lesson.hidden'|trans }}
   </span>
-  <label class="cd-switch task-list-header__switch js-switch {% if not course.isShowUnpublish %}checked{% endif %}">
-    <input type="checkbox" name="isShowPublish" data-toggle="cd-switch" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
+  <label class="cd-switch task-list-header__switch {% if course.isShowUnpublish == 0 %}checked{% endif %}">
+    <input type="checkbox" class="js-switch" name="isShowPublish" id="isShowPublish" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
   </label>
 
   <div class="pull-right">
-    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16" id="step-3" data-toggle="modal" data-position data-target="#modal" data-backdrop="static" data-keyboard="false"
-      data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-lesson-create-btn" id="step-3" data-url="{{ path('course_manage_lesson_create', {courseId:course.id}) }}">
       {{ 'course.manage.create_lesson'|trans }}
     </button>
 

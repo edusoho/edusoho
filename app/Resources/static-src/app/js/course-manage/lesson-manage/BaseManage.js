@@ -25,6 +25,7 @@ export default class Manage {
     this._deleteChapter();
     this._collapse();
     this._publish();
+    this._createTask();
   }
 
   _collapse() {
@@ -261,7 +262,7 @@ export default class Manage {
         $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').addClass('hidden')
         $parentLi.find('.unpublish-item').removeClass('hidden')
       }).fail(function(data){
-        notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
+        notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.error.message);
       });
     })
   }
@@ -275,6 +276,24 @@ export default class Manage {
     this.$taskNumber.text(num);
   }
 
+  _createTask() {
+    this.$element.on('click', '.js-create-task-btn', function(event) {
+      let url = $(this).data('url');
+
+      $.get(url, function (response) {
+        if (response.code) {
+          $('#modal').html('');
+          $('#modal').append(response.html);
+          $('#modal').modal({'backdrop':'static','show':true});
+        } else {
+          notify('danger', Translator.trans(response.message));
+        }
+      }).fail(function(response){
+        notify('error', response.error.message);
+      });
+    })
+  }
+  
   afterAddItem($elm) {
     console.log('afterAddItem');
   }
