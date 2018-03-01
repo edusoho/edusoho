@@ -37,15 +37,19 @@ class AddActivityWatchToStatementJob extends AbstractJob
         $logIds = array();
 
         foreach ($watchLogs as $watchLog) {
-            $activity = $activities[$watchLog['activity_id']];
-            $statements[] = array(
-                'user_id' => $watchLog['user_id'],
-                'verb' => 'audio' == $activity['mediaType'] ? 'listen' : 'watch',
-                'target_id' => $watchLog['id'],
-                'target_type' => $activity['mediaType'],
-                'occur_time' => $watchLog['updated_time'],
-            );
-            $logIds[] = $watchLog['id'];
+            try {
+                $activity = $activities[$watchLog['activity_id']];
+                $statements[] = array(
+                    'user_id' => $watchLog['user_id'],
+                    'verb' => 'audio' == $activity['mediaType'] ? 'listen' : 'watch',
+                    'target_id' => $watchLog['id'],
+                    'target_type' => $activity['mediaType'],
+                    'occur_time' => $watchLog['updated_time'],
+                );
+                $logIds[] = $watchLog['id'];
+            } catch (\Exception $e) {
+                $this->biz['logger']->error($e);
+            }
         }
         if (!empty($statements)) {
             $this->getXapiService()->batchCreateStatements($statements);
