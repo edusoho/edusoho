@@ -16,7 +16,7 @@ export default class Manage {
       self.sortList();
     });
 
-    $('[data-position]').on('click', function(e){
+    $('body').on('click', '[data-position]', function(e){
       let $this = $(this);
 
       self.position = $this.data('position');
