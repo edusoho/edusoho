@@ -272,6 +272,9 @@ class MobileBaseController extends BaseController
 
         foreach ($courses as $course) {
             if (isset($course['teacherIds']) && !empty($course['teacherIds'])) {
+                if (!is_array($course['teacherIds'])) {
+                    $course['teacherIds'] = explode('|', $course['teacherIds']);
+                }
                 $teacherIds = array_merge($teacherIds, $course['teacherIds']);
             }
         }
@@ -447,7 +450,7 @@ class MobileBaseController extends BaseController
         array_walk($task, function ($value, $key) use (&$task) {
             if (is_numeric($value)) {
                 $task[$key] = (string) $value;
-            }  else {
+            } else {
                 $task[$key] = $value;
             }
         });

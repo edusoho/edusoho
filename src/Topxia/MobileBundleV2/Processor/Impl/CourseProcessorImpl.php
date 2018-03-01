@@ -1255,17 +1255,21 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $limit = $this->getParam('limit', 10);
 
         $conditions = array(
-            'userId' => $userId,
+            'status' => 'published',
             'parentId' => 0,
         );
 
-        $total = $this->controller->getCourseService()->findUserTeachCourseCount($conditions);
+        $total = $this->controller->getCourseSetService()->countUserTeachingCourseSets($userId, $conditions);
 
-        $courses = $this->controller->getCourseService()->findUserTeachCourses(
+        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
+            $userId,
             $conditions,
             $start,
             $limit
         );
+
+        $courseSetIds = ArrayToolkit::column($sets, 'id');
+        $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
 
         return array(
             'start' => $start,
@@ -1745,3 +1749,4 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $this->controller->getService('VipPlugin:Vip:VipService');
     }
 }
+
