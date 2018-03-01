@@ -6,114 +6,27 @@
 {% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
-  <div class="panel panel-default" role="courseset-manage-courses" >
-    <div class="panel-heading">
-      {{ 'course.teach_plan_manage'|trans }}
-      <button class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}"><i
-          class="es-icon es-icon-anonymous-iconfont"></i>{{ 'course.teaching_plan.create'|trans }}</button>
+  <div class="courseset-manage-courses" role="courseset-manage-courses">
+    <div class="cd-mb24">
+      <div class="pull-right">
+        <button class="cd-btn cd-btn-primary cd-mr16">{{ 'course.teaching_plan.create'|trans }}</button><button class="cd-btn cd-btn-default">{{ 'course.teaching_plan.sort'|trans }}</button>
+
+        <button class="cd-btn cd-btn-primary cd-mr16">{{ 'course.teaching_plan.sort.save'|trans }}</button><button class="cd-btn cd-btn-default">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
+      </div>
+      <div class="cd-select teaching-type-select" id="select-single">
+        <input type="hidden" value="option1" />
+        <div class="select-value">{{ 'course.filter.all_plan'|trans }}</div>
+        <ul class="select-options">
+          <li class="checked" data-value="option1">{{ 'course.filter.all_plan'|trans }}</li>
+          <li data-value="option2">{{ 'course.status.published'|trans }}</li>
+          <li data-value="option3">{{ 'course.status.unpublished'|trans }}</li>
+          <li data-value="option4">{{ 'course.status.closed'|trans }}</li>
+        </ul>
+      </div>
     </div>
-    <div class="panel-body">
-      <table id="courses-list-table" class="table table-striped">
-      	<thead>
-      	  <th width="30%">{{'course.teaching_plan.create.name'|trans}}</th>
-          <th>
-            {{'course.teaching_plan.create.mode'|trans}}
-            <a class="link-medium es-icon es-icon-help ml5 text-normal"
-              data-container="body" data-toggle="popover" data-trigger="hover"
-              data-placement="top" data-content="<ul class='pl20 list-unstyled'>
-              {{'course.teaching_plan.create.mode.free'|trans|raw}}
-              {{'course.teaching_plan.create.mode.limit'|trans|raw}}</ul>">
-            </a>
-          </th>
-          <th>{{'course.teaching_plan.create.task_numbers'|trans}}</th>
-          <th>{{'course.teaching_plan.create.student'|trans}}</th>
-          <th width="15%">{{'course.teaching_plan.create.price'|trans}}</th>
-          <th>{{'course.teaching_plan.create.status'|trans}}</th>
-          <th>{{'course.teaching_plan.create.operation'|trans}}</th>
-      	</thead>
-      	<tbody>
-      		{% for course in courses %}
-      		<tr>
-      			<td><a class="link-primary" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">{{course.title}}</a></td>
-            <td>
-              {% if course.learnMode|default('freeMode') == 'freeMode' %}
-                {{'course.teaching_plan.free'|trans}}
-              {% else %}
-                {{'course.teaching_plan.locked'|trans}}
-              {% endif %}
-            </td>
-      			<td>{{course.taskNum|default(0)}}</td>
-      			<td>{{course.studentNum|default(0)}}</td>
-      			<td>{{course.price}}{# {{'元'|trans}} #}
-                <br>
-			          {{ slot('course.marketing.extension', {'course':course}) }}
-      			</td>
-			      <td>
-             {% if course.status == 'published' %}
-                <span class="color-success">{{'course.status.published'|trans}}</span>
-              {% elseif course.status=='closed'%}
-                <span class="color-danger">{{'course.status.closed'|trans}}</span>
-              {% else %}
-                <span class="color-warning">{{ 'course.status.unpublished'|trans }}</span>
-              {% endif %}
-            </td>
-            <td>
-            {% if courseSet.canManage|default() or course.canManage|default()  %}
-              <div class="btn-group">
-                <a class="mr10 link-primary"
-                  href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.teaching_plan.manage_btn'|trans }}</a>
-                <a class="dropdown-toggle link-primary" href="javascript:;"  data-toggle="dropdown">
-                  {{'course.teaching_plan.more_btn'|trans}}
-                  <i class="es-icon es-icon-arrowdropdown"></i>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                  <li>
-                    <a href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
-                      <i class="es-icon es-icon-removeredeye mrm"></i>
-                      {{ 'course.teaching_plan.preview_btn'|trans }}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:;" data-toggle="modal" data-target="#modal"
-                      data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                      <i class="es-icon es-icon-contentcopy mrm"></i>
-                      {{ 'course.teaching_plan.copy_btn'|trans }}
-                    </a>
-                  </li>
-                  {% if course.status|default('') == 'published' %}
-                    <li>
-                      <a href="javascript:;"
-                        data-check-url="{{ path('course_set_manage_course_close_check', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                        data-url="{{ path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                        class="js-close-course">
-                        <i class="es-icon es-icon-close01 mrm"></i>
-                        {{ 'form.btn.close'|trans }}
-                      </a>
-                    </li>
-                  {% else %}
-                    <li>
-                      <a href="javascript:;"
-                        data-url="{{ path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                        class="js-delete-course"><i class="es-icon es-icon-delete mrm"></i>{{ 'course.teaching_plan.delete_btn'|trans }}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:;"
-                        data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                        class="js-publish-course"><i class="es-icon es-icon--check-circle mrm"></i>{{ 'course.teaching_plan.publish_btn'|trans }}</a><!-- 已发布的不能删除，可关闭 -->
-                    </li>
-                  {% endif %}
-                </ul>
-              </div>
-            {% else %}
-              <span class="color-gray">无权限管理</span>
-            {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-      <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
-    </div>
+    {% for course in courses %}
+      {% include 'course-manage/header.html.twig' with { side_nav: side_nav } %}
+    {% endfor %}
+    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
   </div>
 {% endblock %}
