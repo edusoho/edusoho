@@ -171,7 +171,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         for ($i = 1; $i<=$count; $i++) {
-            $uuid = $this->getUserService()->makeUUID();
+            $uuid = $this->makeUUID();
             if (!in_array($uuid, $this->batchUUIDs) && !in_array($uuid, $exists)) {
                 $this->batchUUIDs[] = $uuid;
             }
@@ -228,14 +228,14 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
+    private function makeUUID()
+    {
+        return sha1(uniqid(mt_rand(), true));
+    }
+
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     protected function getUserDao()
