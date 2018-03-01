@@ -114,7 +114,7 @@ class MobileBaseController extends BaseController
     {
         $token = $request->headers->get('token', '');
 
-        if (empty($token) && $request->getMethod() == 'GET') {
+        if (empty($token) && 'GET' == $request->getMethod()) {
             $token = $request->query->get('token', '');
         }
 
@@ -364,7 +364,7 @@ class MobileBaseController extends BaseController
         foreach ($copyKeys as $value) {
             $course[$value] = $courseSet[$value];
         }
-        if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
+        if (CourseService::DEFAULT_COURSE_TYPE == $course['courseType'] && '默认教学计划' == $course['title']) {
             $course['title'] = $courseSet['title'];
         } else {
             $course['title'] = $courseSet['title'].'-'.$course['title'];
@@ -380,11 +380,12 @@ class MobileBaseController extends BaseController
             '/src=[\'\"]\/(.*?)[\'\"]/',
             function ($matches) use ($self) {
                 $path = $matches[1];
-                if (strpos($path, 'files') === 0) {
+                if (0 === strpos($path, 'files')) {
                     $path = str_replace('files/', '', $path);
                 }
-                
+
                 $absoluteUrl = $self->coverPath($path, '');
+
                 return "src=\"{$absoluteUrl}\"";
             },
             $html
@@ -433,7 +434,7 @@ class MobileBaseController extends BaseController
 
                 $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
 
-                if (isset($item['status']) && $item['status'] != 'published') {
+                if (isset($item['status']) && 'published' != $item['status']) {
                     return false;
                 }
 
@@ -616,7 +617,7 @@ class MobileBaseController extends BaseController
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
 
-        if (strtoupper($method) == 'POST') {
+        if ('POST' == strtoupper($method)) {
             curl_setopt($curl, CURLOPT_POST, 1);
             $params = http_build_query($params);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);

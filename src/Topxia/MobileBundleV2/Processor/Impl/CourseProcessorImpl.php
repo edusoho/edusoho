@@ -47,7 +47,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
 
-
         $user = $this->controller->getUserByToken($this->request);
 
         if (!$user->isLogin()) {
@@ -200,7 +199,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $result = array();
 
-        if ($action == 'add') {
+        if ('add' == $action) {
             $result = $this->controller->getThreadService()->createThread($formData);
         } else {
             $fields = array(
@@ -241,7 +240,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $content = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
             function ($matches) use ($baseUrl, $urlArray) {
-                if (strpos($matches[1], 'http') !== false) {
+                if (false !== strpos($matches[1], 'http')) {
                     return "src=\"$matches[1]\"";
                 } else {
                     return "src=\"{$urlArray[$matches[1]]}\"";
@@ -295,7 +294,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $type = $this->getParam('type', 'question');
         $lessonId = $this->getParam('lessonId', '0');
 
-        if ($lessonId == '0') {
+        if ('0' == $lessonId) {
             $conditions = array(
                 'userId' => $user['id'],
                 'type' => $type,
@@ -516,7 +515,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $result = $this->controller->getNoteService()->createCourseNote($noteInfo);
         $result['content'] = $this->controller->convertAbsoluteUrl($this->request, $result['content']);
 
-        if ($result['updatedTime'] == 0) {
+        if (0 == $result['updatedTime']) {
             $result['updatedTime'] = $result['createdTime'];
         }
 
@@ -554,7 +553,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
             $course = $courses[$thread['courseId']];
 
-            if ($thread['lessonId'] != 0) {
+            if (0 != $thread['lessonId']) {
                 $lessonInfo = $this->controller->getCourseService()->findLessonsByIds(
                     array(
                         $thread['lessonId'],
@@ -655,7 +654,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $post = $this->controller->getThreadService()->getPost($courseId, $postId);
 
-        if ($post == null) {
+        if (null == $post) {
             return $this->createErrorResponse('no_post', '没有找到指定回复!');
         } else {
             $post['createdTime'] = date('c', $post['createdTime']);
@@ -941,7 +940,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $result;
         }
 
-        if ($couponInfo['useable'] == 'no') {
+        if ('no' == $couponInfo['useable']) {
             return $this->createErrorResponse('error', '优惠码已使用!');
 
             return $result;
@@ -969,7 +968,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         try {
             $this->getCourseMemberService()->removeStudent($course['id'], $user['id'], array(
-                'reason' => $reason
+                'reason' => $reason,
             ));
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
@@ -998,7 +997,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('member_locked', '会员被锁住，不能访问课程，请联系管理员!');
         }
 
-        if ($course['status'] != 'published') {
+        if ('published' != $course['status']) {
             if (!$user->isLogin()) {
                 return $this->createErrorResponse('course_not_published', '课程未发布或已关闭。');
             }
@@ -1010,7 +1009,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $deadline = $member['deadline'];
             $createdTime = $member['createdTime'];
 
-            if ($deadline != 0 && ($deadline - $createdTime) < 0) {
+            if (0 != $deadline && ($deadline - $createdTime) < 0) {
                 return $this->createErrorResponse('course_not_published', '课程未发布或已关闭。');
             }
         }
@@ -1091,7 +1090,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $categoryId = (int) $this->getParam('categoryId', 0);
         $type = $this->getParam('type', 'normal');
 
-        if ($categoryId != 0) {
+        if (0 != $categoryId) {
             $conditions['categoryId'] = $categoryId;
         }
 
@@ -1120,7 +1119,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $categoryId = (int) $this->getParam('categoryId', 0);
         $conditions = array();
 
-        if ($categoryId != 0) {
+        if (0 != $categoryId) {
             $conditions['categoryId'] = $categoryId;
         }
 
@@ -1143,7 +1142,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total = $this->controller->getCourseService()->countCourses($conditions);
         $sort = $this->getParam('sort', array('createdTime' => 'desc'));
 
-        if ($sort == 'recommendedSeq') {
+        if ('recommendedSeq' == $sort) {
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseService()->countCourses($conditions);
 
@@ -1300,7 +1299,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         foreach ($learnStatus as $key => $value) {
-            if ($value == 'finished') {
+            if ('finished' == $value) {
                 unset($learnStatus[$key]);
             }
         }
@@ -1317,7 +1316,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function calculateUserLearnProgress($course, $member)
     {
-        if ($course['lessonNum'] == 0) {
+        if (0 == $course['lessonNum']) {
             return array(
                 'percent' => '0%',
                 'number' => 0,
@@ -1339,7 +1338,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if ($member) {
             $deadline = $member['deadline'];
 
-            if ($deadline == 0) {
+            if (0 == $deadline) {
                 return $member;
             }
 
@@ -1383,7 +1382,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $client = new EdusohoLiveClient();
 
-        if (isset($lesson['replayStatus']) && $lesson['replayStatus'] == 'generated') {
+        if (isset($lesson['replayStatus']) && 'generated' == $lesson['replayStatus']) {
             $result = $client->entryReplay($params, 'root');
         } else {
             $result = $client->getRoomUrl($params, 'root');
@@ -1727,18 +1726,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         //班级课程、不是班级成员不处理
-        if ($course['parentId'] > 0 || !$member || $member['role'] === 'teacher') {
+        if ($course['parentId'] > 0 || !$member || 'teacher' === $member['role']) {
             return false;
         }
 
         //老VIP加入接口加入进来的用户
-        if ($course['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
+        if ($course['vipLevelId'] > 0 && ((0 == $member['orderId'] && 0 == $member['levelId']) || $member['levelId'] > 0)) {
             $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
                 $member['userId'],
                 $course['vipLevelId']
             );
 
-            return $userVipStatus !== 'ok';
+            return 'ok' !== $userVipStatus;
         }
 
         return false;
@@ -1749,4 +1748,3 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $this->controller->getService('VipPlugin:Vip:VipService');
     }
 }
-
