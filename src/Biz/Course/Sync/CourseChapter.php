@@ -34,7 +34,7 @@ class CourseChapter extends AbstractSychronizer
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
         $copiedChapters = $this->getCourseChapterDao()->findByCopyId($sourceId);
 
-        if (empty($copiedCourses)) {
+        if (empty($copiedChapters)) {
             return;
         }
 
