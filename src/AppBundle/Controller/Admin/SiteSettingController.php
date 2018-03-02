@@ -104,7 +104,8 @@ class SiteSettingController extends BaseController
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
             if (!empty($consult['webchatURI'])) {
-                $consult['webchatURI'] = explode('?', $consult['webchatURI'])[0].'?time='.time();
+                $fields = explode('?', $consult['webchatURI']);
+                $consult['webchatURI'] = $fields[0].'?time='.time();
             }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
