@@ -89,7 +89,7 @@ class SiteSettingController extends BaseController
         );
 
         $consult = array_merge($default, $consult);
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $consult = $request->request->all();
 
             foreach ($consult['qq'] as &$qq) {
@@ -104,7 +104,7 @@ class SiteSettingController extends BaseController
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
             if (!empty($consult['webchatURI'])) {
-                $consult['webchatURI'] = $consult['webchatURI'].'?time='.time();
+                $consult['webchatURI'] = explode('?', $consult['webchatURI'])[0].'?time='.time();
             }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
@@ -126,7 +126,7 @@ class SiteSettingController extends BaseController
 
         $esBar = array_merge($default, $esBar);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
             $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
@@ -184,7 +184,7 @@ class SiteSettingController extends BaseController
 
         $defaultSetting = array_merge($default, $defaultSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);
