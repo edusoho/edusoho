@@ -3011,3 +3011,8 @@ order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
+
+test_search:
+    path: /test/search
+    defaults: { _controller: AppBundle:Test:search, limit: '' }
+
