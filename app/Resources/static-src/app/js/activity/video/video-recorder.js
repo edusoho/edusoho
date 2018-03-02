@@ -1,4 +1,4 @@
-import 'store';
+import store from 'store';
 
 export default class VideoRecorder {
 	constructor(container) {

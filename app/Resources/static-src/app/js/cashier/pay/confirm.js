@@ -2,16 +2,11 @@ import notify from 'common/notify';
 import BasePayment from './payment';
 
 class ConfirmModal {
-
-  $container = $('body');
-
-  modalID = 'cashier-confirm-modal';
-
-  tradeSn = '';
-
-  constructor() {
-
-    let template = `
+	constructor() {
+		this.$container = $('body');
+		this.modalID = 'cashier-confirm-modal';
+		this.tradeSn = '';
+		let template = `
       <div id="${this.modalID}" class="modal">
         <div class="modal-dialog cd-modal-dialog">
           <div class="modal-content">
@@ -35,28 +30,28 @@ class ConfirmModal {
       </div>
     `;
 
-    if (this.$container.find('#' + this.modalID).length === 0) {
-      this.$container.append(template);
-    }
+		if (this.$container.find('#' + this.modalID).length === 0) {
+			this.$container.append(template);
+		}
 
-    $('body').on('click', '.js-confirm-btn', this.checkIsPaid.bind(this));
-  }
+		$('body').on('click', '.js-confirm-btn', this.checkIsPaid.bind(this));
+	}
 
-  checkIsPaid() {
-    BasePayment.getTrade(this.tradeSn).then(res => {
-      if (res.isPaid) {
-        location.href = res.paidSuccessUrl;
-      } else {
-        notify('danger', Translator.trans('cashier.confirm.fail_message'));
-        $('#' + this.modalID).modal('hide');
-      }
-    });
-  }
+	checkIsPaid() {
+		BasePayment.getTrade(this.tradeSn).then(res => {
+			if (res.isPaid) {
+				location.href = res.paidSuccessUrl;
+			} else {
+				notify('danger', Translator.trans('cashier.confirm.fail_message'));
+				$('#' + this.modalID).modal('hide');
+			}
+		});
+	}
 
-  show(tradeSn) {
-    $('#' + this.modalID).modal('show');
-    this.tradeSn = tradeSn;
-  }
+	show(tradeSn) {
+		$('#' + this.modalID).modal('show');
+		this.tradeSn = tradeSn;
+	}
 }
 
 export default ConfirmModal;

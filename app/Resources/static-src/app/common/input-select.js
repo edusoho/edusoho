@@ -49,7 +49,6 @@ const Select = (element, type, options) => {
 			width: 400,
 			multiple: true,
 			placeholder: Translator.trans('validate.tag_required_hint'),
-			multiple: true,
 			createSearchChoice() {
 				return null;
 			},

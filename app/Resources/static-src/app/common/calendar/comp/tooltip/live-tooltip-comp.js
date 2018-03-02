@@ -1,4 +1,5 @@
 import BaseTooltipComp from './base-tooltip-comp';
+import moment from 'moment';
 
 export default class LiveTooltip extends BaseTooltipComp {
 

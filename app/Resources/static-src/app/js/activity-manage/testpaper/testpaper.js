@@ -18,9 +18,9 @@ export default class Testpaper {
 	}
 
 	initEvent() {
-  	this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
-  	this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
-  	this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event));
+		this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
+		this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
+		this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event));
 		this.$element.find('input[name="length"]').on('blur',event=>this.changeEndTime(event));
 		this.$element.find('#condition-select').on('change',event=>this.changeCondition(event));
 		this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
@@ -169,10 +169,12 @@ export default class Testpaper {
 				$('input[name="finishScore"]').val(parseInt(values[handle]));
 			});
 		}
+    
+		let tooltipInnerText = Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore': '<span class="js-passScore">'+passScore+'</span>'});
 		let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
       <div class="tooltip-arrow"></div>
       <div class="tooltip-inner ">
-			${Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore': '<span class="js-passScore">'+passScore+'</span>'})}
+        ${tooltipInnerText}
       </div>
       </div></div>`;
 		$('.noUi-handle').append(html);
@@ -181,7 +183,7 @@ export default class Testpaper {
 	}
 
 	getItemsTable(url, testpaperId) {
-  	$.post(url, {testpaperId:testpaperId},function(html){
+		$.post(url, {testpaperId:testpaperId},function(html){
 			$('#questionItemShowTable').html(html);
 			$('#questionItemShowDiv').show();
 		});

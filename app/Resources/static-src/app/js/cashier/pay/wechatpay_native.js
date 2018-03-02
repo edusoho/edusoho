@@ -1,14 +1,11 @@
 import BasePayment from './payment';
 
 export default class WechatPayNative extends BasePayment {
-  $container = $('body');
-
-  modalID = 'wechat-qrcode-modal';
-
-  constructor() {
-    super();
-
-    let template = `
+	constructor() {
+		super();
+		this.$container = $('body');
+		this.modalID = 'wechat-qrcode-modal';
+		let template = `
       <div id="${this.modalID}" class="modal">
         <div class="modal-dialog cd-modal-dialog cd-modal-dialog-sm">
           <div class="modal-content">
@@ -35,25 +32,25 @@ export default class WechatPayNative extends BasePayment {
       </div>
     `;
 
-    if (this.$container.find('#' + this.modalID).length === 0) {
-      this.$container.append(template);
-    }
+		if (this.$container.find('#' + this.modalID).length === 0) {
+			this.$container.append(template);
+		}
 
-    this.$container.find('#' + this.modalID).on('hidden.bs.modal', function() {
-      clearInterval(window.intervalWechatId);
-    });
-  }
+		this.$container.find('#' + this.modalID).on('hidden.bs.modal', function() {
+			clearInterval(window.intervalWechatId);
+		});
+	}
 
-  afterTradeCreated(res) {
-    this.checkOrderStatus();
-    let $modal = this.$container.find('#' + this.modalID);
-    $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
-    $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
-    $modal.modal('show');
-  }
+	afterTradeCreated(res) {
+		this.checkOrderStatus();
+		let $modal = this.$container.find('#' + this.modalID);
+		$modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
+		$modal.find('.js-pay-amount').text('￥' + res.cash_amount);
+		$modal.modal('show');
+	}
 
-  startInterval() {
-    return true;
-  }
+	startInterval() {
+		return true;
+	}
 
 }

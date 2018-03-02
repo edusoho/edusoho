@@ -111,7 +111,7 @@ class Creator {
 		let $expiryStartDate = $('[name="expiryStartDate"]');
 		let $expiryEndDate = $('[name="expiryEndDate"]');
 		let expiryMode = $('[name="expiryMode"]:checked').val();
-    
+		let $deadlineType = $('[name="deadlineType"]:checked');
 		this.elementRemoveRules($deadline);
 		this.elementRemoveRules($expiryDays);
 		this.elementRemoveRules($expiryStartDate);
@@ -119,7 +119,6 @@ class Creator {
 
 		switch (expiryMode) {
 		case 'days':
-			let $deadlineType = $('[name="deadlineType"]:checked');
 			if ($deadlineType.val() === 'end_date') {
 				this.elementAddRules($deadline, this.getDeadlineEndDateRules());
 				this.validator.form();

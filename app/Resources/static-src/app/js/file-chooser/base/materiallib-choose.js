@@ -97,9 +97,9 @@ class MaterialLibChoose extends Chooser {
 	}
 
 	_filterByFileOwner() {
-		params.currentUserId = $('.js-file-owner option:selected').val();
-		$('input[name=currentUserId]').val(currentUserId);
-		this._loadList();
+		// params.currentUserId = $('.js-file-owner option:selected').val();
+		// $('input[name=currentUserId]').val(currentUserId);
+		// this._loadList();
 	}
 
 	_onSelectFile(event) {

@@ -23,7 +23,6 @@ $('#user-profile-form').validate({
 			byte_minlength: 4,
 			byte_maxlength: 18,
 			nickname: true,
-			chinese_alphanumeric: true,
 			es_remote: {
 				type: 'get',
 			}
@@ -51,11 +50,11 @@ $('#user-profile-form').validate({
 		'profile[floatField3]': 'float',
 		'profile[floatField4]': 'float',
 		'profile[floatField5]': 'float',
+		'profile[dateField1]': 'date',
+		'profile[dateField2]': 'date',
+		'profile[dateField3]': 'date',
+		'profile[dateField4]': 'date',
 		'profile[dateField5]': 'date',
-		'profile[dateField5]': 'date',
-		'profile[dateField5]': 'date',
-		'profile[dateField5]': 'date',
-		'profile[dateField5]': 'date'
 	}
 });
 

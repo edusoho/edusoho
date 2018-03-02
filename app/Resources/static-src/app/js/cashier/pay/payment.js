@@ -1,4 +1,5 @@
 import Api from 'common/api';
+import store from 'store';
 import notify from 'common/notify';
 import ConfirmModal from './confirm';
 

@@ -57,12 +57,9 @@ export default class Base {
 			multiple: true,
 			maximumSelectionSize: 20,
 			placeholder: Translator.trans('open_course.tag_required_hint'),
-			width: 'off',
-			multiple: true,
 			createSearchChoice: function () {
 				return null;
 			},
-			maximumSelectionSize: 20
 		});
 	}
 

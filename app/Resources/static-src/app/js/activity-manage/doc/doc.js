@@ -1,5 +1,5 @@
 import FileChooser from '../../file-chooser/file-choose';
-import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
+import { chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
 
 export default class Document {
 	constructor() {
@@ -16,8 +16,7 @@ export default class Document {
 
 	initStep2Form() {
 		var $step2_form = $('#step2-form');
-		var validator = $step2_form.data('validator');
-		validator = $step2_form.validate({
+		var validator = $step2_form.validate({
 			rules: {
 				title: {
 					required: true,
@@ -33,6 +32,7 @@ export default class Document {
 				}
 			}
 		});
+		$step2_form.data('validator', validator);
 	}
 
 	initStep3Form() {
@@ -70,17 +70,6 @@ export default class Document {
 			$('#step2-form').valid();
      
 			$('[name="media"]').val(JSON.stringify(file));
-		});
-
-		$('#condition-select').on('change', event => {
-			let conditionsType = $(event.currentTarget).children('option:selected').val();
-
-			let $conditionsDetail = $('#condition-group');
-			if (conditionsType !== 'time') {
-				$conditionsDetail.addClass('hidden');
-			} else {
-				onConditionTimeType();
-			}
 		});
 	}
 }

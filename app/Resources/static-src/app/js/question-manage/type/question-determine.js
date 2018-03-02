@@ -7,7 +7,7 @@ class Datermine extends QuestionFormBase {
 		this.initTitleEditor(this.validator);
 		this.initAnalysisEditor();
 
-		this.$answerField = $('[name="answer\[\]"]');
+		this.$answerField = $('[name="answer[]"]');
 
 		this.init();
 	}

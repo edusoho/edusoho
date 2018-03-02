@@ -6,7 +6,6 @@ let validator = $('#nickname-form').validate({
 			byte_minlength: 4,
 			byte_maxlength: 18,
 			nickname: true,
-			chinese_alphanumeric: true,
 			es_remote: {
 				type: 'get',
 			}

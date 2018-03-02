@@ -73,8 +73,6 @@ const classroomCreate = ()=>{
 		multiple: true,
 		maximumSelectionSize: 20,
 		placeholder: Translator.trans('classroom.manage.tag_required_hint'),
-		width: 'off',
-		multiple: true,
 		createSearchChoice: function () {
 			return null;
 		}

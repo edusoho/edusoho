@@ -80,8 +80,8 @@ class MembarSMS {
 				$('#alerted-btn').removeClass('hidden');
 				$('.js-member-num span').text(parseInt(data.number));
 			},
-			submitError() {
-				notify('error',  Translator.trans(site.form.submit_error));
+			submitError(data) {
+				notify('danger',  Translator.trans(data.responseJSON.message));
 			}
 		});
 

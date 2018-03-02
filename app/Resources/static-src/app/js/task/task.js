@@ -40,10 +40,10 @@ export default class TaskShow extends Emitter {
 				$('#modal').modal('show');
 				$('#modal').html(response);
 				$('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-	      let $nextBtn = $('.js-next-mobile-btn');
-	      if($nextBtn.data('url')) {
-		      $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
-	      }
+				let $nextBtn = $('.js-next-mobile-btn');
+				if($nextBtn.data('url')) {
+					$nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
+				}
 				this.ui.learned();
 			});
 		});
@@ -64,9 +64,9 @@ export default class TaskShow extends Emitter {
 				this.ui.learned();
 				this.sidebar.reload();
 				let $nextBtn = $('.js-next-mobile-btn');
-	      if($nextBtn.data('url')) {
-		      $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
-	      }
+				if($nextBtn.data('url')) {
+					$nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
+				}
 				$('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
 			});
 		}
@@ -96,7 +96,7 @@ export default class TaskShow extends Emitter {
 				let top = $activeItem.position().top;
 				let standardPosition = (boxHeight - $activeItem.height())/2;
 
-				let infiniteScroll = new ESInfiniteScroll({
+				new ESInfiniteScroll({
 					context: document.getElementsByClassName('js-sidebar-pane ps-container')
 				});
 

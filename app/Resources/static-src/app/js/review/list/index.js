@@ -113,7 +113,7 @@ if ($('.js-reviews').length > 0) {
 		let postNum = $(this).closest('.thread-subpost-container').find('.thread-subpost-content .thread-subpost-list .thread-subpost').length;
 
 		if (postNum >= 5) {
-			Notify.danger('course.manage.post_limit_hint');
+			notify('danger', Translator.trans('course.manage.post_limit_hint'));
 			return;
 		}
 		let $form = $(this).parents('.thread-subpost-container').find('.thread-subpost-form');

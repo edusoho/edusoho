@@ -1,4 +1,4 @@
-import 'store';
+import store from 'store';
 import Cookies from 'js-cookie';
 const COURSE_BASE_INTRO = 'COURSE_BASE_INTRO';
 const COURSE_TASK_INTRO = 'COURSE_TASK_INTRO';

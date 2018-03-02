@@ -35,7 +35,7 @@ export default class {
 				this.$form.find('textarea').val('');
 			})
 			.error(function (response) {
-				Notify.danger(response.error.message);
+				notify('danger', response.error.message);
 			});
 	}
 

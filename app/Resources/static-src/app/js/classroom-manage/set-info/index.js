@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import 'app/js/classroom-manage/classroom-create';
 
 initEditor();
@@ -30,7 +29,7 @@ $('[name=\'expiryMode\']').change(function () {
 });
 
 function initEditor() {
-	let editor_classroom_about = CKEDITOR.replace('about', {
+	CKEDITOR.replace('about', {
 		allowedContent: true,
 		toolbar: 'Detail',
 		fileSingleSizeLimit: app.fileSingleSizeLimit,
@@ -53,10 +52,6 @@ function initValidator() {
 				required: true,
 			}
 		},
-	});
-
-	$('#classroom-save').click(() => {
-		// validator.form();
 	});
 }
 

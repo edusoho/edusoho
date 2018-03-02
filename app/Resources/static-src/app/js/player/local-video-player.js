@@ -32,9 +32,9 @@ class LocalVideoPlayer extends Emitter {
 		player.src(this.options.url);
 
 		player.on('error', error => {
-	    player.hasPlayerError = true;
+			player.hasPlayerError = true;
 			var message = Translator.trans('site.browser_useless_play_video_hint');
-	    notify('danger',message, {delay:30000});
+			notify('danger',message, {delay:30000});
 		});
 
 		player.on('fullscreenchange', function(e) {

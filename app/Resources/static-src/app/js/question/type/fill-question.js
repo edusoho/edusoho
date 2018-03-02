@@ -7,8 +7,8 @@ class FillQuestion
 	getAnswer(questionId) {
 		let answers = [];
 		$('input[name='+questionId+']').each(function(){
-	      	answers.push($(this).val());
-	    });
+			answers.push($(this).val());
+		});
 
 		return answers;
 	}

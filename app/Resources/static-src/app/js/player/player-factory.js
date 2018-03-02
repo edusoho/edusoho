@@ -7,10 +7,10 @@ class PlayerFactory {
 		switch (type) {
 		case 'local-video-player':
 		case 'audio-player':
-			return new LocalVideoPlayer(options);
+			new LocalVideoPlayer(options);
 			break;
 		case 'balloon-cloud-video-player':
-			return new BalloonVideoPlayer(options);
+			new BalloonVideoPlayer(options);
 			break;
 		}
 	}

@@ -15,6 +15,14 @@ module.exports = {
       "cd": true,
       "CKEDITOR": true,
       "Browser": true,
+      "notify": true,
+      "echarts": true,
+      "VideoPlayerSDK": true,
+      "WeixinJSBridge": true,
+      "UploaderSDK": true,
+      "QiQiuYun": true,
+      "noUiSlider": true,
+      "introJs": true,
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -22,13 +30,15 @@ module.exports = {
             "experimentalObjectRestSpread": true,
             "jsx": true
         },
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaVersion": 6,
     },
     "plugins": [
         "react"
     ],
     "rules": {
-        "no-console": "off",
+        "no-useless-escape": 0,
+        "no-console": 0,
         "no-empty": 2,
         "no-unused-vars": 1,
         "indent": [

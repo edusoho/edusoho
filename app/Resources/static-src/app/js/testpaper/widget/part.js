@@ -10,8 +10,8 @@ export const initScrollbar = ()=> {
 export const testpaperCardFixed =()=> {
 	console.log('ok');
 	if (isMobileDevice()) return;
-
- 	let $testpaperCard = $('.js-testpaper-card');
+  
+	let $testpaperCard = $('.js-testpaper-card');
 	if ($testpaperCard.length <= 0 ) {
 		return;
 	}

@@ -309,7 +309,10 @@ class OrderCreate {
 	}
 
 	conculatePrice() {
-		let totalPrice = parseFloat($('[role="total-price"]').text());
+		let totalPrice = parseFloat($('[role="total-price"]').text()),
+			totalCoinPrice = 0,
+			cashDiscount = $('[role="cash-discount"]').text(),
+			coinNumPay = $('[role="coinNum"]').val();
 
 		totalPrice = this.afterCouponPay(totalPrice);
 
@@ -321,10 +324,9 @@ class OrderCreate {
 			this.shouldPay(totalPrice);
 			break;
 		case 'deduction':
-			var totalCoinPrice = utils.multiple(totalPrice, this.coinSetting.cash_rate);
+			totalCoinPrice = utils.multiple(totalPrice, this.coinSetting.cash_rate);
 			totalCoinPrice = utils.moneyFormatCeil(totalCoinPrice);
 			var maxCoinCanPay = this.getMaxCoinCanPay(totalCoinPrice);
-			var coinNumPay = $('[role="coinNum"]').val();
 
 			if (maxCoinCanPay <= parseFloat(coinNumPay)) {
 				coinNumPay = maxCoinCanPay;
@@ -339,7 +341,6 @@ class OrderCreate {
 			if (coinNumPay && $('[name="payPassword"]').length > 0) {
 				coinNumPay = this.afterCoinPay(coinNumPay);
 
-				var cashDiscount = $('[role="cash-discount"]').text();
 				totalPrice = utils.subtract(totalPrice, cashDiscount);
 
 			} else {
@@ -351,8 +352,7 @@ class OrderCreate {
 			this.shouldPay(totalPrice);
 			break;
 		case 'currency':
-			var totalCoinPrice = totalPrice;
-			var coinNumPay = $('[role="coinNum"]').val();
+			totalCoinPrice = totalPrice;
 
 			if (totalCoinPrice <= parseFloat(coinNumPay)) {
 				coinNumPay = totalCoinPrice;
@@ -366,7 +366,6 @@ class OrderCreate {
 
 			if (coinNumPay && $('[name="payPassword"]').length > 0) {
 				coinNumPay = this.afterCoinPay(coinNumPay);
-				var cashDiscount = $('[role="cash-discount"]').text();
 				totalPrice = utils.subtract(totalPrice, cashDiscount);
 			} else {
 				$('[role="coinNum"]').val(0);

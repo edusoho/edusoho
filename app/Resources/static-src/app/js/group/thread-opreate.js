@@ -36,7 +36,7 @@ export const initThread = () => {
 		submitSuccess: function (data) {
 			console.log(data);
 			if (data == '/login') {
-				window.location.href = url;
+				window.location.href = data;
 				return;
 			}
 			// @TODO优化不刷新页面

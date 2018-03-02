@@ -1,7 +1,4 @@
-// var Validator = require('bootstrap.validator');
-// require('es-ckeditor');
-// Notify = require('common/bootstrap-notify');
-// require('./common').run();
+import notify from 'common/notify';
 
 var editor = CKEDITOR.replace('post_content', {
 	toolbar: 'Thread',
@@ -53,9 +50,9 @@ $('.js-btn-thread-post-form-save').click(() => {
 				$('.js-btn-thread-post-form-save').button('reset');
 				data = $.parseJSON(data.responseText);
 				if (data.error) {
-					Notify.danger(data.error.message);
+					notify('danger', data.error.message);
 				} else {
-					Notify.danger(Translator.trans('course.thread_replay_failed_hint'));
+					notify('danger', Translator.trans('course.thread_replay_failed_hint'));
 				}
 			}
 		});

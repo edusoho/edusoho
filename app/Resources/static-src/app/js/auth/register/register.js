@@ -13,7 +13,7 @@ export default class Register {
 	}
 
 	initValidator() {
-		let validator = $('#register-form').validate({
+		$('#register-form').validate({
 			rules: {
 				nickname: {
 					required: true,

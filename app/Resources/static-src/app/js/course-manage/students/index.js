@@ -74,12 +74,12 @@ class Students {
 	}
 
 	exportStudents(start, fileName) {
-		var start = start || 0,
-			fileName = fileName || '';
-
+		start = start || 0,
+		fileName = fileName || '';
+		let self = this;
 		$.get($('#export-students-btn').data('datasUrl'), { start: start, fileName: fileName }, function (response) {
 			if (response.status === 'getData') {
-				exportStudents(response.start, response.fileName);
+				self.exportStudents(response.start, response.fileName);
 			} else {
 				$('#export-students-btn').button('reset');
 				location.href = $('#export-students-btn').data('url') + '&fileName=' + response.fileName;
