@@ -2,7 +2,7 @@
 {% do script(['app/js/course-manage/header/index.js']) %}
 {% set basepath = path('course_show', {id: course.id}) %}
 
-<div class="course-manage-header clearfix {% if side_nav|default(null) == 'plan' %}cd-mb24{% endif %}">
+<div class="course-manage-header clearfix">
 
   {% if course.status=='closed' %}
     <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
