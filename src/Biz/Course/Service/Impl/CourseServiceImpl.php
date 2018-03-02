@@ -1804,6 +1804,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countCoursesByCourseSetId($courseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+        return $this->getCourseDao()->count($conditions);
+    }
+    
     public function countCoursesGroupByCourseSetIds($courseSetIds)
     {
         return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);

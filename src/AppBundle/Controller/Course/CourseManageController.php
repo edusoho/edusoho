@@ -521,14 +521,16 @@ class CourseManageController extends BaseController
         );
 
         $course['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
-        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $studentNum = $this->getCourseMemberService()->countStudentMemberByCourseSetId();
+        $couserNum = $this->getCourseService()->countCoursesByCourseSetId();
 
         return $this->render(
             'course-manage/header.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'users' => $users,
+                'studentNum' => $studentNum,
+                'couserNum' => $couserNum,
             )
         );
     }
