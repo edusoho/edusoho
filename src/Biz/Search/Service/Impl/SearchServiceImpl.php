@@ -92,6 +92,10 @@ class SearchServiceImpl extends BaseService implements SearchService
                 'category' => 'openLesson',
                 'url' => $siteUrl.'/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
             ),
+            array(
+                'classroom' => 'classroom',
+                'url' => $siteUrl.'/callback/cloud_search?provider=classroom&cursor=0&start=0&limit=100',
+            ),
         );
         $urls = urlencode(json_encode($urls));
 
