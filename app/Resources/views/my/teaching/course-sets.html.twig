@@ -12,11 +12,10 @@
 {% block main %}
   <div class="my-teaching-courseset" role="my-teaching-course-sets">
     <div class="cd-mb24">
-      <span class="pull-right">
+      <div class="pull-right">
         <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
-      </span>
-    {# </div> #}
-      <div class="cd-select my-teaching-courseset__select" id="select-single">
+      </div>
+      <div class="cd-select teaching-type-select" id="select-single">
         <input type="hidden" value="option1" />
         <div class="select-value">{{ 'my.teaching.course_set.normal'|trans }}</div>
         <ul class="select-options">
@@ -28,22 +27,22 @@
         </ul>
       </div>
     </div>
-      {# {% include 'my/teaching/course-tab.html.twig' %} #}
-      {# {% for courseSet in courseSets %}
-        {% include 'courseset-manage/header.html.twig' with { side_nav: side_nav } %}
-      {% else %}
-        <div class="empty">
-          <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
-            {% if filter|default('normal') == 'live' %}
-              {{ 'my.teaching.course_set.live_empty_hint'|trans }}
-            {% else %}
-              {{ 'my.teaching.course_set.empty_hint'|trans }}
-            {% endif %}
-          </a>
-        </div>
-      {% endfor %} #}
-      
-      <table class="table table-striped" id="course-table" style="word-break:break-all;">
+    {# {% include 'my/teaching/course-tab.html.twig' %} #}
+    {% for courseSet in courseSets %}
+      {% include 'courseset-manage/header.html.twig' with { side_nav: side_nav } %}
+    {% else %}
+      <div class="empty">
+        <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
+          {% if filter|default('normal') == 'live' %}
+            {{ 'my.teaching.course_set.live_empty_hint'|trans }}
+          {% else %}
+            {{ 'my.teaching.course_set.empty_hint'|trans }}
+          {% endif %}
+        </a>
+      </div>
+    {% endfor %}
+
+     {#  <table class="table table-striped" id="course-table" style="word-break:break-all;">
         <thead>
         <tr>
           <th width="45%">{{ 'my.teaching.course_set.title'|trans }}</th>
@@ -143,10 +142,10 @@
           </tr>
         {% endfor %}
         </tbody>
-      </table>
-      {# <nav class="text-center">
+      </table> #}
+      <nav class="text-center">
         {{ web_macro.paginator(paginator) }}
-      </nav> #}
+      </nav>
     </div>
   </div>
 {% endblock %}
