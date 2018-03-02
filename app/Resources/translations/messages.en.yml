@@ -4369,8 +4369,8 @@ admin.setting.share.as_group_name: 'Group Name'
 admin.setting.share.as_thread_name: 'Discussion Title'
 admin.setting.share.classroom_share_content: 'Content Of slass sharing'
 admin.setting.share.as_classroom_name: 'Class Name'
-admin.setting.security.IFrame_white_domain: 'IFrame White List Domain'
-admin.setting.security.help_block: 'To use 3rd party component, please set the white list to allow the iframe code in course summary, lesson content etc.'
+admin.setting.security.IFrame_white_domain: 'White List Domain'
+admin.setting.security.help_block: 'To use 3rd party component, please set the white list to allow the iframe or img code in course summary, lesson content etc.'
 admin.block_manage.all: ALL
 admin.block_manage.current_theme: 'Current Theme'
 admin.block_manage.system: System
@@ -5635,6 +5635,7 @@ admin.developer_setting.im_api_address: 'IMAPI Address'
 admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN address'
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
 admin.developer_setting.market_address: 'Marketing platform address'
+admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.magic_setting.need_careful_tips: Attention
