@@ -7,12 +7,12 @@
 
 {% block main %}
   <div class="courseset-manage-courses" role="courseset-manage-courses">
-    <div class="cd-mb24">
+    <div class="cd-mb24 clearfix">
       <div class="pull-right">
         <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button><button class="cd-btn cd-btn-default">{{ 'course.teaching_plan.sort'|trans }}</button>
+        data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button><button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>
 
-        <button class="cd-btn cd-btn-primary cd-mr16">{{ 'course.teaching_plan.sort.save'|trans }}</button><button class="cd-btn cd-btn-default">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
+        <button class="cd-btn cd-btn-primary cd-mr16 hidden js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button><button class="cd-btn cd-btn-default hidden js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
       </div>
       <div class="cd-select teaching-type-select" id="select-single">
         <input type="hidden" value="option1" />
@@ -25,9 +25,13 @@
         </ul>
       </div>
     </div>
-    {% for course in courses %}
-      {% include 'course-manage/header.html.twig' with { side_nav: side_nav } %}
+    <ul class="js-plan-list courses-manage-list">
+      {% for course in courses %}
+        <li class="cd-mb24 js-plan-item courses-manage-item drag">
+          {% include 'course-manage/header.html.twig' with { side_nav: side_nav } %}
+        </li>
     {% endfor %}
+    </div>
     <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
   </div>
 {% endblock %}
