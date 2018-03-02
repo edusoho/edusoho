@@ -53,7 +53,6 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
 
         if (!in_array($material['fileId'], $downloadAvtivity['fileIds']) && !in_array($material['link'], $downloadAvtivity['fileIds'])) {
             throw $this->createNotFoundException('not activity file');
-
         }
         $this->createDownloadFileRecord($activity, $material);
 
