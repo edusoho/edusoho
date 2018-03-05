@@ -71,7 +71,7 @@ class DoHomeworkType extends Type
                     );
 
                     $actor = $this->getActor($statement['user_id']);
-                    $result = array();
+                    $result = (object) array();
                     if ('none' != $homeworkResult['passedStatus']) {
                         $result['success'] = ('passed' == $homeworkResult['passedStatus']) ? true : false;
                     }
