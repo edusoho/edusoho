@@ -33,7 +33,7 @@ export default class CourseManage {
       element: $planList,
       ajax: false,
       group: 'nested',
-      // placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
+      placeholder: '<li class="placeholder task-dragged-placeholder cd-mb24"></li>',
       onDragStart: function (item, container, _super) {
         console.log(item);
         let offset = item.offset(),
@@ -43,6 +43,7 @@ export default class CourseManage {
           top: pointer.top - offset.top
         };
         _super(item, container);
+        self.hiddenOperations(item);
       },
       onDrag: function (item, position) {
         const height = item.height();
@@ -55,8 +56,17 @@ export default class CourseManage {
           top: position.top - adjustment.top
         });
       },
+      onDrop: function(item, container, _super) {
+        _super(item, container);
+        self.hiddenOperations(item);
+      }
     }, (data) => {
-      console.log('hhhh');
+
     });
+  }
+
+  hiddenOperations($item) {
+    $item.find('.js-plan-icon').toggleClass('hidden');
+    $item.find('.js-plan-dragged-icon').toggleClass('hidden');
   }
 }

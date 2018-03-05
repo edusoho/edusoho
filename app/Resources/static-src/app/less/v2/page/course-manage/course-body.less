@@ -4,6 +4,7 @@
 }
 
 .courses-operation {
+  margin-right: 16px;
   height: 38px;
   line-height: 38px;
   i {
@@ -23,4 +24,15 @@
 .courses-manage-list {
   padding-left: 0;
   list-style: none;
+}
+
+.courses-manage-item {
+  &.dragged {
+  opacity: 1 !important;
+    .cd-box-shadow-z(3px);
+    .transform(rotate(1deg));
+  }
+  &:hover {
+    cursor: move;
+  }
 }
