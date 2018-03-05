@@ -33,10 +33,15 @@ class SearchServiceImpl extends BaseService implements SearchService
 
         $conditions = $this->searchBase64Encode($conditions);
 
-        $result = $api->get('/search', $conditions);
+        try {
+            $result = $api->get('/search', $conditions);
 
-        if (empty($result['success'])) {
-            throw new \RuntimeException('搜索失败，请稍后再试.', 1);
+            if (empty($result['success'])) {
+                throw new \RuntimeException('搜索失败，请稍后再试.', 1);
+            }
+        } catch (\RuntimeException $e) {
+            $this->getSettingService()->set('_cloud_search_restore_time', time() + 60 * 10);
+            throw $e;
         }
 
         if (empty($result['body']['datas'])) {
