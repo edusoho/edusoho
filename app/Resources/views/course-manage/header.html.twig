@@ -21,18 +21,16 @@
       {% endif %}
     </h1>
     <div class="course-manage-header-info__type">
-      {% if course.learnMode|default('freeMode') == 'freeMode' %}{{'course.teaching_plan.free_mode'|trans}}{% else %}{{'course.teaching_plan.locked_mode'|trans}}{% endif %}
-
-      {# 需要添加一个判断是否是默认教习计划 #}
-      {% if side_nav|default(null) == 'plan' %}<span class="cd-tag cd-tag-blue cd-ml8">{{ 'course.teaching_default_plan'|trans }}</span>{% endif %}</div>
+      {% if 'freeMode' == course.learnMode %}{{'course.teaching_plan.free_mode'|trans}}{% else %}{{'course.teaching_plan.locked_mode'|trans}}{% endif %}{% if side_nav|default(null) == 'plan' %}<span class="cd-tag cd-tag-blue cd-ml8">{{ 'course.teaching_default_plan'|trans }}</span>{% endif %}</div>
   </div>
 
   <div class="course-manage-header-data">
     {# 课时数量和图标还没有改好 #}
     <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>25</span>
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{ course.studentNum|default(0) }}</span>
-    <span class="course-manage-header-data__price color-danger">{{ course.price }}</span>
-    {{ slot('course.marketing.extension', {'course':course}) }}
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{ course.studentNum }}</span>
+    <span class="course-manage-header-data__price color-danger">
+      {% include 'common/price.html.twig' with {'productPrice': course.price} %}
+    </span>
   </div>
 
   <div class="pull-right hidden-xs {% if side_nav|default(null) == 'plan' %}courses-operation{% endif %}">
@@ -87,6 +85,9 @@
         <div class="btn-group">
           <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
         </div>
+        <div class="btn-group">
+          <a class="cd-btn cd-btn-primary" href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+        </div>
       {% endif %}
 
       {# 未发布状态 #}
@@ -103,7 +104,7 @@
               <a target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a>
             </li>
             <li>
-              <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{'course.btn.back_course_edit'|trans}}</a>
+              <a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
             </li>
           </ul>
         </div>
