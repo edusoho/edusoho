@@ -14,17 +14,16 @@ export default class CourseManage {
   bindEvent() {
     this.$sortBtn.on('click', () => this.sortStatus());
     $('.js-cancel-sort-btn').on('click', () => this.cancelSort());
+    $('.js-save-sort-btn').on('click', () => this.saveSort());
   }
 
   sortStatus() {
-    this.status = true;
     this.$sortBtn.toggleClass('hidden');
     this.$sortBtn.prev().toggleClass('hidden');
     this.$sortBtn.nextAll().toggleClass('hidden');
     $('#select-single').toggleClass('hidden');
-    if (this.status) {
-      this.sortPlan();
-    }
+    $('.js-plan-item').toggleClass('drag');
+    this.sortPlan();
   }
 
   sortPlan() {
@@ -61,9 +60,7 @@ export default class CourseManage {
       onDrop: function(item, container, _super) {
         _super(item, container);
         self.hiddenOperations(item);
-      }
-    }, (data) => {
-
+      },
     });
   }
 
@@ -74,5 +71,14 @@ export default class CourseManage {
 
   cancelSort() {
     window.location.reload();
+  }
+
+  saveSort() {
+    $.post($('.js-plan-list').data('sortUrl'), function(response) {
+      if (response.success) {
+        window.location.reload();
+      }
+    });
+
   }
 }
