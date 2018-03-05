@@ -71,9 +71,11 @@ class DoHomeworkType extends Type
                     );
 
                     $actor = $this->getActor($statement['user_id']);
-                    $result = (object) array();
+                    $result = array();
                     if ('none' != $homeworkResult['passedStatus']) {
                         $result['success'] = ('passed' == $homeworkResult['passedStatus']) ? true : false;
+                    } else {
+                        $result = (object) $result;
                     }
 
                     $pushStatements[] = $sdk->finishHomework($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
