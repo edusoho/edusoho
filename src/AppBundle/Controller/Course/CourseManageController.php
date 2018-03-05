@@ -513,24 +513,11 @@ class CourseManageController extends BaseController
 
     public function headerAction($courseSet, $course)
     {
-        $teachers = $this->getCourseMemberService()->searchMembers(
-            array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
-            array('seq' => 'asc'),
-            0,
-            PHP_INT_MAX
-        );
-
-        $course['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
-        $studentNum = $this->getCourseMemberService()->countStudentMemberByCourseSetId();
-        $couserNum = $this->getCourseService()->countCoursesByCourseSetId();
-
         return $this->render(
             'course-manage/header.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'studentNum' => $studentNum,
-                'couserNum' => $couserNum,
             )
         );
     }
