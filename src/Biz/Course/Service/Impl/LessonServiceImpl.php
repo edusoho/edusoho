@@ -12,6 +12,7 @@ class LessonServiceImpl extends BaseService implements LessonService
     public function countLessons($conditions)
     {
         $conditions['type'] = 'lesson';
+
         return $this->getCourseChapterDao()->count($conditions);
     }
 
@@ -51,7 +52,7 @@ class LessonServiceImpl extends BaseService implements LessonService
     {
         $chapter = $this->getCourseChapterDao()->get($lessonId);
         $this->getCourseService()->tryManageCourse($chapter['courseId']);
-        
+
         if (empty($chapter) || $chapter['type'] != 'lesson') {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }

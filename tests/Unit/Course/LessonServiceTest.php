@@ -39,7 +39,7 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'create',
-                'throwException' => new \Exception()
+                'throwException' => new \Exception(),
             ),
         ));
 
@@ -58,14 +58,13 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'create',
-                'returnValue' => array('id' => 1, 'title' => $fields['title'],'courseId' => 1, 'type' => 'lesson', 'status' => 'created', 'copyId' => 0)
+                'returnValue' => array('id' => 1, 'title' => $fields['title'], 'courseId' => 1, 'type' => 'lesson', 'status' => 'created', 'copyId' => 0),
             ),
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'title' => $fields['title'],'courseId' => 1, 'type' => 'lesson', 'status' => 'created', 'copyId' => 0),
+                'returnValue' => array('id' => 1, 'title' => $fields['title'], 'courseId' => 1, 'type' => 'lesson', 'status' => 'created', 'copyId' => 0),
             ),
         ));
-
 
         list($lesson, $task) = $this->getCourseLessonService()->createLesson($fields);
 
@@ -283,7 +282,7 @@ class LessonServiceTest extends BaseTestCase
             array(
                 'functionName' => 'count',
                 'returnValue' => 10,
-            )
+            ),
         ));
         $result = $this->getCourseLessonService()->isLessonCountEnough(1);
 
@@ -314,8 +313,8 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'publishTask',
-                'returnValue' => true
-            )
+                'returnValue' => true,
+            ),
         ));
 
         ReflectionUtils::invokeMethod($this->getCourseLessonService(), 'publishTasks', array(1));
@@ -332,8 +331,8 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'unpublishTask',
-                'returnValue' => true
-            )
+                'returnValue' => true,
+            ),
         ));
 
         ReflectionUtils::invokeMethod($this->getCourseLessonService(), 'unpublishTasks', array(1));
@@ -346,12 +345,12 @@ class LessonServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'tryManageCourse',
-                'returnValue' => true
+                'returnValue' => true,
             ),
             array(
                 'functionName' => 'updateCourseStatistics',
-                'returnValue' => true
-            )
+                'returnValue' => true,
+            ),
         ));
     }
 
