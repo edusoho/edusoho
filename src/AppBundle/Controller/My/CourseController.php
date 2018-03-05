@@ -27,7 +27,7 @@ class CourseController extends CourseBaseController
     {
         $currentUser = $this->getUser();
 
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id'], 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
@@ -75,7 +75,7 @@ class CourseController extends CourseBaseController
     public function learnedAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id'], 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
