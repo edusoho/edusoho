@@ -1809,9 +1809,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $conditions = array(
             'courseSetId' => $courseSetId,
         );
+
         return $this->getCourseDao()->count($conditions);
     }
-    
+
     public function countCoursesGroupByCourseSetIds($courseSetIds)
     {
         return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
@@ -1983,6 +1984,33 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $liveCourses;
+    }
+
+    public function sortCourse($courseSetId, $ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $count = $this->searchCourseCount(
+            array(
+                'courseSetId' => $courseSetId,
+                'ids' => $ids,
+            )
+        );
+        if (count($ids) != $count) {
+            //异常
+        }
+
+        $seq = 1;
+        foreach ($ids as $id) {
+            $fields[] = array(
+                'seq' => $seq++,
+            );
+        }
+
+        $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
     }
 
     public function changeShowPublishLesson($courseId, $status)

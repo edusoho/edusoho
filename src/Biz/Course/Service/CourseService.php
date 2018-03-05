@@ -252,4 +252,7 @@ interface CourseService
     public function changeShowPublishLesson($courseId, $status);
 
     public function countCoursesByCourseSetId($courseSetId);
+
+    //排序教学计划
+    public function sortCourse($courseSetId, $ids);
 }
