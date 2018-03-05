@@ -89,6 +89,21 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $this->db()->fetchAll($sql, $courseIds) ?: array();
     }
 
+    public function findByCourseIdsWithinTeacherAndHeadTeacher($userId, $courseIds)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $userIdLike = "%\"{$userId}\"%";
+        $params = array_merge($courseIds, array($userId, $userIdLike));
+        $sql = "SELECT * FROM `{$this->table}` AS cc JOIN `classroom` AS c 
+                ON cc.classroomId = c.id  WHERE cc.courseId IN ({$marks}) AND c.headTeacherId = ? AND c.teacherIds LIKE ? ORDER BY seq ASC;";
+
+        return $this->db()->fetchAll($sql, $params) ?: array();
+    }
+
     public function findByCourseSetIds($courseSetIds)
     {
         return $this->findInField('courseSetId', $courseSetIds);

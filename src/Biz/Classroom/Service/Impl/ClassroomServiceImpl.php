@@ -1067,6 +1067,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->findByCourseSetIds($courseSetIds);
     }
 
+    public function filterUserCourseIdsByConditions($userId, $courseIds)
+    {
+        $classrooms = $this->getClassroomCourseDao()->findByCourseIdsWithinTeacherAndHeadTeacher($userId, $courseIds);
+        $filterCourseIds = ArrayToolkit::column($classrooms, 'courseId');
+
+        return array_diff($courseIds, $filterCourseIds);
+    }
+
     private function refreshCoursesSeq($classroomId, $courseIds)
     {
         $seq = 1;

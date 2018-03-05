@@ -31,6 +31,7 @@ class CourseController extends CourseBaseController
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
+        $courseIds = $this->getClassroomService()->filterUserCourseIdsByConditions($currentUser['id'], $courseIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courses = ArrayToolkit::group($courses, 'courseSetId');
@@ -79,6 +80,7 @@ class CourseController extends CourseBaseController
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
+        $courseIds = $this->getClassroomService()->filterUserCourseIdsByConditions($currentUser['id'], $courseIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courses = ArrayToolkit::group($courses, 'courseSetId');
