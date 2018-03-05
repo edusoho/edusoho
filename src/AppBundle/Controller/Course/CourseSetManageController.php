@@ -118,17 +118,16 @@ class CourseSetManageController extends BaseController
     public function headerAction($courseSet, $course = null)
     {
         //暂时显示课程的创建者
-        if (empty($courseSet['teacherIds'])) {
-            $courseSet['teacherIds'] = array($courseSet['creator']);
-        }
-        $users = $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
+        $studentNum = $this->getCourseMemberService()->countStudentMemberByCourseSetId($courseSet['id']);
+        $couserNum = $this->getCourseService()->countCoursesByCourseSetId($courseSet['id']);
 
         return $this->render(
             'courseset-manage/header.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'users' => $users,
+                'studentNum' => $studentNum,
+                'couserNum' => $couserNum,
             )
         );
     }
@@ -507,6 +506,18 @@ class CourseSetManageController extends BaseController
         }
     }
 
+    public function courseSort(Request $request, $courseSetId)
+    {
+        try {
+            $courseIds = $request->request->get('ids');
+            $this->getCourseService()->sortCourse($courseSetId, $courseIds);
+
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
     /**
      * @return CourseService
      */
@@ -553,5 +564,10 @@ class CourseSetManageController extends BaseController
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
