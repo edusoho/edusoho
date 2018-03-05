@@ -8,13 +8,12 @@ export default class CourseManage {
 
   init() {
     this.bindEvent();
-    this.sortPlan();
   }
 
 
   bindEvent() {
     this.$sortBtn.on('click', () => this.sortStatus());
-
+    $('.js-cancel-sort-btn').on('click', () => this.cancelSort());
   }
 
   sortStatus() {
@@ -23,6 +22,9 @@ export default class CourseManage {
     this.$sortBtn.prev().toggleClass('hidden');
     this.$sortBtn.nextAll().toggleClass('hidden');
     $('#select-single').toggleClass('hidden');
+    if (this.status) {
+      this.sortPlan();
+    }
   }
 
   sortPlan() {
@@ -68,5 +70,9 @@ export default class CourseManage {
   hiddenOperations($item) {
     $item.find('.js-plan-icon').toggleClass('hidden');
     $item.find('.js-plan-dragged-icon').toggleClass('hidden');
+  }
+
+  cancelSort() {
+    window.location.reload();
   }
 }
