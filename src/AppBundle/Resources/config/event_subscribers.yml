@@ -304,9 +304,3 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
-    course_lesson_event_subscriber:
-        class: Biz\Course\Event\LessonEventSubscriber
-        arguments: ['@biz']
-        tags:
-            - { name: codeages_plugin.event.subscriber }
-

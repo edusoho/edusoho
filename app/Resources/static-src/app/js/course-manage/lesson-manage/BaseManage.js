@@ -262,7 +262,7 @@ export default class Manage {
         $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').addClass('hidden')
         $parentLi.find('.unpublish-item').removeClass('hidden')
       }).fail(function(data){
-        notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.error.message);
+        notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
       });
     })
   }
@@ -289,7 +289,7 @@ export default class Manage {
           notify('danger', Translator.trans(response.message));
         }
       }).fail(function(response){
-        notify('error', response.error.message);
+        notify('error', response.responseJSON.error.message);
       });
     })
   }

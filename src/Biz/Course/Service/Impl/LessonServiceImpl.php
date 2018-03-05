@@ -5,22 +5,75 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\LessonService;
 use Codeages\Biz\Framework\Event\Event;
+use AppBundle\Common\ArrayToolkit;
 
 class LessonServiceImpl extends BaseService implements LessonService
 {
-    public function countLessons($courseId)
+    public function countLessons($conditions)
     {
-        return $this->getCourseChapterDao()->count(array('type' => 'lesson', 'courseId' => $courseId));
+        $conditions['type'] = 'lesson';
+        return $this->getCourseChapterDao()->count($conditions);
     }
 
-    public function publishLesson($lessonId)
+    public function createLesson($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, array('title', 'fromCourseId'))) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $this->beginTransaction();
+        try {
+            $lesson = array(
+                'courseId' => $fields['fromCourseId'],
+                'title' => $fields['title'],
+                'type' => 'lesson',
+                'status' => 'created',
+            );
+            $lesson = $this->getCourseChapterDao()->create($lesson);
+
+            $taskFields = $this->parseTaskFields($fields);
+            $taskFields['categoryId'] = $lesson['id'];
+            $task = $this->getTaskService()->createTask($taskFields);
+
+            $this->commit();
+
+            $this->dispatchEvent('course.lesson.create', new Event($lesson));
+            $this->getLogService()->info('course', 'create_lesson', "创建课时(#{$lesson['id']})", $lesson);
+
+            return array($lesson, $task);
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+    }
+
+    public function updateLesson($lessonId, $fields)
     {
         $chapter = $this->getCourseChapterDao()->get($lessonId);
+        $this->getCourseService()->tryManageCourse($chapter['courseId']);
+        
         if (empty($chapter) || $chapter['type'] != 'lesson') {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
+        $fields = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
+
+        $lesson = $this->getCourseChapterDao()->update($chapter['id'], $fields);
+        $this->dispatchEvent('course.lesson.update', new Event($lesson));
+
+        return $lesson;
+    }
+
+    public function publishLesson($courseId, $lessonId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $chapter = $this->getCourseChapterDao()->get($lessonId);
+        if (empty($chapter) || $chapter['courseId'] != $courseId || $chapter['type'] != 'lesson') {
+            throw $this->createInvalidArgumentException('Argument Invalid');
+        }
+
         $lesson = $this->getCourseChapterDao()->update($lessonId, array('status' => 'published'));
+        $this->publishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.publish', new Event($lesson));
 
@@ -36,34 +89,37 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         foreach ($chapters as $chapter) {
-            $this->publishLesson($chapter['id']);
+            $this->publishLesson($courseId, $chapter['id']);
         }
     }
 
-    public function unpublishLesson($lessonId)
+    public function unpublishLesson($courseId, $lessonId)
     {
+        $this->getCourseService()->tryManageCourse($courseId);
         $chapter = $this->getCourseChapterDao()->get($lessonId);
 
-        if (empty($chapter) || $chapter['type'] != 'lesson') {
+        if (empty($chapter) || $chapter['courseId'] != $courseId || $chapter['type'] != 'lesson') {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
         $lesson = $this->getCourseChapterDao()->update($lessonId, array('status' => 'unpublished'));
+        $this->unpublishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
 
         return $lesson;
     }
 
-    public function deleteLesson($lessonId)
+    public function deleteLesson($courseId, $lessonId)
     {
+        $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseChapterDao()->get($lessonId);
 
         if (empty($lesson)) {
             return;
         }
 
-        if ($lesson['type'] != 'lesson') {
+        if ($lesson['courseId'] != $courseId || $lesson['type'] != 'lesson') {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
@@ -77,6 +133,55 @@ class LessonServiceImpl extends BaseService implements LessonService
         return true;
     }
 
+    public function isLessonCountEnough($courseId)
+    {
+        $lessonCount = $this->countLessons(array('courseId' => $courseId));
+
+        if ($lessonCount >= 300) {
+            throw $this->createServiceException('lesson_count_no_more_than_300');
+        }
+
+        return true;
+    }
+
+    protected function publishTasks($lessonId)
+    {
+        $tasks = $this->getTaskService()->findTasksByChapterId($lessonId);
+
+        if (empty($tasks)) {
+            return;
+        }
+
+        foreach ($tasks as $task) {
+            $this->getTaskService()->publishTask($task['id']);
+        }
+    }
+
+    protected function unpublishTasks($lessonId)
+    {
+        $tasks = $this->getTaskService()->findTasksByChapterId($lessonId);
+
+        if (empty($tasks)) {
+            return;
+        }
+
+        foreach ($tasks as $task) {
+            $this->getTaskService()->unpublishTask($task['id']);
+        }
+    }
+
+    protected function parseTaskFields($fields)
+    {
+        if (!empty($fields['startTime'])) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
+        if (!empty($fields['endTime'])) {
+            $fields['endTime'] = strtotime($fields['endTime']);
+        }
+
+        return $fields;
+    }
+
     protected function getCourseChapterDao()
     {
         return $this->createDao('Course:CourseChapterDao');
@@ -84,7 +189,12 @@ class LessonServiceImpl extends BaseService implements LessonService
 
     protected function getTaskService()
     {
-        return $this->createDao('Task:TaskService');
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getLogService()
