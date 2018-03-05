@@ -13,6 +13,20 @@ use AppBundle\Common\ReflectionUtils;
 
 class CourseServiceTest extends BaseTestCase
 {
+    public function testSortCourse()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('course title 1', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $course = $this->defaultCourse('course title 2', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->sortCourse($courseSet['id'], array(2, 1));
+        $courses = $this->getCourseService()->findCoursesByIds(array(1, 2));
+        $this->assertEquals(1, $courses[2]['seq']);
+        $this->assertEquals(2, $courses[1]['seq']);
+    }
+
     public function testUpdateMembersDeadlineByClassroomId()
     {
         $textClassroom = array(
