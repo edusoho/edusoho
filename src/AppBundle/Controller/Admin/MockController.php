@@ -252,7 +252,8 @@ class MockController extends BaseController
         $typeSamples = array();
         foreach ($fileNames as $fileName) {
             if (strpos($fileName, '.md') && !strpos($fileName, '_doc')) {
-                $typeName = explode('.md', $fileName)[0];
+                $typeNamesSeg = explode('.md', $fileName);
+                $typeName = $typeNamesSeg[0];
                 $fileContent = file_get_contents($dir.$fileName);
                 $docContent = file_get_contents($dir.$typeName.'_doc.md');
                 $keyValue = array();
