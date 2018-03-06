@@ -13,11 +13,16 @@
         });
 
         uploader1.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner1-container").html('<img src="' + response.uri + '">');
-          $form.find('[name=banner1]').val(response.url);
-          $("#mobile-banner1-remove").show();
-          $form.find('div[role="banner1-setting"]').show();
-          Notify.success(Translator.trans('上传轮播图1成功！'));
+          var url = $("#mobile-banner1-upload").data('url');
+          $.post(url, response, function (data) {
+            response = $.parseJSON(data);
+            $("#mobile-banner1-container").html('<img src="' + response.url + '">');
+            $form.find('[name=banner1]').val(response.path);
+            $("#mobile-banner1-remove").show();
+            $form.find('div[role="banner1-setting"]').show();
+            Notify.success(Translator.trans('上传轮播图1成功！'));
+          });
+
         });
 
         $("[data-role='selectBannerCourse']").find('[data-role="selectCourse"]').click(function(){
@@ -116,11 +121,16 @@
         });
 
         uploader2.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner2-container").html('<img src="' + response.uri + '">');
-          $form.find('[name=banner2]').val(response.url);
-          $("#mobile-banner2-remove").show();
-          $form.find('div[role="banner2-setting"]').show();
-          Notify.success(Translator.trans('上传轮播图2成功！'));
+          var url = $("#mobile-banner2-upload").data('url');
+          $.post(url, response, function (data) {
+            response = $.parseJSON(data);
+            $("#mobile-banner2-container").html('<img src="' + response.url + '">');
+            $form.find('[name=banner2]').val(response.path);
+            $("#mobile-banner2-remove").show();
+            $form.find('div[role="banner2-setting"]').show();
+            Notify.success(Translator.trans('上传轮播图2成功！'));
+          })
+
         });
 
 
@@ -151,11 +161,16 @@
         });
 
         uploader3.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner3-container").html('<img src="' + response.uri + '">');
-          $form.find('[name=banner3]').val(response.url);
-          $("#mobile-banner3-remove").show();
-          $form.find('div[role="banner3-setting"]').show();
-          Notify.success(Translator.trans('上传轮播图3成功！'));
+          var url = $("#mobile-banner3-upload").data('url');
+          $.post(url, response, function (data) {
+            response = $.parseJSON(data);
+            $("#mobile-banner3-container").html('<img src="' + response.url + '">');
+            $form.find('[name=banner3]').val(response.path);
+            $("#mobile-banner3-remove").show();
+            $form.find('div[role="banner3-setting"]').show();
+            Notify.success(Translator.trans('上传轮播图3成功！'));
+          })
+
         });
 
         $("input[role='bannerClick3']").on('click', function(){
@@ -185,11 +200,16 @@
         });
 
         uploader4.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner4-container").html('<img src="' + response.uri + '">');
-          $form.find('[name=banner4]').val(response.url);
-          $("#mobile-banner4-remove").show();
-          $form.find('div[role="banner4-setting"]').show();
-          Notify.success(Translator.trans('上传轮播图4成功！'));
+          var url = $("#mobile-banner4-upload").data('url');
+          $.post(url, response, function (data) {
+            response = $.parseJSON(data);
+            $("#mobile-banner4-container").html('<img src="' + response.url + '">');
+            $form.find('[name=banner4]').val(response.path);
+            $("#mobile-banner4-remove").show();
+            $form.find('div[role="banner4-setting"]').show();
+            Notify.success(Translator.trans('上传轮播图4成功！'));
+          })
+
         });
 
         $("input[role='bannerClick4']").on('click', function(){
@@ -219,11 +239,15 @@
         });
 
         uploader5.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner5-container").html('<img src="' + response.uri + '">');
-          $form.find('[name=banner5]').val(response.url);
-          $("#mobile-banner5-remove").show();
-          $form.find('div[role="banner5-setting"]').show();
-          Notify.success(Translator.trans('上传轮播图5成功！'));
+          var url = $("#mobile-banner5-upload").data('url');
+          $.post(url, response, function (data) {
+            response = $.parseJSON(data);
+            $("#mobile-banner5-container").html('<img src="' + response.url + '">');
+            $form.find('[name=banner5]').val(response.path);
+            $("#mobile-banner5-remove").show();
+            $form.find('div[role="banner5-setting"]').show();
+            Notify.success(Translator.trans('上传轮播图5成功！'));
+          })
         });
 
         $("input[role='bannerClick5']").on('click', function(){
