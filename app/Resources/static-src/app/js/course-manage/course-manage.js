@@ -90,6 +90,8 @@ export default class CourseManage {
        notify('success', Translator.trans('site.save_success_hint'));
        this.sortList = sort;
        this._toggleSortStatus();
+    }).error(function(e){
+      notify('danger', e.responseText);
     });
   }
 

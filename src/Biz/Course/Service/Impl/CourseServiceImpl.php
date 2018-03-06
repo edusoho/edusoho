@@ -85,7 +85,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'courseSetId' => $courseSetId,
                 'status' => 'published',
             ),
-            array('createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             1
         );
@@ -2013,7 +2013,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
         if (count($ids) != $count) {
-            //异常
+            throw $this->createAccessDeniedException();
         }
 
         $seq = 1;
@@ -2022,8 +2022,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'seq' => $seq++,
             );
         }
-
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
+        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
     public function changeShowPublishLesson($courseId, $status)
