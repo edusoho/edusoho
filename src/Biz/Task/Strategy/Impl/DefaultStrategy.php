@@ -118,7 +118,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             }
 
             if ($task['mode'] == 'lesson') {
-                $this->getCourseLessonService()->deleteLesson($task['categoryId']);
+                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
             }
 
             $this->biz['db']->commit();
@@ -225,14 +225,14 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     private function _createLesson($task)
     {
-        $chapter = array(
+        /*$chapter = array(
             'courseId' => $task['fromCourseId'],
             'title' => $task['title'],
             'type' => 'lesson',
             'status' => 'create',
         );
         $chapter = $this->getCourseService()->createChapter($chapter);
-        $task['categoryId'] = $chapter['id'];
+        $task['categoryId'] = $chapter['id'];*/
         $task['mode'] = 'lesson';
 
         return parent::createTask($task);

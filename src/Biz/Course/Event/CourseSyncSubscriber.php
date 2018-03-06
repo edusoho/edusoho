@@ -34,6 +34,9 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             //章节的更新和删除会比较麻烦，因为还涉及子节点（比如task的引用也要切换）的处理
             'course.chapter.update' => 'onCourseChapterUpdate',
             'course.chapter.delete' => 'onCourseChapterDelete',
+
+            'course.lesson.create' => 'onCourseChapterCreate',
+            'course.lesson.update' => 'onCourseChapterUpdate',
             'course.lesson.publish' => 'onCourseChapterUpdate',
             'course.lesson.unpublish' => 'onCourseChapterUpdate',
             'course.lesson.delete' => 'onCourseChapterDelete',

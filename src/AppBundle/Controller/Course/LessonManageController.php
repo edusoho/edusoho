@@ -10,51 +10,78 @@ class LessonManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $categoryId = $request->query->get('categoryId');
-        $lessonCount = $this->getCourseLessonService()->countLessons($course['id']);
+        $this->getCourseLessonService()->isLessonCountEnough($course['id']);
 
-        if ($lessonCount >= 300) {
-            return $this->createJsonResponse(array('code' => false, 'message' => 'lesson_count_no_more_than_300'));
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+
+            $formData['_base_url'] = $request->getSchemeAndHttpHost();
+            $formData['fromUserId'] = $this->getUser()->getId();
+            $formData['fromCourseSetId'] = $course['courseSetId'];
+            list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
+
+            return $this->getTaskJsonView($course, $task);
         }
 
-        $html = $this->renderView(
-            'task-manage/modal.html.twig',
-            array(
-                'mode' => 'create',
-                'course' => $course,
-                'courseSet' => $courseSet,
-                'categoryId' => $categoryId,
-                'taskMode' => '',
-            )
-        );
+        return $this->forward('AppBundle:TaskManage:create', array('courseId' => $course['id']));
+    }
 
-        return $this->createJsonResponse(array('code' => true, 'message', 'html' => $html));
+    public function updateAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getChapter($courseId, $lessonId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $lesson = $this->getCourseLessonService()->updateLesson($lesson['id'], $fields);
+
+            return $this->render('lesson-manage/chapter/item.html.twig', array(
+                'course' => $course,
+                'chapter' => $lesson,
+            ));
+        }
+
+        return $this->render('lesson-manage/chapter/modal.html.twig', array(
+            'course' => $course,
+            'type' => 'lesson',
+            'chapter' => $lesson,
+        ));
     }
 
     public function publishAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-        $this->getCourseLessonService()->publishLesson($lessonId);
+        $this->getCourseLessonService()->publishLesson($courseId, $lessonId);
 
         return $this->createJsonResponse(array('success' => true));
     }
 
     public function unpublishAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-        $this->getCourseLessonService()->unpublishLesson($lessonId);
+        $this->getCourseLessonService()->unpublishLesson($courseId, $lessonId);
 
         return $this->createJsonResponse(array('success' => true));
     }
 
     public function deleteAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-        $this->getCourseLessonService()->deleteLesson($lessonId);
+        $this->getCourseLessonService()->deleteLesson($courseId, $lessonId);
 
         return $this->createJsonResponse(array('success' => true));
+    }
+
+    //创建任务或修改任务返回的html
+    protected function getTaskJsonView($course, $task)
+    {
+        $taskJsonData = $this->createCourseStrategy($course)->getTasksJsonData($task);
+        if (empty($taskJsonData)) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse($this->renderView(
+            $taskJsonData['template'],
+            $taskJsonData['data']
+        ));
     }
 
     /**
@@ -76,5 +103,10 @@ class LessonManageController extends BaseController
     protected function getCourseLessonService()
     {
         return $this->createService('Course:LessonService');
+    }
+
+    protected function createCourseStrategy($course)
+    {
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 }

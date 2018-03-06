@@ -1592,9 +1592,6 @@ course_manage_task_pre_update_check:
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 
-course_manage_lesson_create:
-    path:  /course/{courseId}/lesson/create
-    defaults: { _controller: AppBundle:Course/LessonManage:create }
 
 course_manage_task_create:
     path:  /course/{courseId}/task
@@ -1724,6 +1721,14 @@ course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete
     defaults: { _controller: AppBundle:Course/ChapterManage:delete }
     methods: [POST]
+
+course_manage_lesson_create:
+    path:  /course/{courseId}/lesson/create
+    defaults: { _controller: AppBundle:Course/LessonManage:create }
+
+course_manage_lesson_update:
+    path:  /course/{courseId}/lesson/{lessonId}/update
+    defaults: { _controller: AppBundle:Course/LessonManage:update }
 
 course_manage_lesson_publish:
     path:  /course/{courseId}/manage/lesson/{lessonId}/publish
