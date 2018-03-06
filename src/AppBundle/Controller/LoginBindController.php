@@ -96,7 +96,7 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
-            if($this->getCurrentUser()->getId() != $user['id']) {
+            if ($this->getCurrentUser()->getId() != $user['id']) {
                 $this->authenticateUser($user);
             }
 
