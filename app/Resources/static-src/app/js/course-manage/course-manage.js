@@ -1,32 +1,41 @@
 import sortList from 'common/sortable';
+import notify from 'common/notify';
+
 export default class CourseManage {
   constructor() {
     this.$sortBtn = $('.js-sort-btn');
-    this.status = false;
+    this.sortList = this._getSort();
     this.init();
   }
 
   init() {
     this.bindEvent();
+    this.sortPlanEvent();
   }
-
 
   bindEvent() {
-    this.$sortBtn.on('click', () => this.sortStatus());
+    this.$sortBtn.on('click', () => this.sortEvent());
     $('.js-cancel-sort-btn').on('click', () => this.cancelSort());
     $('.js-save-sort-btn').on('click', () => this.saveSort());
+
+    cd.select({
+      el: '#select-single',
+      type: 'single'
+    }).on('change', (value, text) => {
+      if (value) {
+        $('.js-plan-item').not('.js-status-'+value).hide();
+        $('.js-status-'+value).show();
+      } else {
+        $('.js-plan-item').show();
+      } 
+    });
+  } 
+
+  sortEvent() {
+    this._toggleSortStatus();
   }
 
-  sortStatus() {
-    this.$sortBtn.toggleClass('hidden');
-    this.$sortBtn.prev().toggleClass('hidden');
-    this.$sortBtn.nextAll().toggleClass('hidden');
-    $('#select-single').toggleClass('hidden');
-    $('.js-plan-item').toggleClass('drag');
-    this.sortPlan();
-  }
-
-  sortPlan() {
+  sortPlanEvent() {
     const self = this;
     const $planList = $('.js-plan-list');
     let adjustment;
@@ -65,20 +74,45 @@ export default class CourseManage {
   }
 
   hiddenOperations($item) {
-    $item.find('.js-plan-icon').toggleClass('hidden');
-    $item.find('.js-plan-dragged-icon').toggleClass('hidden');
+    $item.find('.js-plan-icon, .js-plan-dragged-icon').toggleClass('hidden');
   }
 
   cancelSort() {
-    window.location.reload();
+    this._restore();
+    this._toggleSortStatus();
+    notify('success', Translator.trans('course.manage.sort_cancel'));
   }
 
   saveSort() {
-    $.post($('.js-plan-list').data('sortUrl'), function(response) {
-      if (response.success) {
-        window.location.reload();
-      }
+    let sort = this._getSort();
+
+    $.post($('.js-plan-list').data('sortUrl'), {'ids': sort}, (response) => {
+       notify('success', Translator.trans('site.save_success_hint'));
+       this.sortList = sort;
+       this._toggleSortStatus();
+    });
+  }
+
+  _restore() {
+    let $list = $('.js-plan-list'), targets = '';
+    for(let j = 0, len = this.sortList.length; j < len; j++) {
+      targets += $list.find('#course-plan-' + this.sortList[j]).prop("outerHTML");
+    }
+
+    $list.html(targets);
+  }
+
+  _toggleSortStatus() {
+    $('.js-sort-group, #select-single').toggleClass('hide');
+    $('.js-plan-item').toggleClass('drag');
+  } 
+
+  _getSort() {
+    let sort = [];
+    $('.js-plan-item').each(function(){
+      sort.push($(this).data('courseId'));
     });
 
+    return sort;
   }
 }

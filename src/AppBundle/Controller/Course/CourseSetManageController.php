@@ -506,7 +506,7 @@ class CourseSetManageController extends BaseController
         }
     }
 
-    public function courseSort(Request $request, $courseSetId)
+    public function courseSortAction(Request $request, $courseSetId)
     {
         try {
             $courseIds = $request->request->get('ids');

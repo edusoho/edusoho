@@ -9,26 +9,30 @@
   <div class="courseset-manage-courses" role="courseset-manage-courses">
     <div class="cd-mb24 clearfix">
       <div class="pull-right">
-        <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button><button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>
-
-        <button class="cd-btn cd-btn-primary cd-mr16 hidden js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button><button class="cd-btn cd-btn-default hidden js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
+        <span class="js-sort-group">
+          <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
+            data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button>
+          <button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>
+        </span>
+        <span class="js-sort-group hide">
+          <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>
+          <button class="cd-btn cd-btn-default js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
+        </span>
       </div>
       <div class="cd-select teaching-type-select" id="select-single">
-        <input type="hidden" value="option1" />
         <div class="select-value">{{ 'course.filter.all_plan'|trans }}</div>
         <ul class="select-options">
-          <li class="checked" data-value="option1">{{ 'course.filter.all_plan'|trans }}</li>
-          <li data-value="option2">{{ 'course.status.published'|trans }}</li>
-          <li data-value="option3">{{ 'course.status.unpublished'|trans }}</li>
-          <li data-value="option4">{{ 'course.status.closed'|trans }}</li>
+          <li class="checked" data-value="">{{ 'course.filter.all_plan'|trans }}</li>
+          <li data-value="published">{{ 'course.status.published'|trans }}</li>
+          <li data-value="draft">{{ 'course.status.unpublished'|trans }}</li>
+          <li data-value="closed">{{ 'course.status.closed'|trans }}</li>
         </ul>
       </div>
     </div>
-    <ul class="js-plan-list courses-manage-list sortable-list" data-sort-url="">
+    <ul class="js-plan-list courses-manage-list sortable-list" data-sort-url="{{ path('course_sort', {courseSetId: courseSet.id}) }}">
       {% for course in courses %}
-        <li class="cd-mb24 js-plan-item courses-manage-item">
-          {% include 'course-manage/header.html.twig' with { side_nav: side_nav } %}
+        <li class="cd-mb24 js-plan-item courses-manage-item js-status-{{ course.status }}" id="course-plan-{{ course.id }}" data-course-id="{{ course.id }}">
+          {% include 'courseset-manage/course-list.html.twig' %}
         </li>
     {% endfor %}
     </div>
