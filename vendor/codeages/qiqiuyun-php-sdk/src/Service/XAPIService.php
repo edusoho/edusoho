@@ -4,6 +4,7 @@ namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Exception\ResponseException;
 use QiQiuYun\SDK\Exception\SDKException;
+use QiQiuYun\SDK\XAPIVerbs;
 
 class XAPIService extends BaseService
 {
@@ -561,6 +562,140 @@ class XAPIService extends BaseService
     }
 
     /**
+     * 提交"搜索"的记录
+     *
+     * @param $actor
+     * @param $object ['id' => '/cloud/search?q=单反&type=course', 'definitionType' => 'course']
+     *                ['id' => '/cloud/search?q=单反&type=teacher', 'objectType' => 'Agent']
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
+    public function searched($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'https://w3id.org/xapi/acrossx/verbs/searched',
+            'display' => array(
+                'zh-CN' => '搜索了',
+                'en-US' => XAPIVerbs::SEARCHED,
+            ),
+        );
+        $statement['object'] = array(
+            'id' => $object['id'],
+        );
+
+        if (!empty($object['definitionType'])) {
+            $statement['definition'] = array(
+                'type' => $this->getActivityType($object['definitionType'])
+            );
+        } else {
+            $statement['objectType'] = $object['objectType'];
+        }
+
+
+        $statement['result'] = array(
+            'response' => $result['response']
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    /**
+     * 提交"登录"的记录
+     *
+     * @param $actor
+     * @param $object
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     * @return array|mixed
+     */
+    public function logged($actor, $object, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'https://w3id.org/xapi/adl/verbs/logged-in',
+            'display' => array(
+                'zh-CN' => '搜索了',
+                'en-US' => XAPIVerbs::LOGGED_IN,
+            ),
+        );
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
+                'name' => array(
+                    $this->defaultLang => $object['name']
+                )
+            )
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    /**
+     * 提交"购买"的记录
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     */
+    public function purchased($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'http://activitystrea.ms/schema/1.0/purchase',
+            'display' => array(
+                'zh-CN' => '购买了',
+                'en-US' => XAPIVerbs::PURCHASED,
+            ),
+        );
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
+                'name' => array(
+                    $this->defaultLang => $object['name']
+                )
+            )
+        );
+
+        $statement['result'] = array(
+            'extensions' => array(
+                'http://xapi.edusoho.com/extensions/amount' => $result['amount']
+            )
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    /**
      * 提交学习记录
      *
      * @param $statement
@@ -622,47 +757,6 @@ class XAPIService extends BaseService
         ));
 
         return $response;
-    }
-
-    /**
-     * @param $verb
-     *
-     * @return string
-     *
-     * @throws SDKException
-     */
-    private function getVerbType($verb)
-    {
-        switch ($verb) {
-            case 'answered': //回答了
-                $verbType = 'http://adlnet.gov/expapi/verbs/answered';
-                break;
-            case 'asked': //提问了
-                $verbType = 'http://adlnet.gov/expapi/verbs/asked';
-                break;
-            case 'completed': //完成了
-                $verbType = 'http://adlnet.gov/expapi/verbs/completed';
-                break;
-            case 'liked': //喜欢
-                $verbType = 'https://w3id.org/xapi/acrossx/verbs/liked';
-                break;
-            case 'listened': //听了
-                $verbType = 'http://activitystrea.ms/schema/1.0/listen';
-                break;
-            case 'noted': //记录了
-                $verbType = 'https://w3id.org/xapi/adb/verbs/noted';
-                break;
-            case 'read': //读了
-                $verbType = 'https://w3id.org/xapi/adb/verbs/read';
-                break;
-            case 'watched': //观看了
-                $verbType = 'https://w3id.org/xapi/acrossx/verbs/watched';
-                break;
-            default:
-                throw new SDKException('Please input correct verb');
-        }
-
-        return $verbType;
     }
 
     /**
