@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,7 +42,7 @@ class MobileController extends BaseController
 
         $mobile = array_merge($default, $operationMobile);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $operationMobile = $request->request->all();
             $mobile = array_merge($courseGrids, $settingMobile, $operationMobile);
 
@@ -53,7 +54,7 @@ class MobileController extends BaseController
         }
         $bannerCourses = array();
         for ($i = 1; $i <= 5; ++$i) {
-            $bannerCourses[$i] = ($mobile['bannerJumpToCourseId'.$i] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId'.$i]) : null;
+            $bannerCourses[$i] = (' ' != $mobile['bannerJumpToCourseId'.$i]) ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId'.$i]) : null;
         }
 
         return $this->render('admin/system/mobile.html.twig', array(
@@ -74,7 +75,7 @@ class MobileController extends BaseController
 
         $mobile = array_merge($default, $courseGrids);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $courseGrids = $request->request->all();
 
             $mobile = array_merge($operationMobile, $settingMobile, $courseGrids);
@@ -104,12 +105,13 @@ class MobileController extends BaseController
 
     public function mobilePictureUploadAction(Request $request, $type)
     {
-        $file = $request->files->get($type);
+        $fileId = $request->request->get('id');
+        $file = $this->getFileService()->getFileObject($fileId);
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'mobile_picture'.time().'.'.$file->getClientOriginalExtension();
+        $filename = 'mobile_picture'.time().'.'.$file->getExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
@@ -183,5 +185,13 @@ class MobileController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 }
