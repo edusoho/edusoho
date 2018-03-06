@@ -25,7 +25,7 @@ class BizSchedulerAddMessageAndTrace extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec('ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `message`;');
-        $connection->exec('ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `trace`;');
+        $connection->exec("ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `message`;");
+        $connection->exec("ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `trace`;");
     }
 }
