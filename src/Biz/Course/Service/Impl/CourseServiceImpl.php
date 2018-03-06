@@ -211,9 +211,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $this->tryManageCourse($id);
 
-        if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
+        /*if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
-        }
+        }*/
         $this->validatie($id, $fields);
 
         $fields = ArrayToolkit::parts(
@@ -297,6 +297,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts(
             $fields,
             array(
+                'title',
+                'summary',
+                'goals',
+                'audiences',
                 'isFree',
                 'originPrice',
                 'vipLevelId',
@@ -327,7 +331,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['rewardPoint']);
         }
 
-        $requireFields = array('isFree', 'buyable');
+        $requireFields = array('title','isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
@@ -2257,6 +2261,22 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
         } else {
             $fields['buyExpiryTime'] = 0;
+        }
+
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
+        if (!empty($fields['goals'])) {
+            $fields['goals'] = json_decode($fields['goals'], true);
+        }
+
+        if (!empty($fields['audiences'])) {
+            $fields['audiences'] = json_decode($fields['audiences'], true);
         }
 
         return $fields;
