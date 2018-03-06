@@ -32,19 +32,21 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             return array('success' => false, 'text' => $text);
         }
 
-        $keywords = array();
+        $keywords = array_column($rows, 'name');
 
-        foreach ($rows as $row) {
-            $keywords[] = $row['name'];
+        $chunkKeywords = array_chunk($keywords, 100);
+
+        foreach ($chunkKeywords as $chunkKeyword) {
+            $pattern = '/('.implode('|', $chunkKeyword).')/';
+            $matched = preg_match($pattern, $text, $match);
+            if ($matched) {
+                goto last;
+            }
         }
 
-        $pattern = '/('.implode('|', $keywords).')/';
-        $matched = preg_match($pattern, $text, $match);
+        return array('success' => false, 'text' => $text);
 
-        if (!$matched) {
-            return array('success' => false, 'text' => $text);
-        }
-
+        last :
         $bannedKeyword = $this->getSensitiveDao()->getByName($match[1]);
 
         if (empty($bannedKeyword)) {
@@ -79,27 +81,34 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             return $text;
         }
 
-        $keywords = array();
+        $keywords = array_column($rows, 'name');
 
-        foreach ($rows as $row) {
-            $keywords[] = $row['name'];
+        $chunkKeywords = array_chunk($keywords, 100);
+
+        $matchs = array();
+        $matcheds = 0;
+        $replacedText = $text;
+        foreach ($chunkKeywords as $chunkKeyword) {
+            $pattern = '/('.implode('|', $chunkKeyword).')/';
+            $matched = preg_match_all($pattern, $text, $match);
+            if ($matched) {
+                $matchs = array_merge($matchs, $match[0]);
+                $replacedText = preg_replace($pattern, '*', $replacedText);
+            }
+            $matcheds += $matched;
         }
 
-        $pattern = '/('.implode('|', $keywords).')/';
-        $matched = preg_match_all($pattern, $text, $match);
-
-        if (!$matched) {
+        if (!$matcheds) {
             return $text;
         }
 
-        $keywords = array_unique($match[0]);
+        $keywords = array_unique($matchs);
 
+        $currentUser = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($currentUser->id);
+        $env = $this->getEnvVariable();
         foreach ($keywords as $key => $value) {
             $keyword = $this->getSensitiveDao()->getByName($value);
-
-            $currentUser = $this->getCurrentUser();
-            $user = $this->getUserService()->getUser($currentUser->id);
-            $env = $this->getEnvVariable();
             $banlog = array(
                 'keywordId' => $keyword['id'],
                 'keywordName' => $keyword['name'],
@@ -115,7 +124,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             $this->getSensitiveDao()->wave(array($keyword['id']), array('bannedNum' => 1));
         }
 
-        return preg_replace($pattern, '*', $text);
+        return $replacedText;
     }
 
     public function scanText($text)
