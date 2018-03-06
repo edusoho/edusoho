@@ -13,8 +13,8 @@
   {% endif %}
 
   <div class="course-manage-header-info">
-    <h1 class="course-manage-header-info__title">
-      <a class="cd-link-major text-overflow" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
+    <h1 class="course-manage-header-info__title text-overflow">
+      <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
     </h1>
     {% if 'freeMode' == course.learnMode %}
       <div class="course-manage-header-info__type">{{ 'course.teaching_plan.free_mode'|trans }}</div>
@@ -24,7 +24,7 @@
   </div>
 
   <div class="course-manage-header-data">
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>25</span>
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-list-check"></i>25</span>
     <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{course.studentNum}}</span>
     <span class="course-manage-header-data__price color-danger">
       {% include 'common/price.html.twig' with {'productPrice': course.price} %}
