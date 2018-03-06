@@ -7,7 +7,7 @@ class FieldSerializer implements SerializerInterface
     /**
      * {@inheritdoc}
      */
-    public function serialize($name, $value)
+    public function serialize($method, $value)
     {
         $methods = array(
             'json' => function ($value) {
@@ -29,13 +29,13 @@ class FieldSerializer implements SerializerInterface
             },
         );
 
-        return $methods[$name]($value);
+        return $methods[$method]($value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function unserialize($name, $value)
+    public function unserialize($method, $value)
     {
         $methods = array(
             'json' => function ($value) {
@@ -57,6 +57,6 @@ class FieldSerializer implements SerializerInterface
             },
         );
 
-        return $methods[$name]($value);
+        return $methods[$method]($value);
     }
 }
