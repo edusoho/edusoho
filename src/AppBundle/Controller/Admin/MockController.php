@@ -90,14 +90,7 @@ class MockController extends BaseController
         $this->validate();
 
         $params = $request->request->get('data');
-
-        $apiUrl = $params['apiUrl'];
-        $apiMethod = $params['apiMethod'];
-
-        unset($params['apiUrl']);
-        unset($params['apiMethod']);
-
-        $result = $this->sendApiVersion3($apiMethod, $apiUrl, $params);
+        $result = $this->sendApiVersion3($params);
 
         return $this->createJsonResponse(array('result' => $result));
     }
@@ -155,10 +148,17 @@ class MockController extends BaseController
         return "{$cloudAccessKey}:{$deadline}:{$once}:{$signatureText}";
     }
 
-    private function sendApiVersion3($method, $url, $params = array(), $conditions = array())
+    private function sendApiVersion3($params = array(), $conditions = array())
     {
-        $token = $this->generateToken($url, '');
-        $url = 'http://127.0.0.1'.$url;
+        $apiUrl = $params['apiUrl'];
+        $apiMethod = $params['apiMethod'];
+        $apiAuthorized = $params['apiAuthorized'];
+
+        unset($params['apiUrl']);
+        unset($params['apiMethod']);
+        unset($params['apiAuthorized']);
+
+        $url = 'http://127.0.0.1'.$apiUrl;
 
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
@@ -172,22 +172,25 @@ class MockController extends BaseController
         curl_setopt($curl, CURLOPT_TIMEOUT, $conditions['timeout']);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Accept: application/vnd.edusoho.v2+json',
-            'Authorization: Signature '.$token,
-        ));
 
-        if ('POST' == $method) {
+        $headers = array('Accept: application/vnd.edusoho.v2+json');
+        if ($apiAuthorized) {
+            $token = $this->generateToken($apiUrl, '');
+            $headers[] = 'Authorization: Signature '.$token;
+        }
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        if ('POST' == $apiMethod) {
             curl_setopt($curl, CURLOPT_POST, 1);
             //TODO
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        } elseif ('PUT' == $method) {
+        } elseif ('PUT' == $apiMethod) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ('DELETE' == $method) {
+        } elseif ('DELETE' == $apiMethod) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ('PATCH' == $method) {
+        } elseif ('PATCH' == $apiMethod) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
@@ -269,11 +272,13 @@ class MockController extends BaseController
         preg_match('/api-version: (.*?)\n/s', $docContent, $apiVersionSegs);
         preg_match('/api-url: (.*?)\n/s', $docContent, $apiUrlSegs);
         preg_match('/api-method: (.*?)\n/s', $docContent, $apiMethodsSegs);
+        preg_match('/api-authorized: (.*?)\n/s', $docContent, $apiAuthorizedSegs);
 
         return array(
             'apiVersion' => $apiVersionSegs[1],
             'apiUrl' => $apiUrlSegs[1],
             'apiMethod' => $apiMethodsSegs[1],
+            'apiAuthorized' => $apiAuthorizedSegs[1],
         );
     }
 }

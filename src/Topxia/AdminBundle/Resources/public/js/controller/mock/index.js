@@ -83,8 +83,11 @@ define(function(require, exports, module) {
         $url = $('.sendOtherBtn').data('url-version-' + $apiInfo.apiVersion);
 
         $postData = $.parseJSON($('.sendOtherMsg').val());
-        $postData['apiMethod'] = $apiInfo['apiMethod'];
-        $postData['apiUrl'] = $apiInfo['apiUrl'];
+        let copiedFields = ['apiMethod', 'apiUrl', 'apiAuthorized'];
+        for (let index = 0; index < copiedFields.length; index++) {
+          const element = copiedFields[index];
+          $postData[element] = $apiInfo[element];
+        }
 
         $.post(
           $url, { 'data': $postData },
