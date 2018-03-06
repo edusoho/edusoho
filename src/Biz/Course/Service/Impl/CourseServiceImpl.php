@@ -1986,6 +1986,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $liveCourses;
     }
 
+    public function sortByCourses($courses)
+    {
+        usort($courses, function ($a, $b) {
+            if ($a['seq'] == $b['seq']) {
+                return 0;
+            }
+
+            return $a['seq'] > $b['seq'] ? 1 : -1;
+        });
+
+        return $courses;
+    }
+
     public function sortCourse($courseSetId, $ids)
     {
         if (empty($ids)) {

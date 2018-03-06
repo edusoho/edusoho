@@ -255,4 +255,6 @@ interface CourseService
 
     //排序教学计划
     public function sortCourse($courseSetId, $ids);
+
+    public function sortByCourses($courses);
 }
