@@ -1,9 +1,7 @@
 {% extends 'v2/layout.html.twig' %}
 
 {% block title %}
-  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib','my-teaching-live-calendar'] %}
-    {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
-  {% endif %}
+  {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
 {% endblock %}
 
 {% block full_content %}
