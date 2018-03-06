@@ -331,7 +331,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['rewardPoint']);
         }
 
-        $requireFields = array('title','isFree', 'buyable');
+        $requireFields = array('title', 'isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
