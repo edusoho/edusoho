@@ -13,8 +13,8 @@
   {% endif %}
 
   <div class="course-manage-header-info">
-    <h1 class="course-manage-header-info__title">
-      <a class="cd-link-major text-overflow" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
+    <h1 class="course-manage-header-info__title text-overflow">
+      <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
     </h1>
     {% if 'freeMode' == course.learnMode %}
       <div class="course-manage-header-info__type">{{ 'course.teaching_plan.free_mode'|trans }}</div>

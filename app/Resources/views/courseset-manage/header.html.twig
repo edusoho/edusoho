@@ -25,11 +25,11 @@
   {% endif %}
 
   <div class="courseset-manage-header-info">
-    <div class="courseset-manage-header-info__title">
+    <div class="courseset-manage-header-info__title text-overflow">
       {% if courseSet.type != 'normal' %}
         [{{ dict('courseType')[courseSet.type] }}]
       {% endif %}
-      <a class="cd-link-major text-overflow" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
     </div>
     <div class="courseset-manage-header-info__price color-danger">
       ¥99～¥199
