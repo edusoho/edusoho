@@ -5,3 +5,4 @@ app/Resources/static-src/app/common/duration-storage.js
 app/Resources/static-src/app/common/calendar/custom-full-calendar.js
 app/Resources/static-src/app/common/component/multi-input/index.js
 app/Resources/static-src/app/common/component/persona-multi-input/index.js
+node_modules

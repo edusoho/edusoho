@@ -23,6 +23,7 @@ module.exports = {
       "QiQiuYun": true,
       "noUiSlider": true,
       "introJs": true,
+      "Handlebars": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {

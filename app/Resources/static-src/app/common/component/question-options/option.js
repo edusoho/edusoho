@@ -52,7 +52,7 @@ export default class Options extends Component {
 				},100);
 			});
 		}else {
-			this.editor.setData(datas.inputValue);
+			this.editor.setData(this.props.datas.inputValue);
 		}
 	}
 
