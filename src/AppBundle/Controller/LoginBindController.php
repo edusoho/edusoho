@@ -9,6 +9,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
+use DeviceDetector\DeviceDetector;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
@@ -16,6 +17,7 @@ class LoginBindController extends BaseController
 {
     public function indexAction(Request $request, $type)
     {
+        $this->isAndroidAndWechat($request);
         if ($request->query->has('_target_path')) {
             $targetPath = $request->query->get('_target_path');
 
@@ -36,7 +38,7 @@ class LoginBindController extends BaseController
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
             ),
-            'times' => 1,
+            'times' => $this->isAndroidAndWechat() ? 2 : 1,
             'duration' => 3600,
         ));
 
@@ -49,6 +51,20 @@ class LoginBindController extends BaseController
         $url = $client->getAuthorizeUrl($callbackUrl);
 
         return $this->redirect($url);
+    }
+
+    protected function isAndroidAndWechat($request)
+    {
+        $userAgent = $request->headers->get('User-Agent');
+        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector->parse();
+        $os = $deviceDetector->getOs();
+        $client = $deviceDetector->getClient();
+        if ($os['name'] == 'Android' && $client['name'] == 'WeChat') {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getBlacklist()
