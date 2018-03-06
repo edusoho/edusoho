@@ -17,7 +17,6 @@ class LoginBindController extends BaseController
 {
     public function indexAction(Request $request, $type)
     {
-        $this->isAndroidAndWechat($request);
         if ($request->query->has('_target_path')) {
             $targetPath = $request->query->get('_target_path');
 
@@ -38,7 +37,7 @@ class LoginBindController extends BaseController
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
             ),
-            'times' => $this->isAndroidAndWechat() ? 2 : 1,
+            'times' => $this->isAndroidAndWechat($request) ? 2 : 1,
             'duration' => 3600,
         ));
 
