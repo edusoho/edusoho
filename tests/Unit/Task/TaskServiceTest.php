@@ -834,7 +834,7 @@ class TaskServiceTest extends BaseTestCase
 
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)
     {
-        return array(
+        $taskFields = array(
             'title' => 'test task',
             'mediaType' => 'text',
             'mode' => 'lesson',
@@ -843,6 +843,11 @@ class TaskServiceTest extends BaseTestCase
             'finishType' => 'time',
             'status' => 'created',
         );
+
+        $lesson = $this->mockChapter($courseId, $taskFields['title']);
+        $taskFields['categoryId'] = $lesson['id'];
+
+        return $taskFields;
     }
 
     protected function mockTask()
@@ -855,7 +860,7 @@ class TaskServiceTest extends BaseTestCase
             'courseType' => 'normal',
         ));
 
-        return array(
+        $taskFields = array(
             'title' => 'test task',
             'mediaType' => 'text',
             'fromCourseId' => $course['id'],
@@ -863,6 +868,23 @@ class TaskServiceTest extends BaseTestCase
             'finishType' => 'time',
             'status' => 'published',
         );
+
+        $lesson = $this->mockChapter($course['id'], $taskFields['title']);
+        $taskFields['categoryId'] = $lesson['id'];
+
+        return $taskFields;
+    }
+
+    protected function mockChapter($courseId, $title)
+    {
+        $fields = array(
+            'courseId' => $courseId,
+            'title' => $title,
+            'type' => 'lesson',
+            'status' => 'created',
+        );
+
+        return $this->getCourseService()->createChapter($fields);
     }
 
     protected function createNewCourse($courseSetId)
