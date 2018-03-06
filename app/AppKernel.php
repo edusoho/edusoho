@@ -171,7 +171,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
         $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
         $biz->register(new \Biz\Xapi\XapiServiceProvider());
-        $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
+        $this->registerSessionServiceProvider($biz);
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
         $biz->boot();
 
@@ -180,6 +180,23 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
         }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
+    }
+
+    protected function registerSessionServiceProvider($biz)
+    {
+        if ($this->getContainer()->hasParameter('redis_host')) {
+            $biz->register(
+                new \Codeages\Biz\Framework\Provider\SessionServiceProvider(),
+                array(
+                    'session.options' => array(
+                        'max_life_time' => 7200,
+                        'session_storage' => 'redis', // exapmle: db, redis
+                    )
+                )
+            );
+        } else{
+            $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
+        }
     }
 
     protected function registerCacheServiceProvider($biz)
