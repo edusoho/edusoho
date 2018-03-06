@@ -37,7 +37,7 @@ class LoginBindController extends BaseController
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
             ),
-            'times' => $this->isAndroidAndWechat($request) ? 2 : 1,
+            'times' => $this->isAndroidAndWechat($request) ? 0 : 1,
             'duration' => 3600,
         ));
 
@@ -96,7 +96,9 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
-            $this->authenticateUser($user);
+            if($this->getCurrentUser()->getId() != $user['id']) {
+                $this->authenticateUser($user);
+            }
 
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));
