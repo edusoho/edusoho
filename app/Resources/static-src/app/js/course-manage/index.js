@@ -4,6 +4,8 @@ import {
   deleteCourse
 } from './help';
 
+import CourseManage from './course-manage';
+
 cd.select({
   el: '#select-single',
   type: 'single'
@@ -15,8 +17,7 @@ closeCourse();
 deleteCourse();
 publishCourse();
 
-
-
+new CourseManage();
 
 
 
