@@ -6,7 +6,7 @@ interface GeneralDaoInterface extends DaoInterface
 {
     public function create($fields);
 
-    public function update($id, array $fields);
+    public function update($identifier, array $fields);
 
     public function delete($id);
 

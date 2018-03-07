@@ -78,8 +78,6 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
         $this->db()->checkFieldNames($updateColumns);
         $this->db()->checkFieldNames(array($identifyColumn));
 
-        array_walk($identifies, 'intval');
-
         $count = count($identifies);
         $pageSize = 500;
         $pageCount = ceil($count / $pageSize);
