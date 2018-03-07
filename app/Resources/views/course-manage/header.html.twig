@@ -30,9 +30,8 @@
   </div>
 
   <div class="course-manage-header-data">
-    {# 课时数量和图标还没有改好 #}
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>25</span>
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{ course.studentNum }}</span>
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-list-check"></i>25</span>
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{course.studentNum}}</span>
     <span class="course-manage-header-data__price color-danger">
       {% include 'common/price.html.twig' with {'productPrice': course.price} %}
     </span>
