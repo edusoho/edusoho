@@ -8,8 +8,10 @@ use AppBundle\Controller\Course\CourseBaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -31,7 +33,6 @@ class CourseController extends CourseBaseController
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courseIds = $this->getClassroomService()->filterUserCourseIdsByConditions($currentUser['id'], $courseIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courses = ArrayToolkit::group($courses, 'courseSetId');
@@ -80,7 +81,6 @@ class CourseController extends CourseBaseController
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courseIds = $this->getClassroomService()->filterUserCourseIdsByConditions($currentUser['id'], $courseIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courses = ArrayToolkit::group($courses, 'courseSetId');
@@ -404,6 +404,9 @@ class CourseController extends CourseBaseController
         return $this->createService('Course:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
