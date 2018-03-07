@@ -10,6 +10,8 @@ use Biz\Xapi\Type\DoQuestionType;
 use Biz\Xapi\Type\DoTestpaperType;
 use Biz\Xapi\Type\FinishActivityType;
 use Biz\Xapi\Type\LiveWatchType;
+use Biz\Xapi\Type\PurchasedClassroomType;
+use Biz\Xapi\Type\PurchasedCourseType;
 use Biz\Xapi\Type\SearchKeywordType;
 use Biz\Xapi\Type\WriteNoteType;
 use Pimple\Container;
@@ -96,6 +98,20 @@ class XapiServiceProvider implements ServiceProviderInterface
 
         $biz[sprintf('xapi.push.%s', SearchKeywordType::TYPE)] = $biz->factory(function ($biz) {
             $type = new SearchKeywordType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', PurchasedClassroomType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new PurchasedClassroomType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', PurchasedCourseType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new PurchasedCourseType();
             $type->setBiz($biz);
 
             return $type;

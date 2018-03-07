@@ -10,7 +10,7 @@ class XAPIJobCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('util:xapi')
+        $this->setName('util:xapi:run')
             ->addArgument('jobName', InputArgument::REQUIRED, '任务名称')
             ->setDescription('手动执行 xapi 的定时任务');
     }

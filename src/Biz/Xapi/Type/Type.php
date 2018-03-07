@@ -17,6 +17,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Context\BizAware;
+use QiQiuYun\SDK\XAPIActivityTypes;
 
 abstract class Type extends BizAware
 {
@@ -203,5 +204,17 @@ abstract class Type extends BizAware
         );
 
         return empty($list[$mediaType]) ? $mediaType : $list[$mediaType];
+    }
+
+    protected function getDefinitionType($type)
+    {
+        static $map = array(
+            'article' => XAPIActivityTypes::MESSAGE,
+            'thread' => XAPIActivityTypes::QUESTION,
+            'course' => XAPIActivityTypes::COURSE,
+            'classroom' => XAPIActivityTypes::CLASS_ONLINE,
+        );
+
+        return $map[$type];
     }
 }

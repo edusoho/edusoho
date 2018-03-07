@@ -2,6 +2,7 @@
 
 namespace Biz\Xapi\Event;
 
+use AppBundle\Common\MathToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -10,6 +11,8 @@ use Biz\File\Service\UploadFileService;
 use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
+use Biz\OrderFacade\Product\ClassroomProduct;
+use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -32,6 +35,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.thread.create' => 'onCourseThreadCreate',
             'question_marker.finish' => 'onQuestionMarkerFinish',
             'user.search' => 'onUserSearch',
+            'order.paid' => 'onOrderPaid',
         );
     }
 
@@ -86,6 +90,20 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $subject = $event->getSubject();
         $this->createStatement($subject['userId'], XAPIVerbs::SEARCHED, 0, 'keyword', array('q' => $subject['q'], 'type' => $subject['type']));
+    }
+
+    public function onOrderPaid(Event $event)
+    {
+        $order = $event->getSubject();
+        $orderItem = empty($order['items']) ? array() : $order['items'][0];
+        // TODO 如果改成一个订单多个商品的话，每一个 item 需要保存真实支付的现金
+        if ($order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], array(CourseProduct::TYPE, ClassroomProduct::TYPE))) {
+
+            $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], array(
+                'pay_amount' => round(MathToolkit::simple($order['pay_amount'], 0.01), 2),
+                'title' => $orderItem['title'],
+            ));
+        }
     }
 
     protected function testpaperFinish($testpaperResult)

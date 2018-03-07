@@ -2,14 +2,9 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-use QiQiuYun\SDK\XAPIActivityTypes;
-use QiQiuYun\SDK\XAPIObjectTypes;
-use QiQiuYun\SDK\XAPIVerbs;
-
-class SearchKeywordType extends Type
+class PurchasedCourseType extends Type
 {
-    const TYPE = 'searched_keyword';
+    const TYPE = 'purchased_course';
 
     public function package($statement)
     {
@@ -21,22 +16,23 @@ class SearchKeywordType extends Type
         if (empty($statements)) {
             return array();
         }
-
         $pushStatements = array();
+
         $sdk = $this->createXAPIService();
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
                 $data = $statement['data'];
                 $object = array(
-                    'id' => '/search?q='.$data['q'].'&type='.$data['type'],
-                    'definitionType' => $data['type'] === 'teacher' ? '' : $this->getDefinitionType($data['type']),
-                    'objectType' => $data['type'] === 'teacher' ? XAPIObjectTypes::AGENT : XAPIObjectTypes::ACTIVITY
+                    'id' => $statement['target_id'],
+                    'definitionType' => $this->getDefinitionType($statement['target_type']),
+                    'name' => $data['title'],
                 );
                 $result = array(
-                    'response' => $data['q']
+                    'amount' => $data['pay_amount']
                 );
-                $pushStatements[] = $sdk->searched($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+
+                $pushStatements[] = $sdk->purchased($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
             } catch (\Exception $e) {
                 $this->biz['logger']->error($e->getMessage());
             }
