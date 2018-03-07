@@ -38,13 +38,13 @@ class DoExercise extends DoTestBase {
     let attachments = this._getAttachments();
     let seq = this._getSeq();
     $.post(url,{data:values,seq:seq,usedTime:this.usedTime,attachments:attachments})
-      .done((response) => {})
+      .done(() => {})
       .error(function (response) {
         notify('error', response.error.message);
       });
   }
 
-  _submitTest(url,toUrl='') {
+  _submitTest(url) {
     let values = this._getAnswers();
     let seq = this._getSeq();
     let emitter = new ActivityEmitter();

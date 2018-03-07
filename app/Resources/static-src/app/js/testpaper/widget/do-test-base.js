@@ -139,7 +139,7 @@ class DoTestBase
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', e => {
+      editor.on('blur', () => {
         editor.updateElement();
         setTimeout(()=>{
           $longTextarea.val(editor.getData());
@@ -148,7 +148,7 @@ class DoTestBase
         }, 1);
       });
 
-      editor.on('instanceReady', function(e) {
+      editor.on('instanceReady', function() {
         this.focus();
 
         $textareaBtn.one('click', function() {
@@ -168,7 +168,7 @@ class DoTestBase
         }, 1);
       });
 
-      editor.on('insertHtml', function(e) {
+      editor.on('insertHtml', function() {
         editor.updateElement();
         setTimeout(function() {
           $longTextarea.val(editor.getData());
@@ -189,7 +189,7 @@ class DoTestBase
     let attachments = this._getAttachments();
 
     $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
-      .done((response) => {})
+      .done(() => {})
       .error(function (response) {
         notify('error', response.error.message);
       });
@@ -228,7 +228,7 @@ class DoTestBase
   _getAnswers() {
     let values = {};
 
-    $('*[data-type]').each(function(index){
+    $('*[data-type]').each(function(){
       let questionId = $(this).attr('name');
       let type = $(this).data('type');
       const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder(type);
@@ -242,7 +242,7 @@ class DoTestBase
   _getAttachments() {
     let attachments = {};
 
-    $('[data-type="essay"]').each(function(index) {
+    $('[data-type="essay"]').each(function() {
       let questionId = $(this).attr('name');
       const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder('essay');
 

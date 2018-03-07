@@ -17,7 +17,7 @@ export default class QuestionManage{
     this.$modal.on('click','.js-confirm-submit',event => this._submitSave(event));
   }
 
-  _showPickerModal(event) {
+  _showPickerModal() {
     let excludeIds = [];
     $('[data-type="'+this.currentType+'"]').find('[name="questionIds[]"]').each(function(){
       excludeIds.push($(this).val());
@@ -43,7 +43,7 @@ export default class QuestionManage{
     this.$element.find('[data-role="batch-select"]').prop('checked',false);
     this.$element.find('[data-role="batch-item"]').prop('checked',false);
   }
-  _confirmSave(event) {
+  _confirmSave() {
     let isOk = this._validateScore();
 
     if (!isOk) {

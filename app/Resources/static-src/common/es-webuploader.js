@@ -76,11 +76,11 @@ class EsWebUploader {
     });
   }
 
-  onFileQueued(file) {
+  onFileQueued() {
     //override it if you need
   }
 
-  onUploadSuccess(file, response) {
+  onUploadSuccess() {
     //override it if you need
   }
 }

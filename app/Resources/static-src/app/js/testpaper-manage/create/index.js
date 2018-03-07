@@ -78,7 +78,7 @@ class TestpaperForm {
           resolution: 1
         },
       });
-      sliders.noUiSlider.on('update', function (values, handle) {
+      sliders.noUiSlider.on('update', function (values) {
         let simplePercentage = parseInt(values[0]),
           normalPercentage = values[1] - values[0],
           difficultyPercentage = 100 - values[1];
@@ -99,7 +99,7 @@ class TestpaperForm {
       filebrowserImageUploadUrl: this.$description.data('imageUploadUrl'),
       height: 100
     });
-    editor.on('change', (a, b, c) => {
+    editor.on('change', () => {
       this.$description.val(delHtmlTag(editor.getData()));
     });
     editor.on('blur', () => {

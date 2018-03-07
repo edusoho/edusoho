@@ -83,7 +83,7 @@ export default class TaskPipe {
           }
         }
       })
-      .fail((error) => {
+      .fail(() => {
       });
 
     return ajax;

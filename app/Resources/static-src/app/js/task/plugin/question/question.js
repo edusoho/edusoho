@@ -56,7 +56,7 @@ export default class {
 
         this.initEvent();
       })
-      .fail(error => {
+      .fail(() => {
         notify('danger', 'error');
       });
   }

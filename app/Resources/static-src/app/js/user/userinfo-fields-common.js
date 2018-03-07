@@ -156,7 +156,7 @@ export default class UserInfoFieldsItemValidate {
     }
   }
 
-  sendSms(e) {
+  sendSms() {
 
     new SmsSender({
       element: '.js-sms-send',

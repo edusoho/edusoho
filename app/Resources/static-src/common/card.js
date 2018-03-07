@@ -1,5 +1,3 @@
-import { isMobileDevice } from 'common/utils';
-
 if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
   bindCardEvent('.js-card-content');
   $('.js-user-card').on('mouseenter', function () {
@@ -97,7 +95,7 @@ if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
   });
 }
 
-function bindCardEvent(selector) {
+function bindCardEvent() {
   $('body').on('click', '.js-card-content .follow-btn', function () {
     var $btn = $(this);
     var loggedin = $btn.data('loggedin');

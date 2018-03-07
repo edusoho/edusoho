@@ -59,11 +59,11 @@ class EsImageCrop {
 
   }
 
-  onSelect(c) {
+  onSelect() {
     //override it
   }
 
-  afterCrop(response) {
+  afterCrop() {
     //override it
   }
 }

@@ -35,7 +35,7 @@ export default class TaskShow extends Emitter {
   }
 
   initLearnBtn() {
-    this.element.on('click', '#learn-btn', event => {
+    this.element.on('click', '#learn-btn', () => {
       $.post($('#learn-btn').data('url'), response => {
         $('#modal').modal('show');
         $('#modal').html(response);
@@ -56,7 +56,7 @@ export default class TaskShow extends Emitter {
     });
   }
 
-  _receiveFinish(response) {
+  _receiveFinish() {
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($('.js-learned-prompt').data('url'), html => {
         $('.js-learned-prompt').attr('data-content', html);

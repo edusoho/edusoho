@@ -20,7 +20,7 @@ export default class TaskSidebar extends Emitter {
         this.element.hide().show();
         this.bindEvent();
       })
-      .fail(error => {
+      .fail(() => {
       });
   }
 

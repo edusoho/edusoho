@@ -1,5 +1,5 @@
 import 'app/common/watermark';
-import { Browser, isMobileDevice } from 'common/utils';
+import {isMobileDevice } from 'common/utils';
 
 export const initScrollbar = ()=> {
   let $paneCard = $('.js-panel-card');
@@ -16,7 +16,7 @@ export const testpaperCardFixed =()=> {
     return;
   }
   let testpaperCard_top = $testpaperCard.offset().top;
-  $(window).scroll(function(event) {
+  $(window).scroll(function() {
     let scrollTop = $(window).scrollTop();
     if (scrollTop >= testpaperCard_top) {
       $testpaperCard.addClass('affix');

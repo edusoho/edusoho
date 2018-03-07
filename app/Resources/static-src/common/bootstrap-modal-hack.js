@@ -1,5 +1,5 @@
 (function() {
-  $(document).on('click.modal.data-api', '[data-toggle="modal"]', function(e) {
+  $(document).on('click.modal.data-api', '[data-toggle="modal"]', function() {
     let $this = $(this),
       href = $this.attr('href'),
       url =  $this.data('url');

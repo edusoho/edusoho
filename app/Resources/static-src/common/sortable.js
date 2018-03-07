@@ -1,6 +1,6 @@
 import 'jquery-sortable';
 
-const sortList = (options, callback = (data) => {}) => {
+const sortList = (options, callback = () => {}) => {
   let defaultOptions = {
     element: '#sortable-list',
     distance: 20,
