@@ -17,9 +17,9 @@
   {% endif %}
 
   <div class="course-manage-header-info">
-    <h1 class="course-manage-header-info__title">
+    <h1 class="course-manage-header-info__title text-overflow">
       {% block title %}
-         <a class="cd-link-major text-overflow" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
+         <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
       {% endblock %}
     </h1>
     <div class="course-manage-header-info__type">

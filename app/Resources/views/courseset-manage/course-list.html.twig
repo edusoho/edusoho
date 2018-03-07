@@ -3,7 +3,7 @@
 {% endblock %}
 
 {% block title %}
-  <a class="cd-link-major text-overflow" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
+  <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
     {{ course.title }}
   </a>
 {% endblock %}
@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="js-plan-dragged-icon hidden">
-          <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-list"></i></a>
+          <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-sort"></i></a>
         </div>
       {% else %}
         <span class="color-gray">{{ 'course.teaching_plan.no_permission'|trans }}</span>
