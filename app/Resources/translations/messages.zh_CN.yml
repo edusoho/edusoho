@@ -3315,6 +3315,10 @@ cloud_search.course.task: 课时
 cloud_search.course.recommend.content_title: 推荐课程
 cloud_search.course.recommend.empty: 暂无推荐课程
 
+cloud_search.classroom: 班级
+cloud_search.classroom.result: >
+  为您找到班级结果约 <span class="color-danger">%counts%</span>个
+
 cloud_search.teacher: 教师
 cloud_search.teacher.result: >
   为您找到教师结果约 <span class="color-danger">%counts%</span>个

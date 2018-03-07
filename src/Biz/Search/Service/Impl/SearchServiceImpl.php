@@ -133,6 +133,7 @@ class SearchServiceImpl extends BaseService implements SearchService
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,
+                'classroom' => 1,
             ),
         );
         $searchSetting = array_merge($searchSetting, $settingTemplate);

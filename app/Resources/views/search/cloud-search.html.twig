@@ -36,6 +36,7 @@
       <div class="es-section">
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
           <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'cloud_search.course'|trans}}</a></li>
+          <li {% if type == 'classroom' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'classroom'}) }}" data-type="course" >{{'cloud_search.classroom'|trans}}</a></li>
           <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'cloud_search.teacher'|trans}}</a></li>
           <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'cloud_search.thread'|trans}}</a></li>
           <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'cloud_search.article'|trans}}</a></li>
