@@ -6,14 +6,9 @@
 {% block top_content %}
   {% cache 'cloud-search/top/banner' 600 %}
   <section class="search-banner es-live-poster swiper-container">
-    {% set banner = block_show('cloud_search_banner') %}
-    {% if  banner %}
-      {{ block_show('cloud_search_banner') }}
-    {% else %}
-      <div class="swiper-slide swiper-hidden"
-        style="background: #ffffff url({{ asset('/assets/img/placeholder/banner_search.jpg') }}) no-repeat; background-size: cover;">
-      </div>
-    {% endif %}
+    <div class="swiper-slide swiper-hidden"
+      style="background: #ffffff url({{ asset('/assets/img/placeholder/banner_search.jpg') }}) no-repeat; background-size: cover;">
+    </div>
     <div class="cloud-search-box">
       <form class="input-group search-input-group" id="search-input-group" action="{{ path('search') }}" method="get">
         <div class="input-wrap">
