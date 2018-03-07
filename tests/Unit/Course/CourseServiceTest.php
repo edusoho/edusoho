@@ -27,6 +27,20 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(2, $courses[1]['seq']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testSortCourseAccessDenied()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('course title 1', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $course = $this->defaultCourse('course title 2', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->sortCourse(1, array(2, 1, 4, 5));
+    }
+
     public function testUpdateMembersDeadlineByClassroomId()
     {
         $textClassroom = array(

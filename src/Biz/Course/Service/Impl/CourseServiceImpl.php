@@ -2009,9 +2009,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $count = $this->searchCourseCount(
             array(
                 'courseSetId' => $courseSetId,
-                'ids' => $ids,
+                'courseIds' => $ids,
             )
         );
+
         if (count($ids) != $count) {
             throw $this->createAccessDeniedException();
         }
