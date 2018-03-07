@@ -13,6 +13,7 @@ use Biz\Xapi\Type\LiveWatchType;
 use Biz\Xapi\Type\PurchasedClassroomType;
 use Biz\Xapi\Type\PurchasedCourseType;
 use Biz\Xapi\Type\SearchKeywordType;
+use Biz\Xapi\Type\UserLoggedInType;
 use Biz\Xapi\Type\WriteNoteType;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -112,6 +113,13 @@ class XapiServiceProvider implements ServiceProviderInterface
 
         $biz[sprintf('xapi.push.%s', PurchasedCourseType::TYPE)] = $biz->factory(function ($biz) {
             $type = new PurchasedCourseType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', UserLoggedInType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new UserLoggedInType();
             $type->setBiz($biz);
 
             return $type;
