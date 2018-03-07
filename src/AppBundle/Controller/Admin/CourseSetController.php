@@ -587,7 +587,7 @@ class CourseSetController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('seq' => 'asc', 'createdTime' => 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

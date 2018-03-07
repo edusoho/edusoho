@@ -1,4 +1,4 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}
   {{ 'course.marketing_setup'|trans }} - {{ course.title }} - {{ parent() }}
@@ -8,10 +8,10 @@
 
 {% do script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/marketing/index.js']) %}
 
-{% block main %}
-  <div class="panel panel-default">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
-    <div class="panel-body">
+{% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
+
+{% block main_body %}
+    <div>
       {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
         {{ web_macro.flash_messages() }}
 
@@ -260,7 +260,4 @@
         <div class="alert alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
       {% endif %}
     </div>
-  </div>
 {% endblock %}
-
-{% block course %}{% endblock %}

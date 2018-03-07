@@ -1,21 +1,31 @@
-{% extends 'layout.html.twig' %}
+{% extends 'v2/layout.html.twig' %}
 
-{% block title %}{{'course.course_manage'|trans}} - {{ parent() }}{% endblock %}
-{% set use_webapck_loader = true %}
-
-{% block content %}
-  {% block course_header %}
-    {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
-  {% endblock %}
-  <div class="row">
-    <div class="col-md-3">
-      {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+{% block full_content %}
+  {% block top_content %}
+    <div class="{% block sectionClass %} courseset-header-section {% endblock %}">
+      <div class="container cd-container">
+        {% block breadcrumb %}
+          <ol class="breadcrumb breadcrumb-o">
+            <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+            <li class="active"> {{ courseSet.title|plain_text(21) }}</li>
+          </ol>
+        {% endblock %}
+        {% block course_header %}
+          {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+        {% endblock %}
+        {% block navbar %}
+          {% include 'courseset-manage/navbar.html.twig' %}
+        {% endblock %}
+      </div>
     </div>
-    <div class="col-md-9">
-      {% block main %}{% endblock %}
+  {% endblock %}
+  <div class="container cd-container">
+    <div class="cd-content courseset-manage-body">
+      {% block sidebar %}
+      {% endblock %}
+
+      {% block main %}
+      {% endblock %}
     </div>
   </div>
-  {% endblock %}
-
-{% block bottom %}
 {% endblock %}

@@ -3041,3 +3041,8 @@ order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
+course_sort:
+    path: /courseset/{courseSetId}/sort
+    defaults: { _controller: AppBundle:Course/CourseSetManage:courseSort, limit: '' }
+    methods: [POST]
+

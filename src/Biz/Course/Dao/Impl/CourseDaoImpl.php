@@ -3,9 +3,9 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
+class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 {
     protected $table = 'course_v8';
 
@@ -158,6 +158,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'originPrice',
                 'updatedTime',
                 'id',
+                'seq',
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(

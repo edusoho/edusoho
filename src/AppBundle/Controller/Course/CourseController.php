@@ -202,7 +202,6 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $user = $this->getCurrentUser();
@@ -229,6 +228,9 @@ class CourseController extends CourseBaseController
             0,
             1
         );
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->sortByCourses($courses);
 
         return $this->render(
             'course/header/header-for-guest.html.twig',
@@ -524,13 +526,14 @@ class CourseController extends CourseBaseController
                     'excludeIds' => $excludeCourseIds,
                     'status' => 'published',
                 ),
-                array('createdTime' => 'desc'),
+                array('seq' => 'asc', 'createdTime' => 'asc'),
                 0,
                 $limitNum - count($otherCoursesMember)
             );
         }
 
         $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
+        $purchasedCourse = $this->getCourseService()->sortByCourses($purchasedCourse);
         $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(

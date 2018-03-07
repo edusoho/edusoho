@@ -1,24 +1,40 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 {% block title %}
   {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
-{% endblock %} 
+{% endblock %}
+
+{% block sectionClass %} course-header-section {% endblock %}
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+    <li><a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{courseSet.title|plain_text(21)}}</a></li>
+    <li class="active">{{course.title}}</li>
+  </ol>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
 
 {% block course_header %}
   {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
 {% endblock %}
 
-{% block main %}
-  <div class="panel panel-default">
+{% block sidebar %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+{% endblock %}
 
-      <div class="panel-heading">
-        {{ course.title }}
-          <button class="btn btn-success btn-sm pull-right js-publish-course"
-            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-            {{ 'course.plan_task.publish_btn'|trans }}
-          </button>
-      </div>
-    <div class="panel-body">
-      {% block course %} {% endblock %}
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
     </div>
   </div>
 {% endblock %}

@@ -46,7 +46,7 @@ export default class Manage {
         $hideElements = $hideElements.not('.unit-hide');
       }
 
-      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, "normal");
+      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, "fast");
       $this.hasClass('toogle-hide') ? $this.html(collapseTexts[0]) :  $this.html(collapseTexts[1]);
     });
   }

@@ -1,13 +1,13 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'info' %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/info/index.js']) %}
 
-{% block main %}
-  <div class="panel panel-default" role="course-manage-info">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
-    <div class="panel-body">
+{% block page_title %}{{ 'course.plan_setup'|trans }}{% endblock %}
+
+{% block main_body %}
+    <div role="course-manage-info">
       {{ web_macro.flash_messages() }}
       <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
         <div class="form-group">
@@ -153,5 +153,4 @@
         </div>
       </form>
     </div>
-  </div>
 {% endblock %}

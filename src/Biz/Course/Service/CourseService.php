@@ -244,4 +244,11 @@ interface CourseService
     public function findLiveCourse($conditions, $userId, $role);
 
     public function changeShowPublishLesson($courseId, $status);
+
+    public function countCoursesByCourseSetId($courseSetId);
+
+    //排序教学计划
+    public function sortCourse($courseSetId, $ids);
+
+    public function sortByCourses($courses);
 }
