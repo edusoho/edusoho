@@ -9,6 +9,8 @@ use AppBundle\Common\ArrayToolkit;
 
 class LessonServiceImpl extends BaseService implements LessonService
 {
+    const LESSON_LIMIT_NUMBER = 300;
+
     public function countLessons($conditions)
     {
         $conditions['type'] = 'lesson';
@@ -53,7 +55,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $chapter = $this->getCourseChapterDao()->get($lessonId);
         $this->getCourseService()->tryManageCourse($chapter['courseId']);
 
-        if (empty($chapter) || $chapter['type'] != 'lesson') {
+        if (empty($chapter) || 'lesson' != $chapter['type']) {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
@@ -69,7 +71,7 @@ class LessonServiceImpl extends BaseService implements LessonService
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $chapter = $this->getCourseChapterDao()->get($lessonId);
-        if (empty($chapter) || $chapter['courseId'] != $courseId || $chapter['type'] != 'lesson') {
+        if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
@@ -99,7 +101,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
         $chapter = $this->getCourseChapterDao()->get($lessonId);
 
-        if (empty($chapter) || $chapter['courseId'] != $courseId || $chapter['type'] != 'lesson') {
+        if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
@@ -120,7 +122,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             return;
         }
 
-        if ($lesson['courseId'] != $courseId || $lesson['type'] != 'lesson') {
+        if ($lesson['courseId'] != $courseId || 'lesson' != $lesson['type']) {
             throw $this->createInvalidArgumentException('Argument Invalid');
         }
 
@@ -138,11 +140,16 @@ class LessonServiceImpl extends BaseService implements LessonService
     {
         $lessonCount = $this->countLessons(array('courseId' => $courseId));
 
-        if ($lessonCount >= 300) {
+        if ($lessonCount >= self::LESSON_LIMIT_NUMBER) {
             throw $this->createServiceException('lesson_count_no_more_than_300');
         }
 
         return true;
+    }
+
+    public function getLessonLimitNum()
+    {
+        return self::LESSON_LIMIT_NUMBER;
     }
 
     protected function publishTasks($lessonId)

@@ -19,4 +19,6 @@ interface LessonService
     public function deleteLesson($courseId, $lessonId);
 
     public function isLessonCountEnough($courseId);
+
+    public function getLessonLimitNum();
 }

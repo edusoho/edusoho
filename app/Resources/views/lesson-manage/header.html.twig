@@ -23,7 +23,7 @@
           data-content="{{'course.plan_task.batch_create_tips'|trans}}"
         {% else %}
           data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-          data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:taskMode|default('default'), token:uploader_token('course-task', app.user.id, 'private')}) }}"
+          data-url="{{ path('course_manage_lesson_batch_create', {courseId:course.id, mode:taskMode|default('default'), token:uploader_token('course-task', app.user.id, 'private')}) }}"
         {% endif %}>
         {{'course.plan_task.batch_create_btn'|trans}}
       </button>
