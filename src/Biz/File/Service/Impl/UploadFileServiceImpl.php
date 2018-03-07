@@ -580,7 +580,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array();
         }
 
-        $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, array());
+        $cloudFileConditions = array();
+        if (isset($conditions['resType'])) {
+            $cloudFileConditions['resType'] = $conditions['resType'];
+        }
+        $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, $cloudFileConditions);
         $files = ArrayToolkit::index($files, 'id');
         foreach ($cloudFiles as &$cloudFile) {
             $cloudFile['type'] = $files[$cloudFile['id']]['type'];

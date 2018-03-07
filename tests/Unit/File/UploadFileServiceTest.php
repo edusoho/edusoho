@@ -915,7 +915,7 @@ class UploadFileServiceTest extends BaseTestCase
                 ),
                 array(
                     'functionName' => 'search',
-                    'withParams' => array(array(), array(), 0, 5),
+                    'withParams' => array(array('resType' => 'attachment'), array(), 0, 5),
                     'returnValue' => array(
                         array(
                             'id' => 11,
@@ -931,7 +931,7 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'findFiles',
-                    'withParams' => array(array(array('id' => 11, 'type' => 'other')), array()),
+                    'withParams' => array(array(array('id' => 11, 'type' => 'other')), array('resType' => 'attachment')),
                     'returnValue' => array(array('id' => 11)),
                 ),
             )
@@ -939,7 +939,7 @@ class UploadFileServiceTest extends BaseTestCase
         $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array(), array(), 0, 5);
         $this->assertEquals(array(), $result);
 
-        $result = $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array(), array(), 0, 5);
+        $result = $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array('resType' => 'attachment'), array(), 0, 5);
         $this->assertEquals(array(array('id' => 11, 'type' => 'other')), $result);
     }
 
