@@ -211,9 +211,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $this->tryManageCourse($id);
 
-        /*if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
-        }*/
         $this->validatie($id, $fields);
 
         $fields = ArrayToolkit::parts(

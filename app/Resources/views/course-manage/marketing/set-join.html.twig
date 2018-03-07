@@ -28,20 +28,6 @@
     </div>
   </div>
   {{ slot('course.marketing.setting', {'course':course}) }}
-
-  {#{% if courseSet.type == 'live' %}
-    <div class="form-group">
-      <label class="col-md-2 control-label" for="maxStudentNum-field">{{'course.plan_setup.member_numbers'|trans}}</label>
-      <div class="col-md-10 controls">
-        <input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large"
-          value="{{ course.maxStudentNum|default('') }}" data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}" data-explain=""> {{'site.data.people'|trans}}
-        <div class="help-block" style="display:none;"></div></div>
-      <div class="col-md-offset-2 col-md-10 js-course-rule">
-        <p class="alert-warning"></p>
-        <a href="{{ path('content_course_rule') }}" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
-      </div>
-    </div>
-  {% endif %}#}
   
   <div class="js-course-add-open-show {% if course.buyable|default(1) == 0 %} hidden {% endif %}">
     <div class="form-group ">
