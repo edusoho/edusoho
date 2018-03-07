@@ -791,7 +791,11 @@ course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
 course.teaching_plan.free_mode: 自由式学习模式
 course.teaching_plan.locked_mode: 解锁式学习模式
+course.teaching_default_plan: 默认计划
 course.teaching_plan.create: 'Add'
+course.teaching_plan.sort: 调整顺序
+course.teaching_plan.sort.save: 保存排序
+course.teaching_plan.sort.cancel: 取消排序
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
@@ -820,6 +824,7 @@ course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Config
+course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
@@ -1100,10 +1105,11 @@ course.status.unpublished: Unpublished
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
+course.filter.all_plan: 全部计划
 course.student_member: 学员人数
 course.learn_plan: 学习计划
-course.student.cell: 个
-course.plan.cell: 人
+course.student.cell: 人
+course.plan.cell: 个
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
 course.share: Share

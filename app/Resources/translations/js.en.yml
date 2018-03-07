@@ -494,6 +494,7 @@ course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
+course.manage.sort_cancel: 取消当前排序
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail

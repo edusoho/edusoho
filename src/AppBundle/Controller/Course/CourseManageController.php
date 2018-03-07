@@ -259,7 +259,7 @@ class CourseManageController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            array('createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -411,7 +411,7 @@ class CourseManageController extends BaseController
                 )
             );
         }
-        
+
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
@@ -513,22 +513,11 @@ class CourseManageController extends BaseController
 
     public function headerAction($courseSet, $course)
     {
-        $teachers = $this->getCourseMemberService()->searchMembers(
-            array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
-            array('seq' => 'asc'),
-            0,
-            PHP_INT_MAX
-        );
-
-        $course['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
-        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
-
         return $this->render(
             'course-manage/header.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'users' => $users,
             )
         );
     }

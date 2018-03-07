@@ -86,7 +86,7 @@ class Course extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $courses = $this->service('Course:CourseService')->searchCourses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('seq' => 'asc','createdTime' => 'asc'),
             $offset,
             $limit
         );
