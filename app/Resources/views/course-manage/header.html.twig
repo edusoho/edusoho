@@ -13,11 +13,11 @@
   {% endif %}
 
   <div class="course-manage-header-info">
-    <h1 class="course-manage-header-info__title">
+    <h1 class="course-manage-header-info__title text-overflow">
       {% if side_nav|default(null) == 'plan' %}
-        <a class="cd-link-major text-overflow" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">{{ course.title }}</a>
+        <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">{{ course.title }}</a>
       {% else %}
-        <a class="cd-link-major text-overflow" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
+        <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
       {% endif %}
     </h1>
     <div class="course-manage-header-info__type">
@@ -26,7 +26,7 @@
 
   <div class="course-manage-header-data">
     {# 课时数量和图标还没有改好 #}
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>25</span>
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-list-check"></i>25</span>
     <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{ course.studentNum }}</span>
     <span class="course-manage-header-data__price color-danger">
       {% include 'common/price.html.twig' with {'productPrice': course.price} %}
