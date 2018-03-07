@@ -596,11 +596,11 @@ class XAPIService extends BaseService
         );
 
         if (!empty($object['definitionType'])) {
-            $statement['definition'] = array(
+            $statement['object']['definition'] = array(
                 'type' => $this->getActivityType($object['definitionType'])
             );
         } else {
-            $statement['objectType'] = $object['objectType'];
+            $statement['object']['objectType'] = $object['objectType'];
         }
 
 

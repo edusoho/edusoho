@@ -10,6 +10,7 @@ use Biz\Course\Service\ThreadService;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -215,11 +216,11 @@ class SearchController extends BaseController
         $biz = $this->getBiz();
         /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
         $dispatcher = $biz['dispatcher'];
-        $dispatcher->dispatch('user.search', array(
+        $dispatcher->dispatch('user.search', new Event(array(
             'userId' => $this->getCurrentUser()->getId(),
             'q' => $keyword,
             'type' => $type
-        ));
+        )));
     }
 
     /**
