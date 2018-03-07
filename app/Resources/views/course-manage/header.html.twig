@@ -14,20 +14,15 @@
 
   <div class="course-manage-header-info">
     <h1 class="course-manage-header-info__title">
-      {% if side_nav|default(null) == 'plan' %}
-        <a class="cd-link-major text-overflow" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">{{ course.title }}</a>
-      {% else %}
-        <a class="cd-link-major text-overflow" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
-      {% endif %}
+      <a class="cd-link-major text-overflow" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
     </h1>
     <div class="course-manage-header-info__type">
       {% if 'freeMode' == course.learnMode %}{{'course.teaching_plan.free_mode'|trans}}{% else %}{{'course.teaching_plan.locked_mode'|trans}}{% endif %}{% if side_nav|default(null) == 'plan' %}<span class="cd-tag cd-tag-blue cd-ml8">{{ 'course.teaching_default_plan'|trans }}</span>{% endif %}</div>
   </div>
 
   <div class="course-manage-header-data">
-    {# 课时数量和图标还没有改好 #}
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>25</span>
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{ course.studentNum }}</span>
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-list-check"></i>25</span>
+    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{course.studentNum}}</span>
     <span class="course-manage-header-data__price color-danger">
       {% include 'common/price.html.twig' with {'productPrice': course.price} %}
     </span>
