@@ -1726,6 +1726,15 @@ course_manage_lesson_create:
     path:  /course/{courseId}/lesson/create
     defaults: { _controller: AppBundle:Course/LessonManage:create }
 
+course_manage_lesson_batch_create:
+    path:  /course/{courseId}/lesson/batch_create
+    defaults: { _controller: AppBundle:Course/LessonManage:batchCreate }
+
+course_manage_lesson_valid_num:
+    path: /course/{courseId}/lesson/valid_num
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
+    methods: [POST]
+
 course_manage_lesson_update:
     path:  /course/{courseId}/lesson/{lessonId}/update
     defaults: { _controller: AppBundle:Course/LessonManage:update }
