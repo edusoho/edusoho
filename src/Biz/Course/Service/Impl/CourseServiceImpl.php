@@ -99,7 +99,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             array(
                 'courseSetId' => $courseSetId,
             ),
-            array('createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             1
         );
