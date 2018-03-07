@@ -29,7 +29,7 @@
     </div>
     {# {% include 'my/teaching/course-tab.html.twig' %} #}
     {% for courseSet in courseSets %}
-      {% include 'courseset-manage/header.html.twig' with { side_nav: side_nav } %}
+      {% include 'my/teaching/course-set-list.html.twig' %}
     {% else %}
       <div class="empty">
         <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">

@@ -1,5 +1,7 @@
 {% import "macro.html.twig" as web_macro %}
-{% do script(['app/js/courseset-manage/header/index.js']) %}
+{% block js %}
+  {% do script(['app/js/courseset-manage/header/index.js']) %}
+{% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
 
 
@@ -37,9 +39,7 @@
   </div>
 
 <div class="courseset-manage-header-btn hidden-xs">
-  {% if side_nav|default(null) == 'my-teaching-courses' %}
-    <div class="cd-btn cd-btn-ghost-primary">{{ 'course.manage_btn'|trans }}</div>
-  {% else %}
+  {% block btn %}
     {# 课程发布按钮 #}
     {% if courseSet.status == 'published' %}
       <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
@@ -59,7 +59,7 @@
         </ul>
       </div>
     {% endif %}
-  {% endif %}
+  {% endblock %}
 </div>
 
   <div class="courseset-manage-header-data">
@@ -73,6 +73,8 @@
   </div>
 </div>
 
-{% if courseSet.status == 'closed' and side_nav|default(null) != 'my-teaching-courses' %}
-  <div class="cd-alert cd-alert-warning">{{'course.remove_students_tips'|trans}}</div>
-{% endif %}
+{% block close %}
+  {% if courseSet.status == 'closed' %}
+    <div class="cd-alert cd-alert-warning">{{'course.remove_students_tips'|trans}}</div>
+  {% endif %}
+{% endblock %}
