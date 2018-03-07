@@ -585,12 +585,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         foreach ($cloudFiles as &$cloudFile) {
             $cloudFile['type'] = $files[$cloudFile['id']]['type'];
         }
+
         return $cloudFiles;
     }
 
     public function countCloudFllesFromLocal($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getUploadFileDao()->count($conditions);
     }
 
