@@ -526,13 +526,14 @@ class CourseController extends CourseBaseController
                     'excludeIds' => $excludeCourseIds,
                     'status' => 'published',
                 ),
-                array('createdTime' => 'desc'),
+                array('seq' => 'asc', 'createdTime' => 'asc'),
                 0,
                 $limitNum - count($otherCoursesMember)
             );
         }
 
         $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
+        $purchasedCourse = $this->getCourseService()->sortByCourses($purchasedCourse);
         $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(
