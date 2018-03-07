@@ -8,7 +8,6 @@ class PurchasedCourseType extends Type
 
     public function package($statement)
     {
-        //
     }
 
     public function packages($statements)

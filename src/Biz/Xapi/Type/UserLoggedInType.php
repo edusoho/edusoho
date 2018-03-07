@@ -2,7 +2,7 @@
 
 namespace Biz\Xapi\Type;
 
-class SearchKeywordType extends Type
+class UserLoggedInType extends Type
 {
     const TYPE = 'logged-in_keyword';
 
