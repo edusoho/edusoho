@@ -1,17 +1,17 @@
 class FillQuestion
 {
-	constructor() {
+  constructor() {
 		
-	}
+  }
 
-	getAnswer(questionId) {
-		let answers = [];
-		$('input[name='+questionId+']').each(function(){
-			answers.push($(this).val());
-		});
+  getAnswer(questionId) {
+    let answers = [];
+    $('input[name='+questionId+']').each(function(){
+      answers.push($(this).val());
+    });
 
-		return answers;
-	}
+    return answers;
+  }
 }
 
 export default FillQuestion;

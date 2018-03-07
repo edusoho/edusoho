@@ -29,17 +29,17 @@ import newNotificationModule from './modules/newNotification';
 const API_URL_PREFIX = '/api';
 
 const Api = {
-	// 课程模块
-	course: courseModule(API_URL_PREFIX),
-	// 班级模块
-	classroom: classroomModule(API_URL_PREFIX),
-	trade: tradeModule(API_URL_PREFIX),
-	captcha: captchaModule(API_URL_PREFIX),
-	sms: smsModule(API_URL_PREFIX),
-	teacherLiveCourse: teacherLiveCourseModule(API_URL_PREFIX),
-	studentLiveCourse: studentLiveCourseModule(API_URL_PREFIX),
-	conversation: conversationModule(API_URL_PREFIX),
-	newNotification: newNotificationModule(API_URL_PREFIX),
+  // 课程模块
+  course: courseModule(API_URL_PREFIX),
+  // 班级模块
+  classroom: classroomModule(API_URL_PREFIX),
+  trade: tradeModule(API_URL_PREFIX),
+  captcha: captchaModule(API_URL_PREFIX),
+  sms: smsModule(API_URL_PREFIX),
+  teacherLiveCourse: teacherLiveCourseModule(API_URL_PREFIX),
+  studentLiveCourse: studentLiveCourseModule(API_URL_PREFIX),
+  conversation: conversationModule(API_URL_PREFIX),
+  newNotification: newNotificationModule(API_URL_PREFIX),
 };
 
 export default Api;

@@ -1,27 +1,27 @@
 class EssayQuestion
 {
-	constructor() {
+  constructor() {
 		
-	}
+  }
 
-	getAnswer(questionId) {
-		let answers = [];
-		let value = $('[name='+questionId+']').val();
-		answers.push(value);
+  getAnswer(questionId) {
+    let answers = [];
+    let value = $('[name='+questionId+']').val();
+    answers.push(value);
 
-		return answers;
-	}
+    return answers;
+  }
 
-	getAttachment(questionId) {
-		let attachment = [];
-		let fileId = $('[name='+questionId+']').parent().find('[data-role="fileId"]').val();
+  getAttachment(questionId) {
+    let attachment = [];
+    let fileId = $('[name='+questionId+']').parent().find('[data-role="fileId"]').val();
 
-		if (fileId != '') {
-			attachment.push(fileId);
-		}
+    if (fileId != '') {
+      attachment.push(fileId);
+    }
 
-		return attachment;
-	}
+    return attachment;
+  }
 }
 
 export default EssayQuestion;

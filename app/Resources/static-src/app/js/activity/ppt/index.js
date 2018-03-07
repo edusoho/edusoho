@@ -7,30 +7,30 @@ let $content = $('#activity-ppt-content');
 let watermarkUrl = $content.data('watermarkUrl');
 
 let createPPT = (watermark) => {
-	let ppt = new PptPlayer({
-		element: '#activity-ppt-content',
-		slides: $content.data('slides').split(','),
-		watermark: watermark
-	});
+  let ppt = new PptPlayer({
+    element: '#activity-ppt-content',
+    slides: $content.data('slides').split(','),
+    watermark: watermark
+  });
 
 
-	if ($content.data('finishType') === 'end') {
-		ppt.once('end', (data) => {
-			emitter.emit('finish',data);
-		});
-	}
+  if ($content.data('finishType') === 'end') {
+    ppt.once('end', (data) => {
+      emitter.emit('finish',data);
+    });
+  }
 
-	return ppt;
+  return ppt;
 };
 
 if (watermarkUrl === undefined) {
-	let ppt = createPPT();
+  let ppt = createPPT();
 } else {
-	$.get(watermarkUrl)
-		.then((watermark) => {
-			let ppt = createPPT(watermark);
-		})
-		.fail(error => {
-			console.error(error);
-		});
+  $.get(watermarkUrl)
+    .then((watermark) => {
+      let ppt = createPPT(watermark);
+    })
+    .fail(error => {
+      console.error(error);
+    });
 }

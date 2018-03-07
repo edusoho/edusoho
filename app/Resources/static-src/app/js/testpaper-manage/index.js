@@ -4,37 +4,37 @@ import DeleteAction from '../../common/widget/delete-action';
 
 class TestpaperManage
 {
-	constructor($container) {
+  constructor($container) {
 
-		this.$container = $container;
-		this._initEvent();
-		this._init();
-	}
+    this.$container = $container;
+    this._initEvent();
+    this._init();
+  }
 
-	_initEvent() {
-		this.$container.on('click','.open-testpaper,.close-testpaper',event=>this.testpaperAction(event));
+  _initEvent() {
+    this.$container.on('click','.open-testpaper,.close-testpaper',event=>this.testpaperAction(event));
 
-	}
+  }
 
-	_init() {
+  _init() {
 
-	}
+  }
 
-	testpaperAction(event) {
-		let $target = $(event.currentTarget);
-		let $tr = $target.closest('tr');
+  testpaperAction(event) {
+    let $target = $(event.currentTarget);
+    let $tr = $target.closest('tr');
 
-		if (!confirm($target.attr('title'))) {
-			return ;
-		}
+    if (!confirm($target.attr('title'))) {
+      return ;
+    }
 
-		$.post($target.data('url'), function(html){
-			notify('success', Translator.trans('testpaper_manage.save_success_hint'));
-			$tr.replaceWith(html);
-		}).error(function(){
-			notify('danger', Translator.trans('testpaper_manage.save_error_hint'));
-		});
-	}
+    $.post($target.data('url'), function(html){
+      notify('success', Translator.trans('testpaper_manage.save_success_hint'));
+      $tr.replaceWith(html);
+    }).error(function(){
+      notify('danger', Translator.trans('testpaper_manage.save_error_hint'));
+    });
+  }
   
 }
 

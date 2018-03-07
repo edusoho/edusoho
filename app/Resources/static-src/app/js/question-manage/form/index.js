@@ -10,40 +10,40 @@ import SelectLinkage from '../widget/select-linkage.js';
 
 let questionCreator;
 class QuestionCreator {
-	constructor() {
-	}
+  constructor() {
+  }
 
-	static getCreator(type, $form) {
-		switch (type) {
-		case 'single_choice':
-			questionCreator = new SingleChoice($form);
-			break;
-		case 'uncertain_choice':
-			questionCreator = new UncertainChoice($form);
-			break;
-		case 'choice':
-			questionCreator = new Choice($form);
-			break;
-		case 'determine':
-			questionCreator = new Determine($form);
-			break;
-		case 'essay':
-			questionCreator = new Essay($form);
-			break;
-		case 'fill':
-			questionCreator = new Fill($form);
-			break;
-		case 'material':
-			questionCreator = new Material($form);
-			break;
-		default:
-			questionCreator = new QuestionFormBase($form);
-			questionCreator.initTitleEditor();
-			questionCreator.initAnalysisEditor();
-		}
+  static getCreator(type, $form) {
+    switch (type) {
+    case 'single_choice':
+      questionCreator = new SingleChoice($form);
+      break;
+    case 'uncertain_choice':
+      questionCreator = new UncertainChoice($form);
+      break;
+    case 'choice':
+      questionCreator = new Choice($form);
+      break;
+    case 'determine':
+      questionCreator = new Determine($form);
+      break;
+    case 'essay':
+      questionCreator = new Essay($form);
+      break;
+    case 'fill':
+      questionCreator = new Fill($form);
+      break;
+    case 'material':
+      questionCreator = new Material($form);
+      break;
+    default:
+      questionCreator = new QuestionFormBase($form);
+      questionCreator.initTitleEditor();
+      questionCreator.initAnalysisEditor();
+    }
 
-		return questionCreator;
-	}
+    return questionCreator;
+  }
 }
 
 let $form = $('[data-role="question-form"]');

@@ -1,6 +1,6 @@
 import LessonModal from './lesson-modal';
 
 new LessonModal({
-	element: '#modal',
-	form: '#lesson-create-form'
+  element: '#modal',
+  form: '#lesson-create-form'
 });

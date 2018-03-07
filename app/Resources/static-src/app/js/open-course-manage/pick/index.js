@@ -6,78 +6,78 @@ let $searchForm = $('.form-search');
 let $sure = $('#sure');
 
 $sure.on('click', function () {
-	$sure.button('submiting').addClass('disabled');
+  $sure.button('submiting').addClass('disabled');
 
-	$.ajax({
-		type: 'post',
-		url: $('#sure').data('url'),
-		data: { 'ids': ids },
-		async: false,
-		success: function (response) {
-			if (!response['result']) {
-				$sure.removeClass('disabled');
-				notify('danger',response['message']);
-			} else {
-				$('.modal').modal('hide');
-				window.location.reload();
-			}
-		}
-	});
+  $.ajax({
+    type: 'post',
+    url: $('#sure').data('url'),
+    data: { 'ids': ids },
+    async: false,
+    success: function (response) {
+      if (!response['result']) {
+        $sure.removeClass('disabled');
+        notify('danger',response['message']);
+      } else {
+        $('.modal').modal('hide');
+        window.location.reload();
+      }
+    }
+  });
 
 });
 
 $('#search').on('click', function () {
 
-	$.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
+  $.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
 
-		$('#modal').html(data);
-	});
+    $('#modal').html(data);
+  });
 });
 
 $('#enterSearch').keydown(function (event) {
 
-	if (event.keyCode == 13) {
-		$.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
-			$('#modal').html(data);
-		});
-		return false;
-	}
+  if (event.keyCode == 13) {
+    $.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
+      $('#modal').html(data);
+    });
+    return false;
+  }
 });
 
 
 
 $('#all-courses').on('click', function () {
-	$('input[name="key"]').val('');
-	$.post($(this).data('url'), $('.form-search').serialize(), function (data) {
-		$('#modal').html(data);
-	});
+  $('input[name="key"]').val('');
+  $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
+    $('#modal').html(data);
+  });
 
 
 });
 
 $('.row').on('click', '.course-item ', function () {
 
-	let id = $(this).data('id');
+  let id = $(this).data('id');
 
-	if ($(this).hasClass('enabled')) {
-		return;
-	}
+  if ($(this).hasClass('enabled')) {
+    return;
+  }
 
-	if ($(this).hasClass('select')) {
+  if ($(this).hasClass('select')) {
 
-		$(this).removeClass('select');
-		$('.course-metas-' + id).hide();
+    $(this).removeClass('select');
+    $('.course-metas-' + id).hide();
 
-		ids = $.grep(ids, function (val, key) {
-			if (val != id)
-				return true;
-		}, false);
+    ids = $.grep(ids, function (val, key) {
+      if (val != id)
+        return true;
+    }, false);
 
-	} else {
-		$(this).addClass('select');
-		$('.course-metas-' + id).show();
-		ids.push(id);
-	}
+  } else {
+    $(this).addClass('select');
+    $('.course-metas-' + id).show();
+    ids.push(id);
+  }
 });
 
 

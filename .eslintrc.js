@@ -44,7 +44,7 @@ module.exports = {
         "no-unused-vars": 1,
         "indent": [
             "error",
-            "tab"
+            2
         ],
         "linebreak-style": [
             "error",
