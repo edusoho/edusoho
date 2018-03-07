@@ -105,7 +105,7 @@ class LessonManageController extends BaseController
             ));
         }
 
-        return $this->render(' lesson-manage/chapter/modal.html.twig', array(
+        return $this->render('lesson-manage/chapter/modal.html.twig', array(
             'course' => $course,
             'type' => 'lesson',
             'chapter' => $lesson,
