@@ -158,6 +158,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'originPrice',
                 'updatedTime',
                 'id',
+                'seq',
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(

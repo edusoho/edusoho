@@ -85,7 +85,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'courseSetId' => $courseSetId,
                 'status' => 'published',
             ),
-            array('createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             1
         );
@@ -1986,6 +1986,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $liveCourses;
     }
 
+    public function sortByCourses($courses)
+    {
+        usort($courses, function ($a, $b) {
+            if ($a['seq'] == $b['seq']) {
+                return 0;
+            }
+
+            return $a['seq'] > $b['seq'] ? 1 : -1;
+        });
+
+        return $courses;
+    }
+
     public function sortCourse($courseSetId, $ids)
     {
         if (empty($ids)) {
@@ -2000,7 +2013,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
         if (count($ids) != $count) {
-            //异常
+            throw $this->createAccessDeniedException();
         }
 
         $seq = 1;
@@ -2009,8 +2022,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'seq' => $seq++,
             );
         }
-
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
+        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
     public function changeShowPublishLesson($courseId, $status)

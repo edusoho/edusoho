@@ -506,15 +506,15 @@ class CourseSetManageController extends BaseController
         }
     }
 
-    public function courseSort(Request $request, $courseSetId)
+    public function courseSortAction(Request $request, $courseSetId)
     {
         try {
             $courseIds = $request->request->get('ids');
             $this->getCourseService()->sortCourse($courseSetId, $courseIds);
 
-            return $this->createJsonResponse(array('success' => true));
+            return $this->createJsonResponse(true, 200);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+            return $this->createJsonResponse($e->getMessage(), 500);
         }
     }
 

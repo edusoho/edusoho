@@ -437,6 +437,7 @@ course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
 course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
+course.manage.sort_cancel: 取消当前排序
 
 material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
@@ -809,3 +810,4 @@ admin.article_setting.choose_category: --选择所属栏目--
 
 
 Bad credentials.: 用户名或密码错误
+
