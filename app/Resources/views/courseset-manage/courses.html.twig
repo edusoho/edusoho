@@ -9,15 +9,15 @@
   <div class="courseset-manage-courses" role="courseset-manage-courses">
     <div class="cd-mb24 clearfix">
       <div class="pull-right">
-        <span class="js-sort-group">
+        <div class="js-sort-group">
           <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
             data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button>
           <button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>
-        </span>
-        <span class="js-sort-group hide">
+        </div>
+        <div class="js-sort-group hide">
           <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>
           <button class="cd-btn cd-btn-default js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
-        </span>
+        </div>
       </div>
       <div class="cd-select teaching-type-select" id="select-single">
         <div class="select-value">{{ 'course.filter.all_plan'|trans }}</div>
