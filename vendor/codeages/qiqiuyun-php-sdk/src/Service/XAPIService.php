@@ -4,6 +4,7 @@ namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Exception\ResponseException;
 use QiQiuYun\SDK\Exception\SDKException;
+use QiQiuYun\SDK\XAPIActivityTypes;
 use QiQiuYun\SDK\XAPIVerbs;
 
 class XAPIService extends BaseService
@@ -766,45 +767,7 @@ class XAPIService extends BaseService
      */
     private function getActivityType($minType)
     {
-        switch ($minType) {
-            case 'audio': //音频
-                $activityType = 'http://activitystrea.ms/schema/1.0/audio';
-                break;
-            case 'course': //课程
-                $activityType = 'http://adlnet.gov/expapi/activities/course';
-                break;
-            case 'online-discussion':
-                $activityType = 'https://w3id.org/xapi/acrossx/activities/online-discussion';
-                break;
-            case 'document': //文档,一个主要内容为文本的独立文件,包含word,excel,ppt,text等格式
-                $activityType = 'https://w3id.org/xapi/acrossx/activities/document';
-                break;
-            case 'exercise': //练习,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/exercise';
-                break;
-            case 'homework': //作业,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/homework';
-                break;
-            case 'interaction': //互动
-                $activityType = 'http://adlnet.gov/expapi/activities/interaction';
-                break;
-            case 'live': //直播,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/live';
-                break;
-            case 'question': //问题
-                $activityType = 'http://adlnet.gov/expapi/activities/question';
-                break;
-            case 'testpaper': //试卷,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/testpaper';
-                break;
-            case 'video': //视频
-                $activityType = 'https://w3id.org/xapi/acrossx/activities/video';
-                break;
-            default:
-                $activityType = $minType;
-        }
-
-        return $activityType;
+        return XAPIActivityTypes::getFullName($minType);
     }
 
     /**

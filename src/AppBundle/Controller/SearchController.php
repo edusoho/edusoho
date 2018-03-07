@@ -18,12 +18,14 @@ class SearchController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $courses = $paginator = null;
-
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
+        $type = $request->query->get('type', 'course');
+        $page = $request->query->get('page', 1);
+
+        $this->dispatchSearchEvent($keywords, $type, $page);
 
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
 
@@ -33,7 +35,7 @@ class SearchController extends BaseController
                     'cloud_search',
                     array(
                         'q' => $keywords,
-                        'type' => $request->query->get('type'),
+                        'type' => $type,
                     )
                 )
             );
@@ -202,6 +204,22 @@ class SearchController extends BaseController
         $keyword = str_replace('/', '', $keyword);
 
         return $keyword;
+    }
+
+    private function dispatchSearchEvent($keyword, $type, $page)
+    {
+        if (empty($keyword) || $page > 1 || !$this->getCurrentUser()->isLogin()) {
+            return;
+        }
+
+        $biz = $this->getBiz();
+        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+        $dispatcher = $biz['dispatcher'];
+        $dispatcher->dispatch('user.search', array(
+            'userId' => $this->getCurrentUser()->getId(),
+            'q' => $keyword,
+            'type' => $type
+        ));
     }
 
     /**

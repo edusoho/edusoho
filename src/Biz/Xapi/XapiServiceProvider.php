@@ -10,7 +10,7 @@ use Biz\Xapi\Type\DoQuestionType;
 use Biz\Xapi\Type\DoTestpaperType;
 use Biz\Xapi\Type\FinishActivityType;
 use Biz\Xapi\Type\LiveWatchType;
-use Biz\Xapi\Type\VideoWatchType;
+use Biz\Xapi\Type\SearchKeywordType;
 use Biz\Xapi\Type\WriteNoteType;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -66,8 +66,8 @@ class XapiServiceProvider implements ServiceProviderInterface
             return $type;
         });
 
-        $biz[sprintf('xapi.push.%s', VideoWatchType::TYPE)] = $biz->factory(function ($biz) {
-            $type = new VideoWatchType();
+        $biz[sprintf('xapi.push.%s', SearchKeywordType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new SearchKeywordType();
             $type->setBiz($biz);
 
             return $type;
@@ -89,6 +89,13 @@ class XapiServiceProvider implements ServiceProviderInterface
 
         $biz[sprintf('xapi.push.%s', AudioListen::TYPE)] = $biz->factory(function ($biz) {
             $type = new AudioListen();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', SearchKeywordType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new SearchKeywordType();
             $type->setBiz($biz);
 
             return $type;

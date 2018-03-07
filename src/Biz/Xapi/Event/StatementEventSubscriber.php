@@ -18,6 +18,7 @@ use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use QiQiuYun\SDK\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -30,6 +31,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
             'question_marker.finish' => 'onQuestionMarkerFinish',
+            'user.search' => 'onUserSearch',
         );
     }
 
@@ -80,6 +82,12 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         }
     }
 
+    public function onUserSearch(Event $event)
+    {
+        $subject = $event->getSubject();
+        $this->createStatement($subject['userId'], XAPIVerbs::SEARCHED, 0, 'keyword', array('q' => $subject['q'], 'type' => $subject['type']));
+    }
+
     protected function testpaperFinish($testpaperResult)
     {
         $this->createStatement($testpaperResult['userId'], 'completed', $testpaperResult['id'], 'testpaper');
@@ -116,7 +124,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->createStatement($thread['userId'], 'asked', $thread['id'], 'question');
     }
 
-    private function createStatement($userId, $verb, $targetId, $targetType)
+    private function createStatement($userId, $verb, $targetId, $targetType, $data = array())
     {
         if (empty($userId)) {
             return;
@@ -127,6 +135,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'verb' => $verb,
                 'target_id' => $targetId,
                 'target_type' => $targetType,
+                'data' => $data,
                 'occur_time' => time(),
             );
 
