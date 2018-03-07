@@ -44,8 +44,6 @@ class LessonManageController extends BaseController
             if (!in_array($file['type'], array('document', 'video', 'audio', 'ppt', 'flash'))) {
                 return $this->createJsonResponse(array('error' => '不支持的文件类型'));
             }
-
-            $course = $this->getCourseService()->getCourse($courseId);
             $formData = $this->createTaskByFileAndCourse($file, $course);
             $formData['mode'] = $mode;
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
