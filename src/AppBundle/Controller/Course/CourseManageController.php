@@ -411,7 +411,7 @@ class CourseManageController extends BaseController
                 )
             );
         }
-        
+
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
