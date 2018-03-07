@@ -26,8 +26,6 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', 1);
 
-        $this->dispatchSearchEvent($keywords, $type, $page);
-
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
 
         if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
@@ -41,6 +39,8 @@ class SearchController extends BaseController
                 )
             );
         }
+
+        $this->dispatchSearchEvent($keywords, $type, $page);
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
@@ -120,6 +120,8 @@ class SearchController extends BaseController
 
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
+
+        $this->dispatchSearchEvent($keywords, $type, $page);
 
         if (!$this->isTypeUseable($type)) {
             return $this->render('TwigBundle:Exception:error403.html.twig');
