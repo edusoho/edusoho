@@ -36,6 +36,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'question_marker.finish' => 'onQuestionMarkerFinish',
             'user.search' => 'onUserSearch',
             'order.paid' => 'onOrderPaid',
+            'user.daily.active' => 'onUserDailyActive',
         );
     }
 
@@ -104,6 +105,12 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'title' => $orderItem['title'],
             ));
         }
+    }
+
+    public function onUserDailyActive(Event $event)
+    {
+        $subject = $event->getSubject();
+        $this->createStatement($subject['userId'], XAPIVerbs::LOGGED_IN, $subject['userId'], 'user');
     }
 
     protected function testpaperFinish($testpaperResult)

@@ -2,10 +2,7 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-use QiQiuYun\SDK\XAPIActivityTypes;
 use QiQiuYun\SDK\XAPIObjectTypes;
-use QiQiuYun\SDK\XAPIVerbs;
 
 class SearchKeywordType extends Type
 {

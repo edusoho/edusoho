@@ -623,7 +623,7 @@ class XAPIService extends BaseService
      * @param bool $isPush
      * @return array|mixed
      */
-    public function logged($actor, $object, $uuid = null, $timestamp = null, $isPush = true)
+    public function logged($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
         if (!empty($uuid)) {
@@ -638,11 +638,11 @@ class XAPIService extends BaseService
             ),
         );
         $statement['object'] = array(
-            'id' => $object['id'],
+            'id' => $this->auth->getAccessKey(),
             'definition' => array(
-                'type' => $this->getActivityType($object['definitionType']),
+                'type' => $this->getActivityType(XAPIActivityTypes::APPLICATION),
                 'name' => array(
-                    $this->defaultLang => $object['name']
+                    $this->defaultLang => $this->options['school_name']
                 )
             )
         );
