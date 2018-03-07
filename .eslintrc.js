@@ -41,7 +41,7 @@ module.exports = {
         "no-useless-escape": 0,
         "no-console": 0,
         "no-empty": 2,
-        "no-unused-vars": 1,
+        "no-unused-vars": 0,
         "indent": [
             "error",
             2
