@@ -6084,7 +6084,6 @@ admin.app_center.type.theme: Theme
 admin.app_center.type.app: Application
 admin.app_center.buyed_app_hidden: 'Hide purchased application'
 admin.app_center.error_tips: "AccessKey or SecretKey might not valid，it will impact the system，<a href=\"%cloudSettingUrl%\">please update settings</a>\n"
-admin.app_center.unlink_tips: 'Could not connect to service to upgrade, please check the network.'
 admin.app_center.package_update_btn: Install
 admin.app_center.user_access: 'Commercial Only'
 admin.app_center.buy_btn: Purchase

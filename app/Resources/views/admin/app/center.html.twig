@@ -27,7 +27,9 @@
   {% if status|default(null) == 'error' %}
     <div class="alert alert-danger">{{ 'admin.app_center.error_tips'|trans({'%cloudSettingUrl%': path('admin_setting_cloud')})|raw }}</div>
   {% elseif  status|default(null) == 'unlink' %}
-    <div class="alert alert-danger">{{ 'admin.app_center.unlink_tips'|trans }}</div>
+    <p class="alert alert-danger">
+      {{'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}
+    </p>
   {% else %}
     <table class="table table-striped table-hover" id="app-table-container">
       <thead>

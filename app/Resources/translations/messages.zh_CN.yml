@@ -7518,7 +7518,6 @@ admin.app_center.type.app: 应用
 admin.app_center.buyed_app_hidden: 隐藏已购应用
 admin.app_center.error_tips: >
   AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="%cloudSettingUrl%">请修改设置。</a>
-admin.app_center.unlink_tips: 您的服务器无法连接到更新服务器，请检查网络连接状况。
 admin.app_center.package_update_btn: 安装
 admin.app_center.user_access: 商业专属
 admin.app_center.buy_btn: 购买
