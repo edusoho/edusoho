@@ -1,8 +1,13 @@
-.cd-status {
+.es-status {
   position: relative;
   display: inline-block;
   line-height: 1;
+  font-size: 12px;
+  padding-left: 12px;
   &:before {
+    position: absolute;
+    top: 3px;
+    left: 0;
     content: '';
     width: 6px;
     height: 6px;
@@ -15,27 +20,27 @@
     vertical-align: middle;
     line-height: 1;
   }
-  &.cd-status-danger {
+  &.es-status-danger {
     &:before {
       background: @brand-danger;
     }
   }
-  &.cd-status-info {
+  &.es-status-info {
     &:before {
       background: @brand-info;
     }
   }
-  &.cd-status-warning {
+  &.es-status-warning {
     &:before {
       background: @brand-warning;
     }
   }
-  &.cd-status-success {
+  &.es-status-success {
     &:before {
       background: @brand-success;
     }
   }
-  &.cd-status-disabled {
+  &.es-status-disabled {
     &:before {
       background: @cd-bg-dark;
     }

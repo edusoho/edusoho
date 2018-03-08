@@ -1,11 +1,11 @@
 <?php
 
 if (!file_exists(__DIR__.'/../app/data/install.lock')) {
-    header("Location: install/install.php");
+    header('Location: install/install.php');
     exit();
 }
 
-if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__.'/../app/data/upgrade.lock')) {
+if ((0 !== strpos($_SERVER['REQUEST_URI'], '/admin')) && file_exists(__DIR__.'/../app/data/upgrade.lock')) {
     $time = file_get_contents(__DIR__.'/../app/data/upgrade.lock');
     date_default_timezone_set('Asia/Shanghai');
     $currentTime = time();
@@ -59,7 +59,7 @@ function _fix_gpc_magic(&$item)
 
 function _fix_gpc_magic_files(&$item, $key)
 {
-    if ($key != 'tmp_name') {
+    if ('tmp_name' != $key) {
         if (is_array($item)) {
             array_walk($item, '_fix_gpc_magic_files');
         } else {
@@ -70,6 +70,6 @@ function _fix_gpc_magic_files(&$item, $key)
 
 function isOldApiCall()
 {
-    return (!(isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/vnd.edusoho.v2+json'))
-        && ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app_dev.php/api') === 0));
+    return (!(isset($_SERVER['HTTP_ACCEPT']) && 'application/vnd.edusoho.v2+json' == $_SERVER['HTTP_ACCEPT']))
+        && ((0 === strpos($_SERVER['REQUEST_URI'], '/api')) || (0 === strpos($_SERVER['REQUEST_URI'], '/app.php/api')));
 }

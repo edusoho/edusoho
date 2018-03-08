@@ -19,7 +19,7 @@ $btn.click((event) => {
       window.location.reload();
     }, 'json').error(function (jqxhr, textStatus, errorThrown) {
       var json = jQuery.parseJSON(jqxhr.responseText);
-      $form.find('.alert-danger').html(json.message).show();
+      $form.find('.alert-danger').html(Translator.trans(json.message)).show();
     });
   }
 })

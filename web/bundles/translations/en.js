@@ -718,4 +718,5 @@ t.add("admin.data.lab.setting.error", "\u53d1\u751f\u5f02\u5e38\u4e86\uff0c\u8bf
 t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01", "js", "en");
 t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "en");
 t.add("admin.article_setting.choose_category", "Choose column", "js", "en");
+t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "en");
 })(Translator);

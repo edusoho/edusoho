@@ -36,7 +36,7 @@ class LoginBindController extends BaseController
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
             ),
-            'times' => 1,
+            'times' => $this->isAndroidAndWechat($request) ? 0 : 1,
             'duration' => 3600,
         ));
 
@@ -49,6 +49,18 @@ class LoginBindController extends BaseController
         $url = $client->getAuthorizeUrl($callbackUrl);
 
         return $this->redirect($url);
+    }
+
+    protected function isAndroidAndWechat($request)
+    {
+        $userAgent = $this->getWebExtension()->parseUserAgent($request->headers->get('User-Agent'));
+        if (!empty($userAgent)
+            && !empty($userAgent['os']) && $userAgent['os']['name'] == 'Android'
+            && !empty($userAgent['client']) && $userAgent['client']['name'] == 'WeChat') {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getBlacklist()
@@ -81,7 +93,9 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
-            $this->authenticateUser($user);
+            if ($this->getCurrentUser()->getId() != $user['id']) {
+                $this->authenticateUser($user);
+            }
 
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));

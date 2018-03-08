@@ -21,7 +21,7 @@
     {% set security_type = 'danger' %}
     {% set security_level = 'user.settings.security.low_level'|trans %}
   {% endif %}
-  <div class="cd-security cd-security-{{ security_type }} cd-mb32">
+  <div class="es-security es-security-{{ security_type }} cd-mb32">
     <span class="security-icon">
       <i class="cd-icon cd-icon-{{ security_type }}"></i>
     </span>
@@ -32,57 +32,57 @@
     <span class="security-level">{{ security_level }}</span>
   </div>
 
-  <div class="cd-setting">
+  <div class="es-setting">
     <span class="setting-icon"><i class="cd-icon cd-icon-lock"></i></span>
     <span class="setting-title">{{'user.fields.login_password'|trans}}</span>
     <span class="setting-content">{{'user.settings.security.login_password_tips'|trans}}</span>
     <span class="setting-action">
       {% if hasLoginPassword %}
-        <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
+        <span class="es-setting-status es-setting-status-done">{{'site.setting.finished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
           {{'form.btn.modify'|trans}}
         </button>
       {% else %}
-        <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
+        <span class="es-setting-status">{{'site.setting.unfinished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
           {{'form.btn.set'|trans}}
         </button>
       {% endif %}
     </span>
   </div>
 
-  <div class="cd-setting">
+  <div class="es-setting">
     <span class="setting-icon"><i class="cd-icon cd-icon-payment"></i></span>
     <span class="setting-title">{{'user.fields.pay_password'|trans}}</span>
     <span class="setting-content">{{'user.settings.security.pay_password_tips'|trans}}</span>
     <span class="setting-action">
       {% if hasPayPassword %}
-        <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+        <span class="es-setting-status es-setting-status-done">{{'site.setting.finished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
       {% else %}
-        <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
+        <span class="es-setting-status">{{'site.setting.unfinished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
       {% endif %}
     </span>
   </div>
 
-  <div class="cd-setting">
+  <div class="es-setting">
     <span class="setting-icon"><i class="cd-icon cd-icon-safe"></i></span>
     <span class="setting-title">{{'user.settings.security.questions'|trans}}</span>
     <span class="setting-content">{{'user.settings.security.questions_tips'|trans}}</span>
     <span class="setting-action">
       {% if hasFindPayPasswordQuestion %}
-        <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.view'|trans}}</button>
+        <span class="es-setting-status es-setting-status-done">{{'site.setting.finished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.view'|trans}}</button>
       {% else %}
-        <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
+        <span class="es-setting-status">{{'site.setting.unfinished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
       {% endif %}
     </span>
   </div>
 
   {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' and (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
-    <div class="cd-setting">
+    <div class="es-setting">
       <span class="setting-icon"><i class="cd-icon cd-icon-iphone"></i></span>
       <span class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</span>
       <span class="setting-content">
@@ -94,17 +94,17 @@
       </span>
       <span class="setting-action">
         {% if hasVerifiedMobile %}
-          <span class="cd-setting-status cd-setting-status-done">{{'site.bind.finished'|trans}}</span>
-          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+          <span class="es-setting-status es-setting-status-done">{{'site.bind.finished'|trans}}</span>
+          <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
         {% else %}
-          <span class="cd-setting-status">{{'site.bind.unfinished'|trans}}</span>
-          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
+          <span class="es-setting-status">{{'site.bind.unfinished'|trans}}</span>
+          <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
         {% endif %}
       </span>
     </div>
   {% endif %}
 
-  <div class="cd-setting">
+  <div class="es-setting">
     <span class="setting-icon"><i class="cd-icon cd-icon-email"></i></span>
     <span class="setting-title">{{'user.settings.email_menu'|trans}}</span>
     <span class="setting-content">
@@ -117,16 +117,16 @@
     <span class="setting-action">
       {% if hasEmail %}
         {% if hasVerifiedEmail %}
-          <span class="cd-setting-status cd-setting-status-done">{{'site.verify.finished'|trans}}</span>
-          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+          <span class="es-setting-status es-setting-status-done">{{'site.verify.finished'|trans}}</span>
+          <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
         {% else %}
-          <span class="cd-setting-status">{{'site.verify.unfinished'|trans}}</span>
-          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+          <span class="es-setting-status">{{'site.verify.unfinished'|trans}}</span>
+          <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
           <button class="btn cd-btn cd-btn-ghost-primary" id="send-verify-email" data-url="{{ path('settings_email_verify') }}" data-loading-text="{{'form.btn.verifying'|trans}}">{{'form.btn.verify'|trans}}</button>
         {% endif %}
       {% else %}
-        <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
+        <span class="es-setting-status">{{'site.setting.unfinished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-ghost-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
       {% endif %}
     </span>
   </div>

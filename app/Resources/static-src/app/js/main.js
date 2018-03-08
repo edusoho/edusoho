@@ -1,7 +1,7 @@
 import Swiper from 'swiper';
 import Cookies from 'js-cookie';
 
-import 'common/codeages-design/js/codeages-design';
+import 'codeages-design';
 import 'common/tabs-lavalamp';
 import 'common/card';
 import 'common/bootstrap-modal-hack';
@@ -65,13 +65,9 @@ $(document).ajaxSend(function (a, b, c) {
   let $dom = $(`[data-url="${url}"]`);
   if ($dom.data('loading')) {
     let loading;
-    if ($dom.data('loading-class')) {
-      loading = cd.loading({
-        loadingClass: $dom.data('loading-class')
-      });
-    } else {
-      loading = cd.loading();
-    }
+    loading = cd.loading({
+      isFixed: $dom.data('is-fixed')
+    });
 
     let loadingBox = $($dom.data('target') || $dom);
     loadingBox.html(loading);

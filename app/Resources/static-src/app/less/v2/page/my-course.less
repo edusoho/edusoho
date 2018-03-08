@@ -60,22 +60,23 @@
     margin-top: 8px;
     font-size: 12px;
     line-height: 1;
-    color: @cd-gray;
+    color: @cd-dark-minor;
   }
 
   .my-course-item__progress {
     font-size: 12px;
-    line-height: 1;
-    color: @cd-gray;
+    color: @cd-dark-minor;
+    .my-course-item__progress__text {
+      float: left;
+      width: 20%;
+    }
     .cd-progress {
-      margin-left: 16px;
-      margin-right: 12px;
-      display: inline-block;
-      @media (max-width: @screen-xs-min) {
-        margin-left: 4px;
-        margin-right: 4px;
-        width: 58%;
-      }
+      float: left;
+      width: 80%;
+      margin-bottom: 0;
+    }
+    .progress-text {
+      width: 32px;
     }
   }
 
@@ -92,16 +93,16 @@
   }
 
   .my-course-item__dropdown {
-    li {
-      min-width: 200px;
-    }
-    &.cd-dropdown-menu-right {
+    &.dropdown-menu-right {
       @media (max-width: @screen-xs-max) {
         top: auto;
         left: 0;
         bottom: 100%;
         margin-bottom: 4px;
       }
+    }
+    li {
+      min-width: 200px;
     }
   }
 }
