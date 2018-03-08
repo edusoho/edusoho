@@ -4,7 +4,8 @@
 {% endblock %}
 
 {% block btn %}
-  <div class="cd-btn cd-btn-ghost-primary">{{ 'course.manage_btn'|trans }}</div>
+  {{ dump(filter|default('normal')) }}
+  <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.manage_btn'|trans }}</a>
 {% endblock %}
 
 {% block close %}

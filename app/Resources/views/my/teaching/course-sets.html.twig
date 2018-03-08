@@ -16,23 +16,24 @@
         <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
       </div>
       <div class="cd-select teaching-type-select" id="select-single">
-        <input type="hidden" value="option1" />
+        <input type="hidden" value="normal" />
         <div class="select-value">{{ 'my.teaching.course_set.normal'|trans }}</div>
         <ul class="select-options">
-          <li class="checked" data-value="option1">{{ 'my.teaching.course_set.normal'|trans }}</li>
-          <li data-value="option2">{{ 'my.teaching.course_set.live'|trans }}</li>
-          <li data-value="option3">{{ 'my.teaching.course_set.classroom'|trans({'%classroom%': setting("classroom.name")|default("classroom"|trans)}) }}</li>
-          <li data-value="option4">{{ 'my.teaching.open_course.normal'|trans }}</li>
-          <li data-value="option5">{{ 'my.teaching.open_course.live'|trans }}</li>
+          <li class="checked" data-value="normal">{{ 'my.teaching.course_set.normal'|trans }}</li>
+          <li data-value="live" data-url="{{path('my_teaching_course_sets', {filter:'live'}) }}"><a href="{{path('my_teaching_course_sets', {filter:'live'}) }}">{{ 'my.teaching.course_set.live'|trans }}</a></li>
+          <li data-value="classroom">{{ 'my.teaching.course_set.classroom'|trans({'%classroom%': setting("classroom.name")|default("classroom"|trans)}) }}</li>
+          <li data-value="normalOpen">{{ 'my.teaching.open_course.normal'|trans }}</li>
+          <li data-value="liveOpen">{{ 'my.teaching.open_course.live'|trans }}</li>
         </ul>
       </div>
     </div>
     {# {% include 'my/teaching/course-tab.html.twig' %} #}
     {% for courseSet in courseSets %}
+      <div class="js-course-set-item js-course-set-type-{{ filter|default('normal') }}">
       {% include 'my/teaching/course-set-list.html.twig' %}
     {% else %}
       <div class="empty">
-        <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
+        <a class="link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
           {% if filter|default('normal') == 'live' %}
             {{ 'my.teaching.course_set.live_empty_hint'|trans }}
           {% else %}
