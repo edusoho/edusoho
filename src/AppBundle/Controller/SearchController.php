@@ -27,8 +27,9 @@ class SearchController extends BaseController
         $page = $request->query->get('page', 1);
 
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_restore_time = $this->getSettingService()->get('_cloud_search_restore_time', 0);
 
-        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
+        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok' && $cloud_search_restore_time < time()) {
             return $this->redirect(
                 $this->generateUrl(
                     'cloud_search',
