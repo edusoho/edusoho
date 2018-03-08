@@ -27,7 +27,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $api = $this->getCloudApi('leaf');
 
-        if ($type === 'course') {
+        if ('course' === $type) {
             $conditions['type'] = 'course,openCourse';
         }
 
@@ -116,7 +116,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $siteSetting = $this->getSettingService()->get('site');
         $siteUrl = $siteSetting['url'];
-        if (strpos($siteUrl, 'http://') !== 0) {
+        if (0 !== strpos($siteUrl, 'http://')) {
             $siteUrl = 'http://'.$siteUrl;
         }
 

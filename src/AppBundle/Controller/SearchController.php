@@ -29,7 +29,7 @@ class SearchController extends BaseController
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
         $cloud_search_restore_time = $this->getSettingService()->get('_cloud_search_restore_time', 0);
 
-        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok' && $cloud_search_restore_time < time()) {
+        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && 'ok' == $cloud_search_setting['status'] && $cloud_search_restore_time < time()) {
             return $this->redirect(
                 $this->generateUrl(
                     'cloud_search',
@@ -78,11 +78,11 @@ class SearchController extends BaseController
             'parentId' => 0,
         );
 
-        if ($filter == 'vip') {
+        if ('vip' == $filter) {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } elseif ($filter == 'live') {
+        } elseif ('live' == $filter) {
             $conditions['type'] = 'live';
-        } elseif ($filter == 'free') {
+        } elseif ('free' == $filter) {
             $conditions['minCoursePrice'] = '0.00';
         }
 
@@ -144,12 +144,12 @@ class SearchController extends BaseController
             'page' => $page,
         );
 
-        if ($type == 'teacher') {
+        if ('teacher' == $type) {
             $pageSize = 9;
             $conditions['type'] = 'user';
             $conditions['num'] = $pageSize;
             $conditions['filters'] = json_encode(array('role' => 'teacher'));
-        } elseif ($type == 'thread') {
+        } elseif ('thread' == $type) {
             $conditions['filters'] = json_encode(array('targetType' => 'group'));
         }
 
@@ -190,7 +190,7 @@ class SearchController extends BaseController
             return false;
         }
 
-        if ($cloudSearchType[$type] == 1) {
+        if (1 == $cloudSearchType[$type]) {
             return true;
         }
 
@@ -222,7 +222,7 @@ class SearchController extends BaseController
         $dispatcher->dispatch('user.search', new Event(array(
             'userId' => $this->getCurrentUser()->getId(),
             'q' => $keyword,
-            'type' => $type
+            'type' => $type,
         )));
     }
 

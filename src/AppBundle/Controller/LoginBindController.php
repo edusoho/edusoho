@@ -59,7 +59,7 @@ class LoginBindController extends BaseController
         $deviceDetector->parse();
         $os = $deviceDetector->getOs();
         $client = $deviceDetector->getClient();
-        if ($os['name'] == 'Android' && $client['name'] == 'WeChat') {
+        if ('Android' == $os['name'] && 'WeChat' == $client['name']) {
             return true;
         }
 
