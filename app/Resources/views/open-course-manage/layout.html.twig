@@ -1,8 +1,18 @@
-{% extends 'layout.html.twig' %}
+{% extends 'courseset-manage/layout.html.twig' %}
 
 {% block title %}{{'my.teaching.open_course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 
-{% block content %}
+ {% block breadcrumb %}{% endblock %}
+
+{% block course_header %}
+  {% include 'open-course-manage/header.html.twig' %}
+{% endblock %}
+
+{% block navbar %}
+  {% include 'open-course-manage/navbar.html.twig' %}
+{% endblock %}
+
+{# {% block content %}
   {% include 'open-course-manage/header.html.twig' %}
 
   <div class="row">
@@ -72,4 +82,4 @@
       {% block main %}{% endblock %}
     </div>
   </div>
-{% endblock %}
+{% endblock %} #}

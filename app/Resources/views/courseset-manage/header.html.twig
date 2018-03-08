@@ -47,7 +47,7 @@
     {% endif %}
 
     {% if courseSet.status != 'published' %}
-      <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
+      <button class="cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
 
       <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
         <button class="cd-btn cd-btn-primary course-manage-header-more">
