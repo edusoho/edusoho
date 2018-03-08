@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d71700b94a1ff73aceb4f7d827d43844",
+    "content-hash": "32312f58467bc2c13677d5f9d8a49a42",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.10",
+            "version": "v0.9.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57"
+                "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/6d8a27d1a77da92aab9942bc9739bed051fe7b57",
-                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1ace8d1a1d142615aecc1c52f0468fafd33089ad.zip",
+                "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad",
                 "shasum": ""
             },
             "require": {
@@ -324,6 +324,9 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^4.8|^5.7|^6.0"
             },
+            "suggest": {
+                "ramsey/uuid": "Dao UUID primary key feature need this package."
+            },
             "bin": [
                 "bin/biz"
             ],
@@ -341,7 +344,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-01-30T03:05:11+00:00"
+            "time": "2018-03-06T02:42:56+00:00"
         },
         {
             "name": "codeages/biz-order-pay",

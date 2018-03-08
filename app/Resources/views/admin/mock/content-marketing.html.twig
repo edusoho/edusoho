@@ -1,0 +1,42 @@
+<div class="marketing tagContent" style="display:none">
+  <div>
+    <input type="button" value="发送" class="sendMarketingBtn" data-url="{{ path('admin_mocked_marketing_post_data') }}"></input>
+    <input type="text" class="marketingUrl" style="width: 450px"></input>
+  </div>
+  <textarea type="text" class="sendedMarketingData" style="width: 500px; height: 500px;">
+    {
+      "activity_id":"152",
+      "activity_name":"砍价活动",
+      "client_ip":"192.168.9.250",
+      "deduct":{
+        "id":"727",
+        "order_id":"729",
+        "detail":"砍价",
+        "item_id":"729",
+        "deduct_type":"cut",
+        "deduct_id":"52",
+        "deduct_amount":"99",
+        "status":"paid",
+        "user_id":"1430",
+        "seller_id":"2",
+        "snapshot":[],
+        "created_time":"1517989048",
+        "updated_time":"1517989055"
+      },
+      "mobile":"13675812222",
+      "nickname":"李二",
+      "order_id":"729",
+      "order_pay_amount":"1",
+      "order_pay_time":"{{ date().timestamp }}",
+      "order_price_amount":"100",
+      "target_id":"1237",
+      "target_type":"course",
+      "user_id":"1430"
+    }
+  </textarea>
+  <div style="display: inline">
+    <div style="display: inline; margin-top: -20px; position: absolute; padding-left: 28px;">发送结果</div>
+    <span style="visibility: hidden">123</span>
+    <textarea type="text" class="sendMarketingResult" readonly style="width: 500px; height: 500px;"></textarea>
+  </div>
+</div>
