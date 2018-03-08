@@ -5374,8 +5374,8 @@ admin.setting.share.as_group_name: 为小组名称
 admin.setting.share.as_thread_name: 为话题名称
 admin.setting.share.classroom_share_content: 班级分享内容
 admin.setting.share.as_classroom_name: 为班级名称
-admin.setting.security.IFrame_white_domain: IFrame白名单域名
-admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的iframe网址。一行一个域名，请不要添加http://前缀。
+admin.setting.security.IFrame_white_domain: 白名单域名
+admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe、图片等涉及外链的代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的外链网址。一行一个域名，请不要添加http://前缀。
 # 运营模块
 # 编辑区管理
 admin.block_manage.all: 所有
