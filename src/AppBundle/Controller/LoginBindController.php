@@ -54,12 +54,10 @@ class LoginBindController extends BaseController
 
     protected function isAndroidAndWechat($request)
     {
-        $userAgent = $request->headers->get('User-Agent');
-        $deviceDetector = new DeviceDetector($userAgent);
-        $deviceDetector->parse();
-        $os = $deviceDetector->getOs();
-        $client = $deviceDetector->getClient();
-        if ($os['name'] == 'Android' && $client['name'] == 'WeChat') {
+        $userAgent = $this->getWebExtension()->parseUserAgent($request->headers->get('User-Agent'));
+        if (!empty($userAgent)
+            && !empty($userAgent['os']) && $userAgent['os']['name'] == 'Android'
+            && !empty($userAgent['client']) && $userAgent['client']['name'] == 'WeChat') {
             return true;
         }
 
