@@ -22,6 +22,8 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_user.*/    database_user: tester/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_password.*/    database_password: tester/g' app/config/parameters_test.yml"
   - mkdir web/files
   - touch app/config/routing_plugins.yml
 
