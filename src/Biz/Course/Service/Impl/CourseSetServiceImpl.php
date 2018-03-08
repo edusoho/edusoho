@@ -1079,6 +1079,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 if ('' === $value || null === $value) {
                     return false;
                 }
+
                 return true;
             }
         );
