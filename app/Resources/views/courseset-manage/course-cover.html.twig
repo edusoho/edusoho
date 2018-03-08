@@ -1,0 +1,26 @@
+<div class="form-group">
+  <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
+  <div class="col-md-8 controls">
+    <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-2 control-label">
+  </div>
+  <div class="col-md-8 controls">
+    {{ 'course.cover_image.upload_tips'|trans|raw }}
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-2 control-label"></div>
+  <div class="col-md-8 controls">
+    <button id="upload-picture-btn"
+    class="btn btn-primary upload-picture-btn"
+    data-upload-token="{{ upload_token('tmp', 'image') }}"
+    data-goto-url="{{ path('course_set_manage_cover_crop', {id:courseSet.id}) }}"
+    data-loading-text="{{'form.btn.upload.submiting'|trans}}"
+    >{{ 'course.cover_image.upload_btn'|trans }}</button>
+  </div>
+</div>

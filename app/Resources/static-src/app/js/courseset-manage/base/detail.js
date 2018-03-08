@@ -3,7 +3,7 @@ import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 
-class detail {
+export default class detail {
   constructor() {
     this.init();
   }
@@ -12,7 +12,6 @@ class detail {
     this.initCkeditor();
     this.renderMultiGroupComponent('course-goals', 'goals');
     this.renderMultiGroupComponent('intended-students', 'audiences');
-    this.submitForm();
   }
 
   initCkeditor() {
@@ -20,7 +19,7 @@ class detail {
       allowedContent: true,
       toolbar: 'Detail',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+      filebrowserImageUploadUrl: $('input[name="summary"]').data('imageUploadUrl')
     });
   }
 
@@ -36,14 +35,6 @@ class detail {
     );
   }
 
-  submitForm() {
-    $('#courseset-submit').click((event) => {
-      this.publishAddMessage();
-      $(event.currentTarget).button('loading');
-      $('#courseset-detail-form').submit();
-    });
-  }
-
   publishAddMessage() {
     postal.publish({
       channel: "courseInfoMultiInput",
@@ -51,5 +42,3 @@ class detail {
     });
   }
 }
-
-new detail();

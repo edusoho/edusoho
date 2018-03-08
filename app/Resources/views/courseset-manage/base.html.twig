@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.base'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
 {% set side_nav = 'base' %}
 
 {% block main %}
@@ -16,14 +16,12 @@
           <label class="control-label-required" for="title">{{ 'course.base.title'|trans }}</label>
           </div>
           <div class="col-md-8">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-            <input type="hidden" name="id" value="{{courseSet.id}}">
-            <input type="hidden" id="courseSetType" name="type" value="{{courseSet.type}}">
             <input type="text" id="title" name="title" required="required" class="form-control"
                    value="{{ courseSet.title|default('') }}">
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
+
         <div class="form-group">
           <label class="col-md-2 control-label" for="subtitle">{{ 'course.base.sub_title'|trans }}</label>
           <div class="col-md-8">
@@ -31,6 +29,7 @@
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
+
         <div class="form-group">
           <label class="col-md-2 control-label" for="tags">{{ 'course.base.tag'|trans }}</label>
           <div class="col-md-8 controls">
@@ -40,6 +39,7 @@
             <div class="help-block">{{ 'course.base.tag_tips'|trans }}</div>
           </div>
         </div>
+
         <div class="form-group">
           <label class="col-md-2 control-label" for="categoryId">{{ 'course.base.category'|trans }}</label>
           <div class="col-md-8 controls">
@@ -57,11 +57,39 @@
             {{ radios('serializeMode', {'none':'course.base.serialize_mode.none'|trans, 'serialized':'course.base.serialize_mode.serialized'|trans, 'finished':'course.base.serialize_mode.finished'|trans}, courseSet.serializeMode|default('none') ) }}
           </div>
         </div>
+        
+        <!-- 封面图片 -->
+        {% include 'courseset-manage/course-cover.html.twig' %}
+
+        <div class="empty">以下设置可以在教学计划中具体设置，也可以在此处统一设置。在此处统一设置以应用于所有教学计划。</div>
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>{{'course.detail.summary'|trans}}</label></div>
+          <div class="col-md-8 controls">
+            <textarea name="summary" rows="10" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
+          </div>
+        </div>
+
+        <div class="form-group dynamic-collection" id="courseset-goals-form-group">
+          <div class="col-md-2 control-label"><label>{{'course.detail.target'|trans}}</label></div>
+          <div class="col-md-8 controls">
+            <div id="course-goals" data-field-name="goals" data-init-value="{{courseSet.goals|default([])|json_encode_utf8()}}"></div>
+          </div>
+        </div>
+
+        <div class="form-group" id="courseset-audiences-form-group">
+          <div class="col-md-2 control-label"><label>{{'course.detail.intended-students'|trans}}</label></div>
+          <div class="col-md-8 controls">
+            <div id="intended-students" data-field-name="audiences" data-init-value="{{courseSet.audiences|default([])|json_encode_utf8()}}"></div>
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-8">
             <button id="courseset-base-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
           </div>
         </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
     </div>
   </div>
