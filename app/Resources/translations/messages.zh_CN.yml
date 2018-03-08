@@ -6025,7 +6025,7 @@ admin.edu_cloud.register: 没有帐号? 去注册
 admin.edu_cloud.project: 项目
 admin.edu_cloud.content: 内容
 admin.edu_cloud.operation: 操作
-admin.edu_cloud.connect_failed_tips: 网络问题，无法连接%Edusoho%开放云平台
+admin.edu_cloud.connect_failed_tips: 网络问题，无法连接到 %EduSoho% 开放云平台
 admin.edu_cloud.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.side_bar.introduction: 概览
 admin.edu_cloud.side_bar.setup: 设置
@@ -6533,7 +6533,6 @@ admin.edu_cloud.edu_search.rage_introduction_content: >
 admin.edu_cloud.edu_search.base_setting: 基本设置
 admin.edu_cloud.edu_search.power_by: >
   云搜索服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a>
-admin.edu_cloud.edu_search.connect_failed_tips: 网络问题，无法连接%edusoho%开放云平台
 admin.edu_cloud.edu_search.rebuild_index: 重建索引
 admin.edu_cloud.edu_search.rebuild_index.rebuild_btn: 重建索引
 admin.edu_cloud.edu_search.rebuild_index.sure_tips: 确定重建索引？
@@ -7446,7 +7445,6 @@ admin.cloud_setting.trial_hint: 当前版本为试用版,不能进行更多操�
 admin.cloud_setting.package_info: 套餐信息
 admin.cloud_setting.package_name: 套餐名称
 admin.cloud_setting.service_deadline: 服务期限
-admin.cloud_setting.network_error_hint: 网络问题，无法连接到EduSoho开放云平台，暂时无法获取信息
 admin.cloud_setting.buy_package_hint: >
   尚未购买套餐，点击<a href="%servicePriceUrl%" target="_blank">这里</a>了解详情
 admin.cloud_setting.access_key: 授权码
