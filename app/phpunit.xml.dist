@@ -13,12 +13,48 @@
     syntaxCheck                 = "false"
     bootstrap                   = "../bootstrap/bootstrap_test.php" >
 
+    <!-- 如何执行见 .travis.yml -->
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="UnitA2B">
+            <directory>../tests/Unit/A*</directory>
+            <directory>../tests/Unit/B*</directory>
+            <file>./tests/Unit/AbstractCopyTest.php</file>
+        </testsuite>
+        <testsuite name="UnitC2D">
+            <directory>../tests/Unit/C*</directory>
+            <directory>../tests/Unit/D*</directory>
+        </testsuite>
+        <testsuite name="UnitE2P">
+            <directory>../tests/Unit/E*</directory>
+            <directory>../tests/Unit/F*</directory>
+            <directory>../tests/Unit/G*</directory>
+            <directory>../tests/Unit/H*</directory>
+            <directory>../tests/Unit/I*</directory>
+            <directory>../tests/Unit/J*</directory>
+            <directory>../tests/Unit/K*</directory>
+            <directory>../tests/Unit/L*</directory>
+            <directory>../tests/Unit/M*</directory>
+            <directory>../tests/Unit/N*</directory>
+            <directory>../tests/Unit/O*</directory>
+            <directory>../tests/Unit/P*</directory>
+        </testsuite>
+        <testsuite name="UnitQ2T">
+            <directory>../tests/Unit/Q*</directory>
+            <directory>../tests/Unit/R*</directory>
+            <directory>../tests/Unit/S*</directory>
+            <directory>../tests/Unit/T*</directory>
+        </testsuite>
+        <testsuite name="UnitU2Z">
+            <directory>../tests/Unit/U*</directory>
+            <directory>../tests/Unit/V*</directory>
+            <directory>../tests/Unit/W*</directory>
+            <directory>../tests/Unit/X*</directory>
+            <directory>../tests/Unit/Y*</directory>
+            <directory>../tests/Unit/Z*</directory>
+        </testsuite>
+        <testsuite name="CustomBundle">
             <directory>../src/CustomBundle/Tests</directory>
             <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>
-            <!-- <directory>../src/AppBundle/Extensions/DataTag/Tests</directory> -->
-            <directory>../tests/Unit</directory>
         </testsuite>
     </testsuites>
 
