@@ -1,7 +1,10 @@
-<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}" style="word-break: break-all;" >
+<li class="open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}">
   <div class="item-line"></div>
   <div class="item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
+    {% if lesson.status == 'unpublished' %}
+      <span class="unpublish-warning color-warning">({{'my.teaching.open_course.lesson.status.unpublished'|trans}})</span>
+    {% endif %}
 
     {% if lesson.type == 'video' %}
       {% if mediaStatus == 'waiting' %}
@@ -56,20 +59,43 @@
       {% endif %}
     {% endif  %}
 
-    {% if lesson.status == 'unpublished' %}
-      <span class="unpublish-warning color-warning">({{'my.teaching.open_course.lesson.status.unpublished'|trans}})</span>
-    {% endif %}
-
     {% if lesson.materialNum > 0 %}
       <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'my.teaching.open_course.lesson.material'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray"></i></span>
     {% endif %}
   </div>
-  
+
   <div class="item-actions">
-    <a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" >
-      <span class="es-icon es-icon-edit prs"></span>{{'my.teaching.open_course.lesson.edit_btn'|trans}}
+    <a class="cd-mr24 cd-link-assist" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" >
+      <span class="es-icon es-icon-edit"></span>
     </a>
-    
+
+    <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+      <a class="cd-link-assist" href="javascript:;">
+        <i class="es-icon es-icon-morehoriz"></i>
+      </a>
+      <ul class="dropdown-menu open-course-lesson-item__dropdown">
+        {% if course.type == 'open' %}
+          <li>
+            <a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('open_course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}">{{'my.teaching.open_course.lesson.add_material_btn'|trans}}</a>
+          </li>
+        {% endif %}
+
+        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+          <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.publish'|trans}}</a>
+        </li>
+
+        <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
+          <a class="unpublish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.cancel_publish'|trans}}</a>
+        </li>
+
+        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+          <a class="delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.delete'|trans}}</a>
+        </li>
+
+      </ul>
+    </div>
+
+{# 
     <span class="dropdown">
       <a class="dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown" style="margin-right:3px" aria-haspopup="true" aria-expanded="false"></i>{{'my.teaching.open_course.lesson.more_btn'|trans}}</a>
 
@@ -82,26 +108,26 @@
           </li>
           <li class="divider"></li>
         {% endif %}
-        
+
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-ok-circle prs"></span>{{'form.btn.publish'|trans}}
           </a>
         </li>
-        
+
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
-          <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
+          <a class="unpublish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-remove-circle prs"></span>{{'form.btn.cancel_publish'|trans}}
           </a>
         </li>
 
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
+          <a class="delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-trash prs"></span>{{'form.btn.delete'|trans}}
           </a>
         </li>
       </ul>
-    </span>
+    </span> #}
   </div>
 
 </li>
