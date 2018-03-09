@@ -90,7 +90,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onUserSearch(Event $event)
     {
         $subject = $event->getSubject();
-        $this->createStatement($subject['userId'], XAPIVerbs::SEARCHED, 0, 'keyword', array('q' => $subject['q'], 'type' => $subject['type']));
+        $this->createStatement($subject['userId'], XAPIVerbs::SEARCHED, 0, 'keyword', $subject);
     }
 
     public function onOrderPaid(Event $event)
