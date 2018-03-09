@@ -633,7 +633,7 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/adl/verbs/logged-in',
             'display' => array(
-                'zh-CN' => '搜索了',
+                'zh-CN' => '登录了',
                 'en-US' => XAPIVerbs::LOGGED_IN,
             ),
         );
