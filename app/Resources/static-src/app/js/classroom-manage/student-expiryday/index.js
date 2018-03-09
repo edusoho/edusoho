@@ -13,7 +13,7 @@ let validator = $form.validate({
       required: '请输入有效期'
     }
   }
-})
+});
 
 $('#student-save').click((event) => {
   if (validator.form()) {
@@ -27,13 +27,13 @@ $('#student-save').click((event) => {
       window.location.reload();
     });
   }
-})
+});
 
-$("#student_deadline").datetimepicker({
+$('#student_deadline').datetimepicker({
   language: document.documentElement.lang,
   autoclose: true,
   format: 'yyyy-mm-dd',
   minView: 'month'
 });
 
-$("#student_deadline").datetimepicker('setStartDate', new Date);
+$('#student_deadline').datetimepicker('setStartDate', new Date);

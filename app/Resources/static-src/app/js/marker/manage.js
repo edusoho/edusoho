@@ -80,7 +80,7 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
           }
         } else {
           //剩余排序
-          console.log('drag', drag)
+          console.log('drag', drag);
           drag.sortList($marker.find('[data-role="scale-blue-list"]'));
         }
       });
@@ -99,10 +99,10 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
 
       $.post(url, {questionIds: param});
     }
-  })
+  });
 
   return drag;
-}
+};
 
 class Manage {
   constructor(options) {
@@ -122,13 +122,13 @@ class Manage {
     $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, (response) => {
       $('#subject-lesson-list').html(response);
       $('[data-toggle="popover"]').popover();
-      if (!Cookies.get("MARK-MANGE-GUIDE")) {
+      if (!Cookies.get('MARK-MANGE-GUIDE')) {
         this.initIntro();
       } else {
         this.initDrag();
         $('#step-1').removeClass('introhelp-icon-help');
       }
-      Cookies.set("MARK-MANGE-GUIDE", 'true', {expires: 360, path: "/"});
+      Cookies.set('MARK-MANGE-GUIDE', 'true', {expires: 360, path: '/'});
       this.$form.data('pageSize', count);
     });
   }
@@ -138,8 +138,8 @@ class Manage {
     $('.show-introhelp').addClass('show');
 
     var $img = $('.js-introhelp-img img'),
-        img = document.createElement('img'),
-        imgheight = $(window).height() - $img.offset().top - 80;
+      img = document.createElement('img'),
+      imgheight = $(window).height() - $img.offset().top - 80;
         
     img.src = $img.attr('src');
     let left = imgheight * img.width / img.height / 2 + 50;
@@ -158,7 +158,7 @@ class Manage {
 
   onFormAutoSubmit(event) {
     if (event.keyCode == 13) {
-      event.preventDefault()
+      event.preventDefault();
       this.onFormSubmit(event);
     }
   }
@@ -182,15 +182,15 @@ class Manage {
     $.get($(e.currentTarget).data('url'), function (response) {
       $('.modal').modal('show');
       $('.modal').html(response);
-    })
+    });
   }
 
   onMoreQuestion(e) {
     let target = $('select[name=target]');
     let $this = $(e.currentTarget).hide().parent().addClass('loading'),
-        $list = $('#subject-lesson-list').css('max-height', $('#subject-lesson-list').height()),
-        getpage = parseInt($this.data('current-page')) + 1,
-        lastpage = $this.data('last-page');
+      $list = $('#subject-lesson-list').css('max-height', $('#subject-lesson-list').height()),
+      getpage = parseInt($this.data('current-page')) + 1,
+      lastpage = $this.data('last-page');
 
     $.post($this.data('url') + getpage, {'target': target.val(), 'pageSize': this.$form.data('pageSize')}, function (response) {
       $this.remove();
@@ -215,7 +215,7 @@ class Manage {
     let mediaLength = 30;
 
     $.ajax({
-      type: "get",
+      type: 'get',
       url: $('.js-pane-question-content').data('marker-metas-url'),
       cache: false,
       async: false,
@@ -224,7 +224,7 @@ class Manage {
         mediaLength = data.videoTime;
       }
     });
-    drag(initMarkerArry, mediaLength, messenger)
+    drag(initMarkerArry, mediaLength, messenger);
   }
 }
 

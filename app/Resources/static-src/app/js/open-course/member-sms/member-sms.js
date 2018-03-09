@@ -45,7 +45,7 @@ class MembarSMS {
       captchaValidated: true,
       captchaNum: 'captcha_code',
       captcha: true,
-    })
+    });
   }
 
   onFormSubmit(event) {
@@ -76,12 +76,12 @@ class MembarSMS {
       submitSuccess(data) {
         $form.closest('.modal').modal('hide');
        
-        $("#alert-btn").addClass('hidden');
-        $("#alerted-btn").removeClass('hidden');
+        $('#alert-btn').addClass('hidden');
+        $('#alerted-btn').removeClass('hidden');
         $('.js-member-num span').text(parseInt(data.number));
       },
-      submitError() {
-        notify('error',  Translator.trans(site.form.submit_error));
+      submitError(data) {
+        notify('danger',  Translator.trans(data.responseJSON.message));
       }
     });
 
@@ -95,18 +95,18 @@ class MembarSMS {
       required: true,
       phone: true,
       es_remote: true
-    })
+    });
     $('[name="captcha_code"]').rules('add', {
       required: true,
       alphanumeric: true,
       es_remote: true
-    })
+    });
     $('[name="sms_code_modal"]').rules('add', {
       required: true,
       maxlength: 6,
       minlength: 6,
       es_remote: true
-    })
+    });
   }
 }
 

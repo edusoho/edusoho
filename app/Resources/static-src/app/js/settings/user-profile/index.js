@@ -10,10 +10,10 @@ let editor = CKEDITOR.replace('profile_about', {
 let uploader = new EsWebUploader({
   element: '#upload-picture-btn',
   onUploadSuccess: function(file, response) {
-    let url = $("#upload-picture-btn").data("gotoUrl");
+    let url = $('#upload-picture-btn').data('gotoUrl');
     $.get(url, function(html) {
-      $("#modal").modal('show').html(html);
-    })
+      $('#modal').modal('show').html(html);
+    });
   }
 });
 
@@ -34,7 +34,7 @@ let validator = $('#user-profile-form').validate({
       window.location.reload();
     }, 1000);
   }
-})
+});
 
 $('#profile-save-btn').on('click', (event) => {
   const $this = $(event.currentTarget);
@@ -43,5 +43,5 @@ $('#profile-save-btn').on('click', (event) => {
     $this.button('loading');
     $('#user-profile-form').submit();
   }
-})
+});
 

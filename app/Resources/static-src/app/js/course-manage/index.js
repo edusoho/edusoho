@@ -30,7 +30,7 @@ TaskListHeaderFixed();
 $('#sortable-list').on('click', '.js-chapter-toggle-show', (event) => {
   let $this = $(event.currentTarget);
   let $chapter = $this.closest('.js-task-manage-chapter');
-  $chapter.nextUntil('.js-task-manage-chapter').animate({ height: 'toggle', opacity: 'toggle' }, "normal");
+  $chapter.nextUntil('.js-task-manage-chapter').animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
   toggleIcon($chapter, 'es-icon-keyboardarrowdown', 'es-icon-keyboardarrowup');
 });
 

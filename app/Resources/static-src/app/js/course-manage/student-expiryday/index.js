@@ -9,7 +9,7 @@ let validator = $form.validate({
       positive_integer: true,
     }
   }
-})
+});
 
 $('.js-save-expiryday-set-form').click(() => {
   if (validator.form()) {
@@ -23,4 +23,4 @@ $('.js-save-expiryday-set-form').click(() => {
       notify('danger',Translator.trans('course_manage.student_expiryday_extend_failed_hint', { name: user_name }));
     });
   }
-})
+});

@@ -6,7 +6,7 @@ $('.material-delete-form-btn').click(function() {
   let ids = [];
   $('[data-role=batch-item]:checked').each(function() {
     ids.push(this.value);
-  })
+  });
 
   let isDeleteFile = $form.find('input[name="isDeleteFile"]:checked').val();
   $.post($form.attr('action'), {
@@ -15,4 +15,4 @@ $('.material-delete-form-btn').click(function() {
   }, function() {
     window.location.reload();
   });
-})
+});

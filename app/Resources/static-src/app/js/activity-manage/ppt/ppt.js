@@ -4,7 +4,7 @@ import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/choose
 export default class PPT {
   constructor() {
     this.$mediaId = $('[name="mediaId"]');
-    this.validator3 = null
+    this.validator3 = null;
     this.init();
   }
   init() {
@@ -15,7 +15,7 @@ export default class PPT {
   }
 
   initStep2Form() {
-    var $step2_form = $("#step2-form");
+    var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
     validator = $step2_form.validate({
       rules: {
@@ -36,7 +36,7 @@ export default class PPT {
   }
 
   initStep3Form() {
-    var $step3_form = $("#step3-form");
+    var $step3_form = $('#step3-form');
     this.validator3 = $step3_form.validate({
       rules: {
         finishDetail: {
@@ -63,7 +63,7 @@ export default class PPT {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
-      $("#step2-form").valid();
+      $('#step2-form').valid();
       $('[name="media"]').val(JSON.stringify(file));
     });
   }
@@ -76,15 +76,15 @@ export default class PPT {
 
     $select.on('change', event => {
       let conditionsType = $(event.currentTarget).children('option:selected').val();
-      let $conditionsDetail = $("#condition-group");
+      let $conditionsDetail = $('#condition-group');
       if (conditionsType !== 'time') {
         $conditionsDetail.addClass('hidden');
         return;
       }else {
-         $conditionsDetail.removeClass('hidden');
+        $conditionsDetail.removeClass('hidden');
       }
       if(!this.validator3) {
-         this.initStep3Form();
+        this.initStep3Form();
       }
     });
   }

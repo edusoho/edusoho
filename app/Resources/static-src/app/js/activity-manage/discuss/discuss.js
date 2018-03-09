@@ -1,4 +1,4 @@
-import { initEditor } from '../editor'
+import { initEditor } from '../editor';
 
 export default class Discuss {
   constructor(props) {
@@ -10,7 +10,7 @@ export default class Discuss {
   }
 
   _inItStep2form() {
-    var $step2_form = $("#step2-form");
+    var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
     validator = $step2_form.validate({
       rules: {
