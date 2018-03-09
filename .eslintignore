@@ -7,3 +7,4 @@ app/Resources/static-src/app/common/component/multi-input/index.js
 app/Resources/static-src/app/common/component/persona-multi-input/index.js
 node_modules
 plugins/
+web/themes
