@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d71700b94a1ff73aceb4f7d827d43844",
+    "content-hash": "319a76c1ca56d4672d784b7abcc18b83",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.10",
+            "version": "v0.9.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57"
+                "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/6d8a27d1a77da92aab9942bc9739bed051fe7b57",
-                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1ace8d1a1d142615aecc1c52f0468fafd33089ad.zip",
+                "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad",
                 "shasum": ""
             },
             "require": {
@@ -324,6 +324,9 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^4.8|^5.7|^6.0"
             },
+            "suggest": {
+                "ramsey/uuid": "Dao UUID primary key feature need this package."
+            },
             "bin": [
                 "bin/biz"
             ],
@@ -341,7 +344,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-01-30T03:05:11+00:00"
+            "time": "2018-03-06T02:42:56+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -465,16 +468,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.2.3",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8"
+                "reference": "5b4bfb3d68fc0f24994515efab7cf55e953410cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7be9669159fc6de4279aeb1ae754f6b52352f1d8.zip",
-                "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8",
+                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/5b4bfb3d68fc0f24994515efab7cf55e953410cc.zip",
+                "reference": "5b4bfb3d68fc0f24994515efab7cf55e953410cc",
                 "shasum": ""
             },
             "require": {
@@ -504,7 +507,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-02-06T08:30:40+00:00"
+            "time": "2018-03-08T03:02:11+00:00"
         },
         {
             "name": "codeages/rate-limiter",

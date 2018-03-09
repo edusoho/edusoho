@@ -1,7 +1,6 @@
 {% set first = 1 %}
 {% for dataId,data in  block.data[code]|default(null) %}
   <div role="tabpanel" class="tab-pane {% if first == 1 %}active{% endif %}" id="poster-{{ dataId }}">
-    {% if block.code != 'cloud_search_banner' %}
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'admin.block_manage.visual_edit.poster_open_btn'|trans}}</label>
       <label class="checkbox-inline">
@@ -12,9 +11,6 @@
       </label>
       <input class="status-value" type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status }}">
     </div>
-    {% else %}
-    <input type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status|default() }}">
-    {% endif %}
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'admin.block_manage.visual_edit.poster_layout_mode'|trans}}</label>
       <label class="checkbox-inline">
@@ -48,8 +44,6 @@
             {% if block.code == 'live_top_banner' %}
               {{'admin.block_manage.visual_edit.poster_live_top_banner_tips'|trans|raw}}
               <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
-            {% elseif block.code == 'cloud_search_banner' %}
-              {{'admin.block_manage.visual_edit.poster_cloud_search_banner_tips'|trans|raw}}
             {% else %}
               {{'admin.block_manage.visual_edit.poster_other_tips'|trans|raw}}
               <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
@@ -68,7 +62,6 @@
           <input type="text" class="form-control colorpicker-input width-input-small" name="data[{{ code }}][{{ dataId }}][background]" id="data[{{ code }}][{{ dataId }}][background]" placeholder="{{ data.background }}" value="{{ data.background }}">
         </div>
       </div>
-      {% if block.code != 'cloud_search_banner' %}
       <div class="form-group">
         <label class="col-sm-2 control-label">
           {{'admin.block_manage.visual_edit.poster_link_url'|trans}}
@@ -78,7 +71,6 @@
           <input type="text" class="form-control width-input-large" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" placeholder="{{ app.request.getScheme() }}://" value="{{ data.href }}">
         </div>
       </div>
-      {% endif %}
     </div>
     <div class="edit-mode-html" {% if data.mode == 'img' %}style="display: none;"{% endif %}>
       <div class="form-group">

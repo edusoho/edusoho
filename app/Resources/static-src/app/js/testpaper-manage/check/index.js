@@ -188,4 +188,4 @@ class CheckTest
   }
 }
 
-new CheckTest($('.container'));
+new CheckTest($('.js-testpaper-container'));

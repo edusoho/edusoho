@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Wrapper;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class CourseSetWrapper extends Wrapper
 {
     public function price($courseSet)
@@ -28,7 +30,7 @@ class CourseSetWrapper extends Wrapper
 
         $price = round($courseSet['minCoursePrice'], 2);
 
-        if ($coinSetting['coin_enabled'] && $coinSetting['cash_model'] == 'currency') {
+        if ($coinSetting['coin_enabled'] && 'currency' == $coinSetting['cash_model']) {
             $priceWrapper['currencyType'] = 'coin';
             $priceWrapper['currency'] = $coinSetting['coin_name'] ?: $this->container->get('translator')->trans('finance.coin');
             $price = round($courseSet['minCoursePrice'] * $coinSetting['cash_rate'], 2);
@@ -47,7 +49,7 @@ class CourseSetWrapper extends Wrapper
 
     protected function getSettingService()
     {
-        return $this->container->get('biz')->service('System:SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getWrapList()

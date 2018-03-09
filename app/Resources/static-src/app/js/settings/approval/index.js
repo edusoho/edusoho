@@ -27,7 +27,7 @@ cd.upload({
   let $target = $($this.data('target'));
 
   $target.addClass('done').css({
-    'background': `url(${src})`,
+    'background-image': `url(${src})`,
   });
 
   if (!$target.find('.mask').length) {

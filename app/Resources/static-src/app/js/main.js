@@ -1,8 +1,7 @@
 import Swiper from 'swiper';
 import Cookies from 'js-cookie';
 
-// import 'common/codeages-design/js/codeages-design';
-import * as cd from 'codeages-design';
+import 'codeages-design';
 import 'common/tabs-lavalamp';
 import 'common/card';
 import 'common/bootstrap-modal-hack';
@@ -10,8 +9,6 @@ import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import notify from 'common/notify';
 import './alert';
-
-window.cd = cd;
 
 let rpn = new RewardPointNotify();
 rpn.display();

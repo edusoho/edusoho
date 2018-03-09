@@ -6,6 +6,8 @@ interface XapiService
 {
     public function createStatement($statement);
 
+    public function batchCreateStatements($statements);
+
     public function getStatement($id);
 
     public function updateStatementsPushedByStatementIds($statementIds);
@@ -23,6 +25,8 @@ interface XapiService
     public function countStatements($conditions);
 
     public function updateWatchLog($id, $watchLog);
+
+    public function batchUpdateWatchLogPushed($watchLogIds);
 
     public function createWatchLog($watchLog);
 
