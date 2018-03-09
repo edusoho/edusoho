@@ -72,7 +72,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
         try {
-            $result = CloudAPIFactory::create('leaf')->get('/me');       
+            $result = CloudAPIFactory::create('leaf')->get('/me');
         } catch (\Exception $e) {
             return $this->render('admin/system/mobile.setting.error.html.twig');
         }
