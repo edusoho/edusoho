@@ -223,6 +223,7 @@ class SearchController extends BaseController
             'userId' => $this->getCurrentUser()->getId(),
             'q' => $keyword,
             'type' => $type,
+            'uri' => $this->get('request')->getRequestUri()
         )));
     }
 

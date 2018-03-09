@@ -26,7 +26,7 @@ class SearchKeywordType extends Type
                 $actor = $this->getActor($statement['user_id']);
                 $data = $statement['data'];
                 $object = array(
-                    'id' => '/search?q='.$data['q'].'&type='.$data['type'],
+                    'id' => $data['uri'],
                     'definitionType' => $data['type'] === 'teacher' ? '' : $this->getDefinitionType($data['type']),
                     'objectType' => $data['type'] === 'teacher' ? XAPIObjectTypes::AGENT : XAPIObjectTypes::ACTIVITY
                 );
