@@ -27,7 +27,11 @@ before_script:
   - touch app/config/routing_plugins.yml
 
 script:
-  - phpunit -c app/
+  - phpunit -c app/ --testsuite UnitA2B
+  - phpunit -c app/ --testsuite UnitC2D
+  - phpunit -c app/ --testsuite UnitE2P
+  - phpunit -c app/ --testsuite UnitQ2T
+  - phpunit -c app/ --testsuite UnitU2Z
 
 cache:
   directories:
