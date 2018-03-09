@@ -32,6 +32,11 @@ class TimeMachine
         return $timeMachine->format($format, strtotime($dateExpression));
     }
 
+    public static function isTimestamp($timestamp)
+    {
+        return strtotime(date('Y-m-d H:i:s', $timestamp)) === (int) $timestamp;
+    }
+
     public function __construct($timezone)
     {
         $this->timezone = $timezone;
