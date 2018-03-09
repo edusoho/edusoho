@@ -16,7 +16,7 @@ let validator = $form.validate({
       equalTo: '#form_payPassword'
     }
   },
-})
+});
 
 console.log(validator);
 
@@ -26,7 +26,7 @@ $('#payPassword-save-btn').on('click', (event) => {
     $this.button('loading');
     $form.submit();
   }
-})
+});
 
 let messageDanger = $('.alert-danger').text();
 let messageSuccess = $('.alert-success').text();

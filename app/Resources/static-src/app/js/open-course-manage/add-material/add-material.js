@@ -20,7 +20,7 @@ export default class AddMaterial {
         fileId: 'required'
       },
       messages: {
-        link: Translator.trans("activity.download_manage.link_error_hint"),
+        link: Translator.trans('activity.download_manage.link_error_hint'),
         fileId: Translator.trans('activity.download_manage.materials_error_hint')
       },
       submitHandler(form) {
@@ -106,7 +106,7 @@ export default class AddMaterial {
       $('.js-current-file').text(file.name);
       let media = isEmpty($media.val()) ? Object.create(null) : JSON.parse($media.val());
       $materials.val(media.id);
-    }
+    };
 
     const fileChooser = new FileChooser();
     fileChooser.on('select', fileSelect);

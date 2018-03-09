@@ -8,7 +8,7 @@ const studentLiveCourseModule = (api) => {
         type: 'GET'
       }, options));
     }
-  }
-}
+  };
+};
 
 export default studentLiveCourseModule;

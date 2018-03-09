@@ -29,10 +29,10 @@ class TestpaperManage
     }
 
     $.post($target.data('url'), function(html){
-      notify('success', Translator.trans("testpaper_manage.save_success_hint"));
+      notify('success', Translator.trans('testpaper_manage.save_success_hint'));
       $tr.replaceWith(html);
     }).error(function(){
-      notify('danger', Translator.trans("testpaper_manage.save_error_hint"));
+      notify('danger', Translator.trans('testpaper_manage.save_error_hint'));
     });
   }
   

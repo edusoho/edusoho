@@ -22,6 +22,6 @@ jQuery.fn.extend({
         this.value += myValue;
         this.focus();
       }
-    })
+    });
   }
 });

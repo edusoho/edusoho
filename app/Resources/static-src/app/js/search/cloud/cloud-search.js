@@ -5,8 +5,8 @@ class CloudSearch {
   }
 
   init() {
-    if(this.$element.find("#search-input-group .form-control").val()) {
-      this.$element.find(".js-btn-clear").show();
+    if(this.$element.find('#search-input-group .form-control').val()) {
+      this.$element.find('.js-btn-clear').show();
     }
     echo.init();
     this.initEvent();

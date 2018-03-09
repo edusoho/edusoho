@@ -1,7 +1,7 @@
 import QuestionTypeBuilder from './question-type-builder';
 import CopyDeny from './copy-deny';
-import ActivityEmitter from "../../activity/activity-emitter";
-import notify from "common/notify";
+import ActivityEmitter from '../../activity/activity-emitter';
+import notify from 'common/notify';
 
 class DoTestBase
 {
@@ -45,7 +45,7 @@ class DoTestBase
     $current.siblings('.js-marking.hidden').removeClass('hidden');
     let id = $current.closest('.js-testpaper-question').attr('id');
     
-    $(`[data-anchor="#${id}"]`).find('.js-marking-card').toggleClass("hidden");
+    $(`[data-anchor="#${id}"]`).find('.js-marking-card').toggleClass('hidden');
   }
 
   _favoriteToggle(event) {
@@ -57,9 +57,9 @@ class DoTestBase
       $current.addClass('hidden').siblings('.js-favorite.hidden').data('url',response.url);  
       $current.addClass('hidden').siblings('.js-favorite.hidden').removeClass('hidden');
     })
-    .error(function(response){
-      notify('error', response.error.message);
-    })
+      .error(function(response){
+        notify('error', response.error.message);
+      });
   }
 
   _analysisToggle(event) {
@@ -100,12 +100,12 @@ class DoTestBase
       }else {
         $(item).removeClass('active');
       }
-    })
+    });
     let questionId = $input.attr('name');
-    this._renderBtnIndex(questionId,num>0?true:false)
+    this._renderBtnIndex(questionId,num>0?true:false);
   }
 
-   _renderBtnIndex(idNum,done = true,doing = false) {
+  _renderBtnIndex(idNum,done = true,doing = false) {
     let $btn = $(`[data-anchor="#question${idNum}"]`);
     if(done) {
       $btn.addClass('done');
@@ -115,7 +115,7 @@ class DoTestBase
     if(doing) {
       $btn.addClass('doing').siblings('.doing').removeClass('doing');
     }else {
-      $btn.removeClass('doing')
+      $btn.removeClass('doing');
     }
   }
   _showEssayInputEditor(event) {
@@ -139,7 +139,7 @@ class DoTestBase
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', e => {
+      editor.on('blur', () => {
         editor.updateElement();
         setTimeout(()=>{
           $longTextarea.val(editor.getData());
@@ -148,7 +148,7 @@ class DoTestBase
         }, 1);
       });
 
-      editor.on('instanceReady', function(e) {
+      editor.on('instanceReady', function() {
         this.focus();
 
         $textareaBtn.one('click', function() {
@@ -168,7 +168,7 @@ class DoTestBase
         }, 1);
       });
 
-      editor.on('insertHtml', function(e) {
+      editor.on('insertHtml', function() {
         editor.updateElement();
         setTimeout(function() {
           $longTextarea.val(editor.getData());
@@ -189,10 +189,10 @@ class DoTestBase
     let attachments = this._getAttachments();
 
     $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
-    .done((response) => {})
-    .error(function (response) {
-      notify('error', response.error.message);
-    });
+      .done(() => {})
+      .error(function (response) {
+        notify('error', response.error.message);
+      });
   }
 
   _btnSubmit(event) {
@@ -207,34 +207,34 @@ class DoTestBase
     let attachments = this._getAttachments();
 
     $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
-    .done((response) => {
-      if (response.result) {
-        emitter.emit('finish', {data: ''});
-      }
+      .done((response) => {
+        if (response.result) {
+          emitter.emit('finish', {data: ''});
+        }
 
-      if (toUrl != '' || response.goto != '') {
-        window.location.href = toUrl;
-      } else if (response.goto != ''){
-        window.location.href = response.goto;
-      } else if (response.message != '') {
-        notify('error', response.message);
-      }
-    })
-    .error(function (response) {
-      notify('error', response.error.message);
-    });
+        if (toUrl != '' || response.goto != '') {
+          window.location.href = toUrl;
+        } else if (response.goto != ''){
+          window.location.href = response.goto;
+        } else if (response.message != '') {
+          notify('error', response.message);
+        }
+      })
+      .error(function (response) {
+        notify('error', response.error.message);
+      });
   }
 
   _getAnswers() {
     let values = {};
 
-    $('*[data-type]').each(function(index){
+    $('*[data-type]').each(function(){
       let questionId = $(this).attr('name');
       let type = $(this).data('type');
       const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder(type);
       let answer = questionTypeBuilder.getAnswer(questionId);
       values[questionId] = answer;
-    })
+    });
 
     return JSON.stringify(values);
   }
@@ -242,13 +242,13 @@ class DoTestBase
   _getAttachments() {
     let attachments = {};
 
-    $('[data-type="essay"]').each(function(index) {
+    $('[data-type="essay"]').each(function() {
       let questionId = $(this).attr('name');
       const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder('essay');
 
       let attachment = questionTypeBuilder.getAttachment(questionId);
       attachments[questionId] = attachment;
-    })
+    });
 
     return attachments;
   }

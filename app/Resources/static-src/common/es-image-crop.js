@@ -21,16 +21,16 @@ class EsImageCrop {
       selectWidth = (cropedWidth) * (naturalWidth / scaledWidth),
       selectHeight = (cropedHeight) * (naturalHeight / scaledHeight);
 
-      $picture.Jcrop({
-          trueSize: [naturalWidth, naturalHeight],
-          setSelect: [0, 0, selectWidth, selectHeight],
-          aspectRatio: ratio,
-          keySupport: false,
-          allowSelect: false,
-          onSelect(c) {
-              self.onSelect(c);
-          }
-      });
+    $picture.Jcrop({
+      trueSize: [naturalWidth, naturalHeight],
+      setSelect: [0, 0, selectWidth, selectHeight],
+      aspectRatio: ratio,
+      keySupport: false,
+      allowSelect: false,
+      onSelect(c) {
+        self.onSelect(c);
+      }
+    });
 
     // $picture.css('height', scaledHeight);
   }
@@ -59,11 +59,11 @@ class EsImageCrop {
 
   }
 
-  onSelect(c) {
+  onSelect() {
     //override it
   }
 
-  afterCrop(response) {
+  afterCrop() {
     //override it
   }
 }
