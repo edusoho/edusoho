@@ -12,8 +12,14 @@
 {% endblock %}
 
 {% block body %}
+  {% if chapter.type|default('') == 'lesson' %}
+    {% set saveUrl = path('course_manage_lesson_update', {courseId: course.id, lessonId: chapter.id|default()}) %}
+  {% else %}
+    {% set saveUrl = path('course_manage_chapter_manage', {courseId: course.id, chapterId: chapter.id|default()}) %}
+  {% endif %}
+  
   <form id="course-chapter-form" class="form-horizontal" method="post" data-chapter-id="{{ chapter.id|default(0) }}" data-parentId="{{ parentId|default() }}"
-      action="{{ path('course_manage_chapter_manage', {courseId: course.id, chapterId: chapter.id|default()}) }}">
+      action="{{ saveUrl }}">
     <div class="row form-group">
       <div class="col-md-3 control-label">
         <label for="chapter-title-field">

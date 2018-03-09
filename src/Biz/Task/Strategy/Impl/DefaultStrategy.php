@@ -118,7 +118,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             }
 
             if ($task['mode'] == 'lesson') {
-                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
             }
 
             $this->biz['db']->commit();
@@ -220,24 +220,19 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     //取消发布课时中一组任务
     public function unpublishTask($task)
     {
-        $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
-        foreach ($tasks as $task) {
-            $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
-        }
-        $task['status'] = 'unpublished';
-
-        return $task;
+        return $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
     }
 
     private function _createLesson($task)
     {
-        $chapter = array(
+        /*$chapter = array(
             'courseId' => $task['fromCourseId'],
             'title' => $task['title'],
             'type' => 'lesson',
+            'status' => 'create',
         );
         $chapter = $this->getCourseService()->createChapter($chapter);
-        $task['categoryId'] = $chapter['id'];
+        $task['categoryId'] = $chapter['id'];*/
         $task['mode'] = 'lesson';
 
         return parent::createTask($task);

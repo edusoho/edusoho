@@ -108,7 +108,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     public function countByChpaterId($chapterId)
     {
         $sql = "SELECT count(*) FROM {$this->table()} WHERE categoryId = ?";
-        
+
         return $this->db()->fetchColumn($sql, array($chapterId));
     }
 

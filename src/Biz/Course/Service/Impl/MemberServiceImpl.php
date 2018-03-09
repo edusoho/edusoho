@@ -1121,7 +1121,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'courseSetId' => $couseSetId,
             'role' => 'student',
         );
-        
+
         return $this->getMemberDao()->count($conditions);
     }
 

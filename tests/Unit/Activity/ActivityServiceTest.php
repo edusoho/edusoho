@@ -266,8 +266,8 @@ class ActivityServiceTest extends BaseTestCase
                     'returnValue' => 1,
                 ),
                 array(
-                    'functionName' => 'createChapter',
-                    'returnValue' => array('id' => 1, 'status' => 'create'),
+                    'functionName' => 'getChapter',
+                    'returnValue' => array('id' => 1, 'type' => 'lesson', 'status' => 'create'),
                 ),
             )
         );
@@ -277,6 +277,7 @@ class ActivityServiceTest extends BaseTestCase
             'mediaType' => 'text',
             'fromCourseId' => $course['id'],
             'fromCourseSetId' => 1,
+            'categoryId' => 1,
         );
         $savedTask = $this->getTaskService()->createTask($task);
 

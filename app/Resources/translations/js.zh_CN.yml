@@ -808,6 +808,7 @@ admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: --选择所属栏目--
 
+lesson_count_no_more_than_300: 课时总数不能超过300个
+lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 Bad credentials.: 用户名或密码错误
-
