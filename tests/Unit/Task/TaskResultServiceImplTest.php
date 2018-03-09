@@ -237,7 +237,7 @@ class TaskResultServiceImplTest extends BaseTestCase
         $this->mockTaskResult(array('courseTaskId' => 2, 'courseId' => 1, 'status' => 'finish'));
 
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId(1);
-        $this->assertEquals(1, $taskResult['courseTaskId']);
+        $this->assertEquals(2, $taskResult['courseTaskId']);
     }
 
     public function testFindUserTaskResultsByTaskIds()
