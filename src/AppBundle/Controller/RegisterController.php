@@ -132,7 +132,7 @@ class RegisterController extends BaseController
         }
         $inviteCode = $request->query->get('inviteCode', '');
         $this->get('session')->set('invite_code', $inviteCode);
-        $inviteUser = empty($inviteCode) ? array() : $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
+        $inviteUser = empty($inviteCode) ? array() : $this->getUserService()->getUserByInviteCode($inviteCode);
        
         if ($this->getWebExtension()->isWechatLoginBind()) {
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
