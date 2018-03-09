@@ -10,7 +10,6 @@ class SearchKeywordType extends Type
 
     public function package($statement)
     {
-        //
     }
 
     public function packages($statements)
@@ -27,11 +26,11 @@ class SearchKeywordType extends Type
                 $data = $statement['data'];
                 $object = array(
                     'id' => $data['uri'],
-                    'definitionType' => $data['type'] === 'teacher' ? '' : $this->getDefinitionType($data['type']),
-                    'objectType' => $data['type'] === 'teacher' ? XAPIObjectTypes::AGENT : XAPIObjectTypes::ACTIVITY
+                    'definitionType' => 'teacher' === $data['type'] ? '' : $this->getDefinitionType($data['type']),
+                    'objectType' => 'teacher' === $data['type'] ? XAPIObjectTypes::AGENT : XAPIObjectTypes::ACTIVITY,
                 );
                 $result = array(
-                    'response' => $data['q']
+                    'response' => $data['q'],
                 );
                 $pushStatements[] = $sdk->searched($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
             } catch (\Exception $e) {

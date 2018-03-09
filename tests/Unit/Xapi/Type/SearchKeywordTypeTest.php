@@ -30,7 +30,6 @@ class SearchKeywordTypeTest extends BaseTestCase
         foreach ($statements as $index => $st) {
             $this->assertEquals($st['data']['q'], $pushStatements[$index]['result']['response']);
             $this->assertTrue(strpos($pushStatements[$index]['object']['id'], $st['data']['q']) > 0);
-
         }
 
         $this->assertEquals('http://adlnet.gov/expapi/activities/course', $pushStatements[0]['object']['definition']['type']);
