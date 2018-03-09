@@ -13,7 +13,7 @@
     syntaxCheck                 = "false"
     bootstrap                   = "../bootstrap/bootstrap_test.php" >
 
-    <!-- 执行制定testsuite: phpunit -c app/ --testsuite UnitU2Z -->
+    <!-- 如何执行见 .travis.yml -->
     <testsuites>
         <testsuite name="UnitA2B">
             <directory>../tests/Unit/A*</directory>
