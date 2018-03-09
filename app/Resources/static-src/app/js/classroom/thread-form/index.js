@@ -38,11 +38,11 @@ if (threadType == 'event') {
   });
   $form.find('[name="location"]').rules('add', {
     visible_character: true
-  })
+  });
   $form.find('[name="startTime"]').rules('add', {
     required: true,
     DateAndTime: true
-  })
+  });
 
   $form.find('[name="startTime"]').datetimepicker({
     language: document.documentElement.lang,

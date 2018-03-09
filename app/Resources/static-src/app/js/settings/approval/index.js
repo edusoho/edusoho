@@ -39,11 +39,11 @@ cd.upload({
     cd.message({
       type: 'danger',
       message: Translator.trans('uploader.size_2m_limit_hint')
-    })
+    });
   } else if (code === 'FLIE_TYPE_LIMIT') {
     cd.message({
       type: 'danger',
       message: Translator.trans('uploader.type_denied_limit_hint')
-    })
+    });
   }
-})
+});

@@ -32,26 +32,26 @@ if ($form.length > 0) {
   });
 
 
-  $form.find('.js-btn-save').on("click", function () {
+  $form.find('.js-btn-save').on('click', function () {
     let self = $(this);
     if (validator.form()) {
       self.button('loading');
       $.post($form.attr('action'), $form.serialize())
-      .success((response) => {
-        if (response.code == 'success') {
-          $form.find('.js-review-remind').fadeIn('fast', function () {
-            window.location.reload();
-          });
-        } else {
-          notify('danger', response.message);
-          self.button('reset');
-        }
+        .success((response) => {
+          if (response.code == 'success') {
+            $form.find('.js-review-remind').fadeIn('fast', function () {
+              window.location.reload();
+            });
+          } else {
+            notify('danger', response.message);
+            self.button('reset');
+          }
         
-      })
-      .error((response) => {
-        notify('danger', response.responseJSON.error.message);
-        self.button('reset');
-      })
+        })
+        .error((response) => {
+          notify('danger', response.responseJSON.error.message);
+          self.button('reset');
+        });
     }
   });
 
@@ -76,12 +76,12 @@ let $reviews = $('.js-reviews');
 $('.js-reviews').hover(function () {
   let $fullLength = $(this).find('.full-content').text().length;
 
-  if ($fullLength > 100 && $(this).find('.short-content').is(":hidden") == false) {
+  if ($fullLength > 100 && $(this).find('.short-content').is(':hidden') == false) {
     $(this).find('.show-full-btn').show();
   } else {
     $(this).find('.show-full-btn').hide();
   }
-})
+});
 
 $reviews.on('click', '.show-full-btn', function () {
   let $review = $(this).parents('.media');
@@ -113,11 +113,11 @@ if ($('.js-reviews').length > 0) {
     let postNum = $(this).closest('.thread-subpost-container').find('.thread-subpost-content .thread-subpost-list .thread-subpost').length;
 
     if (postNum >= 5) {
-      Notify.danger('course.manage.post_limit_hint');
+      notify('danger', Translator.trans('course.manage.post_limit_hint'));
       return;
     }
     let $form = $(this).parents('.thread-subpost-container').find('.thread-subpost-form');
     $form.toggleClass('hide');
     threadShowWidget._initSubpostForm($form);
-  })
+  });
 }

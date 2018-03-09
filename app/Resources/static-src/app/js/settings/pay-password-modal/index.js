@@ -39,7 +39,7 @@ class PayPasswordModal {
           window.location.reload();
         }, 1000);
       }
-    })
+    });
     return validator;
   }
   initEvent() {
@@ -54,4 +54,4 @@ class PayPasswordModal {
 new PayPasswordModal({
   element: '#settings-pay-password-form',
   currentDom: '.js-submit-form'
-})
+});

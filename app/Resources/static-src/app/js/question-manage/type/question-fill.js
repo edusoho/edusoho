@@ -1,7 +1,7 @@
 import QuestionFormBase from './form-base';
 
-jQuery.validator.addMethod("fillCheck", function (value, element) {
-    return this.optional(element) || /(\[\[(.+?)\]\])/i.test(value);
+jQuery.validator.addMethod('fillCheck', function (value, element) {
+  return this.optional(element) || /(\[\[(.+?)\]\])/i.test(value);
 }, Translator.trans('course.question.create.fill_hint'));
 
 class Fill extends QuestionFormBase {
@@ -18,7 +18,7 @@ class Fill extends QuestionFormBase {
   init() {
     this.$titleField.rules('add',{
       fillCheck:true
-    })
+    });
   }
 }
 

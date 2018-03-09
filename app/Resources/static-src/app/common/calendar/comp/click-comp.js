@@ -1,4 +1,4 @@
-import Comp from './comp'
+import Comp from './comp';
 
 export default class ClickComp extends Comp {
 
@@ -12,7 +12,7 @@ export default class ClickComp extends Comp {
     let current = this;
     options['eventClick'] = function(event, jsEvent, view) {
       window.open(current._generateClickUrl(event));
-    }
+    };
     return options;
   }
 

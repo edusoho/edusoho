@@ -6,9 +6,9 @@ $('#sure').on('click', function () {
   $('#sure').button('submiting').addClass('disabled');
 
   $.ajax({
-    type: "post",
+    type: 'post',
     url: $('#sure').data('url'),
-    data: "ids=" + ids,
+    data: 'ids=' + ids,
     async: false,
     success: function (data) {
 
@@ -22,7 +22,7 @@ $('#sure').on('click', function () {
 
 $('#search').on('click', function () {
 
-  if ($('[name=key]').val() != "") {
+  if ($('[name=key]').val() != '') {
 
     $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
 
@@ -64,11 +64,11 @@ $('#all-courses').on('click', function () {
 
 $('.js-course-select').on('change', function () {
   var id = $(this).val();
-  var sid = $(this).attr('id').split("-")[2];
+  var sid = $(this).attr('id').split('-')[2];
   for (var i = 0; i < ids.length; i++) {
-    var idArr = ids[i].split(":");
+    var idArr = ids[i].split(':');
     if (idArr[0] == sid) {
-      ids[i] = sid + ":" + id;
+      ids[i] = sid + ':' + id;
       break;
     }
   }
@@ -77,7 +77,7 @@ $('.js-course-select').on('change', function () {
   $('.js-price-' + sid).html(price);
 });
 
-$('.courses-list').on('click', ".course-item-cbx", function () {
+$('.courses-list').on('click', '.course-item-cbx', function () {
 
   var $course = $(this).parent();
   var sid = $course.data('id');//courseSet.id
@@ -92,7 +92,7 @@ $('.courses-list').on('click', ".course-item-cbx", function () {
 
     ids = $.grep(ids, function (val, key) {
 
-      if (val != sid + ":" + id)
+      if (val != sid + ':' + id)
         return true;
     }, false);
   } else {
