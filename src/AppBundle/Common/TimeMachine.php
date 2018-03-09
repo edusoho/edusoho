@@ -34,7 +34,9 @@ class TimeMachine
 
     public static function isTimestamp($timestamp)
     {
-        return strtotime(date('Y-m-d H:i:s', $timestamp)) === (int) $timestamp;
+        return ((string) (int) $timestamp === (string) $timestamp)
+        && ($timestamp <= PHP_INT_MAX)
+        && ($timestamp >= ~PHP_INT_MAX);
     }
 
     public function __construct($timezone)
