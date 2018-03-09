@@ -162,6 +162,7 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
+            throw $e;
             return $this->render(
                 'search/cloud-search-failure.html.twig',
                 array(
