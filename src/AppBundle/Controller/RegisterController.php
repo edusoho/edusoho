@@ -130,20 +130,14 @@ class RegisterController extends BaseController
                 return $this->createMessageResponse('error', $e->getMessage());
             }
         }
-
-        $inviteCode = '';
-        $inviteUser = array();
-
-        if (!empty($fields['inviteCode'])) {
-            $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
+        $inviteCode = $request->query->get('inviteCode', '');
+        $this->get('session')->set('invite_code', $inviteCode);
+        $inviteUser = empty($inviteCode) ? array() : $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
+       
+        if ($this->getWebExtension()->isWechatLoginBind()) {
+            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
         }
-
-        if (!empty($inviteUser)) {
-            $inviteCode = $fields['inviteCode'];
-        }
-
         return $this->render('register/index.html.twig', array(
-            'inviteCode' => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort' => array(),
             'inviteUser' => $inviteUser,

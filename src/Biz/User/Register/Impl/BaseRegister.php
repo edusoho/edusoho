@@ -233,8 +233,10 @@ abstract class BaseRegister
     private function createPerInviteUser($registration, $user)
     {
         $inviteUser = null;
-        if (!empty($registration['invite_code'])) {
-            $inviteUser = $this->getUserDao()->getByInviteCode($registration['invite_code']);
+        $inviteCode = empty($registration['invite_code']) ? $this->biz['session']->get('invite_code', '') : $registration['invite_code'];
+
+        if (!empty($inviteCode)) {
+            $inviteUser = $this->getUserDao()->getByInviteCode($inviteCode);
         }
 
         if (!empty($inviteUser)) {

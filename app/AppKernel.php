@@ -180,6 +180,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
         }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
+        $biz['session'] = $this->getContainer()->get('session');
     }
 
     protected function registerSessionServiceProvider($biz)
