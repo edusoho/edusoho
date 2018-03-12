@@ -1,5 +1,6 @@
 searchResultType:
     course: 课程
+    classroom: 班级
     teacher: 教师
     thread: 小组话题
     article: 资讯
