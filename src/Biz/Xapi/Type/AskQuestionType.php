@@ -2,8 +2,6 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class AskQuestionType extends Type
 {
     const TYPE = 'asked_question';

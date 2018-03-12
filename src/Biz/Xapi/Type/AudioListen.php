@@ -2,8 +2,6 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class AudioListen extends Type
 {
     const TYPE = 'listen_audio';

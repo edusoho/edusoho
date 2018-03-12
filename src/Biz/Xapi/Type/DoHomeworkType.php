@@ -2,8 +2,6 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class DoHomeworkType extends Type
 {
     const TYPE = 'completed_homework';
@@ -38,7 +36,6 @@ class DoHomeworkType extends Type
             return array();
         }
         try {
-
             $homeworkResults = $this->findHomeworkResults(
                array($statements, 'target_id')
             );

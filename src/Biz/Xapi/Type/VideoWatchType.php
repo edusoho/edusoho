@@ -2,8 +2,6 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class VideoWatchType extends Type
 {
     const TYPE = 'watch_video';

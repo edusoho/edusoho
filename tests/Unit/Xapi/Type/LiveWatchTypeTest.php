@@ -203,7 +203,7 @@ class LiveWatchTypeTest extends BaseTestCase
                         'watched_time' => 100,
                     ),
                 ),
-            )));
+            ), ));
 
         $taskService = $this->mockBiz(
             'Task:TaskDao',

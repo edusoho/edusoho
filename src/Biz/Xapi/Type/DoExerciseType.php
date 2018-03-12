@@ -2,8 +2,6 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class DoExerciseType extends Type
 {
     const TYPE = 'completed_exercise';

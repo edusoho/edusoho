@@ -31,7 +31,8 @@ abstract class Type extends BizAware
      * @param $dao
      * @param $columns
      * @param array $conditions
-     * @return array  array('id' => 1, 'column1' => 2)
+     *
+     * @return array array('id' => 1, 'column1' => 2)
      */
     protected function find($subject, $dao, $columns, $conditions = array())
     {
@@ -39,6 +40,7 @@ abstract class Type extends BizAware
         $conditions = array_merge(array('ids' => $ids), $conditions);
         $columns = array_unique(array_merge(array('id'), $columns));
         $results = $this->createDao($dao)->search($conditions, array(), 0, PHP_INT_MAX, $columns);
+
         return ArrayToolkit::index($results, 'id');
     }
 
@@ -133,6 +135,7 @@ abstract class Type extends BizAware
 
     /**
      * @param $alias
+     *
      * @return \Codeages\Biz\Framework\Dao\GeneralDaoInterface
      */
     protected function createDao($alias)
