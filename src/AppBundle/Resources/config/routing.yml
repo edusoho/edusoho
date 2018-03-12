@@ -1592,6 +1592,7 @@ course_manage_task_pre_update_check:
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create }
@@ -1721,13 +1722,34 @@ course_manage_chapter_delete:
     defaults: { _controller: AppBundle:Course/ChapterManage:delete }
     methods: [POST]
 
-course_manage_chapter_publish:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/publish
-    defaults: { _controller: AppBundle:Course/ChapterManage:publish }
+course_manage_lesson_create:
+    path:  /course/{courseId}/lesson/create
+    defaults: { _controller: AppBundle:Course/LessonManage:create }
 
-course_manage_chapter_unpublish:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/unpublish
-    defaults: { _controller: AppBundle:Course/ChapterManage:unpublish }
+course_manage_lesson_batch_create:
+    path:  /course/{courseId}/lesson/batch_create
+    defaults: { _controller: AppBundle:Course/LessonManage:batchCreate }
+
+course_manage_lesson_valid_num:
+    path: /course/{courseId}/lesson/valid_num
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
+    methods: [POST]
+
+course_manage_lesson_update:
+    path:  /course/{courseId}/lesson/{lessonId}/update
+    defaults: { _controller: AppBundle:Course/LessonManage:update }
+
+course_manage_lesson_publish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/publish
+    defaults: { _controller: AppBundle:Course/LessonManage:publish }
+
+course_manage_lesson_unpublish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
+    defaults: { _controller: AppBundle:Course/LessonManage:unpublish }
+
+course_manage_lesson_delete:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/delete
+    defaults: { _controller: AppBundle:Course/LessonManage:delete }
 
 course_manage_change_lesson_show_status:
     path:  /course/{courseId}/manage/change/lesson/show/status
@@ -3018,4 +3040,9 @@ member_operation_record:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+
+course_sort:
+    path: /courseset/{courseSetId}/sort
+    defaults: { _controller: AppBundle:Course/CourseSetManage:courseSort, limit: '' }
+    methods: [POST]
 

@@ -1115,6 +1115,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByIds($ids);
     }
 
+    public function countStudentMemberByCourseSetId($couseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $couseSetId,
+            'role' => 'student',
+        );
+
+        return $this->getMemberDao()->count($conditions);
+    }
+
     protected function createOrder($courseId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));

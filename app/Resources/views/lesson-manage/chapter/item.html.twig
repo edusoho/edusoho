@@ -21,14 +21,14 @@
             </a>
           </li>
           <li>
-            <a href="javascript:;" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+            <a href="javascript:;" class="js-lesson-create-btn" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_lesson_create', {courseId:course.id}) }}">
               {{'course.manage.create_lesson'|trans }}
             </a>
           </li>
         </ul>
       </div>
     {% else %}
-      <a class="cd-mr24" data-position="{{ chapter.id }}" data-type="lesson" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+      <a class="cd-mr24 js-lesson-create-btn" data-position="{{ chapter.id }}" data-type="lesson" href="javascript:;" data-url="{{ path('course_manage_lesson_create', {courseId:course.id}) }}">
         <i class="cd-icon cd-icon-add"></i>
       </a>
     {% endif %}

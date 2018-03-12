@@ -85,7 +85,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'courseSetId' => $courseSetId,
                 'status' => 'published',
             ),
-            array('createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             1
         );
@@ -99,7 +99,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             array(
                 'courseSetId' => $courseSetId,
             ),
-            array('createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             1
         );
@@ -587,7 +587,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $this->dispatchEvent('course.publish', $course);
 
-        $this->publishChapterByCourseId($course['id']);
+        $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
     }
 
     protected function validateExpiryMode($course)
@@ -930,43 +930,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return array();
-    }
-
-    public function publishChapter($chapterId)
-    {
-        $chapter = $this->getChapterDao()->get($chapterId);
-        if (empty($chapter) && $chapter['type'] != 'lesson') {
-            throw new $this->createInvalidArgumentException('Argument Invalid');
-        }
-
-        $this->getChapterDao()->update($chapterId, array('status' => 'published'));
-
-        $this->dispatchEvent('course.chapter.publish', new Event($chapter));
-    }
-
-    public function publishChapterByCourseId($courseId)
-    {
-        $chapters = $this->getChapterDao()->findLessonsByCourseId($courseId);
-
-        if (empty($chapters)) {
-            return;
-        }
-
-        foreach ($chapters as $chapter) {
-            $this->publishChapter($chapter['id']);
-        }
-    }
-
-    public function unpublishChapter($chapterId)
-    {
-        $chapter = $this->getChapterDao()->get($chapterId);
-        if (empty($chapter) && $chapter['type'] != 'lesson') {
-            throw new $this->createInvalidArgumentException('Argument Invalid');
-        }
-
-        $this->getChapterDao()->update($chapterId, array('status' => 'unpublished'));
-
-        $this->dispatchEvent('course.chapter.unpublish', new Event($chapter));
     }
 
     public function countUserLearningCourses($userId, $filters = array())
@@ -1804,6 +1767,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countCoursesByCourseSetId($courseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+
+        return $this->getCourseDao()->count($conditions);
+    }
+
     public function countCoursesGroupByCourseSetIds($courseSetIds)
     {
         return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
@@ -1975,6 +1947,47 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $liveCourses;
+    }
+
+    public function sortByCourses($courses)
+    {
+        usort($courses, function ($a, $b) {
+            if ($a['seq'] == $b['seq']) {
+                return 0;
+            }
+
+            return $a['seq'] > $b['seq'] ? 1 : -1;
+        });
+
+        return $courses;
+    }
+
+    public function sortCourse($courseSetId, $ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $count = $this->searchCourseCount(
+            array(
+                'courseSetId' => $courseSetId,
+                'courseIds' => $ids,
+            )
+        );
+
+        if (count($ids) != $count) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $seq = 1;
+        foreach ($ids as $id) {
+            $fields[] = array(
+                'seq' => $seq++,
+            );
+        }
+        $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
+        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
     public function changeShowPublishLesson($courseId, $status)
@@ -2159,6 +2172,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 
     /**

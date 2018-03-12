@@ -494,6 +494,7 @@ course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
+course.manage.sort_cancel: 取消当前排序
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
@@ -867,4 +868,8 @@ admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: 'Choose column'
 
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
+
 Bad credentials.: 用户名或密码错误
+

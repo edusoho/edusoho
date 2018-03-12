@@ -5,7 +5,11 @@
   {% if task|default(false) %}
     {{ 'course.plan_task.activity_manage.modify'|trans }}
   {% else %}
-    {{ 'course.plan_task.activity_manage.create'|trans }}
+    {% if categoryId|default(0) %}
+      {{ 'course.plan_task.activity_manage.create'|trans }}
+    {% else %}
+      {{ 'course.manage.create_lesson'|trans }}
+    {% endif %}
   {% endif %}
 {% endblock %}
 

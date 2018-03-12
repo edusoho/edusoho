@@ -53,12 +53,6 @@ interface CourseService
 
     public function deleteChapter($courseId, $chapterId);
 
-    public function publishChapter($chapterId);
-
-    public function publishChapterByCourseId($courseId);
-
-    public function unpublishChapter($chapterId);
-
     public function findChaptersByCourseId($courseId);
 
     public function updateCourse($id, $fields);
@@ -250,4 +244,11 @@ interface CourseService
     public function findLiveCourse($conditions, $userId, $role);
 
     public function changeShowPublishLesson($courseId, $status);
+
+    public function countCoursesByCourseSetId($courseSetId);
+
+    //排序教学计划
+    public function sortCourse($courseSetId, $ids);
+
+    public function sortByCourses($courses);
 }

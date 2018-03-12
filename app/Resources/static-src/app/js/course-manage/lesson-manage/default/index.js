@@ -1,4 +1,4 @@
-import ShowUnpublish from './../ShowUnpublish';
+import {hiddenUnpublishTask, addLesson} from './../header-util';
 import BaseManage from './../BaseManage';
 
 class DefaultManage extends BaseManage {
@@ -29,7 +29,15 @@ class DefaultManage extends BaseManage {
       }
     });
   }
+
+  afterAddItem($elm) {
+    if ($elm.find('.js-item-content').length > 0) {
+        $elm.find('.js-item-content').trigger('click');
+    }
+  }
 }
 
 new DefaultManage('#sortable-list');
-new ShowUnpublish('input[name="isShowPublish"]');
+hiddenUnpublishTask();
+addLesson();
+

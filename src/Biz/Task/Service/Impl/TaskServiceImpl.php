@@ -788,9 +788,9 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function countTasksByChpaterId($chapterId)
     {
-         return $this->getTaskDao()->countByChpaterId($chapterId);
+        return $this->getTaskDao()->countByChpaterId($chapterId);
     }
-    
+
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findByChapterId($chapterId);

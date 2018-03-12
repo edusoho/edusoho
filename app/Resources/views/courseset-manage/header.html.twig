@@ -4,7 +4,6 @@
 {% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
 
-
 <div class="courseset-manage-header cd-mb32 clearfix">
   {# 课程封面 #}
   <a href="{{basepath}}">
@@ -34,7 +33,11 @@
       <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
     </div>
     <div class="courseset-manage-header-info__price color-danger">
-      ¥99～¥199
+      {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
+        ¥{{ courseSet.minCoursePrice }}
+      {% else %}
+        ¥{{ courseSet.minCoursePrice }}～¥{{ courseSet.maxCoursePrice }}
+      {% endif %}
     </div>
   </div>
 
@@ -42,7 +45,7 @@
   {% block btn %}
     {# 课程发布按钮 #}
     {% if courseSet.status == 'published' %}
-      <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
+      <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
     {% endif %}
 
     {% if courseSet.status != 'published' %}
@@ -64,12 +67,12 @@
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.student_member'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">1515</span>{{ 'course.student.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
   </div>
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.learn_plan'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">2</span>{{ 'course.plan.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ couserNum|default() }}</span>{{ 'course.plan.cell'|trans }}</div>
   </div>
 </div>
 
