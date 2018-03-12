@@ -67,12 +67,12 @@
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.student_member'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
   </div>
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.learn_plan'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ couserNum|default() }}</span>{{ 'course.plan.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.courseNum|default() }}</span>{{ 'course.plan.cell'|trans }}</div>
   </div>
 </div>
 
