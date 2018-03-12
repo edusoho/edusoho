@@ -1,7 +1,6 @@
 {% set side_nav = side_nav|default(null) %}
 
 <ul class="nav-header-section nav nav-tabs">
-  {# <li class="list-group-heading">{{'my.teaching.open_course.course_info'|trans}}</li> #}
   <li class="nav-header-section__item {% if side_nav == 'base' %}active{% endif %}">
     <a href="{{ path('open_course_manage_base', {id:course.id}) }}">
       <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.Basic_Info'|trans}}
@@ -29,11 +28,6 @@
         <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.lesson.manage'|trans}}
       </a>
     </li>
-    <li class="nav-header-section__item {% if side_nav == 'files' %}active{% endif %}">
-      <a href="{{ path('open_course_manage_files', {id:course.id}) }}">
-        <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.file_manage_btn'|trans}}
-      </a>
-    </li>
   {% endif %}
 
 
@@ -48,8 +42,16 @@
     </a>
   </li>
   <li class="nav-header-section__item {% if side_nav == 'students' %}active{% endif %}">
-    <a href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
+    <a {% if course.type == 'open' %}class="nav-header-section__link"{% endif %} href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
       <span></span>{{'site.default.student'|trans}}{{'my.teaching.open_course.student_setting.manage_btn'|trans}}
     </a>
   </li>
+
+  {% if course.type == 'open' %}
+    <li class="nav-header-section__item {% if side_nav == 'files' %}active{% endif %}">
+      <a href="{{ path('open_course_manage_files', {id:course.id}) }}">
+        <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.file_manage_btn'|trans}}
+      </a>
+    </li>
+  {% endif %}
 </ul>

@@ -1,5 +1,7 @@
 {% import "macro.html.twig" as web_macro %}
-{% do script(['app/js/open-course-manage/header/index.js'])%}
+{% block js %}
+  {% do script(['app/js/open-course-manage/header/index.js'])%}
+{% endblock %}
 
 <div class="courseset-manage-header cd-mb32 clearfix">
   <a href="{{ path('open_course_show', {courseId:course.id}) }}">
@@ -18,30 +20,33 @@
     <div class="courseset-manage-header-info__title text-overflow">
       [{{ dict('courseType')[course.type] }}]<a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     </div>
+    {% if course.type == 'liveOpen' %}
+      <span class="cd-tag cd-tag-green">{{'explore.open_course.live'|trans}}</span>
+    {% endif %}
   </div>
 
-
   <div class="courseset-manage-header-btn hidden-xs">
+    {% block btn %}
+      {% if course.status == 'published' %}
+        <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
+      {% else %}
+        <button class="cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
+      {% endif %}
 
-    {% if course.status == 'published' %}
-      <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
-    {% else %}
-      <button class="cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
-    {% endif %}
-
-    <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-      <button class="cd-btn cd-btn-primary course-manage-header-more">
-        <i class="es-icon es-icon-morehoriz"></i>
-      </button>
-      <ul class="dropdown-menu text-center">
-        <li>
-          <a href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
-        </li>
-        <li>
-          <a href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
-        </li>
-      </ul>
-    </div>
+      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+        <button class="cd-btn cd-btn-primary course-manage-header-more">
+          <i class="es-icon es-icon-morehoriz"></i>
+        </button>
+        <ul class="dropdown-menu text-center">
+          <li>
+            <a href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
+          </li>
+          <li>
+            <a href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
   </div>
 
   <div class="courseset-manage-header-data">

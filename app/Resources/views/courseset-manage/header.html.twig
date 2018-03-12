@@ -30,14 +30,19 @@
       {% if courseSet.type != 'normal' %}
         [{{ dict('courseType')[courseSet.type] }}]
       {% endif %}
-      <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      {% block coursesetTitle %}
+        <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      {% endblock %}
     </div>
+
     <div class="courseset-manage-header-info__price color-danger">
       {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
         ¥{{ courseSet.minCoursePrice }}
       {% else %}
         ¥{{ courseSet.minCoursePrice }}～¥{{ courseSet.maxCoursePrice }}
       {% endif %}
+      {% block coursesetTag %}
+      {% endblock %}
     </div>
   </div>
 

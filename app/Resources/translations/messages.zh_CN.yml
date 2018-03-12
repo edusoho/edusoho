@@ -3784,14 +3784,13 @@ my.teaching.testpaper.test_record: 我的考试记录
 
 my.teaching.open_course.title: 名称
 my.teaching.open_course.hit_num: 浏览数
-my.teaching.open_course.hit_num_cell: 次
 my.teaching.open_course.status: 状态
 my.teaching.open_course.actions: 操作
 my.teaching.open_course.live_label: 直播直播
 my.teaching.open_course.manage_btn: 管理
 my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.lesson_manage_btn: 课时管理
-my.teaching.open_course.file_manage_btn: 文件管理
+my.teaching.open_course.file_manage_btn: 课程文件
 my.teaching.open_course.student_manage_btn: 学员管理
 my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
 my.teaching.page_title: 在教课程

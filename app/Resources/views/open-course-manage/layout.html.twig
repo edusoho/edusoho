@@ -2,7 +2,12 @@
 
 {% block title %}{{'my.teaching.open_course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 
- {% block breadcrumb %}{% endblock %}
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+    <li class="active">{{ course.title|plain_text(21) }}</li>
+  </ol>
+{% endblock %}
 
 {% block course_header %}
   {% include 'open-course-manage/header.html.twig' %}
