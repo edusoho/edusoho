@@ -19,7 +19,7 @@
 	 {% endif %}
 
 	<div class="panel-body">
-		<ul class="lesson-list sortable-list" id="course-item-list" {% if course.type == 'normal' or course.type == 'live' %}data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}"{% endif %}>
+		<ul class="open-course-lesson sortable-list" id="course-item-list" {% if course.type == 'normal' or course.type == 'live' %}data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}"{% endif %}>
 
 			{% for id, item in items %}
 			  {% if 'chapter' in id %}
@@ -30,7 +30,7 @@
 			{% endfor %}
 
 		</ul>
-		<div>{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
+		<div class="cd-mt16 cd-ml40">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
 	</div>
 </div>
 
