@@ -71,7 +71,7 @@ $list.on('click', '.publish-lesson-btn', function (e) {
   let $btn = $(e.currentTarget);
   $.post($(this).data('url'), function (html) {
     let id = '#' + $(html).attr('id');
-    $(id).find('.item-content .unpublish-warning').remove();
+    $(id).find('.item-content .js-unpublish-status').remove();
     $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
     $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
     $(id).find('.item-actions .delete-lesson-btn').parent().addClass('hidden').removeClass('show');
@@ -84,7 +84,7 @@ $list.on('click', '.unpublish-lesson-btn', function (e) {
   let $btn = $(e.currentTarget);
   $.post($(this).data('url'), function (html) {
     let id = '#' + $(html).attr('id');
-    $(id).find('.item-content').append('<span class="unpublish-warning text-warning">' + Translator.trans('open_course.unpublish_hint') +'</span>');
+    $(id).find('.item-content').prepend('<span class="lesson-unpublish-status js-unpublish-status">' + Translator.trans('open_course.unpublish_hint') +'</span>');
     $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
     $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
     $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');

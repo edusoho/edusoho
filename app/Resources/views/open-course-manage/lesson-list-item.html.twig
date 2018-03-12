@@ -3,7 +3,7 @@
   <div class="item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
     {% if lesson.status == 'unpublished' %}
-      <span class="unpublish-warning color-warning">({{'my.teaching.open_course.lesson.status.unpublished'|trans}})</span>
+      <span class="lesson-unpublish-status">{{'my.teaching.open_course.lesson.status.unpublished'|trans}}</span>
     {% endif %}
 
     {% if lesson.type == 'video' %}
@@ -40,11 +40,11 @@
     {{ lesson.title }}
 
     {% if lesson.type in ['video', 'audio'] %}
-      <span class="color-gray">{{ lesson.length|duration }}</span>
+      <span class="mls">{{ lesson.length|duration }}</span>
     {% endif %}
 
     {% if lesson.type in ['live'] %}
-      <span class="color-gray">{{ lesson.startTime|date_format }}</span>
+      <span class="mls">{{ lesson.startTime|date_format }}</span>
     {% endif %}
 
     <span data-role="mediaStatus"></span>
@@ -94,40 +94,5 @@
 
       </ul>
     </div>
-
-{# 
-    <span class="dropdown">
-      <a class="dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown" style="margin-right:3px" aria-haspopup="true" aria-expanded="false"></i>{{'my.teaching.open_course.lesson.more_btn'|trans}}</a>
-
-      <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
-
-        {% if course.type == 'open' %}
-          <li>
-            <a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('open_course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-paperclip prs"></span>{{'my.teaching.open_course.lesson.add_material_btn'|trans}}</a>
-          </li>
-          <li class="divider"></li>
-        {% endif %}
-
-        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-ok-circle prs"></span>{{'form.btn.publish'|trans}}
-          </a>
-        </li>
-
-        <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
-          <a class="unpublish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-remove-circle prs"></span>{{'form.btn.cancel_publish'|trans}}
-          </a>
-        </li>
-
-        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a class="delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-trash prs"></span>{{'form.btn.delete'|trans}}
-          </a>
-        </li>
-      </ul>
-    </span> #}
   </div>
-
 </li>
