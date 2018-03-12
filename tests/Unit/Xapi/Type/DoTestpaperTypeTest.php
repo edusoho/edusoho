@@ -183,11 +183,10 @@ class DoTestpaperTypeTest extends BaseTestCase
         );
 
         $courseService = $this->mockBiz(
-            'Course:CourseService',
+            'Course:CourseDao',
             array(
                 array(
-                    'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(2)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 2,
@@ -200,11 +199,10 @@ class DoTestpaperTypeTest extends BaseTestCase
         );
 
         $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
+            'Course:CourseSetDao',
             array(
                 array(
-                    'functionName' => 'findCourseSetsByIds',
-                    'withParams' => array(array(3)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 3,
@@ -229,8 +227,8 @@ class DoTestpaperTypeTest extends BaseTestCase
 
         $testpaperService->shouldHaveReceived('findTestpaperResultsByIds');
         $testpaperService->shouldHaveReceived('findTestpapersByIds');
-        $courseService->shouldHaveReceived('findCoursesByIds');
-        $courseSetService->shouldHaveReceived('findCourseSetsByIds');
+        $courseService->shouldHaveReceived('search');
+        $courseSetService->shouldHaveReceived('search');
 
         $packageInfo = reset($packageInfo);
 

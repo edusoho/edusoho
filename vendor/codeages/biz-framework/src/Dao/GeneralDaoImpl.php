@@ -73,12 +73,13 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $this->db()->fetchAssoc($sql, array($id)) ?: null;
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
+    public function search($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        $this->addSelect($builder, $columns);
 
         $declares = $this->declares();
         foreach ($orderBys ?: array() as $order => $sort) {
@@ -87,6 +88,23 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         }
 
         return $builder->execute()->fetchAll();
+    }
+
+    private function addSelect(DynamicQueryBuilder $builder, $columns)
+    {
+        if (!$columns) {
+            return $builder->select('*');
+        }
+
+        foreach ($columns as $column) {
+            if (preg_match('/^\w+$/', $column)) {
+                $builder->addSelect($column);
+            } else {
+                throw $this->createDaoException('Illegal column name: '. $column);
+            }
+        }
+
+        return $builder;
     }
 
     public function count($conditions)

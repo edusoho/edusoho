@@ -53,21 +53,9 @@ class DoTestpaperType extends Type
             $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
             $testpapers = ArrayToolkit::index($testpapers, 'id');
 
-            $courseIds = ArrayToolkit::column($testpaperResults, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
-
-            $courseSetIds = ArrayToolkit::column($testpaperResults, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
-
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
+            $courses = $this->findCourses(
+                array($testpaperResults, 'courseId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();

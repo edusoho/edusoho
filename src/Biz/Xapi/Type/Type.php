@@ -2,6 +2,7 @@
 
 namespace Biz\Xapi\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
@@ -25,9 +26,118 @@ abstract class Type extends BizAware
 
     abstract public function packages($statements);
 
+    /**
+     * @param $subject
+     * @param $dao
+     * @param $columns
+     * @param array $conditions
+     * @return array  array('id' => 1, 'column1' => 2)
+     */
+    protected function find($subject, $dao, $columns, $conditions = array())
+    {
+        $ids = ArrayToolkit::column($subject[0], $subject[1]);
+        $conditions = array_merge(array('ids' => $ids), $conditions);
+        $columns = array_unique(array_merge(array('id'), $columns));
+        $results = $this->createDao($dao)->search($conditions, array(), 0, PHP_INT_MAX, $columns);
+        return ArrayToolkit::index($results, 'id');
+    }
+
+    protected function findTasks($subject, $conditions = array())
+    {
+        return $this->find(
+            $subject,
+            'Task:TaskDao',
+            array('activityId', 'type', 'courseId'),
+            $conditions
+        );
+    }
+
+    protected function findCourses($subject, $conditions = array())
+    {
+        $courses = $this->find(
+            $subject,
+            'Course:CourseDao',
+            array('courseSetId', 'title'),
+            $conditions
+        );
+
+        $courseSets = $this->findCourseSets(
+            array($courses, 'courseSetId')
+        );
+
+        foreach ($courses as &$course) {
+            if (!empty($courseSets[$course['courseSetId']])) {
+                $courseSet = $courseSets[$course['courseSetId']];
+                $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
+                $course['title'] = $courseSet['title'].'-'.$course['title'];
+            }
+        }
+
+        return $courses;
+    }
+
+    protected function findCourseSets($subject, $conditions = array())
+    {
+        return $this->find(
+            $subject,
+            'Course:CourseSetDao',
+            array('title', 'subtitle'),
+            $conditions
+        );
+    }
+
+    protected function findCourseThreads($subject, $conditions = array())
+    {
+        return $this->find(
+            $subject,
+            'Course:ThreadDao',
+            array('taskId', 'courseId', 'courseSetId'),
+            $conditions
+        );
+    }
+
+    protected function findActivityWatchLogs($subject, $conditions = array())
+    {
+        return $this->find(
+            $subject,
+            'Xapi:ActivityWatchLogDao',
+            array('course_id', 'task_id'),
+            $conditions
+        );
+    }
+
+    protected function findActivities($subject)
+    {
+        $activityIds = ArrayToolkit::column($subject[0], $subject[1]);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        $resourceIds = array();
+        foreach ($activities as $activity) {
+            if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+                if (!empty($activity['ext']['mediaId'])) {
+                    $resourceIds[] = $activity['ext']['mediaId'];
+                }
+            }
+        }
+        $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
+        $resources = ArrayToolkit::index($resources, 'id');
+
+        return array($activities, $resources);
+    }
+
     protected function createService($alias)
     {
         return $this->biz->service($alias);
+    }
+
+    /**
+     * @param $alias
+     * @return \Codeages\Biz\Framework\Dao\GeneralDaoInterface
+     */
+    protected function createDao($alias)
+    {
+        return $this->biz->dao($alias);
     }
 
     /**

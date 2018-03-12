@@ -192,6 +192,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'parentId IN ( :parentIds )',
                 'id NOT IN ( :excludeIds )',
                 'id IN ( :courseIds )',
+                'id IN ( :ids)',
                 'locked = :locked',
                 'lessonNum > :lessonNumGT',
                 'orgCode = :orgCode',

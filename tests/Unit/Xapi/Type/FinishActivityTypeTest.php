@@ -204,11 +204,10 @@ class FinishActivityTypeTest extends BaseTestCase
         );
 
         $taskService = $this->mockBiz(
-            'Task:TaskService',
+            'Task:TaskDao',
             array(
                 array(
-                    'functionName' => 'findTasksByIds',
-                    'withParams' => array(array(3)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 3,
@@ -222,11 +221,10 @@ class FinishActivityTypeTest extends BaseTestCase
         );
 
         $courseService = $this->mockBiz(
-            'Course:CourseService',
+            'Course:CourseDao',
             array(
                 array(
-                    'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 1,
@@ -239,11 +237,10 @@ class FinishActivityTypeTest extends BaseTestCase
         );
 
         $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
+            'Course:CourseSetDao',
             array(
                 array(
-                    'functionName' => 'findCourseSetsByIds',
-                    'withParams' => array(array(5)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 5,
@@ -301,9 +298,9 @@ class FinishActivityTypeTest extends BaseTestCase
         ));
 
         $taskResultService->shouldHaveReceived('searchTaskResults');
-        $taskService->shouldHaveReceived('findTasksByIds');
-        $courseService->shouldHaveReceived('findCoursesByIds');
-        $courseSetService->shouldHaveReceived('findCourseSetsByIds');
+        $taskService->shouldHaveReceived('search');
+        $courseService->shouldHaveReceived('search');
+        $courseSetService->shouldHaveReceived('search');
         $activityService->shouldHaveReceived('findActivities');
 
         $packageInfo = reset($packageInfo);

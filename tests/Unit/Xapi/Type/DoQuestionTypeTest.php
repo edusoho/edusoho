@@ -253,11 +253,10 @@ class DoQuestionTypeTest extends BaseTestCase
         );
 
         $taskService = $this->mockBiz(
-            'Task:TaskService',
+            'Task:TaskDao',
             array(
                 array(
-                    'functionName' => 'findTasksByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 1,
@@ -272,11 +271,10 @@ class DoQuestionTypeTest extends BaseTestCase
         );
 
         $courseService = $this->mockBiz(
-            'Course:CourseService',
+            'Course:CourseDao',
             array(
                 array(
-                    'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 1,
@@ -289,11 +287,10 @@ class DoQuestionTypeTest extends BaseTestCase
         );
 
         $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
+            'Course:CourseSetDao',
             array(
                 array(
-                    'functionName' => 'findCourseSetsByIds',
-                    'withParams' => array(array(5)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 5,
@@ -351,9 +348,9 @@ class DoQuestionTypeTest extends BaseTestCase
 
         $questionMarkerResultService->shouldHaveReceived('findResultsByIds');
         $questionMarkerService->shouldHaveReceived('findQuestionMarkersByIds');
-        $taskService->shouldHaveReceived('findTasksByIds');
-        $courseService->shouldHaveReceived('findCoursesByIds');
-        $courseSetService->shouldHaveReceived('findCourseSetsByIds');
+        $taskService->shouldHaveReceived('search');
+        $courseService->shouldHaveReceived('search');
+        $courseSetService->shouldHaveReceived('search');
         $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
 

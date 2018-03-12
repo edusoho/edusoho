@@ -138,11 +138,10 @@ class DoExerciseTypeTest extends BaseTestCase
             )
         );
 
-        $testpaperService = $this->mockBiz('Testpaper:TestpaperService',
+        $testpaperService = $this->mockBiz('Testpaper:TestpaperResultDao',
             array(
                 array(
-                    'functionName' => 'findTestpaperResultsByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 1,
@@ -156,11 +155,10 @@ class DoExerciseTypeTest extends BaseTestCase
             )
         );
 
-        $courseService = $this->mockBiz('Course:CourseService',
+        $courseService = $this->mockBiz('Course:CourseDao',
             array(
                 array(
-                    'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(2)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 2,
@@ -173,11 +171,10 @@ class DoExerciseTypeTest extends BaseTestCase
         );
 
         $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
+            'Course:CourseSetDao',
             array(
                 array(
-                    'functionName' => 'findCourseSetsByIds',
-                    'withParams' => array(array(3)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 3,
@@ -200,9 +197,9 @@ class DoExerciseTypeTest extends BaseTestCase
             ),
         ));
 
-        $testpaperService->shouldHaveReceived('findTestpaperResultsByIds');
-        $courseService->shouldHaveReceived('findCoursesByIds');
-        $courseSetService->shouldHaveReceived('findCourseSetsByIds');
+        $testpaperService->shouldHaveReceived('search');
+        $courseService->shouldHaveReceived('search');
+        $courseSetService->shouldHaveReceived('search');
 
         $packageInfo = reset($packageInfo);
 

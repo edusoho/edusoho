@@ -45,43 +45,22 @@ class AskQuestionType extends Type
             return array();
         }
         try {
-            $threadIds = ArrayToolkit::column($statements, 'target_id');
-            $threads = $this->getThreadService()->searchThreads(array('ids' => $threadIds, 'type' => 'question'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-            $threads = ArrayToolkit::index($threads, 'id');
+            $threads = $this->findCourseThreads(
+                array($statements, 'target_id'),
+                array('type' => 'question')
+            );
 
-            $taskIds = ArrayToolkit::column($threads, 'taskId');
-            $tasks = $this->getTaskService()->findTasksByIds($taskIds);
-            $tasks = ArrayToolkit::index($tasks, 'id');
+            $tasks = $this->findTasks(
+                array($threads, 'taskId')
+            );
 
-            $courseSetIds = ArrayToolkit::column($threads, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
+            $courses = $this->findCourses(
+                array($threads, 'courseId')
+            );
 
-            $courseIds = ArrayToolkit::column($threads, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
-
-            $activityIds = ArrayToolkit::column($tasks, 'activityId');
-            $activities = $this->getActivityService()->findActivities($activityIds, true);
-            $activities = ArrayToolkit::index($activities, 'id');
-
-            $resourceIds = array();
-            foreach ($activities as $activity) {
-                if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-                    if (!empty($activity['ext']['mediaId'])) {
-                        $resourceIds[] = $activity['ext']['mediaId'];
-                    }
-                }
-            }
-            $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
-            $resources = ArrayToolkit::index($resources, 'id');
+            list($activities, $resources) = $this->findActivities(
+                array($tasks, 'activityId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();

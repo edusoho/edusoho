@@ -203,11 +203,10 @@ class WriteNoteTypeTest extends BaseTestCase
         );
 
         $taskService = $this->mockBiz(
-            'Task:TaskService',
+            'Task:TaskDao',
             array(
                 array(
-                    'functionName' => 'findTasksByIds',
-                    'withParams' => array(array(100)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 100,
@@ -220,11 +219,10 @@ class WriteNoteTypeTest extends BaseTestCase
         );
 
         $courseService = $this->mockBiz(
-            'Course:CourseService',
+            'Course:CourseDao',
             array(
                 array(
-                    'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 1,
@@ -237,11 +235,10 @@ class WriteNoteTypeTest extends BaseTestCase
         );
 
         $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
+            'Course:CourseSetDao',
             array(
                 array(
-                    'functionName' => 'findCourseSetsByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 1,
@@ -258,7 +255,6 @@ class WriteNoteTypeTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'findActivities',
-                    'withParams' => array(array(1000), true),
                     'returnValue' => array(
                         0 => array(
                             'id' => 1000,
@@ -302,9 +298,9 @@ class WriteNoteTypeTest extends BaseTestCase
         $packageInfo = reset($packageInfo);
 
         $courseNoteService->shouldHaveReceived('searchNotes');
-        $taskService->shouldHaveReceived('findTasksByIds');
-        $courseService->shouldHaveReceived('findCoursesByIds');
-        $courseSetService->shouldHaveReceived('findCourseSetsByIds');
+        $taskService->shouldHaveReceived('search');
+        $courseService->shouldHaveReceived('search');
+        $courseSetService->shouldHaveReceived('search');
         $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
 

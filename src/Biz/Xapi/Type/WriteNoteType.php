@@ -46,38 +46,17 @@ class WriteNoteType extends Type
             $notes = $this->getCourseNoteService()->searchNotes(array('ids' => $noteIds), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
             $notes = ArrayToolkit::index($notes, 'id');
 
-            $taskIds = ArrayToolkit::column($notes, 'taskId');
-            $tasks = $this->getTaskService()->findTasksByIds($taskIds);
-            $tasks = ArrayToolkit::index($tasks, 'id');
+            $tasks = $this->findTasks(
+                array($notes, 'taskId')
+            );
 
-            $courseIds = ArrayToolkit::column($notes, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
+            $courses = $this->findCourses(
+                array($notes, 'courseId')
+            );
 
-            $courseSetIds = ArrayToolkit::column($notes, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
-
-            $activityIds = ArrayToolkit::column($tasks, 'activityId');
-            $activities = $this->getActivityService()->findActivities($activityIds, true);
-            $activities = ArrayToolkit::index($activities, 'id');
-            $resourceIds = array();
-            foreach ($activities as $activity) {
-                if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-                    if (!empty($activity['ext']['mediaId'])) {
-                        $resourceIds[] = $activity['ext']['mediaId'];
-                    }
-                }
-            }
-            $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
-            $resources = ArrayToolkit::index($resources, 'id');
+            list($activities, $resources) = $this->findActivities(
+                array($tasks, 'activityId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();

@@ -38,25 +38,14 @@ class DoHomeworkType extends Type
             return array();
         }
         try {
-            $homeworkResultIds = ArrayToolkit::column($statements, 'target_id');
-            $homeworkResults = $this->getTestpaperService()->findTestpaperResultsByIds($homeworkResultIds);
-            $homeworkResults = ArrayToolkit::index($homeworkResults, 'id');
 
-            $courseIds = ArrayToolkit::column($homeworkResults, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
+            $homeworkResults = $this->findHomeworkResults(
+               array($statements, 'target_id')
+            );
 
-            $courseSetIds = ArrayToolkit::column($homeworkResults, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
-
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
+            $courses = $this->findCourses(
+               array($homeworkResults, 'courseId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();
@@ -88,5 +77,14 @@ class DoHomeworkType extends Type
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);
         }
+    }
+
+    private function findHomeworkResults($subject)
+    {
+        return $this->find(
+            $subject,
+            'Testpaper:TestpaperResultDao',
+            array('courseId', 'paperName', 'passedStatus')
+        );
     }
 }

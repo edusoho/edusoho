@@ -19,6 +19,7 @@ class ActivityWatchLogDaoImpl extends AdvancedDaoImpl implements ActivityWatchLo
             'serializes' => array(
             ),
             'conditions' => array(
+                'id IN ( :ids)',
                 'is_push = :is_push',
                 'created_time > :created_time_GT',
                 'created_time < :created_time_LT',
