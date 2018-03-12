@@ -75,7 +75,7 @@ interface TestpaperService
 
     public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $activityId);
 
