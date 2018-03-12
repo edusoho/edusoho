@@ -1,13 +1,15 @@
   
 <div class="settings-list js-settings-list clearfix">
   <div class="settings-item {% if tasks.preparation|default(null) %} active {% endif %}">
-    <a href="javascript:;" data-toggle="modal" data-target="#modal"
+    <a href="javascript:;" 
       data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not tasks.preparation|default(null) %}
+        class="js-lesson-create-btn"
         data-content="{{'course.plan_task.preparation_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: lesson.id}) }}">
       {% else %}
+        data-toggle="modal" data-target="#modal"
         data-content="<i class='mr10 es-icon
           {% if activity_metas(tasks.preparation.type) %}
             {{ activity_metas(tasks.preparation.type).icon }}
@@ -24,9 +26,8 @@
     <i class="es-icon es-icon-angledoubleright after"></i>
   </div>
   <div class="settings-item js-settings-item active">
-    <a href="javascript:;" data-role='update-task'
+    <a href="javascript:;" data-role='update-task' data-toggle="modal" data-target="#modal"
       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"
-      data-toggle="modal" data-target="#modal"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       data-content="<i class='mr10 es-icon
         {% if activity_metas(task.activity.mediaType) %}
@@ -38,12 +39,14 @@
     <i class="es-icon es-icon-angledoubleright after"></i>
   </div>
   <div class="settings-item {% if tasks.exercise|default(null) %} active {% endif %}">
-    <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+    <a href="javascript:;" data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not tasks.exercise|default(null) %}
+        class="js-lesson-create-btn" 
         data-content="{{'course.plan_task.practice_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: lesson.id}) }}">
       {% else %}
+        data-toggle="modal" data-target="#modal"
         data-content="<i class='mr10 es-icon
           {% if activity_metas(tasks.exercise.type) %}
             {{ activity_metas(tasks.exercise.type).icon }}
@@ -57,13 +60,15 @@
     <i class="es-icon es-icon-angledoubleright after"></i>
   </div>
   <div class="settings-item {% if tasks.homework|default(null) %} active {% endif %}">
-    <a href="javascript:;" data-toggle="modal" data-target="#modal"
+    <a href="javascript:;" 
       data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not tasks.homework|default(null) %}
+        class="js-lesson-create-btn"
         data-content="{{'course.plan_task.homework_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: lesson.id}) }}">
       {% else %}
+        data-toggle="modal" data-target="#modal"
         data-content="<i class='mr10 es-icon
           {% if activity_metas(tasks.homework.type) %}
             {{ activity_metas(tasks.homework.type).icon }}
@@ -78,13 +83,15 @@
   </div>
 
   <div class="settings-item {% if tasks.extraClass|default(null) %} active {% endif %}">
-    <a href="javascript:;" data-toggle="modal" data-target="#modal"
+    <a href="javascript:;" 
       data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not  tasks.extraClass|default(null) %}
+        class="js-lesson-create-btn"
         data-content="{{'course.plan_task.extra_class_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: lesson.id}) }}">
       {% else %}
+        data-toggle="modal" data-target="#modal"
         data-content="<i class='mr10 es-icon
         {% if activity_metas(tasks.extraClass.type) %}
           {{ activity_metas(tasks.extraClass.type).icon }}

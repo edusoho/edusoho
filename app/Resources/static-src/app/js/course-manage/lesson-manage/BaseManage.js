@@ -16,14 +16,16 @@ export default class Manage {
       self.sortList();
     });
 
-    this.$element.on('click','[data-toggle]', function(e){
+    $('body').on('click', '[data-position]', function(e){
       let $this = $(this);
+
       self.position = $this.data('position');
       self.type = $this.data('type');
     });
     this._deleteChapter();
     this._collapse();
     this._publish();
+    this._createTask();
   }
 
   _collapse() {
@@ -53,8 +55,10 @@ export default class Manage {
     let $elm = $(elm);
     let $exsit = $('#'+$elm.attr('id'));
 
+    //编辑时，替换元素
     if ($exsit.length > 0) {
-      $exsit.replaceWith(elm);
+      $exsit.replaceWith($elm);
+      this.afterAddItem($elm);
 
       return;
     }
@@ -63,34 +67,35 @@ export default class Manage {
     {
       case 'chapter':
         let $position = this.$element.find('#chapter-'+this.position);
-        $position = $position.nextUntil('.js-task-manage-chapter').last();
-        if (0 == $position.length) {
-          this.$element.append(elm);
+        let $last = $position.nextUntil('.js-task-manage-chapter').last();
+        if (0 == $last.length) {
+          $position.after($elm);
         } else {
-          $position.after(elm);
+          $last.after($elm);
         }
         break;
       case 'task':
-        this.$element.find('#chapter-'+this.position+' .js-lesson-box').append(elm);
+        this.$element.find('#chapter-'+this.position+' .js-lesson-box').append($elm);
         break;
       case 'lesson':
         let $unit = this.$element.find('#chapter-'+this.position);
         let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
         if (0 == $lesson.length) {
-          $unit.after(elm);
+          $unit.after($elm);
         } else {
-          $lesson.after(elm);
+          $lesson.after($elm);
         }
         break;
       default:
-        this.$element.append(elm);
+        this.$element.append($elm);
     }
     this.handleEmptyShow();
     this._flushTaskNumber();
-    this._clearPosition();
+    this.clearPosition();
+    this.afterAddItem($elm);
   }
 
-  _clearPosition() {
+  clearPosition() {
     this.position = '';
     this.type = '';
   }
@@ -226,11 +231,13 @@ export default class Manage {
 
   _sortUnitNumber() {
      // 排序 节 的序号
-    let num = 1;
-    this.$element.find('.js-task-manage-unit').each(function(){
-      let $item = $(this);
-      $item.find('.number').text(num);
-      num = $item.next().hasClass('task-manage-chapter') ? 1 : num+1;
+    let num;
+    this.$element.find('.js-task-manage-chapter').each(function(){
+      let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
+      num = 1;
+      $unit.each(function(){
+        $(this).find('.number').text(num++);
+      });
     });
   }
 
@@ -267,5 +274,27 @@ export default class Manage {
     
     let num = $('.js-settings-item.active').length;
     this.$taskNumber.text(num);
+  }
+
+  _createTask() {
+    this.$element.on('click', '.js-create-task-btn', function(event) {
+      let url = $(this).data('url');
+
+      $.get(url, function (response) {
+        if (response.code) {
+          $('#modal').html('');
+          $('#modal').append(response.html);
+          $('#modal').modal({'backdrop':'static','show':true});
+        } else {
+          notify('danger', Translator.trans(response.message));
+        }
+      }).fail(function(response){
+        notify('error', response.responseJSON.error.message);
+      });
+    })
+  }
+  
+  afterAddItem($elm) {
+    console.log('afterAddItem');
   }
 }

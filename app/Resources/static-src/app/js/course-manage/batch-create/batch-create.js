@@ -23,6 +23,7 @@ class BatchCreate {
       accept: $uploader.data('accept'),
       process: this.getUploadProcess(),
       ui: 'batch',
+      fileNumLimit: $uploader.data('fileNumLimit') !== undefined ? $uploader.data('NumLimit') : null,
       locale: document.documentElement.lang
     })
 
@@ -53,6 +54,10 @@ class BatchCreate {
 
       let $btn = $(event.currentTarget);
       $btn.button('loading');
+      if (!this.validLessonNum($btn)) {
+        return ;
+      }
+
       console.log('files', this.files);
 
       this.files.map((file, index) => {
@@ -91,6 +96,25 @@ class BatchCreate {
     }
 
     return uploadProcess;
+  }
+
+  validLessonNum($btn) {
+    $.ajax({
+      type: 'post',
+      url: $btn.data('validUrl'),
+      async: false,
+      data: {
+        number: this.files.length
+      },
+      success: function(response) {
+        if (response && response.error) {
+          notify('danger', response.error);
+          $btn.button('reset');
+          return false;
+        }
+        return true;
+      }
+    });
   }
 
   createLesson($btn, file, isLast) {

@@ -7,6 +7,7 @@ use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Visitor\CourseStrategyVisitorInterface;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class NormalStrategy extends BaseStrategy implements CourseStrategy
 {
@@ -103,7 +104,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             );
             $categoryTaskCount = $this->getTaskDao()->count($conditions);
             if (empty($categoryTaskCount)) {
-                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
             }
 
             $this->biz['db']->commit();
@@ -267,21 +268,11 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
 
     private function _createLesson($task)
     {
-        if (!empty($task['categoryId'])) {
-            $chapter = $this->getCourseService()->getChapter($task['fromCourseId'], $task['categoryId']);
-            if (empty($chapter)) {
-                throw $this->createInvalidArgumentException('CategoryId Invalid');
-            }
-        } else {
-            $chapter = array(
-                'courseId' => $task['fromCourseId'],
-                'title' => $task['title'],
-                'type' => 'lesson',
-                'status' => 'created',
-            );
-            $chapter = $this->getCourseService()->createChapter($chapter);
+        $chapter = $this->getCourseService()->getChapter($task['fromCourseId'], $task['categoryId']);
+        if (empty($chapter) || $chapter['type'] != 'lesson') {
+            throw new InvalidArgumentException('CategoryId Invalid');
         }
-        $task['categoryId'] = $chapter['id'];
+
         $task['status'] = $chapter['status'];
 
         return parent::createTask($task);
