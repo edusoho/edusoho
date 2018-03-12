@@ -49,8 +49,6 @@ class SearchServiceImpl extends BaseService implements SearchService
         }
 
         $resultSet = $result['body']['datas'];
-        var_dump($conditions);
-        var_dump($resultSet);
         $counts = $result['body']['count'];
         $resultSet = SearchAdapterFactory::create($type)->adapt($resultSet);
 
