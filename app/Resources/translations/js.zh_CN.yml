@@ -533,7 +533,7 @@ open_course.add_replay_failed_where_live: 录制失败，直播时您没有进�
 open_course.add_replay_failed_hint: 录制失败!
 open_course.add_replay_success_hint: 课时已录制!
 open_course.publish_lesson_hint: 课时发布成功!
-open_course.unpublish_hint: (未发布)
+open_course.unpublish_hint: 未发布
 open_course.exercise_delete_hint: 您真的要删除该课时练习吗?
 open_course.exercise_delete_success_hint: 练习已删除!
 open_course.homework_delete_hint: 您真的要删除该课时作业吗?

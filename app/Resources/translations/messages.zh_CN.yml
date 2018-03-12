@@ -3820,7 +3820,7 @@ my.teaching.course_set.select_type.live_open_course.available_after_open: 云直
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
 # 录播公开课
-my.teaching.open_course.Basic_Info: 基本信息
+my.teaching.open_course.Basic_Info: 课程信息
 my.teaching.open_course.Basic_Info.title: 标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
 my.teaching.open_course.Basic_Info.tags: 标签
