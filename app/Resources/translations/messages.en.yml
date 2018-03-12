@@ -3148,6 +3148,7 @@ my.teaching.testpaper.reviewing_empty: 'No paper needs to review'
 my.teaching.testpaper.check_finished_empty: 'No paper has been reviewed'
 my.teaching.testpaper.test_record: 'My tests'
 my.teaching.open_course.hit_num: PV
+my.teaching.open_course.hit_num_cell: 次
 my.teaching.open_course.status: Status
 my.teaching.open_course.actions: Action
 my.teaching.open_course.manage_btn: Manage

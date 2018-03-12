@@ -41,29 +41,29 @@
     </div>
   </div>
 
-<div class="courseset-manage-header-btn hidden-xs">
-  {% block btn %}
-    {# 课程发布按钮 #}
-    {% if courseSet.status == 'published' %}
-      <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
-    {% endif %}
+  <div class="courseset-manage-header-btn hidden-xs">
+    {% block btn %}
+      {# 课程发布按钮 #}
+      {% if courseSet.status == 'published' %}
+        <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
+      {% endif %}
 
-    {% if courseSet.status != 'published' %}
-      <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
+      {% if courseSet.status != 'published' %}
+        <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
 
-      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-        <button class="cd-btn cd-btn-primary course-manage-header-more">
-          <i class="es-icon es-icon-morehoriz"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
-          </li>
-        </ul>
-      </div>
-    {% endif %}
-  {% endblock %}
-</div>
+        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+          <button class="cd-btn cd-btn-primary course-manage-header-more">
+            <i class="es-icon es-icon-morehoriz"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+    {% endblock %}
+  </div>
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.student_member'|trans }}</span>
@@ -74,6 +74,7 @@
     <span>{{ 'course.learn_plan'|trans }}</span>
     <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.courseNum|default() }}</span>{{ 'course.plan.cell'|trans }}</div>
   </div>
+
 </div>
 
 {% block close %}

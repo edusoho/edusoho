@@ -3784,6 +3784,7 @@ my.teaching.testpaper.test_record: 我的考试记录
 
 my.teaching.open_course.title: 名称
 my.teaching.open_course.hit_num: 浏览数
+my.teaching.open_course.hit_num_cell: 次
 my.teaching.open_course.status: 状态
 my.teaching.open_course.actions: 操作
 my.teaching.open_course.live_label: 直播直播
