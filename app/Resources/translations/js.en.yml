@@ -589,7 +589,7 @@ open_course.add_replay_failed_where_live: Recording failed, you did not record i
 open_course.add_replay_failed_hint: Recording failed!
 open_course.add_replay_success_hint: Lesson has been recorded!
 open_course.publish_lesson_hint: Lesson publish successfully!
-open_course.unpublish_hint: (Unpublished)
+open_course.unpublish_hint: Unpublished
 open_course.exercise_delete_hint: Do you really want to delete this lesson practice?
 open_course.exercise_delete_success_hint: Practice deleted!
 open_course.homework_delete_hint: Do you really want to delete the assingment?
