@@ -90,7 +90,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $lesson = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($lesson['courseId'], array(
-            'compulsoryTaskNum', 'publishLessonNum'
+            'compulsoryTaskNum', 'publishLessonNum',
         ));
     }
 
@@ -98,7 +98,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $lesson = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($lesson['courseId'], array(
-            'lessonNum', 'publishLessonNum'
+            'lessonNum', 'publishLessonNum',
         ));
     }
 
