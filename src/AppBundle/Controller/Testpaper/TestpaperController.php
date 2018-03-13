@@ -18,6 +18,7 @@ use AppBundle\Common\Exception\AccessDeniedException;
 
 class TestpaperController extends BaseController
 {
+    //由于学习引擎改造，这里的 lessonId 等于 activityId
     public function doTestpaperAction(Request $request, $testId, $lessonId)
     {
         $user = $this->getUser();
@@ -307,13 +308,11 @@ class TestpaperController extends BaseController
         return $total;
     }
 
-    //这里的lessonId 等于taskId
-    protected function testpaperActivityCheck($lessonId, $testpaper)
+    protected function testpaperActivityCheck($activityId, $testpaper)
     {
         $user = $this->getUser();
 
-        $task = $this->getTaskService()->getTask($lessonId);
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($activityId);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
@@ -337,7 +336,7 @@ class TestpaperController extends BaseController
             $user['id'],
             $testpaper['id'],
             $activity['fromCourseId'],
-            $lessonId,
+            $activityId,
             $testpaper['type']
         );
 
