@@ -27,7 +27,7 @@ abstract class BaseRegister
         $this->createUserProfile($registration, $user);
         $this->afterSave($registration, $user);
 
-        return array($user, $this->createPerInviteUser($registration, $user));
+        return array($user, $this->createPerInviteUser($registration, $user['id']));
     }
 
     /**
@@ -230,22 +230,19 @@ abstract class BaseRegister
         $this->getProfileDao()->create($profile);
     }
 
-    private function createPerInviteUser($registration, $user)
+    private function createPerInviteUser($registration, $userId)
     {
-        $inviteUser = null;
-        $inviteCode = empty($registration['invite_code']) ? $this->biz['session']->get('invite_code', '') : $registration['invite_code'];
-
-        if (!empty($inviteCode)) {
-            $inviteUser = $this->getUserDao()->getByInviteCode($inviteCode);
-        }
+        $originUser = $this->biz['user'];
+        $inviteCode = empty($registration['invitedCode']) ? $originUser['invitedCode'] : $registration['invitedCode'];
+        $inviteUser = empty($inviteCode) ? array() : $this->getUserDao()->getByInviteCode($inviteCode);
 
         if (!empty($inviteUser)) {
-            $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
-            $invitedCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
+            $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $userId);
+            $invitedCoupon = $this->getCouponService()->generateInviteCoupon($userId, 'register');
 
             if (!empty($invitedCoupon)) {
                 $card = $this->getCardService()->getCardByCardId($invitedCoupon['id']);
-                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($userId, array('invitedUserCardId' => $card['cardId']));
             }
         }
 

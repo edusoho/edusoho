@@ -180,7 +180,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
         }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
-        $biz['session'] = $this->getContainer()->get('session');
     }
 
     protected function registerSessionServiceProvider($biz)
@@ -226,7 +225,13 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
+            $currentUser = array(
+                'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
+                'isSecure' => $this->request->isSecure(),
+                'invitedCode' => $container->get('session')->get('invitedCode', ''),
+            );
+
+            $currentUser = new \Biz\User\AnonymousUser($currentUser);
             $currentUser['isSecure'] = $this->request->isSecure();
 
             $biz['user'] = $currentUser;
