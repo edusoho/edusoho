@@ -23,7 +23,7 @@ class SearchKeywordType extends Type
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
-                $data = $statement['data'];
+                $data = $statement['context'];
                 $object = array(
                     'id' => $data['uri'],
                     'definitionType' => 'teacher' === $data['type'] ? '' : $this->getDefinitionType($data['type']),

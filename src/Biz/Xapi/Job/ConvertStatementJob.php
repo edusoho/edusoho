@@ -9,6 +9,9 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class ConvertStatementJob extends AbstractJob
 {
+
+    private $perCount = 4000;
+
     public function execute()
     {
         try {
@@ -16,7 +19,7 @@ class ConvertStatementJob extends AbstractJob
             $condition = array(
                 'status' => 'created',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 2000);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, $this->perCount);
             $statements = ArrayToolkit::index($statements, 'uuid');
 
             foreach ($statements as &$statement) {
