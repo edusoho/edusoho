@@ -21,7 +21,7 @@ use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use QiQiuYun\SDK\XAPIVerbs;
+use QiQiuYun\SDK\Constants\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
