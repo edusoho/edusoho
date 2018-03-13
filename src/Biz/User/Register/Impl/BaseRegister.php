@@ -233,11 +233,11 @@ abstract class BaseRegister
     private function createPerInviteUser($registration, $userId)
     {
         $originUser = $this->biz['user'];
-        
+
         $invitedCode = empty($originUser['invitedCode']) ? '' : $originUser['invitedCode'];
         $invitedCode = empty($registration['invitedCode']) ? $invitedCode : $registration['invitedCode'];
         $inviteUser = empty($invitedCode) ? array() : $this->getUserDao()->getByInviteCode($invitedCode);
-        
+
         if (!empty($inviteUser)) {
             $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $userId);
             $invitedCoupon = $this->getCouponService()->generateInviteCoupon($userId, 'register');
