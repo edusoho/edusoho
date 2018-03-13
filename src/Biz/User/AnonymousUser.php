@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AnonymousUser extends CurrentUser
 {
-    public function __construct($user)
+    public function __construct($user = array())
     {
         $user = array_merge(array(
             'id' => 0,
