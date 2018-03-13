@@ -1,6 +1,7 @@
 import DateRangePicker from 'app/common/daterangepicker';
 import Emitter from 'component-emitter';
-import  moment from 'moment';
+import 'moment';
+
 export default class CourseOverviewDateRangePicker extends Emitter {
 
   constructor(containerSelector) {
