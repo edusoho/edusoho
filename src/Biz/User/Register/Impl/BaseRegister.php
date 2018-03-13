@@ -234,7 +234,8 @@ abstract class BaseRegister
     {
         $originUser = $this->biz['user'];
         
-        $invitedCode = empty($registration['invitedCode']) ? $originUser['invitedCode'] : $registration['invitedCode'];
+        $invitedCode = empty($originUser['invitedCode']) ? '' : $originUser['invitedCode'];
+        $invitedCode = empty($registration['invitedCode']) ? $invitedCode : $registration['invitedCode'];
         $inviteUser = empty($invitedCode) ? array() : $this->getUserDao()->getByInviteCode($invitedCode);
         
         if (!empty($inviteUser)) {
