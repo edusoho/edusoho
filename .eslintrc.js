@@ -25,6 +25,7 @@ module.exports = {
       "introJs": true,
       "Handlebars": true,
       "store": true,
+      "moment": true,
     },
     "extends": "eslint:recommended",
     "parserOptions": {
