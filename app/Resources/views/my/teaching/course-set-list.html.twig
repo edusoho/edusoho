@@ -1,0 +1,23 @@
+{% extends 'courseset-manage/header.html.twig' %}
+
+{% block js %}
+{% endblock %}
+
+{% block coursesetTitle %}
+  {% if courseSet.status == 'published' %}
+    <a class="cd-link-major" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+  {% else %}
+    <a class="cd-link-major" href="{{ path('course_show', {id: courseSet.defaultCourseId, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
+  {% endif %}
+{% endblock %}
+
+{% block courseTitle %}
+  {{ courseSet.courseNum|default(0) }}
+{% endblock %}
+
+{% block btn %}
+  <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.manage_btn'|trans }}</a>
+{% endblock %}
+
+{% block close %}
+{% endblock %}

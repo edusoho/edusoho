@@ -1264,6 +1264,7 @@ course.student_member: 学员人数
 course.learn_plan: 学习计划
 course.student.cell: 人
 course.plan.cell: 个
+course.manage_btn: 管理课程
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
 course.share: 分享
@@ -3790,7 +3791,7 @@ my.teaching.open_course.live_label: 直播直播
 my.teaching.open_course.manage_btn: 管理
 my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.lesson_manage_btn: 课时管理
-my.teaching.open_course.file_manage_btn: 文件管理
+my.teaching.open_course.file_manage_btn: 课程文件
 my.teaching.open_course.student_manage_btn: 学员管理
 my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
 my.teaching.page_title: 在教课程
@@ -3819,7 +3820,7 @@ my.teaching.course_set.select_type.live_open_course.available_after_open: 云直
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
 # 录播公开课
-my.teaching.open_course.Basic_Info: 基本信息
+my.teaching.open_course.Basic_Info: 课程信息
 my.teaching.open_course.Basic_Info.title: 标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
 my.teaching.open_course.Basic_Info.tags: 标签

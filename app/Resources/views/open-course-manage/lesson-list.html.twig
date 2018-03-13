@@ -10,7 +10,7 @@
 <div class="panel panel-default panel-col lesson-manage-panel" data-file-status-url={{path('open_course_manage_file_status')}}>
   <div class="panel-heading">
     <div class="pull-right">
-      <button class="btn btn-info btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'my.teaching.open_course.lesson.add_btn'|trans}}{% endif %}</button>
+      <button class="cd-btn cd-btn-primary cd-btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}">{% if course.type == 'open' %}{{'course.manage.create_lesson'|trans}}{% endif %}</button>
     </div>
     {{'my.teaching.open_course.lesson.manage'|trans}}
   </div>
@@ -24,9 +24,8 @@
    {% endif %}
 
   <div class="panel-body">
-    <ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
+    <ul class="open-course-lesson sortable-list" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
       {% for id, item in items %}
-        
         {% if 'lesson' in id  %}
           {% include 'open-course-manage/lesson-list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
         {% endif %}

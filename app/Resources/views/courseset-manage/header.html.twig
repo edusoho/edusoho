@@ -1,5 +1,7 @@
 {% import "macro.html.twig" as web_macro %}
-{% do script(['app/js/courseset-manage/header/index.js']) %}
+{% block js %}
+  {% do script(['app/js/courseset-manage/header/index.js']) %}
+{% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
 
 <div class="courseset-manage-header cd-mb32 clearfix">
@@ -28,8 +30,11 @@
       {% if courseSet.type != 'normal' %}
         [{{ dict('courseType')[courseSet.type] }}]
       {% endif %}
-      <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      {% block coursesetTitle %}
+        <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      {% endblock %}
     </div>
+
     <div class="courseset-manage-header-info__price color-danger">
       {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
         ¥{{ courseSet.minCoursePrice }}
@@ -39,40 +44,45 @@
     </div>
   </div>
 
-  {# 课程发布按钮 #}
   <div class="courseset-manage-header-btn hidden-xs">
+    {% block btn %}
+      {# 课程发布按钮 #}
+      {% if courseSet.status == 'published' %}
+        <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
+      {% endif %}
 
-    {% if courseSet.status == 'published' %}
-      <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
-    {% endif %}
+      {% if courseSet.status != 'published' %}
+        <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
 
-    {% if courseSet.status != 'published' %}
-      <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
+        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+          <button class="cd-btn cd-btn-primary course-manage-header-more">
+            <i class="es-icon es-icon-morehoriz"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+    {% endblock %}
 
-      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-        <button class="cd-btn cd-btn-primary course-manage-header-more">
-          <i class="es-icon es-icon-morehoriz"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
-          </li>
-        </ul>
-      </div>
-    {% endif %}
   </div>
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.student_member'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
   </div>
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.learn_plan'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ couserNum|default() }}</span>{{ 'course.plan.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span>{{ 'course.plan.cell'|trans }}</div>
   </div>
+
 </div>
 
-{% if courseSet.status == 'closed' %}
-  <div class="alert alert-warning">{{'course.remove_students_tips'|trans}}</div>
-{% endif %}
+{% block close %}
+  {% if courseSet.status == 'closed' %}
+    <div class="cd-alert cd-alert-warning">{{'course.remove_students_tips'|trans}}</div>
+  {% endif %}
+{% endblock %}
