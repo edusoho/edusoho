@@ -5,7 +5,7 @@ export const floatConsult = ($element, popoverBtnClass) => {
   const marginTop = (0 - $element.height() / 2) + 'px';
 
   if (Browser.ie10 || Browser.ie11 || Browser.edge) {
-    $element.css('margin-right': '16px');
+    $element.css({'margin-right': '16px'});
   }
 
   $element.css({'margin-top': marginTop, 'visibility': 'visible'});
@@ -26,4 +26,4 @@ export const floatConsult = ($element, popoverBtnClass) => {
       return $($(this).data('contentElement')).html();
     }
   });
-}
+};

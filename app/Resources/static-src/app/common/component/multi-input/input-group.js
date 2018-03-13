@@ -8,18 +8,18 @@ export default class InputGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemName: "",
+      itemName: '',
       searched: true,
       resultful: false,
       searchResult: [],
-    }
+    };
     this.subscribeMessage();
   }
 
   subscribeMessage() {
     postal.subscribe({
-      channel: "courseInfoMultiInput",
-      topic: "addMultiInput",
+      channel: 'courseInfoMultiInput',
+      topic: 'addMultiInput',
       callback: () => {
         console.log('add');
         this.handleAdd();
@@ -40,7 +40,7 @@ export default class InputGroup extends Component {
     //在这种情况下，重新开启搜索功能；
     this.setState({
       searched: true,
-    })
+    });
   }
 
   handleNameChange(event) {
@@ -66,7 +66,7 @@ export default class InputGroup extends Component {
           });
         }
       });
-    }, 100)
+    }, 100);
   }
 
   handleAdd() {
@@ -77,7 +77,7 @@ export default class InputGroup extends Component {
       itemName: '',
       searchResult: [],
       resultful: false,
-    })
+    });
   }
 
   render() {

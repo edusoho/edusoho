@@ -22,7 +22,7 @@ export default class TaskPipe {
     this._registerChannel();
 
     if (this.element.data('eventEnable') == 1) {
-        this._initInterval();
+      this._initInterval();
     }
   }
 
@@ -58,7 +58,7 @@ export default class TaskPipe {
     window.onbeforeunload = () => {
       this._clearInterval();
       this._flush();
-    }
+    };
     this._clearInterval();
     this.intervalId = setInterval(() => this._flush(), this.learnTimeSec*1000);
   }
@@ -83,7 +83,7 @@ export default class TaskPipe {
           }
         }
       })
-      .fail((error) => {
+      .fail(() => {
       });
 
     return ajax;

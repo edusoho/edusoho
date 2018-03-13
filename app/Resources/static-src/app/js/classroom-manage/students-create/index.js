@@ -3,7 +3,7 @@ import notify from 'common/notify';
 let $modal = $('#student-create-form').parents('.modal');
 let $form = $('#student-create-form');
 let $table = $('#course-student-list');
-let $btn = $("#student-create-form-submit");
+let $btn = $('#student-create-form-submit');
 let validator = $form.validate({
   onkeyup: false,
   rules: {
@@ -31,7 +31,7 @@ let validator = $form.validate({
       remote: Translator.trans('classroom_manage.student_create_field_required_error_hint')
     }
   }
-})
+});
 
 $btn.click(() => {
   if (validator.form()) {
@@ -45,4 +45,4 @@ $btn.click(() => {
       $btn.button('reset').removeClass('disabled');
     });
   }
-})
+});

@@ -8,41 +8,41 @@ import Essay from '../type/question-essay';
 import Material from '../type/question-material';
 import SelectLinkage from '../widget/select-linkage.js';
 
-
+let questionCreator;
 class QuestionCreator {
   constructor() {
   }
 
   static getCreator(type, $form) {
     switch (type) {
-      case 'single_choice':
-        QuestionCreator = new SingleChoice($form);
-        break;
-      case 'uncertain_choice':
-        QuestionCreator = new UncertainChoice($form);
-        break;
-      case 'choice':
-        QuestionCreator = new Choice($form);
-        break;
-      case 'determine':
-        QuestionCreator = new Determine($form);
-        break;
-      case 'essay':
-        QuestionCreator = new Essay($form);
-        break;
-      case 'fill':
-        QuestionCreator = new Fill($form);
-        break;
-      case 'material':
-        QuestionCreator = new Material($form);
-        break;
-      default:
-        QuestionCreator = new QuestionFormBase($form);
-        QuestionCreator.initTitleEditor();
-        QuestionCreator.initAnalysisEditor();
+    case 'single_choice':
+      questionCreator = new SingleChoice($form);
+      break;
+    case 'uncertain_choice':
+      questionCreator = new UncertainChoice($form);
+      break;
+    case 'choice':
+      questionCreator = new Choice($form);
+      break;
+    case 'determine':
+      questionCreator = new Determine($form);
+      break;
+    case 'essay':
+      questionCreator = new Essay($form);
+      break;
+    case 'fill':
+      questionCreator = new Fill($form);
+      break;
+    case 'material':
+      questionCreator = new Material($form);
+      break;
+    default:
+      questionCreator = new QuestionFormBase($form);
+      questionCreator.initTitleEditor();
+      questionCreator.initAnalysisEditor();
     }
 
-    return QuestionCreator;
+    return questionCreator;
   }
 }
 

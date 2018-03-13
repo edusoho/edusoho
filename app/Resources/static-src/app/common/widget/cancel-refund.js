@@ -1,6 +1,6 @@
 import notify from 'common/notify';
 
-$(".cancel-refund").on('click', function () {
+$('.cancel-refund').on('click', function () {
   if (!confirm(Translator.trans('classroom.cancel_refund_hint'))) {
     return false;
   }

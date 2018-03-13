@@ -1,4 +1,4 @@
-import 'store';
+import store from 'store';
 
 export default class VideoRecorder {
   constructor(container) {
@@ -9,7 +9,7 @@ export default class VideoRecorder {
   }
 
   addVideoPlayerCounter(emitter, player) {
-    let playerCounter = store.get("activity_id_" + this.activityId + "_playing_counter");
+    let playerCounter = store.get('activity_id_' + this.activityId + '_playing_counter');
     if (!playerCounter) {
       this.playerCounter = 0;
     }
@@ -21,19 +21,19 @@ export default class VideoRecorder {
     } else if (player.playing) {
       this.playerCounter++;
     }
-    store.set("activity_id_" + this.activityId + "_playing_counter", this.playerCounter);
+    store.set('activity_id_' + this.activityId + '_playing_counter', this.playerCounter);
   }
 
   watching(emitter) {
-    let watchTime = store.get("activity_id_" + this.activityId + "_playing_counter");
+    let watchTime = store.get('activity_id_' + this.activityId + '_playing_counter');
     console.log(watchTime);
     emitter.emit('watching', {watchTime: watchTime}).then(() => {
-      let url = $("#video-content").data('watchUrl');
+      let url = $('#video-content').data('watchUrl');
       $.post(url, function (response) {
         if (response && response.status == 'error') {
           window.location.reload();
         }
-      })
+      });
     }).catch((error) => {
       console.error(error);
     });

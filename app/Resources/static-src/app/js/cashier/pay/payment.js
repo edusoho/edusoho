@@ -1,4 +1,5 @@
 import Api from 'common/api';
+import store from 'store';
 import notify from 'common/notify';
 import ConfirmModal from './confirm';
 
@@ -29,7 +30,7 @@ export default class BasePayment {
       location.href = trade.paidSuccessUrl;
     } else {
       store.set('trade_' + this.getURLParameter('sn'), trade.tradeSn);
-      this.afterTradeCreated(trade)
+      this.afterTradeCreated(trade);
     }
   }
 
@@ -48,7 +49,7 @@ export default class BasePayment {
   }
 
   cancelCheckOrder() {
-    clearInterval(window.intervalCheckOrderId)
+    clearInterval(window.intervalCheckOrderId);
   }
 
   startInterval() {
@@ -63,7 +64,7 @@ export default class BasePayment {
         store.remove('trade_' + this.getURLParameter('sn'));
         location.href = res.paidSuccessUrl;
       }
-    })
+    });
   }
 
   getURLParameter(name) {

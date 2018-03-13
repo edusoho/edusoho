@@ -294,6 +294,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateCourseMarketing($id, $fields)
     {
         $oldCourse = $this->tryManageCourse($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -319,7 +320,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ('published' != $oldCourse['status']) {
+        if ($courseSet['status'] != 'published' || $oldCourse['status'] != 'published') {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -329,7 +330,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $requireFields = array('isFree', 'buyable');
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
@@ -2178,7 +2178,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (in_array($course['status'], array('published', 'closed'))) {
             //计划发布或者关闭，不允许修改模式，但是允许修改时间
             unset($fields['expiryMode']);
-            if ('published' == $course['status']) {
+            if ('published' == $courseSet['status'] && 'published' == $course['status']) {
                 //计划发布后，不允许修改时间
                 unset($fields['expiryDays']);
                 unset($fields['expiryStartDate']);
