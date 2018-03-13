@@ -74,34 +74,24 @@ class OpenCourseManageController extends BaseController
         return $this->getBiz()->service('System:SettingService');
     }
 
-    public function pictureAction(Request $request, $id)
-    {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        return $this->render(
-            'open-course-manage/picture.html.twig',
-            array(
-                'course' => $course,
-            )
-        );
-    }
-
     public function pictureCropAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
-            $this->getOpenCourseService()->changeCoursePicture($course['id'], $data['images']);
+            $course = $this->getOpenCourseService()->changeCoursePicture($course['id'], json_decode($data['images'], true));
 
-            return $this->redirect($this->generateUrl('open_course_manage_picture', array('id' => $course['id'])));
+            $cover = $this->getWebExtension()->getFpath($course['largePicture']);
+
+            return $this->createJsonResponse(array('code' => true, 'cover' => $cover));
         }
 
         $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
         return $this->render(
-            'open-course-manage/picture-crop.html.twig',
+            'open-course-manage/picture-crop-modal.html.twig',
             array(
                 'course' => $course,
                 'pictureUrl' => $pictureUrl,
