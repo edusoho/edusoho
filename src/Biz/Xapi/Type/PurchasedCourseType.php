@@ -24,7 +24,7 @@ class PurchasedCourseType extends Type
                 $data = $statement['context'];
                 $object = array(
                     'id' => $statement['target_id'],
-                    'definitionType' => $this->getDefinitionType($statement['target_type']),
+                    'definitionType' => $this->convertActivityType($statement['target_type']),
                     'name' => $data['title'],
                 );
                 $result = array(

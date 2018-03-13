@@ -21,7 +21,7 @@ class PushStatementJob extends AbstractJob
         }
 
         $count = $this->getXapiService()->countStatements(array('status' => 'converted'));
-        $times = floor($count / $this->perCount);
+        $times = ceil($count / $this->perCount);
         $times = min($times, $this->maxTimes);
         for ($i = 0; $i < $times; ++$i) {
             $this->pushStatements($this->perCount);
