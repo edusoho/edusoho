@@ -148,6 +148,7 @@ class BaseTestCase extends TestCase
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
             'org' => array('id' => 1),
+            'invitedCode' => '',
         ));
 
         $this->getServiceKernel()->setBiz($this->getBiz());
