@@ -44,7 +44,7 @@ class LocalImageCrop {
   saveEvent(event, imageCrop) {
     event.stopPropagation();
     const $this = $(event.currentTarget);
-    console.log('start crop')
+    console.log('start crop');
     imageCrop.crop({
       imgs: this.imgs,
       post: false
@@ -67,7 +67,7 @@ class LocalImageCrop {
 
     imageCrop.afterCrop = (res) => {
       this.afterCrop(res);
-    }
+    };
 
     return imageCrop;
   }
@@ -93,7 +93,7 @@ class LocalImageCrop {
           resolve(data);
         });
       });
-    }
+    };
 
     let cropImage = function(res) {
       return new Promise(function(resolve, reject) {
@@ -115,9 +115,9 @@ class LocalImageCrop {
         }).always(function() {
           $input.val('');
           $modal.modal('hide');
-        })
+        });
       });
-    }
+    };
 
     uploadImage().then(function(res) {
       return cropImage(res);

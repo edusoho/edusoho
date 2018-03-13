@@ -64,7 +64,7 @@ class DoTestpaper extends DoTestBase {
     }
   }
 
-  _clickBtnReume(event) {
+  _clickBtnReume() {
     this.$timer.timer('resume');
     this._initUsedTimer();
     this.$container.find('.js-btn-pause').removeClass('active');

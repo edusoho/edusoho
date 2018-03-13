@@ -13,7 +13,7 @@ if(watermarkUrl) {
 }
 
 function initDocPlayer(contents) {
-  let doc = new DocPlayer({
+  new DocPlayer({
     element: $element,
     swfUrl: $element.data('swf'),
     pdfUrl: $element.data('pdf'),
@@ -23,6 +23,6 @@ function initDocPlayer(contents) {
       yPosition: 'center',
       rotate: 45,
     },
-	  canCopy: $element.data('disableCopy')
+    canCopy: $element.data('disableCopy')
   });
 }

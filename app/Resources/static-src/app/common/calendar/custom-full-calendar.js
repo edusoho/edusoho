@@ -128,7 +128,7 @@ export default class CustomFullCalendar {
       calEvents = current._generateEventOtherAttrs(calEvents, result['data']);
       callback(calEvents);
     }).catch((res) => {
-      console.log('error callback')
+      console.log('error callback');
     });
   }
 
@@ -145,7 +145,7 @@ export default class CustomFullCalendar {
       } else if (nextMonthFirstDay) {
         $day.html(view.intervalEnd.format('LL'));
       }
-    })
+    });
   }
 
   _generateEventOtherAttrs(events, data) {

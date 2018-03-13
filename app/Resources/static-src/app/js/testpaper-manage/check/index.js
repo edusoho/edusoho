@@ -1,9 +1,8 @@
-import QuestionTypeBuilder from '../../testpaper/widget/question-type-builder';
 import {
   testpaperCardFixed,
 } from 'app/js/testpaper/widget/part';
 
-$.validator.addMethod("score",function(value,element){ 
+$.validator.addMethod('score',function(value,element){ 
   let isFloat = /^\d+(\.\d)?$/.test(value);
   if (!isFloat){
     return false;
@@ -67,7 +66,7 @@ class CheckTest
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', function(e) {
+      editor.on('blur', function() {
         editor.updateElement();
         setTimeout(function() {
           $longTextarea.val(editor.getData());
@@ -75,7 +74,7 @@ class CheckTest
         }, 1);
       });
 
-      editor.on('instanceReady', function(e) {
+      editor.on('instanceReady', function() {
         this.focus();
 
         $textareaBtn.one('click', function() {
@@ -95,7 +94,7 @@ class CheckTest
         }, 1);
       });
 
-      editor.on('insertHtml', function(e) {
+      editor.on('insertHtml', function() {
         editor.updateElement();
         setTimeout(function() {
           $longTextarea.val(editor.getData());
@@ -106,11 +105,11 @@ class CheckTest
     
   }
 
-  _initValidate(event) {
+  _initValidate() {
     this.validator = this.$form.validate();
 
     if ($('*[data-score]:visible').length > 0) {
-      $('*[data-score]:visible').each(function(index){
+      $('*[data-score]:visible').each(function(){
         $(this).rules('add',{
           required:true,
           score:true,
@@ -118,8 +117,8 @@ class CheckTest
           messages: {    
             required: Translator.trans('activity.testpaper_manage.required_error_hint'),    
           } 
-        })
-      })
+        });
+      });
     }
 
   }
@@ -130,8 +129,7 @@ class CheckTest
     $(document).scrollTop(position.top - 55);
   }
 
-  _submitValidate(event) {
-    let $target = $(event.currentTarget);
+  _submitValidate() {
     let scoreTotal = 0;
 
     if (this.validator == undefined || this.validator.form()) {
@@ -145,7 +143,7 @@ class CheckTest
 
         self.checkContent[questionId] = content;
         scoreTotal = scoreTotal + Number($(this).val());
-      })
+      });
 
       let subjectiveScore = Number(this.$dialog.find('[name="objectiveScore"]').val());
       let totalScore = Number(scoreTotal) + subjectiveScore;
@@ -175,7 +173,7 @@ class CheckTest
       } else {
         window.location.reload();
       }
-    })
+    });
   }
 
   _teacherSayFill(event) {
@@ -190,4 +188,4 @@ class CheckTest
   }
 }
 
-new CheckTest($('.container'));
+new CheckTest($('.js-testpaper-container'));

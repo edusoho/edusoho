@@ -9,7 +9,7 @@ const COURSE_LIST_INTRO_COOKIE = 'COURSE_LIST_INTRO_COOKIE';
 export default class Intro {
   constructor() {
     this.intro = null;
-    this.customClass = "es-intro-help multistep";
+    this.customClass = 'es-intro-help multistep';
     $('body').on('click','.js-skip',(event)=>{
       this.intro.exit();
     });
@@ -44,10 +44,10 @@ export default class Intro {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
     if(steps.length < 2) {
-       doneLabel= Translator.trans('intro.confirm_hint');
-       this.customClass = "es-intro-help";
+      doneLabel= Translator.trans('intro.confirm_hint');
+      this.customClass = 'es-intro-help';
     }else {
-       this.customClass = "es-intro-help multistep";
+      this.customClass = 'es-intro-help multistep';
     }
     console.log(steps.length < 2);
     console.log(this.customClass);
@@ -61,7 +61,7 @@ export default class Intro {
       showBullets: false,
       tooltipPosition: 'auto',
       showStepNumbers: false,
-       exitOnEsc: false,
+      exitOnEsc: false,
       exitOnOverlayClick: false,
       tooltipClass:this.customClass,
     });
@@ -75,7 +75,7 @@ export default class Intro {
       else {
         $('.js-skip').remove();
       }
-    })
+    });
   }
 
   initTaskCreatePageIntro() {
@@ -166,7 +166,7 @@ export default class Intro {
       arry.push({
         element: '[into-step-id="step-5"]',
         intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
-      })
+      });
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
         store.set(COURSE_TASK_DETAIL_INTRO,true);
       }
@@ -203,7 +203,7 @@ export default class Intro {
         element: '#step-5',
         intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
         position: 'bottom',
-      })
+      });
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
         store.set(COURSE_TASK_DETAIL_INTRO,true);
       }

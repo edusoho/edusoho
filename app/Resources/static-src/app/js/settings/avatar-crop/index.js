@@ -16,7 +16,7 @@ class CoverCrop {
 
   initEvent(imageCrop) {
     const $node = $(this.element);
-    $node.on('click', this.goBack, (event) => this.goBackEvent(event))
+    $node.on('click', this.goBack, (event) => this.goBackEvent(event));
 
     $node.on('click', this.saveBtn, (event) => {
       event.stopPropagation();
@@ -32,7 +32,7 @@ class CoverCrop {
 
   goBackEvent(event) {
     let $element = $(event.currentTarget);
-    document.location.href = $element.data("gotoUrl");
+    document.location.href = $element.data('gotoUrl');
   }
 
   imageCrop() {
@@ -48,10 +48,10 @@ class CoverCrop {
       let url = $saveBtn.data('url');
       
       $.post(url, { images: response }, () => {
-        document.location.href = $saveBtn.data("gotoUrl");
+        document.location.href = $saveBtn.data('gotoUrl');
       });
-    }
-    return imageCrop
+    };
+    return imageCrop;
   }
 
 }
@@ -61,4 +61,4 @@ new CoverCrop({
   avatarCrop: '#avatar-crop',
   saveBtn: '#upload-avatar-btn',
   goBack: '.js-go-back'
-})
+});

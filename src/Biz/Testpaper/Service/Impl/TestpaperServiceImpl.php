@@ -306,13 +306,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
     }
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
     {
         return $this->getTestpaperResultDao()->getUserLatelyResultByTestId(
             $userId,
             $testId,
             $courseId,
-            $activityId,
+            $lessonId,
             $type
         );
     }

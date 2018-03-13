@@ -5,7 +5,7 @@ export default class Options extends Component {
     super(props);
     this.state = {
       resultful: this.props.resultful,
-    }
+    };
   }
   render() {
     let options = [];
@@ -18,16 +18,16 @@ export default class Options extends Component {
     }
     return (
       <ul className={`dropdown-menu options ${ this.state.resultful && 'show' } `}>
-      {options}
+        {options}
       </ul>
-    )
+    );
   }
 
   handleChange (event) {
     this.setState({
       resultful: false,
     });
-    let data = event.currentTarget.attributes["data-item"].value;
+    let data = event.currentTarget.attributes['data-item'].value;
     this.props.selectChange(event.currentTarget.attributes['data-name'].value,JSON.parse(data));
   }
 }

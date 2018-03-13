@@ -28,7 +28,7 @@ $.get($('#isTeachersUrl').val() + '?ids=' + $userIds, function (ids) {
     $('.class-detail-content').find('.user-id-' + $idArray[i]).each(function () {
       $(this).addClass('teacher');
     });
-  };
+  }
 });
 
 

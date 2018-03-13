@@ -13,7 +13,7 @@ export default class DetailWidget {
       this.cover = new Cover({
         element: $('#cover-tab')
       });
-    };
+    }
 
     this.info = new Info({
       element: $('#info-tab')
@@ -49,7 +49,7 @@ export default class DetailWidget {
     // this.destroy();
     $('.panel-heading').html(Translator.trans('material_lib.content_title'));
   }
-   _changePane($target) {
+  _changePane($target) {
     //change li
     $target.closest('.nav').find('li.active').removeClass('active');
     $target.addClass('active');

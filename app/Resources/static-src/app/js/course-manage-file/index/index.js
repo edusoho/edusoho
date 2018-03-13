@@ -19,22 +19,22 @@ $panel.on('click', '.convert-file-btn', function () {
 
 $('.tip').tooltip();
 
-$("#modal").modal({
+$('#modal').modal({
   backdrop: 'static',
   keyboard: false,
   show: false
 });
 
-$("button", ".panel-heading").on('click', function () {
-  var url = $(this).data("url");
-  $("#modal").html('');
-  $("#modal").modal('show');
+$('button', '.panel-heading').on('click', function () {
+  var url = $(this).data('url');
+  $('#modal').html('');
+  $('#modal').modal('show');
   $.get(url, function (html) {
-    $("#modal").html(html);
+    $('#modal').html(html);
   });
-})
+});
 
-$("[rel='tooltip']").tooltip();
+$('[rel=\'tooltip\']').tooltip();
 
 asyncLoadFiles();
 
@@ -42,11 +42,11 @@ $('[data-role=batch-delete]').click(function () {
   var flag = false;
   var ids = [];
   $('[data-role=batch-item]').each(function () {
-    if ($(this).is(":checked")) {
+    if ($(this).is(':checked')) {
       flag = true;
       ids.push(this.value);
     }
-  })
+  });
 
   if (flag) {
     $('#modal').html('');
@@ -56,7 +56,7 @@ $('[data-role=batch-delete]').click(function () {
     notify('danger',Translator.trans('notify.file_not_select.message'));
     return;
   }
-})
+});
 
 function asyncLoadFiles() {
   var fileIds = new Array();
@@ -70,7 +70,7 @@ function asyncLoadFiles() {
     return;
   }
 
-  $.post($("#file-manage-panel").data("fileStatusUrl"), { 'ids': fileIds.join(",") }, function (data) {
+  $.post($('#file-manage-panel').data('fileStatusUrl'), { 'ids': fileIds.join(',') }, function (data) {
     if (!data || data.length == 0) {
       return;
     }
@@ -79,28 +79,28 @@ function asyncLoadFiles() {
       var file = data[i];
       if ($.inArray(file.type, ['video', 'ppt', 'document']) > -1 &&  file.storage == 'cloud') {
         if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='color-warning mr5 text-sm'>" + Translator.trans('page.file_converting.message') + "</span><br/>");
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class=\'color-warning mr5 text-sm\'>' + Translator.trans('page.file_converting.message') + '</span><br/>');
         } else if (file.convertStatus == 'error') {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='color-danger mr5 text-sm'>" + Translator.trans('page.file_convert_failed.message') + "</span><br/>");
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class=\'color-danger mr5 text-sm\'>' + Translator.trans('page.file_convert_failed.message') + '</span><br/>');
         } else if (file.convertStatus == 'none') {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:last').after("<span class='label label-default mr5 tip'>" + Translator.trans('page.file_not_convert.message') + "</span>");
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:last').after('<span class=\'label label-default mr5 tip\'>' + Translator.trans('page.file_not_convert.message') + '</span>');
         } else if (file.convertStatus == 'success') {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:last').after("<span class='label label-success mr5 tip'>" + Translator.trans('page.file_converted.message') + "</span>");
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:last').after('<span class=\'label label-success mr5 tip\'>' + Translator.trans('page.file_converted.message') + '</span>');
         }
 
       }
       if (file.type == 'video' && file.metas2) {
         if (file.metas2.shd) {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_shd.message') + '</span>');
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_shd.message') + '</span>');
         } else if (file.metas2.hd) {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_hd.message') + '</span>');
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_hd.message') + '</span>');
         } else if (file.metas2.sd) {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_sd.message') + '</span>');
+          $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_sd.message') + '</span>');
         }
       }
 
       if (file.type == 'video' && file.metas && file.metas.caption) {
-        $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-primary tip">' + Translator.trans('page.video_subtitle.message') + '</span>');
+        $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class="label label-primary tip">' + Translator.trans('page.video_subtitle.message') + '</span>');
       }
     }
   });
