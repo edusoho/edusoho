@@ -141,7 +141,7 @@ $list.on('click', '.delete-homework-btn', function (e) {
   }, 'json');
 });
 
-$("#course-item-list .item-actions .js-replay-upload-btn").tooltip();
+$("#course-item-list .item-actions .btn-link").tooltip();
 $("#course-item-list .fileDeletedLesson").tooltip();
 
 $('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
