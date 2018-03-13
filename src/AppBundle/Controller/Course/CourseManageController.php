@@ -465,12 +465,6 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            if (!empty($data['goals'])) {
-                $data['goals'] = json_decode($data['goals'], true);
-            }
-            if (!empty($data['audiences'])) {
-                $data['audiences'] = json_decode($data['audiences'], true);
-            }
             $updatedCourse = $this->getCourseService()->updateCourse($courseId, $data);
             if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
                 $this->getCourseService()->batchConvert($course['id']);

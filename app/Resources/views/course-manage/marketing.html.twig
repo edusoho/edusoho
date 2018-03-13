@@ -6,258 +6,41 @@
 
 {% set side_nav = 'marketing' %}
 
-{% do script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/marketing/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/marketing/index.js']) %}
 
 {% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
 
 {% block main_body %}
-    <div>
+  <div>
+    {{ web_macro.flash_messages() }}
+    <form id="course-marketing-form" class="form-horizontal" action="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id}) }}" method="post">
+      {% include 'course-manage/marketing/set-base-info.html.twig' %}
+
       {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
-        {{ web_macro.flash_messages() }}
 
-        <form id="course-marketing-form" class="form-horizontal" action="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id}) }}" method="post">
+        {% include 'course-manage/marketing/set-join.html.twig' %}
+        <hr class="mb30  bg-border-color">
 
-          <div class="es-piece">
-            <div class="piece-header">{{'course.marketing_setup.setup'|trans}}</div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                {{ 'course.marketing_setup.setup.can_join'|trans }}
-                <a class="es-icon es-icon-help text-normal link-gray" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ 'course.marketing_setup.setup.can_join.tips'|trans }}"></a>
-              </label>
-              <div class="col-sm-8 radios">
-                {{ radios('buyable', { '1': 'site.datagrid.radios.open'|trans, '0': 'site.datagrid.radios.close'|trans }, course.buyable|default(1)) }}
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-2 control-label">
-                <label class="control-label-required" for="course_price">{{ 'site.price'|trans }}</label>
-              </div>
-              <div class="col-sm-8 radios">
-                {{ radios('isFree', {'1': 'course.marketing_setup.price.free'|trans,'0': 'course.marketing_setup.price.not_free'|trans}, course.isFree|default(0)) }}
-              </div>
-            </div>
-            <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}" data-role="tab-content">
-              <div class="col-sm-8 col-sm-offset-2">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-                <input class="form-control width-150 mrs" id="course_price" type="text" name="originPrice" value="{{ course.originPrice|default(0) }}">
-                {{ 'site.currency.CNY'|trans }}
-                <span class="js-course-add-close-show {% if course.buyable|default(1) == 1 %} hidden {% endif %} ">{{'course.marketing_setup.for_show_tips'|trans}}</span>
-              </div>
-            </div>
-            {{ slot('course.marketing.setting', {'course':course}) }}
+        {% include 'course-manage/marketing/set-reward-point.html.twig' %}
 
-            <div class="js-course-add-open-show {% if course.buyable|default(1) == 0 %} hidden {% endif %}">
-              <div class="form-group ">
-                <div class="col-sm-2 control-label">
-                  <label class="control-label-required">{{ 'course.marketing_setup.expiry_date'|trans }}</label>
-                </div>
-                <div class="col-sm-8 radios">
-                  {{ radios('enableBuyExpiryTime', {'1': 'course.marketing_setup.expiry_date.custom'|trans, '0': 'course.marketing_setup.expiry_date.anytime'|trans}, course.buyExpiryTime|default(0) > 0 ? 1 : 0 ) }}
-                </div>
-              </div>
-              <div class="form-group {% if course.buyExpiryTime == 0 %}hidden{% endif %} " id="buyExpiryTime">
-                <div class="col-sm-8 col-sm-offset-2">
-                  <input type="text" class="form-control width-150 mr10" name="buyExpiryTime"
-                         value="{% if course.buyExpiryTime > 0 %}{{ course.buyExpiryTime|date_format('Y-m-d') }}{% endif %}">
-                  {{'course.marketing_setup.expiry_date_tips'|trans}}
-                </div>
-              </div>
-              {#缺少学员数限制#}
-              {% if setting('magic.buy_before_approval') %}
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">
-                    {{ 'course.marketing_setup.approval'|trans }}
-                    <a class="es-icon es-icon-help text-normal link-gray"
-                       data-container="body" data-toggle="popover" data-trigger="hover"
-                       data-placement="top" data-content="{{ 'course.marketing_setup.approval_tips'|trans }}"></a></label>
-                  <div class="col-sm-8 radios">
-                    {{ radios('approval', { '1': 'site.datagrid.radios.yes'|trans, '0': 'site.datagrid.radios.no'|trans }, course.approval|default(0)) }}
-                  </div>
-                </div>
-              {% endif %}
-            </div>
-          </div>
+        {% include 'course-manage/marketing/set-rule.html.twig' %}
+        <hr class="mb30  bg-border-color">
+
+        {% if courseSet.type != 'live' %}
+          {% include 'course-manage/marketing/set-preview.html.twig' %}
           <hr class="mb30  bg-border-color">
+        {% endif %}
 
-           {% if setting('reward_point').enable|default(0) and setting('reward_point').allowTeacherSet|default(0) %}
-            <div class="es-piece">
-              <div class="piece-header">{{ 'course.marketing_setup.reward_point_setting'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
-              <div class="form-group form-inline">
-                <label class="col-sm-2 control-label">
-                  {{ 'course.marketing_setup.study_award'|trans }}
-                </label>
-                <div class="col-sm-8">
-                  {{ 'course.marketing_setup.task_award'|trans }}
-                  <input class="form-control" type="text" name="taskRewardPoint" value="{{ course.taskRewardPoint }}">   / {{'site.default.times'|trans}}
-                </div>
-              </div>
-              <div class="form-group form-inline">
-                <label class="col-sm-2 control-label display"></label>
-                <div class="col-sm-8">
-                  {{ 'course.marketing_setup.course_award'|trans }}  <input class="form-control" type="text" name="rewardPoint" value="{{ course.rewardPoint }}">   / {{'site.default.times'|trans}}
-                </div>
-              </div>
-            </div>
-            <hr class="mb30  bg-border-color">
-          {% endif %}
+        {% include 'course-manage/marketing/set-service.html.twig' %}
 
-          <div class="es-piece">
-            <div class="piece-header">{{'course.marketing_setup.rule'|trans}}</div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                {{ 'course.marketing_setup.rule.expiry_date'|trans }}
-                <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
-                data-content="<ul class='pl10 list-unstyled'>
-                  <li class='mb10'>{{ 'course.teaching_plan.expiry_date.anytime'|trans|raw }}</li>
-                  <li class='mb10'>{{ 'course.teaching_plan.expiry_date.real_time'|trans|raw }}</li>
-                  <li>{{ 'course.teaching_plan.expiry_date.overdue_tips'|trans }}</li>
-                </ul>">
-                </a>
-              </label>
-              <div class="col-sm-8 radios">
-                {% set coursePublished = course.status|default('draft') == 'published' %}
-                {% set courseClosed = course.status|default('draft') == 'closed' %}
-                {% set courseSetPublished = courseSet.status|default('draft') == 'published' %}
-                {{ radios('expiryMode',
-                { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
-                course.expiryMode|default('days'), coursePublished or courseClosed ? 'disabled' : '') }}
-
-                {#随到随学#}
-                <div class="mb20 mt20 {% if course.expiryMode|default('days') in ['date', 'forever'] %}hidden{% endif %}" id="expiry-days">
-                  {{ radios('deadlineType',
-                  { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans},
-                  course.deadlineType|default('days'),  coursePublished or courseClosed ? 'disabled' : '') }}
-
-                  {% if coursePublished or courseClosed %}
-                    <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
-                  {% endif %}
-
-                  <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
-                    <input class="form-control width-150 mr10" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
-                  </div>
-
-                  <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}" id="deadlineType-days">
-                    <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays" value="{{ course.expiryDays|default(1) }}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>
-                    {{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}
-                  </div>
-                </div>
-                {#固定周期#}
-                <div class="mb20 mt20 {% if course.expiryMode|default('days') in ['days', 'forever'] %}hidden{% endif %}" id="expiry-date">
-                  {{ 'course.plan_task.start_time'|trans }}
-                  <input class="form-control mh10 width-150 " id="expiryStartDate" type="text" name="expiryStartDate" value="{% if course.expiryStartDate|default(0) == 0 %}{{'now'|date('Y-m-d')}}{% else %}{{ course.expiryStartDate|default('now'|date('Y-m-d')) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>
-                  {{ 'course.plan_task.end_time'|trans }}
-                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %} >
-                </div>
-                <div class="color-warning">{{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}</div>
-              </div>
-            </div>
-            {% if setting('magic.lesson_watch_limit') %}
-              <div class="form-group">
-                <label class="col-sm-2 control-label">
-                  {{ 'course.marketing_setup.rule.watch_time_limit'|trans }}
-                </label>
-                <div class="col-sm-8">
-                  <input class="form-control width-150 mrs" type="text" name="watchLimit" value="{{ course.watchLimit|default(0) }}">
-                  {{ 'course.marketing_setup.rule.watch_time_limit.watch_limit'|trans }}
-                  <a class="es-icon es-icon-help text-normal link-gray" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ 'course.marketing_setup.rule.watch_time_limit.watch_limit_tips'|trans|raw }}">
-                  </a>
-                </div>
-              </div>
-            {% endif %}
-          </div>
-          <hr class="mb30  bg-border-color">
-
-          {% if courseSet.type != 'live' %}
-            <div class="es-piece ">
-              <div class="piece-header">{{'course.marketing_setup.preview'|trans}}</div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ 'course.marketing_setup.preview.set_task'|trans }}</label>
-                <div class="col-sm-8">
-                  <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting">
-                    {% for task in canFreeTasks %}
-                      <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
-                        <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %} checked {% endif %}>
-                        
-                        {% set meta = activity_meta(task.type) %}
-                        <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-original-title="{{'course.marketing_setup.preview.set_task.task_name'|trans({'%name%':meta.name})}}"></i>
-                        <span class="inline-block vertical-middle text-overflow title">
-                          {{'course.marketing_setup.preview.set_task.task'|trans}} {{ task.number }}：{{ task.title }}
-                        </span>
-                        <span class="label label-warning pull-right price">{{'course.marketing_setup.preview.set_task.free'|trans}}</span>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                  {% set can_free_activity_types = can_free_activity_types() %}
-                  <div class="help-block ">{{'course.marketing_setup.preview.set_task.free_tips'|trans}}{{ can_free_activity_types|join('word.seperator'|trans) }}
-                  </div>
-                </div>
-              </div>
-              {% if setting('storage.upload_mode', 'local') != 'local' %}
-              <div class="form-group">
-                <label class="col-sm-2 control-label">
-                  {{ 'course.marketing_setup.preview.try_watch'|trans }}
-                  <a class="es-icon es-icon-help text-normal link-gray" data-container="body"
-                     data-toggle="popover"
-                     data-trigger="hover"
-                     data-placement="top"
-                     data-content="{{ 'course.marketing_setup.preview.try_watch_tips'|trans }}">
-                  </a>
-                </label>
-                <div class="col-sm-8 radios">
-                  {{ radios('tryLookable', { '1': 'site.datagrid.radios.yes'|trans, '0': 'site.datagrid.radios.no'|trans }, course.tryLookable|default(0)) }}
-                </div>
-              </div>
-              {% endif %}
-              <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
-                <div class="col-sm-8 col-sm-offset-2">
-                  <select class="form-control width-150 mh5" id="tryLookLength" name="tryLookLength">
-                    {% for i in 1..10 %}
-                      {% if course.tryLookLength | default(1) == i %}
-                        <option value="{{ i }}" selected>{{ i }}</option>
-                      {% else %}
-                        <option value="{{ i }}">{{ i }}</option>
-                      {% endif %}
-                    {% endfor %}
-                  </select>{{'site.date.minute'|trans}}
-                </div>
-              </div>
-            </div>
-            <hr class="mb30  bg-border-color">
-          {% endif %}
-
-
-          <div class="es-piece">
-            <div class="piece-header">{{'course.marketing_setup.services'|trans}}</div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.show_services'|trans }}</label>
-              <div class="col-sm-8 radios">
-                {{ radios('showServices', {'1': 'site.datagrid.radios.yes'|trans,'0': 'site.datagrid.radios.no'|trans}, course.showServices|default(1)) }}
-              </div>
-            </div>
-            <div class="form-group js-services {% if course.showServices|default(1) == 0 %}hidden{% endif %}">
-              <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.provide_services'|trans }}</label>
-              <div class="col-sm-8 form-control-static">
-                {% set serviceTags = services(course.services | default([])) %}
-                {% for tag in serviceTags %}
-                  <a
-                    class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}"
-                    data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                    data-content="{{ tag.summary|trans }}" data-code="{{ tag.code }}">{{ tag.fullName|trans }}</a>
-                {% endfor %}
-                <input type="hidden" id="course_services" name="services"
-                       value="{{ course.services|default([])|json_encode_utf8() }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-8">
-                <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-              </div>
-            </div>
-          </div>
-
-        </form>
-      {% else %}
-        <div class="alert alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
       {% endif %}
-    </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
 {% endblock %}
