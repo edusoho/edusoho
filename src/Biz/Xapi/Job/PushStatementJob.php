@@ -16,7 +16,7 @@ class PushStatementJob extends AbstractJob
             return;
         }
 
-        for ($i = 0; $i <= 5; ++$i) {
+        for ($i = 0; $i < 20; ++$i) {
             $this->pushStatements(500);
         }
     }
@@ -28,6 +28,7 @@ class PushStatementJob extends AbstractJob
                 'status' => 'converted',
             );
             $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, $count);
+
             $statementIds = ArrayToolkit::column($statements, 'id');
             $uuids = ArrayToolkit::column($statements, 'uuid');
             $statements = ArrayToolkit::index($statements, 'uuid');

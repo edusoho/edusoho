@@ -17,13 +17,30 @@ class XAPIJobCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $start_time =time();
         $biz = $this->getBiz();
         $jobName = $input->getArgument('jobName');
         $class = "Biz\\Xapi\\Job\\$jobName";
         /** @var \Codeages\Biz\Framework\Scheduler\AbstractJob $instance */
         $instance = new $class(array(), $biz);
         $instance->execute();
+
+        $end_time = time();
+
+        $output->writeln(sprintf('<info>Peak memory usage: %s</info>', $this->getNiceFileSize(memory_get_peak_usage())));
+
+        $output->writeln(sprintf('<info>Time usage: %ss</info>', $end_time - $start_time));
     }
 
-
+    function getNiceFileSize($bytes, $binaryPrefix = true) {
+        if ($binaryPrefix) {
+            $unit=array('B','KiB','MiB','GiB','TiB','PiB');
+            if ($bytes==0) return '0 ' . $unit[0];
+            return @round($bytes/pow(1024,($i=floor(log($bytes,1024)))),2) .' '. (isset($unit[$i]) ? $unit[$i] : 'B');
+        } else {
+            $unit=array('B','KB','MB','GB','TB','PB');
+            if ($bytes==0) return '0 ' . $unit[0];
+            return @round($bytes/pow(1000,($i=floor(log($bytes,1000)))),2) .' '. (isset($unit[$i]) ? $unit[$i] : 'B');
+        }
+    }
 }

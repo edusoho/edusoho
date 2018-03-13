@@ -16,7 +16,7 @@ class ConvertStatementJob extends AbstractJob
             $condition = array(
                 'status' => 'created',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 500);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 2000);
             $statements = ArrayToolkit::index($statements, 'uuid');
 
             foreach ($statements as &$statement) {

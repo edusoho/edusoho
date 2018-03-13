@@ -57,7 +57,7 @@ final class XAPIActivityTypes
         if (isset($nameMaps[$shortName])) {
             return $nameMaps[$shortName];
         } else {
-            throw new \InvalidArgumentException('UnSupport type');
+            throw new \InvalidArgumentException(sprintf('UnSupport type %s', $shortName));
         }
     }
 

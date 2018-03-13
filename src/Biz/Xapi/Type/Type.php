@@ -37,6 +37,11 @@ abstract class Type extends BizAware
     protected function find($subject, $dao, $columns, $conditions = array())
     {
         $ids = ArrayToolkit::column($subject[0], $subject[1]);
+
+        if (!$ids) {
+            return array();
+        }
+
         $conditions = array_merge(array('ids' => $ids), $conditions);
         $columns = array_unique(array_merge(array('id'), $columns));
         $results = $this->createDao($dao)->search($conditions, array(), 0, PHP_INT_MAX, $columns);
@@ -49,7 +54,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Task:TaskDao',
-            array('activityId', 'type', 'courseId'),
+            array('activityId', 'type', 'courseId', 'title'),
             $conditions
         );
     }
@@ -93,7 +98,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Course:ThreadDao',
-            array('taskId', 'courseId', 'courseSetId'),
+            array('taskId', 'courseId', 'courseSetId', 'title', 'content'),
             $conditions
         );
     }
@@ -103,7 +108,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Xapi:ActivityWatchLogDao',
-            array('course_id', 'task_id'),
+            array('course_id', 'task_id', 'watched_time'),
             $conditions
         );
     }

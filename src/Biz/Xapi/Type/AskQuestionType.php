@@ -74,10 +74,11 @@ class AskQuestionType extends Type
                     } else {
                         $resource = array();
                     }
+
                     $object = array(
                         'id' => $thread['id'],
                         'course' => $course,
-                        'definitionType' => empty($task['type']) ? 'null' : $this->convertMediaType($task['type']),
+                        'definitionType' => empty($task['type']) ? 'course' : $this->convertMediaType($task['type']),
                         'resource' => empty($resource) ? array() : $resource,
                     );
                     $actor = $this->getActor($statement['user_id']);
