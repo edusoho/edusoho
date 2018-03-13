@@ -2075,14 +2075,6 @@ course_set_manage_base:
   path: /course_set/{id}/manage/base
   defaults: {_controller: AppBundle:Course/CourseSetManage:base}
 
-course_set_manage_detail:
-  path: /course_set/{id}/manage/detail
-  defaults: {_controller: AppBundle:Course/CourseSetManage:detail}
-
-course_set_manage_cover:
-  path: /course_set/{id}/manage/cover
-  defaults: {_controller: AppBundle:Course/CourseSetManage:cover}
-
 course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:Course/CourseSetManage:coverCrop}

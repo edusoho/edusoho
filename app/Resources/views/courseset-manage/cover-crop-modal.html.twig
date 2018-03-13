@@ -1,0 +1,24 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{ 'courseset_manage.cover_img'|trans }}{% endblock %}
+{% set modal_class= 'modal-lg' %}
+
+{% do script(['app/js/courseset-manage/cover-crop/index.js']) %}
+
+{% block body %}
+  <form id="courseset-picture-crop-form" method="post">
+    <div class="form-group clearfix">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <img class="img-responsive" src="{{ filepath(pictureUrl) }}"
+        id="courseset-picture-crop"
+        width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+        <div class="help-block">{{'courseset_manage.cover_img.tips'|trans}}</div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button class="btn btn-fat btn-primary crop-picture-save-btn" data-url="{{path('course_set_manage_cover_crop', {id: courseSet.id})}}" id="upload-picture-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}
+

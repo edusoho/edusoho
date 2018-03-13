@@ -210,43 +210,6 @@ class CourseSetManageController extends BaseController
         );
     }
 
-    public function detailAction(Request $request, $id)
-    {
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            if (!empty($data['goals'])) {
-                $data['goals'] = json_decode($data['goals'], true);
-            }
-            if (!empty($data['audiences'])) {
-                $data['audiences'] = json_decode($data['audiences'], true);
-            }
-
-            $this->getCourseSetService()->updateCourseSetDetail($id, $data);
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
-        }
-
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
-        if ($courseSet['locked']) {
-            return $this->redirectToRoute(
-                'course_set_manage_sync',
-                array(
-                    'id' => $id,
-                    'sideNav' => 'detail',
-                )
-            );
-        }
-
-        return $this->render(
-            'courseset-manage/detail.html.twig',
-            array(
-                'courseSet' => $courseSet,
-            )
-        );
-    }
-
     public function coverAction(Request $request, $id)
     {
         if ($request->isMethod('POST')) {
@@ -285,9 +248,10 @@ class CourseSetManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data['images'], true));
+            $courseSet = $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data['images'], true));
+            $cover = $this->getWebExtension()->getFpath($courseSet['cover']['large']);
 
-            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
+            return $this->createJsonResponse(array('code' => true, 'cover' => $cover));
         }
 
         if ($courseSet['locked']) {
@@ -305,7 +269,7 @@ class CourseSetManageController extends BaseController
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
         return $this->render(
-            'courseset-manage/cover-crop.html.twig',
+            'courseset-manage/cover-crop-modal.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'pictureUrl' => $pictureUrl,
