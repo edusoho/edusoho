@@ -18,7 +18,7 @@ class AnonymousUser extends CurrentUser
             'orgId' => $this->rootOrgId,
             'orgCode' => $this->rootOrgCode,
         ), $user);
-        
+
         $this->data = $user;
     }
 

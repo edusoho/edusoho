@@ -131,14 +131,15 @@ class RegisterController extends BaseController
             }
         }
 
-        // invitedCode这里为 被邀请码 
+        // invitedCode这里为 被邀请码
         $invitedCode = $request->query->get('inviteCode', '');
         $this->get('session')->set('invitedCode', $invitedCode);
         $inviteUser = empty($invitedCode) ? array() : $this->getUserService()->getUserByInviteCode($invitedCode);
-       
+
         if ($this->getWebExtension()->isWechatLoginBind()) {
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
         }
+
         return $this->render('register/index.html.twig', array(
             'isRegisterEnabled' => $registerEnable,
             'registerSort' => array(),
