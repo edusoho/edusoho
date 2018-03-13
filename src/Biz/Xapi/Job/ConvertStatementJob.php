@@ -9,7 +9,6 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class ConvertStatementJob extends AbstractJob
 {
-
     private $perCount = 4000;
 
     public function execute()

@@ -25,8 +25,8 @@ class XapiStatmentAddContext extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("
+        $connection->exec('
             ALTER TABLE `xapi_statement` DROP `context`;
-        ");
+        ');
     }
 }
