@@ -1426,6 +1426,7 @@ course.detail.content_title: 详细信息
 course.detail.summary: 课程简介
 course.detail.target: 课程目标
 course.detail.intended-students: 适应人群
+course.detail.info_tip: 以下设置可以在教学计划中具体设置，也可以在此处统一设置。在此处统一设置以应用于所有教学计划。
 course.question_manage: 课程题库
 course.question_manage.your_answer: 你的回答：
 course.question_manage.you_no_answer: 未回答
