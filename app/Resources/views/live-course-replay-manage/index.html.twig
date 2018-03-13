@@ -13,24 +13,18 @@
 	</div>
 
 	{% if items is empty %}
-
-	 <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
-
-	 {% endif %}
+	  <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
+	{% endif %}
 
 	<div class="panel-body">
-		<ul class="open-course-lesson sortable-list" id="course-item-list" {% if course.type == 'normal' or course.type == 'live' %}data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}"{% endif %}>
-
+		<ul class="open-course-lesson sortable-list" id="course-item-list">
 			{% for id, item in items %}
-			  {% if 'chapter' in id %}
-			    {% include 'live-course-replay-manage/chapter-item.html.twig' with {chapter: item} %}
-			  {% elseif 'lesson' in id %}
+			  {% if 'lesson' in id %}
 			    {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
 			  {% endif %}
 			{% endfor %}
-
 		</ul>
-		<div class="cd-mt16 cd-ml40">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
+		<div class="cd-mt16 cd-ml40 color-warning">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
 	</div>
 </div>
 

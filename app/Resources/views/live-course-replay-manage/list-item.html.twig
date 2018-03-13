@@ -1,20 +1,6 @@
 <li class="open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}">
 	<div class="item-line"></div>
 	<div class="item-content">
-	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
-
-    {# 直播图标的不同课时类型状态 #}
-		{% if lesson.type in ['video', 'live'] %}
-		  {% if mediaStatus == 'waiting' %}
-			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
-		  {% elseif mediaStatus == 'doing' %}
-			<span class="glyphicon glyphicon-facetime-video text-info"></span>
-		  {% elseif mediaStatus == 'error' %}
-			<span class="glyphicon glyphicon-facetime-video color-danger"></span>
-		  {% else %}
-			<span class="glyphicon glyphicon-facetime-video color-success"></span>
-		  {% endif %}
-		{% endif %}
 
 		{{ 'course.lesson'|trans }} <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
@@ -45,22 +31,11 @@
 				{% endif %}
 			{% endif %}
 		{% endif %}
-
 	</div>
 	<div class="item-actions">
-		{% if lesson.type != 'liveOpen' %}
-			<a class="cd-link-assist cd-mr24 js-tip-show" title="{{'course.preview'|trans}}" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><i class="es-icon es-icon-removeredeye"></i></a>
-		{% endif %}
-
-		{% if lesson.type == 'live' %}
-			{% set editUrl = path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
-			{% set createUrl = path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
-			{% set uploadUrl = path('live_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
-		{% elseif lesson.type == 'liveOpen' %}
-			{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
-			{% set createUrl = path('live_open_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
-			{% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
-		{% endif %}
+		{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
+		{% set createUrl = path('live_open_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
+		{% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 
 		{% if lesson.status == 'published' and lesson.isEnd and lesson.replayStatus == 'generated' and lesson.type in ['live','liveOpen'] %}
 			<a href="#modal" class="cd-link-assist cd-mr24 js-tip-show" title="{{'course.live.replay_manage.lesson_edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><i class="es-icon es-icon-list"></i></a>
@@ -68,18 +43,17 @@
 
 		{% if lesson.status == 'published' and lesson.type in ['live','liveOpen'] and lesson.isEnd  %}
 			{% if lesson.canRecord|default(false) and lesson.replayStatus != 'videoGenerated' %}
-				<a class="cd-link-assist cd-mr24 replay-lesson-btn"
+				<a class="cd-link-assist cd-mr24 js-generate-replay"
 				{% if lesson.replayStatus == 'ungenerated' %}
 				title="{{'course.live.replay_manage.record'|trans}}"
 				{% else %}
 				title="{{'course.live.replay_manage.re_record'|trans}}"
 				{% endif %}
-				 data-url="{{ createUrl }}" href="javascripct:;"><span class="glyphicon glyphicon-facetime-video"></span>
+				 data-url="{{ createUrl }}" href="javascripct:;"><span class="es-icon es-icon-videocam"></span>
 				</a>
 			{% endif %}
 
-			<a class="cd-link-assist js-tip-show" href="#modal" title="{{'course.live.replay_manage.upload_btn'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			<a class="cd-link-assist item-actions__btn js-tip-show" href="#modal" title="{{'course.live.replay_manage.upload_btn'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
 		{% endif %}
-
 	</div>
 </li>

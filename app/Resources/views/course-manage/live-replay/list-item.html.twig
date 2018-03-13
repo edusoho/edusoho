@@ -1,22 +1,22 @@
-<li class="item-lesson clearfix" id="lesson-{{ task.id }}">
+<li class="live-course-lesson-item cd-mb16 clearfix" id="lesson-{{ task.id }}">
 	<div class="item-line"></div>
 	<div class="item-content">
 	  {% set mediaStatus = task.mediaStatus|default(null) %}
 
 		{% if task.type in ['video', 'live'] %}
 		  {% if mediaStatus == 'waiting' %}
-			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
+			<span class="es-icon es-icon-videocam text-warning"></span>
 		  {% elseif mediaStatus == 'doing' %}
-			<span class="glyphicon glyphicon-facetime-video text-info"></span>
+			<span class="es-icon es-icon-videocam text-info"></span>
 		  {% elseif mediaStatus == 'error' %}
-			<span class="glyphicon glyphicon-facetime-video color-danger"></span>
+			<span class="es-icon es-icon-videocam color-danger"></span>
 		  {% else %}
-			<span class="glyphicon glyphicon-facetime-video color-success"></span>
+			<span class="es-icon es-icon-videocam color-success"></span>
 		  {% endif %}
 		{% endif %}
 
-		{{'course.task'|trans}} <span class="number">{{ task.number }}</span>： {{ task.title }}
-    <span class="color-gray">{{ task.startTime|date_format }}</span>
+		<span class="mls">{{'course.activity'|trans}}</span><span class="number mls">{{ task.number }}</span>： {{ task.title }}
+    <span class="mhs">{{ task.startTime|date_format }}</span>
 
 		{% if task.status == 'unpublished' %}
 		  <span class="text-warning">({{'course.replay_manage.unpublished'|trans}})</span>
@@ -41,30 +41,30 @@
 		{% endif %}
 
 	</div>
-	<div class="item-actions prs">
-    <a class="btn btn-link" title="{{'course.replay_manage.preview_btn'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
+	<div class="item-actions">
+    <a class="cd-link-assist cd-mr24" title="{{'course.replay_manage.preview_btn'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="es-icon es-icon-removeredeye"></span></a>
 
     {% set editUrl = path('course_manage_task_replay_edit',{ courseId: course.id, taskId:task.id}) %}
     {% set createUrl = path('course_manage_task_replay_create', {courseId:course.id, taskId:task.id}) %}
     {% set uploadUrl = path('course_manage_task_replay_upload', {courseId:course.id, taskId:task.id}) %}
 
 		{% if task.status == 'published' and task.isEnd and activity.ext.replayStatus == 'generated' %}
-			<a href="#modal" class="btn btn-link " title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list"></span></a>
+			<a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list"></span></a>
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd  %}
 			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
-				<button class="btn btn-link replay-lesson-btn js-generate-replay"
+				<button class="cd-link-assist cd-mr24 replay-lesson-btn js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
 				title="{{'course.replay_manage.record'|trans}}"
 				{% else %}
 				title="{{'course.replay_manage.record_again'|trans}}"
 				{% endif %}
-				 data-url="{{ createUrl }}"><span class="glyphicon glyphicon-facetime-video"></span>
+				 data-url="{{ createUrl }}"><span class="es-icon es-icon-videocam"></span>
 				</button>
 			{% endif %}
 
-			<a href="#modal" class="btn btn-link " title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			<a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
 		{% endif %}
 
 	</div>
