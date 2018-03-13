@@ -1081,6 +1081,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
     {
+        if (empty($classroomId) || empty($userId)) {
+            throw $this->createServiceException("userId #{$userId} or classroomId #{$classroomId} can not empty!");
+        }
+
         return $this->getMemberDao()->updateByClassroomIdAndUserId($classroomId, $userId, array(
             'deadline' => $deadline,
         ));
