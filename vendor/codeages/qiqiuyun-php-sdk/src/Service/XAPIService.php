@@ -722,7 +722,7 @@ class XAPIService extends BaseService
     {
         $school = array(
             'name' => $this->options['school_name'],
-            'url' => $this->options['host'],
+            'url' => $this->options['school_url'],
         );
         foreach ($statements as &$statement) {
             $statement['context'] = array(
