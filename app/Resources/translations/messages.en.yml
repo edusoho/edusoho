@@ -1274,6 +1274,7 @@ course.detail.content_title: Detail
 course.detail.summary: About
 course.detail.target: 'Goals'
 course.detail.intended-students: Who should take the course
+course.detail.info_tip: 以下设置可以在教学计划中具体设置，也可以在此处统一设置。在此处统一设置以应用于所有教学计划。
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
