@@ -19,7 +19,7 @@
       </div>
     {% else %}
       <div class="empty">
-        <a class="link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
+        <a class="cd-link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
           {% if filter|default('normal') == 'live' %}
             {{ 'my.teaching.course_set.live_empty_hint'|trans }}
           {% else %}

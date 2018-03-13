@@ -10,3 +10,9 @@
     <a class="cd-btn cd-btn-ghost-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'my.teaching.open_course.view_btn'|trans}}</a>
   {% endif %}
 {% endblock %}
+
+{% block liveTag %}
+  {% if course.type == 'liveOpen' %}
+    <span class="cd-tag cd-tag-green">{{'explore.open_course.live'|trans}}</span>
+  {% endif %}
+{% endblock %}

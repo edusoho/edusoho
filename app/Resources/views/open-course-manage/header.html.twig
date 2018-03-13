@@ -20,9 +20,8 @@
     <div class="courseset-manage-header-info__title text-overflow">
       [{{ dict('courseType')[course.type] }}]<a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     </div>
-    {% if course.type == 'liveOpen' %}
-      <span class="cd-tag cd-tag-green">{{'explore.open_course.live'|trans}}</span>
-    {% endif %}
+    {% block liveTag %}
+    {% endblock %}
   </div>
 
   <div class="courseset-manage-header-btn hidden-xs">

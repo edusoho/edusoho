@@ -41,8 +41,6 @@
       {% else %}
         ¥{{ courseSet.minCoursePrice }}～¥{{ courseSet.maxCoursePrice }}
       {% endif %}
-      {% block coursesetTag %}
-      {% endblock %}
     </div>
   </div>
 
@@ -78,7 +76,7 @@
 
   <div class="courseset-manage-header-data">
     <span>{{ 'course.learn_plan'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.courseNum|default() }}</span>{{ 'course.plan.cell'|trans }}</div>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span>{{ 'course.plan.cell'|trans }}</div>
   </div>
 
 </div>

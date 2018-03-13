@@ -3,7 +3,7 @@
 
 {% block title %}{{'my.teaching.page_title'|trans}} - {{ parent() }}{% endblock %}
 
-{% do script(['app/js/my/teaching-courseset/index.js'])  %}
+{% do script(['app/js/my/teaching-courseset/index.js']) %}
 
 {% set side_nav = 'my-teaching-courses' %}
 
@@ -18,7 +18,7 @@
     </div>
   {% else %}
     <div class="empty">
-      <a class="link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
+      <a class="cd-link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
         {% if filter|default('normal') == 'live' %}
           {{ 'my.teaching.course_set.live_empty_hint'|trans }}
         {% else %}

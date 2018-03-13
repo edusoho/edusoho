@@ -11,13 +11,9 @@
   {% endif %}
 {% endblock %}
 
-{# 直播课程的label #}
-{# {% block coursesetTag %}
-  {% if courseSet.type == 'live' %}
-    <span class="cd-tag cd-tag-green mr5">{{ 'my.teaching.course_set.live_label'|trans }}</span>
-  {% endif %}
+{% block courseTitle %}
+  {{ courseSet.courseNum|default(0) }}
 {% endblock %}
- #}
 
 {% block btn %}
   <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.manage_btn'|trans }}</a>
