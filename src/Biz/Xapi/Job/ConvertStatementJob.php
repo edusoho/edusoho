@@ -20,7 +20,9 @@ class ConvertStatementJob extends AbstractJob
             $statements = ArrayToolkit::index($statements, 'uuid');
 
             foreach ($statements as &$statement) {
-                $statement['key'] = "{$statement['verb']}_{$statement['target_type']}";
+                if (!empty($statement['verb']) && !empty($statement['target_type'])) {
+                    $statement['key'] = "{$statement['verb']}_{$statement['target_type']}";
+                }
             }
 
             $groupStatements = ArrayToolkit::group($statements, 'key');
