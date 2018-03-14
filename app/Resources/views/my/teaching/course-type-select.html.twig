@@ -7,7 +7,6 @@
     <div class="select-value">
       {% if filter == 'normal' %}{{ 'my.teaching.course_set.normal'|trans }}
       {% elseif filter == 'live' %}{{ 'my.teaching.course_set.live'|trans }}
-      {% elseif filter == 'classroom' %}{{ 'my.teaching.course_set.classroom'|trans({'%classroom%': setting("classroom.name")|default("classroom"|trans)}) }}
       {% elseif filter == 'open' %}{{ 'my.teaching.open_course.normal'|trans }}
       {% elseif filter == 'liveOpen' %}{{ 'my.teaching.open_course.live'|trans }}
       {% endif %}
@@ -15,7 +14,6 @@
     <ul class="select-options js-select-options">
       <li class="{% if filter == 'normal' %}checked{% endif %}" data-value="normal" data-url="{{path('my_teaching_course_sets', {filter:'normal'}) }}">{{ 'my.teaching.course_set.normal'|trans }}</li>
       <li class="{% if filter == 'live' %}checked{% endif %}" data-value="live" data-url="{{path('my_teaching_course_sets', {filter:'live'}) }}">{{ 'my.teaching.course_set.live'|trans }}</li>
-      <li class="{% if filter == 'classroom' %}checked{% endif %}" data-value="classroom" data-url="{{path('my_teaching_course_sets', {filter:'classroom'}) }}">{{ 'my.teaching.course_set.classroom'|trans({'%classroom%': setting("classroom.name")|default("classroom"|trans)}) }}</li>
       <li class="{% if filter == 'open' %}active{% endif %}" data-value="normalOpen" data-url="{{ path('my_teaching_open_courses', {filter:'open'}) }}">{{ 'my.teaching.open_course.normal'|trans }}</li>
       <li class="{% if filter == 'liveOpen' %}active{% endif %}" data-value="liveOpen" data-url="{{ path('my_teaching_open_courses', {filter:'liveOpen'}) }}">{{ 'my.teaching.open_course.live'|trans }}</li>
     </ul>
