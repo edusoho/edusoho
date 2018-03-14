@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\Invoice\Dao\Impl;
 
+use Codeages\Biz\Framework\Dao\DaoException;
 use Codeages\Biz\Invoice\Dao\InvoiceDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -29,5 +30,6 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
                 'sn = :sn',
             ),
         );
+
     }
 }

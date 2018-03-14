@@ -2,6 +2,9 @@
 
 namespace Tests;
 
+use Codeages\Biz\Pay\Payment\IapGateway;
+use Codeages\Biz\Pay\Payment\WechatGateway;
+
 class PayServiceTest extends IntegrationTestCase
 {
     public function setUp()
@@ -9,20 +12,20 @@ class PayServiceTest extends IntegrationTestCase
         parent::setUp();
 
         $currentUser = array(
-            'id' => 1,
+            'id' => 1
         );
         $this->biz['user'] = $currentUser;
 
         $this->biz['payment.platforms.options'] = array(
             'wechat' => array(
-                'appid' => 'aaa',
-            ),
+                'appid'=>'aaa'
+            )
         );
 
         $this->biz['payment.final_options'] = array(
             'closed_by_notify' => true,
             'refunded_by_notify' => true,
-            'coin_rate' => 1,
+            'coin_rate' => 1
         );
     }
 
@@ -49,8 +52,8 @@ class PayServiceTest extends IntegrationTestCase
         $this->assertEquals($data['price_type'], $trade['price_type']);
         $this->assertEquals($data['amount'], $trade['amount']);
         $this->assertEquals($data['coin_amount'], $trade['coin_amount']);
-        if ('coin' == $trade['price_type']) {
-            $this->assertEquals($trade['cash_amount'] * $this->getCoinRate(), $trade['amount'] - $trade['coin_amount']);
+        if ($trade['price_type'] == 'coin') {
+            $this->assertEquals($trade['cash_amount'] * $this->getCoinRate(), $trade['amount']-$trade['coin_amount']);
         } else {
             $this->assertEquals($trade['cash_amount'] * $this->getCoinRate(), $trade['amount'] * $this->getCoinRate() - $trade['coin_amount']);
         }
@@ -71,7 +74,7 @@ class PayServiceTest extends IntegrationTestCase
         $notifyData = $this->mockNotifyData($trade);
         $this->biz['payment.wechat'] = $this->mockConvertNotifyData($notifyData);
         $result = $this->getPayService()->notifyPaid('wechat', $notifyData);
-        $this->assertEquals('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>', $result);
+        $this->assertEquals('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>',$result);
 
         $this->getPayService()->notifyPaid('wechat', $this->mockNotifyData($trade));
 
@@ -89,7 +92,7 @@ class PayServiceTest extends IntegrationTestCase
         $userBalance = $this->getAccountService()->createUserBalance($user);
 
         $user = array(
-            'user_id' => 2,
+            'user_id' => 2
         );
 
         $seller = $this->getAccountService()->createUserBalance($user);
@@ -99,7 +102,7 @@ class PayServiceTest extends IntegrationTestCase
             'buyer_id' => $userBalance['user_id'],
             'amount' => '100',
             'title' => '充值1000个虚拟币',
-            'action' => 'recharge',
+            'action' => 'recharge'
         );
 
         $this->getAccountService()->transferCoin($recharge);
@@ -112,6 +115,7 @@ class PayServiceTest extends IntegrationTestCase
         $data = $this->mockTrade();
         $data['coin_amount'] = 20;
         $trade = $this->getPayService()->createTrade($data);
+
 
         $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
         $this->assertEquals(80, $userBalance['amount']);
@@ -128,7 +132,7 @@ class PayServiceTest extends IntegrationTestCase
         $userBalance = $this->getAccountService()->createUserBalance($user);
 
         $user = array(
-            'user_id' => 2,
+            'user_id' => 2
         );
 
         $seller = $this->getAccountService()->createUserBalance($user);
@@ -138,7 +142,7 @@ class PayServiceTest extends IntegrationTestCase
             'buyer_id' => $userBalance['user_id'],
             'amount' => '100',
             'title' => '充值1000个虚拟币',
-            'action' => 'recharge',
+            'action' => 'recharge'
         );
 
         $this->getAccountService()->transferCoin($recharge);
@@ -150,6 +154,7 @@ class PayServiceTest extends IntegrationTestCase
         $data = $this->mockTrade();
         $data['coin_amount'] = 20;
         $trade = $this->getPayService()->createTrade($data);
+
 
         $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
         $this->assertEquals(80, $userBalance['amount']);
@@ -178,12 +183,12 @@ class PayServiceTest extends IntegrationTestCase
     public function testRechargeNotify()
     {
         $user = array(
-            'user_id' => $this->biz['user']['id'],
+            'user_id' => $this->biz['user']['id']
         );
         $this->getAccountService()->createUserBalance($user);
 
         $seller = array(
-            'user_id' => 12,
+            'user_id' => 12
         );
         $this->getAccountService()->createUserBalance($seller);
 
@@ -196,7 +201,7 @@ class PayServiceTest extends IntegrationTestCase
         $notifyData = $this->mockNotifyData($trade);
         $this->biz['payment.wechat'] = $this->mockConvertNotifyData($notifyData);
         $result = $this->getPayService()->notifyPaid('wechat', $notifyData);
-        $this->assertEquals('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>', $result);
+        $this->assertEquals('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>',$result);
 
         $this->getPayService()->notifyPaid('wechat', $this->mockNotifyData($trade));
 
@@ -210,13 +215,13 @@ class PayServiceTest extends IntegrationTestCase
     public function testRechargeByIap()
     {
         $seller = array(
-            'user_id' => 0,
+            'user_id' => 0
         );
         $this->getAccountService()->createUserBalance($seller);
 
         $this->mockIapGetWay();
         $user = array(
-            'user_id' => $this->biz['user']['id'],
+            'user_id' => $this->biz['user']['id']
         );
         $this->getAccountService()->createUserBalance($user);
 
@@ -227,7 +232,7 @@ class PayServiceTest extends IntegrationTestCase
             'user_id' => $user['user_id'],
             'amount' => 1000,
             'receipt' => 'xxx',
-            'is_sand_box' => false,
+            'is_sand_box' => false
         );
         $this->getPayService()->rechargeByIap($data);
 
@@ -238,7 +243,7 @@ class PayServiceTest extends IntegrationTestCase
     protected function rechargeCoin()
     {
         $user = array(
-            'user_id' => $this->biz['user']['id'],
+            'user_id' => $this->biz['user']['id']
         );
         $this->getAccountService()->createUserBalance($user);
 
@@ -263,29 +268,28 @@ class PayServiceTest extends IntegrationTestCase
             'pay_amount' => 1000,
             'cash_type' => 'CNY',
             'attach' => array(
-                'user_id' => 1,
+                'user_id' => 1
             ),
             'quantity' => 1,
             'product_id' => 1,
         );
 
-        $mock = \Mockery::mock('Codeages\\Biz\\Pay\\Payment\\IapGateway');
+        $mock = \Mockery::mock("Codeages\\Biz\\Pay\\Payment\\IapGateway");
         $mock->shouldReceive('converterNotify')->andReturn(array($return, 'success'));
-
         return $mock;
     }
 
     protected function assertPaidTrade($notifyData, $trade)
     {
-        $xml = simplexml_load_string($notifyData, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $notifyData = json_decode(json_encode($xml), true);
+        $xml = simplexml_load_string($notifyData,'SimpleXMLElement', LIBXML_NOCDATA);
+        $notifyData = json_decode(json_encode($xml),TRUE);
         $this->assertEquals('wechat', $trade['platform']);
         $this->assertEquals('paid', $trade['status']);
         $this->assertEquals($notifyData['fee_type'], $trade['currency']);
         $this->assertNotEmpty($trade['notify_data']);
         $this->assertEquals($notifyData['transaction_id'], $trade['platform_sn']);
         $cashFlows = $this->getCashflowDao()->findByTradeSn($trade['trade_sn']);
-        $this->assertEquals(5, count($cashFlows));
+        $this->assertEquals(5,count($cashFlows));
 
         foreach ($cashFlows as $cashFlow) {
             $this->assertNotEmpty($cashFlow['sn']);
@@ -293,16 +297,17 @@ class PayServiceTest extends IntegrationTestCase
 
             $this->assertEquals($trade['order_sn'], $cashFlow['order_sn']);
             $this->assertEquals($trade['trade_sn'], $cashFlow['trade_sn']);
-            if ('coin' == $cashFlow['currency']) {
+            if ($cashFlow['currency'] == 'coin') {
                 $this->assertEquals('none', $cashFlow['platform']);
             } else {
                 $this->assertEquals($trade['platform'], $cashFlow['platform']);
             }
+
         }
 
-        if ('recharge' == $trade['type']) {
+        if ($trade['type'] == 'recharge') {
             foreach ($cashFlows as $cashFlow) {
-                if ('coin' == $cashFlow['currency']) {
+                if($cashFlow['currency'] == 'coin') {
                     $this->assertEquals($trade['cash_amount'] * $this->getCoinRate(), $cashFlow['amount']);
                 } else {
                     $this->assertEquals($trade['cash_amount'], $cashFlow['amount']);
@@ -310,9 +315,9 @@ class PayServiceTest extends IntegrationTestCase
             }
         }
 
-        if ('purchase' == $trade['type']) {
+        if ($trade['type'] == 'purchase')  {
             foreach ($cashFlows as $cashFlow) {
-                if ('coin' == $cashFlow['currency']) {
+                if($cashFlow['currency'] == 'coin') {
                     $this->assertEquals($trade['coin_amount'], $cashFlow['amount']);
                 } else {
                     $this->assertEquals($trade['cash_amount'], $cashFlow['amount']);
@@ -325,8 +330,8 @@ class PayServiceTest extends IntegrationTestCase
     {
         $this->biz['payment.platforms.options'] = array(
             'wechat' => array(
-                'appid' => 'bcbc',
-            ),
+                'appid'=>'bcbc'
+            )
         );
 
         $payments = $this->getPayService()->findEnabledPayments();
@@ -345,7 +350,7 @@ class PayServiceTest extends IntegrationTestCase
             'goods_title' => 'java基础课程',
             'goods_detail' => 'java基础课程，适合初学者',
             'attach' => array(
-                'user_id' => 1,
+                'user_id' => 1
             ),
             'order_sn' => '123456',
             'amount' => 100,
@@ -356,15 +361,15 @@ class PayServiceTest extends IntegrationTestCase
             'price_type' => 'money',
             'platform' => 'wechat',
             'seller_id' => '12',
-            'type' => 'purchase',
+            'type' => 'purchase'
         );
+
     }
 
     protected function mockNotifyData($trade = array())
     {
         $outTradeNo = empty($trade) ? '1409811653' : $trade['trade_sn'];
         $totalFee = empty($trade) ? '100' : $trade['cash_amount'];
-
         return "<xml>
               <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
               <attach><![CDATA[支付测试]]></attach>
@@ -395,14 +400,14 @@ class PayServiceTest extends IntegrationTestCase
             'trade_sn' => '1409811653',
             'cash_type' => 'CNY',
             'attach' => array(
-                'user_id' => 1,
+                'user_id' => 1
             ),
-            'notify_data' => array(),
+            'notify_data' => array()
         );
 
         if (!empty($notifyData)) {
-            $xml = simplexml_load_string($notifyData, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $notifyData = json_decode(json_encode($xml), true);
+            $xml = simplexml_load_string($notifyData,'SimpleXMLElement', LIBXML_NOCDATA);
+            $notifyData = json_decode(json_encode($xml),TRUE);
 
             $return['notify_data'] = $notifyData;
             $return['cash_flow'] = $notifyData['transaction_id'];
@@ -411,21 +416,19 @@ class PayServiceTest extends IntegrationTestCase
             $return['trade_sn'] = $notifyData['out_trade_no'];
         }
 
-        $mock = \Mockery::mock('Codeages\\Biz\\Pay\\Payment\\WechatGateway');
+        $mock = \Mockery::mock("Codeages\\Biz\\Pay\\Payment\\WechatGateway");
         $mock->shouldReceive('converterNotify')->andReturn(array($return, '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'));
-
         return $mock;
     }
 
     protected function convertTime($paidTime)
     {
-        $year = substr($paidTime, 0, 4);
-        $month = substr($paidTime, 4, 2);
-        $day = substr($paidTime, 6, 2);
-        $hour = substr($paidTime, 8, 2);
-        $minuts = substr($paidTime, 10, 2);
-        $seconds = substr($paidTime, 12, 2);
-
+        $year = substr($paidTime,0,4);
+        $month = substr($paidTime,4,2);
+        $day = substr($paidTime,6,2);
+        $hour = substr($paidTime,8,2);
+        $minuts = substr($paidTime,10,2);
+        $seconds = substr($paidTime,12,2);
         return strtotime("{$year}-{$month}-{$day} {$hour}:{$minuts}:{$seconds}");
     }
 
@@ -444,10 +447,9 @@ class PayServiceTest extends IntegrationTestCase
             'result_code' => 'SUCCESS',
         );
 
-        $mock = \Mockery::mock('Codeages\\Biz\\Pay\\Payment\\WechatGateway');
+        $mock = \Mockery::mock("Codeages\\Biz\\Pay\\Payment\\WechatGateway");
         $mock->shouldReceive('createTrade')->andReturn($return);
         $mock->shouldReceive('closeTrade')->andReturn(new CloseOrderResponseTest());
-
         return $mock;
     }
 
@@ -484,13 +486,11 @@ class PayServiceTest extends IntegrationTestCase
 
 class CloseOrderResponseTest
 {
-    public function isSuccessful()
-    {
+    public function isSuccessful(){
         return true;
     }
 
-    public function getFailData()
-    {
+    public function getFailData(){
         return '错误码：666，错误原因：系统错误';
     }
 }

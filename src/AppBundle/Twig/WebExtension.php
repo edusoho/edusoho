@@ -1741,6 +1741,6 @@ class WebExtension extends \Twig_Extension
         $wechat = $this->isMicroMessenger();
         $loginBind = $this->getSetting('login_bind');
 
-        return $wechat && !empty($loginBind['enabled']) &&  !empty($loginBind['weixinmob_enabled']);
+        return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
     }
 }
