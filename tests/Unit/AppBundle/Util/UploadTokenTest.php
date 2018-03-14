@@ -21,7 +21,7 @@ class UploadTokenTest extends BaseTestCase
         $this->assertEquals('image', $contents[2]);
         $this->assertEquals(TimeMachine::time() + 18000, $contents[3]);
         $secret = $this->getServiceKernel()->getParameter('secret');
-        $this->assertEquals(md5("{$user['id']}|course|image|".(time() + 18000)."|$secret"), $contents[4]);
+        $this->assertEquals(md5("{$user['id']}|course|image|".(TimeMachine::time() + 18000)."|$secret"), $contents[4]);
     }
 
     public function testParse()

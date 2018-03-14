@@ -27,8 +27,6 @@ class LoginBindController extends BaseController
                 $request->getSession()->set('_target_path', $targetPath);
             }
         }
-
-        $inviteCode = $request->query->get('inviteCode', null);
         $client = $this->createOAuthClient($type);
 
         $token = $this->getTokenService()->makeToken('login.bind', array(
@@ -41,10 +39,6 @@ class LoginBindController extends BaseController
         ));
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
-
-        if ($inviteCode) {
-            $callbackUrl = $callbackUrl.'&inviteCode='.$inviteCode;
-        }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
 
@@ -71,7 +65,6 @@ class LoginBindController extends BaseController
     public function callbackAction(Request $request, $type)
     {
         $code = $request->query->get('code');
-        $inviteCode = $request->query->get('inviteCode');
         $token = $request->query->get('token', '');
 
         $this->validateToken($request, $type);
@@ -108,7 +101,7 @@ class LoginBindController extends BaseController
             $oUser = $oauthClient->getUserInfo($token);
             $this->storeOauthUserToSession($request, $oUser, $type);
 
-            return $this->redirect($this->generateUrl('oauth2_login_index', array('inviteCode' => $inviteCode)));
+            return $this->redirect($this->generateUrl('oauth2_login_index'));
         }
     }
 

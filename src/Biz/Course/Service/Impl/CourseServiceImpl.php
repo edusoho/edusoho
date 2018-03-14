@@ -31,6 +31,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
+use AppBundle\Common\TimeMachine;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -612,18 +613,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
             }
-            $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
-                $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
+                $course['expiryStartDate'] = TimeMachine::isTimestamp($course['expiryStartDate']) ? $course['expiryStartDate'] : strtotime($course['expiryStartDate']);
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
             }
             if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
             } else {
-                $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 throw $this->createInvalidArgumentException(
