@@ -3320,8 +3320,8 @@ cloud_search.classroom.result: >
   为您找到班级结果约 <span class="color-danger">%counts%</span>个
 cloud_search.classroom.evaluate: %ratingNum%人评价
 cloud_search.classroom.learned: (%studentNum%)人学习
-cloud_search.classroom.recommend.content_title: 推荐课程
-cloud_search.classroom.recommend.empty: 暂无推荐课程
+cloud_search.classroom.recommend.content_title: 推荐班级
+cloud_search.classroom.recommend.empty: 暂无推荐班级
 
 cloud_search.teacher: 教师
 cloud_search.teacher.result: >
