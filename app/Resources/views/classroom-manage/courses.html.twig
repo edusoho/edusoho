@@ -57,14 +57,16 @@
                       {% endif %}
                     </div>
 
-                    <h4 class="course-title text-overflow">
+                    <h4 class="course-title text-overflow mb0">
                       {% if course.serializeMode=='serialized' %}
                         <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
                         <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
                       {% endif %}
                       <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
-                    {% if course.type == 'live' %}
+                      <div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{course.title|sub_text(20)}}</div>
+
+                      {% if course.type == 'live' %}
                         {% set lesson = course['lesson']|default(null) %}
                         {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                           <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
@@ -84,10 +86,9 @@
                       {% endif %}
                     {% else %}
                       <div class="pull-right cd-mr40"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_base', {id: course.courseSet.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
-                      <div class="pull-left  cd-text-sm">{{'classroom.teach_plan'|trans}}：{{course.title|sub_text(20)}}</div>
                     {% endif %}
 
-                    <div class="course-footer cd-mt40 clearfix">
+                    <div class="course-footer cd-mt32 clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}
                         <div class="teacher">
