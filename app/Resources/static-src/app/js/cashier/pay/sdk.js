@@ -5,8 +5,7 @@ import LianlianpayWap from './lianlianpay_wap';
 import LianlianpayWeb from './lianlianpay_web';
 import WechatPayJs from './wechatpay_js';
 import WechatPayMweb from './wechatpay_mweb';
-
-import store from 'store';
+import 'store';
 
 export default class PaySDK {
 

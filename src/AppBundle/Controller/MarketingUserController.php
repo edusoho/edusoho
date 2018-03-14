@@ -20,7 +20,7 @@ class MarketingUserController extends BaseController
             if (!in_array($token['data']['targetType'], array('classroom', 'course', 'coupon'))) {
                 throw new InvalidArgumentException('targetType is invalid');
             }
-            if (!in_array($token['data']['targetType'], array('classroom', 'course'))) {
+            if (in_array($token['data']['targetType'], array('classroom', 'course'))) {
                 $url = $this->generateTargetUrl($token['data']['targetType'], $token['data']['targetId']);
             } else {
                 $url = $this->generateTargetUrl($token['data']['targetType']);
