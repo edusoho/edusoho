@@ -13,13 +13,13 @@ let validator = $form.validate({
       equalTo: '#form_newPassword'
     }
   }
-})
+});
 
 $('.js-submit-form').off('click');
 $('.js-submit-form').click(function () {
   if (validator.form()) {
     let data = $form.serialize();
-    let targetUrl = $form.attr("action");
+    let targetUrl = $form.attr('action');
     $.post(targetUrl, data, function (html) {
       $modal.html(html);
     });

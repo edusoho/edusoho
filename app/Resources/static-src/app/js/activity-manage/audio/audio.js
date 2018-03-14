@@ -44,12 +44,12 @@ export default class Audio {
   }
 
   autoValidatorLength() {
-    $(".js-length").blur(function () {
-      let validator = $("#step2-form").data('validator');
+    $('.js-length').blur(function () {
+      let validator = $('#step2-form').data('validator');
       if (validator && validator.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
-        $("#length").val(minute * 60 + second);
+        $('#length').val(minute * 60 + second);
       }
     });
   }
@@ -79,15 +79,15 @@ export default class Audio {
       placeMediaAttr(file);
 
       $('[name="ext[mediaId]"]').val(file.source);
-      $("#step2-form").valid();
+      $('#step2-form').valid();
       if (file.source == 'self') {
-        $("#ext_mediaId").val(file.id);
-        $("#ext_mediaUri").val('');
+        $('#ext_mediaId').val(file.id);
+        $('#ext_mediaUri').val('');
       } else {
-        $("#ext_mediaId").val('');
-        $("#ext_mediaUri").val(file.uri);
+        $('#ext_mediaId').val('');
+        $('#ext_mediaUri').val(file.uri);
       }
-    }
+    };
     fileChooser.on('select', onSelectFile);
   }
 }

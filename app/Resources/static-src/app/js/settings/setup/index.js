@@ -21,7 +21,7 @@ if ($form.length) {
         type: 'get',
       }
     },
-  })
+  });
 
   $btn.click(() => {
     if (validator.form()) {
@@ -34,5 +34,5 @@ if ($form.length) {
         notify('danger', Translator.trans('settings.setup.set_failed.hint'));
       });
     }
-  })
+  });
 }

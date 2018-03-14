@@ -49,7 +49,7 @@ export default class SmsSender {
     };
     self.$element.addClass('disabled');
     $.post(url, data, function(response) {
-      let ackResponse = "undefined" != typeof response['ACK'] ? response['ACK'] : '';
+      let ackResponse = 'undefined' != typeof response['ACK'] ? response['ACK'] : '';
       if (self.additionalAction(ackResponse)) {
         // 已在条件中自动处理，不需要额外处理
       } else if (ackResponse == 'ok') {
@@ -63,7 +63,7 @@ export default class SmsSender {
 
         refreshTimeLeft();
       } else {
-        if ("undefined" != typeof response['error']) {
+        if ('undefined' != typeof response['error']) {
           notify('danger', response['error']);
         } else {
           notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));

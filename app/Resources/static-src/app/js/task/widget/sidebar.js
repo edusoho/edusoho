@@ -1,4 +1,4 @@
-import Emitter from "component-emitter";
+import Emitter from 'component-emitter';
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 
 export default class TaskSidebar extends Emitter {
@@ -20,7 +20,7 @@ export default class TaskSidebar extends Emitter {
         this.element.hide().show();
         this.bindEvent();
       })
-      .fail(error => {
+      .fail(() => {
       });
   }
 
@@ -30,7 +30,7 @@ export default class TaskSidebar extends Emitter {
 
   // 修复字体图标在chrome下，加载两次从而不能显示的问题
   fixIconInChrome() {
-    let html = `<i class="es-icon es-icon-chevronleft"></i>`;
+    let html = '<i class="es-icon es-icon-chevronleft"></i>';
     this.element.html(html);
   }
 
@@ -39,8 +39,8 @@ export default class TaskSidebar extends Emitter {
     <div class="dashboard-toolbar">
       <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">
         ${this.plugins.reduce((html, plugin) => {
-        return html += `<li data-plugin="${plugin.code}" data-url="${plugin.url}"><a href="#"><div class="mbs es-icon ${plugin.icon}"></div>${plugin.name}</a></li>`;
-      }, '')}
+    return html += `<li data-plugin="${plugin.code}" data-url="${plugin.url}"><a href="#"><div class="mbs es-icon ${plugin.icon}"></div>${plugin.name}</a></li>`;
+  }, '')}
       </ul>
     </div>`;
     this.element.html(html);
@@ -66,7 +66,7 @@ export default class TaskSidebar extends Emitter {
       }
       
       if(this.isManualOperation){
-          this.operationContent($btn);
+        this.operationContent($btn);
       }
   
       if ($btn.data('loaded')) {

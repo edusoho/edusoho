@@ -17,16 +17,16 @@ export default class QuestionManage{
     this.$modal.on('click','.js-confirm-submit',event => this._submitSave(event));
   }
 
-  _showPickerModal(event) {
+  _showPickerModal() {
     let excludeIds = [];
     $('[data-type="'+this.currentType+'"]').find('[name="questionIds[]"]').each(function(){
-        excludeIds.push($(this).val());
+      excludeIds.push($(this).val());
     });
 
-    let $modal = $("#modal").modal();
+    let $modal = $('#modal').modal();
     $modal.data('manager', this);
     $.get(this.$button.data('url'), {excludeIds: excludeIds.join(','), type: this.currentType}, function(html) {
-        $modal.html(html);
+      $modal.html(html);
     });
   }
 
@@ -43,18 +43,18 @@ export default class QuestionManage{
     this.$element.find('[data-role="batch-select"]').prop('checked',false);
     this.$element.find('[data-role="batch-item"]').prop('checked',false);
   }
-  _confirmSave(event) {
+  _confirmSave() {
     let isOk = this._validateScore();
 
     if (!isOk) {
-        return ;
+      return ;
     }
 
     if( $('[name="passedScore"]').length > 0){
-        let passedScoreErrorMsg = $('.passedScoreDiv').siblings('.help-block').html();
-        if ($.trim(passedScoreErrorMsg) != ''){
-            return ;
-        }
+      let passedScoreErrorMsg = $('.passedScoreDiv').siblings('.help-block').html();
+      if ($.trim(passedScoreErrorMsg) != ''){
+        return ;
+      }
     }
 
     let stats = this._calTestpaperStats();
@@ -74,12 +74,12 @@ export default class QuestionManage{
     
     let html='';
     $.each(stats, function(index, statsItem){
-        let tr = "<tr>";
-            tr += "<td>" + statsItem.name + "</td>";
-            tr += "<td>" + statsItem.count + "</td>";
-            tr += "<td>" + statsItem.score.toFixed(1) + "</td>";
-            tr += "</tr>";
-        html += tr;
+      let tr = '<tr>';
+      tr += '<td>' + statsItem.name + '</td>';
+      tr += '<td>' + statsItem.count + '</td>';
+      tr += '<td>' + statsItem.score.toFixed(1) + '</td>';
+      tr += '</tr>';
+      html += tr;
     });
 
     this.$modal.find('.detail-tbody').html(html);
@@ -91,23 +91,23 @@ export default class QuestionManage{
     let isOk = true;
 
     if (this.$element.find('[name="scores[]"]').length == 0) {
-        notify('danger',Translator.trans('activity.testpaper_manage.question_required_error_hint'));
-        isOk = false;
+      notify('danger',Translator.trans('activity.testpaper_manage.question_required_error_hint'));
+      isOk = false;
     }
 
     this.$element.find('input[type="text"][name="scores[]"]').each(function() {
-        var score = $(this).val();
+      var score = $(this).val();
 
-        if (score == '0') {
-            notify('danger',Translator.trans('activity.testpaper_manage.question_score_empty_hint'));
-            isOk = false;
-        }
+      if (score == '0') {
+        notify('danger',Translator.trans('activity.testpaper_manage.question_score_empty_hint'));
+        isOk = false;
+      }
 
-        if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
-            notify('danger', Translator.trans('activity.testpaper_manage.question_score_error_hint'));
-            $(this).focus();
-            isOk = false;
-        }
+      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+        notify('danger', Translator.trans('activity.testpaper_manage.question_score_error_hint'));
+        $(this).focus();
+        isOk = false;
+      }
     });
 
     return isOk;
@@ -118,39 +118,39 @@ export default class QuestionManage{
     let self = this;
 
     this.$typeNav.find('li').each(function() {
-        let type = $(this).find('a').data('type'),
-            name = $(this).find('a').data('name');
+      let type = $(this).find('a').data('type'),
+        name = $(this).find('a').data('name');
             
 
-        stats[type] = {name:name, count:0, score:0, missScore:0};
+      stats[type] = {name:name, count:0, score:0, missScore:0};
 
-        self.$element.find('#testpaper-items-'+type).find('[name="scores[]"]').each(function() {
-            let itemType = $(this).closest('tr').data('type');
-            let score = itemType == 'material' ? 0 : parseFloat($(this).val());
-            let question = {};
+      self.$element.find('#testpaper-items-'+type).find('[name="scores[]"]').each(function() {
+        let itemType = $(this).closest('tr').data('type');
+        let score = itemType == 'material' ? 0 : parseFloat($(this).val());
+        let question = {};
 
-            if (itemType != 'material') {
-              stats[type]['count'] ++;
-            }
+        if (itemType != 'material') {
+          stats[type]['count'] ++;
+        }
             
-            stats[type]['score'] += score;
-            stats[type]['missScore'] = parseFloat($(this).data('miss-score'));
+        stats[type]['score'] += score;
+        stats[type]['missScore'] = parseFloat($(this).data('miss-score'));
 
-            let questionId = $(this).closest('tr').data('id');
+        let questionId = $(this).closest('tr').data('id');
 
-            question['id'] = questionId;
-            question['score'] = score;
-            question['missScore'] = parseFloat($(this).data('miss-score'));
-            question['type'] = type;
+        question['id'] = questionId;
+        question['score'] = score;
+        question['missScore'] = parseFloat($(this).data('miss-score'));
+        question['type'] = type;
             
-            self.questions.push(question);
-        });
+        self.questions.push(question);
+      });
     });
 
     let total = {name:Translator.trans('activity.testpaper_manage.question_total_score'), count:0, score:0};
     $.each(stats, function(index, statsItem) {
-        total.count += statsItem.count;
-        total.score += statsItem.score;
+      total.count += statsItem.count;
+      total.score += statsItem.score;
     });
 
     stats.total = total;
@@ -162,7 +162,7 @@ export default class QuestionManage{
     let passedScore = 0;
     let $target = $(event.currentTarget);
     if ($('input[name="passedScore"]:visible').length > 0) {
-        passedScore = $('input[name="passedScore"]').val();
+      passedScore = $('input[name="passedScore"]').val();
     }
 
     $target.button('loading').addClass('disabled');
@@ -171,6 +171,6 @@ export default class QuestionManage{
       if (result.goto) {
         window.location.href = result.goto;
       }
-    })
+    });
   }
 }

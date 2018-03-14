@@ -9,4 +9,4 @@ new Importer({
       currency: true
     }
   }
-})
+});

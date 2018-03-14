@@ -45,10 +45,10 @@ class CoverCrop {
       
       $.post(url, { images: response }, (response) => {
         if (response.status === 'success') {
-          $("#profile_avatar").val(response.avatar);
-          $("#user-profile-form img").attr('src', response.avatar);
-          $("#profile_avatar").blur();
-          $("#modal").modal('hide');
+          $('#profile_avatar').val(response.avatar);
+          $('#user-profile-form img').attr('src', response.avatar);
+          $('#profile_avatar').blur();
+          $('#modal').modal('hide');
           
           notify('success',Translator.trans('site.upload_success_hint'));
         } else {
@@ -56,8 +56,8 @@ class CoverCrop {
           $saveBtn.button('reset');
         }
       });
-    }
-    return imageCrop
+    };
+    return imageCrop;
   }
 
 }
@@ -66,4 +66,4 @@ new CoverCrop({
   element: '#avatar-crop-form',
   avatarCrop: '#avatar-crop',
   saveBtn: '#upload-avatar-btn',
-})
+});

@@ -39,7 +39,7 @@ if ($('#exit-btn').length > 0) {
         notify('danger', Translator.trans(data.message));
       }
     });
-  })
+  });
 
 }
 
@@ -79,7 +79,7 @@ if ($('.group-post-list').length > 0) {
 
     }
 
-    ;
+		
     $(this).hide();
     $('#unreply-' + postId).show();
     $('.reply-' + postId).css('display', '');

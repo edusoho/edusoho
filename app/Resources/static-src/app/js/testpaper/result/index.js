@@ -27,3 +27,11 @@ $('.js-testpaper-redo-timer').timer({
     self.usedTime = 0;
   }
 });
+
+$('#finishPaper').click(function() {
+ if ($(this).attr('disabled') == 'disabled') {
+   return false;
+ } else {
+   return true;
+ }
+})

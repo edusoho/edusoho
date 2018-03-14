@@ -1,4 +1,4 @@
-import Comp from '../comp'
+import Comp from '../comp';
 
 export default class BaseTooltipComp extends Comp {
 
@@ -6,10 +6,10 @@ export default class BaseTooltipComp extends Comp {
     let current = this;
     options['eventMouseover'] = function(event, jsEvent, view) {
       current._showTip(current._generateParams(event), event, jsEvent);
-    }
+    };
     options['eventMouseout'] = function(event, jsEvent, view) {
       current._hideTip(current._generateParams(event), event, jsEvent);
-    }
+    };
     return options;
   }
 

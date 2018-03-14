@@ -74,7 +74,7 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
           phone: Translator.trans('validate.phone.message'),
         }
       }
-      });
+    });
     this.getCustomFields();
   }
 

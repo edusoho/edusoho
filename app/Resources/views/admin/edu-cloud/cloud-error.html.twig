@@ -4,8 +4,5 @@
 {% set submenu = 'service-information' %}
 
 {% block main %}
-<div class="text-center">
-  <h1 class="text-muted">{{'admin.edu_cloud.connect_failed_tips'|trans({'%Edusoho%': 'EduSoho'|copyright_less })}}</h1>
-</div>
-
+  <p class="text-center text-muted alert alert-danger">{{'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}</p>
 {% endblock %}

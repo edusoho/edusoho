@@ -69,7 +69,7 @@ class Manage {
   initUploader() {
     let select = this.select;
 
-    let videoNo = $uploader.data('mediaGlobalId');;
+    let videoNo = $uploader.data('mediaGlobalId');
     let mediaId = $uploader.data('mediaId');
     let subtitleCreateUrl = $uploader.data('subtitleCreateUrl');
     
@@ -99,9 +99,9 @@ class Manage {
 
     uploader.on('file.finish', function(file) {
       $.post(subtitleCreateUrl, {
-        "name": file.name,
-        "subtitleId": file.id,
-        "mediaId": mediaId
+        'name': file.name,
+        'subtitleId': file.id,
+        'mediaId': mediaId
       }).success(function (data) {
         if (!data) {
           return;
@@ -115,7 +115,7 @@ class Manage {
             if (data.subtitles) {
               select.resetOptions(data.subtitles);
             }
-          })
+          });
         }, 5000);
       }).error(function(data) {
         notify('danger', Translator.trans(data.responseJSON.error.message));
@@ -129,7 +129,7 @@ class Manage {
     try {
       captions.parse(data);
     } catch(e) {
-      notify('danger', Translator.trans('subtitle.parse_error_hint'))
+      notify('danger', Translator.trans('subtitle.parse_error_hint'));
       $textTrackDisplay.html(Translator.trans('subtitle.parse_error_hint'));
       return;
     }
@@ -164,7 +164,7 @@ class Manage {
           $subtitleDom.eq(last.index - 2).addClass('active');
         }
       }, 0);
-    })
+    });
   }
   
 }

@@ -145,6 +145,9 @@ class EduSohoAppClient implements AppClient
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
+        if (empty($result)) {
+            return array();
+        }
 
         return json_decode($result, true);
     }

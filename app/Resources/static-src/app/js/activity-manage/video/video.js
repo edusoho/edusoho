@@ -31,16 +31,16 @@ export default class Video {
   displayFinishCondition(source) {
     console.log(source);
     if (source === 'self') {
-      $("#finish-condition option[value=end]").removeAttr('disabled');
-      $("#finish-condition option[value=end]").text(Translator.trans('activity.video_manage.finish_detail'));
+      $('#finish-condition option[value=end]').removeAttr('disabled');
+      $('#finish-condition option[value=end]').text(Translator.trans('activity.video_manage.finish_detail'));
     } else {
-      $("#finish-condition option[value=end]").text(Translator.trans('activity.video_manage.other_finish_detail'));
-      $("#finish-condition option[value=end]").attr('disabled', 'disabled');
-      $("#finish-condition option[value=time]").attr('selected', false);
-      $("#finish-condition option[value=time]").attr('selected', true);
+      $('#finish-condition option[value=end]').text(Translator.trans('activity.video_manage.other_finish_detail'));
+      $('#finish-condition option[value=end]').attr('disabled', 'disabled');
+      $('#finish-condition option[value=time]').attr('selected', false);
+      $('#finish-condition option[value=time]').attr('selected', true);
       $('.viewLength').removeClass('hidden');
       this.initStep3from();
-      }
+    }
   }
 
   initStep2form() {
@@ -70,7 +70,7 @@ export default class Video {
           required: Translator.trans('activity.video_manage.length_unsigned_integer_error_hint'),
           second_range: Translator.trans('activity.video_manage.second_range_error_hint'),
         },
-        'ext[mediaSource]': Translator.trans("activity.video_manage.media_error_hint"),
+        'ext[mediaSource]': Translator.trans('activity.video_manage.media_error_hint'),
       }
     });
     $step2_form.data('validator', validator);
@@ -98,32 +98,32 @@ export default class Video {
   }
 
   autoValidatorLength() {
-    $(".js-length").blur(function () {
-      let validator = $("#step2-form").data('validator');
+    $('.js-length').blur(function () {
+      let validator = $('#step2-form').data('validator');
       if (validator && validator.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
-        $("#length").val(minute * 60 + second);
+        $('#length').val(minute * 60 + second);
       }
     });
   }
 
   isInitStep3from() {
     // 完成条件是观看时长的情况
-    if ($("#finish-condition").children('option:selected').val() === 'time') {
+    if ($('#finish-condition').children('option:selected').val() === 'time') {
       $('.viewLength').removeClass('hidden');
       this.initStep3from();
     }
 
-    $("#finish-condition").on('change', (event) => {
+    $('#finish-condition').on('change', (event) => {
       if (event.target.value == 'time') {
         $('.viewLength').removeClass('hidden');
         this.initStep3from();
       } else {
         $('.viewLength').addClass('hidden');
-        $('input[name="ext[finishDetail]"]').rules('remove')
+        $('input[name="ext[finishDetail]"]').rules('remove');
       }
-    })
+    });
   }
 
   initfileChooser() {
@@ -155,13 +155,13 @@ export default class Video {
       placeMediaAttr(file);
 
       $('[name="ext[mediaSource]"]').val(file.source);
-      $("#step2-form").valid();
+      $('#step2-form').valid();
       if (file.source == 'self') {
-        $("#ext_mediaId").val(file.id);
-        $("#ext_mediaUri").val('');
+        $('#ext_mediaId').val(file.id);
+        $('#ext_mediaUri').val('');
       } else {
-        $("#ext_mediaUri").val(file.uri);
-        $("#ext_mediaId").val(0);
+        $('#ext_mediaUri').val(file.uri);
+        $('#ext_mediaId').val(0);
       }
       //渲染字幕
       subtitleDialog.render(file);

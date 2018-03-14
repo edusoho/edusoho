@@ -4,20 +4,20 @@ const notify = (level, message, settings = {}, options = {}) => {
   $('[data-notify="container"]').remove();
   let iconFont = '';
   switch (level) {
-    case 'info':
-      iconFont = "cd-icon cd-icon-info-o color-info mrm";
-      break;
-    case 'success':
-      iconFont = "cd-icon cd-icon-success-o color-success mrm";
-      break;
-    case 'danger':
-      iconFont = "cd-icon cd-icon-danger-o color-danger mrm";
-      break;
-    case 'warning':
-      iconFont = "cd-icon cd-icon-warning-o color-warning mrm";
-      break;
-    default:
-      break;
+  case 'info':
+    iconFont = 'cd-icon cd-icon-info-o color-info mrm';
+    break;
+  case 'success':
+    iconFont = 'cd-icon cd-icon-success-o color-success mrm';
+    break;
+  case 'danger':
+    iconFont = 'cd-icon cd-icon-danger-o color-danger mrm';
+    break;
+  case 'warning':
+    iconFont = 'cd-icon cd-icon-warning-o color-warning mrm';
+    break;
+  default:
+    break;
   }
 
   let defaultOptions = {

@@ -4,8 +4,8 @@ $('body').on('click', '.js-social-share', function() {
   var params = $btn.parents('.js-social-share-params').data();
 
   var url = '';
-  if ($(".point-share-url").length > 0) {
-    $.post($(".point-share-url").val(), function() {});
+  if ($('.point-share-url').length > 0) {
+    $.post($('.point-share-url').val(), function() {});
   }
   switch (type) {
   case 'weibo':

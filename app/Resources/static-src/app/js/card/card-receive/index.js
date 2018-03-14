@@ -7,7 +7,7 @@ if ($('a').hasClass('money-card-use')) {
 
   $.post(url, function (response) {
     notify('success',Translator.trans('card.card_receive_success_hint', {coin:coin}));
-    setTimeout("window.location.href = '" + target_url + "'", 2000);
+    setTimeout('window.location.href = \'' + target_url + '\'', 2000);
   }).error(function () {
     notify('danger',Translator.trans('card.card_receive_failed_hint'));
   });

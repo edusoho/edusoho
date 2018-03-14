@@ -30,9 +30,9 @@ class detail {
       blurIsAdd={true}
       sortable={true}
       dataSource={datas}
-      inputName={name + "[]"}
+      inputName={name + '[]'}
       outputDataElement={name} />,
-      document.getElementById(elementId)
+    document.getElementById(elementId)
     );
   }
 
@@ -46,8 +46,8 @@ class detail {
 
   publishAddMessage() {
     postal.publish({
-      channel: "courseInfoMultiInput",
-      topic: "addMultiInput",
+      channel: 'courseInfoMultiInput',
+      topic: 'addMultiInput',
     });
   }
 }

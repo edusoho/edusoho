@@ -18,7 +18,7 @@ class Coupon {
     this.$deductAmountLabel = this.$form.find('#deduct-amount-label');
     this.$couponCodeLabel = this.$form.find('#coupon-code-label');
 
-    this.$selectCouponBtn = this.$form.find("#select-coupon-btn");
+    this.$selectCouponBtn = this.$form.find('#select-coupon-btn');
 
     this.init();
   }
@@ -74,7 +74,7 @@ class Coupon {
 
         this.useCouponAfter(deductAmount, code);
       }
-    })
+    });
   }
 
   useCouponAfter(deductAmount, code) {
@@ -152,7 +152,7 @@ class Coupon {
       this.$selectCouponBtn.trigger('click');
 
       this.useCouponAfter(deductAmount, code);
-    })
+    });
   }
 
 }

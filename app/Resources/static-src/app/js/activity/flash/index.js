@@ -1,4 +1,4 @@
-import swfobject from "es-swfobject";
+import swfobject from 'es-swfobject';
 let $el = $('#flash-player');
 
 if (!swfobject.hasFlashPlayerVersion('11')) {
@@ -13,7 +13,7 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
   $el.show();
 } else {
   swfobject.embedSWF($el.data('uri'),
-    'flash-player', '100%', '100%', "9.0.0", null, null, {
+    'flash-player', '100%', '100%', '9.0.0', null, null, {
       wmode: 'opaque',
       allowFullScreen: 'true'
     });

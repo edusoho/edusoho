@@ -12,7 +12,7 @@ const courseModule = (api) => {
         url: `${api}/courses`,
       }, options));
     }
-  }
-}
+  };
+};
 
 export default courseModule;
