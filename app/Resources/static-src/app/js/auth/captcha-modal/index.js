@@ -20,7 +20,7 @@ if ($('input[name="set_bind_emailOrMobile"]').length > 0) {
   smsType = 'sms_registration';
 }
 
-$('#captcha-form').find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
+$('#captcha-form').find('#getcode_num').attr('src', $('#getcode_num').data('url') + '?' + Math.random());
 
 let captchaModal = new CaptchaModal($('#captcha-form'),dataTo,smsType,captchaNum);
 

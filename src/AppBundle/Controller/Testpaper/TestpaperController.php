@@ -307,11 +307,13 @@ class TestpaperController extends BaseController
         return $total;
     }
 
-    protected function testpaperActivityCheck($activityId, $testpaper)
+    //这里的lessonId 等于taskId
+    protected function testpaperActivityCheck($lessonId, $testpaper)
     {
         $user = $this->getUser();
 
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $task = $this->getTaskService()->getTask($lessonId);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
@@ -334,8 +336,8 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(
             $user['id'],
             $testpaper['id'],
-            $activity['fromCourseSetId'],
-            $activityId,
+            $activity['fromCourseId'],
+            $lessonId,
             $testpaper['type']
         );
 

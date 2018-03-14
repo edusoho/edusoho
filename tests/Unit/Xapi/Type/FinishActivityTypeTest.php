@@ -214,6 +214,7 @@ class FinishActivityTypeTest extends BaseTestCase
                             'title' => 'test task',
                             'activityId' => 2,
                             'type' => 'video',
+                            'courseId' => 1,
                         ),
                     ),
                 ),

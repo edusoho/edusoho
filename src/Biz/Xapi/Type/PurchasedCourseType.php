@@ -17,10 +17,10 @@ class PurchasedCourseType extends Type
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
-                $data = $statement['data'];
+                $data = $statement['context'];
                 $object = array(
                     'id' => $statement['target_id'],
-                    'definitionType' => $this->getDefinitionType($statement['target_type']),
+                    'definitionType' => $this->convertActivityType($statement['target_type']),
                     'name' => $data['title'],
                 );
                 $result = array(

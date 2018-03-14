@@ -1,4 +1,4 @@
-import notify from "common/notify";
+import notify from 'common/notify';
 
 $('#chapter-title-field').on('keypress', function (e) {
   if ((e.keyCode || e.which) === 13) {
@@ -7,7 +7,7 @@ $('#chapter-title-field').on('keypress', function (e) {
 });
 
 let sortList = function ($list) {
-  let data = $list.sortable("serialize").get();
+  let data = $list.sortable('serialize').get();
   let lessonNum = 0;
   let chapterNum = 0;
   let unitNum = 0;
@@ -66,15 +66,15 @@ $('#course-chapter-btn').on('click', function () {
 
           });
           if (add != 1) {
-            $("#sortable-list").append(html);
+            $('#sortable-list').append(html);
           }
         } else {
-          $("#sortable-list").append(html);
+          $('#sortable-list').append(html);
         }
 
-        let $list = $("#sortable-list");
+        let $list = $('#sortable-list');
         sortList($list);
       }
     },
   });
-})
+});

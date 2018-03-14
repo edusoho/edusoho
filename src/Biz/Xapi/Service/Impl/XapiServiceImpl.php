@@ -48,6 +48,11 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getStatementDao()->get($id);
     }
 
+    public function deleteStatement($id)
+    {
+        return $this->getStatementDao()->update($id, array('status' => 'deleted'));
+    }
+
     protected function generateUUID()
     {
         mt_srand((float) microtime() * 10000);

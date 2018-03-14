@@ -57,5 +57,5 @@ $smsCode.on('click', function() {
     element: smsSend,
     url: $smsCode.data('url'),
     smsType: 'sms_bind',
-  })
-})
+  });
+});

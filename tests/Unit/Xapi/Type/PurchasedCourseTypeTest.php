@@ -18,16 +18,16 @@ class PurchasedCourseTypeTest extends BaseTestCase
         $type->setBiz($this->biz);
 
         $statements = array(
-            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'data' => array('title' => 'PHP基础入门', 'pay_amount' => 399.99)),
-            array('user_id' => 2, 'uuid' => 20, 'target_id' => 2, 'target_type' => 'classroom', 'occur_time' => time(), 'data' => array('title' => 'Java入门班', 'pay_amount'=> 1024.10)),
+            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('title' => 'PHP基础入门', 'pay_amount' => 399.99)),
+            array('user_id' => 2, 'uuid' => 20, 'target_id' => 2, 'target_type' => 'classroom', 'occur_time' => time(), 'context' => array('title' => 'Java入门班', 'pay_amount'=> 1024.10)),
         );
         $pushStatements = $type->packages($statements);
 
         $this->assertEquals(array('id', 'actor', 'verb', 'object', 'result', 'timestamp'), array_keys($pushStatements[0]));
         foreach ($statements as $index => $st) {
             $this->assertEquals($st['target_id'], $pushStatements[$index]['object']['id']);
-            $this->assertEquals($st['data']['title'], $pushStatements[$index]['object']['definition']['name']['zh-CN']);
-            $this->assertEquals($st['data']['pay_amount'], $pushStatements[$index]['result']['extensions']['http://xapi.edusoho.com/extensions/amount']);
+            $this->assertEquals($st['context']['title'], $pushStatements[$index]['object']['definition']['name']['zh-CN']);
+            $this->assertEquals($st['context']['pay_amount'], $pushStatements[$index]['result']['extensions']['http://xapi.edusoho.com/extensions/amount']);
         }
 
         $this->assertEquals('http://adlnet.gov/expapi/activities/course', $pushStatements[0]['object']['definition']['type']);

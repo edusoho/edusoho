@@ -21,7 +21,7 @@ use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use QiQiuYun\SDK\XAPIVerbs;
+use QiQiuYun\SDK\Constants\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -148,7 +148,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->createStatement($thread['userId'], 'asked', $thread['id'], 'question');
     }
 
-    private function createStatement($userId, $verb, $targetId, $targetType, $data = array())
+    private function createStatement($userId, $verb, $targetId, $targetType, $context = array())
     {
         if (empty($userId)) {
             return;
@@ -159,7 +159,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'verb' => $verb,
                 'target_id' => $targetId,
                 'target_type' => $targetType,
-                'data' => $data,
+                'context' => $context,
                 'occur_time' => time(),
             );
 

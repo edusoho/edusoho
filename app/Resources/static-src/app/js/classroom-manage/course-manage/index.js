@@ -1,7 +1,7 @@
 import sortList from 'common/sortable';
-import notify from "common/notify";
+import notify from 'common/notify';
 
-$(".course-list-group").on('click', '.close', function () {
+$('.course-list-group').on('click', '.close', function () {
   if (confirm(Translator.trans('classroom.manage.delete_course_hint'))) {
     $.post($(this).data('url'), function (resp) {
       if (resp.success) {
@@ -16,8 +16,8 @@ $(".course-list-group").on('click', '.close', function () {
 
 sortList({
   element: '#course-list-group',
-  itemSelector: "li",
+  itemSelector: 'li',
   ajax:false,
 },(data)=>{
   $('#courses-form').submit();
-})
+});

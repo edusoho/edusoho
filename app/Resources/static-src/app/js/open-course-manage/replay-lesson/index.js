@@ -3,7 +3,7 @@ import notify from 'common/notify';
 
 let sortListAfter = function (data, $list) {
   $.post($list.data('sortUrl'), { ids: data }, function (response) {
-    let lessonNum = chapterNum = unitNum = 0;
+    let lessonNum = 0, chapterNum = 0, unitNum = 0;
 
     $list.find('.item-lesson, .item-chapter').each(function () {
       let $item = $(this);
@@ -29,7 +29,7 @@ sortList({
   itemSelector: '.item-lesson, .item-chapter',
 }, (data) => {
   sortListAfter(data, $list);
-})
+});
 
 
 
@@ -40,14 +40,14 @@ $list.on('click', '.delete-lesson-btn', function (e) {
   let $btn = $(e.currentTarget);
   let _isTestPaper = function () {
     return $btn.parents('.item-chapter')[0];
-  }
+  };
   let _remove_item = function () {
     if (_isTestPaper()) {
       $btn.parents('.item-chapter').remove();
     } else {
       $btn.parents('.item-lesson').remove();
     }
-  }
+  };
   $.post($(this).data('url'), function (response) {
     _remove_item();
     sortListAfter($list);
@@ -141,8 +141,8 @@ $list.on('click', '.delete-homework-btn', function (e) {
   }, 'json');
 });
 
-$("#course-item-list .item-actions .btn-link").tooltip();
-$("#course-item-list .fileDeletedLesson").tooltip();
+$('#course-item-list .item-actions .btn-link').tooltip();
+$('#course-item-list .fileDeletedLesson').tooltip();
 
 $('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
   if ($(this).find('.dropdown-menu-more').css('display') == 'block') {
@@ -175,12 +175,12 @@ function asyncLoadFiles() {
     for (var i = 0; i < data.length; i++) {
       var file = data[i];
       if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
-        $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>" + Translator.trans('page.file_converting.message') + "</span>");
+        $('li[data-file-id=' + file.id + ']').find('span[data-role="mediaStatus"]').append('<span class=\'text-warning\'>' + Translator.trans('page.file_converting.message') + '</span>');
       } else if (file.convertStatus == 'error') {
-        $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>" + Translator.trans('page.file_convert_failed.message') + "</span>");
+        $('li[data-file-id=' + file.id + ']').find('span[data-role="mediaStatus"]').append('<span class=\'text-danger\'>' + Translator.trans('page.file_convert_failed.message') + '</span>');
       } else if (file.convertStatus == 'success') {
-        $("li[data-file-id=" + file.id + "]").find('.mark-manage').show();
-        $("li[data-file-id=" + file.id + "]").find('.mark-manage-divider').show();
+        $('li[data-file-id=' + file.id + ']').find('.mark-manage').show();
+        $('li[data-file-id=' + file.id + ']').find('.mark-manage-divider').show();
       }
     }
   });
@@ -189,7 +189,7 @@ function asyncLoadFiles() {
 $('.js-lesson-batch-btn-popover').popover({
   html: true,
   trigger: 'hover',
-  delay: { "show": 200, "hide": 1000 },
+  delay: { 'show': 200, 'hide': 1000 },
   placement: 'top',
   template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
   content: function () {

@@ -10,7 +10,7 @@ class Cover {
     new EsWebUploader({
       element: '#upload-picture-btn',
       onUploadSuccess: function(file, response) {
-        let url = $("#upload-picture-btn").data("gotoUrl");
+        let url = $('#upload-picture-btn').data('gotoUrl');
         notify('success', Translator.trans('open_course.picture_upload_success_hint'));
         document.location.href = url;
       }

@@ -50,7 +50,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return (int) $builder->execute()->fetchColumn(0);
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
+    public function search($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('*')

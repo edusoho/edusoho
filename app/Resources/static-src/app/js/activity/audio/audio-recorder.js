@@ -9,7 +9,7 @@ export default class AudioRecorder {
   addAudioPlayerCounter(emitter, player) {
     let $container = $(this.container);
     let activityId = $container.data('id');
-    let playerCounter = store.get("activity_id_" + activityId + "_playing_counter");
+    let playerCounter = store.get('activity_id_' + activityId + '_playing_counter');
     if (!playerCounter) {
       playerCounter = 0;
     }
@@ -25,7 +25,7 @@ export default class AudioRecorder {
     } else if (player.playing) {
       playerCounter++;
     }
-    store.set("activity_id_" + activityId + "_playing_counter", playerCounter);
+    store.set('activity_id_' + activityId + '_playing_counter', playerCounter);
   }
 
 }

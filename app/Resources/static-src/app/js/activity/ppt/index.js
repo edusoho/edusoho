@@ -1,5 +1,5 @@
 import PptPlayer from '../../../common/ppt-player';
-import ActivityEmitter from "../activity-emitter";
+import ActivityEmitter from '../activity-emitter';
 
 
 let emitter = new ActivityEmitter();

@@ -1,13 +1,10 @@
 import BasePayment from './payment';
 
 export default class WechatPayNative extends BasePayment {
-  $container = $('body');
-
-  modalID = 'wechat-qrcode-modal';
-
   constructor() {
     super();
-
+    this.$container = $('body');
+    this.modalID = 'wechat-qrcode-modal';
     let template = `
       <div id="${this.modalID}" class="modal">
         <div class="modal-dialog cd-modal-dialog cd-modal-dialog-sm">

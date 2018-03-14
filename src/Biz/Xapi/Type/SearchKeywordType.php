@@ -2,7 +2,7 @@
 
 namespace Biz\Xapi\Type;
 
-use QiQiuYun\SDK\XAPIObjectTypes;
+use QiQiuYun\SDK\Constants\XAPIActivityTypes;
 
 class SearchKeywordType extends Type
 {
@@ -19,14 +19,14 @@ class SearchKeywordType extends Type
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
-                $data = $statement['data'];
+                $data = $statement['context'];
                 $object = array(
                     'id' => $data['uri'],
-                    'definitionType' => 'teacher' === $data['type'] ? '' : $this->getDefinitionType($data['type']),
-                    'objectType' => 'teacher' === $data['type'] ? XAPIObjectTypes::AGENT : XAPIObjectTypes::ACTIVITY,
+                    'definitionType' => XAPIActivityTypes::SEARCH_ENGINE,
                 );
                 $result = array(
                     'response' => $data['q'],
+                    'type' => $this->convertActivityType($data['type']),
                 );
                 $pushStatements[] = $sdk->searched($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
             } catch (\Exception $e) {

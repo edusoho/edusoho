@@ -8,7 +8,7 @@ export let toggleIcon = (target, $expandIconClass, $putIconClass) => {
     $icon.removeClass($putIconClass).addClass($expandIconClass);
     $text ? $text.text(Translator.trans('展开')): '';
   }
-}
+};
 
 export let chapterAnimate = (
   delegateTarget = 'body',
@@ -17,7 +17,7 @@ export let chapterAnimate = (
   $putIconClass = 'es-icon-anonymous-iconfont') => {
   $(delegateTarget).on('click', target, (event) => {
     let $this = $(event.currentTarget);
-    $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, "normal");
-    toggleIcon($this, $expandIconClass, $putIconClass)
-  })
-}
+    $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+    toggleIcon($this, $expandIconClass, $putIconClass);
+  });
+};

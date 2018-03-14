@@ -18,7 +18,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Context\BizAware;
-use QiQiuYun\SDK\XAPIActivityTypes;
+use QiQiuYun\SDK\Constants\XAPIActivityTypes;
 
 abstract class Type extends BizAware
 {
@@ -35,6 +35,11 @@ abstract class Type extends BizAware
     protected function find($subject, $dao, $columns, $conditions = array())
     {
         $ids = ArrayToolkit::column($subject[0], $subject[1]);
+
+        if (!$ids) {
+            return array();
+        }
+
         $conditions = array_merge(array('ids' => $ids), $conditions);
         $columns = array_unique(array_merge(array('id'), $columns));
         $results = $this->createDao($dao)->search($conditions, array(), 0, PHP_INT_MAX, $columns);
@@ -47,7 +52,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Task:TaskDao',
-            array('activityId', 'type', 'courseId'),
+            array('activityId', 'type', 'courseId', 'title'),
             $conditions
         );
     }
@@ -91,7 +96,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Course:ThreadDao',
-            array('taskId', 'courseId', 'courseSetId'),
+            array('taskId', 'courseId', 'courseSetId', 'title', 'content'),
             $conditions
         );
     }
@@ -101,7 +106,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Xapi:ActivityWatchLogDao',
-            array('course_id', 'task_id'),
+            array('course_id', 'task_id', 'watched_time'),
             $conditions
         );
     }
@@ -317,15 +322,16 @@ abstract class Type extends BizAware
         return empty($list[$mediaType]) ? $mediaType : $list[$mediaType];
     }
 
-    protected function getDefinitionType($type)
+    protected function convertActivityType($esType)
     {
         static $map = array(
             'article' => XAPIActivityTypes::MESSAGE,
             'thread' => XAPIActivityTypes::QUESTION,
             'course' => XAPIActivityTypes::COURSE,
             'classroom' => XAPIActivityTypes::CLASS_ONLINE,
+            'teacher' => XAPIActivityTypes::USER_PROFILE,
         );
 
-        return $map[$type];
+        return $map[$esType];
     }
 }

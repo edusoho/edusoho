@@ -10,10 +10,10 @@ let validator = $form.validate({
       maxlength: 30
     }
   }
-})
+});
 
 $form.on('click', '#classroom-create-btn', (event) => {
   if (validator && validator.form()) {
     $form.submit();
   }
-})
+});

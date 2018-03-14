@@ -18,6 +18,7 @@ class StatementDaoImpl extends AdvancedDaoImpl implements StatementDao
                 'push_time',
             ),
             'serializes' => array(
+                'context' => 'json',
                 'data' => 'json',
             ),
             'conditions' => array(

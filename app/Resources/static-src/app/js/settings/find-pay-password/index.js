@@ -7,7 +7,7 @@ let validator = $('#settings-find-pay-password-form').validate({
       maxlength: 20
     }
   },
-})
+});
 
 $('#answer-question-btn').on('click', (event) => {
   const $this = $(event.currentTarget);
@@ -15,7 +15,7 @@ $('#answer-question-btn').on('click', (event) => {
     $this.button('loading');
     $('#settings-find-pay-password-form').submit();
   }
-})
+});
 
 let messageDanger = $('.alert-danger').text();
 let messageSuccess = $('.alert-success').text();

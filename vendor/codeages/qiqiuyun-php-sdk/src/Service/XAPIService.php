@@ -4,8 +4,8 @@ namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Exception\ResponseException;
 use QiQiuYun\SDK\Exception\SDKException;
-use QiQiuYun\SDK\XAPIActivityTypes;
-use QiQiuYun\SDK\XAPIVerbs;
+use QiQiuYun\SDK\Constants\XAPIActivityTypes;
+use QiQiuYun\SDK\Constants\XAPIVerbs;
 
 class XAPIService extends BaseService
 {
@@ -593,19 +593,16 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType'])
+            )
         );
 
-        if (!empty($object['definitionType'])) {
-            $statement['object']['definition'] = array(
-                'type' => $this->getActivityType($object['definitionType'])
-            );
-        } else {
-            $statement['object']['objectType'] = $object['objectType'];
-        }
-
-
         $statement['result'] = array(
-            'response' => $result['response']
+            'response' => $result['response'],
+            'extensions' => array(
+                'https://w3id.org/xapi/acrossx/extensions/type' => $this->getActivityType($result['type'])
+            )
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -724,8 +721,8 @@ class XAPIService extends BaseService
     public function pushStatements($statements)
     {
         $school = array(
-            'id' => $this->auth->getAccessKey(),
             'name' => $this->options['school_name'],
+            'url' => $this->options['school_url'],
         );
         foreach ($statements as &$statement) {
             $statement['context'] = array(
