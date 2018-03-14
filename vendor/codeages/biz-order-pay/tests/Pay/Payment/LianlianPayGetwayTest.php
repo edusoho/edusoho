@@ -16,7 +16,7 @@ class LianlianPayGetwayTest extends IntegrationTestCase
                 'secret' => 'secret',
                 'accessKey' => 'accessKey',
                 'oid_partner' => 'oid_partner',
-                'signatureToolkit' => $signatureToolkit,
+                'signatureToolkit' => $signatureToolkit
             ),
         );
     }
@@ -76,7 +76,7 @@ class LianlianPayGetwayTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateTradeWithInvalidArguments()
     {

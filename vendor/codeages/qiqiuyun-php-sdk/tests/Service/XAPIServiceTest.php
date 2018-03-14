@@ -4,8 +4,8 @@ namespace QiQiuYun\SDK\Tests\Service;
 
 use QiQiuYun\SDK\Tests\BaseTestCase;
 use QiQiuYun\SDK\Service\XAPIService;
-use QiQiuYun\SDK\XAPIActivityTypes;
-use QiQiuYun\SDK\XAPIObjectTypes;
+use QiQiuYun\SDK\Constants\XAPIActivityTypes;
+use QiQiuYun\SDK\Constants\XAPIObjectTypes;
 
 class XAPIServiceTest extends BaseTestCase
 {
@@ -90,10 +90,11 @@ class XAPIServiceTest extends BaseTestCase
         $actor = $this->getActor();
         $object = array(
             'id' => '/cloud/search?q=单反&type=course',
-            'definitionType' => XAPIActivityTypes::COURSE
+            'definitionType' => XAPIActivityTypes::SEARCH_ENGINE
         );
         $result = array(
-            'response' => '单反'
+            'response' => '单反',
+            'type' => 'course',
         );
 
         $httpClient = $this->mockHttpClient(array(
@@ -102,11 +103,14 @@ class XAPIServiceTest extends BaseTestCase
             'result' => $result,
         ));
         $service = $this->createXAPIService($httpClient);
-        $statement = $service->searched($actor, $object, $result);
+        $statement = $service->searched($actor, $object, $result, null, null, false);
 
-        $this->assertEquals($actor, $statement['actor']);
-        $this->assertEquals($object, $statement['object']);
-        $this->assertEquals($result, $statement['result']);
+        $this->assertEquals('https://w3id.org/xapi/acrossx/verbs/searched', $statement['verb']['id']);
+        $this->assertEquals('https://w3id.org/xapi/acrossx/activities/search-engine',
+            $statement['object']['definition']['type']);
+        $this->assertEquals('http://adlnet.gov/expapi/activities/course',
+            $statement['result']['extensions']['https://w3id.org/xapi/acrossx/extensions/type']);
+        $this->assertEquals('单反', $statement['result']['response']);
     }
 
     public function testSearchTeacher()
@@ -114,10 +118,11 @@ class XAPIServiceTest extends BaseTestCase
         $actor = $this->getActor();
         $object = array(
             'id' => '/cloud/search?q=李老师&type=teacher',
-            'objectType' => XAPIObjectTypes::AGENT
+            'definitionType' => XAPIActivityTypes::SEARCH_ENGINE
         );
         $result = array(
-            'response' => '李老师'
+            'response' => '李老师',
+            'type' => 'user-profile'
         );
 
         $httpClient = $this->mockHttpClient(array(
@@ -126,11 +131,11 @@ class XAPIServiceTest extends BaseTestCase
             'result' => $result,
         ));
         $service = $this->createXAPIService($httpClient);
-        $statement = $service->searched($actor, $object, $result);
+        $statement = $service->searched($actor, $object, $result, null, null, false);
 
-        $this->assertEquals($actor, $statement['actor']);
-        $this->assertEquals($object, $statement['object']);
-        $this->assertEquals($result, $statement['result']);
+        $this->assertEquals('http://id.tincanapi.com/activitytype/user-profile',
+            $statement['result']['extensions']['https://w3id.org/xapi/acrossx/extensions/type']);
+        $this->assertEquals('李老师', $statement['result']['response']);
     }
 
     public function testLogged()
@@ -146,10 +151,11 @@ class XAPIServiceTest extends BaseTestCase
             'object' => $object,
         ));
         $service = $this->createXAPIService($httpClient);
-        $statement = $service->logged($actor, $object);
+        $statement = $service->logged($actor, $object, null, null, null, false);
 
-        $this->assertEquals($actor, $statement['actor']);
-        $this->assertEquals($object, $statement['object']);
+        $this->assertEquals('https://w3id.org/xapi/adl/verbs/logged-in', $statement['verb']['id']);
+        $this->assertEquals('http://activitystrea.ms/schema/1.0/application',
+            $statement['object']['definition']['type']);
     }
 
     public function testPurchased()
@@ -158,10 +164,10 @@ class XAPIServiceTest extends BaseTestCase
         $object = array(
             'id' => '38983',
             'name' => '摄影基础',
-            'definitionType' => XAPIActivityTypes::COURSE,
+            'definitionType' => XAPIActivityTypes::CLASS_ONLINE,
         );
         $result = array(
-            'amount' => '199.99'
+            'amount' => 199.99
         );
         $httpClient = $this->mockHttpClient(array(
             'actor' => $actor,
@@ -170,11 +176,12 @@ class XAPIServiceTest extends BaseTestCase
         ));
 
         $service = $this->createXAPIService($httpClient);
-        $statement = $service->purchased($actor, $object, $result);
+        $statement = $service->purchased($actor, $object, $result, null, null, false);
 
-        $this->assertEquals($actor, $statement['actor']);
-        $this->assertEquals($object, $statement['object']);
-        $this->assertEquals($result, $statement['result']);
+        $this->assertEquals('http://activitystrea.ms/schema/1.0/purchase', $statement['verb']['id']);
+        $this->assertEquals('https://w3id.org/xapi/acrossx/activities/class-online',
+            $statement['object']['definition']['type']);
+        $this->assertEquals(199.99, $statement['result']['extensions']['http://xapi.edusoho.com/extensions/amount']);
     }
 
     private function getActor()
@@ -193,7 +200,7 @@ class XAPIServiceTest extends BaseTestCase
     protected function createXAPIService($httpClient = null)
     {
         return new XAPIService($this->auth, array(
-            'school_name' => '测试网校',
+            'school_name' => '测试网校', 'school_url' => 'http://demo.edusoho.com'
         ), null, $httpClient);
     }
 }
