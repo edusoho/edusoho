@@ -19,7 +19,7 @@
       </a>
     </li>
     <li>
-      <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_chapter_delete', {courseId:course.id, chapterId:lesson.id}) }}">
+      <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
         {{ 'form.btn.delete'|trans }}
       </a>
     </li>
