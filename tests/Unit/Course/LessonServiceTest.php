@@ -7,6 +7,20 @@ use AppBundle\Common\ReflectionUtils;
 
 class LessonServiceTest extends BaseTestCase
 {
+    public function testGetLesson()
+    {
+        $lesson = array('id' => 1, 'type' => 'lesson', 'title' => 'lesson title');
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => $lesson,
+            ),
+        ));
+        $result = $this->getCourseLessonService()->getLesson(1);
+
+        $this->assertArrayEquals($lesson, $result);
+    }
+
     public function testCountLessons()
     {
         $this->mockBiz('Course:CourseChapterDao', array(
@@ -342,6 +356,102 @@ class LessonServiceTest extends BaseTestCase
         ReflectionUtils::invokeMethod($this->getCourseLessonService(), 'unpublishTasks', array(1));
 
         $this->assertTrue(true);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testSetOptionalException()
+    {
+        $this->mockCourseManage();
+
+        $lesson = array('id' => 1, 'type' => 'unit', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0);
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => $lesson,
+            ),
+        ));
+
+        $this->getCourseLessonService()->unsetOptional(1, 1);
+    }
+
+    public function testSetOptional()
+    {
+        $this->mockCourseManage();
+
+        $lesson = array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0);
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => $lesson,
+            ),
+            array(
+                'functionName' => 'update',
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1),
+            ),
+            array(
+                'functionName' => 'findByCopyId',
+                'returnValue' => array()
+            )
+        ));
+        $this->mockBiz('Task:TaskService', array(
+            array(
+                'functionName' => 'updateTasksOptionalByLessonId',
+                'returnValue' => true,
+            ),
+        ));
+        $result = $this->getCourseLessonService()->setOptional(1, 1);
+
+        $this->assertEquals(1, $result['isOptional']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testUnsetOptionalException()
+    {
+        $this->mockCourseManage();
+
+        $lesson = array('id' => 1, 'type' => 'unit', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1);
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => $lesson,
+            ),
+        ));
+
+        $this->getCourseLessonService()->unsetOptional(1, 0);
+    }
+
+    public function testUnsetOptional()
+    {
+        $this->mockCourseManage();
+
+        $lesson = array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1);
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => $lesson,
+            ),
+            array(
+                'functionName' => 'update',
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0),
+            ),
+            array(
+                'functionName' => 'findByCopyId',
+                'returnValue' => array()
+            )
+        ));
+        $this->mockBiz('Task:TaskService', array(
+            array(
+                'functionName' => 'updateTasksOptionalByLessonId',
+                'returnValue' => true,
+            ),
+        ));
+        $result = $this->getCourseLessonService()->setOptional(1, 0);
+
+        $this->assertEquals(0, $result['isOptional']);
     }
 
     private function mockCourseManage()

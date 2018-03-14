@@ -19,6 +19,16 @@
       </a>
     </li>
     <li>
+      <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
+        {{'设置选修'|trans}}
+      </a>
+    </li>
+    <li>
+      <a class='js-unset-optional {% if lesson.isOptional != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_unset_optional', {courseId:course.id, lessonId:lesson.id}) }}">
+        {{'设置必修'|trans}}
+      </a>
+    </li>
+    <li>
       <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
         {{ 'form.btn.delete'|trans }}
       </a>

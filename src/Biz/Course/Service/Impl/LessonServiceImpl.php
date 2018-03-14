@@ -11,6 +11,17 @@ class LessonServiceImpl extends BaseService implements LessonService
 {
     const LESSON_LIMIT_NUMBER = 300;
 
+    public function getLesson($lessonId)
+    {
+        $lesson = $this->getCourseChapterDao()->get($lessonId);
+
+        if (empty($lesson) || $lesson['type'] != 'lesson') {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        return $lesson;
+    }
+
     public function countLessons($conditions)
     {
         $conditions['type'] = 'lesson';
@@ -150,6 +161,62 @@ class LessonServiceImpl extends BaseService implements LessonService
     public function getLessonLimitNum()
     {
         return self::LESSON_LIMIT_NUMBER;
+    }
+
+    public function setOptional($courseId, $lessonId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getLesson($lessonId);
+        if (empty($lesson) || $lesson['type'] != 'lesson' || $lesson['courseId'] != $courseId) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $this->beginTransaction();
+        try {
+
+            $lesson = $this->getCourseChapterDao()->update($lesson['id'], array('isOptional' => 1));
+
+            $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 1);
+
+            $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
+            $this->getLogService()->info('course', 'course.lesson.update', "课时设置选修(#{$lesson['id']})", $lesson);
+            
+            $this->commit();
+
+            return $lesson;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+    }
+
+    public function unsetOptional($courseId, $lessonId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getLesson($lessonId);
+        if (empty($lesson) || $lesson['type'] != 'lesson' || $lesson['courseId'] != $courseId) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $this->beginTransaction();
+        try {
+
+            $lesson = $this->getCourseChapterDao()->update($lesson['id'], array('isOptional' => 0));
+
+            $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 0);
+
+            $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
+            $this->getLogService()->info('course', 'course.lesson.update', "课时设置取消选修(#{$lesson['id']})", $lesson);
+            
+            $this->commit();
+
+            return $lesson;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     protected function publishTasks($lessonId)
