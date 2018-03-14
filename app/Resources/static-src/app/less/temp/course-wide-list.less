@@ -3,113 +3,100 @@
   list-style: none;
   margin: 0;
   padding:0;
-}
+  .course-item {
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    &:hover {
+      background: #f9f9f9;
+    }
+  }
+  .course-picture-link {
+    float: left;
+    @media (max-width: 600px) {
+      float: none;
+      display: block;
+    }
+  }
+  .course-picture {
+    width: 230px;
+    .border-top-left-radius();
+    .border-bottom-left-radius();
+     @media (max-width: 600px) {
+      display: block;
+      width: 100%;
+    }
+  }
+  .course-body {
+    margin: 15px 15px 0px 245px;
+    @media (max-width: 600px) {
+      margin-left: 15px;
+      margin-bottom: 15px;
+    }
+  }
+  .course-price {
+    color: #e57259;
+    font-size: 16px;
+  }
+  .course-price-info {
+    float: right;
+  }
+  .course-title {
+    margin: 10px 0 10px;
+    word-break: break-all;
+    a {
+      color: #555;
+      font-weight: bold;
+    }
+    .course-title__plan {
+      font-size: 12px;
+      line-height: 1;
+    }
+  }
+  .course-metas {
+    float: right;
+    text-align: right;
+    margin-top: 10px;
+  }
+  .course-about {
+    margin: 0 0 15px;
+    color: #666;
+  }
 
-.course-wide-list .course-item {
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-.course-wide-list .course-item:hover {
-  background: #f9f9f9;
-}
-
-.course-wide-list .course-picture-link {
-  float: left;
-}
-
-.course-wide-list .course-picture {
-  width: 230px;
-  .border-top-left-radius();
-  .border-bottom-left-radius();
-}
-
-.course-wide-list .course-body {
-  margin: 15px 15px 0px 245px;
-}
-
-.courses-selected .course-body {
-  margin: 15px 15px 0px 300px;
-}
-
-@media (max-width: 600px) {
-  .course-wide-list .course-picture-link {
-    float: none;
+  .teacher {
+    float: left;
+    width: 180px;
+  }
+  .teacher-avatar {
+    float: left;
     display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+  .teacher-nickname {
+    margin-bottom: 8px;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: bold;
+    color: #555;
+  }
+  .teacher-title {
+    color: #777;
+    font-size: 12px;
+    line-height: 1;
   }
 
-  .course-wide-list .course-picture {
-    display: block;
-    width: 100%;
-  }
-
-  .course-wide-list .course-body {
-    margin-left: 15px;
-    margin-bottom: 15px;
+  .divider {
+    width: 1px;
+    border-left: 1px solid #ccc;
+    margin: 0 5px;
   }
 }
 
-.course-wide-list .course-price-info {
-  float: right;
-}
-
-.course-wide-list .course-title {
-  margin: 10px 0 10px;
-  word-break:break-all;
-}
-
-.course-wide-list .course-title a {
-  color: #555;
-  font-weight: bold;
-}
-
-.course-wide-list .course-about {
-  margin: 0 0 15px;
-  color: #666;
-}
-
-.course-wide-list .teacher {
-  float: left;
-  width: 180px;
-}
-
-.course-wide-list .teacher-avatar {
-  float: left;
-  display: block;
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
-  margin-right: 5px;
-}
-
-.course-wide-list .teacher-nickname {
-  margin-bottom: 8px;
-  font-size: 12px;
-  line-height: 1;
-  font-weight: bold;
-  color: #555;
-}
-
-.course-wide-list .teacher-title {
-  color: #777;
-  font-size: 12px;
-  line-height: 1;
-}
-
-.course-wide-list .course-metas {
-  float: right;
-  text-align: right;
-  margin-top: 10px;
-}
-
-.course-wide-list .course-price {
-  color: #e57259;
-  font-size: 16px;
-}
-
-.course-wide-list .divider {
-  width: 1px;
-  border-left: 1px solid #ccc;
-  margin: 0 5px;
+.courses-selected {
+  .course-body {
+    margin: 15px 15px 0px 300px;
+  }
 }
