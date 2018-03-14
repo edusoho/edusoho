@@ -170,7 +170,7 @@ function install_step3($init_data = 0)
         $installLogFd = @fopen($biz['log_directory'].'/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
         $initializer = new \AppBundle\Common\SystemInitializer($output);
-        $biz['user'] = new \Biz\User\AnonymousUser(array('currentIp' => '127.0.0.1'));
+        $biz['user'] = new \Biz\User\AnonymousUser();
         $biz['user.register'] = new \Biz\User\Register\RegisterFactory($biz);
         $biz['user.register.email'] = new \Biz\User\Register\Impl\EmailRegistDecoderImpl($biz);
         try {
@@ -515,7 +515,7 @@ EOD;
 function _initKey()
 {
     global $biz;
-    $currentUser = new \Biz\User\AnonymousUser(array('currentIp' => '127.0.0.1'));
+    $currentUser = new \Biz\User\AnonymousUser();
 
     $biz['user'] = $currentUser;
     $settingService = $biz->service('System:SettingService');

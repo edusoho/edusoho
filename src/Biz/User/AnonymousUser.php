@@ -10,6 +10,7 @@ class AnonymousUser extends CurrentUser
     {
         $user = array_merge(array(
             'id' => 0,
+            'currentIp' => '127.0.0.1',
             'nickname' => '游客',
             'email' => 'test.edusoho.com',
             'roles' => array(),
