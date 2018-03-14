@@ -5,6 +5,7 @@ namespace AppBundle\Component\RateLimit;
 use AppBundle\Common\TimeMachine;
 use Codeages\RateLimiter\RateLimiter;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\OAuth2\OAuthUser;
 
 class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
 {
@@ -20,7 +21,10 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
             case 'none':
                 return;
             case 'low':
-                $this->validateCaptcha($request);
+                $oauthUser = $this->getOauthUser($request);
+                if ($oauthUser->captchaEnabled) {
+                    $this->validateCaptcha($request);
+                }
                 break;
             case 'middle':
                 $this->validateCaptcha($request);
@@ -72,5 +76,20 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \AppBundle\Controller\OAuth2\OAuthUser
+     */
+    private function getOauthUser(Request $request)
+    {
+        $oauthUser = $request->getSession()->get(OAuthUser::SESSION_KEY);
+        if (!$oauthUser) {
+            throw new NotFoundHttpException();
+        }
+
+        return $oauthUser;
     }
 }
