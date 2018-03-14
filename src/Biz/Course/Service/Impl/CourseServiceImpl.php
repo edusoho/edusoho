@@ -516,6 +516,14 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(
                     array('courseId' => $id, 'source' => 'coursematerial')
                 );
+            } elseif ('publishLessonNum' === $field) {
+                $updateFields['publishLessonNum'] = $this->getCourseLessonService()->countLessons(
+                    array('courseId' => $id, 'status' => 'published')
+                );
+            } elseif ('lessonNum' === $field) {
+                $updateFields['lessonNum'] = $this->getCourseLessonService()->countLessons(
+                    array('courseId' => $id)
+                );
             }
         }
 

@@ -64,6 +64,10 @@ class LessonServiceTest extends BaseTestCase
                 'functionName' => 'get',
                 'returnValue' => array('id' => 1, 'title' => $fields['title'], 'courseId' => 1, 'type' => 'lesson', 'status' => 'created', 'copyId' => 0),
             ),
+            array(
+                'functionName' => 'count',
+                'returnValue' => 2,
+            ),
         ));
 
         list($lesson, $task) = $this->getCourseLessonService()->createLesson($fields);
