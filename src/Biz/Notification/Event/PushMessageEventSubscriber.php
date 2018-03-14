@@ -1848,7 +1848,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $classroom = $event->getSubject();
 
         if ($this->isCloudSearchEnabled()) {
-            if ('draft' == $classroom['type']) {
+            if ('draft' == $classroom['status']) {
                 return;
             }
             if ('published' == $classroom['status']) {
