@@ -12,7 +12,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->serialize();
 
-        $this->assertEquals('a:8', substr($result, 0, 3));
+        $this->assertEquals('a:9', substr($result, 0, 3));
     }
 
     public function testUnserialize()
