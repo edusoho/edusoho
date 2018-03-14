@@ -174,14 +174,13 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $this->beginTransaction();
         try {
-
             $lesson = $this->getCourseChapterDao()->update($lesson['id'], array('isOptional' => 1));
 
             $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 1);
 
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
             $this->getLogService()->info('course', 'course.lesson.update', "课时设置选修(#{$lesson['id']})", $lesson);
-            
+
             $this->commit();
 
             return $lesson;
@@ -202,14 +201,13 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $this->beginTransaction();
         try {
-
             $lesson = $this->getCourseChapterDao()->update($lesson['id'], array('isOptional' => 0));
 
             $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 0);
 
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
             $this->getLogService()->info('course', 'course.lesson.update', "课时设置取消选修(#{$lesson['id']})", $lesson);
-            
+
             $this->commit();
 
             return $lesson;

@@ -39,7 +39,7 @@ class ChapterCopy extends AbstractEntityCopy
             'seq',
             'title',
             'status',
-            'isOptional'
+            'isOptional',
         );
     }
 

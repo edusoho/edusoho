@@ -837,11 +837,11 @@ class TaskServiceTest extends BaseTestCase
      */
     public function testUpdateTasksOptionalByLessonIdException()
     {
-        $this->mockBiz('Course:LessonService', array( 
+        $this->mockBiz('Course:LessonService', array(
             array(
                 'functionName' => 'getLesson',
-                'returnValue' => array('id' => 1, 'type' => 'unit', 'courseId' => 1)
-            )
+                'returnValue' => array('id' => 1, 'type' => 'unit', 'courseId' => 1),
+            ),
         ));
 
         $this->getTaskService()->updateTasksOptionalByLessonId(1, 1);
@@ -849,29 +849,29 @@ class TaskServiceTest extends BaseTestCase
 
     public function testUpdateTasksOptionalByLessonId()
     {
-        $this->mockBiz('Course:LessonService', array( 
+        $this->mockBiz('Course:LessonService', array(
             array(
                 'functionName' => 'getLesson',
-                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1)
-            )
+                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1),
+            ),
         ));
 
-        $this->mockBiz('Course:CourseService', array( 
+        $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'tryManageCourse',
-                'returnValue' => true
-            )
+                'returnValue' => true,
+            ),
         ));
 
-        $this->mockBiz('Task:TaskDao', array( 
+        $this->mockBiz('Task:TaskDao', array(
             array(
                 'functionName' => 'findByChapterId',
-                'returnValue' => array(array('id' => 1,'courseId' => 1, 'title' => 'task name', 'isOptional' => 0, 'copyId' => 0))
+                'returnValue' => array(array('id' => 1, 'courseId' => 1, 'title' => 'task name', 'isOptional' => 0, 'copyId' => 0)),
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1,'courseId' => 1, 'title' => 'task name', 'isOptional' => 1, 'copyId' => 0)
-            )
+                'returnValue' => array('id' => 1, 'courseId' => 1, 'title' => 'task name', 'isOptional' => 1, 'copyId' => 0),
+            ),
         ));
 
         $this->getTaskService()->updateTasksOptionalByLessonId(1, 1);

@@ -392,8 +392,8 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findByCopyId',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
         $this->mockBiz('Task:TaskService', array(
             array(
@@ -440,8 +440,8 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findByCopyId',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
         $this->mockBiz('Task:TaskService', array(
             array(
