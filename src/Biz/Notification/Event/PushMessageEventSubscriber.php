@@ -1845,25 +1845,29 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     public function onClassroomUpdate(Event $event)
     {
-        $classroom = $event->getSubject();
+        $args = $event->getSubject();
+        $classroom = empty($args['classroom']) ? null : $args['classroom'];
+        $fields = empty($args['fields']) ? null : $args['fields'];
 
-        if ($this->isCloudSearchEnabled()) {
-            if ('draft' == $classroom['status']) {
-                return;
-            }
-            if ('published' == $classroom['status']) {
-                $args = array(
-                    'category' => 'classroom',
-                );
-                $this->createSearchJob('update', $args);
-            }
+        if (!empty($fields) && isset($fields['status'])) {
+            if ($this->isCloudSearchEnabled()) {
+                if ('draft' == $classroom['status']) {
+                    return;
+                }
+                if ('published' == $classroom['status']) {
+                    $args = array(
+                        'category' => 'classroom',
+                    );
+                    $this->createSearchJob('update', $args);
+                }
 
-            if ('closed' == $classroom['status']) {
-                $args = array(
-                    'category' => 'classroom',
-                    'id' => $classroom['id'],
-                );
-                $this->createSearchJob('delete', $args);
+                if ('closed' == $classroom['status']) {
+                    $args = array(
+                        'category' => 'classroom',
+                        'id' => $classroom['id'],
+                    );
+                    $this->createSearchJob('delete', $args);
+                }
             }
         }
     }
