@@ -51,8 +51,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classroom.join' => 'onClassroomJoin',
             'classroom.quit' => 'onClassroomQuit',
 
-            'classroom.create' => 'onClassroomCreate',
-            'classroom.delete' => 'onClassroomDelete',
+            'classroom.update' => 'onClassroomUpdate',
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
             'thread.create' => 'onThreadCreate',
@@ -1844,28 +1843,28 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     //-----------班级相关----------
 
-    public function onClassroomCreate(Event $event)
+    public function onClassroomUpdate(Event $event)
     {
         $classroom = $event->getSubject();
 
         if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'classroom',
-            );
-            $this->createSearchJob('update', $args);
-        }
-    }
+            if ('draft' == $classroom['type']) {
+                return;
+            }
+            if ('published' == $classroom['status']) {
+                $args = array(
+                    'category' => 'classroom',
+                );
+                $this->createSearchJob('update', $args);
+            }
 
-    public function onClassroomDelete(Event $event)
-    {
-        $classroom = $event->getSubject();
-
-        if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'classroom',
-                'id' => $classroom['id']
-            );
-            $this->createSearchJob('delete', $args);
+            if ('closed' == $classroom['status']) {
+                $args = array(
+                    'category' => 'classroom',
+                    'id' => $classroom['id'],
+                );
+                $this->createSearchJob('delete', $args);
+            }
         }
     }
 
