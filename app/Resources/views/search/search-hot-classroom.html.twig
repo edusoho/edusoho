@@ -1,6 +1,6 @@
 <div class="panel panel-default live-course-body">
     <div class="panel-heading">
-        <h3 class="panel-title">{{'cloud_search.course.recommend.content_title'|trans}}</h3>
+        <h3 class="panel-title">{{'cloud_search.classroom.recommend.content_title'|trans}}</h3>
     </div>
     <div class="panel-body es-live-recommend">
         {% set courseSets = data('RecommendCourseSets',{'count':10,'notFill':true}) %}
@@ -23,7 +23,7 @@
                 </div>
             </div>
         {% else %}
-            <div class="empty">{{'cloud_search.course.recommend.empty'|trans}}</div>
+            <div class="empty">{{'cloud_search.classroom.recommend.empty'|trans}}</div>
         {% endfor %}
     </div>
 </div>
