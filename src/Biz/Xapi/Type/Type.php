@@ -22,8 +22,6 @@ use QiQiuYun\SDK\XAPIActivityTypes;
 
 abstract class Type extends BizAware
 {
-    abstract public function package($statement);
-
     abstract public function packages($statements);
 
     /**

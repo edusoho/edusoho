@@ -6,10 +6,6 @@ class UserLoggedInType extends Type
 {
     const TYPE = 'logged-in_user';
 
-    public function package($statement)
-    {
-    }
-
     public function packages($statements)
     {
         if (empty($statements)) {

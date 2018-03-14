@@ -6,10 +6,6 @@ class PurchasedCourseType extends Type
 {
     const TYPE = 'purchased_course';
 
-    public function package($statement)
-    {
-    }
-
     public function packages($statements)
     {
         if (empty($statements)) {
@@ -28,7 +24,7 @@ class PurchasedCourseType extends Type
                     'name' => $data['title'],
                 );
                 $result = array(
-                    'amount' => $data['pay_amount']
+                    'amount' => $data['pay_amount'],
                 );
 
                 $pushStatements[] = $sdk->purchased($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);

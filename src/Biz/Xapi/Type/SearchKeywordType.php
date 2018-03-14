@@ -8,10 +8,6 @@ class SearchKeywordType extends Type
 {
     const TYPE = 'searched_keyword';
 
-    public function package($statement)
-    {
-    }
-
     public function packages($statements)
     {
         if (empty($statements)) {
