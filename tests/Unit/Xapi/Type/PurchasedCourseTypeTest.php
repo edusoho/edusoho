@@ -19,7 +19,7 @@ class PurchasedCourseTypeTest extends BaseTestCase
 
         $statements = array(
             array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('title' => 'PHP基础入门', 'pay_amount' => 399.99)),
-            array('user_id' => 2, 'uuid' => 20, 'target_id' => 2, 'target_type' => 'classroom', 'occur_time' => time(), 'context' => array('title' => 'Java入门班', 'pay_amount'=> 1024.10)),
+            array('user_id' => 2, 'uuid' => 20, 'target_id' => 2, 'target_type' => 'classroom', 'occur_time' => time(), 'context' => array('title' => 'Java入门班', 'pay_amount' => 1024.10)),
         );
         $pushStatements = $type->packages($statements);
 
