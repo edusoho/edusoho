@@ -230,9 +230,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 'isSecure' => $this->request->isSecure(),
                 'invitedCode' => $container->get('session')->get('invitedCode', ''),
             );
-
             $currentUser = new \Biz\User\AnonymousUser($currentUser);
-            $currentUser['isSecure'] = $this->request->isSecure();
 
             $biz['user'] = $currentUser;
             $serviceKernel
