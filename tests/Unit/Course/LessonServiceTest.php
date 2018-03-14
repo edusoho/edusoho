@@ -358,6 +358,13 @@ class LessonServiceTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
+    public function testGetLessonLimitNum()
+    {
+        $count = $this->getCourseLessonService()->getLessonLimitNum();
+
+        $this->assertEquals(\Biz\Course\Service\Impl\LessonServiceImpl::LESSON_LIMIT_NUMBER, $count);
+    }
+
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
@@ -373,7 +380,7 @@ class LessonServiceTest extends BaseTestCase
             ),
         ));
 
-        $this->getCourseLessonService()->unsetOptional(1, 1);
+        $this->getCourseLessonService()->setOptional(1, 1);
     }
 
     public function testSetOptional()
@@ -449,7 +456,7 @@ class LessonServiceTest extends BaseTestCase
                 'returnValue' => true,
             ),
         ));
-        $result = $this->getCourseLessonService()->setOptional(1, 0);
+        $result = $this->getCourseLessonService()->unsetOptional(1, 0);
 
         $this->assertEquals(0, $result['isOptional']);
     }
