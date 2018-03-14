@@ -51,6 +51,9 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classroom.join' => 'onClassroomJoin',
             'classroom.quit' => 'onClassroomQuit',
 
+            'classroom.create' => 'onClassroomCreate',
+            'classroom.delete' => 'onClassroomDelete',
+
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
             'thread.create' => 'onThreadCreate',
             'thread.update' => 'onThreadUpdate',
@@ -1836,6 +1839,32 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    //-----------班级相关----------
+
+    public function onClassroomCreate(Event $event)
+    {
+        $classroom = $event->getSubject();
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'classroom',
+            );
+            $this->createSearchJob('update', $args);
+        }
+    }
+
+    public function onClassroomDelete(Event $event)
+    {
+        $classroom = $event->getSubject();
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'classroom',
+            );
+            $this->createSearchJob('delete', $args);
         }
     }
 

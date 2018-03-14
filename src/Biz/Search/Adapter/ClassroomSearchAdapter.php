@@ -33,7 +33,7 @@ class ClassroomSearchAdapter extends AbstractSearchAdapter
 
     protected function adaptClassroom($classroom, $learningClassroomIds)
     {
-        $classroomLocal = $this->getClassroomService()->getClassroom($classroom['id']);
+        $classroomLocal = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
         if (!empty($classroomLocal)) {
             $classroom['rating'] = $classroomLocal['rating'];
@@ -61,5 +61,4 @@ class ClassroomSearchAdapter extends AbstractSearchAdapter
     {
         return $this->createService('Classroom:ClassroomService');
     }
-
 }
