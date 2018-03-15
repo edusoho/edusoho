@@ -123,18 +123,58 @@ class RegisterRateLimiterTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    public function testHandleWithMiddleSecurity()
+    public function testHandleWithMiddleAndFristRegistSecurity()
     {
         $limiter = new RegisterRateLimiter($this->biz);
-        $request = $this->mockRequest(
+        $request = new Request(
+            array(),
             array(
-                'request' => array(
-                    'captchaToken' => 'kuozhi',
-                    'phrase' => 'password',
+                'captchaToken' => 'kuozhi',
+                'phrase' => 'password',
+            ),
+            array(),
+            array(),
+            array(),
+            array('REMOTE_ADDR' => '128.2.2.1')
+        );
+
+        $this->setOauthUser($request, true);
+
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth'),
+                    'returnValue' => array(
+                        'register_protective' => 'middle',
+                    ),
                 ),
-                'getClientIp' => '128.2.2.1',
             )
         );
+
+        $result = $limiter->handle($request);
+
+        $settingService->shouldHaveReceived('get')->times(1);
+        $this->assertNull($result);
+    }
+
+    public function testHandleWithMiddleAndNotFristRegistSecurity()
+    {
+        $limiter = new RegisterRateLimiter($this->biz);
+        $request = new Request(
+            array(),
+            array(
+                'captchaToken' => 'kuozhi',
+                'phrase' => 'password',
+            ),
+            array(),
+            array(),
+            array(),
+            array('REMOTE_ADDR' => '128.2.2.1')
+        );
+
+        $this->setOauthUser($request, false);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -166,7 +206,6 @@ class RegisterRateLimiterTest extends BaseTestCase
 
         $settingService->shouldHaveReceived('get')->times(1);
         $captcha->shouldHaveReceived('check')->times(1);
-        $request->shouldHaveReceived('getClientIp')->times(1);
         $this->assertNull($result);
     }
 
