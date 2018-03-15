@@ -139,19 +139,21 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             return false;
         }
 
-        $keywords = array();
+        $keywords = array_column($rows, 'name');
 
-        foreach ($rows as $row) {
-            $keywords[] = $row['name'];
+        $chunkKeywords = array_chunk($keywords, 100);
+
+        foreach ($chunkKeywords as $chunkKeyword) {
+            $pattern = '/('.implode('|', $chunkKeyword).')/';
+            $matched = preg_match($pattern, $text, $match);
+            if ($matched) {
+                goto last;
+            }
         }
 
-        $pattern = '/('.implode('|', $keywords).')/';
-        $matched = preg_match($pattern, $text, $match);
+        return false;
 
-        if (!$matched) {
-            return false;
-        }
-
+        last :
         $bannedKeyword = $this->getSensitiveDao()->getByName($match[1]);
 
         if (empty($bannedKeyword)) {
