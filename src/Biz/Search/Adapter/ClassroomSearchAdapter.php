@@ -36,6 +36,7 @@ class ClassroomSearchAdapter extends AbstractSearchAdapter
         $classroomLocal = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
         if (!empty($classroomLocal)) {
+            $classroom['id'] = $classroomLocal['id'];
             $classroom['rating'] = $classroomLocal['rating'];
             $classroom['ratingNum'] = $classroomLocal['ratingNum'];
             $classroom['studentNum'] = $classroomLocal['studentNum'];
