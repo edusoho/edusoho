@@ -119,11 +119,13 @@ export default class Manage {
           $parent.closest('.js-task-manage-lesson').remove();
         }
         $parent.remove();
-        self.sortList();
+        
         self.handleEmptyShow();
-        $.post($this.data('url'), function (data) {
-        });
         self._flushTaskNumber();
+        $.post($this.data('url'), function (data) {
+          self.sortList();
+        });
+        
       })
     });
   }
@@ -296,6 +298,7 @@ export default class Manage {
   }
 
   _optional() {
+    let self = this;
     this.$element.on('click', '.js-set-optional', (event) => {
       let $this = $(event.target);
       $.post($this.data('url'), function (data) {   
@@ -304,6 +307,8 @@ export default class Manage {
         $parentLi.find('.js-unset-optional').removeClass('hidden');
         $parentLi.find('.js-set-optional').addClass('hidden');
         $parentLi.find('.js-lesson-option-tag').removeClass('hidden');
+
+        self.sortList();
         notify('success', Translator.trans('site.save_success_hint'));
       }).fail(function(data){
         notify('danger', Translator.trans('site.save_error_hint') + ':' + data.responseJSON.error.message);
@@ -313,10 +318,13 @@ export default class Manage {
     this.$element.on('click', '.js-unset-optional', (event) => {
       $.post($(event.target).data('url'), function (data) {
         let $parentLi = $(event.target).closest('.task-manage-item');
-        notify('success', Translator.trans('site.save_success_hint'));
+     
         $parentLi.find('.js-unset-optional').addClass('hidden');
         $parentLi.find('.js-set-optional').removeClass('hidden');
         $parentLi.find('.js-lesson-option-tag').addClass('hidden');
+
+        self.sortList();
+        notify('success', Translator.trans('site.save_success_hint'));
       }).fail(function(data){
         notify('danger', Translator.trans('site.save_error_hint') + ':' + data.responseJSON.error.message);
       });
