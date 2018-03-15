@@ -9,6 +9,10 @@ use AppBundle\Common\ArrayToolkit;
 
 class PushStatementJob extends AbstractJob
 {
+    private $perCount = 500;
+
+    private $maxTimes = 40;
+
     public function execute()
     {
         $xapiSetting = $this->getSettingService()->get('xapi', array());
@@ -16,8 +20,11 @@ class PushStatementJob extends AbstractJob
             return;
         }
 
-        for ($i = 0; $i <= 5; ++$i) {
-            $this->pushStatements(500);
+        $count = $this->getXapiService()->countStatements(array('status' => 'converted'));
+        $times = ceil($count / $this->perCount);
+        $times = min($times, $this->maxTimes);
+        for ($i = 0; $i < $times; ++$i) {
+            $this->pushStatements($this->perCount);
         }
     }
 
@@ -28,6 +35,7 @@ class PushStatementJob extends AbstractJob
                 'status' => 'converted',
             );
             $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, $count);
+
             $statementIds = ArrayToolkit::column($statements, 'id');
             $uuids = ArrayToolkit::column($statements, 'uuid');
             $statements = ArrayToolkit::index($statements, 'uuid');

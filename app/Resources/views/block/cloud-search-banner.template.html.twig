@@ -1,5 +1,0 @@
-{% for imglink in posters|default(null) if imglink.src|default('') %}
-    {% if imglink.status == 1 and imglink.mode == "img" %}
-        <div class="swiper-slide swiper-hidden" style="background: #ffffff url({{ asset(imglink.src) }}) no-repeat; background-size: cover;"></div> 
-    {% endif %} 
-{% endfor %}

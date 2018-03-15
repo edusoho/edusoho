@@ -79,8 +79,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             unset($thread['location']);
         }
 
-        $thread['createdTime'] = time();
-        $thread['updateTime'] = time();
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->create($thread);

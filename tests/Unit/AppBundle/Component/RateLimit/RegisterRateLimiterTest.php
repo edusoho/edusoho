@@ -5,6 +5,10 @@ namespace Tests\Unit\AppBundle\Component\RateLimit;
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use Biz\Common\BizCaptcha;
+use AppBundle\Controller\OAuth2\OAuthUser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class RegisterRateLimiterTest extends BaseTestCase
 {
@@ -39,17 +43,52 @@ class RegisterRateLimiterTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    public function testHandleWithLowSecurity()
+    public function testHandleWithLowAndFristRegistSecurity()
     {
         $limiter = new RegisterRateLimiter($this->biz);
-        $request = $this->mockRequest(
+
+        $request = new Request(
+            array(),
             array(
-                'request' => array(
-                    'captchaToken' => 'kuozhi',
-                    'phrase' => 'password',
+                'captchaToken' => 'kuozhi',
+                'phrase' => 'password',
+            )
+        );
+
+        $this->setOauthUser($request, true);
+
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth'),
+                    'returnValue' => array(
+                        'register_protective' => 'low',
+                    ),
                 ),
             )
         );
+
+        $result = $limiter->handle($request);
+
+        $settingService->shouldHaveReceived('get')->times(1);
+        $this->assertNull($result);
+    }
+
+    public function testHandleWithLowAndNotFirstRegistSecurity()
+    {
+        $limiter = new RegisterRateLimiter($this->biz);
+
+        $request = new Request(
+            array(),
+            array(
+                'captchaToken' => 'kuozhi',
+                'phrase' => 'password',
+            )
+        );
+
+        $this->setOauthUser($request, false);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -176,5 +215,14 @@ class RegisterRateLimiterTest extends BaseTestCase
         $captcha->shouldHaveReceived('check')->times(1);
         $request->shouldHaveReceived('getClientIp')->times(2);
         $this->assertNull($result);
+    }
+
+    private function setOauthUser($request, $isFirst)
+    {
+        $oauthUser = new OAuthUser();
+        $oauthUser->captchaEnabled = !(true == $isFirst);
+        $session = new Session(new MockArraySessionStorage());
+        $request->setSession($session);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
 }

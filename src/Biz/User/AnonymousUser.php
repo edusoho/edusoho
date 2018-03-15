@@ -6,19 +6,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AnonymousUser extends CurrentUser
 {
-    public function __construct($ip)
+    public function __construct($user = array())
     {
-        $this->data = array(
+        $user = array_merge(array(
             'id' => 0,
+            'currentIp' => '127.0.0.1',
             'nickname' => '游客',
             'email' => 'test.edusoho.com',
-            'currentIp' => $ip,
             'roles' => array(),
             'locked' => false,
             'org' => array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode),
             'orgId' => $this->rootOrgId,
             'orgCode' => $this->rootOrgCode,
-        );
+        ), $user);
+
+        $this->data = $user;
     }
 
     public function serialize()

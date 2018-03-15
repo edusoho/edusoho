@@ -51,7 +51,7 @@ class UserOnlineTrack
             'source' => $this->isFromApp() ? 'App' : 'Web',
         );
 
-        $this->getOnlineService()->saveOnline($online);
+        $this->getUserActiveService()->saveOnline($online);
     }
 
     private function isFromApp()
@@ -77,10 +77,10 @@ class UserOnlineTrack
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Session\Service\OnlineService
+     * @return \Biz\User\Service\UserActiveService
      */
-    private function getOnlineService()
+    private function getUserActiveService()
     {
-        return $this->biz->service('Session:OnlineService');
+        return $this->biz->service('User:UserActiveService');
     }
 }

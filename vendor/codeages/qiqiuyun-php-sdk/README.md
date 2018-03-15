@@ -5,7 +5,7 @@
 ## 安装
 
 ```shell
-composer require codesges/qiqiuyun-php-sdk
+composer require codeages/qiqiuyun-php-sdk
 ```
 
 ## 使用说明
