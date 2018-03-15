@@ -1928,7 +1928,7 @@ activity.live.not_created_notice: 直播教室尚未创建！
 
 
 course.note.expand_btn: '[展开全文]'
-course.note.reduce_btn: '[收起全文]'
+course.note.collapse_btn: '[收起全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.task.learning.remaining.watch_time: 剩余观看时长
