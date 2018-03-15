@@ -80,7 +80,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $thread['lastPostUserId'] = $thread['userId'];
-        $thread['lastPostTime'] = $thread['createdTime'];
+        $thread['lastPostTime'] = time();
         $thread = $this->getThreadDao()->create($thread);
         if (!empty($thread['ats'])) {
             foreach ($thread['ats'] as $userId) {
