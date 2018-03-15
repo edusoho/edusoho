@@ -13,8 +13,5 @@ class PlayerFactory {
     }
   }
 }
-var a = 1;
-if(a) {
-  a = 2;
-}
+
 export default PlayerFactory;
