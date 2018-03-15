@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\Framework\Scheduler\Service\Impl;
 
+use Codeages\Biz\Framework\Scheduler\Dao\JobProcessDao;
 use Codeages\Biz\Framework\Scheduler\Service\JobPool;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\BaseService;
@@ -72,23 +73,45 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     public function execute()
     {
+        $initProcess = $this->createJobProcess(array(
+            'pid' => getmypid(),
+        ));
+
+        $process['start_time'] = $this->getMillisecond();
         $this->updateWaitingJobsToAcquired();
         do {
-            $result = $this->runAcquiredJobs();
+            $result = $this->runAcquiredJobs($initProcess['id']);
         } while ($result);
+        $process['end_time'] = $this->getMillisecond();
+        $process['cost_time'] = $process['end_time'] - $process['start_time'];
+        $process['peak_memory'] = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
+
+        $this->updateJobProcess($initProcess['id'], $process);
     }
 
-    protected function runAcquiredJobs()
+    protected function runAcquiredJobs($processId)
     {
+        $result = '';
         $jobFired = $this->triggerJob();
         if (empty($jobFired)) {
             return false;
         }
-
+        $process['process_id'] = $processId;
+        $process['start_time'] = $this->getMillisecond();
         $jobInstance = $this->createJobInstance($jobFired);
-        $result = $this->getJobPool()->execute($jobInstance);
+        try {
+            $result = $this->getJobPool()->execute($jobInstance);
+        } catch (\Exception $e) {
+            $this->createErrorLog($jobFired, $e->getMessage(), $e->getTraceAsString());
+        }
+        $process['end_time'] = $this->getMillisecond();
+        $process['cost_time'] = $process['end_time'] - $process['start_time'];
+        $process['peak_memory'] = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
 
-        $this->jobExecuted($jobFired, $result);
+        if (empty($result)) {
+            $result = 'failure';
+        }
+        $this->jobExecuted($jobFired, $result, $process);
 
         return true;
     }
@@ -117,6 +140,13 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         if (!empty($job)) {
             $this->deleteJob($job['id']);
         }
+    }
+
+    public function createErrorLog($jobFired, $message, $trace)
+    {
+        $jobFired['job_detail']['message'] = $message;
+        $jobFired['job_detail']['trace'] = $trace;
+        $this->createJobLog($jobFired, 'error');
     }
 
     protected function check($jobFired)
@@ -158,34 +188,35 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         return static::EXECUTING;
     }
 
-    protected function jobExecuted($jobFired, $result)
+    protected function jobExecuted($jobFired, $result, $process)
     {
+        $process = ArrayToolkit::parts($process, array('process_id', 'peak_memory', 'start_time', 'end_time', 'cost_time'));
         if ('success' == $result) {
-            $this->getJobFiredDao()->update($jobFired['id'], array(
+            $this->getJobFiredDao()->update($jobFired['id'], array_merge(array(
                 'status' => 'success',
-            ));
+            ), $process));
             $this->createJobLog($jobFired, 'success');
         } elseif ('retry' == $result) {
             if ($jobFired['retry_num'] < $this->getMaxRetryNum()) {
-                $this->getJobFiredDao()->update($jobFired['id'], array(
+                $this->getJobFiredDao()->update($jobFired['id'], array_merge(array(
                     'retry_num' => $jobFired['retry_num'] + 1,
                     'fired_time' => time(),
                     'status' => 'acquired',
-                ));
+                ), $process));
                 $this->createJobLog($jobFired, 'acquired');
             } else {
                 $result = 'failure';
-                $this->getJobFiredDao()->update($jobFired['id'], array(
+                $this->getJobFiredDao()->update($jobFired['id'], array_merge(array(
                     'fired_time' => time(),
                     'status' => $result,
-                ));
+                ), $process));
                 $this->createJobLog($jobFired, $result);
             }
         } else {
-            $this->getJobFiredDao()->update($jobFired['id'], array(
+            $this->getJobFiredDao()->update($jobFired['id'], array_merge(array(
                 'fired_time' => time(),
                 'status' => $result,
-            ));
+            ), $process));
             $this->createJobLog($jobFired, $result);
         }
 
@@ -313,6 +344,8 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             'args',
             'priority',
             'status',
+            'message',
+            'trace',
         ));
 
         if (!empty($jobFired['id'])) {
@@ -398,12 +431,29 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
         foreach ($jobFireds as $jobFired) {
             if ($jobFired['job_detail']['name'] != 'Scheduler_MarkExecutingTimeoutJob') {
-                $this->markTimout($jobFired);
+                $this->markTimeout($jobFired);
             }
         }
     }
 
-    protected function markTimout($jobFired)
+    public function createJobProcess($process)
+    {
+        return $this->getJobProcessDao()->create($process);
+    }
+
+    public function updateJobProcess($id, $process)
+    {
+        return $this->getJobProcessDao()->update($id, $process);
+    }
+
+    protected function getMillisecond()
+    {
+        list($t1, $t2) = explode(' ', microtime());
+
+        return (float) sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
+    }
+
+    protected function markTimeout($jobFired)
     {
         $jobFired = $this->getJobFiredDao()->update($jobFired['id'], array('status' => 'timeout'));
 
@@ -433,6 +483,14 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     protected function getJobDao()
     {
         return $this->biz->dao('Scheduler:JobDao');
+    }
+
+    /**
+     * @return JobProcessDao
+     */
+    protected function getJobProcessDao()
+    {
+        return $this->biz->dao('Scheduler:JobProcessDao');
     }
 
     protected function getJobPool()

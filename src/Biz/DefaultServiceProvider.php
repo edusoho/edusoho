@@ -33,6 +33,7 @@ use Biz\User\Register\Impl\BinderRegistDecoderImpl;
 use Biz\User\Register\Impl\DistributorRegistDecoderImpl;
 use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
+use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -157,6 +158,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $bizSms->setBiz($biz);
 
             return $bizSms;
+        };
+
+        $biz['register_sms_rate_limiter'] = function ($biz) {
+            return new RegisterSmsRateLimiter($biz);
         };
     }
 }

@@ -89,10 +89,9 @@ user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
 
-# 临时隐藏 distributor
-#distributor_register:
-#    path:  /distributor_register
-#    defaults: { _controller: AppBundle:Register:distributorIndex }
+distributor_register:
+   path:  /distributor_register
+   defaults: { _controller: AppBundle:Register:distributorIndex }
 
 register:
     path:  /register
@@ -1176,6 +1175,11 @@ vip_upgrade:
 edu_cloud_sms_send:
     path:  /edu_cloud/sms_send
     defaults: { _controller: AppBundle:EduCloud:smsSend }
+    methods: [POST]
+
+edu_cloud_sms_send_registration:
+    path:  /edu_cloud/sms_send_registration
+    defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
     methods: [POST]
 
 edu_cloud_sms_check:
@@ -3002,14 +3006,6 @@ try_export:
 member_operation_record:
     path: /member/{operatType}/record/{targetType}/{targetId}
     defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
-
-v2_demo:
-   path: /v2/demo
-   defaults: { _controller: AppBundle:V2:demo }
-
-v2_demo_modal:
-   path: /v2/demo/modal
-   defaults: { _controller: AppBundle:V2:modal }
 
 order_calculate_price:
     path: /order/price/calculate

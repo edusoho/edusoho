@@ -840,6 +840,7 @@ oauth.send.validate_message: 发送验证
 oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
 oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
 oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
+oauth.refresh.captcha_code_required_tip: 请输入图形验证码
 oauth.captcha_code_length_tip: 图形码为5位数
 oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
@@ -859,3 +860,5 @@ admin.data.lab.setting.error: 发生异常了，请重试！
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: 'Choose column'
+
+Bad credentials.: 用户名或密码错误

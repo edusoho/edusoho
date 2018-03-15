@@ -2,6 +2,7 @@
 
 namespace Biz\Xapi\Event;
 
+use AppBundle\Common\MathToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -10,6 +11,8 @@ use Biz\File\Service\UploadFileService;
 use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
+use Biz\OrderFacade\Product\ClassroomProduct;
+use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -18,6 +21,7 @@ use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use QiQiuYun\SDK\Constants\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -30,6 +34,9 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
             'question_marker.finish' => 'onQuestionMarkerFinish',
+            'user.search' => 'onUserSearch',
+            'order.paid' => 'onOrderPaid',
+            'user.daily.active' => 'onUserDailyActive',
         );
     }
 
@@ -80,6 +87,31 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         }
     }
 
+    public function onUserSearch(Event $event)
+    {
+        $subject = $event->getSubject();
+        $this->createStatement($subject['userId'], XAPIVerbs::SEARCHED, 0, 'keyword', $subject);
+    }
+
+    public function onOrderPaid(Event $event)
+    {
+        $order = $event->getSubject();
+        $orderItem = empty($order['items']) ? array() : $order['items'][0];
+        // TODO 如果改成一个订单多个商品的话，每一个 item 需要保存真实支付的现金
+        if ($order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], array(CourseProduct::TYPE, ClassroomProduct::TYPE))) {
+            $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], array(
+                'pay_amount' => round(MathToolkit::simple($order['pay_amount'], 0.01), 2),
+                'title' => $orderItem['title'],
+            ));
+        }
+    }
+
+    public function onUserDailyActive(Event $event)
+    {
+        $subject = $event->getSubject();
+        $this->createStatement($subject['userId'], XAPIVerbs::LOGGED_IN, $subject['userId'], 'user');
+    }
+
     protected function testpaperFinish($testpaperResult)
     {
         $this->createStatement($testpaperResult['userId'], 'completed', $testpaperResult['id'], 'testpaper');
@@ -116,7 +148,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->createStatement($thread['userId'], 'asked', $thread['id'], 'question');
     }
 
-    private function createStatement($userId, $verb, $targetId, $targetType)
+    private function createStatement($userId, $verb, $targetId, $targetType, $context = array())
     {
         if (empty($userId)) {
             return;
@@ -127,6 +159,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'verb' => $verb,
                 'target_id' => $targetId,
                 'target_type' => $targetType,
+                'context' => $context,
                 'occur_time' => time(),
             );
 

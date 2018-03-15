@@ -30,4 +30,4 @@ $('.js-student-remark-save-btn').click((event) => {
       notify('danger', Translator.trans('course_manage.student_remark_failed_hint', { username: user_name }));
     });
   }
-})
+});

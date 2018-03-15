@@ -79,7 +79,7 @@ export default class HeaderNav {
     }).catch((res) => {
       // 异常捕获
       console.log('catch', res.responseJSON.message);
-    })
+    });
   }
 
   informShow($dom, res, flag) {

@@ -2,15 +2,10 @@ import notify from 'common/notify';
 import BasePayment from './payment';
 
 class ConfirmModal {
-
-  $container = $('body');
-
-  modalID = 'cashier-confirm-modal';
-
-  tradeSn = '';
-
   constructor() {
-
+    this.$container = $('body');
+    this.modalID = 'cashier-confirm-modal';
+    this.tradeSn = '';
     let template = `
       <div id="${this.modalID}" class="modal">
         <div class="modal-dialog cd-modal-dialog">

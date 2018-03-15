@@ -240,19 +240,21 @@ class PayServiceImpl extends BaseService implements PayService
                 return $trade;
             }
 
-            if (PayingStatus::NAME != $trade['status']) {
-                $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.is_not_paying', $data['trade_sn'], "交易号{$data['trade_sn']}状态不正确，状态为：{$trade['status']}", $data);
-                return $trade;
-            }
-
-            if ($trade['cash_amount'] != $data['pay_amount']) {
-                $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.pay_amount.mismatch', $data['trade_sn'], "{$data['trade_sn']}实际支付的价格{$data['pay_amount']}和交易记录价格{$trade['cash_amount']}不匹配，状态为：{$trade['status']}", $data);
-            }
-
             try {
                 $this->beginTransaction();
 
                 $trade = $this->getPayTradeDao()->get($trade['id'], array('lock' => true));
+
+                if (PayingStatus::NAME != $trade['status']) {
+                    $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.is_not_paying', $data['trade_sn'], "交易号{$data['trade_sn']}状态不正确，状态为：{$trade['status']}", $data);
+                    $this->commit();
+                    return $trade;
+                }
+
+                if ($trade['cash_amount'] != $data['pay_amount']) {
+                    $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.pay_amount.mismatch', $data['trade_sn'], "{$data['trade_sn']}实际支付的价格{$data['pay_amount']}和交易记录价格{$trade['cash_amount']}不匹配，状态为：{$trade['status']}", $data);
+                }
+
                 $trade = $this->updateTradeToPaid($trade['id'], $data);
                 $this->transfer($trade);
                 if ($trade['type'] == 'purchase') {

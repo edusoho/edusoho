@@ -29,7 +29,7 @@ class SelectLinkage
         let option = '<option value="0">'+Translator.trans('site.choose_hint')+'</option>';
         $.each(result,function(index,task){
           option += '<option value="'+task.id+'">'+task.title+'</option>';
-        })
+        });
         self.select2.append(option);
         self.select2.show();
       } else {

@@ -65,6 +65,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             ),
             'conditions' => array(
                 'id = :id',
+                'id IN ( :ids)',
                 'checkTeacherId = :checkTeacherId',
                 'paperName = :paperName',
                 'testId = :testId',

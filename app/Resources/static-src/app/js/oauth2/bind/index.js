@@ -25,6 +25,6 @@ let validator = $form.validate({
 
 $('#password').focus(() => {
   $('.js-password-error').remove();
-})
+});
 
 enterSubmit($form, $btn);

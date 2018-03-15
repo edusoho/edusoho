@@ -26,7 +26,7 @@ $table.on('click', '.cancel-share-btn', function(e) {
 
   $.post($this.data('url'), {
     targetUserId: $this.attr('targetUserId')
-    }, function(response) {
+  }, function(response) {
     $btn.closest('.share-history-record').remove();
     notify('success', Translator.trans('material.cancel_share.tips'));
   }, 'json');
@@ -38,7 +38,7 @@ $('.modal').off('click.modal-pagination');
 $table.on('click', '.pagination li', function() {
   let $this = $(this);
   let page = $this.data('page');
-  let url = $this.closest(".pagination").data('url');
+  let url = $this.closest('.pagination').data('url');
 
   $.get(url, { 'page': page }, function(html) {
     $table.html(html);

@@ -22,7 +22,7 @@ $('#submit-btn').click(() => {
   if (validator.form()) {
     $form.submit();
   }
-})
+});
 
 $smsCode.on('click', () => {
   new SmsSender({
@@ -33,4 +33,4 @@ $smsCode.on('click', () => {
       return true;
     }
   });
-})
+});

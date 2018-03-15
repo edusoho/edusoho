@@ -7,7 +7,6 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Marketing\Service\MarketingService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ApiBundle\Api\Annotation\ResponseFilter;
 
@@ -28,11 +27,11 @@ class ClassroomMarketingMember extends AbstractResource
         }
         $biz = $this->getBiz();
         $logger = $biz['logger'];
-        $logger->debug('微营销通知处理订单');
+        $logger->info('微营销通知处理班级订单');
         $postData = $request->request->all();
 
         try {
-            return $this->getMarketingService()->addUserToClassroom($postData);
+            return $this->getMarketingClassroomService()->join($postData);
         } catch (\Exception $e) {
             $logger->error($e);
 
@@ -63,11 +62,11 @@ class ClassroomMarketingMember extends AbstractResource
     }
 
     /**
-     * @return MarketingService
+     * @return MarketingClassroomService
      */
-    protected function getMarketingService()
+    protected function getMarketingClassroomService()
     {
-        return $this->service('Marketing:MarketingService');
+        return $this->service('Marketing:MarketingClassroomService');
     }
 
     protected function getUserService()

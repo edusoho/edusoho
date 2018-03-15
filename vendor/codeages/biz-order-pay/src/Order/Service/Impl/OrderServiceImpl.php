@@ -109,6 +109,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->findBySns($orderSns);
     }
 
+    public function findOrdersByInvoiceSn($invoiceSn)
+    {
+        return $this->getOrderDao()->findByInvoiceSn($invoiceSn);
+    }
+
     public function findOrderLogsByOrderId($orderId)
     {
         return $this->getOrderLogDao()->findOrderLogsByOrderId($orderId);
@@ -169,6 +174,20 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->reCalcOrderPayAmount($order);
 
         return $newDeduct;
+    }
+
+    public function updateOrderInvoiceSnByOrderId($orderId, $invoiceSn)
+    {
+        $order = $this->getOrder($orderId);
+        if (empty($order)) {
+            throw new NotFoundException('order not found');
+        }
+
+        if ($order['user_id'] != $this->biz['user']['id']) {
+            throw new AccessDeniedException('Order owner is invalid.');
+        }
+
+        return $this->getOrderDao()->update($orderId, array('invoice_sn' => $invoiceSn));
     }
 
     private function reCalcOrderPayAmount($order)

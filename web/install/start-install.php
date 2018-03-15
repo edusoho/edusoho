@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Shanghai');
 // 尚存在问题：
 // 1.vendor不存在导致升级检测失败报错
 // 2.topxia:build命令没有打包新的api目录，打包6.5.5时需要修改该命令
@@ -170,7 +170,7 @@ function install_step3($init_data = 0)
         $installLogFd = @fopen($biz['log_directory'].'/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
         $initializer = new \AppBundle\Common\SystemInitializer($output);
-        $biz['user'] = new \Biz\User\AnonymousUser('127.0.0.1');
+        $biz['user'] = new \Biz\User\AnonymousUser();
         $biz['user.register'] = new \Biz\User\Register\RegisterFactory($biz);
         $biz['user.register.email'] = new \Biz\User\Register\Impl\EmailRegistDecoderImpl($biz);
         try {
@@ -515,7 +515,7 @@ EOD;
 function _initKey()
 {
     global $biz;
-    $currentUser = new \Biz\User\AnonymousUser('127.0.0.1');
+    $currentUser = new \Biz\User\AnonymousUser();
 
     $biz['user'] = $currentUser;
     $settingService = $biz->service('System:SettingService');

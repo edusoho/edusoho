@@ -15,9 +15,17 @@ define(function(require, exports, module) {
       }
     );
 
+    $('.mockSelector').change(
+      function() {
+        $('.tagContent').hide();
+        displayedTabContent = $('.mockSelector').val();
+        $('.tagContent.' + displayedTabContent).show();
+      }
+    );
+
     $('.sendedType').change(
       function() {
-        if ($('.sendedType') != '') {
+        if ($('.sendedType').val() != '') {
           $('.sendedData').val('');
           $.post(
             $('.sendedType').data('url'), { type: $('.sendedType').val() },
@@ -41,6 +49,52 @@ define(function(require, exports, module) {
             }
           );
         }
+      }
+    );
+
+    $('.sendMarketingBtn').click(
+      function() {
+        $('.sendMarketingResult').html('');
+        $.post(
+          $('.sendMarketingBtn').data('url'), { 'url': $('.marketingUrl').val(), 'body': $('.sendedMarketingData').val() },
+          function(data) {
+            $('.sendMarketingResult').html(data.result);
+          }
+        );
+      }
+    );
+
+    $('.marketingUrl').val('/callback/marketing?ac=orders.accept');
+
+    $('.selectedType').change(
+      function() {
+        var sendMsg = $('.' + $('.selectedType').val()).html();
+        $('.sendOtherMsg').val(sendMsg);
+        $('.doc').val($('.' + $('.selectedType').val() + '_doc').html());
+      }
+    );
+
+    $('.selectedType').change();
+
+    $('.sendOtherBtn').click(
+      function() {
+        $('.result').html('获取信息中...');
+        $apiInfo = $.parseJSON($('.' + $('.selectedType').val() + '_apiInfo').html());
+        $url = $('.sendOtherBtn').data('url-version-' + $apiInfo.apiVersion);
+
+        $postData = $.parseJSON($('.sendOtherMsg').val());
+        let copiedFields = ['apiMethod', 'apiUrl', 'apiAuthorized'];
+        for (let index = 0; index < copiedFields.length; index++) {
+          const element = copiedFields[index];
+          $postData[element] = $apiInfo[element];
+        }
+
+        $.post(
+          $url, { 'data': $postData },
+          function(data) {
+            $('.result').html(JSON.stringify(data));
+          }
+        );
       }
     );
   };

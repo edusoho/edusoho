@@ -2,11 +2,6 @@
 t.fallback = 'en';
 t.defaultDomain = 'js';
 // en
-t.add("plugin_faq.validate.from_version", "\u8d77\u59cb\u7248\u672c\u53f7", "js", "en");
-t.add("plugin_faq.validate.end_version", "\u7ec8\u6b62\u7248\u672c\u53f7", "js", "en");
-t.add("plugin_faq.category.hint", "\u8bf7\u9009\u62e9\u5206\u7c7b", "js", "en");
-t.add("plugin_faq.validate.es_version", "ES\u7248\u672c\u53f7", "js", "en");
-t.add("plugin_faq.validate.compare_version.hint", "\u8d77\u59cb\u7248\u672c\u53f7\u5fc5\u987b\u5c0f\u4e8e\u7b49\u4e8e\u7ec8\u6b62\u7248\u672c\u53f7", "js", "en");
 t.add("site.flash_not_install_hint", "Flash player is not installed in your browser or version is too low, please install the Flash player. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
 t.add("site.date_format_dhis", "Days %day% Hours %hour% Minutes %minutes% seconds %seconds%", "js", "en");
 t.add("site.date_format_his", "Hours %hours% Minutes %minutes% Seconds %seconds%", "js", "en");
@@ -709,6 +704,7 @@ t.add("oauth.send.validate_message", "\u53d1\u9001\u9a8c\u8bc1", "js", "en");
 t.add("oauth.send.error_message_tip", "\u8bf7\u6c42\u53d1\u9001\u6b21\u6570\u8fc7\u591a\uff0c\u8bf7\u7a0d\u540e\u5c1d\u8bd5", "js", "en");
 t.add("oauth.send.sms_code_error_tip", "\u60a8\u8f93\u5165\u7684\u77ed\u4fe1\u9a8c\u8bc1\u7801\u4e0d\u6b63\u786e", "js", "en");
 t.add("oauth.refresh.captcha_code_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u5931\u6548\uff0c\u8bf7\u91cd\u65b0\u8f93\u5165\u56fe\u5f62\u9a8c\u8bc1\u7801", "js", "en");
+t.add("oauth.refresh.captcha_code_required_tip", "\u8bf7\u8f93\u5165\u56fe\u5f62\u9a8c\u8bc1\u7801", "js", "en");
 t.add("oauth.captcha_code_length_tip", "\u56fe\u5f62\u7801\u4e3a5\u4f4d\u6570", "js", "en");
 t.add("oauth.captcha_code_expired_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u8fc7\u671f", "js", "en");
 t.add("oauth.captcha_code_error_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "en");
@@ -722,4 +718,5 @@ t.add("admin.data.lab.setting.error", "\u53d1\u751f\u5f02\u5e38\u4e86\uff0c\u8bf
 t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01", "js", "en");
 t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "en");
 t.add("admin.article_setting.choose_category", "Choose column", "js", "en");
+t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "en");
 })(Translator);

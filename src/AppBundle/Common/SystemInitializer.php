@@ -254,6 +254,7 @@ class SystemInitializer
             'cloud_api_server' => 'http://api.edusoho.net',
             'cloud_access_key' => '',
             'cloud_secret_key' => '',
+            'video_h5_enable' => 1,
         );
 
         $this->getSettingService()->set('storage', $default);

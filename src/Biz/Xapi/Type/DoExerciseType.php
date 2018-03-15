@@ -2,31 +2,9 @@
 
 namespace Biz\Xapi\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class DoExerciseType extends Type
 {
     const TYPE = 'completed_exercise';
-
-    public function package($statement)
-    {
-        $exerciseFinish = $this->getTestpaperService()->getTestpaperResult($statement['target_id']);
-        $course = $this->getCourseService()->getCourse($exerciseFinish['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($exerciseFinish['courseSetId']);
-        $course['description'] = $courseSet['subtitle'];
-        $course['title'] = $courseSet['title'].'-'.$course['title'];
-
-        $object = array(
-            'id' => $exerciseFinish['id'],
-            'name' => $exerciseFinish['paperName'],
-            'course' => $course,
-        );
-
-        $actor = $this->getActor($statement['user_id']);
-        $result = array();
-
-        return $this->createXAPIService()->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
-    }
 
     public function packages($statements)
     {
@@ -34,25 +12,13 @@ class DoExerciseType extends Type
             return array();
         }
         try {
-            $exerciseResultIds = ArrayToolkit::column($statements, 'target_id');
-            $exerciseResults = $this->getTestpaperService()->findTestpaperResultsByIds($exerciseResultIds);
-            $exerciseResults = ArrayToolkit::index($exerciseResults, 'id');
+            $exerciseResults = $this->findExerciseResults(
+                array($statements, 'target_id')
+            );
 
-            $courseIds = ArrayToolkit::column($exerciseResults, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
-
-            $courseSetIds = ArrayToolkit::column($exerciseResults, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
-
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
+            $courses = $this->findCourses(
+                array($exerciseResults, 'courseId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();
@@ -67,7 +33,7 @@ class DoExerciseType extends Type
                     );
 
                     $actor = $this->getActor($statement['user_id']);
-                    $result = array();
+                    $result = array('success' => true);
 
                     $pushStatements[] = $sdk->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
                 } catch (\Exception $e) {
@@ -79,5 +45,14 @@ class DoExerciseType extends Type
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);
         }
+    }
+
+    private function findExerciseResults($subject)
+    {
+        return $this->find(
+            $subject,
+            'Testpaper:TestpaperResultDao',
+            array('courseId', 'paperName')
+        );
     }
 }

@@ -16,18 +16,18 @@
   {{ web_macro.flash_messages(true) }}
   {% for type, client in clients %}
     {% if settings[type ~ '_enabled']|default(false) and type != 'weixinmob' %}
-      <div class="cd-setting">
+      <div class="es-setting">
         <span class="setting-icon">
           <i class="cd-icon cd-icon-{{ client.icon_class }}"></i>
         </span>
         <span class="setting-title">{% if type == 'weixinweb' %}{{ 'user.settings.oauth.weixin'|trans }}{% else %}{{ client.name }}{% endif %}</span>
         <span class="setting-action">
           {% if client.status|default(null) == 'bind' %}
-            <span class="cd-setting-status cd-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</span>
-            <a class="btn cd-btn cd-btn-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
+            <span class="es-setting-status es-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</span>
+            <a class="btn cd-btn cd-btn-ghost-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
           {% else %}
-            <span class="cd-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
-            <a class="btn cd-btn cd-btn-default" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
+            <span class="es-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
+            <a class="btn cd-btn cd-btn-ghost-default" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
           {% endif %}
         </span>
       </div>

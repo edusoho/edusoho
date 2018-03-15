@@ -6,6 +6,9 @@ use Biz\BaseTestCase;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Activity\Service\ActivityService;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 class ActivityServiceTest extends BaseTestCase
 {
@@ -109,7 +112,123 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertNull($savedActivity);
     }
 
-    public function testFinishTrigger()
+    public function testTriggerStart()
+    {
+        $savedTask = $this->handleTriggerData();
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+        );
+        $result = $this->getActivityService()->trigger(-1, 'start', $data);
+        $this->assertEquals($result, false);
+        $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals($activity['event'], 'start');
+        $this->assertEquals($activity['learnedTime'], 0);
+    }
+
+    public function testTriggerDoing()
+    {
+        $savedTask = $this->handleTriggerData();
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'doTask',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'isFinished',
+                    'returnValue' => 0,
+                ),
+                array(
+                    'functionName' => 'getTimeSec',
+                    'returnValue' => 200,
+                ),
+            )
+        );
+        TimeMachine::setMockedTime(time());
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+            'lastTime' => TimeMachine::time() - 60,
+            'events' => array(),
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals($activity['event'], 'doing');
+        $this->assertEquals($activity['learnedTime'], 60);
+    }
+
+    public function testTriggerWatching()
+    {
+        $savedTask = $this->handleTriggerData();
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'doTask',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'isFinished',
+                    'returnValue' => 0,
+                ),
+                array(
+                    'functionName' => 'getTimeSec',
+                    'returnValue' => 200,
+                ),
+            )
+        );
+        TimeMachine::setMockedTime(time());
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+            'lastTime' => TimeMachine::time() - 60,
+            'events' => array(
+                'watching' => array('watchTime' => 120),
+            ),
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $learnLogs = $this->getActivityLearnLogService()->search(
+            array('activityId' => $savedTask['activityId'], 'userId' => 1),
+            array('createdTime' => 'DESC'),
+            0,
+            10
+        );
+        $learnLogs = ArrayToolKit::index($learnLogs, 'event');
+        $this->assertArrayHasKey('doing', $learnLogs);
+        $this->assertEquals($learnLogs['doing']['learnedTime'], 60);
+        $this->assertArrayHasKey('watching', $learnLogs);
+        $this->assertEquals($learnLogs['watching']['learnedTime'], 120);
+    }
+
+    public function testTriggerFinish()
+    {
+        $savedTask = $this->handleTriggerData();
+        TimeMachine::setMockedTime(time());
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+            'lastTime' => TimeMachine::time() - 60,
+            'events' => array(
+                'finish' => array('data' => array('stop' => true)),
+            ),
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals($activity['event'], 'finish');
+        $this->assertEquals($activity['learnedTime'], 0);
+    }
+
+    protected function handleTriggerData()
     {
         $course = array(
             'id' => 1,
@@ -135,6 +254,14 @@ class ActivityServiceTest extends BaseTestCase
                     'returnValue' => 1,
                 ),
                 array(
+                    'functionName' => 'tryTakeCourse',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'canTakeCourse',
+                    'returnValue' => 1,
+                ),
+                array(
                     'functionName' => 'getCourse',
                     'returnValue' => $course,
                 ),
@@ -153,13 +280,7 @@ class ActivityServiceTest extends BaseTestCase
         );
         $savedTask = $this->getTaskService()->createTask($task);
 
-        $data = array(
-            'task' => $savedTask,
-        );
-
-        $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
-        $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        return $savedTask;
     }
 
     public function testSearch()
@@ -465,6 +586,62 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertArrayHasKey('ext', $results[0]);
     }
 
+    public function testBuildMaterial()
+    {
+        $material = array(
+            'id' => 1,
+            'name' => 'material',
+            'summary' => 'summary',
+            'link' => 'www.edusoho.com',
+        );
+        $activity = array(
+            'fromCourseId' => 2,
+            'fromCourseSetId' => 3,
+            'id' => 4,
+            'mediaType' => 'video',
+        );
+        $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'buildMaterial', array($material, $activity));
+        $this->assertEquals($result['fileId'], 1);
+        $this->assertEquals($result['courseId'], 2);
+        $this->assertEquals($result['courseSetId'], 3);
+        $this->assertEquals($result['lessonId'], 4);
+        $this->assertEquals($result['title'], 'material');
+        $this->assertEquals($result['description'], 'summary');
+        $this->assertEquals($result['source'], 'courseactivity');
+        $this->assertEquals($result['link'], 'www.edusoho.com');
+    }
+
+    public function testDiffMaterials()
+    {
+        $arr1 = array(
+            array(
+                'fileId' => 0,
+                'link' => 'www.edusoho.com0',
+            ),
+            array(
+                'fileId' => 1,
+                'link' => 'www.edusoho.com1',
+            ),
+        );
+        $arr2 = array();
+        $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'diffMaterials', array($arr1, $arr2));
+        $this->assertEquals($result[0]['link'], 'www.edusoho.com0');
+
+        $arr2 = array(
+            array(
+                'fileId' => 0,
+                'link' => 'www.edusoho.com0',
+            ),
+            array(
+                'fileId' => 2,
+                'link' => 'www.edusoho.com1',
+            ),
+        );
+        $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'diffMaterials', array($arr1, $arr2));
+        $this->assertEquals($result[0]['fileId'], 1);
+        $this->assertEquals($result[0]['link'], 'www.edusoho.com1');
+    }
+
     /**
      * @return ActivityService
      */
@@ -495,5 +672,10 @@ class ActivityServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }

@@ -9,8 +9,8 @@ cd.table({
     $.get(url).done(function(html) {
       $target.html(html);
     }).fail(function() {
-      notify('danger', Translator.trans('site.response_error'))
-    })
+      notify('danger', Translator.trans('site.response_error'));
+    });
   }
 });
 

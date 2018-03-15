@@ -35,6 +35,13 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $this->findInField('sn', $orderSns);
     }
 
+    public function findByInvoiceSn($invoiceSn)
+    {
+        return $this->findByFields(array(
+            'invoice_sn' => $invoiceSn
+        ));
+    }
+
     public function count($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
@@ -43,28 +50,12 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return (int) $builder->execute()->fetchColumn(0);
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        $declares = $this->declares();
-        foreach ($orderBys ?: array() as $order => $sort) {
-            $this->checkOrderBy($order, $sort, $declares['orderbys']);
-            $builder->addOrderBy($order, $sort);
-        }
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function sumPaidAmount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select("sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount");
 
-        return $builder->execute()->fetch();  
+        return $builder->execute()->fetch();
     }
 
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
@@ -177,7 +168,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'pay_time > :pay_time_GT',
                 'pay_amount > :pay_amount_GT',
                 'price_amount > :price_amount_GT',
-                'source = :source', 
+                'source = :source',
                 'status = :status',
                 'status IN (:statuses)',
                 'seller_id = :seller_id',
@@ -186,6 +177,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'title LIKE :title_like',
                 'updated_time >= :updated_time_GE',
                 'refund_deadline < :refund_deadline_LT',
+                'invoice_sn = :invoice_sn',
             ),
         );
     }

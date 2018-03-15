@@ -20,19 +20,19 @@
       <div id="coupon-error-message" class="form-error-message" style="display:none"></div>
     </div>
     {% if product.availableDeducts.coupon|default() %}
-      <a href="javascript:;" id="select-coupon-btn" class="cd-link-gray cd-text-xs" data-toggle="popover" data-placement="right" data-html="true" data-content='
+      <a href="javascript:;" id="select-coupon-btn" class="cd-link-minor cd-text-sm" data-toggle="popover" data-placement="right" data-html="true" data-content='
         {% for deduct in product.availableDeducts.coupon %}
           <label for="existing-coupon-{{ loop.index }}" class="cd-radio cd-radio-sm cd-mv16">
             <input id="existing-coupon-{{ loop.index }}" type="radio" class="js-existing-coupon" data-code="{{ deduct.code }}" data-deduct-amount="{{ deduct.deduct_amount|price_format }}">
             {{'plugin.coupon.minus'|trans}} {{ deduct.deduct_amount|price_format }}
-            <span class="cd-text-gray">{{'order.confirm.coupon.expiry_date_hint'|trans}} {{deduct.deadline|date("Y-m-d")}}</span>
+            <span class="cd-dark-minor">{{'order.confirm.coupon.expiry_date_hint'|trans}} {{deduct.deadline|date("Y-m-d")}}</span>
           </label>
         {% endfor %}
       '>{{'order.confirm.coupon.select_existed'|trans}}</a>
     {% endif %}
   </div>
   <div class="order-center-coupon__selected" style="display:none"  id="order-center-coupon__selected">
-    <span class="cd-text-gray-dark">
+    <span class="cd-dark-major">
       {{'order.confirm.coupon.used_coupon'|trans}} <span id="coupon-code-label"></span> {{'order.confirm.coupon.deduction'|trans}} <span id="deduct-amount-label"></span>
     </span> 
     <a href="javascript:;" class="cd-link-primary" id="cancel-use-coupon-btn">{{'form.btn.cancel'|trans}}</a>

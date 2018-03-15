@@ -4,10 +4,12 @@ namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Exception\ResponseException;
 use QiQiuYun\SDK\Exception\SDKException;
+use QiQiuYun\SDK\Constants\XAPIActivityTypes;
+use QiQiuYun\SDK\Constants\XAPIVerbs;
 
 class XAPIService extends BaseService
 {
-    protected $baseUri = 'http://xapi.qiqiuyun.net';
+    protected $host = 'xapi.qiqiuyun.net';
 
     protected $defaultLang = 'zh-CN';
 
@@ -561,6 +563,137 @@ class XAPIService extends BaseService
     }
 
     /**
+     * 提交"搜索"的记录
+     *
+     * @param $actor
+     * @param $object ['id' => '/cloud/search?q=单反&type=course', 'definitionType' => 'course']
+     *                ['id' => '/cloud/search?q=单反&type=teacher', 'objectType' => 'Agent']
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
+    public function searched($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'https://w3id.org/xapi/acrossx/verbs/searched',
+            'display' => array(
+                'zh-CN' => '搜索了',
+                'en-US' => XAPIVerbs::SEARCHED,
+            ),
+        );
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType'])
+            )
+        );
+
+        $statement['result'] = array(
+            'response' => $result['response'],
+            'extensions' => array(
+                'https://w3id.org/xapi/acrossx/extensions/type' => $this->getActivityType($result['type'])
+            )
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    /**
+     * 提交"登录"的记录
+     *
+     * @param $actor
+     * @param $object
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     * @return array|mixed
+     */
+    public function logged($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'https://w3id.org/xapi/adl/verbs/logged-in',
+            'display' => array(
+                'zh-CN' => '登录了',
+                'en-US' => XAPIVerbs::LOGGED_IN,
+            ),
+        );
+        $statement['object'] = array(
+            'id' => $this->auth->getAccessKey(),
+            'definition' => array(
+                'type' => $this->getActivityType(XAPIActivityTypes::APPLICATION),
+                'name' => array(
+                    $this->defaultLang => $this->options['school_name']
+                )
+            )
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    /**
+     * 提交"购买"的记录
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     */
+    public function purchased($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'http://activitystrea.ms/schema/1.0/purchase',
+            'display' => array(
+                'zh-CN' => '购买了',
+                'en-US' => XAPIVerbs::PURCHASED,
+            ),
+        );
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
+                'name' => array(
+                    $this->defaultLang => $object['name']
+                )
+            )
+        );
+
+        $statement['result'] = array(
+            'extensions' => array(
+                'http://xapi.edusoho.com/extensions/amount' => $result['amount']
+            )
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    /**
      * 提交学习记录
      *
      * @param $statement
@@ -572,26 +705,7 @@ class XAPIService extends BaseService
      */
     public function pushStatement($statement)
     {
-        $statement['context'] = array(
-            'extensions' => array(
-                'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
-            ),
-        );
-
-        $rawResponse = $this->client->request('POST', '/statements', array(
-            'json' => array($statement),
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature(),
-            ),
-        ));
-
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-
-        return $statement;
+        return $this->pushStatements(array($statement));
     }
 
     /**
@@ -606,36 +720,28 @@ class XAPIService extends BaseService
      */
     public function pushStatements($statements)
     {
+        $school = array(
+            'name' => $this->options['school_name'],
+            'url' => $this->options['school_url'],
+        );
         foreach ($statements as &$statement) {
             $statement['context'] = array(
                 'extensions' => array(
-                    'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
+                    'http://xapi.edusoho.com/extensions/school' => $school,
                 ),
             );
         }
 
-        $rawResponse = $this->client->request('POST', '/statements', array(
-            'json' => $statements,
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature(),
-            ),
+        return $this->request('POST', '/statements', $statements, array(
+            'Authorization' => $this->auth->makeXAPIRequestAuthorization(),
         ));
-
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-
-        return $response;
     }
 
     /**
      * @param $type
      * @param $value
-     * @return mixed
-     * @throws ResponseException
-     * @throws \QiQiuYun\SDK\HttpClient\ClientException
+     *
+     * @return array
      */
     public function setting($type, $value)
     {
@@ -644,63 +750,11 @@ class XAPIService extends BaseService
             'setting' => $type,
             'value' => $value,
         );
-
-        $rawResponse = $this->client->request('POST', '/setting', array(
-            'json' => $setting,
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature(),
-            )
+        $response = $this->request('POST', '/setting', $setting, array(
+            'Authorization' => $this->auth->makeXAPIRequestAuthorization(),
         ));
 
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-
         return $response;
-
-    }
-
-    /**
-     * @param $verb
-     *
-     * @return string
-     *
-     * @throws SDKException
-     */
-    private function getVerbType($verb)
-    {
-        switch ($verb) {
-            case 'answered': //回答了
-                $verbType = 'http://adlnet.gov/expapi/verbs/answered';
-                break;
-            case 'asked': //提问了
-                $verbType = 'http://adlnet.gov/expapi/verbs/asked';
-                break;
-            case 'completed': //完成了
-                $verbType = 'http://adlnet.gov/expapi/verbs/completed';
-                break;
-            case 'liked': //喜欢
-                $verbType = 'https://w3id.org/xapi/acrossx/verbs/liked';
-                break;
-            case 'listened': //听了
-                $verbType = 'http://activitystrea.ms/schema/1.0/listen';
-                break;
-            case 'noted': //记录了
-                $verbType = 'https://w3id.org/xapi/adb/verbs/noted';
-                break;
-            case 'read': //读了
-                $verbType = 'https://w3id.org/xapi/adb/verbs/read';
-                break;
-            case 'watched': //观看了
-                $verbType = 'https://w3id.org/xapi/acrossx/verbs/watched';
-                break;
-            default:
-                throw new SDKException('Please input correct verb');
-        }
-
-        return $verbType;
     }
 
     /**
@@ -710,45 +764,7 @@ class XAPIService extends BaseService
      */
     private function getActivityType($minType)
     {
-        switch ($minType) {
-            case 'audio': //音频
-                $activityType = 'http://activitystrea.ms/schema/1.0/audio';
-                break;
-            case 'course': //课程
-                $activityType = 'http://adlnet.gov/expapi/activities/course';
-                break;
-            case 'online-discussion':
-                $activityType = 'https://w3id.org/xapi/acrossx/activities/online-discussion';
-                break;
-            case 'document': //文档,一个主要内容为文本的独立文件,包含word,excel,ppt,text等格式
-                $activityType = 'https://w3id.org/xapi/acrossx/activities/document';
-                break;
-            case 'exercise': //练习,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/exercise';
-                break;
-            case 'homework': //作业,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/homework';
-                break;
-            case 'interaction': //互动
-                $activityType = 'http://adlnet.gov/expapi/activities/interaction';
-                break;
-            case 'live': //直播,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/live';
-                break;
-            case 'question': //问题
-                $activityType = 'http://adlnet.gov/expapi/activities/question';
-                break;
-            case 'testpaper': //试卷,非xAPI标准
-                $activityType = 'http://xapi.edusoho.com/activities/testpaper';
-                break;
-            case 'video': //视频
-                $activityType = 'https://w3id.org/xapi/acrossx/activities/video';
-                break;
-            default:
-                $activityType = $minType;
-        }
-
-        return $activityType;
+        return XAPIActivityTypes::getFullName($minType);
     }
 
     /**
@@ -787,15 +803,6 @@ class XAPIService extends BaseService
         }
 
         return $id;
-    }
-
-    protected function makeSignature()
-    {
-        $deadline = strtotime(date('Y-m-d H:0:0', strtotime('+2 hours')));
-        $signingText = $this->auth->getAccessKey()."\n".$deadline;
-        $signingText = $this->auth->getAccessKey().':'.$deadline.':'.$this->auth->sign($signingText);
-
-        return $signingText;
     }
 
     protected function getTime($timestamp, $format = 'iso8601')
@@ -856,5 +863,15 @@ class XAPIService extends BaseService
     protected function getIsoTime($timestamp = null)
     {
         return empty($timestamp) ? date('c') : date('c', $timestamp);
+    }
+
+    protected function filterOptions(array $options = array())
+    {
+        $options = parent::filterOptions($options);
+        if (empty($options['school_name'])) {
+            throw new SDKException('Option `school_name` is missing.');
+        }
+
+        return $options;
     }
 }

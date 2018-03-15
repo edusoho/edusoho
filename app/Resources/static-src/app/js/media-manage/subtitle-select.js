@@ -7,7 +7,7 @@ const convertStatus = (status) => {
     none: Translator.trans('subtitle.status.waiting')
   };
   return statusMap[status];
-}
+};
 
 let Select = {
   init(options) {
@@ -33,17 +33,17 @@ let Select = {
   initEvent() {
     let _self = this;
     this.$parentDom
-    .delegate('.track-selcet-open-arrow', 'click', this.handleOpen.bind(this))
-    .delegate('.track-selcet-close-arrow', 'click', this.handleClose.bind(this))
-    .delegate('.delete','click', this.handleDelete.bind(this))
-    .delegate('.select-item', 'click', function() {
-      $(this).siblings().removeClass('active');
-      $(this).addClass('active');
-      let name = $(this).find('.value').html();
-      let url = $(this).find('.value').attr('url');
-      _self.setValue({name:name,url:url});
-      _self.handleClose();
-    })
+      .delegate('.track-selcet-open-arrow', 'click', this.handleOpen.bind(this))
+      .delegate('.track-selcet-close-arrow', 'click', this.handleClose.bind(this))
+      .delegate('.delete','click', this.handleDelete.bind(this))
+      .delegate('.select-item', 'click', function() {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+        let name = $(this).find('.value').html();
+        let url = $(this).find('.value').attr('url');
+        _self.setValue({name:name,url:url});
+        _self.handleClose();
+      });
     this.$showBox.on('click',this.toggle.bind(this));
     this.on('valuechange',function(){
       this.$dataShow.html(this.getValue().name);
@@ -54,9 +54,9 @@ let Select = {
         this.trigger('optionlimit');
       }
       this.$list.html(this.getOptionsStr());
-      this.setValue(this.getDefaultOption())
+      this.setValue(this.getDefaultOption());
     });
-    this.on('optionempty', this.handleOptionEmpty.bind(this))
+    this.on('optionempty', this.handleOptionEmpty.bind(this));
   },
   templete() {
     return `<div class="track-select-parent">
@@ -83,21 +83,21 @@ let Select = {
     }
   },
   getOptionsStr() {
-      let _self = this;
-      if(!this.options.length){
-        this.trigger('optionempty');
-      }
-      let optionsStr = '';
-      this.options.map((option, index) => {
-        optionsStr += `<li class="select-item">
+    let _self = this;
+    if(!this.options.length){
+      this.trigger('optionempty');
+    }
+    let optionsStr = '';
+    this.options.map((option, index) => {
+      optionsStr += `<li class="select-item">
                         <div class="value" title="${option.name}" url="${option.url}">
                           ${option.name}
                         </div>
                         <span class="convertStatus convert-${option.convertStatus}">${convertStatus(option.convertStatus)}</span>
                         <i class="es-icon es-icon-close01 delete" data-index="${index}"></i>
                       </li>`;
-      })
-      return optionsStr;
+    });
+    return optionsStr;
   },
   setValue(value) {
     if (!value) {
@@ -166,6 +166,6 @@ let Select = {
     this.options.push(option);
     this.trigger('listchange');
   }
-}
+};
 
 export default Select;

@@ -7,6 +7,9 @@ class SecurityQuestion {
     this.$q1 = $('[name=question-1]');
     this.$q2 = $('[name=question-2]');
     this.$q3 = $('[name=question-3]');
+
+    this.selectOptions = [];
+
     this.init();
   }
 
@@ -19,25 +22,26 @@ class SecurityQuestion {
     const $node = $(this.element);
     const _this = this;
 
-    $('option[value=parents]').css('display', 'none');
-    $('option[value=teacher]').css('display', 'none');
-    $('option[value=lover]').css('display', 'none');
-    
-    this.$q1.on('change', function(event) {
-      let $this = $(this);
-      _this.reflesh_option_display($this)
-    });
+    this.changeOptions();
 
-    this.$q2.on('change', function(event) {
-      let $this = $(this);
-      _this.reflesh_option_display($this)
-    });
+    cd.select({
+      el: '.js-cd-select',
+    }).on('beforeChange', (value, text) => {
+      if (this.selectOptions.includes(value)) {
+        notify('danger', Translator.trans('user.settings.security.security_questions.type_duplicate_hint'));
+        throw new Error(Translator.trans('user.settings.security.security_questions.type_duplicate_hint'));
+      }
 
-    this.$q3.on('change', function(event) {
-      let $this = $(this);
-      _this.reflesh_option_display($this)
+    }).on('change', (value, text) => {
+      this.changeOptions();
     });
+  }
 
+  changeOptions() {
+    this.selectOptions = [];
+    [this.$q1, this.$q2, this.$q3].forEach((item) => {
+      this.selectOptions.push(item.val());
+    });
   }
 
   validator() {
@@ -69,28 +73,7 @@ class SecurityQuestion {
       submitError(data) {
         notify('danger',  Translator.trans(data.responseJSON.message));
       }
-    })
-  }
-
-  reflesh_option_display($node) {
-
-    if (this.$q1.val() === this.$q2.val() || this.$q3.val() === this.$q2.val() || this.$q1.val() === this.$q3.val()) {
-      notify('danger',Translator.trans('user.settings.security.security_questions.type_duplicate_hint'));
-      this.$q1.val('parents');
-      this.$q2.val('teacher');
-      this.$q3.val('lover');
-      
-    } else {
-      $(`option[value=${$node.val()}]`).css('display', 'none');
-    }
-
-    let questions = ['parents', 'teacher', 'lover', 'schoolName', 'firstTeacher', 'hobby', 'notSelected'];
-
-    for (let questionId in questions) {
-      if (questions[questionId] !== this.$q1.val() && questions[questionId] !== this.$q2.val() && questions[questionId] !== this.$q3.val()) {
-        $(`option[value=${questions[questionId]}]`).css('display', 'block');
-      }
-    }
+    });
   }
 }
 

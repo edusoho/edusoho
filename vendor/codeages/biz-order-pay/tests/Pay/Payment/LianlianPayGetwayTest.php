@@ -10,7 +10,7 @@ class LianlianPayGetwayTest extends IntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        $signatureToolkit = \Mockery::mock(SignatureToolkit::class);
+        $signatureToolkit = \Mockery::mock('Codeages\\Biz\\Pay\\Payment\\SignatureToolkit');
         $this->biz['payment.platforms'] = array(
             'lianlianpay' => array(
                 'secret' => 'secret',

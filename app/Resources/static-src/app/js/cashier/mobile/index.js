@@ -35,7 +35,7 @@ class CashierForm {
       let $this = $(event.currentTarget);
       if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
         $this.addClass('active').siblings().removeClass('active');
-        $("input[name='payment']").val($this.attr("id"));
+        $('input[name=\'payment\']').val($this.attr('id'));
       }
     });
 

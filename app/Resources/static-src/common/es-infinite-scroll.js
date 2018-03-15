@@ -1,6 +1,6 @@
 import 'waypoints/lib/jquery.waypoints.min';
 import 'waypoints/lib/shortcuts/infinite.min';
-import Emitter from "common/es-event-emitter";
+import Emitter from 'common/es-event-emitter';
 
 export default class ESInfiniteScroll extends Emitter {
 
@@ -31,7 +31,7 @@ export default class ESInfiniteScroll extends Emitter {
         }
       });
 
-    })
+    });
   }
 
   initDownInfinite() {

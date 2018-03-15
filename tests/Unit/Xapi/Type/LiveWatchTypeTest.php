@@ -8,116 +8,6 @@ use Biz\Xapi\Type\LiveWatchType;
 
 class LiveWatchTypeTest extends BaseTestCase
 {
-    public function testPackage()
-    {
-        $xapiService = $this->mockBiz('Xapi:XapiService',
-            array(
-                array(
-                    'functionName' => 'getWatchLog',
-                    'withParams' => array(1),
-                    'returnValue' => array(
-                        'id' => 1,
-                        'target_id' => 1,
-                        'task_id' => 2,
-                        'course_id' => 3,
-                        'watched_time' => 100,
-                    ),
-                ),
-                array(
-                    'functionName' => 'getXapiSdk',
-                    'returnValue' => $this->getXapiService()->getXapiSdk(),
-                ),
-            )
-        );
-
-        $taskService = $this->mockBiz(
-            'Task:TaskService',
-            array(
-                array(
-                    'functionName' => 'getTask',
-                    'withParams' => array(2),
-                    'returnValue' => array(
-                        'id' => 2,
-                        'title' => 'test task',
-                        'activityId' => 4,
-                        'type' => 'video',
-                    ),
-                ),
-            )
-        );
-
-        $courseService = $this->mockBiz(
-            'Course:CourseService',
-            array(
-                array(
-                    'functionName' => 'getCourse',
-                    'withParams' => array(3),
-                    'returnValue' => array(
-                        'id' => 3,
-                        'title' => 'course title',
-                        'courseSetId' => 5,
-                    ),
-                ),
-            )
-        );
-
-        $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
-            array(
-                array(
-                    'functionName' => 'getCourseSet',
-                    'withParams' => array(5),
-                    'returnValue' => array(
-                        'id' => 5,
-                        'title' => 'course set title',
-                        'subtitle' => 'course set subtitle',
-                    ),
-                ),
-            )
-        );
-
-        $activityService = $this->mockBiz(
-            'Activity:ActivityService',
-            array(
-                array(
-                    'functionName' => 'getActivity',
-                    'withParams' => array(4, true),
-                    'returnValue' => array(
-                        'id' => 4,
-                        'mediaType' => 'video',
-                        'ext' => array(
-                            'mediaId' => 333333,
-                        ),
-                    ),
-                ),
-            )
-        );
-
-        $type = new LiveWatchType();
-        $type->setBiz($this->biz);
-        $packageInfo = $type->package(array(
-            'target_id' => 1,
-            'user_id' => 12121,
-            'uuid' => '123123123dse',
-            'occur_time' => time(),
-        ));
-
-        $xapiService->shouldHaveReceived('getWatchLog');
-        $xapiService->shouldHaveReceived('getXapiSdk');
-        $taskService->shouldHaveReceived('getTask');
-        $courseService->shouldHaveReceived('getCourse');
-        $courseSetService->shouldHaveReceived('getCourseSet');
-        $activityService->shouldHaveReceived('getActivity');
-
-        $this->assertEquals('123123123dse', $packageInfo['id']);
-        $this->assertEquals('https://w3id.org/xapi/acrossx/verbs/watched', $packageInfo['verb']['id']);
-        $this->assertEquals(4, $packageInfo['object']['id']);
-        $this->assertArrayEquals(
-            array('title' => 'course set title-course title', 'description' => 'course set subtitle'),
-            $packageInfo['object']['definition']['extensions']['http://xapi.edusoho.com/extensions/course']
-        );
-    }
-
     public function testPackages()
     {
         $type = new LiveWatchType();
@@ -125,21 +15,37 @@ class LiveWatchTypeTest extends BaseTestCase
         $packageInfo = $type->packages(array());
 
         $this->assertEmpty($packageInfo);
-        $xapiService = $this->mockBiz('Xapi:XapiService',
+
+        $this->mockBiz(
+            'System:SettingService',
             array(
                 array(
-                    'functionName' => 'findWatchLogsByIds',
-                    'withParams' => array(array(1)),
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
                     'returnValue' => array(
-                        0 => array(
-                            'id' => 1,
-                            'target_id' => 1,
-                            'task_id' => 2,
-                            'course_id' => 3,
-                            'watched_time' => 100,
-                        ),
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
                     ),
                 ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                    ),
+                ),
+            )
+        );
+
+        $xapiService = $this->mockBiz('Xapi:XapiService',
+            array(
                 array(
                     'functionName' => 'getXapiSdk',
                     'returnValue' => $this->getXapiService()->getXapiSdk(),
@@ -147,12 +53,25 @@ class LiveWatchTypeTest extends BaseTestCase
             )
         );
 
+        $watchDao = $this->mockBiz('Xapi:ActivityWatchLogDao', array(
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    0 => array(
+                        'id' => 1,
+                        'target_id' => 1,
+                        'task_id' => 2,
+                        'course_id' => 3,
+                        'watched_time' => 100,
+                    ),
+                ),
+            ), ));
+
         $taskService = $this->mockBiz(
-            'Task:TaskService',
+            'Task:TaskDao',
             array(
                 array(
-                    'functionName' => 'findTasksByIds',
-                    'withParams' => array(array(2)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 2,
@@ -166,11 +85,10 @@ class LiveWatchTypeTest extends BaseTestCase
         );
 
         $courseService = $this->mockBiz(
-            'Course:CourseService',
+            'Course:CourseDao',
             array(
                 array(
-                    'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(3)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 3,
@@ -183,11 +101,10 @@ class LiveWatchTypeTest extends BaseTestCase
         );
 
         $courseSetService = $this->mockBiz(
-            'Course:CourseSetService',
+            'Course:CourseSetDao',
             array(
                 array(
-                    'functionName' => 'findCourseSetsByIds',
-                    'withParams' => array(array(5)),
+                    'functionName' => 'search',
                     'returnValue' => array(
                         0 => array(
                             'id' => 5,
@@ -229,11 +146,11 @@ class LiveWatchTypeTest extends BaseTestCase
             ),
         ));
 
-        $xapiService->shouldHaveReceived('findWatchLogsByIds');
+        $watchDao->shouldHaveReceived('search');
         $xapiService->shouldHaveReceived('getXapiSdk');
-        $taskService->shouldHaveReceived('findTasksByIds');
-        $courseService->shouldHaveReceived('findCoursesByIds');
-        $courseSetService->shouldHaveReceived('findCourseSetsByIds');
+        $taskService->shouldHaveReceived('search');
+        $courseService->shouldHaveReceived('search');
+        $courseSetService->shouldHaveReceived('search');
         $activityService->shouldHaveReceived('findActivities');
 
         $packageInfo = reset($packageInfo);

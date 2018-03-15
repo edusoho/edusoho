@@ -18,7 +18,7 @@ class Coupon {
     this.$deductAmountLabel = this.$form.find('#deduct-amount-label');
     this.$couponCodeLabel = this.$form.find('#coupon-code-label');
 
-    this.$selectCouponBtn = this.$form.find("#select-coupon-btn");
+    this.$selectCouponBtn = this.$form.find('#select-coupon-btn');
 
     this.init();
   }
@@ -74,7 +74,7 @@ class Coupon {
 
         this.useCouponAfter(deductAmount, code);
       }
-    })
+    });
   }
 
   useCouponAfter(deductAmount, code) {
@@ -143,16 +143,15 @@ class Coupon {
   selectCoupon() {
     cd.radio({
       el: '.js-existing-coupon',
-      cb: (event) => {
-        const $this = $(event.currentTarget);
-        const code = $this.data('code');
-        const deductAmount = $this.data('deductAmount');
-        this.$couponCode.val(code);
+    }).on('change', (event) => {
+      const $this = $(event.currentTarget);
+      const code = $this.data('code');
+      const deductAmount = $this.data('deductAmount');
+      this.$couponCode.val(code);
 
-        this.$selectCouponBtn.trigger('click');
+      this.$selectCouponBtn.trigger('click');
 
-        this.useCouponAfter(deductAmount, code);
-      }
+      this.useCouponAfter(deductAmount, code);
     });
   }
 

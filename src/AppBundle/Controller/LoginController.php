@@ -21,10 +21,8 @@ class LoginController extends BaseController
             $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
         }
 
-        if ($this->getWebExtension()->isMicroMessenger() && $this->setting('login_bind.enabled', 0) && $this->setting('login_bind.weixinmob_enabled', 0)) {
-            $inviteCode = $request->query->get('inviteCode', '');
-
-            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request), 'inviteCode' => $inviteCode)));
+        if ($this->getWebExtension()->isWechatLoginBind()) {
+            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
         }
 
         return $this->render('login/index.html.twig', array(

@@ -247,9 +247,7 @@ userType:
     qq: QQ connected
     weixin: Wechat connected
     marketing: 微营销
-
-# 临时隐藏 distributor
-#    distributor: 分销
+    distributor: 分销
 
 userKeyWordTypes:
     nickname: Nickname
@@ -370,6 +368,7 @@ processStatus:
     none: Not Start
     waiting: Waiting
     processing: Processing
+    doing: Doing
     ok: Success
     error: Error
 

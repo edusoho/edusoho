@@ -298,17 +298,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.9",
-        "version_normalized": "0.9.9.0",
+        "version": "v0.9.14",
+        "version_normalized": "0.9.14.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
+            "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/c319ccece125b07da681f4893dfa50bf5bbb99f7",
-            "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1ace8d1a1d142615aecc1c52f0468fafd33089ad.zip",
+            "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad",
             "shasum": ""
         },
         "require": {
@@ -330,7 +330,10 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "^4.8|^5.7|^6.0"
         },
-        "time": "2018-01-18T02:33:43+00:00",
+        "suggest": {
+            "ramsey/uuid": "Dao UUID primary key feature need this package."
+        },
+        "time": "2018-03-06T02:42:56+00:00",
         "bin": [
             "bin/biz"
         ],
@@ -352,17 +355,17 @@
     },
     {
         "name": "codeages/biz-order-pay",
-        "version": "v0.1.14",
-        "version_normalized": "0.1.14.0",
+        "version": "v0.1.16",
+        "version_normalized": "0.1.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed"
+            "reference": "29240956c8c1ca58e77f1719dad4d625800c6c0c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
-            "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/29240956c8c1ca58e77f1719dad4d625800c6c0c.zip",
+            "reference": "29240956c8c1ca58e77f1719dad4d625800c6c0c",
             "shasum": ""
         },
         "require": {
@@ -371,15 +374,17 @@
             "wenqinruan/omnipay-alipay": "^2.3"
         },
         "require-dev": {
-            "mockery/mockery": "^0.9.9"
+            "mockery/mockery": "^0.9.9",
+            "phpunit/phpunit": "4.8.36"
         },
-        "time": "2018-01-25T02:38:55+00:00",
+        "time": "2018-03-14T08:09:45+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "Codeages\\Biz\\Order\\": "src/Order/",
-                "Codeages\\Biz\\Pay\\": "src/Pay/"
+                "Codeages\\Biz\\Pay\\": "src/Pay/",
+                "Codeages\\Biz\\Invoice\\": "src/Invoice/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -473,6 +478,51 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "codeages/qiqiuyun-php-sdk",
+        "version": "v0.2.8",
+        "version_normalized": "0.2.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
+            "reference": "7819d101d889bb502bfe54617388336f24e46441"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7819d101d889bb502bfe54617388336f24e46441.zip",
+            "reference": "7819d101d889bb502bfe54617388336f24e46441",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "monolog/monolog": "^1.18",
+            "phpunit/phpunit": "^4 || ^5 || ^6"
+        },
+        "time": "2018-03-14T07:11:29+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/functions.php"
+            ],
+            "psr-4": {
+                "QiQiuYun\\SDK\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "QiQiuYun PHP SDK"
     },
     {
         "name": "codeages/rate-limiter",
@@ -2738,7 +2788,8 @@
             "spreadsheet",
             "xls",
             "xlsx"
-        ]
+        ],
+        "abandoned": "phpoffice/phpspreadsheet"
     },
     {
         "name": "phpspec/prophecy",
@@ -3240,7 +3291,7 @@
         "version_normalized": "3.7.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/piwik/device-detector.git",
+            "url": "https://github.com/matomo-org/device-detector.git",
             "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30"
         },
         "dist": {
@@ -5587,50 +5638,5 @@
             "security",
             "xxtea"
         ]
-    },
-    {
-        "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.1.0",
-        "version_normalized": "0.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0.zip",
-            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "psr/log": "^1.0"
-        },
-        "require-dev": {
-            "monolog/monolog": "^1.18",
-            "phpunit/phpunit": "^4 || ^5 || ^6",
-            "silex/silex": "^2.0"
-        },
-        "time": "2018-01-26T03:47:46+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/functions.php"
-            ],
-            "psr-4": {
-                "QiQiuYun\\SDK\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com",
-                "homepage": "http://www.codeages.com"
-            }
-        ],
-        "description": "QiQiuYun PHP SDK"
     }
 ]
