@@ -71,7 +71,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
            'xapiStatmentAddContext',
-           ''
+           'createPoint',
         );
 
         $funcNames = array();
