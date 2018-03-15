@@ -15,16 +15,15 @@ export default class CourseList {
 
   onExpandCourse(e) {
     var $target = $(e.currentTarget);
-    var $parent = $target.closest('.course-item');
-    var $lessonList = $parent.find('.course-detail-content');
-    
+    var $parent = $target.parents(".course-item");
+    var $lessonList = $target.parents(".media").siblings(".course-detail-content");
     if ($lessonList.length > 0) {
       this._lessonListSHow($lessonList)
     } else {
       var self = this;
       $.get($target.data('lessonUrl'), { 'visibility': 0 }, function (html) {
         $parent.append(html);
-        self._lessonListSHow($parent.find('.course-detail-content'));
+        self._lessonListSHow($parent.siblings(".course-detail-content"));
       });
     }
 
