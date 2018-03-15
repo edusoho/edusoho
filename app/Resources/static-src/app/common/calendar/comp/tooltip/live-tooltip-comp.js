@@ -1,5 +1,5 @@
 import BaseTooltipComp from './base-tooltip-comp';
-
+var a = 1;
 export default class LiveTooltip extends BaseTooltipComp {
 
   _getParamNames() {
