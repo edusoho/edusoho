@@ -13,5 +13,5 @@ class PlayerFactory {
     }
   }
 }
-
+var a = 1;
 export default PlayerFactory;
