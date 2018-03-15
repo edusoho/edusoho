@@ -63,7 +63,7 @@ $.validator.setDefaults({
 
 $.extend($.validator.prototype, {
   defaultMessage: function(element, rule) {
-    if (typeof rule === "string") {
+    if (typeof rule === 'string') {
       rule = { method: rule };
     }
 
@@ -74,28 +74,28 @@ $.extend($.validator.prototype, {
         // 'title' is never undefined, so handle empty string as undefined
         !this.settings.ignoreTitle && element.title || undefined,
         $.validator.messages[rule.method],
-        "<strong>Warning: No message defined for " + element.name + "</strong>"
+        '<strong>Warning: No message defined for ' + element.name + '</strong>'
       ),
       theregex = /\$?\{(\d+)\}/g,
       displayregex = /%display%/g;
-    if (typeof message === "function") {
+    if (typeof message === 'function') {
       message = message.call(this, rule.parameters, element);
     } else if (theregex.test(message)) {
-      message = $.validator.format(message.replace(theregex, "{$1}"), rule.parameters);
+      message = $.validator.format(message.replace(theregex, '{$1}'), rule.parameters);
     }
 
     if (displayregex.test(message)) {
       var labeltext, name;
-      var id = $(element).attr("id") || $(element).attr("name");
+      var id = $(element).attr('id') || $(element).attr('name');
       if (id) {
-        labeltext = $("label[for=" + id + "]").text();
+        labeltext = $('label[for=' + id + ']').text();
         if (labeltext) {
-          labeltext = labeltext.replace(/^[\*\s\:\：]*/, "").replace(/[\*\s\:\：]*$/, "");
+          labeltext = labeltext.replace(/^[\*\s\:\：]*/, '').replace(/[\*\s\:\：]*$/, '');
         }
       }
 
-      name = $(element).data('display') || $(element).attr("name");
-      message = message.replace(displayregex, labeltext || name)
+      name = $(element).data('display') || $(element).attr('name');
+      message = message.replace(displayregex, labeltext || name);
     }
 
     return message;
@@ -105,7 +105,7 @@ $.extend($.validator.prototype, {
 
 $.extend($.validator.messages, {
   required: Translator.trans('validate.required.message'),
-  remote: "请修正此字段",
+  remote: '请修正此字段',
   email: Translator.trans('validate.valid_email_input.message'),
   url: Translator.trans('validate.valid_url_input.message'),
   date: Translator.trans('validate.valid_date_input.message'),
@@ -123,7 +123,7 @@ $.extend($.validator.messages, {
   min: $.validator.format(Translator.trans('validate.min.message'))
 });
 
-$.validator.addMethod("DateAndTime", function(value, element) {
+$.validator.addMethod('DateAndTime', function(value, element) {
   let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
   return this.optional(element) || reg.test(value);
 }, $.validator.format(Translator.trans('validate.valid_date_and_time_input.message')));
@@ -142,15 +142,15 @@ function strlen(str) {
   return len;
 }
 
-$.validator.addMethod("trim", function(value, element, params) {
+$.validator.addMethod('trim', function(value, element, params) {
   return this.optional(element) || $.trim(value).length > 0;
 }, Translator.trans('validate.trim.message'));
 
-$.validator.addMethod("visible_character", function(value, element, params) {
+$.validator.addMethod('visible_character', function(value, element, params) {
   return this.optional(element) || (value.match(/\S/g).length === value.length);
 }, Translator.trans('validate.visible_character.message'));
 
-$.validator.addMethod("idcardNumber", function(value, element, params) {
+$.validator.addMethod('idcardNumber', function(value, element, params) {
   let _check = function(idcardNumber) {
     let reg = /^\d{17}[0-9xX]$/i;
     if (!reg.test(idcardNumber)) {
@@ -161,7 +161,7 @@ $.validator.addMethod("idcardNumber", function(value, element, params) {
     if (parseInt(idcardNumber.substr(6, 4)) < 1900 || parseInt(idcardNumber.substr(6, 4)) > y) {
       return false;
     }
-    let birth = idcardNumber.substr(6, 4) + "-" + idcardNumber.substr(10, 2) + "-" + idcardNumber.substr(12, 2);
+    let birth = idcardNumber.substr(6, 4) + '-' + idcardNumber.substr(10, 2) + '-' + idcardNumber.substr(12, 2);
     if (!'undefined' == typeof birth.getDate) {
       return false;
     }
@@ -171,7 +171,7 @@ $.validator.addMethod("idcardNumber", function(value, element, params) {
       iSum += parseInt(idcardNumber.charAt(i)) * IW[i];
     }
     let iJYM = iSum % 11;
-    let sJYM = ''
+    let sJYM = '';
     if (iJYM == 0) sJYM = '1';
     else if (iJYM == 1) sJYM = '0';
     else if (iJYM == 2) sJYM = 'x';
@@ -188,11 +188,11 @@ $.validator.addMethod("idcardNumber", function(value, element, params) {
       return false;
     }
     return true;
-  }
+  };
   return this.optional(element) || _check(value);
 }, Translator.trans('validate.idcard_number_input.message'));
 
-$.validator.addMethod("visible_character", function(value, element, params) {
+$.validator.addMethod('visible_character', function(value, element, params) {
   return this.optional(element) || $.trim(value).length > 0;
 }, Translator.trans('validate.visible_character_input.message'));
 
@@ -212,11 +212,11 @@ $.validator.addMethod('unsigned_integer', function(value, element) {
 //   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 // }, "时长必须为非负整数");
 
-jQuery.validator.addMethod("second_range", function(value, element) {
+jQuery.validator.addMethod('second_range', function(value, element) {
   return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
 }, Translator.trans('validate.second_range.message'));
 
-$.validator.addMethod("course_title", function(value, element, params) {
+$.validator.addMethod('course_title', function(value, element, params) {
   return this.optional(element) || /^[^<>]*$/.test(value);
 }, Translator.trans('validate.course_title.message'));
 
@@ -228,78 +228,78 @@ $.validator.addMethod('date', function(value, element) {
   return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
 }, Translator.trans('validate.valid_date_input.message'));
 
-$.validator.addMethod("open_live_course_title", function(value, element, params) {
+$.validator.addMethod('open_live_course_title', function(value, element, params) {
   return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
 }, Translator.trans('validate.open_live_course_title.message'));
 
-$.validator.addMethod("currency", function(value, element, params) {
+$.validator.addMethod('currency', function(value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, Translator.trans('validate.currency.message'));
 
 //@TODO这里不应该判断大于0，应该用组合positive_currency:true，min:1，看到替换
-$.validator.addMethod("positive_currency", function(value, element, params) {
-    return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
+$.validator.addMethod('positive_currency', function(value, element, params) {
+  return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, Translator.trans('validate.positive_currency.message'));
 
-$.validator.addMethod("positive_price", function(value, element, params) {
-    return /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
+$.validator.addMethod('positive_price', function(value, element, params) {
+  return /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, Translator.trans('validate.positive_currency.message'));
 
-jQuery.validator.addMethod("max_year", function(value, element) {
+jQuery.validator.addMethod('max_year', function(value, element) {
   return this.optional(element) || value < 100000;
 }, Translator.trans('validate.max_year.message'));
 
-$.validator.addMethod("before_date", function(value, element, params) {
-    let date = new Date(value);
-    let afterDate = new Date($(params).val());
-    return this.optional(element) || afterDate >= date;
-  },
-  Translator.trans('validate.before_date.message')
+$.validator.addMethod('before_date', function(value, element, params) {
+  let date = new Date(value);
+  let afterDate = new Date($(params).val());
+  return this.optional(element) || afterDate >= date;
+},
+Translator.trans('validate.before_date.message')
 );
 
-$.validator.addMethod("after_date", function(value, element, params) {
-    let date = new Date(value);
-    let afterDate = new Date($(params).val());
-    return this.optional(element) || afterDate <= date;
-  },
-  Translator.trans('validate.after_date.message')
+$.validator.addMethod('after_date', function(value, element, params) {
+  let date = new Date(value);
+  let afterDate = new Date($(params).val());
+  return this.optional(element) || afterDate <= date;
+},
+Translator.trans('validate.after_date.message')
 );
 
-$.validator.addMethod("after_now", function(value, element, params) {
-    let afterDate = new Date(value.replace(/-/g, '/')); //fix sf;
-    return this.optional(element) || afterDate >= new Date();
-  },
-  Translator.trans('validate.after_now.message')
+$.validator.addMethod('after_now', function(value, element, params) {
+  let afterDate = new Date(value.replace(/-/g, '/')); //fix sf;
+  return this.optional(element) || afterDate >= new Date();
+},
+Translator.trans('validate.after_now.message')
 );
 
 //日期比较，不进行时间比较
-$.validator.addMethod("after_now_date", function(value, element, params) {
-    let now = new Date();
-    let afterDate = new Date(value);
-    let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
-    return this.optional(element) || afterDate >= new Date(str);
-  },
-  Translator.trans('validate.after_now_date.message')
+$.validator.addMethod('after_now_date', function(value, element, params) {
+  let now = new Date();
+  let afterDate = new Date(value);
+  let str = now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate();
+  return this.optional(element) || afterDate >= new Date(str);
+},
+Translator.trans('validate.after_now_date.message')
 );
 
 //检查将废除,没有严格的时间转换，有兼容问题
-$.validator.addMethod("before", function(value, element, params) {
-    return value && $(params).val() >= value;
-  },
-  Translator.trans('validate.before.message')
+$.validator.addMethod('before', function(value, element, params) {
+  return value && $(params).val() >= value;
+},
+Translator.trans('validate.before.message')
 );
 //检查将废除,没有严格的时间转换，有兼容问题
-$.validator.addMethod("after", function(value, element, params) {
+$.validator.addMethod('after', function(value, element, params) {
 
-    return value && $(params).val() < value;
-  },
-  Translator.trans('validate.after.message')
+  return value && $(params).val() < value;
+},
+Translator.trans('validate.after.message')
 );
 //检查将废除，存在兼容性问题
-$.validator.addMethod("feature", function(value, element, params) {
-    return value && (new Date(value).getTime()) > Date.now();
-  },
-  Translator.trans('validate.feature.message')
+$.validator.addMethod('feature', function(value, element, params) {
+  return value && (new Date(value).getTime()) > Date.now();
+},
+Translator.trans('validate.feature.message')
 );
 
 $.validator.addMethod('qq', function(value, element) {
@@ -311,7 +311,7 @@ $.validator.addMethod('mobile', function(value, element) {
 }, Translator.trans('validate.valid_mobile_input.message'));
 
 $.validator.addMethod('url', function(value, element) {
-  return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
+  return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, Translator.trans('validate.valid_url_input.message'));
 
 $.validator.addMethod('chinese', function(value, element) {
@@ -320,7 +320,7 @@ $.validator.addMethod('chinese', function(value, element) {
 
 $.validator.addMethod('chinese_limit', function(value, element, params) {
   let l = strlen(value);
-  console.log('params', params)
+  console.log('params', params);
   return this.optional(element) || l <= Number(params);
 }, Translator.trans('validate.chinese_limit.message'));
 
@@ -354,30 +354,30 @@ $.validator.addMethod('limitSize', function(value, element) {
 }, Translator.trans('validate.limit_size.message'));
 
 
-jQuery.validator.addMethod("max_year", function(value, element) {
+jQuery.validator.addMethod('max_year', function(value, element) {
   return this.optional(element) || value < 100000;
 }, Translator.trans('validate.max_year.message'));
 
-$.validator.addMethod("feature", function(value, element, params) {
-    return value && (new Date(value).getTime()) > Date.now();
-  },
-  Translator.trans('validate.feature.message')
+$.validator.addMethod('feature', function(value, element, params) {
+  return value && (new Date(value).getTime()) > Date.now();
+},
+Translator.trans('validate.feature.message')
 );
 
-$.validator.addMethod("next_day", function(value, element, params) {
-    let now = new Date();
-    let next = new Date(now + 86400 * 1000);
-    return value && next <= new Date(value);
-  },
-  Translator.trans('validate.next_day.message')
+$.validator.addMethod('next_day', function(value, element, params) {
+  let now = new Date();
+  let next = new Date(now + 86400 * 1000);
+  return value && next <= new Date(value);
+},
+Translator.trans('validate.next_day.message')
 );
 
-$.validator.addMethod("chinese_alphanumeric", function(value, element, params) {
-  return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
+$.validator.addMethod('chinese_alphanumeric', function(value, element, params) {
+  return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value);
 }, jQuery.validator.format(Translator.trans('validate.chinese_alphanumeric.message')));
 
-$.validator.addMethod("alphanumeric", function(value, element, params) {
-  return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value)
+$.validator.addMethod('alphanumeric', function(value, element, params) {
+  return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value);
 }, jQuery.validator.format(Translator.trans('validate.alphanumeric.message')));
 
 $.validator.addMethod('raty_star', function(value, element) {
@@ -392,8 +392,8 @@ $.validator.addMethod('phone', function(value, element) {
   return this.optional(element) || /^1\d{10}$/.test(value);
 }, $.validator.format(Translator.trans('validate.phone.message')));
 
-$.validator.addMethod("nickname", function(value, element, params) {
-  return this.optional(element) || !/^1\d{10}$/.test(value)
+$.validator.addMethod('nickname', function(value, element, params) {
+  return this.optional(element) || !/^1\d{10}$/.test(value);
 }, Translator.trans('validate.nickname.message'));
 
 $.validator.addMethod('es_remote', function(value, element, params) {
@@ -441,7 +441,7 @@ $.validator.addMethod('es_remote', function(value, element, params) {
     if (typeof callback === 'function') {
       callback(isSuccess);
     }
-  })
+  });
   
   return this.optional(element) || isSuccess;
 
@@ -474,7 +474,7 @@ $.validator.addMethod('es_email', function(value, element, params) {
 }, Translator.trans('validate.valid_email_input.message'));
 
 $.validator.addMethod('es_score', function (value, element, params) {
-	return this.optional(element) || /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(value);
+  return this.optional(element) || /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(value);
 }, Translator.trans('validate.valid_score_input.message'));
 
 $.validator.addMethod('email_or_mobile_check', function (value, element, params) {
@@ -484,10 +484,10 @@ $.validator.addMethod('email_or_mobile_check', function (value, element, params)
   var isEmail = reg_email.test(value);
   var isMobile = reg_mobile.test(value);
   if (isMobile) {
-    $(".email_mobile_msg").removeClass('hidden');
+    $('.email_mobile_msg').removeClass('hidden');
     $('.js-captcha').addClass('hidden');
   } else {
-    $(".email_mobile_msg").addClass('hidden');
+    $('.email_mobile_msg').addClass('hidden');
     $('.js-captcha').removeClass('hidden');
   }
   if (isEmail || isMobile) {
