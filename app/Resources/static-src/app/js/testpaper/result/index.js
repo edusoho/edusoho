@@ -29,9 +29,9 @@ $('.js-testpaper-redo-timer').timer({
 });
 
 $('#finishPaper').click(function() {
- if ($(this).attr('disabled') == 'disabled') {
-   return false;
- } else {
-   return true;
- }
-})
+  if ($(this).attr('disabled') == 'disabled') {
+    return false;
+  } else {
+    return true;
+  }
+});
