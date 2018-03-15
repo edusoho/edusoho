@@ -168,6 +168,7 @@ class LoginController extends LoginBindController
             }
 
             $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
+
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
             ));
