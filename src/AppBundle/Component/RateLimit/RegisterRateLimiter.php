@@ -4,8 +4,8 @@ namespace AppBundle\Component\RateLimit;
 
 use AppBundle\Common\TimeMachine;
 use Codeages\RateLimiter\RateLimiter;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\OAuth2\OAuthUser;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
 {
