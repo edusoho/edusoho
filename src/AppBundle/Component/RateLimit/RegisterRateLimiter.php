@@ -27,7 +27,10 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
                 }
                 break;
             case 'middle':
-                $this->validateCaptcha($request);
+                $oauthUser = $this->getOauthUser($request);
+                if ($oauthUser->captchaEnabled) {
+                    $this->validateCaptcha($request);
+                }
                 $factory = $this->biz['ratelimiter.factory'];
                 /** @var RateLimiter $limiter */
                 $limiter = $factory('register.ip.mid_one_day', self::MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
