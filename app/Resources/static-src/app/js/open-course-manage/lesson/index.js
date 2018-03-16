@@ -30,7 +30,7 @@ export default class LessonManage {
 
   cancelPublishLesson(event) {
     let $btn = $(event.target);
-    $.post($btn.data('url'), function (html) {
+    $.post($btn.data('url'), (html) => {
       $('.js-item-content').prepend('<span class="lesson-unpublish-status js-unpublish-status">' + Translator.trans('open_course.unpublish_hint') +'</span>');
       $('.js-publish-lesson-btn, .js-delete-lesson-btn').parent().removeClass('hidden');
       $('.js-unpublish-lesson-btn').parent().addClass('hidden');
