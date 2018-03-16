@@ -172,7 +172,14 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseSetService()->countCourseSets(array('ids' => $vipCourseSetIds, 'type' => 'live')),
+            $this->getCourseSetService()->countCourseSets(
+                array(
+                    'ids' => $vipCourseSetIds, 
+                    'type' => 'live',
+                    'status' => 'published',
+                    'categoryId' => $categoryId
+                )
+            ),
             10
         );
         $replayLiveCourseSets = array();
