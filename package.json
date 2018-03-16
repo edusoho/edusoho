@@ -40,6 +40,7 @@
         "html5shiv": "3.7.3",
         "iframe-resizer": "3.5.5",
         "intro.js": "2.4.0",
+        "istanbul": "^0.4.5",
         "jquery": "1.12.4",
         "jquery-blurr": "0.1.2",
         "jquery-form": "3.50.0",
@@ -92,6 +93,7 @@
         "compile:debug": "npm run compile sourcemap:true",
         "compile:custom": "npm run compile module:CustomBundle",
         "clean": "rm -rf node_modules",
-        "test": "mocha --recursive --reporter mochawesome --compilers js:babel-core/register tests/Js && node tests/Js/result.js"
+        "test": "mocha --recursive --reporter mochawesome --compilers js:babel-core/register tests/Js && open mochawesome-report/mochawesome.html",
+        "cover": "istanbul cover _mocha tests/Js/* && istanbul report && open coverage/lcov-report/index.html"
     }
 }

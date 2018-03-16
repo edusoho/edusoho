@@ -58,3 +58,4 @@ deployment-config.json
 /web/MP_*
 yarn-error.log
 /mochawesome-report/*
+/coverage/*
