@@ -23,8 +23,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $conditions['targetType'] = $conditions['resType'];
         }
 
-        $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
-        $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
+        $result['count'] = $this->getUploadFileService()->countCloudFllesFromLocal($conditions);
+        $result['data'] = $this->getUploadFileService()->searchCloudFilesFromLocal($conditions, array('id' => 'DESC'), $start, $limit);
 
         $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
         $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);

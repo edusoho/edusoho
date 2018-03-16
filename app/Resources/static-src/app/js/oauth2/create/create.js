@@ -80,7 +80,7 @@ export default class Create {
       let isSuccess = 0;
       let params = {
         captchaToken: self.captchaToken
-      }
+      };
       Api.captcha.validate({ data: data, params: params, async: false, promise: false }).done(res => {
         if (res.status === 'success') {
           isSuccess = true;
@@ -135,30 +135,30 @@ export default class Create {
       }).catch((res) => {
         const code = res.responseJSON.error.code;
         switch (code) {
-          case 30001:
-            if ($('.js-captcha').hasClass('hidden')) {
-              $('.js-captcha').removeClass('hidden');
-              notify('danger', Translator.trans('oauth.refresh.captcha_code_required_tip'));
-              $("[name='captcha_code']").rules('add', this.getCaptchaCodeRule());
-            } else {
-              notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
-              $captchaCode.val('');
-              this.initCaptchaCode();
-            }
-            $target.attr('disabled', true);
-            break;
-          case 30002:
-            notify('danger', Translator.trans('oauth.send.error_message_tip'));
-            break;
-          case 30003:
-            notify('danger', Translator.trans('admin.site.cloude_sms_enable_hint'));
-            break;
-          default:
-            notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
-            break;
+        case 30001:
+          if ($('.js-captcha').hasClass('hidden')) {
+            $('.js-captcha').removeClass('hidden');
+            notify('danger', Translator.trans('oauth.refresh.captcha_code_required_tip'));
+            $('[name=\'captcha_code\']').rules('add', this.getCaptchaCodeRule());
+          } else {
+            notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
+            $captchaCode.val('');
+            this.initCaptchaCode();
+          }
+          $target.attr('disabled', true);
+          break;
+        case 30002:
+          notify('danger', Translator.trans('oauth.send.error_message_tip'));
+          break;
+        case 30003:
+          notify('danger', Translator.trans('admin.site.cloude_sms_enable_hint'));
+          break;
+        default:
+          notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
+          break;
         }
       });
-    })
+    });
   }
 
   changeCaptchaCode() {
@@ -186,7 +186,7 @@ export default class Create {
         smsCode: $('#sms-code').val(),
         captchaToken: this.captchaToken,
         phrase: $('#captcha_code').val()
-      }
+      };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
         $target.button('reset');
@@ -204,8 +204,8 @@ export default class Create {
         } else {
           notify('danger', Translator.trans('oauth.register.error_message'));
         }
-      })
-    })
+      });
+    });
 
     enterSubmit(this.$form, this.$btn);
   }
@@ -216,7 +216,7 @@ export default class Create {
       if ($tip.length) {
         $tip.remove();
       }
-    })
+    });
   }
 
   getCaptchaCodeRule() {

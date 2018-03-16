@@ -6,7 +6,7 @@ export default class Coin {
     this.priceType = this.$container.data('priceType');
     this.coinRate = this.$container.data('coinRate');
     this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ?
-                        this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
+      this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
     
     this.init();
   }
@@ -46,7 +46,7 @@ export default class Coin {
       price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
 
       let originalPirce = parseFloat(this.$container.data('maxAllowCoin'));
-      let coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;;
+      let coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;
       this.$form.trigger('changeCoinPrice', [coinPrice]);
     } else {
       price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);

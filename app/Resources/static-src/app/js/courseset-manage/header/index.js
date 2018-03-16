@@ -14,6 +14,6 @@ export const publishCourseSet = () => {
       }
     });
   });
-}
+};
 
 publishCourseSet();

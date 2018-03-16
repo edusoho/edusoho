@@ -1,6 +1,5 @@
-let $modal = $('#modal');
-let $form = $('#unbind-form');
-let $btn = $('#unbind-btn');
+import notify from 'common/notify';
+let $modal = $('#modal'), $form = $('#unbind-form'), $btn = $('#unbind-btn');
 
 let validator = $form.validate({
   rules: {
@@ -15,17 +14,17 @@ $btn.click(() => {
   if (validator.form()) {
     $btn.button('loading');
     $modal.modal('hide');
-    let payAgreementId = $("input[name='payAgreementId']").val();
+    let payAgreementId = $('input[name=\'payAgreementId\']').val();
     $.post($form.attr('action'), $form.serialize(), function (response) {
       if (response.success) {
         $('#unbind-bank-' + payAgreementId).remove();
-        Notify.success(response.message);
+        notify('success', response.message);
       } else {
-        Notify.danger(response.message);
+        notify('danger', response.message);
       }
     });
   }
-})
+});
 
 
 

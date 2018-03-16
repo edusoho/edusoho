@@ -27,8 +27,6 @@ class LoginBindController extends BaseController
                 $request->getSession()->set('_target_path', $targetPath);
             }
         }
-
-        $inviteCode = $request->query->get('inviteCode', null);
         $client = $this->createOAuthClient($type);
 
         $token = $this->getTokenService()->makeToken('login.bind', array(
@@ -36,19 +34,27 @@ class LoginBindController extends BaseController
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
             ),
-            'times' => 1,
+            'times' => $this->isAndroidAndWechat($request) ? 0 : 1,
             'duration' => 3600,
         ));
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
 
-        if ($inviteCode) {
-            $callbackUrl = $callbackUrl.'&inviteCode='.$inviteCode;
-        }
-
         $url = $client->getAuthorizeUrl($callbackUrl);
 
         return $this->redirect($url);
+    }
+
+    protected function isAndroidAndWechat($request)
+    {
+        $userAgent = $this->getWebExtension()->parseUserAgent($request->headers->get('User-Agent'));
+        if (!empty($userAgent)
+            && !empty($userAgent['os']) && $userAgent['os']['name'] == 'Android'
+            && !empty($userAgent['client']) && $userAgent['client']['name'] == 'WeChat') {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getBlacklist()
@@ -59,7 +65,6 @@ class LoginBindController extends BaseController
     public function callbackAction(Request $request, $type)
     {
         $code = $request->query->get('code');
-        $inviteCode = $request->query->get('inviteCode');
         $token = $request->query->get('token', '');
 
         $this->validateToken($request, $type);
@@ -81,7 +86,9 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
-            $this->authenticateUser($user);
+            if ($this->getCurrentUser()->getId() != $user['id']) {
+                $this->authenticateUser($user);
+            }
 
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));
@@ -94,7 +101,7 @@ class LoginBindController extends BaseController
             $oUser = $oauthClient->getUserInfo($token);
             $this->storeOauthUserToSession($request, $oUser, $type);
 
-            return $this->redirect($this->generateUrl('oauth2_login_index', array('inviteCode' => $inviteCode)));
+            return $this->redirect($this->generateUrl('oauth2_login_index'));
         }
     }
 

@@ -5,7 +5,7 @@ const enterSubmit = ($formDom, $btnDom) => {
       e.preventDefault();
     }
   });
-}
+};
 
 export {
   enterSubmit

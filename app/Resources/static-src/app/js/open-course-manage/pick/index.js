@@ -9,7 +9,7 @@ $sure.on('click', function () {
   $sure.button('submiting').addClass('disabled');
 
   $.ajax({
-    type: "post",
+    type: 'post',
     url: $('#sure').data('url'),
     data: { 'ids': ids },
     async: false,
@@ -55,7 +55,7 @@ $('#all-courses').on('click', function () {
 
 });
 
-$('.row').on('click', ".course-item ", function () {
+$('.row').on('click', '.course-item ', function () {
 
   let id = $(this).data('id');
 

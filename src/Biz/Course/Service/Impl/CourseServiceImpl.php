@@ -31,6 +31,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
+use AppBundle\Common\TimeMachine;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -290,6 +291,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateCourseMarketing($id, $fields)
     {
         $oldCourse = $this->tryManageCourse($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -319,7 +321,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($oldCourse['status'] != 'published') {
+        if ($courseSet['status'] != 'published' || $oldCourse['status'] != 'published') {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -329,7 +331,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $requireFields = array('title', 'isFree', 'buyable');
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
@@ -619,18 +620,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
             }
-            $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
-                $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
+                $course['expiryStartDate'] = TimeMachine::isTimestamp($course['expiryStartDate']) ? $course['expiryStartDate'] : strtotime($course['expiryStartDate']);
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
             }
             if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
             } else {
-                $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 throw $this->createInvalidArgumentException(
@@ -2256,7 +2257,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (in_array($course['status'], array('published', 'closed'))) {
             //计划发布或者关闭，不允许修改模式，但是允许修改时间
             unset($fields['expiryMode']);
-            if ('published' == $course['status']) {
+            if ('published' == $courseSet['status'] && 'published' == $course['status']) {
                 //计划发布后，不允许修改时间
                 unset($fields['expiryDays']);
                 unset($fields['expiryStartDate']);

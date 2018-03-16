@@ -92,11 +92,13 @@ class DefaultSdkProvider implements ServiceProviderInterface
         $pushUrl = ltrim($pushUrl, 'http://');
         $pushUrl = ltrim($pushUrl, 'https://');
         $siteName = empty($siteSettings['name']) ? 'none' : $siteSettings['name'];
+        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
 
         return array(
             'xapi' => array(
                 'host' => $pushUrl,
                 'school_name' => $siteName,
+                'school_url' => $siteUrl,
             ),
         );
     }

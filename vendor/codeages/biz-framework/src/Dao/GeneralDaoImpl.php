@@ -10,10 +10,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected $table = null;
 
-    protected $timestamps = array();
-
-    protected $serializes = array();
-
     public function __construct(Biz $biz)
     {
         $this->biz = $biz;
@@ -21,18 +17,14 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function create($fields)
     {
-        $timestampField = $this->getTimestampField('created');
-
-        if ($timestampField) {
-            $fields[$timestampField] = time();
-        }
-
         $affected = $this->db()->insert($this->table(), $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert error.');
         }
 
-        return $this->get($this->db()->lastInsertId());
+        $lastInsertId = isset($fields['id']) ? $fields['id'] : $this->db()->lastInsertId();
+
+        return $this->get($lastInsertId);
     }
 
     public function update($identifier, array $fields)
@@ -41,7 +33,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             return 0;
         }
 
-        if (is_numeric($identifier)) {
+        if (is_numeric($identifier) || is_string($identifier)) {
             return $this->updateById($identifier, $fields);
         }
 
@@ -81,12 +73,13 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $this->db()->fetchAssoc($sql, array($id)) ?: null;
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
+    public function search($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        $this->addSelect($builder, $columns);
 
         $declares = $this->declares();
         foreach ($orderBys ?: array() as $order => $sort) {
@@ -95,6 +88,23 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         }
 
         return $builder->execute()->fetchAll();
+    }
+
+    private function addSelect(DynamicQueryBuilder $builder, $columns)
+    {
+        if (!$columns) {
+            return $builder->select('*');
+        }
+
+        foreach ($columns as $column) {
+            if (preg_match('/^\w+$/', $column)) {
+                $builder->addSelect($column);
+            } else {
+                throw $this->createDaoException('Illegal column name: '. $column);
+            }
+        }
+
+        return $builder;
     }
 
     public function count($conditions)
@@ -107,11 +117,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function updateById($id, $fields)
     {
-        $timestampField = $this->getTimestampField('updated');
-        if ($timestampField) {
-            $fields[$timestampField] = time();
-        }
-
         $this->db()->update($this->table, $fields, array('id' => $id));
 
         return $this->get($id);
@@ -127,12 +132,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     {
         $builder = $this->createQueryBuilder($conditions)
             ->update($this->table, $this->table);
-
-        $timestampField = $this->getTimestampField('updated');
-
-        if ($timestampField) {
-            $fields[$timestampField] = time();
-        }
 
         foreach ($fields as $key => $value) {
             $builder
@@ -282,23 +281,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     {
         $start = (int) $start;
         $limit = (int) $limit;
-    }
-
-    private function getTimestampField($mode = null)
-    {
-        if (empty($this->timestamps)) {
-            return null;
-        }
-
-        if ('created' == $mode) {
-            return isset($this->timestamps[0]) ? $this->timestamps[0] : null;
-        }
-
-        if ('updated' == $mode) {
-            return isset($this->timestamps[1]) ? $this->timestamps[1] : null;
-        }
-
-        throw $this->createDaoException('mode error.');
     }
 
     private function createDaoException($message = '', $code = 0)

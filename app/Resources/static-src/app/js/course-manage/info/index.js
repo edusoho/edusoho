@@ -14,7 +14,7 @@ class courseInfo {
     if ($('#maxStudentNum-field').length > 0) {
       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
         $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
-      })
+      });
     }
     this.initValidator();
     this.checkBoxChange();
@@ -24,12 +24,12 @@ class courseInfo {
   }
 
   changeAudioMode() {
-    $('#audio-modal-id').on('change', "input[name='enableAudio']", function(){
-      let mode = $("#course-audio-mode").data('value');
+    $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function(){
+      let mode = $('#course-audio-mode').data('value');
       if (mode == 'notAllowed') {
         notify('info', Translator.trans('course.audio.enable.biz.user'));
-        $("[name='enableAudio']")[1].checked = true;
-        $("[name='enableAudio']")[0].checked = false;
+        $('[name=\'enableAudio\']')[1].checked = true;
+        $('[name=\'enableAudio\']')[0].checked = false;
       }
     });
   }
@@ -88,7 +88,7 @@ class courseInfo {
     });
 
     $.validator.addMethod(
-      "before",
+      'before',
       function (value, element, params) {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
@@ -99,7 +99,7 @@ class courseInfo {
     );
 
     $.validator.addMethod(
-      "after",
+      'after',
       function (value, element, params) {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
@@ -143,11 +143,11 @@ class courseInfo {
 
 new courseInfo();
 
-jQuery.validator.addMethod("max_year", function (value, element) {
+jQuery.validator.addMethod('max_year', function (value, element) {
   return this.optional(element) || value < 100000;
-}, Translator.trans("course.manage.max_year_error_hint"));
+}, Translator.trans('course.manage.max_year_error_hint'));
 
-jQuery.validator.addMethod("live_capacity", function (value, element) {
+jQuery.validator.addMethod('live_capacity', function (value, element) {
   const maxCapacity = parseInt($(element).data('liveCapacity'));
   if (value > maxCapacity) {
     const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });

@@ -8,7 +8,7 @@ const newNotificationModule = (api) => {
         type: 'GET',
       }, options));
     }
-  }
+  };
 };
 
 export default newNotificationModule;

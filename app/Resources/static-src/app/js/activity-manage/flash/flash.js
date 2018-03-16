@@ -37,7 +37,7 @@ export default class Flash {
   }
 
   initStep3Form() {
-    let $step3_form = $("#step3-form");
+    let $step3_form = $('#step3-form');
 
     let validator = $step3_form.validate({
       onkeyup: false,
@@ -64,7 +64,7 @@ export default class Flash {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
-      $("#step2-form").valid();
+      $('#step2-form').valid();
       $('[name="media"]').val(JSON.stringify(file));
       if(this.validator2) {
         this.validator2.form();

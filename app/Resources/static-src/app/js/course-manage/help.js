@@ -92,11 +92,11 @@ export const TaskListHeaderFixed = () => {
     return;
   }
   let headerTop = $header.offset().top;
-	$(window).scroll(function(event) {
-			if ($(window).scrollTop() >= headerTop) {
-				$header.addClass('fixed')
-			} else {
-				$header.removeClass('fixed');
-			}
-	});
+  $(window).scroll(function(event) {
+      if ($(window).scrollTop() >= headerTop) {
+        $header.addClass('fixed')
+      } else {
+        $header.removeClass('fixed');
+      }
+  });
 }

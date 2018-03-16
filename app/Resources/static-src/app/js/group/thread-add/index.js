@@ -8,15 +8,15 @@ new AttachmentActions($userThreadForm);
 let editor = CKEDITOR.replace(threadContent, {
   toolbar: 'Thread',
   fileSingleSizeLimit: app.fileSingleSizeLimit,
-  filebrowserImageUploadUrl: $("#" + threadContent).data('imageUploadUrl'),
+  filebrowserImageUploadUrl: $('#' + threadContent).data('imageUploadUrl'),
   allowedContent: true,
   height: 300
 });
 editor.on('change', () => {
-  $("#" + threadContent).val(editor.getData());
+  $('#' + threadContent).val(editor.getData());
 });
 editor.on('blur', () => {
-  $("#" + threadContent).val(editor.getData());
+  $('#' + threadContent).val(editor.getData());
 });
 
 let formValidator = $userThreadForm.validate({
@@ -38,7 +38,7 @@ $(groupThreadAddBtn).click(function(){
   if(formValidator.form()) {
     $userThreadForm.submit();
   }
-})
+});
 
 
 

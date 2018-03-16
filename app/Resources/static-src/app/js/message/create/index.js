@@ -12,7 +12,7 @@ let validator = $form.validate({
       maxlength: 500
     }
   }
-})
+});
 
 autocomplete({
   element: '#message_receiver',

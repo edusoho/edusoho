@@ -16,7 +16,7 @@ class Essay extends QuestionFormBase {
   init() {
     this.$answerField.rules('add', {
       required: true
-    })
+    });
 
     let editor = CKEDITOR.replace(this.answerFieldId, {
       toolbar: 'Minimal',

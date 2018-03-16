@@ -17,7 +17,7 @@ $form.validate({
     }
   },
   submitSuccess() {
-    notify('success', Translator.trans('site.save_success_hint'))
+    notify('success', Translator.trans('site.save_success_hint'));
     window.location.reload();
   }
-})
+});

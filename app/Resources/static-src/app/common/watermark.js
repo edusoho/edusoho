@@ -33,13 +33,13 @@
         '-ms-transform': rotate,
         '-o-transform': rotate,
         'transform': rotate,
-        'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"
+        'filter': 'progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod=\'auto expand\')'
       });
       $watermarkDiv.css(settings.style);
       if (IEversion >= 8 && IEversion < 9) {
         $watermarkDiv.css({
           'height': 60,
-          'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity=" + (parseFloat(settings.opacity) * 100) + ")"
+          'filter': 'progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod=\'auto expand\')progid:DXImageTransform.Microsoft.Alpha(opacity=' + (parseFloat(settings.opacity) * 100) + ')'
         });
       }
       $watermarkDiv.html(settings.contents);
@@ -87,22 +87,22 @@
     }
 
     function setOffsetByPosition() {
-      if (settings.xPosition == "left") {
+      if (settings.xPosition == 'left') {
         leftOffset = minLeftOffset;
       }
-      if (settings.xPosition == "center") {
+      if (settings.xPosition == 'center') {
         leftOffset = ($thiz.width() - $watermarkDiv.width()) / 2;
       }
-      if (settings.xPosition == "right") {
+      if (settings.xPosition == 'right') {
         leftOffset = ($thiz.width() - $watermarkDiv.width()) - minLeftOffset;
       }
-      if (settings.yPosition == "top") {
+      if (settings.yPosition == 'top') {
         topOffset = minTopOffset;
       }
-      if (settings.yPosition == "center") {
+      if (settings.yPosition == 'center') {
         topOffset = ($thiz.height() - $watermarkDiv.height()) / 2 + minTopOffset;
       }
-      if (settings.yPosition == "bottom") {
+      if (settings.yPosition == 'bottom') {
         topOffset = ($thiz.height() - $watermarkDiv.height() - minTopOffset);
       }
     }
@@ -120,7 +120,7 @@
       var rv = -1; // Return value assumes failure.
       if (navigator.appName == 'Microsoft Internet Explorer') {
         var ua = navigator.userAgent;
-        var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+        var re = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})');
         if (re.exec(ua) != null)
           rv = parseFloat(RegExp.$1);
       }

@@ -1,5 +1,5 @@
-import notify from "common/notify";
-import postal from "postal";
+import notify from 'common/notify';
+import postal from 'postal';
 
 export default class {
   constructor(url) {
@@ -17,7 +17,7 @@ export default class {
       this.channel.publish('back-to-list');
     });
 
-    this.$form.on('click', '.btn-primary', event => this.onSavePost(event))
+    this.$form.on('click', '.btn-primary', event => this.onSavePost(event));
   }
 
   onSavePost(event) {
@@ -28,37 +28,37 @@ export default class {
     }
 
     $.post(this.$form.attr('action'), this.$form.serialize())
-        .done((html) => {
-          this.$element.find('[data-role=post-list]').append(html);
-          const number = parseInt(this.$element.find('[data-role=post-number]').text());
-          this.$element.find('[data-role=post-number]').text(number + 1);
-          this.$form.find('textarea').val('');
-        })
-        .error(function (response) {
-          Notify.danger(response.error.message);
-        });
+      .done((html) => {
+        this.$element.find('[data-role=post-list]').append(html);
+        const number = parseInt(this.$element.find('[data-role=post-number]').text());
+        this.$element.find('[data-role=post-number]').text(number + 1);
+        this.$form.find('textarea').val('');
+      })
+      .error(function (response) {
+        notify('danger', response.error.message);
+      });
   }
 
   render() {
     $.get(this.url)
-        .done(html => {
-          this.$element.html(html);
+      .done(html => {
+        this.$element.html(html);
 
-          this.$form = this.$element.find('.post-form');
-          this.validator = this.$form.validate({
-            rules: {
-              'post[content]': 'required'
-            },
-            messages: {
-              'post[content]': Translator.trans('task.plugin_question_replay.content_required_error_hint')
-            }
-          });
+        this.$form = this.$element.find('.post-form');
+        this.validator = this.$form.validate({
+          rules: {
+            'post[content]': 'required'
+          },
+          messages: {
+            'post[content]': Translator.trans('task.plugin_question_replay.content_required_error_hint')
+          }
+        });
 
-          this.initEvent();
-        })
-        .fail(error => {
-          notify('danger', 'error')
-        })
+        this.initEvent();
+      })
+      .fail(() => {
+        notify('danger', 'error');
+      });
   }
 
   destroy() {

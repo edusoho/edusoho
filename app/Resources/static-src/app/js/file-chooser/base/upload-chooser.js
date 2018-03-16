@@ -7,7 +7,7 @@ export default class UploaderChooser extends Chooser {
     this.element = $(element);
     this._sdk = undefined;
     this._initSdk()
-        ._bindEvent();
+      ._bindEvent();
   }
 
   _initSdk() {

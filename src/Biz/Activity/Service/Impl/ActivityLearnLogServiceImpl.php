@@ -6,13 +6,14 @@ use Biz\BaseService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Dao\Impl\ActivityLearnLogDaoImpl;
 use Biz\Task\Service\TaskResultService;
+use AppBundle\Common\TimeMachine;
 
 class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLogService
 {
     public function createLog($activity, $eventName, $data)
     {
         if (!empty($data['lastTime'])) {
-            $data['learnedTime'] = time() - $data['lastTime'];
+            $data['learnedTime'] = TimeMachine::time() - $data['lastTime'];
         }
 
         $fields = array(
