@@ -136,8 +136,8 @@ class MaterialWidget {
         self.element.parent().prev().html(Translator.trans('material_lib.detail.content_title'));
         self.element.parent().append(resp);
 
-        if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
-          $(".nav.nav-tabs").lavaLamp();
+        if($('.nav.nav-tabs').length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+          $('.nav.nav-tabs').lavaLamp();
         }
 
         Select('#tags', 'remote');
@@ -186,7 +186,7 @@ class MaterialWidget {
       $('.js-manage-batch-btn').removeClass('hide');
       $('.js-upload-file-btn').removeClass('hide');
       let mode = this.model;
-      if (mode == "edit") {
+      if (mode == 'edit') {
         $('#material-lib-batch-btn-bar').show();
       }
     } else {
@@ -205,11 +205,11 @@ class MaterialWidget {
     let $target = $(event.currentTarget);
     $.get($target.data('url'), function(data) {
       if (data) {
-        $target.addClass("material-collection");
-        notify('success', Translator.trans('site.collect_cuccess_hint'))
+        $target.addClass('material-collection');
+        notify('success', Translator.trans('site.collect_cuccess_hint'));
       } else {
-        $target.removeClass("material-collection");
-        notify('success', Translator.trans('site.uncollect_cuccess_hint'))
+        $target.removeClass('material-collection');
+        notify('success', Translator.trans('site.uncollect_cuccess_hint'));
       }
     });
   }
@@ -217,7 +217,7 @@ class MaterialWidget {
     let self = this;
     let mode = self.model;
 
-    if(mode == "normal") {
+    if(mode == 'normal') {
       this.model = 'edit';
       let $target = $(event.currentTarget);
       $('#material-lib-batch-btn-bar').show();
@@ -241,7 +241,7 @@ class MaterialWidget {
     $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
       ids.push(this.value);
     });
-    if (ids == "") {
+    if (ids == '') {
       notify('danger', Translator.trans('meterial_lib.select_resource_delete_hint'));
       return;
     }
@@ -301,7 +301,7 @@ class MaterialWidget {
           notify('success', Translator.trans('meterial_lib.unshare_resource_success_hint'));
           self.renderTable();
         }
-      })
+      });
     }
   }
   onClickPagination(event) {
@@ -319,7 +319,7 @@ class MaterialWidget {
       url: $target.data('url'),
     }).done(function(response) {
       notify('success', Translator.trans('subtitle.status.success'));
-      $target.parents(".materials-list").replaceWith($(response));
+      $target.parents('.materials-list').replaceWith($(response));
     }).fail(function() {
       notify('danger', Translator.trans('subtitle.status.error'));
     }).always(function() {
@@ -343,7 +343,7 @@ class MaterialWidget {
       if (mode == 'edit' && attribute == 'mine') {
         $('#material-lib-batch-bar').show();
         $('#material-lib-items-panel').find('[data-role=batch-item]').show();
-        $("[data-role=batch-select]").attr("checked",false);
+        $('[data-role=batch-select]').attr('checked',false);
       } else if (mode == 'normal') {
         $('#material-lib-batch-bar').hide();
         $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
@@ -369,11 +369,11 @@ class MaterialWidget {
   }
   _fileShare(ids, url) {
     let self = this;
-    if (ids == "") {
+    if (ids == '') {
       notify('danger', Translator.trans('meterial_lib.select_share_resource_hint'));
       return;
     }
-    $.post(url, { "ids": ids }, function(data) {
+    $.post(url, { 'ids': ids }, function(data) {
       if (data) {
         notify('success', Translator.trans('meterial_lib.share_resource_success_hint'));
         self.renderTable();

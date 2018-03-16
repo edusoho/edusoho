@@ -1,6 +1,6 @@
 import wx from 'weixin-js-sdk';
 
-let $jweixin = $(".jweixin-data");
+let $jweixin = $('.jweixin-data');
 
 wx.config($jweixin.data('config'));
 

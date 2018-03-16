@@ -37,13 +37,13 @@ export default class List extends MultiInputList {
                 </a>
                 <input type="hidden" name={inputName} value={item.id} />
               </li>
-            )
+            );
           })
         }
       </ul>
-    )
+    );
   }
-};
+}
 
 List.contextTypes = {
   ...MultiInputList.contextTypes,

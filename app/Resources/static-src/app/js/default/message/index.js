@@ -1,4 +1,4 @@
-let $message = $("#page-message-container");
+let $message = $('#page-message-container');
 let gotoUrl = $message.data('goto');
 let duration = $message.data('duration');
 if (duration > 0 && gotoUrl) {

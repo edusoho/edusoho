@@ -25,8 +25,8 @@ $element.on('click', '.js-members-expand', (e) => {
   }
 });
 
-$element.on('click', '.js-members-collapse', (e) => {
+$element.on('click', '.js-members-collapse', () => {
   $('.js-join-members').fadeOut(500);
   $('.js-members-expand').show();
   $('.js-members-collapse').hide();
-})
+});

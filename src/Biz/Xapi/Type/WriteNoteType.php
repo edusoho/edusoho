@@ -8,34 +8,6 @@ class WriteNoteType extends Type
 {
     const TYPE = 'noted_note';
 
-    public function package($statement)
-    {
-        $note = $this->getCourseNoteService()->getNote($statement['target_id']);
-        $task = $this->getTaskService()->getTask($note['taskId']);
-        $course = $this->getCourseService()->getCourse($note['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($note['courseSetId']);
-        $course['description'] = $courseSet['subtitle'];
-        $course['title'] = $courseSet['title'].'-'.$course['title'];
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-
-        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
-        }
-
-        $object = array(
-            'id' => $activity['id'],
-            'course' => $course,
-            'definitionType' => $this->convertMediaType($task['type']),
-            'resource' => empty($resource) ? array() : $resource,
-        );
-
-        $actor = $this->getActor($statement['user_id']);
-
-        $result = $note;
-
-        return $this->createXAPIService()->writeNote($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
-    }
-
     public function packages($statements)
     {
         if (empty($statements)) {
@@ -46,38 +18,17 @@ class WriteNoteType extends Type
             $notes = $this->getCourseNoteService()->searchNotes(array('ids' => $noteIds), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
             $notes = ArrayToolkit::index($notes, 'id');
 
-            $taskIds = ArrayToolkit::column($notes, 'taskId');
-            $tasks = $this->getTaskService()->findTasksByIds($taskIds);
-            $tasks = ArrayToolkit::index($tasks, 'id');
+            $tasks = $this->findTasks(
+                array($notes, 'taskId')
+            );
 
-            $courseIds = ArrayToolkit::column($notes, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
+            $courses = $this->findCourses(
+                array($notes, 'courseId')
+            );
 
-            $courseSetIds = ArrayToolkit::column($notes, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
-
-            $activityIds = ArrayToolkit::column($tasks, 'activityId');
-            $activities = $this->getActivityService()->findActivities($activityIds, true);
-            $activities = ArrayToolkit::index($activities, 'id');
-            $resourceIds = array();
-            foreach ($activities as $activity) {
-                if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-                    if (!empty($activity['ext']['mediaId'])) {
-                        $resourceIds[] = $activity['ext']['mediaId'];
-                    }
-                }
-            }
-            $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
-            $resources = ArrayToolkit::index($resources, 'id');
+            list($activities, $resources) = $this->findActivities(
+                array($tasks, 'activityId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();

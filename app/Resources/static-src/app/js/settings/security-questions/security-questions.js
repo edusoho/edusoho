@@ -34,14 +34,14 @@ class SecurityQuestion {
 
     }).on('change', (value, text) => {
       this.changeOptions();
-    })
+    });
   }
 
   changeOptions() {
     this.selectOptions = [];
     [this.$q1, this.$q2, this.$q3].forEach((item) => {
       this.selectOptions.push(item.val());
-    })
+    });
   }
 
   validator() {
@@ -73,7 +73,7 @@ class SecurityQuestion {
       submitError(data) {
         notify('danger',  Translator.trans(data.responseJSON.message));
       }
-    })
+    });
   }
 }
 

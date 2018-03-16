@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\TestHandler;
+use Codeages\Biz\Framework\Dao\IdGenerator\OrderedTimeUUIDGenerator;
 
 class IntegrationTestCase extends TestCase
 {
@@ -111,6 +112,10 @@ class IntegrationTestCase extends TestCase
                 return new ArrayStorage();
             };
         }
+
+        $biz['dao.id_generator.uuid'] = function() {
+            return new OrderedTimeUUIDGenerator();
+        };
 
         $biz['logger.test_handler'] = function () {
             return new TestHandler();

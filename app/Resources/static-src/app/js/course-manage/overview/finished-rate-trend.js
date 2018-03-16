@@ -37,10 +37,10 @@ export default class FinishedRateTrend {
 
     let self = this;
     $.ajax({
-      type: "GET",
+      type: 'GET',
       beforeSend: function(request) {
-        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+        request.setRequestHeader('Accept', 'application/vnd.edusoho.v2+json');
+        request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
       },
       data: {startDate: startDate, endDate: endDate},
       url: '/api/course/' + this.courseId + '/report/completion_rate_trend',
@@ -80,7 +80,7 @@ export default class FinishedRateTrend {
           + 'border-radius:10px;width:9px;height:9px;background-color:' + params[i].color + '"></span>'
           + params[i].seriesName + ' ' + params[i].value + (i === 1 ? '%' : '') + '</br>';
         html += circle;
-      };
+      }
       return html;
     }
 
@@ -100,7 +100,7 @@ export default class FinishedRateTrend {
         data: [
           {name:Translator.trans('course_manage.course_dashboard.finish_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
           {name:Translator.trans('course_manage.course_dashboard.finish_rate'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
-          ],
+        ],
         itemWidth: 8,
         itemHeight: 8,
         left: '80'
@@ -162,32 +162,32 @@ export default class FinishedRateTrend {
           nameGap: 20
         },
         {
-            name: Translator.trans('course_manage.course_dashboard.finish_rate'),
-            min: 0,
-            minInterval: 1,
-            max: 100,
-            type: 'value',
-            boundaryGap: ['0%', '20%'],
-            axisLabel: {
-                textStyle: {
-                    color: '#9b9b9b'
-                },
-                formatter: '{value}%',
-                margin: 15,
+          name: Translator.trans('course_manage.course_dashboard.finish_rate'),
+          min: 0,
+          minInterval: 1,
+          max: 100,
+          type: 'value',
+          boundaryGap: ['0%', '20%'],
+          axisLabel: {
+            textStyle: {
+              color: '#9b9b9b'
             },
-            splitLine: {
-              show: false,
-              lineStyle: {
-                  color: '#f5f5f5'
-              }
-            },
-            axisLine: {
-                show: false
-            },
-            axisTick: {
-                show: false
-            },
-            nameGap: 20
+            formatter: '{value}%',
+            margin: 15,
+          },
+          splitLine: {
+            show: false,
+            lineStyle: {
+              color: '#f5f5f5'
+            }
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          nameGap: 20
         }
       ],
       series: [

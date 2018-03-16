@@ -32,7 +32,7 @@ export default class VideoPlay {
   _playerSwf() {
     const swf_dom = 'swf-player';
     swfobject.embedSWF($('#' + swf_dom).data('url'),
-      swf_dom, '100%', '100%', "9.0.0", null, null, {
+      swf_dom, '100%', '100%', '9.0.0', null, null, {
         wmode: 'opaque',
         allowFullScreen: 'true'
       });
@@ -46,21 +46,21 @@ export default class VideoPlay {
       type: 'parent'
     });
 
-    messenger.on("ended", (msg) => {
+    messenger.on('ended', (msg) => {
       this.player.playing = false;
       this._onFinishLearnTask(msg);
     });
 
-    messenger.on("playing", (msg) => {
+    messenger.on('playing', (msg) => {
       this.player.playing = true;
     });
 
-    messenger.on("paused", (msg) => {
+    messenger.on('paused', (msg) => {
       this.player.playing = false;
       this.recorder.watching(this.emitter);
     });
 
-    messenger.on("timechange", (msg) => {
+    messenger.on('timechange', (msg) => {
       this.player.currentTime = msg.currentTime;
     });
   }

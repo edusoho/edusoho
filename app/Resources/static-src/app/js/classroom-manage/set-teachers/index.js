@@ -13,5 +13,5 @@ ReactDOM.render(<PersonaMultiInput
   inputName = "teacherIds[]"
   dataSource = { $('#classroom-manage-set-teachers').data('teachers') }
   showAddBtnGroup = { false }/>,
-  document.getElementById('classroom-manage-set-teachers')
+document.getElementById('classroom-manage-set-teachers')
 );

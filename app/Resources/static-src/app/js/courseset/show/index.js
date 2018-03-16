@@ -176,7 +176,7 @@ function initTaskLearnChart() {
 
 function triggerMemberExpired() {
   if ($('.member-expire').length) {
-    $(".member-expire a").trigger('click');
+    $('.member-expire a').trigger('click');
   }
 }
 

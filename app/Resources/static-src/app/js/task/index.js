@@ -12,14 +12,14 @@ if (Browser.ie10 || Browser.ie11 || Browser.edge) {
   iframeDom.onload = () => {
     const iframeContent = iframeDom.contentWindow;
     const iframeHtml = iframeContent.document.getElementsByTagName('html')[0];
-    iframeHtml.style.width = "100%";
-  }
+    iframeHtml.style.width = '100%';
+  };
 }
 
 let $adBtn = $('.js-audio-convert-ad');
 if ($adBtn.length > 0) {
   $adBtn.on('click', function(event) {
-    Cookies.set($adBtn.data('cookie'), 'true', {expires: 360, path: "/"});
+    Cookies.set($adBtn.data('cookie'), 'true', {expires: 360, path: '/'});
     $adBtn.parents('.js-audio-convert-box').remove();
   });
 }

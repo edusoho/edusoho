@@ -24,7 +24,7 @@ class OrderSms {
       element: smsSend,
       url: $(smsSend).data('url'),
       smsType: 'sms_user_pay',
-    })
+    });
   }
 
   initValidator() {

@@ -8,6 +8,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 class ActivityServiceTest extends BaseTestCase
 {
@@ -147,10 +148,11 @@ class ActivityServiceTest extends BaseTestCase
                 ),
             )
         );
+        TimeMachine::setMockedTime(time());
         $data = array(
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
-            'lastTime' => time() - 60,
+            'lastTime' => TimeMachine::time() - 60,
             'events' => array(),
         );
 
@@ -181,10 +183,11 @@ class ActivityServiceTest extends BaseTestCase
                 ),
             )
         );
+        TimeMachine::setMockedTime(time());
         $data = array(
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
-            'lastTime' => time() - 60,
+            'lastTime' => TimeMachine::time() - 60,
             'events' => array(
                 'watching' => array('watchTime' => 120),
             ),
@@ -208,10 +211,11 @@ class ActivityServiceTest extends BaseTestCase
     public function testTriggerFinish()
     {
         $savedTask = $this->handleTriggerData();
+        TimeMachine::setMockedTime(time());
         $data = array(
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
-            'lastTime' => time() - 60,
+            'lastTime' => TimeMachine::time() - 60,
             'events' => array(
                 'finish' => array('data' => array('stop' => true)),
             ),

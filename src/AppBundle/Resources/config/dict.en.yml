@@ -368,6 +368,7 @@ processStatus:
     none: Not Start
     waiting: Waiting
     processing: Processing
+    doing: Doing
     ok: Success
     error: Error
 

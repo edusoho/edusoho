@@ -16,7 +16,7 @@ export default class CaptchaModal {
   }
   changeCaptcha(e) {
     var $code = $(e.currentTarget);
-    $code.attr("src", $code.data("url") + "?" + Math.random());
+    $code.attr('src', $code.data('url') + '?' + Math.random());
   }
 
   submitForm() {
@@ -63,7 +63,7 @@ export default class CaptchaModal {
             $('.js-sms-send').off('click');
           } else {
             this._captchaValidated = false;
-            this.$element.find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
+            this.$element.find('#getcode_num').attr('src', $('#getcode_num').data('url') + '?' + Math.random());
             this.$element.find('.help-block').html('<span class="color-danger">' + Translator.trans('auth.mobile_captcha_error_hint') + '</span>');
             this.$element.find('.help-block').show();
           }

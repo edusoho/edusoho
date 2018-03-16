@@ -59,7 +59,7 @@ export default class PersonaMultiInput extends MultiInput {
     }
   }
 
-  onChecked=(event)=> {
+  onChecked = (event)=> {
     let id = event.currentTarget.value;
     updateChecked(this.state.dataSourceUi,id);
     this.setState({

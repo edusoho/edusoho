@@ -1,5 +1,6 @@
 import DateRangePicker from 'app/common/daterangepicker';
-import Emitter from "component-emitter";
+import Emitter from 'component-emitter';
+import 'moment';
 
 export default class CourseOverviewDateRangePicker extends Emitter {
 
@@ -31,7 +32,7 @@ export default class CourseOverviewDateRangePicker extends Emitter {
 
       now.setDate(now.getDate() - days + 1);
       self.$drp.data('daterangepicker').setStartDate(now);
-	    self.emit('date-picked', {startDate:self.getStartDate(), endDate:self.getEndDate()});
+      self.emit('date-picked', {startDate:self.getStartDate(), endDate:self.getEndDate()});
     });
 
   }
