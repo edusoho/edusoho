@@ -27,6 +27,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.lesson.unpublish' => array('onPublishLessonNumberChange', -100),
             'course.lesson.create' => array('onLessonNumberChange', -100),
             'course.lesson.delete' => array('onLessonNumberChange', -100),
+            'course.lesson.setOptional' => array('onLessonOptionalChange', -100),
 
             'course.thread.create' => 'onCourseThreadChange',
             'course.thread.delete' => 'onCourseThreadChange',
@@ -124,6 +125,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $course = $event->getSubject();
 
         $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('ratingNum', 'noteNum', 'studentNum', 'materialNum'));
+    }
+
+    public function onLessonOptionalChange(Event $event)
+    {
+        $lesson = $event->getSubject();
+
+        $this->getCourseService()->updateCourseStatistics($lesson['courseId'], array('compulsoryTaskNum'));
     }
 
     protected function onTaskNumberChange(Event $event, $fields)

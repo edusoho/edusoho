@@ -40,6 +40,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.lesson.publish' => 'onCourseChapterUpdate',
             'course.lesson.unpublish' => 'onCourseChapterUpdate',
             'course.lesson.delete' => 'onCourseChapterDelete',
+            'course.lesson.setOptional' => 'onCourseChapterUpdate',
             //同步新建的任务时同步新增material记录即可，这里无需处理
             // 'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
