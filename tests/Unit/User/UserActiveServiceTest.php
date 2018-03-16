@@ -61,8 +61,8 @@ class UserActiveServiceTest extends BaseTestCase
         $this->mockBiz('Session:OnlineService', array(
             array(
                 'functionName' => 'saveOnline',
-                'returnValue' => 1
-            )
+                'returnValue' => 1,
+            ),
         ));
         $this->getUserActiveService()->saveOnline(array('user_id' => 1900));
         $result = $this->getUserActiveDao()->getByUserId(1900);
@@ -77,6 +77,7 @@ class UserActiveServiceTest extends BaseTestCase
     {
         return $this->createDao('User:UserActiveDao');
     }
+
     /**
      * @return \Biz\User\Service\UserActiveService
      */
