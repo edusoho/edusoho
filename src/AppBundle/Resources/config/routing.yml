@@ -1306,10 +1306,6 @@ open_course_draft_create:
    path:  /open/course/draft/create
    defaults: { _controller: AppBundle:OpenCourseLessonManage:draftCreate }
 
-open_course_manage_picture:
-    path:  /open/course/{id}/manage/picture
-    defaults: { _controller: AppBundle:OpenCourseManage:picture }
-
 open_course_manage_picture_crop:
     path:  /open/course/{id}/manage/picture/crop
     defaults: { _controller: AppBundle:OpenCourseManage:pictureCrop }

@@ -1,4 +1,5 @@
 import EsImageCrop from 'common/es-image-crop.js';
+import notify from 'common/notify';
 
 class CoverCrop {
   constructor() {
@@ -13,15 +14,26 @@ class CoverCrop {
     });
 
     imageCrop.afterCrop = function(response) {
-      let url = $("#upload-picture-btn").data("url");
-      console.log('afterCrop');
-      $.post(url, { images: response}, function() {
-        console.log($("#upload-picture-btn").data("gotoUrl"));
-        document.location.href = $("#upload-picture-btn").data("gotoUrl");
+      let $saveBtn = $('.crop-picture-save-btn');
+      let url = $saveBtn.data('url');
+
+      $.post(url, { images: JSON.stringify(response) })
+      .success((response) => {
+        if (response.code) {
+          $('#course-form').find('img').attr('src', response.cover);
+          $('#modal').modal('hide');
+        } else {
+          notify('danger',Translator.trans('upload_fail_retry_hint'));
+          $saveBtn.button('reset');
+        }
+      })
+      .error((response) => {
+        notify('danger',Translator.trans('upload_fail_retry_hint'));
+        $saveBtn.button('reset');
       });
     };
 
-    $("#upload-picture-btn").click(function(event) {
+    $(".crop-picture-save-btn").click(function(event) {
       $(event.currentTarget).button('loading');
       event.stopPropagation();
       imageCrop.crop({
@@ -33,12 +45,7 @@ class CoverCrop {
       });
 
     })
-
-    $('.go-back').click(function() {
-      history.go(-1);
-    });
   }
 }
-
 
 new CoverCrop();
