@@ -358,7 +358,6 @@ class LessonServiceTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
-
     public function testFindLessonsByCourseId()
     {
         $this->mockBiz('Course:CourseChapterDao', array(
@@ -373,7 +372,7 @@ class LessonServiceTest extends BaseTestCase
         $this->assertEquals(2, count($result));
         $this->assertEquals('lesson', $result[0]['type']);
     }
-    
+
     public function testGetLessonLimitNum()
     {
         $count = $this->getCourseLessonService()->getLessonLimitNum();
