@@ -21,4 +21,6 @@ interface LessonService
     public function isLessonCountEnough($courseId);
 
     public function getLessonLimitNum();
+
+    public function findLessonsByCourseId($courseId);
 }

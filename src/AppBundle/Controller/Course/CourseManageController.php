@@ -117,6 +117,8 @@ class CourseManageController extends BaseController
         }
 
         $default = $this->getSettingService()->get('default', array());
+        $lessons = $this->getCourseLessonService()->findLessonsByCourseId($courseId);
+        $lessons = ArrayToolkit::index($lessons, 'id');
 
         return $this->render(
             'course-manage/live-replay/index.html.twig',
@@ -125,6 +127,7 @@ class CourseManageController extends BaseController
                 'course' => $course,
                 'tasks' => $liveTasks,
                 'default' => $default,
+                'lessons' => $lessons,
             )
         );
     }
@@ -1266,5 +1269,10 @@ class CourseManageController extends BaseController
     protected function getActivityConfig()
     {
         return $this->get('extension.manager')->getActivities();
+    }
+
+    protected function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 }

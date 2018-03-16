@@ -344,6 +344,21 @@ class LessonServiceTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
+    public function testFindLessonsByCourseId()
+    {
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'findLessonsByCourseId',
+                'returnValue' => array(array('id' => 1, 'type' => 'lesson'), array('id' => 2, 'type' => 'lesson')),
+            ),
+        ));
+
+        $result = $this->getCourseLessonService()->findLessonsByCourseId(1);
+
+        $this->assertEquals(2, count($result));
+        $this->assertEquals('lesson', $result[0]['type']);
+    }
+
     private function mockCourseManage()
     {
         $this->mockBiz('Course:CourseService', array(

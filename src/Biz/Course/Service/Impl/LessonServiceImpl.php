@@ -165,6 +165,11 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
     }
 
+    public function findLessonsByCourseId($courseId)
+    {
+        return $this->getCourseChapterDao()->findLessonsByCourseId($courseId);
+    }
+
     protected function unpublishTasks($lessonId)
     {
         $tasks = $this->getTaskService()->findTasksByChapterId($lessonId);
