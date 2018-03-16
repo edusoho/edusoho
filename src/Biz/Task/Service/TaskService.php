@@ -224,4 +224,6 @@ interface TaskService
     public function getTodayLiveCourseNumber();
 
     public function countTasksByChpaterId($chapterId);
+
+    public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0);
 }

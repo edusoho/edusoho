@@ -1747,6 +1747,16 @@ course_manage_lesson_delete:
     path:  /course/{courseId}/manage/lesson/{lessonId}/delete
     defaults: { _controller: AppBundle:Course/LessonManage:delete }
 
+course_manage_lesson_set_optional:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/setoptional
+    defaults: { _controller: AppBundle:Course/LessonManage:setOptional }
+    methods: [POST]
+
+course_manage_lesson_unset_optional:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unsetoptional
+    defaults: { _controller: AppBundle:Course/LessonManage:unsetOptional }
+    methods: [POST]
+
 course_manage_change_lesson_show_status:
     path:  /course/{courseId}/manage/change/lesson/show/status
     defaults: { _controller: AppBundle:Course/CourseManage:showPublish }

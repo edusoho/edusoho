@@ -1058,6 +1058,29 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $liveCourseNumber;
     }
 
+    public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0)
+    {
+        $lesson = $this->getCourseLessonService()->getLesson($lessonId);
+
+        if (empty($lesson) || $lesson['type'] != 'lesson') {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $this->getCourseService()->tryManageCourse($lesson['courseId']);
+
+        $tasks = $this->findTasksByChapterId($lessonId);
+
+        foreach ($tasks as $task) {
+            $newTask = $this->getTaskDao()->update($task['id'], array('isOptional' => $isOptional));
+
+            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})的选修状态", array(
+                'oldTask' => $task,
+                'task' => $newTask,
+            ));
+            $this->dispatchEvent('course.task.updateOptional', new Event($newTask, $task));
+        }
+    }
+
     /**
      * @return TaskDao
      */
@@ -1228,5 +1251,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    protected function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 }

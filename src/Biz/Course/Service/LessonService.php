@@ -4,6 +4,8 @@ namespace Biz\Course\Service;
 
 interface LessonService
 {
+    public function getLesson($lessonId);
+
     public function countLessons($conditions);
 
     public function createLesson($fields);
@@ -23,4 +25,8 @@ interface LessonService
     public function getLessonLimitNum();
 
     public function findLessonsByCourseId($courseId);
+
+    public function setOptional($courseId, $lessonId);
+
+    public function unsetOptional($courseId, $lessonId);
 }
