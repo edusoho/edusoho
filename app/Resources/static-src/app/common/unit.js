@@ -43,3 +43,7 @@ export const dateFormat = (fmt) => {
     return fmt;         
   };       
 };
+
+export const numberConvertLetter = (number) =>  {
+  return String.fromCharCode(number + 64);
+};

@@ -225,8 +225,12 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
-            $currentUser['isSecure'] = $this->request->isSecure();
+            $currentUser = array(
+                'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
+                'isSecure' => $this->request->isSecure(),
+                'invitedCode' => $container->get('session')->get('invitedCode', ''),
+            );
+            $currentUser = new \Biz\User\AnonymousUser($currentUser);
 
             $biz['user'] = $currentUser;
             $serviceKernel

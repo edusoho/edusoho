@@ -10,6 +10,8 @@ interface XapiService
 
     public function getStatement($id);
 
+    public function deleteStatement($id);
+
     public function updateStatementsPushedByStatementIds($statementIds);
 
     public function updateStatementsPushingByStatementIds($statementIds);

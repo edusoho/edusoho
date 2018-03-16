@@ -36,41 +36,6 @@ class RewardPoint extends Migration
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分帐目流水';
-
-            CREATE TABLE `reward_point_product` (
-              `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `title` varchar(60) NOT NULL DEFAULT '' COMMENT '商品名称',
-              `img` varchar(255) NOT NULL DEFAULT '' COMMENT '图片',
-              `price` float(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
-              `about` text COMMENT '简介',
-              `requireConsignee` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '需要收货人',
-              `requireTelephone` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '需要联系电话',
-              `requireEmail` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '需要邮箱',
-              `requireAddress` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '需要地址',
-              `status` varchar(32) DEFAULT 'draft' COMMENT '商品状态  draft|published',
-              `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-              `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
-            CREATE TABLE `reward_point_product_order` (
-              `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `sn` varchar(60) NOT NULL DEFAULT '' COMMENT '订单号',
-              `productId` int(10) UNSIGNED NOT NULL COMMENT '商品Id',
-              `title` varchar(60) NOT NULL DEFAULT '' COMMENT '订单名称',
-              `price` float(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
-              `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
-              `consignee` varchar(128) NOT NULL DEFAULT '' COMMENT '收货人',
-              `telephone` varchar(20) NOT NULL DEFAULT '' COMMENT '联系电话',
-              `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
-              `address` varchar(255) NOT NULL DEFAULT '' COMMENT '需要地址',
-              `sendTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-              `message` varchar(100) NOT NULL DEFAULT '' COMMENT '发货留言',
-              `status` varchar(32) DEFAULT 'created' COMMENT '发货状态  created|sending|finished',
-              `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-              `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
 
         $biz['db']->exec("
@@ -88,8 +53,6 @@ class RewardPoint extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_account`;');
         $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_account_flow`;');
-        $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_product`;');
-        $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_product_order`;');
         $biz['db']->exec('ALTER TABLE `course_v8` DROP COLUMN `taskRewardPoint`, DROP COLUMN `rewardPoint`;');
     }
 }

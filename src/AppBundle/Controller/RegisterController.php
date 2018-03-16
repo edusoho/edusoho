@@ -131,24 +131,33 @@ class RegisterController extends BaseController
             }
         }
 
-        $inviteCode = '';
-        $inviteUser = array();
+        // invitedCode这里为 被邀请码
+        $invitedCode = $this->setInviteCode($request);
+        $inviteUser = empty($invitedCode) ? array() : $this->getUserService()->getUserByInviteCode($invitedCode);
 
-        if (!empty($fields['inviteCode'])) {
-            $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
-        }
-
-        if (!empty($inviteUser)) {
-            $inviteCode = $fields['inviteCode'];
+        if ($this->getWebExtension()->isWechatLoginBind()) {
+            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
         }
 
         return $this->render('register/index.html.twig', array(
-            'inviteCode' => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort' => array(),
             'inviteUser' => $inviteUser,
             '_target_path' => $this->getTargetPath($request),
         ));
+    }
+
+    private function setInviteCode($request)
+    {
+        // invitedCode这里为 被邀请码
+        $invitedCode = $request->query->get('inviteCode', '');
+        $inviteSetting = $this->getSettingService()->get('invite');
+        if (empty($inviteSetting['invite_code_setting'])) {
+            $invitedCode = '';
+        }
+        $this->get('session')->set('invitedCode', $invitedCode);
+
+        return $invitedCode;
     }
 
     public function successAction(Request $request)

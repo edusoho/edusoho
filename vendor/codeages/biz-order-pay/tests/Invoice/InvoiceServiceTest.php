@@ -8,7 +8,7 @@ class InvoiceServiceTest extends IntegrationTestCase
     {
         parent::setUp();
         $currentUser = array(
-            'id' => 1,
+            'id' => 1
         );
         $this->biz['user'] = $currentUser;
     }
@@ -26,7 +26,7 @@ class InvoiceServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testApplyInvoiceWithWrongMoney()
     {
@@ -37,20 +37,20 @@ class InvoiceServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testApplyInvoiceWithWrongUser()
     {
         $mockInvoice = $this->mockInvoice();
         $this->biz['user'] = array(
-            'id' => 2,
+            'id' => 2
         );
 
         $invoice = $this->getInvoiceService()->applyInvoice($mockInvoice);
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testApplyInvoiceWithOrderInvoiced()
     {
@@ -78,7 +78,7 @@ class InvoiceServiceTest extends IntegrationTestCase
 
         $result = $this->getInvoiceService()->finishInvoice($invoice['id'], array(
             'post_number' => 'foo',
-            'review_comment' => 'bar',
+            'review_comment' => 'bar'
         ));
 
         $this->assertEquals($mockInvoice['title'], $result['title']);
@@ -123,7 +123,7 @@ class InvoiceServiceTest extends IntegrationTestCase
             'phone' => '15700081111',
             'receiver' => 'tinyyywood',
             'orderIds' => $order['id'],
-            'money' => $order['pay_amount'] / 100,
+            'money' => $order['pay_amount']/100,
         );
     }
 
@@ -146,22 +146,22 @@ class InvoiceServiceTest extends IntegrationTestCase
                 'target_id' => 1,
                 'target_type' => 'course',
                 'create_extra' => array(
-                    'xxx' => 'xxx',
+                    'xxx' => 'xxx'
                 ),
                 'deducts' => array(
                     array(
                         'deduct_id' => 1,
                         'deduct_type' => 'discount',
                         'deduct_amount' => 10,
-                        'detail' => '打折活动扣除10元',
+                        'detail' => '打折活动扣除10元'
                     ),
                     array(
                         'deduct_id' => 2,
                         'deduct_type' => 'coupon',
                         'deduct_amount' => 8,
-                        'detail' => '使用优惠码扣除8元',
-                    ),
-                ),
+                        'detail' => '使用优惠码扣除8元'
+                    )
+                )
             ),
             array(
                 'title' => 'F1驾驶技术',
@@ -170,23 +170,23 @@ class InvoiceServiceTest extends IntegrationTestCase
                 'target_id' => 2,
                 'target_type' => 'course',
                 'create_extra' => array(
-                    'xxx' => 'xxx',
+                    'xxx' => 'xxx'
                 ),
                 'deducts' => array(
                     array(
                         'deduct_id' => 3,
                         'deduct_type' => 'discount',
                         'deduct_amount' => 10,
-                        'detail' => '打折活动扣除10元',
+                        'detail' => '打折活动扣除10元'
                     ),
                     array(
                         'deduct_id' => 5,
                         'deduct_type' => 'coupon',
                         'deduct_amount' => 4,
-                        'detail' => '使用优惠码扣除4元',
-                    ),
-                ),
-            ),
+                        'detail' => '使用优惠码扣除4元'
+                    )
+                )
+            )
         );
     }
 
@@ -194,16 +194,16 @@ class InvoiceServiceTest extends IntegrationTestCase
     {
         return array(
             'title' => '购买商品',
-            'callback' => array('url' => 'http://try6.edusoho.cn/'),
+            'callback' => array('url'=>'http://try6.edusoho.cn/'),
             'source' => 'custom',
             'price_type' => 'coin',
             'user_id' => $this->biz['user']['id'],
             'created_reason' => '购买',
             'create_extra' => array(
-                'xxx' => 'xxx',
+                'xxx' => 'xxx'
             ),
             'device' => 'wap',
-            'expired_refund_days' => 5,
+            'expired_refund_days' => 5
         );
     }
 
