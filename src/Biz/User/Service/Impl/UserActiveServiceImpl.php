@@ -5,7 +5,6 @@ namespace Biz\User\Service\Impl;
 use Biz\BaseService;
 use Biz\User\Service\UserActiveService;
 use Biz\User\Dao\Impl\UserActiveDaoImpl;
-use Symfony\Component\Filesystem\Filesystem;
 
 class UserActiveServiceImpl extends BaseService implements UserActiveService
 {
@@ -39,6 +38,7 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
         $record = $this->getActiveUserDao()->create($activeUserLog);
 
         $this->dispatch('user.daily.active', $record);
+
         return $record;
     }
 
