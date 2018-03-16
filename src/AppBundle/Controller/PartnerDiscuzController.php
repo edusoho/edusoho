@@ -6,7 +6,6 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Common\RegisterTypeUtils;
 
 class PartnerDiscuzController extends BaseController
 {
@@ -107,7 +106,7 @@ class PartnerDiscuzController extends BaseController
 
             $user = $this->getUserService()->register(
                 $registration,
-                RegisterTypeUtils::getRegisterTypes($registration)
+                $this->getBiz()['user.register.type.toolkit']->getRegisterTypes($registration)
             );
         } else {
             $user = $this->getUserService()->getUser($bind['toId']);

@@ -6,6 +6,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
+use Biz\User\Register\Common\DistributorCookieToolkit;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -159,7 +160,10 @@ class LoginController extends LoginBindController
             $this->register($request);
             $this->authenticatedOauthUser();
 
-            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
+            $response = $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
+            $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+
+            return $response;
         } else {
             $oauthUser->captchaEnabled = true;
             if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
@@ -226,7 +230,12 @@ class LoginController extends LoginBindController
             $registerFields['email'] = $this->getUserService()->generateEmail($registerFields);
         }
 
-        $this->getUserService()->register($registerFields, array($oauthUser->accountType, 'binder'));
+        $registerFields = DistributorCookieToolkit::setCookieTokenToFields($request, $registerFields);
+
+        $this->getUserService()->register(
+            $registerFields,
+            $this->getBiz()['user.register.type.toolkit']->getThirdPartyRegisterTypes($oauthUser->accountType, $registerFields)
+        );
     }
 
     /**
