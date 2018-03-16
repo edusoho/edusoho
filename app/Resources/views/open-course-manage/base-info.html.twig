@@ -60,6 +60,29 @@ tagMatchUrl: path('tag_match')
           </div>
         </div>
 
+        <div class="form-group clearfix">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <p class="help-block">{{ 'my.teaching.open_course.course_picture.title.help_block'|trans|raw }}<strong>{{'2MB'|trans}}</strong>。</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <a
+            id="upload-picture-btn"
+            class="btn btn-fat btn-primary upload-picture-btn"
+            data-upload-token="{{ upload_token('tmp', 'image') }}"
+            data-goto-url="{{path('open_course_manage_picture_crop', {id:course.id})}}"
+            >{{'form.btn.picture_crop'|trans}}</a>
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="col-md-offset-2 col-md-8 controls">
             <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">{{ 'form.btn.save'|trans }}</button>

@@ -131,6 +131,20 @@ class LessonManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function setOptionalAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseLessonService()->setOptional($courseId, $lessonId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function unsetOptionalAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseLessonService()->unsetOptional($courseId, $lessonId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
     private function createTaskByFileAndCourse($file, $course)
     {
         $task = array(

@@ -1729,6 +1729,8 @@ course.plan_task.activity_manage.modify: 修改任务
 
 course.lesson: 课时
 course.manage.create_lesson: 添加课时
+course.lesson_manage.set_optional: 设置选修
+course.lesson_manage.unset_optional: 设置必修
 
 # activity-活动
 course.plan_task.activity_manage.finished_condition: 完成条件

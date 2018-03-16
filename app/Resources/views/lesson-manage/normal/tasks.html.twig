@@ -5,9 +5,7 @@
   <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
     <div class="item-content js-item-content text-overflow">
       <i class="es-icon {{ activity_metas(activity.mediaType).icon }} mrs" data-role="task"></i>
-      {% if task.isOptional %}
-        <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
-      {% else %}
+      {% if not task.isOptional %}
         {{'course.activity'|trans}}<span class="number mls">{{ task.number }}</span>：
       {% endif %}
       {{ task.title|sub_text(30) }}

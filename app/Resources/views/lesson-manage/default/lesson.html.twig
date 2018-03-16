@@ -11,9 +11,9 @@
         {% endif %}">
          {{'course.plan_task.task_unpublished'|trans}}
       </span>
-      {% if task.isOptional == 1 %}
-        <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
-      {% else %}
+      
+      <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not task.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
+      {% if not task.isOptional %}
         {{'course.lesson'|trans}}<span class="number mls">{{ lesson.number }}</span>：
       {% endif %}
       {{ lesson.title|sub_text(30) }}
