@@ -304,9 +304,8 @@ export default class Manage {
       $.post($this.data('url'), function (data) {   
         let $parentLi = $this.closest('.task-manage-item');
 
-        $parentLi.find('.js-unset-optional').removeClass('hidden');
+        $parentLi.find('.js-unset-optional,.js-lesson-option-tag').removeClass('hidden');
         $parentLi.find('.js-set-optional').addClass('hidden');
-        $parentLi.find('.js-lesson-option-tag').removeClass('hidden');
 
         self.sortList();
         notify('success', Translator.trans('site.save_success_hint'));
@@ -319,9 +318,8 @@ export default class Manage {
       $.post($(event.target).data('url'), function (data) {
         let $parentLi = $(event.target).closest('.task-manage-item');
      
-        $parentLi.find('.js-unset-optional').addClass('hidden');
+        $parentLi.find('.js-unset-optional,.js-lesson-option-tag').addClass('hidden');
         $parentLi.find('.js-set-optional').removeClass('hidden');
-        $parentLi.find('.js-lesson-option-tag').addClass('hidden');
 
         self.sortList();
         notify('success', Translator.trans('site.save_success_hint'));
