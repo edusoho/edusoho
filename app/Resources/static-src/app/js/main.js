@@ -7,7 +7,7 @@ import 'common/card';
 import 'common/bootstrap-modal-hack';
 import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
-import notify from "common/notify";
+import notify from 'common/notify';
 import './alert';
 
 let rpn = new RewardPointNotify();
@@ -22,8 +22,8 @@ if ($('#rewardPointNotify').length > 0) {
   let message = $('#rewardPointNotify').text();
   if (message) {
     notify('success', decodeURIComponent(message));
-  };
-};
+  }
+}
 
 $('[data-toggle="popover"]').popover({
   html: true
@@ -45,10 +45,10 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 
   if (error.name === 'Unlogin') {
     let ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/micromessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+    if (ua.match(/micromessenger/i) == 'micromessenger' && $('meta[name=is-open]').attr('content') != 0) {
       window.location.href = '/login/bind/weixinmob?_target_path=' + location.href;
     } else {
-      let $loginModal = $("#login-modal");
+      let $loginModal = $('#login-modal');
       $('.modal').modal('hide');
       $loginModal.modal('show');
       $.get($loginModal.data('url'), function (html) {
@@ -71,7 +71,7 @@ $(document).ajaxSend(function (a, b, c) {
 
     let loadingBox = $($dom.data('target') || $dom);
     loadingBox.html(loading);
-  };
+  }
 
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
@@ -115,25 +115,25 @@ $('.js-search').focus(function () {
   $(this).prop('placeholder', Translator.trans('site.search_hint')).removeClass('active');
 });
 
-$("select[name='language']").change(function () {
-  Cookies.set("locale", $('select[name=language]').val(), { 'path': '/' });
-  $("select[name='language']").parents('form').trigger('submit');
+$('select[name=\'language\']').change(function () {
+  Cookies.set('locale', $('select[name=language]').val(), { 'path': '/' });
+  $('select[name=\'language\']').parents('form').trigger('submit');
 });
 
 let eventPost = function($obj) {
-    let postData = $obj.data();
-    $.post($obj.data('url'), postData)
-}
+  let postData = $obj.data();
+  $.post($obj.data('url'), postData);
+};
 
 $('.event-report').each(function(){
-    (function($obj){
-        eventPost($obj);
-    })($(this));
-})
+  (function($obj){
+    eventPost($obj);
+  })($(this));
+});
 
 $('body').on('event-report', function(e, name){
-    let $obj = $(name);
-    eventPost($obj);
-})
+  let $obj = $(name);
+  eventPost($obj);
+});
 
 $.ajax('/online/sample');

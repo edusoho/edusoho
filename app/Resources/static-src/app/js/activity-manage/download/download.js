@@ -27,7 +27,7 @@ export default class DownLoad {
         materials: 'required',
       },
       messages: {
-        link: Translator.trans("activity.download_manage.link_error_hint"),
+        link: Translator.trans('activity.download_manage.link_error_hint'),
         materials: Translator.trans('activity.download_manage.materials_error_hint')
       }
     });
@@ -61,7 +61,7 @@ export default class DownLoad {
       chooserUiOpen();
       $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
-    }
+    };
 
     const fileChooser = new FileChooser();
     fileChooser.on('select', fileSelect);

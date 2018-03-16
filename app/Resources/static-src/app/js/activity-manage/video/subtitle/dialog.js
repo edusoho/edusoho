@@ -1,13 +1,10 @@
 import notify from 'common/notify';
 
 class SubtitleDialog {
-
-  upload_id = 'subtitle-uploader';
-  inited = false;
-
   constructor(element) {
     this.element = $(element);
-
+    this.upload_id = 'subtitle-uploader';
+    this.inited = false;
     if (this.element.length > 0) {
       this.init();
       this.inited = true;
@@ -88,9 +85,9 @@ class SubtitleDialog {
 
     uploader.on('file.finish', function (file) {
       $.post($elem.data('subtitleCreateUrl'), {
-        "name": file.name,
-        "subtitleId": file.id,
-        "mediaId": mediaId
+        'name': file.name,
+        'subtitleId': file.id,
+        'mediaId': mediaId
       }).success(function (data) {
         let convertStatus = {
           waiting: Translator.trans('activity.video_manage.convert_status_waiting'),

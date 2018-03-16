@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class CategoryMarksDataTag extends CourseBaseDataTag implements DataTag
 {
     public function getData(array $arguments)
@@ -19,6 +21,6 @@ class CategoryMarksDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return ServiceKernel::instance()->getBiz()->service('Taxonomy:CategoryService');
     }
 }

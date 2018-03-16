@@ -8,7 +8,7 @@ const smsModule = (api) => {
         type: 'POST'
       }, options));
     }
-  }
-}
+  };
+};
 
 export default smsModule;

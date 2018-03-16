@@ -25,7 +25,7 @@ class Drag {
     this.editbox = editbox;
     this.timepartnum = timepartnum;
 
-    this.courseId = this.$element.data("course-id");
+    this.courseId = this.$element.data('course-id');
 
     this.addScale = addScale;
     this.mergeScale = mergeScale;
@@ -61,7 +61,7 @@ class Drag {
     let _self = this;
     let changeleft = true;
     let $editbox_list = $('#editbox-lesson-list');
-    messenger.on("timechange", function (data) {
+    messenger.on('timechange', function (data) {
       if (changeleft) {
         $('.scale-white').css('left', _self.getleft(data.currentTime));
       }
@@ -85,26 +85,26 @@ class Drag {
 
   initSortable() {
     let _obj = this;
-    $("#subject-lesson-list").sortable({
-        group: 'no-drop',
-        drop: false,
-        delay: 500,
-        handle: '.drag',
-        onDrop($item, container, _super) {
-          if ($item.hasClass('item-lesson')) {
-            _super($item, container);
-            let $_scale = $item.closest('.scale.blue');
-            if ($_scale.find('.lesson-list .item-lesson').length > 0) {
-              _obj.sortList($_scale.find('.lesson-list'));
-              _obj.addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.lesson-list').children().length);
-            }
+    $('#subject-lesson-list').sortable({
+      group: 'no-drop',
+      drop: false,
+      delay: 500,
+      handle: '.drag',
+      onDrop($item, container, _super) {
+        if ($item.hasClass('item-lesson')) {
+          _super($item, container);
+          let $_scale = $item.closest('.scale.blue');
+          if ($_scale.find('.lesson-list .item-lesson').length > 0) {
+            _obj.sortList($_scale.find('.lesson-list'));
+            _obj.addScale($_scale, $_scale.find('.time').html(), $_scale.css('left'), $_scale.find('.lesson-list').children().length);
           }
         }
+      }
     });
     
-    $("#editbox-lesson-list").sortable({
-        group: 'no-drop',
-        drag: false
+    $('#editbox-lesson-list').sortable({
+      group: 'no-drop',
+      drag: false
     });
   }
 
@@ -119,14 +119,14 @@ class Drag {
   addScale($marker, time, seq, markers_array) {
     let $marker_item = $marker.find('li' + ':last');
     let markerJson = {
-        "id": $marker.attr('id'),
-        "second": time,
-        "questionMarkers": [{
-            "id": $marker_item.attr('id'),
-            "seq": seq,
-            "questionId": $marker_item.attr('question-id')
-        }]
-    }
+      'id': $marker.attr('id'),
+      'second': time,
+      'questionMarkers': [{
+        'id': $marker_item.attr('id'),
+        'seq': seq,
+        'questionId': $marker_item.attr('question-id')
+      }]
+    };
     $.extend(this.addScale(markerJson, $marker, markers_array));
   }
 
@@ -165,13 +165,13 @@ class Drag {
         for (let j = 0; j < questionMarkers.length; j++) {
           let $new_scale_blue_item = $scale_blue_item.clone().removeAttr('data-role').attr({ 'question-id': questionMarkers[j].questionId, 'id': questionMarkers[j].id});
 
-          console.log('new_scale_blue_item',  $new_scale_blue_item)
+          console.log('new_scale_blue_item',  $new_scale_blue_item);
 
           $new_scale_blue_item
             .data('url', `/course/${this.courseId}/question/${questionMarkers[j].questionId}/marker/preview`)
             .find('[data-role="sqe-number"]').text(j + 1).end()
             .find('[data-role="question-type"]').text('单选题').end()
-            .find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ""));
+            .find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ''));
           
           $scale_blue_item.before($new_scale_blue_item);
         }
@@ -208,13 +208,13 @@ class Drag {
         _self.maskShow(false);
         let $scale_blue = $item.closest('.scale-blue');
         let markerJson = {
-          "id": '',
-          "questionMarkers": []
+          'id': '',
+          'questionMarkers': []
         };
         markerJson.id = $scale_blue.attr('id');
         _self.sortList($scale_blue.find('[data-role="scale-blue-list"]'));
         
-        $scale_blue.find("li").each(function () {
+        $scale_blue.find('li').each(function () {
           let questionMarkers = {
             'id': $(this).attr('id'),
             'seq': $(this).find('[data-role="sqe-number"]').html()
@@ -282,8 +282,8 @@ class Drag {
         for (let i in _self.markers_array) {
           if (Math.abs(_self.markers_array[i].time - _move_time) <= 5) {
             marker_array = [{
-                id: _self.markers_array[i].id,
-                time: _self.markers_array[i].time
+              id: _self.markers_array[i].id,
+              time: _self.markers_array[i].time
             }];
             //靠近的元素刻度线高亮条件ID
             $merge_marker = $('.scale-blue[id=' + _self.markers_array[i].id + ']').addClass('highlight');
@@ -329,8 +329,8 @@ class Drag {
     e.stopPropagation();
     let $this = $(e.currentTarget);
     let $list = $this.closest('[data-role="scale-blue-list"]'),
-        $marker_question = $this.closest('li'),
-        $marker = $this.closest('.scale-blue');
+      $marker_question = $this.closest('li'),
+      $marker = $this.closest('.scale-blue');
     this._deleteScale($marker, $marker_question, $list.children().length, this.markers_array);
   }
 
@@ -340,57 +340,57 @@ class Drag {
 
   slideScale(e) {
     let _self = this,
-        marker_array = [],
-        $merge_marker = null,
-        _mover_left = null,
-        _move_time = null;
+      marker_array = [],
+      $merge_marker = null,
+      _mover_left = null,
+      _move_time = null;
 
     let $moveitem = $(e.currentTarget),
-        $editbox_list = $('#editbox-lesson-list'),
-        _oldleft = $moveitem.css('left');
+      $editbox_list = $('#editbox-lesson-list'),
+      _oldleft = $moveitem.css('left');
     _self.maskShow(true);
     $('.marker-manage').addClass('slideing');
     $moveitem.addClass('moveing');
     $(document).on('mousemove.slide', function (event) {
-        window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
-        _mover_left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
-        _move_time = Math.round((_mover_left - 20) * _self._video_time / $editbox_list.width());
-        $moveitem.css('left', _mover_left);
-        $moveitem.find('[data-role="scale-blue-time"]').text(Tool.sec2Time(_move_time));
+      window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+      _mover_left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
+      _move_time = Math.round((_mover_left - 20) * _self._video_time / $editbox_list.width());
+      $moveitem.css('left', _mover_left);
+      $moveitem.find('[data-role="scale-blue-time"]').text(Tool.sec2Time(_move_time));
 
-        if (_self.markers_array.length > 0) {
-            $('.scale-blue').removeClass('highlight');
-            marker_array = [];
-            $merge_marker = null;
-            for (let i in _self.markers_array) {
-                if (Math.abs(_self.markers_array[i].time - _move_time) <= 5 && $moveitem.attr('id') != _self.markers_array[i].id) {
-                    marker_array = [{
-                        id: _self.markers_array[i].id,
-                        time: _self.markers_array[i].time
-                    }];
-                    //靠近的元素刻度线高亮条件ID
-                    $merge_marker = $('.scale-blue[id=' + _self.markers_array[i].id + ']').addClass('highlight');
-                    return;
-                }
-            }
+      if (_self.markers_array.length > 0) {
+        $('.scale-blue').removeClass('highlight');
+        marker_array = [];
+        $merge_marker = null;
+        for (let i in _self.markers_array) {
+          if (Math.abs(_self.markers_array[i].time - _move_time) <= 5 && $moveitem.attr('id') != _self.markers_array[i].id) {
+            marker_array = [{
+              id: _self.markers_array[i].id,
+              time: _self.markers_array[i].time
+            }];
+            //靠近的元素刻度线高亮条件ID
+            $merge_marker = $('.scale-blue[id=' + _self.markers_array[i].id + ']').addClass('highlight');
+            return;
+          }
         }
+      }
     }).on('mouseup.slide', function (event) {
-        $(document).off('mousemove.slide');
-        $(document).off('mouseup.slide');
-        _self.maskShow(false);
-        $moveitem.removeClass('moveing');
-        $('.marker-manage').removeClass('slideing');
-        if (marker_array.length > 0) {
-            var $list = $merge_marker.find('[data-role="scale-blue-list"]');
-            $list.append($moveitem.find('[data-role="scale-blue-list"]').children());
-            _self.sortList($list);
-            $merge_marker.removeClass('highlight');
-            _self._mergeScale($moveitem, $merge_marker, _self.markers_array);
-        } else {
-            //新增
-            _self._updateScale($moveitem, _move_time);
-        }
-    })
+      $(document).off('mousemove.slide');
+      $(document).off('mouseup.slide');
+      _self.maskShow(false);
+      $moveitem.removeClass('moveing');
+      $('.marker-manage').removeClass('slideing');
+      if (marker_array.length > 0) {
+        var $list = $merge_marker.find('[data-role="scale-blue-list"]');
+        $list.append($moveitem.find('[data-role="scale-blue-list"]').children());
+        _self.sortList($list);
+        $merge_marker.removeClass('highlight');
+        _self._mergeScale($moveitem, $merge_marker, _self.markers_array);
+      } else {
+        //新增
+        _self._updateScale($moveitem, _move_time);
+      }
+    });
   }
 
   hoverScale(e) {
@@ -422,42 +422,42 @@ class Drag {
   _addScale($marker, time, seq, markers_array) {
     let $marker_item = $marker.find('li' + ':last');
     let markerJson = {
-      "id": $marker.attr('id'),
-      "second": time,
-      "questionMarkers": [{
-        "id": $marker_item.attr('id'),
-        "seq": seq,
-        "questionId": $marker_item.attr('question-id')
+      'id': $marker.attr('id'),
+      'second': time,
+      'questionMarkers': [{
+        'id': $marker_item.attr('id'),
+        'seq': seq,
+        'questionId': $marker_item.attr('question-id')
       }]
-    }
+    };
     $.extend(this.addScale(markerJson, $marker, markers_array));
   }
 
   _mergeScale($marker, $merg_marker, markers_array) {
     // 合并时后台去处理顺序，被合并数按序号依次增加
     let markerJson = {
-      "id": $marker.attr('id'),
-      "merg_id": $merg_marker.attr('id')
-    }
+      'id': $marker.attr('id'),
+      'merg_id': $merg_marker.attr('id')
+    };
     $.extend(this.mergeScale(markerJson, $marker, $merg_marker, markers_array));
   }
 
   _updateScale($marker, time) {
     let markerJson = {
-      "id": $marker.attr('id'),
-      "second": time,
-    }
+      'id': $marker.attr('id'),
+      'second': time,
+    };
     $.extend(this.updateScale(markerJson, $marker));
   }
 
   _deleteScale($marker, $marker_question, marker_questions_num, markers_array) {
-    console.log('id', $marker, $marker.attr('id'))
+    console.log('id', $marker, $marker.attr('id'));
     let markerJson = {
-      "id": $marker.attr('id'),
-      "questionMarkers": [{
-        "id": $marker_question.attr('id'),
-        "seq": $marker_question.find('[data-role="sqe-number"]').html(),
-        "questionId": $marker_question.attr('question-id')
+      'id': $marker.attr('id'),
+      'questionMarkers': [{
+        'id': $marker_question.attr('id'),
+        'seq': $marker_question.find('[data-role="sqe-number"]').html(),
+        'questionId': $marker_question.attr('question-id')
       }]
     };
     $.extend(this.deleteScale(markerJson, $marker, $marker_question, marker_questions_num, markers_array));

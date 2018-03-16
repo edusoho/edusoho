@@ -54,6 +54,13 @@ class TimeMachineTest extends BaseTestCase
         $this->assertEquals(22, $diff);
     }
 
+    public function testIsTimestamp()
+    {
+        $this->assertFalse(TimeMachine::isTimestamp('2018-01-29 19:00:01'));
+        $this->assertTrue(TimeMachine::isTimestamp('1387512440'));
+        $this->assertTrue(TimeMachine::isTimestamp(1387512440));
+    }
+
     private function getTimeMachine()
     {
         return new TimeMachine('Asia/Shanghai');

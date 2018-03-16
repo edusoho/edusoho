@@ -1,5 +1,5 @@
-import notify from "common/notify";
-import postal from "postal";
+import notify from 'common/notify';
+import postal from 'postal';
 
 export default class {
   constructor() {
@@ -27,17 +27,17 @@ export default class {
     let channel = postal.channel('task.plugin.question');
 
     $.post(this.$element.attr('action'), this.$element.serialize())
-        .done((html) => {
-          notify('success', Translator.trans('task.plugin_question_post_success_hint'));
-          channel.publish("form.save", {
-            html: html
-          });
-          $btn.removeAttr('disabled');
-          this.collapse();
-        })
-        .fail((error) => {
-          notify('danger', error);
-        })
+      .done((html) => {
+        notify('success', Translator.trans('task.plugin_question_post_success_hint'));
+        channel.publish('form.save', {
+          html: html
+        });
+        $btn.removeAttr('disabled');
+        this.collapse();
+      })
+      .fail((error) => {
+        notify('danger', error);
+      })
     ;
   }
 
@@ -80,7 +80,7 @@ export default class {
   collapse() {
     this.$element.removeClass('form-expanded');
     this.editor && this.editor.destroy();
-    this.$element.removeData("validator");
+    this.$element.removeData('validator');
     this.clear();
     this.$element.find('.js-detail-form-group').addClass('hide');
 

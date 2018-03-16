@@ -32,7 +32,7 @@ const Select = (element, type, options) => {
       },
       initSelection(element, callback) {
         let data = [];
-        $(element.val().split(",")).each(function() {
+        $(element.val().split(',')).each(function() {
           data.push({
             id: this,
             name: this
@@ -49,12 +49,11 @@ const Select = (element, type, options) => {
       width: 400,
       multiple: true,
       placeholder: Translator.trans('validate.tag_required_hint'),
-      multiple: true,
       createSearchChoice() {
         return null;
       },
       maximumSelectionSize: 20
-    }
+    };
   }
 
   $(element).select2(Object.assign(config, options));

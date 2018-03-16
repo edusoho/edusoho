@@ -14,5 +14,8 @@ class BlocksDataTagTest extends BaseTestCase
 
         $this->assertArrayHasKey('test1', $contents);
         $this->assertArrayHasKey('test2', $contents);
+
+        $contents = $datatag->getData(array('codes' => array()));
+        $this->assertEmpty($contents);
     }
 }

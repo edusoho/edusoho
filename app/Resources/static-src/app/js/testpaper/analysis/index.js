@@ -16,4 +16,4 @@ $('.js-analysis').click(function(){
   self.addClass('hidden');
   self.siblings('.js-analysis.hidden').removeClass('hidden');
   self.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
-})
+});

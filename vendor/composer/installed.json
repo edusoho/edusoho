@@ -298,17 +298,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.10",
-        "version_normalized": "0.9.10.0",
+        "version": "v0.9.14",
+        "version_normalized": "0.9.14.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57"
+            "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/6d8a27d1a77da92aab9942bc9739bed051fe7b57",
-            "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1ace8d1a1d142615aecc1c52f0468fafd33089ad.zip",
+            "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad",
             "shasum": ""
         },
         "require": {
@@ -330,7 +330,10 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "^4.8|^5.7|^6.0"
         },
-        "time": "2018-01-30T03:05:11+00:00",
+        "suggest": {
+            "ramsey/uuid": "Dao UUID primary key feature need this package."
+        },
+        "time": "2018-03-06T02:42:56+00:00",
         "bin": [
             "bin/biz"
         ],
@@ -352,17 +355,17 @@
     },
     {
         "name": "codeages/biz-order-pay",
-        "version": "v0.1.15",
-        "version_normalized": "0.1.15.0",
+        "version": "v0.1.16",
+        "version_normalized": "0.1.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "52f71578e425471a6b57ab40f37acb87beb655e5"
+            "reference": "29240956c8c1ca58e77f1719dad4d625800c6c0c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/52f71578e425471a6b57ab40f37acb87beb655e5.zip",
-            "reference": "52f71578e425471a6b57ab40f37acb87beb655e5",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/29240956c8c1ca58e77f1719dad4d625800c6c0c.zip",
+            "reference": "29240956c8c1ca58e77f1719dad4d625800c6c0c",
             "shasum": ""
         },
         "require": {
@@ -374,7 +377,7 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "4.8.36"
         },
-        "time": "2018-02-07T03:54:31+00:00",
+        "time": "2018-03-14T08:09:45+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -478,17 +481,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.2.5",
-        "version_normalized": "0.2.5.0",
+        "version": "v0.2.8",
+        "version_normalized": "0.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "5b4bfb3d68fc0f24994515efab7cf55e953410cc"
+            "reference": "7819d101d889bb502bfe54617388336f24e46441"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/5b4bfb3d68fc0f24994515efab7cf55e953410cc.zip",
-            "reference": "5b4bfb3d68fc0f24994515efab7cf55e953410cc",
+            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7819d101d889bb502bfe54617388336f24e46441.zip",
+            "reference": "7819d101d889bb502bfe54617388336f24e46441",
             "shasum": ""
         },
         "require": {
@@ -500,7 +503,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2018-03-08T03:02:11+00:00",
+        "time": "2018-03-14T07:11:29+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

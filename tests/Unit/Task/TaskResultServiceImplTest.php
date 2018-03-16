@@ -233,7 +233,7 @@ class TaskResultServiceImplTest extends BaseTestCase
     public function testGetUserLatestFinishedTaskResultByCourseId()
     {
         $this->mockTaskResult(array('courseTaskId' => 1, 'courseId' => 1, 'status' => 'finish'));
-        sleep(1);
+        sleep(1); // sleep 1秒，确保按时间搜索时 正确
         $this->mockTaskResult(array('courseTaskId' => 2, 'courseId' => 1, 'status' => 'finish'));
 
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId(1);

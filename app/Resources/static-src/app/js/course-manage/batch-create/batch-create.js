@@ -1,5 +1,5 @@
 import notify from 'common/notify';
-import { sortablelist } from "app/js/course-manage/help";
+import { sortablelist } from 'app/js/course-manage/help';
 
 class BatchCreate {
   constructor(options) {
@@ -25,7 +25,7 @@ class BatchCreate {
       process: this.getUploadProcess(),
       ui: 'batch',
       locale: document.documentElement.lang
-    })
+    });
 
     this.uploader.on('file.finish', (file) => {
       this.files.push(file);
@@ -34,7 +34,7 @@ class BatchCreate {
     this.uploader.on('error', (error) => {
       let status = {'F_DUPLICATE':Translator.trans('uploader.file.exist')};
       if (!error.message){
-          error.message = status[error.error];
+        error.message = status[error.error];
       }
       notify('danger', error.message);
     });
@@ -61,9 +61,9 @@ class BatchCreate {
         if (index + 1 == this.files.length) {
           isLast = true;
         }
-        console.log('file', file)
+        console.log('file', file);
         this.createLesson($btn, file, isLast);
-      })
+      });
     });
 
     $('[data-toggle="popover"]').popover({
@@ -105,13 +105,13 @@ class BatchCreate {
       },
       success: function(response) {
         if (response && response.error) {
-          notify('danger', response.error)
+          notify('danger', response.error);
         } else {
           self.$sortable.append(response.html);
         }
       },
       error: function(response) {
-        console.log('error', response)
+        console.log('error', response);
         notify('danger', Translator.trans('uploader.status.error'));
       },
       complete: function (response) {

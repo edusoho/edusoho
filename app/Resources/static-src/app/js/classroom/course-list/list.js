@@ -15,15 +15,15 @@ export default class CourseList {
 
   onExpandCourse(e) {
     var $target = $(e.currentTarget);
-    var $parent = $target.parents(".course-item");
-    var $lessonList = $target.parents(".media").siblings(".course-detail-content");
+    var $parent = $target.parents('.course-item');
+    var $lessonList = $target.parents('.media').siblings('.course-detail-content');
     if ($lessonList.length > 0) {
-      this._lessonListSHow($lessonList)
+      this._lessonListSHow($lessonList);
     } else {
       var self = this;
       $.get($target.data('lessonUrl'), { 'visibility': 0 }, function (html) {
         $parent.append(html);
-        self._lessonListSHow($parent.siblings(".course-detail-content"));
+        self._lessonListSHow($parent.siblings('.course-detail-content'));
       });
     }
 
@@ -31,7 +31,7 @@ export default class CourseList {
   }
   onCollapseCourse(e) {
     var $target = $(e.currentTarget);
-    this._lessonListSHow($target.parents(".media").siblings(".course-detail-content"));
+    this._lessonListSHow($target.parents('.media').siblings('.course-detail-content'));
     $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
   }
   _lessonListSHow($list) {

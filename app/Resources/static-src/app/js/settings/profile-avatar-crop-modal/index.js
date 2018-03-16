@@ -10,5 +10,5 @@ new LocalImageCrop({
     medium: [120, 120],
     small: [48, 48]
   }
-})
+});
 

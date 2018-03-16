@@ -12,7 +12,7 @@
         "url": ""
     },
     "devDependencies": {
-        "es-webpack-engine": "3.5.0"
+        "es-webpack-engine": "3.5.2"
     },
     "dependencies": {
         "babel-polyfill": "6.5.0",

@@ -902,6 +902,64 @@ class UploadFileServiceTest extends BaseTestCase
         unset($biz['@File:UploadFileDao']);
     }
 
+    public function testSearchCloudFilesFromLocal()
+    {
+        $this->mockBiz(
+            'File:UploadFileDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'withParams' => array(array(), array(), 0, 5),
+                    'returnValue' => array(),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'search',
+                    'withParams' => array(array('resType' => 'attachment'), array(), 0, 5),
+                    'returnValue' => array(
+                        array(
+                            'id' => 11,
+                            'type' => 'other',
+                        ),
+                    ),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'File:CloudFileImplementor',
+            array(
+                array(
+                    'functionName' => 'findFiles',
+                    'withParams' => array(array(array('id' => 11, 'type' => 'other')), array('resType' => 'attachment')),
+                    'returnValue' => array(array('id' => 11)),
+                ),
+            )
+        );
+        $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array(), array(), 0, 5);
+        $this->assertEquals(array(), $result);
+
+        $result = $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array('resType' => 'attachment'), array(), 0, 5);
+        $this->assertEquals(array(array('id' => 11, 'type' => 'other')), $result);
+    }
+
+    public function testCountCloudFllesFromLocal()
+    {
+        $this->mockBiz(
+            'File:UploadFileDao',
+            array(
+                array(
+                    'functionName' => 'count',
+                    'withParams' => array(array()),
+                    'returnValue' => 1,
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result = $this->getUploadFileService()->countCloudFllesFromLocal(array());
+        $this->assertEquals(1, $result);
+    }
+
     protected function createUser($user)
     {
         $userInfo = array();

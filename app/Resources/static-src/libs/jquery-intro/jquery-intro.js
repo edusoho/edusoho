@@ -18,7 +18,7 @@
   //   factory(root);
   // }
 
-   factory(root);
+  factory(root);
 } (this, function () {
   //Default config/variables
   var VERSION = '2.3.0';
@@ -72,7 +72,7 @@
       /* Padding to add after scrolling when element is not in the viewport (in pixels) */
       scrollPadding: 30,
       /* Precedence of positions, when auto is enabled */
-      positionPrecedence: ["bottom", "top", "right", "left"],
+      positionPrecedence: ['bottom', 'top', 'right', 'left'],
       /* Disable an interaction with element? */
       disableInteraction: false,
       /* Default hint position */
@@ -94,7 +94,7 @@
    */
   function _introForElement(targetElm) {
     var introItems = [],
-        self = this;
+      self = this;
 
     if (this._options.steps) {
       //use steps passed programmatically
@@ -113,7 +113,7 @@
 
         //intro without element
         if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
-          var floatingElementQuery = document.querySelector(".introjsFloatingElement");
+          var floatingElementQuery = document.querySelector('.introjsFloatingElement');
 
           if (floatingElementQuery == null) {
             floatingElementQuery = document.createElement('div');
@@ -214,7 +214,7 @@
       _nextStep.call(self);
 
       var skipButton     = targetElm.querySelector('.introjs-skipbutton'),
-          nextStepButton = targetElm.querySelector('.introjs-nextbutton');
+        nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
@@ -239,7 +239,7 @@
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
             if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
-                self._introCompleteCallback.call(self);
+              self._introCompleteCallback.call(self);
             }
             //check if any callback is defined
             if (self._introExitCallback != undefined) {
@@ -282,24 +282,24 @@
     return false;
   }
 
- /*
+  /*
    * makes a copy of the object
    * @api private
    * @method _cloneObject
   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
-        return object;
+    if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
+      return object;
+    }
+    var temp = {};
+    for (var key in object) {
+      if (typeof (jQuery) != 'undefined' && object[key] instanceof jQuery) {
+        temp[key] = object[key];
+      } else {
+        temp[key] = _cloneObject(object[key]);
       }
-      var temp = {};
-      for (var key in object) {
-        if (typeof (jQuery) != 'undefined' && object[key] instanceof jQuery) {
-          temp[key] = object[key];
-        } else {
-          temp[key] = _cloneObject(object[key]);
-        }
-      }
-      return temp;
+    }
+    return temp;
   }
   /**
    * Go to specific step of introduction
@@ -453,11 +453,11 @@
    */
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer, hintMode) {
     var tooltipCssClass = '',
-        currentStepObj,
-        tooltipOffset,
-        targetOffset,
-        windowSize,
-        currentTooltipPosition;
+      currentStepObj,
+      tooltipOffset,
+      targetOffset,
+      windowSize,
+      currentTooltipPosition;
 
     hintMode = hintMode || false;
 
@@ -490,8 +490,8 @@
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
     currentTooltipPosition = this._introItems[this._currentStep].position;
-    if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
-      if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
+    if ((currentTooltipPosition == 'auto' || this._options.tooltipPosition == 'auto')) {
+      if (currentTooltipPosition != 'floating') { // Floating is always valid, no point in calculating
         currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
       }
     }
@@ -500,97 +500,97 @@
     windowSize    = _getWinSize();
 
     switch (currentTooltipPosition) {
-      case 'top':
-        arrowLayer.className = 'introjs-arrow bottom';
+    case 'top':
+      arrowLayer.className = 'introjs-arrow bottom';
 
-        if (hintMode) {
-          var tooltipLayerStyleLeft = 0;
-        } else {
-          var tooltipLayerStyleLeft = 15;
-        }
-        console.log(tooltipLayerStyleLeft);
-        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
-        tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
-        
-        break;
-      case 'right':
-        tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
-        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
-          // In this case, right would have fallen below the bottom of the screen.
-          // Modify so that the bottom of the tooltip connects with the target
-          arrowLayer.className = "introjs-arrow left-bottom";
-          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
-        } else {
-          arrowLayer.className = 'introjs-arrow left';
-        }
-        break;
-      case 'left':
-        if (!hintMode && this._options.showStepNumbers == true) {
-          tooltipLayer.style.top = '0';
-        }
-
-        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
-          // In this case, left would have fallen below the bottom of the screen.
-          // Modify so that the bottom of the tooltip connects with the target
-          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
-          arrowLayer.className = 'introjs-arrow right-bottom';
-        } else {
-          arrowLayer.className = 'introjs-arrow right';
-        }
-        tooltipLayer.style.right = (targetOffset.width + 20) + 'px';
-
-        break;
-      case 'floating':
-        arrowLayer.style.display = 'none';
-
-        //we have to adjust the top and left of layer manually for intro items without element
-        tooltipLayer.style.left   = '50%';
-        tooltipLayer.style.top    = '50%';
-        tooltipLayer.style.marginLeft = '-' + (tooltipOffset.width / 2)  + 'px';
-        tooltipLayer.style.marginTop  = '-' + (tooltipOffset.height / 2) + 'px';
-
-        if (typeof(helperNumberLayer) != 'undefined' && helperNumberLayer != null) {
-          helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 18) + 'px';
-          helperNumberLayer.style.top  = '-' + ((tooltipOffset.height / 2) + 18) + 'px';
-        }
-
-        break;
-      case 'bottom-right-aligned':
-        arrowLayer.className      = 'introjs-arrow top-right';
-
-        var tooltipLayerStyleRight = 0;
-        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
-        tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
-        break;
-
-      case 'bottom-middle-aligned':
-        arrowLayer.className      = 'introjs-arrow top-middle';
-
-        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
-
-        // a fix for middle aligned hints
-        if (hintMode) {
-          tooltipLayerStyleLeftRight += 5;
-        }
-
-        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
-          tooltipLayer.style.right = null;
-          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
-        }
-        tooltipLayer.style.top = (targetOffset.height + 20) + 'px';
-        break;
-
-      case 'bottom-left-aligned':
-      // Bottom-left-aligned is the same as the default bottom
-      case 'bottom':
-      // Bottom going to follow the default behavior
-      default:
-        arrowLayer.className = 'introjs-arrow top';
-
+      if (hintMode) {
         var tooltipLayerStyleLeft = 0;
-        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
-        tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
-        break;
+      } else {
+        var tooltipLayerStyleLeft = 15;
+      }
+      console.log(tooltipLayerStyleLeft);
+      _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+      tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
+        
+      break;
+    case 'right':
+      tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
+      if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+        // In this case, right would have fallen below the bottom of the screen.
+        // Modify so that the bottom of the tooltip connects with the target
+        arrowLayer.className = 'introjs-arrow left-bottom';
+        tooltipLayer.style.top = '-' + (tooltipOffset.height - targetOffset.height - 20) + 'px';
+      } else {
+        arrowLayer.className = 'introjs-arrow left';
+      }
+      break;
+    case 'left':
+      if (!hintMode && this._options.showStepNumbers == true) {
+        tooltipLayer.style.top = '0';
+      }
+
+      if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+        // In this case, left would have fallen below the bottom of the screen.
+        // Modify so that the bottom of the tooltip connects with the target
+        tooltipLayer.style.top = '-' + (tooltipOffset.height - targetOffset.height - 20) + 'px';
+        arrowLayer.className = 'introjs-arrow right-bottom';
+      } else {
+        arrowLayer.className = 'introjs-arrow right';
+      }
+      tooltipLayer.style.right = (targetOffset.width + 20) + 'px';
+
+      break;
+    case 'floating':
+      arrowLayer.style.display = 'none';
+
+      //we have to adjust the top and left of layer manually for intro items without element
+      tooltipLayer.style.left   = '50%';
+      tooltipLayer.style.top    = '50%';
+      tooltipLayer.style.marginLeft = '-' + (tooltipOffset.width / 2)  + 'px';
+      tooltipLayer.style.marginTop  = '-' + (tooltipOffset.height / 2) + 'px';
+
+      if (typeof(helperNumberLayer) != 'undefined' && helperNumberLayer != null) {
+        helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 18) + 'px';
+        helperNumberLayer.style.top  = '-' + ((tooltipOffset.height / 2) + 18) + 'px';
+      }
+
+      break;
+    case 'bottom-right-aligned':
+      arrowLayer.className      = 'introjs-arrow top-right';
+
+      var tooltipLayerStyleRight = 0;
+      _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+      tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
+      break;
+
+    case 'bottom-middle-aligned':
+      arrowLayer.className      = 'introjs-arrow top-middle';
+
+      var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+
+      // a fix for middle aligned hints
+      if (hintMode) {
+        tooltipLayerStyleLeftRight += 5;
+      }
+
+      if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+        tooltipLayer.style.right = null;
+        _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+      }
+      tooltipLayer.style.top = (targetOffset.height + 20) + 'px';
+      break;
+
+    case 'bottom-left-aligned':
+      // Bottom-left-aligned is the same as the default bottom
+    case 'bottom':
+      // Bottom going to follow the default behavior
+    default:
+      arrowLayer.className = 'introjs-arrow top';
+
+      var tooltipLayerStyleLeft = 0;
+      _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+      tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
+      break;
     }
   }
 
@@ -645,33 +645,33 @@
 
     // If we check all the possible areas, and there are no valid places for the tooltip, the element
     // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
-    var calculatedPosition = "floating";
+    var calculatedPosition = 'floating';
 
     // Check if the width of the tooltip + the starting point would spill off the right side of the screen
     // If no, neither bottom or top are valid
     if (targetOffset.left + tooltipWidth > windowSize.width || ((targetOffset.left + (targetOffset.width / 2)) - tooltipWidth) < 0) {
-      _removeEntry(possiblePositions, "bottom");
-      _removeEntry(possiblePositions, "top");
+      _removeEntry(possiblePositions, 'bottom');
+      _removeEntry(possiblePositions, 'top');
     } else {
       // Check for space below
       if ((targetOffset.height + targetOffset.top + tooltipHeight) > windowSize.height) {
-        _removeEntry(possiblePositions, "bottom");
+        _removeEntry(possiblePositions, 'bottom');
       }
 
       // Check for space above
       if (targetOffset.top - tooltipHeight < 0) {
-        _removeEntry(possiblePositions, "top");
+        _removeEntry(possiblePositions, 'top');
       }
     }
 
     // Check for space to the right
     if (targetOffset.width + targetOffset.left + tooltipWidth > windowSize.width) {
-      _removeEntry(possiblePositions, "right");
+      _removeEntry(possiblePositions, 'right');
     }
 
     // Check for space to the left
     if (targetOffset.left - tooltipWidth < 0) {
-      _removeEntry(possiblePositions, "left");
+      _removeEntry(possiblePositions, 'left');
     }
 
     // At this point, our array only has positions that are valid. Pick the first one, as it remains in order
@@ -680,7 +680,7 @@
     }
 
     // If the requested position is in the list, replace our calculated choice with that
-    if (desiredTooltipPosition && desiredTooltipPosition != "auto") {
+    if (desiredTooltipPosition && desiredTooltipPosition != 'auto') {
       if (possiblePositions.indexOf(desiredTooltipPosition) > -1) {
         calculatedPosition = desiredTooltipPosition;
       }
@@ -714,8 +714,8 @@
       if (!this._introItems[this._currentStep]) return;
 
       var currentElement  = this._introItems[this._currentStep],
-          elementPosition = _getOffset(currentElement.element),
-          widthHeightPadding = 10;
+        elementPosition = _getOffset(currentElement.element),
+        widthHeightPadding = 10;
 
       // If the target element is fixed, the tooltip should be fixed as well.
       // Otherwise, remove a fixed class that may be left over from the previous
@@ -781,10 +781,10 @@
     }
 
     var self = this,
-        oldHelperLayer = document.querySelector('.introjs-helperLayer'),
-        oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
-        highlightClass = 'introjs-helperLayer',
-        elementPosition = _getOffset(targetElement.element);
+      oldHelperLayer = document.querySelector('.introjs-helperLayer'),
+      oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
+      highlightClass = 'introjs-helperLayer',
+      elementPosition = _getOffset(targetElement.element);
 
     //check for a current step highlight class
     if (typeof (targetElement.highlightClass) === 'string') {
@@ -797,18 +797,18 @@
 
     if (oldHelperLayer != null) {
       var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
-          oldtooltipLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
-          oldArrowLayer        = oldReferenceLayer.querySelector('.introjs-arrow'),
-          oldtooltipContainer  = oldReferenceLayer.querySelector('.introjs-tooltip'),
-          skipTooltipButton    = oldReferenceLayer.querySelector('.introjs-skipbutton'),
-          prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton'),
-          nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
+        oldtooltipLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
+        oldArrowLayer        = oldReferenceLayer.querySelector('.introjs-arrow'),
+        oldtooltipContainer  = oldReferenceLayer.querySelector('.introjs-tooltip'),
+        skipTooltipButton    = oldReferenceLayer.querySelector('.introjs-skipbutton'),
+        prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton'),
+        nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
 
       //update or reset the helper highlight class
       oldHelperLayer.className = highlightClass;
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
-      oldtooltipContainer.style.display = "none";
+      oldtooltipContainer.style.display = 'none';
 
       if (oldHelperNumberLayer != null) {
         var lastIntroItem = this._introItems[(targetElement.step - 2 >= 0 ? targetElement.step - 2 : 0)];
@@ -827,7 +827,7 @@
       if (fixParents && fixParents.length > 0) {
         for (var i = fixParents.length - 1; i >= 0; i--) {
           fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-        };
+        }
       }
 
       //remove old classes if the element still exist
@@ -848,7 +848,7 @@
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
-        oldtooltipContainer.style.display = "block";
+        oldtooltipContainer.style.display = 'block';
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
 
         //change active bullet
@@ -873,13 +873,13 @@
 
     } else {
       var helperLayer       = document.createElement('div'),
-          referenceLayer    = document.createElement('div'),
-          arrowLayer        = document.createElement('div'),
-          tooltipLayer      = document.createElement('div'),
-          tooltipTextLayer  = document.createElement('div'),
-          bulletsLayer      = document.createElement('div'),
-          progressLayer     = document.createElement('div'),
-          buttonsLayer      = document.createElement('div');
+        referenceLayer    = document.createElement('div'),
+        arrowLayer        = document.createElement('div'),
+        tooltipLayer      = document.createElement('div'),
+        tooltipTextLayer  = document.createElement('div'),
+        bulletsLayer      = document.createElement('div'),
+        progressLayer     = document.createElement('div'),
+        buttonsLayer      = document.createElement('div');
 
       helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
@@ -916,7 +916,7 @@
         if (i === (targetElement.step-1)) anchorLink.className = 'active';
 
         _setAnchorAsButton(anchorLink);
-        anchorLink.innerHTML = "&nbsp;";
+        anchorLink.innerHTML = '&nbsp;';
         anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
 
         innerLi.appendChild(anchorLink);
@@ -1093,7 +1093,7 @@
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
         window.scrollBy(0, top - this._options.scrollPadding); // 30px padding from edge to look nice
 
-      //Scroll down
+        //Scroll down
       } else {
         window.scrollBy(0, bottom + 70 + this._options.scrollPadding); // 70px + 30px padding from edge to look nice
       }
@@ -1128,7 +1128,7 @@
     } else {
       return propValue;
     }
-  };
+  }
 
   /**
    * Checks to see if target element (or parents) position is fixed or not
@@ -1150,7 +1150,7 @@
     }
 
     return _isFixed(p);
-  };
+  }
 
   /**
    * Provides a cross-browser way to get the screen dimensions
@@ -1197,8 +1197,8 @@
    */
   function _addOverlayLayer(targetElm) {
     var overlayLayer = document.createElement('div'),
-        styleText = '',
-        self = this;
+      styleText = '',
+      self = this;
 
     //set css class name
     overlayLayer.className = 'introjs-overlay';
@@ -1235,7 +1235,7 @@
     }, 10);
 
     return true;
-  };
+  }
 
   /**
    * Removes open hint (tooltip hint)
@@ -1251,7 +1251,7 @@
       tooltip.parentNode.removeChild(tooltip);
       return step;
     }
-  };
+  }
 
   /**
    * Start parsing hint items
@@ -1262,7 +1262,7 @@
    */
   function _populateHints(targetElm) {
     var self = this;
-    this._introItems = []
+    this._introItems = [];
 
     if (this._options.hints) {
       for (var i = 0, l = this._options.hints.length; i < l; i++) {
@@ -1322,7 +1322,7 @@
       document.attachEvent('onclick', _removeHintTooltip.bind(this));
       document.attachEvent('onresize', _reAlignHints.bind(this));
     }
-  };
+  }
 
   /**
    * Re-aligns all hint elements
@@ -1336,7 +1336,7 @@
 
       if (typeof (item.targetElement) == 'undefined') continue;
 
-      _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement)
+      _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement);
     }
   }
 
@@ -1358,7 +1358,7 @@
     if (typeof (this._hintCloseCallback) !== 'undefined') {
       this._hintCloseCallback.call(this, stepId);
     }
-  };
+  }
 
   /**
    * Hide all hints
@@ -1374,7 +1374,7 @@
         _hideHint.call(this, hints[i].getAttribute('data-step'));
       }
     }
-  };
+  }
 
   /**
    * Add all available hints to the page
@@ -1453,7 +1453,7 @@
     if (typeof (this._hintsAddedCallback) !== 'undefined') {
       this._hintsAddedCallback.call(this);
     }
-  };
+  }
 
   /**
    * Aligns hint position
@@ -1470,33 +1470,33 @@
 
     // align the hint element
     switch (position) {
-      default:
-      case 'top-left':
-        hint.style.left = offset.left + 'px';
-        hint.style.top = offset.top + 'px';
-        break;
-      case 'top-right':
-        hint.style.left = (offset.left + offset.width) + 'px';
-        hint.style.top = offset.top + 'px';
-        break;
-      case 'bottom-left':
-        hint.style.left = offset.left + 'px';
-        hint.style.top = (offset.top + offset.height) + 'px';
-        break;
-      case 'bottom-right':
-        hint.style.left = (offset.left + offset.width) + 'px';
-        hint.style.top = (offset.top + offset.height) + 'px';
-        break;
-      case 'bottom-middle':
-        hint.style.left = (offset.left + (offset.width / 2)) + 'px';
-        hint.style.top = (offset.top + offset.height) + 'px';
-        break;
-      case 'top-middle':
-        hint.style.left = (offset.left + (offset.width / 2)) + 'px';
-        hint.style.top = offset.top + 'px';
-        break;
+    default:
+    case 'top-left':
+      hint.style.left = offset.left + 'px';
+      hint.style.top = offset.top + 'px';
+      break;
+    case 'top-right':
+      hint.style.left = (offset.left + offset.width) + 'px';
+      hint.style.top = offset.top + 'px';
+      break;
+    case 'bottom-left':
+      hint.style.left = offset.left + 'px';
+      hint.style.top = (offset.top + offset.height) + 'px';
+      break;
+    case 'bottom-right':
+      hint.style.left = (offset.left + offset.width) + 'px';
+      hint.style.top = (offset.top + offset.height) + 'px';
+      break;
+    case 'bottom-middle':
+      hint.style.left = (offset.left + (offset.width / 2)) + 'px';
+      hint.style.top = (offset.top + offset.height) + 'px';
+      break;
+    case 'top-middle':
+      hint.style.left = (offset.left + (offset.width / 2)) + 'px';
+      hint.style.top = offset.top + 'px';
+      break;
     }
-  };
+  }
 
   /**
    * Triggers when user clicks on the hint element
@@ -1570,7 +1570,7 @@
 
     //set proper position
     _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
-  };
+  }
 
   /**
    * Get an element position on the page
@@ -1604,7 +1604,7 @@
     elementPosition.left = _x;
 
     return elementPosition;
-  };
+  }
 
   /**
    * Gets the current progress percentage
@@ -1617,7 +1617,7 @@
     // Steps are 0 indexed
     var currentStep = parseInt((this._currentStep + 1), 10);
     return ((currentStep / this._introItems.length) * 100);
-  };
+  }
 
   /**
    * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
@@ -1632,7 +1632,7 @@
     for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
     for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
     return obj3;
-  };
+  }
 
   var introJs = function (targetElm) {
     if (typeof (targetElm) === 'object') {

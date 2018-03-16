@@ -3,6 +3,7 @@
 namespace Codeages\Biz\Framework\Scheduler\Service;
 
 use Codeages\Biz\Framework\Scheduler\Job;
+use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class JobPool
@@ -103,7 +104,7 @@ class JobPool
     {
         return $this->biz->dao('Scheduler:JobPoolDao');
     }
-
+    
     public function __get($name)
     {
         return empty($this->data[$name]) ? '' : $this->data[$name];
