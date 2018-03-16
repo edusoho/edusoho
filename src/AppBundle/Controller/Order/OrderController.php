@@ -45,6 +45,7 @@ class OrderController extends BaseController
 
         $priceFormat = $this->get('web.twig.order_extension')->priceFormat($product->getPayablePrice());
         $deducts = $product->getDeducts();
+
         return $this->createJsonResponse(
             array(
                 'price' => $product->getPayablePrice(),
