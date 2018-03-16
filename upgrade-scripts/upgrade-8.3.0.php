@@ -59,7 +59,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'addCourseChapters',
             'updateTaskFields',
             'updateChpaterCopyId',
-            'updateLessonNum'
+            'updateLessonNum',
+            'updateLessonIsOption'
         );
 
         $funcNames = array();
@@ -138,7 +139,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
         $connection->exec("
-            update course_chapter cc1,course_chapter cc2 set cc1.copyId=cc2.id where cc1.migrate_task_id>0 and cc2.migrate_task_id =(select copyId from course_task ct where ct.id=cc1.migrate_task_id and copyId>0)
+            update course_chapter cc1,course_chapter cc2 set cc1.copyId=cc2.id where cc1.migrate_task_id>0 and cc2.migrate_task_id =(select ct.copyId from course_task ct where ct.id=cc1.migrate_task_id and ct.copyId>0)
         ");
         return 1;
     }
@@ -153,6 +154,17 @@ class EduSohoUpgrade extends AbstractUpdater
             update course_v8 cv,(SELECT courseid,count(*) num FROM `course_chapter` WHERE type='lesson' and status='published' group by courseid) cc set cv.publishLessonNum=cc.num where cv.id=cc.courseid
         ");
         return 1;
+    }
+
+
+    protected function updateLessonIsOption($value='')
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            UPDATE `course_chapter` cc SET isoptional = (select isoptional from course_task ct where ct.categoryid=cc.id limit 1) where cc.type='lesson'
+        ");
+        return 1;
+        
     }
 
     protected function addSourceTaskId($table)
