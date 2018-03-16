@@ -5,7 +5,7 @@ let $warnning = $form.find('.warnning');
 
 $form.find('[name="reason[type]"]').on('change', function () {
   let $this = $(this),
-  $selected = $this.find('option:selected');
+    $selected = $this.find('option:selected');
   if ($selected.val() == 'other') {
     $reasonNote.val('').removeClass('hide');
   } else {
@@ -37,5 +37,5 @@ $form.on('submit', function () {
     return false;
   } 
 
-  $modal.find('[type=submit]').button('loading').attr("disabled", true);
+  $modal.find('[type=submit]').button('loading').attr('disabled', true);
 });

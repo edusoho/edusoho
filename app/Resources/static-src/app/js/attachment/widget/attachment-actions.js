@@ -21,7 +21,7 @@ class AttachmentActions {
       }
     }).error(function(response){
       notify('danger', Translator.trans('file.not_found'));
-    })
+    });
     
   }
 }

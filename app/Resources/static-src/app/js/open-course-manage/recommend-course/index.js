@@ -1,6 +1,6 @@
 import sortList from 'common/sortable';
 
-$(".course-list-group").on('click', '.close', function () {
+$('.course-list-group').on('click', '.close', function () {
   let recommendId = $(this).data('recommendId');
   let courseId = $(this).data('id');
   $.post($(this).data('cancelUrl')).done(function () {
@@ -11,9 +11,9 @@ $(".course-list-group").on('click', '.close', function () {
 
 sortList({
   element: '.course-list-group',
-  itemSelector: "li.course-item",
+  itemSelector: 'li.course-item',
   ajax: false
-})
+});
 
 
 

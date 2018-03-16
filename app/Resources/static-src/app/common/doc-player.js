@@ -26,30 +26,28 @@ class DocPlayer {
   }
 
   onFullScreen(docPlayer) {
-    alert(1)
-     window.onmessage=function(e){
-	     alert(2)
-       console.log(e.data)
-        if(e == null || e == undefined ){
-            return;
-        }
-        var isPageFullScreen = e.data;
-        if(typeof(isPageFullScreen) != "boolean"){
-            return ;
-        }
-         var docContent =  $('#task-content-iframe', window.parent.document);
-        if (isPageFullScreen) {
-          docContent.removeClass('screen-full');
-          docContent.width('100%');
-        }else{
-          docContent.addClass('screen-full');
-          docContent.width( window.document.body.offsetWidth+"px");
-        }
+    window.onmessage=function(e){
+      console.log(e.data);
+      if(e == null || e == undefined ){
+        return;
+      }
+      var isPageFullScreen = e.data;
+      if(typeof(isPageFullScreen) != 'boolean'){
+        return ;
+      }
+      var docContent =  $('#task-content-iframe', window.parent.document);
+      if (isPageFullScreen) {
+        docContent.removeClass('screen-full');
+        docContent.width('100%');
+      }else{
+        docContent.addClass('screen-full');
+        docContent.width( window.document.body.offsetWidth+'px');
+      }
     };
   }
 
   isIE9() {
-    return navigator.appVersion.indexOf("MSIE 9.") != -1;
+    return navigator.appVersion.indexOf('MSIE 9.') != -1;
   }
 
   isSupportHtml5() {
@@ -57,7 +55,7 @@ class DocPlayer {
   }
 
   initPDFJSViewer() {
-    $("html").attr('dir', 'ltr');
+    $('html').attr('dir', 'ltr');
 
     let src = app.cloudOldDocumentSdkUrl + '#' + this.pdfUrl;
 
@@ -69,7 +67,7 @@ class DocPlayer {
      src="${src}" style="width:100%;height:100%;border:0px" 
      allowfullscreen="" webkitallowfullscreen="">
       </iframe>`;
-     this.element.append($iframe);
+    this.element.append($iframe);
 
     this.addWatermark();
   }
@@ -99,7 +97,7 @@ class DocPlayer {
       'website',
       this.swfPlayerWidth,
       this.swfPlayerHeight,
-      "9.0.45",
+      '9.0.45',
       null,
       flashVars,
       params,

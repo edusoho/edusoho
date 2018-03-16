@@ -1,4 +1,4 @@
-var toggleBtn = $("#class-teacher-column .show-more");
+var toggleBtn = $('#class-teacher-column .show-more');
 
 toggleBtn.data('toggle', true);
 
@@ -7,17 +7,17 @@ toggleBtn.click(function () {
 
   if (btn.data('toggle')) {
 
-    $(this).siblings("ul").animate({
+    $(this).siblings('ul').animate({
       'max-height': '2160px',
     }, 300);
-    $(this).find(".fa").removeClass('fa-angle-down').addClass('fa-angle-up');
+    $(this).find('.fa').removeClass('fa-angle-down').addClass('fa-angle-up');
     btn.data('toggle', false);
 
   } else {
-    $(this).siblings("ul").animate({
-      'max-height': "324px"
+    $(this).siblings('ul').animate({
+      'max-height': '324px'
     }, 300);
-    $(this).find(".fa").removeClass('fa-angle-up').addClass('fa-angle-down');
+    $(this).find('.fa').removeClass('fa-angle-up').addClass('fa-angle-down');
     btn.data('toggle', true);
   }
 

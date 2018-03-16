@@ -19,7 +19,7 @@ export const initEditor = ($item, validator) => {
 
   //fix ie11 中文输入
   editor.on('blur', () => {
-     console.log('blur');
+    console.log('blur');
     $item.val(editor.getData());
     if (validator) {
       validator.form();

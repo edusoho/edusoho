@@ -57,6 +57,10 @@ class PushStatementJobTest extends BaseTestCase
                 ),
             ),
             array(
+                'functionName' => 'countStatements',
+                'returnValue' => 10,
+            ),
+            array(
                 'functionName' => 'getXapiSdk',
                 'returnValue' => $mockObject,
             ),

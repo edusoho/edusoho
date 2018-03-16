@@ -15,14 +15,14 @@ let autocomplete = ({ element, valueKey, url }) => {
         $.get(`${getUrl}?q=${q}`, (data) => {
           if (data) {
             data.map((item) => {
-              source.push(item[this.valueKey])
-            })
+              source.push(item[this.valueKey]);
+            });
           }
-          add(source)
-        })
+          add(source);
+        });
       },
     ],
-  })
-}
+  });
+};
 
 export default autocomplete;

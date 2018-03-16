@@ -14,7 +14,7 @@ const captchaModule = (api) => {
         type: 'GET',
       }, options));
     }
-  }
+  };
 };
 
 export default captchaModule;

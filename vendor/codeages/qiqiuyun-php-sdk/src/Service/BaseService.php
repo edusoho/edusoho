@@ -121,9 +121,9 @@ abstract class BaseService
         try {
             $result = SDK\json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            throw new SDKException($e->getMessage()."(response: {$response->getBody()}");
+            throw new SDKException($e->getMessage(). "(response: {$response->getBody()}");
         }
-
+        
         $responseCode = $response->getHttpResponseCode();
 
         if ($responseCode < 200 || $responseCode > 299 || isset($result['error'])) {

@@ -1,5 +1,4 @@
 <?php
-
 namespace Codeages\Biz\Invoice\Service;
 
 interface InvoiceService

@@ -3,23 +3,23 @@
 namespace Codeages\Biz\Framework\Dao;
 
 /**
- * Dao的缓存策略接口
+ * Dao 的缓存策略接口
  */
 interface CacheStrategy
 {
     /**
-     * 在Dao的get/find/search/count系列方法调用之前调用，以获取缓存。
+     * 在 Dao 的 get/find/search/count 系列方法调用之前调用，以获取缓存。
      *
      * @param string $dao       Dao
-     * @param string $method    调用的Dao方法名
-     * @param array  $arguments 调用的Dao参数
+     * @param string $method    调用的 Dao 方法名
+     * @param array  $arguments 调用的 Dao 参数
      *
-     * @return mixed 缓存存在返回结果集，否则返回false
+     * @return mixed 缓存存在返回结果集，否则返回 false
      */
     public function beforeQuery(GeneralDaoInterface $dao, $method, $arguments);
 
     /**
-     * 在Dao的get/find/search/count系列方法调用之后调用，可以缓存结果。
+     * 在 Dao 的 get/find/search/count 系列方法调用之后调用，可以缓存结果。
      *
      * @param string $dao       Dao
      * @param string $method    调用Dao方法名
@@ -29,7 +29,7 @@ interface CacheStrategy
     public function afterQuery(GeneralDaoInterface $dao, $method, $arguments, $data);
 
     /**
-     * 在Dao的create系列方法调用之后调用，可以缓存结果集。
+     * 在 Dao 的 create 系列方法调用之后调用，可以缓存结果集。
      *
      * @param string $dao       Dao
      * @param string $method    调用Dao方法名
@@ -39,7 +39,7 @@ interface CacheStrategy
     public function afterCreate(GeneralDaoInterface $dao, $method, $arguments, $row);
 
     /**
-     * 在Dao的update系列方法调用之后调用，可以缓存结果集。
+     * 在 Dao 的 update 系列方法调用之后调用，可以缓存结果集。
      *
      * @param string $dao       Dao
      * @param string $method    调用Dao方法名
@@ -49,7 +49,7 @@ interface CacheStrategy
     public function afterUpdate(GeneralDaoInterface $dao, $method, $arguments, $row);
 
     /**
-     * 在Dao的wave系列方法调用之后调用，可以缓存结果集。
+     * 在 Dao 的 wave 系列方法调用之后调用，可以缓存结果集。
      *
      * @param string $dao       Dao
      * @param string $method    调用Dao方法名
@@ -59,7 +59,7 @@ interface CacheStrategy
     public function afterWave(GeneralDaoInterface $dao, $method, $arguments, $affected);
 
     /**
-     * 在Dao的delete系列方法调用之后调用，可以删除缓存。
+     * 在 Dao 的 delete 系列方法调用之后调用，可以删除缓存。
      *
      * @param string $dao       Dao
      * @param string $method    调用Dao方法名

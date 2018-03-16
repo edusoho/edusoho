@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Invoice\Service\InvoiceService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
+
 class InvoiceServiceImpl extends BaseService implements InvoiceService
 {
     public function getInvoice($id)
@@ -72,7 +73,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
 
         $money = 0;
         foreach ($orders as $key => $order) {
-            if ($user['id'] != $order['user_id']) {
+            if ($user['id'] != $order['user_id'] ) {
                 throw new AccessDeniedException('order owner is invalid');
             }
 
@@ -128,7 +129,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'review_user_id' => 0,
             'number' => '',
             'post_number' => '',
-            'review_comment' => '',
+            'review_comment' => ''
         ));
 
         $invoice = $this->getInvoiceDao()->update($id, $fields);

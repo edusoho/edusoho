@@ -34,7 +34,7 @@ function saveNote($btn = null) {
     return;
   }
   saveRedmineLoading();
-  $btn ? $btn.attr('disabled', 'disabled'): "";
+  $btn ? $btn.attr('disabled', 'disabled'): '';
   $.post($form.attr('action'), data)
     .then((response) => {
       saveRedmineSuccess();

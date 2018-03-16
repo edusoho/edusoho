@@ -14,15 +14,15 @@ class AddActivityWatchToStatementJobTest extends BaseTestCase
         $this->mockBiz('Xapi:XapiService', array(
             array('functionName' => 'searchWatchLogs', 'returnValue' => array(
                 array('id' => 1, 'user_id' => 1, 'updated_time' => time(), 'activity_id' => 1),
-                array('id' => 2, 'user_id' => 2, 'updated_time' => time(), 'activity_id' => 2),
-                array('id' => 3, 'user_id' => 3, 'updated_time' => time(), 'activity_id' => 3),
+//                array('id' => 2, 'user_id' => 2, 'updated_time' => time(), 'activity_id' => 2),
+//                array('id' => 3, 'user_id' => 3, 'updated_time' => time(), 'activity_id' => 3),
             )),
-            array('functionName' => 'createStatement', 'returnValue' => true),
-            array('functionName' => 'updateWatchLog', 'returnValue' => true),
+            array('functionName' => 'batchCreateStatements', 'returnValue' => true),
+            array('functionName' => 'batchUpdateWatchLogPushed', 'returnValue' => true),
         ));
 
         $this->mockBiz('Activity:ActivityService', array(
-            array('functionName' => 'getActivity', 'returnValue' => array('id' => 1, 'mediaType' => 'listen')),
+            array('functionName' => 'findActivities', 'returnValue' => array(array('id' => 1, 'mediaType' => 'listen'))),
         ));
         $this->getActivityWatchLogDao()->create(array_merge($this->mockWatchLog(), array('updated_time' => time() - 3600)));
         $job = new AddActivityWatchToStatementJob();

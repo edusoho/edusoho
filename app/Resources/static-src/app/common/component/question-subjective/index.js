@@ -1,7 +1,7 @@
 export let questionSubjectiveRemask = ($element) => {
   let hasSubjective = false;
-   let html = '';
-  let $subjectiveRemask = $(".js-subjective-remask");
+  let html = '';
+  let $subjectiveRemask = $('.js-subjective-remask');
 
   $element.find('tbody tr').each(function() {
     let type = $(this).data('type');
@@ -25,4 +25,4 @@ export let questionSubjectiveRemask = ($element) => {
     html = Translator.trans('activity.homework_manage.pass_objective_question_hint');
   }
   $subjectiveRemask.html(html).removeClass('hidden');
-}
+};

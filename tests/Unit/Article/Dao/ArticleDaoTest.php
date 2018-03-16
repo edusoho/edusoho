@@ -158,7 +158,16 @@ class ArticleDaoTest extends BaseDaoTestCase
         $res[] = $this->getDao()->searchByCategoryIds(array(1), 0, 10);
         $res[] = $this->getDao()->searchByCategoryIds(array(1, 2), 0, 10);
 
-        $this->assertEquals(array($expected[0], $expected[1]), $res[0]);
+        $this->assertEquals(2, count($res[0]));
+        foreach ($res[0] as $key => $value) {
+            if ($expected[0]['id'] === $value['id']) {
+                $this->assertArrayEquals($expected[0], $value);
+            } elseif ($expected[1]['id'] === $value['id']) {
+                $this->assertArrayEquals($expected[1], $value);
+            } else {
+                $this->assertTrue(false);
+            }
+        }
         $this->assertEquals($expected, $res[1]);
     }
 

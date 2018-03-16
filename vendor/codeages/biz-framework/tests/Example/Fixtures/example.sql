@@ -48,3 +48,12 @@ CREATE TABLE `example3` (
   `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `example_uuid`;
+CREATE TABLE `example_uuid` (
+  `id` binary(16) NOT NULL,
+  `name` varchar(32) NOT NULL DEFAULT '',
+  `created_time` int(10) unsigned NOT NULL DEFAULT 0,
+  `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -47,7 +47,7 @@ export default class Homework {
     event.preventDefault();
     let $btn = $(event.currentTarget);
     let excludeIds = [];
-    $("#question-table-tbody").find('[name="questionIds[]"]').each(function () {
+    $('#question-table-tbody').find('[name="questionIds[]"]').each(function () {
       excludeIds.push($(this).val());
     });
     this.$questionPickedModal.modal().data('manager', this);
@@ -77,8 +77,8 @@ export default class Homework {
         },
       },
       messages: {
-        description: Translator.trans("activity.homework_manage.question_homework_hint"),
-        questionLength: Translator.trans("activity.homework_manage.question_required_error_hint"),
+        description: Translator.trans('activity.homework_manage.question_homework_hint'),
+        questionLength: Translator.trans('activity.homework_manage.question_required_error_hint'),
       },
     });
     this.validator2 = validator;
@@ -88,17 +88,17 @@ export default class Homework {
   }
 
   setValidateRule() {
-    $.validator.addMethod("arithmeticFloat", function (value, element) {
+    $.validator.addMethod('arithmeticFloat', function (value, element) {
       return this.optional(element) || /^[0-9]+(\.[0-9]?)?$/.test(value);
-    }, $.validator.format(Translator.trans("activity.homework_manage.arithmetic_float_error_hint")));
+    }, $.validator.format(Translator.trans('activity.homework_manage.arithmetic_float_error_hint')));
 
-    $.validator.addMethod("positiveInteger", function (value, element) {
+    $.validator.addMethod('positiveInteger', function (value, element) {
       return this.optional(element) || /^[1-9]\d*$/.test(value);
-    }, $.validator.format(Translator.trans("activity.homework_manage.positive_integer_error_hint")));
+    }, $.validator.format(Translator.trans('activity.homework_manage.positive_integer_error_hint')));
 
-    $.validator.addMethod("DateAndTime", function (value, element) {
+    $.validator.addMethod('DateAndTime', function (value, element) {
       let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
       return this.optional(element) || reg.test(value);
-    }, $.validator.format(Translator.trans("activity.homework_manage.date_and_time_error_hint:mm")));
+    }, $.validator.format(Translator.trans('activity.homework_manage.date_and_time_error_hint:mm')));
   }
 }
