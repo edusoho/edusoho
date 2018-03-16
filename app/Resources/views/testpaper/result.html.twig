@@ -54,8 +54,10 @@
       {% if ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
         <div class="testpaper-timer">
           {% set redoTime = (paperResult.checkedTime + target.redoInterval * 3600) - ("now"|date("U")) %}
-          {{ 'testpaper.redo_countdown'|trans }}:
-          <span class="timer js-testpaper-redo-timer" data-time="{{ redoTime }}">00:00:00</span>
+          <p>
+            {{ 'testpaper.redo_countdown'|trans }}:
+            <span class="timer js-testpaper-redo-timer" data-time="{{ redoTime }}">00:00:00</span>
+          </p>
           <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}" disabled="disabled">{{'testpaper.do_gagin'|trans}}</a>
         </div>
       {% else %}

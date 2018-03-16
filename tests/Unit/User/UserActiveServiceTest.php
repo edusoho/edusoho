@@ -2,19 +2,12 @@
 
 namespace Tests\Unit\User;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
-use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\ServiceKernel;
 
 class UserActiveServiceTest extends BaseTestCase
 {
-    public function testCreateActiveUser()
-    {
-        $result = $this->getUserActiveService()->createActiveUser();
-        $this->assertEquals(1, $result['userId']);
-    }
-
     public function testCreateActiveUserWithNotLogin()
     {
         $currentUser = new CurrentUser();
@@ -27,24 +20,8 @@ class UserActiveServiceTest extends BaseTestCase
             'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $result = $this->getUserActiveService()->createActiveUser();
+        $result = ReflectionUtils::invokeMethod($this->getUserActiveService(), 'createActiveUser');
         $this->assertEquals(array(), $result);
-    }
-
-    public function testGetActiveUser()
-    {
-        $this->mockBiz(
-            'User:UserActiveDao',
-            array(
-                array(
-                    'functionName' => 'getByUserId',
-                    'returnValue' => array('id' => 2, 'userId' => 3),
-                    'withParams' => array(3),
-                ),
-            )
-        );
-        $result = $this->getUserActiveService()->getActiveUser(3);
-        $this->assertEquals(array('id' => 2, 'userId' => 3), $result);
     }
 
     public function testIsActiveUser()
@@ -59,7 +36,7 @@ class UserActiveServiceTest extends BaseTestCase
                 ),
             )
         );
-        $result = $this->getUserActiveService()->isActiveUser();
+        $result = ReflectionUtils::invokeMethod($this->getUserActiveService(), 'isActiveUser');
         $this->assertTrue($result);
     }
 
@@ -79,17 +56,31 @@ class UserActiveServiceTest extends BaseTestCase
         $this->assertEquals(array(array('userId' => 1, 'date' => '20171022')), $result);
     }
 
-    public function testWriteToFile()
+    public function testSaveOnline()
     {
-        $path = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/files/test/test.txt';
-        $result = $this->getUserActiveService()->writeToFile($path, 2);
-        $this->assertTrue($result);
-        $fileSystem = new Filesystem();
-        if (file_exists(dirname($path))) {
-            $fileSystem->remove(dirname($path));
-        }
+        $this->mockBiz('Session:OnlineService', array(
+            array(
+                'functionName' => 'saveOnline',
+                'returnValue' => 1,
+            ),
+        ));
+        $this->getUserActiveService()->saveOnline(array('user_id' => 1900));
+        $result = $this->getUserActiveDao()->getByUserId(1900);
+        $this->assertNotNull($result);
+        $this->assertEquals(1900, $result['userId']);
     }
 
+    /**
+     * @return \Biz\User\Dao\UserActiveDao
+     */
+    private function getUserActiveDao()
+    {
+        return $this->createDao('User:UserActiveDao');
+    }
+
+    /**
+     * @return \Biz\User\Service\UserActiveService
+     */
     protected function getUserActiveService()
     {
         return $this->createService('User:UserActiveService');

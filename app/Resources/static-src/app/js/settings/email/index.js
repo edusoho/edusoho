@@ -10,7 +10,7 @@ $('#setting-email-form').validate({
     'email': 'required es_email'
   },
   submitSuccess(data) {
-      $('#modal').html(data);
+    $('#modal').html(data);
   },
   submitError(data) {
     notify('danger',  Translator.trans(data.responseJSON.message));

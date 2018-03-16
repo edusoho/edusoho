@@ -11,4 +11,4 @@ let validator = $form.validate({
       equalTo: '#form_password'
     }
   }
-})
+});

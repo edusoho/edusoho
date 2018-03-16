@@ -8,7 +8,7 @@ class InvoiceTemplateServiceTest extends IntegrationTestCase
     {
         parent::setUp();
         $currentUser = array(
-            'id' => 1,
+            'id' => 1
         );
         $this->biz['user'] = $currentUser;
     }
@@ -24,7 +24,7 @@ class InvoiceTemplateServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateInvoiceTemplateWithoutTitle()
     {
@@ -53,7 +53,7 @@ class InvoiceTemplateServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUpdateInvoiceTemplateWithInvalidArgumentException()
     {
@@ -149,7 +149,7 @@ class InvoiceTemplateServiceTest extends IntegrationTestCase
             'address' => 'hangzhou zhejiang',
             'phone' => '15700081111',
             'receiver' => 'tinyyywood',
-            'user_id' => $this->biz['user']['id'],
+            'user_id' => $this->biz['user']['id']
         );
     }
 

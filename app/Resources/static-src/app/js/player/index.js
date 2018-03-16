@@ -7,13 +7,13 @@ class Show {
   constructor(element) {
     let container = $(element);
     this.htmlDom = $(element);
-    this.userId = container.data("userId");
-    this.userName = container.data("userName");
-    this.fileId = container.data("fileId");
-    this.fileGlobalId = container.data("fileGlobalId");
+    this.userId = container.data('userId');
+    this.userName = container.data('userName');
+    this.fileId = container.data('fileId');
+    this.fileGlobalId = container.data('fileGlobalId');
 
-    this.courseId = container.data("courseId");
-    this.lessonId = container.data("lessonId");
+    this.courseId = container.data('courseId');
+    this.lessonId = container.data('lessonId');
     this.timelimit = container.data('timelimit');
 
     this.playerType = container.data('player');
@@ -43,7 +43,7 @@ class Show {
   }
 
   initView() {
-    let html = "";
+    let html = '';
     if (this.fileType == 'video') {
       if (this.playerType == 'local-video-player') {
         html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
@@ -98,8 +98,8 @@ class Show {
         let item = {
           label: subtitles[i].name,
           src: subtitles[i].url,
-          'default': ("default" in subtitles[i]) ? subtitles[i]['default'] : false
-        }
+          'default': ('default' in subtitles[i]) ? subtitles[i]['default'] : false
+        };
         textTracks.push(item);
       }
     }
@@ -129,8 +129,8 @@ class Show {
   initEvent() {
     let player = this.initPlayer();
     let messenger = this.initMesseger();
-    player.on("ready", () => {
-      messenger.sendToParent("ready", {
+    player.on('ready', () => {
+      messenger.sendToParent('ready', {
         pause: true,
         currentTime: player.getCurrentTime()
       });
@@ -167,8 +167,8 @@ class Show {
 
     });
 
-    player.on("timechange", (data) => {
-      messenger.sendToParent("timechange", {
+    player.on('timechange', (data) => {
+      messenger.sendToParent('timechange', {
         pause: true,
         currentTime: player.getCurrentTime()
       });
@@ -179,22 +179,22 @@ class Show {
       }
     });
 
-    player.on("paused", () => {
-      messenger.sendToParent("paused", {
+    player.on('paused', () => {
+      messenger.sendToParent('paused', {
         pause: true,
         currentTime: player.getCurrentTime()
       });
     });
 
-    player.on("playing", () => {
-      messenger.sendToParent("playing", {
+    player.on('playing', () => {
+      messenger.sendToParent('playing', {
         pause: false,
         currentTime: player.getCurrentTime()
       });
     });
 
-    player.on("ended", () => {
-      messenger.sendToParent("ended", {
+    player.on('ended', () => {
+      messenger.sendToParent('ended', {
         stop: true
       });
       if (!this.isCloudPalyer()) {

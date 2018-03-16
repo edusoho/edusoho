@@ -193,6 +193,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'parentId IN ( :parentIds )',
                 'id NOT IN ( :excludeIds )',
                 'id IN ( :courseIds )',
+                'id IN ( :ids)',
                 'locked = :locked',
                 'lessonNum > :lessonNumGT',
                 'orgCode = :orgCode',

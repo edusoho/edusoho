@@ -8,26 +8,25 @@ let editor = CKEDITOR.replace('profile_about', {
   filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
 });
 
-$(".js-date").datetimepicker({
+$('.js-date').datetimepicker({
   autoclose: true,
   format: 'yyyy-mm-dd',
   minView: 'month',
   language: document.documentElement.lang
 });
 
-$("#user-profile-form").validate({
+$('#user-profile-form').validate({
   rules: {
     'nickname': {
-			required: true,
-			chinese_alphanumeric: true,
-			byte_minlength: 4,
-			byte_maxlength: 18,
-			nickname: true,
-			chinese_alphanumeric: true,
-			es_remote: {
-				type: 'get',
-			}
-		},
+      required: true,
+      chinese_alphanumeric: true,
+      byte_minlength: 4,
+      byte_maxlength: 18,
+      nickname: true,
+      es_remote: {
+        type: 'get',
+      }
+    },
     'profile[truename]': {
       minlength: 2,
       maxlength: 18
@@ -51,11 +50,11 @@ $("#user-profile-form").validate({
     'profile[floatField3]': 'float',
     'profile[floatField4]': 'float',
     'profile[floatField5]': 'float',
+    'profile[dateField1]': 'date',
+    'profile[dateField2]': 'date',
+    'profile[dateField3]': 'date',
+    'profile[dateField4]': 'date',
     'profile[dateField5]': 'date',
-    'profile[dateField5]': 'date',
-    'profile[dateField5]': 'date',
-    'profile[dateField5]': 'date',
-    'profile[dateField5]': 'date'
   }
 });
 

@@ -13,7 +13,7 @@ for (let i = 0; i <= partnum; i++) {
   $('[data-role="scale-default"]').before($new_scale_default);
 }
 
-messenger.on("timechange", function(data) {
+messenger.on('timechange', function(data) {
   $('.scale-white').css('left', getleft(data.currentTime, mediaLength));
 });
 

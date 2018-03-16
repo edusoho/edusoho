@@ -58,8 +58,8 @@ class Choice extends QuestionFormBase {
   publishMessage() {
     console.log('publishMessage');
     postal.publish({
-      channel : "manage-question",
-      topic : "question-create-form-validator-start",
+      channel : 'manage-question',
+      topic : 'question-create-form-validator-start',
       data : {
         isValidator: true,
       }
@@ -69,8 +69,8 @@ class Choice extends QuestionFormBase {
   subscriptionMessage() {
     console.log('subscriptionMessage');
     postal.subscribe({
-      channel  : "manage-question",
-      topic    : "question-create-form-validator-end",
+      channel  : 'manage-question',
+      topic    : 'question-create-form-validator-end',
       callback : (data, envelope) =>{
         this.isSubmit = data.isValidator;
         console.log({

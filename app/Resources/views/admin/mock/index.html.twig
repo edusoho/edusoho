@@ -7,87 +7,10 @@
   <select class="mockSelector">
     <option value="distributor">分销模拟</option>
     <option value="marketing">微营销模拟</option>
+    <option value="other">其他模拟</option>
   </select>
 
-  <div class="distributor tagContent">
-    分销平台token伪造
-    <form id="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token')}}">
-      <div>
-        优惠券金额(分): <input type="text" name="couponPrice" value="10000"></input>
-      </div>
-      <div>
-        优惠卷有效期(天): <input type="text" name="couponExpiryDay" value="{{couponExpireDateStr}}"></input>
-      </div>
-      <div>
-        token有效期: <input type="text" name="tokenExpireDateStr" value="{{tokenExpireDateStr}}"></input>
-      </div>
-    </form>
-
-    生成的二维码地址: <textarea type="text" class="distributorRegisterUrl" readonly style="width: 800px"></textarea>
-    <div>
-      <input type="button" value="提交" id="tokenGeneratorBtn"></input>
-    </div>
-
-    <br/><br/>
-    发送
-    <div>
-      类型: 
-      <select class="sendedType" data-url="{{ path('admin_mocked_distributor_get_post_data') }}">
-        <option value="">----</option>
-        <option value="User">用户</option>
-        <option value="Order">订单</opiton>
-      </select>
-    </div>
-
-    <div>
-      发送的数据 <br/>
-      <textarea type="text" class="sendedData" readonly style="width: 1000px; height: 200px;" data-url="{{ path('admin_mocked_distributor_post_data') }}"></textarea>
-      <br/>发送结果 <span class="sendResult"></span>
-    </div>
-
-    <input type="button" value="发送" class="sendBtn" data-url="{{ path('admin_mocked_distributor_post_data') }}"></input>
-  </div>
-
-  <div class="marketing tagContent" style="display:none">
-    <div>
-      <input type="button" value="发送" class="sendMarketingBtn" data-url="{{ path('admin_mocked_marketing_post_data') }}"></input>
-      <input type="text" class="defaultUrl" style="width: 450px"></input>
-    </div>
-    <textarea type="text" class="sendedMarketingData" style="width: 500px; height: 500px;">
-      {
-        "activity_id":"152",
-        "activity_name":"砍价活动",
-        "client_ip":"192.168.9.250",
-        "deduct":{
-            "id":"727",
-            "order_id":"729",
-            "detail":"砍价",
-            "item_id":"729",
-            "deduct_type":"cut",
-            "deduct_id":"52",
-            "deduct_amount":"99",
-            "status":"paid",
-            "user_id":"1430",
-            "seller_id":"2",
-            "snapshot":[],
-            "created_time":"1517989048",
-            "updated_time":"1517989055"
-        },
-        "mobile":"13675812222",
-        "nickname":"李二",
-        "order_id":"729",
-        "order_pay_amount":"1",
-        "order_pay_time":"{{ date().timestamp }}",
-        "order_price_amount":"100",
-        "target_id":"1237",
-        "target_type":"course",
-        "user_id":"1430"
-      }
-    </textarea>
-    <div style="display: inline">
-      <div style="display: inline; margin-top: -20px; position: absolute; padding-left: 28px;">发送结果</div>
-      <span style="visibility: hidden">123</span>
-      <textarea type="text" class="sendMarketingResult" readonly style="width: 500px; height: 500px;"></textarea>
-    </div>
-  </div>
+  {% include 'admin/mock/content-distributor.html.twig' %}
+  {% include 'admin/mock/content-marketing.html.twig' %}
+  {% include 'admin/mock/content-other.html.twig' %}
 {% endblock %}

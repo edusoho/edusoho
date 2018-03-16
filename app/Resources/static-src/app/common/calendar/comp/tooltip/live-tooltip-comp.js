@@ -1,4 +1,4 @@
-import BaseTooltipComp from './base-tooltip-comp'
+import BaseTooltipComp from './base-tooltip-comp';
 
 export default class LiveTooltip extends BaseTooltipComp {
 

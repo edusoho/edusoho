@@ -21,7 +21,14 @@
         <env name="DB_PASSWORD" value=""/>
         <env name="REDIS_HOST" value="127.0.0.1:6379"/>
     </php>
-
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <file>src/Testing/BizCodeceptionModule.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="EduSoho Framework Test Suite">
             <directory>./tests</directory>

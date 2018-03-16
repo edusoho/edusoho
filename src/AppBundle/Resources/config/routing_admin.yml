@@ -952,6 +952,11 @@ admin_mocked_marketing_post_data:
     defaults: { _controller: AppBundle:Admin/Mock:postMarketingData }
     methods: [POST]
 
+admin_mocked_post_data_version_3:
+    path: /mock/post_data_version_3
+    defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
+    methods: [POST]
+
 admin_optimize:
     path:  /setting/optimize
     defaults: { _controller: AppBundle:Admin/Optimize:index }

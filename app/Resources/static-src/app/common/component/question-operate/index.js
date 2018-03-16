@@ -1,5 +1,5 @@
 import notify from 'common/notify';
-import { questionSubjectiveRemask } from '../question-subjective'
+import { questionSubjectiveRemask } from '../question-subjective';
 
 export default class QuestionOperate {
   constructor($form, $modal) {
@@ -26,11 +26,11 @@ export default class QuestionOperate {
       onDrop: (item, container, _super) => {
         _super(item, container);
         if (item.hasClass('have-sub-questions')) {
-            let $tbody = item.parents('tbody');
-            $tbody.find('tr.is-question').each(function() {
-                let $tr = $(this);
-                $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
-            });
+          let $tbody = item.parents('tbody');
+          $tbody.find('tr.is-question').each(function() {
+            let $tr = $(this);
+            $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+          });
         }
         this.refreshSeqs();
       }
@@ -40,11 +40,11 @@ export default class QuestionOperate {
   replaceQuestion(event) {
     let $target = $(event.currentTarget);
     let excludeIds = [];
-    let $tbody = this.$form.find("tbody:visible");
+    let $tbody = this.$form.find('tbody:visible');
 
     $tbody.find('[name="questionIds[]"]').each(function(){
       excludeIds.push($(this).val());
-    })
+    });
 
     this.$modal.data('manager', this).modal();
     $.get($target.data('url'), {excludeIds: excludeIds.join(','), type: $tbody.data('type')}, html => {
@@ -67,12 +67,12 @@ export default class QuestionOperate {
     if (this.$form.find('[data-role="batch-item"]:checked').length == 0) {
       let $redmine = this.$form.find('.js-help-redmine');
       if($redmine) {
-        $redmine.text(Translator.trans('activity.testpaper_manage.question_required_error_hint')).show();;
+        $redmine.text(Translator.trans('activity.testpaper_manage.question_required_error_hint')).show();
         setTimeout(function() {
           $redmine.slideUp();
         }, 3000);
       }else {
-       notify('danger', Translator.trans('activity.testpaper_manage.question_required_error_hint'));
+        notify('danger', Translator.trans('activity.testpaper_manage.question_required_error_hint'));
       }
     }
     let self = this;
@@ -85,18 +85,18 @@ export default class QuestionOperate {
       }
       $(this).closest('tr').remove();
       
-    })
+    });
     questionSubjectiveRemask(this.$form);
   }
 
   previewQuestion(event) {
     event.preventDefault();
-    window.open($(event.currentTarget).data('url'), '_blank', "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
+    window.open($(event.currentTarget).data('url'), '_blank', 'directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0');
   }
 
   refreshSeqs() {
     let seq = 1;
-    this.$form.find("tbody tr").each(function(){
+    this.$form.find('tbody tr').each(function(){
       let $tr = $(this);
                   
       if (!$tr.hasClass('have-sub-questions')) { 

@@ -23,7 +23,7 @@ export default class Base {
               return true;
             }
           },
-	        course_title: true
+          course_title: true
         },
         subtitle: {
           required: {
@@ -32,7 +32,7 @@ export default class Base {
               return false;
             }
           },
-	        course_title: true
+          course_title: true
         }
       },
     });

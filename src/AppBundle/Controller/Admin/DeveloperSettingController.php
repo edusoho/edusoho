@@ -28,7 +28,7 @@ class DeveloperSettingController extends BaseController
 
         $developerSetting = array_merge($default, $developerSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $developerSetting = $request->request->all();
 
             $this->openDevModeIfDebugEnable($developerSetting);
@@ -61,7 +61,7 @@ class DeveloperSettingController extends BaseController
 
     public function versionAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $app = $this->getAppservice()->getAppByCode($data['code']);
 
@@ -84,7 +84,7 @@ class DeveloperSettingController extends BaseController
 
     public function magicAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $setting = $request->request->get('setting', '{}');
             $setting = json_decode($setting, true);
 
@@ -112,8 +112,6 @@ class DeveloperSettingController extends BaseController
             $devLockFile = $this->container->getParameter('kernel.root_dir').'/data/dev.lock';
             if ($developerSetting['debug']) {
                 $fileSystem->touch($devLockFile);
-            } else {
-                $fileSystem->remove($devLockFile);
             }
         } catch (\Exception $e) {
             //可能线上环境的dev.lock被人加过，导致权限问题无法删除

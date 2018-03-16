@@ -101,13 +101,13 @@ class IntegrationTestCase extends TestCase
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
-        if ('true' === getenv('CACHE_ENABLED')) {
+        if (getenv('CACHE_ENABLED') === 'true') {
             $biz['dao.cache.enabled'] = true;
             $biz['dao.cache.annotation'] = true;
         }
 
         if (getenv('CACHE_STRATEGY_DEFAULT')) {
-            if ('null' == getenv('CACHE_STRATEGY_DEFAULT')) {
+            if (getenv('CACHE_STRATEGY_DEFAULT') == 'null') {
                 $biz['dao.cache.strategy.default'] = null;
             } else {
                 $biz['dao.cache.strategy.default'] = getenv('CACHE_STRATEGY_DEFAULT');

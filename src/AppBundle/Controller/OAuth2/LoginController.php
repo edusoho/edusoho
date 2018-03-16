@@ -161,11 +161,13 @@ class LoginController extends LoginBindController
 
             return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
         } else {
-            $oauthUser->displayCaptcha = true;
+            $oauthUser->captchaEnabled = true;
             if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
-                $oauthUser->displayCaptcha =
+                $oauthUser->captchaEnabled =
                     'captchaRequired' == $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
             }
+
+            $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
 
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,

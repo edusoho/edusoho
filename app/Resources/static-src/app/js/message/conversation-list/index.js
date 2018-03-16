@@ -1,4 +1,4 @@
-$("#site-navbar").find('.message-badge-container .badge').remove();
+$('#site-navbar').find('.message-badge-container .badge').remove();
 
 $('.conversation-list').on('click', 'a', function (e) {
   e.stopPropagation();
