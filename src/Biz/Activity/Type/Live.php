@@ -19,9 +19,7 @@ class Live extends Activity
 
     public function preCreateCheck($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
-            throw new InvalidArgumentException('activity.missing_params');
-        }
+        $this->baseFieldsCheck($fields);
 
         $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
             $fields['fromCourseId'],
@@ -36,13 +34,7 @@ class Live extends Activity
 
     public function preUpdateCheck($activity, $newFields)
     {
-        if (empty($newFields['startTime']) || empty($newFields['length'])) {
-            return;
-        }
-
-        if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
-            throw new InvalidArgumentException('activity.missing_params');
-        }
+        $this->baseFieldsCheck($newFields);
 
         $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
             $newFields['fromCourseId'],
@@ -53,6 +45,17 @@ class Live extends Activity
 
         if ($overlapTimeActivities) {
             throw new InvalidArgumentException('activity.live.overlap_time');
+        }
+    }
+
+    private function baseFieldsCheck($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
+            throw new InvalidArgumentException('activity.missing_params');
+        }
+
+        if ($fields['startTime'] < time()) {
+            throw new InvalidArgumentException('activity.after_now_invalid');
         }
     }
 
