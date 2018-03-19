@@ -33,7 +33,6 @@ class RegisterTypeToolkit
      * @param $accountType 分为 email 或 mobile
      * @param $registrations
      * array(
-     *  'type' => 'mobile', //mobile 或 email
      *  'distributorToken' => '....', // 如果从分销平台注册过来，需要带上 distributorToken
      * )
      */
