@@ -117,7 +117,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
                         $this->getUserService()->register(
                             $registration,
-                            $this->getBiz()['user.register.type.toolkit']->getRegisterTypes($registration)
+                            $this->getRegisterTypeToolkit()->getRegisterTypes($registration)
                         );
 
                         $user = $this->userProvider->loadUserByUsername($username);
@@ -142,7 +142,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
     }
 
-    private function syncEmailAndPassword($user, $partnerUser, $token)
+    protected function syncEmailAndPassword($user, $partnerUser, $token)
     {
         try {
             $isEmaildChanged = ($user['email'] != $partnerUser['email']);
@@ -167,7 +167,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         return $user;
     }
 
-    private function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     {
         $s = '';
         $cLength = strlen($chars);
@@ -182,12 +182,12 @@ class AuthenticationProvider extends UserAuthenticationProvider
     /**
      * @return SettingService
      */
-    private function getSettingService()
+    protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
     }
@@ -195,7 +195,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
     /**
      * @return LogService
      */
-    private function getLogService()
+    protected function getLogService()
     {
         return ServiceKernel::instance()->createService('System:LogService');
     }
@@ -203,7 +203,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
     /**
      * @return AuthService
      */
-    private function getAuthService()
+    protected function getAuthService()
     {
         return ServiceKernel::instance()->createService('User:AuthService');
     }
@@ -216,5 +216,12 @@ class AuthenticationProvider extends UserAuthenticationProvider
     protected function getBiz()
     {
         return $this->getServiceKernel()->getBiz();
+    }
+
+    protected function getRegisterTypeToolkit()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user.register.type.toolkit'];
     }
 }

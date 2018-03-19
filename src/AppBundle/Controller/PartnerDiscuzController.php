@@ -106,7 +106,7 @@ class PartnerDiscuzController extends BaseController
 
             $user = $this->getUserService()->register(
                 $registration,
-                $this->getBiz()['user.register.type.toolkit']->getRegisterTypes($registration)
+                $this->getRegisterTypeToolkit()->getRegisterTypes($registration)
             );
         } else {
             $user = $this->getUserService()->getUser($bind['toId']);
@@ -288,7 +288,7 @@ class PartnerDiscuzController extends BaseController
     /**
      * @return AuthService
      */
-    private function getAuthService()
+    protected function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');
     }
@@ -299,5 +299,12 @@ class PartnerDiscuzController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getRegisterTypeToolkit()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user.register.type.toolkit'];
     }
 }
