@@ -43,7 +43,7 @@
 
 		{% if lesson.status == 'published' and lesson.type in ['live','liveOpen'] and lesson.isEnd  %}
 			{% if lesson.canRecord|default(false) and lesson.replayStatus != 'videoGenerated' %}
-				<a class="cd-link-assist cd-mr24 js-generate-replay"
+				<a class="cd-link-assist cd-mr24 js-generate-replay replay-lesson-btn"
 				{% if lesson.replayStatus == 'ungenerated' %}
 				title="{{'course.live.replay_manage.record'|trans}}"
 				{% else %}
