@@ -51,6 +51,7 @@
         "jquery.countdown": "1.2.8",
         "jquery.cycle2": "2.1.7",
         "js-cookie": "2.1.3",
+        "jsdom": "^11.6.2",
         "lodash": "3.10.1",
         "mocha": "^5.0.4",
         "mochawesome": "^3.0.2",
@@ -75,6 +76,7 @@
         "ua-parser-js": "^0.7.17",
         "video.js": "4.10.2",
         "waypoints": "4.0.1",
+        "websocket": "^1.0.25",
         "weixin-js-sdk": "1.2.0"
     },
     "babel": {
