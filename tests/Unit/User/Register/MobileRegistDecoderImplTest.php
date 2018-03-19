@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\User;
+namespace Tests\Unit\User\Register;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
