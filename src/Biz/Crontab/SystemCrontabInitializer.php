@@ -77,7 +77,7 @@ class SystemCrontabInitializer
         $command = self::getCrontabJobCommand();
         $env = ServiceKernel::instance()->getEnvironment();
         $env = empty($env) ? 'prod' : $env;
-        $command .=  ' -e '.$env;
+        $command .= ' -e '.$env;
         $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
 
         $crontabJob = CrontabJob::createFromCrontabLine($command);
