@@ -56,6 +56,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'addNewFields',
             'addCourseChapters',
             'updateTaskFields',
             'updateChpaterCopyId',
@@ -94,6 +95,48 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function addNewFields()
+    {
+        $connection = $this->getConnection();
+        if (!$this->isFieldExist('course_chapter', 'status')) {
+            $connection->exec("
+                ALTER TABLE `course_chapter` ADD `status` varchar(20) NOT NULL DEFAULT 'published' COMMENT '发布状态 create|published|unpublished' AFTER `copyId`;
+            ");
+        }
+
+        if (!$this->isFieldExist('course_v8', 'isShowUnpublish')) {
+            $connection->exec("
+                ALTER TABLE `course_v8` ADD `isShowUnpublish` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '学员端是否展示未发布课时';
+            ");
+        }
+
+        if (!$this->isFieldExist('course_v8', 'seq')) {
+            $connection->exec("
+                ALTER TABLE `course_v8` ADD COLUMN `seq` int(10)  NOT NULL DEFAULT 0 COMMENT '排序序号' AFTER `status`;
+            ");
+        }
+
+        if (!$this->isFieldExist('course_v8', 'lessonNum')) {
+            $connection->exec("
+                ALTER TABLE `course_v8` ADD COLUMN `lessonNum` int(10)  NOT NULL DEFAULT 0 COMMENT '课时总数' AFTER `compulsoryTaskNum`;
+            ");
+        }
+
+        if (!$this->isFieldExist('course_v8', 'publishLessonNum')) {
+            $connection->exec("
+                ALTER TABLE `course_v8` ADD COLUMN `publishLessonNum` int(10)  NOT NULL DEFAULT 0 COMMENT '课时发布数量' AFTER `lessonNum`;
+            ");
+        }
+
+        if (!$this->isFieldExist('course_chapter', 'isOptional')) {
+            $connection->exec("
+                ALTER TABLE `course_chapter` add `isOptional` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否选修' AFTER `status`;
+            ");
+        }
+
+        return 1;
     }
 
     protected function addCourseChapters()
