@@ -8,24 +8,24 @@
 {% block main %}
 
 <div class="panel panel-default panel-col lesson-manage-panel">
-	<div class="panel-heading">
-		{{'course.live.replay_manage.content_title'|trans}}
-	</div>
+  <div class="panel-heading">
+    {{'course.live.replay_manage.content_title'|trans}}
+  </div>
 
-	{% if items is empty %}
-	  <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
-	{% endif %}
+  {% if items is empty %}
+    <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
+  {% endif %}
 
-	<div class="panel-body">
-		<ul class="open-course-lesson sortable-list" id="course-item-list">
-			{% for id, item in items %}
-			  {% if 'lesson' in id %}
-			    {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
-			  {% endif %}
-			{% endfor %}
-		</ul>
-		<div class="cd-mt16 cd-ml40 color-warning">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
-	</div>
+  <div class="panel-body">
+    <ul class="open-course-lesson" id="course-item-list">
+      {% for id, item in items %}
+        {% if 'lesson' in id %}
+          {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="cd-mt16 cd-ml40 color-warning">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
+  </div>
 </div>
 
 {% endblock %}

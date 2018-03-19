@@ -47,7 +47,7 @@ class CoverCrop {
         }
       });
 
-    })
+    });
 
     $('.go-back').click(function() {
       history.go(-1);

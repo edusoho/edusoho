@@ -18,6 +18,35 @@ class XapiServiceTest extends BaseTestCase
         $this->assertEquals($createdStatement['id'], $result['id']);
     }
 
+    public function testBatchCreateStatements()
+    {
+        $statement = $this->mockStatement();
+        $statements = array($statement);
+        $this->getXapiService()->batchCreateStatements($statements);
+
+        $result = $this->getXapiService()->searchStatements(array(), array(), 0, 100);
+
+        $this->assertNotEmpty($result);
+        $this->assertEquals($statement['user_id'], $result[0]['user_id']);
+    }
+
+    public function testBatchUpdateWatchLogPushed()
+    {
+        $log = array(
+            'user_id' => 1,
+            'activity_id' => 1,
+            'course_id' => 1,
+            'task_id' => 1,
+            'watched_time' => time(),
+        );
+
+        $watchLog = $this->getXapiService()->createWatchLog($log);
+        $this->getXapiService()->batchUpdateWatchLogPushed(array($watchLog['id']));
+
+        $result = $this->getXapiService()->getWatchLog($watchLog['id']);
+        $this->assertEquals(1, $result['is_push']);
+    }
+
     public function testUpdateStatementsPushedByStatementIds()
     {
         $statement = $this->mockStatement();

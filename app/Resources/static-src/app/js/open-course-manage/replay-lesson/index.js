@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-
 // 再点一次就报错
 $('.js-generate-replay').on('click', (event) => {
   const $this = $(event.currentTarget);
@@ -26,5 +25,3 @@ $('.js-generate-replay').on('click', (event) => {
 });
 
 $(".js-tip-show").tooltip();
-
-

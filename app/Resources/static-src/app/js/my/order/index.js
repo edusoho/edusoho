@@ -1,6 +1,6 @@
 import notify from 'common/notify';
 
-$("#orders-table").on('click', '.js-cancel-refund', function() {
+$('#orders-table').on('click', '.js-cancel-refund', function() {
   let $that =  $(this);
   cd.confirm({
     title: Translator.trans('user.account.refund_cancel_title'),
@@ -18,7 +18,7 @@ $("#orders-table").on('click', '.js-cancel-refund', function() {
   });
 });
 
-$("#orders-table").on('click', '.js-cancel', function() {
+$('#orders-table').on('click', '.js-cancel', function() {
   let $that =  $(this);
 
   cd.confirm({

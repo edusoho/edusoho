@@ -2,7 +2,7 @@ $('a[role="replay-name-span"]').click(function(){
   let replayId = $(this).data('replayId');
   $(this).hide();
   $(`#replay-name-input-${replayId}`).show();
-})
+});
 
 $('input[role="replay-name-input"]').blur(function() {
   let self = $(this);
@@ -17,5 +17,5 @@ $('input[role="replay-name-input"]').blur(function() {
     if (res) {
       $(`#replay-name-span-${replayId}`).text(self.val());
     }
-  })
-})
+  });
+});

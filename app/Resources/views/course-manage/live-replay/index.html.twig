@@ -15,6 +15,11 @@
 
     <ul class="live-course-lesson sortable-list ml0" id="course-item-list">
       {% for task in tasks %}
+        <!--
+          获取lesson:lessons[task.categoryId]
+          标题：lessons[task.categoryId].title
+          序号：lessons[task.categoryId].seq
+        -->
         {% include 'course-manage/live-replay/list-item.html.twig' with {course: course, task: task, activity: task.activity } %}
       {% endfor %}
     </ul>

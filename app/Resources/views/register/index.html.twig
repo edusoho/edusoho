@@ -2,11 +2,7 @@
 {% block title %}{{'user.register'|trans}} - {{ parent() }}{% endblock %}
 {% set bodyClass = 'register' %}
 {% set parameter = get_parameters_from_url(app.request.uri) %}
-{% if setting('login_bind.weixinmob_enabled') == '1' %}
-	{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/auth/register/index.js','app/js/auth/is-weixin/index.js'])%}
-{% else %}
-	{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/auth/register/index.js'])%}
-{% endif %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/auth/register/index.js'])%}
 
 {% block content %}
 	<div class="es-section login-section">
@@ -19,7 +15,7 @@
 				<form id="register-form" method="post" action="">
 					{{ web_macro.flash_messages() }}
 
-					{% if inviteCode != null  %}
+					{% if inviteUser %}
 						<div class="alert alert-info alert-sm">{{'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
 					{% endif %}
 
@@ -98,11 +94,12 @@
 							</div>
 						</div>
 					{% endif %}
-					{% if (setting('invite.invite_code_setting')|default(0) == 1) and  inviteCode == null  %}
+
+					{% if (setting('invite.invite_code_setting')|default(0) == 1) and not inviteUser %}
 						<div class="form-group mbl">
-							<label class="control-label required" for="invite_code">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
+							<label class="control-label required" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
 							<div class="controls">
-								<input type="text" name="invite_code" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
+								<input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
 							</div>
 						</div>
 					{% endif %}
@@ -124,17 +121,13 @@
 
 					<input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-					{% if app.request.get('inviteCode', '') %}
-						<input type="hidden" id="invite_code" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
-					{% endif %}
-
 				</form>
 
 				{% if setting('login_bind.enabled') %}
 					<div class="social-login">
 
             <span>
-              {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path,inviteCode:inviteCode|default('')})) }}
+              {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
             </span>
 						<div class="line"></div>
 					</div>

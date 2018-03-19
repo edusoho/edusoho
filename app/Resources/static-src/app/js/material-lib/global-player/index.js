@@ -13,11 +13,11 @@ let play = new QiQiuYun.Player({
 });
 
 let messenger = new EsMessenger({
-    name: 'parent',
-    project: 'PlayerProject',
-    type: 'child'
-  });
+  name: 'parent',
+  project: 'PlayerProject',
+  type: 'child'
+});
 
-play.on("video.timeupdate", (mes) => {
-  messenger.sendToParent("video.timeupdate", mes);
+play.on('video.timeupdate', (mes) => {
+  messenger.sendToParent('video.timeupdate', mes);
 });

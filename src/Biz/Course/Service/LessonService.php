@@ -24,6 +24,8 @@ interface LessonService
 
     public function getLessonLimitNum();
 
+    public function findLessonsByCourseId($courseId);
+
     public function setOptional($courseId, $lessonId);
 
     public function unsetOptional($courseId, $lessonId);

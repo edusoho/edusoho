@@ -12,7 +12,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function getBySn($sn, array $options = array())
     {
-        $lock = isset($options['lock']) && true === $options['lock'];
+        $lock = isset($options['lock']) && $options['lock'] === true;
 
         $forUpdate = '';
 
@@ -38,7 +38,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function findByInvoiceSn($invoiceSn)
     {
         return $this->findByFields(array(
-            'invoice_sn' => $invoiceSn,
+            'invoice_sn' => $invoiceSn
         ));
     }
 
@@ -50,26 +50,10 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return (int) $builder->execute()->fetchColumn(0);
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        $declares = $this->declares();
-        foreach ($orderBys ?: array() as $order => $sort) {
-            $this->checkOrderBy($order, $sort, $declares['orderbys']);
-            $builder->addOrderBy($order, $sort);
-        }
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function sumPaidAmount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount');
+            ->select("sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount");
 
         return $builder->execute()->fetch();
     }
@@ -119,7 +103,6 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
-
         return false;
     }
 
@@ -130,7 +113,6 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
-
         return false;
     }
 

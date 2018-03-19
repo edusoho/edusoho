@@ -7,8 +7,8 @@ const ajax = (options) => {
     promise: true,
     dataType: 'json',
     beforeSend(request) {
-      request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-      request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+      request.setRequestHeader('Accept', 'application/vnd.edusoho.v2+json');
+      request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
 
       if (typeof options.before === 'function') {
         options.before(request);

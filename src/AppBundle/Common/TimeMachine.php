@@ -32,6 +32,13 @@ class TimeMachine
         return $timeMachine->format($format, strtotime($dateExpression));
     }
 
+    public static function isTimestamp($timestamp)
+    {
+        return ((string) (int) $timestamp === (string) $timestamp)
+        && ($timestamp <= PHP_INT_MAX)
+        && ($timestamp >= ~PHP_INT_MAX);
+    }
+
     public function __construct($timezone)
     {
         $this->timezone = $timezone;

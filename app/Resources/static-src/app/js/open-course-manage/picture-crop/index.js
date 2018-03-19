@@ -8,7 +8,7 @@ class CoverCrop {
 
   init() {
     let imageCrop = new EsImageCrop({
-      element: "#course-picture-crop",
+      element: '#course-picture-crop',
       cropedWidth: 480,
       cropedHeight: 270
     });
@@ -43,8 +43,8 @@ class CoverCrop {
           small: [96, 54],
         }
       });
-
     })
+
   }
 }
 

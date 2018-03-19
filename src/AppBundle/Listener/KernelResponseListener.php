@@ -3,8 +3,6 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Controller\OAuth2\OAuthUser;
-use Biz\User\Service\UserActiveService;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,8 +31,6 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $this->generateUserActiveLog($request);
-
         $auth = $this->getSettingService()->get('auth');
 
         if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])
@@ -58,27 +54,6 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
                 return;
             }
-        }
-    }
-
-    private function generateUserActiveLog(Request $request)
-    {
-        $session = $request->getSession();
-
-        if (empty($session)) {
-            return;
-        }
-
-        $activeUserTime = $session->get('active_user_time', 0);
-
-        //当天登录激活
-        if ($activeUserTime != strtotime('today')) {
-            $currentUser = $this->getUserService()->getCurrentUser();
-            $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
-            if (!$isActiveUser) {
-                $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
-            }
-            $request->getSession()->set('active_user_time', strtotime('today'));
         }
     }
 
@@ -166,13 +141,5 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
-    }
-
-    /**
-     * @return UserActiveService
-     */
-    private function getUserActiveLogService()
-    {
-        return ServiceKernel::instance()->createService('User:UserActiveService');
     }
 }

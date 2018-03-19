@@ -4395,8 +4395,8 @@ admin.setting.share.as_group_name: 'Group Name'
 admin.setting.share.as_thread_name: 'Discussion Title'
 admin.setting.share.classroom_share_content: 'Content Of slass sharing'
 admin.setting.share.as_classroom_name: 'Class Name'
-admin.setting.security.IFrame_white_domain: 'IFrame White List Domain'
-admin.setting.security.help_block: 'To use 3rd party component, please set the white list to allow the iframe code in course summary, lesson content etc.'
+admin.setting.security.IFrame_white_domain: 'White List Domain'
+admin.setting.security.help_block: 'To use 3rd party component, please set the white list to allow the iframe or img code in course summary, lesson content etc.'
 admin.block_manage.all: ALL
 admin.block_manage.current_theme: 'Current Theme'
 admin.block_manage.system: System
@@ -4977,7 +4977,7 @@ admin.edu_cloud.register: 'No account? To register'
 admin.edu_cloud.project: Project
 admin.edu_cloud.content: Content
 admin.edu_cloud.operation: Action
-admin.edu_cloud.connect_failed_tips: 'Network problem, can not connect% Edusoho% open cloud platform'
+admin.edu_cloud.connect_failed_tips: 'Network problem, can not connect %EduSoho% open cloud platform'
 admin.edu_cloud.locked_tips: 'Your education cloud service has been locked, please contact customer service'
 admin.edu_cloud.side_bar.introduction: Overview
 admin.edu_cloud.side_bar.setup: Setup
@@ -5353,7 +5353,6 @@ admin.edu_cloud.edu_search.rage_introduction: 'Search range description'
 admin.edu_cloud.edu_search.rage_introduction_content: '-Courses:  full-text search of contents such as course title, course description, lesson titles, keywords. <br>-Teacher: Teachers'' names, titles <br>-Group discussions: Full-text search of group discussions such as discussion titles and keywords <br>Article: Full-text search of article titles, keywords and bodies. <br>-Open class: Full-text search of course title, course description, keyword text. <br>'
 admin.edu_cloud.edu_search.base_setting: 'Basic settings'
 admin.edu_cloud.edu_search.power_by: 'Cloud search services are provided by EduSoho Education Cloud <a href="http://open.edusoho.com/educloud" target="_blank"> Find out more</a>'
-admin.edu_cloud.edu_search.connect_failed_tips: 'Failed to connect %edusoho% Open cloud platform due to network problem'
 admin.edu_cloud.edu_search.rebuild_index: 'Rebuild the index'
 admin.edu_cloud.edu_search.rebuild_index.rebuild_btn: 'Rebuild the index'
 admin.edu_cloud.edu_search.rebuild_index.sure_tips: 'Determined to rebuild the index?'
@@ -6063,7 +6062,6 @@ admin.cloud_setting.trial_hint: 'You are using a trail version and cannot procee
 admin.cloud_setting.package_info: 'Package info'
 admin.cloud_setting.package_name: 'Package name'
 admin.cloud_setting.service_deadline: 'Service deadline'
-admin.cloud_setting.network_error_hint: 'Network issue, cannot connect to EduSoho Open Cloud API.'
 admin.cloud_setting.buy_package_hint: "You haven't bought package, click <a href=\"%servicePriceUrl%\" target=\"_blank\">here</a> to know more.\n"
 admin.cloud_setting.access_key: 'Authorization code'
 admin.cloud_setting.key_update_btn: 'Set New Authorization Code'
@@ -6112,7 +6110,6 @@ admin.app_center.type.theme: Theme
 admin.app_center.type.app: Application
 admin.app_center.buyed_app_hidden: 'Hide purchased application'
 admin.app_center.error_tips: "AccessKey or SecretKey might not valid，it will impact the system，<a href=\"%cloudSettingUrl%\">please update settings</a>\n"
-admin.app_center.unlink_tips: 'Could not connect to service to upgrade, please check the network.'
 admin.app_center.package_update_btn: Install
 admin.app_center.user_access: 'Commercial Only'
 admin.app_center.buy_btn: Purchase

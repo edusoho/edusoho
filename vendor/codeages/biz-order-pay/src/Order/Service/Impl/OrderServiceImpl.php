@@ -16,7 +16,7 @@ use Codeages\Biz\Order\Status\Order\PayingOrderStatus;
 class OrderServiceImpl extends BaseService implements OrderService
 {
     private $allowed_deducts_fields = array(
-        'order_id', 'item_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', 'detail', 'seller_id', 'snapshot', 'deduct_type_name',
+        'order_id', 'item_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', 'detail', 'seller_id', 'snapshot', 'deduct_type_name'
     );
 
     public function findOrderItemDeductsByOrderId($orderId)
@@ -62,35 +62,30 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function searchOrders($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->filterConditions($conditions);
-
         return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countOrders($conditions)
     {
         $conditions = $this->filterConditions($conditions);
-
         return $this->getOrderDao()->count($conditions);
     }
 
     public function countGroupByDate($conditions, $sort, $dateColumn = 'pay_time')
     {
         $conditions = $this->filterConditions($conditions);
-
         return $this->getOrderDao()->countGroupByDate($conditions, $sort, $dateColumn);
     }
 
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
     {
         $conditions = $this->filterConditions($conditions);
-
         return $this->getOrderDao()->sumGroupByDate($column, $conditions, $sort, $dateColumn);
     }
 
     public function sumPaidAmount($conditions)
     {
         $conditions = $this->filterConditions($conditions);
-
         return $this->getOrderDao()->sumPaidAmount($conditions);
     }
 
@@ -142,7 +137,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function addOrderItemDeduct($deduct)
     {
         if (!ArrayToolkit::requireds($deduct, array(
-            'order_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', ))) {
+            'order_id','deduct_id', 'deduct_type', 'deduct_amount', 'user_id'))) {
             throw new InvalidArgumentException('Invalid argument.');
         }
 
@@ -188,7 +183,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new NotFoundException('order not found');
         }
 
-        if ($this->biz['user']['id'] != $order['user_id']) {
+        if ($order['user_id'] != $this->biz['user']['id']) {
             throw new AccessDeniedException('Order owner is invalid.');
         }
 
@@ -207,17 +202,17 @@ class OrderServiceImpl extends BaseService implements OrderService
     protected function filterConditions($conditions)
     {
         foreach ($conditions as $key => $value) {
-            if ('order_item_title' == $key) {
+            if ($key == 'order_item_title') {
                 $customConditions['title_LIKE'] = $value;
                 unset($conditions[$key]);
             }
 
-            if ('order_item_target_ids' == $key) {
+            if ($key == 'order_item_target_ids') {
                 $customConditions['target_ids'] = $value;
                 unset($conditions[$key]);
             }
 
-            if ('order_item_target_type' == $key) {
+            if ($key == 'order_item_target_type') {
                 $customConditions['target_type'] = $value;
                 unset($conditions[$key]);
             }

@@ -26,7 +26,7 @@ $('.js-find-by-email').click(function () {
   makeValidator('email');
   $('#password-reset-by-mobile-form').hide();
   $('#password-reset-form').show();
-})
+});
 
 $('.js-find-by-mobile').click(function () {
   validator = null;
@@ -36,7 +36,7 @@ $('.js-find-by-mobile').click(function () {
   $('#password-reset-form').hide();
   $('#password-reset-by-mobile-form').show();
 
-})
+});
 
 $smsCode.click(() => {
   const smsSender = new SmsSender({
@@ -47,7 +47,7 @@ $smsCode.click(() => {
       return true;
     }
   });
-})
+});
 
 function makeValidator(type) {
   if ('email' == type) {
@@ -95,6 +95,6 @@ function makeValidator(type) {
           rangelength: Translator.trans('auth.password_reset.sms_code_validate_hint'),
         }
       }
-    })
+    });
   }
-};
+}

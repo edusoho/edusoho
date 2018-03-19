@@ -27,7 +27,7 @@ cd.upload({
   let $target = $($this.data('target'));
 
   $target.addClass('done').css({
-    'background': `url(${src})`,
+    'background-image': `url(${src})`,
   });
 
   if (!$target.find('.mask').length) {
@@ -39,11 +39,11 @@ cd.upload({
     cd.message({
       type: 'danger',
       message: Translator.trans('uploader.size_2m_limit_hint')
-    })
+    });
   } else if (code === 'FLIE_TYPE_LIMIT') {
     cd.message({
       type: 'danger',
       message: Translator.trans('uploader.type_denied_limit_hint')
-    })
+    });
   }
-})
+});

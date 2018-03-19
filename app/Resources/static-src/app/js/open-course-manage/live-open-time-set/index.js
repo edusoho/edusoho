@@ -1,9 +1,9 @@
-let $content = $("#live-lesson-content-field");
+let $content = $('#live-lesson-content-field');
 let $form = $('#live-open-course-form');
 let now = new Date();
 let $btn = $('#live-open-course-form-btn');
 let thisTime = $('[name=startTime]').val();
-thisTime = thisTime.replace(/-/g, "/");
+thisTime = thisTime.replace(/-/g, '/');
 thisTime = Date.parse(thisTime) / 1000;
 let nowTime = Date.parse(new Date()) / 1000;
 
@@ -12,9 +12,9 @@ if (nowTime > thisTime) {
   $('#live-length-field').attr('disabled', true);
   $('#live-open-course-form-btn').attr('disabled', true);
 
-  $('#starttime-help-block').html("直播已经开始或者结束,无法编辑");
+  $('#starttime-help-block').html('直播已经开始或者结束,无法编辑');
   $('#starttime-help-block').css('color', '#a94442');
-  $('#timelength-help-block').html("直播已经开始或者结束,无法编辑");
+  $('#timelength-help-block').html('直播已经开始或者结束,无法编辑');
   $('#timelength-help-block').css('color', '#a94442');
 } else {
   $('[name=startTime]').attr('disabled', false);
@@ -45,7 +45,7 @@ let validator = $form.validate({
   }
 });
 
-$("[name=startTime]").datetimepicker({
+$('[name=startTime]').datetimepicker({
   autoclose: true,
   language: document.documentElement.lang
 }).on('hide', function (ev) {
@@ -58,4 +58,4 @@ $btn.click(() => {
     $btn.button('loading');
     $form.submit();
   }
-})
+});

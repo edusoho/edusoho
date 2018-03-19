@@ -29,16 +29,16 @@ export default class detail {
       blurIsAdd={true}
       sortable={true}
       dataSource={datas}
-      inputName={name + "[]"}
+      inputName={name + '[]'}
       outputDataElement={name} />,
-      document.getElementById(elementId)
+    document.getElementById(elementId)
     );
   }
 
   publishAddMessage() {
     postal.publish({
-      channel: "courseInfoMultiInput",
-      topic: "addMultiInput",
+      channel: 'courseInfoMultiInput',
+      topic: 'addMultiInput',
     });
   }
 }

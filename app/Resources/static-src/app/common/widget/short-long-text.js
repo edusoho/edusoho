@@ -7,4 +7,4 @@ export const shortLongText  = ($element) => {
     var $long = $(this);
     $long.slideUp('fast').parents('.short-long-text').find('.short-text').slideDown('fast');
   });
-}
+};

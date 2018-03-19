@@ -15,11 +15,11 @@ let validator = $form.validate({
       maxlength: 20
     }
   }
-})
+});
 
 $btn.click(()=>{
   if(validator.form()) {
     $btn.button('loadding');
     $form.submit();
   }
-})
+});

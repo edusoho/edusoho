@@ -16,7 +16,7 @@ class MaterialLibChoose extends Chooser {
 
   _initEvent() {
     $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
-    $(this.container).on('change', '.js-file-owner', this._filterByFileOwner)
+    $(this.container).on('change', '.js-file-owner', this._filterByFileOwner);
     $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
     $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
     $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
@@ -54,19 +54,19 @@ class MaterialLibChoose extends Chooser {
     $('input[name=sourceFrom]').val(type);
     $('input[name=page]').val(1);
     switch (type) {
-      case 'my':
-        $('.js-file-name-group').removeClass('hidden');
-        $('.js-file-owner-group').addClass('hidden');
-        break;
-      case 'sharing':
-        this._loadSharingContacts.call(this, $(that).data('sharingContactsUrl'));
-        $('.js-file-name-group').removeClass('hidden');
-        $('.js-file-owner-group').addClass('hidden');
-        break;
-      default:
-        $('.js-file-name-group').removeClass('hidden');
-        $('.js-file-owner-group').addClass('hidden');
-        break;
+    case 'my':
+      $('.js-file-name-group').removeClass('hidden');
+      $('.js-file-owner-group').addClass('hidden');
+      break;
+    case 'sharing':
+      this._loadSharingContacts.call(this, $(that).data('sharingContactsUrl'));
+      $('.js-file-name-group').removeClass('hidden');
+      $('.js-file-owner-group').addClass('hidden');
+      break;
+    default:
+      $('.js-file-name-group').removeClass('hidden');
+      $('.js-file-owner-group').addClass('hidden');
+      break;
     }
     this._loadList();
   }
@@ -80,10 +80,10 @@ class MaterialLibChoose extends Chooser {
       if (Object.keys(teachers).length > 0) {
         var html = `<option value=''>${Translator.trans('activity.manage.choose_teacher_hint')}</option>`;
         $.each(teachers, function(i, teacher) {
-          html += `<option value='${teacher.id}'>${teacher.nickname} </option>`
+          html += `<option value='${teacher.id}'>${teacher.nickname} </option>`;
         });
 
-        $(".js-file-owner", self.element).html(html);
+        $('.js-file-owner', self.element).html(html);
       }
 
     }, 'json');
@@ -97,9 +97,9 @@ class MaterialLibChoose extends Chooser {
   }
 
   _filterByFileOwner() {
-    params.currentUserId = $('.js-file-owner option:selected').val();
-    $('input[name=currentUserId]').val(currentUserId);
-    this._loadList();
+    // params.currentUserId = $('.js-file-owner option:selected').val();
+    // $('input[name=currentUserId]').val(currentUserId);
+    // this._loadList();
   }
 
   _onSelectFile(event) {

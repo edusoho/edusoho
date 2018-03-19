@@ -25,7 +25,11 @@ before_script:
   services:
     - mysql:5.5
   script:
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
   only:
     - develop
     - master
@@ -38,7 +42,11 @@ before_script:
     - mysql:5.5
     - redis:latest
   script:
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
   only:
     - develop
     - master
@@ -52,7 +60,11 @@ before_script:
     - redis:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
 
 7.0 For Non-Develop:
   stage: test
@@ -61,7 +73,11 @@ before_script:
     - mysql:5.5
     - redis:latest
   script:
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
 
   only:
     - master
