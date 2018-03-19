@@ -94,7 +94,7 @@
               {% set author = review.User|default(null) %}
               {% set course = review.course|default(null) %}
               {% if author and course %}
-            <div class="media media-dynamic">
+            <div class="media media-dynamic {% if loop.index != 1 %}cd-mt8 {% endif %}">
               <div class="media-left">
               {{ web_macro.user_avatar(author,'','avatar-sm',true) }}
               </div>
@@ -131,7 +131,7 @@
             {% set statuses = data('LatestStatuses', {mode:'simple', count: 4,private:0}) %}
 
             {% for status in statuses %}
-              <div class="media media-dynamic">
+              <div class="media media-dynamic {% if loop.index != 1 %}cd-mt8 {% endif %}">
                 <div class="media-left">
                   {{ web_macro.user_avatar(status.user, '', 'avatar-sm') }}
                 </div>
