@@ -14,7 +14,8 @@
 			<span class="es-icon es-icon-videocam color-success"></span>
 		  {% endif %}
 		{% endif %}
-    <span class="mls">课时1： {{ '飞机扣水电费健康拉萨放开手放开水电费课时第三方艾克发开发是打开发发生大'|sub_text(20) }}</span>
+    {% set lesson = { 'number': 1, 'title': '我是干巴巴的测试数据没有一丁点水分就是要这样水经验到二十个字哇'   } %}
+    <span class="mls">{{ 'course.lesson'|trans }} {{ lesson.number }}： {{ lesson.title|sub_text(20) }}</span>
 
 		<span class="mls">{{'course.activity'|trans}}</span><span class="number mls">{{ task.number }}</span>{# ： {{ task.title }} #}
     <span class="mhs">{{ task.startTime|date_format }}</span>
