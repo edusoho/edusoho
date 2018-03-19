@@ -9,3 +9,5 @@ describe('common:unit', function() {
     assert.equal(trim(' a asdf ', false), 'a asdf');
   });
 });
+
+

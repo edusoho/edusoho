@@ -12,16 +12,19 @@
         "url": ""
     },
     "devDependencies": {
-        "es-webpack-engine": "3.5.2"
+        "es-webpack-engine": "3.5.2",
+        "jsdom": "^11.6.2"
     },
     "dependencies": {
         "babel-istanbul": "^0.12.2",
+        "babel-plugin-module-resolver": "^3.1.0",
         "babel-polyfill": "6.5.0",
         "bootstrap": "3.3.7",
         "bootstrap-daterangepicker": "2.1.24",
         "bootstrap-datetime-picker": "2.3.10",
         "bootstrap-notify": "3.1.3",
         "chai": "^4.1.2",
+        "chai-jquery": "^2.0.0",
         "clipboard": "1.7.1",
         "codeages-design": "^0.1.4",
         "component-emitter": "1.2.0",
@@ -51,9 +54,9 @@
         "jquery.countdown": "1.2.8",
         "jquery.cycle2": "2.1.7",
         "js-cookie": "2.1.3",
-        "jsdom": "^11.6.2",
         "lodash": "3.10.1",
         "mocha": "^5.0.4",
+        "mocha-webpack": "^1.1.0",
         "mochawesome": "^3.0.2",
         "moment": "2.16.0",
         "nouislider": "9.1.0",
@@ -97,6 +100,7 @@
         "compile:custom": "npm run compile module:CustomBundle",
         "clean": "rm -rf node_modules",
         "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js && open mochawesome-report/mochawesome.html && npm run test:cover",
-        "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive --require 'jquery' && open coverage/lcov-report/index.html"
+        "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
+        "test:simple": "mocha --require babel-core/register"
     }
 }
