@@ -2,18 +2,15 @@
   <div class="item-line"></div>
   <div class="item-content js-item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
-    {# 发布与否的判断 #}
     {% if lesson.status == 'unpublished' %}
       <span class="lesson-unpublish-status">{{'my.teaching.open_course.lesson.status.unpublished'|trans}}</span>
     {% endif %}
 
-    {# 无效课时逻辑的判断 #}
     {% if lesson.type not in ['liveOpen'] and lesson.mediaSource == 'self' and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId)
     %}
       <span class="cd-tag cd-tag-red mrs js-file-delete-lesson" title="{{'my.teaching.open_course.lesson.lesson_file_deleted'|trans}}">{{'my.teaching.open_course.lesson.invalid_lesson'|trans}}</span>
     {% endif %}
 
-    {# 图标状态判断 #}
     {% if mediaStatus == 'waiting' %}
       <i class="es-icon es-icon-videoclass color-warning"></i>
     {% elseif mediaStatus == 'doing' %}
@@ -48,13 +45,11 @@
       {% endif %}
     {% endif  %}
 
-    {# 上传附件 #}
     {% if lesson.materialNum > 0 %}
       <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'my.teaching.open_course.lesson.material'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray"></i></span>
     {% endif %}
   </div>
 
-  {# 下拉操作 #}
   <div class="item-actions">
     <a class="cd-mr24 cd-link-assist" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" >
       <span class="es-icon es-icon-edit"></span>

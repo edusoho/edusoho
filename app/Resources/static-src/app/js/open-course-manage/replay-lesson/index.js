@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-// 再点一次就报错
 $('.js-generate-replay').on('click', (event) => {
   const $this = $(event.currentTarget);
   const message = Translator.trans('confirm.replay_lesson.message');
