@@ -48,21 +48,15 @@ class SystemCrontabInitializer
                 $crontabRepository = new CrontabRepository(new CrontabAdapter());
                 $command = self::getCrontabJobCommand();
                 $crontabJobs = $crontabRepository->findJobByRegex('/'.str_replace('/', '\/', $command).'/');
-
-                if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
-                    //如果数量少就增加
-                    for ($i = 0; $i < self::MAX_CRONTAB_NUM - count($crontabJobs); ++$i) {
-                        $crontabJob = self::createCrontabJob();
-                        $crontabRepository->addJob(
-                            $crontabJob
-                        );
-                    }
-                } elseif (count($crontabJobs) > self::MAX_CRONTAB_NUM) {
-                    foreach (array_slice($crontabJobs, 0, count($crontabJobs) - self::MAX_CRONTAB_NUM) as $crontabJob) {
-                        $crontabRepository->removeJob($crontabJob);
-                    }
+                foreach ($crontabJobs as $crontabJob) {
+                    $crontabRepository->removeJob($crontabJob);
                 }
-
+                for ($i = 0; $i < self::MAX_CRONTAB_NUM; ++$i) {
+                    $crontabJob = self::createCrontabJob();
+                    $crontabRepository->addJob(
+                        $crontabJob
+                    );
+                }
                 $crontabRepository->persist();
             } catch (\Exception $e) {
                 //如果出现错误，就不注册
@@ -81,6 +75,9 @@ class SystemCrontabInitializer
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $logPath = $rootDir.'/logs/crontab.log';
         $command = self::getCrontabJobCommand();
+        $env = ServiceKernel::instance()->getEnvironment();
+        $env = empty($env) ? 'prod' : $env;
+        $command .=  ' -e '.$env;
         $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
 
         $crontabJob = CrontabJob::createFromCrontabLine($command);
