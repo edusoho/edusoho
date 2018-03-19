@@ -55,7 +55,7 @@
 
 		{% if task.status == 'published' and task.isEnd  %}
 			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
-				<button class="cd-link-assist cd-mr24 replay-lesson-btn js-generate-replay"
+				<button class="cd-link-assist cd-mr24 js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
 				title="{{'course.replay_manage.record'|trans}}"
 				{% else %}
