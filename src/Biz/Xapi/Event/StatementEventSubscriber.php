@@ -98,7 +98,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $order = $event->getSubject();
         $orderItem = empty($order['items']) ? array() : $order['items'][0];
         // TODO 如果改成一个订单多个商品的话，每一个 item 需要保存真实支付的现金
-        if ($order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], array(CourseProduct::TYPE, ClassroomProduct::TYPE))) {
+        $isSuiteOrder = 'outside' != $order['source'] && $order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], array(CourseProduct::TYPE, ClassroomProduct::TYPE));
+        if ($isSuiteOrder) {
             $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], array(
                 'pay_amount' => round(MathToolkit::simple($order['pay_amount'], 0.01), 2),
                 'title' => $orderItem['title'],
