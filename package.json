@@ -29,6 +29,7 @@
         "codeages-design": "^0.1.4",
         "component-emitter": "1.2.0",
         "console-polyfill": "0.2.3",
+        "decache": "^4.4.0",
         "easy-pie-chart": "2.1.7",
         "echarts": "3.1.10",
         "echo-js": "1.7.3",
@@ -99,7 +100,7 @@
         "compile:debug": "npm run compile sourcemap:true",
         "compile:custom": "npm run compile module:CustomBundle",
         "clean": "rm -rf node_modules",
-        "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js && open mochawesome-report/mochawesome.html && npm run test:cover",
+        "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
         "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
         "test:simple": "mocha --require babel-core/register"
     }

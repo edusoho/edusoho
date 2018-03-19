@@ -1,4 +1,5 @@
-import { trim, dateFormat, numberConvertLetter } from '../../../app/Resources/static-src/app/common/unit.js';
+import { getRootPath } from '../../util/init.js';
+const { trim, dateFormat, numberConvertLetter } = require(getRootPath() + '/app/Resources/static-src/app/common/unit.js');
 
 var assert = require('chai').assert;
 describe('common:unit', function() {
