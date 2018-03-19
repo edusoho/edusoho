@@ -356,7 +356,7 @@ class ActivityServiceTest extends BaseTestCase
         $this->mockBiz('Activity:ActivityDao', array(
             array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => 1),
         ));
-        $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => time()+3600, 'length' => 3));
+        $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => time() + 3600, 'length' => 3));
     }
 
     public function testPreCreateCheck()
@@ -364,7 +364,7 @@ class ActivityServiceTest extends BaseTestCase
         $this->mockBiz('Activity:ActivityDao', array(
             array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => null),
         ));
-        $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => time()+3600, 'length' => 3));
+        $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => time() + 3600, 'length' => 3));
     }
 
     public function testPreUpdateCheck()
@@ -374,7 +374,7 @@ class ActivityServiceTest extends BaseTestCase
             array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => null),
         ));
 
-        $this->getActivityService()->preUpdateCheck(1, array('fromCourseId' => 1, 'startTime' => time()+3600, 'length' => 3));
+        $this->getActivityService()->preUpdateCheck(1, array('fromCourseId' => 1, 'startTime' => time() + 3600, 'length' => 3));
     }
 
     public function testGetActivity()
