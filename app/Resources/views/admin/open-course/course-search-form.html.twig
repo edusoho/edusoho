@@ -13,7 +13,7 @@
     </div>
   {% endif %}
   <div class="form-group">
-      <select class="form-control" name="status">
+      <select class="form-control" name="type">
         {{ select_options(dict('openCourseCategory'), app.request.query.get('type'), 'type'|trans) }}
       </select>
     </div>
