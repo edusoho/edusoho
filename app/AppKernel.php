@@ -226,7 +226,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
             try {
                 //初始化项目时，biz_session 尚未创建
-                $invitedCode = $container->get('session')->get('invitedCode', '');
+                $invitedCode = @$container->get('session')->get('invitedCode', '');
             } catch (\Exception $e) {
                 $invitedCode = '';
             }
