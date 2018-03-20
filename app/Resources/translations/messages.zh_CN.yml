@@ -3248,13 +3248,17 @@ custom_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
 # 搜索模块
 search.empty: 没有搜到相关课程，请换个关键词试试！
 search.content_title: 搜索
-search.relative_courses_result: 共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程
-search.relative_classrooms_result: 共找到<span>%count%</span>门<span>“%keywords%”</span>相关班级
-search.result_course_copy: 共找到<span>%count%</span>门课程
+search.relative_courses_result: 共找到<span class="color-danger phm">%count%</span>门<span class="color-danger phm">“%keywords%”</span>相关课程
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关班级
+search.result_course_copy: 共找到<span class="color-danger phm">%count%</span>门课程
+search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个班级
 search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
 search.live_courses: 直播课程
+search.all_classrooms: 全部班级
+search.free_classrooms: 免费班级
+
 
 #云资源
 cloud_file.preview: 资料预览
