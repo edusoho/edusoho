@@ -9,8 +9,15 @@ const getRootPath = function(){
 const init = function(html = '')
 {
   let { JSDOM } = require('jsdom');
-  let dom = new JSDOM(`<!DOCTYPE html><html><body>${html}</body></html>`);
+  let dom = new JSDOM(`<!DOCTYPE html><html><body>${html}</body></html>`,{
+    url: 'http://demo.edusoho.com/',
+    referrer: 'http://demo.edusoho.com/',
+    contentType: 'text/html',
+    userAgent: 'Mellblomenator/9000',
+    includeNodeLocations: true,
+  });
   global.window = dom.window;
+  console.log(window.location.href);
   global.$ = require('jquery');
 };
 
