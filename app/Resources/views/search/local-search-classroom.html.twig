@@ -1,64 +1,66 @@
-<div class="course-filter search-filter" id="course-filter">
-  <div class="result-declare">
+{% extends 'search/local-search.html.twig' %}
+
+{% block searchType %}
+  <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans }}</a></li>
+  <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+    <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans }}</a>
+  </li>
+{% endblock %}
+
+{% block mobileType %}
+  {# <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',filter|default('all')) }}
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu" role="menu">
+    <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans }}</a></li>
+    <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+      <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans }}</a>
+    </li>
+  </ul> #}
+{% endblock %}
+
+{% block tip %}
+  <div class="cd-mb8">
     {% if keywords %}
       {{'search.relative_classrooms_result'|trans({'%count%': count, '%keywords%': keywords})|raw}}
     {% else %}
-      {{'search.result_course_copy'|trans({'%count%': count})|raw}}
+      {{'search.result_classrooms_copy'|trans({'%count%': count})|raw}}
     {% endif %}
   </div>
-  <ul class="nav nav-pills hidden-xs" role="tablist">
-    <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{'全部班级'|trans}}</a></li>
-    <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
-      <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{'免费班级'|trans}}</a>
-    </li>
-  </ul>
-  {#<div class="btn-group visible-xs">#}
-    {#<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',filter|default('all')) }}#}
-      {#<span class="caret"></span></button>#}
+{% endblock %}
 
-    {#<ul class="dropdown-menu" role="menu">#}
-      {#<li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'search.all_courses'|trans}}</a></li>#}
-      {#{{ slot('local.search.vip.courses', {'keywords':keywords,'filter':filter}) }}#}
-      {#<li role="presentation" class="{% if filter == 'free' %}active{% endif %}">#}
-        {#<a href="{{ path('search',{filter:'free'}) }}">{{'search.free_courses'|trans}}</a>#}
-      {#</li>#}
-      {#<li role="presentation" class="{% if filter == 'live' %}active{% endif %}">#}
-        {#<a href="{{ path('search',{filter:'live'}) }}">{{'search.live_courses'|trans}}</a>#}
-      {#</li>#}
-    {#</ul>#}
-  {#</div>#}
-
-</div>
-
-<!-- 班级列表 -->
-<div class="class-list row">
-  {% if classrooms %}
-    {% for classroom in classrooms %}
-      <div class="col-md-4 col-sm-6">
-        <div class="class-item">
-          <div class="class-img">
-            <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
-              {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
-              <h3>{{ classroom.title }}</h3>
-              <div class="image-overlay"></div>
-            </a>
+{% block content %}
+  <!-- 班级列表 -->
+  <div class="class-list local-search-class-list cd-mt8">
+    <div class="row">
+      {% if classrooms %}
+        {% for classroom in classrooms %}
+          <div class="col-md-3 col-sm-6">
+            <div class="class-item local-search-class-item">
+              <div class="class-img local-search-class-item__img">
+                <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                  {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                  <h3>{{ classroom.title }}</h3>
+                  <div class="image-overlay"></div>
+                </a>
+              </div>
+              <div class="class-serve local-search-class-item__serve">
+                {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
+              </div>
+              <ul class="class-data local-search-class-item__data clearfix">
+                <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
+                <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
+                <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
+              </ul>
+            </div>
           </div>
-          <div class="class-serve">
-            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
-          </div>
-          <ul class="class-data clearfix">
-            <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
-            <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
-            <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
-          </ul>
-        </div>
-      </div>
-    {% endfor %}
+        {% endfor %}
 
-  {% else %}
-    <div class="empty">{{'explore.classroom.empty'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</div>
-  {% endif %}
-</div>
-<nav class="text-center">
-  {{ web_macro.paginator(paginator) }}
-</nav>
+      {% else %}
+        <div class="empty">{{'explore.classroom.empty'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</div>
+      {% endif %}
+    </div>
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}
