@@ -13,9 +13,9 @@
       </div>
     </div>
   </div>
+  <div class="with-error" data-type="{{ errorType }}"></div>
 {% endblock %}
 
 {% block content %}
-
   {% include 'search/local-search-'~ type|lower ~'.html.twig' %}
 {% endblock %}

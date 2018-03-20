@@ -50,10 +50,10 @@ class SearchController extends BaseController
     public function classroomSearchAction(Request $request)
     {
         $keywords = $request->query->get('q');
+        $errorType = $request->query->get('errorType');
         $keywords = $this->filterKeyWord(trim($keywords));
         $type = $request->query->get('type', 'classroom');
         $filter = $request->query->get('filter');
-        $currentUser = $this->getCurrentUser();
 
         $conditions = array(
             'status' => 'published',
@@ -63,8 +63,6 @@ class SearchController extends BaseController
         if ('free' == $filter) {
             $conditions['price'] = '0.00';
         }
-
-        var_dump($conditions);
 
         $count = $this->getClassroomService()->countClassrooms($conditions);
 
@@ -89,6 +87,7 @@ class SearchController extends BaseController
                 'count' => $count,
                 'paginator' => $paginator,
                 'keywords' => $keywords,
+                'errorType' => $errorType,
             )
         );
     }
@@ -97,6 +96,7 @@ class SearchController extends BaseController
     {
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
+        $errorType = $request->query->get('errorType');
         $type = $request->query->get('type', 'course');
         $currentUser = $this->getCurrentUser();
         $vip = $this->getAppService()->findInstallApp('Vip');
@@ -166,6 +166,7 @@ class SearchController extends BaseController
                 'categoryIds' => $categoryIds,
                 'filter' => $filter,
                 'count' => $count,
+                'errorType' => $errorType,
             )
         );
     }
@@ -213,15 +214,24 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
-            throw $e;
-            return $this->render(
-                'search/cloud-search-failure.html.twig',
-                array(
-                    'keywords' => $keywords,
-                    'type' => $type,
-                    'errorMessage' => '搜索失败，请稍后再试.',
+            return $this->redirect(
+                $this->generateUrl(
+                'search',
+                    array(
+                        'q' => $keywords,
+                        'errorType' => 'cloudSearchError',
+                    )
                 )
             );
+
+//            return $this->render(
+//                'search/cloud-search-failure.html.twig',
+//                array(
+//                    'keywords' => $keywords,
+//                    'type' => $type,
+//                    'errorMessage' => '搜索失败，请稍后再试.',
+//                )
+//            );
         }
 
         $paginator = new Paginator($this->get('request'), $counts, $pageSize);
