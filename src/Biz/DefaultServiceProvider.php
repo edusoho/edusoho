@@ -31,6 +31,7 @@ use Biz\User\Register\Impl\EmailRegistDecoderImpl;
 use Biz\User\Register\Impl\MobileRegistDecoderImpl;
 use Biz\User\Register\Impl\BinderRegistDecoderImpl;
 use Biz\User\Register\Impl\DistributorRegistDecoderImpl;
+use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
@@ -115,6 +116,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
         };
         $biz['course.normal_strategy'] = function ($biz) {
             return new NormalStrategy($biz);
+        };
+
+        $biz['user.register.type.toolkit'] = function ($biz) {
+            return new RegisterTypeToolkit();
         };
 
         $biz['user.register'] = function ($biz) {

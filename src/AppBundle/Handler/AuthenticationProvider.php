@@ -15,7 +15,6 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\RegisterTypeUtils;
 
 /**
  * 此Class大部分代码来自DaoAuthenticationProvider.
@@ -116,7 +115,10 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         );
                         $registration['type'] = $this->getAuthService()->getPartnerName();
 
-                        $this->getUserService()->register($registration, RegisterTypeUtils::getRegisterTypes($registration));
+                        $this->getUserService()->register(
+                            $registration,
+                            $this->getRegisterTypeToolkit()->getRegisterTypes($registration)
+                        );
 
                         $user = $this->userProvider->loadUserByUsername($username);
                     }
@@ -140,7 +142,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
     }
 
-    private function syncEmailAndPassword($user, $partnerUser, $token)
+    protected function syncEmailAndPassword($user, $partnerUser, $token)
     {
         try {
             $isEmaildChanged = ($user['email'] != $partnerUser['email']);
@@ -165,7 +167,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         return $user;
     }
 
-    private function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     {
         $s = '';
         $cLength = strlen($chars);
@@ -180,12 +182,12 @@ class AuthenticationProvider extends UserAuthenticationProvider
     /**
      * @return SettingService
      */
-    private function getSettingService()
+    protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
     }
@@ -193,7 +195,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
     /**
      * @return LogService
      */
-    private function getLogService()
+    protected function getLogService()
     {
         return ServiceKernel::instance()->createService('System:LogService');
     }
@@ -201,7 +203,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
     /**
      * @return AuthService
      */
-    private function getAuthService()
+    protected function getAuthService()
     {
         return ServiceKernel::instance()->createService('User:AuthService');
     }
@@ -209,5 +211,17 @@ class AuthenticationProvider extends UserAuthenticationProvider
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getBiz()
+    {
+        return $this->getServiceKernel()->getBiz();
+    }
+
+    protected function getRegisterTypeToolkit()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user.register.type.toolkit'];
     }
 }

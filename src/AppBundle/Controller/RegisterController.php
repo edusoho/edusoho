@@ -8,12 +8,12 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
+use Biz\User\Register\Common\DistributorCookieToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Cookie;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class RegisterController extends BaseController
@@ -31,8 +31,8 @@ class RegisterController extends BaseController
             } else {
                 $response = $this->redirect($registerUrl);
             }
-            $cookie = new Cookie('distributor-token', $fields['token'], time() + 604800);
-            $response->headers->setCookie($cookie); //有效期7天
+            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token']);
+
             return $response;
         }
 
@@ -86,11 +86,7 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
-
-                $distributorTokenCookie = $request->cookies->get('distributor-token');
-                if (!empty($distributorTokenCookie)) {
-                    $registration['distributorToken'] = $distributorTokenCookie;
-                }
+                $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration);
 
                 $user = $this->getAuthService()->register($registration);
 
@@ -119,9 +115,7 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                if (!empty($distributorTokenCookie)) {
-                    $response->headers->setCookie(new Cookie('distributor-token', ''));
-                }
+                $response = DistributorCookieToolkit::clearCookieToken($request, $response);
 
                 return $response;
             } catch (ServiceException $se) {
