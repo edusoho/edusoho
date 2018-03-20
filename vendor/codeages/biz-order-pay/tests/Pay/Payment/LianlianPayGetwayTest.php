@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Codeages\Biz\Pay\Payment\LianlianPayGetway;
+use Codeages\Biz\Pay\Payment\LianlianPayGateway;
 use Codeages\Biz\Pay\Payment\SignatureToolkit;
 
 class LianlianPayGetwayTest extends IntegrationTestCase
@@ -10,7 +10,7 @@ class LianlianPayGetwayTest extends IntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        $signatureToolkit = \Mockery::mock(SignatureToolkit::class);
+        $signatureToolkit = \Mockery::mock('Codeages\\Biz\\Pay\\Payment\\SignatureToolkit');
         $this->biz['payment.platforms'] = array(
             'lianlianpay' => array(
                 'secret' => 'secret',
@@ -23,7 +23,7 @@ class LianlianPayGetwayTest extends IntegrationTestCase
 
     public function testConverterNotify()
     {
-        $gateway = new LianlianPayGetway($this->biz);
+        $gateway = new LianlianPayGateway($this->biz);
 
         $this->biz['payment.platforms']['lianlianpay']['signatureToolkit']->shouldReceive('signVerify')->andReturn(true);
 
@@ -80,14 +80,14 @@ class LianlianPayGetwayTest extends IntegrationTestCase
      */
     public function testCreateTradeWithInvalidArguments()
     {
-        $gateway = new LianlianPayGetway($this->biz);
+        $gateway = new LianlianPayGateway($this->biz);
         $gateway->createTrade(array());
     }
 
     public function testCreateTrade()
     {
         $this->biz['payment.platforms']['lianlianpay']['signatureToolkit']->shouldReceive('signParams')->andReturn('signResult');
-        $gateway = new LianlianPayGetway($this->biz);
+        $gateway = new LianlianPayGateway($this->biz);
         $result = $gateway->createTrade(array(
             'goods_title' => 'goods_title_result',
             'goods_detail' => 'detail_result',

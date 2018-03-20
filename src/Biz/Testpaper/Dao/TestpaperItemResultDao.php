@@ -12,17 +12,17 @@ interface TestpaperItemResultDao extends GeneralDaoInterface
 
     public function updateItemAnswers($testPaperResultId, $answers);
 
-    public function updateItemResults($answers, $testPaperResultId);
+    public function updateItemResults($testPaperResultId, $answers);
 
-    public function updateItemEssays($answers, $testPaperResultId);
+    public function updateItemEssays($testPaperResultId, $answers);
 
     public function findTestResultsByItemIdAndTestId($questionIds, $testPaperResultId);
 
-    public function findRightItemCountByTestPaperResultId($testPaperResultId);
+    public function countRightItemByTestPaperResultId($testPaperResultId);
 
     public function findWrongResultByUserId($id, $start, $limit);
 
-    public function findWrongResultCountByUserId($id);
+    public function countWrongResultByUserId($id);
 
     public function deleteTestpaperItemResultByTestpaperId($testpaperId);
 }

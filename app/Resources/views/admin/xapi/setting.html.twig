@@ -2,8 +2,6 @@
 
 {% set menu = 'admin_xapi_setting' %}
 
-{% set script_controller='xapi/index' %}
-
 {% block main %}
   {{ web_macro.flash_messages() }}
   <form action="{{ path('admin_xapi_setting') }}" method="post" id="xapi-setting-form" class="form-horizontal">
@@ -25,7 +23,7 @@
     </div>
     <div class="row">
       <div class="col-md-offset-2 col-md-7">
-        <p class="text-muted">默认地址是：http://xapi.qiqiuyu.net/v1/</p>
+        <p class="text-muted">默认地址是：https://lrs.qiqiuyun.net/v1/xapi/</p>
       </div>
     </div>
     <div class="row form-group">

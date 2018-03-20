@@ -1,0 +1,18 @@
+branches:
+  - master
+
+language: php
+
+php:
+  - '5.3'
+  - '5.4'
+  - '5.5'
+  - '5.6'
+  - '7.0'
+
+before_script:
+  - composer install
+  - mysql -e 'CREATE DATABASE `order-pay-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
+
+script:
+  - phpunit -c .

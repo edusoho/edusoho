@@ -1,6 +1,6 @@
 import notify from 'common/notify';
 
-var $list = $("#course-student-list");
+var $list = $('#course-student-list');
 
 $list.on('click', '.student-remove', function () {
   var $tr = $(this).parents('tr');
@@ -23,14 +23,14 @@ $list.on('click', '.student-remove', function () {
   });
 });
 
-$("#refund-coin-tips").popover({
+$('#refund-coin-tips').popover({
   html: true,
   trigger: 'hover',//'hover','click'
   placement: 'left',//'bottom',
-  content: $("#refund-coin-tips-html").html()
+  content: $('#refund-coin-tips-html').html()
 });
 
-$("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function () {
+$('#course-student-list').on('click', '.follow-student-btn, .unfollow-student-btn', function () {
 
   var $this = $(this);
 
@@ -58,8 +58,8 @@ $('#export-students-btn').on('click', function () {
 });
 
 function exportStudents(start, fileName) {
-  var start = start || 0,
-    fileName = fileName || '';
+  start = start || 0,
+  fileName = fileName || '';
 
   $.get($('#export-students-btn').data('datasUrl'), { start: start, fileName: fileName }, function (response) {
     if (response.status === 'getData') {

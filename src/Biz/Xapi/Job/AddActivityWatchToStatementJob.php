@@ -2,6 +2,7 @@
 
 namespace Biz\Xapi\Job;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -10,6 +11,13 @@ class AddActivityWatchToStatementJob extends AbstractJob
 {
     public function execute()
     {
+        for ($i = 1; $i <= 5; ++$i) {
+            $this->watchLogToSatement();
+        }
+    }
+
+    private function watchLogToSatement()
+    {
         $conditions = array(
             'is_push' => 0,
             'updated_time_LT' => time() - 60 * 60,
@@ -17,20 +25,35 @@ class AddActivityWatchToStatementJob extends AbstractJob
 
         $orderBy = array('created_time' => 'ASC');
 
-        $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, 10);
+        $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, 500);
+        if (empty($watchLogs)) {
+            return;
+        }
+
+        $activityIds = ArrayToolkit::column($watchLogs, 'activity_id');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+        $statements = array();
+        $logIds = array();
 
         foreach ($watchLogs as $watchLog) {
-            $activity = $this->getActivityService()->getActivity($watchLog['activity_id']);
-            $statement = array(
-                'user_id' => $watchLog['user_id'],
-                'verb' => 'audio' == $activity['mediaType'] ? 'listen' : 'watch',
-                'target_id' => $watchLog['id'],
-                'target_type' => $activity['mediaType'],
-                'occur_time' => $watchLog['updated_time'],
-            );
-
-            $this->getXapiService()->createStatement($statement);
-            $this->getXapiService()->updateWatchLog($watchLog['id'], array('is_push' => 1));
+            try {
+                $activity = $activities[$watchLog['activity_id']];
+                $statements[] = array(
+                    'user_id' => $watchLog['user_id'],
+                    'verb' => 'audio' == $activity['mediaType'] ? 'listen' : 'watch',
+                    'target_id' => $watchLog['id'],
+                    'target_type' => $activity['mediaType'],
+                    'occur_time' => $watchLog['updated_time'],
+                );
+                $logIds[] = $watchLog['id'];
+            } catch (\Exception $e) {
+                $this->biz['logger']->error($e);
+            }
+        }
+        if (!empty($statements)) {
+            $this->getXapiService()->batchCreateStatements($statements);
+            $this->getXapiService()->batchUpdateWatchLogPushed($logIds);
         }
     }
 

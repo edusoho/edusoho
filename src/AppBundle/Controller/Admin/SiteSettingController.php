@@ -34,7 +34,6 @@ class SiteSettingController extends BaseController
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
-
         $default = array(
             'name' => '',
             'slogan' => '',
@@ -50,18 +49,21 @@ class SiteSettingController extends BaseController
             'favicon' => '',
             'copyright' => '',
         );
-
         $site = array_merge($default, $site);
-
-        if ($request->getMethod() == 'POST') {
-            $site = $request->request->all();
-            $this->getSettingService()->set('site', $site);
-            $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
-            $this->setFlashMessage('success', 'site.save.success');
-        }
 
         return $this->render('admin/system/site.html.twig', array(
             'site' => $site,
+        ));
+    }
+
+    public function saveSiteAction(Request $request)
+    {
+        $site = $request->request->all();
+        $this->getSettingService()->set('site', $site);
+        $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
+
+        return $this->createJsonResponse(array(
+            'message' => $this->trans('site.save.success'),
         ));
     }
 
@@ -87,7 +89,7 @@ class SiteSettingController extends BaseController
         );
 
         $consult = array_merge($default, $consult);
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $consult = $request->request->all();
 
             foreach ($consult['qq'] as &$qq) {
@@ -102,7 +104,8 @@ class SiteSettingController extends BaseController
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
             if (!empty($consult['webchatURI'])) {
-                $consult['webchatURI'] = $consult['webchatURI'].'?time='.time();
+                $fields = explode('?', $consult['webchatURI']);
+                $consult['webchatURI'] = $fields[0].'?time='.time();
             }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
@@ -124,7 +127,7 @@ class SiteSettingController extends BaseController
 
         $esBar = array_merge($default, $esBar);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
             $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
@@ -182,7 +185,7 @@ class SiteSettingController extends BaseController
 
         $defaultSetting = array_merge($default, $defaultSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);

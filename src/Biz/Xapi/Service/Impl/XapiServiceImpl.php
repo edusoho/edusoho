@@ -5,12 +5,15 @@ namespace Biz\Xapi\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
+use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use QiQiuYun\SDK\QiQiuYunSDK;
 
 class XapiServiceImpl extends BaseService implements XapiService
 {
@@ -26,9 +29,28 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getStatementDao()->create($statement);
     }
 
+    public function batchCreateStatements($statements)
+    {
+        if (empty($this->biz['user'])) {
+            throw new AccessDeniedException('user is not login.');
+        }
+        $batchCreateHelper = new BatchCreateHelper($this->getStatementDao());
+        foreach ($statements as $statement) {
+            $statement['version'] = $this->biz['xapi.options']['version'];
+            $statement['uuid'] = $this->generateUUID();
+            $batchCreateHelper->add($statement);
+        }
+        $batchCreateHelper->flush();
+    }
+
     public function getStatement($id)
     {
         return $this->getStatementDao()->get($id);
+    }
+
+    public function deleteStatement($id)
+    {
+        return $this->getStatementDao()->update($id, array('status' => 'deleted'));
     }
 
     protected function generateUUID()
@@ -130,6 +152,17 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getActivityWatchLogDao()->update($id, $watchLog);
     }
 
+    public function batchUpdateWatchLogPushed($watchLogIds)
+    {
+        $batchUpdateHelper = new BatchUpdateHelper($this->getActivityWatchLogDao());
+        foreach ($watchLogIds as $id) {
+            $batchUpdateHelper->add('id', $id, array(
+                'is_push' => 1,
+            ));
+        }
+        $batchUpdateHelper->flush();
+    }
+
     public function searchWatchLogs($conditions, $orderBys, $start, $limit)
     {
         return $this->getActivityWatchLogDao()->search($conditions, $orderBys, $start, $limit);
@@ -192,6 +225,11 @@ class XapiServiceImpl extends BaseService implements XapiService
         }
     }
 
+    public function getXapiSdk()
+    {
+        return $this->biz['qiQiuYunSdk.xapi'];
+    }
+
     /**
      * @return StatementDao
      */
@@ -222,5 +260,13 @@ class XapiServiceImpl extends BaseService implements XapiService
     protected function getStatementArchiveDao()
     {
         return $this->createDao('Xapi:StatementArchiveDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

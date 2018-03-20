@@ -1,6 +1,6 @@
-import postal from "postal";
+import postal from 'postal';
 import QuestionForm from './form';
-import Question from './question'
+import Question from './question';
 
 class QuestionPlugin {
   constructor() {
@@ -23,9 +23,9 @@ class QuestionPlugin {
       this.$element.find('.empty-item').remove();
     });
 
-    channel.subscribe('back-to-list', () => this.onBackList())
+    channel.subscribe('back-to-list', () => this.onBackList());
 
-      $("[data-toggle='popover']").popover();
+    $('[data-toggle=\'popover\']').popover();
   }
 
   onRedirectQuestion(event) {

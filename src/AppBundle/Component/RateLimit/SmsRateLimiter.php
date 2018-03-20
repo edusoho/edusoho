@@ -11,12 +11,12 @@ class SmsRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
     /**
      * @var \Codeages\RateLimiter\RateLimiter
      */
-    private $ipHourRateLimiter;
+    protected $ipHourRateLimiter;
 
     /**
      * @var \Codeages\RateLimiter\RateLimiter
      */
-    private $siteDayRateLimiter;
+    protected $siteDayRateLimiter;
 
     const IP_MAX_ALLOW_ATTEMPT_ONE_HOUR = 15;
 

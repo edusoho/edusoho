@@ -1,0 +1,46 @@
+.es-data-card {
+  padding: 45px 0;
+  text-align: left;
+  background: @cd-bg-light;
+  height: 136px;
+  text-align: center;
+  .cd-clearfix;
+  margin-bottom: 24px;
+  border-radius: 4px;
+  @media(max-width: @screen-md-max) {
+    padding: 36px 0;
+  }
+  @media(max-width: @screen-xs-max) {
+    height: auto;
+    padding: 16px;
+  }
+  .card-item {
+    padding: 0 20px;
+    float: left;
+    width: 50%;
+    font-size: 12px;
+    @media(max-width: @screen-md-max) {
+      padding: 0 10px;
+    }
+    @media(max-width: @screen-xs-max) {
+      padding-left: 20px;
+    }
+    & + .card-item {
+      .cd-box-shadow-inset;
+    }
+  }
+  .card-item-label {
+    margin-bottom: 8px;
+    line-height: 1;
+    color: @cd-dark-minor;
+  }
+  .card-item-value span {
+    font-size: 24px;
+    line-height: 1;
+    color: @cd-dark-major;
+    display: inline-block;
+    @media(max-width: @screen-md-max) {
+      font-size: 18px;
+    }
+  }
+}

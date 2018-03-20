@@ -100,6 +100,13 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $unit = '';
 
     /**
+     * 是否可以使用优惠券
+     *
+     * @var bool
+     */
+    public $couponEnable = true;
+
+    /**
      * 封面
      *
      * @var array
@@ -161,7 +168,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
                 $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", $e->getMessage());
+            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", array('error' => $e->getMessage()));
         }
     }
 
@@ -178,6 +185,11 @@ abstract class Product extends BizAware implements OrderStatusCallback
     }
 
     public function getCreateExtra()
+    {
+        return array();
+    }
+
+    public function getSnapShot()
     {
         return array();
     }

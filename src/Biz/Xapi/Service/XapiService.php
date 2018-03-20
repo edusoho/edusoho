@@ -6,7 +6,11 @@ interface XapiService
 {
     public function createStatement($statement);
 
+    public function batchCreateStatements($statements);
+
     public function getStatement($id);
+
+    public function deleteStatement($id);
 
     public function updateStatementsPushedByStatementIds($statementIds);
 
@@ -24,6 +28,8 @@ interface XapiService
 
     public function updateWatchLog($id, $watchLog);
 
+    public function batchUpdateWatchLogPushed($watchLogIds);
+
     public function createWatchLog($watchLog);
 
     public function searchWatchLogs($conditions, $orderBys, $start, $limit);
@@ -37,4 +43,6 @@ interface XapiService
     public function archiveStatement();
 
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0);
+
+    public function getXapiSdk();
 }

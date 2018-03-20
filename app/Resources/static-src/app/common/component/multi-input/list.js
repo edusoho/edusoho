@@ -16,7 +16,7 @@ export default class List extends Component {
     if (this.context.sortable) {
       sortList({
         element: sortId,
-        itemSelector: "li",
+        itemSelector: 'li',
         ajax: false,
       }, (data) => {
         //@TODO需优化成React的组件
@@ -32,7 +32,7 @@ export default class List extends Component {
     //sortList操作了真实的DOM需要还原；
     this.$list.on('mousedown', 'li', () => {
       this.$item = $(sortId).children('.list-group-item');
-    })
+    });
   }
 
   componentWillMount() {
@@ -58,13 +58,13 @@ export default class List extends Component {
                 </a>
                 <input type="hidden" name={inputName} value={item.label} />
               </li>
-            )
+            );
           })
         }
       </ul>
-    )
+    );
   }
-};
+}
 
 List.contextTypes = {
   removeItem: React.PropTypes.func,

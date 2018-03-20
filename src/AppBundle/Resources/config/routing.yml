@@ -89,6 +89,10 @@ user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
 
+distributor_register:
+   path:  /distributor_register
+   defaults: { _controller: AppBundle:Register:distributorIndex }
+
 register:
     path:  /register
     defaults: { _controller: AppBundle:Register:index }
@@ -1173,6 +1177,11 @@ edu_cloud_sms_send:
     defaults: { _controller: AppBundle:EduCloud:smsSend }
     methods: [POST]
 
+edu_cloud_sms_send_registration:
+    path:  /edu_cloud/sms_send_registration
+    defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
+    methods: [POST]
+
 edu_cloud_sms_check:
     path:  /edu_cloud/sms_check/{type}
     defaults: { _controller: AppBundle:EduCloud:smsCheck }
@@ -2244,6 +2253,14 @@ course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
+course_manage_exam_next_result_check:
+  path: /course/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultNextCheck }
+
+course_manage_testpaper_result_graph:
+  path: /course/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultGraph }
+
 testpaper_check:
   path: /testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }
@@ -2253,8 +2270,12 @@ course_manage_testpaper_check_list:
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkList }
 
 course_manage_testpaper_result_list:
-  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  path: /course/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultList }
+
+course_manage_exam_result_anlysis:
+  path: /course/{id}/manage/exam/activity/{activityId}/analysis
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultAnalysis }
 
 course_manage_testpaper_questions:
   path: /course/{courseId}/manage/testpaper/{testpaperId}/items
@@ -2310,7 +2331,6 @@ course_manage_homework_check_list:
 course_manage_homework_check:
   path: /course/{id}/manage/homework/{resultId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
-
 
 homework_start_do:
   path: /lesson/{lessonId}/homework/{homeworkId}/startDo
@@ -2498,12 +2518,24 @@ classroom_manage_testpaper:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
 
 classroom_manage_testpaper_result_list:
-  path: /classroom/{id}/manage/testpaper/{testpaperId}/result
+  path: /classroom/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
 
 classroom_manage_testpaper_check:
   path: /classroom/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
+
+classroom_manage_exam_result_anlysis:
+  path: /classroom/{id}/manage/exam/activity/{activityId}/analysis
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultAnalysis }
+
+classroom_manage_exam_next_result_check:
+  path: /classroom/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultNextCheck }
+
+classroom_manage_testpaper_result_graph:
+  path: /classroom/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultGraph }
 
 classroom_manage_homework:
     path:  /classroom/{id}/manage/homework/list
@@ -2951,6 +2983,10 @@ marketing_user_login:
     path: /marketing/user/login
     defaults: { _controller: AppBundle:MarketingUser:login }
 
+user_login_marketing:
+    path: /marketing/user/login
+    defaults: { _controller: AppBundle:MarketingUser:login }
+
 export:
     path: /export/{name}/{type}
     defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
@@ -2970,14 +3006,6 @@ try_export:
 member_operation_record:
     path: /member/{operatType}/record/{targetType}/{targetId}
     defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
-
-v2_demo:
-   path: /v2/demo
-   defaults: { _controller: AppBundle:V2:demo }
-
-v2_demo_modal:
-   path: /v2/demo/modal
-   defaults: { _controller: AppBundle:V2:modal }
 
 order_calculate_price:
     path: /order/price/calculate

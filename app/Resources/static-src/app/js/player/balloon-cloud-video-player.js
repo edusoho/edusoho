@@ -39,7 +39,7 @@ class BalloonCloudVideoPlayer extends Emitter {
           html: self.options.fingerprint,
           duration: self.options.fingerprintTime
         }
-      })
+      });
     }
 
     if (self.options.timelimit) {
@@ -49,16 +49,18 @@ class BalloonCloudVideoPlayer extends Emitter {
           text: Translator.trans('activity.video.try_watch_finish_hint'),
           display: true
         }
-      })
+      });
     }
 
     if (self.options.enablePlaybackRates) {
       extConfig = Object.assign(extConfig, {
-        playbackRates: {
-          enable: true,
-          source: 'hls',
-          src: self.options.url
-        }
+        playbackRates: ['1.0', '1.25', '1.5']
+      });
+    }
+
+    if (self.options.videoH5) {
+      extConfig = Object.assign(extConfig, {
+        h5: true
       });
     }
 
@@ -88,34 +90,34 @@ class BalloonCloudVideoPlayer extends Emitter {
       remeberLastPos: true,
       videoHeaderLength: self.options.videoHeaderLength,
       autoplay: self.options.autoplay
-    })
+    });
     var player = new VideoPlayerSDK(extConfig);
 
     player.on('ready', function(e) {
-      self.emit("ready", e);
+      self.emit('ready', e);
     });
 
-    player.on("timeupdate", function(e) {
+    player.on('timeupdate', function(e) {
       //    player.__events get all the event;
-      self.emit("timechange", e);
+      self.emit('timechange', e);
     });
 
-    player.on("ended", function(e) {
-      self.emit("ended", e);
+    player.on('ended', function(e) {
+      self.emit('ended', e);
     });
 
-    player.on("playing", function(e) {
-      self.emit("playing", e);
+    player.on('playing', function(e) {
+      self.emit('playing', e);
     });
 
-    player.on("paused", function(e) {
-      self.emit("paused", e);
+    player.on('paused', function(e) {
+      self.emit('paused', e);
     });
 
-    player.on("exam.answered", function(e) {
+    player.on('exam.answered', function(e) {
       var data = e.data;
       data['type'] = self.convertQuestionType(data.type, 'cloud');
-      self.emit("answered", data);
+      self.emit('answered', data);
     });
 
     this.player = player;
@@ -161,11 +163,11 @@ class BalloonCloudVideoPlayer extends Emitter {
       var exam = {
         popupExam: {
           config: {
-            "mode": "middle"
+            'mode': 'middle'
           },
           questions: questions
         }
-      }
+      };
 
       this.player.setExams(exam);
     }

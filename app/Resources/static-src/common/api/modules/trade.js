@@ -15,7 +15,7 @@ const tradeModule = (api) => {
       }, options));
 
     }
-  }
+  };
 };
 
 export default tradeModule;

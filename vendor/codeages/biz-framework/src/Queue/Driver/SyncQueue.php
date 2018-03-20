@@ -40,7 +40,7 @@ class SyncQueue extends AbstractQueue implements Queue
             $message = '';
         }
 
-        if ($code == Job::FAILED || $code == Job::FAILED_RETRY) {
+        if (Job::FAILED == $code || Job::FAILED_RETRY == $code) {
             $this->failer && $this->failer->log($job, $this->getName(), $message);
         }
     }

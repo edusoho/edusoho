@@ -18,7 +18,7 @@ class Token extends AbstractResource
 
         return array(
             'token' => $token,
-            'user' => $user
+            'user' => $user,
         );
     }
 
@@ -35,12 +35,11 @@ class Token extends AbstractResource
                     'levelId' => $vip['levelId'],
                     'vipName' => $level['name'],
                     'deadline' => date('c', $vip['deadline']),
-                    'seq' => $level['seq']
+                    'seq' => $level['seq'],
                 );
             } else {
                 $user['vip'] = null;
             }
-
         }
 
         return $user;

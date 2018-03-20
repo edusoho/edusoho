@@ -104,7 +104,7 @@
             "icon1":
             {   
                 "title": "中部图标１",
-                "desc": "建议图片大小为130*130",
+                "desc": "建议图片尺寸为130×130px",
                 "count": 1,
                 "type": "imglink",
                 "default": [
@@ -141,7 +141,7 @@
             "icon2":
             {   
                 "title": "中部图标２",
-                "desc": "建议图片大小为130*130",
+                "desc": "建议图片尺寸为130×130px",
                 "count": 1,
                 "type": "imglink",
                 "default": [
@@ -178,7 +178,7 @@
             "icon3":
             {   
                 "title": "中部图标３",
-                "desc": "建议图片大小为130*130",
+                "desc": "建议图片尺寸为130×130px",
                 "count": 1,
                 "type": "imglink",
                 "default": [
@@ -222,7 +222,7 @@
         "items": {
             "middleImg": {
                 "title": "广告图片",
-                "desc": "建议图片大小为宽1920px高 400px",
+                "desc": "建议图片尺寸为1920×400px",
                 "count": "1",
                 "type": "imglink",
                 "default": [
@@ -425,13 +425,13 @@
             },
             "bottomLogo": {
                 "title": "底部Logo",
-                "desc": "建议图片大小为233*64",
+                "desc": "建议图片尺寸为233×64px",
                 "count": 1,
                 "type": "imglink",
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/bottom_logo.png",
-                        "alt": "建议图片大小为233*64",
+                        "alt": "建议图片尺寸为233×64px",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
                     }

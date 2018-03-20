@@ -30,7 +30,7 @@
       {% if isTeacher is defined and not isTeacher %}
         <span class="color-danger">{{'testpaper.check.not_isTeacher.tips'|trans({'%typeName%':typeName}) }}</span>
       {% endif %}
-      {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
+      {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id, activityId: activityId})) }}
     </div>
   </div>
 {% endblock %}

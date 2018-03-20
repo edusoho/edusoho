@@ -3,27 +3,45 @@
 namespace Biz\Search\Service\Impl;
 
 use Biz\BaseService;
+use Biz\CloudPlatform\Client\FailoverCloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Search\Adapter\SearchAdapterFactory;
 use Biz\Search\Service\SearchService;
+use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class SearchServiceImpl extends BaseService implements SearchService
 {
+    protected $cloudLeafApi;
+
+    protected $cloudRootApi;
+
+    public function __construct(Biz $biz)
+    {
+        parent::__construct($biz);
+        $this->cloudLeafApi = CloudAPIFactory::create('leaf');
+        $this->cloudRootApi = CloudAPIFactory::create('root');
+    }
+
     public function cloudSearch($type, $conditions = array())
     {
-        $api = CloudAPIFactory::create('leaf');
+        $api = $this->getCloudApi('leaf');
 
-        if ($type === 'course') {
+        if ('course' === $type) {
             $conditions['type'] = 'course,openCourse';
         }
 
         $conditions = $this->searchBase64Encode($conditions);
 
-        $result = $api->get('/search', $conditions);
+        try {
+            $result = $api->get('/search', $conditions);
 
-        if (empty($result['success'])) {
-            throw new \RuntimeException('搜索失败，请稍候再试.', 1);
+            if (empty($result['success'])) {
+                throw new \RuntimeException('搜索失败，请稍后再试.', 1);
+            }
+        } catch (\RuntimeException $e) {
+            $this->getSettingService()->set('_cloud_search_restore_time', time() + 60 * 10);
+            throw $e;
         }
 
         if (empty($result['body']['datas'])) {
@@ -39,7 +57,7 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     public function refactorAllDocuments()
     {
-        $api = CloudAPIFactory::create('root');
+        $api = $this->getCloudApi('root');
         $conditions = array('categorys' => 'course,user,thread,article');
 
         return $api->post('/search/refactor_documents', $conditions);
@@ -49,7 +67,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $siteUrl = $this->getSiteUrl();
 
-        $api = CloudAPIFactory::create('root');
+        $api = $this->getCloudApi('root');
         $urls = array(
             array(
                 'category' => 'course',
@@ -98,7 +116,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $siteSetting = $this->getSettingService()->get('site');
         $siteUrl = $siteSetting['url'];
-        if (strpos($siteUrl, 'http://') !== 0) {
+        if (0 !== strpos($siteUrl, 'http://')) {
             $siteUrl = 'http://'.$siteUrl;
         }
 
@@ -137,6 +155,29 @@ class SearchServiceImpl extends BaseService implements SearchService
         $conditions['method'] = 'base64';
 
         return $conditions;
+    }
+
+    /**
+     * @param $node
+     *
+     * @return FailoverCloudAPI
+     */
+    protected function getCloudApi($node)
+    {
+        $apiProp = 'cloud'.ucfirst($node).'Api';
+
+        return $this->$apiProp;
+    }
+
+    /**
+     * @param $node
+     * @param $api
+     * 仅供单元测试使用，正常业务严禁使用
+     */
+    public function setCloudApi($node, $api)
+    {
+        $apiProp = 'cloud'.ucfirst($node).'Api';
+        $this->$apiProp = $api;
     }
 
     protected function getSettingService()

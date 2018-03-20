@@ -100,7 +100,27 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             'status' => 'success',
         ), array('id' => 'DESC'), 0, 1000);
 
+        if (empty($orders)) {
+            return;
+        }
+
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderRefunds = $this->getOrderRefundDao()->search(
+            array(
+                'status' => 'auditing',
+                'order_ids' => $orderIds
+            ),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        $orderRefunds = ArrayToolkit::index($orderRefunds, 'order_id');
+        
         foreach ($orders as $order) {
+            if (!empty($orderRefunds[$order['id']])) {
+                continue;
+            }
+            
             $this->finished($order['id']);
         }
     }
@@ -137,6 +157,8 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
         if (!empty($order['trade_sn'])) {
             $this->getPayService()->applyRefundByTradeSn($order['trade_sn'], $data);
+        } else {
+            $this->setRefunded($id, $data);
         }
 
         return $refund;
@@ -185,6 +207,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
                 'order_id' => $order['id'],
                 'item_id' => 0,
                 'deduct_type' => 'adjust_price',
+                'deduct_type_name' => '改价',
                 'deduct_id' => 0,
                 'deduct_amount' => $adjustAmount,
                 'user_id' => $order['user_id'],

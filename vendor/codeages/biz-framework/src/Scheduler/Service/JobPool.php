@@ -30,7 +30,8 @@ class JobPool
         try {
             $result = $job->execute();
         } catch (\Exception $e) {
-            $this->getTargetlogService()->log(TargetlogService::ERROR, 'job', $this->id, $e->getMessage());
+            $this->release($job);
+            throw $e;
         }
 
         $this->release($job);
@@ -94,7 +95,7 @@ class JobPool
         $ids = array($id);
         $diff = array('num' => $diff);
         $jobPool = $this->getJobPoolDao()->get($id);
-        if (!($jobPool['num'] == 0 && $diff < 0)) {
+        if (!(0 == $jobPool['num'] && $diff['num'] < 0)) {
             $this->getJobPoolDao()->wave($ids, $diff);
         }
     }
@@ -103,12 +104,7 @@ class JobPool
     {
         return $this->biz->dao('Scheduler:JobPoolDao');
     }
-
-    protected function getTargetlogService()
-    {
-        return $this->biz->service('Targetlog:TargetlogService');
-    }
-
+    
     public function __get($name)
     {
         return empty($this->data[$name]) ? '' : $this->data[$name];

@@ -35,7 +35,7 @@ class QuestionMarkerStats {
     return {
       tooltip: {
         trigger: 'item',
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
       },
       color: ['#4653BE', '#72CC59', '#4DA8E6', '#F8AB60'],
       legend: {
@@ -72,8 +72,8 @@ class QuestionMarkerStats {
     let stats = this.getStats();
 
     let xData = [],
-        seriesData = [],
-        seriesName = '选择率';
+      seriesData = [],
+      seriesName = '选择率';
 
     $.each(stats, function(index, stat) {
 

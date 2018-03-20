@@ -12,7 +12,7 @@ class EduSohoAppClient implements AppClient
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://open.edusoho.com/app_api';
+    private $apiUrl = 'open.edusoho.com/app_api';
 
     private $debug = false;
 
@@ -40,6 +40,9 @@ class EduSohoAppClient implements AppClient
 
         if (!empty($options['apiUrl'])) {
             $this->apiUrl = $options['apiUrl'];
+        } else {
+            $protocol = empty($options['isSecure']) ? 'http://' : 'https://';
+            $this->apiUrl = $protocol.$this->apiUrl;
         }
 
         $this->debug = empty($options['debug']) ? false : true;
@@ -142,6 +145,9 @@ class EduSohoAppClient implements AppClient
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
+        if (empty($result)) {
+            return array();
+        }
 
         return json_decode($result, true);
     }
@@ -193,7 +199,7 @@ class EduSohoAppClient implements AppClient
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
 
-        if (strtoupper($method) == 'POST') {
+        if ('POST' == strtoupper($method)) {
             curl_setopt($curl, CURLOPT_POST, 1);
             $params = http_build_query($params);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);

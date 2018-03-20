@@ -8,7 +8,7 @@ const conversationModule = (api) => {
         type: 'GET',
       }, options));
     }
-  }
+  };
 };
 
 export default conversationModule;

@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeCourseSetCourseMember extends AbstractResource
@@ -32,5 +31,4 @@ class MeCourseSetCourseMember extends AbstractResource
 
         return $members;
     }
-
 }

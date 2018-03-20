@@ -264,6 +264,8 @@ userType:
     import: 手动导入
     qq: QQ登录
     weixin: 微信登录
+    marketing: 微营销
+    distributor: 分销
 
 userKeyWordTypes:
     nickname: 用户名
@@ -384,6 +386,7 @@ processStatus:
     none: 未转码
     waiting: 转码中
     processing: 转码中
+    doing: 转码中
     ok: 转码成功
     error: 转码失败
 

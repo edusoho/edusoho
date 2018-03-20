@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\TestHandler;
+use Codeages\Biz\Framework\Dao\IdGenerator\OrderedTimeUUIDGenerator;
 
 class IntegrationTestCase extends TestCase
 {
@@ -93,13 +94,13 @@ class IntegrationTestCase extends TestCase
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
-        if (getenv('CACHE_ENABLED') === 'true') {
+        if ('true' === getenv('CACHE_ENABLED')) {
             $biz['dao.cache.enabled'] = true;
             $biz['dao.cache.annotation'] = true;
         }
 
         if (getenv('CACHE_STRATEGY_DEFAULT')) {
-            if (getenv('CACHE_STRATEGY_DEFAULT') == 'null') {
+            if ('null' == getenv('CACHE_STRATEGY_DEFAULT')) {
                 $biz['dao.cache.strategy.default'] = null;
             } else {
                 $biz['dao.cache.strategy.default'] = getenv('CACHE_STRATEGY_DEFAULT');
@@ -107,10 +108,14 @@ class IntegrationTestCase extends TestCase
         }
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
-            $biz['dao.cache.array_storage'] = function() {
+            $biz['dao.cache.array_storage'] = function () {
                 return new ArrayStorage();
             };
         }
+
+        $biz['dao.id_generator.uuid'] = function() {
+            return new OrderedTimeUUIDGenerator();
+        };
 
         $biz['logger.test_handler'] = function () {
             return new TestHandler();
@@ -126,6 +131,7 @@ class IntegrationTestCase extends TestCase
         $biz['lock.flock.directory'] = sys_get_temp_dir();
 
         $biz->boot();
+
         return $biz;
     }
 

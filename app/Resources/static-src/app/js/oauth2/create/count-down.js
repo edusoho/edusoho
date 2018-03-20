@@ -8,7 +8,7 @@ export const countDown = (num) => {
   $fetchBtnText.html(Translator.trans('site.data.get_sms_code_again_btn'));
   notify('success', Translator.trans('site.data.get_sms_code_success_hint'));
   refreshTimeLeft();
-}
+};
 
 const refreshTimeLeft = () => {
   let leftTime = $timeLeft.text();
@@ -21,4 +21,4 @@ const refreshTimeLeft = () => {
     $fetchBtnText.html(Translator.trans('oauth.send.validate_message'));
     $smsCode.removeAttr('disabled');
   }
-}
+};

@@ -25,6 +25,11 @@ class EnvWriteCommand extends Command
         $file = $input->getArgument('file');
         $key = $input->getArgument('key');
         $value = $input->getArgument('value');
+        if ('true' == $value) {
+            $value = true;
+        } elseif ('false' == $value) {
+            $value = false;
+        }
 
         if (!file_exists($file)) {
             throw new \InvalidArgumentException('Environment file is not exist.');

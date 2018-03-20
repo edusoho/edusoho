@@ -40,7 +40,7 @@ class PayServiceImpl extends BaseService implements PayService
 
         if ('recharge' == $data['type']) {
             return $this->createRechargeTrade($data, $createPlatformTrade);
-        } else if ('purchase' == $data['type']) {
+        } elseif ('purchase' == $data['type']) {
             return $this->createPurchaseTrade($data, $createPlatformTrade);
         } else {
             throw new InvalidArgumentException("can't create the type of {$data['type']} trade");
@@ -64,7 +64,6 @@ class PayServiceImpl extends BaseService implements PayService
             }
 
             $this->commit();
-
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
@@ -136,15 +135,12 @@ class PayServiceImpl extends BaseService implements PayService
             }
 
             $trade = $this->getTradeContext($trade['id'])->closing();
-
-            if($this->isCloseByPayment()){
+            if ($this->isCloseByPayment()) {
                 $this->closeByPayment($trade);
-            } else {
-                $data = array(
-                    'sn' => $trade['trade_sn'],
-                );
-                $this->notifyClosed($data);
             }
+
+            $data = array('sn' => $trade['trade_sn']);
+            $this->notifyClosed($data);
         }
     }
 
@@ -222,37 +218,46 @@ class PayServiceImpl extends BaseService implements PayService
         return empty($this->biz['payment.final_options']['closed_by_notify']) ? false : $this->biz['payment.final_options']['closed_by_notify'];
     }
 
-    protected function closeByPayment($trade)
+    protected function closeByPayment($data)
     {
-        return $this->getPayment($trade['platform'])->closeTrade($trade);
+        $response = $this->getPayment($data['platform'])->closeTrade($data);
+        if (!$response->isSuccessful()) {
+            $failData = $response->getFailData();
+            $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.close_failed', $data['trade_sn'], "交易号{$data['trade_sn']}关闭失败,{$failData},(order_sn:{$data['order_sn']})", $data);
+        } else {
+            $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.close', $data['trade_sn'], "交易号{$data['trade_sn']}关闭成功。(order_sn:{$data['order_sn']})", $data);
+        }
+
+        return $response;
     }
 
     protected function updateTradeToPaidAndTransferAmount($data)
     {
         if ($data['status'] == 'paid') {
-
             $trade = $this->getPayTradeDao()->getByTradeSn($data['trade_sn']);
             if (empty($trade)) {
                 $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.not_found', $data['trade_sn'], "交易号{$data['trade_sn']}不存在", $data);
                 return $trade;
             }
 
-            $trade = $this->getPayTradeDao()->get($trade['id'], array('lock' => true));
-            if (PayingStatus::NAME != $trade['status']) {
-                $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.is_not_paying', $data['trade_sn'], "交易号{$data['trade_sn']}状态不正确，状态为：{$trade['status']}", $data);
-                return $trade;
-            }
-
-            if ($trade['cash_amount'] != $data['pay_amount']) {
-                $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.pay_amount.mismatch', $data['trade_sn'], "{$data['trade_sn']}实际支付的价格{$data['pay_amount']}和交易记录价格{$trade['cash_amount']}不匹配，状态为：{$trade['status']}", $data);
-            }
-
             try {
                 $this->beginTransaction();
 
+                $trade = $this->getPayTradeDao()->get($trade['id'], array('lock' => true));
+
+                if (PayingStatus::NAME != $trade['status']) {
+                    $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.is_not_paying', $data['trade_sn'], "交易号{$data['trade_sn']}状态不正确，状态为：{$trade['status']}", $data);
+                    $this->commit();
+                    return $trade;
+                }
+
+                if ($trade['cash_amount'] != $data['pay_amount']) {
+                    $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.pay_amount.mismatch', $data['trade_sn'], "{$data['trade_sn']}实际支付的价格{$data['pay_amount']}和交易记录价格{$trade['cash_amount']}不匹配，状态为：{$trade['status']}", $data);
+                }
+
                 $trade = $this->updateTradeToPaid($trade['id'], $data);
                 $this->transfer($trade);
-                if($trade['type'] == 'purchase'){
+                if ($trade['type'] == 'purchase') {
                     $this->closeTradesByOrderSn($trade['order_sn'], array($trade['trade_sn']));
                 }
                 $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.paid', $data['trade_sn'], "交易号{$data['trade_sn']}，账目流水处理成功", $data);
@@ -310,7 +315,7 @@ class PayServiceImpl extends BaseService implements PayService
             throw new AccessDeniedException('can not refund, because the trade is not paid');
         }
 
-        if($this->isRefundByPayment()){
+        if ($this->isRefundByPayment()) {
             return $this->refundPlatformTrade($trade);
         }
 
@@ -326,8 +331,8 @@ class PayServiceImpl extends BaseService implements PayService
 
     protected function refundPlatformTrade($trade)
     {
-        $paymentGetWay = $this->getPayment($trade['platform']);
-        $response = $paymentGetWay->applyRefund($trade);
+        $paymentGateway = $this->getPayment($trade['platform']);
+        $response = $paymentGateway->applyRefund($trade);
 
         if (!$response->isSuccessful()) {
             return $trade;
@@ -344,8 +349,8 @@ class PayServiceImpl extends BaseService implements PayService
 
     public function notifyRefunded($payment, $data)
     {
-        $paymentGetWay = $this->getPayment($payment);
-        list($result, $response) = $paymentGetWay->converterRefundNotify($data);
+        $paymentGateway = $this->getPayment($payment);
+        list($result, $response) = $paymentGateway->converterRefundNotify($data);
         $tradeSn = $result['trade_sn'];
 
         $this->updateTradeToRefunded($tradeSn, $data);
@@ -406,7 +411,7 @@ class PayServiceImpl extends BaseService implements PayService
         }
 
         if ('money' == $trade['price_type']) {
-            $trade['cash_amount'] = floor(($trade['amount'] * $trade['rate'] - $trade['coin_amount']) / $trade['rate'] ); // 标价为人民币，可用虚拟币抵扣
+            $trade['cash_amount'] = floor(($trade['amount'] * $trade['rate'] - $trade['coin_amount']) / $trade['rate']); // 标价为人民币，可用虚拟币抵扣
         } else {
             $trade['cash_amount'] = floor(($trade['amount'] - $trade['coin_amount']) / $rate); // 标价为虚拟币
         }
@@ -421,9 +426,7 @@ class PayServiceImpl extends BaseService implements PayService
 
     protected function transfer($trade)
     {
-
         if (!empty($trade['cash_amount'])) {
-
             $flow = $this->getAccountService()->rechargeCash($trade);
 
             $fields = array(
@@ -458,7 +461,6 @@ class PayServiceImpl extends BaseService implements PayService
                 );
                 $this->getAccountService()->transferCoin($fields);
             }
-
         } elseif ('purchase' == $trade['type']) {
             if (!empty($trade['coin_amount'])) {
                 $this->getAccountService()->releaseCoin($trade['user_id'], $trade['coin_amount']);

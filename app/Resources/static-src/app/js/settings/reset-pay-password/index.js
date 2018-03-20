@@ -28,4 +28,4 @@ $('#settings-pay-password-form').validate({
   submitError(data) {
     notify('danger', Translator.trans(data.responseJSON.message));
   }
-})
+});

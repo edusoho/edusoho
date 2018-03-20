@@ -106,7 +106,9 @@ class TaskServiceImpl extends BaseService implements TaskService
             $media = json_decode($fields['media'], true);
             $fields['mediaSource'] = $media['source'];
 
-            $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
+            if ('self' == $fields['mediaSource']) {
+                $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
+            }
         }
 
         return $fields;
@@ -842,6 +844,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
 
         return $toLearnTasks;
+    }
+
+    public function getTimeSec($type)
+    {
+        $magicSetting = $this->getSettingService()->get('magic');
+        $default = 'watch' == $type ? TaskService::WATCH_TIME_STEP : TaskService::LEARN_TIME_STEP;
+
+        return empty($magicSetting[$type.'_time_sec']) ? $default : $magicSetting[$type.'_time_sec'];
     }
 
     protected function getToLearnTaskWithFreeMode($courseId)

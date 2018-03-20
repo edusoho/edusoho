@@ -2,15 +2,68 @@
 
 namespace Codeages\Biz\Order\Status\Order;
 
-use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\Order\Exception\OrderStatusException;
 
-abstract class AbstractOrderStatus extends \Codeages\Biz\Order\Status\AbstractStatus
+abstract class AbstractOrderStatus implements OrderStatus
 {
+    protected $biz;
     protected $order;
+
+    abstract public function getName();
+
+    abstract public function process($data);
+
+    function __construct($biz)
+    {
+        $this->biz = $biz;
+    }
+
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+    public function start($order, $orderItems)
+    {
+        throw new OrderStatusException('can not start order.');
+    }
+
+    public function paying($data = array())
+    {
+        throw new OrderStatusException("can not change order #{$this->order['id']} status to paying.");
+    }
+
+    public function paid($data = array())
+    {
+        throw new OrderStatusException("can not change order #{$this->order['id']} status to paid.");
+    }
+
+    public function closed($data = array())
+    {
+        throw new OrderStatusException("can not change order #{$this->order['id']} status to closed.");
+    }
+
+    public function success($data = array())
+    {
+        throw new OrderStatusException("can not change order #{$this->order['id']} status to success.");
+    }
+
+    public function fail($data = array())
+    {
+        throw new OrderStatusException("can not change order #{$this->order['id']} status to fail.");
+    }
+
+    public function finished($data = array())
+    {
+        throw new OrderStatusException("can not change order #{$this->order['id']} status to finished.");
+    }
+
+    protected function getOrderStatus($name)
+    {
+        $orderStatus = $this->biz['order_status.'.$name];
+        $orderStatus->setOrder($this->order);
+        return $orderStatus;
+    }
 
     protected function changeStatus($name)
     {
@@ -32,18 +85,6 @@ abstract class AbstractOrderStatus extends \Codeages\Biz\Order\Status\AbstractSt
             ));
         }
         return $order;
-    }
-
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    public function getOrderStatus($name)
-    {
-        $orderStatus = $this->biz['order_status.'.$name];
-        $orderStatus->setOrder($this->order);
-        return $orderStatus;
     }
 
     protected function getOrderDao()

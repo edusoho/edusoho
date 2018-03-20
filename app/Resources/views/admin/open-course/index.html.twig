@@ -18,9 +18,13 @@
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
     <thead>
     <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
       <th>{{ 'admin.open_manage.manage.number_th'|trans }}</th>
-      <th width="49%">{{ 'admin.open_manage.manage.name_th'|trans }}</th>      
+      <th width="40%">{{ 'admin.open_manage.manage.name_th'|trans }}</th>
       <th>{{ 'admin.open_manage.manage.status_th'|trans }}</th>
+      {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{ 'admin.open_manage.manage.creator_th'|trans }}</th>
       <th>{{ 'admin.open_manage.manage.operater_th'|trans }}</th>
     </tr>
@@ -35,7 +39,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+  {% include 'org/batch-update-org-btn.html.twig' with {module:'openCourse', formId:'course-table'} %}
   {{ admin_macro.paginator(paginator) }}
 
 {% endblock %}

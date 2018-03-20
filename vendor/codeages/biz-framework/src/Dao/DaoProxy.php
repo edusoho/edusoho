@@ -53,7 +53,7 @@ class DaoProxy
     protected function getProxyMethod($method)
     {
         foreach (array('get', 'find', 'search', 'count', 'create', 'batchCreate', 'batchUpdate', 'batchDelete', 'update', 'wave', 'delete') as $prefix) {
-            if (strpos($method, $prefix) === 0) {
+            if (0 === strpos($method, $prefix)) {
                 return $prefix;
             }
         }
@@ -61,13 +61,20 @@ class DaoProxy
         return null;
     }
 
+    /**
+     * 代理 get 开头的方法调用
+     *
+     * @param string $method 被调用的 Dao 方法名
+     * @param array $arguments 调用参数
+     * @return array|null
+     */
     protected function get($method, $arguments)
     {
         $lastArgument = end($arguments);
         reset($arguments);
-
+        
         // lock模式下，因为需要借助mysql的锁，不走cache
-        if (is_array($lastArgument) && isset($lastArgument['lock']) && $lastArgument['lock'] === true) {
+        if (is_array($lastArgument) && isset($lastArgument['lock']) && true === $lastArgument['lock']) {
             $row = $this->callRealDao($method, $arguments);
             $this->unserialize($row);
 
@@ -84,13 +91,16 @@ class DaoProxy
         $strategy = $this->buildCacheStrategy();
         if ($strategy) {
             $cache = $strategy->beforeQuery($this->dao, $method, $arguments);
-            if ($cache !== false) {
+            // 命中 cache, 直接返回 cache 数据
+            if (false !== $cache) {
                 return $cache;
             }
         }
 
         $row = $this->callRealDao($method, $arguments);
         $this->unserialize($row);
+
+        // 将结果缓存至 ArrayStorage
         $this->arrayStorage && ($this->arrayStorage[$this->getCacheKey($this->dao, $method, $arguments)] = $row);
 
         if ($strategy) {
@@ -110,14 +120,14 @@ class DaoProxy
         $strategy = $this->buildCacheStrategy();
         if ($strategy) {
             $cache = $strategy->beforeQuery($this->dao, $method, $arguments);
-            if ($cache !== false) {
+            if (false !== $cache) {
                 return $cache;
             }
         }
 
         $rows = $this->callRealDao($method, $arguments);
 
-        if(!empty($rows)) {
+        if (!empty($rows)) {
             $this->unserializes($rows);
         }
 
@@ -133,7 +143,7 @@ class DaoProxy
         $strategy = $this->buildCacheStrategy();
         if ($strategy) {
             $cache = $strategy->beforeQuery($this->dao, $method, $arguments);
-            if ($cache !== false) {
+            if (false !== $cache) {
                 return $cache;
             }
         }
@@ -150,6 +160,11 @@ class DaoProxy
     protected function create($method, $arguments)
     {
         $declares = $this->dao->declares();
+
+        $generator = $this->getIdGenerator();
+        if ($generator) {
+            $id = $arguments[0]['id'] = $generator->generate();
+        }
 
         $time = time();
 
@@ -190,7 +205,13 @@ class DaoProxy
         $time = time();
         $rows = $arguments[$lastKey];
 
+        $generator = $this->getIdGenerator();
+
         foreach ($rows as &$row) {
+            if ($generator) {
+                $row['id'] = $generator->generate();
+            }
+
             if (isset($declares['timestamps'][0])) {
                 $row[$declares['timestamps'][0]] = $time;
             }
@@ -355,6 +376,15 @@ class DaoProxy
         }
     }
 
+    protected function getIdGenerator()
+    {
+        $declares = $this->declares();
+        if (empty($declares['id_generator'])) {
+            return null;
+        }
+        return $this->container['dao.id_generator.'.$declares['id_generator']];
+    }
+
     private function flushTableCache()
     {
         $this->arrayStorage && ($this->arrayStorage->flush());
@@ -379,36 +409,46 @@ class DaoProxy
         }
 
         if (!empty($this->container['dao.cache.annotation'])) {
-            $strategy = $this->getStrategyFromAnnotation($this->dao);
+            $strategy = $this->getCacheStrategyFromAnnotation($this->dao);
             if ($strategy) {
                 return $strategy;
             }
         }
 
         $declares = $this->dao->declares();
-        if (isset($declares['cache']) && $declares['cache'] === false) {
-            return null;
-        }
 
-        if (!empty($declares['cache'])) {
-            return $this->container['dao.cache.strategy.'.$declares['cache']];
-        }
-
-        if (isset($this->container['dao.cache.strategy.default'])) {
+        // 未指定 cache 策略，则使用默认策略
+        if (!isset($declares['cache'])) {
             return $this->container['dao.cache.strategy.default'];
         }
 
-        return null;
+        // 针对某个 Dao 关闭 Cache
+        if (false === $declares['cache']) {
+            return null;
+        }
+
+        // 针对某个 Dao 指定 Cache 策略
+        $strategyServiceId = 'dao.cache.strategy.'.strtolower($declares['cache']);
+        if (!isset($this->container[$strategyServiceId])) {
+            throw new DaoException("Dao %s cache strategy is not defined, please define first in biz container use %s service id.", get_class($this->dao), $strategyServiceId);
+        }
+
+        return $this->container[$strategyServiceId];
     }
 
-    private function getStrategyFromAnnotation($dao)
+    private function getCacheStrategyFromAnnotation($dao)
     {
         $metadata = $this->metadataReader->read($dao);
         if (empty($metadata)) {
             return null;
         }
 
-        return $this->container['dao.cache.strategy.'.strtolower($metadata['strategy'])];
+        $strategyServiceId = 'dao.cache.strategy.'.strtolower($metadata['strategy']);
+        if (!isset($this->container[$strategyServiceId])) {
+            throw new DaoException("Dao %s cache strategy is not defined, please define first in biz container use %s service id.", get_class($this->dao), $strategyServiceId);
+        }
+
+        return $this->container[$strategyServiceId];
     }
 
     private function getCacheKey(GeneralDaoInterface $dao, $method, $arguments)

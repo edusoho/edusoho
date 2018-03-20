@@ -233,6 +233,8 @@ admin.cloud.attachment_setting_menu: 云附件设置
 admin.cloud.app_center_menu: ES应用
 admin.cloud.attachment_menu: 云附件
 admin.cloud.consult_menu: 云问答
+admin.cloud.data_lab: 数据实验室
+admin.cloud.data_lab_setting: 设置
 admin.cloud.cloud_setting_menu: 授权信息
 
 ##概览模块
@@ -347,8 +349,10 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
-##微营销模块
+
+##营销模块
 admin.marketing.menu: 微营销
+admin.distributor.menu: 分销
 
 #web模块
 web.course: 课程管理

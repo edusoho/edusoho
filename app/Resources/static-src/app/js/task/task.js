@@ -1,7 +1,7 @@
-import TaskSidebar from "./widget/sidebar";
-import TaskUi from "./widget/task-ui";
-import TaskPipe from "./widget/task-pipe";
-import Emitter from "common/es-event-emitter";
+import TaskSidebar from './widget/sidebar';
+import TaskUi from './widget/task-ui';
+import TaskPipe from './widget/task-pipe';
+import Emitter from 'common/es-event-emitter';
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 export default class TaskShow extends Emitter {
@@ -35,15 +35,15 @@ export default class TaskShow extends Emitter {
   }
 
   initLearnBtn() {
-    this.element.on('click', '#learn-btn', event => {
+    this.element.on('click', '#learn-btn', () => {
       $.post($('#learn-btn').data('url'), response => {
         $('#modal').modal('show');
         $('#modal').html(response);
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-	      let $nextBtn = $('.js-next-mobile-btn');
-	      if($nextBtn.data('url')) {
-		      $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
-	      }
+        let $nextBtn = $('.js-next-mobile-btn');
+        if($nextBtn.data('url')) {
+          $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
+        }
         this.ui.learned();
       });
     });
@@ -56,17 +56,17 @@ export default class TaskShow extends Emitter {
     });
   }
 
-  _receiveFinish(response) {
+  _receiveFinish() {
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-      $.get($(".js-learned-prompt").data('url'), html => {
-        $(".js-learned-prompt").attr('data-content', html);
+      $.get($('.js-learned-prompt').data('url'), html => {
+        $('.js-learned-prompt').attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
         this.sidebar.reload();
         let $nextBtn = $('.js-next-mobile-btn');
-	      if($nextBtn.data('url')) {
-		      $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
-	      }
+        if($nextBtn.data('url')) {
+          $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
+        }
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
       });
     }
@@ -96,15 +96,15 @@ export default class TaskShow extends Emitter {
         let top = $activeItem.position().top;
         let standardPosition = (boxHeight - $activeItem.height())/2;
 
-        let infiniteScroll = new ESInfiniteScroll({
+        new ESInfiniteScroll({
           context: document.getElementsByClassName('js-sidebar-pane ps-container')
         });
 
         if ((bodyHeight - top) < standardPosition) {
-            console.log('位置靠近底部，top偏移',top - standardPosition);
-            console.log(bodyHeight - boxHeight);
-            $box.scrollTop(bodyHeight - boxHeight);
-            return;
+          console.log('位置靠近底部，top偏移',top - standardPosition);
+          console.log(bodyHeight - boxHeight);
+          $box.scrollTop(bodyHeight - boxHeight);
+          return;
         }
         if (top > standardPosition) {
           console.log('位置大于标准位置时，top偏移',top - standardPosition);

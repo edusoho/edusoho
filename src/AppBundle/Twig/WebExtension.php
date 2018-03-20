@@ -161,6 +161,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
+            new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
         );
     }
 
@@ -1718,7 +1719,7 @@ class WebExtension extends \Twig_Extension
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-v2.js',
+            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
@@ -1733,5 +1734,13 @@ class WebExtension extends \Twig_Extension
         $timestamp = round(time() / 100);
 
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
+    }
+
+    public function isWechatLoginBind()
+    {
+        $wechat = $this->isMicroMessenger();
+        $loginBind = $this->getSetting('login_bind');
+
+        return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
     }
 }

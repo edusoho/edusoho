@@ -11,7 +11,6 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
-use QiQiuYun\SDK\Service\ResourceService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
@@ -24,8 +23,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $conditions['targetType'] = $conditions['resType'];
         }
 
-        $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
-        $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
+        $result['count'] = $this->getUploadFileService()->countCloudFllesFromLocal($conditions);
+        $result['data'] = $this->getUploadFileService()->searchCloudFilesFromLocal($conditions, array('id' => 'DESC'), $start, $limit);
 
         $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
         $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
@@ -184,7 +183,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         $result = $this->getCloudFileImplementor()->player($globalId, $ssl);
         if (!empty($result) && is_array($result)) {
-            $result['token'] = $this->getResourceService()->generatePlayToken($globalId);
+            $result['token'] = $this->biz['qiQiuYunSdk.play']->makePlayToken($globalId);
         }
 
         return $result;
@@ -251,17 +250,6 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         return false;
-    }
-
-    protected function getResourceService()
-    {
-        $storage = $this->getSettingService()->get('storage', array());
-        $config = array(
-            'access_key' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
-            'secret_key' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-        );
-
-        return new ResourceService($config);
     }
 
     /**
