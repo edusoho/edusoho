@@ -797,29 +797,28 @@ admin:
                             disable: true
 
         admin_marketing_top:
+            name: admin.marketing.menu
+            blank: true
+            children:
+                _admin_marketing_marketing_menu:
                     name: admin.marketing.menu
-                    blank: true
+                    disable: true
                     children:
-                      _admin_marketing_marketing_menu:
-                        name: admin.marketing.menu
-                        disable: true
-                        children:
-                            _marketing_marketing_page:
-                                name: admin.marketing.menu
-                                router_name: admin_login_marketing
+                        _marketing_marketing_page:
+                            name: admin.marketing.menu
+                            router_name: admin_login_marketing
         
-        # 临时隐藏 distributor
-        # admin_distributor_top:
-        #     name: admin.distributor.menu
-        #     blank: true
-        #     children:
-        #         _admin_distributor_menu:
-        #         name: admin.distributor.menu
-        #         disable: true
-        #         children:
-        #             _distributor_page:
-        #                 name: admin.distributor.menu
-        #                 router_name: admin_login_distributor
+        admin_distributor_top:
+            name: admin.distributor.menu
+            blank: true
+            children:
+                _admin_distributor_menu:  #缩进必须要正确，否则页面会报 Undefined index: name 的错误
+                    name: admin.distributor.menu
+                    disable: true
+                    children:
+                        _distributor_page:
+                            name: admin.distributor.menu
+                            router_name: admin_login_distributor
 
         admin_system:
             name: admin.nav.system
