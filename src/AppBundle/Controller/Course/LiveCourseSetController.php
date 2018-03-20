@@ -174,10 +174,10 @@ class LiveCourseSetController extends CourseBaseController
             $request,
             $this->getCourseSetService()->countCourseSets(
                 array(
-                    'ids' => $vipCourseSetIds, 
+                    'ids' => $vipCourseSetIds,
                     'type' => 'live',
                     'status' => 'published',
-                    'categoryId' => $categoryId
+                    'categoryId' => $categoryId,
                 )
             ),
             10
