@@ -286,6 +286,12 @@ class OpenCourseManageController extends BaseController
         );
         $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
 
+        $canUpdateStartTime = true;
+
+        if (!empty($liveLesson['startTime']) && time() > $liveLesson['startTime']) {
+            $canUpdateStartTime = false;
+        }
+
         if ('POST' == $request->getMethod()) {
             $liveLessonFields = $request->request->all();
 
@@ -327,6 +333,7 @@ class OpenCourseManageController extends BaseController
             array(
                 'course' => $liveCourse,
                 'openLiveLesson' => $liveLesson,
+                'canUpdateStartTime' => $canUpdateStartTime,
             )
         );
     }

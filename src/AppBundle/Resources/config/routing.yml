@@ -3011,3 +3011,7 @@ order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
+
+client_time_check:
+    path: /client_time_check
+    defaults: { _controller: AppBundle:Default:clientTimeCheck }

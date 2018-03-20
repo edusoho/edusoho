@@ -14,9 +14,6 @@ export default class Live {
     jQuery.validator.addMethod('show_overlap_time_error', function(value, element) {
       return this.optional( element ) || !$(element).data('showError');
     }, '所选时间已经有直播了，请换个时间');
-    jQuery.validator.addMethod('show_server_time_error', function(value, element) {
-      return this.optional( element ) || !$(element).data('showError');
-    }, '所选时间不能小于服务器时间');
     let $step2_form = $('#step2-form');
     this.validator2 = $step2_form.validate({
       onkeyup: false,
@@ -30,8 +27,15 @@ export default class Live {
         startTime: {
           required: true,
           DateAndTime: true,
-          after_now:true,
-          show_server_time_error: true,
+          after_now: true,
+          es_remote: {
+            type: 'post',
+            data: {
+              clientTime: function () {
+                return $('[name=startTime]').val();
+              }
+            }
+          }
         },
         length: {
           required: true,
@@ -43,6 +47,11 @@ export default class Live {
         remark: {
           maxlength: 1000
         },
+      },
+      messages: {
+        startTime: {
+          es_remote: '开始时间不能小于服务器时间'
+        }
       }
     });
     initEditor($('[name="remark"]'), this.validator2);
@@ -60,6 +69,7 @@ export default class Live {
 
   checkOverlapTime($step2_form) {
     if ($step2_form.find('#startTime').val() && $step2_form.find('#length').val()) {
+      let showError = 1;
       let params = {
         startTime: $step2_form.find('#startTime').val(),
         length: $step2_form.find('#length').val(),
@@ -72,19 +82,12 @@ export default class Live {
         data: params,
         dataType: 'json',
         success: function (resp) {
-          let startTime = $step2_form.find('#startTime');
-          let length = $step2_form.find('#length');
-          startTime.data('showError', 0);
-          length.data('showError', 0);
-          if (resp.success === 0) {
-            if (resp.error == 'activity.after_now_invalid') {
-              startTime.data('showError', 1);
-            } else {
-              length.data('showError', 1);
-            }
-          }
+          showError = resp.success === 0;
         }
       });
+
+      $step2_form.find('#length').data('showError', showError);
+
     }
   }
 

@@ -22,10 +22,19 @@ if (nowTime > thisTime) {
 }
 
 let validator = $form.validate({
+  onkeyup: false,
   rules: {
     startTime: {
       required: true,
-      after_now: true
+      after_now: true,
+      es_remote: {
+        type: 'post',
+        data: {
+          clientTime: function () {
+            return $('[name=startTime]').val();
+          }
+        }
+      }
     },
     timeLength: {
       required: true,
@@ -41,6 +50,11 @@ let validator = $form.validate({
           },
         }
       }
+    }
+  },
+  messages: {
+    startTime: {
+      es_remote: '开始时间不能小于服务器时间'
     }
   }
 });

@@ -401,11 +401,20 @@ $.validator.addMethod('es_remote', function(value, element, params) {
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = params.type ? params.type : 'GET';
   let data = params.data ? params.data : { value: value };
+  const finalData = {};
+  for (let item in data) {
+    const test = data[item];
+    if (typeof test === 'function') {
+      finalData[item] = test();
+    }
+  }
+
   let callback = params.callback ? params.callback : null;
   let isSuccess = 0;
   this.valueCache ? this.valueCache : {};
-  let cacheKey = url + type + JSON.stringify(data);
-  
+  let dataValue = $.isEmptyObject(finalData) ? data : finalData;
+  let cacheKey = url + type + JSON.stringify(dataValue);
+
   if (cacheKey in this.valueCache) {
     $.validator.messages.es_remote = this.valueCache[cacheKey].message;
     return this.optional(element) || this.valueCache[cacheKey].isSuccess;
