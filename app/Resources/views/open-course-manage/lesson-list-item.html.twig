@@ -1,42 +1,28 @@
-<li class="open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}">
+<li class="open-course-lesson-item js-open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}">
   <div class="item-line"></div>
-  <div class="item-content">
+  <div class="item-content js-item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
     {% if lesson.status == 'unpublished' %}
       <span class="lesson-unpublish-status">{{'my.teaching.open_course.lesson.status.unpublished'|trans}}</span>
     {% endif %}
 
-    {% if lesson.type == 'video' %}
-      {% if mediaStatus == 'waiting' %}
-      <i class="fa fa-file-video-o color-warning"></i>
-      {% elseif mediaStatus == 'doing' %}
-      <i class="fa fa-file-video-o text-info"></i>
-      {% elseif mediaStatus == 'error' %}
-      <i class="fa fa-file-video-o color-danger"></i>
-      {% else %}
-      <i class="fa fa-file-video-o color-success"></i>
-      {% endif %}
-    {% elseif lesson.type == 'liveOpen' %}
-      {% if mediaStatus == 'waiting' %}
-      <i class="fa fa-video-camera color-warning"></i>
-      {% elseif mediaStatus == 'doing' %}
-      <i class="fa fa-video-camera text-info"></i>
-      {% elseif mediaStatus == 'error' %}
-      <i class="fa fa-video-camera color-danger"></i>
-      {% else %}
-      <i class="fa fa-video-camera color-success"></i>
-      {% endif %}
-    {% else %}
-      <i class="fa fa-file-powerpoint-o color-success"></i>
+    {% if lesson.type not in ['liveOpen'] and lesson.mediaSource == 'self' and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId)
+    %}
+      <span class="cd-tag cd-tag-red mrs js-file-delete-lesson" title="{{'my.teaching.open_course.lesson.lesson_file_deleted'|trans}}">{{'my.teaching.open_course.lesson.invalid_lesson'|trans}}</span>
     {% endif %}
+
+    {% if mediaStatus == 'waiting' %}
+      <i class="es-icon es-icon-videoclass color-warning"></i>
+    {% elseif mediaStatus == 'doing' %}
+      <i class="es-icon es-icon-videoclass text-info"></i>
+    {% elseif mediaStatus == 'error' %}
+      <i class="es-icon es-icon-videoclass color-danger"></i>
+    {% else %}
+      <i class="es-icon es-icon-videoclass color-success"></i>
+    {% endif %}
+
     {{ 'course.lesson'|trans }} <span class="number">{{ lesson.number }}</span>：
 
-    {% if lesson.type not in ['liveOpen'] 
-      and lesson.mediaSource == 'self'
-      and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId) 
-    %}
-      <span class="label label-danger fileDeletedLesson" title="{{'my.teaching.open_course.lesson.lesson_file_deleted'|trans}}">{{'my.teaching.open_course.lesson.invalid_lesson'|trans}}</span>
-    {% endif %}
     {{ lesson.title }}
 
     {% if lesson.type in ['video', 'audio'] %}
@@ -81,15 +67,15 @@
         {% endif %}
 
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.publish'|trans}}</a>
+          <a class="js-publish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.publish'|trans}}</a>
         </li>
 
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
-          <a class="unpublish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.cancel_publish'|trans}}</a>
+          <a class="js-unpublish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.cancel_publish'|trans}}</a>
         </li>
 
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a class="delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.delete'|trans}}</a>
+          <a class="js-delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.delete'|trans}}</a>
         </li>
 
       </ul>
