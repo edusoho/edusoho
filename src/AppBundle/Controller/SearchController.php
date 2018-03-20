@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
@@ -19,8 +20,6 @@ class SearchController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
-
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
         $type = $request->query->get('type', 'course');
@@ -43,6 +42,63 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
+        return $this->forward("AppBundle:Search:{$type}Search", array(
+            'request' => $request,
+        ));
+    }
+
+    public function classroomSearchAction(Request $request)
+    {
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
+        $type = $request->query->get('type', 'classroom');
+        $filter = $request->query->get('filter');
+        $currentUser = $this->getCurrentUser();
+
+        $conditions = array(
+            'status' => 'published',
+            'titleLike' => $keywords,
+        );
+
+        if ('free' == $filter) {
+            $conditions['price'] = '0.00';
+        }
+
+        var_dump($conditions);
+
+        $count = $this->getClassroomService()->countClassrooms($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count, 12
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('updatedTime' => 'desc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'search/index.html.twig',
+            array(
+                'type' => $type,
+                'classrooms' => $classrooms,
+                'filter' => $filter,
+                'count' => $count,
+                'paginator' => $paginator,
+                'keywords' => $keywords,
+            )
+        );
+    }
+
+    public function courseSearchAction(Request $request)
+    {
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
+        $type = $request->query->get('type', 'course');
+        $currentUser = $this->getCurrentUser();
         $vip = $this->getAppService()->findInstallApp('Vip');
 
         $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
@@ -101,6 +157,7 @@ class SearchController extends BaseController
         return $this->render(
             'search/index.html.twig',
             array(
+                'type' => $type,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'keywords' => $keywords,
@@ -115,17 +172,6 @@ class SearchController extends BaseController
 
     public function cloudSearchAction(Request $request)
     {
-        $this->getSettingService()->set('cloud_search', array(
-            'search_enabled' => 1,
-            'status' => 'ok',
-            'type' => array(
-                'course' => 1,
-                'teacher' => 1,
-                'thread' => 1,
-                'article' => 1,
-                'classroom' => 1,
-            ),
-        ));
         $pageSize = 10;
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
@@ -306,5 +352,13 @@ class SearchController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

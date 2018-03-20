@@ -1,0 +1,56 @@
+<div class="course-filter search-filter" id="course-filter">
+  <div class="result-declare">
+    {% if keywords %}
+      {{'search.relative_courses_result'|trans({'%count%': count, '%keywords%': keywords})|raw}}
+    {% else %}
+      {{'search.result_course_copy'|trans({'%count%': count})|raw}}
+    {% endif %}
+  </div>
+  <ul class="nav nav-pills hidden-xs" role="tablist">
+    <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords}) }}">{{'search.all_courses'|trans}}</a></li>
+    {{ slot('local.search.vip.courses', {'keywords':keywords, 'filter':filter}) }}
+    <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+      <a href="{{ path('search',{filter:'free', q:keywords}) }}">{{'search.free_courses'|trans}}</a>
+    </li>
+    <li role="presentation" class="{% if filter == 'live' %}active{% endif %}">
+      <a href="{{ path('search',{filter:'live', q:keywords}) }}">{{'search.live_courses'|trans}}</a>
+    </li>
+  </ul>
+  <div class="btn-group visible-xs">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',filter|default('all')) }}
+      <span class="caret"></span></button>
+
+    <ul class="dropdown-menu" role="menu">
+      <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'search.all_courses'|trans}}</a></li>
+      {{ slot('local.search.vip.courses', {'keywords':keywords,'filter':filter}) }}
+      <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+        <a href="{{ path('search',{filter:'free'}) }}">{{'search.free_courses'|trans}}</a>
+      </li>
+      <li role="presentation" class="{% if filter == 'live' %}active{% endif %}">
+        <a href="{{ path('search',{filter:'live'}) }}">{{'search.live_courses'|trans}}</a>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- 课程列表 -->
+<div class="course-list">
+  {% if courseSets %}
+    <div class="row">
+      {% for courseSet in courseSets %}
+        <div class="col-lg-3 col-md-4 col-xs-6">
+          {% include 'course/widgets/course-grid.html.twig' with { courseSet: courseSet} %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">{{'search.empty'|trans}}</div>
+  {% endif %}
+</div>
+
+<nav class="text-center">
+  {% if courseSets %}
+    {{ web_macro.paginator(paginator) }}
+  {% endif %}
+</nav>
