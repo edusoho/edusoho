@@ -61,7 +61,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateTaskFields',
             'updateChpaterCopyId',
             'updateLessonNum',
-            'updateLessonIsOption'
+            'updateLessonIsOptionAndStatus'
         );
 
         $funcNames = array();
@@ -100,11 +100,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function addNewFields()
     {
         $connection = $this->getConnection();
-        if (!$this->isFieldExist('course_chapter', 'status')) {
-            $connection->exec("
-                ALTER TABLE `course_chapter` ADD `status` varchar(20) NOT NULL DEFAULT 'published' COMMENT '发布状态 create|published|unpublished' AFTER `copyId`;
-            ");
-        }
 
         if (!$this->isFieldExist('course_v8', 'isShowUnpublish')) {
             $connection->exec("
@@ -130,20 +125,41 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        if (!$this->isFieldExist('course_chapter', 'status')) {
+            $connection->exec("
+                ALTER TABLE `course_chapter` ADD `status` varchar(20) NOT NULL DEFAULT 'published' COMMENT '发布状态 create|published|unpublished' AFTER `copyId`;
+            ");
+        }
+
         if (!$this->isFieldExist('course_chapter', 'isOptional')) {
             $connection->exec("
                 ALTER TABLE `course_chapter` add `isOptional` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否选修' AFTER `status`;
             ");
         }
 
+        if (!$this->isFieldExist('course_chapter', 'migrate_task_id')) {
+            $connection->exec("ALTER TABLE `course_chapter` ADD COLUMN `migrate_task_id` int(10) NOT NULL DEFAULT '0' COMMENT '来源任务表id';");
+        }
+
+        if (!$this->isIndexExist('course_chapter', 'migrate_task_id', 'migrate_task_id')) {
+            $connection->exec("ALTER TABLE `course_chapter` ADD INDEX migrate_task_id (migrate_task_id);");
+        }
+
         return 1;
     }
 
-    protected function addCourseChapters()
+    protected function addCourseChapters($page)
     {
-        $this->addSourceTaskId('course_chapter');
         $connection = $this->getConnection();
-        $connection->exec("DELETE FROM `course_chapter` WHERE `migrate_task_id`>0");
+        $countSql = "SELECT count(*) from `course_task` where courseId in (select id from course_v8 where courseType='normal')";
+        $count = $this->getConnection()->fetchColumn($countSql);
+        if ($count == 0) {
+            return;
+        }
+        $start = $this->getStart($page);
+        if ($page == 1) {
+            $connection->exec("DELETE FROM `course_chapter` WHERE `migrate_task_id`>0");
+        }
         $connection->exec("
             INSERT into `course_chapter` (
                 `courseId`,
@@ -164,9 +180,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `createdTime`,
                 0 as `copyId`,
                 `id` as `migrate_task_id`
-            from `course_task` where courseId in (select id from course_v8 where courseType='normal');
+            from `course_task` where courseId in (select id from course_v8 where courseType='normal') order by id limit {$start}, {$this->pageSize};;
         ");
-        return 1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return 1;
+        }
+
+        return $nextPage;
     }
 
     protected function updateTaskFields()
@@ -200,26 +221,15 @@ class EduSohoUpgrade extends AbstractUpdater
     }
 
 
-    protected function updateLessonIsOption($value='')
+    protected function updateLessonIsOptionAndStatus()
     {
         $connection = $this->getConnection();
         $connection->exec("
-            UPDATE `course_chapter` cc SET isoptional = (select isoptional from course_task ct where ct.categoryid=cc.id limit 1) where cc.type='lesson'
+            UPDATE `course_chapter` cc,course_task ct SET cc.isoptional = ct.isoptional,cc.status = ct.status where cc.id=ct.categoryId and cc.type='lesson' and ct.mode='lesson'
         ");
+
         return 1;
         
-    }
-
-    protected function addSourceTaskId($table)
-    {
-        $connection = $this->getConnection();
-        if (!$this->isFieldExist($table, 'migrate_task_id')) {
-            $connection->exec("ALTER TABLE `{$table}` ADD COLUMN `migrate_task_id` int(10) NOT NULL DEFAULT '0' COMMENT '来源任务表id';");
-        }
-
-        if (!$this->isIndexExist($table, 'migrate_task_id', 'migrate_task_id')) {
-            $connection->exec("ALTER TABLE `{$table}` ADD INDEX migrate_task_id (migrate_task_id);");
-        }
     }
 
     protected function deleteCache()
@@ -263,6 +273,22 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getLastPage($count)
+    {
+        return ceil($count / $this->pageSize);
+    }
+
+    protected function getNextPage($count, $currentPage)
+    {
+        $diff = $this->getLastPage($count) - $currentPage;
+        return $diff > 0 ? $currentPage + 1 : 0;
+    }
+
+    protected function getStart($page)
+    {
+        return ($page - 1) * $this->pageSize;
     }
 }
 
