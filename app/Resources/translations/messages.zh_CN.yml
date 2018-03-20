@@ -3304,7 +3304,7 @@ cloud_search.result_sum: 个
 cloud_search.common_keywords: 常用关键字
 cloud_search.result: 搜索结果
 cloud_search.all_courses: 全部课程
-cloud_search.input_placeholder: 可搜索课程、教师、话题、资讯
+cloud_search.input_placeholder: 可搜索
 
 cloud_search.course: 课程
 cloud_search.course.result: >
