@@ -12,8 +12,6 @@ class OpenCourseController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $conditions['types'] = array('open', 'liveOpen');
-
         if (empty($conditions['categoryId'])) {
             unset($conditions['categoryId']);
         }
