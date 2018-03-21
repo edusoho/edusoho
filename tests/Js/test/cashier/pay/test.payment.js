@@ -22,16 +22,16 @@ describe('pay:payment', function() {
   });
 
   it('function:getTrade when tradesn not empty and ordersn not empty', function() {
-    var apiTradeGet = sinon.stub(Api.trade, 'get');
-    var expectedParams = {params: { orderSn: '201802123', tradeSn: '20180202' }};
+    let apiTradeGet = sinon.stub(Api.trade, 'get');
+    let expectedParams = {params: { orderSn: '201802123', tradeSn: '20180202' }};
     BasePament.getTrade('20180202', '201802123');
     apiTradeGet.restore();
     sinon.assert.calledWith(apiTradeGet, expectedParams);
   });
 
   it('function:getTrade when tradesn is not empty and ordersn is empty', function() {
-    var apiTradeGet = sinon.stub(Api.trade, 'get');
-    var expectedParams = {params: {tradeSn: '12431234' }};
+    let apiTradeGet = sinon.stub(Api.trade, 'get');
+    let expectedParams = {params: {tradeSn: '12431234' }};
     BasePament.getTrade('12431234');
     apiTradeGet.restore();
     sinon.assert.calledWith(apiTradeGet, expectedParams);

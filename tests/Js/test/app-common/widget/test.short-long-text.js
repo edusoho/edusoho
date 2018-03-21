@@ -1,7 +1,7 @@
 
 let { getRootPath, init } = require('../../../util/init.js');
 const { shortLongText } = require(getRootPath() + '/app/Resources/static-src/app/common/widget/short-long-text.js');
-var assert = require('chai').assert;
+const assert = require('chai').assert;
 
 describe('common:short-long-test', function(done) {
   before(function() {

@@ -1,7 +1,7 @@
 import { getRootPath } from '../../util/init.js';
 const { trim, dateFormat, numberConvertLetter } = require(getRootPath() + '/app/Resources/static-src/app/common/unit.js');
 
-var assert = require('chai').assert;
+const assert = require('chai').assert;
 describe('common:unit', function() {
   it('function:trim when is_global is true', function() {
     assert.equal(trim(' a asdf '), 'aasdf');
