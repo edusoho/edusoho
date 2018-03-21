@@ -42,7 +42,7 @@ class SearchExtension extends \Twig_Extension
 
         $types = !empty($cloudSearchSetting['type']) ? $cloudSearchSetting['type'] : array();
         $placeholderArray = array();
-        if(!empty($types) && is_array($types)) {
+        if (!empty($types) && is_array($types)) {
             foreach ($types as $type => $value) {
                 if ($value) {
                     $placeholderArray[] = $this->container->get('translator')->trans('cloud_search.'.$type);
