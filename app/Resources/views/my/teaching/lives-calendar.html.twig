@@ -1,23 +1,19 @@
-{% extends 'v2/layout.html.twig' %}
+{% extends 'my/my-teaching.html.twig' %}
 
 {% block title %}{{ 'my.teaching.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
 
 {% do script(['libs/fullcalendar.js', 'app/js/my/teaching-calendar/index.js'])  %}
 
-{% block full_content %}
-  <div class="container cd-container">
-    <ul class="breadcrumb breadcrumb-o">
-      <li><a href="{{ path('my_teaching_course_sets') }}">{{'my.teaching.menu_heading'|trans}}</a></li>
-      <li class="active">{{'my.teaching.live_schedule_menu'|trans}}</li>
-    </ul>
-    <div class="cd-content mt0">
-      <div class="cd-panel schedule-panel">
-        <div class="cd-panel-body schedule-panel__body">
-          <div class="schedule-panel-body__current-num">{{ 'my.teaching.today_courses'|trans }}：<span style="font-size: 24px">{{ courseNumber }}</span><span class="cd-ml8 cd-text-sm">{{ 'my.teaching.hints_block'|trans }}</span></div>
-          <div id='calendar'></div>
-          <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d H:i:s')}}</div>
-          <div id="courseNumber" class="hidden">{{ courseNumber }}</div>
-        </div>
+{% set side_nav = 'my-teaching-live-calendar' %}
+
+{% block main %}
+  <div class="cd-content mt0">
+    <div class="cd-panel schedule-panel">
+      <div class="cd-panel-body schedule-panel__body">
+        <div class="schedule-panel-body__current-num">{{ 'my.teaching.today_courses'|trans }}：<span style="font-size: 24px">{{ courseNumber }}</span><span class="cd-ml8 cd-text-sm">{{ 'my.teaching.hints_block'|trans }}</span></div>
+        <div id='calendar'></div>
+        <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d H:i:s')}}</div>
+        <div id="courseNumber" class="hidden">{{ courseNumber }}</div>
       </div>
     </div>
   </div>
