@@ -6543,7 +6543,7 @@ admin.edu_cloud.edu_search.search_tips: >
 admin.edu_cloud.edu_search.rage_introduction: 搜索范围说明
 admin.edu_cloud.edu_search.rage_introduction_content: >
   －课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。<br>
-  － 班级：包括班级标题、班级介绍、班级课程等内容<br>
+  －班级：包括班级标题、班级介绍、班级课程等内容。<br>
   －教师：教师姓名、教师头衔。<br>
   －小组话题：包括话题标题、正文等关键词全文搜索。<br>
   －资讯：包括资讯标题、正文等关键词全文搜索。<br>
