@@ -42,7 +42,7 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!in_array(array('course', 'classroom'), $type)) {
+        if (!in_array($type, array('course', 'classroom'))) {
             $type = 'course';
         }
 
