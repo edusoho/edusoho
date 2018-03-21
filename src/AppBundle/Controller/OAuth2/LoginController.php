@@ -6,6 +6,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
+use Biz\User\Register\Common\DistributorCookieToolkit;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -88,7 +89,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    private function bindUser(OAuthUser $oauthUser, $password)
+    protected function bindUser(OAuthUser $oauthUser, $password)
     {
         $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
@@ -103,7 +104,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    private function authenticatedOauthUser()
+    protected function authenticatedOauthUser()
     {
         $request = $this->get('request');
         $oauthUser = $this->getOauthUser($this->get('request'));
@@ -159,7 +160,10 @@ class LoginController extends LoginBindController
             $this->register($request);
             $this->authenticatedOauthUser();
 
-            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
+            $response = $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
+            $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+
+            return $response;
         } else {
             $oauthUser->captchaEnabled = true;
             if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
@@ -175,7 +179,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    private function validateRegisterRequest(Request $request)
+    protected function validateRegisterRequest(Request $request)
     {
         $validateResult = array(
             'hasError' => false,
@@ -197,7 +201,7 @@ class LoginController extends LoginBindController
         return $validateResult;
     }
 
-    private function validateRegisterType(Request $request)
+    protected function validateRegisterType(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
         $isCloseRegister = OAuthUser::REGISTER_CLOSED === $oauthUser->mode;
@@ -208,7 +212,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    private function register(Request $request)
+    protected function register(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
         $registerFields = array(
@@ -226,20 +230,32 @@ class LoginController extends LoginBindController
             $registerFields['email'] = $this->getUserService()->generateEmail($registerFields);
         }
 
-        $this->getUserService()->register($registerFields, array($oauthUser->accountType, 'binder'));
+        $registerFields = DistributorCookieToolkit::setCookieTokenToFields($request, $registerFields);
+
+        $this->getUserService()->register(
+            $registerFields,
+            $this->getRegisterTypeToolkit()->getThirdPartyRegisterTypes($oauthUser->accountType, $registerFields)
+        );
     }
 
     /**
      * @return \Biz\Common\BizSms
      */
-    private function getBizSms()
+    protected function getBizSms()
     {
         $biz = $this->getBiz();
 
         return $biz['biz_sms'];
     }
 
-    private function getUserByTypeAndAccount($type, $account)
+    protected function getRegisterTypeToolkit()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user.register.type.toolkit'];
+    }
+
+    protected function getUserByTypeAndAccount($type, $account)
     {
         $user = null;
         switch ($type) {
@@ -261,7 +277,7 @@ class LoginController extends LoginBindController
      *
      * @return \AppBundle\Controller\OAuth2\OAuthUser
      */
-    private function getOauthUser(Request $request)
+    protected function getOauthUser(Request $request)
     {
         $oauthUser = $request->getSession()->get(OAuthUser::SESSION_KEY);
         if (!$oauthUser) {
@@ -271,14 +287,14 @@ class LoginController extends LoginBindController
         return $oauthUser;
     }
 
-    private function loginAttemptCheck($account, Request $request)
+    protected function loginAttemptCheck($account, Request $request)
     {
         $limiter = new LoginFailRateLimiter($this->getBiz());
         $request->request->set('username', $account);
         $limiter->handle($request);
     }
 
-    private function registerAttemptCheck(Request $request)
+    protected function registerAttemptCheck(Request $request)
     {
         $limiter = new RegisterRateLimiter($this->getBiz());
         $limiter->handle($request);

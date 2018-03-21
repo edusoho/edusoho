@@ -15,6 +15,14 @@ courseType:
     liveOpen: Living open course
     normal: Course
 
+nonOpenCourseCateogry:
+    live: Living course
+    normal: Course
+
+openCourseCategory:
+    liveOpen: Living open course
+    open: Open course
+
 classroomStatus:
     draft: Unpublished
     published: Published

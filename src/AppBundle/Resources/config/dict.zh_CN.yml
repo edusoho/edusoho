@@ -15,6 +15,14 @@ courseType:
     liveOpen: 直播公开课
     normal: 普通课程
 
+nonOpenCourseCateogry:
+    live: 直播课程
+    normal: 普通课程
+
+openCourseCategory:
+    liveOpen: 直播公开课
+    open: 录播公开课
+
 classroomStatus:
     draft: 未发布
     published: 已发布

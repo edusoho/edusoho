@@ -191,10 +191,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                     'session.options' => array(
                         'max_life_time' => 7200,
                         'session_storage' => 'redis', // exapmle: db, redis
-                    )
+                    ),
                 )
             );
-        } else{
+        } else {
             $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
         }
     }
@@ -224,11 +224,16 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $biz = $container->get('biz');
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
-
+            try {
+                //初始化项目时，biz_session 尚未创建
+                $invitedCode = @$container->get('session')->get('invitedCode', '');
+            } catch (\Exception $e) {
+                $invitedCode = '';
+            }
             $currentUser = array(
                 'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
                 'isSecure' => $this->request->isSecure(),
-                'invitedCode' => $container->get('session')->get('invitedCode', ''),
+                'invitedCode' => $invitedCode,
             );
             $currentUser = new \Biz\User\AnonymousUser($currentUser);
 

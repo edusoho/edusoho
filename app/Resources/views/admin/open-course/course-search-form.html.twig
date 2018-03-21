@@ -13,6 +13,11 @@
     </div>
   {% endif %}
   <div class="form-group">
+      <select class="form-control" name="type">
+        {{ select_options(dict('openCourseCategory'), app.request.query.get('type'), 'type'|trans) }}
+      </select>
+    </div>
+  <div class="form-group">
     <input class="form-control" type="text" placeholder="{{ 'admin.open_manage.title_placeholder'|trans }}" name="titleLike" value="{{ app.request.get('title') }}">
   </div>
   <div class="form-group">

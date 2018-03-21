@@ -29,5 +29,6 @@ $('#note-list .content').each(function(){
 });
 
 $('#note-list').on('click','.js-more-show',function(){
+  $(this).find('.js-change-btn').toggle();
   $(this).prev().toggleClass('active');
 });
