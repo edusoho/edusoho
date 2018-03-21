@@ -224,16 +224,16 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $biz = $container->get('biz');
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
-            // try {
-            //     //初始化项目时，biz_session 尚未创建
-            //     $invitedCode = @$container->get('session')->get('invitedCode', '');
-            // } catch (\Exception $e) {
-            //     $invitedCode = '';
-            // }
+            try {
+                //初始化项目时，biz_session 尚未创建
+                $invitedCode = @$container->get('session')->get('invitedCode', '');
+            } catch (\Exception $e) {
+                $invitedCode = '';
+            }
             $currentUser = array(
                 'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
                 'isSecure' => $this->request->isSecure(),
-                // 'invitedCode' => $invitedCode,
+                'invitedCode' => $invitedCode,
             );
             $currentUser = new \Biz\User\AnonymousUser($currentUser);
 
