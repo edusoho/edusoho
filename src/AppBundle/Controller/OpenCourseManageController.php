@@ -305,7 +305,7 @@ class OpenCourseManageController extends BaseController
             $liveLesson['length'] = $liveLessonFields['timeLength'];
             $liveLesson['title'] = $liveCourse['title'];
             if ($liveLesson['startTime'] < time()) {
-                return $this->createMessageResponse('error', '开始时间不能小于服务器当前时间');
+                return $this->createMessageResponse('error', '开始时间应晚于当前时间');
             }
 
             $routes = array(

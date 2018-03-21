@@ -3015,3 +3015,4 @@ order_calculate_price:
 client_time_check:
     path: /client_time_check
     defaults: { _controller: AppBundle:Default:clientTimeCheck }
+    methods: [POST]

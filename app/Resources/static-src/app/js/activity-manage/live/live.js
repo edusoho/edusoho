@@ -50,7 +50,7 @@ export default class Live {
       },
       messages: {
         startTime: {
-          es_remote: '开始时间不能小于服务器时间'
+          es_remote: Translator.trans('validate.after_now.message')
         }
       }
     });
