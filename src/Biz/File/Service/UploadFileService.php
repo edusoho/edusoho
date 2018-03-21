@@ -143,5 +143,5 @@ interface UploadFileService
 
     public function searchCloudFilesFromLocal($conditions, $orderBy, $start, $limit);
 
-    public function countCloudFllesFromLocal($conditions);
+    public function countCloudFilesFromLocal($conditions);
 }

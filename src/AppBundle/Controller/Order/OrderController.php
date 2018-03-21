@@ -43,9 +43,16 @@ class OrderController extends BaseController
         $product = $this->getProduct($targetType, $fields);
         $product->setPickedDeduct($fields);
 
-        $price = $this->get('web.twig.order_extension')->priceFormat($product->getPayablePrice());
+        $priceFormat = $this->get('web.twig.order_extension')->priceFormat($product->getPayablePrice());
+        $deducts = $product->getDeducts();
 
-        return $this->createJsonResponse($price);
+        return $this->createJsonResponse(
+            array(
+                'price' => $product->getPayablePrice(),
+                'priceFormat' => $priceFormat,
+                'deducts' => $deducts,
+            )
+        );
     }
 
     private function getProduct($targetType, $params)
