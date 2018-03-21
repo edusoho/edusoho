@@ -73,6 +73,7 @@
         "respond.js": "1.4.2",
         "screenfull": "3.0.2",
         "select2": "3.5.1",
+        "sinon": "^4.4.6",
         "store": "1.3.20",
         "subtitle": "0.1.5",
         "swiper": "2.7.6",
