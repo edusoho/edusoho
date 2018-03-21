@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block mobileType %}
-  {# <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',filter|default('all')) }}
+   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchClassroomType',filter|default('all')) }}
   <span class="caret"></span></button>
   <ul class="dropdown-menu" role="menu">
     <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans }}</a></li>
     <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
       <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans }}</a>
     </li>
-  </ul> #}
+  </ul>
 {% endblock %}
 
 {% block tip %}

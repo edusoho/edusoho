@@ -365,6 +365,10 @@ searchCourseType:
     free: 免费课程
     live: 直播课程
 
+searchClassroomType:
+    all: 全部班级
+    free: 免费班级
+
 userInfoFields:
     email: 邮箱地址
     truename: 真实姓名

@@ -347,6 +347,10 @@ searchCourseType:
     free: Free Course
     live: Live Course
 
+searchClassroomType:
+    all: All
+    free: Free Classroom
+
 userInfoFields:
     email: Email
     truename: Real name

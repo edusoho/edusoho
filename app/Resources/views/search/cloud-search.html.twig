@@ -13,7 +13,7 @@
       <form class="input-group search-input-group" id="search-input-group" action="{{ path('search') }}" method="get">
         <div class="input-wrap">
           <input type="text" name="q" class="form-control"
-           placeholder="{{ 'cloud_search.input_placeholder'|trans }}{% for key, nav in cloudSearch.type %}{% if nav == 1 %}{{ ('cloud_search.'~key)|trans }}、 {% endif %}{% endfor %}" value="{{keywords}}">
+           placeholder="{{ 'cloud_search.input_placeholder'|trans }}{{ show_search_placeholder() }}" value="{{keywords}}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
