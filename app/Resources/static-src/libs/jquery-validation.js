@@ -1,6 +1,6 @@
 import 'jquery-validation';
-import axis from 'common/axis';
 import { isEmpty } from 'common/utils';
+import axis from 'common/axis';
 
 $.validator.setDefaults({
   errorClass: 'form-error-message jq-validate-error',
@@ -404,9 +404,9 @@ $.validator.addMethod('es_remote', function(value, element, params) {
   let data = params.data ? params.data : { value: value };
   const finalData = {};
   for (let item in data) {
-    const test = data[item];
-    if (typeof test === 'function') {
-      finalData[item] = test();
+    const prop = data[item];
+    if (typeof prop === 'function') {
+      finalData[item] = prop();
     }
   }
 
