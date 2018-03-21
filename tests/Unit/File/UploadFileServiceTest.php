@@ -943,7 +943,7 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals(array(array('id' => 11, 'type' => 'other')), $result);
     }
 
-    public function testCountCloudFllesFromLocal()
+    public function testcountCloudFilesFromLocal()
     {
         $this->mockBiz(
             'File:UploadFileDao',
@@ -956,7 +956,7 @@ class UploadFileServiceTest extends BaseTestCase
                 ),
             )
         );
-        $result = $this->getUploadFileService()->countCloudFllesFromLocal(array());
+        $result = $this->getUploadFileService()->countCloudFilesFromLocal(array());
         $this->assertEquals(1, $result);
     }
 
