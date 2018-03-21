@@ -2691,7 +2691,7 @@ teacher.content_title: 'All teachers'
 teacher.promoted_teacher.content_title: 'Teacher Info'
 teacher.promoted_teacher.see_ben: 'View teacher''s homepage'
 custom_page.empty: 'The current page has not been edited yet ,please edit in the control panel'
-search.empty: 'Cannot find related courses, please change your keyword.'
+search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
 search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关班级

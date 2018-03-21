@@ -50,7 +50,7 @@
         {% endfor %}
       </div>
     {% else %}
-      <div class="empty">{{'search.empty'|trans}}</div>
+      <div class="empty">{{'search.empty'|trans({'%name%':'site.default.course'|trans})}}</div>
     {% endif %}
   </div>
 
