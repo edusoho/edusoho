@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class ClearFiredLogJob extends Migration
+class BizSchedulerDeleteFiredLogJob extends Migration
 {
     /**
      * Do the migration
@@ -10,12 +10,13 @@ class ClearFiredLogJob extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $db = $biz['db'];
-        $currentTime = time();
+        $connection = $biz['db'];
 
-        $db->exec("
+        $currentTime = time();
+        $connection->exec("
             INSERT INTO `biz_scheduler_job` (
                 `name`,
+                `pool`,
                 `expression`,
                 `class`,
                 `args`,
@@ -30,6 +31,7 @@ class ClearFiredLogJob extends Migration
             ) VALUES
             (
                 'DeleteFiredLogJob',
+                'dedicated',
                 '0 23 * * *',
                 'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\DeleteFiredLogJob',
                 '',
@@ -43,5 +45,17 @@ class ClearFiredLogJob extends Migration
                 '{$currentTime}'
             );
         ");
+    }
+
+    /**
+     * Undo the migration
+     */
+    public function down()
+    {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+
+        $connection->exec('update biz_scheduler_job_fired set job_detail = null');
+        $connection->exec("delete from biz_scheduler_job_fired where name = 'Scheduler_MarkExecutingTimeoutJob'");
     }
 }
