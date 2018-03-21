@@ -410,4 +410,32 @@ class GeneralDaoImplTest extends IntegrationTestCase
 
         $this->assertEquals($row['delimiter_serialize_value'], array('i_am_delimiter_serialized_value'));
     }
+
+    public function testSearchWithColumns()
+    {
+        /** @var \Tests\Example\Dao\ExampleDao $dao */
+        $dao = $this->biz->dao('Example:ExampleDao');
+
+        $dao->create(array('name' => 'test1', 'ids1' => array('1111'), 'ids2' => array('1111')));
+        $dao->create(array('name' => 'test1', 'ids1' => array('2222'), 'ids2' => array('2222')));
+        $dao->create(array('name' => 'test2', 'ids1' => array('3333'), 'ids2' => array('3333')));
+
+        $results = $dao->search(array('name' => 'test2'), array(), 0, 10, array('name', 'ids1'));
+        $this->assertCount(1, $results);
+        $this->assertEquals(
+            array('name' => 'test2', 'ids1' => array('3333')),
+            $results[0]
+        );
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testSearchWithErrorColumns()
+    {
+        /** @var \Tests\Example\Dao\ExampleDao $dao */
+        $dao = $this->biz->dao('Example:ExampleDao');
+
+        $dao->search(array('name' => 'test2'), array(), 0, 10, array('* from example;#'));
+    }
 }

@@ -161,6 +161,14 @@ class SystemCrontabInitializer
                 'expression' => '0 3 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\StorageDailyJob',
             ),
+            'DistributorSyncJob' => array(
+                'expression' => '*/19 * * * *',
+                'class' => 'Biz\Distributor\Job\DistributorSyncJob',
+            ),
+            'DeleteFiredLogJob' => array(
+                'expression' => '0 23 * * *',
+                'class' => 'Codeages\Biz\Framework\Scheduler\Job\DeleteFiredLogJob',
+            ),
         );
         $defaultJob = array(
             'pool' => 'default',
