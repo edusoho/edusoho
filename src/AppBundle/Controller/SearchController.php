@@ -42,9 +42,13 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        return $this->forward("AppBundle:Search:{$type}Search", array(
-            'request' => $request,
-        ));
+        return $this->forward(
+            "AppBundle:Search:{$type}Search",
+            array(
+                'request' => $request,
+            ),
+            $request->query->all()
+        );
     }
 
     public function classroomSearchAction(Request $request)
