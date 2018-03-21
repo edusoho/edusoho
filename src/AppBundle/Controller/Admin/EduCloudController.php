@@ -1105,6 +1105,7 @@ class EduCloudController extends BaseController
         if (empty($data['type'])) {
             $data['type'] = array(
                 'course' => 1,
+                'classroom' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,
