@@ -9,14 +9,16 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class AddActivityWatchToStatementJob extends AbstractJob
 {
+    private $perCount = 5000;
+
     public function execute()
     {
-        for ($i = 1; $i <= 5; ++$i) {
-            $this->watchLogToSatement();
+        for ($i = 1; $i <= 10; ++$i) {
+            $this->watchLogToStatement();
         }
     }
 
-    private function watchLogToSatement()
+    private function watchLogToStatement()
     {
         $conditions = array(
             'is_push' => 0,
@@ -25,7 +27,7 @@ class AddActivityWatchToStatementJob extends AbstractJob
 
         $orderBy = array('created_time' => 'ASC');
 
-        $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, 500);
+        $watchLogs = $this->getXapiService()->searchWatchLogs($conditions, $orderBy, 0, $this->perCount);
         if (empty($watchLogs)) {
             return;
         }
