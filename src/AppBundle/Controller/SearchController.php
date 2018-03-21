@@ -42,6 +42,10 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
+        if (!in_array(array('course', 'classroom'), $type)) {
+            $type = 'course';
+        }
+
         return $this->forward(
             "AppBundle:Search:{$type}Search",
             array(
