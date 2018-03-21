@@ -38,11 +38,14 @@ class RewardPoint extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分帐目流水';
         ");
 
-        $biz['db']->exec("
-            ALTER TABLE `course_v8` 
-            ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分',
-            ADD COLUMN `taskRewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '任务积分';
-        ");
+        $result = $biz['db']->fetchAssoc("DESCRIBE `course_v8` `rewardPoint`;");
+        if(!$result) {
+            $biz['db']->exec("
+                ALTER TABLE `course_v8` 
+                ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分',
+                ADD COLUMN `taskRewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '任务积分';
+            ");
+        }
     }
 
     /**
