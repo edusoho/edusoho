@@ -5,8 +5,10 @@
     > li {
       margin: 0 0 10px 20px;
       a {
-        padding-top: 6px;
-        padding-bottom: 6px;
+        @media(max-width: @screen-xs-min) {
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
       }
     }
   }
