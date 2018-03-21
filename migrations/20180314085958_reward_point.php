@@ -11,7 +11,7 @@ class RewardPoint extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            CREATE TABLE `reward_point_account` (
+            CREATE TABLE  IF NOT EXISTS  `reward_point_account` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
               `balance` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '积分余额',
@@ -20,7 +20,7 @@ class RewardPoint extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
             
-            CREATE TABLE `reward_point_account_flow` (
+            CREATE TABLE  IF NOT EXISTS `reward_point_account_flow` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
               `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
