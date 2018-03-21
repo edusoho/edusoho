@@ -4,7 +4,6 @@ namespace Biz\Course\Job;
 
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class UpdateCourseSetMonthStudentNumJob extends AbstractJob

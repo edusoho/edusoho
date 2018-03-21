@@ -265,7 +265,7 @@ class CourseSetServiceTest extends BaseTestCase
         $fields = array(
             'title' => '新课程开始！',
             'type' => 'normal',
-            'monthStudentNum' => 10
+            'monthStudentNum' => 10,
         );
         $courseSet = $this->getCourseSetDao()->create($fields);
         $this->assertEquals($fields['monthStudentNum'], $courseSet['monthStudentNum']);
@@ -273,7 +273,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->getCourseSetService()->refreshMonthStudentNum();
 
         $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
-        
+
         $this->assertEquals(0, $result['monthStudentNum']);
     }
 

@@ -25,8 +25,8 @@ class CourseSetAddMonthStudentNum extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("
+        $connection->exec('
             ALTER TABLE `course_set_v8` DROP COLUMN `monthStudentNum`;
-        ");
+        ');
     }
 }

@@ -95,7 +95,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'rating',
                 'studentNum',
                 'id',
-                'monthStudentNum'
+                'monthStudentNum',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',

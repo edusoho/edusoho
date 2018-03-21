@@ -12,7 +12,7 @@ class UpdateCourseSetMonthStudentNumJobTest extends BaseTestCase
         $fields = array(
             'title' => '新课程开始！',
             'type' => 'normal',
-            'monthStudentNum' => 10
+            'monthStudentNum' => 10,
         );
         $courseSet = $this->getCourseSetDao()->create($fields);
         $this->assertEquals($fields['monthStudentNum'], $courseSet['monthStudentNum']);
@@ -20,8 +20,8 @@ class UpdateCourseSetMonthStudentNumJobTest extends BaseTestCase
         $this->mockBiz('Course:MemberService', array(
             array(
                 'functionName' => 'searchMemberCountGroupByFields',
-                'returnValue' => array(array('courseSetId' => $courseSet['id'], 'count' => 2))
-            )
+                'returnValue' => array(array('courseSetId' => $courseSet['id'], 'count' => 2)),
+            ),
         ));
 
         $job = new UpdateCourseSetMonthStudentNumJob(array(), $this->getBiz());
