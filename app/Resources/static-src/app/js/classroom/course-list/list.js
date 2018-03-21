@@ -1,4 +1,5 @@
-import {chapterAnimate} from 'app/common/widget/chapter-animate';
+import { chapterAnimate } from 'app/common/widget/chapter-animate';
+import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 
 export default class CourseList {
   constructor($element) {
@@ -9,8 +10,8 @@ export default class CourseList {
   }
 
   initEvent() {
-    this.$element.on('click','.es-icon-keyboardarrowdown',(event)=>this.onExpandCourse(event));
-    this.$element.on('click','.es-icon-keyboardarrowup',(event)=>this.onCollapseCourse(event));
+    this.$element.on('click', '.es-icon-keyboardarrowdown', (event) => this.onExpandCourse(event));
+    this.$element.on('click', '.es-icon-keyboardarrowup', (event) => this.onCollapseCourse(event));
   }
 
   onExpandCourse(e) {
@@ -18,12 +19,15 @@ export default class CourseList {
     var $parent = $target.parents('.course-item');
     var $lessonList = $target.parents('.media').siblings('.course-detail-content');
     if ($lessonList.length > 0) {
-      this._lessonListSHow($lessonList);
+      this._lessonListShow($lessonList);
     } else {
       var self = this;
-      $.get($target.data('lessonUrl'), { 'visibility': 0 }, function (html) {
+      $.get($target.data('lessonUrl'), { 'visibility': 0 }, function(html) {
         $parent.append(html);
-        self._lessonListSHow($parent.siblings('.course-detail-content'));
+        let pagedCourseLesson = new PagedCourseLesson();
+        pagedCourseLesson.init();
+        pagedCourseLesson.destroyPaging();
+        self._lessonListShow($parent.siblings('.course-detail-content'));
       });
     }
 
@@ -31,10 +35,10 @@ export default class CourseList {
   }
   onCollapseCourse(e) {
     var $target = $(e.currentTarget);
-    this._lessonListSHow($target.parents('.media').siblings('.course-detail-content'));
+    this._lessonListShow($target.parents('.media').siblings('.course-detail-content'));
     $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
   }
-  _lessonListSHow($list) {
+  _lessonListShow($list) {
     if ($list.length > 0) {
       $list.animate({
         visibility: 'toggle',

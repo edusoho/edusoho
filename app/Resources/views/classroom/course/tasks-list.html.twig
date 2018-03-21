@@ -1,4 +1,4 @@
-{{ render(controller('AppBundle:Course/Course:tasks', {course: course, member: member}))}}
+{{ render(controller('AppBundle:Course/Course:tasks', {course: course, member: member, paged: true}))}}
 
 {% if course.compulsoryTaskNum > 25 %}
   <div class="text-center pt10 pb10 border-top-gray-lighter" >
