@@ -36,10 +36,6 @@ class Live extends Activity
 
     public function preUpdateCheck($activity, $newFields)
     {
-        if (empty($newFields['startTime']) || empty($newFields['length'])) {
-            return;
-        }
-
         if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
             throw new InvalidArgumentException('activity.missing_params');
         }

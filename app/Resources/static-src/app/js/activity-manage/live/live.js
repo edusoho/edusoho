@@ -27,7 +27,15 @@ export default class Live {
         startTime: {
           required: true,
           DateAndTime: true,
-          after_now:true,
+          after_now: true,
+          es_remote: {
+            type: 'post',
+            data: {
+              clientTime: function () {
+                return $('[name=startTime]').val();
+              }
+            }
+          }
         },
         length: {
           required: true,
@@ -39,6 +47,11 @@ export default class Live {
         remark: {
           maxlength: 1000
         },
+      },
+      messages: {
+        startTime: {
+          es_remote: Translator.trans('validate.after_now.message')
+        }
       }
     });
     initEditor($('[name="remark"]'), this.validator2);
