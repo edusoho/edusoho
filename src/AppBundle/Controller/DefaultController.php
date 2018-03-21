@@ -199,6 +199,7 @@ class DefaultController extends BaseController
         if ($clientTime < time()) {
             return $this->createJsonResponse(false);
         }
+
         return $this->createJsonResponse(true);
     }
 

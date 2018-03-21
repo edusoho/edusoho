@@ -1,5 +1,6 @@
 import 'jquery-validation';
 import axis from 'common/axis';
+import { isEmpty } from 'common/utils';
 
 $.validator.setDefaults({
   errorClass: 'form-error-message jq-validate-error',
@@ -412,7 +413,7 @@ $.validator.addMethod('es_remote', function(value, element, params) {
   let callback = params.callback ? params.callback : null;
   let isSuccess = 0;
   this.valueCache ? this.valueCache : {};
-  let dataValue = $.isEmptyObject(finalData) ? data : finalData;
+  let dataValue = isEmpty(finalData) ? data : finalData;
   let cacheKey = url + type + JSON.stringify(dataValue);
 
   if (cacheKey in this.valueCache) {

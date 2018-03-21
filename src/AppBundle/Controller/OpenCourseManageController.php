@@ -304,6 +304,9 @@ class OpenCourseManageController extends BaseController
             $liveLesson['startTime'] = strtotime($liveLessonFields['startTime']);
             $liveLesson['length'] = $liveLessonFields['timeLength'];
             $liveLesson['title'] = $liveCourse['title'];
+            if ($liveLesson['startTime'] < time()) {
+                return $this->createMessageResponse('error', '开始时间不能小于服务器当前时间');
+            }
 
             $routes = array(
                 'authUrl' => $this->generateUrl('live_auth', array(), true),

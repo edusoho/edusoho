@@ -7,7 +7,7 @@ thisTime = thisTime.replace(/-/g, '/');
 thisTime = Date.parse(thisTime) / 1000;
 let nowTime = Date.parse(new Date()) / 1000;
 
-if (nowTime > thisTime) {
+if (!$form.data('update')) {
   $('[name=startTime]').attr('disabled', true);
   $('#live-length-field').attr('disabled', true);
   $('#live-open-course-form-btn').attr('disabled', true);
@@ -22,7 +22,6 @@ if (nowTime > thisTime) {
 }
 
 let validator = $form.validate({
-  onkeyup: false,
   rules: {
     startTime: {
       required: true,
@@ -63,7 +62,7 @@ $('[name=startTime]').datetimepicker({
   autoclose: true,
   language: document.documentElement.lang
 }).on('hide', function (ev) {
-  $form.validate('[name=startTime]');
+  validator.form();
 });
 $('[name=startTime]').datetimepicker('setStartDate', now);
 
