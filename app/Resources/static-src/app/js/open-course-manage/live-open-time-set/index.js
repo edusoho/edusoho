@@ -2,10 +2,6 @@ let $content = $('#live-lesson-content-field');
 let $form = $('#live-open-course-form');
 let now = new Date();
 let $btn = $('#live-open-course-form-btn');
-let thisTime = $('[name=startTime]').val();
-thisTime = thisTime.replace(/-/g, '/');
-thisTime = Date.parse(thisTime) / 1000;
-let nowTime = Date.parse(new Date()) / 1000;
 
 if (!$form.data('update')) {
   $('[name=startTime]').attr('disabled', true);
@@ -62,7 +58,7 @@ $('[name=startTime]').datetimepicker({
   autoclose: true,
   language: document.documentElement.lang
 }).on('hide', function (ev) {
-  validator.form();
+  validator.element('[name=startTime]');
 });
 $('[name=startTime]').datetimepicker('setStartDate', now);
 
