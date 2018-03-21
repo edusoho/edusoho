@@ -65,8 +65,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-           'xapiStatmentAddContext',
-           'createPoint',
+           'updateClassroomSearch',
         );
 
         $funcNames = array();
@@ -106,13 +105,13 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateClassroomSearch()
     {
         $cloudSearchSetting = $this->getSettingService()->get('cloud_search', array());
-        $type = empty($cloudSearchSetting['type']) ? array() : empty($cloudSearchSetting['type']);
+        $type = empty($cloudSearchSetting['type']) ? array() : $cloudSearchSetting['type'];
         $updateSetting = $settingTemplate = array(
             'search_enabled' => isset($cloudSearchSetting['search_enabled']) ? $cloudSearchSetting['search_enabled'] : 0,
-            'status' => isset($cloudSearchSetting['status']) ? isset($cloudSearchSetting['status']) :'closed',
+            'status' => isset($cloudSearchSetting['status']) ? $cloudSearchSetting['status'] :'closed',
             'type' => array(
-                'course' => isset($type['course']) ? $type['course'] : 0,
-                'classroom' => isset($type['classroom']) ? $type['classroom'] : 0,
+                'course' => 1,
+                'classroom' => isset($type['classroom']) ? $type['classroom'] : 1,
                 'teacher' => isset($type['teacher']) ? $type['teacher'] : 0,
                 'thread' => isset($type['thread']) ? $type['thread'] : 0,
                 'article' => isset($type['article']) ? $type['article'] : 0,
@@ -120,7 +119,7 @@ class EduSohoUpgrade extends AbstractUpdater
         );
         $this->getSettingService()->set('cloud_search', $updateSetting);
 
-        return 1
+        return 1;
     }
 
     protected function generateIndex($step, $page)
