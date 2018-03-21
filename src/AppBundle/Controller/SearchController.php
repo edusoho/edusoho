@@ -60,7 +60,7 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $errorType = $request->query->get('errorType');
         $keywords = $this->filterKeyWord(trim($keywords));
-        $type = $request->query->get('type', 'classroom');
+        $type = 'classroom';
         $filter = $request->query->get('filter');
 
         $conditions = array(
@@ -105,7 +105,7 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
         $errorType = $request->query->get('errorType');
-        $type = $request->query->get('type', 'course');
+        $type = 'course';
         $currentUser = $this->getCurrentUser();
         $vip = $this->getAppService()->findInstallApp('Vip');
 
