@@ -35,7 +35,7 @@ class GenerateXapiDataCommand extends BaseCommand
         );
 
         $statements = array();
-        for ($i = 0; $i < $num; ++$i ) {
+        for ($i = 0; $i < $num; ++$i) {
             $target_type = 0 == mt_rand(1, 100) % 2 ? 'course' : 'classroom';
 
             $statement = array(
