@@ -223,15 +223,6 @@ class SearchController extends BaseController
                     )
                 )
             );
-
-//            return $this->render(
-//                'search/cloud-search-failure.html.twig',
-//                array(
-//                    'keywords' => $keywords,
-//                    'type' => $type,
-//                    'errorMessage' => '搜索失败，请稍后再试.',
-//                )
-//            );
         }
 
         $paginator = new Paginator($this->get('request'), $counts, $pageSize);

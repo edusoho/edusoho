@@ -2754,6 +2754,15 @@ cloud_search.course.learned: '(%studentNum%) students are learning'
 cloud_search.course.task: Lesson
 cloud_search.course.recommend.content_title: 'Recommend courses'
 cloud_search.course.recommend.empty: 'Sorry, no Recommend course now.'
+
+cloud_search.classroom: Classroom
+cloud_search.classroom.result: >
+  Have Find <span class="color-danger">%counts%</span>course(s).
+cloud_search.classroom.evaluate: %ratingNum% review
+cloud_search.classroom.learned: (%studentNum%) learned
+cloud_search.classroom.recommend.content_title: Recommended Classroom
+cloud_search.classroom.recommend.empty: No Recommend Classrooms
+
 cloud_search.teacher: Teachers
 cloud_search.teacher.result: 'Have found <span class="color-danger">%counts%</span> teacher(s)'
 cloud_search.teacher.recommend.content_title: 'Recommend teachers'
