@@ -8,7 +8,7 @@
   <div class="panel-body">
     <i class="es-icon es-icon-infooutline text-primary"></i>
     <div class="text-md mbl">{{'admin.edu_cloud.edu_search.no_enabled_search'|trans}}</div>
-    <div class="color-gray notice-desc">{{'admin.edu_cloud.edu_search.search_tips'|trans|raw}}</div>
+    <div class="color-gray notice-desc">{{'admin.edu_cloud.edu_search.search_tips'|trans({'%searchUrl%': path('admin_cloud_search')})|raw}}</div>
     {% if data.status == 'unbinded' %}
       <div class="text-danger text-sm">
         {{'admin.edu_cloud.edu_search.unbinded_url_tips'|trans({'%setUrl%': path('admin_setting_cloud')})|raw}}

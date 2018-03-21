@@ -804,3 +804,5 @@ admin.article_setting.choose_category: --选择所属栏目--
 
 
 Bad credentials.: 用户名或密码错误
+
+cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式

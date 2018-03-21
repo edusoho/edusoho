@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
@@ -19,8 +20,6 @@ class SearchController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
-
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
         $type = $request->query->get('type', 'course');
@@ -43,6 +42,68 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
+        if (!in_array($type, array('course', 'classroom'))) {
+            $type = 'course';
+        }
+
+        return $this->forward(
+            "AppBundle:Search:{$type}Search",
+            array(
+                'request' => $request,
+            ),
+            $request->query->all()
+        );
+    }
+
+    public function classroomSearchAction(Request $request)
+    {
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
+        $type = 'classroom';
+        $filter = $request->query->get('filter');
+
+        $conditions = array(
+            'status' => 'published',
+            'titleLike' => $keywords,
+        );
+
+        if ('free' == $filter) {
+            $conditions['price'] = '0.00';
+        }
+
+        $count = $this->getClassroomService()->countClassrooms($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count, 12
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('updatedTime' => 'desc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'search/index.html.twig',
+            array(
+                'type' => $type,
+                'classrooms' => $classrooms,
+                'filter' => $filter,
+                'count' => $count,
+                'paginator' => $paginator,
+                'keywords' => $keywords,
+            )
+        );
+    }
+
+    public function courseSearchAction(Request $request)
+    {
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
+        $type = 'course';
+        $currentUser = $this->getCurrentUser();
         $vip = $this->getAppService()->findInstallApp('Vip');
 
         $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
@@ -101,6 +162,7 @@ class SearchController extends BaseController
         return $this->render(
             'search/index.html.twig',
             array(
+                'type' => $type,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'keywords' => $keywords,
@@ -156,12 +218,13 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
-            return $this->render(
-                'search/cloud-search-failure.html.twig',
-                array(
-                    'keywords' => $keywords,
-                    'type' => $type,
-                    'errorMessage' => '搜索失败，请稍后再试.',
+            return $this->redirect(
+                $this->generateUrl(
+                'search',
+                    array(
+                        'q' => $keywords,
+                        'errorType' => 'cloudSearchError',
+                    )
                 )
             );
         }
@@ -294,5 +357,13 @@ class SearchController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

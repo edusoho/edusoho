@@ -2692,14 +2692,18 @@ teacher.content_title: 'All teachers'
 teacher.promoted_teacher.content_title: 'Teacher Info'
 teacher.promoted_teacher.see_ben: 'View teacher''s homepage'
 custom_page.empty: 'The current page has not been edited yet ,please edit in the control panel'
-search.empty: 'Cannot find related courses, please change your keyword.'
+search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
-search.relative_courses_result: 'Total <span>%count%</span> courses with <span>“%keywords%”</span>'
-search.result_course_copy: 'Total <span>%count%</span> courses'
+search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关班级
+search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
+search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> classrooms'
 search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
 search.live_courses: 'Live courses'
+search.all_classrooms: 'All classrooms'
+search.free_classrooms: 'Free classrooms'
 cloud_file.preview: 'File preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -2751,6 +2755,15 @@ cloud_search.course.learned: '(%studentNum%) students are learning'
 cloud_search.course.task: Lesson
 cloud_search.course.recommend.content_title: 'Recommend courses'
 cloud_search.course.recommend.empty: 'Sorry, no Recommend course now.'
+
+cloud_search.classroom: Classroom
+cloud_search.classroom.result: >
+  Have Find <span class="color-danger">%counts%</span>course(s).
+cloud_search.classroom.evaluate: %ratingNum% review
+cloud_search.classroom.learned: (%studentNum%) learned
+cloud_search.classroom.recommend.content_title: Recommended Classroom
+cloud_search.classroom.recommend.empty: No Recommend Classrooms
+
 cloud_search.teacher: Teachers
 cloud_search.teacher.result: 'Have found <span class="color-danger">%counts%</span> teacher(s)'
 cloud_search.teacher.recommend.content_title: 'Recommend teachers'
