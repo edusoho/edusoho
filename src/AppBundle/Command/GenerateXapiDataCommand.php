@@ -31,12 +31,12 @@ class GenerateXapiDataCommand extends BaseCommand
     {
         $titles = array(
             'course' => '测试课程',
-            'classroom' => '测试班级'
+            'classroom' => '测试班级',
         );
 
         $statements = array();
-        for ($i = 0; $i < $num; $i ++) {
-            $target_type = mt_rand(1, 100) % 2 == 0 ? 'course' : 'classroom';
+        for ($i = 0; $i < $num; ++$i ) {
+            $target_type = 0 == mt_rand(1, 100) % 2 ? 'course' : 'classroom';
 
             $statement = array(
                 'verb' => 'purchased',
@@ -47,8 +47,8 @@ class GenerateXapiDataCommand extends BaseCommand
                 'occur_time' => strtotime('-'.mt_rand(1, 100).'days'),
                 'context' => array(
                     'pay_amount' => $this->generateRandAmount(),
-                    'title' => $titles[$target_type].mt_rand(1, 1000)
-                )
+                    'title' => $titles[$target_type].mt_rand(1, 1000),
+                ),
             );
 
             $statements[] = $statement;
@@ -59,7 +59,7 @@ class GenerateXapiDataCommand extends BaseCommand
 
     private function generateRandAmount()
     {
-        return  round(mt_rand(1, 10000)/33, 2);
+        return  round(mt_rand(1, 10000) / 33, 2);
     }
 
     /**
