@@ -11,7 +11,6 @@ let basePament = new BasePament();
 
 describe('pay:payment', function() {
   before(function() {
-
   });
 
   after(function() {
@@ -42,8 +41,5 @@ describe('pay:payment', function() {
 
   it('function:startInterval', function() {
     assert.equal(basePament.startInterval(), false);
-    // var ajax = sinon.stub($, 'ajax');
-    // ajax.restore();
-    // sinon.assert.calledWith(ajax, expectedParams);
   });
 });
