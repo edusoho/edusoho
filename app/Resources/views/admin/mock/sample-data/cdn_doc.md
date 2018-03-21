@@ -6,7 +6,7 @@
 #   api authorized: 有此属性的api，一般会加上标签 @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN") 
 
 api-version: 3
-api-url: /api/cdn
+api-url: /api/cdns
 api-method: POST
 api-authorized: true
 
