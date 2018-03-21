@@ -58,7 +58,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     public function refactorAllDocuments()
     {
         $api = $this->getCloudApi('root');
-        $conditions = array('categorys' => 'course,user,thread,article');
+        $conditions = array('categorys' => 'course,classroom,user,thread,article');
 
         return $api->post('/search/refactor_documents', $conditions);
     }
