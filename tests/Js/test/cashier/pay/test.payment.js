@@ -1,20 +1,18 @@
 
 import { getRootPath, init } from '../../../util/init.js';
-import decache from 'decache';
 const assert = require('chai').assert;
 const sinon = require('sinon');
 import Api from 'common/api';
 
-init('');
-let BasePament = require(getRootPath() + '/app/Resources/static-src/app/js/cashier/pay/payment.js').default;
-let basePament = new BasePament();
-
+let basePament, BasePament;
 describe('pay:payment', function() {
   before(function() {
+    init('');
+    BasePament = require(getRootPath() + '/app/Resources/static-src/app/js/cashier/pay/payment.js').default;
+    basePament = new BasePament();
   });
 
   after(function() {
-    decache('../../../util/init.js');
   });
 
   it('function:getTrade when trade is empty', function() {

@@ -26,8 +26,6 @@ module.exports = {
       "Handlebars": true,
       "store": true,
       "moment": true,
-      "describe": true,
-      "it": true,
     },
     "extends": "eslint:recommended",
     "parserOptions": {

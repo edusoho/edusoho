@@ -17,7 +17,6 @@ const init = function(html = '')
     includeNodeLocations: true,
   });
   global.window = dom.window;
-  console.log(window.location.href);
   global.$ = require('jquery');
 };
 

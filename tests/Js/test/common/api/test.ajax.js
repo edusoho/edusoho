@@ -1,18 +1,14 @@
 
-import { getRootPath, init } from '../../../util/init.js';
+let { getRootPath, init } = require('../../../util/init.js');
 import decache from 'decache';
 const assert = require('chai').assert;
 const sinon = require('sinon');
 import Api from 'common/api';
-
-init('');
 let ajax = require(getRootPath() + '/app/Resources/static-src/common/api/ajax.js').default;
+
 describe('common:ajax', function() {
   before(function() {
-  });
-
-  after(function() {
-    decache('../../../util/init.js');
+    init('');
   });
 
   it('ajax:promise = true', function() {

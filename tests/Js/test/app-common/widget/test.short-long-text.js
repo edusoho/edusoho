@@ -1,6 +1,5 @@
 
 let { getRootPath, init } = require('../../../util/init.js');
-import decache from 'decache';
 const { shortLongText } = require(getRootPath() + '/app/Resources/static-src/app/common/widget/short-long-text.js');
 var assert = require('chai').assert;
 
@@ -10,7 +9,6 @@ describe('common:short-long-test', function(done) {
     shortLongText($('body'));
   });
   after(function() {
-    decache('../../../util/init.js');
   });
   it('short-text click event', function() {
     $('body').find('.short-text').trigger('click');
