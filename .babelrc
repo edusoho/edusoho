@@ -1,0 +1,11 @@
+{
+  "presets": [ "es2015" ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+         "common":"./app/Resources/static-src/common"
+      }
+    }]
+  ]
+}
