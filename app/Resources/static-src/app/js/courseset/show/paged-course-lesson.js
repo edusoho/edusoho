@@ -9,7 +9,7 @@ class PagedCourseLesson {
    * }
    */
   constructor(options) {
-    this._displayAllImmediately = this.options['displayAllImmediately'] ? true : false;
+    this._displayAllImmediately = options['displayAllImmediately'] ? true : false;
   }
 
   init() {
