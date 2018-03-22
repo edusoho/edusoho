@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d07869cc0ed79f9560329781a44981f4",
+    "content-hash": "0db368be503055389b601e53d13c39a9",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -301,7 +301,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1ace8d1a1d142615aecc1c52f0468fafd33089ad.zip",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/1ace8d1a1d142615aecc1c52f0468fafd33089ad",
                 "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad",
                 "shasum": ""
             },
@@ -348,16 +348,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.16",
+            "version": "v0.1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "29240956c8c1ca58e77f1719dad4d625800c6c0c"
+                "reference": "5db57d220aaba5775b47160d924df750590749fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/29240956c8c1ca58e77f1719dad4d625800c6c0c.zip",
-                "reference": "29240956c8c1ca58e77f1719dad4d625800c6c0c",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/5db57d220aaba5775b47160d924df750590749fb",
+                "reference": "5db57d220aaba5775b47160d924df750590749fb",
                 "shasum": ""
             },
             "require": {
@@ -382,7 +382,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-03-14T08:09:45+00:00"
+            "time": "2018-03-22T02:15:49+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -476,7 +476,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7819d101d889bb502bfe54617388336f24e46441.zip",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/7819d101d889bb502bfe54617388336f24e46441",
                 "reference": "7819d101d889bb502bfe54617388336f24e46441",
                 "shasum": ""
             },
@@ -2542,7 +2542,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/piwik/device-detector/zipball/f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
                 "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
                 "shasum": ""
             },
