@@ -23,4 +23,4 @@ $('.js-generate-replay').on('click', (event) => {
   });
 });
 
-$(".js-tip-show").tooltip();
+$('.js-tip-show').tooltip();

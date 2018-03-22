@@ -25,14 +25,14 @@ class DefaultManage extends BaseManage {
       }
       else {
         $li.addClass('active').find('.js-settings-list').stop().slideDown(500);
-        $li.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
+        $li.siblings('.js-task-manage-item.active').removeClass('active').find('.js-settings-list').hide();
       }
     });
   }
 
   afterAddItem($elm) {
     if ($elm.find('.js-item-content').length > 0) {
-        $elm.find('.js-item-content').trigger('click');
+      $elm.find('.js-item-content').trigger('click');
     }
   }
 }

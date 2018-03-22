@@ -46,7 +46,7 @@ export default class CourseManage {
       placeholder: '<li class="placeholder task-dragged-placeholder cd-mb24"></li>',
       onDragStart: function(item, container, _super) {
         let offset = item.offset(),
-            pointer = container.rootGroup.pointer;
+          pointer = container.rootGroup.pointer;
         adjustment = {
           left: pointer.left - offset.left,
           top: pointer.top - offset.top
@@ -96,10 +96,10 @@ export default class CourseManage {
 
   _restore() {
     let $list = $('.js-plan-list'),
-        targets = '',
-        len = this.sortList.length;
+      targets = '',
+      len = this.sortList.length;
     for (let j = 0; j < len; j++) {
-      targets += $list.find('#course-plan-' + this.sortList[j]).prop("outerHTML");
+      targets += $list.find('#course-plan-' + this.sortList[j]).prop('outerHTML');
     }
     $list.html(targets);
   }
