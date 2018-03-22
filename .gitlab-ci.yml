@@ -5,7 +5,7 @@
     - mysql:5.5
     - redis:latest
   script:
-    - sudo apt install npm
+    - sudo apt-get install npm
     - sudo npm install npm@latest -g
     - sudo npm install -g n
     - sudo n stable
