@@ -74,6 +74,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
             <div class="js-infinite-item-template hidden">  
               <i class="es-icon es-icon-undone-check color-{color} left-menu"></i> // 实际显示的节点
             </div>
+        'displayAllImmediately': false,  //没有分页刷新功能，直接显示全部
    *  }
    */
   constructor(options) {
@@ -82,7 +83,11 @@ export default class ESInfiniteCachedScroll extends Emitter {
     this._options = options;
     this._initConfig();
 
-    this._initUpLoading();
+    if (this._displayAllImmediately) {
+      this._displayCurrentPageDataAndSwitchToNext();
+    } else {
+      this._initUpLoading();
+    }
   }
 
   _initUpLoading() {
@@ -108,7 +113,14 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
   _initConfig() {
     this._currentPage = 1;
-    this._pageSize = this._options['pageSize'] ? this._options['pageSize'] : 25;
+    this._displayAllImmediately = this._options['displayAllImmediately'] ? true : false;
+
+    if (this._displayAllImmediately) {
+      this._pageSize = 10000;
+    } else {
+      this._pageSize = this._options['pageSize'] ? this._options['pageSize'] : 25;
+    }
+
     this._isLastPage = false;
   }
 

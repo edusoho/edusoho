@@ -1,8 +1,21 @@
 import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
 
 class PagedCourseLesson {
+
+  /**
+   * @param options 
+   * {
+   *   'displayAllImmediately': false //默认为false, 如果为true, 则不做分页处理，立刻显示全部
+   * }
+   */
+  constructor(options) {
+    this._displayAllImmediately = this.options['displayAllImmediately'] ? true : false;
+  }
+
   init() {
     new ESInfiniteCachedScroll({
+      'displayAllImmediately': this._displayAllImmediately,
+
       'data': $.parseJSON($('.js-hidden-data').html().replace(/[\r\n]/g, '')),
 
       'context': {

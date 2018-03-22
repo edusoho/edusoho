@@ -24,10 +24,10 @@ export default class CourseList {
       var self = this;
       $.get($target.data('lessonUrl'), { 'visibility': 0 }, function(html) {
         $parent.append(html);
-        self._lessonListShow($parent.siblings('.course-detail-content'));
-        let pagedCourseLesson = new PagedCourseLesson();
+        let pagedCourseLesson = new PagedCourseLesson({ displayAllImmediately: true });
         pagedCourseLesson.init();
         pagedCourseLesson.destroyPaging();
+        self._lessonListShow($parent.siblings('.course-detail-content'));
       });
     }
 
