@@ -58,8 +58,8 @@
       </li>
       <li>
         <a
-          href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}"
-          class="{% if (orderBy == 'studentNum') %}active{% endif %}">
+          href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'monthStudentNum'}) }}"
+          class="{% if (orderBy == 'monthStudentNum') %}active{% endif %}">
           {{ 'site.datagrid.filter.hotest'|trans }}
         </a>
       </li>

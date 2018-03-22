@@ -762,6 +762,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'rating' => array('rating' => 'DESC'),
             'studentNum' => array('studentNum' => 'DESC'),
             'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
+            'monthStudentNum' => array('monthStudentNum' => 'DESC', 'studentNum' => 'DESC'),
         );
         if (isset($typeOrderByMap[$order])) {
             return $typeOrderByMap[$order];
@@ -955,6 +956,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         return $relatedCourseSets;
+    }
+
+    public function refreshMonthStudentNum()
+    {
+        return $this->getCourseSetDao()->refreshMonthStudentNum();
     }
 
     protected function getRelatedCourseSetDao()
