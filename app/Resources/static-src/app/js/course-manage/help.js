@@ -62,7 +62,7 @@ export const publishCourse = () => {
 };
 
 export const showSettings = () => {
-  $("#sortable-list").on('click', '.js-item-content', (event) => {
+  $('#sortable-list').on('click', '.js-item-content', (event) => {
     console.log('click');
     let $this = $(event.currentTarget);
     let $li = $this.closest('.js-task-manage-item');
@@ -71,7 +71,7 @@ export const showSettings = () => {
     }
     else {
       $li.addClass('active').find('.js-settings-list').stop().slideDown(500);
-      $li.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
+      $li.siblings('.js-task-manage-item.active').removeClass('active').find('.js-settings-list').hide();
     }
   });
 };
@@ -79,7 +79,7 @@ export const showSettings = () => {
 export const TabChange = () => {
   $('[data-role="tab"]').click(function (event) {
     let $this = $(this);
-    $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
+    $($this.data('tab-content')).removeClass('hidden').siblings('[data-role="tab-content"]').addClass('hidden');
   });
 };
 
@@ -91,10 +91,10 @@ export const TaskListHeaderFixed = () => {
   }
   let headerTop = $header.offset().top;
   $(window).scroll(function(event) {
-      if ($(window).scrollTop() >= headerTop) {
-        $header.addClass('fixed')
-      } else {
-        $header.removeClass('fixed');
-      }
+    if ($(window).scrollTop() >= headerTop) {
+      $header.addClass('fixed');
+    } else {
+      $header.removeClass('fixed');
+    }
   });
-}
+};
