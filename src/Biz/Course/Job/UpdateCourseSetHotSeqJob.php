@@ -6,21 +6,21 @@ use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class UpdateCourseSetMonthStudentNumJob extends AbstractJob
+class UpdateCourseSetHotSeqJob extends AbstractJob
 {
     public function execute()
     {
         $conditions = array('startTimeGreaterThan' => strtotime('-30 days'), 'classroomId' => 0, 'role' => 'student');
         $memberCount = $this->getCourseMemberService()->searchMemberCountGroupByFields($conditions, 'courseSetId', 0, PHP_INT_MAX);
 
-        //把所有课程的monthStudentNum都更新为0
-        $this->getCourseSetService()->refreshMonthStudentNum();
+        //把所有课程的hotSeq都更新为0
+        $this->getCourseSetService()->refreshHotSeq();
 
         if (!empty($memberCount)) {
             $batchHelper = new BatchUpdateHelper($this->getCourseSetDao());
 
             foreach ($memberCount as $count) {
-                $fields = array('monthStudentNum' => $count['count']);
+                $fields = array('hotSeq' => $count['count']);
                 $batchHelper->add('id', $count['courseSetId'], $fields);
             }
 
