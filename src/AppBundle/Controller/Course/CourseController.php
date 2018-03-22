@@ -431,7 +431,7 @@ class CourseController extends CourseBaseController
     {
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
-        $pageSize = $paged ? 20 : 10000;
+        $pageSize = $paged ? 25 : 10000;  //前台>25个，才会有 显示全部 按钮
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => $pageSize));
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
