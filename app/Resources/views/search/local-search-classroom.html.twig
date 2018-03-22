@@ -4,7 +4,7 @@
 {% block searchType %}
   <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans({'%classroom%':classroomName}) }}</a></li>
   <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
-    <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
+    <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans({'%classroom%':classroomName}) }}</a>
   </li>
 {% endblock %}
 
@@ -14,7 +14,7 @@
   <ul class="dropdown-menu" role="menu">
     <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans({'%classroom%':classroomName}) }}</a></li>
     <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
-      <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
+      <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans({'%classroom%':classroomName}) }}</a>
     </li>
   </ul>
 {% endblock %}
