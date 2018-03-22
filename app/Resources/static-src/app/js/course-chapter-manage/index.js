@@ -1,4 +1,4 @@
-import notify from "common/notify";
+import notify from 'common/notify';
 let $sortableList = $('#sortable-list');
 
 $('#chapter-title-field').on('keypress', function (e) {
@@ -29,4 +29,4 @@ $('#course-chapter-btn').on('click', function () {
       }
     },
   });
-})
+});
