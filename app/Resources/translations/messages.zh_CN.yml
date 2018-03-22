@@ -3250,15 +3250,15 @@ custom_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
 search.empty: 没有搜到相关%name%，请换个关键词试试！
 search.content_title: 搜索
 search.relative_courses_result: 共找到<span class="color-danger phm">%count%</span>门<span class="color-danger phm">“%keywords%”</span>相关课程
-search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关班级
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
 search.result_course_copy: 共找到<span class="color-danger phm">%count%</span>门课程
-search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个班级
+search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个%classroom%
 search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
 search.live_courses: 直播课程
-search.all_classrooms: 全部班级
-search.free_classrooms: 免费班级
+search.all_classrooms: 全部%classroom%
+search.free_classrooms: 免费%classroom%
 
 
 #云资源
@@ -3323,11 +3323,11 @@ cloud_search.course.recommend.empty: 暂无推荐课程
 
 cloud_search.classroom: 班级
 cloud_search.classroom.result: >
-  为您找到班级结果约 <span class="color-danger">%counts%</span>个
+  为您找到%classroom%结果约 <span class="color-danger">%counts%</span>个
 cloud_search.classroom.evaluate: %ratingNum%人评价
 cloud_search.classroom.learned: (%studentNum%)人学习
-cloud_search.classroom.recommend.content_title: 推荐班级
-cloud_search.classroom.recommend.empty: 暂无推荐班级
+cloud_search.classroom.recommend.content_title: 推荐%classroom%
+cloud_search.classroom.recommend.empty: 暂无推荐%classroom%
 
 cloud_search.teacher: 教师
 cloud_search.teacher.result: >

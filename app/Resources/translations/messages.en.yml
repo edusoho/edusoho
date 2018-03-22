@@ -2695,15 +2695,15 @@ custom_page.empty: 'The current page has not been edited yet ,please edit in the
 search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
-search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关班级
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
 search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
-search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> classrooms'
+search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
 search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
 search.live_courses: 'Live courses'
-search.all_classrooms: 'All classrooms'
-search.free_classrooms: 'Free classrooms'
+search.all_classrooms: 'All %classroom%'
+search.free_classrooms: 'Free %classroom%'
 cloud_file.preview: 'File preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -2758,11 +2758,11 @@ cloud_search.course.recommend.empty: 'Sorry, no Recommend course now.'
 
 cloud_search.classroom: Classroom
 cloud_search.classroom.result: >
-  Have Find <span class="color-danger">%counts%</span>course(s).
+  Have Find <span class="color-danger">%counts%</span>%classroom%(s).
 cloud_search.classroom.evaluate: %ratingNum% review
 cloud_search.classroom.learned: (%studentNum%) learned
-cloud_search.classroom.recommend.content_title: Recommended Classroom
-cloud_search.classroom.recommend.empty: No Recommend Classrooms
+cloud_search.classroom.recommend.content_title: Recommended %classroom%
+cloud_search.classroom.recommend.empty: No Recommend %classroom%
 
 cloud_search.teacher: Teachers
 cloud_search.teacher.result: 'Have found <span class="color-danger">%counts%</span> teacher(s)'

@@ -33,8 +33,17 @@
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
         {% for key, nav in cloudSearch.type %}
           {% if nav == 1 %}
-            <li {% if type == key %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : key}) }}" data-type="{{ key }}" >{{('cloud_search.' ~ key)|trans}}</a></li>
+            <li {% if type == key %}class="active" {% endif %}>
+              <a href="{{path('cloud_search',{q : keywords,type : key}) }}" data-type="{{ key }}" >
+                {% if(key == 'classroom') %}
+                  {{ setting('classroom.name')|default(('cloud_search.' ~ key)|trans) }}
+                {% else %}
+                  {{('cloud_search.' ~ key)|trans}}
+                {% endif %}
+              </a>
+            </li>
           {% endif %}
+
         {% endfor %}
         </ul>
         <div class="search-result" id="search-result">
