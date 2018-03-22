@@ -1849,7 +1849,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $classroom = empty($args['classroom']) ? null : $args['classroom'];
         $fields = empty($args['fields']) ? null : $args['fields'];
 
-        if (!empty($fields) && isset($fields['status'])) {
+        if (!empty($fields)) {
             if ($this->isCloudSearchEnabled()) {
                 if ('draft' == $classroom['status']) {
                     return;
