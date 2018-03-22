@@ -1,5 +1,6 @@
 searchResultType:
     course: Course
+    classroom: Classroom
     teacher: Teacher
     thread: Topic
     article: Article
@@ -14,6 +15,14 @@ courseType:
     open: Open course
     liveOpen: Living open course
     normal: Course
+
+nonOpenCourseCateogry:
+    live: Living course
+    normal: Course
+
+openCourseCategory:
+    liveOpen: Living open course
+    open: Open course
 
 classroomStatus:
     draft: Unpublished
@@ -345,6 +354,10 @@ searchCourseType:
     vip: VIP Course
     free: Free Course
     live: Live Course
+
+searchClassroomType:
+    all: All
+    free: Free Classroom
 
 userInfoFields:
     email: Email
