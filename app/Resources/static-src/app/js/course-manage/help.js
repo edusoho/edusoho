@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function (evt) {
     let $target = $(evt.currentTarget);
@@ -17,10 +15,10 @@ export const closeCourse = () => {
 
       $.post($target.data('url'), function (data) {
         if (data.success) {
-          notify('success', Translator.trans('course.manage.close_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('course.manage.close_success_hint') });
           location.reload();
         } else {
-          notify('danger', Translator.trans('course.manage.close_fail_hint') + ':' + data.message);
+          cd.message({ type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message });
         }
       });
     });
@@ -34,14 +32,14 @@ export const deleteCourse = () => {
     }
     $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
-        notify('success', Translator.trans('site.delete_success_hint'));
+        cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
         if (data.redirect) {
           window.location.href = data.redirect;
         }else {
           location.reload();
         }
       } else {
-        notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
+        cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
       }
     });
   });
@@ -54,10 +52,10 @@ export const publishCourse = () => {
     }
     $.post($(evt.target).data('url'), function (data) {
       if (data.success) {
-        notify('success', Translator.trans('course.manage.task_publish_success_hint'));
+        cd.message({ type: 'success', message: Translator.trans('course.manage.task_publish_success_hint') });
         location.reload();
       } else {
-        notify('danger', Translator.trans('course.manage.task_publish_fail_hint')+':' + data.message, {delay:5000});
+        cd.message({ type: 'danger', message: Translator.trans('course.manage.task_publish_fail_hint')+':' + data.message, delay: 5000 });
       }
     });
   });

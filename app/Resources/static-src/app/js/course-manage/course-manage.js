@@ -1,5 +1,4 @@
 import sortList from 'common/sortable';
-import notify from 'common/notify';
 
 export default class CourseManage {
   constructor() {
@@ -79,18 +78,18 @@ export default class CourseManage {
   cancelSort() {
     this._restore();
     this._toggleSortStatus();
-    notify('success', Translator.trans('course.manage.sort_cancel'));
+    cd.message({ type: 'success', message: Translator.trans('course.manage.sort_cancel') });
   }
 
   saveSort() {
     let sort = this._getSort();
 
     $.post($('.js-plan-list').data('sortUrl'), { 'ids': sort }, (response) => {
-      notify('success', Translator.trans('site.save_success_hint'));
+      cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       this.sortList = sort;
       this._toggleSortStatus();
     }).error(function(e) {
-      notify('danger', e.responseText);
+      cd.message({ type: 'danger', message: e.responseText });
     });
   }
 
