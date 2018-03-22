@@ -60,14 +60,13 @@ export default class Manage {
     if ($exsit.length > 0) {
       $exsit.replaceWith($elm);
       this.afterAddItem($elm);
-
       return;
     }
     //添加章节课时
-    switch(this.type)
-    {
+    switch (this.type) {
     case 'chapter':
-      let $position = this.$element.find('#chapter-'+this.position);
+    {
+      let $position = this.$element.find('#chapter-' + this.position);
       let $last = $position.nextUntil('.js-task-manage-chapter').last();
       if (0 == $last.length) {
         $position.after($elm);
@@ -75,21 +74,25 @@ export default class Manage {
         $last.after($elm);
       }
       break;
+    }
     case 'task':
       this.$element.find('#chapter-'+this.position+' .js-lesson-box').append($elm);
       break;
     case 'lesson':
-      let $unit = this.$element.find('#chapter-'+this.position);
-      let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
-      if (0 == $lesson.length) {
-        $unit.after($elm);
-      } else {
-        $lesson.after($elm);
+      {
+        let $unit = this.$element.find('#chapter-' + this.position);
+        let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+        if (0 == $lesson.length) {
+          $unit.after($elm);
+        } else {
+          $lesson.after($elm);
+        }
       }
       break;
     default:
       this.$element.append($elm);
     }
+
     this.handleEmptyShow();
     this._flushTaskNumber();
     this.clearPosition();
