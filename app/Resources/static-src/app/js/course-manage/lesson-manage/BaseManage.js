@@ -79,16 +79,16 @@ export default class Manage {
       this.$element.find('#chapter-'+this.position+' .js-lesson-box').append($elm);
       break;
     case 'lesson':
-      {
-        let $unit = this.$element.find('#chapter-' + this.position);
-        let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
-        if (0 == $lesson.length) {
-          $unit.after($elm);
-        } else {
-          $lesson.after($elm);
-        }
+    {
+      let $unit = this.$element.find('#chapter-' + this.position);
+      let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+      if (0 == $lesson.length) {
+        $unit.after($elm);
+      } else {
+        $lesson.after($elm);
       }
       break;
+    }
     default:
       this.$element.append($elm);
     }
