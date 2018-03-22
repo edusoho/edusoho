@@ -7,8 +7,8 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    const VERSION = '8.0.22';
-    
+    const VERSION = '8.2.22';
+
     public function __construct($biz)
     {
         parent::__construct($biz);
