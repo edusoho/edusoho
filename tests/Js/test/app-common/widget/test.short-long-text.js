@@ -3,7 +3,7 @@ let { getRootPath, init } = require('../../../util/init.js');
 const { shortLongText } = require(getRootPath() + '/app/Resources/static-src/app/common/widget/short-long-text.js');
 const assert = require('chai').assert;
 
-describe('common:short-long-test', function(done) {
+describe('common:short-long-test', function() {
   before(function() {
     init('<div class="short-text">tesast</div>');
     shortLongText($('body'));
@@ -16,7 +16,6 @@ describe('common:short-long-test', function(done) {
     
     let test = function() {
       assert.equal($('.short-text').css('display'), 'none');
-      done();
     };
 
     setTimeout(test, 1001);

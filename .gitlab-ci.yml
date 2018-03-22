@@ -171,3 +171,23 @@ Api Test With 5.5:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
     - develop
+
+5.5 with js-test-unit:
+  stage: test
+  image: codeages/ci-php:5.5-5
+  services:
+    - mysql:5.5
+    - redis:latest
+  script:
+    - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3 
+    - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    - sudo apt-get update && sudo apt-get install yarn
+    - curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    - sudo apt-get install -y nodejs
+    - node -v
+    - npm -v
+    - yarn config set registry https://registry.npm.taobao.org
+    - yarn
+    - npm run test:simple tests/Js/test/*
+  only:
+    - develop
