@@ -2,7 +2,7 @@
   <ul class="nav nav-pills pull-left" role="tablist">
     <li role="presentation" class="{% if type == 'course' %}active{% endif %} ml0"><a href="{{ path('search', {q:keywords,type:'course'}) }}">{{ 'cloud_search.course'|trans }}</a></li>
     <li role="presentation" class="{% if type == 'classroom' %}active{% endif %}">
-      <a href="{{ path('search',{q:keywords,type:'classroom'}) }}">{{ 'cloud_search.classroom'|trans }}</a>
+      <a href="{{ path('search',{q:keywords,type:'classroom'}) }}">{{ setting('classroom.name')|default('site.default.classroom'|trans) }}</a>
     </li>
   </ul>
   <ul class="nav nav-pills hidden-xs" role="tablist">
