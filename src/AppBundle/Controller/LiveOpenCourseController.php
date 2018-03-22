@@ -248,7 +248,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             if (!empty($file)) {
                 $lesson['media'] = $file;
             } else {
-                $lesson['media'] = array('id' => 0, 'convertStatus' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '', 'length' => 0,'fileSize' => 0);
+                $lesson['media'] = array('id' => 0, 'convertStatus' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '', 'length' => 0, 'fileSize' => 0);
             }
         }
 
