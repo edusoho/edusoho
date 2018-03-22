@@ -3,14 +3,14 @@ import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
 class PagedCourseLesson {
   init() {
     new ESInfiniteCachedScroll({
-      'data': $.parseJSON($('.js-hidden-data').html().replace(/[\r\n]/g, "")),
+      'data': $.parseJSON($('.js-hidden-data').html().replace(/[\r\n]/g, '')),
 
       'context': {
-        'course': $.parseJSON($('.js-hidden-course-info').html().replace(/[\r\n]/g, "")),
+        'course': $.parseJSON($('.js-hidden-course-info').html().replace(/[\r\n]/g, '')),
 
-        'i18n': $.parseJSON($('.js-hidden-i18n').html().replace(/[\r\n]/g, "")),
+        'i18n': $.parseJSON($('.js-hidden-i18n').html().replace(/[\r\n]/g, '')),
 
-        'metas': $.parseJSON($('.js-hidden-activity-metas').html().replace(/[\r\n]/g, "")),
+        'metas': $.parseJSON($('.js-hidden-activity-metas').html().replace(/[\r\n]/g, '')),
 
         'currentTimeStamp': parseInt($('.js-hidden-current-timestamp').html(), 10),
 
@@ -115,18 +115,18 @@ class PagedCourseLesson {
 
   destroyPaging() {
     let removedClasses = [
-      '.js-infinite-item-template',
-      '.js-hidden-data',
-      '.js-hidden-course-info',
-      '.js-hidden-i18n',
-      '.js-hidden-activity-metas',
-      '.js-hidden-current-timestamp',
-      '.infinite-container',
-      '.js-down-loading-more'
+      'js-infinite-item-template',
+      'js-hidden-data',
+      'js-hidden-course-info',
+      'js-hidden-i18n',
+      'js-hidden-activity-metas',
+      'js-hidden-current-timestamp',
+      'infinite-container',
+      'js-down-loading-more'
     ];
 
     for (let i = 0; i < removedClasses.length; i++) {
-      $(removedClasses[i]).removeClass(removedClasses[i]);
+      $('.' + removedClasses[i]).removeClass(removedClasses[i]);
     }
   }
 }
