@@ -42,6 +42,7 @@ class ClassroomSearchAdapter extends AbstractSearchAdapter
             $classroom['studentNum'] = $classroomLocal['studentNum'];
             $classroom['middlePicture'] = $classroomLocal['middlePicture'];
             $classroom['learning'] = in_array($classroom['classroomId'], $learningClassroomIds);
+            $classroom['about'] = $classroomLocal['about'];
         } else {
             $classroom['rating'] = 0;
             $classroom['ratingNum'] = 0;
