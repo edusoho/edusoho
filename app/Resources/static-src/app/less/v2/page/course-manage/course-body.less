@@ -29,14 +29,17 @@
 .courses-manage-item {
   &.dragged {
     opacity: 1 !important;
-    .cd-box-shadow-z(3px);
     .transform(rotate(1deg));
-    .course-manage-header {
-      .cd-box-shadow-z(12px);
-    }
   }
   &.drag:hover {
     cursor: move;
+    .course-manage-header {
+      .es-transition;
+      &:hover {
+        .es-transition;
+        .cd-box-shadow-z(12px);
+      }
+    }
   }
   .course-manage-header {
     .cd-box-shadow-z(2px);
