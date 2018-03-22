@@ -96,7 +96,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'studentNum',
                 'id',
                 'hotSeq',
-                'publishedTime'
+                'publishedTime',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',

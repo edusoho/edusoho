@@ -22,6 +22,5 @@ class CourseSetChangeMonthStudentNum extends Migration
      */
     public function down()
     {
-
     }
 }
