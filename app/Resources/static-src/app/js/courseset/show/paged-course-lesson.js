@@ -9,6 +9,9 @@ class PagedCourseLesson {
    * }
    */
   constructor(options) {
+    if (typeof options == 'undefined') {
+      options = {};
+    }
     this._displayAllImmediately = options['displayAllImmediately'] ? true : false;
   }
 
