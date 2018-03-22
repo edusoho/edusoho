@@ -127,9 +127,13 @@ class PagedCourseLesson {
 
       'dataTemplateNode': '.js-infinite-item-template'
     });
+
+    if (this._displayAllImmediately) {
+      this._destroyPaging();
+    }
   }
 
-  destroyPaging() {
+  _destroyPaging() {
     let removedClasses = [
       'js-infinite-item-template',
       'js-hidden-data',
