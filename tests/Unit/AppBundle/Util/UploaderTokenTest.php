@@ -22,7 +22,7 @@ class UploaderTokenTest extends BaseTestCase
         $this->assertEquals(3, $contents[2]);
         $this->assertEquals('private', $contents[3]);
         $this->assertEquals(TimeMachine::time() + 86400, $contents[4]);
-        $this->assertEquals(md5("{$user['id']}|courselesson|3|private|".(time() + 86400)."|{$user['salt']}"), $contents[5]);
+        $this->assertEquals(md5("{$user['id']}|courselesson|3|private|".(TimeMachine::time() + 86400)."|{$user['salt']}"), $contents[5]);
     }
 
     public function testParse()

@@ -11,14 +11,14 @@
 <div class="panel panel-default panel-col">
   <div class="panel-heading">{{'my.teaching.open_course.liveTimeSet.title'|trans}}</div>
   <div class="panel-body">
-    <form class="form-horizontal" id="live-open-course-form" method="post">
+    <form class="form-horizontal" id="live-open-course-form" method="post" data-update = "{{ canUpdateStartTime }}">
 
       {{ web_macro.flash_messages() }}
 
       <div class="form-group">
         <label class="col-md-2 control-label" for="live-startTime">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
         <div class="col-md-8 controls" style="z-index:2000;">
-          <input type="text" id="live-startTime"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}">
+          <input type="text" id="live-startTime"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}" data-url="{{ path('client_time_check') }}">
           <div class="help-block" id="starttime-help-block">
             {{'my.teaching.open_course.liveTimeSet.start_time.help_block'|trans}}
           </div>

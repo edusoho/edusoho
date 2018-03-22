@@ -158,7 +158,7 @@ class MockController extends BaseController
         unset($params['apiMethod']);
         unset($params['apiAuthorized']);
 
-        $url = 'http://127.0.0.1'.$apiUrl;
+        $url = $_SERVER['HTTP_ORIGIN'].$apiUrl;
 
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
