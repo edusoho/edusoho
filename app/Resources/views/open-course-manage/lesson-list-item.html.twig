@@ -3,7 +3,7 @@
   <div class="item-content js-item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
     {% if lesson.status == 'unpublished' %}
-      <span class="lesson-unpublish-status">{{'my.teaching.open_course.lesson.status.unpublished'|trans}}</span>
+      <span class="lesson-unpublish-status js-unpublish-status">{{'my.teaching.open_course.lesson.status.unpublished'|trans}}</span>
     {% endif %}
 
     {% if lesson.type not in ['liveOpen'] and lesson.mediaSource == 'self' and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId)

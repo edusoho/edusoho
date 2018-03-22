@@ -91,7 +91,6 @@ export default class Manage {
     }
     default:
       this.$element.append($elm);
-      break;
     }
 
     this.handleEmptyShow();
