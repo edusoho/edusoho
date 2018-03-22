@@ -18,6 +18,6 @@
             {{ web_macro.star(classroom.rating|default(0)) }}
             <span>{{'cloud_search.classroom.evaluate'|trans({'%ratingNum%':classroom.ratingNum|default(0)})}}{{ 'cloud_search.classroom.learned'|trans({'%studentNum%':course.studentNum|default(0)}) }}</span>
         </div>
-        <div class="content editor-text">{{ classroom.about|cdn|raw|sub_text(40) }}</div>
+        <div class="content editor-text">{{ classroom.about|cdn|raw }}</div>
     </div>
 </div>
