@@ -305,6 +305,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createDao('Scheduler:JobDao');
     }
+
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
 }
 
 abstract class AbstractUpdater
