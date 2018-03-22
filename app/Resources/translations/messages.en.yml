@@ -2695,7 +2695,7 @@ custom_page.empty: 'The current page has not been edited yet ,please edit in the
 search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
-search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关班级
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
 search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
 search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
 search.all_courses: 'All courses'
