@@ -7,7 +7,7 @@ export default class LessonManage {
   }
 
   init() {
-    $(".js-file-delete-lesson").tooltip();
+    $('.js-file-delete-lesson').tooltip();
     this.asyncLoadFiles();
     this.bindEvent();
   }
@@ -61,7 +61,7 @@ export default class LessonManage {
         $('#modal').html(data);
         $('#modal').modal('show');
       }
-    })
+    });
   }
 
   asyncLoadFiles() {
@@ -73,9 +73,9 @@ export default class LessonManage {
       }
       const file = data[0];
       if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
-        this.$item.find('span[data-role="mediaStatus"]').append("<span class='text-warning'>"+Translator.trans('open_course.file_format_conversion_hint')+"</span>");
+        this.$item.find('span[data-role="mediaStatus"]').append('<span class=\'text-warning\'>'+Translator.trans('open_course.file_format_conversion_hint')+'</span>');
       } else if (file.convertStatus == 'error') {
-        this.$item.find('span[data-role="mediaStatus"]').append("<span class='text-danger'>"+Translator.trans('open_course.file_format_conversion_failed_hint')+"</span>");
+        this.$item.find('span[data-role="mediaStatus"]').append('<span class=\'text-danger\'>'+Translator.trans('open_course.file_format_conversion_failed_hint')+'</span>');
       }
     });
   }

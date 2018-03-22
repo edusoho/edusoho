@@ -33,7 +33,7 @@ export default class Manage {
     let collapseTexts = [
       '<i class="es-icon es-icon-chevronright cd-mr16"></i>',
       '<i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i>'
-    ]
+    ];
     this.$element.on('click', '.js-toggle-show', (event) => {
       let $this = $(event.currentTarget);
       $this.toggleClass('toogle-hide');
@@ -47,7 +47,7 @@ export default class Manage {
         $hideElements = $hideElements.not('.unit-hide');
       }
 
-      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, "fast");
+      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, 'fast');
       $this.hasClass('toogle-hide') ? $this.html(collapseTexts[0]) :  $this.html(collapseTexts[1]);
     });
   }
@@ -60,36 +60,40 @@ export default class Manage {
     if ($exsit.length > 0) {
       $exsit.replaceWith($elm);
       this.afterAddItem($elm);
-
       return;
     }
     //添加章节课时
-    switch(this.type)
+    switch (this.type) {
+    case 'chapter':
     {
-      case 'chapter':
-        let $position = this.$element.find('#chapter-'+this.position);
-        let $last = $position.nextUntil('.js-task-manage-chapter').last();
-        if (0 == $last.length) {
-          $position.after($elm);
-        } else {
-          $last.after($elm);
-        }
-        break;
-      case 'task':
-        this.$element.find('#chapter-'+this.position+' .js-lesson-box').append($elm);
-        break;
-      case 'lesson':
-        let $unit = this.$element.find('#chapter-'+this.position);
-        let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
-        if (0 == $lesson.length) {
-          $unit.after($elm);
-        } else {
-          $lesson.after($elm);
-        }
-        break;
-      default:
-        this.$element.append($elm);
+      let $position = this.$element.find('#chapter-' + this.position);
+      let $last = $position.nextUntil('.js-task-manage-chapter').last();
+      if (0 == $last.length) {
+        $position.after($elm);
+      } else {
+        $last.after($elm);
+      }
+      break;
     }
+    case 'task':
+      this.$element.find('#chapter-'+this.position+' .js-lesson-box').append($elm);
+      break;
+    case 'lesson':
+    {
+      let $unit = this.$element.find('#chapter-' + this.position);
+      let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+      if (0 == $lesson.length) {
+        $unit.after($elm);
+      } else {
+        $lesson.after($elm);
+      }
+      break;
+    }
+    default:
+      this.$element.append($elm);
+      break;
+    }
+
     this.handleEmptyShow();
     this._flushTaskNumber();
     this.clearPosition();
@@ -126,7 +130,7 @@ export default class Manage {
           self.sortList();
         });
         
-      })
+      });
     });
   }
 
@@ -152,7 +156,7 @@ export default class Manage {
       },
       onDragStart: function (item, container, _super) {
         let offset = item.offset(),
-            pointer = container.rootGroup.pointer;
+          pointer = container.rootGroup.pointer;
         adjustment = {
           left: pointer.left - offset.left,
           top: pointer.top - offset.top
@@ -179,7 +183,7 @@ export default class Manage {
     // 任务课时内拖动
     if ($item.hasClass('js-task-manage-item') &&
       container.target.closest('.js-task-manage-lesson').attr('id') != $item.closest('.js-task-manage-lesson').attr('id')) {
-        return false;
+      return false;
     }
     // 章节只能挂在总节点下
     if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
@@ -189,7 +193,7 @@ export default class Manage {
     }
     // 课时不能不能在课时下
     if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
-        return false;
+      return false;
     }
 
     return true;
@@ -207,11 +211,11 @@ export default class Manage {
     // 后台排序seq值
     let ids = [];
     this.$element.find('.task-manage-item').each(function(){
-        ids.push($(this).attr('id'));
+      ids.push($(this).attr('id'));
     });
     $.post(this.$element.data('sortUrl'), { ids: ids }, (response) => {
     });
-    this.sortablelist()
+    this.sortablelist();
   }
 
   sortablelist() {
@@ -229,11 +233,11 @@ export default class Manage {
     this.$element.find(name).each(function(){
       let $item = $(this);
       $item.find('.number').text(num++);
-    })   
+    });   
   }
 
   _sortUnitNumber() {
-     // 排序 节 的序号
+    // 排序 节 的序号
     let num;
     this.$element.find('.js-task-manage-chapter').each(function(){
       let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
@@ -256,18 +260,18 @@ export default class Manage {
       }).fail(function(data){
         notify('danger', Translator.trans('course.manage.task_unpublish_fail_hint') + ':' + data.responseJSON.error.message);
       });
-    })
+    });
 
     this.$element.on('click', '.publish-item', (event) => {
       $.post($(event.target).data('url'), function (data) {
         let $parentLi = $(event.target).closest('.task-manage-item');
         notify('success', Translator.trans('course.manage.task_publish_success_hint'));
-        $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').addClass('hidden')
-        $parentLi.find('.unpublish-item').removeClass('hidden')
+        $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').addClass('hidden');
+        $parentLi.find('.unpublish-item').removeClass('hidden');
       }).fail(function(data){
         notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
       });
-    })
+    });
   }
 
   _flushTaskNumber() {
@@ -294,7 +298,7 @@ export default class Manage {
       }).fail(function(response){
         notify('error', response.responseJSON.error.message);
       });
-    })
+    });
   }
 
   _optional() {
@@ -312,7 +316,7 @@ export default class Manage {
       }).fail(function(data){
         notify('danger', Translator.trans('site.save_error_hint') + ':' + data.responseJSON.error.message);
       });
-    })
+    });
 
     this.$element.on('click', '.js-unset-optional', (event) => {
       $.post($(event.target).data('url'), function (data) {
@@ -326,7 +330,7 @@ export default class Manage {
       }).fail(function(data){
         notify('danger', Translator.trans('site.save_error_hint') + ':' + data.responseJSON.error.message);
       });
-    })
+    });
   }
   
   afterAddItem($elm) {
