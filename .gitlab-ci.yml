@@ -1,7 +1,11 @@
-5.3 with for js-test-unit:
+5.5 with js-test-unit:
   stage: test
-  image: codeages/ci-php:5.3-2
+  image: codeages/ci-php:5.5-5
   services:
+    - mysql:5.5
+    - redis:latest
   script:
-    - npm install
+    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    - sudo apt-get update && sudo apt-get install yarn
+    - yarn
     - npm run test
