@@ -5468,17 +5468,17 @@
     },
     {
         "name": "wenqinruan/omnipay-alipay",
-        "version": "v2.3.5",
-        "version_normalized": "2.3.5.0",
+        "version": "v2.3.6",
+        "version_normalized": "2.3.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/wenqinruan/omnipay-alipay.git",
-            "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25"
+            "reference": "7f906729a1685dda30e15186a827ccc098427e54"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/wenqinruan/omnipay-alipay/zipball/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
-            "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
+            "url": "https://api.github.com/repos/wenqinruan/omnipay-alipay/zipball/7f906729a1685dda30e15186a827ccc098427e54",
+            "reference": "7f906729a1685dda30e15186a827ccc098427e54",
             "shasum": ""
         },
         "require": {
@@ -5487,7 +5487,7 @@
         "require-dev": {
             "omnipay/tests": "~2.0"
         },
-        "time": "2017-09-26T12:37:40+00:00",
+        "time": "2018-03-22T02:11:38+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
