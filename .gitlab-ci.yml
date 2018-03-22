@@ -5,9 +5,7 @@
     - mysql:5.5
     - redis:latest
   script:
-    - sudo apt-get install npm
-    - sudo npm install npm@latest -g
-    - sudo npm install -g n
-    - sudo n stable
-    - npm install
-    - npm run test
+    - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3 
+    - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    - sudo apt-get update && sudo apt-get install yarn
+    - yarn
