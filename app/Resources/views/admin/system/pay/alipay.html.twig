@@ -49,13 +49,4 @@
       <div class="help-block">{{ 'admin.payment_setting.alipay_mobile_payment_hint'|trans }}</div>
     </div>
   </div>
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label>{{ 'admin.payment_setting.open_alipay_api'|trans }}</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      {{ radios('close_trade_enabled', {1:'form.radio_btn.true'|trans, 0:'form.radio_btn.false'|trans}, payment.close_trade_enabled|default(0)) }}
-      <div class="help-block">{{ 'admin.payment_setting.disabled_alipay_api'|trans }}</div>
-    </div>
-  </div>
 </fieldset>
