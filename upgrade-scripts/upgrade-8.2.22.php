@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    const VERSION = '8.0.22';
+    
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -66,6 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
            'updateClassroomSearch',
+           'initCrontab',
         );
 
         $funcNames = array();
@@ -118,6 +121,17 @@ class EduSohoUpgrade extends AbstractUpdater
             ),
         );
         $this->getSettingService()->set('cloud_search', $updateSetting);
+
+        return 1;
+    }
+
+    protected function initCrontab()
+    {
+        $this->logger(self::VERSION, 'info', '开始：初始化 crontab');
+
+        \Biz\Crontab\SystemCrontabInitializer::init();
+
+        $this->logger(self::VERSION, 'info', '结束：初始化 crontab - 成功');
 
         return 1;
     }
