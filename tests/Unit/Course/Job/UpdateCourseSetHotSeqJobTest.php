@@ -3,7 +3,7 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
-use Biz\Course\Job\UpdateCourseSetMonthStudentNumJob;
+use Biz\Course\Job\UpdateCourseSetHotSeqJob;
 
 class UpdateCourseSetMonthStudentNumJobTest extends BaseTestCase
 {
@@ -12,10 +12,10 @@ class UpdateCourseSetMonthStudentNumJobTest extends BaseTestCase
         $fields = array(
             'title' => '新课程开始！',
             'type' => 'normal',
-            'monthStudentNum' => 10,
+            'hotSeq' => 10,
         );
         $courseSet = $this->getCourseSetDao()->create($fields);
-        $this->assertEquals($fields['monthStudentNum'], $courseSet['monthStudentNum']);
+        $this->assertEquals($fields['hotSeq'], $courseSet['hotSeq']);
 
         $this->mockBiz('Course:MemberService', array(
             array(
@@ -24,11 +24,11 @@ class UpdateCourseSetMonthStudentNumJobTest extends BaseTestCase
             ),
         ));
 
-        $job = new UpdateCourseSetMonthStudentNumJob(array(), $this->getBiz());
+        $job = new UpdateCourseSetHotSeqJob(array(), $this->getBiz());
         $job->execute();
 
         $result = $this->getCourseSetDao()->get($courseSet['id']);
-        $this->assertEquals(2, $result['monthStudentNum']);
+        $this->assertEquals(2, $result['hotSeq']);
     }
 
     protected function getCourseSetDao()
