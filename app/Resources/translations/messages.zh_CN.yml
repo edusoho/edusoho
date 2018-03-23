@@ -7308,6 +7308,7 @@ admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
   <p class="help-block">开启后，网校在手机浏览器和微信上默认使用微网校进行显示</p>
   <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
+  <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
 
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
