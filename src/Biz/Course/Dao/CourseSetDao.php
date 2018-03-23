@@ -16,5 +16,5 @@ interface CourseSetDao extends GeneralDaoInterface
 
     public function analysisCourseSetDataByTime($startTime, $endTime);
 
-    public function refreshMonthStudentNum();
+    public function refreshHotSeq();
 }
