@@ -10,11 +10,24 @@ class CourseBuyController extends BuyFlowController
 {
     protected $targetType = 'course';
 
+    protected function needOpenPayment($id)
+    {
+        $payment = $this->getSettingService()->get('payment');
+        $course = $this->getCourseService()->getCourse($id);
+        $vipJoinEnabled = false;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $user = $this->getCurrentUser();
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+        }
+
+        return !$course['isFree'] && !$payment['enabled'] && !$vipJoinEnabled;
+    }
+
     protected function tryFreeJoin($id)
     {
         $this->getCourseService()->tryFreeJoin($id);
     }
-
+    
     protected function getSuccessUrl($id)
     {
         return $this->generateUrl('my_course_show', array('id' => $id));
@@ -56,5 +69,13 @@ class CourseBuyController extends BuyFlowController
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 }

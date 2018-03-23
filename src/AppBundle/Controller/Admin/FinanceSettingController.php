@@ -12,7 +12,6 @@ class FinanceSettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled' => 0,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
             'bank_gateway' => 'none',
             'alipay_enabled' => 0,
             'alipay_key' => '',
@@ -45,7 +44,7 @@ class FinanceSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $payment = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
-
+            $payment = $this->isClosePayment($payment);
             $formerPayment = $this->getSettingService()->get('payment');
             if (0 == $payment['enabled'] && 1 == $formerPayment['enabled']) {
                 $payment['alipay_enabled'] = 0;
@@ -56,10 +55,9 @@ class FinanceSettingController extends BaseController
             }
 
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
-            $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
-            $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
+            $this->getLogService()->info('system', 'update_settings', '更改支付方式设置', $payment);
             $this->setFlashMessage('success', 'site.save.success');
         }
 

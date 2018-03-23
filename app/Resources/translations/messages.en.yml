@@ -264,6 +264,7 @@ form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
+form.btn.know: Know
 form.btn.return: Back
 form.btn.cancel: Cancel
 form.btn.confirm: Confirm
@@ -764,6 +765,8 @@ course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
 buy.approve_tips: 'You need to verify your id before buying.'
+buy.payments_disabled_title: Open payment function reminder
+buy.payments_disabled_tips: Since the online school does not open any payment function, the current product does not support purchase. Please contact the online school to open the payment function before purchasing.
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
@@ -5941,6 +5944,8 @@ admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p>'
+
+admin.payment_setting.help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
 admin.payment_setting.alipay: Alipay
 admin.payment_setting.pay_disabled_tips: 'Tips when close the payment'
 admin.payment_setting.payment_hint: 'If turned on, the site revenue will transfer automatically to configured alipay account, wechat pay account or online banking account.'
@@ -5978,7 +5983,8 @@ admin.payment_setting.wxpay_application_tips: ''
 admin.payment_setting.wxpay_appid_word: 'AppID from <a target="_blank" href="%wxpayUrl%"> wechat public platform </a> "development" - "Basic configuration"'
 admin.payment_setting.wxpay_secret_word: 'If you need support in wechat payment, you have to fill in. AppSecret from <a target=, "_blank" HREF = "%wxpayUrl%" > wechat public platforms </a>  "development"-" Basic configuration "'
 admin.payment_setting.wxpay_secret: 'MP File verification code'
-admin.payment_setting.wxpay_mp_secret_hint: 'Please fill the content from MP_verify'
+admin.payment_setting.wxpay_mp_secret_hint: >
+  Please fill the content from MP_verify<a target="_blank" href="%wxpMPHelpUrl%">Get Help</a>
 admin.payment_setting.wxpay_account: 'Mechant account'
 admin.payment_setting.wxpay_account_hint: 'Merchant account from <a target="_blank" href="%wxpayUrl%"> wechat public platform </a> " wechat pay" - "Merchant information"'
 admin.payment_setting.wxpay_key: 'Wechat merchant platform API Key'

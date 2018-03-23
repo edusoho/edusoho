@@ -35,7 +35,7 @@ class CourseOrderController extends BaseController
 
         if ($course['price'] > 0 && !$this->getEnabledPayments() && !$vipJoinEnabled) {
             return $this->render(
-                'course/order/payments-disabled.html.twig',
+                'buy-flow/payments-disabled-modal.html.twig',
                 array(
                     'course' => $course,
                 )
