@@ -270,7 +270,7 @@ class CourseSetServiceTest extends BaseTestCase
         $courseSet = $this->getCourseSetDao()->create($fields);
         $this->assertEquals($fields['hotSeq'], $courseSet['hotSeq']);
 
-        $this->getCourseSetService()->refreshMonthStudentNum();
+        $this->getCourseSetService()->refreshHotSeq();
 
         $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
 
