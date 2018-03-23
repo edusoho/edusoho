@@ -21,6 +21,7 @@ class OperationSettingController extends BaseController
 
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
             $this->getSettingService()->set('wap', $wapSetting);
+            $this->getSettingService()->delete('meCount');
             $this->getLogService()->info('system', 'update_settings', '更新WAP设置', $wapSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -44,7 +45,7 @@ class OperationSettingController extends BaseController
 
         $articleSetting = array_merge($default, $articleSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $articleSetting = $request->request->all();
             $this->getSettingService()->set('article', $articleSetting);
             $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
@@ -58,7 +59,7 @@ class OperationSettingController extends BaseController
 
     public function groupSetAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
 
             $this->getSettingService()->set('group', $set);
@@ -80,7 +81,7 @@ class OperationSettingController extends BaseController
             'inviteInfomation_template' => '{{registerUrl}}',
         );
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $inviteSetting = $request->request->all();
             if (isset($inviteSetting['get_coupon_setting'])) {
                 $inviteSetting['get_coupon_setting'] = 1;
