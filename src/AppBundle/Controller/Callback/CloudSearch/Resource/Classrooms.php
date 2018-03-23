@@ -37,6 +37,7 @@ class Classrooms extends BaseProvider
     public function build($classrooms)
     {
         $classrooms = $this->buildCategories($classrooms);
+
         return $classrooms;
     }
 
