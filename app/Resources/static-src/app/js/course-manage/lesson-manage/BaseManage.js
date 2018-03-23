@@ -247,18 +247,18 @@ export default class Manage {
 
   _publish() {
     const info = {
-      class: '.publish-item, .js-delete, .lesson-unpublish-status',
-      oppositeClas: '.unpublish-item',
+      class: '.js-publish-item, .js-delete, .js-lesson-unpublish-status',
+      oppositeClas: '.js-unpublish-item',
       flag: false
     };
-    this.$element.on('click', '.unpublish-item', (event) => {
+    this.$element.on('click', '.js-unpublish-item', (event) => {
       const $target = $(event.target);
       info.success = Translator.trans('course.manage.task_unpublish_success_hint'),
       info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':',
       this.toggleOptional($target, self, info);
     });
 
-    this.$element.on('click', '.publish-item', (event) => {
+    this.$element.on('click', '.js-publish-item', (event) => {
       const $target = $(event.target);
       info.success = Translator.trans('course.manage.task_publish_success_hint'),
       info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':',

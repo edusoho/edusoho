@@ -11,13 +11,13 @@
       {% set isPublish = 0 %}
     {% endif %}
     <li>
-      <a class='unpublish-item {% if not isPublish %}hidden{% endif %}' href="javascript:;"
+      <a class='js-unpublish-item {% if not isPublish %}hidden{% endif %}' href="javascript:;"
         data-url="{{ path('course_manage_lesson_unpublish', {lessonId:lesson.id, courseId:task.courseId}) }}">
         {{'course.plan_task.unpublish_btn'|trans}}
       </a>
     </li>
     <li>
-      <a class='publish-item {% if isPublish %}hidden{% endif %}' href="javascript:;"
+      <a class='js-publish-item {% if isPublish %}hidden{% endif %}' href="javascript:;"
         data-url="{{ path('course_manage_lesson_publish', {lessonId:lesson.id, courseId:task.courseId}) }}">
         {{'course.plan_task.publish_btn'|trans}}
       </a>
