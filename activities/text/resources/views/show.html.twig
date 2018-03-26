@@ -1,10 +1,11 @@
-{% extends 'activity/content-layout.html.twig' %}
+{% extends 'activity-layout.html.twig' %}
+
 {% block head_scripts %}
   {{ parent() }}
   <base target="_blank">
 {% endblock %}
 
-{% do script(['libs/perfect-scrollbar.js','app/js/activity/text/index.js']) %}
+{% do script(['libs/ltc-sdk.js', 'libs/perfect-scrollbar.js', 'textactivity/js/show/index.js']) %}
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% block body %}
   <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ enableCopy }}">

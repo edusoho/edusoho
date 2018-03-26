@@ -17,3 +17,11 @@ if ($('#text-activity').data('disableCopy')) {
 		}
 	}, false);
 }
+
+const sdk = ltcsdk.config();
+const sdkUi = sdk.getUi();
+
+sdkUi.message({
+  type: 'danger',
+  message: '这是消息'
+})

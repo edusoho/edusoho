@@ -29,7 +29,8 @@ module.exports = {
     'echarts': ['echarts'],
     'select2': ['libs/select2/index.js'],
     'handlebars': ['handlebars'],
-    'fullcalendar': ['libs/fullcalendar/index.js']
+    'fullcalendar': ['libs/fullcalendar/index.js'],
+    'ltc-sdk': ['libs/ltc-sdk/index.js']
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
@@ -72,4 +73,6 @@ module.exports = {
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin}',
+  isESlint: false,
+  baseName: 'libs/base,libs/ltc-sdk',
 }

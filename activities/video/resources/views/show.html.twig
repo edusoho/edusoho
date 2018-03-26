@@ -1,6 +1,6 @@
-{% extends 'activity/content-layout.html.twig' %}
+{% extends 'activity-layout.html.twig' %}
 
-{% do script(['app/js/activity/video/index.js']) %}
+{% do script(['libs/ltc-sdk.js', 'videoactivity/js/show/index.js']) %}
 
 {% block body %}
   {% set video = activity.ext %}

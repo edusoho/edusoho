@@ -1,5 +1,5 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
-import SubtitleDialog from 'app/js/activity-manage/video/subtitle/dialog';
+import SubtitleDialog from 'app/js/activity-manage/video-subtitle/dialog';
 
 export default class Video {
   constructor() {
