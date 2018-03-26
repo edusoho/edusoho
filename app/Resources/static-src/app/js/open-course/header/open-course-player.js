@@ -38,6 +38,7 @@ class OpenCoursePlayer {
       }
       $('#media-error-dialog').hide();
       this.lesson = lesson;
+      $('.js-live-video-replay-btn').removeClass('hidden');
 
       let mediaSourceActionsMap = {
         'iframe': this.onIframe,
