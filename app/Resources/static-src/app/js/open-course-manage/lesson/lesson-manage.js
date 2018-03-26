@@ -18,22 +18,22 @@ export default class LessonManage {
   }
 
   publishLesson(event) {
-    let $btn = $(event.target);
-    $.post($btn.data('url'), (html) => {
-      $('.js-unpublish-status').remove();
-      $('.js-publish-lesson-btn, .js-delete-lesson-btn').parent().addClass('hidden');
-      $('.js-unpublish-lesson-btn').parent().removeClass('hidden');
-      cd.message({ type: 'success', message: Translator.trans('open_course.publish_lesson_hint') });
-    });
+    const $btn = $(event.target);
+    const message = Translator.trans('open_course.publish_lesson_hint');
+    this.togglePublish($btn, message);
   }
 
   cancelPublishLesson(event) {
-    let $btn = $(event.target);
-    $.post($btn.data('url'), (html) => {
-      $('.js-item-content').prepend('<span class="lesson-unpublish-status js-unpublish-status">' + Translator.trans('open_course.unpublish_hint') +'</span>');
-      $('.js-publish-lesson-btn, .js-delete-lesson-btn').parent().removeClass('hidden');
-      $('.js-unpublish-lesson-btn').parent().addClass('hidden');
-      cd.message({ type: 'success', message: Translator.trans('open_course.unpublish_success_hint') });
+    const $btn = $(event.target);
+    const message = Translator.trans('open_course.unpublish_success_hint');
+    this.togglePublish($btn, message);
+  }
+
+  togglePublish($target, message) {
+    $.post($target.data('url'), (html) => {
+      $('.js-publish-lesson-btn, .js-delete-lesson-btn, .js-unpublish-lesson-btn').parent().toggleClass('hidden');
+      $('.js-unpublish-status').toggleClass('hidden');
+      cd.message({ type: 'success', message: message });
     });
   }
 

@@ -31,14 +31,16 @@
     opacity: 1 !important;
     .transform(rotate(1deg));
   }
-  &.drag:hover {
-    cursor: move;
+  &.drag {
     .course-manage-header {
-      .es-transition;
+      .es-transition(box-shadow);
       &:hover {
-        .es-transition;
+        .es-transition(box-shadow);
         .cd-box-shadow-z(12px);
       }
+    }
+    &:hover {
+      cursor: move;
     }
   }
   .course-manage-header {
