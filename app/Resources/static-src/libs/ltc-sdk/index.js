@@ -1,8 +1,9 @@
 // import 'babel-polyfill';
-import 'jquery';
-import * as cd from 'codeages-design';
-import '!style-loader!css-loader!less-loader!codeages-design/src/less/codeages-design.less';
+// import 'jquery';
+// import * as cd from 'codeages-design';
+// import '!style-loader!css-loader!less-loader!codeages-design/src/less/codeages-design.less';
 import Api from './api';
+import * as components from './component';
 
 class LtcSDK {
   constructor() {
@@ -56,7 +57,11 @@ class LtcSDK {
 
   getUi() {
     this.verify();
-    return cd;
+    return Object.assign(
+      {}, 
+      // cd, 
+      components
+    );
   }
 
   getMessenger() {

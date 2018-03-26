@@ -1,12 +1,15 @@
-import { initEditor } from "app/js/activity-manage/editor";
+// import { initEditor } from "app/js/activity-manage/editor";
 import "store";
 export default class Text {
   constructor(props) {
     this._init();
   }
 
-  _init() {
-    this._inItStep2form();
+  async _init() {
+    this.sdk = window.ltcsdk.config();
+    this.sdkUi = this.sdk.getUi();
+
+    await this._inItStep2form();
     this._inItStep3form();
     this._lanuchAutoSave();
 
@@ -18,7 +21,7 @@ export default class Text {
     });
   }
 
-  _inItStep2form() {
+  async _inItStep2form() {
     const $step2_form = $('#step2-form');
     let validator = $step2_form.data('validator');
     validator = $step2_form.validate({
@@ -36,7 +39,11 @@ export default class Text {
       },
     });
     const $content = $('[name="content"]');
-    this.editor = initEditor($content, validator);
+    // this.editor = initEditor($content, validator);
+    this.editor = await this.sdkUi.ckeditorInit({
+      target: '[name="content"]',
+      validator
+    });
     this._contentCache = $content.val();
   }
 
