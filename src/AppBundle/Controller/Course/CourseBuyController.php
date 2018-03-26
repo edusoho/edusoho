@@ -27,7 +27,7 @@ class CourseBuyController extends BuyFlowController
     {
         $this->getCourseService()->tryFreeJoin($id);
     }
-    
+
     protected function getSuccessUrl($id)
     {
         return $this->generateUrl('my_course_show', array('id' => $id));
@@ -37,7 +37,7 @@ class CourseBuyController extends BuyFlowController
     {
         $course = $this->getCourseService()->getCourse($id);
 
-        return $course['maxStudentNum'] - $course['studentNum'] <= 0 && $course['type'] == 'live';
+        return $course['maxStudentNum'] - $course['studentNum'] <= 0 && 'live' == $course['type'];
     }
 
     protected function needApproval($id)
@@ -45,7 +45,7 @@ class CourseBuyController extends BuyFlowController
         $course = $this->getCourseService()->getCourse($id);
         $user = $this->getCurrentUser();
 
-        return $course['approval'] && $user['approvalStatus'] !== 'approved';
+        return $course['approval'] && 'approved' !== $user['approvalStatus'];
     }
 
     protected function isJoined($id)
