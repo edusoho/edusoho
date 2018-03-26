@@ -12,7 +12,6 @@
         "url": ""
     },
     "devDependencies": {
-        "babel-preset-stage-0": "^6.24.1",
         "es-webpack-engine": "3.5.3-rc.1"
     },
     "dependencies": {
