@@ -733,29 +733,6 @@ class ClassroomController extends BaseController
         return $this->render('classroom/classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
     }
 
-    protected function getEnabledPayments()
-    {
-        $enableds = array();
-
-        $setting = $this->setting('payment', array());
-
-        if (empty($setting['enabled'])) {
-            return $enableds;
-        }
-
-        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $payNames = array_keys($payment);
-        foreach ($payNames as $payName) {
-            if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type'],
-                );
-            }
-        }
-
-        return $enableds;
-    }
-
     /**
      * @return ThreadService
      */
