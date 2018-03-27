@@ -30,6 +30,7 @@ class CourseController extends CourseBaseController
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
+        $course['courseItemNum'] = $this->getCourseService()->countCourseItems($course);
 
         return $this->render(
             'course/tabs/summary.html.twig',
@@ -71,7 +72,7 @@ class CourseController extends CourseBaseController
                 $lastCourseMember = reset($lastCourseMember);
                 $course = $this->getCourseService()->getCourse($lastCourseMember['courseId']);
                 //周期课程且未开始时，不做跳转
-                if ($course['expiryMode'] != 'date' || $course['expiryStartDate'] < time()) {
+                if ('date' != $course['expiryMode'] || $course['expiryStartDate'] < time()) {
                     return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
                 }
             }
@@ -135,7 +136,7 @@ class CourseController extends CourseBaseController
         }
         $tag = null;
         foreach ($tasks as $task) {
-            if (empty($tag) && $task['type'] === 'video' && $course['tryLookable']) {
+            if (empty($tag) && 'video' === $task['type'] && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
                     $tag = 'site.badge.try_watch';
@@ -391,7 +392,7 @@ class CourseController extends CourseBaseController
      */
     private function getSelectCourseId(Request $request, $course)
     {
-        if ($request->get('_route') == 'my_course_show') {
+        if ('my_course_show' == $request->get('_route')) {
             return $request->query->get('selectedCourse', $course['id']);
         } else {
             return $request->query->get('selectedCourse', 0);
