@@ -920,6 +920,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             unset($conditions['categoryId']);
         }
 
+        if (isset($conditions['recommendedSeq'])) {
+            $conditions['recommended'] = 1;
+            unset($conditions['recommendedSeq']);
+        }
+
         return $conditions;
     }
 

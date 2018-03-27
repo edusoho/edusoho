@@ -10,6 +10,12 @@ class UpdateCourseSetHotSeqJob extends AbstractJob
 {
     public function execute()
     {
+        $this->updateCourseHotSeq();
+        $this->updateClassroomHotSeq();
+    }
+
+    protected function updateCourseHotSeq()
+    {
         $conditions = array('startTimeGreaterThan' => strtotime('-30 days'), 'classroomId' => 0, 'role' => 'student');
         $memberCount = $this->getCourseMemberService()->searchMemberCountGroupByFields($conditions, 'courseSetId', 0, PHP_INT_MAX);
 
@@ -22,6 +28,25 @@ class UpdateCourseSetHotSeqJob extends AbstractJob
             foreach ($memberCount as $count) {
                 $fields = array('hotSeq' => $count['count']);
                 $batchHelper->add('id', $count['courseSetId'], $fields);
+            }
+
+            $batchHelper->flush();
+        }
+    }
+
+    protected function updateClassroomHotSeq()
+    {
+        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student','assistant'));
+        $memberCount = $this->getCourseMemberService()->searchMemberCountGroupByFields($conditions, 'classroomId', 0, PHP_INT_MAX);
+
+        $this->getClassroomService()->refreshClassroomHotSeq();
+
+        if (!empty($memberCount)) {
+            $batchHelper = new BatchUpdateHelper($this->getClassroomDao());
+
+            foreach ($memberCount as $count) {
+                $fields = array('hotSeq' => $count['count']);
+                $batchHelper->add('id', $count['classroomId'], $fields);
             }
 
             $batchHelper->flush();
@@ -41,8 +66,18 @@ class UpdateCourseSetHotSeqJob extends AbstractJob
         return $this->biz->service('Course:MemberService');
     }
 
+    protected function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
+    }
+
     protected function getCourseSetDao()
     {
         return $this->biz->dao('Course:CourseSetDao');
+    }
+
+    protected function getClassroomDao()
+    {
+        return $this->biz->dao('Classroom:ClassroomDao');
     }
 }
