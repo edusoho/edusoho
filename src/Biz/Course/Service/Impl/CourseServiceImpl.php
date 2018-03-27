@@ -32,6 +32,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use AppBundle\Common\TimeMachine;
+use AppBundle\Common\CourseToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -873,7 +874,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createChapter($chapter)
     {
-        if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
+        if (!in_array($chapter['type'], CourseToolkit::getAvailableChapterTypes())) {
             throw $this->createInvalidArgumentException('Invalid Chapter Type');
         }
 
@@ -1976,7 +1977,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $chapterConditions = array(
             'courseId' => $course['id'],
-            'types' => array('chapter', 'unit'),  //章和节
+            'types' => CourseToolkit::getUserDisplayedChapterTypes(),
         );
         $chapterUnitCount = $this->getChapterDao()->count($chapterConditions);
 
