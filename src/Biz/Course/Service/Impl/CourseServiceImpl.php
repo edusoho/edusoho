@@ -321,7 +321,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($courseSet['status'] != 'published' || $oldCourse['status'] != 'published') {
+        if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -922,7 +922,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getChapterDao()->delete($deletedChapter['id']);
 
-        if ($deletedChapter['type'] == 'lesson') {
+        if ('lesson' == $deletedChapter['type']) {
             $this->getTaskService()->deleteTasksByCategoryId($courseId, $deletedChapter['id']);
         }
 
@@ -1970,6 +1970,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         });
 
         return $courses;
+    }
+
+    public function countCourseItems($course)
+    {
+        $chapterConditions = array(
+            'courseId' => $course['id'],
+            'types' => array('chapter', 'unit'),  //章和节
+        );
+        $chapterUnitCount = $this->getChapterDao()->count($chapterConditions);
+
+        return $chapterUnitCount + $course['compulsoryTaskNum'];
     }
 
     public function sortCourse($courseSetId, $ids)
