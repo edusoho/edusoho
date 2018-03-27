@@ -36,7 +36,7 @@ class UpdateCourseSetHotSeqJob extends AbstractJob
 
     protected function updateClassroomHotSeq()
     {
-        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student','assistant'));
+        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student', 'assistant'));
         $memberCount = $this->getClassroomService()->searchMemberCountGroupByFields($conditions, 'classroomId', 0, PHP_INT_MAX);
 
         $this->getClassroomService()->refreshClassroomHotSeq();

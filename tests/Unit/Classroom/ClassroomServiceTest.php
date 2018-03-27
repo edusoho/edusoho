@@ -838,10 +838,10 @@ class ClassroomServiceTest extends BaseTestCase
         $this->mockBiz('Classroom:ClassroomMemberDao', array(
             array(
                 'functionName' => 'searchMemberCountGroupByFields',
-                'returnValue' => array(array('classroomId' => 1, 'count' =>2)),
+                'returnValue' => array(array('classroomId' => 1, 'count' => 2)),
             ),
         ));
-        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student','assistant'));
+        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student', 'assistant'));
         $result = $this->getClassroomService()->searchMemberCountGroupByFields($conditions, 'classroomId', 0, 10);
 
         $this->assertEquals(1, count($result));

@@ -238,7 +238,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('classroomId' => 1));
         $expected[] = $this->mockDataObject(array('classroomId' => 2));
 
-        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student','assistant'));
+        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student', 'assistant'));
         $result = $this->getDao()->searchMemberCountGroupByFields($conditions, 'classroomId', 0, 10);
 
         $this->assertEquals(2, count($result));
