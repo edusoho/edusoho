@@ -72,6 +72,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
            'addCourseSetColumn',
            'addCourseMemberIndex',
+           'setCourseSort',
+           'addClassroomColumn',
+           'addClassroomMemberIndex',
+           'setClassroomSort',
            'registerCrontab',
         );
 
@@ -125,6 +129,50 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->createIndex('course_member', 'courseSetId', 'courseSetId');
 
         $this->logger('info', 'course_member新增索引courseSetId完成');
+        return 1;
+    }
+
+    protected function setCourseSort()
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+        if (isset($courseSetting['explore_default_orderBy']) && $courseSetting['explore_default_orderBy'] == 'studentNum') {
+            $courseSetting['explore_default_orderBy'] = 'hotSeq';
+            $this->getSettingService()->set('course', $courseSetting);
+
+            $this->logger('info', '更新课程列表页默认排序');
+        }
+        
+        return 1;
+    }
+
+    protected function addClassroomColumn()
+    {
+        if (!$this->isFieldExist('classroom', 'hotSeq')) {
+            $this->getConnection()->exec("ALTER TABLE `classroom` ADD `hotSeq` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最热排序' AFTER `ratingNum`;");
+        }
+        
+        $this->logger('info', 'classroom新增字段hotSeq完成');
+        return 1;
+    }
+
+    protected function addClassroomMemberIndex()
+    {
+        $this->createIndex('classroom_member', 'classroomId', 'classroomId');
+
+        $this->logger('info', 'classroom_member新增索引classroomId完成');
+        return 1;
+    }
+
+    protected function setClassroomSort()
+    {
+        $classroomSetting = $this->getSettingService()->get('classroom', array());
+        if (isset($classroomSetting['explore_default_orderBy']) && $classroomSetting['explore_default_orderBy'] == 'studentNum') {
+            $classroomSetting['explore_default_orderBy'] = 'hotSeq';
+            $this->getSettingService()->set('classroom', $classroomSetting);
+
+            $this->logger('info', '更新班级列表页默认排序');
+        }
+        
         return 1;
     }
 
