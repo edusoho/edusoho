@@ -833,6 +833,21 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(1, $result);
     }
 
+    public function testSearchMemberCountGroupByFields()
+    {
+        $this->mockBiz('Classroom:ClassroomMemberDao', array(
+            array(
+                'functionName' => 'searchMemberCountGroupByFields',
+                'returnValue' => array(array('classroomId' => 1, 'count' => 2)),
+            ),
+        ));
+        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student', 'assistant'));
+        $result = $this->getClassroomService()->searchMemberCountGroupByFields($conditions, 'classroomId', 0, 10);
+
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(1, $result[0]['classroomId']);
+    }
+
     public function testSearchMembers()
     {
         $this->mockBiz(
@@ -2384,6 +2399,17 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->findMembersByMemberIds(array(1));
 
         $this->getClassroomMemberDao()->shouldHaveReceived('findMembersByMemberIds');
+    }
+
+    public function testRefreshClassroomHotSeq()
+    {
+        $classroom = $this->getClassroomDao()->create(array('title' => 'classroom title', 'hotSeq' => 10));
+        $this->assertEquals(10, $classroom['hotSeq']);
+
+        $this->getClassroomService()->refreshClassroomHotSeq();
+
+        $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
+        $this->assertEquals(0, $classroom['hotSeq']);
     }
 
     protected function mockCourse($title = 'Test Course 1')
