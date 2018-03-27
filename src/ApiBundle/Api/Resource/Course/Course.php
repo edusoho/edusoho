@@ -84,9 +84,10 @@ class Course extends AbstractResource
         $conditions['status'] = 'published';
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $sort = $this->getSort($request);
         $courses = $this->service('Course:CourseService')->searchCourses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            $sort,
             $offset,
             $limit
         );
