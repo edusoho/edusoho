@@ -74,13 +74,11 @@ $('[data-role=confirm-btn]').click(function () {
   });
 });
 
-$('.thread-post-list').on('click', '.thread-post-action', function () {
+$('.thread-post-list').on('click', '.js-call-username', function() {
 
-  var userName = $(this).data('user');
-
+  const userName = $(this).parent().data('user');
   editor.focus();
   editor.insertHtml('@' + userName + '&nbsp;');
-
 });
 
 $('.thread-post-list').on('click', '[data-action=post-delete]', function () {
