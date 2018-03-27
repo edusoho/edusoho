@@ -1,5 +1,3 @@
-import notify from "common/notify";
-
 export default class ShowUnpublish {
   constructor(element) {
     this.$element = $(element);
@@ -14,10 +12,10 @@ export default class ShowUnpublish {
       const status = this.$element.parent().hasClass('checked') ? 1 : 0;
       $.post(url, { status: status })
       .success((response) => {
-        notify('success', Translator.trans('site.save_success_hint'));
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       })
       .error((response) => {
-        notify('error', response.error.message);
+        cd.message({ type: 'danger', message: response.error.message });
       })
     })
   }

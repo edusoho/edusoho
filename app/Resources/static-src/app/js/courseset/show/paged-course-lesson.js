@@ -13,9 +13,10 @@ class PagedCourseLesson {
       options = {};
     }
     this._displayAllImmediately = options['displayAllImmediately'] ? true : false;
+    this._init();
   }
 
-  init() {
+  _init() {
     new ESInfiniteCachedScroll({
       'displayAllImmediately': this._displayAllImmediately,
 

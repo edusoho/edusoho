@@ -29,10 +29,21 @@
 .courses-manage-item {
   &.dragged {
     opacity: 1 !important;
-    .cd-box-shadow-z(3px);
     .transform(rotate(1deg));
   }
-  &.drag:hover {
-    cursor: move;
+  &.drag {
+    .course-manage-header {
+      .es-transition(box-shadow);
+      &:hover {
+        .es-transition(box-shadow);
+        .cd-box-shadow-z(12px);
+      }
+    }
+    &:hover {
+      cursor: move;
+    }
+  }
+  .course-manage-header {
+    .cd-box-shadow-z(2px);
   }
 }

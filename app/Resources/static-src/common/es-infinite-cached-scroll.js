@@ -1,6 +1,6 @@
 import { isEmpty } from 'common/utils';
 import 'waypoints/lib/jquery.waypoints.min';
-import Emitter from "common/es-event-emitter";
+import Emitter from 'common/es-event-emitter';
 
 /** 
  * 伪分页，从缓存中读取数据，数据结构格式见 构造方法

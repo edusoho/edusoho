@@ -4,7 +4,8 @@ import { Browser } from 'common/utils';
 import { buyBtn } from 'app/common/widget/btn-util';
 import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 
-new PagedCourseLesson().init();
+new PagedCourseLesson();
+
 echo.init();
 chapterAnimate();
 initTaskLearnChart();

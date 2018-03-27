@@ -10,7 +10,7 @@ class NormalManage extends BaseManage {
     if (!this.$taskNumber) {
       this.$taskNumber = $('#task-num');
     }
-    
+
     let num = $('.js-task-manage-item:not(.js-optional-task)').length;
     this.$taskNumber.text(num);
   }

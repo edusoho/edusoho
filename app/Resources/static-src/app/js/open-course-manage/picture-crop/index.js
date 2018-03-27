@@ -18,22 +18,22 @@ class CoverCrop {
       let url = $saveBtn.data('url');
 
       $.post(url, { images: JSON.stringify(response) })
-      .success((response) => {
-        if (response.code) {
-          $('#course-form').find('img').attr('src', response.cover);
-          $('#modal').modal('hide');
-        } else {
+        .success((response) => {
+          if (response.code) {
+            $('#course-form').find('img').attr('src', response.cover);
+            $('#modal').modal('hide');
+          } else {
+            notify('danger',Translator.trans('upload_fail_retry_hint'));
+            $saveBtn.button('reset');
+          }
+        })
+        .error((response) => {
           notify('danger',Translator.trans('upload_fail_retry_hint'));
           $saveBtn.button('reset');
-        }
-      })
-      .error((response) => {
-        notify('danger',Translator.trans('upload_fail_retry_hint'));
-        $saveBtn.button('reset');
-      });
+        });
     };
 
-    $(".crop-picture-save-btn").click(function(event) {
+    $('.crop-picture-save-btn').click(function(event) {
       $(event.currentTarget).button('loading');
       event.stopPropagation();
       imageCrop.crop({
@@ -43,7 +43,7 @@ class CoverCrop {
           small: [96, 54],
         }
       });
-    })
+    });
 
   }
 }

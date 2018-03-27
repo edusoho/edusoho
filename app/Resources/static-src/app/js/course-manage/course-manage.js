@@ -1,5 +1,4 @@
 import sortList from 'common/sortable';
-import notify from 'common/notify';
 
 export default class CourseManage {
   constructor() {
@@ -46,7 +45,7 @@ export default class CourseManage {
       placeholder: '<li class="placeholder task-dragged-placeholder cd-mb24"></li>',
       onDragStart: function(item, container, _super) {
         let offset = item.offset(),
-            pointer = container.rootGroup.pointer;
+          pointer = container.rootGroup.pointer;
         adjustment = {
           left: pointer.left - offset.left,
           top: pointer.top - offset.top
@@ -79,27 +78,27 @@ export default class CourseManage {
   cancelSort() {
     this._restore();
     this._toggleSortStatus();
-    notify('success', Translator.trans('course.manage.sort_cancel'));
+    cd.message({ type: 'success', message: Translator.trans('course.manage.sort_cancel') });
   }
 
   saveSort() {
     let sort = this._getSort();
 
     $.post($('.js-plan-list').data('sortUrl'), { 'ids': sort }, (response) => {
-      notify('success', Translator.trans('site.save_success_hint'));
+      cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       this.sortList = sort;
       this._toggleSortStatus();
     }).error(function(e) {
-      notify('danger', e.responseText);
+      cd.message({ type: 'danger', message: e.responseText });
     });
   }
 
   _restore() {
     let $list = $('.js-plan-list'),
-        targets = '',
-        len = this.sortList.length;
+      targets = '',
+      len = this.sortList.length;
     for (let j = 0; j < len; j++) {
-      targets += $list.find('#course-plan-' + this.sortList[j]).prop("outerHTML");
+      targets += $list.find('#course-plan-' + this.sortList[j]).prop('outerHTML');
     }
     $list.html(targets);
   }

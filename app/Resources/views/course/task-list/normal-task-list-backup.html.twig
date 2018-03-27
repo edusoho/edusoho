@@ -1,4 +1,4 @@
-<div class="course-detail-content">
+<div class="course-detail-content js-course-detail-content">
 
   {% if courseItems and courseItems[0]['seq'] != 1 %}
     <a class="js-up-more-link link-gray center-block text-center" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">{{ 'my.learning.course.click_loading_more'|trans }}</a>

@@ -346,8 +346,8 @@ class Marketing {
 
   publishAddMessage() {
     postal.publish({
-      channel: "courseInfoMultiInput",
-      topic: "addMultiInput",
+      channel: 'courseInfoMultiInput',
+      topic: 'addMultiInput',
     });
   }
 

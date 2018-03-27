@@ -20,20 +20,20 @@ class CoverCrop {
       let url = $saveBtn.data('url');
 
       $.post(url, { images: JSON.stringify(response) })
-      .success((response) => {
-        if (response.code) {
-          $('#courseset-form').find('img').attr('src', response.cover);
-          $('#cover').blur();
-          $('#modal').modal('hide');
-        } else {
+        .success((response) => {
+          if (response.code) {
+            $('#courseset-form').find('img').attr('src', response.cover);
+            $('#cover').blur();
+            $('#modal').modal('hide');
+          } else {
+            notify('danger',Translator.trans('upload_fail_retry_hint'));
+            $saveBtn.button('reset');
+          }
+        })
+        .error((response) => {
           notify('danger',Translator.trans('upload_fail_retry_hint'));
           $saveBtn.button('reset');
-        }
-      })
-      .error((response) => {
-        notify('danger',Translator.trans('upload_fail_retry_hint'));
-        $saveBtn.button('reset');
-      });
+        });
     };
 
     $(this.saveBtn).click(function(event) {

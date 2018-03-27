@@ -1,12 +1,10 @@
-import notify from 'common/notify';
-
 $('.course-publish-btn').click(function () {
   if (!confirm(Translator.trans('open_course.publish_hint'))) {
     return;
   }
   $.post($(this).data('url'), function (response) {
     if (!response['result']) {
-      notify('danger',response['message']);
+      cd.message({ type: 'danger', message: response['message'] });
     } else {
       window.location.reload();
     }
