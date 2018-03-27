@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('register', 'payment'))) {
+        if (!in_array($type, array('register', 'payment', 'vip'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -54,6 +54,36 @@ class Setting extends AbstractResource
             'alipayEnabled' => empty($paymentSetting['alipay_enabled']) ? false : true,
             'wxpayEnabled' => empty($paymentSetting['wxpay_enabled']) ? false : true,
             'llpayEnabled' => empty($paymentSetting['llpay_enabled']) ? false : true,
+        );
+    }
+
+    public function getVip()
+    {
+        $vipSetting = $this->getSettingService()->get('vip', array());
+
+        if (!empty($vipSetting['buyType'])) {
+            switch ($vipSetting['buyType']) {
+                case 10:
+                    $buyType = 'year_and_month';
+                    break;
+                case 20:
+                    $buyType = 'year';
+                    break;
+                case 30:
+                    $buyType = 'month';
+                    break;
+                default:
+                    $buyType = 'month';
+                    break;
+            }
+        }
+
+        return array(
+            'enabled' => empty($vipSetting['enabled']) ? false : true,
+            'buyType' => empty($buyType) ? 'month' : $buyType,
+            'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
+            'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],
+            'defaultBuyMonths' => empty($vipSetting['default_buy_months']) ? '30' : $vipSetting['default_buy_months'],
         );
     }
 
