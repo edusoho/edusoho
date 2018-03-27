@@ -39,7 +39,7 @@
         <label >{{'admin.setting_course.classroom.classroom_list_default_seq'|trans}}</label>
       </div>
       <div class="controls col-md-7 radios">
-        {{ radios('explore_default_orderBy', {createdTime:'site.datagrid.filter.latest'|trans, studentNum:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, classroomSetting.explore_default_orderBy) }}
+        {{ radios('explore_default_orderBy', {createdTime:'site.datagrid.filter.latest'|trans, hotSeq:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, classroomSetting.explore_default_orderBy) }}
         <p class="help-block"><a target="_blank" href="{{ path('classroom_explore') }}">{{ 'admin.setting_course.classroom.classroom_list.help_block'|trans }}</a>{{ 'admin.setting_course.classroom.classroom_list_default_seq.help_block'|trans }}</p>
       </div>
     </div>
