@@ -56,7 +56,7 @@
     </div>
     <div class="panel-body">
     {% include 'course/tabs/tasks.html.twig' with {limitCount : 2} %}
-    {% if course.courseItemNum > 12 %}
+    {% if course.courseItemNum > 25 %}
     <div class="text-center pt10 border-top-gray-lighter" >
        <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="link-dark">{{ 'course.catalogue.view_all_btn'|trans }}</a>
     </div>
