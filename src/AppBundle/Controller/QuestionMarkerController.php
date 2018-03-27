@@ -23,7 +23,7 @@ class QuestionMarkerController extends BaseController
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
         $baseUrl = $request->getSchemeAndHttpHost();
         $headerLength = 0;
-        if (!$this->isHiddenVideoHeader()) {
+        if (!$this->getWebExtension()->isHiddenVideoHeader()) {
             $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
             if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
                 $headerLength = $videoHeaderFile['length'];
@@ -67,16 +67,6 @@ class QuestionMarkerController extends BaseController
         }
 
         return $this->createJsonResponse($result);
-    }
-
-    protected function isHiddenVideoHeader($isHidden = false)
-    {
-        $storage = $this->setting('storage');
-        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**
