@@ -295,7 +295,10 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        $statement['result'] = empty($result) ? (object) $result : $result;
+        
+        if (!empty($result)) {
+            $statement['result'] = $result;
+        }
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -345,7 +348,10 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        $statement['result'] = empty($result) ? (object) $result : $result;
+        
+        if (!empty($result)) {
+            $statement['result'] = $result;
+        }
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -395,7 +401,10 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        $statement['result'] = empty($result) ? (object) $result : $result;
+
+        if (!empty($result)) {
+            $statement['result'] = $result;
+        }
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -746,7 +755,6 @@ class XAPIService extends BaseService
     public function setting($type, $value)
     {
         $setting = array(
-            'accessKey' => $this->auth->getAccessKey(),
             'setting' => $type,
             'value' => $value,
         );
