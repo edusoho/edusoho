@@ -1375,6 +1375,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function _prepareClassroomConditions($conditions)
     {
+        $intList = array('buyable', 'showable');
+        foreach ($intList as $key) {
+            if (isset($conditions[$key])) {
+                $conditions[$key] = (int) $conditions[$key];
+            }
+        }
+
         $conditions = array_filter(
             $conditions,
             function ($value) {
