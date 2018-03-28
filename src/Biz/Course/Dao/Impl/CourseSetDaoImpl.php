@@ -46,9 +46,9 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $builder->execute()->fetchAll();
     }
 
-    public function refreshMonthStudentNum()
+    public function refreshHotSeq()
     {
-        $sql = "UPDATE {$this->table} set monthStudentNum = 0;";
+        $sql = "UPDATE {$this->table} set hotSeq = 0;";
         $this->db()->exec($sql);
     }
 
@@ -95,7 +95,8 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'rating',
                 'studentNum',
                 'id',
-                'monthStudentNum',
+                'hotSeq',
+                'publishedTime',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',
