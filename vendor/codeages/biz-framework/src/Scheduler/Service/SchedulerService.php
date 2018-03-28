@@ -4,6 +4,8 @@ namespace Codeages\Biz\Framework\Scheduler\Service;
 
 interface SchedulerService
 {
+    const JOB_MEMORY_LIMIT = 200 * 1024 * 1024;
+
     public function register($job);
 
     public function execute();
