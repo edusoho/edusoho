@@ -3,14 +3,13 @@
 namespace Tests\Unit\Task\Dao;
 
 use Tests\Unit\Base\BaseDaoTestCase;
-use AppBundle\Common\TimeMachine;
 
 class ViewLogDaoTest extends BaseDaoTestCase
 {
     public function testSearchGroupByTime()
     {
         $this->mockDataObject();
-        $diffTime = 24*60*60;
+        $diffTime = 24 * 60 * 60;
         $results = $this->getDao()->searchGroupByTime(array('fileType' => 'video', 'fileStorage' => 'cloud', 'fileSource' => 'self'), time() - $diffTime, time() + $diffTime);
         $first = reset($results);
 
