@@ -1,6 +1,14 @@
 {% set tagMarks = data('TagMarks', {tags:tags}) %}
 {% set categoryMarks = data('CategoryMarks', {selectedCategory:selectedCategory, selectedSubCategory:selectedSubCategory, selectedthirdLevelCategory:selectedthirdLevelCategory}) %}
 {% set selectedTagGroups = data('SelectedTagGroups', {tags:tags}) %}
+{% set orderBy = request.query.get('orderBy', 'latest') %}
+{% set filter = request.query.get('filter')|default(null) %}
+
+{% if group == 'classroom' %}
+  {% set path = 'classroom_explore' %}
+{% else %}
+  {% set path = 'course_set_explore' %}
+{% endif %}
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm clearfix">
