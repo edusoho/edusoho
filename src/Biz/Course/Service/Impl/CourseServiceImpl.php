@@ -32,6 +32,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use AppBundle\Common\TimeMachine;
+use AppBundle\Common\CourseToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -321,7 +322,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($courseSet['status'] != 'published' || $oldCourse['status'] != 'published') {
+        if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -873,7 +874,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createChapter($chapter)
     {
-        if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
+        if (!in_array($chapter['type'], CourseToolkit::getAvailableChapterTypes())) {
             throw $this->createInvalidArgumentException('Invalid Chapter Type');
         }
 
@@ -922,7 +923,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getChapterDao()->delete($deletedChapter['id']);
 
-        if ($deletedChapter['type'] == 'lesson') {
+        if ('lesson' == $deletedChapter['type']) {
             $this->getTaskService()->deleteTasksByCategoryId($courseId, $deletedChapter['id']);
         }
 
@@ -1970,6 +1971,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         });
 
         return $courses;
+    }
+
+    public function countCourseItems($course)
+    {
+        $chapterConditions = array(
+            'courseId' => $course['id'],
+            'types' => CourseToolkit::getUserDisplayedChapterTypes(),
+        );
+        $chapterUnitCount = $this->getChapterDao()->count($chapterConditions);
+
+        return $chapterUnitCount + $course['compulsoryTaskNum'];
     }
 
     public function sortCourse($courseSetId, $ids)

@@ -537,6 +537,30 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals('title', $result[0]['title']);
     }
 
+    public function testCountCourseItems()
+    {
+        $mockedCourseChapterDao = $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'count',
+                'withParams' => array(
+                    array(
+                        'courseId' => 123,
+                        'types' => array('chapter', 'unit'),
+                    ),
+                ),
+                'returnValue' => 2,
+            ),
+        ));
+
+        $courseInfo = array(
+            'id' => 123,
+            'compulsoryTaskNum' => 3,
+        );
+        $result = $this->getCourseService()->countCourseItems($courseInfo);
+
+        $this->assertEquals(5, $result);
+    }
+
     protected function createNewCourseSet()
     {
         $courseSetFields = array(

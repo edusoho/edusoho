@@ -50,9 +50,9 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $items = $this->findItems();
 
         foreach ($items as $key => &$item) {
-            if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
+            if ('chapter' == $item['type'] || 'unit' == $item['type']) {
                 $item['itemType'] = $item['type'];
-            } elseif ($item['type'] == 'lesson') {
+            } elseif ('lesson' == $item['type']) {
                 unset($items[$key]);
             } else {
                 $item['itemType'] = 'task';
@@ -195,16 +195,6 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $conditions = array(
             'courseId' => $this->courseId,
         );
-
-        if ($this->paging['direction'] == 'down') {
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
-        }
-
-        if ($this->paging['direction'] == 'up') {
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] - 1;
-        }
 
         if ($this->isHiddenUnpublishTasks()) {
             $conditions['status'] = 'published';

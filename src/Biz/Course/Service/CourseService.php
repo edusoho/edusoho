@@ -251,4 +251,6 @@ interface CourseService
     public function sortCourse($courseSetId, $ids);
 
     public function sortByCourses($courses);
+
+    public function countCourseItems($course);
 }

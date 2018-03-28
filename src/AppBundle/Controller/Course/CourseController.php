@@ -26,10 +26,11 @@ class CourseController extends CourseBaseController
 
         $courseItems = array();
         if ($isMarketingPage) {
-            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 25));
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
+        $course['courseItemNum'] = $this->getCourseService()->countCourseItems($course);
 
         return $this->render(
             'course/tabs/summary.html.twig',
