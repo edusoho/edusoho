@@ -10,6 +10,19 @@ class CourseBuyController extends BuyFlowController
 {
     protected $targetType = 'course';
 
+    protected function needOpenPayment($id)
+    {
+        $payment = $this->getSettingService()->get('payment');
+        $course = $this->getCourseService()->getCourse($id);
+        $vipJoinEnabled = false;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $user = $this->getCurrentUser();
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+        }
+
+        return !$course['isFree'] && !$payment['enabled'] && !$vipJoinEnabled;
+    }
+
     protected function tryFreeJoin($id)
     {
         $this->getCourseService()->tryFreeJoin($id);
@@ -24,7 +37,7 @@ class CourseBuyController extends BuyFlowController
     {
         $course = $this->getCourseService()->getCourse($id);
 
-        return $course['maxStudentNum'] - $course['studentNum'] <= 0 && $course['type'] == 'live';
+        return $course['maxStudentNum'] - $course['studentNum'] <= 0 && 'live' == $course['type'];
     }
 
     protected function needApproval($id)
@@ -32,7 +45,7 @@ class CourseBuyController extends BuyFlowController
         $course = $this->getCourseService()->getCourse($id);
         $user = $this->getCurrentUser();
 
-        return $course['approval'] && $user['approvalStatus'] !== 'approved';
+        return $course['approval'] && 'approved' !== $user['approvalStatus'];
     }
 
     protected function isJoined($id)
@@ -56,5 +69,13 @@ class CourseBuyController extends BuyFlowController
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 }

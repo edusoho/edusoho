@@ -10,8 +10,10 @@ define(function(require, exports, module) {
 
         $('[name=alipay_enabled]').change(function(e) {
             var radio = e.target.value;
-
+            var subItem = $(this).parents('fieldset').children('[data-sub="alipay"]');
+          
             if (radio == '1') {
+                subItem.removeClass('hidden');
                 validator.addItem({
                     element: '[name="alipay_secret"]',
                     required: true,
@@ -23,6 +25,7 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入PID')
                 });
             } else {
+                subItem.addClass('hidden');
                 validator.removeItem('[name="alipay_secret"]');
                 validator.removeItem('[name="alipay_key"]');
             }
@@ -30,12 +33,24 @@ define(function(require, exports, module) {
 
         $('[name=wxpay_enabled]').change(function(e) {
             var radio = e.target.value;
+            var subItem = $(this).parents('fieldset').children('[data-sub="wxpay"]');
 
             if (radio == '1') {
+                subItem.removeClass('hidden');
                 validator.addItem({
-                    element: '[name="wxpay_appid"]',
+                  element: '[name="wxpay_appid"]',
+                  required: true,
+                  errormessageRequired: Translator.trans('请输入AppID')
+                });
+                validator.addItem({
+                    element: '[name="wxpay_secret"]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入AppID')
+                    errormessageRequired: Translator.trans('请输入AppSecret')
+                });
+                validator.addItem({
+                  element: '[name="wxpay_mp_secret"]',
+                  required: true,
+                  errormessageRequired: Translator.trans('请输入MP文件验证码')
                 });
                 validator.addItem({
                     element: '[name=wxpay_account]',
@@ -48,7 +63,10 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入商户平台Key')
                 });
             } else {
-                validator.removeItem('[name="wxpay_key"]');
+                subItem.addClass('hidden');
+                validator.removeItem('[name="wxpay_appid"]');
+                validator.removeItem('[name="wxpay_secret"]');
+                validator.removeItem('[name="wxpay_mp_secret"]');
                 validator.removeItem('[name="wxpay_account"]');
                 validator.removeItem('[name="wxpay_key"]');
             }
@@ -56,8 +74,10 @@ define(function(require, exports, module) {
 
         $('[name=heepay_enabled]').change(function(e) {
             var radio = e.target.value;
+            var subItem = $(this).parents('fieldset').children('[data-sub="heepay"]');
 
             if (radio == '1') {
+                subItem.removeClass('hidden');
                 validator.addItem({
                     element: '[name="heepay_key"]',
                     required: true,
@@ -69,6 +89,7 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入商户平台Key')
                 });
             } else {
+                subItem.addClass('hidden');
                 validator.removeItem('[name="heepay_key"]');
                 validator.removeItem('[name="heepay_secret"]');
             }
@@ -76,8 +97,10 @@ define(function(require, exports, module) {
 
         $('[name=quickpay_enabled]').change(function(e) {
             var radio = e.target.value;
-
+            var subItem = $(this).parents('fieldset').children('[data-sub="quickpay"]');
+            
             if (radio == '1') {
+                subItem.removeClass('hidden');
                 validator.addItem({
                     element: '[name="quickpay_key"]',
                     required: true,
@@ -94,6 +117,7 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入Aes')
                 });
             } else {
+                subItem.addClass('hidden');
                 validator.removeItem('[name="quickpay_key"]');
                 validator.removeItem('[name="quickpay_secret"]');
                 validator.removeItem('[name="quickpay_aes"]');
@@ -102,8 +126,10 @@ define(function(require, exports, module) {
 
         $('[name=llpay_enabled]').change(function(e) {
             var radio = e.target.value;
+            var subItem = $(this).parents('fieldset').children('[data-sub="llpay"]');
 
             if (radio == '1') {
+                subItem.removeClass('hidden');
                 validator.addItem({
                     element: '[name="llpay_key"]',
                     required: true,
@@ -120,6 +146,7 @@ define(function(require, exports, module) {
                     errormessageRequired: '请输入密钥'
                 });
             } else {
+                subItem.addClass('hidden');
                 validator.removeItem('[name="llpay_key"]');
                 validator.removeItem('[name="llpay_accessKey"]');
                 validator.removeItem('[name="llpay_secretKey"]');
