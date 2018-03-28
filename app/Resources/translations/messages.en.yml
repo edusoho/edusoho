@@ -6941,6 +6941,7 @@ cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成直播回放
+log.action.live.delete_live_activity: 删除直播活动
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

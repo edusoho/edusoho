@@ -223,6 +223,7 @@ class LoginController extends LoginBindController
             'type' => $oauthUser->type,
             'registeredWay' => $oauthUser->isApp() ? strtolower($oauthUser->os) : 'web',
             'authid' => $oauthUser->authid,
+            'createdIp' => $request->getClientIp(),
         );
 
         if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
