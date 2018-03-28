@@ -22,7 +22,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            
             $result = $this->updateScheme($index);
 
             $this->getConnection()->commit();
@@ -63,7 +62,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         clearstatcache(true);
 
-        $this->logger( 'info', '删除缓存');
+        $this->logger('info', '删除缓存');
         return 1;
     }
 
@@ -77,6 +76,7 @@ class EduSohoUpgrade extends AbstractUpdater
            'addClassroomMemberIndex',
            'setClassroomSort',
            'registerCrontab',
+           'updatePaymentsSetting',
         );
 
         $funcNames = array();
@@ -86,7 +86,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
 
         if ($index == 0) {
-            $this->logger( 'info', '开始执行升级脚本');
+            $this->logger('info', '开始执行升级脚本');
             $this->deleteCache();
 
             return array(
@@ -191,6 +191,34 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->logger('info', '新增updateHotSeq的定时任务完成');
+        return 1;
+    }
+
+    protected function updatePaymentsSetting()
+    {
+        $paymentSetting = $this->getSettingService()->get('payment');
+        $paymentEnabled = 0;
+        $defaultPayments = array(
+            'alipay_enabled',
+            'wxpay_enabled',
+            'llpay_enabled',
+            'heepay_enabled',
+            'quickpay_enabled',
+            'llpay_enabled',
+        );
+        foreach ($defaultPayments as $defaultPayment) {
+            if ($paymentSetting[$defaultPayment]) {
+                $paymentEnabled = 1;
+            }
+        }
+        if (isset($paymentSetting['disabled_message'])) {
+            unset($paymentSetting['disabled_message']);
+        }
+        $paymentSetting['enabled'] = $paymentEnabled;
+        $this->getSettingService()->set('payment', $paymentSetting);
+        
+        $this->logger('info', 'payment设置更新完成');
+
         return 1;
     }
 
