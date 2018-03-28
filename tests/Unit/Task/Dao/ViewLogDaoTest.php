@@ -9,8 +9,8 @@ class ViewLogDaoTest extends BaseDaoTestCase
 {
     public function testSearchGroupByTime()
     {
-        $createdTime = TimeMachine::time();
         $this->mockDataObject();
+        $createdTime = TimeMachine::time();
         $results = $this->getDao()->searchGroupByTime(array('fileType' => 'video', 'fileStorage' => 'cloud', 'fileSource' => 'self'), $createdTime - 1000, $createdTime + 1000);
         $first = reset($results);
 
