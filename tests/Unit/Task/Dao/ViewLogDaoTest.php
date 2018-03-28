@@ -3,21 +3,25 @@
 namespace Tests\Unit\Task\Dao;
 
 use Tests\Unit\Base\BaseDaoTestCase;
+use AppBundle\Common\TimeMachine;
 
 class ViewLogDaoTest extends BaseDaoTestCase
 {
     public function testSearchGroupByTime()
     {
+        $createdTime = TimeMachine::time();
         $this->mockDataObject();
-        $results = $this->getDao()->searchGroupByTime(array('fileType' => 'video', 'fileStorage' => 'cloud', 'fileSource' => 'self'), time() - 1000, time() + 1000);
+        $results = $this->getDao()->searchGroupByTime(array('fileType' => 'video', 'fileStorage' => 'cloud', 'fileSource' => 'self'), $createdTime - 1000, $createdTime + 1000);
         $first = reset($results);
 
         $this->assertEquals(1, $first['count']);
-        $this->assertEquals(date('Y-m-d'), $first['date']);
+        $this->assertEquals(date('Y-m-d', $createdTime), $first['date']);
     }
 
     public function getDefaultMockFields()
     {
+        $createdTime = 1522199274;
+
         return array(
             'courseId' => 1,
             'courseSetId' => 1,
@@ -27,6 +31,7 @@ class ViewLogDaoTest extends BaseDaoTestCase
             'fileType' => 'video',
             'fileStorage' => 'cloud',
             'fileSource' => 'self',
+            'createdTime' => TimeMachine::setMockedTime($createdTime),
         );
     }
 }
