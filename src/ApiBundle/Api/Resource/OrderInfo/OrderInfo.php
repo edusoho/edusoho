@@ -56,7 +56,7 @@ class OrderInfo extends AbstractResource
             'coinName' => '',
             'cashRate' => '1',
             'buyType' => '',
-            'priceType' => $currency->isoCode == 'CNY' ? 'RMB' : 'Coin',
+            'priceType' => 'CNY' == $currency->isoCode ? 'RMB' : 'Coin',
             'coinPayAmount' => 0,
             'fullCoinPayable' => 0,
             'verifiedMobile' => (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
@@ -89,7 +89,7 @@ class OrderInfo extends AbstractResource
             $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
         }
 
-        if ($orderInfo['priceType'] == 'Coin') {
+        if ('Coin' == $orderInfo['priceType']) {
             $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
         }
 
@@ -98,26 +98,56 @@ class OrderInfo extends AbstractResource
 
     private function addVipParams(&$params)
     {
-        if ($params['targetType'] == 'vip') {
+        if ('vip' == $params['targetType']) {
             $vipSetting = $this->service('System:SettingService')->get('vip');
             $defaultUnitType = 'month';
             $defaultDuration = 3;
             if ($vipSetting && !empty($vipSetting['buyType'])) {
+                if (isset($params['unit'])) {
+                    $this->checkUnit($vipSetting['buyType'], $params['unit']);
+                }
                 //按年月
-                if ($vipSetting['buyType'] == '10') {
+                if ('10' == $vipSetting['buyType']) {
                     $defaultDuration = $vipSetting['default_buy_months10'];
-                    //按年
-                } elseif ($vipSetting['buyType'] == '20') {
+                //按年
+                } elseif ('20' == $vipSetting['buyType']) {
                     $defaultUnitType = 'year';
                     $defaultDuration = $vipSetting['default_buy_years'];
-                    //按月
+                //按月
                 } else {
                     $defaultDuration = $vipSetting['default_buy_months'];
                 }
             }
 
-            $params['unit'] = $defaultUnitType;
-            $params['num'] = $defaultDuration;
+            $params['unit'] = !empty($params['unit']) ? $params['unit'] : $defaultUnitType;
+            $params['num'] = !empty($params['num']) ? $params['num'] : $defaultDuration;
+        }
+    }
+
+    private function checkUnit($type, $unit)
+    {
+        $result = true;
+        switch ($type) {
+            case '30':
+                if ('month' !== $unit) {
+                    $result = false;
+                }
+                break;
+            case '20':
+                if ('year' !== $unit) {
+                    $result = false;
+                }
+                break;
+            case '10':
+            default:
+                if (!in_array($unit, array('year', 'month'))) {
+                    $result = false;
+                }
+                break;
+        }
+
+        if (!$result) {
+            throw new BadRequestHttpException('unit is not allowed', null, ErrorCode::INVALID_ARGUMENT);
         }
     }
 
