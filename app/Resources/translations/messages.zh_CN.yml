@@ -7323,11 +7323,11 @@ admin.payment_setting.api_status: 接口状态
 admin.payment_setting.api_type: 接口类型
 admin.payment_setting.alipay_api_type.direct: 电脑网站支付接口
 admin.payment_setting.alipay_api_type.direct.hint: >
-  开通次接口后支持<span class="warning-state">电脑浏览器</span>支付，需前往支付宝开通，查看
+  开通此接口后支持<span class="warning-state">电脑浏览器</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
-  开通次接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
+  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_secret: MD5密钥
 admin.payment_setting.alipay_hint: >

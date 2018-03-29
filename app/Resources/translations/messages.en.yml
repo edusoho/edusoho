@@ -5954,6 +5954,11 @@ admin.payment_setting.payment: 'Payment function'
 admin.payment_setting.api_status: 'Interface status'
 admin.payment_setting.api_type: 'Interface type'
 admin.payment_setting.alipay_api_type.direct: 'PC website payments'
+admin.payment_setting.alipay_api_type.direct.hint: >
+  <span class="warning-state">Computer Browser</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
+admin.payment_setting.alipay_api_type.mobile: Mobile Website Payment Interface
+admin.payment_setting.alipay_api_type.mobile.hint: >
+  <span class="warning-state">Mobile browser</span> and <span class="warning-state">KuoZhi School</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
