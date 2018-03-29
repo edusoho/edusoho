@@ -50,7 +50,7 @@ class WechatController extends PaymentController
                 'gateway' => 'WechatPay_Js',
                 'type' => $request->query->get('type', 'purchase'),
                 'openid' => $openid,
-                'orderSn' => empty($params['orderSn']) ? '' : $params['orderSn'],
+                'orderSn' => $params['orderSn'],
                 'coinAmount' => empty($params['coinAmount']) ? 0 : $params['coinAmount'],
                 'payPassword' => empty($params['payPassword']) ? '' : $params['payPassword'],
             ),
