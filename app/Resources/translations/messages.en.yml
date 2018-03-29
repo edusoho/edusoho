@@ -5945,7 +5945,8 @@ admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
 
-admin.payment_setting.help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
+admin.payment_setting.open_help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
+admin.payment_setting.close_help.tips: 'Tip: Closing the payment function will result in users of the school cannot be purchased.'
 admin.payment_setting.alipay: Alipay
 admin.payment_setting.pay_disabled_tips: 'Tips when close the payment'
 admin.payment_setting.payment_hint: 'If turned on, the site revenue will transfer automatically to configured alipay account, wechat pay account or online banking account.'
@@ -5989,6 +5990,8 @@ admin.payment_setting.wxpay_account: 'Mechant account'
 admin.payment_setting.wxpay_account_hint: 'Merchant account from <a target="_blank" href="%wxpayUrl%"> wechat public platform </a> " wechat pay" - "Merchant information"'
 admin.payment_setting.wxpay_key: 'Wechat merchant platform API Key'
 admin.payment_setting.wxpay_key_hint: 'Set wechat merchant platform API Keys in <a href="%wxpayUrl%" target="_blank"> wechat merchant platform </a> "account settings" - "API Security ".'
+admin.payment_setting.submit_error.tips: 'Please open the online school’s payment method as needed'
+
 admin.finance_refund.max_refund_days: 'Refund deadline'
 admin.finance_refund.max_refund_days_hint: 'Users wcan get refund during refund deadline. If the refund deadline is 0, it means refund is disabled. <br/><span style= "color:Red" > The system does not support auto refunds, please contact students to obtain the relevant accounts and process the refund manually.'
 admin.finance_refund.apply_notification: 'Refund Application Notice'

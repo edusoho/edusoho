@@ -7313,7 +7313,8 @@ admin.wap_setting.hint: >
   <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
   <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
 
-admin.payment_setting.help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
+admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
+admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致网校用户无法购买商品。
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
 admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
@@ -7381,6 +7382,7 @@ admin.payment_setting.wxpay_account_hint: >
 admin.payment_setting.wxpay_key: 微信商户平台API密钥
 admin.payment_setting.wxpay_key_hint: >
   微信商户平台API密钥需要登录<a href="%wxpayUrl%" target="_blank">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙。
+admin.payment_setting.submit_error.tips: 请按需开启网校的支付方式
 
 admin.finance_refund.max_refund_days: 退款期限
 admin.finance_refund.max_refund_days_hint: >
