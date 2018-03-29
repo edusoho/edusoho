@@ -18,6 +18,7 @@ class ClassroomBuyController extends BuyFlowController
             $user = $this->getCurrentUser();
             $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
         }
+
         return $classroom['price'] > 0 && !$payment['enabled'] && !$vipJoinEnabled;
     }
 
