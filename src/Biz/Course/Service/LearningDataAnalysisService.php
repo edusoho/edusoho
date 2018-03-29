@@ -7,6 +7,7 @@ interface LearningDataAnalysisService
     public function getUserLearningProgress($courseId, $userId);
 
     public function makeProgress($learnedNum, $total);
+
     /**
      * 用户对多个课程的总进度
      *
