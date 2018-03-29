@@ -22,16 +22,7 @@ class ExploreController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (!isset($conditions['filter'])) {
-            $filter = array(
-                'type' => 'all',
-                'price' => 'all',
-                'currentLevelId' => 'all',
-            );
-            $conditions['filter'] = $filter;
-        } else {
-            $filter = $conditions['filter'];
-        }
+        list($conditions, $filter) = $this->getFilter($conditions, 'course');
 
         list($conditions, $tags) = $this->getConditionsByTags($conditions);
         $conditions = $this->getCourseConditionsByTags($conditions);
@@ -46,15 +37,6 @@ class ExploreController extends BaseController
         if (isset($conditions['ids']) && $conditions['ids'] === self::EMPTY_COURSE_SET_IDS) {
             $conditions['ids'] = array(0);
         }
-
-        if ($filter['price'] === 'free') {
-            $conditions['price'] = '0.00';
-        }
-
-        if ($filter['type'] === 'live') {
-            $conditions['type'] = 'live';
-        }
-        unset($conditions['filter']);
 
         list($conditions, $orderBy) = $this->getCourseSetSearchOrderBy($conditions);
 
@@ -246,12 +228,7 @@ class ExploreController extends BaseController
         list($conditions, $tags) = $this->getConditionsByTags($conditions);
         $conditions = $this->getClassroomConditionsByTags($conditions);
 
-        $filter = !isset($conditions['filter']) ? array('price' => 'all', 'currentLevelId' => 'all') : $conditions['filter'];
-        unset($conditions['filter']);
-
-        if ($filter['price'] === 'free') {
-            $conditions['price'] = '0.00';
-        }
+        list($conditions, $filter) = $this->getFilter($conditions, 'classroom');
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId']);
 
@@ -284,6 +261,27 @@ class ExploreController extends BaseController
                 'tags' => $tags,
             )
         );
+    }
+
+    protected function getFilter($conditions, $type)
+    {
+        $default = array('price' => 'all', 'currentLevelId' => 'all');
+        if ($type == 'course') {
+            $default['type'] = 'all';
+        }
+
+        $filter = !isset($conditions['filter']) ? $default : $conditions['filter'];
+
+        if (isset($filter['price']) && $filter['price'] === 'free') {
+            $conditions['price'] = '0.00';
+        }
+
+        if (isset($filter['type']) && $filter['type'] === 'live') {
+            $conditions['type'] = 'live';
+        }
+        unset($conditions['filter']);
+
+        return array($conditions, $filter);
     }
 
     protected function getConditionsByTags($conditions)
