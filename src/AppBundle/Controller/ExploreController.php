@@ -184,6 +184,7 @@ class ExploreController extends BaseController
 
         if (empty($conditions['ids'])) {
             $conditions['ids'] = $courseSetIds;
+
             return $conditions;
         }
 
@@ -202,7 +203,7 @@ class ExploreController extends BaseController
 
         $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), array('seq' => 'ASC'), 0, 100);
 
-        return ArrayToolkit::index($levels,'id');
+        return ArrayToolkit::index($levels, 'id');
     }
 
     protected function getConditionsByVip($conditions, $currentLevelId)
@@ -315,6 +316,7 @@ class ExploreController extends BaseController
         }
 
         $conditions['tagIds'] = array_values($tags);
+
         return array($conditions, $tags);
     }
 
