@@ -58,7 +58,7 @@
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
         {% if lesson.replayStatus == 'videoGenerated' %}
-          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
+          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn hidden" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
         {% elseif lesson.replayStatus == 'generated' %}
           {% for replay in lesson.replays if replay %}
             {% if lesson.liveProvider == 5 %}

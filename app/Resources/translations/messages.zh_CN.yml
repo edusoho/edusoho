@@ -342,6 +342,7 @@ form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.know: 了解
 form.btn.return: 返回
 form.btn.cancel: 取消
 form.btn.confirm: 确定
@@ -880,6 +881,8 @@ course.delete_from_classroom_tips: 课程已从%classroomName%中移除
 course.not_member_in_classroom_tips: >
   还不是%classroomName%成员,请先<a href="%classroomUrl%">加入%classroomName%</a>
 buy.approve_tips: 购买需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
+buy.payments_disabled_title: 开通支付功能提醒
+buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
@@ -7308,23 +7311,24 @@ admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
   <p class="help-block">开启后，网校在手机浏览器和微信上默认使用微网校进行显示</p>
   <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
+  <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
 
+admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
+admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致网校用户无法购买商品。
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
 admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
 admin.payment_setting.payment: 支付功能
 admin.payment_setting.api_status: 接口状态
 admin.payment_setting.api_type: 接口类型
-admin.payment_setting.alipay_api_type.direct: 电脑网站支付
-admin.payment_setting.alipay_api_type.escow: 担保交易接口
-admin.payment_setting.alipay_api_type.dualfun: 标准双接口
-admin.payment_setting.alipay_api_hint: >
-  PID和Key可在申请支付宝接口后获取，
-  <a href="%alipayApplication%" target="_blank">如何申请？</a>
-  <br>
-  “立即到账接口”如需在移动客户端使用，请开通<a href="%mobileAlipayApplication%" target="blank">手机网站支付</a>
-  <br>
-  “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签电脑网站支付。
+admin.payment_setting.alipay_api_type.direct: 电脑网站支付接口
+admin.payment_setting.alipay_api_type.direct.hint: >
+  开通此接口后支持<span class="warning-state">电脑浏览器</span>支付，需前往支付宝开通，查看
+  <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
+admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
+admin.payment_setting.alipay_api_type.mobile.hint: >
+  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
+  <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_secret: MD5密钥
 admin.payment_setting.alipay_hint: >
   登录【支付宝商家服务】-【我的商家服务】-【签约管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
@@ -7370,13 +7374,15 @@ admin.payment_setting.wxpay_secret_word: >
   如需支持微信内购买，必须填写。AppSecret来自<a target="_blank" href="%wxpayUrl%">微信公众平台</a>内左侧栏【开发】-【基本配置】
 
 admin.payment_setting.wxpay_secret: MP文件验证码
-admin.payment_setting.wxpay_mp_secret_hint: 请填写微信提供的MP_verify文件中的内容
+admin.payment_setting.wxpay_mp_secret_hint: >
+  请填写微信提供的MP_verify文件中的内容<a target="_blank" href="%wxpMPHelpUrl%">获取教程</a>
 admin.payment_setting.wxpay_account: 商户号
 admin.payment_setting.wxpay_account_hint: >
   商户号来自<a target="_blank" href="%wxpayUrl%">微信公众平台</a>内左侧栏【微信支付】-【商户信息】
 admin.payment_setting.wxpay_key: 微信商户平台API密钥
 admin.payment_setting.wxpay_key_hint: >
   微信商户平台API密钥需要登录<a href="%wxpayUrl%" target="_blank">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙。
+admin.payment_setting.submit_error.tips: 请按需开启网校的支付方式
 
 admin.finance_refund.max_refund_days: 退款期限
 admin.finance_refund.max_refund_days_hint: >
@@ -8220,6 +8226,7 @@ cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成录播回放
+log.action.live.delete_live_activity: 删除直播活动
 
 cashflow.title: 名称
 cashflow.sn: 流水号

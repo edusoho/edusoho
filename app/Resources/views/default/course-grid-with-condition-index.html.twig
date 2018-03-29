@@ -9,6 +9,8 @@
     {% set courseSets = data('RecommendCourseSets',{'count':count, 'categoryId':categoryId}) %}
   {% elseif orderBy == 'studentNum' %}
     {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
+  {% elseif orderBy == 'hotSeq' %}
+    {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'hotSeq'}) %}
   {% endif %}
   {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0}) %}
   {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):] %}
@@ -81,8 +83,8 @@
           {{ 'site.datagrid.filter.latest'|trans }}
         </a>
         <a href="javascript:;"
-           class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter"
-           data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}"
+           class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'hotSeq') %} active {% endif %}js-course-filter"
+           data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'hotSeq'}) }}"
            data-type='course'>
           {{ 'site.datagrid.filter.hotest'|trans }}
         </a>

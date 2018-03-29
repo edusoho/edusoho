@@ -100,7 +100,7 @@
         <label >{{'admin.setting_course.course_list_page_seq'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('explore_default_orderBy', {latest:'site.datagrid.filter.latest'|trans, studentNum:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, courseSetting.explore_default_orderBy) }}
+        {{ radios('explore_default_orderBy', {latest:'site.datagrid.filter.latest'|trans, hotSeq:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, courseSetting.explore_default_orderBy) }}
         <p class="help-block"><a target="_blank" href="{{ path('course_set_explore') }}">{{ 'admin.setting_course.course_list_page.help_block'|trans }}</a>{{ 'admin.setting_course.course_list_page_seq.help_block'|trans }}</p>
       </div>
     </div>

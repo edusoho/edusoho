@@ -3,9 +3,9 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseSetDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
+class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
 {
     protected $table = 'course_set_v8';
 
@@ -44,6 +44,12 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             ->addOrderBy('DATE', 'ASC');
 
         return $builder->execute()->fetchAll();
+    }
+
+    public function refreshHotSeq()
+    {
+        $sql = "UPDATE {$this->table} set hotSeq = 0;";
+        $this->db()->exec($sql);
     }
 
     public function declares()
@@ -89,6 +95,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'rating',
                 'studentNum',
                 'id',
+                'hotSeq',
+                'publishedTime',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',
