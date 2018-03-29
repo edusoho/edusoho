@@ -313,11 +313,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $pluginList = array(
             array(
                 'ChargeCoin',
-                1138,
+                1285,
             ),
             array(
                 'Vip',
-                1135
+                1284
             ),
         );
 
