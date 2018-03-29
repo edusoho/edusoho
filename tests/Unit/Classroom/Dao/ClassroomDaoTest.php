@@ -123,6 +123,17 @@ class ClassroomDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $res[1], $this->getCompareKeys());
     }
 
+    public function refreshHotSeq()
+    {
+        $expected = $this->mockDataObject(array('title' => 'ahaha', 'hotSeq' => 10));
+        $this->assertEquals(10, $expected['hotSeq']);
+
+        $this->getDao()->refreshHotSeq();
+
+        $classroom = $this->getDao()->get($expected['id']);
+        $this->assertEquals(0, $classroom['hotSeq']);
+    }
+
     protected function getDefaultMockFields()
     {
         return array(

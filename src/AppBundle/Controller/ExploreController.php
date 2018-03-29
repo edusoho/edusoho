@@ -476,15 +476,7 @@ class ExploreController extends BaseController
             $classroomSetting['explore_default_orderBy'] = 'createdTime';
         }
 
-        $sort = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
-
-        if ($sort === 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-            $orderBy = array($sort => 'asc');
-        } else {
-            $orderBy = array($sort => 'desc');
-        }
-
+        $orderBy = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
         unset($conditions['orderBy']);
 
         $paginator = new Paginator(
@@ -532,7 +524,7 @@ class ExploreController extends BaseController
                 'categoryParent' => $categoryParent,
                 'filter' => $filter,
                 'levels' => $levels,
-                'orderBy' => $sort,
+                'orderBy' => $orderBy,
                 'tags' => $tags,
                 'group' => 'classroom',
             )

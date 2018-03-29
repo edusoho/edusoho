@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'cd-modal-dialog' %}
+{% set modalType = 'user' %}
+
+{% block title %}{{ 'buy.payments_disabled_title' | trans }}{% endblock %}
+
+{% block body %}
+	<div>{{ setting('payment.disabled_message')|default('buy.payments_disabled_tips') | trans | raw }}</div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-dismiss="modal">{{ 'form.btn.know'|trans }}</button>
+{% endblock %}
