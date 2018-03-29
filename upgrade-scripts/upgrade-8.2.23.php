@@ -1,8 +1,6 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Biz\Util\PluginUtil;
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
@@ -38,7 +36,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath($this->biz['kernel.root_dir'] . "/../web/install");
+            $dir = realpath($this->biz['kernel.root_dir'].'/../web/install');
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -51,7 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+        $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
     protected function deleteCache()
@@ -63,6 +61,7 @@ class EduSohoUpgrade extends AbstractUpdater
         clearstatcache(true);
 
         $this->logger('info', '删除缓存');
+
         return 1;
     }
 
@@ -77,22 +76,23 @@ class EduSohoUpgrade extends AbstractUpdater
            'setClassroomSort',
            'registerCrontab',
            'updatePaymentsSetting',
+           'downloadPlugin',
+           'updatePlugin',
         );
 
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
-            $funcNames[$key+1] = $funcName;
+            $funcNames[$key + 1] = $funcName;
         }
 
-
-        if ($index == 0) {
+        if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
             $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
                 'message' => '升级数据...',
-                'progress' => 0
+                'progress' => 0,
             );
         }
 
@@ -100,15 +100,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $method = $funcNames[$step];
         $page = $this->$method($page);
 
-        if ($page == 1) {
-            $step++;
+        if (1 == $page) {
+            ++$step;
         }
 
         if ($step <= count($funcNames)) {
             return array(
                 'index' => $this->generateIndex($step, $page),
                 'message' => '升级数据...',
-                'progress' => 0
+                'progress' => 0,
             );
         }
     }
@@ -118,7 +118,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_set_v8', 'hotSeq')) {
             $this->getConnection()->exec("ALTER TABLE `course_set_v8` ADD `hotSeq` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最热排序' AFTER `studentNum`;");
         }
-        
+
         $this->logger('info', 'course_set_v8新增字段hotSeq完成');
 
         return 1;
@@ -129,19 +129,20 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->createIndex('course_member', 'courseSetId', 'courseSetId');
 
         $this->logger('info', 'course_member新增索引courseSetId完成');
+
         return 1;
     }
 
     protected function setCourseSort()
     {
         $courseSetting = $this->getSettingService()->get('course', array());
-        if (isset($courseSetting['explore_default_orderBy']) && $courseSetting['explore_default_orderBy'] == 'studentNum') {
+        if (isset($courseSetting['explore_default_orderBy']) && 'studentNum' == $courseSetting['explore_default_orderBy']) {
             $courseSetting['explore_default_orderBy'] = 'hotSeq';
             $this->getSettingService()->set('course', $courseSetting);
 
             $this->logger('info', '更新课程列表页默认排序');
         }
-        
+
         return 1;
     }
 
@@ -150,8 +151,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('classroom', 'hotSeq')) {
             $this->getConnection()->exec("ALTER TABLE `classroom` ADD `hotSeq` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最热排序' AFTER `ratingNum`;");
         }
-        
+
         $this->logger('info', 'classroom新增字段hotSeq完成');
+
         return 1;
     }
 
@@ -160,19 +162,20 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->createIndex('classroom_member', 'classroomId', 'classroomId');
 
         $this->logger('info', 'classroom_member新增索引classroomId完成');
+
         return 1;
     }
 
     protected function setClassroomSort()
     {
         $classroomSetting = $this->getSettingService()->get('classroom', array());
-        if (isset($classroomSetting['explore_default_orderBy']) && $classroomSetting['explore_default_orderBy'] == 'studentNum') {
+        if (isset($classroomSetting['explore_default_orderBy']) && 'studentNum' == $classroomSetting['explore_default_orderBy']) {
             $classroomSetting['explore_default_orderBy'] = 'hotSeq';
             $this->getSettingService()->set('classroom', $classroomSetting);
 
             $this->logger('info', '更新班级列表页默认排序');
         }
-        
+
         return 1;
     }
 
@@ -191,19 +194,31 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->logger('info', '新增updateHotSeq的定时任务完成');
+
         return 1;
     }
 
     protected function updatePaymentsSetting()
     {
         $paymentSetting = $this->getSettingService()->get('payment');
+        $unsetSettings = array(
+            'heepay_enabled',
+            'heepay_key',
+            'heepay_secret',
+            'quickpay_enabled',
+            'quickpay_key',
+            'quickpay_secret',
+            'quickpay_aes',
+        );
+        foreach ($unsetSettings as $unsetSetting) {
+            if (isset($paymentSetting[$unsetSetting])) {
+                unset($paymentSetting[$unsetSetting]);
+            }
+        }
         $paymentEnabled = 0;
         $defaultPayments = array(
             'alipay_enabled',
             'wxpay_enabled',
-            'llpay_enabled',
-            'heepay_enabled',
-            'quickpay_enabled',
             'llpay_enabled',
         );
         foreach ($defaultPayments as $defaultPayment) {
@@ -211,15 +226,106 @@ class EduSohoUpgrade extends AbstractUpdater
                 $paymentEnabled = 1;
             }
         }
-        if (isset($paymentSetting['disabled_message'])) {
-            unset($paymentSetting['disabled_message']);
-        }
+
         $paymentSetting['enabled'] = $paymentEnabled;
         $this->getSettingService()->set('payment', $paymentSetting);
-        
+
         $this->logger('info', 'payment设置更新完成');
 
         return 1;
+    }
+
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if (isset($package['error'])) {
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->logger('warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '升级'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if (isset($package['error'])) {
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install', 0);
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->logger('warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '升级完毕');
+        return $page + 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            array(
+                'ChargeCoin',
+                1285,
+            ),
+            array(
+                'Vip',
+                1284
+            ),
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
     }
 
     protected function generateIndex($step, $page)
@@ -231,6 +337,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $step = intval($index / 1000000);
         $page = $index % 1000000;
+
         return array($step, $page);
     }
 
@@ -238,6 +345,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -245,6 +353,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "SHOW TABLES LIKE '{$table}'";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -252,6 +361,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -300,6 +410,14 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createDao('Scheduler:JobDao');
     }
+
+    /**
+     * @return \Biz\CloudPlatform\Service\AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
 }
 
 abstract class AbstractUpdater
@@ -331,7 +449,7 @@ abstract class AbstractUpdater
     protected function logger($level, $message)
     {
         $version = \AppBundle\System::VERSION;
-        $data = date('Y-m-d H:i:s') . " [{$level}] {$version} " . $message . PHP_EOL;
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
         if (!file_exists($this->getLoggerFile())) {
             touch($this->getLoggerFile());
         }
@@ -340,6 +458,6 @@ abstract class AbstractUpdater
 
     private function getLoggerFile()
     {
-        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
     }
 }
