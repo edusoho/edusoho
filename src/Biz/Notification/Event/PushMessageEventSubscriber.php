@@ -85,6 +85,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'course-set.delete' => 'onCourseDelete',
             'course-set.closed' => 'onCourseDelete',
 
+            'open.course.publish' => 'onOpenCourseCreate',
+            'open.course.delete' => 'onOpenCourseDelete',
+            'open.course.close' => 'onOpenCourseDelete',
+            'open.course.update' => 'onOpenCourseUpdate',
+
             //教学计划购买
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onCourseQuit',
@@ -1797,7 +1802,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'category' => 'openCourse',
                 'id' => $openCourse['id'],
             );
-            $this->createSearchJob('update', $args);
+            $this->createSearchJob('delete', $args);
         }
     }
 
@@ -1807,7 +1812,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $course = $subject['course'];
         $course = $this->convertOpenCourse($course);
 
-        if ($this->isCloudSearchEnabled()) {
+        if ($this->isCloudSearchEnabled() && 'published' == $course['status']) {
             $args = array(
                 'category' => 'openCourse',
             );
