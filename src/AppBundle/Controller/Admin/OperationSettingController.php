@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class OperationSettingController extends BaseController
 {
@@ -21,7 +22,10 @@ class OperationSettingController extends BaseController
 
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
             $this->getSettingService()->set('wap', $wapSetting);
-            $this->getSettingService()->delete('meCount');
+            $result = CloudAPIFactory::create('leaf')->get('/me');
+            if (empty($result['error'])) {
+                $this->getSettingService()->set('meCount', $result);
+            }
             $this->getLogService()->info('system', 'update_settings', '更新WAP设置', $wapSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
