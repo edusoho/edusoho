@@ -85,7 +85,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'course-set.delete' => 'onCourseDelete',
             'course-set.closed' => 'onCourseDelete',
 
-            'open.course.publish' => 'onOpenCourseUpdate',
+            'open.course.publish' => 'onOpenCourseCreate',
             'open.course.delete' => 'onOpenCourseDelete',
             'open.course.close' => 'onOpenCourseDelete',
             'open.course.update' => 'onOpenCourseUpdate',
