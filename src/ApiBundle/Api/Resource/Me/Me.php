@@ -14,11 +14,31 @@ class Me extends AbstractResource
         $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($profile, $user);
-        $user['vip'] = null;
+        $this->appendUser($user);
+
+        return $user;
+    }
+
+    private function appendUser(&$user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = array_merge($profile, $user);
+
         if ($this->isPluginInstalled('vip')) {
-            $apiRequest = new ApiRequest('/api/plugins/vip/vip_users/'.$user['id'], 'GET');
-            $user['vip'] = $this->invokeResource($apiRequest);
+            $vip = $this->service('VipPlugin:Vip:VipService')->getMemberByUserId($user['id']);
+            $level = $this->service('VipPlugin:Vip:LevelService')->getLevel($vip['levelId']);
+            if ($vip) {
+                $user['vip'] = array(
+                    'levelId' => $vip['levelId'],
+                    'vipName' => $level['name'],
+                    'deadline' => date('c', $vip['deadline']),
+                    'seq' => $level['seq'],
+                );
+            } else {
+                $user['vip'] = null;
+            }
         }
+
 
         return $user;
     }
@@ -29,13 +49,5 @@ class Me extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
-    }
-
-    /**
-     * @return VipService
-     */
-    private function getVipService()
-    {
-        return $this->service('VipPlugin:Vip:VipService');
     }
 }
