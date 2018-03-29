@@ -52,10 +52,12 @@ class StudentExporter extends Exporter
 
     public function getContent($start, $limit)
     {
+        $course = $this->getCourseService()->getCourse($this->parameter['courseId']);
+        $translator = $this->container->get('translator');
         $gender = array(
-            'female' => $this->container->get('translator')->trans('user.fields.gender.female'),
-            'male' => $this->container->get('translator')->trans('user.fields.gender.male'),
-            'secret' => $this->container->get('translator')->trans('user.fields.gender.secret'),
+            'female' => $translator->trans('user.fields.gender.female'),
+            'male' => $translator->trans('user.fields.gender.male'),
+            'secret' => $translator->trans('user.fields.gender.secret'),
         );
 
         $courseMembers = $this->getCourseMemberService()->searchMembers(
@@ -67,13 +69,11 @@ class StudentExporter extends Exporter
 
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
 
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');
 
         foreach ($courseMembers as $key => $member) {
-            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['courseId'], $member['userId']);
+            $progress = $this->getLearningDataAnalysisService()->makeProgress($member['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
             $courseMembers[$key]['learningProgressPercent'] = $progress['percent'];
         }
 
@@ -88,7 +88,7 @@ class StudentExporter extends Exporter
             $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
             $member[] = $courseMember['learningProgressPercent'];
             $member[] = $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] : '-';
-            $member[] = $gender[$profiles[$courseMember['userId']]['gender']].',';
+            $member[] = $gender[$profiles[$courseMember['userId']]['gender']];
             $member[] = $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] : '-';
             $member[] = $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] : '-';
             $member[] = $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] : '-';
