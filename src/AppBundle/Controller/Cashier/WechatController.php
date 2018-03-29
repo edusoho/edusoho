@@ -10,7 +10,9 @@ class WechatController extends PaymentController
 {
     public function wechatJsPayAction(Request $request)
     {
-        $params = $request->query->all();
+        if ($request->query->get('orderSn')) {
+            $request->getSession()->set('wechat_pay_params', $request->query->all());
+        }
 
         $user = $this->getUser();
 
@@ -37,6 +39,8 @@ class WechatController extends PaymentController
             return $this->createMessageResponse('error', '不能使用微信支付，可能是网校未开启微信支付或配置不正确');
         }
 
+        $params = $request->getSession()->get('wechat_pay_params');
+
         $apiKernel = $this->get('api_resource_kernel');
         $apiRequest = new ApiRequest(
             '/api/trades',
@@ -44,7 +48,7 @@ class WechatController extends PaymentController
             array(),
             array(
                 'gateway' => 'WechatPay_Js',
-                'type' => empty($params['type']) ? 'purchase' : $params['type'],
+                'type' => $request->query->get('type', 'purchase'),
                 'openid' => $openid,
                 'orderSn' => empty($params['orderSn']) ? '' : $params['orderSn'],
                 'coinAmount' => empty($params['coinAmount']) ? 0 : $params['coinAmount'],
