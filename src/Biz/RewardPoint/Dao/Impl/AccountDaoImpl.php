@@ -16,9 +16,16 @@ class AccountDaoImpl extends GeneralDaoImpl implements AccountDao
         return $this->db()->executeUpdate($sql, array($userId));
     }
 
-    public function getByUserId($userId)
+    public function getByUserId($userId, $potions = array())
     {
-        return $this->getByFields(array('userId' => $userId));
+        $lock = isset($options['lock']) && true === $options['lock'];
+
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
+        if ($lock) {
+            $sql .= ' FOR UPDATE';
+        }
+
+        return $this->db()->fetchAssoc($sql, array($userId));
     }
 
     public function waveBalance($id, $value)
