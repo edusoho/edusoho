@@ -39,6 +39,10 @@ abstract class BuyFlowController extends BaseController
             ));
         }
 
+        if ($this->needOpenPayment($id)) {
+            return $this->render('buy-flow/payments-disabled-modal.html.twig');
+        }
+
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
@@ -83,6 +87,11 @@ abstract class BuyFlowController extends BaseController
     }
 
     protected function needApproval($id)
+    {
+        return false;
+    }
+
+    protected function needOpenPayment($id)
     {
         return false;
     }

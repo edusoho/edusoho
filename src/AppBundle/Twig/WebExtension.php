@@ -163,6 +163,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
             new \Twig_SimpleFunction('canSendMessage', array($this, 'canSendMessage')),
+            new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader'))
         );
     }
 
@@ -1780,6 +1781,16 @@ class WebExtension extends \Twig_Extension
         }
 
         if (empty($messageSetting['studentToTeacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->getSetting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
             return false;
         }
 

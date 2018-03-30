@@ -36,8 +36,6 @@ class DoHomeworkType extends Type
                     $result = array();
                     if ('none' != $homeworkResult['passedStatus']) {
                         $result['success'] = ('passed' == $homeworkResult['passedStatus']) ? true : false;
-                    } else {
-                        $result = (object) $result;
                     }
 
                     $pushStatements[] = $sdk->finishHomework($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);

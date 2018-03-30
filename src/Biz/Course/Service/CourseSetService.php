@@ -274,5 +274,5 @@ interface CourseSetService
      */
     public function cloneCourseSet($courseSetId, $params);
 
-    public function refreshMonthStudentNum();
+    public function refreshHotSeq();
 }

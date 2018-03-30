@@ -77,7 +77,7 @@ class WechatController extends PaymentController
         $tradeSn = $request->query->get('tradeSn');
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
-        if ($trade['status'] == 'created' || $trade['status'] == 'paying') {
+        if ('created' == $trade['status'] || 'paying' == $trade['status']) {
             $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($tradeSn);
 
             return $this->render(

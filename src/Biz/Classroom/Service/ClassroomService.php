@@ -117,6 +117,8 @@ interface ClassroomService
 
     public function searchMemberCount($conditions);
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
     public function getClassroomMember($classroomId, $userId);
 
     public function remarkStudent($classroomId, $userId, $remark);
@@ -192,4 +194,6 @@ interface ClassroomService
     public function findMembersByMemberIds($ids);
 
     public function tryFreeJoin($classroomId);
+
+    public function refreshClassroomHotSeq();
 }
