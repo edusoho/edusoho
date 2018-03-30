@@ -427,11 +427,11 @@ class TagServiceTest extends BaseTestCase
         $this->mockBiz('Taxonomy:TagOwnerDao', array(
             array(
                 'functionName' => 'findByTagIdsAndOwnerType',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
-        $result = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType(array(1,2,3), 'classroom');
+        $result = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType(array(1, 2, 3), 'classroom');
         $this->assertEmpty($result);
     }
 
@@ -440,15 +440,15 @@ class TagServiceTest extends BaseTestCase
         $this->mockBiz('Taxonomy:TagOwnerDao', array(
             array(
                 'functionName' => 'findByTagIdsAndOwnerType',
-                'returnValue' => array(array('id' => 1, 'ownerId' => 2, 'tagId' => 1, 'ownerType' => 'classroom'), array('id' => 2, 'ownerId' => 3, 'tagId' => 2, 'ownerType' => 'classroom'),array('id' => 3, 'ownerId' => 3, 'tagId' => 1, 'ownerType' => 'classroom'))
-            )
+                'returnValue' => array(array('id' => 1, 'ownerId' => 2, 'tagId' => 1, 'ownerType' => 'classroom'), array('id' => 2, 'ownerId' => 3, 'tagId' => 2, 'ownerType' => 'classroom'), array('id' => 3, 'ownerId' => 3, 'tagId' => 1, 'ownerType' => 'classroom')),
+            ),
         ));
 
-        $result = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType(array(1,2), 'classroom');
+        $result = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType(array(1, 2), 'classroom');
 
         $this->assertEquals(1, count($result));
     }
-    
+
     public function testFindTagIdsByOwnerTypeAndOwnerIds()
     {
         $ownerId = 1;

@@ -372,7 +372,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         return array_keys($ownerTagCount);
     }
-    
+
     public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
     {
         $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerIds($ownerType, $ids);
