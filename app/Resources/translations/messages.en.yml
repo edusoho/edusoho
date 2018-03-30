@@ -5569,6 +5569,12 @@ admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
 admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+
+admin.user_center.message_title_name: Message setting
+admin.user_center.message_student_to_student: Allow student to student send message
+admin.user_center.message_student_to_teacher: Allow student to teacher send message
+admin.user_center.message_teacher_to_student: Allow teacher to student send message
+
 admin.role_manage.keyword_type: '-- Keyword type--'
 admin.role_manage.nameLike: 'Role name'
 admin.role_manage.codeLike: Coding

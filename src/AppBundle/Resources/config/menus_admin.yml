@@ -887,6 +887,9 @@ admin:
                         admin_setting_avatar:
                             name: admin.system.user.avatar_tab
                             disable: true
+                        admin_setting_user_message:
+                            name: admin.system.user.message
+                            disable: true
                 admin_roles:
                     name: admin.system.roles_menu
                     children:
