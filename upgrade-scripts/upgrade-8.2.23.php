@@ -222,7 +222,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'llpay_enabled',
         );
         foreach ($defaultPayments as $defaultPayment) {
-            if ($paymentSetting[$defaultPayment]) {
+            if (!empty($paymentSetting[$defaultPayment])) {
                 $paymentEnabled = 1;
             }
         }
