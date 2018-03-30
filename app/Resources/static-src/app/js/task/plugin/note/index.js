@@ -4,7 +4,7 @@ let heigth = ($('.js-sidebar-pane').height() - 175);
 let $content = $('#note-content-field');
 let lastNoteContent;
 let editor = CKEDITOR.replace('note-content-field', {
-  toolbar: 'Simple',
+  toolbar: 'Minimal',
   fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
   allowedContent: true,
