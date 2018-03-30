@@ -2,7 +2,7 @@
   <div class="chapter-item clearfix">
     <div class="item-line"></div>
     <div class="item-content">
-      <span class="lesson-unpublish-status js-lesson-unpublish-status{% if lesson.status == 'published' %}hidden{% endif %}">
+      <span class="lesson-unpublish-status js-lesson-unpublish-status {% if lesson.status == 'published' %}hidden{% endif %}">
       {{'course.plan_task.task_unpublished'|trans}}</span>
 
       <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not lesson.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
