@@ -30,6 +30,7 @@ class TableCommand extends AbstractCommand
             'scheduler_add_job_fired_index',
             'scheduler_add_message_and_trace',
             'scheduler_add_job_process',
+            'scheduler_delete_fired_log_job',
         );
 
         foreach ($migrations as $migration) {

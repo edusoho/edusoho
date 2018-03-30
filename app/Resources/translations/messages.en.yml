@@ -267,6 +267,7 @@ form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
+form.btn.know: Know
 form.btn.return: Back
 form.btn.cancel: Cancel
 form.btn.confirm: Confirm
@@ -767,6 +768,8 @@ course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
 buy.approve_tips: 'You need to verify your id before buying.'
+buy.payments_disabled_title: Open payment function reminder
+buy.payments_disabled_tips: Since the online school does not open any payment function, the current product does not support purchase. Please contact the online school to open the payment function before purchasing.
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
@@ -2718,14 +2721,18 @@ teacher.content_title: 'All teachers'
 teacher.promoted_teacher.content_title: 'Teacher Info'
 teacher.promoted_teacher.see_ben: 'View teacher''s homepage'
 custom_page.empty: 'The current page has not been edited yet ,please edit in the control panel'
-search.empty: 'Cannot find related courses, please change your keyword.'
+search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
-search.relative_courses_result: 'Total <span>%count%</span> courses with <span>“%keywords%”</span>'
-search.result_course_copy: 'Total <span>%count%</span> courses'
+search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
+search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
+search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
 search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
 search.live_courses: 'Live courses'
+search.all_classrooms: 'All %classroom%'
+search.free_classrooms: 'Free %classroom%'
 cloud_file.preview: 'File preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -2777,6 +2784,15 @@ cloud_search.course.learned: '(%studentNum%) students are learning'
 cloud_search.course.task: Lesson
 cloud_search.course.recommend.content_title: 'Recommend courses'
 cloud_search.course.recommend.empty: 'Sorry, no Recommend course now.'
+
+cloud_search.classroom: Classroom
+cloud_search.classroom.result: >
+  Have Find <span class="color-danger">%counts%</span>%classroom%(s).
+cloud_search.classroom.evaluate: %ratingNum% review
+cloud_search.classroom.learned: (%studentNum%) learned
+cloud_search.classroom.recommend.content_title: Recommended %classroom%
+cloud_search.classroom.recommend.empty: No Recommend %classroom%
+
 cloud_search.teacher: Teachers
 cloud_search.teacher.result: 'Have found <span class="color-danger">%counts%</span> teacher(s)'
 cloud_search.teacher.recommend.content_title: 'Recommend teachers'
@@ -5953,7 +5969,10 @@ admin.invite_setting.invite_infomation_template: 'Invitation templates'
 admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
-admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p>'
+admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
+
+admin.payment_setting.open_help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
+admin.payment_setting.close_help.tips: 'Tip: Closing the payment function will result in users of the school cannot be purchased.'
 admin.payment_setting.alipay: Alipay
 admin.payment_setting.pay_disabled_tips: 'Tips when close the payment'
 admin.payment_setting.payment_hint: 'If turned on, the site revenue will transfer automatically to configured alipay account, wechat pay account or online banking account.'
@@ -5961,6 +5980,11 @@ admin.payment_setting.payment: 'Payment function'
 admin.payment_setting.api_status: 'Interface status'
 admin.payment_setting.api_type: 'Interface type'
 admin.payment_setting.alipay_api_type.direct: 'PC website payments'
+admin.payment_setting.alipay_api_type.direct.hint: >
+  <span class="warning-state">Computer Browser</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
+admin.payment_setting.alipay_api_type.mobile: Mobile Website Payment Interface
+admin.payment_setting.alipay_api_type.mobile.hint: >
+  <span class="warning-state">Mobile browser</span> and <span class="warning-state">KuoZhi School</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
@@ -5991,11 +6015,14 @@ admin.payment_setting.wxpay_application_tips: ''
 admin.payment_setting.wxpay_appid_word: 'AppID from <a target="_blank" href="%wxpayUrl%"> wechat public platform </a> "development" - "Basic configuration"'
 admin.payment_setting.wxpay_secret_word: 'If you need support in wechat payment, you have to fill in. AppSecret from <a target=, "_blank" HREF = "%wxpayUrl%" > wechat public platforms </a>  "development"-" Basic configuration "'
 admin.payment_setting.wxpay_secret: 'MP File verification code'
-admin.payment_setting.wxpay_mp_secret_hint: 'Please fill the content from MP_verify'
+admin.payment_setting.wxpay_mp_secret_hint: >
+  Please fill the content from MP_verify<a target="_blank" href="%wxpMPHelpUrl%">Get Help</a>
 admin.payment_setting.wxpay_account: 'Mechant account'
 admin.payment_setting.wxpay_account_hint: 'Merchant account from <a target="_blank" href="%wxpayUrl%"> wechat public platform </a> " wechat pay" - "Merchant information"'
 admin.payment_setting.wxpay_key: 'Wechat merchant platform API Key'
 admin.payment_setting.wxpay_key_hint: 'Set wechat merchant platform API Keys in <a href="%wxpayUrl%" target="_blank"> wechat merchant platform </a> "account settings" - "API Security ".'
+admin.payment_setting.submit_error.tips: 'Please open the online school’s payment method as needed'
+
 admin.finance_refund.max_refund_days: 'Refund deadline'
 admin.finance_refund.max_refund_days_hint: 'Users wcan get refund during refund deadline. If the refund deadline is 0, it means refund is disabled. <br/><span style= "color:Red" > The system does not support auto refunds, please contact students to obtain the relevant accounts and process the refund manually.'
 admin.finance_refund.apply_notification: 'Refund Application Notice'
@@ -6954,6 +6981,7 @@ cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成直播回放
+log.action.live.delete_live_activity: 删除直播活动
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

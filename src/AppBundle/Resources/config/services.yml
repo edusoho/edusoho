@@ -153,6 +153,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    web.twig.search_extension:
+        class: AppBundle\Twig\SearchExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
     topxia.timemachine:
         class: AppBundle\Common\TimeMachine
         arguments:    ['Asia/Shanghai']

@@ -3,9 +3,9 @@
 namespace Biz\Classroom\Dao\Impl;
 
 use Biz\Classroom\Dao\ClassroomDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
+class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
 {
     protected $table = 'classroom';
 
@@ -32,12 +32,18 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
         return $this->findInField('id', $ids);
     }
 
+    public function refreshHotSeq()
+    {
+        $sql = "UPDATE {$this->table} set hotSeq = 0;";
+        $this->db()->exec($sql);
+    }
+
     public function declares()
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
-            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum', 'id', 'updatedTime', 'recommendedTime', 'hitNum'),
+            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum', 'id', 'updatedTime', 'recommendedTime', 'hitNum', 'hotSeq'),
             'conditions' => array(
                 'title = :title',
                 'status = :status',

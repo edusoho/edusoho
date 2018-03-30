@@ -313,10 +313,18 @@ class WebExtension extends \Twig_Extension
 
         if ($cdnUrl) {
             $publicUrlPath = $this->container->getParameter('topxia.upload.public_url_path');
+            $themeUrlPath = $this->container->getParameter('topxia.web_themes_url_path');
+            $assetUrlPath = $this->container->getParameter('topxia.web_assets_url_path');
+            $bundleUrlPath = $this->container->getParameter('topxia.web_bundles_url_path');
+            $staticDistUrlPath = $this->container->getParameter('front_end.web_static_dist_url_path');
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
             if ($imgs) {
                 foreach ($imgs[1] as $img) {
-                    if (0 === strpos($img, $publicUrlPath)) {
+                    if (0 === strpos($img, $publicUrlPath)
+                        || 0 === strpos($img, $themeUrlPath)
+                        || 0 === strpos($img, $assetUrlPath)
+                        || 0 === strpos($img, $bundleUrlPath)
+                        || 0 === strpos($img, $staticDistUrlPath)) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }

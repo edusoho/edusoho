@@ -3044,3 +3044,7 @@ course_sort:
     defaults: { _controller: AppBundle:Course/CourseSetManage:courseSort, limit: '' }
     methods: [POST]
 
+client_time_check:
+    path: /client_time_check
+    defaults: { _controller: AppBundle:Default:clientTimeCheck }
+    methods: [POST]

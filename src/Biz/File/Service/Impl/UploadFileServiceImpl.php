@@ -593,7 +593,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $cloudFiles;
     }
 
-    public function countCloudFllesFromLocal($conditions)
+    public function countCloudFilesFromLocal($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 

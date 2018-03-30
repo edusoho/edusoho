@@ -98,6 +98,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
+        $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit);
@@ -720,6 +721,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomMemberDao()->count($conditions);
+    }
+
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getClassroomMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
     public function getClassroomMember($classroomId, $userId)
@@ -2015,6 +2021,31 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findMembersByMemberIds($ids)
     {
         $this->getClassroomMemberDao()->findMembersByMemberIds($ids);
+    }
+
+    public function refreshClassroomHotSeq()
+    {
+        return $this->getClassroomDao()->refreshHotSeq();
+    }
+
+    protected function getOrderBys($order)
+    {
+        if (is_array($order)) {
+            return $order;
+        }
+
+        $typeOrderByMap = array(
+            'hitNum' => array('hitNum' => 'DESC'),
+            'rating' => array('rating' => 'DESC'),
+            'studentNum' => array('studentNum' => 'DESC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
+            'hotSeq' => array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'),
+        );
+        if (isset($typeOrderByMap[$order])) {
+            return $typeOrderByMap[$order];
+        } else {
+            return array('createdTime' => 'DESC');
+        }
     }
 
     /**

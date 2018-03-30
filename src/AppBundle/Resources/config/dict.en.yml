@@ -1,5 +1,6 @@
 searchResultType:
     course: Course
+    classroom: Classroom
     teacher: Teacher
     thread: Topic
     article: Article
@@ -353,6 +354,10 @@ searchCourseType:
     vip: VIP Course
     free: Free Course
     live: Live Course
+
+searchClassroomType:
+    all: All
+    free: Free Classroom
 
 userInfoFields:
     email: Email

@@ -191,6 +191,18 @@ class DefaultController extends BaseController
         return $this->redirectSafely($targetPath);
     }
 
+    public function clientTimeCheckAction(Request $request)
+    {
+        $clientTime = $request->request->get('clientTime');
+        $clientTime = strtotime($clientTime);
+
+        if ($clientTime < time()) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     private function getMeCount()
     {
         $meCount = $this->setting('meCount', false);

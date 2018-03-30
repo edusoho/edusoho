@@ -244,6 +244,23 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEmpty($relatedCourseSets);
     }
 
+    public function testRefreshHotSeq()
+    {
+        $fields = array(
+            'title' => '新课程开始！',
+            'type' => 'normal',
+            'hotSeq' => 10,
+        );
+        $courseSet = $this->getCourseSetDao()->create($fields);
+        $this->assertEquals($fields['hotSeq'], $courseSet['hotSeq']);
+
+        $this->getCourseSetService()->refreshHotSeq();
+
+        $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+
+        $this->assertEquals(0, $result['hotSeq']);
+    }
+
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
@@ -268,5 +285,10 @@ class CourseSetServiceTest extends BaseTestCase
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
     }
 }
