@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Event\Event;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -124,6 +125,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'preLiveActivity' => $preLiveActivity,
             'newLiveActivity' => $liveActivity,
         ));
+
+        $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
 
         return $liveActivity;
     }
