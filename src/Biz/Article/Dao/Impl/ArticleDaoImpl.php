@@ -134,9 +134,6 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'thumb != :thumbNotEqual',
                 'orgCode = :orgCode',
             ),
-            'serializes' => array(
-                'tagIds' => 'delimiter',
-            ),
         );
     }
 }

@@ -785,7 +785,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $tasks = $this->findTasksByChapterId($chapterId);
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         array_walk(

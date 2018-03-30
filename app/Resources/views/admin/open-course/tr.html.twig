@@ -54,7 +54,7 @@
 
         {% if course.status != 'published' and app.user.isSuperAdmin() %}
           <li class="divider"></li>
-          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span>{{ 'admin.open_manage.manage.delete_course_btn'|trans }}</a></li>
+          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span> {{ 'admin.open_manage.manage.delete_course_btn'|trans }}</a></li>
         {% endif %}
       </ul>
     </div>

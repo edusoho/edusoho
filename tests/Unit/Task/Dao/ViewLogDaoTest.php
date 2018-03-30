@@ -9,11 +9,11 @@ class ViewLogDaoTest extends BaseDaoTestCase
     public function testSearchGroupByTime()
     {
         $this->mockDataObject();
-        $results = $this->getDao()->searchGroupByTime(array('fileType' => 'video', 'fileStorage' => 'cloud', 'fileSource' => 'self'), time() - 1000, time() + 1000);
+        $diffTime = 24 * 60 * 60;
+        $results = $this->getDao()->searchGroupByTime(array('fileType' => 'video', 'fileStorage' => 'cloud', 'fileSource' => 'self'), time() - $diffTime, time() + $diffTime);
         $first = reset($results);
 
         $this->assertEquals(1, $first['count']);
-        $this->assertEquals(date('Y-m-d'), $first['date']);
     }
 
     public function getDefaultMockFields()

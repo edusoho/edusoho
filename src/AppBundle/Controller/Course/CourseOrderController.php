@@ -33,9 +33,10 @@ class CourseOrderController extends BaseController
             $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
         }
 
-        if ($course['price'] > 0 && !$this->getEnabledPayments() && !$vipJoinEnabled) {
+        $paymentSetting = $this->setting('payment');
+        if ($course['price'] > 0 && !$paymentSetting['enabled'] && !$vipJoinEnabled) {
             return $this->render(
-                'course/order/payments-disabled.html.twig',
+                'buy-flow/payments-disabled-modal.html.twig',
                 array(
                     'course' => $course,
                 )
@@ -103,29 +104,6 @@ class CourseOrderController extends BaseController
                 'id' => $id,
             )
         );
-    }
-
-    protected function getEnabledPayments()
-    {
-        $enableds = array();
-
-        $setting = $this->setting('payment', array());
-
-        if (empty($setting['enabled'])) {
-            return $enableds;
-        }
-
-        $payment = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $payNames = array_keys($payment);
-        foreach ($payNames as $payName) {
-            if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type'],
-                );
-            }
-        }
-
-        return $enableds;
     }
 
     protected function getRemainStudentNum($course)
