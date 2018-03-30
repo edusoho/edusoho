@@ -3,6 +3,9 @@
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
 use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
+use Biz\Article\Service\ArticleService;
+use Biz\Article\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 
@@ -53,13 +56,13 @@ class Articles extends BaseProvider
 
     protected function buildTags($articles)
     {
-        $tagIdGroups = ArrayToolkit::column($articles, 'tagIds');
-        $tagIds = ArrayToolkit::mergeArraysValue($tagIdGroups);
+        $articleIds = ArrayToolkit::column($articles, 'id');
+        $tagIds = $this->getTagService()->findTagIdsByOwnerTypeAndOwnerIds('article', $articleIds);
+        $groupTagIds = $this->getTagService()->findGroupTagIdsByOwnerTypeAndOwnerIds('article', $articleIds);
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         foreach ($articles as &$article) {
-            $articleTagIds = $article['tagIds'];
+            $articleTagIds = !empty($groupTagIds[$article['id']]) ? $groupTagIds[$article['id']] : array();
             if (!empty($articleTagIds)) {
                 foreach ($articleTagIds as $index => $articleTagId) {
                     if (isset($tags[$articleTagId])) {
@@ -81,7 +84,7 @@ class Articles extends BaseProvider
     }
 
     /**
-     * @return Biz\Article\Service\ArticleService
+     * @return ArticleService
      */
     protected function getArticleService()
     {
@@ -89,15 +92,15 @@ class Articles extends BaseProvider
     }
 
     /**
-     * @return Biz\Taxonomy\Service\CategoryService
+     * @return CategoryService
      */
     protected function getCategoryService()
     {
-        return $this->getBiz()->service('Taxonomy:CategoryService');
+        return $this->getBiz()->service('Article:CategoryService');
     }
 
     /**
-     * @return Biz\Taxonomy\Service\TagService
+     * @return TagService
      */
     protected function getTagService()
     {
