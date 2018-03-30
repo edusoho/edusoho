@@ -145,6 +145,16 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return $payablePrice > 0 ? $payablePrice : 0;
     }
 
+    public function getDeducts()
+    {
+        $deducts = array();
+        foreach ($this->pickedDeducts as $deduct) {
+            $deducts[$deduct['deduct_type']] = $deduct['deduct_amount'];
+        }
+
+        return $deducts;
+    }
+
     public function getMaxCoinAmount()
     {
         return round(($this->maxRate / 100) * $this->getCurrency()->convertToCoin($this->originPrice), 2);

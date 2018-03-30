@@ -1286,12 +1286,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $conditions;
     }
 
-    public function searchCourses($conditions, $sort, $start, $limit)
+    public function searchCourses($conditions, $sort, $start, $limit, $columns = array())
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy = $this->_prepareCourseOrderBy($sort);
 
-        return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突

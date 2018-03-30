@@ -23,7 +23,7 @@ class CloudFileServiceTest2 extends BaseTestCase
         $expectedConditions = array('resType' => 'video', 'targetType' => 'video');
         $this->mockBiz('File:UploadFileService', array(
            array('functionName' => 'searchCloudFilesFromLocal', 'withParams' => array($expectedConditions, array('id' => 'DESC'), 1, 2), 'returnValue' => $mockRemoteResources),
-           array('functionName' => 'countCloudFllesFromLocal', 'withParams' => array($expectedConditions), 'returnValue' => 3),
+           array('functionName' => 'countCloudFilesFromLocal', 'withParams' => array($expectedConditions), 'returnValue' => 3),
         ));
 
         $this->mockBiz('User:UserService', array(

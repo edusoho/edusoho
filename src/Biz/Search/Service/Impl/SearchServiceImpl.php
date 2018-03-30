@@ -58,7 +58,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     public function refactorAllDocuments()
     {
         $api = $this->getCloudApi('root');
-        $conditions = array('categorys' => 'course,user,thread,article');
+        $conditions = array('categorys' => 'course,classroom,user,thread,article');
 
         return $api->post('/search/refactor_documents', $conditions);
     }
@@ -97,6 +97,10 @@ class SearchServiceImpl extends BaseService implements SearchService
                 'category' => 'openLesson',
                 'url' => $siteUrl.'/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
             ),
+            array(
+                'category' => 'classroom',
+                'url' => $siteUrl.'/callback/cloud_search?provider=classrooms&cursor=0&start=0&limit=100',
+            ),
         );
         $urls = urlencode(json_encode($urls));
 
@@ -131,6 +135,7 @@ class SearchServiceImpl extends BaseService implements SearchService
             'status' => 'waiting',
             'type' => array(
                 'course' => 1,
+                'classroom' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,

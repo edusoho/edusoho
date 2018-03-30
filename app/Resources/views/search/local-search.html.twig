@@ -1,0 +1,22 @@
+<div class="course-filter search-filter clearfix cd-mb8" id="course-filter">
+  <ul class="nav nav-pills pull-left" role="tablist">
+    <li role="presentation" class="{% if type == 'course' %}active{% endif %} ml0"><a href="{{ path('search', {q:keywords,type:'course'}) }}">{{ 'cloud_search.course'|trans }}</a></li>
+    <li role="presentation" class="{% if type == 'classroom' %}active{% endif %}">
+      <a href="{{ path('search',{q:keywords,type:'classroom'}) }}">{{ setting('classroom.name')|default('site.default.classroom'|trans) }}</a>
+    </li>
+  </ul>
+  <ul class="nav nav-pills hidden-xs" role="tablist">
+    {% block searchType %}
+    {% endblock %}
+  </ul>
+  <div class="btn-group visible-xs">
+    {% block mobileType %}
+    {% endblock %}
+  </div>
+</div>
+
+{% block tip %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Codeages\Biz\Framework\Util\TimeMachine;
+
 class SchedulerTest extends IntegrationTestCase
 {
     /**
@@ -56,6 +58,25 @@ class SchedulerTest extends IntegrationTestCase
         );
 
         $this->getSchedulerService()->register($job);
+    }
+
+    public function testDeleteJobFired()
+    {
+        TimeMachine::setMockedTime(1521598571);
+        $jobFiredDao = $this->mockBiz(
+            'Scheduler:JobFiredDao',
+            array(
+                array(
+                    'functionName' => 'deleteWhenCreatedTimeBefore',
+                    'withParams' => array(1521512171), //1521598571-60*60*24, 1天前
+                    'returnValue' => 1,
+                ),
+            )
+        );
+
+        $result = $this->getSchedulerService()->deleteJobFired(1);
+        $jobFiredDao->shouldHaveReceived('deleteWhenCreatedTimeBefore')->times(1);
+        $this->assertEquals(1, $result);
     }
 
     public function testCreateJob()

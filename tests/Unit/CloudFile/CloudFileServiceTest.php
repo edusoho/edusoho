@@ -396,7 +396,7 @@ class CloudFileServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'countCloudFllesFromLocal',
+                    'functionName' => 'countCloudFilesFromLocal',
                     'returnValue' => 2,
                 ),
                 array(

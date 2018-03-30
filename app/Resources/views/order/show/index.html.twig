@@ -13,15 +13,14 @@
     data-price-type="{{ currency }}"
     data-coin-rate="{{ setting('coin.cash_rate') }}"
     data-coin-name="{{ setting('coin.coin_name') }}">
-      {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
+      <input type="hidden" name="targetType" value="{{product.targetType}}"/>
+      <input type="hidden" name="targetId" value="{{product.targetId}}"/>
       {% include product.showTemplate %}
-
-      {{ slot('order.show.deducts', {'product': product}) }}
-      
       {% if product.couponEnable|default(true) %}
         {% include 'order/show/coupon-item.html.twig' %}
       {% endif %}
-    
+      
+      {{ slot('order.show.deducts', {'product': product}) }}
       <div class="cd-pv16" id="order-center-price-list">
         <div class="order-center-price">
           <div class="order-center-price__title">{{'order.confirm.price'|trans}}</div>

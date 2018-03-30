@@ -1,5 +1,6 @@
 searchResultType:
     course: 课程
+    classroom: 班级
     teacher: 教师
     thread: 小组话题
     article: 资讯
@@ -371,6 +372,10 @@ searchCourseType:
     vip: 会员课程
     free: 免费课程
     live: 直播课程
+
+searchClassroomType:
+    all: 全部班级
+    free: 免费班级
 
 userInfoFields:
     email: 邮箱地址

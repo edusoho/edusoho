@@ -12,7 +12,8 @@
     <div class="cloud-search-box">
       <form class="input-group search-input-group" id="search-input-group" action="{{ path('search') }}" method="get">
         <div class="input-wrap">
-          <input type="text" name="q" class="form-control" placeholder="{{'cloud_search.input_placeholder'|trans}}" value="{{keywords}}">
+          <input type="text" name="q" class="form-control"
+           placeholder="{{ 'cloud_search.input_placeholder'|trans }}{{ show_search_placeholder() }}" value="{{keywords}}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
@@ -32,8 +33,17 @@
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
         {% for key, nav in cloudSearch.type %}
           {% if nav == 1 %}
-            <li {% if type == key %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : key}) }}" data-type="{{ key }}" >{{('cloud_search.' ~ key)|trans}}</a></li>
+            <li {% if type == key %}class="active" {% endif %}>
+              <a href="{{path('cloud_search',{q : keywords,type : key}) }}" data-type="{{ key }}" >
+                {% if(key == 'classroom') %}
+                  {{ setting('classroom.name')|default(('cloud_search.' ~ key)|trans) }}
+                {% else %}
+                  {{('cloud_search.' ~ key)|trans}}
+                {% endif %}
+              </a>
+            </li>
           {% endif %}
+
         {% endfor %}
         </ul>
         <div class="search-result" id="search-result">

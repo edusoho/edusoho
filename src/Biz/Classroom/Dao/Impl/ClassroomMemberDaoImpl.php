@@ -133,6 +133,19 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
         ));
     }
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("{$groupBy}, COUNT(id) AS count")
+            ->groupBy($groupBy)
+            ->orderBy('count', 'DESC')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     public function declares()
     {
         return array(

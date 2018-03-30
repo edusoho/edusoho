@@ -724,6 +724,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'rating' => array('rating' => 'DESC'),
             'studentNum' => array('studentNum' => 'DESC'),
             'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
+            'hotSeq' => array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'),
         );
         if (isset($typeOrderByMap[$order])) {
             return $typeOrderByMap[$order];
@@ -881,6 +882,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             unset($conditions['categoryId']);
         }
 
+        if (isset($conditions['recommendedSeq'])) {
+            $conditions['recommended'] = 1;
+            unset($conditions['recommendedSeq']);
+        }
+
         return $conditions;
     }
 
@@ -917,6 +923,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         return $relatedCourseSets;
+    }
+
+    public function refreshHotSeq()
+    {
+        return $this->getCourseSetDao()->refreshHotSeq();
     }
 
     protected function getRelatedCourseSetDao()

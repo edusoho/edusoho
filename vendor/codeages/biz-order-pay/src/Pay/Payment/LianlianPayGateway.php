@@ -11,7 +11,7 @@ class LianlianPayGateway extends AbstractGateway
 //    protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 //    protected $wapUrl = 'https://yintong.com.cn/llpayh5/payment.htm';
 
-    protected $url = 'https://cashier.lianlianpay.com/payment/bankgateway.htm';
+    protected $url = 'https://payment.lianlianpay.com/payment/bankgateway.htm';
     protected $wapUrl = 'https://wap.lianlianpay.com/payment.htm';
 
     protected $isWap = false;

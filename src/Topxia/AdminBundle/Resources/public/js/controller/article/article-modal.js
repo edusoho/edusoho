@@ -141,7 +141,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '[name=title]',
       required: true,
-      rule: 'visible_character'
+      rule: 'maxlength{max:255} visible_character'
     });
 
     validator.addItem({

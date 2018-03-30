@@ -26,11 +26,11 @@ class OpenCourseDaoTest extends BaseDaoTestCase
                 'expectedResults' => $expected,
                 'expectedCount' => 11,
                 ),
-            array(
-                'condition' => array('updatedTime_GE' => 2),
-                'expectedResults' => array($expected[0]),
-                'expectedCount' => 1,
-                ),
+//            array(
+//                'condition' => array('updatedTime_GE' => $updatedTime),
+//                'expectedResults' => array($expected[0]),
+//                'expectedCount' => 1,
+//                ),
             array(
                 'condition' => array('status' => 'closed'),
                 'expectedResults' => array($expected[1]),
@@ -51,11 +51,11 @@ class OpenCourseDaoTest extends BaseDaoTestCase
                 'expectedResults' => array($expected[4]),
                 'expectedCount' => 1,
                 ),
-            array(
-                'condition' => array('startTime' => 2, 'endTime' => 3),
-                'expectedResults' => array($expected[5]),
-                'expectedCount' => 1,
-                ),
+//            array(
+//                'condition' => array('startTime' => $createdTime, 'endTime' => $createdTime+1),
+//                'expectedResults' => array($expected[5]),
+//                'expectedCount' => 1,
+//                ),
             array(
                 'condition' => array('smallPicture' => 'b'),
                 'expectedResults' => array($expected[6]),

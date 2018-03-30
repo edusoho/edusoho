@@ -276,6 +276,12 @@ class OpenCourseManageController extends BaseController
         );
         $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
 
+        $canUpdateStartTime = true;
+
+        if (!empty($liveLesson['startTime']) && time() > $liveLesson['startTime']) {
+            $canUpdateStartTime = false;
+        }
+
         if ('POST' == $request->getMethod()) {
             $liveLessonFields = $request->request->all();
 
@@ -288,6 +294,9 @@ class OpenCourseManageController extends BaseController
             $liveLesson['startTime'] = strtotime($liveLessonFields['startTime']);
             $liveLesson['length'] = $liveLessonFields['timeLength'];
             $liveLesson['title'] = $liveCourse['title'];
+            if ($liveLesson['startTime'] < time()) {
+                return $this->createMessageResponse('error', '开始时间应晚于当前时间');
+            }
 
             $routes = array(
                 'authUrl' => $this->generateUrl('live_auth', array(), true),
@@ -317,6 +326,7 @@ class OpenCourseManageController extends BaseController
             array(
                 'course' => $liveCourse,
                 'openLiveLesson' => $liveLesson,
+                'canUpdateStartTime' => $canUpdateStartTime,
             )
         );
     }

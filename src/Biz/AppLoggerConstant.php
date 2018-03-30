@@ -354,6 +354,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::LIVE => array(
                 'update_live_activity',
                 'generate_live_replay',
+                'delete_live_activity',
             ),
         );
     }
