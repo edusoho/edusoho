@@ -1,18 +1,15 @@
 
-import { getRootPath, init } from '../../../util/init.js';
+import { init } from 'test/util/init.js';
 const assert = require('chai').assert;
 const sinon = require('sinon');
 import Api from 'common/api';
 
 let basePament, BasePament;
-describe('pay:payment', function() {
+describe('pay:getTrade', function() {
   before(function() {
     init('');
-    BasePament = require(getRootPath() + '/app/Resources/static-src/app/js/cashier/pay/payment.js').default;
+    BasePament = require('test-src/app/js/cashier/pay/payment.js').default;
     basePament = new BasePament();
-  });
-
-  after(function() {
   });
 
   it('function:getTrade when trade is empty', function() {
@@ -36,7 +33,14 @@ describe('pay:payment', function() {
     apiTradeGet.restore();
     sinon.assert.calledWith(apiTradeGet, expectedParams);
   });
+});
 
+describe('pay:getTrade', function() {
+  before(function() {
+    init('');
+    BasePament = require('test-src/app/js/cashier/pay/payment.js').default;
+    basePament = new BasePament();
+  });
   it('function:startInterval', function() {
     assert.equal(basePament.startInterval(), false);
   });
