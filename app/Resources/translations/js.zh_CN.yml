@@ -307,7 +307,7 @@ auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
 
-card.card_receive_success_hint: 学习卡已使用，充值%coin%虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。
+card.card_receive_success_hint: 学习卡已使用，充值%coinAmount%%coinName%成功，可前往【账户中心】-【我的账户】查看充值情况。
 card.card_receive_failed_hint: 失败!
 
 classroom.cancel_refund_hint: 真的要取消退款吗？
