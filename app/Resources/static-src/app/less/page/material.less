@@ -10,74 +10,12 @@
     border: solid 2px #eee;
 }
 
-.stats-summary .piece.border-sm-left {
-    border-left-width: 1px;
-}
-
-.stats-summary .piece.border-sm-top {
-    border-top-width: 1px;
-}
-
-.stats-summary .piece.border-sm-right {
-    border-right-width: 1px;
-}
-
-.stats-summary .piece.border-sm-bottom {
-    border-bottom-width: 1px;
-}
-
 .stats-summary .piece:hover {
     border: solid 2px #499AE6;
 }
 
 .stats-summary .piece.active {
     border: solid 2px #499AE6;
-}
-
-.stats-summary .piece .quantum {
-    padding: 20px;
-}
-
-.stats-summary .piece .quantum .p-text {
-    font-size: 16px;
-}
-
-.stats-summary .piece .quantum .number {
-    color: #499AE6;
-    font-weight: 500;
-}
-
-.materiallib-stats .pie-container {
-    padding: 15px;
-}
-
-.pie-container .left {
-    padding-left: 0;
-    padding-right: 5px;
-}
-
-.pie-container .right {
-    padding-left: 5px;
-    padding-right: 0;
-}
-
-.pie-container .pie {
-    padding: 0;
-    height: 460px;
-    border: solid 4px #eee;
-}
-
-.materiallib-stats .line-container {
-    padding: 15px;
-}
-
-.line-container .container {
-    padding: 0;
-}
-
-.line-container .line {
-    border: solid 4px #eee;
-    height: 300px;
 }
 
 .materiallib-stats .chart {
@@ -120,14 +58,11 @@
   margin-bottom: 20px;
 }
 
-.my-materials-list .materials-ul {
-  height: 200px;
-}
 
 .materials-ul {
+  margin-bottom: 24px;
   border: solid 1px #eee;
   padding-left: 0;
-  height: 218px;
   background: #fafafa;
 }
 
@@ -172,6 +107,7 @@
 
 .materials-ul li.caption {
   padding: 8px 10px;
+  line-height: 1;
 }
 
 .materials-ul li.caption p.tags, .materials-ul li.caption p.date {
@@ -375,7 +311,9 @@
 .materials-ul {
   .img-li {
     position: relative;
-    height: 103px;
+    @media (min-width: @screen-xs-max) {
+      height: 176px;
+    }
     img {
       height: 100%;
     }
@@ -411,11 +349,16 @@
         }
       }
       .btn-operation {
+        position: absolute;
+        top: 40%;
+        left: 35%;
         text-align: center;
-        margin-top: 5px;
         height: 35px;
       }
       .time {
+        position: absolute;
+        right: 0;
+        bottom: 0;
         height: 22px;
         padding: 5px 2px;
         font-size: 12px;

@@ -19,7 +19,7 @@
     <li>
       <a class='js-publish-item {% if isPublish %}hidden{% endif %}' href="javascript:;"
         data-url="{{ path('course_manage_lesson_publish', {lessonId:lesson.id, courseId:task.courseId}) }}">
-        {{'course.plan_task.publish_btn'|trans}}
+        {{'course.plan_task.publish_btn'|trans}}{{ 'course.lesson'|trans }}
       </a>
     </li>
     <li>
@@ -34,7 +34,7 @@
     </li>
     <li>
       <a class='js-delete {% if isPublish %}hidden{% endif %}' href="javascript:;" data-name="{{ ('site.data.lesson')|trans }}" data-url="{{ path('course_manage_lesson_delete', {lessonId:lesson.id, courseId:task.courseId}) }}">
-        {{'course.plan_task.delete_btn'|trans}}
+        {{'course.plan_task.delete_btn'|trans}}{{ 'course.lesson'|trans }}
       </a>
     </li>
     {{ slot('task.menu.extension', {'task': task}) }}

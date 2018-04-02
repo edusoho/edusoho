@@ -1264,7 +1264,6 @@ course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
 course.student_member: 学员人数
-course.learn_plan: 学习计划
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
@@ -2465,7 +2464,7 @@ classroom.set_head_teacher_tips: 班主任负责管理整个%name%，班主任�
 classroom.set_teacher: 设置教师
 classroom.set_teacher_tips: >
   <div>相关页面中的老师列举将会按照这里设定的顺序显示。</div>
-  <div>教学服务团队成员有权制订学习计划、答疑、批阅作业/试卷、发起活动。</div>
+  <div>教学服务团队成员有权制订教学计划、答疑、批阅作业/试卷、发起活动。</div>
   <div>注：班级教师来源课程教师，无法主动添加</div>
 classroom.set_teacher_empty: 还没有教师!赶紧去设置课程吧！
 classroom.create_course_btn: 添加课程
