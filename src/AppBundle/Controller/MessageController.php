@@ -100,6 +100,9 @@ class MessageController extends BaseController
             if (empty($receiver)) {
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
+                throw $this->createAccessDeniedException("You're not allowed to send message to {$receiver['id']}");
+            }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
             return $this->redirect($this->generateUrl('message'));
