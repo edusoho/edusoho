@@ -72,15 +72,15 @@ class CategoryController extends BaseController
         return $subCategories;
     }
 
-    protected function makeThirdCategories($category)
+    protected function makeThirdCategories($selectedSubCategory)
     {
         $thirdCategories = array();
 
-        if (empty($category['subCategory'])) {
+        if (empty($selectedSubCategory)) {
             return $thirdCategories;
         }
 
-        $parentCategory = $this->getCategoryService()->getCategoryByCode($category['subCategory']);
+        $parentCategory = $this->getCategoryService()->getCategoryByCode($selectedSubCategory);
 
         if (empty($parentCategory)) {
             return $thirdCategories;
@@ -99,7 +99,7 @@ class CategoryController extends BaseController
 
         $subCategories = $this->makeSubCategories($category);
 
-        $thirdLevelCategories = $this->makeThirdCategories($category);
+        $thirdLevelCategories = $this->makeThirdCategories($selectedSubCategory);
 
         return $this->render('category/explore-nav.html.twig', array(
             'selectedCategory' => $category,
