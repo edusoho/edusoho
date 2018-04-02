@@ -6,12 +6,12 @@ const sinon = require('sinon');
 import Api from 'common/api';
 let ajax = require('test-src/common/api/ajax.js').default;
 
-describe('common:ajax', function() {
+describe('common/api/ajax:ajax', function() {
   before(function() {
     init('');
   });
 
-  it('ajax:promise = true', function() {
+  it('promise = true', function() {
     let ajaxStub = sinon.stub($, 'ajax').returns('test');
     ajax({
     }).then(res => {
@@ -28,7 +28,7 @@ describe('common:ajax', function() {
     sinon.assert.calledWithMatch(ajaxStub, expectedParams);
   });
 
-  it('ajax:promise = false', function() {
+  it('promise = false', function() {
     let ajaxStub = sinon.stub($, 'ajax').returns('test1');
     let result = ajax({
       promise: false,
@@ -45,5 +45,4 @@ describe('common:ajax', function() {
     ajaxStub.restore();
     sinon.assert.calledWithMatch(ajaxStub, expectedParams);
   });
-
 });
