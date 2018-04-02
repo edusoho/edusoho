@@ -12,6 +12,7 @@ use AppBundle\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class BaseController extends Controller
 {
@@ -292,6 +293,11 @@ class BaseController extends Controller
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
     {
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
+    }
+
+    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
+    {
+        return new AccessDeniedException($message, 403, $previous);
     }
 
     /**
