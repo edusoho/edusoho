@@ -12,7 +12,7 @@ $('body').on('click', '.money-card-use', function () {
   let coinAmount = $('.card-coin-val').val();
 
   $.post(url, function (response) {
-    notify('success', Translator.trans('card.card_receive_success_hint', {coin:coinAmount, coinName: coinName}));
+    notify('success', Translator.trans('card.card_receive_success_hint', {coinAmount: coinAmount, coinName: coinName}));
     setTimeout('window.location.href = \'' + target_url + '\'', 2000);
   }).error(function () {
     notify('danger', Translator.trans('失败！'));

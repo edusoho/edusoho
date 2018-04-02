@@ -8,7 +8,7 @@ if ($('a').hasClass('money-card-use')) {
   let coinAmount = $('.card-coin-val').val();
 
   $.post(url, function (response) {
-    notify('success',Translator.trans('card.card_receive_success_hint', {coin:coinAmount, coinName: coinName}));
+    notify('success',Translator.trans('card.card_receive_success_hint', {coinAmount: coinAmount, coinName: coinName}));
     setTimeout('window.location.href = \'' + targetUrl + '\'', 2000);
   }).error(function () {
     notify('danger',Translator.trans('card.card_receive_failed_hint'));
