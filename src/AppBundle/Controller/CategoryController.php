@@ -111,7 +111,7 @@ class CategoryController extends BaseController
             'tagGroups' => $tagGroups,
             'tags' => $tags,
             'group' => $group,
-            'request' => $request
+            'request' => $request,
         ));
     }
 
