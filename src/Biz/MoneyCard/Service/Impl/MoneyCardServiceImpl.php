@@ -146,7 +146,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
 
-                $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员作废，详情请联系管理员。";
+                $message = "您的一张价值为{$batch['coin']}{$this->getCoinName()}的学习卡已经被管理员作废，详情请联系管理员。";
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -181,7 +181,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
                 $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
-                $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员启用。";
+                $message = "您的一张价值为{$batch['coin']}{$this->getCoinName()}的学习卡已经被管理员启用。";
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             } else {
@@ -205,7 +205,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         if (!empty($card)) {
             $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
-            $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员删除，详情请联系管理员。";
+            $message = "您的一张价值为{$batch['coin']}{$this->getCoinName()}的学习卡已经被管理员删除，详情请联系管理员。";
 
             $this->getNotificationService()->notify($card['userId'], 'default', $message);
         }
@@ -245,7 +245,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
 
-                $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员作废，详情请联系管理员。";
+                $message = "您的一张价值为{$batch['coin']}{$this->getCoinName()}的学习卡已经被管理员作废，详情请联系管理员。";
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -298,7 +298,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             if (!empty($card) && 'invalid' == $card['status']) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
                 $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
-                $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员启用。";
+                $message = "您的一张价值为{$batch['coin']}{$this->getCoinName()}的学习卡已经被管理员启用。";
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -329,13 +329,20 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
-                $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员删除，详情请联系管理员。";
+                $message = "您的一张价值为{$batch['coin']}{$this->getCoinName()}的学习卡已经被管理员删除，详情请联系管理员。";
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
         }
 
         $this->getLogService()->info('money_card', 'batch_delete', "删除了批次为{$id}的充值卡");
+    }
+
+    private function getCoinName()
+    {
+        $coin = $this->getSettingService()->get('coin');
+
+        return empty($coin['coin_name']) ? '虚拟币' : $coin['coin_name'];
     }
 
     protected function makeRands($median, $number, $cardPrefix, $passwordLength)
@@ -586,7 +593,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     'receivedNumber' => $receivedNumber,
                 ));
 
-                $message = "您有一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的充值卡领取成功";
+                $message = "您有一张价值为{$batch['coin']}{$this->getCoinName()}的充值卡领取成功";
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 $this->dispatchEvent('moneyCard.receive', $batch);
             }
