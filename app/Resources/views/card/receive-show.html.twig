@@ -1,5 +1,6 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script(['app/js/card/card-receive/index.js'])%}
+{% set coin = setting('coin') %}
 
 {#登录后#}
 {% if app.user %}
