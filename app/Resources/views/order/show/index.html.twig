@@ -15,6 +15,7 @@
     data-coin-name="{{ setting('coin.coin_name') }}">
       <input type="hidden" name="targetType" value="{{product.targetType}}"/>
       <input type="hidden" name="targetId" value="{{product.targetId}}"/>
+      <input type="hidden" name="price" value="{{product.getPayablePrice()}}"/>
       {% include product.showTemplate %}
       {% if product.couponEnable|default(true) %}
         {% include 'order/show/coupon-item.html.twig' %}
