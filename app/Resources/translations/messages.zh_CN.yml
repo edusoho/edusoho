@@ -1665,7 +1665,6 @@ course.plan_task.add_chapter_btn: 添加%chapter_name%
 course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 添加%part_name%
 course.plan_task.edit_part_btn: 编辑%part_name%
-
 course.plan_task.edit_btn: 编辑
 course.plan_task.preview_btn: 预览
 course.plan_task.more_btn: 更多
