@@ -115,7 +115,7 @@ abstract class Exporter implements ExporterInterface
         if (!is_array($magic)) {
             $magic = array();
         }
-        
+
         if (empty($magic['export_limit'])) {
             $magic['export_limit'] = 1000;
         }
