@@ -1529,7 +1529,7 @@ course.testpaper_manage.empty: >
 course.testpaper_manage.delete_btn: 删除
 course.testpaper_manage.tips: >
   提示：试卷一旦发布不能修改，发布后的试卷需要
-  <strong class="color-warning">添加到任务</strong>
+  <strong class="color-warning">添加到活动</strong>
   中才能正常使用。
 course.testpaper_manage.score: %score%分
 course.testpaper_manage.passed_condition: 及格%passedCondition%分
