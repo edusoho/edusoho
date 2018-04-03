@@ -6,7 +6,7 @@ import Api from 'common/api';
 
 let basePament, BasePament;
 describe('app/js/cashier/pay/payment:getTrade', function() {
-  before(function() {
+  beforeEach(function() {
     init('');
     BasePament = require('test-src/app/js/cashier/pay/payment.js').default;
     basePament = new BasePament();
