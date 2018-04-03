@@ -112,6 +112,10 @@ abstract class Exporter implements ExporterInterface
     protected function getPageConditions()
     {
         $magic = $this->getSettingService()->get('magic', array());
+        if (!is_array($magic)) {
+            $magic = array();
+        }
+        
         if (empty($magic['export_limit'])) {
             $magic['export_limit'] = 1000;
         }
