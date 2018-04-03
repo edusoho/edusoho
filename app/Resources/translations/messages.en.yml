@@ -1476,6 +1476,7 @@ course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
 course.plan_task.total_tasks: 'Lessons in total:'
+course.plan_total_members: 学员总数
 course.plan_task.everyday_finish_tasks: >
   日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
 course.plan_lesson.hidden: 前台隐藏未发布课时
