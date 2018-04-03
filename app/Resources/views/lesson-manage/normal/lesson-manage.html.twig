@@ -1,5 +1,5 @@
 <a class="cd-mr24" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {courseId:course.id, lessonId:lesson.id}) }}">
-  <i class="es-icon es-icon-edit"></i>
+  <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'my.teaching.open_course.lesson.modal.edit'|trans }}" data-placement="top"></i>
 </a>
 
 <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
@@ -10,7 +10,7 @@
   <ul class="dropdown-menu task-manage-item__dropdown">
     <li>
       <a class='js-publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
-        {{'course.plan_task.publish_btn'|trans}}
+        {{'course.plan_task.publish_btn'|trans}}{{ 'course.lesson'|trans }}
       </a>
     </li>
     <li>
@@ -30,7 +30,7 @@
     </li>
     <li>
       <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
-        {{ 'form.btn.delete'|trans }}
+        {{ 'form.btn.delete'|trans }}{{ 'course.lesson'|trans }}
       </a>
     </li>
   </ul>

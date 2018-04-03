@@ -1264,7 +1264,6 @@ course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
 course.student_member: 学员人数
-course.learn_plan: 学习计划
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
@@ -1530,7 +1529,7 @@ course.testpaper_manage.empty: >
 course.testpaper_manage.delete_btn: 删除
 course.testpaper_manage.tips: >
   提示：试卷一旦发布不能修改，发布后的试卷需要
-  <strong class="color-warning">添加到任务</strong>
+  <strong class="color-warning">添加到活动</strong>
   中才能正常使用。
 course.testpaper_manage.score: %score%分
 course.testpaper_manage.passed_condition: 及格%passedCondition%分
@@ -1656,6 +1655,7 @@ course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
 course.plan_task.total_tasks: 课时总数：
+course.plan_total_members: 学员总数：
 course.plan_task.published_lessons: 已发布课时数：
 course.plan_task.unpublished_lessons: 未发布课时数：
 course.plan_task.everyday_finish_tasks: >
@@ -1664,7 +1664,9 @@ course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: 任务
 course.plan_task.batch_create_btn: 批量添加
 course.plan_task.add_chapter_btn: 添加%chapter_name%
+course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 添加%part_name%
+course.plan_task.edit_part_btn: 编辑%part_name%
 course.plan_task.edit_btn: 编辑
 course.plan_task.preview_btn: 预览
 course.plan_task.more_btn: 更多
@@ -1729,8 +1731,9 @@ course.plan_task.activity_manage.setup_content: >
 course.plan_task.activity_manage.setup_finish_condition:  >
   <span class="number">3</span>
   设置完成条件
-course.plan_task.activity_manage.create: 添加任务
-course.plan_task.activity_manage.modify: 修改任务
+course.plan_task.activity_manage.create: 添加活动
+course.plan_task.activity_manage.modify: 编辑活动
+course.plan_task.activity_manage.preview: 预览活动
 
 course.lesson: 课时
 course.manage.create_lesson: 添加课时
@@ -2467,7 +2470,7 @@ classroom.set_head_teacher_tips: 班主任负责管理整个%name%，班主任�
 classroom.set_teacher: 设置教师
 classroom.set_teacher_tips: >
   <div>相关页面中的老师列举将会按照这里设定的顺序显示。</div>
-  <div>教学服务团队成员有权制订学习计划、答疑、批阅作业/试卷、发起活动。</div>
+  <div>教学服务团队成员有权制订教学计划、答疑、批阅作业/试卷、发起活动。</div>
   <div>注：班级教师来源课程教师，无法主动添加</div>
 classroom.set_teacher_empty: 还没有教师!赶紧去设置课程吧！
 classroom.create_course_btn: 添加课程

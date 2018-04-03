@@ -30,8 +30,8 @@
   </div>
 
   <div class="course-manage-header-data">
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-list-check"></i>{{ course.lessonNum }}</span>
-    <span class="course-manage-header-data__icon"><i class="es-icon es-icon-person"></i>{{course.studentNum}}</span>
+    <span class="course-manage-header-data__icon">{{ 'course.plan_task.total_tasks'|trans }}{{ course.lessonNum }}</span>
+    <span class="course-manage-header-data__icon">{{ 'course.plan_total_members'|trans }}{{course.studentNum}}</span>
     <span class="course-manage-header-data__price color-danger">
       {% include 'common/price.html.twig' with {'productPrice': course.price} %}
     </span>
@@ -50,7 +50,7 @@
 
       {# 未发布状态 #}
       {% if course.status != 'published' %}
-        <button class="cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
+        <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
         <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
           <button class="cd-btn cd-btn-primary course-manage-header-more">
             <i class="es-icon es-icon-morehoriz"></i>

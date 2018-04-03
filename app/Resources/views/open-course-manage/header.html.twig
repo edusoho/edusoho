@@ -29,14 +29,14 @@
       {% if course.status == 'published' %}
         <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
       {% else %}
-        <button class="cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
+        <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
       {% endif %}
 
       <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
         <button class="cd-btn cd-btn-primary course-manage-header-more">
           <i class="es-icon es-icon-morehoriz"></i>
         </button>
-        <ul class="dropdown-menu text-center">
+        <ul class="dropdown-menu">
           <li>
             <a href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
           </li>

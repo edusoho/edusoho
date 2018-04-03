@@ -66,7 +66,7 @@
         {% endif %}
 
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a class="js-publish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.publish'|trans}}</a>
+          <a class="js-publish-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.publish'|trans}}{{ 'course.lesson'|trans }}</a>
         </li>
 
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
@@ -74,7 +74,7 @@
         </li>
 
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a class="js-delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.delete'|trans}}</a>
+          <a class="js-delete-lesson-btn" href="javascript:;" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">{{'form.btn.delete'|trans}}{{ 'course.lesson'|trans }}</a>
         </li>
 
       </ul>

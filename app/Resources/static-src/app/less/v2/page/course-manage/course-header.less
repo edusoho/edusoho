@@ -41,15 +41,19 @@
   float: left;
   margin-left: 64px;
   margin-top: 11px;
+  @media (max-width: @screen-sm-max) {
+    width: 300px;
+    margin-left: 2%;
+  }
 }
 
 .course-manage-header-data__icon {
   margin-right: 40px;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   color: @cd-dark-minor;
-  i {
-    margin-right: 4px;
+  @media (max-width: @screen-sm-max) {
+    margin-right: 4%;
   }
 }
 

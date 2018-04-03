@@ -38,16 +38,20 @@ export default class LessonManage {
   }
 
   deleteLesson(event) {
-    if (!confirm(Translator.trans('open_course.lesson_delete_hint'))) {
-      return;
-    }
-    let $btn = $(event.target);
-    $.post($btn.data('url'), (response) => {
-      this.$item.remove();
-      $('.js-lesson-notify').show();
-      $('.js-lesson-create-btn').attr('disabled', false);
-      cd.message({ type: 'success', message: Translator.trans('open_course.lesson_delete_success_hint') });
-    }, 'json');
+    const $btn = $(event.target);
+    cd.confirm({
+      title: Translator.trans('site.delete'),
+      content: Translator.trans('open_course.lesson_delete_hint'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close')
+    }).on('ok', () => {
+      $.post($btn.data('url'), (response) => {
+        this.$item.remove();
+        $('.js-lesson-notify').show();
+        $('.js-lesson-create-btn').attr('disabled', false);
+        cd.message({ type: 'success', message: Translator.trans('open_course.lesson_delete_success_hint') });
+      }, 'json');
+    });
   }
 
   createLesson(event) {

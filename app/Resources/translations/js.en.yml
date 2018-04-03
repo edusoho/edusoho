@@ -438,6 +438,7 @@ course_set.title_required_error_hint: Please enter a title
 course_set.learn_progress: Learning progress
 course_set.manage.tag_required_hint: Please enter a label
 course_set.manage.publish_hint: Are you sure you want to post the course?
+course_set.manage.publish_title: 发布课程
 course_set.manage.publish_success_hint: The course was published successfully
 course_set.manage.publish_fail_hint: Course release failed
 course_set.manage.next_label: Continue to learn
@@ -474,6 +475,7 @@ course.manage.expiry_end_date_error_hint: The start date should be earlier than 
 course.manage.max_year_error_hint: The maximum value of the validity period can not exceed 99,999 days
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
+course.manage.publish_title: 发布教学计划
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Are you sure to close the program?

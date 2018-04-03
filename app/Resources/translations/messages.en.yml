@@ -1110,7 +1110,6 @@ course.status.finished: Finished
 course.status.published: Published
 course.filter.all_plan: 全部计划
 course.student_member: 学员人数
-course.learn_plan: 学习计划
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
@@ -1477,6 +1476,7 @@ course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
 course.plan_task.total_tasks: 'Lessons in total:'
+course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 'Published Lesson Number:'
 course.plan_task.unpublished_lessons: 'Unpublish Lesson Number:'
 course.plan_task.everyday_finish_tasks: >
@@ -1485,7 +1485,9 @@ course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: Add
 course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
+course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 'Add %part_name%'
+course.plan_task.edit_part_btn: 编辑%part_name%
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
 course.plan_task.more_btn: 'More'
@@ -1538,6 +1540,7 @@ course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Pl
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
 course.plan_task.activity_manage.create: 'Add'
 course.plan_task.activity_manage.modify: 'Edit'
+course.plan_task.activity_manage.preview: 预览活动
 
 course.lesson: Lesson
 course.manage.create_lesson: Add Lesson

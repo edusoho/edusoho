@@ -1,64 +1,71 @@
+import { publish } from 'app/common/widget/publish';
+
 export const closeCourse = () => {
-  $('body').on('click', '.js-close-course', function (evt) {
+  $('body').on('click', '.js-close-course', (evt) => {
     let $target = $(evt.currentTarget);
-    if (!confirm(Translator.trans('course.manage.close_hint'))) {
-      return;
-    }
-
-    $.post($target.data('check-url'), function (data) {
-
-      if (data.warn) {
-        if (!confirm(Translator.trans(data.message))) {
+    cd.confirm({
+      title: Translator.trans('site.close'),
+      content: Translator.trans('course.manage.close_hint'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close')
+    }).on('ok', () => {
+      $.post($target.data('checkUrl'), (data) => {
+        if (!data.warn) {
           return;
         }
-      }
-
-      $.post($target.data('url'), function (data) {
-        if (data.success) {
-          cd.message({ type: 'success', message: Translator.trans('course.manage.close_success_hint') });
-          location.reload();
-        } else {
-          cd.message({ type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message });
-        }
+        cd.confirm({
+          title: Translator.trans('site.close'),
+          content: Translator.trans(data.message),
+          okText: Translator.trans('site.confirm'),
+          cancelText: Translator.trans('site.close')
+        }).on('ok', () => {
+          $.post($target.data('url'), (data) => {
+            if (data.success) {
+              cd.message({ type: 'success', message: Translator.trans('course.manage.close_success_hint') });
+              location.reload();
+            } else {
+              cd.message({ type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message });
+            }
+          });
+        });
       });
     });
   });
 };
 
 export const deleteCourse = () => {
-  $('body').on('click', '.js-delete-course', function (evt) {
-    if (!confirm(Translator.trans('course.manage.delete_hint'))) {
-      return;
-    }
-    $.post($(evt.currentTarget).data('url'), function (data) {
-      if (data.success) {
-        cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
-        if (data.redirect) {
-          window.location.href = data.redirect;
-        }else {
-          location.reload();
+  $('body').on('click', '.js-delete-course', (evt) =>  {
+    cd.confirm({
+      title: Translator.trans('site.delete'),
+      content: Translator.trans('course.manage.delete_hint'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close')
+    }).on('ok', () => {
+      $.post($(evt.currentTarget).data('url'), (data) => {
+        if (data.success) {
+          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          } else {
+            location.reload();
+          }
+        } else {
+          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
         }
-      } else {
-        cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
-      }
+      });
     });
   });
 };
 
 export const publishCourse = () => {
-  $('body').on('click', '.js-publish-course', function (evt) {
-    if (!confirm(Translator.trans('course.manage.publish_hint'))) {
-      return;
-    }
-    $.post($(evt.target).data('url'), function (data) {
-      if (data.success) {
-        cd.message({ type: 'success', message: Translator.trans('course.manage.task_publish_success_hint') });
-        location.reload();
-      } else {
-        cd.message({ type: 'danger', message: Translator.trans('course.manage.task_publish_fail_hint')+':' + data.message, delay: 5000 });
-      }
-    });
-  });
+  const info = {
+    title: 'course.manage.publish_title',
+    hint: 'course.manage.publish_hint',
+    success: 'course.manage.publish_success_hint',
+    fail: 'course.manage.publish_fail_hint'
+  };
+
+  publish('.js-publish-course', info);
 };
 
 export const showSettings = () => {

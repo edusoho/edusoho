@@ -11,7 +11,7 @@
     </div>
     <div class="item-actions">
       <a class="cd-mr24 js-create-task-btn" href="javascript:;" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
-        <i class="cd-icon cd-icon-add"></i>
+        <i class="cd-icon cd-icon-add" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.create'|trans }}" data-placement="top" ></i>
       </a>
 
      {% include 'lesson-manage/normal/lesson-manage.html.twig' %}
