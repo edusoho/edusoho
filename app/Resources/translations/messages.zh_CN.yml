@@ -1656,6 +1656,8 @@ course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
 course.plan_task.total_tasks: 课时总数：
+course.plan_task.published_lessons: 已发布课时数：
+course.plan_task.unpublished_lessons: 未发布课时数：
 course.plan_task.everyday_finish_tasks: >
   日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
 course.plan_lesson.hidden: 前台隐藏未发布课时
