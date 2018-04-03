@@ -92,7 +92,7 @@ class StudentExporter extends Exporter
             $member[] = $user['nickname'];
             $member[] = $user['email'];
             $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
-            $member[] = $courseMember['learningProgressPercent'];
+            $member[] = $courseMember['learningProgressPercent'].'%';
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
