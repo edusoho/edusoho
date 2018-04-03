@@ -47,6 +47,7 @@ class CourseController extends CourseBaseController
     {
         $tab = $this->prepareTab($tab);
         $user = $this->getCurrentUser();
+        $preview = $request->query->get('previewAs', '');
 
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
@@ -58,7 +59,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
         }
 
-        if ($user->isLogin() && $this->canCourseShowRedirect($request)) {
+        if (empty($preview) && $user->isLogin() && $this->canCourseShowRedirect($request)) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
                     'userId' => $user['id'],
