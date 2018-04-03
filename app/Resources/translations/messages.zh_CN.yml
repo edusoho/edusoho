@@ -1655,13 +1655,17 @@ course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
 course.plan_task.total_tasks: 课时总数：
+course.plan_total_members: 学员总数：
 course.plan_task.everyday_finish_tasks: >
   日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
 course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: 任务
 course.plan_task.batch_create_btn: 批量添加
 course.plan_task.add_chapter_btn: 添加%chapter_name%
+course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 添加%part_name%
+course.plan_task.edit_part_btn: 编辑%part_name%
+
 course.plan_task.edit_btn: 编辑
 course.plan_task.preview_btn: 预览
 course.plan_task.more_btn: 更多
@@ -1726,8 +1730,9 @@ course.plan_task.activity_manage.setup_content: >
 course.plan_task.activity_manage.setup_finish_condition:  >
   <span class="number">3</span>
   设置完成条件
-course.plan_task.activity_manage.create: 添加任务
-course.plan_task.activity_manage.modify: 修改任务
+course.plan_task.activity_manage.create: 添加活动
+course.plan_task.activity_manage.modify: 编辑活动
+course.plan_task.activity_manage.preview: 预览活动
 
 course.lesson: 课时
 course.manage.create_lesson: 添加课时

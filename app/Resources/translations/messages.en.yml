@@ -1482,7 +1482,9 @@ course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: Add
 course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
+course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 'Add %part_name%'
+course.plan_task.edit_part_btn: 编辑%part_name%
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
 course.plan_task.more_btn: 'More'
@@ -1535,6 +1537,7 @@ course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Pl
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
 course.plan_task.activity_manage.create: 'Add'
 course.plan_task.activity_manage.modify: 'Edit'
+course.plan_task.activity_manage.preview: 预览活动
 
 course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
