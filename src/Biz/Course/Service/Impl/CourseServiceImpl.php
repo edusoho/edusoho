@@ -1967,7 +1967,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 return 0;
             }
 
-            return $a['seq'] > $b['seq'] ? 1 : -1;
+            return $a['seq'] < $b['seq'] ? 1 : -1;
         });
 
         return $courses;
@@ -2001,6 +2001,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (count($ids) != $count) {
             throw $this->createAccessDeniedException();
         }
+        $ids = array_reverse($ids);
 
         $seq = 1;
         foreach ($ids as $id) {
