@@ -18,6 +18,30 @@ class ExportHelpTest extends BaseTestCase
         );
         $result = ExportHelp::getMagicExportSetting($request);
         $this->assertArrayEquals(array(100, 1000, 10000), $result);
+
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array(
+                    'export_limit' => 1001,
+                    'export_allow_count' => 10001,
+                ),
+            ),
+        ));
+        $result = ExportHelp::getMagicExportSetting($request);
+        $this->assertArrayEquals(array(100, 1001, 10001), $result);
+
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array(
+                    'export_limit' => 10001,
+                    'export_allow_count' => 1001,
+                ),
+            ),
+        ));
+        $result = ExportHelp::getMagicExportSetting($request);
+        $this->assertArrayEquals(array(100, 1001, 1001), $result);
     }
 
     public function testAddFileTitle()
