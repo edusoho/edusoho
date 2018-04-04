@@ -527,7 +527,7 @@ open_course.load_search_hint: 搜索中...
 open_course.tag_required_hint: 请输入标签
 open_course.publish_hint: 您真的要发布该课程吗？
 open_course.picture_upload_success_hint: 上传成功！
-open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗?
+open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料。您真的要删除该课时吗?
 open_course.chapter_delete_hint: 您真的要删除该（%chapterName%）(%partName%）吗?
 open_course_chapter_delete_success_hint: 已删除
 open_course.add_replay_hint: 您真的要录制回放吗?
