@@ -1306,10 +1306,6 @@ open_course_draft_create:
    path:  /open/course/draft/create
    defaults: { _controller: AppBundle:OpenCourseLessonManage:draftCreate }
 
-open_course_manage_picture:
-    path:  /open/course/{id}/manage/picture
-    defaults: { _controller: AppBundle:OpenCourseManage:picture }
-
 open_course_manage_picture_crop:
     path:  /open/course/{id}/manage/picture/crop
     defaults: { _controller: AppBundle:OpenCourseManage:pictureCrop }
@@ -1592,6 +1588,7 @@ course_manage_task_pre_update_check:
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create }
@@ -1712,18 +1709,57 @@ course_task_plugin_thread_answer:
   defaults: { _controller: AppBundle:TaskPlugin:answerQuestion }
   methods: [POST]
 
-#course_chapter
-course_manage_chapter_create:
-    path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: AppBundle:Course/ChapterManage:create }
-
-course_manage_chapter_edit:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: AppBundle:Course/ChapterManage:edit }
+course_manage_chapter_manage:
+    path:  /course/{courseId}/manage/chapter/manage
+    defaults: { _controller: AppBundle:Course/ChapterManage:manage}
 
 course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete
     defaults: { _controller: AppBundle:Course/ChapterManage:delete }
+    methods: [POST]
+
+course_manage_lesson_create:
+    path:  /course/{courseId}/lesson/create
+    defaults: { _controller: AppBundle:Course/LessonManage:create }
+
+course_manage_lesson_batch_create:
+    path:  /course/{courseId}/lesson/batch_create
+    defaults: { _controller: AppBundle:Course/LessonManage:batchCreate }
+
+course_manage_lesson_valid_num:
+    path: /course/{courseId}/lesson/valid_num
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
+    methods: [POST]
+
+course_manage_lesson_update:
+    path:  /course/{courseId}/lesson/{lessonId}/update
+    defaults: { _controller: AppBundle:Course/LessonManage:update }
+
+course_manage_lesson_publish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/publish
+    defaults: { _controller: AppBundle:Course/LessonManage:publish }
+
+course_manage_lesson_unpublish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
+    defaults: { _controller: AppBundle:Course/LessonManage:unpublish }
+
+course_manage_lesson_delete:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/delete
+    defaults: { _controller: AppBundle:Course/LessonManage:delete }
+
+course_manage_lesson_set_optional:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/setoptional
+    defaults: { _controller: AppBundle:Course/LessonManage:setOptional }
+    methods: [POST]
+
+course_manage_lesson_unset_optional:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unsetoptional
+    defaults: { _controller: AppBundle:Course/LessonManage:unsetOptional }
+    methods: [POST]
+
+course_manage_change_lesson_show_status:
+    path:  /course/{courseId}/manage/change/lesson/show/status
+    defaults: { _controller: AppBundle:Course/CourseManage:showPublish }
     methods: [POST]
 
 #course
@@ -2036,14 +2072,6 @@ course_set_manage:
 course_set_manage_base:
   path: /course_set/{id}/manage/base
   defaults: {_controller: AppBundle:Course/CourseSetManage:base}
-
-course_set_manage_detail:
-  path: /course_set/{id}/manage/detail
-  defaults: {_controller: AppBundle:Course/CourseSetManage:detail}
-
-course_set_manage_cover:
-  path: /course_set/{id}/manage/cover
-  defaults: {_controller: AppBundle:Course/CourseSetManage:cover}
 
 course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
@@ -3003,6 +3031,10 @@ order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
+course_sort:
+    path: /courseset/{courseSetId}/sort
+    defaults: { _controller: AppBundle:Course/CourseSetManage:courseSort, limit: '' }
+    methods: [POST]
 
 client_time_check:
     path: /client_time_check

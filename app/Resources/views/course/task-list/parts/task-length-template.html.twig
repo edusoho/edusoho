@@ -1,0 +1,30 @@
+<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
+
+  <span class="hidden-xs mr20" display-if="{hasWatchLimitRemaining}">  {{'course.task.learning.remaining.watch_time'|trans}}：{watchLimitRemaining} </span>
+  {% set now = date().timestamp %}
+
+  <tmp display-if="{isLive}">
+    <tmp display-if="{isLiveReplayGenerated}">
+      {{ 'course.block_grid.live_back'|trans }}
+    </tmp>
+
+    <tmp hide-if="{isLiveReplayGenerated}">
+      <tmp display-if="{isLiveNotStarted}">
+        {activityStartTimeStr}
+      </tmp>
+
+      <tmp display-if="{isLiveStarting}">
+        {{ 'course.block_grid.onlive'|trans }}
+      </tmp>
+
+      <tmp display-if="{isLiveFinished}">
+        {{ 'course.block_grid.live_finish'|trans }}
+      </tmp>
+    </tmp>
+  </tmp>
+
+  <tmp hide-if="{isLive}">
+    {activityLength}
+  </tmp>
+  <i class="{getMetaIcon}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{getMetaName}任务" data-container="body"></i>
+</span>

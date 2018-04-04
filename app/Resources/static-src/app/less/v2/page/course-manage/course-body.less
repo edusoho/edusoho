@@ -1,0 +1,49 @@
+.teaching-type-select {
+  width: 276px;
+  height: 34px;
+}
+
+.courses-operation {
+  margin-right: 16px;
+  height: 38px;
+  line-height: 38px;
+  i {
+    font-size: 24px;
+  }
+}
+
+.courses-operation-dropdown {
+  text-align: center !important;
+  top: 20px !important;
+}
+
+.courseset-manage-courses {
+  min-height: 550px;
+}
+
+.courses-manage-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+.courses-manage-item {
+  &.dragged {
+    opacity: 1 !important;
+    .transform(rotate(1deg));
+  }
+  &.drag {
+    .course-manage-header {
+      .es-transition(box-shadow);
+      &:hover {
+        .es-transition(box-shadow);
+        .cd-box-shadow-z(12px);
+      }
+    }
+    &:hover {
+      cursor: move;
+    }
+  }
+  .course-manage-header {
+    .cd-box-shadow-z(2px);
+  }
+}

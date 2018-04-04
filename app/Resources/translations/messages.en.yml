@@ -16,7 +16,9 @@ site.date.second: Second
 site.data.people: Person
 site.data.empty: Empty
 site.data.chapter: Chapter
+site.data.lesson: Lesson
 site.data.task: Task
+site.data.unit: unit
 site.data.part: Part
 site.data.title: Title
 site.data.score: Score
@@ -240,6 +242,7 @@ form.field.create: Add
 form.field.amount: Amount
 form.field.cut: Cut
 form.btn.create: Add
+form.btn.edit: Edit
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
@@ -780,8 +783,8 @@ course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
 course.price.discount: '%discount% off'
-course.chapter: 'Chapter %number% : %title%'
-course.unit: 'Part %number% : %title%'
+course.chapter: '%chapter_name% %number% : %title%'
+course.unit: '%chapter_name% %number% : %title%'
 course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
@@ -790,7 +793,13 @@ course.activity: Activity
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
+course.teaching_plan.free_mode: 自由式学习模式
+course.teaching_plan.locked_mode: 解锁式学习模式
+course.teaching_default_plan: 默认计划
 course.teaching_plan.create: 'Add'
+course.teaching_plan.sort: 调整顺序
+course.teaching_plan.sort.save: 保存排序
+course.teaching_plan.sort.cancel: 取消排序
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
@@ -819,6 +828,7 @@ course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Config
+course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
@@ -1046,7 +1056,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
-course.order: 'Check order'
+course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
 course.order.conditions: 'Filter'
@@ -1099,6 +1109,13 @@ course.status.unpublished: Unpublished
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
+course.filter.all_plan: 全部计划
+course.student_member: 学员人数
+course.student.cell: 人
+course.plan.cell: 个
+course.manage_btn: 管理课程
+course.preview.course: 预览课程
+course.preview.plan: 预览计划
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
@@ -1262,6 +1279,7 @@ course.detail.content_title: Detail
 course.detail.summary: About
 course.detail.target: 'Goals'
 course.detail.intended-students: Who should take the course
+course.detail.info_tip: 以下设置可以在教学计划中具体设置，也可以在此处统一设置。在此处统一设置以应用于所有教学计划。
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
@@ -1440,7 +1458,7 @@ course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 
-course.plan_task: Tasks
+course.plan_task: Lessons
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
@@ -1448,7 +1466,7 @@ course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Config
 course.plan_task.publish_btn: Publish
 course.plan_task.manage: 'Programs'
-course.plan_task.content_title: Tasks
+course.plan_task.content_title: Lessons
 course.plan_task.locked.task_locked: 'Task locked'
 course.plan_task.task: Task
 course.plan_task.practice: Exercise
@@ -1458,12 +1476,19 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Tasks in total:'
-course.plan_task.everyday_finish_tasks: ''
+course.plan_task.total_tasks: 'Lessons in total:'
+course.plan_total_members: 学员总数
+course.plan_task.published_lessons: 'Published Lesson Number:'
+course.plan_task.unpublished_lessons: 'Unpublish Lesson Number:'
+course.plan_task.everyday_finish_tasks: >
+  日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
+course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: Add
 course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
+course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 'Add %part_name%'
+course.plan_task.edit_part_btn: 编辑%part_name%
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
 course.plan_task.more_btn: 'More'
@@ -1473,16 +1498,15 @@ course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
 course.plan_task.preparation_tips: 'Students can learn to learn by looking at tasks such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
-course.plan_task.empty: 'It''s empty, add a task now.'
+course.plan_task.empty: 'It's empty, add a lesson now'
 course.plan_task.task_unpublished: （unpublish）
 course.plan_task.is_optional_task: Optional
 course.plan_task.edit_tips: 'Create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
-course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
-course.plan_task.which_part: "</i>No.<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
-course.plan_task.which_task: "</i>No.<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
+course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n"
+course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.create_task: 'Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
@@ -1517,6 +1541,13 @@ course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Pl
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
 course.plan_task.activity_manage.create: 'Add'
 course.plan_task.activity_manage.modify: 'Edit'
+course.plan_task.activity_manage.preview: 预览活动
+
+course.lesson: Lesson
+course.manage.create_lesson: Add Lesson
+course.lesson_manage.set_optional: 设置选修
+course.lesson_manage.unset_optional: 设置必修
+
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
 course.plan_task.activity_manage.audio.converting: 'Transcoding, please wait.'

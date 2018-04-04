@@ -50,9 +50,9 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $items = $this->findItems();
 
         foreach ($items as $key => &$item) {
-            if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
+            if ('chapter' == $item['type'] || 'unit' == $item['type']) {
                 $item['itemType'] = $item['type'];
-            } elseif ($item['type'] == 'lesson') {
+            } elseif ('lesson' == $item['type']) {
                 unset($items[$key]);
             } else {
                 $item['itemType'] = 'task';
@@ -112,6 +112,11 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'seq_GT' => $task['seq'],
             'seq_LTE' => $task['seq'] + $downLimit,
         );
+
+        if ($this->isHiddenUnpublishTasks()) {
+            $upConditions['status'] = 'published';
+            $downConditions['status'] = 'published';
+        }
 
         $upChapters = $this->getChapterDao()->search(
             $upConditions,
@@ -191,17 +196,18 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'courseId' => $this->courseId,
         );
 
-        if ($this->paging['direction'] == 'down') {
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
-        }
-
-        if ($this->paging['direction'] == 'up') {
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] - 1;
+        if ($this->isHiddenUnpublishTasks()) {
+            $conditions['status'] = 'published';
         }
 
         return $conditions;
+    }
+
+    private function isHiddenUnpublishTasks()
+    {
+        $course = $this->getCourseService()->getCourse($this->courseId);
+
+        return !$course['isShowUnpublish'];
     }
 
     /**
@@ -218,6 +224,11 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     private function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 
     /**

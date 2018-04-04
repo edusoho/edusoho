@@ -16,23 +16,11 @@ class courseInfo {
         $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
       });
     }
-    this.initCkeidtor();
     this.initValidator();
     this.checkBoxChange();
     this.changeAudioMode();
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
-    this.renderMultiGroupComponent('course-goals', 'goals');
-    this.renderMultiGroupComponent('intended-students', 'audiences');
-  }
-
-  initCkeidtor() {
-    CKEDITOR.replace('summary', {
-      allowedContent: true,
-      toolbar: 'Detail',
-      fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
-    });
   }
 
   changeAudioMode() {
@@ -46,13 +34,6 @@ class courseInfo {
     });
   }
 
-  renderMultiGroupComponent(elementId, name) {
-    let datas = $('#' + elementId).data('init-value');
-    ReactDOM.render(<MultiInput
-      dataSource={datas}
-      outputDataElement={name} />, document.getElementById(elementId));
-  }
-
   initValidator() {
     let $form = $('#course-info-form');
     let validator = $form.validate({
@@ -61,15 +42,6 @@ class courseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
-        title: {
-          maxlength: 100,
-          required: {
-            depends: function () {
-              $(this).val($.trim($(this).val()));
-              return true;
-            }
-          }
-        },
         maxStudentNum: {
           required: true,
           live_capacity: true,
@@ -98,9 +70,6 @@ class courseInfo {
         }
       },
       messages: {
-        title: {
-          require: Translator.trans('course.manage.title_required_error_hint')
-        },
         maxStudentNum: {
           required: Translator.trans('course.manage.max_student_num_error_hint')
         },
@@ -142,16 +111,8 @@ class courseInfo {
 
     $('#course-submit').click(() => {
       if (validator.form()) {
-        this.publishAddMessage();
         $form.submit();
       }
-    });
-  }
-
-  publishAddMessage() {
-    postal.publish({
-      channel: 'courseInfoMultiInput',
-      topic: 'addMultiInput',
     });
   }
 

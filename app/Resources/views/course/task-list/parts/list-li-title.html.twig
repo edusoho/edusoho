@@ -1,8 +1,0 @@
-{% if (member is empty) and task.isFree %}
-  <span class="label label-success mr10">{{ 'course.catalogue.task_status.free'|trans }}</span>
-{% elseif (member is empty) and course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-  <span class="label label-warning mrm">{{ 'course.catalogue.task_status.try_lookable'|trans }}</span>
-{% elseif member  and task.isOptional == 1 %}
-  <span class="label label-info mr10">{{ 'course.catalogue.task_status.is_optional'|trans }}</span>
-{% endif %}
-{{ 'course.catalogue.task_status.task'|trans({'%taskNumber%':taskIndex|default(task.number) ,'%taskTitle%':task.title}) }}

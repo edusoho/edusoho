@@ -15,5 +15,6 @@
 
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_task_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ 'upload.content_title.uploading_tips'|trans }}">{{'form.btn.add'|trans}}</button>
+  <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-valid-url="{{ path('course_manage_lesson_valid_num', {courseId:courseId}) }}"
+          data-url="{{ path('course_manage_lesson_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ 'upload.content_title.uploading_tips'|trans }}">{{'form.btn.add'|trans}}</button>
 {% endblock %}

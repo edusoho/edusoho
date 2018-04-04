@@ -1,63 +1,88 @@
 {% import "macro.html.twig" as web_macro %}
-{% do script(['app/js/courseset-manage/header/index.js']) %}
+{% block js %}
+  {% do script(['app/js/courseset-manage/header/index.js']) %}
+{% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
 
+<div class="courseset-manage-header cd-mb32 clearfix">
+  {# 课程封面 #}
+  <a href="{{basepath}}">
+    <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+  </a>
 
-<div class="es-section course-manage-header clearfix">
-    <a href="{{basepath}}">
-      <img class="picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
-    </a>
-  <h1 class="title">
-    {% if courseSet.type != 'normal' %}
-      [{{ dict('courseType')[courseSet.type] }}]
+  {# 课程发布状态 #}
+  {% if courseSet.status=='closed' %}
+    <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
+  {% elseif courseSet.status=='draft' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
+  {% elseif courseSet.status=='published' %}
+    {% if courseSet.serializeMode=='serialized' %}
+      <span class="course-publish-status course-publish-status--published">{{'course.status.serialized'|trans}}</span>
+    {% elseif courseSet.serializeMode=='finished' %}
+      <span class="course-publish-status course-publish-status--unpublished">{{'course.status.finished'|trans}}</span>
+    {% else %}
+      <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans}}</span>
     {% endif %}
-    <a class="link-dark" href="{{basepath}}">{{ courseSet.title }}</a>
-    {% if courseSet.status=='closed' %}
-      <span class="label label-danger ">{{'course.status.closed'|trans}}</span>
-    {% elseif courseSet.status=='draft' %}
-      <span class="label label-warning ">{{'course.status.unpublished'|trans}}</span>
-    {% elseif courseSet.status=='published' %}
-      {% if courseSet.serializeMode=='serialized' %}
-        <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
-      {% elseif courseSet.serializeMode=='finished' %}
-        <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
-      {% else %}
-        <span class="label label-success ">{{'course.status.published'|trans}}</span>
+  {% endif %}
+
+  <div class="courseset-manage-header-info">
+    <div class="courseset-manage-header-info__title text-overflow">
+      {% if courseSet.type != 'normal' %}
+        [{{ dict('courseType')[courseSet.type] }}]
       {% endif %}
-    {% endif %}
-  </h1>
+      {% block coursesetTitle %}
+        <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      {% endblock %}
+    </div>
 
-  <div class="teachers">
-    {% if courseSet.teacherIds|default(null) %}
-      {{'course.teacher'|trans}}
-      {% for id in courseSet.teacherIds %}
-        {% set user = users[id] %}
-        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
-      {% endfor %}
-    {% endif  %}
+    <div class="courseset-manage-header-info__price color-danger">
+      {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
+        ¥{{ courseSet.minCoursePrice }}
+      {% else %}
+        ¥{{ courseSet.minCoursePrice }}～¥{{ courseSet.maxCoursePrice }}
+      {% endif %}
+    </div>
   </div>
 
-  <div class="toolbar hidden-xs">
-    {% if course.courseSetId|default(null) and course_count(course.courseSetId)|default(0) > 1 %}
-        <a class="btn btn-default btn-sm " href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{'course.btn.back_course_edit'|trans}}</a>
-    {% endif %}
+  <div class="courseset-manage-header-btn hidden-xs">
+    {% block btn %}
+      {# 课程发布按钮 #}
+      {% if courseSet.status == 'published' %}
+        <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
+      {% endif %}
 
-    {% if courseSet.status == 'published' %}
-      <div class="btn-group">
-        <a class="btn btn-default btn-sm" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
-      </div>
-    {% endif %}
+      {% if courseSet.status != 'published' %}
+        <button class="btn cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
 
-    {% if courseSet.status != 'published' %}
-      <div class="btn-group">
-        <a class="btn btn-default btn-sm" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{'course.btn.preview'|trans}}</a>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary btn-sm course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
-      </div>
-    {% endif %}
+        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+          <button class="cd-btn cd-btn-primary course-manage-header-more">
+            <i class="es-icon es-icon-morehoriz"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+    {% endblock %}
+
   </div>
+
+  <div class="courseset-manage-header-data">
+    <span>{{ 'course.student_member'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
+  </div>
+
+  <div class="courseset-manage-header-data">
+    <span>{{ 'course.teaching_plan'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span>{{ 'course.plan.cell'|trans }}</div>
+  </div>
+
 </div>
-{% if courseSet.status == 'closed' %}
-<div class="alert alert-warning">{{'course.remove_students_tips'|trans}}</div>
-{% endif %}
+
+{% block close %}
+  {% if courseSet.status == 'closed' %}
+    <div class="cd-alert cd-alert-warning">{{'course.remove_students_tips'|trans}}</div>
+  {% endif %}
+{% endblock %}

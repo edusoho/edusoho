@@ -1,0 +1,54 @@
+<div class="es-piece ">
+  <div class="piece-header">{{'course.marketing_setup.preview'|trans}}</div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">{{ 'course.marketing_setup.preview.set_task'|trans }}</label>
+    <div class="col-sm-8">
+      <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting">
+        {% for task in canFreeTasks %}
+          <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
+            <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %} checked {% endif %}>
+            
+            {% set meta = activity_meta(task.type) %}
+            <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-original-title="{{'course.marketing_setup.preview.set_task.task_name'|trans({'%name%':meta.name})}}"></i>
+            <span class="inline-block vertical-middle text-overflow title">
+              {{'course.marketing_setup.preview.set_task.task'|trans}} {{ task.number }}：{{ task.title }}
+            </span>
+            <span class="label label-warning pull-right price">{{'course.marketing_setup.preview.set_task.free'|trans}}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      {% set can_free_activity_types = can_free_activity_types() %}
+      <div class="help-block ">{{'course.marketing_setup.preview.set_task.free_tips'|trans}}{{ can_free_activity_types|join('word.seperator'|trans) }}
+      </div>
+    </div>
+  </div>
+  {% if setting('storage.upload_mode', 'local') != 'local' %}
+  <div class="form-group">
+    <label class="col-sm-2 control-label">
+      {{ 'course.marketing_setup.preview.try_watch'|trans }}
+      <a class="es-icon es-icon-help text-normal link-gray" data-container="body"
+         data-toggle="popover"
+         data-trigger="hover"
+         data-placement="top"
+         data-content="{{ 'course.marketing_setup.preview.try_watch_tips'|trans }}">
+      </a>
+    </label>
+    <div class="col-sm-8 radios">
+      {{ radios('tryLookable', { '1': 'site.datagrid.radios.yes'|trans, '0': 'site.datagrid.radios.no'|trans }, course.tryLookable|default(0)) }}
+    </div>
+  </div>
+  {% endif %}
+  <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
+    <div class="col-sm-8 col-sm-offset-2">
+      <select class="form-control width-150 mh5" id="tryLookLength" name="tryLookLength">
+        {% for i in 1..10 %}
+          {% if course.tryLookLength | default(1) == i %}
+            <option value="{{ i }}" selected>{{ i }}</option>
+          {% else %}
+            <option value="{{ i }}">{{ i }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>{{'site.date.minute'|trans}}
+    </div>
+  </div>
+</div>

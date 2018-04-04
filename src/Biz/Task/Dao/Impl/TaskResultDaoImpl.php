@@ -74,6 +74,11 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->delete($this->table, array('courseTaskId' => $taskId));
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table, array('courseId' => $courseId));
+    }
+
     public function countLearnNumByTaskId($taskId)
     {
         $sql = "SELECT count(id) FROM {$this->table()} WHERE courseTaskId = ? ";
