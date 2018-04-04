@@ -76,7 +76,6 @@ export default class Manage {
     }
     case 'task':
       this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
-      $('[data-toggle="tooltip"]').tooltip();
       break;
     case 'lesson':
     {
@@ -87,13 +86,12 @@ export default class Manage {
       } else {
         $lesson.after($elm);
       }
-      $('[data-toggle="tooltip"]').tooltip();
       break;
     }
     default:
       this.$element.append($elm);
-      $('[data-toggle="tooltip"]').tooltip();
     }
+    $('[data-toggle="tooltip"]').tooltip();
 
     this.handleEmptyShow();
     this._flushTaskNumber();
