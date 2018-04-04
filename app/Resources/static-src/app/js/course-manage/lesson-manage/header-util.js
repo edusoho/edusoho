@@ -17,7 +17,7 @@ export const hiddenUnpublishTask = () => {
 };
 
 export const addLesson = () => {
-  $('#sortable-list').on('click', '.js-lesson-create-btn', (event) => {
+  $('body').on('click', '.js-lesson-create-btn', (event) => {
     const url = $(event.currentTarget).data('url');
     $.get(url, {})
       .success((response) => {
