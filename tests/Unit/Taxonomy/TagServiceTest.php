@@ -402,6 +402,23 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(false, $this->getTagService()->isTagGroupNameAvailable('测试标签组', '测试标签组2'));
     }
 
+    public function testFindGroupTagIdsByOwnerTypeAndOwnerIds()
+    {
+        $ownerId = 1;
+        $fields = array(
+            'tagId' => 1,
+            'ownerType' => 'course',
+            'ownerId' => $ownerId,
+        );
+
+        $this->getTagService()->addTagOwnerRelation($fields);
+        $fields['tagId'] = 2;
+        $this->getTagService()->addTagOwnerRelation($fields);
+        $tagIds = $this->getTagService()->findGroupTagIdsByOwnerTypeAndOwnerIds('course', array($ownerId));
+        $this->assertEquals(1, $tagIds['1'][0]);
+        $this->assertEquals(2, $tagIds['1'][1]);
+    }
+
     public function testFindTagIdsByOwnerTypeAndOwnerIds()
     {
         $ownerId = 1;
@@ -415,8 +432,7 @@ class TagServiceTest extends BaseTestCase
         $fields['tagId'] = 2;
         $this->getTagService()->addTagOwnerRelation($fields);
         $tagIds = $this->getTagService()->findTagIdsByOwnerTypeAndOwnerIds('course', array($ownerId));
-        $this->assertEquals(1, $tagIds['1'][0]);
-        $this->assertEquals(2, $tagIds['1'][1]);
+        $this->assertEquals(2, count($tagIds));
     }
 
     /**

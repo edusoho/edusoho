@@ -17,6 +17,7 @@ const init = function(html = '')
     includeNodeLocations: true,
   });
   global.window = dom.window;
+  decache('jquery');
   global.$ = require('jquery');
 };
 

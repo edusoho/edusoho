@@ -22,6 +22,11 @@
       </button>
       {% if tasks %}
         <ul class="dropdown-menu" role="menu">
+          <li class="{% if selectedTaskId == 0  %}active{% endif %}">
+            <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: 0, selectedCourse: selectedCourseId }) }}#notes">
+              {{ 'course.note.all_task'|trans }}
+            </a>
+          </li>
           {% for task in tasks %}
             <li class="{% if task.id == selectedTaskId %} active {% endif %}">
               <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">

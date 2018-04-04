@@ -274,6 +274,7 @@ user.fileds.wechat: 微信
 user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
+user.fields.gender.secret: 秘密
 user.fields.idcard_label: 身份证号
 user.fields.idcard_front_title: 上传身份证正面照
 user.fields.idcard_back_title: 上传身份证反面照
@@ -6873,6 +6874,12 @@ admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
 admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+
+admin.user_center.message_title_name: 私信发送设置
+admin.user_center.message_student_to_student: 允许学员给学员发送私信
+admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
+admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
+
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--

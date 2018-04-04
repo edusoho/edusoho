@@ -9,6 +9,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Biz\Course\Service\LiveReplayService;
 
 class UploadFileEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -37,6 +38,8 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             'thread.post.delete' => 'onThreadPostDelete',
 
             'delete.use.file' => 'onDeleteUseFiles',
+
+            'live.activity.update' => 'onLiveActivityUpdate',
         );
     }
 
@@ -284,6 +287,16 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
         foreach ($attachments as $value) {
             $this->getUploadFileService()->deleteUseFile($value['id']);
+        }
+    }
+
+    public function onLiveActivityUpdate(Event $event)
+    {
+        $liveActivity = $event->getSubject();
+        $fields = $event->getArgument('fields');
+
+        if (isset($fields['replayStatus']) && $fields['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+            $this->getUploadFileService()->waveUsedCount($fields['mediaId'], 1);
         }
     }
 
