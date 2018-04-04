@@ -1109,7 +1109,7 @@ course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
 course.filter.all_plan: 全部计划
-course.student_member: 学员人数
+course.student_member: 学员总数
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程

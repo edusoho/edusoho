@@ -1263,7 +1263,7 @@ course.status.serialized: 更新中
 course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
-course.student_member: 学员人数
+course.student_member: 学员总数
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
@@ -4720,7 +4720,7 @@ admin.course_manage.statistics.classroom: 所在%classroom%
 admin.course_manage.statistics.teach_plan_count: 教学计划数量
 admin.course_manage.statistics.task_count: 任务数量
 admin.course_manage.statistics.student: 学员
-admin.course_manage.statistics.student_number: 学员人数
+admin.course_manage.statistics.student_number: 学员总数
 admin.course_manage.statistics.finished_number: 完成课程人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
 admin.course_manage.statistics.income_RMB: 课程收入(元)
