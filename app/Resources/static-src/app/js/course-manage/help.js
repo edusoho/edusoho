@@ -10,26 +10,31 @@ export const closeCourse = () => {
       cancelText: Translator.trans('site.close')
     }).on('ok', () => {
       $.post($target.data('checkUrl'), (data) => {
-        if (!data.warn) {
+        if (data.warn) {
+          cd.confirm({
+            title: Translator.trans('site.close'),
+            content: Translator.trans(data.message),
+            okText: Translator.trans('site.confirm'),
+            cancelText: Translator.trans('site.close')
+          }).on('ok', () => {
+            closeCourseAction($target);
+          });
           return;
         }
-        cd.confirm({
-          title: Translator.trans('site.close'),
-          content: Translator.trans(data.message),
-          okText: Translator.trans('site.confirm'),
-          cancelText: Translator.trans('site.close')
-        }).on('ok', () => {
-          $.post($target.data('url'), (data) => {
-            if (data.success) {
-              cd.message({ type: 'success', message: Translator.trans('course.manage.close_success_hint') });
-              location.reload();
-            } else {
-              cd.message({ type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message });
-            }
-          });
-        });
+        closeCourseAction($target);
       });
     });
+  });
+};
+
+const closeCourseAction = ($target) => {
+  $.post($target.data('url'), (data) => {
+    if (data.success) {
+      cd.message({ type: 'success', message: Translator.trans('course.manage.close_success_hint') });
+      location.reload();
+    } else {
+      cd.message({ type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message });
+    }
   });
 };
 
