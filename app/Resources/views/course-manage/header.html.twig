@@ -44,7 +44,11 @@
           <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
         </div>
         <div class="btn-group">
-          <a class="cd-btn cd-btn-primary" href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+          {% if courseSet.type == 'live' %}
+            <a class="cd-btn cd-btn-primary" href="{{ path('course_set_manage_base', {id: courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+          {% else %}
+            <a class="cd-btn cd-btn-primary" href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+          {% endif %}
         </div>
       {% endif %}
 
@@ -60,7 +64,11 @@
               <a target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a>
             </li>
             <li>
-              <a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+              {% if courseSet.type == 'live' %}
+                <a href="{{ path('course_set_manage_base', {id: courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+              {% else %}
+                <a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
+              {% endif %}
             </li>
           </ul>
         </div>
