@@ -60,6 +60,22 @@ class HTMLHelper
         return $html;
     }
 
+    public function htmlTagAutoComple($html)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
+        );
+
+        $factory = new HTMLPurifierFactory($config);
+        $purifier = $factory->createSimple();
+
+        return $purifier->purify($html);
+    }
+
     protected function handleOuterLink($html, $safeDomains)
     {
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);

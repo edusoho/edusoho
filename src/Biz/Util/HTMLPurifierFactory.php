@@ -46,6 +46,20 @@ class HTMLPurifierFactory
         return new \HTMLPurifier($config);
     }
 
+    public function createSimple()
+    {
+        if (!isset($this->config['cacheDir'])) {
+            throw new ServiceException('Please give `cacheDir` argument.');
+        }
+        $this->warmUp($this->config['cacheDir']);
+
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', $this->config['cacheDir']);
+        $config->set('HTML.Trusted', true);
+
+        return new \HTMLPurifier($config);
+    }
+
     private function buildSafeIframeRegexp()
     {
         if (empty($this->config['safeIframeDomains']) || !is_array($this->config['safeIframeDomains'])) {
