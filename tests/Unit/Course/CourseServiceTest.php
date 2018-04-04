@@ -23,8 +23,8 @@ class CourseServiceTest extends BaseTestCase
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->sortCourse($courseSet['id'], array(2, 1));
         $courses = $this->getCourseService()->findCoursesByIds(array(1, 2));
-        $this->assertEquals(1, $courses[2]['seq']);
-        $this->assertEquals(2, $courses[1]['seq']);
+        $this->assertEquals(2, $courses[2]['seq']);
+        $this->assertEquals(1, $courses[1]['seq']);
     }
 
     /**
