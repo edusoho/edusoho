@@ -22,7 +22,7 @@ site.data.empty: 无
 site.data.chapter: 章
 site.data.unit: 节
 site.data.lesson: 课时
-site.data.task: 任务
+site.data.task: 活动
 site.data.part: 节
 site.data.title: 标题
 site.data.score: 分
@@ -959,9 +959,9 @@ course.plan_setup.mode.free: 自由式学习
 course.plan_setup.mode.locked: 解锁式学习
 course.plan_setup.mode.locked_tips: 根据既定顺序逐个解锁学习
 course.plan_setup.mode.free_tips: 学习过程自由安排
-course.plan_setup.finish_rule: 任务完成规则
-course.plan_setup.finish_rule.depend_on_finish_condition: 由任务完成条件决定
-course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，任务才算完成
+course.plan_setup.finish_rule: 活动完成规则
+course.plan_setup.finish_rule.depend_on_finish_condition: 由活动完成条件决定
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，活动才算完成
 course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
@@ -994,11 +994,11 @@ course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
   例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
 course.marketing_setup.preview: 预览试看
-course.marketing_setup.preview.set_task: 设置免费学习任务
+course.marketing_setup.preview.set_task: 设置免费学习活动
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
+course.marketing_setup.preview.set_task.free_tips: 免费活动仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
@@ -1007,7 +1007,7 @@ course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程营销，如有需要请联系网站管理员！
 course.marketing_setup.reward_point_setting: %name%设置
 course.marketing_setup.study_award:　学习奖励
-course.marketing_setup.task_award: 完成单个任务
+course.marketing_setup.task_award: 完成单个活动
 course.marketing_setup.course_award: 完成教学计划
 
 course.teacher_setup: 教师管理
@@ -1094,7 +1094,7 @@ course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
-course.testpaper_check.optional_task_title: 选修任务：%title%
+course.testpaper_check.optional_task_title: 选修课时：%title%
 course.testpaper_check.testpaper_delete: 该试卷已删除
 course.testpaper_check.graph_avg_score: 平均分：%avgScore% 分
 course.testpaper_check.graph_max_score: 最高分：%maxScore% 分
@@ -1149,11 +1149,11 @@ course.question_marker_statistics: 弹题统计
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
-course.dashboard.success_rate: 任务完成率
-course.dashboard.study_detail: 任务学习详情
-course.dashboard.study_detail.name: 任务名
+course.dashboard.success_rate: 活动完成率
+course.dashboard.study_detail: 活动学习详情
+course.dashboard.study_detail.name: 活动名
 course.dashboard.study_detail.per_study_time: 平均学习时长(分)
-course.dashboard.study_detail.per_study_time_tips: 任务学习时长：从任务开始到任务完成的耗时，任务平均学习时长：每个学员的任务学习时长的平均数
+course.dashboard.study_detail.per_study_time_tips: 活动学习时长：从活动开始到活动完成的耗时，活动平均学习时长：每个学员的活动学习时长的平均数
 course.dashboard.study_detail.audio_time: 音视频时长(分)
 course.dashboard.study_detail.audio_time_tips: 音视频的实际时长，仅支持云视频和本地音视频
 course.dashboard.study_detail.per_audio_time: 音视频平均观看时长(分)
@@ -1169,9 +1169,9 @@ course.dashboard.study_detail.audio: （音频）
 course.dashboard.study_detail.testpaper: （试卷）
 course.dashboard.study_detail.ppt: （ppt）
 course.dashboard.study_detail.detail.username: 用户名
-course.dashboard.study_detail.detail.join_time: 加入任务时间
-course.dashboard.study_detail.detail.finish_time: 完成任务时间
-course.dashboard.study_detail.detail.task_learn_time: 任务学习时长（分）
+course.dashboard.study_detail.detail.join_time: 加入活动时间
+course.dashboard.study_detail.detail.finish_time: 完成活动时间
+course.dashboard.study_detail.detail.task_learn_time: 活动学习时长（分）
 course.dashboard.study_detail.detail.audio_learn_time: 音视频学习时长（分）
 course.dashboard.study_detail.detail.score: 最近考试得分
 course.dashboard.stunents_numbers: 计划学员数
@@ -1182,12 +1182,12 @@ course.dashboard.notes_numbers: 笔记数
 course.dashboard.questions_numbers: 提问数
 course.dashboard.discussions_numbers: 话题数
 course.dashboard.free_view_numbers: 免费试看数
-course.dashboard.free_view_numbers_tips: 观看免费任务和试看视频的总次数
+course.dashboard.free_view_numbers_tips: 观看免费活动和试看视频的总次数
 course.dashboard.student_trend: 学员趋势
 course.dashboard.student_trend_seven_days: 7天
 course.dashboard.student_trend_thirty_days: 30天
 course.dashboard.student_detail: 学员详情
-course.dashboard.task_detail: 任务详情
+course.dashboard.task_detail: 活动详情
 course.dashboard.student_chart.time_select_all: 全部
 course.dashboard.student_chart.time_select_unFinished: 未完成
 course.dashboard.student_chart.time_select_seven_days: 7天未学
@@ -1331,7 +1331,7 @@ course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
 course.task: 任务
-course.task.progress: 任务进度
+course.task.progress: 活动进度
 course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个任务才能学习
 course.task.learning: 任务学习
@@ -1498,7 +1498,7 @@ course.question_manage.manage.fault: 错误
 course.question_manage.manage.belong: 从属
 course.question_manage.manage.default_belong: 本课程
 course.question_manage.manage.choose: 请选择
-course.question_manage.manage.belong_tips: 可以针对本课程、某个教学计划或者某个学习任务出题
+course.question_manage.manage.belong_tips: 可以针对本课程、某个教学计划或者某个学习活动出题
 course.question_manage.manage.difficulty: 难度
 course.question_manage.manage.easy_difficulty: 简单
 course.question_manage.manage.normal_difficulty: 一般
@@ -1543,7 +1543,7 @@ course.testpaper_manage.publish_btn: 发布试卷
 course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
 course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
-course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被任务引用，真的要关闭吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被活动引用，真的要关闭吗？
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
@@ -8045,11 +8045,11 @@ my.reward_point.mall.search_hint: 输入标题关键字
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 加入学习时间
-task.learn_data_detail.finishedTime: 完成任务时间
+task.learn_data_detail.finishedTime: 完成活动时间
 task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
 task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
-task.learn_data_detail.learnTime: 任务学习时长（分）
+task.learn_data_detail.learnTime: 活动学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
 task.learn_data_detail.finished_rate: 完成率
 task.learn_data_detail.contact_information: 联系方式
