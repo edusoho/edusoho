@@ -58,9 +58,9 @@ class ExportHelp
     public static function genereateExportCsvFileName($contentName = '')
     {
         $user = ServiceKernel::instance()->getCurrentUser();
-        $fileName = md5($contentName.$user->getId().time());
+        $fileName = md5($contentName.$user->getId().TimeMachine::time());
 
-        return $fileName.rand();
+        return $fileName.RandMachine::rand();
     }
 
     public static function exportCsv($request, $fileName)
