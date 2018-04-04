@@ -249,6 +249,16 @@ class CourseManageController extends BaseController
     public function listAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
+            return $this->redirectToRoute(
+                'course_set_manage_sync',
+                array(
+                    'id' => $courseSetId,
+                    'sideNav' => 'tasks',
+                )
+            );
+        }
 
         $conditions = array(
             'courseSetId' => $courseSet['id'],
@@ -407,10 +417,10 @@ class CourseManageController extends BaseController
         $sync = $request->query->get('sync');
         if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
-                'course_set_manage_sync',
+                'course_set_manage_course_students',
                 array(
-                    'id' => $courseSetId,
-                    'sideNav' => 'tasks',
+                    'courseSetId' => $courseSetId,
+                    'courseId' => $courseId,
                 )
             );
         }
