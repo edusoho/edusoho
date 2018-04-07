@@ -91,24 +91,26 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   _initUpLoading() {
-    const self = this;
-    // 滚动到 class='js-down-loading-more' 的dom节点时，自动刷新下一页
-    let waypoint = new Waypoint({
-      element: $('.js-down-loading-more')[0],
-      handler: function(direction) {
-        if (direction == 'down') {
-          if (self._isLastPage) {
-            waypoint.disable();
-          } else {
-            waypoint.disable();
-            self._displayCurrentPageDataAndSwitchToNext();
-            Waypoint.refreshAll();
-            waypoint.enable();
+    if ($('.js-down-loading-more').length != 0) {
+      const self = this;
+      // 滚动到 class='js-down-loading-more' 的dom节点时，自动刷新下一页
+      let waypoint = new Waypoint({
+        element: $('.js-down-loading-more')[0],
+        handler: function(direction) {
+          if (direction == 'down') {
+            if (self._isLastPage) {
+              waypoint.disable();
+            } else {
+              waypoint.disable();
+              self._displayCurrentPageDataAndSwitchToNext();
+              Waypoint.refreshAll();
+              waypoint.enable();
+            }
           }
-        }
-      },
-      offset: 'bottom-in-view'
-    });
+        },
+        offset: 'bottom-in-view'
+      });
+    }
   }
 
   _initConfig() {

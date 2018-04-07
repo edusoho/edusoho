@@ -20,14 +20,14 @@ class PagedCourseLesson {
     new ESInfiniteCachedScroll({
       'displayAllImmediately': this._displayAllImmediately,
 
-      'data': $.parseJSON($('.js-hidden-data').html().replace(/[\r\n]/g, '')),
+      'data': this._toJson($('.js-hidden-data').html()),
 
       'context': {
-        'course': $.parseJSON($('.js-hidden-course-info').html().replace(/[\r\n]/g, '')),
+        'course': this._toJson($('.js-hidden-course-info').html()),
 
-        'i18n': $.parseJSON($('.js-hidden-i18n').html().replace(/[\r\n]/g, '')),
+        'i18n': this._toJson($('.js-hidden-i18n').html()),
 
-        'metas': $.parseJSON($('.js-hidden-activity-metas').html().replace(/[\r\n]/g, '')),
+        'metas': this._toJson($('.js-hidden-activity-metas').html()),
 
         'currentTimeStamp': parseInt($('.js-hidden-current-timestamp').html(), 10),
 
@@ -149,6 +149,17 @@ class PagedCourseLesson {
     for (let i = 0; i < removedClasses.length; i++) {
       $('.' + removedClasses[i]).removeClass(removedClasses[i]);
     }
+  }
+
+  /*
+   * 将字符串转化为json，转换前先去除换行，如果字符串为空，则转化为 {}
+   */
+  _toJson(str) {
+    let json = {};
+    if (str) {
+      json = $.parseJSON(str.replace(/[\r\n]/g, ''));
+    }
+    return json;
   }
 }
 

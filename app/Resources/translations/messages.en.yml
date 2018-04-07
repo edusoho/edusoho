@@ -1110,7 +1110,7 @@ course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
 course.filter.all_plan: 全部计划
-course.student_member: 学员人数
+course.student_member: 学员总数
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
@@ -1799,7 +1799,7 @@ open_course.load_search_hint: Search ...
 open_course.tag_required_hint: Please enter a tag
 open_course.publish_hint: Do you really want to publish this course?
 open_course.picture_upload_success_hint: Uploaded successfully!
-open_course.lesson_delete_hint: When delete the lesson, the test and resource of this lesson will also be deleted. Do you really want to delete the lesson?
+open_course.lesson_delete_hint: When delete the lesson, the resource of this lesson will also be deleted. Do you really want to delete the lesson?
 open_course.chapter_delete_hint: Do you really want to delete the (% chapterName%) (% partName%)?
 open_course_chapter_delete_success_hint: Deleted
 open_course.add_replay_hint: Do you really want to record playback?

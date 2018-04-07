@@ -12,10 +12,10 @@
   {% elseif not isOvertime %}
     <a class="title" href="#modal" data-toggle="modal"
         data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-        style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
+        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
   {% else %}
     <a class="title" href="javascript:;" data-toggle="modal"
-        style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
+        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
   {% endif %}
 
   {% include 'course/task-list/parts/task-length-template.html.twig' %}
@@ -24,14 +24,14 @@
       <tmp display-if="{isTaskFree}">
         <a class="btn btn-primary" href="#modal" data-toggle="modal"
             data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-            style="margin-top:-8px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
+            style="margin-top:-6px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
       </tmp>
 
       <tmp hide-if="{isTaskFree}">
         <tmp display-if="{isTaskTryLookable}">
           <a class="btn btn-warning" href="#modal" data-toggle="modal"
               data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-              style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
+              style="margin-top:-6px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
         </tmp>
 
         <tmp hide-if="{isTaskTryLookable}">
@@ -39,11 +39,11 @@
             {% if course.isFree %}
               <a class="btn btn-warning" href="#modal" data-toggle="modal"
                   data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-                  style="margin-top:-8px">{{ 'course.catalogue.task.join_btn'|trans }}</a>
+                  style="margin-top:-6px">{{ 'course.catalogue.task.join_btn'|trans }}</a>
             {% else %}
               <a class="btn btn-warning" href="#modal" data-toggle="modal"
                   data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-                  style="margin-top:-8px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
+                  style="margin-top:-6px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
             {% endif %}
           {% endif %}
         </tmp>

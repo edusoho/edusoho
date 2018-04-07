@@ -65,7 +65,6 @@ export default class Manage {
     switch (this.type) {
     case 'chapter':
     {
-
       let $position = this.$element.find('#chapter-' + this.position);
       let $last = $position.nextUntil('.js-task-manage-chapter').last();
       if (0 == $last.length) {
@@ -76,7 +75,7 @@ export default class Manage {
       break;
     }
     case 'task':
-      this.$element.find('#chapter-' + this.position + '.js-lesson-box').append($elm);
+      this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
       break;
     case 'lesson':
     {
@@ -92,6 +91,7 @@ export default class Manage {
     default:
       this.$element.append($elm);
     }
+    $('[data-toggle="tooltip"]').tooltip();
 
     this.handleEmptyShow();
     this._flushTaskNumber();
