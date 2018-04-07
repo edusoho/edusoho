@@ -10,90 +10,63 @@ class MemberRecentlyLearnedDataTagTest extends BaseTestCase
 {
     public function testGetData()
     {
-        // $user1 = $this->getUserService()->register(array(
-        //     'email' => '1234@qq.com',
-        //     'nickname' => 'user1',
-        //     'password' => '123456',
-        //     'confirmPassword' => '123456',
-        //     'createdIp' => '127.0.0.1',
-        // ));
-        // $course1 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course1',
-        // );
-        // $course2 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course2',
-        // );
-        // $course3 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course3',
-        // );
+        $this->mockBiz('Task:TaskService', array(
+            array(
+                'functionName' => 'getUserRecentlyStartTask',
+                'returnValue' => array('id' => 10,'fromCourseSetId' => 1, 'courseId' => 2)
+            ),
+            array(
+                'functionName' => 'getNextTask',
+                'returnValue' => array('id' => 11,'fromCourseSetId' => 1, 'courseId' => 2)
+            )
+        ));
 
-        // $course1 = $this->getCourseService()->createCourse($course1);
-        // $course2 = $this->getCourseService()->createCourse($course2);
-        // $course3 = $this->getCourseService()->createCourse($course3);
-        // $this->getCourseService()->publishCourse($course1['id']);
-        // $this->getCourseService()->publishCourse($course2['id']);
-        // $this->getCourseService()->publishCourse($course3['id']);
-        // $this->getCourseMemberService()->becomeStudent($course1['id'], $user1['id']);
-        // $this->getCourseMemberService()->becomeStudent($course2['id'], $user1['id']);
+        $this->mockBiz('Course:CourseSetService', array(
+            array(
+                'functionName' => 'getCourseSet',
+                'returnValue' => array('id' => 1)
+            )
+        ));
 
-        // $lesson1 = array(
-        //     'courseId' => $course1['id'],
-        //     'title' => 'lesson1',
-        //     'type' => 'text',
-        // );
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 2, 'teacherIds' => array(1))
+            )
+        ));
 
-        // $lesson2 = array(
-        //     'courseId' => $course1['id'],
-        //     'title' => 'lesson2',
-        //     'type' => 'text',
-        // );
-        // $lesson3 = array(
-        //     'courseId' => $course2['id'],
-        //     'title' => 'lesson3',
-        //     'type' => 'text',
-        // );
+        $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'getCourseMember',
+                'returnValue' => array('id' => 5, 'userId' => 10)
+            )
+        ));
 
-        // $lesson1 = $this->getCourseService()->createLesson($lesson1);
-        // $lesson2 = $this->getCourseService()->createLesson($lesson2);
-        // $lesson3 = $this->getCourseService()->createLesson($lesson3);
+        $this->mockBiz('Course:LearningDataAnalysisService', array(
+            array(
+                'functionName' => 'getUserLearningProgress',
+                'returnValue' => array('id' => 5)
+            )
+        ));
 
-        // $this->getCourseService()->publishLesson($course1['id'], $lesson1['id']);
-        // $this->getCourseService()->publishLesson($course1['id'], $lesson2['id']);
-        // $this->getCourseService()->publishLesson($course2['id'], $lesson3['id']);
-
-        // $user = new CurrentUser();
-        // $user1['currentIp'] = '127.0.0.1';
-        // $user->fromArray($user1);
-        // $this->getServiceKernel()->setCurrentUser($user);
-
-        // $this->getCourseService()->startLearnLesson($course1['id'], $lesson1['id']);
-        // $this->getCourseService()->startLearnLesson($course1['id'], $lesson2['id']);
-
+        $this->mockBiz('User:UserService', array(
+            array(
+                'functionName' => 'findUsersByIds',
+                'returnValue' => array(array('id' => 1))
+            )
+        ));
+        
         $datatag = new MemberRecentlyLearnedDataTag();
-        // $courses = $datatag->getData(array('user' => $user));
-        // $this->assertEquals($course1['id'], $courses['id']);
+        $courseSet = $datatag->getData(array('user' => array('id' => 10)));
 
-        // $this->getCourseService()->startLearnLesson($course2['id'], $lesson3['id']);
-        // $courses = $datatag->getData(array('user' => $user));
-        // $this->assertEquals($course2['id'], $courses['id']);
-        $this->assertTrue(true);
+        $this->assertNotEmpty($courseSet['course']);
+        $this->assertNotEmpty($courseSet['course']['teachers']);
+        $this->assertNotEmpty($courseSet['course']['nextLearnTask']);
+        $this->assertNotEmpty($courseSet['course']['progress']);
     }
 
-    public function getCourseService()
+    protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
-    }
-
-    public function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User:UserService');
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 }
