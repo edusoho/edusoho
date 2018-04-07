@@ -38,7 +38,7 @@ class SmsSendOneDayJobTest extends BaseTestCase
         );
 
         $mockedApi = $this->mockBiz(
-            'Mocked:MockedApi',
+            'Mocked:MockedApi_112321',
             array(
                 array(
                     'functionName' => 'post',
