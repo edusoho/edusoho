@@ -38,7 +38,7 @@ class SmsSendOneDayJobTest extends BaseTestCase
         );
 
         $mockedApi = $this->mockBiz(
-            'Mocked:MockedApi_112321',
+            'Mocked:MockedApiOne',
             array(
                 array(
                     'functionName' => 'post',
@@ -59,6 +59,9 @@ class SmsSendOneDayJobTest extends BaseTestCase
         $mockedApi->shouldHaveReceived('post')->times(1);
 
         $this->assertTrue(true);
+
+        ReflectionUtils::setStaticProperty(new SmsProcessorFactory(), 'mockedProcessor', null);
+        ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', null);
     }
 
     public function testExecuteWithException()
