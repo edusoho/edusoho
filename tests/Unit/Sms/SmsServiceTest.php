@@ -165,8 +165,9 @@ class SmsServiceTest extends BaseTestCase
     protected function createApiMock($return = null)
     {
         $return = isset($return) ? $return : array('status' => 'ok');
-        $mockObject = Mockery::mock('Mocked:MockedApi_ddescll2'.rand());
+        $mockObject = Mockery::mock('MockedApi_ddescll2'.rand());
         $mockObject->shouldReceive('post')->times(1)->andReturn($return);
+        $mockObject->shouldReceive('getAccessKey')->andReturn('access_key');
         $this->getSmsService()->setCloudeApi($mockObject);
     }
 
