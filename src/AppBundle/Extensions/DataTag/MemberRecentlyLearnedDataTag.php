@@ -19,13 +19,13 @@ class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
     {
         $user = $arguments['user'];
 
-        $task = $this->getTaskService()->getUserRecentlyStartTask($user->id);
+        $task = $this->getTaskService()->getUserRecentlyStartTask($user['id']);
 
         if (!empty($task)) {
             $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
+            $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
             if (empty($member)) {
                 return  array();
             }
