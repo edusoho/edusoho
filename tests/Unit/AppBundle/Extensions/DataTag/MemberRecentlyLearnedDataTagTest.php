@@ -7,6 +7,21 @@ use AppBundle\Extensions\DataTag\MemberRecentlyLearnedDataTag;
 
 class MemberRecentlyLearnedDataTagTest extends BaseTestCase
 {
+    public function testTaskEmpty()
+    {
+        $this->mockBiz('Task:TaskService', array(
+            array(
+                'functionName' => 'getUserRecentlyStartTask',
+                'returnValue' => array(),
+            ),
+        ));
+
+        $datatag = new MemberRecentlyLearnedDataTag();
+        $courseSet = $datatag->getData(array('user' => array('id' => 10)));
+
+        $this->assertEmpty($courseSet);
+    }
+
     public function testGetData()
     {
         $this->mockBiz('Task:TaskService', array(
@@ -64,8 +79,8 @@ class MemberRecentlyLearnedDataTagTest extends BaseTestCase
         $this->assertNotEmpty($courseSet['course']['progress']);
     }
 
-    protected function getTaskService()
+    protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->createService('Course:MemberService');
     }
 }
