@@ -38,7 +38,7 @@ class DefaultController extends BaseController
         $meCount = $this->getMeCount();
         $mobileCode = (empty($meCount['mobileCode']) ? 'edusohov3' : $meCount['mobileCode']);
 
-        if ($this->getWebExtension()->isMicroMessenger()) {
+        if ($this->getWebExtension()->isMicroMessenger() && 'edusohov3' == $mobileCode) {
             $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
         } else {
             $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
