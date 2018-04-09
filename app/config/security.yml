@@ -55,7 +55,7 @@ security:
                 secret: "%secret%"
                 lifetime: 31536000
                 path: /
-                domain: ~
+                domain: "%custom_domain%"
             logout:
                 path:   logout
                 success_handler: topxia.logout.success_handler
