@@ -1,6 +1,6 @@
 parameters:
     session.service_id: session.handler.pdo
-    custom_domain: ~
+    cookie_domain: ~
     role_hierarchy:
         ROLE_TEACHER:     ROLE_USER
         ROLE_BACKEND:     ROLE_USER

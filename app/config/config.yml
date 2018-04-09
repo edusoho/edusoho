@@ -28,7 +28,7 @@ framework:
     trusted_proxies: ~
     session:
         handler_id:  "%session.service_id%"
-        cookie_domain: "%custom_domain%"
+        cookie_domain: "%cookie_domain%"
     fragments:       ~
     http_method_override: true
     assets:
