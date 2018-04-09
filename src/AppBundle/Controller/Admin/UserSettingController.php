@@ -380,6 +380,29 @@ class UserSettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
     }
 
+    public function messageAction(Request $request)
+    {
+        $messageSettingDefault = array(
+            'studentToStudent' => 1,
+            'studentToTeacher' => 1,
+            'teacherToStudent' => 1
+        );
+        $setting = $this->getSettingService()->get('message', array());
+        $setting = array_merge($messageSettingDefault, $setting);
+        $this->getSettingService()->set('message', $setting);
+
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            $formData = ArrayToolkit::parts($formData, array('studentToStudent', 'studentToTeacher', 'teacherToStudent'));
+            $formData = array_merge(array('studentToStudent' => 0, 'studentToTeacher' => 0, 'teacherToStudent' => 0), $formData);
+
+            $this->getSettingService()->set('message', $formData);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin/system/user-message.html.twig');
+    }
+
     protected function updateWeixinMpFile($val)
     {
         $dir = realpath(__DIR__.'/../../../../web/');
