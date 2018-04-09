@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\FileToolkit;
+use Biz\Common\HTMLHelper;
 
 class SiteSettingController extends BaseController
 {
@@ -59,6 +60,11 @@ class SiteSettingController extends BaseController
     public function saveSiteAction(Request $request)
     {
         $site = $request->request->all();
+
+        if (!empty($site['analytics'])) {
+            $helper = new HTMLHelper($this->getBiz());
+            $site['analytics'] = $helper->htmlTagAutoComple($site['analytics']);
+        }
         $this->getSettingService()->set('site', $site);
         $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
 
