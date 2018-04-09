@@ -10,7 +10,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
 use Biz\System\Service\LogService;
-use Biz\System\Service\SessionService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\NotificationService;
@@ -524,7 +523,6 @@ class UserController extends BaseController
 
     protected function kickUserLogout($userId)
     {
-        $this->getSessionService()->clearByUserId($userId);
         $tokens = $this->getTokenService()->findTokensByUserIdAndType($userId, 'mobile_login');
         if (!empty($tokens)) {
             foreach ($tokens as $token) {
@@ -563,14 +561,6 @@ class UserController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    /**
-     * @return SessionService
-     */
-    protected function getSessionService()
-    {
-        return $this->createService('System:SessionService');
     }
 
     /**
