@@ -1770,7 +1770,7 @@ class WebExtension extends \Twig_Extension
         }
 
         $messageSetting = $this->getSetting('message', array());
-        
+
         if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
             return false;
         }

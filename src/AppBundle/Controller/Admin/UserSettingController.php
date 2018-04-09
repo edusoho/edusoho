@@ -385,7 +385,7 @@ class UserSettingController extends BaseController
         $messageSettingDefault = array(
             'studentToStudent' => 1,
             'studentToTeacher' => 1,
-            'teacherToStudent' => 1
+            'teacherToStudent' => 1,
         );
         $setting = $this->getSettingService()->get('message', array());
         $setting = array_merge($messageSettingDefault, $setting);
