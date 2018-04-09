@@ -183,7 +183,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ('published' === $task['status']) {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+            return;
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
@@ -280,6 +280,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
+        }
+    }
+
+    public function deleteTasksByCategoryId($courseId, $categoryId)
+    {
+        $lessonTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($courseId, $categoryId);
+        if (empty($lessonTasks)) {
+            return;
+        }
+        foreach ($lessonTasks as $task) {
+            $this->deleteTask($task['id']);
         }
     }
 
@@ -775,6 +786,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getTaskByCourseIdAndActivityId($courseId, $activityId);
     }
 
+    public function countTasksByChpaterId($chapterId)
+    {
+        return $this->getTaskDao()->countByChpaterId($chapterId);
+    }
+
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findByChapterId($chapterId);
@@ -1042,6 +1058,29 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $liveCourseNumber;
     }
 
+    public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0)
+    {
+        $lesson = $this->getCourseLessonService()->getLesson($lessonId);
+
+        if (empty($lesson) || $lesson['type'] != 'lesson') {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $this->getCourseService()->tryManageCourse($lesson['courseId']);
+
+        $tasks = $this->findTasksByChapterId($lessonId);
+
+        foreach ($tasks as $task) {
+            $newTask = $this->getTaskDao()->update($task['id'], array('isOptional' => $isOptional));
+
+            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})的选修状态", array(
+                'oldTask' => $task,
+                'task' => $newTask,
+            ));
+            $this->dispatchEvent('course.task.updateOptional', new Event($newTask, $task));
+        }
+    }
+
     /**
      * @return TaskDao
      */
@@ -1212,5 +1251,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    protected function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 }

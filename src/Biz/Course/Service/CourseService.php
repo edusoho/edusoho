@@ -51,6 +51,8 @@ interface CourseService
 
     public function updateChapter($courseId, $chapterId, $fields);
 
+    public function deleteChapter($courseId, $chapterId);
+
     public function findChaptersByCourseId($courseId);
 
     public function updateCourse($id, $fields);
@@ -173,8 +175,6 @@ interface CourseService
 
     public function sortCourseItems($courseId, $ids);
 
-    public function deleteChapter($courseId, $chapterId);
-
     public function analysisCourseDataByTime($startTime, $endTime);
 
     public function countCourses(array $conditions);
@@ -242,4 +242,15 @@ interface CourseService
     public function tryFreeJoin($courseId);
 
     public function findLiveCourse($conditions, $userId, $role);
+
+    public function changeShowPublishLesson($courseId, $status);
+
+    public function countCoursesByCourseSetId($courseSetId);
+
+    //排序教学计划
+    public function sortCourse($courseSetId, $ids);
+
+    public function sortByCourses($courses);
+
+    public function countCourseItems($course);
 }

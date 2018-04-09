@@ -215,6 +215,7 @@ class Logger
                 'cancel_teachers_all' => '取消用户的教师身份',
                 'delete_taskLearn' => '删除任务学习记录',
                 'delete_chapter' => '删除章节',
+                'delete_lesson' => '删除课时',
                 'delete_favorite' => '删除收藏',
                 'delete_note' => '删除笔记',
                 'delete_thread' => '删除话题',

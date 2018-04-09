@@ -1,17 +1,16 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.homework_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'homework-check' %}
 
-{% block main %}
-  <div class="panel panel-default testpaper-mark-panel">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
-    <div class="panel-body">
-      {% if isTeacher is defined and not isTeacher %}
-        <span class="color-danger">{{'course.homework_check.no_permission_tips'|trans}}</span>
-      {% endif %}
+{% block page_title %}{{ 'course.homework_check'|trans }}{% endblock %}
 
-      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework'})) }}
-    </div>
+{% block main_body %}
+  <div>
+    {% if isTeacher is defined and not isTeacher %}
+      <span class="color-danger">{{'course.homework_check.no_permission_tips'|trans}}</span>
+    {% endif %}
+
+    {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework'})) }}
   </div>
 {% endblock %}

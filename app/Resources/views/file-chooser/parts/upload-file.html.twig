@@ -10,7 +10,8 @@
   data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
   data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
   data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
-  data-process="{{ uploader_process(targetType) }}">
+  data-process="{{ uploader_process(targetType) }}"
+  data-num-limit="{{ enableLessonCount|default(null) }}">
   </div>
   {% if (mediaType|default(null) == 'video' or showVideoQuality|default(0)) and setting('storage.upload_mode', 'local') != 'local' %}
     <div class="uploader-bottom">

@@ -1,17 +1,18 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.members_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
 {% set side_nav = 'students' %}
 
-{% block main %}
-  <div class="panel panel-default" role="course-manage-student-index">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav, btnGroup:1} %}
+{% endblock %}
 
-    <div class="panel-body">
+{% block main_body %}
+    <div role="course-manage-student-index">
       {{ web_macro.flash_messages() }}
       {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': 'manage'} %}
-      
+
       <form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
         <div class="form-group col-md-7">
           <input class="form-control " type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
@@ -96,5 +97,4 @@
         {{ web_macro.paginator(paginator) }}
       </nav>
     </div>
-  </div>
 {% endblock %}

@@ -41,6 +41,7 @@ site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
 site.close: 关闭
+site.delete: 删除
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -336,6 +337,10 @@ coin.invite_url_copy_success_hint: 已复制邀请链接到剪切板，快去分
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
 
+course.chapter: '第%number%%chapter_name%: %title%'
+course.unit: '第%number%%part_name%: %title%'
+course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
@@ -376,6 +381,7 @@ course_set.title_required_error_hint: 请输入标题
 course_set.learn_progress: 学习进度
 course_set.manage.tag_required_hint: 请输入标签
 course_set.manage.publish_hint: 是否确定发布该课程？
+course_set.manage.publish_title: 发布课程
 course_set.manage.publish_success_hint: 课程发布成功
 course_set.manage.publish_fail_hint: 课程发布失败
 course_set.manage.next_label: 继续了解
@@ -399,7 +405,7 @@ course_set.manage.upgrade_step3_hint:  >
 course_set.manage.upgrade_step5_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 
-course.manage.title_required_error_hint: 请输入教学.计划课程标题
+course.manage.title_required_error_hint: 请输入教学计划课程标题
 course.manage.expiry_end_date_error_hint: 请输入结束日期
 course.manage.expiry_start_date_error_hint: 请输入开始日期
 course.manage.expiry_days_error_hint: 请输入有效期天数
@@ -412,14 +418,15 @@ course.manage.expiry_end_date_error_hint: 开始日期应早于结束日期
 course.manage.max_year_error_hint: 有效期最大值不能超过99,999天
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
+course.manage.publish_title: 发布教学计划
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
 course.manage.close_hint: 是否确定关闭该教学计划？
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.delete_hint: 是否确定删除该教学计划？
-course.manage.task_delete_hint: 是否确定删除该任务吗？
-course.manage.chapter_delete_hint: 是否确定删除该章节吗？
+course.manage.task_delete_hint: 是否确定删除该活动吗？
+course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
@@ -432,6 +439,7 @@ course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
 course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
+course.manage.sort_cancel: 取消当前排序
 
 material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
@@ -519,7 +527,7 @@ open_course.load_search_hint: 搜索中...
 open_course.tag_required_hint: 请输入标签
 open_course.publish_hint: 您真的要发布该课程吗？
 open_course.picture_upload_success_hint: 上传成功！
-open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗?
+open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料。您真的要删除该课时吗?
 open_course.chapter_delete_hint: 您真的要删除该（%chapterName%）(%partName%）吗?
 open_course_chapter_delete_success_hint: 已删除
 open_course.add_replay_hint: 您真的要录制回放吗?
@@ -527,7 +535,7 @@ open_course.add_replay_failed_where_live: 录制失败，直播时您没有进�
 open_course.add_replay_failed_hint: 录制失败!
 open_course.add_replay_success_hint: 课时已录制!
 open_course.publish_lesson_hint: 课时发布成功!
-open_course.unpublish_hint: (未发布)
+open_course.unpublish_hint: 未发布
 open_course.exercise_delete_hint: 您真的要删除该课时练习吗?
 open_course.exercise_delete_success_hint: 练习已删除!
 open_course.homework_delete_hint: 您真的要删除该课时作业吗?
@@ -802,6 +810,8 @@ admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: --选择所属栏目--
 
+lesson_count_no_more_than_300: 课时总数不能超过300个
+lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 Bad credentials.: 用户名或密码错误
 

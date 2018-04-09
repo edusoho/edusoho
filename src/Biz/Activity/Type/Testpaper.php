@@ -43,7 +43,7 @@ class Testpaper extends Activity
         $ext = $this->get($activity['mediaId']);
 
         $newExt = array(
-            'mediaId' => $config['testId'],
+            'mediaId' => empty($config['testId']) ? 0 : $config['testId'],
             'doTimes' => $ext['doTimes'],
             'redoInterval' => $ext['redoInterval'],
             'limitedTime' => $ext['limitedTime'],

@@ -26,10 +26,11 @@ class CourseController extends CourseBaseController
 
         $courseItems = array();
         if ($isMarketingPage) {
-            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 25));
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
+        $course['courseItemNum'] = $this->getCourseService()->countCourseItems($course);
 
         return $this->render(
             'course/tabs/summary.html.twig',
@@ -46,6 +47,7 @@ class CourseController extends CourseBaseController
     {
         $tab = $this->prepareTab($tab);
         $user = $this->getCurrentUser();
+        $preview = $request->query->get('previewAs', '');
 
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
@@ -57,7 +59,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
         }
 
-        if ($user->isLogin() && $this->canCourseShowRedirect($request)) {
+        if (empty($preview) && $user->isLogin() && $this->canCourseShowRedirect($request)) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
                     'userId' => $user['id'],
@@ -71,7 +73,7 @@ class CourseController extends CourseBaseController
                 $lastCourseMember = reset($lastCourseMember);
                 $course = $this->getCourseService()->getCourse($lastCourseMember['courseId']);
                 //周期课程且未开始时，不做跳转
-                if ($course['expiryMode'] != 'date' || $course['expiryStartDate'] < time()) {
+                if ('date' != $course['expiryMode'] || $course['expiryStartDate'] < time()) {
                     return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
                 }
             }
@@ -135,7 +137,7 @@ class CourseController extends CourseBaseController
         }
         $tag = null;
         foreach ($tasks as $task) {
-            if (empty($tag) && $task['type'] === 'video' && $course['tryLookable']) {
+            if (empty($tag) && 'video' === $task['type'] && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
                     $tag = 'site.badge.try_watch';
@@ -202,7 +204,6 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $user = $this->getCurrentUser();
@@ -229,6 +230,9 @@ class CourseController extends CourseBaseController
             0,
             1
         );
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->sortByCourses($courses);
 
         return $this->render(
             'course/header/header-for-guest.html.twig',
@@ -389,7 +393,7 @@ class CourseController extends CourseBaseController
      */
     private function getSelectCourseId(Request $request, $course)
     {
-        if ($request->get('_route') == 'my_course_show') {
+        if ('my_course_show' == $request->get('_route')) {
             return $request->query->get('selectedCourse', $course['id']);
         } else {
             return $request->query->get('selectedCourse', 0);
@@ -425,11 +429,12 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function tasksAction($course, $member = array())
+    public function tasksAction($course, $member = array(), $paged = false)
     {
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+        $pageSize = $paged ? 25 : 10000;  //前台>25个，才会有 显示全部 按钮
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => $pageSize));
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
@@ -524,13 +529,14 @@ class CourseController extends CourseBaseController
                     'excludeIds' => $excludeCourseIds,
                     'status' => 'published',
                 ),
-                array('createdTime' => 'desc'),
+                array('seq' => 'asc', 'createdTime' => 'asc'),
                 0,
                 $limitNum - count($otherCoursesMember)
             );
         }
 
         $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
+        $purchasedCourse = $this->getCourseService()->sortByCourses($purchasedCourse);
         $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(

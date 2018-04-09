@@ -3,7 +3,6 @@
 namespace Biz\Testpaper\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Topxia\Service\Common\ServiceKernel;
 
 class UpdateRealTimeTestResultStatusJob extends AbstractJob
 {
@@ -54,23 +53,13 @@ class UpdateRealTimeTestResultStatusJob extends AbstractJob
         }
     }
 
-    protected function getCourseService()
-    {
-        return ServiceKernel::instance()->createService('Course:CourseService');
-    }
-
-    protected function getTaskService()
-    {
-        return ServiceKernel::instance()->createService('Task:TaskService');
-    }
-
     protected function getActivityService()
     {
-        return ServiceKernel::instance()->createService('Activity:ActivityService');
+        return $this->biz->service('Activity:ActivityService');
     }
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 }

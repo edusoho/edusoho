@@ -79,6 +79,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
     {
         $chapterNumber = 1;
         $unitNumber = 1;
+        $lessonNumber = 1;
         $needResetUnitNumber = false;
         $seq = 1;
         $taskNumber = 1;
@@ -90,10 +91,11 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             switch ($chapter['type']) {
                 case 'chapter':
                 case 'unit':
-                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $needResetUnitNumber);
+                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $lessonNumber, $needResetUnitNumber);
                     break;
                 case 'lesson':
                     $fields['seq'] = $seq;
+                    ++$seq;
                     $fields['number'] = $this->updateTaskSeq($chapterId, $taskNumber, $seq);
                     $this->chapterBatchUpdateHelper->add('id', $chapterId, $fields);
                     break;
@@ -173,17 +175,19 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
     {
         $chapterNumber = 1;
         $unitNumber = 1;
+        $lessonNumber = 1;
         $needResetUnitNumber = false;
         $seq = 1;
         $taskNumber = 1;
+        $categoryId = 0;
         foreach ($this->itemIds as $itemId) {
             list($type, $chapterIdOrTaskId) = explode('-', $itemId);
 
             switch ($type) {
                 case 'chapter':
                     $chapter = $this->getChapter($chapterIdOrTaskId);
-                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $needResetUnitNumber);
-
+                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $lessonNumber, $needResetUnitNumber);
+                    $categoryId = $chapterIdOrTaskId;
                     break;
                 case 'task':
                     $task = $this->getTask($chapterIdOrTaskId);
@@ -200,6 +204,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
                         array(
                             'seq' => $seq,
                             'number' => $number,
+                            'categoryId' => $categoryId,
                         )
                     );
 
@@ -241,6 +246,8 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
         foreach ($copiedTasks as $copiedTask) {
             $newFields = $this->taskBatchUpdateHelper->get('id', $copiedTask['copyId']);
+            //在不考虑跨课时拖动的情况下，categoryId不变
+            $newFields['categoryId'] = $copiedTask['categoryId'];
             $this->taskBatchUpdateHelper->add('id', $copiedTask['id'], $newFields);
         }
 
@@ -267,7 +274,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
         unset($copiedChapters);
     }
 
-    private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$needResetUnitNumber)
+    private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$lessonNumber, &$needResetUnitNumber)
     {
         $fields = array(
             'seq' => $seq,
@@ -289,6 +296,12 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             ++$seq;
             $fields['number'] = $unitNumber;
             ++$unitNumber;
+        }
+
+        if ($chapter['type'] == 'lesson') {
+            ++$seq;
+            $fields['number'] = $lessonNumber;
+            ++$lessonNumber;
         }
 
         $this->chapterBatchUpdateHelper->add('id', $chapter['id'], $fields);

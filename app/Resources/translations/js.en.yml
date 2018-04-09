@@ -55,6 +55,8 @@ site.form.submit_error: Form submit error
 site.cancel: Cancel
 site.confirm: Confirm
 site.close: Close
+site.delete: Delete
+
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -393,6 +395,10 @@ coin.invite_url_copy_success_hint: The link was copied successfully
 course.buy.discount_hint: Dicounted
 course.buy.price_free_hint: Go study
 
+course.chapter: '%chapter_name% %number% : %title%'
+course.unit: '%part_name% %number% : %title%'
+course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
+
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
 
@@ -432,6 +438,7 @@ course_set.title_required_error_hint: Please enter a title
 course_set.learn_progress: Learning progress
 course_set.manage.tag_required_hint: Please enter a label
 course_set.manage.publish_hint: Are you sure you want to post the course?
+course_set.manage.publish_title: 发布课程
 course_set.manage.publish_success_hint: The course was published successfully
 course_set.manage.publish_fail_hint: Course release failed
 course_set.manage.next_label: Continue to learn
@@ -468,6 +475,7 @@ course.manage.expiry_end_date_error_hint: The start date should be earlier than 
 course.manage.max_year_error_hint: The maximum value of the validity period can not exceed 99,999 days
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
+course.manage.publish_title: 发布教学计划
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Are you sure to close the program?
@@ -475,7 +483,7 @@ course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
 course.manage.delete_hint: Are you sure you want to delete the plan?
 course.manage.task_delete_hint: Are you sure you want to delete the task?
-course.manage.chapter_delete_hint: Are you sure you want to delete this chapter?
+course.manage.chapter_delete_hint: Are you sure you want to delete this %name%?
 course.manage.task_publish_success_hint: Published successfully
 course.manage.task_publish_fail_hint:  Publish failed
 course.manage.task_unpublish_success_hint:  Publish cancelled successful
@@ -488,6 +496,7 @@ course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
+course.manage.sort_cancel: 取消当前排序
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
@@ -574,7 +583,7 @@ open_course.load_search_hint: Search ...
 open_course.tag_required_hint: Please enter a tag
 open_course.publish_hint: Do you really want to publish this course?
 open_course.picture_upload_success_hint: Uploaded successfully!
-open_course.lesson_delete_hint: When delete the lesson, the test and resource of this lesson will also be deleted. Do you really want to delete the lesson?
+open_course.lesson_delete_hint: When delete the lesson, the resource of this lesson will also be deleted. Do you really want to delete the lesson?
 open_course.chapter_delete_hint: Do you really want to delete the (% chapterName%) (% partName%)?
 Open_course_chapter_delete_success_hint: Deleted
 open_course.add_replay_hint: Do you really want to record playback?
@@ -582,7 +591,7 @@ open_course.add_replay_failed_where_live: Recording failed, you did not record i
 open_course.add_replay_failed_hint: Recording failed!
 open_course.add_replay_success_hint: Lesson has been recorded!
 open_course.publish_lesson_hint: Lesson publish successfully!
-open_course.unpublish_hint: (Unpublished)
+open_course.unpublish_hint: Unpublished
 open_course.exercise_delete_hint: Do you really want to delete this lesson practice?
 open_course.exercise_delete_success_hint: Practice deleted!
 open_course.homework_delete_hint: Do you really want to delete the assingment?
@@ -860,6 +869,9 @@ admin.data.lab.setting.error: 发生异常了，请重试！
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: 'Choose column'
+
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
 Bad credentials.: 用户名或密码错误
 

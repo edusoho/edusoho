@@ -1,6 +1,9 @@
+import Detail from './detail';
+
 export default class Base {
   constructor() {
     this.init();
+    this.detail = new Detail();
   }
 
   init() {
@@ -35,6 +38,7 @@ export default class Base {
     });
     $('#courseset-base-submit').click((event) => {
       if (validator.form()) {
+        this.detail.publishAddMessage();
         $(event.currentTarget).button('loading');
         $form.submit();
       }

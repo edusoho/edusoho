@@ -14,6 +14,11 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->db()->delete($this->table(), array('categoryId' => $categoryId));
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER  BY seq";
@@ -98,6 +103,13 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         $sql = "SELECT * FROM {$this->table()} WHERE categoryId = ? ORDER BY seq ASC ";
 
         return $this->db()->fetchAll($sql, array($chapterId)) ?: array();
+    }
+
+    public function countByChpaterId($chapterId)
+    {
+        $sql = "SELECT count(*) FROM {$this->table()} WHERE categoryId = ?";
+
+        return $this->db()->fetchColumn($sql, array($chapterId));
     }
 
     public function getByChapterIdAndMode($chapterId, $mode)
@@ -260,6 +272,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'endTime < :endTime_LT',
                 'endTime <= :endTime_GE',
                 'categoryId = :categoryId',
+                'categoryId IN (:categoryIds)',
                 'activityId = :activityId',
                 'mode = :mode',
                 'isOptional = :isOptional',

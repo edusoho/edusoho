@@ -17,9 +17,11 @@ class StudentExporter extends Exporter
         $courseSetting = $this->getSettingService()->get('course', array());
         if (!empty($courseSetting['teacher_export_student'])) {
             $this->getCourseService()->tryManageCourse($this->parameter['courseId'], $this->parameter['courseSetId']);
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getCount()
@@ -83,21 +85,25 @@ class StudentExporter extends Exporter
         $datas = array();
         foreach ($courseMembers as $courseMember) {
             $member = array();
-            $member[] = $users[$courseMember['userId']]['nickname'];
-            $member[] = $users[$courseMember['userId']]['email'];
+            $userId = $courseMember['userId'];
+            $profile = $profiles[$userId];
+            $user = $users[$userId];
+
+            $member[] = $user['nickname'];
+            $member[] = $user['email'];
             $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
-            $member[] = $courseMember['learningProgressPercent'];
-            $member[] = $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] : '-';
-            $member[] = $gender[$profiles[$courseMember['userId']]['gender']];
-            $member[] = $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] : '-';
-            $member[] = $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] : '-';
-            $member[] = $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] : '-';
-            $member[] = $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'] : '-';
-            $member[] = $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'] : '-';
-            $member[] = $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'] : '-';
+            $member[] = $courseMember['learningProgressPercent'].'%';
+            $member[] = $profile['truename'] ? $profile['truename'] : '-';
+            $member[] = $gender[$profile['gender']];
+            $member[] = $profile['qq'] ? $profile['qq'] : '-';
+            $member[] = $profile['weixin'] ? $profile['weixin'] : '-';
+            $member[] = $profile['mobile'] ? $profile['mobile'] : '-';
+            $member[] = $profile['company'] ? $profile['company'] : '-';
+            $member[] = $profile['job'] ? $profile['job'] : '-';
+            $member[] = $user['title'] ? $user['title'] : '-';
 
             foreach ($fields as $value) {
-                $member[] = $profiles[$courseMember['userId']][$value] ? $profiles[$courseMember['userId']][$value] : '-';
+                $member[] = $profile[$value] ? $profile[$value] : '-';
             }
 
             $datas[] = $member;

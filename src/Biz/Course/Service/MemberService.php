@@ -142,4 +142,6 @@ interface MemberService
     public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d');
 
     public function findMembersByIds($ids);
+
+    public function countStudentMemberByCourseSetId($couseSetId);
 }

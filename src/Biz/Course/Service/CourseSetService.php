@@ -135,8 +135,6 @@ interface CourseSetService
 
     public function updateCourseSet($id, $fields);
 
-    public function updateCourseSetDetail($id, $fields);
-
     /**
      * 更新课程营销设置.
      *

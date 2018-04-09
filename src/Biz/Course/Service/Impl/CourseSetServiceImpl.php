@@ -439,33 +439,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'tags',
                 'categoryId',
                 'serializeMode',
-                // 'summary',
                 'smallPicture',
                 'middlePicture',
                 'largePicture',
                 'teacherIds',
                 'orgCode',
+                'summary',
+                'goals',
+                'audiences',
             )
         );
 
-        if (null !== $fields['tags']) {
-            $tags = explode(',', $fields['tags']);
-            $tags = $this->getTagService()->findTagsByNames($tags);
-            $tagIds = ArrayToolkit::column($tags, 'id');
-            $fields['tags'] = $tagIds;
-        }
-
         $fields = $this->filterFields($fields);
 
-        if (isset($fields['summary'])) {
-            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
-        }
-
         $this->updateCourseSerializeMode($courseSet, $fields);
-        if (empty($fields['subtitle'])) {
-            $fields['subtitle'] = null;
-        }
-
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
         $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})");
@@ -483,8 +470,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                     $course['id'],
                     array(
                         'serializeMode' => $fields['serializeMode'],
-                        'title' => $course['title'],
-                        'courseSetId' => $courseSet['id'],
                     )
                 );
             }
@@ -512,29 +497,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'course-set.marketing.update',
             new Event($courseSet, array('oldCourseSet' => $oldCourseSet, 'newCourseSet' => $courseSet))
         );
-
-        return $courseSet;
-    }
-
-    public function updateCourseSetDetail($id, $fields)
-    {
-        $courseSet = $this->tryManageCourseSet($id);
-
-        $fields = ArrayToolkit::parts(
-            $fields,
-            array(
-                'summary',
-                'goals',
-                'audiences',
-            )
-        );
-
-        if (isset($fields['summary'])) {
-            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
-        }
-
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
-        $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
     }
@@ -1122,7 +1084,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function filterFields($fields)
     {
-        return array_filter(
+        $fields = array_filter(
             $fields,
             function ($value) {
                 if ('' === $value || null === $value) {
@@ -1132,6 +1094,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 return true;
             }
         );
+
+        if (!empty($fields['tags'])) {
+            $tags = explode(',', $fields['tags']);
+            $tags = $this->getTagService()->findTagsByNames($tags);
+            $tagIds = ArrayToolkit::column($tags, 'id');
+            $fields['tags'] = $tagIds;
+        }
+
+        if (!empty($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
+        if (!empty($fields['goals'])) {
+            $fields['goals'] = json_decode($fields['goals'], true);
+        }
+
+        if (!empty($fields['audiences'])) {
+            $fields['audiences'] = json_decode($fields['audiences'], true);
+        }
+
+        return $fields;
     }
 
     /**
