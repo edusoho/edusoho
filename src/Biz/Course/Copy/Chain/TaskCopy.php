@@ -71,7 +71,7 @@ class TaskCopy extends AbstractEntityCopy
                     $newTask['mode'] = 'default';
                     unset($newTask['categoryId']);
                 } else {*/
-                    $newTask['categoryId'] = $newChapter['id'];
+                $newTask['categoryId'] = $newChapter['id'];
                 //}
             }
 
