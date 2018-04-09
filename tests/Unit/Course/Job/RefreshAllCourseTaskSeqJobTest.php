@@ -16,8 +16,7 @@ class RefreshAllCourseTaskSeqJobTest extends BaseTestCase
         $courseSet = $this->createNewCourseSet();
         $course = $this->defaultCourse('第一个教学计划', array('id' => $courseSet['id']));
 
-        $course = $this->getCourseService()->createCourse($course);
-        $this->createTask('normal', $course['id']);
+        $this->getCourseService()->createCourse($course);
         $mockObj = \Mockery::mock('Biz\Task\Strategy\Impl\NormalStrategy');
         $mockObj->shouldReceive('accept')
             ->andReturn(true);
