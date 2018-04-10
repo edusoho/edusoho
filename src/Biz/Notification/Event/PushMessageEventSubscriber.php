@@ -1983,11 +1983,13 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         //            $this->getSchedulerService()->register($startJob);
         //        }
 
+        //在直播开始前，通知都有效，但不是一直需要执行
         if ('live' == $lesson['type']) {
             $startJob = array(
                 'name' => 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id'],
-                'expression' => $lesson['startTime'] - 10 * 60,
+                'expression' => intval($lesson['startTime'] - 10 * 60),
                 'class' => 'Biz\Notification\Job\LiveLessonStartNotifyJob',
+                'misfire_threshold' => 10 * 60,
                 'args' => array(
                     'targetType' => 'liveLesson',
                     'targetId' => $lesson['id'],

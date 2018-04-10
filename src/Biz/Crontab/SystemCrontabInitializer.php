@@ -169,6 +169,11 @@ class SystemCrontabInitializer
                 'expression' => '0 23 * * *',
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\DeleteFiredLogJob',
             ),
+            'updateCourseSetHotSeq' => array(
+                'expression' => '47 4 * * *',
+                'class' => 'Biz\Course\Job\UpdateCourseSetHotSeqJob',
+                'misfire_threshold' => 0,
+            ),
         );
         $defaultJob = array(
             'pool' => 'default',
