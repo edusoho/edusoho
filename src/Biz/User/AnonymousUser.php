@@ -18,7 +18,7 @@ class AnonymousUser extends CurrentUser
             'org' => array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode),
             'orgId' => $this->rootOrgId,
             'orgCode' => $this->rootOrgCode,
-            'password' => ''
+            'password' => '',
         ), $user);
 
         $this->data = $user;
