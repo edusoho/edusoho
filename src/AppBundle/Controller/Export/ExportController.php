@@ -51,7 +51,7 @@ class ExportController extends BaseController
 
         $exporter = $this->container->get('export_factory')->create($name, $conditions);
         $result = $exporter->export($name);
-        
+
         return $this->createJsonResponse($result);
     }
 
