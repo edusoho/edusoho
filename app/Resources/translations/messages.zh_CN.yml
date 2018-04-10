@@ -1334,7 +1334,7 @@ course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_seq: 任务%seq%
+course.thread.mission_number: 任务%number%
 course.thread.teacher_answer: 教师的答案
 course.thread.form.edit: 编辑话题
 course.thread.form.create: 发表话题
