@@ -1763,6 +1763,7 @@ class WebExtension extends \Twig_Extension
 
         return true;
     }
+
     public function canSendMessage($userId)
     {
         $user = $this->biz['user'];
@@ -1795,7 +1796,6 @@ class WebExtension extends \Twig_Extension
 
         return true;
     }
-
 
     private function isTeacher($roles)
     {
