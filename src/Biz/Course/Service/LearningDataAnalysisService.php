@@ -17,4 +17,6 @@ interface LearningDataAnalysisService
     public function getUserLearningProgressByCourseIds($courseIds, $userId);
 
     public function getUserLearningSchedule($courseId, $userId);
+
+    public function makeProgress($learnedNum, $total);
 }
