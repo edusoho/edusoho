@@ -162,6 +162,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
+            new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('canSendMessage', array($this, 'canSendMessage')),
         );
     }
@@ -1753,6 +1754,15 @@ class WebExtension extends \Twig_Extension
         return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
     }
 
+    public function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->getSetting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
+            return false;
+        }
+
+        return true;
+    }
     public function canSendMessage($userId)
     {
         $user = $this->biz['user'];
@@ -1785,6 +1795,7 @@ class WebExtension extends \Twig_Extension
 
         return true;
     }
+
 
     private function isTeacher($roles)
     {
