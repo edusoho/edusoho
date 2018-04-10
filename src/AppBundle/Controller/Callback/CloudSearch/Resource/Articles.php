@@ -97,7 +97,7 @@ class Articles extends BaseProvider
      */
     protected function getCategoryService()
     {
-        return $this->getBiz()->service('Taxonomy:CategoryService');
+        return $this->getBiz()->service('Article:CategoryService');
     }
 
     /**
