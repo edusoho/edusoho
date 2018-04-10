@@ -199,6 +199,7 @@ user.fileds.wechat: Wechat
 user.fileds.qq: QQ
 user.fields.gender.male: Male
 user.fields.gender.female: Female
+user.fields.gender.secret: Secret
 user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back

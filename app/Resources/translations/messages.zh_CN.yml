@@ -272,6 +272,7 @@ user.fileds.wechat: 微信
 user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
+user.fields.gender.secret: 秘密
 user.fields.idcard_label: 身份证号
 user.fields.idcard_front_title: 上传身份证正面照
 user.fields.idcard_back_title: 上传身份证反面照
