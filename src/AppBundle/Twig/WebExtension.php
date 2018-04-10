@@ -1793,6 +1793,6 @@ class WebExtension extends \Twig_Extension
 
     private function isOnlyStudent($roles)
     {
-        return in_array('ROLE_USER', $roles) && count($roles) == 1;
+        return in_array('ROLE_USER', $roles) && !in_array('ROLE_TEACHER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles);
     }
 }
