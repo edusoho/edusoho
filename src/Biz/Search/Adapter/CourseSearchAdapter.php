@@ -13,6 +13,8 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
         $learningCourseIds = array();
 
+        $tasks = array();
+
         if (!empty($user['id'])) {
             $courseIds = ArrayToolkit::column($courses, 'courseId');
             $plans = $this->getCourseService()->findCoursesByCourseSetIds($courseIds);
