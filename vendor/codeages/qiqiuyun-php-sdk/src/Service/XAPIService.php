@@ -295,7 +295,10 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        $statement['result'] = empty($result) ? (object) $result : $result;
+
+        if (!empty($result)) {
+            $statement['result'] = $result;
+        }
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -345,7 +348,10 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        $statement['result'] = empty($result) ? (object) $result : $result;
+
+        if (!empty($result)) {
+            $statement['result'] = $result;
+        }
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -395,7 +401,10 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        $statement['result'] = empty($result) ? (object) $result : $result;
+
+        if (!empty($result)) {
+            $statement['result'] = $result;
+        }
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -594,15 +603,15 @@ class XAPIService extends BaseService
         $statement['object'] = array(
             'id' => $object['id'],
             'definition' => array(
-                'type' => $this->getActivityType($object['definitionType'])
-            )
+                'type' => $this->getActivityType($object['definitionType']),
+            ),
         );
 
         $statement['result'] = array(
             'response' => $result['response'],
             'extensions' => array(
-                'https://w3id.org/xapi/acrossx/extensions/type' => $this->getActivityType($result['type'])
-            )
+                'https://w3id.org/xapi/acrossx/extensions/type' => $this->getActivityType($result['type']),
+            ),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -618,6 +627,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
+     *
      * @return array|mixed
      */
     public function logged($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
@@ -639,9 +649,9 @@ class XAPIService extends BaseService
             'definition' => array(
                 'type' => $this->getActivityType(XAPIActivityTypes::APPLICATION),
                 'name' => array(
-                    $this->defaultLang => $this->options['school_name']
-                )
-            )
+                    $this->defaultLang => $this->options['school_name'],
+                ),
+            ),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -651,6 +661,7 @@ class XAPIService extends BaseService
 
     /**
      * 提交"购买"的记录
+     *
      * @param $actor
      * @param $object
      * @param $result
@@ -677,15 +688,15 @@ class XAPIService extends BaseService
             'definition' => array(
                 'type' => $this->getActivityType($object['definitionType']),
                 'name' => array(
-                    $this->defaultLang => $object['name']
-                )
-            )
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
         );
 
         $statement['result'] = array(
             'extensions' => array(
-                'http://xapi.edusoho.com/extensions/amount' => $result['amount']
-            )
+                'http://xapi.edusoho.com/extensions/amount' => $result['amount'],
+            ),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -723,6 +734,7 @@ class XAPIService extends BaseService
         $school = array(
             'name' => $this->options['school_name'],
             'url' => $this->options['school_url'],
+            'version' => $this->options['school_version'],
         );
         foreach ($statements as &$statement) {
             $statement['context'] = array(
@@ -746,7 +758,6 @@ class XAPIService extends BaseService
     public function setting($type, $value)
     {
         $setting = array(
-            'accessKey' => $this->auth->getAccessKey(),
             'setting' => $type,
             'value' => $value,
         );

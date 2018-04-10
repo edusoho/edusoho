@@ -63,9 +63,9 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->get($id);
     }
 
-    public function getAccountByUserId($userId)
+    public function getAccountByUserId($userId, $potions = array())
     {
-        return $this->getAccountDao()->getByUserId($userId);
+        return $this->getAccountDao()->getByUserId($userId, $potions);
     }
 
     public function searchAccounts($conditions, $orderBys, $start, $limit)
@@ -86,7 +86,12 @@ class AccountServiceImpl extends BaseService implements AccountService
             throw $this->createInvalidArgumentException('The value must be an integer!');
         }
 
-        return $this->getAccountDao()->waveBalance($id, $value);
+        $balanceFields = array(
+            'balance' => abs($value),
+            'inflowAmount' => abs($value),
+        );
+
+        return $this->getAccountDao()->wave(array($id), $balanceFields);
     }
 
     public function waveDownBalance($id, $value)
@@ -97,7 +102,12 @@ class AccountServiceImpl extends BaseService implements AccountService
             throw $this->createInvalidArgumentException('The value must be an integer!');
         }
 
-        return $this->getAccountDao()->waveDownBalance($id, $value);
+        $balanceFields = array(
+            'balance' => -abs($value),
+            'outflowAmount' => abs($value),
+        );
+
+        return $this->getAccountDao()->wave(array($id), $balanceFields);
     }
 
     public function grantRewardPoint($id, $profile)

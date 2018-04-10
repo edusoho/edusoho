@@ -294,6 +294,7 @@ admin.system.user.login_bind_tab: Log In
 admin.system.user.user_center_tab: User Center
 admin.system.user.user_fields_tab: User Setting
 admin.system.user.avatar_tab: Default
+admin.system.user.message: Message
 
 ##角色管理模块
 admin.system.roles.basic_tab: Roles

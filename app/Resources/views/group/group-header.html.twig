@@ -4,7 +4,7 @@
   <li><a href="{{path('group')}}">{{ group.name|default('group'|trans) }}</a></li>
   <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
 </ol>
-<div class="group-header" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
+<div class="group-header js-group-header" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
   <div class="media">
     <div class="media-left">
       <a href="{{path('group_show',{id:groupinfo.id})}}">

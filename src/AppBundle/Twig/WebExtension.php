@@ -163,6 +163,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
+            new \Twig_SimpleFunction('canSendMessage', array($this, 'canSendMessage')),
         );
     }
 
@@ -1761,5 +1762,48 @@ class WebExtension extends \Twig_Extension
         }
 
         return true;
+    }
+    public function canSendMessage($userId)
+    {
+        $user = $this->biz['user'];
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->isAdmin() || $user->isSuperAdmin()) {
+            return true;
+        }
+
+        $toUser = $this->getUserService()->getUser($userId);
+        if ($user['id'] == $toUser['id']) {
+            return false;
+        }
+
+        $messageSetting = $this->getSetting('message', array());
+
+        if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+            return false;
+        }
+
+        if (empty($messageSetting['studentToStudent']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+            return false;
+        }
+
+        if (empty($messageSetting['studentToTeacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private function isTeacher($roles)
+    {
+        return in_array('ROLE_TEACHER', $roles);
+    }
+
+    private function isOnlyStudent($roles)
+    {
+        return in_array('ROLE_USER', $roles) && !in_array('ROLE_TEACHER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles);
     }
 }

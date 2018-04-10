@@ -13,30 +13,32 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="quickpay_key">PID</label>
+    <div data-sub="quickpay" {% if not payment.quickpay_enabled %} class="hidden" {% endif %}>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="quickpay_key">PID</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="quickpay_key" name="quickpay_key" class="form-control" value="{{payment.quickpay_key}}">
+        </div>
       </div>
-      <div class="controls col-md-8">
-        <input type="text" id="quickpay_key" name="quickpay_key" class="form-control" value="{{payment.quickpay_key}}">
-      </div>
-    </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="quickpay_key">Key</label>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="quickpay_key">Key</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="quickpay_secret" name="quickpay_secret" class="form-control" value="{{payment.quickpay_secret}}">
+        </div>
       </div>
-      <div class="controls col-md-8">
-        <input type="text" id="quickpay_secret" name="quickpay_secret" class="form-control" value="{{payment.quickpay_secret}}">
-      </div>
-    </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="quickpay_aes">Aes</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="quickpay_aes" name="quickpay_aes" class="form-control" value="{{payment.quickpay_aes}}">
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="quickpay_aes">Aes</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="quickpay_aes" name="quickpay_aes" class="form-control" value="{{payment.quickpay_aes}}">
+        </div>
       </div>
     </div>
   {% else %}

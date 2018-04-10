@@ -218,12 +218,12 @@ class AppExtension extends \Twig_Extension
     public function coursePrice($course)
     {
         $price = $course['price'];
-        $coinEnabled = $this->getSettingService()->get('coin.coin_enabled');
-        if ($coinEnabled) {
-            if ($this->getSettingService()->get('coin.price_type') == 'Coin') {
+        $coin = $this->getSettingService()->get('coin');
+        if (!empty($coin['coin_enabled'])) {
+            if (isset($coin['price_type']) && $coin['price_type'] == 'Coin') {
                 if ($price > 0) {
-                    $cashRate = $this->getSettingService()->get('coin.cash_rate');
-                    $coinName = $this->getSettingService()->get('coin.coin_name');
+                    $cashRate = empty($coin['coin_rate']) ? 1 : $coin['coin_rate'];
+                    $coinName = empty($coin['coin_name']) ? '虚拟币' : $coin['coin_name'];
 
                     return '价格：'.($price * $cashRate).$coinName;
                 } else {

@@ -11,4 +11,6 @@ interface ClassroomDao extends GeneralDaoInterface
     public function getByTitle($title);
 
     public function findByLikeTitle($title);
+
+    public function refreshHotSeq();
 }

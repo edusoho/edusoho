@@ -13,8 +13,6 @@
     data-price-type="{{ currency }}"
     data-coin-rate="{{ setting('coin.cash_rate') }}"
     data-coin-name="{{ setting('coin.coin_name') }}">
-      <input type="hidden" name="targetType" value="{{product.targetType}}"/>
-      <input type="hidden" name="targetId" value="{{product.targetId}}"/>
       {% include product.showTemplate %}
       {% if product.couponEnable|default(true) %}
         {% include 'order/show/coupon-item.html.twig' %}
@@ -60,7 +58,9 @@
           {{'order.confirm.submit_btn'|trans}}
         </button>
       </div>
-
+      <input type="hidden" name="targetType" value="{{ product.targetType }}"/>
+      <input type="hidden" name="targetId" value="{{ product.targetId }}"/>
+      <input type="hidden" name="price" value="{{ product.getPayablePrice() }}"/>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>

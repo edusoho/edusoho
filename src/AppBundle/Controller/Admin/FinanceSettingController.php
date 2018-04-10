@@ -12,7 +12,7 @@ class FinanceSettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled' => 0,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'disabled_message' => '由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。',
             'bank_gateway' => 'none',
             'alipay_enabled' => 0,
             'alipay_key' => '',
@@ -27,13 +27,13 @@ class FinanceSettingController extends BaseController
             'wxpay_account' => '',
             'wxpay_key' => '',
             'wxpay_secret' => '',
-            'heepay_enabled' => 0,
-            'heepay_key' => '',
-            'heepay_secret' => '',
-            'quickpay_enabled' => 0,
-            'quickpay_key' => '',
-            'quickpay_secret' => '',
-            'quickpay_aes' => '',
+            // 'heepay_enabled' => 0,
+            // 'heepay_key' => '',
+            // 'heepay_secret' => '',
+            // 'quickpay_enabled' => 0,
+            // 'quickpay_key' => '',
+            // 'quickpay_secret' => '',
+            // 'quickpay_aes' => '',
             'llpay_enabled' => 0,
             'llpay_key' => '',
             'llpay_accessKey' => '',
@@ -45,44 +45,28 @@ class FinanceSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $payment = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
-
-            $formerPayment = $this->getSettingService()->get('payment');
-            if (0 == $payment['enabled'] && 1 == $formerPayment['enabled']) {
+            if (!$payment['enabled']) {
                 $payment['alipay_enabled'] = 0;
                 $payment['wxpay_enabled'] = 0;
-                $payment['heepay_enabled'] = 0;
-                $payment['quickpay_enabled'] = 0;
+                // $payment['heepay_enabled'] = 0;
+                // $payment['quickpay_enabled'] = 0;
                 $payment['llpay_enabled'] = 0;
             }
+            $payment['disabled_message'] = empty($payment['disabled_message']) ? $default['disabled_message'] : $payment['disabled_message'];
 
-            //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
-            $payment = $this->isClosePayment($payment);
+            $formerPayment = $this->getSettingService()->get('payment');
+
+            $payment = array_merge($formerPayment, $payment);
+
             $this->getSettingService()->set('payment', $payment);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
-            $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
+            $this->getLogService()->info('system', 'update_settings', '更改支付方式设置', $payment);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/payment.html.twig', array(
             'payment' => $payment,
         ));
-    }
-
-    public function isClosePayment($payment)
-    {
-        $payments = ArrayToolkit::parts($payment, array('alipay_enabled', 'wxpay_enabled', 'heepay_enabled', 'quickpay_enabled', 'llpay_enabled'));
-        $sum = 0;
-        foreach ($payments as $value) {
-            $sum += $value;
-        }
-
-        if ($sum < 1) {
-            $payment['enabled'] = 0;
-        } else {
-            $payment['enabled'] = 1;
-        }
-
-        return $payment;
     }
 
     public function refundAction(Request $request)

@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Event\Event;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -125,6 +126,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'newLiveActivity' => $liveActivity,
         ));
 
+        $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
+
         return $liveActivity;
     }
 
@@ -139,6 +142,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
             $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+            $this->getLogService()->info(AppLoggerConstant::LIVE, 'delete_live_activity', "删除直播活动（#{$liveActivity['id']}）", $liveActivity);
         }
     }
 

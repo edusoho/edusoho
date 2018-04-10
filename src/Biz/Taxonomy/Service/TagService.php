@@ -62,4 +62,6 @@ interface TagService
     public function deleteTagGroup($id);
 
     public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);
+
+    public function findGroupTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);
 }
