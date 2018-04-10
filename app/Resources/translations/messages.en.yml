@@ -1178,7 +1178,7 @@ course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
-course.thread.mission_seq: Task%seq%
+course.thread.mission_number: Task%number%
 course.thread.teacher_answer: 'Tearcher''s answer'
 course.thread.form.edit: 'Edit'
 course.thread.form.create: 'Publish'
