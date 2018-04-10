@@ -328,13 +328,24 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
         $user = $this->getCurrentUser();
 
-        $conditions['nos'] = ArrayToolkit::column($files, 'globalId');
-        $conditions['limit'] = count($conditions['nos']);
-        $conditions['nos'] = implode(',', array_unique($conditions['nos']));
-        if (!empty($user['isSecure'])) {
-            $conditions['protocol'] = 'https';
+        $globalIds = array_unique(ArrayToolkit::column($files, 'globalId'));
+        $globalIdsChunks = array_chunk($globalIds, 200);
+        $data = array();
+        $count = 0;
+        foreach ($globalIdsChunks as $globalIdsChunk) {
+            $conditions['limit'] = count($globalIdsChunk);
+            $conditions['nos'] = implode(',', $globalIdsChunk);
+            $result = $this->createApi('root')->get('/resources', $conditions);
+            if (!empty($result['data'])) {
+                $data = array_merge($data, $result['data']);
+                $count += $result['count'];
+            }
         }
-        $result = $this->createApi('root')->get('/resources', $conditions);
+
+        $result = array(
+            'data' => $data,
+            'count' => $count,
+        );
 
         if (empty($result['data'])) {
             return $files;
