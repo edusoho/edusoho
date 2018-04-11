@@ -8319,3 +8319,5 @@ admin.datalab.setting.btn_cancel: 取消
 admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
+
+exception.user_lock: 帐号被封禁
