@@ -138,8 +138,8 @@ $('body').on('event-report', function(e, name){
 
 $('.modal').on('hidden.bs.modal', function(){
   let $modal = $(this);
-  if (1 == $modal.find('.modal-dialog').data('clear')) {
-    $modal.html('');
+  if ($modal.find('.modal-dialog').data('clear')) {
+    $modal.empty();
   }
 });
 
