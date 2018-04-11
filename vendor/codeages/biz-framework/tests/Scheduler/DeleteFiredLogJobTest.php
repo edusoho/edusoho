@@ -8,11 +8,11 @@ class DeleteFiredLogJobTest extends IntegrationTestCase
 {
     public function testExecute()
     {
-        $schedulerService = $this->mockBiz(
+        $schedulerService = $this->mockObjectIntoBiz(
             'Scheduler:SchedulerService',
             array(
                 array(
-                    'functionName' => 'deleteJobFired',
+                    'functionName' => 'deleteUnaccquiredJobFired',
                     'withParams' => array(15),
                 ),
             )
@@ -21,7 +21,7 @@ class DeleteFiredLogJobTest extends IntegrationTestCase
         $job = new DeleteFiredLogJob(array(), $this->biz);
         $job->execute();
 
-        $schedulerService->shouldHaveReceived('deleteJobFired')->times(1);
+        $schedulerService->shouldHaveReceived('deleteUnaccquiredJobFired')->times(1);
         $this->assertTrue(true);
     }
 }

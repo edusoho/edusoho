@@ -1331,6 +1331,7 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
