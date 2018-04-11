@@ -12,7 +12,7 @@
             {{'card.isLogin.type.coupon.tips'|trans}}
           {% endif %}
           {% if cardType is defined and cardType == "moneyCard" %}
-            {{'card.isLogin.type.moneyCard.tips'|trans}}
+            {{'card.isLogin.type.moneyCard.tips'|trans({'%coinName%': coin.coin_name|default('finance.coin'|trans) })}}
           {% endif %}
         </div>
         {#卡券内容#}
