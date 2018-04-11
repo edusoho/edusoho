@@ -136,4 +136,11 @@ $('body').on('event-report', function(e, name){
   eventPost($obj);
 });
 
+$('.modal').on('hidden.bs.modal', function(){
+  let $modal = $(this);
+  if (1 == $modal.find('.modal-dialog').data('clear')) {
+    $modal.html('');
+  }
+});
+
 $.ajax('/online/sample');
