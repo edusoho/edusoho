@@ -14,7 +14,7 @@
       {% endif %}
     </div>
   </div>
-  <div class="es-section">
+  <div class="es-section js-group-section">
     <ul class="nav nav-tabs">
       <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">{{'group.detail.group_homepage'|trans}}</a></li>
       <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">{{'group.detail.group_members'|trans}}</a></li>

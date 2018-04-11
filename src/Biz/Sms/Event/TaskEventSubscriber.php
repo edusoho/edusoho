@@ -41,10 +41,10 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onTaskUpdate(Event $event)
     {
         $task = $event->getSubject();
-        if ($task['type'] == 'live') {
+        if ('live' == $task['type']) {
             $this->deleteJob($task);
 
-            if ($task['status'] == 'published') {
+            if ('published' == $task['status']) {
                 $this->registerJob($task);
             }
         }
@@ -54,7 +54,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $task = $event->getSubject();
 
-        if ($task['type'] == 'live') {
+        if ('live' == $task['type']) {
             $this->registerJob($task);
             $smsType = 'sms_live_lesson_publish';
         } else {
@@ -81,10 +81,12 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
 
         if ($dayIsOpen && $task['startTime'] >= (time() + 24 * 60 * 60)) {
+            //24小时期限，在预定时间前1小时内有效
             $startJob = array(
                 'name' => 'SmsSendOneDayJob_task_'.$task['id'],
-                'expression' => $task['startTime'] - 24 * 60 * 60,
+                'expression' => intval($task['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                'misfire_threshold' => 60 * 60,
                 'args' => array(
                     'targetType' => 'task',
                     'targetId' => $task['id'],
@@ -94,10 +96,12 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
 
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
+            //1小时期限，在预定时间前10分钟内有效
             $startJob = array(
                 'name' => 'SmsSendOneHourJob_task_'.$task['id'],
-                'expression' => $task['startTime'] - 60 * 60,
+                'expression' => intval($task['startTime'] - 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                'misfire_threshold' => 60 * 10,
                 'args' => array(
                     'targetType' => 'task',
                     'targetId' => $task['id'],

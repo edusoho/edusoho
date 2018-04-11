@@ -163,6 +163,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
             new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
+            new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
         );
     }
 
@@ -1751,6 +1752,16 @@ class WebExtension extends \Twig_Extension
         $loginBind = $this->getSetting('login_bind');
 
         return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
+    }
+
+    public function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->getSetting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
+            return false;
+        }
+
+        return true;
     }
 
     public function canSendMessage($userId)

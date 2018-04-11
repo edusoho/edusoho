@@ -82,10 +82,11 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $this->updateWaitingJobsToAcquired();
         do {
             $result = $this->runAcquiredJobs($initProcess['id']);
-        } while ($result);
+            $peak_memory = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
+        } while ($result && $peak_memory < SchedulerService::JOB_MEMORY_LIMIT);
         $process['end_time'] = $this->getMillisecond();
         $process['cost_time'] = $process['end_time'] - $process['start_time'];
-        $process['peak_memory'] = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
+        $process['peak_memory'] = $peak_memory;
 
         $this->updateJobProcess($initProcess['id'], $process);
     }
