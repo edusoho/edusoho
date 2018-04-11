@@ -162,7 +162,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
-            new \Twig_SimpleFunction('canSendMessage', array($this, 'canSendMessage')),
+            new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
         );
     }
 
