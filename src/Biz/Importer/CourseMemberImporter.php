@@ -85,13 +85,6 @@ class CourseMemberImporter extends Importer
         $this->getCourseService()->tryManageCourse($courseId);
     }
 
-    protected function getCurrentUser()
-    {
-        $biz = $this->biz;
-
-        return $biz['user'];
-    }
-
     /**
      * @return \Biz\Course\Service\CourseService
      */
