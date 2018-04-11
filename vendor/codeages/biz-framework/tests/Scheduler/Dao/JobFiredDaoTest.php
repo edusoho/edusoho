@@ -6,14 +6,21 @@ use Tests\IntegrationTestCase;
 
 class JobFiredDaoTest extends IntegrationTestCase
 {
-    public function testDeleteWhenCreatedTimeBefore()
+    public function testDeleteUnacquiredBeforeCreatedTime()
     {
         for ($i = 0; $i < 10; ++$i) {
+            if (0 == $i) {
+                $status = 'acquired';
+            } else {
+                $status = 'pool_full';
+            }
+
             $this->getJobFiredDao()->create(
                 array(
                     'job_id' => 1001001,
                     'fired_time' => time(),
                     'job_detail' => array('id' => 1001001),
+                    'status' => $status,
                 )
             );
         }
@@ -23,10 +30,10 @@ class JobFiredDaoTest extends IntegrationTestCase
         $jobsFired = $this->getJobFiredDao()->findByJobId(1001001);
         $this->assertEquals(10, count($jobsFired));
 
-        $this->getJobFiredDao()->deleteWhenCreatedTimeBefore($beforeTime);
+        $this->getJobFiredDao()->deleteUnacquiredBeforeCreatedTime($beforeTime);
 
         $jobsFired = $this->getJobFiredDao()->findByJobId(1001001);
-        $this->assertEquals(0, count($jobsFired));
+        $this->assertEquals(1, count($jobsFired));
     }
 
     protected function getJobFiredDao()

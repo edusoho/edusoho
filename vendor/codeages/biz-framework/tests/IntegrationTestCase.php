@@ -65,7 +65,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * 用于 mock　service　和　dao
-     * 如　$this->mockBiz(
+     * 如　$this->mockObjectIntoBiz(
      *      'Course:CourseService',
      *       array(
      *          array(
@@ -90,7 +90,7 @@ class IntegrationTestCase extends TestCase
      *
      * @return \Mockery\MockInterface
      */
-    protected function mockBiz($alias, $params = array())
+    protected function mockObjectIntoBiz($alias, $params = array())
     {
         $aliasList = explode(':', $alias);
         $className = end($aliasList);
