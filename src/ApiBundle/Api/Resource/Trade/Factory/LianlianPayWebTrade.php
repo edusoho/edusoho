@@ -17,6 +17,7 @@ class LianlianPayWebTrade extends BaseTrade
                 'user_id' => $user['id'],
                 'user_created_time' => $user['createdTime'],
                 'identify_user_id' => $this->getIdentify().'_'.$user['id'],
+                'bindPhone' => $this->processBindPhone($user),
             ),
         );
     }
@@ -30,5 +31,16 @@ class LianlianPayWebTrade extends BaseTrade
         }
 
         return $identify;
+    }
+
+    private function processBindPhone($user)
+    {
+        $bindPhone = '';
+        if (!empty($user['verifiedMobile'])) {
+            $head = substr($user['verifiedMobile'], 0, 3);
+            $tail = substr($user['verifiedMobile'], -4, 4);
+            $bindPhone = $head.'****'.$tail;
+        }
+        return $bindPhone;
     }
 }
