@@ -689,7 +689,7 @@ resource_lib.detail.description: Description
 resource_lib.detail.share: Share
 resource_lib.detail.share.share_to_public: 'Share as public'
 resource_lib.detail.share.share_to_public_tips: '(other teachers can check, preview and use this resource)'
-resource_lib.detail.share.only_myself: 'Only visable to yourself'
+resource_lib.detail.share.only_myself: 'Only visible to yourself'
 resource_lib.delete.content_title: 'Delete'
 resource_lib.delete.confirm_delete_tips: 'Confirmed to delete the file?'
 resource_lib.delete.delete_tips: 'If the file is used in course, deleting the file will cause error to the course.'

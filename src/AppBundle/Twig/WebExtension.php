@@ -164,6 +164,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
             new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
+            new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
         );
     }
 
@@ -1805,5 +1806,17 @@ class WebExtension extends \Twig_Extension
     private function isOnlyStudent($roles)
     {
         return in_array('ROLE_USER', $roles) && !in_array('ROLE_TEACHER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles);
+    }
+
+    public function arraysKeyConvert($arrays, $beforeKey, $afterKey)
+    {
+        foreach ($arrays as $key => $value) {
+            if ($value == $beforeKey) {
+                $arrays[$key][$afterKey] = $arrays[$key][$beforeKey];
+                unset($arrays[$key][$beforeKey]);
+            }
+        }
+
+        return $arrays;
     }
 }
