@@ -26,7 +26,6 @@ class CourseMemberImporter extends Importer
 
     protected function excelDataImporting($course, $userData, $orderData)
     {
-        $operateUser = $this->getCurrentUser();
         $existsUserCount = 0;
         $successCount = 0;
 
@@ -49,7 +48,7 @@ class CourseMemberImporter extends Importer
             } else {
                 $data = array(
                     'price' => $orderData['amount'],
-                    'remark' => empty($orderData['remark']) ? $operateUser['nickname'].'通过批量导入添加' : $orderData['remark'],
+                    'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'source' => 'outside',
                 );
                 $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], $data);
