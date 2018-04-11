@@ -9,7 +9,7 @@ class DeleteFiredLogJob extends AbstractJob
     public function execute()
     {
         $keepDays = 15; //biz_scheduler_job_fired 只保留15天的日志
-        $this->getSchedulerService()->deleteUnaccquiredJobFired($keepDays);
+        $this->getSchedulerService()->deleteUnacquiredJobFired($keepDays);
     }
 
     protected function getSchedulerService()

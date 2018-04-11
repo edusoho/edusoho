@@ -12,7 +12,7 @@ class DeleteFiredLogJobTest extends IntegrationTestCase
             'Scheduler:SchedulerService',
             array(
                 array(
-                    'functionName' => 'deleteUnaccquiredJobFired',
+                    'functionName' => 'deleteUnacquiredJobFired',
                     'withParams' => array(15),
                 ),
             )
@@ -21,7 +21,7 @@ class DeleteFiredLogJobTest extends IntegrationTestCase
         $job = new DeleteFiredLogJob(array(), $this->biz);
         $job->execute();
 
-        $schedulerService->shouldHaveReceived('deleteUnaccquiredJobFired')->times(1);
+        $schedulerService->shouldHaveReceived('deleteUnacquiredJobFired')->times(1);
         $this->assertTrue(true);
     }
 }
