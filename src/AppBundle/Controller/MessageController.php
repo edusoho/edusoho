@@ -74,6 +74,9 @@ class MessageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message_reply');
+            if (!$this->getWebExtension()->canSendMessage($conversation['fromId'])) {
+                throw $this->createAccessDeniedException("You're not allowed to send message to {$conversation['fromId']}");
+            }
             $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
             $html = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
 
@@ -123,6 +126,9 @@ class MessageController extends BaseController
             if (empty($receiver)) {
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
+                throw $this->createAccessDeniedException("You're not allowed to send message to {$receiver['nickname']}");
+            }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
             return $this->redirect($this->generateUrl('message'));
@@ -142,6 +148,9 @@ class MessageController extends BaseController
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
+            }
+            if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
+                throw $this->createAccessDeniedException("You're not allowed to send message to {$receiver['nickname']}");
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
