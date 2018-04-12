@@ -171,3 +171,14 @@ Api Test With 5.5:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
     - develop
+
+5.5 with js-test-unit:
+  stage: test
+  image: tianshengjie/codeage-node
+  script:
+    - npm install yarn
+    - node_modules/yarn/bin/yarn config set registry https://registry.npm.taobao.org
+    - node_modules/yarn/bin/yarn
+    - npm run test:simple tests/Js/test/*
+  only:
+    - develop
