@@ -177,6 +177,5 @@ Api Test With 5.5:
   image: tianshengjie/codeage-node
   script:
     - npm install yarn
-    - yarn config set registry https://registry.npm.taobao.org
     - yarn
     - npm run test:simple tests/Js/test/*
