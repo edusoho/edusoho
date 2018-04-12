@@ -7,6 +7,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
+      {% set groupId = data.groupId|default(0) ? data.groupId: data.id|default(0)%}
 
       {% if data.userId|default(false) %}
         {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
@@ -23,7 +24,7 @@
       {% elseif data.type == 'modify' or data.type == 'collect' %}
         {% set thread = macro.link(data.title, path('group_thread_show',{id:data.id, threadId:data.threadId})) %}
       {% else %}
-        {% set thread = macro.link(data.title, path('group_thread_show',{id:data.groupId|default(data.id), threadId:data.threadId})) %}
+        {% set thread = macro.link(data.title, path('group_thread_show',{id: groupId, threadId:data.threadId})) %}
       {% endif %}
 
        {% if data.type == 'delete'%}
