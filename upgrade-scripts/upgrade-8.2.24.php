@@ -66,6 +66,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'addJobNameField',
+            'addFlowAmountFields',
             'updateInflowRewardPointAmount',
             'updateOutflowRewardPointAmount',
         );
@@ -101,6 +103,32 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    protected function addFlowAmountFields()
+    {
+        if (!$this->isFieldExist('reward_point_account', 'inflowAmount')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `reward_point_account` ADD `inflowAmount` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '入账积分总数' AFTER `balance`;
+            ");
+        }
+
+        if (!$this->isFieldExist('reward_point_account', 'outflowAmount')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `reward_point_account` ADD `outflowAmount` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '出账积分总数' AFTER `balance`;
+            ");
+        }
+
+        return 1;
+    }
+
+    protected function addJobNameField() {
+        if (!$this->isFieldExist('biz_scheduler_job_fired', 'job_name')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_name` varchar(128) NOT NULL DEFAULT '' COMMENT '任务名称' AFTER `job_id`;
+            ");
+        }
+        return 1;
     }
 
     protected function updateInflowRewardPointAmount()
