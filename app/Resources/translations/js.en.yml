@@ -546,6 +546,7 @@ thread.post.like_error_hint: Favour failed, please try again!
 group.manage.delete_member_hint: Really want to delete that member?
 group.manage.delete_required_error_hint: Please select the member you want to delete
 group.manage.member_exit_hint: Really want to quit the group? Your information in this group will be deleted
+group.manage.member_exit: 退出小组
 group.manage.choose_setting_member_hint: Please select the member you want to set
 group.manage.setting_member_permission_hint: Are you sure to set the member's permission?
 group.manage.cancel_member_permission: Are you sure you want to cancel this member's permisiion?

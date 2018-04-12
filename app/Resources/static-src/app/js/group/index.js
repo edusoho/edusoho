@@ -13,36 +13,6 @@ function checkUrl(url) {
 
 let addBtnClicked = false;
 
-$('#add-btn').click(function () {
-  $(this).addClass('disabled');
-  var url = $(this).data('url');
-  $.post(url, function (data) {
-    if (data.status == 'success') {
-      window.location.reload();
-    } else {
-      notify('danger', Translator.trans(data.message));
-    }
-  });
-});
-
-if ($('#exit-btn').length > 0) {
-  $('#exit-btn').click(function () {
-    if (!confirm(Translator.trans('group.manage.member_exit_hint'))) {
-      return false;
-    }
-
-    var url = $(this).data('url');
-    $.post(url, function (data) {
-      if (data.status == 'success') {
-        window.location.reload();
-      } else {
-        notify('danger', Translator.trans(data.message));
-      }
-    });
-  });
-
-}
-
 $('#thread-list').on('click', '.uncollect-btn, .collect-btn', function () {
   let $this = $(this);
 

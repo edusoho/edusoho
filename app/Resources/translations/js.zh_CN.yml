@@ -491,6 +491,7 @@ thread.post.like_error_hint: 点赞失败，请重试！
 group.manage.delete_member_hint: 真的要删除该成员？
 group.manage.delete_required_error_hint: 请选择要删除的成员
 group.manage.member_exit_hint: 真的要退出该小组？您在该小组的信息将删除
+group.manage.member_exit: 退出小组
 group.manage.choose_setting_member_hint: 请选择要设置的成员
 group.manage.setting_member_permission_hint: 确认要设置该成员的权限？
 group.manage.cancel_member_permission: 确认要取消该成员的权限？
