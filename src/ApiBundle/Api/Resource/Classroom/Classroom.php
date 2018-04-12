@@ -42,10 +42,7 @@ class Classroom extends AbstractResource
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
-        if (isset($conditions['showable']) && $conditions['showable'] < 0) {
-            unset($conditions['showable']);
-        }
-        $conditions['showable'] = isset($conditions['showable']) ? $conditions['showable'] : 1;
+        $conditions['showable'] = 1;
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = $conditions['title'];
             unset($conditions['title']);
