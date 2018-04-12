@@ -4,7 +4,7 @@ const { trim, dateFormat, numberConvertLetter } = require(getRootPath() + '/app/
 const assert = require('chai').assert;
 describe('common:unit', function() {
   it('function:trim when is_global is true', function() {
-    assert.equal(trim(' a asdf '), 'aasdf');
+    assert.equal(trim(' a asdf '), 'aasdasdfasff');
   });
   it('function:trim when is_global is false', function() {
     assert.equal(trim(' a asdf ', false), 'a asdf');
