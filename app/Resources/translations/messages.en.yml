@@ -3530,7 +3530,7 @@ card.info.moneycard.tips: 'Money card could use for account recharge'
 card.info.moneycard.date_format: Yynmdd
 card.info.moneycard.use_btn: 'Use Now'
 card.isLogin.type.coupon.tips: 'You received one coupon and you could find it in "account center - coupon"'
-card.isLogin.type.moneyCard.tips: "You received one money card and it has been recharged into %coinName% account"
+card.isLogin.type.moneyCard.tips: 'You received one money card and it has been recharged into "%coinName% account"'
 
 card.notLogin.receive.tips: 'You haven''t logged in, please login now'
 card.receive.login_view_btn: 'Login to view'

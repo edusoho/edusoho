@@ -4277,7 +4277,7 @@ card.info.moneycard.tips: 学习卡可以用于账户充值
 card.info.moneycard.date_format: Y年n月d日
 card.info.moneycard.use_btn: 立即使用
 card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“账户中心—优惠券“
-card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已经充值到账户中心—%coinName%账户
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已经充值到“账户中心—%coinName%账户”
 card.notLogin.receive.tips: 还没有登录，请在登录后领取。
 card.receive.login_view_btn: 登录查看
 
