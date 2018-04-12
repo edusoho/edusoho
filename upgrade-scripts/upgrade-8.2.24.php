@@ -70,6 +70,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addFlowAmountFields',
             'updateInflowRewardPointAmount',
             'updateOutflowRewardPointAmount',
+            'setMessageSettingDefault'
         );
 
         $funcNames = array();
@@ -175,6 +176,22 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->accountUpdateHelper->flush();
+
+        return 1;
+    }
+
+    protected function setMessageSettingDefault()
+    {
+        $setting = $this->getSettingService()->get('message', array());
+        $default = array(
+            'studentToStudent' => 1,
+            'studentToTeacher' => 1,
+            'teacherToStudent' => 1
+        );
+        $setting = array_merge($setting, $default);
+
+        $this->getSettingService()->set('message', $setting);
+        $this->logger('info', '设置私信默认值');
 
         return 1;
     }
