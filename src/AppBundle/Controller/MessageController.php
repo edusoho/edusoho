@@ -75,7 +75,7 @@ class MessageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message_reply');
             if (!$this->getWebExtension()->canSendMessage($conversation['fromId'])) {
-                throw $this->createAccessDeniedException("You're not allowed to send message to {$conversation['fromId']}");
+                throw $this->createAccessDeniedException('not_allowd_send_message');
             }
             $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
             $html = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
@@ -104,7 +104,7 @@ class MessageController extends BaseController
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
             if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
-                throw $this->createAccessDeniedException("You're not allowed to send message to {$receiver['id']}");
+                throw $this->createAccessDeniedException('not_allowd_send_message');
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
@@ -127,7 +127,7 @@ class MessageController extends BaseController
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
             if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
-                throw $this->createAccessDeniedException("You're not allowed to send message to {$receiver['nickname']}");
+                throw $this->createAccessDeniedException('not_allowd_send_message');
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
@@ -150,7 +150,7 @@ class MessageController extends BaseController
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
             if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
-                throw $this->createAccessDeniedException("You're not allowed to send message to {$receiver['nickname']}");
+                throw $this->createAccessDeniedException('not_allowd_send_message');
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
