@@ -1781,6 +1781,10 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
+        if (in_array('ROLE_ADMIN', $toUser['roles']) || in_array('ROLE_SUPER_ADMIN', $toUser['roles'])) {
+            return true;
+        }
+
         $messageSetting = $this->getSetting('message', array());
 
         if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
