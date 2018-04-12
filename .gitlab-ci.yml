@@ -174,9 +174,9 @@ Api Test With 5.5:
 
 5.5 with js-test-unit:
   stage: test
-  image: mkenney/npm
+  image: tianshengjie/codeage-node
   script:
-    - npm install
+    - npm install yarn
     - yarn config set registry https://registry.npm.taobao.org
     - yarn
     - npm run test:simple tests/Js/test/*
