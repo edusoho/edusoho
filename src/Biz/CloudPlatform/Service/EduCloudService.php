@@ -4,7 +4,7 @@ namespace Biz\CloudPlatform\Service;
 
 interface EduCloudService
 {
-    public function isHiddenCloud();
+    public function isVisibleCloud();
 
     public function getOldSmsUserStatus();
 }

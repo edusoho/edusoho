@@ -272,6 +272,7 @@ user.fileds.wechat: 微信
 user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
+user.fields.gender.secret: 秘密
 user.fields.idcard_label: 身份证号
 user.fields.idcard_front_title: 上传身份证正面照
 user.fields.idcard_back_title: 上传身份证反面照
@@ -1330,6 +1331,7 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
@@ -4274,8 +4276,8 @@ card.info.moneycard: 学习卡
 card.info.moneycard.tips: 学习卡可以用于账户充值
 card.info.moneycard.date_format: Y年n月d日
 card.info.moneycard.use_btn: 立即使用
-card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
-card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
+card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“账户中心—优惠券“
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已经充值到“账户中心—%coinName%账户”
 card.notLogin.receive.tips: 还没有登录，请在登录后领取。
 card.receive.login_view_btn: 登录查看
 
@@ -6782,6 +6784,7 @@ admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口�
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
 admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
 admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
 admin.user_center.Configration.help_block: 如何配置？

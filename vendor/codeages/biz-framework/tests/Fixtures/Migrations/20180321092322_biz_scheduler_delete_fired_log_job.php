@@ -32,7 +32,7 @@ class BizSchedulerDeleteFiredLogJob extends Migration
             (
                 'DeleteFiredLogJob',
                 'dedicated',
-                '0 23 * * *',
+                '33 0 * * *',
                 'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\DeleteFiredLogJob',
                 '',
                 '100',

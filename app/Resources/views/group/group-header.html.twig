@@ -1,3 +1,5 @@
+{% do script(['app/js/group/header/index.js']) %}
+
 {% set groupNav = groupNav|default(null) %}
 <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
   <li><a href="{{path('homepage')}}">{{ homepage.name|default('homepage'|trans) }}</a></li>
