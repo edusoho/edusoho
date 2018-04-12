@@ -19,6 +19,8 @@ export default class PaySDK {
     }, options);
 
     paySdk.pay(params);
+
+    return paySdk;
   }
 
   checkOrderStatus() {
