@@ -5,7 +5,12 @@
   <div class="container">
     <div class="panel panel-default error-panel">
       <div class="panel-heading">
-        <span class="error-title">{{ status_code }}</span>{{ status_text }}
+         <span class="error-title">{{ status_code }}</span>
+        {% if exception.code > 0 %} 
+          {{ exception.message|default(status_text) }}
+        {% else %}
+          {{ status_text }}
+        {% endif %}
       </div>
       <div class="panel-body">
         <div class="well">

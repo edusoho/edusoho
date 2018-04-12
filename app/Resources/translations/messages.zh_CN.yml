@@ -8321,3 +8321,8 @@ admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
 
 exception.user_lock: 帐号被封禁
+exception.article.notfound: 资讯不存在
+exception.user.unlogin: 未登陆，请登陆后操作
+exception.course_set.manage: 无权管理该课程
+exception.course.notfound: 计划#%courseId%不存在
+exception.course.illegal_manage: 无权管理该计划

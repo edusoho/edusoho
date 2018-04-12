@@ -82,13 +82,13 @@ class KernelRequestListener
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
                     $token = $request->request->get('token');
-                    $result = ServiceKernel::instance()->createService('CloudPlatform:AppService')->repairProblem($token);
+                    $result = $this->getAppService()->repairProblem($token);
 
                     $this->container->set('Topxia.RepairProblem', $result);
                 } else {
                     $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
                         'type' => 'error',
-                        'message' => $this->getServiceKernel()->trans('页面已过期，请重新提交数据！'),
+                        'message' => '页面已过期，请重新提交数据！',
                         'goto' => '',
                         'duration' => 0,
                     ));
@@ -125,13 +125,18 @@ class KernelRequestListener
         }
     }
 
-    protected function getServiceKernel()
+    protected function getBiz()
     {
-        return ServiceKernel::instance();
+        return $this->container->get('biz');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getBiz()->service('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }
