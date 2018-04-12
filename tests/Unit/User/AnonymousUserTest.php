@@ -12,7 +12,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->serialize();
 
-        $this->assertEquals('a:9', substr($result, 0, 3));
+        $this->assertEquals('a:1', substr($result, 0, 3));
     }
 
     public function testUnserialize()
@@ -227,7 +227,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getCurrentOrgId();
 
-        $this->assertEquals(0, $result);
+        $this->assertEquals(1, $result);
     }
 
     public function testGetCurrentOrg()
@@ -235,7 +235,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getCurrentOrg();
 
-        $this->assertEquals(array(), $result);
+        $this->assertEquals(array('id' => 1, 'orgCode' => '1.'), $result);
     }
 
     public function testGetSelectOrg()
@@ -243,7 +243,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getSelectOrg();
 
-        $this->assertEquals(array(), $result);
+        $this->assertEquals(array('id' => 1, 'orgCode' => '1.'), $result);
     }
 
     public function testGetOrg()
@@ -251,7 +251,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getOrg();
 
-        $this->assertEquals(array('id' => 1, 'orgCode' => '1.'), $result);
+        $this->assertEquals(1, $result);
     }
 
     public function testGetOrgCode()
@@ -259,7 +259,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getOrgCode();
 
-        $this->assertEquals('1.', $result);
+        $this->assertEquals(null, $result);
     }
 
     public function testGetOrgId()
@@ -267,7 +267,7 @@ class AnonymousUserTest extends BaseTestCase
         $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getOrgId();
 
-        $this->assertEquals(1, $result);
+        $this->assertEquals(null, $result);
     }
 
     public function testGetSelectOrgCode()

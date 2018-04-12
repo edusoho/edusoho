@@ -192,7 +192,7 @@ abstract class HLSBaseController extends BaseController
         $params['keyUrl'] = $this->generateUrl("hls_{$this->getRoutingPrefix()}clef", array('id' => $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
-        if (!$inWhiteList && !$this->isHiddenVideoHeader($hideBeginning)) {
+        if (!$inWhiteList && !$this->getWebExtension()->isHiddenVideoHeader($hideBeginning)) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId' => $token['userId'],
                 'fromApi' => $fromApi,
@@ -303,16 +303,6 @@ abstract class HLSBaseController extends BaseController
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
 
         return $this->responseEnhanced($fakeKey);
-    }
-
-    protected function isHiddenVideoHeader($isHidden = false)
-    {
-        $storage = $this->setting('storage');
-        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     protected function isHlsEncryptionPlusEnabled()

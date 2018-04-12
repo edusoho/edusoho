@@ -25,8 +25,8 @@ class Message {
         notify('success', Translator.trans('私信发送成功'));
         $element.closest('.modal').modal('hide');
       },
-      submitError() {
-        notify('danger', Translator.trans('私信发送失败，请重试！'));
+      submitError(response) {
+        notify('danger', Translator.trans(response.responseJSON.error.message));
       }
     });
   }

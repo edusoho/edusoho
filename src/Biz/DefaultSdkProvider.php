@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use AppBundle\System;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
@@ -99,6 +100,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
                 'host' => $pushUrl,
                 'school_name' => $siteName,
                 'school_url' => $siteUrl,
+                'school_version' => System::VERSION,
             ),
         );
     }

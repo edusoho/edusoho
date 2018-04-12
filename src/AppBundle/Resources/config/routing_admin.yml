@@ -861,6 +861,11 @@ admin_setting_avatar:
     defaults: { _controller: AppBundle:Admin/UserSetting:userAvatar }
     permissions: [admin_setting_avatar]
 
+admin_setting_user_message:
+    path:  /setting/message
+    defaults: { _controller: AppBundle:Admin/UserSetting:message }
+    permissions: [admin_setting_user_message]
+
 admin_setting_user_fields:
     path:  /setting/user-fields
     defaults: { _controller: AppBundle:Admin/UserSetting:userFields }

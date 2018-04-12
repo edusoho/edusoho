@@ -22,17 +22,23 @@ class QuestionMarkerController extends BaseController
     {
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
         $baseUrl = $request->getSchemeAndHttpHost();
-
+        $headerLength = 0;
+        if (!$this->getWebExtension()->isHiddenVideoHeader()) {
+            $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
+                $headerLength = $videoHeaderFile['length'];
+            }
+        }
         $result = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
             $isChoice = in_array($questionMaker['type'], array('choice', 'single_choice', 'uncertain_choice'));
-            $isDetermine = $questionMaker['type'] == 'determine';
+            $isDetermine = 'determine' == $questionMaker['type'];
 
             $result[$index]['id'] = $questionMaker['id'];
             $result[$index]['questionMarkerId'] = $questionMaker['id'];
             $result[$index]['markerId'] = $questionMaker['markerId'];
-            $result[$index]['time'] = $questionMaker['second'];
+            $result[$index]['time'] = $questionMaker['second'] + $headerLength;
             $result[$index]['type'] = $questionMaker['type'];
             $result[$index]['question'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['stem']);
             if ($isChoice) {
@@ -52,7 +58,7 @@ class QuestionMarkerController extends BaseController
                 if ($isChoice) {
                     $result[$index]['answer'][$answerIndex] = chr(65 + $answer);
                 } elseif ($isDetermine) {
-                    $result[$index]['answer'][$answerIndex] = $answer == 1 ? 'T' : 'F';
+                    $result[$index]['answer'][$answerIndex] = 1 == $answer ? 'T' : 'F';
                 } else {
                     $result[$index]['answer'][$answerIndex] = $answer;
                 }
@@ -206,7 +212,7 @@ class QuestionMarkerController extends BaseController
 
         $access = $this->getCourseService()->canLearnCourse($data['courseId']);
 
-        if ($access['code'] !== AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS !== $access['code']) {
             throw $this->createAccessDeniedException();
         }
 
@@ -214,9 +220,9 @@ class QuestionMarkerController extends BaseController
             foreach ($data['answer'] as &$answerItem) {
                 $answerItem = (string) (ord($answerItem) - 65);
             }
-        } elseif ($data['type'] == 'determine') {
+        } elseif ('determine' == $data['type']) {
             foreach ($data['answer'] as &$answerItem) {
-                $answerItem = $answerItem == 'T' ? '1' : '0';
+                $answerItem = 'T' == $answerItem ? '1' : '0';
             }
         }
 
@@ -423,16 +429,16 @@ class QuestionMarkerController extends BaseController
     protected function processTarget($conditions)
     {
         $target = $conditions['target'];
-        if (strpos($target, '-') !== false) {
+        if (false !== strpos($target, '-')) {
             $targets = explode('-', $target);
             //本课程
 
-            if ($targets[0] == 'courseSet') {
+            if ('courseSet' == $targets[0]) {
                 $conditions['courseSetId'] = $targets[1];
                 $conditions['courseId'] = 0;
             }
             //本计划
-            if ($targets[0] == 'course') {
+            if ('course' == $targets[0]) {
                 $conditions['courseId'] = $targets[1];
             }
         } else {

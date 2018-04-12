@@ -17,6 +17,13 @@ class FieldSerializer implements SerializerInterface
 
                 return json_encode($value);
             },
+            'mysql_json' => function ($value) {
+                if (empty($value)) {
+                    return '{}';
+                }
+
+                return json_encode($value);
+            },
             'delimiter' => function ($value) {
                 if (empty($value)) {
                     return '';
@@ -39,6 +46,13 @@ class FieldSerializer implements SerializerInterface
     {
         $methods = array(
             'json' => function ($value) {
+                if (empty($value)) {
+                    return array();
+                }
+
+                return json_decode($value, true);
+            },
+            'mysql_json' => function ($value) {
                 if (empty($value)) {
                     return array();
                 }

@@ -48,13 +48,9 @@ class ExportController extends BaseController
     public function preExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
-        try {
-            $exporter = $this->container->get('export_factory')->create($name, $conditions);
 
-            $result = $exporter->export($name);
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('message' => $e->getMessage()));
-        }
+        $exporter = $this->container->get('export_factory')->create($name, $conditions);
+        $result = $exporter->export($name);
 
         return $this->createJsonResponse($result);
     }

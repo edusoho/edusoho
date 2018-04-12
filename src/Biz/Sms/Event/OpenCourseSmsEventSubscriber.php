@@ -30,7 +30,7 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
     {
         $lesson = $event->getSubject();
 
-        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
+        if ('liveOpen' == $lesson['type'] && isset($lesson['startTime'])
             && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
         ) {
             $this->registerJob($lesson);
@@ -42,13 +42,13 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
         $context = $event->getSubject();
         $lesson = $context['lesson'];
 
-        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
-            && $lesson['startTime'] != $lesson['fields']['startTime']
+        if ('liveOpen' == $lesson['type'] && isset($lesson['startTime'])
+            && $lesson['fields']['startTime'] != $lesson['startTime']
             && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
         ) {
             $this->deleteJob($lesson);
 
-            if ($lesson['status'] == 'published') {
+            if ('published' == $lesson['status']) {
                 $this->registerJob($lesson);
             }
         }
@@ -60,11 +60,12 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
         $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
 
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
+            //公开课直播，默认一天前通知，在预定时间后1个小时内有效
             $job = array(
                 'name' => 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => intval($lesson['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
-                'misfire_threshold' => 3600,
+                'misfire_threshold' => 60 * 60,
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
@@ -74,10 +75,12 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
         }
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
+            //公开课直播，默认一个小时前通知，在预定时间后10分钟内有效
             $job = array(
                 'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => intval($lesson['startTime'] - 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                'misfire_threshold' => 60 * 10,
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
