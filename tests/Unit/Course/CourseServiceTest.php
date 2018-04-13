@@ -10,9 +10,69 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Classroom\Service\ClassroomService;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 class CourseServiceTest extends BaseTestCase
 {
+    public function testRecommendCourseByCourseSetId()
+    {
+        TimeMachine::setMockedTime(time());
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $this->getCourseService()->recommendCourseByCourseSetId(1, array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 1,
+        ));
+        $course = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['recommended'], 1);
+        $this->assertEquals($course['recommendedTime'], TimeMachine::time());
+        $this->assertEquals($course['recommendedSeq'], 1);
+
+        try {
+            $errorMessage = '';
+            $this->getCourseService()->recommendCourseByCourseSetId(1, array(
+                'recommended' => 1,
+                'recommendedTime' => TimeMachine::time(),
+            ));
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage();
+        }
+        $this->assertEquals($errorMessage, 'Lack of required fields');
+    }
+
+
+    public function testCancelRecommendCourseByCourseSetId()
+    {
+        TimeMachine::setMockedTime(time());
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $this->getCourseService()->recommendCourseByCourseSetId(1, array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 1,
+        ));
+        $course = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['recommended'], 1);
+        $this->assertEquals($course['recommendedTime'], TimeMachine::time());
+        $this->assertEquals($course['recommendedSeq'], 1);
+
+        $this->getCourseService()->cancelRecommendCourseByCourseSetId(1);
+        $course = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['recommended'], 0);
+        $this->assertEquals($course['recommendedTime'], 0);
+        $this->assertEquals($course['recommendedSeq'], 0);
+    }
+
+    public function testUpdateMaxRate()
+    {
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $newCourse = $this->getCourseService()->updateMaxRate($course['id'], 4);
+        $this->assertEquals($course['maxRate'], 0);
+        $this->assertEquals($newCourse['maxRate'], 4);
+    }
+
     public function testUpdateMembersDeadlineByClassroomId()
     {
         $textClassroom = array(
@@ -508,6 +568,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $this->assertEquals('title', $result[0]['title']);
     }
+
 
     protected function createNewCourseSet()
     {
