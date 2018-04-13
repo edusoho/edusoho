@@ -17,9 +17,11 @@ class StudentExporter extends Exporter
         $courseSetting = $this->getSettingService()->get('course', array());
         if (!empty($courseSetting['teacher_export_student'])) {
             $this->getCourseService()->tryManageCourse($this->parameter['courseId'], $this->parameter['courseSetId']);
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getCount()
