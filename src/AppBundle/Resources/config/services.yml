@@ -163,10 +163,6 @@ services:
         class: AppBundle\Common\TimeMachine
         arguments:    ['Asia/Shanghai']
 
-    topxia.target_helper:
-        class: AppBundle\Util\TargetHelper
-        arguments:    ['@service_container']
-
     web.wrapper:
         class: AppBundle\Component\Wrapper\WrapperManage
         arguments: ['@service_container']
