@@ -22,13 +22,20 @@ class DictExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * 字典来源 dict.{locale}.yml, 如 dict.zh_CN.yml
+     */
     public function getDict($name)
     {
         $locale = $this->getLocale();
 
+        // collector --> Codeages\PluginBundle\System\DictCollector
         return $this->collector->getDictMap($locale, $name);
     }
 
+    /**
+     * 字典来源 dict.{locale}.yml, 如 dict.zh_CN.yml
+     */
     public function getDictText($name, $key, $default = '')
     {
         $locale = $this->getLocale();
