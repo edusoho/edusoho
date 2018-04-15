@@ -9,13 +9,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManagerTest extends BaseTestCase
 {
-    public function tearDown()
-    {
-        if (!empty($this->instance)) {
-            ReflectionUtils::setStaticProperty($this->instance, '_instance', $this->instance);
-        }
-    }
-
     public function testInit()
     {
         $manager = ExtensionManager::init(ServiceKernel::instance());
