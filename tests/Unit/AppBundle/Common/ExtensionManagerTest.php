@@ -27,17 +27,6 @@ class ExtensionManagerTest extends BaseTestCase
         }
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ExtensionManager尚未实例化。
-     */
-    public function testInstanceWithException()
-    {
-        $this->instance = ExtensionManager::instance();
-        ReflectionUtils::setStaticProperty($this->instance, '_instance', null);
-        ExtensionManager::instance();
-    }
-
     public function testRenderStatus()
     {
         $instance = ExtensionManager::instance();
