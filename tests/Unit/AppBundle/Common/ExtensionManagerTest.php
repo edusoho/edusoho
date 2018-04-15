@@ -5,6 +5,7 @@ namespace Tests\Unit\AppBundle\Common;
 use Biz\BaseTestCase;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\ReflectionUtils;
+use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManagerTest extends BaseTestCase
 {
