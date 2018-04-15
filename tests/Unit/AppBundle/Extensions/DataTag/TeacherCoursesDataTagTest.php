@@ -7,56 +7,73 @@ use AppBundle\Extensions\DataTag\TeacherCoursesDataTag;
 
 class TeacherCoursesDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCountMissing()
+    {
+        $datatag = new TeacherCoursesDataTag();
+        $datatag->getData(array());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCountError()
+    {
+        $datatag = new TeacherCoursesDataTag();
+        $datatag->getData(array('count' => 101));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testEmptyUserId()
+    {
+        $dataTag = new TeacherCoursesDataTag();
+        $announcement = $dataTag->getData(array('count' => 5));
+    }
+
     public function testGetData()
     {
-        // $user1 = $this->getUserService()->register(array(
-        //     'email' => '1234@qq.com',
-        //     'nickname' => 'user1',
-        //     'password' => '123456',
-        //     'confirmPassword' => '123456',
-        //     'createdIp' => '127.0.0.1',
-        // ));
-        // $this->getUserService()->changeUserRoles($user1['id'], array('ROLE_USER', 'ROLE_TEACHER'));
-        // $course1 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course1',
-        // );
-        // $course2 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course2',
-        // );
-        // $course3 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course3',
-        // );
+         $user1 = $this->getUserService()->register(array(
+            'email' => '1234@qq.com',
+            'nickname' => 'user1',
+            'password' => '123456',
+            'confirmPassword' => '123456',
+            'createdIp' => '127.0.0.1',
+        ));
+        $this->getUserService()->changeUserRoles($user1['id'], array('ROLE_USER', 'ROLE_TEACHER'));
 
-        // $course1 = $this->getCourseService()->createCourse($course1);
-        // $course2 = $this->getCourseService()->createCourse($course2);
-        // $course3 = $this->getCourseService()->createCourse($course3);
+        $user = $this->getCurrentUser();
+        $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
+        $course = $this->getCourseService()->createCourse(array('title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'default'));
+        $this->getCourseMemberService()->setCourseTeachers($course['id'], array(array('id' => $user1['id'])));
+        $this->getCourseService()->publishCourse($course['id']);
 
-        // $this->getCourseService()->publishCourse($course1['id']);
-        // $this->getCourseService()->publishCourse($course2['id']);
-        // $this->getCourseService()->publishCourse($course3['id']);
-        // $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $user1['id'], 'isVisible' => 1)));
-        // $this->getCourseMemberService()->setCourseTeachers($course2['id'], array(array('id' => $user1['id'], 'isVisible' => 1)));
         $datatag = new TeacherCoursesDataTag();
-        // $courses = $datatag->getData(array('userId' => $user1['id'], 'count' => 5));
-        // $this->assertEquals(2, count($courses));
-        $this->assertTrue(true);
+        $courses = $courses = $datatag->getData(array('userId' => $user1['id'], 'count' => 5));
+        
+        $this->assertNotNull($courses);
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
-    protected function getCourseMemberService()
+    public function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 }

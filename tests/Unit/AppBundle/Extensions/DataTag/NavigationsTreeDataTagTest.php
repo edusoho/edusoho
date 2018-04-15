@@ -3,9 +3,9 @@
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
 use Biz\BaseTestCase;
-use AppBundle\Extensions\DataTag\NavigationDataTag;
+use AppBundle\Extensions\DataTag\NavigationsTreeDataTag;
 
-class NavigationDataTagTest extends BaseTestCase
+class NavigationsTreeDataTagTest extends BaseTestCase
 {
     public function testGetData()
     {
@@ -33,11 +33,18 @@ class NavigationDataTagTest extends BaseTestCase
             'isNewWin' => 0,
             'parentId' => $navigation1['id'],
         ));
-        $datatag = new NavigationDataTag();
-        $navigations = $datatag->getData(array('type' => 'top'));
-        $this->assertEquals(2, count($navigations));
-        $navigations = $datatag->getData(array('type' => 'foot'));
+        $navigation3 = $this->getNavigationService()->createNavigation(array(
+            'name' => 'navigation4',
+            'url' => 'http://www.edusoho.com',
+            'type' => 'top',
+            'isOpen' => 0,
+            'isNewWin' => 0,
+            'parentId' => $navigation1['id'],
+        ));
+        $datatag = new NavigationsTreeDataTag();
+        $navigations = $datatag->getData(array());
         $this->assertEquals(1, count($navigations));
+        $this->assertEquals(1, count($navigations[$navigation1['id']]['children']));
     }
 
     protected function getNavigationService()

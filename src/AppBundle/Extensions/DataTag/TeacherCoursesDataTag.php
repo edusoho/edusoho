@@ -2,12 +2,12 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
+
 class TeacherCoursesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
      * 获取特定老师的课程列表.
-     *
-     * @todo  逻辑有问题，应该是取老师所在的所有课程，而不是创建者创建的所有课程
      *
      * 可传入的参数：
      *   userId   必需 老师ID
@@ -22,9 +22,15 @@ class TeacherCoursesDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
         $this->checkUserId($arguments);
 
+        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($arguments['userId']);
+        if (empty($members)) {
+            return array();
+        }
+
+        $courseIds = ArrayToolkit::column($members, 'courseId');
         $conditions = array(
-            'status' => 'published',
-            'userId' => $arguments['userId'],
+            'ids' => $courseIds,
+            'status' => 'published'
         );
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $arguments['count']);
 
