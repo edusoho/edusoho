@@ -56,7 +56,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return array('result' => false, 'message' => '直播还没开始!');
         }
 
-        if ($lesson['endTime'] < time()) {
+        $isEsLive = in_array($lesson['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+        $endLeftSeconds = time() - $lesson['endTime'];
+        if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
             return array('result' => false, 'message' => '直播已结束!');
         }
 

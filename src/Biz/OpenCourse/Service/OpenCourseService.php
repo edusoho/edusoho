@@ -90,6 +90,12 @@ interface OpenCourseService
 
     public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
+    public function findFinishedLivesWithinTwoHours();
+
+    public function updateLiveStatus($id, $status);
+
+    public function isLiveFinished($lessonId);
+
     /**
      * open_course_member.
      */

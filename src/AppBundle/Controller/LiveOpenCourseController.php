@@ -183,7 +183,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
-            $lesson['isEnd'] = (int) (time() - $lesson['endTime']) > 0;
+            $lesson['isEnd'] = $this->get('web.twig.live_extension')->isLiveFinished($lesson['id'], 'openCourse');;
             $lesson['canRecord'] = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
             $lesson['file'] = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;

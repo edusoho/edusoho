@@ -14,6 +14,8 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
+use Biz\Activity\Service\LiveActivityService;
+use Biz\Util\EdusohoLiveClient;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -468,6 +470,62 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         });
 
         return $activities;
+    }
+
+    public function isLiveFinished($activityId)
+    {
+        $activity = $this->getActivity($activityId, true);
+
+        if (empty($activity) || empty($activity['ext'])) {
+            return true;
+        }
+
+        $endLeftSeconds = time() - $activity['endTime'];
+        $isEsLive = in_array($activity['ext']['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+        
+        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
+        if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
+            return true;
+        }
+
+        if ($activity['ext']['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function checkLiveStatus($courseId, $activityId)
+    {
+        $activity = $this->getActivity($activityId, true);
+        if (empty($activity)) {
+            return array('result' => false, 'message' => 'message_response.live_task_not_exist.message');
+        }
+
+        if ($activity['fromCourseId'] != $courseId) {
+            return array('result' => false, 'message' => 'message_response.illegal_params.message');
+        }
+
+        if (empty($activity['ext']['liveId'])) {
+            return array('result' => false, 'message' => 'message_response.live_class_not_exist.message');
+        }
+
+        if ($activity['startTime'] - time() > 7200) {
+            return array('result' => false, 'message' => 'message_response.live_not_start.message');
+        }
+
+        $isEsLive = in_array($activity['ext']['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+        $endLeftSeconds = time() - $activity['endTime'];
+        if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
+            return array('result' => false, 'message' => 'message_response.live_over.message');
+        }
+
+        return array('result' => true, 'message' => '');
+    }
+
+    public function findFinishedLivesWithinTwoHours()
+    {
+        return $this->getActivityDao()->findFinishedLivesWithinTwoHours();
     }
 
     public function getActivityConfig($type)

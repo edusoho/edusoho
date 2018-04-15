@@ -11,6 +11,9 @@ use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\Activity\Service\LiveActivityService;
+use Biz\AppLoggerConstant;
+use Biz\Util\EdusohoLiveClient;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -696,6 +699,49 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         return array('success', '');
+    }
+
+    public function isLiveFinished($lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+
+        if (empty($lesson) || $lesson['type'] != 'liveOpen') {
+            return true;
+        }
+
+        $endLeftSeconds = time() - $lesson['endTime'];
+
+        $isEsLive = in_array($lesson['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
+        if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
+            return true;
+        }
+
+        if ($lesson['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function findFinishedLivesWithinTwoHours()
+    {
+        return $this->getOpenCourseLessonDao()->findFinishedLivesWithinTwoHours();
+    }
+
+    public function updateLiveStatus($id, $status)
+    {
+        $lesson = $this->getLesson($id);
+        if (empty($lesson)) {
+            return;
+        }
+
+        if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('progressStatus' => $status));
+        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", array('preLesson' => $lesson, 'newLesson' => $updateLesson ));
     }
 
     /**
