@@ -32,10 +32,10 @@ class UpdateLiveStatusJob extends AbstractJob
         $conditions = array(
             'ids' => $mediaIds,
             'replayStatus' => 'ungenerated',
-            'progressStatusNotEqual' => EdusohoLiveClient::LIVE_STATUS_CLOSED
+            'progressStatusNotEqual' => EdusohoLiveClient::LIVE_STATUS_CLOSED,
         );
         $liveActivities = $this->getLiveActivityService()->search($conditions, null, 0, PHP_INT_MAX);
-        
+
         if (empty($liveActivities)) {
             return array();
         }
@@ -74,6 +74,7 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $client = new EdusohoLiveClient();
         $results = $client->checkLiveStatus($formatLives);
+
         return $results;
     }
 

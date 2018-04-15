@@ -113,12 +113,15 @@ class EdusohoLiveClient
 
     /**
      * check live status
-     * @param  [type] $lives array(liveProvider => array(liveId,liveId,...),...)
-     * @return Array         array(liveId => 'status',...) status：unstart|live|pause|closed
+     *
+     * @param [type] $lives array(liveProvider => array(liveId,liveId,...),...)
+     *
+     * @return array array(liveId => 'status',...) status：unstart|live|pause|closed
      */
     public function checkLiveStatus($lives)
     {
         $args = array('liveIds' => $lives);
+
         return $this->createCloudApi('leaf')->get('/lives/rooms_status', $args);
     }
 

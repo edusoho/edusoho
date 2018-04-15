@@ -14,7 +14,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
-use Biz\Activity\Service\LiveActivityService;
 use Biz\Util\EdusohoLiveClient;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
@@ -482,7 +481,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $endLeftSeconds = time() - $activity['endTime'];
         $isEsLive = in_array($activity['ext']['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
-        
+
         //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
         if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
             return true;

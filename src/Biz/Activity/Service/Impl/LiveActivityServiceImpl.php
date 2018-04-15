@@ -140,7 +140,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         $update = $this->getLiveActivityDao()->update($liveActivity['id'], array('progressStatus' => $status));
-        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', "修改直播进行状态，由‘{$liveActivity['progressStatus']}’改为‘{$status}’", array('preLiveActivity' => $liveActivity, 'newLiveActivity' => $update ));
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', "修改直播进行状态，由‘{$liveActivity['progressStatus']}’改为‘{$status}’", array('preLiveActivity' => $liveActivity, 'newLiveActivity' => $update));
 
         return $update;
     }

@@ -127,7 +127,7 @@ class LiveActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      * @expectedExceptionMessage Argument invalid
      */
     public function testUpdateLiveStatusActivityEmpty()
@@ -138,8 +138,8 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->mockBiz('Activity:LiveActivityDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1)
-            )
+                'returnValue' => array('id' => 1),
+            ),
         ));
         $result = $this->getLiveActivityService()->updateLiveStatus(1, 'created');
     }
@@ -149,12 +149,12 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->mockBiz('Activity:LiveActivityDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'progressStatus' => 'created')
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'progressStatus' => 'closed')
-            )
+                'returnValue' => array('id' => 1, 'progressStatus' => 'closed'),
+            ),
         ));
         $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
 
@@ -166,11 +166,11 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->mockBiz('Activity:LiveActivityDao', array(
             array(
                 'functionName' => 'search',
-                'returnValue' => array(array('id' => 1), array('id' => 2))
+                'returnValue' => array(array('id' => 1), array('id' => 2)),
             ),
         ));
 
-        $results = $this->getLiveActivityService()->search(array('ids' => array(1,2,3)), null, 0, 5);
+        $results = $this->getLiveActivityService()->search(array('ids' => array(1, 2, 3)), null, 0, 5);
 
         $this->assertEquals(2, count($results));
     }

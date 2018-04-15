@@ -4,7 +4,6 @@ namespace AppBundle\Twig;
 
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Util\EdusohoLiveClient;
-use Biz\Activity\Service\LiveActivityService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

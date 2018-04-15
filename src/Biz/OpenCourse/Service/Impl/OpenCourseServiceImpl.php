@@ -11,7 +11,6 @@ use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
 use Biz\Util\EdusohoLiveClient;
 
@@ -741,7 +740,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('progressStatus' => $status));
-        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", array('preLesson' => $lesson, 'newLesson' => $updateLesson ));
+        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", array('preLesson' => $lesson, 'newLesson' => $updateLesson));
     }
 
     /**

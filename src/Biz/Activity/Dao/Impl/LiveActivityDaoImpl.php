@@ -16,8 +16,8 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
                 'id IN (:ids)',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
-                'progressStatus != :progressStatusNotEqual'
-            )
+                'progressStatus != :progressStatusNotEqual',
+            ),
         );
     }
 
