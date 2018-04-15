@@ -9,9 +9,12 @@ class FileUtilTest extends BaseTestCase
 {
     public function tearDown()
     {
-        $folderPath = $this->biz['kernel.root_dir'].'/data/testFolder';
-        if (file_exists($folderPath)) {
-            FileUtil::emptyDir($folderPath, true);
+        $folderNames = array('testFolder', 'testFolder2');
+        foreach ($folderNames as $folderName) {
+            $folderPath = $this->biz['kernel.root_dir'].'/data/'.$folderName;
+            if (file_exists($folderPath)) {
+                FileUtil::emptyDir($folderPath, true);
+            }
         }
     }
 
