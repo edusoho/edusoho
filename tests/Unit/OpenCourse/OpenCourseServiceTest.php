@@ -355,6 +355,32 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals('success', $result3[0]);
     }
 
+    public function testIsLiveFinishedLessonEmpty()
+    {
+        $result = $this->getOpenCourseService()->isLiveFinished(1);
+        $this->assertTrue($result);
+
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'type' => 'video')
+            )
+        ));
+        $result = $this->getOpenCourseService()->isLiveFinished(1);
+        $this->assertTrue($result);
+    }
+
+    public function testIsLiveFinished()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array()
+            )
+        ));
+        $this->getOpenCourseService()->isLiveFinished($lessonId);
+    }
+
     /**
      * open_course_member.
      */

@@ -125,11 +125,11 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->assertFalse($result['result']);
         $this->assertEquals('直播还没开始!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 3600), 'endTime' => (time() - 3600)));
+        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 3600), 'endTime' => (time() - 3600), 'liveProvider' => 4));
         $this->assertFalse($result['result']);
         $this->assertEquals('直播已结束!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 30), 'endTime' => (time() + 3600)));
+        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 30), 'endTime' => (time() + 3600), 'liveProvider' => 4));
         $this->assertTrue($result['result']);
         $this->assertEmpty($result['message']);
     }
