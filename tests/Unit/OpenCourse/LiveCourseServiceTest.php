@@ -247,8 +247,8 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'video')
-            )
+                'returnValue' => array('id' => 1, 'type' => 'video'),
+            ),
         ));
         $result = $this->getLiveCourseService()->isLiveFinished(1);
         $this->assertTrue($result);

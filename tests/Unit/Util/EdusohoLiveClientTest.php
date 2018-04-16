@@ -169,7 +169,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
         $client->setCloudApi($mockObject, 'leaf');
 
         $result = $client->checkLiveStatus(array(8 => array(1, 2)));
-        
+
         $this->assertArrayEquals($return, $result);
     }
 

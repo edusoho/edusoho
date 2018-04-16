@@ -108,7 +108,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         if (empty($lesson) || $lesson['type'] != 'liveOpen') {
             return true;
         }
-        
+
         if ($this->checkLiveFinished($lesson)) {
             return true;
         }

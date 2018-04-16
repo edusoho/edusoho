@@ -485,7 +485,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $endLeftSeconds = time() - $activity['endTime'];
         $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
 
-        
         if ($this->checkLiveFinished($activity)) {
             return true;
         }

@@ -126,7 +126,7 @@ class ActivityDaoTest extends BaseDaoTestCase
             'fromCourseSetId' => 1,
             'fromUserId' => 1,
             'startTime' => time() - 1000,
-            'endTime' => time()
+            'endTime' => time(),
         );
     }
 

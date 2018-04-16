@@ -5,7 +5,6 @@ namespace Tests\Unit\Live;
 use Biz\BaseTestCase;
 use Biz\Live\Job\UpdateLiveStatusJob;
 use AppBundle\Common\ReflectionUtils;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Util\EdusohoLiveClient;
 use Mockery;
 
@@ -142,7 +141,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
 
         $lives = array(
             array('id' => 1, 'liveId' => 22, 'liveProvider' => 9),
-            array('id' => 2, 'liveId' => 23, 'liveProvider' => 9)
+            array('id' => 2, 'liveId' => 23, 'liveProvider' => 9),
         );
 
         $return = array(10 => 'closed', 11 => 'live', 22 => 'closed', 23 => 'live');
@@ -166,7 +165,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
 
         $lives = array(
             array('id' => 1, 'liveId' => 22, 'liveProvider' => 9),
-            array('id' => 2, 'liveId' => 23, 'liveProvider' => 9)
+            array('id' => 2, 'liveId' => 23, 'liveProvider' => 9),
         );
         $job = new UpdateLiveStatusJob(array(), $this->biz);
         $result = ReflectionUtils::invokeMethod($job, 'formatLives', array($lives));
@@ -185,7 +184,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
         $lives = array(
             array('id' => 1, 'liveId' => 22, 'liveProvider' => 9, 'type' => 'course'),
             array('id' => 2, 'liveId' => 23, 'liveProvider' => 9, 'type' => 'openCourse'),
-            array('id' => 3, 'liveId' => 24, 'liveProvider' => 9, 'type' => 'course')
+            array('id' => 3, 'liveId' => 24, 'liveProvider' => 9, 'type' => 'course'),
         );
         $livesStatus = array(22 => 'closed', 23 => 'unstart');
 

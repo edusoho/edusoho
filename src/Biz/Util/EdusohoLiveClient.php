@@ -127,7 +127,7 @@ class EdusohoLiveClient
 
     public static function isEsLive($liveProvider)
     {
-        return in_array($liveProvider, array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+        return in_array($liveProvider, array(self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER));
     }
 
     protected function createCloudApi($server)

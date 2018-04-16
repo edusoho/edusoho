@@ -191,7 +191,7 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             'createdTime' => 1,
             'copyId' => 1,
             'replayStatus' => 'ungenerated',
-            'progressStatus' => 'created'
+            'progressStatus' => 'created',
         );
     }
 }
