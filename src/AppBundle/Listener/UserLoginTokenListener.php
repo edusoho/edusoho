@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use AppBundle\Common\Exception\NewException;
+use Biz\User\UserException;
 
 class UserLoginTokenListener
 {
@@ -97,7 +97,7 @@ class UserLoginTokenListener
             $magic = $this->getSettingService()->get('magic');
 
             if ((!empty($magic['login_limit'])) && ($request->isXmlHttpRequest())) {
-                $response = new Response(array('error' => array('code' => NewException::LIMIT_USER_LOGIN)), 403);
+                $response = new Response(array('error' => array('code' => UserException::LIMIT_LOGIN)), 403);
                 $response->headers->clearCookie('REMEMBERME');
                 $response->send();
             }

@@ -1,6 +1,7 @@
 import RewardPointNotify from 'app/common/reward-point-notify';
 import notify from 'common/notify';
 
+let $loginModal = $('#login-modal');
 let rpn = new RewardPointNotify();
 let $document = $(document);
 $document.ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
@@ -22,14 +23,13 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
   
   switch(error.code)
   {
-  case 4500105:
+  case 4040102:
     window.location.href = '/login';
     break;
-  case 4040100:
-    if (ua.match(/micromessenger/i) == 'micromessenger' && $('meta[name=is-open]').attr('content') != 0) {
-      window.location.href = '/login/bind/weixinmob?_target_path=' + location.href;
+  case 4040101:
+    if($('meta[name=wechat_login_bind]').attr('content') != 0) {
+      window.location.href = '/login';
     } else {
-      let $loginModal = $('#login-modal');
       $('.modal').modal('hide');
       $loginModal.modal('show');
       $.get($loginModal.data('url'), function (html) {

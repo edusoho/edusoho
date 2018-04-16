@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use AppBundle\Common\Exception\NewException;
+use Biz\User\UserException;
+
 class ExceptionListener
 {
     private $logger;
@@ -66,7 +67,7 @@ class ExceptionListener
         }
         //兼容老代码
         if (403 === $statusCode && empty($user)) {
-            $error['code'] = NewException::NOTFOUND_USER;
+            $error['code'] = UserException::UN_LOGIN;
         }
 
         $response = new JsonResponse(array('error' => $error), $statusCode);

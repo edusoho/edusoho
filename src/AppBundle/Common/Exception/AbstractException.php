@@ -6,22 +6,22 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 abstract class AbstractException extends HttpException
 {
+    const STATUS_CODE = array(
+        404,
+        403,
+        500,
+    );
+
     public $moduleCode;
 
-    public $infos;
+    public $messages;
 
-    public function __construct($code, $statuCode)
+    public function __construct($code)
     {
-        $info = $this->infos[$code];
-        $code =
+        $codeArray = explode($code, '-');
+        $statusCode = in_array($codeArray[0], self::STATUS_CODE) ? $codeArray[0] : 500;
+        $message = empty($this->messages[$code]) ? '内部异常' : $this->messages[$code];
 
-        parent::__construct($statusCode, $info['message'], null, array(), $code);
+        parent::__construct($statusCode, $message, null, array(), $code);
     }
-
-    static public function getCode($code)
-    {
-        return  $info['statusCode'].$this->getModuleCode().$code;
-    }
-
-    abstract function getModuleCode();
 }
