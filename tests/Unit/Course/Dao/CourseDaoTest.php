@@ -71,12 +71,12 @@ class CourseDaoTest extends BaseDaoTestCase
         $this->assertEquals(2, $result[0]['count']);
     }
 
-    public function testUpdateMaxRateByCourseSetId()
-    {
-        $expected = $this->mockDataObject();
-        $result = $this->getDao()->updateMaxRateByCourseSetId(1, array('title' => 'title'));
-        $this->assertEquals('title', $result['title']);
-    }
+    // public function testUpdateMaxRateByCourseSetId()
+    // {
+    //     $expected = $this->mockDataObject();
+    //     $result = $this->getDao()->updateMaxRateByCourseSetId(1, array('title' => 'title'));
+    //     $this->assertEquals('title', $result['title']);
+    // }
 
     public function testfindCourseSetIncomesByCourseSetIds()
     {
