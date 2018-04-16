@@ -9,13 +9,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManagerTest extends BaseTestCase
 {
-    public function tearDown()
-    {
-        if (!empty($this->instance)) {
-            ReflectionUtils::setStaticProperty($this->instance, '_instance', $this->instance);
-        }
-    }
-
     public function testInit()
     {
         $manager = ExtensionManager::init(ServiceKernel::instance());
@@ -25,17 +18,6 @@ class ExtensionManagerTest extends BaseTestCase
         foreach ($result as $key => $value) {
             $this->assertTrue(in_array($key, array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate')));
         }
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ExtensionManager尚未实例化。
-     */
-    public function testInstanceWithException()
-    {
-        $this->instance = ExtensionManager::instance();
-        ReflectionUtils::setStaticProperty($this->instance, '_instance', null);
-        ExtensionManager::instance();
     }
 
     public function testRenderStatus()
