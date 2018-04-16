@@ -4,18 +4,12 @@ namespace AppBundle\Common\Exception;
 
 class UserException 
 {
-    public $moduleCode = 01;
+    const UN_LOGIN = '404_USER_01';
 
-    const UN_LOGIN = 01;
+    const LIMIT_LOGIN = '403_USER_02';
 
     public $messages = array(
-        01 => array(
-            'statusCode' => 403,
-            'message' => '用户未登录'
-        ),
-        02 => array(
-            'statusCode' => 404,
-            'message' => '限制登录'
-        ), 
+        '404_USER_01' => '用户未登录',
+        '403_USER_02' => '限制登录',
     );
 }

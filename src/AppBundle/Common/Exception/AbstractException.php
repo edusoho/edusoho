@@ -10,11 +10,18 @@ abstract class AbstractException extends HttpException
 
     public $infos;
 
-    public function __construct($code)
+    public function __construct($code, $statuCode)
     {
         $info = $this->infos[$code];
-        $code = $info['statusCode'].$this->moduleCode.$code;
+        $code =
 
         parent::__construct($statusCode, $info['message'], null, array(), $code);
     }
+
+    static public function getCode($code)
+    {
+        return  $info['statusCode'].$this->getModuleCode().$code;
+    }
+
+    abstract function getModuleCode();
 }
