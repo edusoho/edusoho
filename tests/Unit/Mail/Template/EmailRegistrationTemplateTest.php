@@ -15,13 +15,13 @@ class EmailRegistrationTemplateTest extends BaseTestCase
             array(
                 'functionName' => 'get',
                 'returnValue' => array('email_activation_title' => $emailTitle, 'auth.email_activation_body' => $emailBody),
-            )
+            ),
         ));
         $template = new EmailRegistrationTemplate(array());
         $template->setBiz($this->biz);
 
         $result = $template->parse(array('params' => array('nickname' => 'nickname', 'verifyurl' => '', 'sitename' => 'www.edusoho.com', 'siteurl' => '')));
-        
+
         $this->assertEquals($emailTitle, $result['title']);
         $this->assertNotNull($result['body']);
     }

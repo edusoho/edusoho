@@ -14,13 +14,13 @@ class EffectEmailResetPasswordTemplateTest extends BaseTestCase
             array(
                 'functionName' => 'get',
                 'returnValue' => array('name' => $siteName),
-            )
+            ),
         ));
         $template = new EffectEmailResetPasswordTemplate(array());
         $template->setBiz($this->biz);
 
         $result = $template->parse(array('params' => array('nickname' => 'nickname', 'verifyurl' => '', 'sitename' => 'www.edusoho.com', 'siteurl' => '')));
-        
+
         $this->assertEquals("重置您的{$siteName}帐号密码", $result['title']);
         $this->assertNotNull($result['body']);
     }

@@ -13,7 +13,7 @@ class DeletePastDataJobTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getStatisticsSetting',
-                    'returnValues' => array('timespan' => time()-3600),
+                    'returnValues' => array('timespan' => time() - 3600),
                 ),
                 array(
                     'functionName' => 'batchDeletePastDailyStatistics',

@@ -4,7 +4,6 @@ namespace Tests\Unit\Testpaper\Job;
 
 use Biz\Testpaper\Job\UpdateRealTimeTestResultStatusJob;
 use Biz\BaseTestCase;
-use AppBundle\Common\ReflectionUtils;
 
 class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
 {
@@ -27,7 +26,7 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
     {
         $args = array('args' => array('targetId' => 1, 'targetType' => 'activity'));
         $job = new UpdateRealTimeTestResultStatusJob($args, $this->biz);
-        
+
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
@@ -39,9 +38,9 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
                             'testMode' => 'realTime',
                             'limitedTime' => 100,
                             'mediaId' => 5,
-                        )
+                        ),
                 ),
-            )
+            ),
         ));
 
         $this->mockBiz('Testpaper:TestpaperService', array(
@@ -56,7 +55,7 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
             array(
                 'functionName' => 'updateTestpaperResult',
                 'returnValue' => array(),
-            )  
+            ),
         ));
         $result = $job->execute();
 
@@ -67,7 +66,7 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
     {
         $args = array('args' => array('targetId' => 1, 'targetType' => 'activity'));
         $job = new UpdateRealTimeTestResultStatusJob($args, $this->biz);
-        
+
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
@@ -75,9 +74,9 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
                     'id' => 1,
                     'fromCourseId' => 2,
                     'mediaType' => 'text',
-                    'ext' => array()
+                    'ext' => array(),
                 ),
-            )
+            ),
         ));
 
         $result = $job->execute();
@@ -89,7 +88,7 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
     {
         $args = array('args' => array('targetId' => 1, 'targetType' => 'activity'));
         $job = new UpdateRealTimeTestResultStatusJob($args, $this->biz);
-        
+
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
@@ -101,21 +100,20 @@ class UpdateRealTimeTestResultStatusJobTest extends BaseTestCase
                             'testMode' => 'realTime',
                             'limitedTime' => 100,
                             'mediaId' => 5,
-                        )
+                        ),
                 ),
-            )
+            ),
         ));
 
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'searchTestpaperResults',
                 'returnValue' => array(),
-            ), 
+            ),
         ));
 
         $result = $job->execute();
 
         $this->assertNull($result);
     }
-
 }

@@ -36,7 +36,7 @@ class TeacherCoursesDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-         $user1 = $this->getUserService()->register(array(
+        $user1 = $this->getUserService()->register(array(
             'email' => '1234@qq.com',
             'nickname' => 'user1',
             'password' => '123456',
@@ -53,7 +53,7 @@ class TeacherCoursesDataTagTest extends BaseTestCase
 
         $datatag = new TeacherCoursesDataTag();
         $courses = $courses = $datatag->getData(array('userId' => $user1['id'], 'count' => 5));
-        
+
         $this->assertNotNull($courses);
     }
 

@@ -39,14 +39,14 @@ class ElitedCourseQuestionsDataTagTest extends BaseTestCase
         $this->mockBiz('Course:ThreadService', array(
             array(
                 'functionName' => 'searchThreads',
-                'returnValue' => array(array('id' => 1, 'type' => 'question', 'isElite' => 1))
-            )
+                'returnValue' => array(array('id' => 1, 'type' => 'question', 'isElite' => 1)),
+            ),
         ));
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 1, 'title' => 'course title')
-            )
+                'returnValue' => array('id' => 1, 'title' => 'course title'),
+            ),
         ));
 
         $datatag = new ElitedCourseQuestionsDataTag();

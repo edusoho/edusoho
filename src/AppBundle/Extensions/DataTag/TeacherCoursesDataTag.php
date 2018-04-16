@@ -30,7 +30,7 @@ class TeacherCoursesDataTag extends CourseBaseDataTag implements DataTag
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $conditions = array(
             'ids' => $courseIds,
-            'status' => 'published'
+            'status' => 'published',
         );
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $arguments['count']);
 
