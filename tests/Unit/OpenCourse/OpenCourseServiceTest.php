@@ -355,30 +355,55 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals('success', $result3[0]);
     }
 
-    public function testIsLiveFinishedLessonEmpty()
+    public function testFindFinishedLivesWithinTwoHours()
     {
-        $result = $this->getOpenCourseService()->isLiveFinished(1);
-        $this->assertTrue($result);
-
         $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
             array(
-                'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'video')
-            )
+                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'returnValue' => array(array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => time() - 3600, 'endTime' => time() - 1800)),
+            ),
         ));
-        $result = $this->getOpenCourseService()->isLiveFinished(1);
-        $this->assertTrue($result);
+
+        $results = $this->getOpenCourseService()->findFinishedLivesWithinTwoHours();
+
+        $this->assertEquals(1, count($results));
+        $this->assertEquals('liveOpen', $results[0]['type']);
+        $this->assertLessThan(7200, time() - $results[0]['endTime']);
     }
 
-    public function testIsLiveFinished()
+    public function testUpdateLiveStatus()
+    {
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
+        $this->assertEmpty($result);
+
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'update',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'closed'),
+            ),
+        ));
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
+
+        $this->assertEquals('closed', $result['progressStatus']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testUpdateLiveStatusException()
     {
         $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array()
-            )
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
+            ),
         ));
-        $this->getOpenCourseService()->isLiveFinished($lessonId);
+
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'created');
     }
 
     /**

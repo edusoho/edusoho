@@ -152,6 +152,19 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $res[1], $testFields);
     }
 
+    public function testFindFinishedLivesWithinTwoHours()
+    {
+        $expected = array();
+        $expected[1] = $this->mockDataObject(array('startTime' => time() - 3600 * 4, 'endTime' => time() - 3600 * 3));
+        $expected[2] = $this->mockDataObject(array('startTime' => time() - 3600, 'endTime' => time() - 1800));
+
+        $res = $this->getDao()->findFinishedLivesWithinTwoHours();
+        $testFields = $this->getCompareKeys();
+
+        $this->assertArrayEquals($expected[2], $res[0], $testFields);
+        $this->assertEquals(1, count($res));
+    }
+
     public function testGetLessonMaxSeqByCourseId()
     {
         $expected = array();
@@ -167,7 +180,7 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             'courseId' => 1,
             'updatedTime' => 1,
             'status' => 'published',
-            'type' => 'a',
+            'type' => 'liveOpen',
             'free' => 1,
             'userId' => 1,
             'mediaId' => 1,
@@ -177,6 +190,8 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             'title' => 'a',
             'createdTime' => 1,
             'copyId' => 1,
-            );
+            'replayStatus' => 'ungenerated',
+            'progressStatus' => 'created'
+        );
     }
 }

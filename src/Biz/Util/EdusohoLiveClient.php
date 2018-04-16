@@ -125,6 +125,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('leaf')->get('/lives/rooms_status', $args);
     }
 
+    public static function isEsLive($liveProvider)
+    {
+        return in_array($liveProvider, array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+    }
+
     protected function createCloudApi($server)
     {
         if (empty($this->cloudApi[$server])) {

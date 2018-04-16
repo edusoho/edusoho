@@ -94,8 +94,6 @@ interface OpenCourseService
 
     public function updateLiveStatus($id, $status);
 
-    public function isLiveFinished($lessonId);
-
     /**
      * open_course_member.
      */

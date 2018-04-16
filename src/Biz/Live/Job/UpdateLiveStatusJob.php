@@ -9,6 +9,8 @@ use Biz\Activity\Service\LiveActivityService;
 
 class UpdateLiveStatusJob extends AbstractJob
 {
+    private $liveApi;
+
     public function execute()
     {
         $courseLives = $this->findLivesByActivity();
@@ -57,7 +59,6 @@ class UpdateLiveStatusJob extends AbstractJob
         }
 
         $lives = array();
-        $formateLives = array();
         foreach ($lessons as $lesson) {
             $lives[] = array('id' => $lesson['id'], 'type' => 'openCourse', 'liveId' => $lesson['mediaId'], 'liveProvider' => $lesson['liveProvider']);
         }
@@ -72,7 +73,7 @@ class UpdateLiveStatusJob extends AbstractJob
             return array();
         }
 
-        $client = new EdusohoLiveClient();
+        $client = $this->createLiveApi();
         $results = $client->checkLiveStatus($formatLives);
 
         return $results;
@@ -114,6 +115,15 @@ class UpdateLiveStatusJob extends AbstractJob
                 $this->updateCourseLiveStatus($live, $status);
             }
         }
+    }
+
+    private function createLiveApi()
+    {
+        if (!$this->liveApi) {
+            $this->liveApi = new EdusohoLiveClient();
+        }
+
+        return $this->liveApi;
     }
 
     private function updateCourseLiveStatus($live, $status)

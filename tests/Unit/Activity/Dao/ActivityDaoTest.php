@@ -90,6 +90,19 @@ class ActivityDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($activity4, $activities[1], $this->getCompareKeys());
     }
 
+    public function findFinishedLivesWithinTwoHours()
+    {
+        $expected = array();
+        $expected[1] = $this->mockDataObject(array('startTime' => time() - 3600 * 4, 'endTime' => time() - 3600 * 3, 'mediaType' => 'live'));
+        $expected[2] = $this->mockDataObject(array('startTime' => time() - 3600, 'endTime' => time() - 1800, 'mediaType' => 'live'));
+
+        $res = $this->getDao()->findFinishedLivesWithinTwoHours();
+        $testFields = $this->getCompareKeys();
+
+        $this->assertArrayEquals($expected[2], $res[0], $testFields);
+        $this->assertEquals(1, count($res));
+    }
+
     public function testFindOverlapTimeActivitiesByCourseId()
     {
         $activity1 = $this->mockActivity(array('title' => 'activity1', 'startTime' => 20, 'endTime' => 30));
@@ -112,6 +125,8 @@ class ActivityDaoTest extends BaseDaoTestCase
             'fromCourseId' => 1,
             'fromCourseSetId' => 1,
             'fromUserId' => 1,
+            'startTime' => time() - 1000,
+            'endTime' => time()
         );
     }
 

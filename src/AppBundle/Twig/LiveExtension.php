@@ -49,7 +49,7 @@ class LiveExtension extends \Twig_Extension
         if ($type == 'openCourse') {
             return $this->getOpenCourseService()->isLiveFinished($mediaId);
         } else {
-            return $this->getActivityService()->isLiveFinished($mediaId);
+            return $this->getLiveCourseService()->isLiveFinished($mediaId);
         }
     }
 
@@ -66,8 +66,8 @@ class LiveExtension extends \Twig_Extension
         return $this->biz->service('Activity:ActivityService');
     }
 
-    protected function getOpenCourseService()
+    protected function getLiveCourseService()
     {
-        return $this->biz->service('OpenCourse:OpenCourseService');
+        return $this->biz->service('OpenCourse:LiveCourseService');
     }
 }

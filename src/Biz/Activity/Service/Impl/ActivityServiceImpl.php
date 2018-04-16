@@ -18,6 +18,9 @@ use Biz\Util\EdusohoLiveClient;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
+    const LIVE_STARTTIME_DIFF_SECONDS = 7200;
+    const LIVE_ENDTIME_DIFF_SECONDS = 7200;
+
     public function getActivity($id, $fetchMedia = false)
     {
         $activity = $this->getActivityDao()->get($id);
@@ -480,10 +483,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $endLeftSeconds = time() - $activity['endTime'];
-        $isEsLive = in_array($activity['ext']['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
+        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
 
-        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
-        if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
+        
+        if ($this->checkLiveFinished($activity)) {
             return true;
         }
 
@@ -509,13 +512,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return array('result' => false, 'message' => 'message_response.live_class_not_exist.message');
         }
 
-        if ($activity['startTime'] - time() > 7200) {
+        if ($activity['startTime'] - time() > SELF::LIVE_STARTTIME_DIFF_SECONDS) {
             return array('result' => false, 'message' => 'message_response.live_not_start.message');
         }
 
-        $isEsLive = in_array($activity['ext']['liveProvider'], array(EdusohoLiveClient::OLD_ES_LIVE_PROVIDER, EdusohoLiveClient::NEW_ES_LIVE_PROVIDER));
-        $endLeftSeconds = time() - $activity['endTime'];
-        if (($endLeftSeconds > 0 && !$isEsLive) || ($isEsLive && $endLeftSeconds > 7200)) {
+        if ($this->checkLiveFinished($activity)) {
             return array('result' => false, 'message' => 'message_response.live_over.message');
         }
 
@@ -530,6 +531,18 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
+    }
+
+    protected function checkLiveFinished($activity)
+    {
+        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
+        $endLeftSeconds = time() - $activity['endTime'];
+
+        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
+        $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
+        $esLiveFinished = $isEsLive && $endLeftSeconds > SELF::LIVE_ENDTIME_DIFF_SECONDS;
+
+        return $thirdLiveFinished || $esLiveFinished;
     }
 
     /**
