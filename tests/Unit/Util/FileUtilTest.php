@@ -42,14 +42,21 @@ class FileUtilTest extends BaseTestCase
     public function testDeepCopy()
     {
         $folderPath = $this->biz['kernel.root_dir'].'/data/testFolder';
+        $subFolderPath = $folderPath.'/testSubFolder';
         mkdir($folderPath, 0777);
+        mkdir($subFolderPath, 0777);
         file_put_contents($folderPath.'/test', 1111);
+        file_put_contents($subFolderPath.'/test', 1111);
 
         $copiedFolder = $this->biz['kernel.root_dir'].'/data/testFolder2';
+        $copiedSubFolder = $copiedFolder.'/testSubFolder';
         $copiedFile = $copiedFolder.'/test';
+        $copiedSubFolderFile = $subFolderPath.'/test';
         FileUtil::deepCopy($folderPath, $copiedFolder);
 
         $this->assertTrue(file_exists($copiedFolder));
         $this->assertTrue(file_exists($copiedFile));
+        $this->assertTrue(file_exists($copiedSubFolder));
+        $this->assertTrue(file_exists($copiedSubFolderFile));
     }
 }
