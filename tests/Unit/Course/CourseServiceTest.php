@@ -41,7 +41,6 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($errorMessage, 'Lack of required fields');
     }
 
-
     public function testCancelRecommendCourseByCourseSetId()
     {
         TimeMachine::setMockedTime(time());
@@ -71,6 +70,36 @@ class CourseServiceTest extends BaseTestCase
         $newCourse = $this->getCourseService()->updateMaxRate($course['id'], 4);
         $this->assertEquals($course['maxRate'], 0);
         $this->assertEquals($newCourse['maxRate'], 4);
+    }
+
+    public function testUpdateMaxRateByCourseSetId()
+    {
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $this->getCourseService()->updateMaxRateByCourseSetId($course['id'], 4);
+        $newCourse = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['maxRate'], 0);
+        $this->assertEquals($newCourse['maxRate'], 4);
+    }
+
+    public function testUpdateCourseRewardPoint()
+    {
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $newCourse = $this->getCourseService()->updateCourseRewardPoint(
+            $course['id'],
+            array(
+                'taskRewardPoint' => 10,
+                'rewardPoint' => 5,
+                'title' => 'changeTitle',
+            )
+        );
+        $this->assertEquals($course['taskRewardPoint'], 0);
+        $this->assertEquals($newCourse['taskRewardPoint'], 10);
+        $this->assertEquals($course['rewardPoint'], 0);
+        $this->assertEquals($newCourse['rewardPoint'], 5);
+        $this->assertEquals($course['title'], '默认教学计划');
+        $this->assertEquals($newCourse['title'], '默认教学计划');
     }
 
     public function testUpdateMembersDeadlineByClassroomId()
@@ -568,7 +597,6 @@ class CourseServiceTest extends BaseTestCase
         );
         $this->assertEquals('title', $result[0]['title']);
     }
-
 
     protected function createNewCourseSet()
     {
