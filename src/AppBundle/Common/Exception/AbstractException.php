@@ -18,8 +18,8 @@ abstract class AbstractException extends HttpException
 
     public function __construct($code)
     {
-        $codeArray = explode($code, '-');
-        $statusCode = in_array($codeArray[0], self::STATUS_CODE) ? $codeArray[0] : 500;
+        $statusCode = substr($code, -strlen($code), 3);
+        $statusCode = in_array($statusCode, self::STATUS_CODE) ? $statusCode : 500;
         $message = empty($this->messages[$code]) ? '内部异常' : $this->messages[$code];
 
         parent::__construct($statusCode, $message, null, array(), $code);
