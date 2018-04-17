@@ -102,6 +102,25 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($newCourse['title'], '默认教学计划');
     }
 
+    public function testValidateCourseRewardPoint()
+    {
+        //全为空
+        $result = $this->getCourseService()->validateCourseRewardPoint(array());
+        $this->assertTrue(!$result);
+        //一个通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('rewardPoint' => 100));
+        $this->assertTrue(!$result);
+        //一个不通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('rewardPoint' => 100001));
+        $this->assertTrue($result);
+        //两个通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('taskRewardPoint' => 1, 'rewardPoint' => 1000));
+        $this->assertTrue(!$result);
+        //两个有一个不通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('taskRewardPoint' => 1, 'rewardPoint' => 100001));
+        $this->assertTrue($result);
+    }
+
     public function testUpdateMembersDeadlineByClassroomId()
     {
         $textClassroom = array(
