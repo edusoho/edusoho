@@ -55,7 +55,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return array('result' => false, 'message' => '直播教室不存在！');
         }
 
-        if ($lesson['startTime'] - time() > 7200) {
+        if ($lesson['startTime'] - time() > self::LIVE_STARTTIME_DIFF_SECONDS) {
             return array('result' => false, 'message' => '直播还没开始!');
         }
 
@@ -127,7 +127,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
         //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
         $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
-        $esLiveFinished = $isEsLive && $endLeftSeconds > SELF::LIVE_ENDTIME_DIFF_SECONDS;
+        $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
 
         return $thirdLiveFinished || $esLiveFinished;
     }
