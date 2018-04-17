@@ -5,7 +5,7 @@ style="display:none;"
 {% endif %}
 >
   <div class="controls col-md-8 controls">
-    <img src="{{ filepath(defaultSetting['course.png'] ) }}" class="img-responsive">
+    <img src="{{ filepath(defaultSetting['course.png']|default(''), 'course.png') }}" class="img-responsive">
     <a id="default-course-picture-btn"
       data-upload-token="{{ upload_token('system', 'image') }}"
       data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
@@ -20,7 +20,7 @@ style="display:none;"
 {% endif %}
 >
   <div class="controls col-md-8 controls">
-    <img src="{{ asset('assets/img/default/course.png') }}">
+    <img src="{{ asset('assets/img/default/course.png') }}" class="img-responsive">
   </div>
 </div>
 
