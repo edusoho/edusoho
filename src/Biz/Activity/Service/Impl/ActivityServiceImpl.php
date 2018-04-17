@@ -511,7 +511,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return array('result' => false, 'message' => 'message_response.live_class_not_exist.message');
         }
 
-        if ($activity['startTime'] - time() > SELF::LIVE_STARTTIME_DIFF_SECONDS) {
+        if ($activity['startTime'] - time() > self::LIVE_STARTTIME_DIFF_SECONDS) {
             return array('result' => false, 'message' => 'message_response.live_not_start.message');
         }
 
@@ -539,7 +539,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
         $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
-        $esLiveFinished = $isEsLive && $endLeftSeconds > SELF::LIVE_ENDTIME_DIFF_SECONDS;
+        $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
 
         return $thirdLiveFinished || $esLiveFinished;
     }
