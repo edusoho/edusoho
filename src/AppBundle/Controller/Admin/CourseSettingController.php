@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -82,7 +81,7 @@ class CourseSettingController extends BaseController
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('admin/system/', 'update_settings', '更新课程默认图片设置', $defaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
-    
+
             return $this->redirect($this->generateUrl('admin_setting_course_avatar'));
         }
 
