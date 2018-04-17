@@ -11,6 +11,9 @@ use Topxia\Service\Common\ServiceKernel;
 
 class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 {
+    const LIVE_STARTTIME_DIFF_SECONDS = 7200;
+    const LIVE_ENDTIME_DIFF_SECONDS = 7200;
+
     private $liveClient = null;
 
     public function createLiveRoom($course, $lesson, $routes)
@@ -56,7 +59,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return array('result' => false, 'message' => '直播还没开始!');
         }
 
-        if ($lesson['endTime'] < time()) {
+        if ($this->checkLiveFinished($lesson)) {
             return array('result' => false, 'message' => '直播已结束!');
         }
 
@@ -96,6 +99,37 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         return $role;
+    }
+
+    public function isLiveFinished($lessonId)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+
+        if (empty($lesson) || $lesson['type'] != 'liveOpen') {
+            return true;
+        }
+
+        if ($this->checkLiveFinished($lesson)) {
+            return true;
+        }
+
+        if ($lesson['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function checkLiveFinished($lesson)
+    {
+        $isEsLive = EdusohoLiveClient::isEsLive($lesson['liveProvider']);
+        $endLeftSeconds = time() - $lesson['endTime'];
+
+        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
+        $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
+        $esLiveFinished = $isEsLive && $endLeftSeconds > SELF::LIVE_ENDTIME_DIFF_SECONDS;
+
+        return $thirdLiveFinished || $esLiveFinished;
     }
 
     /**

@@ -125,11 +125,15 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->assertFalse($result['result']);
         $this->assertEquals('直播还没开始!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 3600), 'endTime' => (time() - 3600)));
+        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600), 'endTime' => (time() - 1000), 'liveProvider' => 4));
         $this->assertFalse($result['result']);
         $this->assertEquals('直播已结束!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 30), 'endTime' => (time() + 3600)));
+        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600 * 4), 'endTime' => (time() - 3600 * 3), 'liveProvider' => 8));
+        $this->assertFalse($result['result']);
+        $this->assertEquals('直播已结束!', $result['message']);
+
+        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 30), 'endTime' => (time() + 3600), 'liveProvider' => 4));
         $this->assertTrue($result['result']);
         $this->assertEmpty($result['message']);
     }
@@ -233,6 +237,73 @@ class LiveCourseServiceTest extends BaseTestCase
 
         $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'video');
         $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
+    }
+
+    public function testIsLiveFinishedLessonEmpty()
+    {
+        $result = $this->getLiveCourseService()->isLiveFinished(1);
+        $this->assertTrue($result);
+
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'type' => 'video'),
+            ),
+        ));
+        $result = $this->getLiveCourseService()->isLiveFinished(1);
+        $this->assertTrue($result);
+    }
+
+    public function testIsLiveFinishedThirdLiveProvider()
+    {
+        $startTime = time() - 3600;
+        $endTime = time() - 1800;
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime, 'endTime' => $endTime, 'liveProvider' => 1, 'progressStatus' => 'created'),
+            ),
+        ));
+
+        $result = $this->getLiveCourseService()->isLiveFinished(1);
+
+        $this->assertTrue($result);
+    }
+
+    public function testIsLiveFinishedEsLive()
+    {
+        $startTime1 = time() - 3600 * 4;
+        $endTime1 = time() - 3600 * 3;
+
+        $startTime2 = time() - 3600;
+        $endTime2 = time() - 1800;
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime1, 'endTime' => $endTime1, 'liveProvider' => 9, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2, 'mediaId' => 2, 'type' => 'liveOpen', 'startTime' => $startTime2, 'endTime' => $endTime2, 'liveProvider' => 8, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'mediaId' => 3, 'type' => 'liveOpen', 'startTime' => $startTime2, 'endTime' => $endTime2, 'liveProvider' => 9, 'progressStatus' => 'closed'),
+            ),
+        ));
+
+        $result = $this->getLiveCourseService()->isLiveFinished(1);
+        $this->assertTrue($result);
+
+        $result = $this->getLiveCourseService()->isLiveFinished(2);
+        $this->assertFalse($result);
+
+        $result = $this->getLiveCourseService()->isLiveFinished(3);
+        $this->assertTrue($result);
     }
 
     protected function _mockLiveCient()
