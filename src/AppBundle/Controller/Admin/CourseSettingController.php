@@ -76,19 +76,14 @@ class CourseSettingController extends BaseController
         $defaultSetting = $this->getSettingService()->get('default', array());
 
         if ($request->getMethod() == 'POST') {
-            $defaultSetting = $request->request->all();
-
-            $courseDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
-                'defaultCoursePicture',
-            ));
-
-            $default = $this->getSettingService()->get('default', array());
-            $defaultSetting = array_merge($default, $courseDefaultSetting);
+            $courseDefaultSetting = $request->request->get('defaultCoursePicture', 0);
+            $defaultSetting = array_merge($defaultSetting, array('defaultCoursePicture' => $courseDefaultSetting));
 
             $this->getSettingService()->set('default', $defaultSetting);
-
             $this->getLogService()->info('admin/system/', 'update_settings', '更新课程默认图片设置', $defaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
+    
+            return $this->redirect($this->generateUrl('admin_setting_course_avatar'));
         }
 
         return $this->render('admin/system/course-avatar.html.twig', array(

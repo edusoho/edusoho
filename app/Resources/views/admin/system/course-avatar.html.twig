@@ -7,21 +7,15 @@
 
 
 {{ web_macro.flash_messages() }}
-
-  <fieldset>
-    <div class="form-group">
-      <div class="col-md-3 control-label"></div>
-      <div class="controls col-md-8 radios" id="defaultCoursePicture">
-        {{ radios('coursePicture', {1:'admin.setting_course.course_avatar.customer_default_avatar'|trans, 0:'admin.setting_course.course_avatar.system_default_avatar'|trans}, defaultSetting.defaultCoursePicture|default(0)) }}
-        <p>{{'admin.setting_course.course_avatar.tips'|trans|raw}}</p>
-        {% include 'admin/system/default-course-picture.html.twig' %}
-      </div>
-    </div>
-  </fieldset>
-
 <form class="form-horizontal" method="post" id="course-form" novalidate>
-  <input type="hidden" name="defaultCoursePicture" value="{{ defaultSetting.defaultCoursePicture|default(0) }}">
-
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8 radios" id="defaultCoursePicture">
+      {{ radios('defaultCoursePicture', {1:'admin.setting_course.course_avatar.customer_default_avatar'|trans, 0:'admin.setting_course.course_avatar.system_default_avatar'|trans}, defaultSetting.defaultCoursePicture|default(0)) }}
+      <p>{{'admin.setting_course.course_avatar.tips'|trans|raw}}</p>
+      {% include 'admin/system/default-course-picture.html.twig' %}
+    </div>
+  </div>
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
       <button type="submit" class="btn btn-primary mtl mll">{{'form.btn.submit'|trans}}</button>

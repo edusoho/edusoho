@@ -4,22 +4,14 @@
 style="display:none;"
 {% endif %}
 >
-<div class="col-md-8 control-label"><b>{{'admin.setting_course.course_avatar.customer_default_avatar'|trans}}</b></div>
-  <form id="course-picture-form" method="post" >
-    <div class="controls col-md-8 controls">
-      <img src="{{ filepath('','course.png' ) }}">
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-2 control-label"></div>
-      <div class="controls col-md-8 controls">      
-        <a id="default-course-picture-btn"
-        data-upload-token="{{ upload_token('system', 'image') }}"
-        data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
-        class="btn btn-default btn-sm">{{'form.btn.upload'|trans}}</a>
-      </div>
-    </div>
-  </form>
+  <div class="controls col-md-8 controls">
+    <img src="{{ filepath(defaultSetting['course.png'] ) }}" class="img-responsive">
+    <a id="default-course-picture-btn"
+      data-upload-token="{{ upload_token('system', 'image') }}"
+      data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
+      class="btn btn-default btn-sm mtl">{{'form.btn.upload'|trans}}
+    </a>
+  </div>
 </div>
 
 <div class="form-group" id="system-course-picture-class" 
@@ -27,9 +19,8 @@ style="display:none;"
 style="display:none;"
 {% endif %}
 >
-  <div class="col-md-8 control-label"><b>{{'admin.setting_course.course_avatar.system_default_avatar'|trans}}</b></div>
-    <div class="controls col-md-8 controls">
-      <img src="{{ asset('assets/img/default/course.png') }}">
-    </div>
+  <div class="controls col-md-8 controls">
+    <img src="{{ asset('assets/img/default/course.png') }}">
+  </div>
 </div>
 
