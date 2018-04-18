@@ -89,7 +89,7 @@ class HTMLHelper
         }
 
         $openedtags = array_reverse($openedtags);
-        for ($i = 0; $i < $len_opened; $i++) {
+        for ($i = 0; $i < $len_opened; ++$i) {
             if (!in_array($openedtags[$i], $closedtags)) {
                 $html .= '</'.$openedtags[$i].'>';
             } else {
@@ -98,7 +98,7 @@ class HTMLHelper
         }
 
         return $html;
-    } 
+    }
 
     protected function handleOuterLink($html, $safeDomains)
     {
