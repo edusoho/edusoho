@@ -10,6 +10,16 @@ use Biz\Subtitle\Service\SubtitleService;
 
 class SubtitleServiceImpl extends BaseService implements SubtitleService
 {
+    public function searchSubtitles($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getSubtitleDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function findSubtitlesByMediaIds($mediaIds)
+    {
+        return $this->searchSubtitles(array('mediaIds' => $mediaIds), array(), 0, \PHP_INT_MAX);
+    }
+
     public function findSubtitlesByMediaId($mediaId, $ssl = false)
     {
         $subtitles = $this->getSubtitleDao()->findSubtitlesByMediaId($mediaId);
