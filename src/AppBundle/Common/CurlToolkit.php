@@ -79,7 +79,7 @@ class CurlToolkit
             'kzedu.cc', //eduCloud短链
             'dwz.cn', //百度短链
             'qqurl.com', //qq短链
-            'api.edusoho.net',//云平台接口
+            'api.edusoho.net', //云平台接口
         );
     }
 }

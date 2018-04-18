@@ -7,7 +7,7 @@ use AppBundle\Common\CurlToolkit;
 
 class KeyApplier
 {
-    public function applyKey($user, $edition = 'opensource', $source = 'apply')
+    public function applyKey($user, $edition = 'opensource', $source = 'apply', $mock = 0)
     {
         $setting = $this->getSettingService()->get('storage', array());
         if (!empty($setting['cloud_access_key']) && !empty($setting['cloud_secret_key']) && !empty($setting['cloud_key_applied'])) {
@@ -33,16 +33,26 @@ class KeyApplier
 
         $url = empty($setting['cloud_api_server']) ? 'http://api.edusoho.net' : rtrim($setting['cloud_api_server'], '/');
         $url = $url.'/v1/keys';
-        $response = CurlToolkit::request('POST', $url, json_encode($params), array(
+
+        $curlOptions = array(
             'connectTimeout' => 20,
             'userAgent' => 'EduSoho Install Client 1.0',
             'timeout' => 20,
             'headers' => array(
                 'Content-type: application/json',
                 'Sign: '.md5(json_encode($params)),
-            )
-        ));
+            ),
+        );
 
+        if ($mock) {
+            return array(
+                'url' => $url,
+                'params' => $params,
+                'curlOptions' => $curlOptions,
+            );
+        }
+
+        $response = CurlToolkit::request('POST', $url, json_encode($params), $curlOptions);
         if (empty($response)) {
             return array('error' => '生成Key失败，请检查服务器的网络设置！');
         }
