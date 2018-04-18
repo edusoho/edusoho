@@ -1,9 +1,5 @@
 
-<div class="form-group" id="course-picture-class" 
-{% if setting('default.defaultCoursePicture') == 0 %}
-style="display:none;"
-{% endif %}
->
+<div class="form-group {% if setting('default.defaultCoursePicture') == 0 %}hide{% endif %}" id="course-picture-class">
   <div class="controls col-md-8 controls">
     <img src="{{ filepath(defaultSetting['course.png']|default(''), 'course.png') }}" class="img-responsive">
     <a id="default-course-picture-btn"
@@ -14,11 +10,7 @@ style="display:none;"
   </div>
 </div>
 
-<div class="form-group" id="system-course-picture-class" 
-{% if setting('default.defaultCoursePicture') == 1 %}
-style="display:none;"
-{% endif %}
->
+<div class="form-group {% if setting('default.defaultCoursePicture') == 1 %}hide{% endif %}" id="system-course-picture-class" >
   <div class="controls col-md-8 controls">
     <img src="{{ asset('assets/img/default/course.png') }}" class="img-responsive">
   </div>
