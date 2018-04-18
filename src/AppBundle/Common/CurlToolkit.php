@@ -46,7 +46,9 @@ class CurlToolkit
 
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
-
+        if (!empty($conditions['headers'])) {
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $conditions['headers']);
+        }
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
 
@@ -77,6 +79,7 @@ class CurlToolkit
             'kzedu.cc', //eduCloud短链
             'dwz.cn', //百度短链
             'qqurl.com', //qq短链
+            'api.edusoho.net',//云平台接口
         );
     }
 }
