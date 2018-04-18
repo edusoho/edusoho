@@ -146,8 +146,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if (isset($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        if (isset($course['about'])) {
+            $course['about'] = $this->purifyHtml($course['about'], true);
         }
 
         if (!isset($course['isFree'])) {
@@ -221,6 +221,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields,
             array(
                 'title',
+                'about', //@todo 目前没有这个字段
                 'courseSetId',
                 'summary',
                 'goals',

@@ -23,13 +23,17 @@ class CategoryServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'findByGroupIdAndParentId',
                     'withParams' => array(1, 2),
-                    'returnValue' => array(),
+                    'returnValue' => array(
+                        array('id' => 1),
+                    ),
                 ),
             )
         );
 
         $result = $this->getCategoryService()->findCategoriesByGroupIdAndParentId(1, 2);
-        $this->assertEquals(array(), $result);
+        $this->assertEquals(array(
+            array('id' => 1),
+        ), $result);
     }
 
     public function testFindCategoriesByGroupIdAndParentIdWithWrongParams()
@@ -37,6 +41,17 @@ class CategoryServiceTest extends BaseTestCase
         $result = $this->getCategoryService()->findCategoriesByGroupIdAndParentId(-1, 2);
         $this->assertEquals(array(), $result);
     }
+
+    public function testGetCategoryWithEmptyId()
+    {
+        $result = $this->getCategoryService()->getCategory(0);
+        $this->assertEquals(null, $result);
+    }
+
+//    public function testGetCategoryByCode()
+//    {
+//
+//    }
 
     public function testAddCategory()
     {
@@ -133,33 +148,32 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testGetCategoryByCode()
     {
-        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1);
-        $createdCategory = $this->getCategoryService()->createCategory($categoryA);
+        $this->mockBiz(
+            'Taxonomy:CategoryDao',
+            array(
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('code'),
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
         $foundCategory = $this->getCategoryService()->getCategoryByCode('code');
-        $this->assertEquals($createdCategory, $foundCategory);
+        $this->assertEquals(array(
+            'id' => 1,
+        ), $foundCategory);
     }
 
     /**
      * @group get
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
-    public function testGetCategoryByCodeWithNotExistCategoryCode()
-    {
-        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1);
-        $createdCategory = $this->getCategoryService()->createCategory($categoryA);
-        $foundCategory = $this->getCategoryService()->getCategoryByCode('xxxx');
-        $this->assertFalse($foundCategory);
-    }
-
-    /**
-     * @group get
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     */
-    public function testfindCategories()
+    public function testFindCategories()
     {
         $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'weight' => 100, 'groupId' => 1);
         $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'weight' => 10, 'groupId' => 1);
