@@ -16,4 +16,9 @@ class UserException extends AbstractException
         4040101 => '用户未登录',
         4030102 => '限制登录',
     );
+
+    public function UN_LOGIN()
+    {
+        return new self(self::UN_LOGIN);
+    }
 }

@@ -111,7 +111,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$user->isLogin()) {
-            throw new UserException(UserException::UN_LOGIN);
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
