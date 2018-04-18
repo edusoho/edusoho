@@ -9,19 +9,16 @@
 {{ web_macro.flash_messages() }}
 <form class="form-horizontal" method="post" id="course-form" novalidate>
   <div class="form-group">
-    <div class="col-md-3 control-label"></div>
-    <div class="controls col-md-8 radios" id="defaultCoursePicture">
+    <div class="controls col-md-offset-1 radios clearfix" id="defaultCoursePicture">
       {{ radios('defaultCoursePicture', {1:'admin.setting_course.course_avatar.customer_default_avatar'|trans, 0:'admin.setting_course.course_avatar.system_default_avatar'|trans}, defaultSetting.defaultCoursePicture|default(0)) }}
       <p>{{'admin.setting_course.course_avatar.tips'|trans|raw}}</p>
       {% include 'admin/system/default-course-picture.html.twig' %}
+      <div>
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary mtl mll">{{'form.btn.submit'|trans}}</button>
-    </div>
-  </div>
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </div> 
 </form>
 
 {% endblock %}
