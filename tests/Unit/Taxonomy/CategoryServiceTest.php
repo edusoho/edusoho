@@ -15,6 +15,29 @@ class CategoryServiceTest extends BaseTestCase
         $this->getCategoryService()->addGroup(array('id' => 3, 'code' => 'code3', 'name' => '课程分类3', 'depth' => 3));
     }
 
+    public function testFindCategoriesByGroupIdAndParentId()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryDao',
+            array(
+                array(
+                    'functionName' => 'findByGroupIdAndParentId',
+                    'withParams' => array(1, 2),
+                    'returnValue' => array(),
+                ),
+            )
+        );
+
+        $result = $this->getCategoryService()->findCategoriesByGroupIdAndParentId(1, 2);
+        $this->assertEquals(array(), $result);
+    }
+
+    public function testFindCategoriesByGroupIdAndParentIdWithWrongParams()
+    {
+        $result = $this->getCategoryService()->findCategoriesByGroupIdAndParentId(-1, 2);
+        $this->assertEquals(array(), $result);
+    }
+
     public function testAddCategory()
     {
         $rootCategory = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1, 'parentId' => 0);
