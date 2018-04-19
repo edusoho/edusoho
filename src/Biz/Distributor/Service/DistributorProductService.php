@@ -8,14 +8,12 @@ namespace Biz\Distributor\Service;
 interface DistributorProductService
 {
     /**
-     * @return course_show
+     * @return 路由，如course_show
      */
     public function getRoutingName();
 
     /**
-     * 返回路由需要的参数
-     *
-     * @return array('courseId' => $id)
+     * @return 返回路由需要的参数，如 array('id' => $id)
      */
     public function getRoutingParams($id);
 }
