@@ -7,12 +7,15 @@ use AppBundle\Common\ArrayToolkit;
 
 class EdusohoLiveClient
 {
+    const LIVE_ROOM_LARGE = 'large';
+    const LIVE_ROOM_SMALL = 'small';
+
     private $cloudApi;
 
     /**
      * 创建直播.
      *
-     * @param array $args 直播参数，支持的参数有：title, speaker, startTime, endTime, authUrl, jumpUrl, errorJumpUrl
+     * @param array $args 直播参数，支持的参数有：title, speaker, startTime, endTime, authUrl, jumpUrl, errorJumpUrl, roomType
      *
      * @return [type] [description]
      */
@@ -102,6 +105,11 @@ class EdusohoLiveClient
         $logoData = ArrayToolkit::parts($logoData, $filter);
 
         return $this->createCloudApi('root')->post('/liveaccount/logo/set', $logoData);
+    }
+
+    public function getLiveAccount()
+    {
+        return $this->createCloudApi('root')->get('/lives/account');
     }
 
     protected function createCloudApi($server)

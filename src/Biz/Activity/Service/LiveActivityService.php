@@ -15,4 +15,6 @@ interface LiveActivityService
     public function deleteLiveActivity($id);
 
     public function createLiveroom($activity);
+
+    public function canUpdateRoomType($liveStartTime);
 }

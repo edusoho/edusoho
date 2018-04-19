@@ -4,6 +4,7 @@ namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
 use Biz\Activity\Service\LiveActivityService;
+use AppBundle\Common\ReflectionUtils;
 
 class LiveActivityServiceTest extends BaseTestCase
 {
@@ -20,11 +21,13 @@ class LiveActivityServiceTest extends BaseTestCase
             'endTime' => time() + 3000,
             'length' => 2000,
             '_base_url' => 'url...',
+            'roomType' => 'small',
         );
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->assertNotNull($savedActivity['id']);
         $this->assertNotNull($savedActivity['liveId']);
         $this->assertNotNull($savedActivity['liveProvider']);
+        $this->assertEquals('small', $savedActivity['roomType']);
     }
 
     public function testUpdate()
@@ -39,6 +42,7 @@ class LiveActivityServiceTest extends BaseTestCase
             'startTime' => time() + 1000,
             'endTime' => time() + 4000,
             'length' => 3,
+            'roomType' => 'small',
         );
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $savedActivity = array_merge($savedActivity, $live);
@@ -62,6 +66,7 @@ class LiveActivityServiceTest extends BaseTestCase
             'endTime' => time() + 4000,
             'length' => 3000,
             '_base_url' => 'url...',
+            'roomType' => 'large',
         );
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->getLiveActivityService()->deleteLiveActivity($savedActivity['id']);
@@ -123,7 +128,35 @@ class LiveActivityServiceTest extends BaseTestCase
             'length' => 2,
             'title' => 'test',
             'fromCourseId' => 12,
+            'roomType' => 'large',
         ));
+    }
+
+    public function testCanUpdateRoomType()
+    {
+        $liveTime = time() + 30 * 60;
+        $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
+        $this->assertTrue($result);
+
+        $liveTime = time() + 5 * 60;
+        $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
+        $this->assertFalse($result);
+
+        $liveTime = time() - 5 * 60;
+        $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
+        $this->assertFalse($result);
+    }
+
+    public function testIsRoomType()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', array('small'));
+        $this->assertTrue($result);
+
+        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', array('large'));
+        $this->assertTrue($result);
+
+        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', array('middle'));
+        $this->assertFalse($result);
     }
 
     /**
