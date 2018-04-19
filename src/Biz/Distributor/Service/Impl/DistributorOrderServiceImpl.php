@@ -60,7 +60,7 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
         $distributorProduct = $this->createService("Distributor:{$class}");
         $tokenInfo = $distributorProduct->decodeToken($token);
 
-        return array($distributorProduct->getRoutingName(),$distributorProduct->getRoutingParams($tokenInfo));
+        return array($distributorProduct->getRoutingName(), $distributorProduct->getRoutingParams($tokenInfo));
     }
 
     protected function getOrderService()

@@ -14,7 +14,7 @@ class DistributorCookieToolkit
         } else {
             $cookie = new Cookie("distributor-{$cookieName}-token", $token);
         }
-        
+
         $response->headers->setCookie($cookie);
 
         return $response;

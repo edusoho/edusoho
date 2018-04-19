@@ -18,7 +18,7 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
         return 'course_show';
     }
 
-    public function getRoutingParams(Array $tokenInfo)
+    public function getRoutingParams(array $tokenInfo)
     {
         return array('id' => $tokenInfo['product_id']);
     }

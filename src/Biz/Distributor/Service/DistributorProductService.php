@@ -15,5 +15,5 @@ interface DistributorProductService
     /**
      * @return 返回路由需要的参数，如 array('id' => $id)
      */
-    public function getRoutingParams(Array $tokenInfo);
+    public function getRoutingParams(array $tokenInfo);
 }

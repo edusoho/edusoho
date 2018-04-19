@@ -30,7 +30,7 @@ class MockController extends BaseController
         $this->validate();
 
         switch ($type) {
-            case 'user': 
+            case 'user':
                 $data = array(
                     'merchant_id' => '123',
                     'agency_id' => '22221',
@@ -40,7 +40,7 @@ class MockController extends BaseController
                 $tokenExpireDateNum = strtotime($request->request->get('tokenExpireDateStr'));
                 $token = $this->getDistributorUserService()->encodeToken($data, $tokenExpireDateNum);
                 break;
-            case 'course': 
+            case 'course':
                 $data = array(
                     'org_id' => $request->request->get('orgId'),
                     'type' => $request->request->get('type'),
@@ -303,4 +303,3 @@ class MockController extends BaseController
         );
     }
 }
-?>
