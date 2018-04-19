@@ -322,7 +322,8 @@ class WebExtension extends \Twig_Extension
             $staticDistUrlPath = $this->container->getParameter('front_end.web_static_dist_url_path');
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
             if ($imgs) {
-                foreach ($imgs[1] as $img) {
+                $urls = array_unique($imgs[1]);
+                foreach ($urls as $img) {
                     if (0 === strpos($img, $publicUrlPath)
                         || 0 === strpos($img, $themeUrlPath)
                         || 0 === strpos($img, $assetUrlPath)

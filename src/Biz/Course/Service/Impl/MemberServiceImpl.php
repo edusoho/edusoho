@@ -57,6 +57,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
+        // todo source不应该根据isAdminAdded判断，直接传入source
         if (isset($data['isAdminAdded']) && 1 == $data['isAdminAdded']) {
             $data['source'] = 'outside';
         }
@@ -76,7 +77,6 @@ class MemberServiceImpl extends BaseService implements MemberService
                     'remark' => $data['remark'],
                     'reason' => 'site.join_by_import',
                     'reason_type' => 'import_join',
-                    'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
                 );
                 $this->becomeStudent($course['id'], $user['id'], $info);
             }

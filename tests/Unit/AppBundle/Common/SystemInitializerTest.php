@@ -5,9 +5,258 @@ namespace AppBundle\Common\Tests;
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\Filesystem\Filesystem;
 
 class SystemInitializerTest extends BaseTestCase
 {
+    public function testInit()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer->init();
+    }
+
+    public function testInitPages()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initPages', array());
+        $result = $this->getContentService()->searchContents(array(), array('createdTime' => 'DESC'), 0, \PHP_INT_MAX);
+
+        $this->assertArrayEquals(array(
+            'title' => '关于我们',
+            'type' => 'page',
+            'alias' => 'aboutus',
+            'body' => '',
+            'template' => 'default',
+            'status' => 'published',
+        ), ArrayToolkit::parts($result[0], array('title', 'type', 'alias', 'body', 'template', 'status')));
+
+        $this->assertArrayEquals(array(
+            'title' => '常见问题',
+            'type' => 'page',
+            'alias' => 'questions',
+            'body' => '',
+            'template' => 'default',
+            'status' => 'published',
+        ), ArrayToolkit::parts($result[1], array('title', 'type', 'alias', 'body', 'template', 'status')));
+    }
+
+    public function testInitCoin()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initCoin', array());
+        $result = $this->getSettingService()->get('coin');
+        $default = array(
+            'cash_model' => 'none',
+            'cash_rate' => 1,
+            'coin_enabled' => 0,
+        );
+
+        $this->assertArrayEquals($default, $result);
+    }
+
+    public function testInitNavigations()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initNavigations', array());
+        $result = $this->getNavigationService()->searchNavigations(array(), array(), 0, \PHP_INT_MAX);
+
+        $this->assertArrayEquals(array(
+            'name' => '师资力量',
+            'url' => 'teacher',
+            'sequence' => 1,
+            'isNewWin' => 0,
+            'isOpen' => 1,
+            'type' => 'top',
+        ), ArrayToolkit::parts($result[0], array('name', 'url', 'sequence', 'isNewWin', 'isOpen', 'type')));
+
+        $this->assertArrayEquals(array(
+            'name' => '常见问题',
+            'url' => 'page/questions',
+            'sequence' => 2,
+            'isNewWin' => 0,
+            'isOpen' => 1,
+            'type' => 'top',
+        ), ArrayToolkit::parts($result[1], array('name', 'url', 'sequence', 'isNewWin', 'isOpen', 'type')));
+
+        $this->assertArrayEquals(array(
+            'name' => '关于我们',
+            'url' => 'page/aboutus',
+            'sequence' => 3,
+            'isNewWin' => 0,
+            'isOpen' => 1,
+            'type' => 'top',
+        ), ArrayToolkit::parts($result[2], array('name', 'url', 'sequence', 'isNewWin', 'isOpen', 'type')));
+    }
+
+    public function testInitThemes()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initThemes', array());
+
+        $result = $this->getSettingService()->get('theme');
+        $default = array('uri' => 'jianmo');
+        $this->assertArrayEquals($default, $result);
+    }
+
+    public function testInitBlocks()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initBlocks', array());
+
+        $result = $this->getBlockService()->searchBlockTemplates(array(), array(), 0, \PHP_INT_MAX);
+        $result = ArrayToolkit::column($result, 'code');
+
+        $this->assertArrayEquals(
+            array(
+                'live_top_banner',
+                'default:home_top_banner',
+                'autumn:home_top_banner',
+                'jianmo:home_top_banner',
+                'jianmo:middle_banner',
+                'jianmo:advertisement_banner',
+                'jianmo:bottom_info',
+            ),
+            $result
+        );
+
+        $result = $this->getBlockDao()->search(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertTrue(empty($result));
+    }
+
+    public function testInitJob()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initJob', array());
+
+        $result = $this->getSchedulerService()->searchJobs(array(), array(), 0, \PHP_INT_MAX);
+
+        $this->assertEquals(20, count($result));
+
+        $this->assertArrayEquals(array(
+            'Order_FinishSuccessOrdersJob',
+            'Order_CloseOrdersJob',
+            'DeleteExpiredTokenJob',
+            'SessionGcJob',
+            'OnlineGcJob',
+            'Scheduler_MarkExecutingTimeoutJob',
+            'RefreshLearningProgressJob',
+            'UpdateInviteRecordOrderInfoJob',
+            'Xapi_PushStatementsJob',
+            'Xapi_AddActivityWatchToStatementJob',
+            'Xapi_ArchiveStatementJob',
+            'Xapi_ConvertStatementsJob',
+            'SyncUserTotalLearnStatisticsJob',
+            'SyncUserLearnDailyPastLearnStatisticsJob',
+            'DeleteUserLearnDailyPastLearnStatisticsJob',
+            'SyncUserLearnDailyLearnStatisticsJob',
+            'StorageDailyLearnStatisticsJob',
+            'DistributorSyncJob',
+            'DeleteFiredLogJob',
+            'updateCourseSetHotSeq',
+            ), ArrayToolkit::column($result, 'name'));
+    }
+
+    public function testInitSystemUsers()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initSystemUsers', array());
+        $result = $this->getUserService()->searchUsers(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals(1, count($result));
+        $this->assertArrayEquals(array(
+            'email' => 'admin@admin.com',
+            'nickname' => 'admin',
+            'type' => 'default',
+            'emailVerified' => '0',
+            'roles' => array(
+                0 => 'ROLE_USER',
+                1 => 'ROLE_ADMIN',
+                2 => 'ROLE_SUPER_ADMIN',
+                3 => 'ROLE_TEACHER',
+            ),
+            'orgId' => '1',
+            'orgCode' => '1.',
+        ), ArrayToolkit::parts($result[0], array('nickname', 'emailVerified', 'orgId', 'orgCode', 'email', 'password', 'type', 'roles')));
+    }
+
+    public function testInitFolders()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, 'initFolders', array());
+
+        $folders = array(
+            $this->biz['kernel.root_dir'].'/data/udisk',
+            $this->biz['kernel.root_dir'].'/data/private_files',
+            $this->biz['kernel.root_dir'].'/../web/files',
+        );
+
+        $filesystem = new Filesystem();
+
+        foreach ($folders as $folder) {
+            $this->assertTrue($filesystem->exists($folder));
+        }
+    }
+
+    public function testInitRole()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initRole', array());
+
+        $reuslt = $this->getRoleService()->searchRoles(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertArrayEquals(array(
+        0 => 'ROLE_USER',
+        1 => 'ROLE_TEACHER',
+        2 => 'ROLE_ADMIN',
+        3 => 'ROLE_SUPER_ADMIN',
+        ), ArrayToolkit::column($reuslt, 'code'));
+    }
+
+    public function testinitLockFile()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer->initLockFile();
+        $filesystem = new Filesystem();
+        $files = array(
+            $this->biz['kernel.root_dir'].'/data/install.lock',
+            $this->biz['kernel.root_dir'].'/config/routing_plugins.yml',
+        );
+
+        foreach ($files as $file) {
+            $this->assertTrue($filesystem->exists($file));
+        }
+    }
+
+    public function testInitOrg()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initOrg', array());
+        $result = $this->getOrgService()->searchOrgs(array(), array(), 0, \PHP_INT_MAX);
+
+        $this->assertArrayEquals(array(
+            'name' => '全站',
+            'parentId' => '0',
+            'childrenNum' => '0',
+            'depth' => '1',
+            'seq' => '0',
+            'description' => null,
+            'code' => 'FullSite',
+            'orgCode' => '1.',
+            'createdUserId' => '1',
+        ), ArrayToolkit::parts($result[0], array('name', 'parentId', 'childrenNum', 'depth', 'description', 'seq', 'code', 'orgCode', 'createdUserId')));
+    }
+
     public function testInitFile()
     {
         $output = new ConsoleOutput();
@@ -360,8 +609,51 @@ EOD;
         return $this->createDao('Article:CategoryDao');
     }
 
+    protected function getBlockDao()
+    {
+        return $this->createDao('Content:BlockDao');
+    }
+
     private function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    private function getContentService()
+    {
+        return $this->createService('Content:ContentService');
+    }
+
+    protected function getNavigationService()
+    {
+        return $this->createService('Content:NavigationService');
+    }
+
+    protected function getBlockService()
+    {
+        return $this->createService('Content:BlockService');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    protected function getOrgService()
+    {
+        return $this->createService('Org:OrgService');
+    }
+
+    protected function getRoleService()
+    {
+        return $this->createService('Role:RoleService');
     }
 }

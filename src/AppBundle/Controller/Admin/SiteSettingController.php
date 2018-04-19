@@ -63,7 +63,7 @@ class SiteSettingController extends BaseController
 
         if (!empty($site['analytics'])) {
             $helper = new HTMLHelper($this->getBiz());
-            $site['analytics'] = $helper->htmlTagAutoComple($site['analytics']);
+            $site['analytics'] = $helper->closeTags($site['analytics']);
         }
         $this->getSettingService()->set('site', $site);
         $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);

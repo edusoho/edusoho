@@ -98,6 +98,7 @@ class UserDaoTest extends BaseDaoTestCase
             'salt' => 'qunt972ow5c48k4wc8k0ss448os0oko',
             'email' => '800@qq.com',
             'type' => 'default',
+            'uuid' => $this->getUserService()->generateUUID(),
         ));
 
         $users = $this->getUserDao()->findByNicknames(array('test', 'test2'));
@@ -119,6 +120,7 @@ class UserDaoTest extends BaseDaoTestCase
             'salt' => 'qunt972ow5c48k4wc8k0ss448os0oko',
             'email' => '800@qq.com',
             'type' => 'default',
+            'uuid' => $this->getUserService()->generateUUID(),
         ));
 
         $users = $this->getUserDao()->findByIds(array(3, 5));
@@ -196,6 +198,11 @@ class UserDaoTest extends BaseDaoTestCase
     private function getUserDao()
     {
         return $this->createDao('User:UserDao');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     private function getUserProfileDao()
