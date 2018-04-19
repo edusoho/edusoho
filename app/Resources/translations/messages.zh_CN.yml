@@ -1685,7 +1685,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  %nickname%<i>问...</i>
+  By %nickname%
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案

@@ -1,18 +1,14 @@
-<li class="post-item">
-	<div class="post-item-heading clearfix">
-		<img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="avatar">
-		<div class="infos">
-			<div class="nickname">
-				<a href="{{ path('user_show', {id:user.id}) }}" class="nickname" target="_blank">{{ user.nickname }}</a>
-				{% if user.id in course.teacherIds %}
-					<span class="teacher-flag">{{'course.plan_task.course_teacher'|trans}}</span>
-				{% endif %}
-			</div>
-			<div class="time">{{ post.createdTime|smart_time }}</div>
-		</div>
+<li class="post-item media">
+	<div class="media-left">
+		<img class="avatar" src="{{ filepath(user.smallAvatar, 'avatar.png') }}">
 	</div>
 
-	<div class="post-item-body">
-		{{ post.content|raw }}
+	<div class="post-item-body media-body">
+    <a class="nickname" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+    {% if user.id in course.teacherIds %}
+      <span class="teacher-flag">{{'course.plan_task.course_teacher'|trans}}</span>
+    {% endif %}
+    <span class="time cd-text-sm cd-ml8">{{ post.createdTime|smart_time }}</span>
+		<div>{{ post.content|raw }}</div>
 	</div>
 </li>
