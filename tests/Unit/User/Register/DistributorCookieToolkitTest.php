@@ -30,7 +30,7 @@ class DistributorCookieToolkitTest extends BaseTestCase
         $cookieName = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'name');
         $cookieExpire = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'expire');
         $cookieValue = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'value');
-        $this->assertEquals('distributor-token', $cookieName);
+        $this->assertEquals('distributor-user-token', $cookieName);
         $this->assertEquals(1521791574, $cookieExpire);
         $this->assertEquals('123123', $cookieValue);
 
@@ -38,7 +38,7 @@ class DistributorCookieToolkitTest extends BaseTestCase
         $cookieName = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'name');
         $cookieExpire = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'expire');
         $cookieValue = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'value');
-        $this->assertEquals('distributor-token', $cookieName);
+        $this->assertEquals('distributor-user-token', $cookieName);
         $this->assertEquals(0, $cookieExpire);
         $this->assertEquals('', $cookieValue);
     }
@@ -51,7 +51,7 @@ class DistributorCookieToolkitTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'get',
-                    'withParams' => array('distributor-token'),
+                    'withParams' => array('distributor-user-token'),
                     'returnValue' => 'token-test',
                 ),
             )
