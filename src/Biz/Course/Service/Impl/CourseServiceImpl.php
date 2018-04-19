@@ -644,19 +644,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-        $tasks = $this->findTasksByCourseId($course);
+        $tasks = $this->findTasksByCourseId($course['id']);
 
         return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }
 
-    protected function findTasksByCourseId($course)
+    protected function findTasksByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
+            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
         }
 
-        return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+        return $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
     }
 
     public function findCourseItemsByPaging($courseId, $paging = array())
