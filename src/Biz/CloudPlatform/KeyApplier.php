@@ -44,15 +44,11 @@ class KeyApplier
             ),
         );
 
-        if ($mock) {
-            return array(
-                'url' => $url,
-                'params' => $params,
-                'curlOptions' => $curlOptions,
-            );
-        }
-
-        $response = CurlToolkit::request('POST', $url, json_encode($params), $curlOptions);
+        $response = empty($mock) ? CurlToolkit::request('POST', $url, json_encode($params), $curlOptions) : array(
+            'url' => $url,
+            'params' => $params,
+            'curlOptions' => $curlOptions,
+        );
         if (empty($response)) {
             return array('error' => '生成Key失败，请检查服务器的网络设置！');
         }

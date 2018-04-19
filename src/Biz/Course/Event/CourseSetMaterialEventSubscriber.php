@@ -72,6 +72,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         $material = $this->getMaterialService()->searchMaterials(
             array(
                 'courseId' => $activity['courseId'],
+                'courseSetId' => $activity['courseSetId'],
                 'lessonId' => $activity['id'],
                 'fileId' => $activity['mediaId'],
                 'source' => 'courseactivity',
@@ -80,9 +81,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             0,
             1
         );
-
         if (!$material) {
             $fields = array(
+                'courseSetId' => $activity['courseSetId'],
                 'courseId' => $activity['courseId'],
                 'lessonId' => $activity['id'],
                 'fileId' => $activity['mediaId'],
