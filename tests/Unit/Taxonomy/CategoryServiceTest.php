@@ -226,13 +226,130 @@ class CategoryServiceTest extends BaseTestCase
      * @group get
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
-    public function testfindCategoriesWithNotExistGroupId()
+    public function testFindCategoriesWithNotExistGroupId()
     {
         $this->getCategoryService()->findCategories(999);
     }
 
     public function testFindAllCategoriesByParentId()
     {
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+        $categories = $this->getCategoryService()->findAllCategoriesByParentId($createdParentCategoryA['id']);
+        $this->assertContains($createdCategoryA, $categories);
+        $this->assertContains($createdCategoryB, $categories);
+    }
+
+    public function testFindGroupRootCategories()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('parentCodeA'),
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+
+        $results = $this->getCategoryService()->findGroupRootCategories($createdParentCategoryA['code']);
+        $this->assertContains($createdParentCategoryA, $results);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testFindGroupRootCategoriesWithEmptyGroup()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('parentCodeA'),
+                    'returnValue' => array(),
+                ),
+            )
+        );
+        $this->getCategoryService()->findGroupRootCategories('parentCodeA');
+    }
+
+    public function testFindCategoryChildrenIds()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->findCategoryChildrenIds($createdParentCategoryA['id']);
+        $this->assertContains($createdCategoryA['id'], $results);
+        $this->assertContains($createdCategoryB['id'], $results);
+    }
+
+    public function testFindCategoryChildrenIdsWithEmptyCategory()
+    {
+        $results = $this->getCategoryService()->findCategoryChildrenIds(999);
+        $this->assertEquals(array(), $results);
+    }
+
+    public function testFindCategoryBreadcrumbsWithEmptyCategory()
+    {
+        $results = $this->getCategoryService()->findCategoryBreadcrumbs(999);
+        $this->assertEquals(array(), $results);
+    }
+
+    public function testFindCategoryBreadcrumbs()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $this->getCategoryService()->createCategory($categoryB);
+        $results = $this->getCategoryService()->findCategoryBreadcrumbs($createdCategoryA['id']);
+        $parentCategory = reset($results);
+        $childCategory = end($results);
+        $this->assertEquals($createdParentCategoryA['code'], $parentCategory['code']);
+        $this->assertEquals($createdCategoryA['code'], $childCategory['code']);
     }
 
     /**
