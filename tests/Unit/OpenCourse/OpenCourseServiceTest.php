@@ -355,6 +355,57 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals('success', $result3[0]);
     }
 
+    public function testFindFinishedLivesWithinTwoHours()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'returnValue' => array(array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => time() - 3600, 'endTime' => time() - 1800)),
+            ),
+        ));
+
+        $results = $this->getOpenCourseService()->findFinishedLivesWithinTwoHours();
+
+        $this->assertEquals(1, count($results));
+        $this->assertEquals('liveOpen', $results[0]['type']);
+        $this->assertLessThan(7200, time() - $results[0]['endTime']);
+    }
+
+    public function testUpdateLiveStatus()
+    {
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
+        $this->assertEmpty($result);
+
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'update',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'closed'),
+            ),
+        ));
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
+
+        $this->assertEquals('closed', $result['progressStatus']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testUpdateLiveStatusException()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
+            ),
+        ));
+
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'created');
+    }
+
     /**
      * open_course_member.
      */

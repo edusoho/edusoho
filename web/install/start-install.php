@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('Asia/Shanghai');
 // 尚存在问题：
 // 1.vendor不存在导致升级检测失败报错
@@ -114,11 +115,11 @@ function install_step1($init_data = 0)
 
     $safemode = ini_get('safe_mode');
 
-    if ($safemode == 'On') {
+    if ('On' == $safemode) {
         $pass = false;
     }
     $result = _checkWebRoot();
-    if ($result === false) {
+    if (false === $result) {
         $pass = false;
     }
     echo $twig->render('step-1.html.twig', array(
@@ -139,7 +140,7 @@ function install_step2($init_data = 0)
     $error = null;
     $post = array();
 
-    if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+    if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
         $post = $_POST;
         $post['index'] = empty($_GET['index']) ? 0 : $_GET['index'];
         $replace = empty($post['database_replace']) ? false : true;
@@ -165,7 +166,7 @@ function install_step3($init_data = 0)
 
     $error = null;
 
-    if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+    if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'].'/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
@@ -287,8 +288,8 @@ function _create_database($config, $replace)
             $sql = file_get_contents('./edusoho.sql');
             $result = $pdo->exec($sql);
 
-            if ($result === false) {
-                return '创建数据库表结构失败，请删除数据库后重试！';
+            if (false === $result) {
+                return "创建数据库失败，查看<a href='http://www.qiqiuyu.com/faq/585/detail' target='_blank'>解决方案</a>";
             }
 
             /*if (empty($config['database_init'])) {
@@ -358,7 +359,7 @@ function _create_config($config)
 {
     $secret = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     $server = $_SERVER['SERVER_NAME'];
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
         $server = 'https://'.$server;
     } else {
         $server = 'http://'.$server;
