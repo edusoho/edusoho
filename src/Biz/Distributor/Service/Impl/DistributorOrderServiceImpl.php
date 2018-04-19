@@ -2,11 +2,19 @@
 
 namespace Biz\Distributor\Service\Impl;
 
+use Biz\Distributor\Util\DistributorUtil;
+use AppBundle\Common\Exception\RuntimeException;
+
 class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
 {
     public function getSendType()
     {
         return 'order';
+    }
+
+    protected function getJobType()
+    {
+        return 'Order';
     }
 
     protected function convertData($order)
@@ -41,9 +49,18 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
         );
     }
 
-    protected function getJobType()
+    public function getRoutingInfo($token)
     {
-        return 'Order';
+        $type = DistributorUtil::getType($token);
+        if (!in_array($type, array('course'))) {
+            throw new RuntimeException('token error');
+        }
+
+        $class = 'Distributor'.ucfirst($type).'OrderService';
+        $distributorProduct = $this->createService("Distributor:{$class}");
+        $tokenInfo = $distributorProduct->decodeToken($token);
+
+        return array($distributorProduct->getRoutingName(), $distributorProduct->getRoutingParams($tokenInfo));
     }
 
     protected function getOrderService()

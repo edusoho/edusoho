@@ -126,7 +126,7 @@
                 $('#create-database-btn').removeClass('disabled').html('创建数据库');
             }
         }).fail(function(){
-            $('.init-error').show().html("创建数据库失败");
+            $('.init-error').show().html('创建数据库失败，查看<a href="http://www.qiqiuyu.com/faq/585/detail" target="_blank">解决方案</a>');
             $('.progress-bar').css({width: '0%'});
             $('#create-database-btn').removeClass('disabled').html('创建数据库');
         });
