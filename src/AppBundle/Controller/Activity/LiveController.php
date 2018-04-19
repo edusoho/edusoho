@@ -67,7 +67,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             'activity' => $this->formatTimeFields($activity),
             'courseId' => $courseId,
             'taskId' => $task['id'],
-            'canUpdateRoomType' => $canUpdateRoomType
+            'canUpdateRoomType' => $canUpdateRoomType,
         ));
     }
 

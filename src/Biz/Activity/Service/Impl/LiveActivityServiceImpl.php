@@ -13,7 +13,6 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Event\Event;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
@@ -154,8 +153,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     /**
      * 是否可以更新 roomType， 直播开始前10分钟内和直播结束后不可修改
-     * @param  [type] $liveStartTime 直播开始时间
-     * @return boolean   
+     *
+     * @param [type] $liveStartTime 直播开始时间
+     *
+     * @return bool
      */
     public function canUpdateRoomType($liveStartTime)
     {

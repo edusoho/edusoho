@@ -30,7 +30,7 @@ class LiveExtension extends \Twig_Extension
     {
         $default = array(
             'large' => 'course.live_activity.large_room_type',
-            'small' => 'course.live_activity.small_room_type'
+            'small' => 'course.live_activity.small_room_type',
         );
 
         /*$client = new EdusohoLiveClient();
