@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\TimeMachine;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
@@ -24,19 +25,33 @@ class MockController extends BaseController
         ));
     }
 
-    public function mockDistributorTokenAction(Request $request)
+    public function mockDistributorTokenAction(Request $request, $type)
     {
         $this->validate();
 
-        $data = array(
-            'merchant_id' => '123',
-            'agency_id' => '22221',
-            'coupon_price' => $request->request->get('couponPrice'),
-            'coupon_expiry_day' => $request->request->get('couponExpiryDay'),
-        );
-
-        $tokenExpireDateNum = strtotime($request->request->get('tokenExpireDateStr'));
-        $token = $this->getDistributorUserService()->encodeToken($data, $tokenExpireDateNum);
+        switch ($type) {
+            case 'user':
+                $data = array(
+                    'merchant_id' => '123',
+                    'agency_id' => '22221',
+                    'coupon_price' => $request->request->get('couponPrice'),
+                    'coupon_expiry_day' => $request->request->get('couponExpiryDay'),
+                );
+                $tokenExpireDateNum = strtotime($request->request->get('tokenExpireDateStr'));
+                $token = $this->getDistributorUserService()->encodeToken($data, $tokenExpireDateNum);
+                break;
+            case 'course':
+                $data = array(
+                    'org_id' => $request->request->get('orgId'),
+                    'type' => $request->request->get('type'),
+                    'course_id' => $request->request->get('courseId'),
+                    'merchant_id' => '123',
+                );
+                $token = $this->getDistributorCourseOrderService()->encodeToken($data);
+                break;
+            default:
+                throw new InvalidArgumentException('invalid type!');
+        }
 
         return $this->createJsonResponse(array(
             'token' => $token,
@@ -100,6 +115,11 @@ class MockController extends BaseController
         return $this->createService('Distributor:DistributorUserService');
     }
 
+    protected function getDistributorCourseOrderService()
+    {
+        return $this->createService('Distributor:DistributorCourseOrderService');
+    }
+
     protected function getDistributorService($type)
     {
         return $this->createService("Distributor:Distributor{$type}Service");
@@ -112,7 +132,7 @@ class MockController extends BaseController
 
     private function validate()
     {
-        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost');
+        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost', 'www.edusoho-test1.com');
         $host = $_SERVER['HTTP_HOST'];
         if (!in_array($host, $validHosts) && false === strpos($host, '.st.edusoho.cn')) {
             throw new AccessDeniedException($host.'不允许使用此功能！！！');
