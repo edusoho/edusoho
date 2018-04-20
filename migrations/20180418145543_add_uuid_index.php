@@ -12,30 +12,23 @@ class AddUuidIndex extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isIndexExist('user', 'uuid')) {
+        if (!$this->isUniqueIndexExist('user', 'uuid')) {
             $connection->exec('
                 CREATE UNIQUE INDEX `uuid` ON `user`(`uuid`);
             ');
         }
     }
 
-    protected function isIndexExist($table, $indexName)
+    protected function isUniqueIndexExist($table, $indexName)
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
+        $params = $connection->getParams();
+        $dbName = $params['dbname'];
+
+        $sql = "SELECT * FROM information_schema.statistics WHERE table_schema = '{$dbName}' and table_name = '{$table}' AND index_name = '{indexName}';";
         $result = $connection->fetchAssoc($sql);
-
-        $sql = "show index from `{$table}` where Column_name = 'uuid';";
-        $result = $connection->fetchAssoc($sql);
-
-        var_dump('uuid: '.$result);
-
-        $sql = 'select version();';
-        $result = $connection->fetchAssoc($sql);
-
-        var_dump('uuid: '.$result);
 
         return empty($result) ? false : true;
     }
