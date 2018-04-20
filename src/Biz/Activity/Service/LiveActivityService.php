@@ -12,9 +12,13 @@ interface LiveActivityService
 
     public function updateLiveActivity($id, &$fields, $activity);
 
+    public function updateLiveStatus($liveId, $status);
+
     public function deleteLiveActivity($id);
 
     public function createLiveroom($activity);
+
+    public function search($conditions, $orderbys, $start, $limit);
 
     public function canUpdateRoomType($liveStartTime);
 }

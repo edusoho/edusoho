@@ -31,7 +31,7 @@
             <span class="bullet">•</span>
           {% endif %}
           {% if task %}
-            <a class="link-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'course.thread.mission_seq'|trans({'%seq%': task.number })}}</a>
+            <a class="link-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'course.thread.mission_number'|trans({'%number%': task.number })}}</a>
             <span class="bullet">•</span>
           {% endif %}
           <span class="color-gray">{{ 'course.material.upload_time'|trans({'%createdTime%':material.createdTime|smart_time}) }}</span>

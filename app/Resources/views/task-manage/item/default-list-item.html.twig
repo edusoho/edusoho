@@ -19,9 +19,11 @@
 
       {{ task.title|sub_text(30) }}
       {% if task.activity.mediaType is same as('live') %}
+        {% set isLiveFinished = is_live_finished(task.activity.id, 'course') %}
+        
         {% if not task.activity.ext.roomCreated|default(true) %}
           <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
-        {% elseif task.activity.endTime < date().timestamp %}
+        {% elseif isLiveFinished %}
           <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
         {% else %}
           <span class="color-success mls">

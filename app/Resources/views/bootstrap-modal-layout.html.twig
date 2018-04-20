@@ -2,7 +2,7 @@
 {% import "admin/macro.html.twig" as admin_macro %}
 {% include 'css_loader.html.twig' %}
 
-<div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
+<div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}" data-clear="{{ closeClear|default(0) }}">
   {% block modal_content %}
     <div class="modal-content">
       {% block modal_header %}

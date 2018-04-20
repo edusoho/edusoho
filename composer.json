@@ -54,7 +54,7 @@
     "tiben/crontab-manager": "1.2.1",
     "codeages/qiqiuyun-php-sdk": "v0.2.10",
     "phpdocumentor/reflection-docblock": "2.0.5",
-    "codeages/biz-order-pay": "0.1.17"
+    "codeages/biz-order-pay": "0.1.18"
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",

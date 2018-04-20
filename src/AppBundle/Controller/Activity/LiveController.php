@@ -85,26 +85,12 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             return $this->createMessageResponse('info', 'message_response.login_forget.message', null, 3000, $this->generateUrl('login'));
         }
 
+        $result = $this->getActivityService()->checkLiveStatus($courseId, $activityId);
+        if (!$result['result']) {
+            return $this->createMessageResponse('info', $result['message']);
+        }
+
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
-
-        if (empty($activity)) {
-            return $this->createMessageResponse('info', 'message_response.live_task_not_exist.message');
-        }
-        if ($activity['fromCourseId'] != $courseId) {
-            return $this->createMessageResponse('info', 'message_response.illegal_params.message');
-        }
-
-        if (empty($activity['ext']['liveId'])) {
-            return $this->createMessageResponse('info', 'message_response.live_class_not_exist.message');
-        }
-
-        if ($activity['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', 'message_response.live_not_start.message');
-        }
-
-        if ($activity['endTime'] < time()) {
-            return $this->createMessageResponse('info', 'message_response.live_over.message');
-        }
 
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {

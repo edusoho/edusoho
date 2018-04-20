@@ -504,6 +504,7 @@ class CloudFileImplementorTest extends BaseTestCase
                     'processStatus' => 'none',
                 ),
             ),
+            'count' => 1,
         ));
 
         $this->getCloudFileImplementor()->setApi('root', $mockObject);

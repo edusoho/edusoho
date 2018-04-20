@@ -36,8 +36,18 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, array());
     }
 
+    public function findFinishedLivesWithinTwoHours()
+    {
+        $currentTime = time();
+        $expiredTime = 3600 * 2;
+        $sql = "SELECT * FROM {$this->table} WHERE mediaType = 'live' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime};";
+
+        return $this->db()->fetchAll($sql, array());
+    }
+
     public function declares()
     {
+        $declares['orderbys'] = array('endTime');
         $declares['conditions'] = array(
             'fromCourseId = :fromCourseId',
             'mediaType = :mediaType',

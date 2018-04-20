@@ -1180,7 +1180,7 @@ course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
-course.thread.mission_seq: Task%seq%
+course.thread.mission_number: Task%number%
 course.thread.teacher_answer: 'Tearcher''s answer'
 course.thread.form.edit: 'Edit'
 course.thread.form.create: 'Publish'
@@ -7011,3 +7011,5 @@ admin.datalab.setting.btn_cancel: 取消
 admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
+
+exception.user_lock: 帐号被封禁
