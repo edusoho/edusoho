@@ -41,7 +41,6 @@ class GroupFileFireWallTest extends BaseTestCase
         ));
 
         $this->biz['user'] = $currentUser;
-        
 
         $this->mockBiz('Group:ThreadService', array(
             array(
@@ -83,7 +82,6 @@ class GroupFileFireWallTest extends BaseTestCase
         ));
 
         $this->biz['user'] = $currentUser;
-        
 
         $this->mockBiz('Group:ThreadService', array(
             array(

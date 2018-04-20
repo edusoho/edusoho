@@ -25,8 +25,8 @@ class ReviewPostsDataTagTest extends BaseTestCase
         $this->mockBiz('Classroom:ClassroomReviewService', array(
             array(
                 'functionName' => 'searchReviews',
-                'returnValue' => $reviews
-            )
+                'returnValue' => $reviews,
+            ),
         ));
 
         $datatag = new ReviewPostsDataTag();
@@ -43,10 +43,10 @@ class ReviewPostsDataTagTest extends BaseTestCase
         $this->mockBiz('Course:ReviewService', array(
             array(
                 'functionName' => 'searchReviews',
-                'returnValue' => $reviews
-            )
+                'returnValue' => $reviews,
+            ),
         ));
-        
+
         $datatag = new ReviewPostsDataTag();
         $result = $datatag->getData(array('reviewId' => 1, 'targetType' => 'course'));
         $this->assertArrayEquals($reviews, $result);

@@ -17,17 +17,17 @@ class TestpaperActivityCreateListenerTest extends BaseTestCase
             array(
                 'functionName' => 'getActivity',
                 'withParams' => array(3),
-                'returnValue' => array('limitedTime' => 0)
+                'returnValue' => array('limitedTime' => 0),
             ),
             array(
                 'functionName' => 'getActivity',
                 'withParams' => array(4),
-                'returnValue' => array('limitedTime' => 360, 'testMode' => 'normal')
+                'returnValue' => array('limitedTime' => 360, 'testMode' => 'normal'),
             ),
             array(
                 'functionName' => 'getActivity',
                 'withParams' => array(5),
-                'returnValue' => array('limitedTime' => 360, 'testMode' => 'realTime')
+                'returnValue' => array('limitedTime' => 360, 'testMode' => 'realTime'),
             ),
         ));
 
@@ -50,17 +50,17 @@ class TestpaperActivityCreateListenerTest extends BaseTestCase
             array(
                 'functionName' => 'getActivity',
                 'withParams' => array(6),
-                'returnValue' => array('limitedTime' => 30, 'testMode' => 'realTime')
+                'returnValue' => array('limitedTime' => 30, 'testMode' => 'realTime'),
             ),
         ));
         $schedulerService = $this->mockBiz('Scheduler:SchedulerService', array(
             array(
                 'functionName' => 'register',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
         $listener = new TestpaperActivityCreateListener($this->getBiz());
-        $result = $listener->handle(array('id' => 1,'mediaType' => 'testpaper', 'mediaId' => 6, 'startTime' => time() + 3600), array());
+        $result = $listener->handle(array('id' => 1, 'mediaType' => 'testpaper', 'mediaId' => 6, 'startTime' => time() + 3600), array());
 
         $schedulerService->shouldHaveReceived('register')->times(1);
     }

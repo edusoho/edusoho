@@ -81,7 +81,6 @@ class QuestionFileFireWallTest extends BaseTestCase
         $fireWall = new QuestionFileFireWall($this->getBiz());
         $result = $fireWall->canAccess($attachment);
         $this->assertFalse($result);
-        
 
         $this->mockBiz('Question:QuestionService', array(
             array(

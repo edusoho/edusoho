@@ -34,12 +34,12 @@ class TagsCoursesDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:TagService', array(
             array(
                 'functionName' => 'findTagsByNames',
-                'returnValue' => array(array('id' => 1), array('id' => 2))
+                'returnValue' => array(array('id' => 1), array('id' => 2)),
             ),
             array(
                 'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
         $datatag = new TagsCoursesDataTag();
@@ -52,12 +52,12 @@ class TagsCoursesDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:TagService', array(
             array(
                 'functionName' => 'findTagsByNames',
-                'returnValue' => array(array('id' => 1), array('id' => 2))
+                'returnValue' => array(array('id' => 1), array('id' => 2)),
             ),
             array(
                 'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
-                'returnValue' => array(array('id' => 1, 'ownerId' => 1), array('id' => 2, 'ownerId' => 2))
-            )
+                'returnValue' => array(array('id' => 1, 'ownerId' => 1), array('id' => 2, 'ownerId' => 2)),
+            ),
         ));
 
         $datatag = new TagsCoursesDataTag();
@@ -70,18 +70,18 @@ class TagsCoursesDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:TagService', array(
             array(
                 'functionName' => 'findTagsByNames',
-                'returnValue' => array(array('id' => 1), array('id' => 2))
+                'returnValue' => array(array('id' => 1), array('id' => 2)),
             ),
             array(
                 'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
-                'returnValue' => array(array('id' => 1, 'ownerId' => 1),array('id' => 1, 'ownerId' => 2), array('id' => 2, 'ownerId' => 2))
-            )
+                'returnValue' => array(array('id' => 1, 'ownerId' => 1), array('id' => 1, 'ownerId' => 2), array('id' => 2, 'ownerId' => 2)),
+            ),
         ));
 
         $this->mockBiz('Course:CourseSetService', array(
             array(
                 'functionName' => 'searchCourseSets',
-                'returnValue' => array(array('id' => 1))
+                'returnValue' => array(array('id' => 1)),
             ),
         ));
 

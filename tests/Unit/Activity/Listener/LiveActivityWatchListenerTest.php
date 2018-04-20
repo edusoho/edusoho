@@ -16,23 +16,23 @@ class LiveActivityWatchListenerTest extends BaseTestCase
         $taskService = $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'getTimeSec',
-                'returnValue' => 60
+                'returnValue' => 60,
             ),
             array(
                 'functionName' => 'watchTask',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
         ));
 
         $xpiService = $this->mockBiz('Xapi:XapiService', array(
             array(
                 'functionName' => 'watchTask',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
         ));
 
         $listener = new LiveActivityWatchListener($this->getBiz());
-        $result = $listener->handle(array(), array('task' => array('id' => 10),'watchTime' => 10));
+        $result = $listener->handle(array(), array('task' => array('id' => 10), 'watchTime' => 10));
 
         $taskService->shouldHaveReceived('getTimeSec')->times(1);
         $taskService->shouldHaveReceived('watchTask')->times(1);

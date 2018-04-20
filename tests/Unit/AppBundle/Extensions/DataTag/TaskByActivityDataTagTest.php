@@ -34,10 +34,10 @@ class TaskByActivityDataTagTest extends BaseTestCase
         $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'getTaskByCourseIdAndActivityId',
-                'returnValue' => $task
-            )
+                'returnValue' => $task,
+            ),
         ));
-        
+
         $datatag = new TaskByActivityDataTag();
         $result = $datatag->getData(array('courseId' => 1, 'activityId' => 2));
         $this->assertArrayEquals($task, $result);

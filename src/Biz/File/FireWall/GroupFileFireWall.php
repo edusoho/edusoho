@@ -2,8 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class GroupFileFireWall extends BaseFireWall implements FireWallInterface
 {
     public function canAccess($attachment)

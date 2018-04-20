@@ -28,7 +28,7 @@ class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
         }
         $tagIds = ArrayToolkit::column($tags, 'id');
         $tagOwners = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'courseSet');
-        
+
         if (empty($tagOwners)) {
             return array();
         }
