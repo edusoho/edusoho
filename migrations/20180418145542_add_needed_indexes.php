@@ -131,12 +131,6 @@ class AddNeededIndexes extends Migration
                 ALTER TABLE `upload_files_share` ADD INDEX `createdTime`(`createdTime`);
             ');
         }
-
-        if (!$this->isIndexExist('user', 'uuid')) {
-            $connection->exec('
-                CREATE UNIQUE INDEX `uuid` ON `user`(`uuid`);
-            ');
-        }
     }
 
     protected function isIndexExist($table, $indexName)

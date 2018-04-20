@@ -65,6 +65,8 @@ before_script:
     - bin/phpunit -c app/ --testsuite UnitE2P
     - bin/phpunit -c app/ --testsuite UnitQ2T
     - bin/phpunit -c app/ --testsuite UnitU2Z
+  only:
+    - master
 
 7.0 For Non-Develop:
   stage: test
@@ -169,8 +171,6 @@ Api Test With 5.5:
 
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
-  only:
-    - develop
 
 5.5 with js-test-unit:
   stage: test
