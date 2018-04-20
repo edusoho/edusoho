@@ -22,7 +22,7 @@ class AddNeededUuidIndex extends Migration
 
     protected function isIndexExist($table, $indexName)
     {
-        $filePath = __DIR__.'../app/data/specialEnv';
+        $filePath = __DIR__.'/../app/data/specialEnv';
         var_dump($filePath);
         if (file_exists($filePath)) {
             return true;
