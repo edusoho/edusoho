@@ -20,7 +20,7 @@ class DistributorController extends BaseController
             } else {
                 $response = $this->redirect($registerUrl);
             }
-            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token'], 'user');
+            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token'], DistributorCookieToolkit::USER);
 
             return $response;
         }
@@ -31,22 +31,17 @@ class DistributorController extends BaseController
     public function productAction(Request $request)
     {
         $fields = $request->query->all();
-        $loginUrl = $this->generateUrl('login');
+        $homepageUrl = $this->generateUrl('homepage');
         if (!empty($fields['token'])) {
             list($routingName, $routingParams) = $this->DistributorOrderService()->getRoutingInfo($fields['token']);
-            $productUrl = $this->generateUrl($routingName, $routingParams);
+            $response = $this->redirect($this->generateUrl($routingName, $routingParams));
 
-            if ($this->getCurrentUser()->isLogin()) {
-                $response = $this->redirect($productUrl);
-            } else {
-                $response = $this->redirect($loginUrl.'?goto='.$productUrl);
-            }
-            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token'], 'course', 0); //cookie 随浏览器关闭而失效
+            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token'], DistributorCookieToolkit::COURSE, 0); //cookie 随浏览器关闭而失效
 
             return $response;
         }
 
-        return $this->redirect($loginUrl);
+        return $this->redirect($homepageUrl);
     }
 
     protected function DistributorOrderService()
