@@ -48,4 +48,15 @@ class DeleteUnneedIndexes extends Migration
             DROP INDEX `userId_createdTime` ON `user_active_log`;
         ');
     }
+
+    protected function isIndexExist($table, $filedName, $indexName)
+    {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+
+        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $result = $this->connection->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
 }
