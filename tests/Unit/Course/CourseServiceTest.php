@@ -121,6 +121,178 @@ class CourseServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
+    public function testValidateExpiryModeWhenIsEmpty()
+    {
+        $course = array(
+            'expiryStartDate' => 1,
+            'expiryEndDate' => 2,
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals($course, $result);
+    }
+
+    public function testValidateExpiryModeWhenIsDays()
+    {
+        //happy pass
+        $course = array(
+            'expiryMode' => 'days',
+            'expiryStartDate' => 1,
+            'expiryEndDate' => 2,
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'days',
+            'expiryStartDate' => null,
+            'expiryEndDate' => null,
+            'expiryDays' => 3,
+        ), $result);
+
+        //error path
+        unset($course['expiryDays']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Invalid: expiryDays', $message);
+    }
+
+    public function testValidateExpiryModeWhenIsEnd_date()
+    {
+        //happy pass1 str
+        $course = array(
+            'expiryMode' => 'end_date',
+            'expiryStartDate' => 1,
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'end_date',
+            'expiryStartDate' => null,
+            'expiryEndDate' => strtotime($course['expiryEndDate'].' 23:59:59'),
+            'expiryDays' => 0,
+        ), $result);
+
+        //happy pass2 timestamp
+        $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'end_date',
+            'expiryStartDate' => null,
+            'expiryEndDate' => $course['expiryEndDate'],
+            'expiryDays' => 0,
+        ), $result);
+
+        //error path
+        unset($course['expiryEndDate']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Invalid: expiryEndDate', $message);
+    }
+
+    public function testValidateExpiryModeWhenIsDate()
+    {
+        //happy pass1 str
+        $course = array(
+            'expiryMode' => 'date',
+            'expiryStartDate' => '2018-04-10',
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'date',
+            'expiryStartDate' => strtotime($course['expiryStartDate']),
+            'expiryEndDate' => strtotime($course['expiryEndDate'].' 23:59:59'),
+            'expiryDays' => 0,
+        ), $result);
+
+        //happy pass2 timestamp
+        $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
+        $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'date',
+            'expiryStartDate' => $course['expiryStartDate'],
+            'expiryEndDate' => $course['expiryEndDate'],
+            'expiryDays' => 0,
+        ), $result);
+
+        //error path1 startDate not set
+        unset($course['expiryStartDate']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Required: expiryStartDate', $message);
+
+        //error path2 endDate not set
+        $course['expiryStartDate'] = '2018-04-10';
+        unset($course['expiryEndDate']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Required: expiryEndDate', $message);
+
+        //error path3 endDate<=startDate
+        $course['expiryStartDate'] = '2018-04-10';
+        $course['expiryEndDate'] = '2018-04-09';
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Value of Params expiryEndDate must later than expiryStartDate', $message);
+    }
+
+    public function testValidateExpiryModeWhenIsForever()
+    {
+        $course = array(
+            'expiryMode' => 'forever',
+            'expiryStartDate' => '2018-04-10',
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'forever',
+            'expiryStartDate' => 0,
+            'expiryEndDate' => 0,
+            'expiryDays' => 0,
+        ), $result);
+    }
+
+    public function testValidateExpiryModeWhenIsOther()
+    {
+        $course = array(
+            'expiryMode' => 'other_mode',
+            'expiryStartDate' => '2018-04-10',
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Invalid: expiryMode', $message);
+    }
+
     public function testUpdateMembersDeadlineByClassroomId()
     {
         $textClassroom = array(
