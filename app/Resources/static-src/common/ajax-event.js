@@ -18,7 +18,7 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
   let message =  error.code ? error.message : Translator.trans('site.service_error_hint');
   switch(error.code)
   {
-  case 4040102:
+  case 4030102:
     window.location.href = '/login';
     break;
   case 4040101:

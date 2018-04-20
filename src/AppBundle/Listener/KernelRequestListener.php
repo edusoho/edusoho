@@ -3,7 +3,6 @@
 namespace AppBundle\Listener;
 
 use ApiBundle\ApiBundle;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -88,7 +87,7 @@ class KernelRequestListener
                 } else {
                     $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
                         'type' => 'error',
-                        'message' => '页面已过期，请重新提交数据！',
+                        'message' => $this->trans('exception.form.expire'),
                         'goto' => '',
                         'duration' => 0,
                     ));
@@ -138,5 +137,10 @@ class KernelRequestListener
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function trans($id, array $parameters = array())
+    {
+        return $this->container->get('translator')->trans($id, $parameters);
     }
 }
