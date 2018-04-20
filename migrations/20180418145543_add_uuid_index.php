@@ -27,6 +27,8 @@ class AddUuidIndex extends Migration
         $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
         $result = $connection->fetchAssoc($sql);
 
+        var_dump('uuid: ' . $result);
+
         return empty($result) ? false : true;
     }
 }
