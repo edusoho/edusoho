@@ -7,7 +7,7 @@
       <div class="panel-heading">
          <span class="error-title">{{ status_code }}</span>
         {% if exception.code > 0 %} 
-          {{ exception.message|default(status_text) }}
+          {{ exception.message|trans|default(status_text) }}
         {% else %}
           {{ status_text }}
         {% endif %}

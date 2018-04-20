@@ -9,12 +9,12 @@ class AbstractException extends \Symfony\Component\HttpKernel\Exception\HttpExce
         403,
         500,
     );
-    
+
     public function __construct($code)
     {
-
         $statusCode = substr($code, -strlen($code), 3);
-        $message = empty($this->messages[$code]) ? '内部异常' : $this->messages[$code];
+        $statusCode = in_array($statusCode, $this->statusCodes) ? $statusCode : 500;
+        $message = empty($this->messages[$code]) ? 'exception.common_error' : $this->messages[$code];
 
         parent::__construct($statusCode, $message, null, array(), $code);
     }
@@ -23,8 +23,8 @@ class AbstractException extends \Symfony\Component\HttpKernel\Exception\HttpExce
     {
         $class = get_called_class();
         $calld = "\\{$class}::{$method}";
-        $code = eval('return '.$calld.';');
+        $code = constant($class.'::'.$method);
 
         return new $class($code);
-    } 
+    }
 }

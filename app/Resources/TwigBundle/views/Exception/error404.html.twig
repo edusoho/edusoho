@@ -11,7 +11,7 @@
         <div class="well">
           <p>
             {% if exception.code|default(0) > 0 %}
-              {{ exception.message|default('该内容不存在或已被删除！') }} {{ exception.code }}
+              {{ exception.message|trans|default('该内容不存在或已被删除！') }} {{ exception.code }}
             {% else %}
               该内容不存在或已被删除！
             {% endif %}

@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -57,10 +56,10 @@ class ExceptionListener
         }
 
         $error = array(
-            'message' => $exception->getMessage(),
+            'message' => $this->trans($exception->getMessage()),
             'code' => $exception->getCode(),
         );
-        
+
         $debug = $this->container->get('kernel')->isDebug();
         if ($debug) {
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);

@@ -12,7 +12,7 @@
         <div class="well">
           <p>
             {% if code > 0 %}
-              {{ exception.message|default('你没有权限访问该页面！') }} {{ code }}
+              {{ exception.message|trans|default('你没有权限访问该页面！') }} {{ code }}
             {% else %}
               你没有权限访问该页面！
             {% endif %}
