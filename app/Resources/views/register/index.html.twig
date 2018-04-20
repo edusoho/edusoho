@@ -104,6 +104,11 @@
 						</div>
 					{% endif %}
 
+          <div class="form-group">
+            <div class="drag-section">
+              <div id="test" class="drag-section__btn js-drag-btn">拖拽</div>
+            </div>
+          </div>
 					<div class="form-group mbl">
 						<div class="controls">
 							<button type="submit" id="register-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary btn-lg btn-block">{% if setting('auth.user_terms') == 'opened' %}{{ 'user.register.agree_terms'|trans }}{% else %}{{'form.btn.register'|trans}}{% endif %}</button>

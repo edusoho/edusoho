@@ -104,6 +104,29 @@
   }
 }
 
+.drag-section {
+  position: relative;
+  height: 40px;
+  background-color: @gray-lighter;
+  .border-radius;
+
+  .drag-section__btn {
+    position: absolute;
+    width: 66px;
+    height: 40px;
+    background-color: @brand-primary;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    font-size: 16px;
+    .border-radius;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+
 // 登录弹出框
 .login-modal {
   @media(min-width:@screen-sm-min) {
