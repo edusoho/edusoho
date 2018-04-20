@@ -20,7 +20,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         return $this->makeProgress($courseMember['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
     }
 
-    private function makeProgress($learnedNum, $total)
+    public function makeProgress($learnedNum, $total)
     {
         $progress = array(
             'percent' => 0,

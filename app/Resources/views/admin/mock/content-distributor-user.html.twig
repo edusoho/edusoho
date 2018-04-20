@@ -1,6 +1,6 @@
-<div class="distributor tagContent">
+<div class="distributor-user tagContent">
   分销平台token伪造
-  <form id="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token')}}">
+  <form class="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token', {type:'user'})}}">
     <div>
       优惠券金额(分): <input type="text" name="couponPrice" value="10000"></input>
     </div>
@@ -12,9 +12,9 @@
     </div>
   </form>
 
-  生成的二维码地址: <textarea type="text" class="distributorRegisterUrl" readonly style="width: 800px"></textarea>
+  生成的二维码地址: <textarea type="text" class="distributorGeneratorUrl" data-base-url="distributor_user" readonly style="width: 800px"></textarea>
   <div>
-    <input type="button" value="提交" id="tokenGeneratorBtn"></input>
+    <input type="button" value="提交" class="tokenGeneratorBtn"></input>
   </div>
 
   <br/><br/>

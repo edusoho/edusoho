@@ -1,6 +1,5 @@
 export default class Member {
   constructor() {
-    this.$header = $('.js-group-header');
     this.$group = $('.js-group-section');
     this.init();
   }
@@ -10,35 +9,9 @@ export default class Member {
   }
 
   bindEvent() {
-    this.$header.on('click', '#add-btn', (event) => this.addGroup(event));
-    this.$header.on('click', '#exit-btn', (event) => this.exitGroup(event));
     this.$group.on('click', '#delete-btn', () => this.deleteMember());
     this.$group.on('click', '#remove-admin-btn', () => this.removeAdminer());
     this.$group.on('click', '#set-admin-btn', () => this.setAdminer());
-  }
-
-  addGroup(event) {
-    $(event.target).addClass('disabled');
-    this.btnOperated(event);
-  }
-
-  exitGroup(event) {
-    if (!confirm(Translator.trans('group.manage.member_exit_hint'))) {
-      return false;
-    }
-    this.btnOperated(event);
-  }
-
-  btnOperated(event) {
-    const $target = $(event.target);
-    const url = $target.data('url');
-    $.post(url, (data) => {
-      if (data.status === 'success') {
-        window.location.reload();
-      } else {
-        cd.message({ type: 'danger', message: Translator.trans(data.message) });
-      }
-    });
   }
 
   setAdminer() {

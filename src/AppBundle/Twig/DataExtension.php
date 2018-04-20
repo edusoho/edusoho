@@ -82,7 +82,7 @@ class DataExtension extends \Twig_Extension
 
     public function getCloudStatus()
     {
-        return $this->getEduCloudService()->isHiddenCloud();
+        return $this->getEduCloudService()->isVisibleCloud();
     }
 
     public function getCloudConsultPath()

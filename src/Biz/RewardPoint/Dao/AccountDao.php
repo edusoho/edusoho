@@ -2,9 +2,9 @@
 
 namespace Biz\RewardPoint\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface AccountDao extends GeneralDaoInterface
+interface AccountDao extends AdvancedDaoInterface
 {
     public function deleteByUserId($userId);
 

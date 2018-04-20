@@ -28,6 +28,6 @@ class ThreadDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Thread:ThreadService');
     }
 }

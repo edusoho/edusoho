@@ -1,0 +1,38 @@
+<div class="distributor-course tagContent">
+  分销平台token伪造
+  <form class="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token', {type:'course'})}}">
+    <div>
+      机构id: <input type="text" name="orgId" value="1"></input>
+    </div>
+    <div>
+      类型: <input type="text" name="type" value="course"></input>
+    </div>
+    <div>
+      计划id: <input type="text" name="courseId" value="1"></input>
+    </div>
+  </form>
+
+  生成的二维码地址: <textarea type="text" class="distributorGeneratorUrl" data-base-url="distributor_product" readonly style="width: 800px"></textarea>
+  <div>
+    <input type="button" value="提交" class="tokenGeneratorBtn"></input>
+  </div>
+
+  <br/><br/>
+  发送
+  <div>
+    类型: 
+    <select class="sendedType" data-url="{{ path('admin_mocked_distributor_get_post_data') }}">
+      <option value="">----</option>
+      <option value="User">用户</option>
+      <option value="Order">订单</opiton>
+    </select>
+  </div>
+
+  <div>
+    发送的数据 <br/>
+    <textarea type="text" class="sendedData" readonly style="width: 1000px; height: 200px;" data-url="{{ path('admin_mocked_distributor_post_data') }}"></textarea>
+    <br/>发送结果 <span class="sendResult"></span>
+  </div>
+
+  <input type="button" value="发送" class="sendBtn" data-url="{{ path('admin_mocked_distributor_post_data') }}"></input>
+</div>

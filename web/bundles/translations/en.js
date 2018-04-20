@@ -307,7 +307,7 @@ t.add("auth.register.email_or_mobile_required_error_hint", "Please enter your mo
 t.add("auth.register.number_validate_error_hint", "11 numbers, the first number can not be 1", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
-t.add("card.card_receive_success_hint", "Learning card has been used, recharge% coin% virtual currency success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
+t.add("card.card_receive_success_hint", "Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
 t.add("card.card_receive_failed_hint", "Failed!", "js", "en");
 t.add("classroom.cancel_refund_hint", "Do you really want to cancel your refund?", "js", "en");
 t.add("classroom.quit_hint", "Are you sure to quit the class?", "js", "en");
@@ -451,6 +451,7 @@ t.add("thread.post.like_error_hint", "Favour failed, please try again!", "js", "
 t.add("group.manage.delete_member_hint", "Really want to delete that member?", "js", "en");
 t.add("group.manage.delete_required_error_hint", "Please select the member you want to delete", "js", "en");
 t.add("group.manage.member_exit_hint", "Really want to quit the group? Your information in this group will be deleted", "js", "en");
+t.add("group.manage.member_exit", "\u9000\u51fa\u5c0f\u7ec4", "js", "en");
 t.add("group.manage.choose_setting_member_hint", "Please select the member you want to set", "js", "en");
 t.add("group.manage.setting_member_permission_hint", "Are you sure to set the member's permission?", "js", "en");
 t.add("group.manage.cancel_member_permission", "Are you sure you want to cancel this member's permisiion?", "js", "en");
@@ -719,5 +720,7 @@ t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01"
 t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "en");
 t.add("admin.article_setting.choose_category", "Choose column", "js", "en");
 t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "en");
+t.add("User account is locked.", "\u5e10\u53f7\u88ab\u5c01\u7981", "js", "en");
 t.add("cloud_search.network.error_message", "\u7f51\u7edc\u4e0d\u7ed9\u529b\uff0c\u4e3a\u60a8\u5207\u6362\u6781\u7b80\u641c\u7d22\u6a21\u5f0f", "js", "en");
+t.add("message.send.not_allowed", "\u4e0d\u5141\u8bb8\u53d1\u9001\u79c1\u4fe1", "js", "en");
 })(Translator);
