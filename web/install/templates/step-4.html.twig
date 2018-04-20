@@ -45,14 +45,14 @@
         if(response.error) {
           $("#error-reason").html(response.error);
         } else {
-          $("#error-reason").html('生成Key失败，请联系EduSoho官方技术支持！');
+          $("#error-reason").html('生成Key失败，请登录网站后到【管理后台】-【教育云】-【授权信息】中查看，如授权信息中仍生成失败，请到EduSoho官方群反馈。');
         }
         $('.key-create-fail').removeClass('hide');
       }
     }, 'json').done(function(){
       $("#go-btn").removeClass('disabled');
     }).fail(function(){
-      $("#error-reason").html('生成Key失败，请联系EduSoho官方技术支持！');
+      $("#error-reason").html('生成Key失败，请登录网站后到【管理后台】-【教育云】-【授权信息】中查看，如授权信息中仍生成失败，请到EduSoho官方群反馈。');
       $('.key-create-fail').removeClass('hide');
     });
 

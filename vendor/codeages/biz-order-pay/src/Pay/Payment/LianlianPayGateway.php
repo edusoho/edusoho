@@ -11,7 +11,7 @@ class LianlianPayGateway extends AbstractGateway
 //    protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 //    protected $wapUrl = 'https://yintong.com.cn/llpayh5/payment.htm';
 
-    protected $url = 'https://payment.lianlianpay.com/payment/bankgateway.htm';
+    protected $url = 'https://cashier.lianlianpay.com/payment/bankgateway.htm';
     protected $wapUrl = 'https://wap.lianlianpay.com/payment.htm';
 
     protected $isWap = false;
@@ -133,10 +133,14 @@ class LianlianPayGateway extends AbstractGateway
         if (!empty($params['return_url'])) {
             $converted['url_return'] = $params['return_url'];
         }
+        if (empty($params['attach']['bindPhone'])) {
+            $params['attach']['bindPhone'] = '';
+        }
         $converted['risk_item']  = json_encode(array(
             'frms_ware_category'=>1008,
             'user_info_mercht_userno'=>$params['attach']['identify_user_id'],
-            'user_info_dt_register'=>date('YmdHis', $params['attach']['user_created_time'])
+            'user_info_dt_register'=>date('YmdHis', $params['attach']['user_created_time']),
+            'user_info_bind_phone' => $params['attach']['bindPhone']
         ));
 
         $converted['userreq_ip'] = str_replace(".", "_", $params['create_ip']);

@@ -6,13 +6,15 @@
   {% set meta = activity_meta(task.activity.mediaType) %}
   {% if task.type == 'live' %}
     {% set now = date().timestamp %}
+    {% set isLiveFinished = is_live_finished(task.activity.id, 'course') %}
+
     {% if task.activity.ext.replayStatus|default('') != constant('Biz\\Course\\Service\\LiveReplayService::REPLAY_UNGENERATE_STATUS') %}
       {{ 'course.block_grid.live_back'|trans }}
     {% elseif now < task.activity.startTime %}
       {{ task.activity.startTime|date('m-d H:i') }}
-    {% elseif task.activity.startTime < now and now < task.activity.endTime %}
+    {% elseif task.activity.startTime < now and not isLiveFinished %}
       {{ 'course.block_grid.onlive'|trans }}
-    {% elseif now > task.activity.endTime %}
+    {% elseif isLiveFinished %}
       {{ 'course.block_grid.live_finish'|trans }}
     {% endif %}
   {% else %}

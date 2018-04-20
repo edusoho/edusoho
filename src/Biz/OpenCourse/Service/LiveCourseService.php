@@ -13,4 +13,6 @@ interface LiveCourseService
     public function checkLessonStatus($lesson);
 
     public function checkCourseUserRole($course, $lesson);
+
+    public function isLiveFinished($lessonId);
 }
