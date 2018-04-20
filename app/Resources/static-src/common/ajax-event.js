@@ -15,12 +15,7 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
   if (!error) {
     return;
   }
-  let ua = navigator.userAgent.toLowerCase();
-  
-  if (!error.code) {
-    return;
-  }
-  
+  let message =  error.code ? error.message : Translator.trans('site.service_error_hint');
   switch(error.code)
   {
   case 4040102:
@@ -38,7 +33,7 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
     }
     break;
   default:
-    notify('danger', error.message);
+    notify('danger', message);
   }
 });
 
