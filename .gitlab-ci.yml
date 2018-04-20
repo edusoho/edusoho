@@ -65,8 +65,6 @@ before_script:
     - bin/phpunit -c app/ --testsuite UnitE2P
     - bin/phpunit -c app/ --testsuite UnitQ2T
     - bin/phpunit -c app/ --testsuite UnitU2Z
-  only:
-    - master
 
 7.0 For Non-Develop:
   stage: test
