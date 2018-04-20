@@ -122,7 +122,6 @@ describe('register:emSmsCodeValidate', function() {
       initCaptchaCodeRule: function(){}
     };
     let initSmsCodeRuleStub = sinon.stub(mockObject, 'initSmsCodeRule');
-    let initCaptchaCodeRuleStub = sinon.stub(mockObject, 'initCaptchaCodeRule');
     emSmsCodeValidate.apply(mockObject, [13967340627]);
     sinon.assert.calledOnce(initSmsCodeRuleStub);
   });
@@ -133,10 +132,11 @@ describe('register:emSmsCodeValidate', function() {
       initSmsCodeRule: function(){},
       initCaptchaCodeRule: function(){}
     };
-    let initSmsCodeRuleStub = sinon.stub(mockObject, 'initSmsCodeRule');
     let initCaptchaCodeRuleStub = sinon.stub(mockObject, 'initCaptchaCodeRule');
     emSmsCodeValidate.apply(mockObject, [12341]);
     sinon.assert.calledOnce(initCaptchaCodeRuleStub);
+
+    initCaptchaCodeRuleStub.restore();
   });
 });
 
