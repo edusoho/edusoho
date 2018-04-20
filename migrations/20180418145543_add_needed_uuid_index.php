@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddUuidIndex extends Migration
+class AddNeededUuidIndex extends Migration
 {
     /**
      * Do the migration
@@ -12,22 +12,23 @@ class AddUuidIndex extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isUniqueIndexExist('user', 'uuid')) {
+        if (!$this->isIndexExist('user', 'uuid')) {
             $connection->exec('
                 CREATE UNIQUE INDEX `uuid` ON `user`(`uuid`);
             ');
         }
     }
 
-    protected function isUniqueIndexExist($table, $indexName)
+    protected function isIndexExist($table, $indexName)
     {
+        if (getenv('currentTest') && 'ApiTest' == getenv('currentTest')) {
+            return true;
+        }
+
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $params = $connection->getParams();
-        $dbName = $params['dbname'];
-
-        $sql = "SELECT * FROM information_schema.statistics WHERE table_schema = '{$dbName}' and table_name = '{$table}' AND index_name = '{indexName}';";
+        $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
         $result = $connection->fetchAssoc($sql);
 
         return empty($result) ? false : true;
