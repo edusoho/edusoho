@@ -21,14 +21,13 @@ class AddNeededUuidIndex extends Migration
 
     protected function isIndexExist($table, $indexName)
     {
-        $biz = $this->getContainer();
-
-        $filePath = $biz['kernel.root_dir'].'/data/specialEnv';
+        $filePath = __DIR__.'../app/data/specialEnv';
         var_dump($filePath);
         if (file_exists($filePath)) {
             return true;
         }
 
+        $biz = $this->getContainer();
         $connection = $biz['db'];
 
         $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
