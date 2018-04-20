@@ -21,6 +21,7 @@ class AddNeededUuidIndex extends Migration
 
     protected function isIndexExist($table, $indexName)
     {
+        var_dump(getenv('currentTest'));
         if (getenv('currentTest') && 'ApiTest' == getenv('currentTest')) {
             return true;
         }
