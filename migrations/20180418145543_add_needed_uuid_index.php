@@ -13,6 +13,7 @@ class AddNeededUuidIndex extends Migration
         $connection = $biz['db'];
 
         if (!$this->isIndexExist('user', 'uuid')) {
+            var_dump('create index');
             $connection->exec('
                 CREATE UNIQUE INDEX `uuid` ON `user`(`uuid`);
             ');
