@@ -352,6 +352,142 @@ class CategoryServiceTest extends BaseTestCase
         $this->assertEquals($createdCategoryA['code'], $childCategory['code']);
     }
 
+    public function testMakeNavCategories()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('parentCodeA'),
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('codeA'),
+                    'returnValue' => array(
+                        'id' => 2,
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $this->getCategoryService()->createCategory($categoryA);
+        $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->makeNavCategories('codeA', 'parentCodeA');
+        $this->assertEquals(3, count($results));
+        $this->assertEquals('parentCodeA', $results[0][0]['code']);
+        $this->assertEquals(2, count($results[1][0]));
+    }
+
+    public function testMakeNavCategoriesWithEmptyCode()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('parentCodeA'),
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('codeA'),
+                    'returnValue' => array(
+                        'id' => 2,
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $this->getCategoryService()->createCategory($categoryA);
+        $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->makeNavCategories('', 'parentCodeA');
+        $this->assertEquals(3, count($results));
+        $this->assertEquals('parentCodeA', $results[0][0]['code']);
+        $this->assertEmpty($results[1]);
+    }
+
+    public function testFindCategoriesByIds()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->findCategoriesByIds(array($createdParentCategoryA['id'], $createdCategoryA['id'], $createdCategoryB['id']));
+
+        $this->assertContains($createdParentCategoryA, $results);
+        $this->assertContains($createdCategoryA, $results);
+        $this->assertContains($createdCategoryB, $results);
+    }
+
+    public function testFindAllCategories()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->findAllCategories();
+
+        $this->assertContains($createdParentCategoryA, $results);
+        $this->assertContains($createdCategoryA, $results);
+        $this->assertContains($createdCategoryB, $results);
+    }
+
     /**
      * @group get
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
@@ -374,6 +510,37 @@ class CategoryServiceTest extends BaseTestCase
         }
     }
 
+    public function testIsCategoryCodeAvailable()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'getByCode',
+                    'withParams' => array('parentCodeA'),
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $this->getCategoryService()->createCategory($parentCategoryA);
+
+        $result1 = $this->getCategoryService()->isCategoryCodeAvailable('');
+        $this->assertFalse($result1);
+        $result2 = $this->getCategoryService()->isCategoryCodeAvailable('parentCodeA', 'parentCodeA');
+        $this->assertTrue($result2);
+        $result3 = $this->getCategoryService()->isCategoryCodeAvailable('parentCodeA');
+        $this->assertFalse($result3);
+    }
+
     /**
      * @group get
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
@@ -385,41 +552,136 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group update
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUpdateCategory()
     {
-        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1);
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'parentId' => 0, 'groupId' => 1);
         $createdCategory = $this->getCategoryService()->createCategory($categoryA);
         $updateCategory = $this->getCategoryService()->updateCategory($createdCategory['id'], array(
             'code' => 'xxx',
             'name' => '测试分类2',
             'weight' => 20,
-            'groupId' => 1, ));
+            'groupId' => 1,
+        ));
 
         $this->assertEquals('xxx', $updateCategory['code']);
         $this->assertEquals('测试分类2', $updateCategory['name']);
         $this->assertEquals(20, $updateCategory['weight']);
         $this->assertEquals(1, $updateCategory['groupId']);
         $this->assertEquals(0, $updateCategory['parentId']);
-        $this->assertEquals('1', $updateCategory['path']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testUpdateCategoryWithNoCategory()
+    {
+        $this->getCategoryService()->updateCategory(9999, array(
+            'code' => 'xxx',
+            'name' => '测试分类2',
+            'weight' => 20,
+            'groupId' => 1,
+        ));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage 参数不正确，更新分类失败！
+     */
+    public function testUpdateCategoryWithNoFields()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'parentId' => 0, 'groupId' => 1);
+        $createdCategory = $this->getCategoryService()->createCategory($categoryA);
+        $this->getCategoryService()->updateCategory($createdCategory['id'], array());
     }
 
     /**
      * @group delete
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testDeleteCategory()
     {
-        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1);
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'parentId' => 0, 'groupId' => 1);
         $createdCategory = $this->getCategoryService()->createCategory($categoryA);
         $result = $this->getCategoryService()->deleteCategory($createdCategory['id']);
         $category = $this->getCategoryService()->getCategory($createdCategory['id']);
-        $this->assertEquals(1, $result);
-        $this->assertFalse($category);
+        $this->assertEquals(null, $result);
+        $this->assertNull($category);
+    }
 
-        $result = $this->getCategoryService()->deleteCategory($createdCategory['id']);
-        $this->assertEquals(0, $result);
+    /**
+     * @group delete
+     * @expectedException @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testDeleteCategoryWithNotFoundException()
+    {
+        $this->getCategoryService()->deleteCategory(999);
+    }
+
+    public function testFindAllGroups()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'findAll',
+                    'returnValue' => array(
+                        array('id' => 1),
+                    ),
+                ),
+            )
+        );
+        $result = $this->getCategoryService()->findAllGroups();
+        $this->assertEquals(array(
+            array('id' => 1),
+        ), $result);
+    }
+
+    public function testDeleteGroup()
+    {
+        $this->mockBiz(
+            'Taxonomy:CategoryGroupDao',
+            array(
+                array(
+                    'functionName' => 'delete',
+                    'returnValue' => true,
+                ),
+            )
+        );
+        $result = $this->getCategoryService()->deleteGroup(999);
+        $this->assertTrue($result);
     }
 
     /**
