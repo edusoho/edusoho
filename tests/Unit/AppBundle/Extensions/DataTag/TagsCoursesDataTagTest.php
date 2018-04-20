@@ -7,47 +7,87 @@ use AppBundle\Extensions\DataTag\TagsCoursesDataTag;
 
 class TagsCoursesDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCheckCountEmpty()
+    {
+        $datatag = new TagsCoursesDataTag();
+        $datatag->getData(array());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCheckCountError()
+    {
+        $datatag = new TagsCoursesDataTag();
+        $datatag->getData(array('count' => 200));
+    }
+
+    public function testGetDataEmpty()
+    {
+        $datatag = new TagsCoursesDataTag();
+        $result = $datatag->getData(array('count' => 5, 'tags' => array('name1', 'name2')));
+        $this->assertEmpty($result);
+
+        $this->mockBiz('Taxonomy:TagService', array(
+            array(
+                'functionName' => 'findTagsByNames',
+                'returnValue' => array(array('id' => 1), array('id' => 2))
+            ),
+            array(
+                'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
+                'returnValue' => array()
+            )
+        ));
+
+        $datatag = new TagsCoursesDataTag();
+        $result = $datatag->getData(array('count' => 5, 'tags' => array('name1', 'name2')));
+        $this->assertEmpty($result);
+    }
+
+    public function testGetDataTagOwnerEmpty()
+    {
+        $this->mockBiz('Taxonomy:TagService', array(
+            array(
+                'functionName' => 'findTagsByNames',
+                'returnValue' => array(array('id' => 1), array('id' => 2))
+            ),
+            array(
+                'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
+                'returnValue' => array(array('id' => 1, 'ownerId' => 1), array('id' => 2, 'ownerId' => 2))
+            )
+        ));
+
+        $datatag = new TagsCoursesDataTag();
+        $result = $datatag->getData(array('count' => 5, 'tags' => array('name1', 'name2')));
+        $this->assertEmpty($result);
+    }
+
     public function testGetData()
     {
-        // $tag1 = $this->getTagService()->addTag(array('name' => 'tag1'));
-        // $tag2 = $this->getTagService()->addTag(array('name' => 'tag2'));
-        // $course1 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course1',
-        // );
-        // $course2 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course2',
-        // );
-        // $course3 = array(
-        //     'type' => 'normal',
-        //     'title' => 'course3',
-        // );
+        $this->mockBiz('Taxonomy:TagService', array(
+            array(
+                'functionName' => 'findTagsByNames',
+                'returnValue' => array(array('id' => 1), array('id' => 2))
+            ),
+            array(
+                'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
+                'returnValue' => array(array('id' => 1, 'ownerId' => 1),array('id' => 1, 'ownerId' => 2), array('id' => 2, 'ownerId' => 2))
+            )
+        ));
 
-        // $course1 = $this->getCourseService()->createCourse($course1);
-        // $course2 = $this->getCourseService()->createCourse($course2);
-        // $course3 = $this->getCourseService()->createCourse($course3);
-        // $this->getCourseService()->publishCourse($course1['id']);
-        // $this->getCourseService()->publishCourse($course2['id']);
-        // $this->getCourseService()->publishCourse($course3['id']);
-        // $this->getCourseService()->updateCourse($course1['id'], array('tags' => 'tag1,tag2'));
-        // $this->getCourseService()->updateCourse($course2['id'], array('tags' => 'tag2'));
-        // $this->getCourseService()->updateCourse($course3['id'], array('tags' => 'tag1'));
+        $this->mockBiz('Course:CourseSetService', array(
+            array(
+                'functionName' => 'searchCourseSets',
+                'returnValue' => array(array('id' => 1))
+            ),
+        ));
+
         $datatag = new TagsCoursesDataTag();
-        // $courses = $datatag->getData(array('count' => 5, 'tags' => array('tag1', 'tag2')));
-        // $this->assertEquals(1, count($courses));
-        // $courses = $datatag->getData(array('count' => 5, 'tags' => array('tag2')));
-        // $this->assertEquals(2, count($courses));
-        $this->assertTrue(true);
-    }
-
-    public function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
-    }
-
-    public function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        $results = $datatag->getData(array('count' => 5, 'tags' => array('name1', 'name2')));
+        $this->assertNotNull($results);
+        $this->assertEquals(1, count($results));
     }
 }

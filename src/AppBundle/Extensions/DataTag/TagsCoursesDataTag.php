@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
+
 class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -17,32 +19,45 @@ class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
+        $this->checkCount($arguments);
+
         $tags = $this->getTagService()->findTagsByNames($arguments['tags']);
 
-        $tagIds = array();
-
-        foreach ($tags as $tagId) {
-            array_push($tagIds, $tagId['id']);
+        if (empty($tags)) {
+            return array();
+        }
+        $tagIds = ArrayToolkit::column($tags, 'id');
+        $tagOwners = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'courseSet');
+        
+        if (empty($tagOwners)) {
+            return array();
         }
 
-        if (empty($arguments['status'])) {
-            $status = 'published';
-        } else {
-            $status = $arguments['status'];
+        $tagOwners = ArrayToolkit::group($tagOwners, 'ownerId');
+        $courseSetIds = array();
+        $tagCount = count($tags);
+
+        $filter = array_filter($tagOwners, function ($tags) {
+            if (count($tags) >= 2) {
+                return 1;
+            }
+        });
+
+        if (empty($filter)) {
+            return array();
         }
+
+        $courseSetIds = array_keys($filter);
 
         $condition = array(
-            'tagIds' => $tagIds,
-            'status' => $status,
+            'ids' => $courseSetIds,
         );
 
-        $courses = $this->getCourseService()->searchCourses($condition, 'createdTime', 0, $arguments['count']);
-
-        return $this->getCourseTeachersAndCategories($courses);
+        return $this->getCourseSetService()->searchCourseSets($condition, array('createdTime' => 'DESC'), 0, $arguments['count']);
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 }
