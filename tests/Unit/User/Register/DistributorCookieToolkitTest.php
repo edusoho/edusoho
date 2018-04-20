@@ -54,6 +54,11 @@ class DistributorCookieToolkitTest extends BaseTestCase
                     'withParams' => array('distributor-user-token'),
                     'returnValue' => 'token-test',
                 ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('distributor-course-token'),
+                    'returnValue' => null,
+                ),
             )
         );
 
