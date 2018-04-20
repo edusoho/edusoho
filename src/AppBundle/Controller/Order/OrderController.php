@@ -8,6 +8,7 @@ use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Distributor\Common\DistributorCookieToolkit;
 
 class OrderController extends BaseController
 {
@@ -27,6 +28,13 @@ class OrderController extends BaseController
     {
         $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
         $product->setPickedDeduct($request->request->all());
+
+        $distributorToken = DistributorCookieToolkit::getCookieToken($request, 'course', null);
+        if (!empty($distributorToken)) {
+            $product->setCreateExtra(
+                array('distributorToken' => $distributorToken)
+            );
+        }
 
         $order = $this->getOrderFacadeService()->create($product);
 
@@ -70,13 +78,13 @@ class OrderController extends BaseController
 
     public function couponCheckAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $code = trim($request->request->get('code'));
             $id = $request->request->get('targetId');
             $type = $request->request->get('targetType');
             $price = $request->request->get('price');
             $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
-            if (isset($coupon['useable']) && $coupon['useable'] == 'no') {
+            if (isset($coupon['useable']) && 'no' == $coupon['useable']) {
                 return $this->createJsonResponse($coupon);
             }
 

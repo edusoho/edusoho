@@ -27,7 +27,19 @@ class DistributorCookieToolkit
             $fields['distributorToken'] = $distributorTokenCookie;
         }
 
+        $fields['distributorToken'] = self::getCookieToken($request, $cookieName);
+
         return $fields;
+    }
+
+    public static function getCookieToken($request, $cookieName, $defaultValue = '')
+    {
+        $distributorTokenCookie = $request->cookies->get("distributor-{$cookieName}-token");
+        if (!empty($distributorTokenCookie)) {
+            return $distributorTokenCookie;
+        }
+
+        return $defaultValue;
     }
 
     public static function clearCookieToken($request, $response, $cookieName)

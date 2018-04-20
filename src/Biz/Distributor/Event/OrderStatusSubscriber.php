@@ -21,22 +21,28 @@ class OrderStatusSubscriber extends EventSubscriber implements EventSubscriberIn
     public function onOrderChangeStatus(Event $event)
     {
         $context = $event->getSubject();
-        $orderIds = ArrayToolkit::column($context['items'], 'order_id');
+
+        $orderIdItems = ArrayToolkit::index($context['items'], 'order_id');
+        $orderIds = array_keys($orderIdItems);
+
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
 
         $userIds = ArrayToolkit::column($orders, 'user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $data = array();
+        $distributorProductOrders = array();  //商品分销订单
+        $distributorUserOrders = array();     //用户拉新订单
         foreach ($orders as $order) {
-            if (!empty($users[$order['user_id']])) {
+            if (!empty($orderIdItems[$order['id']]['create_extra']['distributorToken'])) {
+                $distributorProductOrders[] = $order;
+            } elseif (!empty($users[$order['user_id']])) {
                 $user = $users[$order['user_id']];
                 if ('distributor' == $user['type']) {
-                    $data[] = $order;
+                    $distributorUserOrders[] = $order;
                 }
             }
         }
-        $this->getDistributorOrderService()->batchCreateJobData($data);
+        $this->getDistributorOrderService()->batchCreateJobData($distributorUserOrders);
     }
 
     protected function getOrderService()
