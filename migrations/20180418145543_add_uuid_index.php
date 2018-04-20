@@ -32,6 +32,11 @@ class AddUuidIndex extends Migration
 
         var_dump('uuid: '.$result);
 
+        $sql = 'select version();';
+        $result = $connection->fetchAssoc($sql);
+
+        var_dump('uuid: '.$result);
+
         return empty($result) ? false : true;
     }
 }
