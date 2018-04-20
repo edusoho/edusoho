@@ -7,14 +7,10 @@ use AppBundle\Common\TimeMachine;
 
 class DistributorCookieToolkit
 {
+    /** 注意，新增一种类型时， 需要修改 getTypes()方法， 往getTypes()内新增一项类型 */
     const USER = 'user';
 
     const COURSE = 'course';
-
-    const TYPE = array(
-        self::USER,
-        self::COURSE,
-    );
 
     public static function setTokenToCookie($response, $token, $cookieName, $liveTime = 604800)
     {
@@ -42,7 +38,8 @@ class DistributorCookieToolkit
     public static function clearCookieToken($request, $response, $cookieName = null)
     {
         if (empty($cookieName)) {
-            foreach (self::TYPE as $type) {
+            $allTypes = self::getTypes();
+            foreach ($allTypes as $type) {
                 self::clearCookieToken($request, $response, $type);
             }
         }
@@ -52,5 +49,10 @@ class DistributorCookieToolkit
         }
 
         return $response;
+    }
+
+    private static function getTypes()
+    {
+        return array(self::USER, self::COURSE);
     }
 }
