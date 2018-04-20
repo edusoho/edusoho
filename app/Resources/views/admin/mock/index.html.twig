@@ -5,10 +5,14 @@
 
 {% block content %}
   <select class="mockSelector">
-    <option value="distributor-user">分销-用户模拟</option>
-    <option value="distributor-course">分销-课程模拟</option>
+    <option value="distributor">分销</option>
     <option value="marketing">微营销模拟</option>
     <option value="other">其他模拟</option>
+  </select>
+  <br>
+  <select class="distributor-sub" class="display:none">
+    <option value="distributor-user">用户模拟</option>
+    <option value="distributor-course">课程模拟</option>
   </select>
 
   {% include 'admin/mock/content-distributor-user.html.twig' %}

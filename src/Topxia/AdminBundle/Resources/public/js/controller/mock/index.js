@@ -20,6 +20,20 @@ define(function(require, exports, module) {
       function() {
         $('.tagContent').hide();
         displayedTabContent = $('.mockSelector').val();
+        if ($(this).val() == 'distributor') {
+          $('.distributor-sub').css({'display': 'block'});
+          displayedTabContent = $('.distributor-sub').val();
+        } else {
+          $('.distributor-sub').css({'display': 'none'});
+        }
+        
+        $('.tagContent.' + displayedTabContent).show();
+      }
+    );
+    $('.distributor-sub').change(
+      function() {
+        $('.tagContent').hide();
+        displayedTabContent = $('.distributor-sub').val();
         $('.tagContent.' + displayedTabContent).show();
       }
     );

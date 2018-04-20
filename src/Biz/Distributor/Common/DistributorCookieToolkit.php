@@ -7,6 +7,11 @@ use AppBundle\Common\TimeMachine;
 
 class DistributorCookieToolkit
 {
+    /** 注意，新增一种类型时， 需要修改 getTypes()方法， 往getTypes()内新增一项类型 */
+    const USER = 'user';
+
+    const COURSE = 'course';
+
     public static function setTokenToCookie($response, $token, $cookieName, $liveTime = 604800)
     {
         if ($liveTime) {
@@ -22,11 +27,6 @@ class DistributorCookieToolkit
 
     public static function setCookieTokenToFields($request, $fields, $cookieName)
     {
-        $distributorTokenCookie = $request->cookies->get("distributor-{$cookieName}-token");
-        if (!empty($distributorTokenCookie)) {
-            $fields['distributorToken'] = $distributorTokenCookie;
-        }
-
         $fields['distributorToken'] = self::getCookieToken($request, $cookieName);
 
         return $fields;
@@ -42,13 +42,24 @@ class DistributorCookieToolkit
         return $defaultValue;
     }
 
-    public static function clearCookieToken($request, $response, $cookieName)
+    public static function clearCookieToken($request, $response, $cookieName = null)
     {
+        if (empty($cookieName)) {
+            $allTypes = self::getTypes();
+            foreach ($allTypes as $type) {
+                self::clearCookieToken($request, $response, $type);
+            }
+        }
         $distributorTokenCookie = $request->cookies->get("distributor-{$cookieName}-token");
         if (!empty($distributorTokenCookie)) {
             $response->headers->setCookie(new Cookie("distributor-{$cookieName}-token", ''));
         }
 
         return $response;
+    }
+
+    private static function getTypes()
+    {
+        return array(self::USER, self::COURSE);
     }
 }

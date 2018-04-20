@@ -3,8 +3,6 @@
 namespace Biz\Distributor\Service\Impl;
 
 use Biz\Distributor\Service\DistributorProductService;
-use AppBundle\Common\TimeMachine;
-use QiQiuYun\SDK\Auth;
 
 class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl implements DistributorProductService
 {
@@ -21,36 +19,6 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     public function getRoutingParams(array $tokenInfo)
     {
         return array('id' => $tokenInfo['product_id']);
-    }
-
-    public function encodeToken($data)
-    {
-        $time = TimeMachine::time();
-        $once = md5(TimeMachine::time());
-
-        $resultStr = '';
-        foreach ($data as $key => $value) {
-            if (!empty($resultStr)) {
-                $resultStr .= ':';
-            }
-
-            $resultStr .= $value;
-        }
-
-        $resultStr .= ":{$time}:{$once}:{$this->sign($once, $time, $data)}";
-
-        return $resultStr;
-    }
-
-    private function sign($once, $time, $arr)
-    {
-        ksort($arr);
-        $json = implode("\n", array($once, $time, json_encode($arr)));
-
-        $settings = $this->getSettingService()->get('storage', array());
-        $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-
-        return $auth->makeSignature($json);
     }
 
     //TODO 分销平台接口弄好后 再根据接口改动
