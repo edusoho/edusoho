@@ -21,9 +21,8 @@ class AddNeededUuidIndex extends Migration
 
     protected function isIndexExist($table, $indexName)
     {
-        var_dump(getenv('currentTest'));
-        var_dump($_ENV);
-        if (getenv('currentTest') && 'ApiTest' == getenv('currentTest')) {
+        $filePath = $this->biz['kernel.root_dir'].'/data/specialEnv';
+        if (file_exists($filePath)) {
             return true;
         }
 
