@@ -45,14 +45,16 @@ class DistributorCookieToolkit
     public static function clearCookieToken($request, $response, $cookieName = null)
     {
         if (empty($cookieName)) {
-            $allTypes = self::getTypes();
-            foreach ($allTypes as $type) {
-                self::clearCookieToken($request, $response, $type);
-            }
+            $clearedTypes = self::getTypes();
+        } else {
+            $clearedTypes = array($cookieName);
         }
-        $distributorTokenCookie = $request->cookies->get("distributor-{$cookieName}-token");
-        if (!empty($distributorTokenCookie)) {
-            $response->headers->setCookie(new Cookie("distributor-{$cookieName}-token", ''));
+
+        foreach ($clearedTypes as $type) {
+            $distributorTokenCookie = $request->cookies->get("distributor-{$type}-token");
+            if (!empty($distributorTokenCookie)) {
+                $response->headers->setCookie(new Cookie("distributor-{$type}-token", ''));
+            }
         }
 
         return $response;
