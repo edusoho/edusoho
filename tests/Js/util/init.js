@@ -26,8 +26,15 @@ const init = function(html = '', options)
   let dom = new JSDOM(`<!DOCTYPE html><html><body>${html}</body></html>`, options);
   global.window = dom.window;
   global.document = window.document;
+  
   decache('jquery');
-  global.$ = require('jquery');
+  let $ = require('jquery');
+  $.validator = $.fn.validate = $.fn.rules = $.fn.datetimepicker = function(data){
+  };
+  $.validator.addMethod = function(name, fn) {
+  };
+
+  global.$ = $;
   global.store = store;
   global.Translator = Translator;
   global.navigator = window.navigator;
