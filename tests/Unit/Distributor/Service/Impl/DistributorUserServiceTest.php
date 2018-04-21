@@ -75,7 +75,7 @@ class DistributorUserServiceTest extends BaseTestCase
 
         $this->assertArrayEquals(
             array(
-                'registable' => true,
+                'valid' => true,
                 'rewardable' => true,
                 'couponPrice' => '1000',
                 'couponExpiryDay' => '1',

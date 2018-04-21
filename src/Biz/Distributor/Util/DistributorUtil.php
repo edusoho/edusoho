@@ -2,9 +2,6 @@
 
 namespace Biz\Distributor\Util;
 
-use Biz\Distributor\Common\DistributorCookieToolkit;
-use AppBundle\Common\Exception\InvalidArgumentException;
-
 class DistributorUtil
 {
     public static function generateTokenByType($biz, $type, $params)
@@ -30,10 +27,6 @@ class DistributorUtil
 
     public static function getDistributorServiceByType($biz, $type)
     {
-        if (!in_array($type, DistributorCookieToolkit::getTypes())) {
-            throw new InvalidArgumentException('invalid type!');
-        }
-
         return $biz->service('Distributor:Distributor'.ucfirst($type).'Service');
     }
 

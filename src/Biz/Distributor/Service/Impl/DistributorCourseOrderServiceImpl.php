@@ -22,21 +22,26 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
         return array('id' => DistributorUtil::getProductIdByToken($token));
     }
 
-    //TODO 分销平台接口弄好后 再根据接口改动
+    /**
+     * @param token 分销平台的token，只能使用一次
+     *
+     * @return array(
+     *                'type' => 'courseOrder',
+     *                'product_id' => '9', //商品id
+     *                'valid' => true, //签名是否有效
+     *                )
+     */
     public function decodeToken($token)
     {
         try {
             $splitedStr = explode(':', $token);
             $tokenInfo = array(
-                'type' => $splitedStr[0],
+                'type' => $this->getSendType(),
                 'product_id' => $splitedStr[1],
-                'org_id' => $splitedStr[0],
-                'merchant_id' => $splitedStr[3],
-                'time' => $splitedStr[4],
-                'once' => $splitedStr[5],
-                'sign' => $splitedStr[6],
+                'valid' => true,
             );
         } catch (\Exception $e) {
+            $tokenInfo = array('valid' => false);
             $this->biz['logger']->error('distributor sign error DistributorCourseOrderServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
         }
 
@@ -60,11 +65,23 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     {
         $result = parent::convertData($order);
 
+        $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $user = $this->getUserService()->getUser($order['user_id']);
+
+        $result['token'] = $items[0]['create_extra']['distributorToken'];
+        $result['nickname'] = $user['nickname'];
+        $result['mobile'] = $user['verifiedMobile'];
+
         return $result;
     }
 
     protected function getJobType()
     {
         return 'CourseOrder';
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

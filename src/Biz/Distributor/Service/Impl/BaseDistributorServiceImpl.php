@@ -13,7 +13,7 @@ use AppBundle\Common\TimeMachine;
 abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl implements DistributorService
 {
     /**
-     * 分销平台的token编码方式
+     * 分销平台的token编码方式, MockController 才使用
      *   注意，$data 内的参数值必须为字符串
      *
      * @param $data, key顺序不能错误

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Distributor\Util\DistributorUtil;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -45,7 +45,7 @@ class DistributorController extends BaseController
             $response = DistributorCookieToolkit::setTokenToCookie(
                 $response,
                 $fields['token'],
-                DistributorCookieToolkit::COURSE,
+                DistributorCookieToolkit::PRODUCT_ORDER,
                 0
             ); //cookie 随浏览器关闭而失效
 

@@ -3,7 +3,7 @@
 namespace Tests\Unit\User\Register;
 
 use Biz\BaseTestCase;
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use AppBundle\Common\TimeMachine;
 use Tests\Unit\User\Register\Tool\MockedHeader;
 use Tests\Unit\User\Register\Tool\MockedResponse;
@@ -56,7 +56,7 @@ class DistributorCookieToolkitTest extends BaseTestCase
                 ),
                 array(
                     'functionName' => 'get',
-                    'withParams' => array('distributor-course-token'),
+                    'withParams' => array('distributor-productOrder-token'),
                     'returnValue' => null,
                 ),
             )

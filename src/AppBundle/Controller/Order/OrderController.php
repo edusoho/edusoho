@@ -8,7 +8,7 @@ use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 
 class OrderController extends BaseController
 {
@@ -29,19 +29,14 @@ class OrderController extends BaseController
         $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
         $product->setPickedDeduct($request->request->all());
 
-        $distributorToken = DistributorCookieToolkit::getCookieToken($request, DistributorCookieToolkit::COURSE, null);
-        if (!empty($distributorToken)) {
-            $product->setCreateExtra(
-                array('distributorToken' => $distributorToken)
-            );
-        }
+        $this->addCreateDealers($request);
 
         $order = $this->getOrderFacadeService()->create($product);
-        $resonse = $this->redirectSafely($this->generateUrl('cashier_show', array(
+        $response = $this->redirectSafely($this->generateUrl('cashier_show', array(
             'sn' => $order['sn'],
         )));
 
-        $resonse = DistributorCookieToolkit::clearCookieToken($request, $resonse);
+        $resonse = DistributorCookieToolkit::clearCookieToken($request, $response);
 
         return $response;
     }
@@ -158,5 +153,21 @@ class OrderController extends BaseController
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    protected function getDistributorProductDealder()
+    {
+        return $this->createService('Distributor:DistributorProductDealerService');
+    }
+
+    private function addCreateDealers(Request $request)
+    {
+        $serviceNames = array('Distributor:DistributorProductDealerService');
+
+        foreach ($serviceNames as $serviceName) {
+            $service = $this->createService($serviceName);
+            $service->setParams($request->cookies->all());
+            $this->getOrderFacadeService()->addDealer($service);
+        }
     }
 }

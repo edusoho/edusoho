@@ -9,6 +9,7 @@ use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\OrderFacade\Service\ProductDealerService;
 use AppBundle\Common\MathToolkit;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -23,9 +24,16 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
     private $deductTypeName = array('discount' => '打折', 'coupon' => '优惠券', 'paidCourse' => '班级课程抵扣', 'adjust_price' => '改价');
 
+    /*
+     * 用于处理 商品
+     * ProductDealer 数组
+     */
+    private $dealers;
+
     public function create(Product $product)
     {
         $product->validate();
+        $product = $this->dealBeforeCreate($product);
 
         $user = $this->biz['user'];
         /* @var $currency Currency */
@@ -252,6 +260,28 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01) * 10 / $adjustDeduct['payAmountExcludeAdjust'], 2);
 
         return $adjustDeduct;
+    }
+
+    public function addDealer(ProductDealerService $dealer)
+    {
+        if (empty($this->dealers)) {
+            $this->dealers = array();
+        }
+
+        $this->dealers[] = $dealer;
+    }
+
+    public function dealBeforeCreate($product)
+    {
+        if (empty($this->dealers)) {
+            return $product;
+        } else {
+            foreach ($this->dealers as $dealer) {
+                $product = $dealer->dealBeforeCreateProduct($product);
+            }
+
+            return $product;
+        }
     }
 
     private function getTotalDeductExcludeAdjust($deducts)

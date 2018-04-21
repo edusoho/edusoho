@@ -6,7 +6,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
