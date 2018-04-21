@@ -29,7 +29,7 @@ class OrderController extends BaseController
         $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
         $product->setPickedDeduct($request->request->all());
 
-        $distributorToken = DistributorCookieToolkit::getCookieToken($request, 'course', null);
+        $distributorToken = DistributorCookieToolkit::getCookieToken($request, DistributorCookieToolkit::COURSE, null);
         if (!empty($distributorToken)) {
             $product->setCreateExtra(
                 array('distributorToken' => $distributorToken)
@@ -37,10 +37,13 @@ class OrderController extends BaseController
         }
 
         $order = $this->getOrderFacadeService()->create($product);
-
-        return $this->redirectSafely($this->generateUrl('cashier_show', array(
+        $resonse = $this->redirectSafely($this->generateUrl('cashier_show', array(
             'sn' => $order['sn'],
         )));
+
+        $resonse = DistributorCookieToolkit::clearCookieToken($request, $resonse);
+
+        return $response;
     }
 
     public function priceAction(Request $request)

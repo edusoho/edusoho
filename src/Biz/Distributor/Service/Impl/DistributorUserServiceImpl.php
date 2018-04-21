@@ -42,7 +42,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
                 }
             }
         } catch (\Exception $e) {
-            $this->biz['logger']->error('distributor sign error BaseDistributorServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
+            $this->biz['logger']->error('distributor sign error DistributorUserServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
         }
 
         return $tokenInfo;
@@ -51,6 +51,19 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     public function getSendType()
     {
         return 'user';
+    }
+
+    public function generateMockedToken($params)
+    {
+        $data = array(
+            'merchant_id' => '123',
+            'agency_id' => '22221',
+            'coupon_price' => $params['couponPrice'],
+            'coupon_expiry_day' => $params['couponExpiryDay'],
+        );
+        $tokenExpireDateNum = strtotime($params['tokenExpireDateStr']);
+
+        return $this->encodeToken($data, $tokenExpireDateNum);
     }
 
     protected function convertData($user)

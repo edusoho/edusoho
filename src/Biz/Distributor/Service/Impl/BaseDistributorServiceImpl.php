@@ -97,16 +97,18 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
 
     public function batchCreateJobData($jobData)
     {
-        $helper = new BatchCreateHelper($this->getDistributorJobDataDao());
-        foreach ($jobData as $single) {
-            $result = array(
-                'data' => $this->convertData($single),
-                'jobType' => $this->getJobType(),
-                'status' => DistributorJobStatus::PENDING,
-            );
-            $helper->add($result);
+        if (!empty($jobData)) {
+            $helper = new BatchCreateHelper($this->getDistributorJobDataDao());
+            foreach ($jobData as $single) {
+                $result = array(
+                    'data' => $this->convertData($single),
+                    'jobType' => $this->getJobType(),
+                    'status' => DistributorJobStatus::PENDING,
+                );
+                $helper->add($result);
+            }
+            $helper->flush();
         }
-        $helper->flush();
     }
 
     public function getDrpService()

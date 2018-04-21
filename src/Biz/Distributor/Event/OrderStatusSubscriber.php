@@ -3,6 +3,7 @@
 namespace Biz\Distributor\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Distributor\Util\DistributorUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -34,7 +35,12 @@ class OrderStatusSubscriber extends EventSubscriber implements EventSubscriberIn
         $distributorUserOrders = array();     //用户拉新订单
         foreach ($orders as $order) {
             if (!empty($orderIdItems[$order['id']]['create_extra']['distributorToken'])) {
-                $distributorProductOrders[] = $order;
+                $productToken = $orderIdItems[$order['id']]['create_extra']['distributorToken'];
+                $productType = DistributorUtil::getTypeByToken($productToken);
+                if (empty($distributorProductOrders[$productType])) {
+                    $distributorProductOrders[$productType] = array();
+                }
+                $distributorProductOrders[$productType][] = $order;
             } elseif (!empty($users[$order['user_id']])) {
                 $user = $users[$order['user_id']];
                 if ('distributor' == $user['type']) {
@@ -42,7 +48,12 @@ class OrderStatusSubscriber extends EventSubscriber implements EventSubscriberIn
                 }
             }
         }
+
         $this->getDistributorOrderService()->batchCreateJobData($distributorUserOrders);
+
+        foreach ($distributorProductOrders as $type => $orders) {
+            DistributorUtil::getDistributorServiceByType($this->getBiz(), $type)->batchCreateJobData($orders);
+        }
     }
 
     protected function getOrderService()

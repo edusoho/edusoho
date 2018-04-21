@@ -30,7 +30,7 @@ class MockController extends BaseController
         $this->validate();
 
         $params = $request->request->all();
-        $token = DistributorUtil::generateTokenByType($type, $params);
+        $token = DistributorUtil::generateTokenByType($this->getBiz(), $type, $params);
 
         return $this->createJsonResponse(array(
             'token' => $token,

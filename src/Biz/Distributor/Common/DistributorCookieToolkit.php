@@ -10,7 +10,7 @@ class DistributorCookieToolkit
     /** 注意，新增一种类型时， 需要修改 getTypes()方法， 往getTypes()内新增一项类型 */
     const USER = 'user';
 
-    const COURSE = 'course';
+    const COURSE = 'courseOrder';
 
     public static function setTokenToCookie($response, $token, $cookieName, $liveTime = 604800)
     {
@@ -60,7 +60,7 @@ class DistributorCookieToolkit
         return $response;
     }
 
-    private static function getTypes()
+    public static function getTypes()
     {
         return array(self::USER, self::COURSE);
     }
