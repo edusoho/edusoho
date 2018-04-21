@@ -28,7 +28,7 @@ class OrderStatusSubscriberTest extends BaseTestCase
                 array(
                     'functionName' => 'findOrdersByIds',
                     'withParams' => array(array(123)),
-                    'returnValue' => array(array('user_id' => 12322)),
+                    'returnValue' => array(array('user_id' => 12322, 'id' => 123)),
                 ),
             )
         );
@@ -49,7 +49,7 @@ class OrderStatusSubscriberTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'batchCreateJobData',
-                    'withParams' => array(array(array('user_id' => 12322))),
+                    'withParams' => array(array(array('user_id' => 12322, 'id' => 123))),
                 ),
             )
         );

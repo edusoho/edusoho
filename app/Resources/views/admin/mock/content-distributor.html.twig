@@ -1,0 +1,30 @@
+<div class="distributor tagContent">
+
+  <select class="subTagContentSelector" class="display:none">
+    <option value="distributor-user">用户拉新</option>
+    <option value="distributor-course-order">课程分销</option>
+  </select>
+
+  {% include 'admin/mock/content-distributor-user.html.twig' %}
+  {% include 'admin/mock/content-distributor-course-order.html.twig' %}
+
+  <br/><br/>
+  发送
+  <div>
+    类型: 
+    <select class="sendedType" data-url="{{ path('admin_mocked_distributor_get_post_data') }}">
+      <option value="">----</option>
+      <option value="User">拉新用户</option>
+      <option value="Order">用户拉新订单</opiton>
+      <option value="CourseOrder">课程分销订单</opiton>
+    </select>
+  </div>
+
+  <div>
+    发送的数据 <span class="sendCount"></span><br/>
+    <textarea type="text" class="sendedData" readonly style="width: 1000px; height: 200px;" data-url="{{ path('admin_mocked_distributor_post_data') }}"></textarea>
+    <br/>发送结果 <span class="sendResult"></span>
+  </div>
+
+  <input type="button" value="发送" class="sendBtn" data-url="{{ path('admin_mocked_distributor_post_data') }}"></input>
+</div>

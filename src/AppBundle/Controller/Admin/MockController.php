@@ -5,11 +5,11 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\TimeMachine;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
-use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
 use Codeages\Weblib\Auth\SignatureTokenAlgo;
+use Biz\Distributor\Util\DistributorUtil;
 
 class MockController extends BaseController
 {
@@ -29,29 +29,8 @@ class MockController extends BaseController
     {
         $this->validate();
 
-        switch ($type) {
-            case 'user':
-                $data = array(
-                    'merchant_id' => '123',
-                    'agency_id' => '22221',
-                    'coupon_price' => $request->request->get('couponPrice'),
-                    'coupon_expiry_day' => $request->request->get('couponExpiryDay'),
-                );
-                $tokenExpireDateNum = strtotime($request->request->get('tokenExpireDateStr'));
-                $token = $this->getDistributorUserService()->encodeToken($data, $tokenExpireDateNum);
-                break;
-            case 'course':
-                $data = array(
-                    'org_id' => $request->request->get('orgId'),
-                    'type' => $request->request->get('type'),
-                    'course_id' => $request->request->get('courseId'),
-                    'merchant_id' => '123',
-                );
-                $token = $this->getDistributorCourseOrderService()->encodeToken($data);
-                break;
-            default:
-                throw new InvalidArgumentException('invalid type!');
-        }
+        $params = $request->request->all();
+        $token = DistributorUtil::generateTokenByType($this->getBiz(), $type, $params);
 
         return $this->createJsonResponse(array(
             'token' => $token,
@@ -108,11 +87,6 @@ class MockController extends BaseController
         $result = $this->sendApiVersion3($params);
 
         return $this->createJsonResponse(array('result' => $result));
-    }
-
-    protected function getDistributorUserService()
-    {
-        return $this->createService('Distributor:DistributorUserService');
     }
 
     protected function getDistributorCourseOrderService()

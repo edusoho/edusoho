@@ -35,4 +35,6 @@ interface OrderFacadeService
     public function adjustOrderPrice($orderId, $newPayAmount);
 
     public function getOrderAdjustInfo($order);
+
+    public function addDealer(ProductDealerService $dealer);
 }
