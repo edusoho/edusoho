@@ -6,6 +6,8 @@ use Topxia\Service\Common\ServiceKernel;
 
 class KeyApplier
 {
+    private $mockedSender;
+
     public function applyKey($user, $edition = 'opensource', $source = 'apply')
     {
         $setting = $this->getSettingService()->get('storage', array());
@@ -48,42 +50,41 @@ class KeyApplier
 
     protected function postRequest($url, $params)
     {
-        $curl = curl_init();
+        if (!empty($this->mockedSender)) {
+            return $this->mockedSender->postRequest($url, $params);
+        } else {
+            $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'EduSoho Install Client 1.0');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_USERAGENT, 'EduSoho Install Client 1.0');
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 20);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+            curl_setopt($curl, CURLOPT_URL, $url);
 
-        ksort($params);
-        $headers[] = 'Content-type: application/json';
-        $headers[] = 'Sign: '.md5(json_encode($params));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            ksort($params);
+            $headers[] = 'Content-type: application/json';
+            $headers[] = 'Sign: '.md5(json_encode($params));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        $response = curl_exec($curl);
+            $response = curl_exec($curl);
 
-        curl_close($curl);
+            curl_close($curl);
 
-        return $response;
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+            return $response;
+        }
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }
