@@ -3,6 +3,7 @@
 
 {% set isCoupon = (app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon') %}
 {% set isMoneyCard = (app.request.query.get('cardType') == 'moneyCard') %}
+{% set coin = setting('coin') %}
 
 {% block title %}
   {% if isCoupon %}

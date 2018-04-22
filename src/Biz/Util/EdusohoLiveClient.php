@@ -7,6 +7,13 @@ use AppBundle\Common\ArrayToolkit;
 
 class EdusohoLiveClient
 {
+    const LIVE_STATUS_UNSTART = 'unstart';
+    const LIVE_STATUS_LIVING = 'live';
+    const LIVE_STATUS_PAUSE = 'pause';
+    const LIVE_STATUS_CLOSED = 'closed';
+    const OLD_ES_LIVE_PROVIDER = 8;
+    const NEW_ES_LIVE_PROVIDER = 9;
+
     private $cloudApi;
 
     /**
@@ -102,6 +109,25 @@ class EdusohoLiveClient
         $logoData = ArrayToolkit::parts($logoData, $filter);
 
         return $this->createCloudApi('root')->post('/liveaccount/logo/set', $logoData);
+    }
+
+    /**
+     * check live status
+     *
+     * @param [type] $lives array(liveProvider => array(liveId,liveId,...),...)
+     *
+     * @return array array(liveId => 'status',...) status：unstart|live|pause|closed
+     */
+    public function checkLiveStatus($lives)
+    {
+        $args = array('liveIds' => $lives);
+
+        return $this->createCloudApi('leaf')->get('/lives/rooms_status', $args);
+    }
+
+    public static function isEsLive($liveProvider)
+    {
+        return in_array($liveProvider, array(self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER));
     }
 
     protected function createCloudApi($server)

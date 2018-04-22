@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5551e430ca4f42df4d31d542248ab09",
+    "content-hash": "7b69b357873640a1de7b95ae622e9dd2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.14",
+            "version": "v0.9.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad"
+                "reference": "44c16d634b3090aa819a303a721e650e7cffd31a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/1ace8d1a1d142615aecc1c52f0468fafd33089ad",
-                "reference": "1ace8d1a1d142615aecc1c52f0468fafd33089ad",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/44c16d634b3090aa819a303a721e650e7cffd31a.zip",
+                "reference": "44c16d634b3090aa819a303a721e650e7cffd31a",
                 "shasum": ""
             },
             "require": {
@@ -344,20 +344,20 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-03-06T02:42:56+00:00"
+            "time": "2018-04-11T09:48:29+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.17",
+            "version": "v0.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "5db57d220aaba5775b47160d924df750590749fb"
+                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/5db57d220aaba5775b47160d924df750590749fb",
-                "reference": "5db57d220aaba5775b47160d924df750590749fb",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/9f343dac2299f78d1506833412e3e3215dc6dc89.zip",
+                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89",
                 "shasum": ""
             },
             "require": {
@@ -382,7 +382,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-03-22T02:15:49+00:00"
+            "time": "2018-04-18T01:23:58+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -468,16 +468,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.2.9",
+            "version": "v0.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "5a724b43bcc2f8420b8ecb19dcd792977186d9b0"
+                "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/5a724b43bcc2f8420b8ecb19dcd792977186d9b0",
-                "reference": "5a724b43bcc2f8420b8ecb19dcd792977186d9b0",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/01cf99a47f1fe4a67b2148736d8069f3144930ad",
+                "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad",
                 "shasum": ""
             },
             "require": {
@@ -507,7 +507,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-03-28T06:13:08+00:00"
+            "time": "2018-04-10T03:46:42+00:00"
         },
         {
             "name": "codeages/rate-limiter",

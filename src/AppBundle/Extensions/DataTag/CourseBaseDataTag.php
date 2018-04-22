@@ -48,7 +48,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 
     protected function getCategoryService()

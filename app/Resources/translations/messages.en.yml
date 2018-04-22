@@ -199,6 +199,7 @@ user.fileds.wechat: Wechat
 user.fileds.qq: QQ
 user.fields.gender.male: Male
 user.fields.gender.female: Female
+user.fields.gender.secret: Secret
 user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back
@@ -688,7 +689,7 @@ resource_lib.detail.description: Description
 resource_lib.detail.share: Share
 resource_lib.detail.share.share_to_public: 'Share as public'
 resource_lib.detail.share.share_to_public_tips: '(other teachers can check, preview and use this resource)'
-resource_lib.detail.share.only_myself: 'Only visable to yourself'
+resource_lib.detail.share.only_myself: 'Only visible to yourself'
 resource_lib.delete.content_title: 'Delete'
 resource_lib.delete.confirm_delete_tips: 'Confirmed to delete the file?'
 resource_lib.delete.delete_tips: 'If the file is used in course, deleting the file will cause error to the course.'
@@ -1174,6 +1175,7 @@ course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'enroll for free'
 course.thread: Discussions
 course.task.preview.free_learn_tips: 'Join for free'
+course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
@@ -3527,8 +3529,9 @@ card.info.moneycard: 'Money Card'
 card.info.moneycard.tips: 'Money card could use for account recharge'
 card.info.moneycard.date_format: Yynmdd
 card.info.moneycard.use_btn: 'Use Now'
-card.isLogin.type.coupon.tips: 'You received one coupon and you could find it in "my card bag"'
-card.isLogin.type.moneyCard.tips: 'You received one money card and it has been recharged into you account'
+card.isLogin.type.coupon.tips: 'You received one coupon and you could find it in "account center - coupon"'
+card.isLogin.type.moneyCard.tips: 'You received one money card and it has been recharged into "%coinName% account"'
+
 card.notLogin.receive.tips: 'You haven''t logged in, please login now'
 card.receive.login_view_btn: 'Login to view'
 admin.course.popular_course.empty_tips: 'No record'
@@ -5511,6 +5514,7 @@ admin.login_connect.verifcation_code.help_block: 'When applying for third-party 
 admin.user_center.admin_sync_btn: 'Administrator account synchronization'
 admin.user_center.user_center.title: 'User Center'
 admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1'
+admin.user_center.user_center.uc_connect.help_block: 'Tip: Due to discuz use mysql_connect connection, high version php has been abandoned, it is recommended not to fill in mysql, Leave it blank'
 admin.user_center.user_center.config_error: 'The configuration file <strong>%path%</strong> not be writable，please open this file and correct it.'
 admin.user_center.Configration: Configuration
 admin.user_center.Configration.help_block: 'How to configure?'

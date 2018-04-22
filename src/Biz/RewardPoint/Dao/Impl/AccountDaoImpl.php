@@ -2,10 +2,10 @@
 
 namespace Biz\RewardPoint\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Biz\RewardPoint\Dao\AccountDao;
 
-class AccountDaoImpl extends GeneralDaoImpl implements AccountDao
+class AccountDaoImpl extends AdvancedDaoImpl implements AccountDao
 {
     protected $table = 'reward_point_account';
 

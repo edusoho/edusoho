@@ -186,6 +186,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
         }
 
+        if (!$this->canPublish($task['id'])) {
+            return false;
+        }
+
         $strategy = $this->createCourseStrategy($task['courseId']);
 
         $task = $strategy->publishTask($task);
@@ -206,10 +210,32 @@ class TaskServiceImpl extends BaseService implements TaskService
                     if (!empty($task['mode']) && 'lesson' !== $task['mode']) {
                         continue;
                     }
+                    if (!$this->canPublish($task['id'])) {
+                        continue;
+                    }
                     $this->publishTask($task['id']);
                 }
             }
         }
+    }
+
+    protected function canPublish($taskId)
+    {
+        $jobName = 'course_task_create_sync_job_'.$taskId;
+
+        $fireJobs = $this->getSchedulerService()->searchJobFires(
+            array('job_name' => $jobName),
+            array('id' => 'desc'),
+            0,
+            1
+        );
+        $syncCreateTaskFireJob = reset($fireJobs);
+
+        if (!empty($syncCreateTaskFireJob) && in_array($syncCreateTaskFireJob['status'], array('executing', 'acquired'))) {
+            return false;
+        }
+
+        return true;
     }
 
     public function unpublishTask($id)
@@ -785,7 +811,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $tasks = $this->findTasksByChapterId($chapterId);
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         array_walk(
@@ -1212,5 +1238,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

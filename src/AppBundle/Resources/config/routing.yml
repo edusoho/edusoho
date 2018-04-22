@@ -91,7 +91,11 @@ user_terms:
 
 distributor_register:
    path:  /distributor_register
-   defaults: { _controller: AppBundle:Register:distributorIndex }
+   defaults: { _controller: AppBundle:Distributor:register }
+
+distributor_product:
+   path:  /distributor_product
+   defaults: { _controller: AppBundle:Distributor:product }
 
 register:
     path:  /register
@@ -1823,14 +1827,6 @@ course_set_manage_course_students_remark:
 course_set_manage_course_students_expiryday:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
   defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
-
-course_set_manage_course_student_export_csv:
-   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/export
-   defaults: { _controller: AppBundle:Course/StudentManage:exportCsv }
-
-course_set_manage_course_student_export_datas:
-   path:  /course_set/{courseSetId}/manage/course/{courseId}/manage/student/export/datas
-   defaults: { _controller: AppBundle:Course/StudentManage:exportDatas }
 
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process

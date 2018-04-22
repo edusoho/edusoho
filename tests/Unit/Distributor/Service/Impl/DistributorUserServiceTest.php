@@ -75,7 +75,7 @@ class DistributorUserServiceTest extends BaseTestCase
 
         $this->assertArrayEquals(
             array(
-                'registable' => true,
+                'valid' => true,
                 'rewardable' => true,
                 'couponPrice' => '1000',
                 'couponExpiryDay' => '1',
@@ -147,6 +147,35 @@ class DistributorUserServiceTest extends BaseTestCase
             'validateExistedToken',
             array('token123')
         );
+    }
+
+    public function testGenerateMockedToken()
+    {
+        TimeMachine::setMockedTime(1524324352);
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+            )
+        );
+
+        $result = $this->getDistributorUserService()->generateMockedToken(
+            array(
+                'couponPrice' => '10',
+                'couponExpiryDay' => '1',
+                'tokenExpireDateStr' => (1524324352 + 86400),
+            )
+        );
+
+        $expectedToken = '123:22221:10:1:-38426805319:c9a10dc1737f63a43d2ca6d155155999:LW38OTHHY7PSHOoW4-s7Uh3jof8=';
+        $this->assertEquals($expectedToken, $result);
     }
 
     private function getDistributorUserService()

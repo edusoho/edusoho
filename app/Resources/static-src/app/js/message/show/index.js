@@ -13,11 +13,15 @@ $('#message-reply-form').on('click', '#course-reply-btn', function (e) {
     return false;
   }
 
-  $.post($('#message-reply-form').attr('action'), $('#message-reply-form').serialize(), function (response) {
-    $('.message-list').prepend(response.html);
-    $('#message_reply_content').val('');
-    $('#course-reply-btn').attr('disabled', false);
-  });
+  $.post($('#message-reply-form').attr('action'), $('#message-reply-form').serialize())
+    .success(function(response) {
+      $('.message-list').prepend(response.html);
+      $('#message_reply_content').val('');
+      $('#course-reply-btn').attr('disabled', false);
+    })
+    .error(function(response) {
+      notify('danger',Translator.trans(response.responseJSON.error.message));
+    });
 
   return false;
 });

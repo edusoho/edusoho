@@ -96,6 +96,7 @@ services:
 
     web.twig.live_extension:
         class: AppBundle\Twig\LiveExtension
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
@@ -162,10 +163,6 @@ services:
     topxia.timemachine:
         class: AppBundle\Common\TimeMachine
         arguments:    ['Asia/Shanghai']
-
-    topxia.target_helper:
-        class: AppBundle\Util\TargetHelper
-        arguments:    ['@service_container']
 
     web.wrapper:
         class: AppBundle\Component\Wrapper\WrapperManage

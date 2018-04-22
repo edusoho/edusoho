@@ -5,7 +5,6 @@ class Students {
     this.initTooltips();
     this.initDeleteActions();
     this.initFollowActions();
-    this.initExportActions();
     this.initExpiryDayActions();
   }
 
@@ -51,39 +50,9 @@ class Students {
     });
   }
 
-  initExportActions() {
-    $('#export-students-btn').on('click',  () =>{
-      let $exportBtn = $('#export-students-btn');
-      $exportBtn.button('loading');
-      $.get($exportBtn.data('datasUrl'), { start: 0 },  (response)=> {
-        if (response.status === 'getData') {
-          this.exportStudents(response.start, response.fileName);
-        } else {
-          $exportBtn.button('reset');
-          location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
-        }
-      });
-    });
-  }
-
-
   initExpiryDayActions() {
     $('.js-expiry-days').on('click', () => {
       notify('danger', '只有按天数设置的学习有效期，才可手动增加有效期。');
-    });
-  }
-
-  exportStudents(start, fileName) {
-    start = start || 0,
-    fileName = fileName || '';
-    let self = this;
-    $.get($('#export-students-btn').data('datasUrl'), { start: start, fileName: fileName }, function (response) {
-      if (response.status === 'getData') {
-        self.exportStudents(response.start, response.fileName);
-      } else {
-        $('#export-students-btn').button('reset');
-        location.href = $('#export-students-btn').data('url') + '&fileName=' + response.fileName;
-      }
     });
   }
 }
