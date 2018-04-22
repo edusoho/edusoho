@@ -2,8 +2,11 @@
 
 namespace Tests\Unit\User;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class UserServiceTest extends BaseTestCase
@@ -260,6 +263,12 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
+    public function testGetUserByEmailWithEmptyEmail()
+    {
+        $foundUser = $this->getUserService()->getUserByEmail('');
+        $this->assertNull($foundUser);
+    }
+
     public function testFindUsersByIds()
     {
         $user1 = $this->createUser('user1');
@@ -298,6 +307,53 @@ class UserServiceTest extends BaseTestCase
         $orderBy = array('createdTime' => 'ASC');
         $result = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 20);
         $this->assertEquals(1, count($result));
+    }
+
+    public function testChangeRawPassword()
+    {
+        $user1 = $this->createUser('user1');
+
+        $result = $this->getUserService()->changeRawPassword($user1['id'], array('password' => 'rawpass'));
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testChangeRawPasswordWithEmptyRawPassword()
+    {
+        $user1 = $this->createUser('user1');
+
+        $this->getUserService()->changeRawPassword($user1['id'], array());
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testChangeRawPasswordWithEmptyUser()
+    {
+        $user1 = $this->createUser('user1');
+
+        $this->getUserService()->changeRawPassword($user1['id'] + 100, array('password' => 'rawpass'));
+    }
+
+    public function testSearchUserProfileCount()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+
+        $result = $this->getUserService()->searchUserProfileCount(array('ids' => array($user1['id'], $user2['id'])));
+
+        $this->assertEquals(2, $result);
+    }
+
+    public function testSearchApprovalsCount()
+    {
+        $user1 = $this->createUser('user1');
+        $this->createApproval($user1['id']);
+        $count = $this->getUserService()->searchApprovalsCount(array('userId' => $user1['id']));
+        $this->assertEquals(1, $count);
     }
 
     public function testFindUserProfilesByIds()
@@ -914,13 +970,42 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals($toUser['id'], $followed['toId']);
     }
 
-    public function testFindUserFollowing()
+    public function testSearchUserFollowing()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
         $this->getUserService()->follow($user1['id'], $user2['id']);
         $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(1, count($result));
+    }
+
+    public function testFindUserFollowers()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $result = $this->getUserService()->findUserFollowers($user2['id'], 0, 20);
+        $this->assertEquals(1, count($result));
+    }
+
+    public function testFindUserFollowerCount()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $result = $this->getUserService()->findUserFollowerCount($user2['id']);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testFindUserFollowing()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+        $this->getUserService()->follow($user1['id'], $user3['id']);
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $result = $this->getUserService()->findUserFollowing($user1['id'], 0, 20);
+        $this->assertEquals(2, count($result));
     }
 
     public function testFindAllUserFollowing()
@@ -930,7 +1015,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
+        $result = $this->getUserService()->findAllUserFollowing($user1['id']);
         $this->assertEquals(2, count($result));
     }
 
@@ -941,11 +1026,44 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user1['id'], $user2['id']);
+        $result = $this->getUserService()->findUserFollowingCount($user1['id']);
+        $this->assertEquals(2, $result);
+    }
+
+    public function testFindUserFollowings()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+        $this->getUserService()->follow($user1['id'], $user3['id']);
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $result = $this->getUserService()->findUserFollowings($user1['id']);
+        $this->assertEquals(2, count($result));
+    }
+
+    public function testSearchUserFollowings()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+        $this->getUserService()->follow($user1['id'], $user3['id']);
+        $this->getUserService()->follow($user1['id'], $user2['id']);
         $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
-    public function testFindUserFollowers()
+    public function testSearchUserFollowingCount()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+        $this->getUserService()->follow($user1['id'], $user3['id']);
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
+        $this->assertEquals(2, count($result));
+    }
+
+    public function testSearchUserFollowers()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
@@ -963,11 +1081,11 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user2['id'], $user3['id']);
-        $result = $this->getUserService()->searchUserFollowers($user3['id'], 0, 20);
+        $result = $this->getUserService()->findAllUserFollower($user3['id']);
         $this->assertEquals(2, count($result));
     }
 
-    public function testFindUserFollowerCount()
+    public function testCountUserFollowers()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
@@ -976,6 +1094,169 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->follow($user3['id'], $user1['id']);
         $result = $this->getUserService()->countUserFollowers($user1['id'], 0, 20);
         $this->assertEquals(1, count($result));
+    }
+
+    public function testChangeAvatarFromImgUrl()
+    {
+        $user1 = $this->createUser('user1');
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/Fixtures/test.jpg', array(
+            'mock' => true,
+        ));
+        $this->assertEquals($user1['id'], $result['id']);
+    }
+
+    public function testChangeAvatarFromImgUrlWithDeleteOriginFile()
+    {
+        $user1 = $this->createUser('user1');
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/Fixtures/test.jpg', array(
+            'mock' => true,
+            'deleteOriginFile' => 0,
+        ));
+        $this->assertEquals($user1['id'], $result['id']);
+    }
+
+    public function testFindFriendCount()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $this->getUserService()->follow($user2['id'], $user1['id']);
+
+        $count = $this->getUserService()->findFriendCount($user1['id']);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testGetSimpleUser()
+    {
+        $user1 = $this->createUser('user1');
+        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/Fixtures/test.jpg', array(
+            'mock' => true,
+        ));
+
+        $simpleUser = $this->getUserService()->getSimpleUser($user1['id']);
+
+        $this->assertEquals($user1['id'], $simpleUser['id']);
+    }
+
+    public function testCountUsersByLessThanCreatedTime()
+    {
+        $this->createUser('user1');
+
+        $count = $this->getUserService()->countUsersByLessThanCreatedTime(time() + 1000);
+        //2 初始化用户 + 新建用户
+        $this->assertEquals(2, $count);
+    }
+
+    public function testCountUsersByMobileNotEmpty()
+    {
+        $user1 = $this->createUser('user1');
+        $this->getUserService()->changeMobile($user1['id'], '13399893398');
+        $count = $this->getUserService()->countUsersByMobileNotEmpty();
+
+        $this->assertEquals(1, $count);
+    }
+
+    public function testFindUsersHasMobile()
+    {
+        $user1 = $this->createUser('user1');
+        $this->getUserService()->changeMobile($user1['id'], '13399893398');
+        $results = $this->getUserService()->findUsersHasMobile(0, 10, false);
+
+        $this->assertEquals(1, count($results));
+    }
+
+    public function testCountUsersHasMobile()
+    {
+        $user1 = $this->createUser('user1');
+        $this->getUserService()->changeMobile($user1['id'], '13399893398');
+        $count = $this->getUserService()->countUserHasMobile(false);
+
+        $this->assertEquals(1, $count);
+    }
+
+    public function testSearchApprovals()
+    {
+        $user1 = $this->createUser('user1');
+        $this->createApproval($user1['id']);
+        $results = $this->getUserService()->searchApprovals(array('userId' => $user1['id']), array(), 0, 10);
+        $this->assertEquals(1, count($results));
+    }
+
+    public function testChangeUserOrg()
+    {
+        $this->mockBiz(
+            'Org:OrgService',
+            array(
+                array(
+                    'functionName' => 'getOrgByOrgCode',
+                    'returnValue' => array(
+                        'id' => 1,
+                        'orgCode' => 'test1',
+                    ),
+                ),
+            )
+        );
+
+        $user1 = $this->createUser('user1');
+
+        $result = $this->getUserService()->changeUserOrg($user1['id'], 'test1');
+        $this->assertEquals('test1', $result['orgCode']);
+    }
+
+    public function testBatchUpdateOrg()
+    {
+        $this->mockBiz(
+            'Org:OrgService',
+            array(
+                array(
+                    'functionName' => 'getOrgByOrgCode',
+                    'returnValue' => array(
+                        'id' => 1,
+                        'orgCode' => 'test1',
+                    ),
+                ),
+            )
+        );
+
+        $this->getSettingService()->set('magic', array(
+            'enable_org' => 1,
+        ));
+
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->batchUpdateOrg(array($user1['id'], $user2['id']), 'test1');
+
+        $users = $this->getUserService()->findUsersByIds(array($user1['id'], $user2['id']));
+
+        $code = ArrayToolkit::column($users, 'orgCode');
+        $this->assertEquals(array('test1', 'test1'), $code);
+    }
+
+    public function testInitSystemUsers()
+    {
+        $this->getUserService()->initSystemUsers();
+    }
+
+    public function testFindFriends()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $this->getUserService()->follow($user2['id'], $user1['id']);
+
+        $result = $this->getUserService()->findFriends($user1['id'], 0, 10);
+        $this->assertEquals(1, count($result));
+    }
+
+    public function testCountFriends()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $this->getUserService()->follow($user2['id'], $user1['id']);
+
+        $result = $this->getUserService()->countFriends($user1['id']);
+        $this->assertEquals(1, $result);
     }
 
     public function testFollow()
@@ -1601,6 +1882,9 @@ class UserServiceTest extends BaseTestCase
         $registeredUser = $this->getUserService()->register($userInfo);
         $emailVerifyToken = $this->getUserService()->makeToken('email-verify', $registeredUser['id'], 1371801141, 'data');
         $result = $this->getUserService()->countTokens(array('type' => 'email-verify'));
+        $this->assertEquals('1', $result);
+
+        $result = $this->getUserService()->searchTokenCount(array('type' => 'email-verify'));
         $this->assertEquals('1', $result);
     }
 
@@ -2500,6 +2784,38 @@ class UserServiceTest extends BaseTestCase
         return $this->getUserService()->register($toUser);
     }
 
+    protected function createApproval($userId, $approval = array())
+    {
+        $sourceFile = __DIR__.'/Fixtures/test.gif';
+        $test1File = $this->getContainer()->getParameter('topxia.upload.private_directory').'/approval/test_test1.gif';
+        $test2File = $this->getContainer()->getParameter('topxia.upload.private_directory').'/approval/test_test2.gif';
+
+        copy($sourceFile, $test1File);
+        copy($sourceFile, $test2File);
+        $file1 = new UploadedFile(
+            $test1File,
+            'original.gif',
+            'image/gif',
+            filesize($test1File),
+            UPLOAD_ERR_OK,
+            true
+        );
+        $file2 = new UploadedFile(
+            $test2File,
+            'original.gif',
+            'image/gif',
+            filesize($test2File),
+            UPLOAD_ERR_OK,
+            true
+        );
+
+        $faceImg = $file1;
+        $backImg = $file2;
+        $directory = $this->getContainer()->getParameter('topxia.upload.private_directory').'/approval';
+
+        return $this->getUserService()->applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
+    }
+
     private function initFile()
     {
         $groups = $this->getFileService()->getAllFileGroups();
@@ -2575,6 +2891,9 @@ class UserServiceTest extends BaseTestCase
         ));
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
