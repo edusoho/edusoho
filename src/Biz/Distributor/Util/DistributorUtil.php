@@ -4,6 +4,12 @@ namespace Biz\Distributor\Util;
 
 class DistributorUtil
 {
+    /**
+     * MockController 使用，伪造token用
+     *
+     * @param $type 对应 $biz->service('Distributor:Distributor'.ucfirst($type).'Service')
+     * @param $params 对应type使用的service中的 generateMockedToken所需的参数
+     */
     public static function generateTokenByType($biz, $type, $params)
     {
         $distributorService = self::getDistributorServiceByType($biz, $type);

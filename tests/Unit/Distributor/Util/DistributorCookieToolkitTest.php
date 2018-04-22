@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\User\Register;
+namespace Tests\Unit\Distributor\Util;
 
 use Biz\BaseTestCase;
 use Biz\Distributor\Util\DistributorCookieToolkit;
