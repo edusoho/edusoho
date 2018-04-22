@@ -3,6 +3,7 @@
 namespace Biz\Xapi\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TimeMachine;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -14,7 +15,7 @@ class ConvertStatementJob extends AbstractJob
     public function execute()
     {
         try {
-            $this->getStatementDao()->retryStatusPushingToCreatedByCreatedTime(strtotime('-3 day'));
+            $this->getStatementDao()->retryStatusPushingToCreatedByCreatedTime(strtotime('-3 day', TimeMachine::time()));
             $condition = array(
                 'status' => 'created',
             );
@@ -29,9 +30,11 @@ class ConvertStatementJob extends AbstractJob
 
             $groupStatements = ArrayToolkit::group($statements, 'key');
             $pushStatements = array();
+
             foreach ($groupStatements as $key => $values) {
                 $push = $this->biz["xapi.push.{$key}"];
                 $result = $push->packages($values);
+
                 if (is_array($result)) {
                     $pushStatements = array_merge($pushStatements, $result);
                 }
@@ -48,6 +51,7 @@ class ConvertStatementJob extends AbstractJob
                     $pushData[$statements[$key]['id']] = $data;
                 }
             }
+
             $this->getXapiService()->updateStatementsConvertedAndDataByStatementData($pushData);
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);

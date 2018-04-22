@@ -212,40 +212,22 @@ class BaseTestCase extends TestCase
      */
     protected function mockBiz($alias, $params = array())
     {
-        $aliasList = explode(':', $alias);
-        $className = end($aliasList);
-        $mockObj = Mockery::mock($className);
-
-        foreach ($params as $param) {
-            $expectation = $mockObj->shouldReceive($param['functionName']);
-
-            if (!empty($param['runTimes'])) {
-                $expectation = $expectation->times($param['runTimes']);
-            }
-
-            if (!empty($param['withParams'])) {
-                $expectation = $expectation->withArgs($param['withParams']);
-            } else {
-                $expectation = $expectation->withAnyArgs();
-            }
-
-            if (!empty($param['returnValue'])) {
-                $expectation->andReturn($param['returnValue']);
-            }
-
-            if (!empty($param['andReturnValues'])) {
-                $expectation->andReturnValues($param['andReturnValues']);
-            }
-
-            if (!empty($param['throwException'])) {
-                $expectation->andThrow($param['throwException']);
-            }
-        }
+        $mockedObj = $this->mockObject($alias, $params);
 
         $biz = $this->getBiz();
-        $biz['@'.$alias] = $mockObj;
+        $biz['@'.$alias] = $mockedObj;
 
-        return $mockObj;
+        return $mockedObj;
+    }
+
+    protected function mockPureBiz($alias, $params = array())
+    {
+        $mockedObj = $this->mockObject($alias, $params);
+
+        $biz = $this->getBiz();
+        $biz[$alias] = $mockedObj;
+
+        return $mockedObj;
     }
 
     /**
@@ -320,6 +302,46 @@ class BaseTestCase extends TestCase
         $permissions['admin_course_content_manage'] = true;
         /* @var $currentUser CurrentUser */
         $currentUser->setPermissions($permissions);
+    }
+
+    protected function mockObject($alias, $params = array())
+    {
+        $splitedChars = array(':', '.');
+        $className = $alias;
+        foreach ($splitedChars as $char) {
+            $aliasList = explode($char, $className);
+            $className = end($aliasList);
+        }
+
+        $mockObj = Mockery::mock($className);
+
+        foreach ($params as $param) {
+            $expectation = $mockObj->shouldReceive($param['functionName']);
+
+            if (!empty($param['runTimes'])) {
+                $expectation = $expectation->times($param['runTimes']);
+            }
+
+            if (!empty($param['withParams'])) {
+                $expectation = $expectation->withArgs($param['withParams']);
+            } else {
+                $expectation = $expectation->withAnyArgs();
+            }
+
+            if (!empty($param['returnValue'])) {
+                $expectation->andReturn($param['returnValue']);
+            }
+
+            if (!empty($param['andReturnValues'])) {
+                $expectation->andReturnValues($param['andReturnValues']);
+            }
+
+            if (!empty($param['throwException'])) {
+                $expectation->andThrow($param['throwException']);
+            }
+        }
+
+        return $mockObj;
     }
 }
 
