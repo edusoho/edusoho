@@ -307,7 +307,7 @@ auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
 
-card.card_receive_success_hint: 学习卡已使用，充值%coin%虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。
+card.card_receive_success_hint: 学习卡已使用，充值%coinAmount%%coinName%成功，可前往【账户中心】-【我的账户】查看充值情况。
 card.card_receive_failed_hint: 失败!
 
 classroom.cancel_refund_hint: 真的要取消退款吗？
@@ -491,6 +491,7 @@ thread.post.like_error_hint: 点赞失败，请重试！
 group.manage.delete_member_hint: 真的要删除该成员？
 group.manage.delete_required_error_hint: 请选择要删除的成员
 group.manage.member_exit_hint: 真的要退出该小组？您在该小组的信息将删除
+group.manage.member_exit: 退出小组
 group.manage.choose_setting_member_hint: 请选择要设置的成员
 group.manage.setting_member_permission_hint: 确认要设置该成员的权限？
 group.manage.cancel_member_permission: 确认要取消该成员的权限？
@@ -802,7 +803,8 @@ admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: --选择所属栏目--
 
-
 Bad credentials.: 用户名或密码错误
+User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
+message.send.not_allowed: 不允许发送私信

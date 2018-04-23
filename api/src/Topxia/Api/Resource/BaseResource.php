@@ -193,7 +193,9 @@ abstract class BaseResource
         if (empty($matches)) {
             return $text;
         }
-        foreach ($matches[1] as $url) {
+
+        $urls = array_unique($matches[1]);
+        foreach ($urls as $url) {
             $text = str_replace($url, $this->getFileUrl($url, '', 'content'), $text);
         }
 

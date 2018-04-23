@@ -363,7 +363,7 @@ auth.register.number_validate_error_hint: 11 numbers, the first number can not b
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
 
-card.card_receive_success_hint: Learning card has been used, recharge% coin% virtual currency success, you can go to the [account center] - [my account] to check the situation.
+card.card_receive_success_hint: Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.
 card.card_receive_failed_hint: Failed!
 
 classroom.cancel_refund_hint: Do you really want to cancel your refund?
@@ -546,6 +546,7 @@ thread.post.like_error_hint: Favour failed, please try again!
 group.manage.delete_member_hint: Really want to delete that member?
 group.manage.delete_required_error_hint: Please select the member you want to delete
 group.manage.member_exit_hint: Really want to quit the group? Your information in this group will be deleted
+group.manage.member_exit: 退出小组
 group.manage.choose_setting_member_hint: Please select the member you want to set
 group.manage.setting_member_permission_hint: Are you sure to set the member's permission?
 group.manage.cancel_member_permission: Are you sure you want to cancel this member's permisiion?
@@ -862,5 +863,7 @@ admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: 'Choose column'
 
 Bad credentials.: 用户名或密码错误
+User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
+message.send.not_allowed: 不允许发送私信

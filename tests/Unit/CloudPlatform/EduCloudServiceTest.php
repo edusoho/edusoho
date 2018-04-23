@@ -16,7 +16,7 @@ class EduCloudServiceTest extends BaseTestCase
 
         $this->getEduCloudService()->setCloudApi($mockObject);
 
-        $result = $this->getEduCloudService()->isHiddenCloud();
+        $result = $this->getEduCloudService()->isVisibleCloud();
 
         $this->assertTrue($result);
     }
@@ -29,12 +29,12 @@ class EduCloudServiceTest extends BaseTestCase
 
         $this->getEduCloudService()->setCloudApi($mockObject);
 
-        $result = $this->getEduCloudService()->isHiddenCloud();
+        $result = $this->getEduCloudService()->isVisibleCloud();
 
         $this->assertFalse($result);
     }
 
-    public function testIsHiddenCloudException()
+    public function testisVisibleCloudException()
     {
         $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
@@ -42,7 +42,7 @@ class EduCloudServiceTest extends BaseTestCase
 
         $this->getEduCloudService()->setCloudApi($mockObject);
 
-        $result = $this->getEduCloudService()->isHiddenCloud();
+        $result = $this->getEduCloudService()->isVisibleCloud();
         $this->assertFalse($result);
     }
 

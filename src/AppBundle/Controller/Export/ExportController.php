@@ -48,6 +48,7 @@ class ExportController extends BaseController
     public function preExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
+
         $exporter = $this->container->get('export_factory')->create($name, $conditions);
         $result = $exporter->export($name);
 

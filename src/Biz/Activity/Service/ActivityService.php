@@ -58,4 +58,10 @@ interface ActivityService
     public function isFinished($activityId);
 
     public function findActivitySupportVideoTryLook($courseIds);
+
+    public function isLiveFinished($activityId);
+
+    public function checkLiveStatus($courseId, $activityId);
+
+    public function findFinishedLivesWithinTwoHours();
 }

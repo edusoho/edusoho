@@ -37,6 +37,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
+        //task 创建同步任务，永久有效
         $this->getSchedulerService()->register(array(
             'name' => 'course_task_create_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
@@ -59,6 +60,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
+        //task 更新同步任务，永久有效
         $this->getSchedulerService()->register(array(
             'name' => 'course_task_update_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
@@ -96,7 +98,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
         $status = $published ? 'published' : 'unpublished';
 
-        if ($course['courseType'] === CourseService::DEFAULT_COURSE_TYPE) {
+        if (CourseService::DEFAULT_COURSE_TYPE === $course['courseType']) {
             $sameCategoryTasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
             $this->getTaskDao()->update(array('courseIds' => array_column($copiedCourses, 'id'), 'copyIds' => array_column($sameCategoryTasks, 'id')), array('status' => $status));
         } else {
@@ -128,7 +130,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     protected function syncTestpaper($activity, $copiedCourse)
     {
-        if ($activity['mediaType'] != 'testpaper') {
+        if ('testpaper' != $activity['mediaType']) {
             return array();
         }
 

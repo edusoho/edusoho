@@ -126,7 +126,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/video/trial.html.twig', array());
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -195,7 +195,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/video/trial.html.twig', array());
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
         $storageSetting = $this->getSettingService()->get('storage', array());
@@ -410,7 +410,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/sms/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -455,7 +455,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/sms/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -544,7 +544,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/email/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -592,7 +592,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/email/trial.html.twig');
         }
 
-        if (!$this->isHiddenCloud()) {
+        if (!$this->isVisibleCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -818,7 +818,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/search/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -861,7 +861,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/search/trial.html.twig');
         }
 
-        if (!$this->isHiddenCloud()) {
+        if (!$this->isVisibleCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -1541,7 +1541,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/live/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -1576,9 +1576,9 @@ class EduCloudController extends BaseController
         return $isLiveWithoutEnable;
     }
 
-    private function isHiddenCloud()
+    private function isVisibleCloud()
     {
-        return $this->getEduCloudService()->isHiddenCloud();
+        return $this->getEduCloudService()->isVisibleCloud();
     }
 
     public function liveSettingAction(Request $request)
@@ -1587,7 +1587,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/live/trial.html.twig');
         }
 
-        if (!$this->isHiddenCloud()) {
+        if (!$this->isVisibleCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -1689,7 +1689,7 @@ class EduCloudController extends BaseController
 
     public function consultSettingAction(Request $request)
     {
-        if (!$this->isHiddenCloud()) {
+        if (!$this->isVisibleCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 

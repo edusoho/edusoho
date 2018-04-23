@@ -7,7 +7,7 @@
 #   router_name: admin_user //可选
 #   router_params:          //可选
 #   blank:                  //可选
-#   visable:                //可选
+#   visible:                //可选
 #   icon:                   //可选
 #   data:                   //可选
 #   before:                 //可选 菜单出现位置在同级的某个菜单之前
@@ -35,33 +35,33 @@ admin:
                                     name: admin.user.basic.basic_tab.create_btn
                                     mode: modal
                                     group: topBtn
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                 admin_user_edit:
                                     name: admin.user.basic.basic_tab.edit_btn
                                     mode: modal
                                     group: groupButton
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_roles:
                                     name: admin.user.basic.basic_tab.setting_roles_btn
                                     mode: modal
                                     group: groupButton
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_avatar:
                                     name: admin.user.basic.basic_tab.update_avatar_btn
                                     mode: modal
                                     group: groupButton
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_change_password:
                                     name: admin.user.basic.basic_tab.change_password_btn
                                     mode: modal
                                     group: groupButton
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                     router_params:
                                         userId: (user.id)
                                 admin_user_send_passwordreset_email:
@@ -69,7 +69,7 @@ admin:
                                     group: groupButton
                                     class: send-passwordreset-email
                                     mode: none
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_send_emailverify_email:
@@ -77,7 +77,7 @@ admin:
                                     class: send-emailverify-email
                                     group: groupButton
                                     mode: none
-                                    visable: (user.type != 'system')
+                                    visible: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_lock:
@@ -85,7 +85,7 @@ admin:
                                     group: groupButton
                                     class: lock-user
                                     mode: none
-                                    visable: (user.type != 'system' and user.locked == 0)
+                                    visible: (user.type != 'system' and user.locked == 0)
                                     router_params:
                                         id: (user.id)
                                 admin_user_unlock:
@@ -93,7 +93,7 @@ admin:
                                     class: unlock-user
                                     group: groupButton
                                     mode: none
-                                    visable: (user.type != 'system' and user.locked == 1)
+                                    visible: (user.type != 'system' and user.locked == 1)
                                     router_params:
                                         id: (user.id)
                                 admin_user_org_update:
@@ -101,7 +101,7 @@ admin:
                                     parent: admin_user_manage
                                     mode: modal
                                     group: groupButton
-                                    visable: ( app.user.id != user.id and setting('magic.enable_org', 0) == 1 )
+                                    visible: ( app.user.id != user.id and setting('magic.enable_org', 0) == 1 )
                                     router_params:
                                         id: (user.id)
                                     disable: true
@@ -128,7 +128,7 @@ admin:
                                     mode: modal
                                     icon: 'glyphicon glyphicon-hand-up'
                                     group: groupButton
-                                    visable: (user.promoted == 0)
+                                    visible: (user.promoted == 0)
                                     router_params:
                                         id: (user.id)
                                         type: teacherList
@@ -137,7 +137,7 @@ admin:
                                     class: cancel-promote-teacher
                                     mode: none
                                     group: groupButton
-                                    visable: (user.promoted == 1)
+                                    visible: (user.promoted == 1)
                                     router_params:
                                         id: (user.id)
                         admin_teacher_promote_list:
@@ -189,7 +189,7 @@ admin:
                                         filter: (filter)
                                         ref: 'courseList'
                                     group: groupButton
-                                    visable: ( filter == 'normal' and not courseSet.recommended )
+                                    visible: ( filter == 'normal' and not courseSet.recommended )
                                     icon: 'glyphicon glyphicon-hand-up'
                                     mode: modal
                                 admin_course_set_cancel_recommend:
@@ -200,7 +200,7 @@ admin:
                                         target: (target)
                                     group: groupButton
                                     class: cancel-recommend-course
-                                    visable: ( filter == 'normal' and courseSet.recommended )
+                                    visible: ( filter == 'normal' and courseSet.recommended )
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
                                 admin_course_guest_member_preview:
@@ -221,7 +221,7 @@ admin:
                                     icon: 'glyphicon glyphicon-ban-circle'
                                     mode: none
                                     class: close-course
-                                    visable: (courseSet.status == 'published')
+                                    visible: (courseSet.status == 'published')
                                 admin_course_sms_prepare:
                                     name: admin.btn.sms_send_btn
                                     router_name: sms_prepare
@@ -231,7 +231,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
-                                    visable: (courseSet.status == 'published')
+                                    visible: (courseSet.status == 'published')
                                 admin_course_set_clone:
                                     name: admin.course.basic.basic_tab.clone_btn
                                     router_params:
@@ -240,7 +240,7 @@ admin:
                                     class: 'js-course-set-clone'
                                     icon: 'glyphicon glyphicon-repeat'
                                     mode: none
-                                    visable: (courseSet.parentId == 0 and courseSet.type != 'live')
+                                    visible: (courseSet.parentId == 0 and courseSet.type != 'live')
                                 admin_course_set_publish:
                                     name: admin.course.basic.basic_tab.publish_submit_btn
                                     router_params:
@@ -250,7 +250,7 @@ admin:
                                     class: publish-course
                                     icon: 'glyphicon glyphicon-ok-circle'
                                     mode: none
-                                    visable: (courseSet.status != 'published')
+                                    visible: (courseSet.status != 'published')
                                 admin_course_set_delete:
                                     name: admin.course.basic.basic_tab.delete_submit_btn
                                     class: delete-course
@@ -261,7 +261,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
-                                    visable: ( courseSet.status in ['closed', 'draft', 'published'])
+                                    visible: ( courseSet.status in ['closed', 'draft', 'published'])
                         admin_course_set_recommend_list:
                             name: admin.course.basic.recommend_list_tab
                         admin_course_set_data:
@@ -295,7 +295,7 @@ admin:
                                     router_params:
                                         id: (classroom.id)
                                         ref: classroomList
-                                    visable: ( classroom.recommended )
+                                    visible: ( classroom.recommended )
                                 admin_classroom_set_recommend:
                                     name: admin.course.classroom.basic_tab.recommend_btn
                                     mode: modal
@@ -304,7 +304,7 @@ admin:
                                     router_params:
                                         id: (classroom.id)
                                         ref: classroomList
-                                    visable: ( not classroom.recommended )
+                                    visible: ( not classroom.recommended )
                                 admin_classroom_close:
                                     name: admin.course.classroom.basic_tab.close_btn
                                     mode: none
@@ -313,7 +313,7 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (classroom.id)
-                                    visable: ( classroom.status == 'published' )
+                                    visible: ( classroom.status == 'published' )
                                 admin_sms_prepare:
                                     name: admin.btn.sms_send_btn
                                     router_name: sms_prepare
@@ -323,7 +323,7 @@ admin:
                                     router_params:
                                         id: (classroom.id)
                                         targetType: classroom
-                                    visable: ( classroom.status == 'published' )
+                                    visible: ( classroom.status == 'published' )
                                 admin_classroom_open:
                                     name: admin.course.classroom.basic_tab.publish_submit_btn
                                     mode: none
@@ -332,7 +332,7 @@ admin:
                                     class: open-classroom
                                     router_params:
                                         id: (classroom.id)
-                                    visable: ( classroom.status != 'published' )
+                                    visible: ( classroom.status != 'published' )
                                 admin_classroom_delete:
                                     name: admin.course.classroom.basic_tab.delete_submit_btn
                                     mode: none
@@ -341,7 +341,7 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (classroom.id)
-                                    visable: ( classroom.status=='draft' )
+                                    visible: ( classroom.status=='draft' )
                         admin_classroom_recommend:
                             name: admin.course.classroom.recommend_tab
                             router_name: admin_classroom_recommend_list
@@ -652,7 +652,7 @@ admin:
                             router_name: admin_coin_user_records
         admin_app:
             name: admin.nav.cloud
-            visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
+            visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
             children:
                 admin_my_cloud:
                     name: admin.cloud.overview_menu
@@ -663,7 +663,7 @@ admin:
                 admin_cloud_video_setting:
                     name: admin.cloud.video_menu
                     router_name: admin_cloud_video_overview
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_cloud_video_overview:
                             name: admin.tab.overview_tab
@@ -673,7 +673,7 @@ admin:
                             disable: true
                 admin_cloud_edulive_setting:
                     name: admin.cloud.edulive_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     router_name: admin_cloud_edulive_overview
                     children:
                         admin_cloud_edulive_overview:
@@ -684,7 +684,7 @@ admin:
                             disable: true
                 admin_edu_cloud_sms:
                     name: admin.cloud.sms_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_edu_cloud_sms_overview:
                             name: admin.tab.overview_tab
@@ -695,7 +695,7 @@ admin:
                             disable: true
                 admin_edu_cloud_email:
                     name: admin.cloud.email_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_edu_cloud_email_overview:
                             name: admin.tab.overview_tab
@@ -706,7 +706,7 @@ admin:
                             disable: true
                 admin_edu_cloud_search_setting:
                     name: admin.cloud.search_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     router_name: admin_edu_cloud_search
                     children:
                         admin_edu_cloud_search_overview:
@@ -718,7 +718,7 @@ admin:
                             disable: true
                 admin_app_im:
                     name: admin.cloud.im_setting_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_app_im_setting:
                             name: admin.cloud.im_setting.basic_tab
@@ -726,7 +726,7 @@ admin:
                             disable: true
                 admin_cloud_file_manage:
                     name: admin.cloud.file_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     parent: admin_app
                     after: admin_app_center_show
                     children:
@@ -735,7 +735,7 @@ admin:
                             disable: true
                 admin_setting_cloud_attachment:
                     name: admin.cloud.attachment_setting_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_edu_cloud_attachment:
                             name: admin.cloud.attachment_setting.basic_tab
@@ -766,7 +766,7 @@ admin:
                             disable: true
                 admin_cloud_attachment_manage:
                     name: admin.cloud.attachment_menu
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_cloud_attachment:
                             name: admin.cloud.attachment.basic_tab
@@ -774,14 +774,14 @@ admin:
                 admin_cloud_consult:
                     name: admin.cloud.consult_menu
                     router_name: admin_cloud_consult_setting
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_cloud_consult_setting:
                             name: admin.tab.setting_tab
                             disable: true
                 admin_cloud_data_lab_manage:
                     name: admin.cloud.data_lab
-                    visable: (cloudStatus())
+                    visible: (cloudStatus())
                     children:
                         admin_cloud_data_lab:
                             name: admin.cloud.data_lab
@@ -887,6 +887,9 @@ admin:
                         admin_setting_avatar:
                             name: admin.system.user.avatar_tab
                             disable: true
+                        admin_setting_user_message:
+                            name: admin.system.user.message
+                            disable: true
                 admin_roles:
                     name: admin.system.roles_menu
                     children:
@@ -973,7 +976,7 @@ admin:
                 admin_setting_mobile_iap_product:
                     name: admin.system.mobile_iap_product_menu
                     disable: true
-                    visable: (setting('magic.enable_mobile_iap', '0'))
+                    visible: (setting('magic.enable_mobile_iap', '0'))
                     children:
                         admin_setting_mobile_iap_product_list:
                             name: admin.system.mobile_iap_product.basic_tab
@@ -1026,7 +1029,7 @@ admin:
                     parent: admin_system
                     group: 2
                     disable: true
-                    visable: false
+                    visible: false
                     children:
                         admin_org:
                             name: admin.system.org.basic_tab
@@ -1034,7 +1037,7 @@ admin:
                 admin_jobs_manage:
                     name: 任务调度
                     group: 2
-                    visable: false
+                    visible: false
                     disable: true
                     children:
                         admin_jobs:
@@ -1046,7 +1049,7 @@ admin:
                 admin_xapi_manage:
                     name: xAPI
                     group: 2
-                    visable: false
+                    visible: false
                     disable: true
                     children:
                         admin_xapi_setting:
@@ -1056,7 +1059,7 @@ admin:
                 admin_queue_menege:
                     name: 队列
                     group: 2
-                    visable: false
+                    visible: false
                     disable: true
                     children:
                         admin_queue_failed_logs:
@@ -1219,21 +1222,21 @@ web:
                     children:
                         classroom_manage_courses:
                             name: web.classroom.content.courses_side_nav
-                            visable: (canManage)
+                            visible: (canManage)
                             data:
                                 side_nav: courses
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_students:
                             name: web.classroom.content.students_side_nav
-                            visable: (canManage)
+                            visible: (canManage)
                             data:
                                 side_nav: students
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_testpaper:
                             name: web.classroom.content.testpaper_check_side_nav
-                            visable: (canHandle)
+                            visible: (canHandle)
                             data:
                                 side_nav: testpaper-check
                             router_params:

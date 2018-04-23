@@ -13,7 +13,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function searchPostsThreadIds($conditions, $orderbys, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('distinct threadId')
+            ->select('distinct threadId, id')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 

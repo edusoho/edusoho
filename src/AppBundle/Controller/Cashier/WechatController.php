@@ -10,7 +10,7 @@ class WechatController extends PaymentController
 {
     public function wechatJsPayAction(Request $request)
     {
-        if ($request->query->get('orderSn')) {
+        if (!$request->query->get('code', '')) {
             $request->getSession()->set('wechat_pay_params', $request->query->all());
         }
 
@@ -40,7 +40,6 @@ class WechatController extends PaymentController
         }
 
         $params = $request->getSession()->get('wechat_pay_params');
-
         $apiKernel = $this->get('api_resource_kernel');
         $apiRequest = new ApiRequest(
             '/api/trades',
@@ -48,10 +47,11 @@ class WechatController extends PaymentController
             array(),
             array(
                 'gateway' => 'WechatPay_Js',
-                'type' => 'purchase',
+                'type' => empty($params['type']) ? 'purchase' : $params['type'],
                 'openid' => $openid,
-                'orderSn' => $params['orderSn'],
+                'orderSn' => empty($params['orderSn']) ? '' : $params['orderSn'],
                 'coinAmount' => empty($params['coinAmount']) ? 0 : $params['coinAmount'],
+                'amount' => empty($params['amount']) ? 0 : $params['amount'],
                 'payPassword' => empty($params['payPassword']) ? '' : $params['payPassword'],
             ),
             array()

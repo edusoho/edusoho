@@ -8,18 +8,18 @@
   {% endif %}
 {% endif %}
 {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
-    {% include 'export/export-btn.html.twig' with 
-      { 
-        'exportFileName': 'course-students', 
-        'targetFormId': 'course-students-export',
-        'exportClass': 'btn-info btn-sm',
-        'text': 'form.btn.export'|trans ~ 'site.default.student'|trans,
-        'exportWebpack': true
-      } 
-    %}
-    <form id="course-students-export" class="hide">
-      <input type="hidden" name="courseSetId" value="{{ courseSet.id }}">
-      <input type="hidden" name="courseId" value="{{ course.id }}">
-    </form>
+  {% include 'export/export-btn.html.twig' with 
+    { 
+      'exportFileName': 'course-students', 
+      'targetFormId': 'course-students-export',
+      'exportClass': 'btn-info btn-sm',
+      'text': 'form.btn.export'|trans ~ 'site.default.student'|trans,
+      'exportWebpack': true
+    } 
+  %}
+  <form id="course-students-export" class="hide">
+    <input type="hidden" name="courseSetId" value="{{ courseSet.id }}">
+    <input type="hidden" name="courseId" value="{{ course.id }}">
+  </form>
 {% endif %}
 </div>

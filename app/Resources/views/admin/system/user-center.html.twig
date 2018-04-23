@@ -45,6 +45,15 @@
     </div>
 
     <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <div class="text-muted">
+          {{ 'admin.user_center.user_center.uc_connect.help_block' | trans }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
       <div class="col-md-3 control-label"><label>UC_DBHOST</label></div>
       <div class="controls col-md-8">
         <input class="form-control" type="text" value="{{ discuzConfig.uc_dbhost|default('') }}" placeholder="UC_DBHOST" name="discuzConfig[uc_dbhost]">

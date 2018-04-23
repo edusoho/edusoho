@@ -1331,11 +1331,12 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_seq: 任务%seq%
+course.thread.mission_number: 任务%number%
 course.thread.teacher_answer: 教师的答案
 course.thread.form.edit: 编辑话题
 course.thread.form.create: 发表话题
@@ -4275,8 +4276,8 @@ card.info.moneycard: 学习卡
 card.info.moneycard.tips: 学习卡可以用于账户充值
 card.info.moneycard.date_format: Y年n月d日
 card.info.moneycard.use_btn: 立即使用
-card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
-card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
+card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“账户中心—优惠券“
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已经充值到“账户中心—%coinName%账户”
 card.notLogin.receive.tips: 还没有登录，请在登录后领取。
 card.receive.login_view_btn: 登录查看
 
@@ -6783,6 +6784,7 @@ admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口�
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
 admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
 admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
 admin.user_center.Configration.help_block: 如何配置？
@@ -6850,6 +6852,11 @@ admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
 admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.user_center.message_title_name: 私信发送设置
+admin.user_center.message_student_to_student: 允许学员给学员发送私信
+admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
+admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
+admin.user_center.message.setting_tip: 提示：设置仅对PC端有效
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -8315,3 +8322,5 @@ admin.datalab.setting.btn_cancel: 取消
 admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
+
+exception.user_lock: 帐号被封禁
