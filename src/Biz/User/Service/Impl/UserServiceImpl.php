@@ -2070,7 +2070,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getRoleService()
     {
-        return $this->getKernel()->createService('Role:RoleService');
+        return $this->createService('Role:RoleService');
     }
 
     /**
@@ -2078,7 +2078,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getOrgService()
     {
-        return $this->getKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 
     public function getKernel()
