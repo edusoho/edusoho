@@ -1341,6 +1341,18 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals('testLocale', $result['locale']);
     }
 
+    public function testPassApproval()
+    {
+        $user1 = $this->createUser('user1');
+        $this->createApproval($user1['id'], array(
+            'truename' => 'test',
+            'idcard' => '371481199402154559',
+        ));
+
+        $result = $this->getUserService()->passApproval($user1['id']);
+        $this->assertTrue($result);
+    }
+
     public function testFindFriends()
     {
         $user1 = $this->createUser('user1');
@@ -2891,8 +2903,8 @@ class UserServiceTest extends BaseTestCase
     protected function createApproval($userId, $approval = array())
     {
         $sourceFile = __DIR__.'/Fixtures/test.gif';
-        $test1File = $this->getContainer()->getParameter('topxia.upload.private_directory').'/approval/test_test1.gif';
-        $test2File = $this->getContainer()->getParameter('topxia.upload.private_directory').'/approval/test_test2.gif';
+        $test1File = __DIR__.'/Fixtures/test_test1.gif';
+        $test2File = __DIR__.'/Fixtures/test_test2.gif';
 
         copy($sourceFile, $test1File);
         copy($sourceFile, $test2File);
