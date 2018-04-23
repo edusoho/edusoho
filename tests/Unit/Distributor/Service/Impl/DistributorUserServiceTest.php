@@ -170,11 +170,11 @@ class DistributorUserServiceTest extends BaseTestCase
             array(
                 'couponPrice' => '10',
                 'couponExpiryDay' => '1',
-                'tokenExpireDateStr' => (1524324352 + 86400),
+                'tokenExpireDateStr' => '2018-04-23 11:30:22',
             )
         );
 
-        $expectedToken = '123:22221:10:1:-38426805319:c9a10dc1737f63a43d2ca6d155155999:LW38OTHHY7PSHOoW4-s7Uh3jof8=';
+        $expectedToken = '123:22221:10:1:1524367822:c9a10dc1737f63a43d2ca6d155155999:VG0KoFICMOXIOeIZR1zs2R_BwLg=';
         $this->assertEquals($expectedToken, $result);
     }
 
