@@ -22,7 +22,6 @@ class AbstractException extends \Symfony\Component\HttpKernel\Exception\HttpExce
     public static function __callStatic($method, $arg)
     {
         $class = get_called_class();
-        $calld = "\\{$class}::{$method}";
         $code = constant($class.'::'.$method);
 
         return new $class($code);
