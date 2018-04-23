@@ -16,6 +16,6 @@ class TaskByActivityDataTag extends CourseBaseDataTag
             'activityId',
         ));
 
-        return  $this->getTaskService()->getTaskByCourseIdAndActivityId($arguments['courseId'], $arguments['activityId']);
+        return $this->getTaskService()->getTaskByCourseIdAndActivityId($arguments['courseId'], $arguments['activityId']);
     }
 }
