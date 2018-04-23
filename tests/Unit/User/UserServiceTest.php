@@ -3,6 +3,7 @@
 namespace Tests\Unit\User;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
@@ -1232,9 +1233,112 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(array('test1', 'test1'), $code);
     }
 
+    public function testUpdateUserUpdatedTime()
+    {
+        $user1 = $this->createUser('user1');
+        $update = $this->getUserService()->updateUserUpdatedTime($user1['id']);
+        $this->assertNotEmpty($update);
+    }
+
+    public function testVerifyPayPassword()
+    {
+        $user1 = $this->createUser('user1');
+        $result = $this->getUserService()->verifyPassword($user1['id'], 'user');
+        $this->assertFalse($result);
+
+        $result = $this->getUserService()->verifyPassword($user1['id'], 'user1');
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testVerifyPayPasswordWithNonExistUser()
+    {
+        $user1 = $this->createUser('user1');
+        $this->getUserService()->verifyPassword($user1['id'] + 10, 'user');
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testValidateNickname()
+    {
+        ReflectionUtils::invokeMethod($this->getUserService(), 'validateNickname', array(
+            '#$%^&*()(',
+        ));
+    }
+
     public function testInitSystemUsers()
     {
         $this->getUserService()->initSystemUsers();
+    }
+
+    public function testGetUserByType()
+    {
+        $this->createUser('user1');
+        $result = $this->getUserService()->getUserByType('default');
+        $this->assertEquals('default', $result['type']);
+    }
+
+    public function testImportUpdateEmail()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user1['password'] = '123456';
+        $user2['password'] = '123456';
+        $this->getUserService()->importUpdateEmail(array(
+            $user1,
+            $user2,
+        ));
+    }
+
+    public function testCreateInviteCode()
+    {
+        $user1 = $this->createUser('user1');
+        $result = $this->getUserService()->createInviteCode($user1['id']);
+
+        $this->assertNotEmpty($result['inviteCode']);
+    }
+
+    public function testGetUserByInviteCode()
+    {
+        $user1 = $this->createUser('user1');
+        $result = $this->getUserService()->createInviteCode($user1['id']);
+
+        $user = $this->getUserService()->getUserByInviteCode($result['inviteCode']);
+
+        $this->assertEquals($result, $user);
+    }
+
+    public function testFindUserIdsByInviteCode()
+    {
+        $user1 = $this->createUser('user1');
+        $result = $this->getUserService()->createInviteCode($user1['id']);
+        $this->mockBiz(
+            'User:InviteRecordService',
+            array(
+                array(
+                    'functionName' => 'findRecordsByInviteUserId',
+                    'withParams' => array($user1['id']),
+                    'returnValue' => array(
+                        array('id' => 1, 'invitedUserId' => 100),
+                    ),
+                ),
+            )
+        );
+
+        $ids = $this->getUserService()->findUserIdsByInviteCode($result['inviteCode']);
+
+        $this->assertEquals(array(100), $ids);
+    }
+
+    public function testUpdateUserLocale()
+    {
+        $user1 = $this->createUser('user1');
+        $this->getUserService()->updateUserLocale($user1['id'], 'testLocale');
+        $result = $this->getUserService()->getUser($user1['id']);
+        $this->assertEquals('testLocale', $result['locale']);
     }
 
     public function testFindFriends()
