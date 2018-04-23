@@ -7,9 +7,9 @@ use Biz\Distributor\Util\DistributorUtil;
 
 class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl implements DistributorProductService
 {
-    public function getSendType()
+    public function getSendType($data)
     {
-        return 'courseOrder';
+        return 'order.'.$data['status'];
     }
 
     public function getRoutingName()
@@ -36,7 +36,7 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
         try {
             $splitedStr = explode(':', $token);
             $tokenInfo = array(
-                'type' => $this->getSendType(),
+                'type' => 'courseOrder',
                 'product_id' => $splitedStr[1],
                 'valid' => true,
             );
@@ -51,7 +51,7 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     public function generateMockedToken($params)
     {
         $data = array(
-            'type' => $this->getSendType(),
+            'type' => 'courseOrder',
             'course_id' => $params['courseId'],
             'org_id' => '333',
             'merchant_id' => '123',

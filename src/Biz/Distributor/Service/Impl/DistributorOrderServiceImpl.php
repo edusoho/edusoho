@@ -4,7 +4,7 @@ namespace Biz\Distributor\Service\Impl;
 
 class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
 {
-    public function getSendType()
+    public function getSendType($data)
     {
         return 'order';
     }
