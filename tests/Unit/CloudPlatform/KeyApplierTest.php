@@ -4,13 +4,16 @@ namespace Tests\Unit\CloudPlatform;
 
 use Biz\BaseTestCase;
 use Biz\CloudPlatform\KeyApplier;
+use AppBundle\Common\ReflectionUtils;
 
 class KeyApplierTest extends BaseTestCase
 {
     public function testApplyKey()
     {
         $applier = new KeyApplier();
+        ReflectionUtils::setProperty($applier, 'moked', true);
         $result = $applier->applyKey($this->getCurrentUser(), 'opensource', 'apply', 1);
+
         $this->assertEquals('http://api.edusoho.net/v1/keys', $result['url']);
         $this->assertArrayEquals(array(
             'siteName' => 'EduSoho网络课程',

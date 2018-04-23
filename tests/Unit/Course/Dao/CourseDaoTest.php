@@ -74,8 +74,9 @@ class CourseDaoTest extends BaseDaoTestCase
     public function testUpdateMaxRateByCourseSetId()
     {
         $expected = $this->mockDataObject();
-        $result = $this->getDao()->updateMaxRateByCourseSetId(1, array('title' => 'title'));
-        $this->assertEquals('title', $result['title']);
+        $this->getDao()->updateMaxRateByCourseSetId(1, array('updatedTime' => time(), 'maxRate' => 4));
+        $result = $this->getDao()->get($expected['id']);
+        $this->assertEquals(4, $result['maxRate']);
     }
 
     public function testfindCourseSetIncomesByCourseSetIds()

@@ -98,10 +98,6 @@ function asyncLoadFiles() {
           $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_sd.message') + '</span>');
         }
       }
-
-      if (file.type == 'video' && file.metas && file.metas.caption) {
-        $('#upload-file-tr-' + file.id).find('a:first ~ br:first').after('<span class="label label-primary tip">' + Translator.trans('page.video_subtitle.message') + '</span>');
-      }
     }
   });
 }

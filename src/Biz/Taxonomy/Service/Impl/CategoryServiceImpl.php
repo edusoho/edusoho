@@ -203,6 +203,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 $parentId = $parent['parentId'];
             }
 
+            //翻转会重建key索引
             $categories = array_reverse($categories);
 
             return array($rootCagoies, $categories, $activeIds);
@@ -425,21 +426,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         return $category;
-    }
-
-    public function isCategoryCodeAvaliable($code, $exclude = null)
-    {
-        if (empty($code)) {
-            return false;
-        }
-
-        if ($code == $exclude) {
-            return true;
-        }
-
-        $category = $this->getCategoryDao()->getByCode($code);
-
-        return $category ? false : true;
     }
 
     /**

@@ -7,7 +7,9 @@ use AppBundle\Common\CurlToolkit;
 
 class KeyApplier
 {
-    public function applyKey($user, $edition = 'opensource', $source = 'apply', $mock = 0)
+    private $moked;
+
+    public function applyKey($user, $edition = 'opensource', $source = 'apply')
     {
         $setting = $this->getSettingService()->get('storage', array());
         if (!empty($setting['cloud_access_key']) && !empty($setting['cloud_secret_key']) && !empty($setting['cloud_key_applied'])) {
@@ -44,7 +46,7 @@ class KeyApplier
             ),
         );
 
-        $response = empty($mock) ? CurlToolkit::request('POST', $url, json_encode($params), $curlOptions) : array(
+        $response = empty($this->moked) ? CurlToolkit::request('POST', $url, json_encode($params), $curlOptions) : array(
             'url' => $url,
             'params' => $params,
             'curlOptions' => $curlOptions,
@@ -58,11 +60,11 @@ class KeyApplier
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

@@ -8,7 +8,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
@@ -65,7 +65,7 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
-                $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration, 'user');
+                $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration, DistributorCookieToolkit::USER);
 
                 $user = $this->getAuthService()->register($registration);
 
@@ -94,8 +94,7 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                $response = DistributorCookieToolkit::clearCookieToken($request, $response, 'user');
-                $response = DistributorCookieToolkit::clearCookieToken($request, $response, 'course');
+                $response = DistributorCookieToolkit::clearCookieToken($request, $response);
 
                 return $response;
             } catch (ServiceException $se) {
