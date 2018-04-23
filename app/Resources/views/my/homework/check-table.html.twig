@@ -9,7 +9,7 @@
         {% set courseSet = courseSets[paperResult.courseSetId]|default(null) %}
 
         <tr>
-          <td width="55%">
+          <td width="55%" class="vertical-middle">
             {{ task.title|default(null)|plain_text(60) }}
             <div>
               {% if courseSet|default(null) %}
@@ -22,13 +22,11 @@
               <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{ paperResult.beginTime|date('site.date_format'|trans) }}</small>
             </div>
           </td>
-          <td>
-            <td width="20%" class="vertical-middle">
-              {{ web_macro.user_link(user) }} <br>
-              <small class="color-gray">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'my.learning.homework.submit_paper'|trans}}</small>
-            </td>
+          <td width="20%" class="vertical-middle">
+            {{ web_macro.user_link(user) }} <br>
+            <small class="color-gray">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'my.learning.homework.submit_paper'|trans}}</small>
           </td>
-          <td>
+          <td class="vertical-middle">
             {% if status == 'reviewing' %}
               <a class="link-primary" href="{{ path('course_manage_homework_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">{{'my.learning.homework.check_paper'|trans}}</a>
             {% else %}
