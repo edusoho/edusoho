@@ -45,7 +45,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
                     'returnValue' => array(
                         'couponPrice' => 10000,
                         'couponExpiryDay' => 1,
-                        'registable' => true,
+                        'valid' => true,
                         'rewardable' => true,
                     ),
                 ),

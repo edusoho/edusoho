@@ -8,12 +8,12 @@ use AppBundle\Common\TimeMachine;
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 {
     /**
-     * 分销平台的token，只能使用一次
+     * @param token 分销平台的token，只能使用一次
      *
      * @return array(
      *                'couponPrice' => 123, //优惠券，奖励多少分 （单位为分）
      *                'couponExpiryDay' => unix_time, //优惠券有效时间
-     *                'registable'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
+     *                'valid'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
      *                'rewardable' => false  //是否有奖励, 当couponPrice或couponExpiryday=0时, 则注册的用户不会发放优惠券
      *                )
      */
@@ -22,7 +22,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         $splitedStr = explode(':', $token);
 
         $tokenInfo = array(
-            'registable' => false,
+            'valid' => false,
             'rewardable' => false,
         );
 
@@ -31,7 +31,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
             if (!empty($drpService)) {
                 $this->validateExistedToken($token);
                 $parsedInfo = $this->getDrpService()->parseRegisterToken($token);
-                $tokenInfo['registable'] = true;
+                $tokenInfo['valid'] = true;
                 $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
                 if ($tokenExpireTime >= TimeMachine::time()) {
                     $tokenInfo['couponPrice'] = $parsedInfo['coupon_price'];
@@ -42,7 +42,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
                 }
             }
         } catch (\Exception $e) {
-            $this->biz['logger']->error('distributor sign error BaseDistributorServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
+            $this->biz['logger']->error('distributor sign error DistributorUserServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
         }
 
         return $tokenInfo;
@@ -51,6 +51,19 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     public function getSendType()
     {
         return 'user';
+    }
+
+    public function generateMockedToken($params)
+    {
+        $data = array(
+            'merchant_id' => '123',
+            'agency_id' => '22221',
+            'coupon_price' => $params['couponPrice'],
+            'coupon_expiry_day' => $params['couponExpiryDay'],
+        );
+        $tokenExpireDateNum = strtotime($params['tokenExpireDateStr']);
+
+        return $this->encodeToken($data, $tokenExpireDateNum);
     }
 
     protected function convertData($user)

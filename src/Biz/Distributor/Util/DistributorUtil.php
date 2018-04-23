@@ -2,59 +2,44 @@
 
 namespace Biz\Distributor\Util;
 
-use Biz\Distributor\Common\DistributorCookieToolkit;
-use AppBundle\Common\Exception\InvalidArgumentException;
-use Topxia\Service\Common\ServiceKernel;
-
 class DistributorUtil
 {
-    public static function getType($token)
+    /**
+     * MockController 使用，伪造token用
+     *
+     * @param $type 对应 $biz->service('Distributor:Distributor'.ucfirst($type).'Service')
+     * @param $params 对应type使用的service中的 generateMockedToken所需的参数
+     */
+    public static function generateTokenByType($biz, $type, $params)
+    {
+        $distributorService = self::getDistributorServiceByType($biz, $type);
+
+        return $distributorService->generateMockedToken($params);
+    }
+
+    public static function getDistributorServiceByToken($biz, $token)
+    {
+        $type = self::getTypeByToken($token);
+
+        return self::getDistributorServiceByType($biz, $type);
+    }
+
+    public static function getProductIdByToken($token)
     {
         $splitedStr = explode(':', $token);
 
-        return $splitedStr[1] ? $splitedStr[1] : 'course';
+        return $splitedStr[1];
     }
 
-    public static function generateTokenByType($type, $params)
+    public static function getDistributorServiceByType($biz, $type)
     {
-        if (!in_array($type, DistributorCookieToolkit::TYPE)) {
-            return false;
-        }
-
-        switch ($type) {
-            case DistributorCookieToolkit::USER:
-                $data = array(
-                    'merchant_id' => '123',
-                    'agency_id' => '22221',
-                    'coupon_price' => $params['couponPrice'],
-                    'coupon_expiry_day' => $params['couponExpiryDay'],
-                );
-                $tokenExpireDateNum = strtotime($params['tokenExpireDateStr']);
-                break;
-            case DistributorCookieToolkit::COURSE:
-                $data = array(
-                    'org_id' => $params['orgId'],
-                    'type' => $params['type'],
-                    'course_id' => $params['courseId'],
-                    'merchant_id' => '123',
-                );
-                $tokenExpireDateNum = null;
-                break;
-            default:
-                throw new InvalidArgumentException('invalid type!');
-                break;
-        }
-
-        return self::getDistributorUserService()->encodeToken($data, $tokenExpireDateNum);
+        return $biz->service('Distributor:Distributor'.ucfirst($type).'Service');
     }
 
-    protected static function getDistributorUserService()
+    public static function getTypeByToken($token)
     {
-        return self::getServiceKernel()->getBiz()->service('Distributor:DistributorUserService');
-    }
+        $splitedStr = explode(':', $token);
 
-    protected static function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        return $splitedStr[0];
     }
 }

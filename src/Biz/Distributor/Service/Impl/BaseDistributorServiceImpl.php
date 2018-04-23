@@ -13,7 +13,7 @@ use AppBundle\Common\TimeMachine;
 abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl implements DistributorService
 {
     /**
-     * 分销平台的token编码方式
+     * 分销平台的token编码方式, MockController 才使用
      *   注意，$data 内的参数值必须为字符串
      *
      * @param $data, key顺序不能错误
@@ -97,16 +97,18 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
 
     public function batchCreateJobData($jobData)
     {
-        $helper = new BatchCreateHelper($this->getDistributorJobDataDao());
-        foreach ($jobData as $single) {
-            $result = array(
-                'data' => $this->convertData($single),
-                'jobType' => $this->getJobType(),
-                'status' => DistributorJobStatus::PENDING,
-            );
-            $helper->add($result);
+        if (!empty($jobData)) {
+            $helper = new BatchCreateHelper($this->getDistributorJobDataDao());
+            foreach ($jobData as $single) {
+                $result = array(
+                    'data' => $this->convertData($single),
+                    'jobType' => $this->getJobType(),
+                    'status' => DistributorJobStatus::PENDING,
+                );
+                $helper->add($result);
+            }
+            $helper->flush();
         }
-        $helper->flush();
     }
 
     public function getDrpService()

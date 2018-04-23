@@ -2,7 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorUtil;
 use Symfony\Component\HttpFoundation\Request;
 
 class DistributorController extends BaseController
@@ -33,10 +34,20 @@ class DistributorController extends BaseController
         $fields = $request->query->all();
         $homepageUrl = $this->generateUrl('homepage');
         if (!empty($fields['token'])) {
-            list($routingName, $routingParams) = $this->DistributorOrderService()->getRoutingInfo($fields['token']);
-            $response = $this->redirect($this->generateUrl($routingName, $routingParams));
+            $service = DistributorUtil::getDistributorServiceByToken($this->getBiz(), $fields['token']);
+            $response = $this->redirect(
+                $this->generateUrl(
+                    $service->getRoutingName(),
+                    $service->getRoutingParams($fields['token'])
+                )
+            );
 
-            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token'], DistributorCookieToolkit::COURSE, 0); //cookie 随浏览器关闭而失效
+            $response = DistributorCookieToolkit::setTokenToCookie(
+                $response,
+                $fields['token'],
+                DistributorCookieToolkit::PRODUCT_ORDER,
+                0
+            ); //cookie 随浏览器关闭而失效
 
             return $response;
         }
@@ -44,7 +55,7 @@ class DistributorController extends BaseController
         return $this->redirect($homepageUrl);
     }
 
-    protected function DistributorOrderService()
+    protected function getDistributorOrderService()
     {
         return $this->createService('Distributor:DistributorOrderService');
     }

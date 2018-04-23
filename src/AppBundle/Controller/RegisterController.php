@@ -8,7 +8,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
-use Biz\Distributor\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
