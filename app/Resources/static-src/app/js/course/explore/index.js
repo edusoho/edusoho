@@ -2,9 +2,6 @@ echo.init();
 
 $('#live, #free').on('click', event => {
   const $this = $(event.currentTarget);
-  $this.attr('checked', false);
-  $this.attr('checked',true);
-
   window.location.href = $this.val();
 });
 
