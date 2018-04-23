@@ -8,8 +8,11 @@ define(function(require, exports, module) {
         var sendMsg = $('.' + $('.selectedType').val()).html();
         $('.sendOtherMsg').val(sendMsg);
         $('.doc').val($('.' + $('.selectedType').val() + '_doc').html());
-        if ($('.doc').val().indexOf('api-url-editable: true') != -1) {
+        $('.api-url').val('');
 
+        if ($('.doc').val().indexOf('api-url-editable: true') != -1) {
+          $apiInfo = $.parseJSON($('.' + $('.selectedType').val() + '_apiInfo').html());
+          $('.api-url').val($apiInfo['apiUrl']);
         }
       }
     );
