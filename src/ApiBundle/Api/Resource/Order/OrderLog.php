@@ -13,8 +13,6 @@ class OrderLog extends AbstractResource
      */
     public function search(ApiRequest $request, $orderId)
     {
-        $conditions = $request->query->all();
-
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($orderId);
 
         $total = count($orderLogs);
