@@ -2,6 +2,7 @@
 {% block title %}访问被拒绝 - {{ parent() }}{% endblock %}
 
 {% block body %}
+  {% set code =  exception.code|default(0) %}
   <div class="container">
     <div class="panel panel-default error-panel">
       <div class="panel-heading">
@@ -10,10 +11,10 @@
       <div class="panel-body">
         <div class="well">
           <p>
-            {% if exception.message|default('') %}
-              {{ exception.message }}
+            {% if code > 0 %}
+              {{ exception.message|trans|default('你没有权限访问该页面！') }} {{ code }}
             {% else %}
-               你没有权限访问该页面！
+              你没有权限访问该页面！
             {% endif %}
           </p>
           <p>请确认您的来源链接是否正确？是否拥有该权限？</p>

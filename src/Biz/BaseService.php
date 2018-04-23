@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\AbstractException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -110,6 +111,15 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function createNotFoundException($message = '')
     {
         return new NotFoundException($message);
+    }
+
+    protected function createNewException($e)
+    {
+        if ($e instanceof AbstractException) {
+            throw $e;
+        }
+
+       throw new \Exception();
     }
 
     /**

@@ -8323,4 +8323,7 @@ admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
 
-exception.user_lock: 帐号被封禁
+exception.common_error: 服务器内部错误
+exception.article.notfound: 资讯不存在
+exception.user.unlogin: 未登陆，请登陆后操作
+exception.form.expire: 页面已过期，请重新提交数据！
