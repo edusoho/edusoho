@@ -1985,7 +1985,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getCardService()
     {
-        return $this->getKernel()->createService('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     /**
@@ -1993,7 +1993,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getCouponService()
     {
-        return $this->getKernel()->createService('Coupon:CouponService');
+        return $this->createService('Coupon:CouponService');
     }
 
     /**
