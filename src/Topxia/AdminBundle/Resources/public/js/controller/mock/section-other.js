@@ -4,9 +4,16 @@ define(function(require, exports, module) {
 
     $('.selectedType').change(
       function() {
+        $('.doc').attr('disabled', true);
         var sendMsg = $('.' + $('.selectedType').val()).html();
         $('.sendOtherMsg').val(sendMsg);
         $('.doc').val($('.' + $('.selectedType').val() + '_doc').html());
+        $('.api-url').val('');
+
+        if ($('.doc').val().indexOf('api-url-editable: true') != -1) {
+          $apiInfo = $.parseJSON($('.' + $('.selectedType').val() + '_apiInfo').html());
+          $('.api-url').val($apiInfo['apiUrl']);
+        }
       }
     );
 
@@ -23,6 +30,10 @@ define(function(require, exports, module) {
         for (let index = 0; index < copiedFields.length; index++) {
           const element = copiedFields[index];
           $postData[element] = $apiInfo[element];
+        }
+
+        if ($('.doc').val().indexOf('api-url-editable: true') != -1) {
+          $postData['apiUrl'] = $('.api-url').val();
         }
 
         $.post(
