@@ -136,15 +136,15 @@ class LiveActivityServiceTest extends BaseTestCase
     {
         $liveTime = time() + 30 * 60;
         $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
-        $this->assertTrue($result);
+        $this->assertEquals(1, $result);
 
         $liveTime = time() + 5 * 60;
         $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
-        $this->assertFalse($result);
+        $this->assertEquals(0, $result);
 
         $liveTime = time() - 5 * 60;
         $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
-        $this->assertFalse($result);
+        $this->assertEquals(0, $result);
     }
 
     public function testIsRoomType()
