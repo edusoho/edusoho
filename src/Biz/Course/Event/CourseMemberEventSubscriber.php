@@ -18,6 +18,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use AppBundle\Common\ArrayToolkit;
 
 class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -83,12 +84,8 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             return;
         }
 
-        foreach ($members as $member) {
-            $info = array(
-                'deadline' => $member['deadline'],
-            );
-            $this->getCourseMemberService()->createMemberByClassroomJoined($course['id'], $member['userId'], $classroomId, $info);
-        }
+        $memberIds = ArrayToolkit::column($members, 'userId');
+        $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds, $classroomId);
     }
 
     private function countStudentMember(Event $event)
