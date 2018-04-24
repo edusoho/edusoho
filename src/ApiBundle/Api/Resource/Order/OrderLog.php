@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 
 class OrderLog extends AbstractResource
 {
@@ -19,11 +20,20 @@ class OrderLog extends AbstractResource
         $offset = 0;
         $limit = $total;
 
-        $this->getOCUtil()->replaceWithObjValue(
-            $orderLogs,
-            array('user_id' => array('nickname' => 'nickname', 'mobile' => 'verifiedMobile')),
-            'user'
-        );
+        if (!empty($orderLogs)) {
+            $this->getOCUtil()->replaceWithObjValue(
+                $orderLogs,
+                array('user_id' => array('nickname' => 'nickname', 'mobile' => 'verifiedMobile')),
+                'user'
+            );
+
+            $dicts = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('orderStatus');
+            $prefixDicts = ArrayToolkit::appendKeyPrefix($dicts, 'order.');
+
+            foreach ($orderLogs as &$orderLog) {
+                $orderLog['statusName'] = $prefixDicts[$orderLog['status']];
+            }
+        }
 
         return $this->makePagingObject($orderLogs, $total, $offset, $limit);
     }
