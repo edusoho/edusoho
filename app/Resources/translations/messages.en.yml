@@ -4650,6 +4650,7 @@ admin.sensitive_manage.add_sensitive_btn: Add
 admin.sensitive_manage.error: Error
 admin.sensitive_manage.prompt: Tip
 admin.sensitive_manage.prompt.tips: 'The user has no permissions to review the menu'
+admin.sensitive_manage.existed: 'The sensitive words already existed:%keywords%'
 admin.operation_article.category_option: '--In Category--'
 admin.operation_article.property_option: '--Property--'
 admin.operation_article.status_option: '--Publish Status--'
