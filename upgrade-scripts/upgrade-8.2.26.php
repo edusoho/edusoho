@@ -102,6 +102,12 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    public function fillMediaSource()
+    {
+        $this->getConnection()->exec("UPDATE `course_task` SET mediaSource = 'self' WHERE mediaSource = '' AND type IN ('video','audio','doc','ppt');");
+        return 1;
+    }
+
     protected function generateIndex($step, $page)
     {
         return $step * 1000000 + $page;
