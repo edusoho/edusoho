@@ -10,7 +10,7 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
 {
     public function testGetSendType()
     {
-        $this->assertEquals('courseOrder', $this->getDistributorCourseOrderService()->getSendType());
+        $this->assertEquals('order.refunded', $this->getDistributorCourseOrderService()->getSendType(array('status' => 'refunded')));
     }
 
     public function testGetRoutingName()

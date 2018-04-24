@@ -118,8 +118,10 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
 
     /**
      * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 user
+     *
+     * @param $data distributor_job_data 内的data属性
      */
-    abstract public function getSendType();
+    abstract public function getSendType($data);
 
     /**
      * 保存数据时，转化数据用，转为 distributor_job_data 内的data属性

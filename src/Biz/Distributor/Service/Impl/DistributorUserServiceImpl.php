@@ -48,7 +48,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         return $tokenInfo;
     }
 
-    public function getSendType()
+    public function getSendType($data)
     {
         return 'user';
     }
