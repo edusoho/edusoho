@@ -46,7 +46,7 @@
   
   <div class="es-filter">
     <ul class="nav nav-sort">
-      <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li>
+      <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li>
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}" class="{% if (orderBy == 'hotSeq') %} active {% endif %}">{{'site.datagrid.filter.hotest'|trans}}</a></li>
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'site.datagrid.filter.recommended'|trans}}</a></li>
     </ul>
