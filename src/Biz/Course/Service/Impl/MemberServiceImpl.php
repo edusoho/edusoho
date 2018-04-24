@@ -643,7 +643,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return time() + $refundSetting['maxRefundDays'] * 24 * 60 * 60;
     }
 
-    public function batchBecomeStudents($courseId, $memberIds)
+    public function batchBecomeStudents($courseId, $memberIds, $classroomId = 0)
     {
         if (empty($memberIds)) {
             return array();
@@ -686,6 +686,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
         $membersNotes = ArrayToolkit::group($courseNotes, 'userId');
 
+        $classroomMembers = array();
+        if ($classroomId > 0) {
+            $classroomMembers = $this->getClassroomService()->findClassroomStudents($classroomId, 0, PHP_INT_MAX);
+            $classroomMembers = ArrayToolkit::index($classroomMembers, 'userId');
+        }
+
         $newMembers = array();
         foreach ($beAddUserIds as $userId) {
             $member = array(
@@ -693,14 +699,21 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'userId' => $userId,
                 'courseSetId' => $course['courseSetId'],
                 'orderId' => 0,
-                'deadline' => $this->getMemberDeadline($course),
                 'levelId' => 0,
                 'role' => 'student',
                 'learnedNum' => 0,
                 'noteNum' => 0,
                 'noteLastUpdateTime' => 0,
                 'createdTime' => time(),
+                'joinedType' => $classroomId > 0 ? 'classroom' : 'course',
             );
+
+            if ($classroomId > 0 && !empty($classroomMembers[$userId])) {
+                $member['classroomId'] = $classroomId;
+                $member['deadline'] = $classroomMembers[$userId]['deadline'];
+            } else {
+                $member['deadline'] = $this->getMemberDeadline($course);
+            }
 
             if (!empty($membersNotes[$userId])) {
                 $member['noteNum'] = count($membersNotes[$userId]);

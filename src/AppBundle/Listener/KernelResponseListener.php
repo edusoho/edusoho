@@ -128,18 +128,18 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
         return $isFillUserInfo;
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->container->get('biz');
     }
 }

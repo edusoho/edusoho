@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Biz\User\UserException;
 
 class ExceptionListener
 {
@@ -30,12 +30,12 @@ class ExceptionListener
         $exception = $event->getException();
         $statusCode = $this->getStatusCode($exception);
 
+        $user = $this->getUser();
         $request = $event->getRequest();
+
         if (!$request->isXmlHttpRequest()) {
             $this->setTargetPath($request);
             $exception = $this->convertException($exception);
-            $statusCode = $this->getStatusCode($exception);
-            $user = $this->getUser();
             if (Response::HTTP_FORBIDDEN === $statusCode && empty($user)) {
                 $response = new RedirectResponse($this->container->get('router')->generate('login'));
                 $event->setResponse($response);
@@ -55,22 +55,18 @@ class ExceptionListener
             return;
         }
 
-        $error = array('name' => 'Error');
+        $error = array(
+            'message' => $this->trans($exception->getMessage()),
+            'code' => $exception->getCode(),
+        );
 
-        if ($this->container->get('kernel')->isDebug()) {
-            $error['message'] = $exception->getMessage();
+        $debug = $this->container->get('kernel')->isDebug();
+        if ($debug) {
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
-        } else {
-            $error['message'] = 'Request occurs an error';
         }
-
-        if (403 === $statusCode) {
-            $user = $this->getUser($event);
-            if ($user) {
-                $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
-            } else {
-                $error = array('name' => 'Unlogin', 'message' => $this->getServiceKernel()->trans('当前操作，需要登录！'));
-            }
+        //兼容老代码
+        if (403 === $statusCode && empty($user)) {
+            $error['code'] = UserException::UN_LOGIN;
         }
 
         $response = new JsonResponse(array('error' => $error), $statusCode);
@@ -127,8 +123,8 @@ class ExceptionListener
         return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
-    protected function getServiceKernel()
+    protected function trans($id, array $parameters = array())
     {
-        return ServiceKernel::instance();
+        return $this->container->get('translator')->trans($id, $parameters);
     }
 }
