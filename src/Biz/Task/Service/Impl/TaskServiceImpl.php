@@ -23,7 +23,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      * @var array
      *            包含序列化字段的学习类型，mediaType
      */
-    private static $mediaList = array('video', 'audio', 'doc', 'ppt');
+    private static $mediaList = array('video', 'audio', 'doc', 'ppt', 'flash');
 
     public function getTask($id)
     {
