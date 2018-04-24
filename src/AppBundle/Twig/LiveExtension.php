@@ -74,7 +74,7 @@ class LiveExtension extends \Twig_Extension
         if (empty($roomTypes)) {
             return array();
         }
-        
+
         if (count($roomTypes) >= 2) {
             return $default;
         } else {
@@ -87,6 +87,7 @@ class LiveExtension extends \Twig_Extension
         $client = new EdusohoLiveClient();
         try {
             $result = $client->getLiveAccount();
+
             return $result['roomType'];
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return array();
