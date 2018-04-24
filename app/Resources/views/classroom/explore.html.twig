@@ -1,7 +1,15 @@
 {% extends 'layout.html.twig' %}
 {% set bodyClass = 'classroom-list-page bg-blank' %}
-{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{'category.all_category'|trans}}{% endif %}{% endblock %}
-{% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
+
+{% block keywords %}
+  {{ categoryArray.name|default('category.all_category'|trans) }}
+  {% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}
+{% endblock %}
+
+{% block description %}
+  {{ categoryArray.description|default('')|striptags|trim|plain_text(100) }}
+{% endblock %}
+
 {% block title %}{{ categoryArray.name|default('category.all_category'|trans)  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
 {% endblock %}
 
@@ -29,13 +37,18 @@
 {% endblock %}
 {% block content %}
   {% set price = filter.price|default('all')%}
-  {% set orderBy = orderBy|default('createdTime')%}
+  {% set orderBy = app.request.query.get('orderBy')|default('createdTime')%}
   {% set currentLevelId = filter.currentLevelId|default('all')%}
+  {% set subCategory = app.request.query.get('subCategory', '') %}
+  {% set thirdLevelCategory = app.request.query.get('thirdLevelCategory', '') %}
 
-  {{ render(controller('AppBundle:Category:treeNav',{category:category, tags:tags, path:path, filter:{price: price,currentLevelId: currentLevelId},orderBy:orderBy,group:'classroom'})) }}
+  {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'classroom'})) }}
+  
   <div class="es-filter">
     <ul class="nav nav-sort">
-      <li><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}" class="{% if (orderBy == 'hotSeq') %} active {% endif %}">{{'site.datagrid.filter.hotest'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'site.datagrid.filter.recommended'|trans}}</a></li>
+      <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li>
+      <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}" class="{% if (orderBy == 'hotSeq') %} active {% endif %}">{{'site.datagrid.filter.hotest'|trans}}</a></li>
+      <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'site.datagrid.filter.recommended'|trans}}</a></li>
     </ul>
     <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
@@ -45,9 +58,9 @@
             {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
-          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'category.all_category'|trans}}</a></li>
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'category.all_category'|trans}}</a></li>
           {% for level in levels %}
-            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
           </ul>
         </div>
@@ -55,9 +68,9 @@
       <label class="checkbox-inline hidden-xs">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
-          {{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
         "> {{'explore.classroom.free_name'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
       </label>
