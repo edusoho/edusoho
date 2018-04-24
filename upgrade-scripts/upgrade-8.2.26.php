@@ -104,7 +104,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function fillMediaSource()
     {
-        $this->getConnection()->exec("UPDATE `course_task` SET mediaSource = 'self' WHERE mediaSource = '' AND type IN ('video','audio','doc','ppt');");
+        $this->getConnection()->exec("UPDATE `course_task` SET mediaSource = 'self' WHERE mediaSource = '' AND type IN ('video','audio','doc','ppt','flash');");
         return 1;
     }
 
