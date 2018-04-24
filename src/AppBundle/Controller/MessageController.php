@@ -38,13 +38,23 @@ class MessageController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
-        if ($result) {
-            $response = array('success' => false, 'message' => 'json_response.receiver_not_exist.message');
-        } elseif ($currentUser['nickname'] == $nickname) {
+        $response = array('success' => true, 'message' => '');
+
+        if ($currentUser['nickname'] == $nickname) {
             $response = array('success' => false, 'message' => 'json_response.cannot_send_message_self.message');
-        } else {
-            $response = array('success' => true, 'message' => '');
+
+            return $this->createJsonResponse($response);
+        }
+
+        $user = $this->getUserService()->getUserByNickname($nickname);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => 'json_response.receiver_not_exist.message');
+
+            return $this->createJsonResponse($response);
+        }
+
+        if (!$this->getWebExtension()->canSendMessage($user['id'])) {
+            $response = array('success' => false, 'message' => 'json_response.receiver_not_allowed.message');
         }
 
         return $this->createJsonResponse($response);
