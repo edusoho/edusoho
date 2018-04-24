@@ -24,7 +24,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         //预处理内容
         $text = strip_tags($text);
         $text = $this->semiangleTofullangle($text);
-        $text = $this->plainTextFilter($text, true);
+        $text = $this->plainTextFilter($text);
 
         $rows = $this->getSensitiveDao()->findByState('banned');
 
@@ -37,7 +37,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $chunkKeywords = array_chunk($keywords, 100);
 
         foreach ($chunkKeywords as $chunkKeyword) {
-            $pattern = '/('.implode('|', $chunkKeyword).')/';
+            $pattern = '/('.implode('|', $chunkKeyword).')/i';
             $matched = preg_match($pattern, $text, $match);
             if ($matched) {
                 goto last;
@@ -89,7 +89,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $matcheds = 0;
         $replacedText = $text;
         foreach ($chunkKeywords as $chunkKeyword) {
-            $pattern = '/('.implode('|', $chunkKeyword).')/';
+            $pattern = '/('.implode('|', $chunkKeyword).')/i';
             $matched = preg_match_all($pattern, $text, $match);
             if ($matched) {
                 $matchs = array_merge($matchs, $match[0]);
@@ -131,7 +131,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     {
         //预处理内容
         $text = $this->semiangleTofullangle($text);
-        $text = $this->plainTextFilter($text, true);
+        $text = $this->plainTextFilter($text);
 
         $rows = $this->getSensitiveDao()->findAllKeywords();
 
@@ -144,7 +144,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $chunkKeywords = array_chunk($keywords, 100);
 
         foreach ($chunkKeywords as $chunkKeyword) {
-            $pattern = '/('.implode('|', $chunkKeyword).')/';
+            $pattern = '/('.implode('|', $chunkKeyword).')/i';
             $matched = preg_match($pattern, $text, $match);
             if ($matched) {
                 goto last;
@@ -249,18 +249,13 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
      */
     private function plainTextFilter($text, $strictmodel = false)
     {
+        $text = trim(str_replace('&nbsp;', ' ', $text));
         if ($strictmodel) {
-            $text = preg_replace('/[^\x{4e00}-\x{9fa5}]/iu', '', $text);
             //严格模式，仅保留中文
-        } else {
-            $text = preg_replace('/[^a-zA-Z0-9\x{4e00}-\x{9fa5}]/iu', '', $text);
-            //非严格模式，保留中文汉子，数字
+            $text = preg_replace('/[^\x{4e00}-\x{9fa5}]/iu', '', $text);
         }
-
-        $text = str_replace('&nbsp;', ' ', $text);
-        $text = trim($text);
-
-        return $text;
+        //非严格模式，保留中文汉子，数字
+        return preg_replace('/[^a-zA-Z0-9\x{4e00}-\x{9fa5}]/iu', '', $text);
     }
 
     /**
