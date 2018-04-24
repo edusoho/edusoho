@@ -14,21 +14,21 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
-        if ($filter == 'normal') {
+        if ('normal' == $filter) {
             $conditions['parentId'] = 0;
         }
 
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $conditions['parentId_GT'] = 0;
         }
 
-        if ($filter == 'vip') {
+        if ('vip' == $filter) {
             $conditions['vipLevelIdGreaterThan'] = 1;
             $conditions['parentId'] = 0;
         }
 
         foreach (array('categoryId', 'status', 'title', 'creator') as $value) {
-            if (isset($conditions[$value]) && $conditions[$value] == '') {
+            if (isset($conditions[$value]) && '' == $conditions[$value]) {
                 unset($conditions[$value]);
             }
         }
@@ -36,12 +36,12 @@ class CourseController extends BaseController
         $conditions = $this->fillOrgCode($conditions);
 
         $coinSetting = $this->getSettingService()->get('coin');
-        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1 && $coinSetting['cash_model'] == 'currency';
+        $coinEnable = isset($coinSetting['coin_enabled']) && 1 == $coinSetting['coin_enabled'] && 'currency' == $coinSetting['cash_model'];
 
         if (isset($conditions['chargeStatus'])) {
-            if ($conditions['chargeStatus'] == 'free') {
+            if ('free' == $conditions['chargeStatus']) {
                 $conditions['price'] = '0.00';
-            } elseif ($conditions['chargeStatus'] == 'charge') {
+            } elseif ('charge' == $conditions['chargeStatus']) {
                 $conditions['price_GT'] = '0.00';
             }
         }
@@ -67,7 +67,7 @@ class CourseController extends BaseController
 
         $classrooms = array();
         $vips = array();
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds($courseSetIds);
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
 
@@ -75,7 +75,7 @@ class CourseController extends BaseController
                 $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
-        } elseif ($filter == 'vip') {
+        } elseif ('vip' == $filter) {
             if ($this->isPluginInstalled('Vip')) {
                 $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
                 $vips = ArrayToolkit::index($vips, 'id');
@@ -129,15 +129,15 @@ class CourseController extends BaseController
         $searchCourseSetsNum = count($courseSets);
 
         foreach ($courseSets as $courseSet) {
-            if ($courseSet['status'] == 'published') {
+            if ('published' == $courseSet['status']) {
                 ++$publishedCourseSetsNum;
             }
 
-            if ($courseSet['status'] == 'closed') {
+            if ('closed' == $courseSet['status']) {
                 ++$closedCourseSetsNum;
             }
 
-            if ($courseSet['status'] == 'draft') {
+            if ('draft' == $courseSet['status']) {
                 ++$unPublishedCourseSetsNum;
             }
         }
@@ -196,7 +196,7 @@ class CourseController extends BaseController
 
     public function checkPasswordAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $password = $request->request->get('password');
             $currentUser = $this->getUser();
             $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
@@ -233,14 +233,14 @@ class CourseController extends BaseController
         $ref = $request->query->get('ref');
         $filter = $request->query->get('filter');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $number = $request->request->get('number');
 
             $courseSet = $this->getCourseSetService()->recommendCourse($id, $number);
 
             $user = $this->getUserService()->getUser($courseSet['creator']);
 
-            if ($ref == 'recommendList') {
+            if ('recommendList' == $ref) {
                 return $this->render('admin/course-set/course-recommend-tr.html.twig', array(
                     'courseSet' => $courseSet,
                     'user' => $user,
@@ -261,13 +261,13 @@ class CourseController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->cancelRecommendCourse($id);
 
-        if ($target == 'recommend_list') {
+        if ('recommend_list' == $target) {
             return $this->forward('AppBundle:Admin/admin/course/recommendList', array(
                 'request' => $request,
             ));
         }
 
-        if ($target == 'normal_index') {
+        if ('normal_index' == $target) {
             return $this->renderCourseTr($id, $request);
         }
     }
@@ -329,7 +329,7 @@ class CourseController extends BaseController
         );
 
         $file = '';
-        if ($start == 0) {
+        if (0 == $start) {
             $file = ExportHelp::addFileTitle($request, 'course_tasks', $title);
         }
 
@@ -366,15 +366,15 @@ class CourseController extends BaseController
         foreach ($originaTasks as $task) {
             $exportTask = '';
 
-            if ($task['type'] == 'text') {
+            if ('text' == $task['type']) {
                 $exportTask .= $task['title'] ? $task['title'].'(图文),' : '-'.',';
-            } elseif ($task['type'] == 'video') {
+            } elseif ('video' == $task['type']) {
                 $exportTask .= $task['title'] ? $task['title'].'(视频),' : '-'.',';
-            } elseif ($task['type'] == 'audio') {
+            } elseif ('audio' == $task['type']) {
                 $exportTask .= $task['title'] ? $task['title'].'(音频),' : '-'.',';
-            } elseif ($task['type'] == 'testpaper') {
+            } elseif ('testpaper' == $task['type']) {
                 $exportTask .= $task['title'] ? $task['title'].'(试卷),' : '-'.',';
-            } elseif ($task['type'] == 'ppt') {
+            } elseif ('ppt' == $task['type']) {
                 $exportTask .= $task['title'] ? $task['title'].'(ppt),' : '-'.',';
             } else {
                 $exportTask .= $task['title'] ? $task['title'].',' : '-'.',';
@@ -383,12 +383,15 @@ class CourseController extends BaseController
             $exportTask .= $task['studentNum'] ? $task['studentNum'].',' : '-'.',';
             $exportTask .= $task['finishedNum'] ? $task['finishedNum'].',' : '-'.',';
 
-            $learnedTime = (int) ($task['learnedTime']);
+            $studentNum = (int) $task['studentNum'];
+            $learnedTime = $studentNum ? floor((int) $task['learnedTime'] / $studentNum) : (int) $task['learnedTime'];
+            $watchTime = empty($task['watchTime']) ? '' : ($studentNum ? floor((int) $task['watchTime'] / $studentNum) : (int) $task['watchTime']);
+
             $exportTask .= $learnedTime ? $learnedTime.',' : '-'.',';
 
             $exportTask .= !empty($task['length']) ? $task['length'].',' : '-'.',';
 
-            $exportTask .= !empty($task['watchTime']) ? $task['watchTime'].',' : '-'.',';
+            $exportTask .= $watchTime ? $watchTime.',' : '-'.',';
 
             $exportTask .= !empty($task['score']) ? $task['score'].',' : '-'.',';
 
@@ -407,7 +410,7 @@ class CourseController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $courseTitle = $course['isDefault'] == 1 ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
+        $courseTitle = 1 == $course['isDefault'] ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
         $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
@@ -426,19 +429,19 @@ class CourseController extends BaseController
         $conditions = $request->query->all();
         $conditions['parentId'] = 0;
 
-        if (isset($conditions['categoryId']) && $conditions['categoryId'] == '') {
+        if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
             unset($conditions['categoryId']);
         }
 
-        if (isset($conditions['status']) && $conditions['status'] == '') {
+        if (isset($conditions['status']) && '' == $conditions['status']) {
             unset($conditions['status']);
         }
 
-        if (isset($conditions['title']) && $conditions['title'] == '') {
+        if (isset($conditions['title']) && '' == $conditions['title']) {
             unset($conditions['title']);
         }
 
-        if (isset($conditions['creator']) && $conditions['creator'] == '') {
+        if (isset($conditions['creator']) && '' == $conditions['creator']) {
             unset($conditions['creator']);
         }
 
@@ -512,14 +515,14 @@ class CourseController extends BaseController
                 $task['watchTime'] = round($watchTime / 60);
             }
 
-            if ($task['type'] == 'testpaper' && !empty($task['activity'])) {
+            if ('testpaper' == $task['type'] && !empty($task['activity'])) {
                 $activity = $task['activity'];
                 $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
                     array('testId' => $activity['mediaId'])
                 );
 
-                $task['score'] = $paperNum == 0 ? 0 : intval($score / $paperNum);
+                $task['score'] = 0 == $paperNum ? 0 : intval($score / $paperNum);
             }
 
             $task['finishedNum'] = $finishedNum;
@@ -548,7 +551,7 @@ class CourseController extends BaseController
         $classrooms = array();
         $vips = array();
 
-        if ($fields['filter'] == 'classroom') {
+        if ('classroom' == $fields['filter']) {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
 
@@ -556,7 +559,7 @@ class CourseController extends BaseController
                 $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
-        } elseif ($fields['filter'] == 'vip') {
+        } elseif ('vip' == $fields['filter']) {
             if ($this->isPluginInstalled('Vip')) {
                 $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
                 $vips = ArrayToolkit::index($vips, 'id');
@@ -604,11 +607,11 @@ class CourseController extends BaseController
 
             return array('success' => true, 'message' => $message);
         } else {
-            if ($type == 'homeworks' || $type == 'exercises') {
+            if ('homeworks' == $type || 'exercises' == $type) {
                 $message = $dataDictionary[$type].'数据删除失败或插件未安装或插件未升级';
 
                 return array('success' => false, 'message' => $message);
-            } elseif ($type == 'course') {
+            } elseif ('course' == $type) {
                 $message = $dataDictionary[$type].'数据删除';
 
                 return array('success' => false, 'message' => $message);
