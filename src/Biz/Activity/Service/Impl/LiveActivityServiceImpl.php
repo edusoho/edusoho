@@ -89,6 +89,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $liveActivity['liveId'] = $live['id'];
                 $liveActivity['liveProvider'] = $live['provider'];
                 $liveActivity['roomCreated'] = 1;
+                $liveActivity['roomType'] = empty($fields['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $fields['roomType'];
 
                 $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
             }
