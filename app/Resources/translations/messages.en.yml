@@ -1654,7 +1654,6 @@ course.live_lesson_manage.live_length.input_placeholder: Duration
 course.live_lesson_manage.live_length.minutes: Minutes
 
 course.live_activity.room_type: 授课形式
-course.live_activity.room_type_tip: 授课类型发布后不能修改
 course.live_activity.large_room_type: Large
 course.live_activity.small_room_type: Small
 

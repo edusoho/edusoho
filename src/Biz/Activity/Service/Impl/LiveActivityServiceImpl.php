@@ -61,14 +61,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             throw $this->createServiceException($error);
         }
 
-        if (empty($activity['roomType']) || !$this->isRoomType($activity['roomType'])) {
-            throw $this->createServiceException('Argument liveRoom error');
+        if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
+            throw $this->createServiceException('Argument room type error');
         }
 
         $liveActivity = array(
             'liveId' => $live['id'],
             'liveProvider' => $live['provider'],
-            'roomType' => $activity['roomType'],
+            'roomType' => empty($activity['roomType']) ? 'large' : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
         );
 
@@ -105,14 +105,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $liveParams['endTime'] = (string) ($fields['startTime'] + $fields['length'] * 60);
             }
 
-            if ($this->canUpdateRoomType($activity['startTime'])) {
+            if (!empty($fields['roomType']) && $this->canUpdateRoomType($activity['startTime'])) {
                 $liveParams['roomType'] = $fields['roomType'];
             }
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
 
-        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
+        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId', 'roomType'));
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
@@ -186,10 +186,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $disableSeconds = 10 * 60;
 
         if ($timeDiff < 0 || ($timeDiff > 0 && $timeDiff <= $disableSeconds)) {
-            return false;
+            return 0;
         }
 
-        return true;
+        return 1;
     }
 
     protected function isRoomType($liveRoomType)
@@ -244,7 +244,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             throw $this->createNotFoundException('教师不存在！');
         }
 
-        if (empty($activity['roomType']) || !$this->isRoomType($activity['roomType'])) {
+        if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
             throw $this->createServiceException('Argument roomType error');
         }
 
@@ -268,7 +268,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
             'callback' => $callbackUrl,
-            'roomType' => $activity['roomType'],
+            'roomType' => empty($activity['roomType']) ? '' : $activity['roomType'],
         ));
 
         return $live;
