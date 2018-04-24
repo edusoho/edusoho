@@ -68,7 +68,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $liveActivity = array(
             'liveId' => $live['id'],
             'liveProvider' => $live['provider'],
-            'roomType' => empty($activity['roomType']) ? 'large' : $activity['roomType'],
+            'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
         );
 
@@ -268,7 +268,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
             'callback' => $callbackUrl,
-            'roomType' => empty($activity['roomType']) ? '' : $activity['roomType'],
+            'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
         ));
 
         return $live;
