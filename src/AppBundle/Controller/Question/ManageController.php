@@ -64,8 +64,11 @@ class ManageController extends BaseController
 
         $user = $this->getUser();
         $searchCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-
-        $showTasks = $this->getTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
+        $conditions = array(
+            'courseId' => $request->query->get('courseId', 0),
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
+        );
+        $showTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
         $showTasks = ArrayToolkit::index($showTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(
