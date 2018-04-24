@@ -709,6 +709,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             );
 
             if ($classroomId > 0 && !empty($classroomMembers[$userId])) {
+                $member['classroomId'] = $classroomId;
                 $member['deadline'] = $classroomMembers[$userId]['deadline'];
             } else {
                 $member['deadline'] = $this->getMemberDeadline($course);
