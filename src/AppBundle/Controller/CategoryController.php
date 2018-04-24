@@ -92,7 +92,7 @@ class CategoryController extends BaseController
     public function treeNavAction(Request $request, $category, $tags, $group = 'course')
     {
         $selectedSubCategory = $request->query->get('subCategory', '');
-        $thirdLevelCategory = $request->query->get('thirdLevelCategory', '');
+        $thirdLevelCategory = $request->query->get('selectedthirdLevelCategory', '');
 
         $categories = $this->makeCategories($group);
         $tagGroups = $this->makeTags();
