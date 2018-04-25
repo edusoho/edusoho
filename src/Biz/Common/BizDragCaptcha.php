@@ -14,7 +14,11 @@ class BizDragCaptcha extends BizAware
 
     const JIGSAW_WIDTH = 50;
 
-    private $tokenType = 'drag_captcha';
+    const DEVIATION = 0.5;
+
+    const TOKENTIMES = 5;
+
+    const TOKENTYPE = 'drag_captcha';
 
     public function generate($options = array())
     {
@@ -28,9 +32,9 @@ class BizDragCaptcha extends BizAware
         $options = $this->setJigsawPosition($options);
         $jigsaw = $this->getJigsaw($options);
 
-        $token = $this->getTokenService()->makeToken($this->tokenType, array(
-            'times' => 10,
-            'duration' => 60 * 30,
+        $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
+            'times' => self::TOKENTIMES + 1,
+            'duration' => 60 * 10,
             'userId' => 0,
             'data' => $options,
         ));
@@ -41,21 +45,34 @@ class BizDragCaptcha extends BizAware
         );
     }
 
-    public function check($captchaId, $phrase)
+    public function checkByServer($token, $jigsaw)
     {
-        $token = $this->getTokenService()->verifyToken($this->tokenType, $captchaId);
-
-        if (empty($token)) {
-            return self::STATUS_INVALID;
+        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
+        if (!$this->validateJigsaw($token, $jigsaw)) {
+            throw new \Exception();
         }
 
-        $remainedTimes = $token['remainedTimes'];
+        return true;
+    }
 
-        if (0 == $remainedTimes) {
+    public function check($token, $jigsaw)
+    {
+        // 由于前端后端都要消耗token使用次数，所以验证正确之后，必须保证剩余验证次数大于一次
+        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
+        if (empty($token)) {
             return self::STATUS_EXPIRED;
         }
 
-        // return $token['data']['phrase'] == $phrase ? self::STATUS_SUCCESS : self::STATUS_INVALID;
+        if ($this->validateJigsaw($token, $jigsaw)) {
+            return $token['remainedTimes'] > 2 ? self::STATUS_INVALID : self::STATUS_EXPIRED;
+        }
+
+        return self::STATUS_SUCCESS;
+    }
+
+    private function validateJigsaw($token, $jigsaw)
+    {
+        return abs($jigsaw - $token['data']['positionX']) > self::DEVIATION;
     }
 
     public function getBackground($token)

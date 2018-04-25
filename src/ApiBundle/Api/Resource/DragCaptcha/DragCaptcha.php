@@ -32,14 +32,14 @@ class DragCaptcha extends AbstractResource
     /**
      * @ApiConf(isRequiredAuth=false)
      */
-    public function get(ApiRequest $request, $captchaId)
+    public function get(ApiRequest $request, $token)
     {
-        if (!($phrase = $request->query->get('phrase'))) {
-            throw new BadRequestHttpException('Missing Params', ErrorCode::INVALID_ARGUMENT);
+        if (!($jigsaw = $request->query->get('jigsaw'))) {
+            throw new BadRequestHttpException('jigsaw', ErrorCode::INVALID_ARGUMENT);
         }
 
         return array(
-            'status' => $this->getBizDragCaptcha()->check($captchaId, $phrase),
+            'status' => $this->getBizDragCaptcha()->check($token, $jigsaw),
         );
     }
 }
