@@ -12,14 +12,17 @@ class BizDragCaptcha extends BizAware
 
     const STATUS_EXPIRED = 'expired';
 
+    const JIGSAW_WIDTH = 50;
+
     private $tokenType = 'drag_captcha';
 
     public function generate($options = array())
     {
+        $size = getimagesize('/private/var/www/edusoho/web/assets/img/captcha/2.png');
+
         $default = array(
-            'height' => 240,
-            'width' => 480,
-            'jigsaw' => 80,
+            'height' => $size[1],
+            'width' => $size[0],
         );
         $options = array_merge($options, $default);
         $options = $this->setJigsawPosition($options);
@@ -61,51 +64,46 @@ class BizDragCaptcha extends BizAware
         if (empty($token)) {
             return;
         }
+
         $options = $token['data'];
         $source = $this->getSource($options);
-        $backgroundJigsaw = imagecreate($options['jigsaw'], $options['jigsaw']);
-        $white = imagecolorallocate($backgroundJigsaw, 255, 255, 255);
-        imagefill($backgroundJigsaw, 0, 0, $white);
-        $sub = imagecreate($options['jigsaw'], $options['height']);
-        $white = imagecolorallocatealpha($sub, 255, 255, 255, 80);
-        // $image = imagecreatefrompng('/private/var/www/edusoho/src/Biz/Common/CaptchaImages/3.png');
-        // $ptimage = imagecreatefrompng('/private/var/www/edusoho/src/Biz/Common/CaptchaImages/pt.png');
-        //$size = getimagesize('/private/var/www/edusoho/src/Biz/Common/CaptchaImages/3.png');
-        imagecopymerge($source, $sub, $options['positionX'], $options['positionY'], 0, 0, $options['jigsaw'], $options['jigsaw'], 90);
-
+        $sub = imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/jigsaw-border.png');
+        imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
         ob_start();
         imagepng($source);
+
+        imagedestroy($sub);
+        imagedestroy($source);
 
         return ob_get_clean();
     }
 
     private function getSource($options)
     {
-        $bg = imagecreate($options['width'], $options['height']);
-        $red = imagecolorallocate($bg, 255, 0, 0);
-        imagefill($bg, 0, 0, $red);
-
-        return $bg;
+        return imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/2.png');
     }
 
     private function getJigsaw($options)
     {
         $source = $this->getSource($options);
-        $sub = imagecreate($options['jigsaw'], $options['height']);
-        $white = imagecolorallocatealpha($sub, 255, 255, 255, 0);
-        imagecolortransparent($sub, $white);
-        imagecopymerge($sub, $source, 0, $options['positionY'], $options['positionX'], $options['positionY'], $options['jigsaw'], $options['jigsaw'], 100);
+
+        $jigsawBg = imagecreate(self::JIGSAW_WIDTH, $options['height']);
+        $white = imagecolorallocatealpha($jigsawBg, 255, 255, 255, 0);
+        imagecolortransparent($jigsawBg, $white);
+
+        imagecopymerge($jigsawBg, $source, 0, $options['positionY'], $options['positionX'], $options['positionY'], self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 100);
         ob_start();
-        imagepng($sub);
+        imagepng($jigsawBg);
         $str = ob_get_clean();
+        imagedestroy($jigsawBg);
 
         return 'data:image/png;base64,'.base64_encode($str);
     }
 
     private function setJigsawPosition($options)
     {
-        $options['positionX'] = rand($options['jigsaw'], $options['width'] - $options['jigsaw']);
-        $options['positionY'] = rand($options['jigsaw'], $options['height'] - $options['jigsaw']);
+        $options['positionX'] = rand(self::JIGSAW_WIDTH, $options['width'] - self::JIGSAW_WIDTH);
+        $options['positionY'] = rand(self::JIGSAW_WIDTH, $options['height'] - self::JIGSAW_WIDTH);
 
         return $options;
     }
