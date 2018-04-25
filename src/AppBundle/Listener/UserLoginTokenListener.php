@@ -2,7 +2,6 @@
 
 namespace AppBundle\Listener;
 
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
