@@ -27,6 +27,6 @@ class VipStatusDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
+        return $this->getServiceKernel()->getBiz()->service('VipPlugin:Vip:VipService');
     }
 }

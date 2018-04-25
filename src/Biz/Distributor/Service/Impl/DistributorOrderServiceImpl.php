@@ -9,6 +9,11 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
         return 'order';
     }
 
+    protected function getJobType()
+    {
+        return 'Order';
+    }
+
     protected function convertData($order)
     {
         $item = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
@@ -39,11 +44,6 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
             'status' => $order['status'],
             'updated_time' => $order['updated_time'],
         );
-    }
-
-    protected function getJobType()
-    {
-        return 'Order';
     }
 
     protected function getOrderService()

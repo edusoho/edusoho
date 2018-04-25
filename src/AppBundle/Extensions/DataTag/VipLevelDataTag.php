@@ -18,6 +18,6 @@ class VipLevelDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
+        return $this->getServiceKernel()->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 }

@@ -23,6 +23,11 @@
       <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn ml5">{{'course.course_files.reconvert_btn'|trans}}</a>
     {% endif %}
     <br>
+    
+    {% if subtitles[uploadFile.id]|default() %}
+      <span class='label label-success mr5 tip'>{{ 'course.course_files.subtitle_manage.subtitle'|trans }}</span> 
+    {% endif %}
+
     {% if uploadFile.storage == 'cloud' and uploadFile.type == 'video' and courseSet.enableAudio|default(true) %}
       <span class='label {{ uploadFile.audioConvertStatus == 'success' ? 'label-success' : 'label-warning' }} mr5 tip'>{{dict_text('audioConvertStatus', uploadFile.audioConvertStatus)}}</span>
     {% endif %}
@@ -33,23 +38,6 @@
   <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
   <td>
     {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
-    {# {% if 'courselesson' in fileQuotes or 'opencourselesson' in fileQuotes %}
-      <span class="label label-success tip">{{'任务'|trans}}</span>
-    {% endif %}
-
-    {% if 'coursetask' in fileQuotes %}
-      <span class="label label-success tip">{{'任务'|trans}}</span>
-    {% endif %}
-
-    {% if 'coursematerial' in fileQuotes or 'opencoursematerial' in fileQuotes %}
-      <span class="label label-success tip">{{'资料'|trans}}</span>
-    {% endif %}
-
-    {% if not fileQuotes %}
-      <span class="label label-default tip">{{'未使用'|trans}}</span>
-    {% endif %} #}
-
-    {# 暂时只需要区分使用和未使用 #}
     {% if uploadFile.targetType == 'coursematerial' and uploadFile.usedCount <= 1 or uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1 %}
       <span class="label label-default tip">{{'course.course_files.use_status.unused'|trans}}</span>
     {% else %}

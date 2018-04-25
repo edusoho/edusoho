@@ -4,7 +4,6 @@ namespace Biz\CloudPlatform\QueueJob;
 
 use Biz\CloudPlatform\Service\SearchService;
 use Codeages\Biz\Framework\Queue\AbstractJob;
-use Codeages\Biz\Framework\Queue\Service\QueueService;
 
 class SearchJob extends AbstractJob
 {
@@ -21,11 +20,11 @@ class SearchJob extends AbstractJob
         }
 
         try {
-            if ($type == 'update') {
+            if ('update' == $type) {
                 $result = $this->getSearchService()->notifyUpdate($args);
             }
 
-            if ($type == 'delete') {
+            if ('delete' == $type) {
                 $result = $this->getSearchService()->notifyDelete($args);
             }
             if (!empty($result['error'])) {
@@ -48,13 +47,5 @@ class SearchJob extends AbstractJob
     protected function getSearchService()
     {
         return $this->biz->service('CloudPlatform:SearchService');
-    }
-
-    /**
-     * @return QueueService
-     */
-    protected function getQueueService()
-    {
-        return $this->biz->service('Queue:QueueService');
     }
 }
