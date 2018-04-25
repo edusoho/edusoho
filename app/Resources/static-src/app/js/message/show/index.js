@@ -1,15 +1,17 @@
 import notify from 'common/notify';
+let $replyBtn = $('#course-reply-btn');
 
 $('#message-reply-form').on('click', '#course-reply-btn', function (e) {
-  $('#course-reply-btn').addClass('disabled');
-  $('#course-reply-btn').attr('disabled', true);
+  $replyBtn.addClass('disabled').attr('disabled', true);
   if ($('#message_reply_content').val().length >= 500) {
     notify('danger',Translator.trans('notify.private_message_maxlength.message'));
+    $replyBtn.removeClass('disabled').attr('disabled', false);
     return false;
   }
 
   if ($.trim($('#message_reply_content').val()).length == 0) {
-    notify('danger',Translator.trans('不好意思，私信内容不允许为空!'));
+    notify('danger',Translator.trans('请输入内容!'));
+    $replyBtn.removeClass('disabled').attr('disabled', false);
     return false;
   }
 
@@ -17,10 +19,10 @@ $('#message-reply-form').on('click', '#course-reply-btn', function (e) {
     .success(function(response) {
       $('.message-list').prepend(response.html);
       $('#message_reply_content').val('');
-      $('#course-reply-btn').attr('disabled', false);
+      $replyBtn.removeClass('disabled').attr('disabled', false);
     })
     .error(function(response) {
-      notify('danger',Translator.trans(response.responseJSON.error.message));
+      $replyBtn.removeClass('disabled').attr('disabled', false);
     });
 
   return false;
@@ -45,7 +47,6 @@ $('.message-list').on('click', '.delete-message', function (e) {
     }
     $item.remove();
   });
-
 });
 
 
@@ -55,6 +56,5 @@ $('textarea').bind('input propertychange', function () {
   } else {
     $('#course-reply-btn').addClass('disabled');
   }
-
 });
 
