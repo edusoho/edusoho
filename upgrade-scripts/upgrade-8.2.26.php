@@ -71,6 +71,7 @@ class EduSohoUpgrade extends AbstractUpdater
            'fillMediaSource',
            'addColumn',
            'updateLiveRoomType',
+           'addCourseSetTitle'
         );
 
         $funcNames = array();
@@ -155,6 +156,12 @@ class EduSohoUpgrade extends AbstractUpdater
         $ids = implode(',', $liveActivityIds);
         $this->logger('info', "更新activity_live表中id为：{$ids}的roomType为{$roomType}");
 
+        return 1;
+    }
+
+    protected function addCourseSetTitle()
+    {
+        $this->getConnection()->exec("update course_v8 cv,course_set_v8 cvs set cv.courseSetTitle=cvs.title where cv.coursesetid=cvs.id");
         return 1;
     }
 
