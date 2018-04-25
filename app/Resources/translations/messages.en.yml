@@ -5585,7 +5585,7 @@ admin.user_center.message_title_name: Message setting
 admin.user_center.message_student_to_student: Allow student to student send message
 admin.user_center.message_student_to_teacher: Allow student to teacher send message
 admin.user_center.message_teacher_to_student: Allow teacher to student send message
-admin.user_center.message.setting_tip: 提示：APP端不生效
+admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
 admin.role_manage.keyword_type: '-- Keyword type--'
 admin.role_manage.nameLike: 'Role name'
