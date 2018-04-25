@@ -91,7 +91,11 @@ user_terms:
 
 distributor_register:
    path:  /distributor_register
-   defaults: { _controller: AppBundle:Register:distributorIndex }
+   defaults: { _controller: AppBundle:Distributor:register }
+
+distributor_product:
+   path:  /distributor_product
+   defaults: { _controller: AppBundle:Distributor:product }
 
 register:
     path:  /register

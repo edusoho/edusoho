@@ -26,7 +26,7 @@ interface CategoryService
 
     public function findAllCategories();
 
-    public function makeNavCategories($categoryId, $groupCode);
+    public function makeNavCategories($code, $groupCode);
 
     public function findCategoryBreadcrumbs($categoryId);
 
@@ -51,6 +51,4 @@ interface CategoryService
     public function deleteGroup($id);
 
     public function sortCategories($ids);
-
-    public function isCategoryCodeAvaliable($code, $exclude = null);
 }

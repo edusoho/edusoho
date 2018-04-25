@@ -47,4 +47,14 @@ abstract class BaseDataTag
     {
         return ServiceKernel::instance()->createService('System:SettingService')->get($name, $default);
     }
+
+    protected function createService($alias)
+    {
+        return $this->getServiceKernel()->getBiz()->service($alias);
+    }
+
+    protected function createDao($alias)
+    {
+        return $this->getServiceKernel()->getBiz()->dao($alias);
+    }
 }

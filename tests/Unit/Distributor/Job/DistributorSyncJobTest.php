@@ -67,7 +67,7 @@ class DistributorSyncJobTest extends BaseTestCase
         $drpService->shouldHaveReceived('postData')->times(1);
         $distributorUserService->shouldHaveReceived('getDrpService')->times(1);
         $distributorUserService->shouldHaveReceived('findJobData')->times(1);
-        $distributorUserService->shouldHaveReceived('getSendType')->times(1);
+        $distributorUserService->shouldHaveReceived('getSendType')->times(2);
         $distributorUserService->shouldHaveReceived('batchUpdateStatus')->times(1);
     }
 }

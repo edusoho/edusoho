@@ -32,7 +32,7 @@ class Live {
             let browser = $uapraser.getBrowser();
             let os = $uapraser.getOS();
 
-            if (document.location.protocol ==='http:' && role === 'student' && provider === 8 && os.name !== ('Android'||'iOS'||'Windows Phone'||'Windows Mobile') &&  browser.name === 'Chrome' && browser.major >= 60) {
+            if (document.location.protocol ==='http:' && role === 'student' && (provider === 8 || provider === 9) && os.name !== ('Android'||'iOS'||'Windows Phone'||'Windows Mobile') &&  browser.name === 'Chrome' && browser.major >= 60) {
               window.location.href = data.roomUrl;
             }
 

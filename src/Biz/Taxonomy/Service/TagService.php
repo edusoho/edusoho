@@ -63,5 +63,7 @@ interface TagService
 
     public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);
 
+    public function findOwnerIdsByTagIdsAndOwnerType($tagIds, $ownerType);
+
     public function findGroupTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);
 }

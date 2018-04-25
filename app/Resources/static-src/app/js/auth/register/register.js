@@ -70,7 +70,7 @@ export default class Register {
       autoclose: true,
       format: 'yyyy-mm-dd',
       minView: 'month',
-      language: document.documentElement.lang
+      language: window.document.documentElement.lang
     });
   }
 

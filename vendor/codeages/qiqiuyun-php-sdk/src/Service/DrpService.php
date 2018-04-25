@@ -77,6 +77,39 @@ class DrpService extends BaseService
     }
 
     /**
+     *  解析课程分销时用到的token，返回token的组成部分
+     *
+     * @param string $token
+     *
+     * @return array 内容如下:
+     *               - distribution_type 分销活动类型
+     *               - course_id 课程id
+     *               - time 链接生成时间
+     *               - nonce 参与签名计算的随机字符串
+     *
+     * @throws SDKException 签名不通过
+     */
+    public function parseCourseActivityToken($token)
+    {
+        $token = explode(':', $token);
+        if (7 !== count($token)) {
+            throw new SDKException('非法请求:token格式不合法');
+        }
+        list($distributionType, $courseId, $merchantId, $agencyId, $time, $nonce, $expectSign) = $token;
+
+        $data = array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'course_id' => $courseId);
+        ksort($data);
+        $dataStr = json_encode($data);
+        $signingText = implode("\n", array($nonce, $time, $dataStr));
+        $actualSign = $this->auth->makeSignature($signingText);
+        if ($expectSign != $actualSign) {
+            throw new SDKException('非法请求:sign值不一致');
+        }
+
+        return array('distribution_type' => $distributionType, 'course_id' => $courseId, 'time' => $time, 'nonce' => $nonce);
+    }
+
+    /**
      * 上报通过分销平台注册的用户,或者他们的订单信息
      *
      * @param string $type  数据类型，user，order

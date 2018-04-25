@@ -50,9 +50,9 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $items = $this->findItems();
 
         foreach ($items as $key => &$item) {
-            if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
+            if ('chapter' == $item['type'] || 'unit' == $item['type']) {
                 $item['itemType'] = $item['type'];
-            } elseif ($item['type'] == 'lesson') {
+            } elseif ('lesson' == $item['type']) {
                 unset($items[$key]);
             } else {
                 $item['itemType'] = 'task';
@@ -112,7 +112,6 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'seq_GT' => $task['seq'],
             'seq_LTE' => $task['seq'] + $downLimit,
         );
-
         $upChapters = $this->getChapterDao()->search(
             $upConditions,
             array(),
@@ -191,14 +190,14 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'courseId' => $this->courseId,
         );
 
-        if ($this->paging['direction'] == 'down') {
+        if ('down' == $this->paging['direction']) {
             $conditions['seq_GTE'] = $this->paging['offsetSeq'];
             $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
         }
 
-        if ($this->paging['direction'] == 'up') {
+        if ('up' == $this->paging['direction']) {
             $conditions['seq_LTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] - 1;
+            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] + 1;
         }
 
         return $conditions;

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Thread;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\CurrentUser;
@@ -26,6 +27,86 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertArrayEquals($thread, $threadNew);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage thread title is null
+     */
+    public function testCreatedThreadWithNoneTitleException()
+    {
+        $thread = $this->createProtectThread(array(), array('title'));
+
+        $threadNew = $this->getThreadService()->getThread($thread['id']);
+
+        $this->assertArrayEquals($thread, $threadNew);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage thread content is null
+     */
+    public function testCreatedThreadWithNoneContentException()
+    {
+        $thread = $this->createProtectThread(array(), array('content'));
+
+        $threadNew = $this->getThreadService()->getThread($thread['id']);
+
+        $this->assertArrayEquals($thread, $threadNew);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage thread targetId is null
+     */
+    public function testCreatedThreadWithNoneTargetIdException()
+    {
+        $thread = $this->createProtectThread(array(), array('targetId'));
+
+        $threadNew = $this->getThreadService()->getThread($thread['id']);
+
+        $this->assertArrayEquals($thread, $threadNew);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCreatedThreadWithNoneTypeException()
+    {
+        $thread = $this->createProtectThread(array('type' => 'unknown'));
+
+        $threadNew = $this->getThreadService()->getThread($thread['id']);
+
+        $this->assertArrayEquals($thread, $threadNew);
+    }
+
+    public function testCreateThreadWithEventType()
+    {
+        $thread = $this->createProtectThread(array(
+            'type' => 'event',
+            'location' => '12345test str',
+            'startTime' => 'now',
+        ));
+
+        $threadNew = $this->getThreadService()->getThread($thread['id']);
+
+        $this->assertArrayEquals($thread, $threadNew);
+    }
+
+    public function testCreateThreadWithAts()
+    {
+        $currentUser = $this->getCurrentUser();
+        $this->createUser();
+        $newUser = $this->createUser(array('email' => 'newUser@user.com', 'nickname' => 'newUser'));
+        $thread = $this->createProtectThread(array(
+            'content' => '@user @newUser @admin',
+            'userId' => $currentUser['id'],
+        ));
+
+        $threadNew = $this->getThreadService()->getThread($thread['id']);
+
+        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertContains($newUser['id'], $threadNew['ats']);
+    }
+
     public function testUpdateThread()
     {
         $user = $this->createUser();
@@ -38,15 +119,81 @@ class ThreadServiceTest extends BaseTestCase
         $fields = array(
             'title' => 'title2',
             'content' => 'hello123',
+            'startTime' => 'now',
         );
         $threadUpdate = $this->getThreadService()->updateThread($thread['id'], $fields);
 
         $this->assertEquals($fields['title'], $threadUpdate['title']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testUpdateThreadWithEmptyThread()
+    {
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $thread = $this->createProtectThread();
+
+        $fields = array(
+            'title' => 'title2',
+            'content' => 'hello123',
+            'startTime' => time(),
+        );
+        $this->getThreadService()->updateThread($thread['id'] + 1, $fields);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage invalid argument
+     */
+    public function testUpdateThreadWithEmptyFields()
+    {
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $thread = $this->createProtectThread();
+
+        $fields = array();
+        $this->getThreadService()->updateThread($thread['id'], $fields);
+    }
+
     public function testDeleteThread()
     {
         $thread = $this->createProtectThread();
+        $createdPost = $this->createTestPost($thread);
+
+        $this->getThreadService()->deleteThread($thread['id']);
+
+        $foundThread = $this->getThreadService()->getThread($thread['id']);
+        $foundPost = $this->getThreadService()->getPost($createdPost['id']);
+
+        $this->assertNull($foundThread);
+        $this->assertNull($foundPost);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testDeleteThreadWithThreadNoneExist()
+    {
+        $thread = $this->createProtectThread();
+
+        $this->getThreadService()->deleteThread($thread['id'] + 1);
+    }
+
+    public function testDeleteThreadWithEventType()
+    {
+        $thread = $this->createProtectThread(array(
+            'type' => 'event',
+            'location' => '12345test str',
+            'startTime' => 'now',
+        ));
         $createdPost = $this->createTestPost($thread);
 
         $this->getThreadService()->deleteThread($thread['id']);
@@ -67,6 +214,15 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['sticky']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testSetThreadStickyWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $this->getThreadService()->setThreadSticky($thread['id'] + 1);
+    }
+
     public function testCancelThreadSticky()
     {
         $thread = $this->createProtectThread();
@@ -80,6 +236,16 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(0, $result['sticky']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCancelThreadStickyWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+
+        $this->getThreadService()->cancelThreadSticky($thread['id'] + 1);
+    }
+
     public function testSetThreadNice()
     {
         $thread = $this->createProtectThread();
@@ -87,6 +253,15 @@ class ThreadServiceTest extends BaseTestCase
         $result = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals(1, $result['nice']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testSetThreadNiceWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $this->getThreadService()->setThreadNice($thread['id'] + 1);
     }
 
     public function testCancelThreadNice()
@@ -102,6 +277,15 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(0, $result['nice']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCancelThreadNiceWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $this->getThreadService()->cancelThreadNice($thread['id'] + 1);
+    }
+
     public function testSetThreadSolved()
     {
         $thread = $this->createProtectThread();
@@ -109,6 +293,15 @@ class ThreadServiceTest extends BaseTestCase
         $result = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals(1, $result['solved']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testSetThreadSolvedWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $this->getThreadService()->setThreadSolved($thread['id'] + 1);
     }
 
     public function testCancelThreadSolved()
@@ -122,6 +315,16 @@ class ThreadServiceTest extends BaseTestCase
         $this->getThreadService()->cancelThreadSolved($thread['id']);
         $result = $this->getThreadService()->getThread($thread['id']);
         $this->assertEquals(0, $result['solved']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCancelThreadSolvedWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+
+        $this->getThreadService()->cancelThreadSolved($thread['id'] + 1);
     }
 
     public function testHitThread()
@@ -201,10 +404,52 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $thread['postNum']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCreatePostWithParentIdAndPostNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $this->createTestPost($thread, array('parentId' => 10));
+    }
+
+    public function testCreatePostWithParentId()
+    {
+        $thread = $this->createProtectThread();
+        $parentPost = $this->createTestPost($thread);
+
+        $createdPost = $this->createTestPost($thread, array('parentId' => $parentPost['id']));
+
+        $this->assertTrue(is_array($createdPost));
+        $this->assertEquals($thread['targetId'], $createdPost['targetId']);
+        $this->assertEquals($thread['id'], $createdPost['threadId']);
+
+        $thread = $this->getThreadService()->getThread($thread['id']);
+        $this->assertEquals(2, $thread['postNum']);
+        $this->assertEquals($parentPost['id'], $createdPost['parentId']);
+    }
+
+    public function testCreatePostWithAts()
+    {
+        $this->createUser();
+        $this->createUser(array('email' => 'newUser@user.com', 'nickname' => 'newUser'));
+        $thread = $this->createProtectThread();
+        $createdPost = $this->createTestPost($thread, array('content' => '@admin @user @newUser'));
+
+        $this->assertTrue(is_array($createdPost));
+        $this->assertEquals($thread['targetId'], $createdPost['targetId']);
+        $this->assertEquals($thread['id'], $createdPost['threadId']);
+
+        $thread = $this->getThreadService()->getThread($thread['id']);
+        $this->assertEquals(1, $thread['postNum']);
+    }
+
     public function testDeletePost()
     {
         $thread = $this->createProtectThread();
-        $createdPost = $this->createTestPost($thread);
+        $parentPost = $this->createTestPost($thread);
+
+        $createdPost = $this->createTestPost($thread, array('parentId' => $parentPost['id']));
 
         $this->getThreadService()->deletePost($createdPost['id']);
 
@@ -212,7 +457,18 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertNull($post);
 
         $thread = $this->getThreadService()->getThread($createdPost['threadId']);
-        $this->assertEquals(0, $thread['postNum']);
+        $this->assertEquals(1, $thread['postNum']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testDeletePostWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $createdPost = $this->createTestPost($thread);
+
+        $this->getThreadService()->deletePost($createdPost['id'] + 1);
     }
 
     public function testSearchPostsCount()
@@ -257,6 +513,17 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals('1', $foundPost['adopted']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testSetPostAdoptedWithPostNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $post = $this->createTestPost($thread);
+
+        $this->getThreadService()->setPostAdopted($post['id'] + 1);
+    }
+
     public function testCancelPostAdopted()
     {
         $thread = $this->createProtectThread();
@@ -269,6 +536,21 @@ class ThreadServiceTest extends BaseTestCase
         $this->getThreadService()->cancelPostAdopted($foundPost['id']);
         $result = $this->getThreadService()->getPost($foundPost['id']);
         $this->assertEquals('0', $result['adopted']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testCancelPostAdoptedWithPostNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $post = $this->createTestPost($thread);
+
+        $this->getThreadService()->setPostAdopted($post['id']);
+        $foundPost = $this->getThreadService()->getPost($post['id']);
+        $this->assertEquals('1', $foundPost['adopted']);
+
+        $this->getThreadService()->cancelPostAdopted($foundPost['id'] + 1);
     }
 
     public function testWavePost()
@@ -292,7 +574,7 @@ class ThreadServiceTest extends BaseTestCase
         $thread = $this->createProtectThread();
         $member = $this->createThreadMember1($thread);
 
-        $findMeber = $this->getThreadService()->getMember($member['id']);
+        $findMember = $this->getThreadService()->getMember($member['id']);
 
         $this->assertEquals($member['nickname'], $findMember['nickname']);
         $this->assertEquals($member['userId'], $findMember['userId']);
@@ -319,6 +601,31 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals($member['userId'], $findMember['userId']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCreateMemberWithMemberExist()
+    {
+        $thread = $this->createProtectThread();
+        $this->createThreadMember1($thread['id']);
+        $this->createThreadMember1($thread['id']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testCreateMemberWithMemberMax()
+    {
+        $thread = $this->createProtectThread(array(
+            'type' => 'event',
+            'location' => '12345test str',
+            'startTime' => 'now',
+            'maxUsers' => 1,
+        ));
+        $this->createThreadMember1($thread['id']);
+        $this->createThreadMember2($thread['id']);
+    }
+
     public function testDeleteMember()
     {
         $thread = $this->createProtectThread();
@@ -333,6 +640,20 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertNull($member);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testDeleteMemberWithMemberNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $member = $this->createThreadMember1($thread['id']);
+
+        $findMember = $this->getThreadService()->getMember($member['id']);
+        $this->assertEquals($member['nickname'], $findMember['nickname']);
+
+        $this->getThreadService()->deleteMember($member['id'] + 1);
+    }
+
     public function testDeleteMembersByThreadId()
     {
         $thread = $this->createProtectThread();
@@ -345,6 +666,20 @@ class ThreadServiceTest extends BaseTestCase
         $member = $this->getThreadService()->getMember($member['id']);
 
         $this->assertNull($member);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testDeleteMembersByThreadIdWithThreadNonExist()
+    {
+        $thread = $this->createProtectThread();
+        $member = $this->createThreadMember1($thread['id']);
+
+        $findMember = $this->getThreadService()->getMember($member['id']);
+        $this->assertEquals($member['nickname'], $findMember['nickname']);
+
+        $this->getThreadService()->deleteMembersByThreadId($thread['id'] + 1);
     }
 
     public function testSearchMembers()
@@ -380,7 +715,7 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, count($members));
     }
 
-    public function searchMemberCount($conditions)
+    public function testSearchMemberCount()
     {
         $thread = $this->createProtectThread();
         $member1 = $this->createThreadMember1($thread['id']);
@@ -401,6 +736,66 @@ class ThreadServiceTest extends BaseTestCase
 
         $count = $this->getThreadService()->searchMemberCount($conditions);
         $this->assertEquals(1, $count);
+    }
+
+    public function testFilterSort()
+    {
+        $sort = ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array('popular'));
+        $this->assertEquals(array('hitNum' => 'DESC'), $sort);
+
+        $sort = ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array('created'));
+        $this->assertEquals(array('sticky' => 'DESC', 'createdTime' => 'DESC'), $sort);
+
+        $sort = ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array('posted'));
+        $this->assertEquals(array('sticky' => 'DESC', 'lastPostTime' => 'DESC'), $sort);
+
+        $sort = ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array('createdNotStick'));
+        $this->assertEquals(array('createdTime' => 'DESC'), $sort);
+
+        $sort = ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array('postedNotStick'));
+        $this->assertEquals(array('lastPostTime' => 'DESC'), $sort);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testFilterSortWithException()
+    {
+        ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array(''));
+    }
+
+    public function testPrepareThreadSearchConditions()
+    {
+        $conditions = ReflectionUtils::invokeMethod($this->getThreadService(), 'prepareThreadSearchConditions', array(
+            array(
+                'keywordType' => 'title',
+                'keyword' => '1234',
+                'author' => 'admin',
+                'latest' => 'week',
+            ),
+        ));
+
+        $this->assertEquals('1234', $conditions['title']);
+        $this->assertNotNull($conditions['userId']);
+        $this->assertNotNull($conditions['GTEcreatedTime']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testPrepareThreadSearchConditionsWithException()
+    {
+        $conditions = ReflectionUtils::invokeMethod($this->getThreadService(), 'prepareThreadSearchConditions', array(
+            array(
+                'keywordType' => 'errorKeyWordType',
+                'keyword' => '1234',
+            ),
+        ));
+        var_dump($conditions);
+
+        $this->assertEquals('1234', $conditions['title']);
+        $this->assertNotNull($conditions['userId']);
+        $this->assertNotNull($conditions['GTEcreatedTime']);
     }
 
     public function testFindThreadIds()
@@ -461,15 +856,26 @@ class ThreadServiceTest extends BaseTestCase
     public function testTryAccess()
     {
         $thread = $this->createProtectThread();
-        $this->getThreadService()->tryAccess('thread.create', $thread);
+        $result = $this->getThreadService()->tryAccess('thread.create', $thread);
+        $this->assertTrue($result);
     }
 
-    protected function createUser()
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testTryAccessWithException()
+    {
+        $thread = $this->createProtectThread();
+        $this->getThreadService()->tryAccess('thread.unknown_event', $thread);
+    }
+
+    protected function createUser($fields = array())
     {
         $user = array();
         $user['email'] = 'user@user.com';
         $user['nickname'] = 'user';
         $user['password'] = 'user';
+        $user = array_merge($user, $fields);
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
@@ -477,7 +883,7 @@ class ThreadServiceTest extends BaseTestCase
         return $user;
     }
 
-    protected function createProtectThread()
+    protected function createProtectThread($fields = array(), $excludeFields = array())
     {
         $textClassroom = array(
             'title' => 'test',
@@ -492,6 +898,13 @@ class ThreadServiceTest extends BaseTestCase
             'targetType' => 'classroom',
             'type' => 'question',
         );
+
+        $thread = array_merge($thread, $fields);
+        foreach ($excludeFields as $excludeField) {
+            if (isset($thread[$excludeField])) {
+                unset($thread[$excludeField]);
+            }
+        }
 
         return $this->getThreadService()->createThread($thread);
     }
@@ -534,7 +947,7 @@ class ThreadServiceTest extends BaseTestCase
         return $this->getThreadService()->createThread($thread);
     }
 
-    protected function createTestPost($thread)
+    protected function createTestPost($thread, $fields = array())
     {
         $post = array(
             'targetId' => $thread['targetId'],
@@ -542,6 +955,7 @@ class ThreadServiceTest extends BaseTestCase
             'threadId' => $thread['id'],
             'content' => 'post thread',
         );
+        $post = array_merge($post, $fields);
 
         return $this->getThreadService()->createPost($post);
     }

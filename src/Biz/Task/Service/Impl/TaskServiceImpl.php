@@ -883,7 +883,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
-
         if (!empty($finishedTasks)) {
             $taskIds = ArrayToolkit::column($finishedTasks, 'courseTaskId');
             $electiveTaskIds = $this->getStartElectiveTaskIds($courseId);

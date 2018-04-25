@@ -23,7 +23,9 @@ before_script:
   - "sed -i 's/\\s*database_user.*/    database_user: tester/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_password.*/    database_password: tester/g' app/config/parameters_test.yml"
   - mkdir web/files
+  - mkdir -p app/data
   - touch app/config/routing_plugins.yml
+  - touch app/data/crontab_config.yml
 
 script:
   - phpunit -c app/ --testsuite UnitA2B

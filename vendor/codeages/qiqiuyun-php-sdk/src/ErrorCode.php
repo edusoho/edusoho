@@ -61,7 +61,7 @@ class ErrorCode
     const INVALID_ARGUMENT = 8;
 
     /**
-     * 网关已收到请求，但处理超时，可重试 ( htto code: 504)
+     * 网关已收到请求，但处理超时，可重试 ( http code: 504)
      */
     const TIMEOUT = 9;
 }
