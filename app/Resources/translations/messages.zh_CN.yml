@@ -6860,7 +6860,7 @@ admin.user_center.message_title_name: 私信发送设置
 admin.user_center.message_student_to_student: 允许学员给学员发送私信
 admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
 admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
-admin.user_center.message.setting_tip: 提示：APP端不生效
+admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -8327,7 +8327,9 @@ admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
 
+exception.common_forbidden: 被禁止的操作
 exception.common_error: 服务器内部错误
 exception.article.notfound: 资讯不存在
 exception.user.unlogin: 未登陆，请登陆后操作
+exception.user.message_forbidden: 不支持向该用户发送私信
 exception.form.expire: 页面已过期，请重新提交数据！
