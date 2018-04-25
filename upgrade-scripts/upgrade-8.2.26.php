@@ -148,7 +148,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $liveActivityIds = ArrayToolkit::column($results, 'mediaId');
 
         foreach ($liveActivityIds as $liveId) {
-            $sql = "UPDATE activity_live set roomType = '{$roomType}'";
+            $sql = "UPDATE activity_live set roomType = '{$roomType}' where id = {$liveId}";
             $this->getConnection()->exec($sql);
         }
 
