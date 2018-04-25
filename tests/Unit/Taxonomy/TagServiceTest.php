@@ -7,6 +7,29 @@ use Biz\BaseTestCase;
 
 class TagServiceTest extends BaseTestCase
 {
+    public function testGetTagByLikeName()
+    {
+        $createdTag = $this->createTag();
+        $createdTag1 = $this->createTag(
+            array(
+                'name' => '自定义标签',
+            )
+        );
+
+        $result1 = $this->getTagService()->findTagsByLikeName('测试');
+        $this->assertCount(1, $result1);
+        $this->assertContains($createdTag, $result1);
+
+        $result2 = $this->getTagService()->findTagsByLikeName('自定义');
+        $this->assertCount(1, $result2);
+        $this->assertContains($createdTag1, $result2);
+
+        $result3 = $this->getTagService()->findTagsByLikeName('标签');
+        $this->assertCount(2, $result3);
+        $this->assertContains($createdTag, $result3);
+        $this->assertContains($createdTag1, $result3);
+    }
+
     /**
      * @group add
      */
@@ -463,6 +486,17 @@ class TagServiceTest extends BaseTestCase
         $this->getTagService()->addTagOwnerRelation($fields);
         $tagIds = $this->getTagService()->findTagIdsByOwnerTypeAndOwnerIds('course', array($ownerId));
         $this->assertEquals(2, count($tagIds));
+    }
+
+    private function createTag($param = array())
+    {
+        $tag = array(
+            'name' => '测试标签',
+        );
+
+        $tag = array_merge($tag, $param);
+
+        return $this->getTagService()->addTag($tag);
     }
 
     /**

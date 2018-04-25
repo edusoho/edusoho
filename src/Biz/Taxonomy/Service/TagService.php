@@ -23,7 +23,7 @@ interface TagService
 
     public function getTagByName($name);
 
-    public function getTagByLikeName($name);
+    public function findTagsByLikeName($name);
 
     public function findAllTags($start, $limit);
 
