@@ -129,7 +129,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course,
             array(
                 'title',
-                'courseSetTitle',
                 'about',
                 'courseSetId',
                 'learnMode',
@@ -159,7 +158,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['maxRate'] = $courseSet['maxRate'];
-        $course['courseSetTitle'] = empty($course['courseSetTitle']) ? $courseSet['title'] : $course['courseSetTitle'];
+        $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
 
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
