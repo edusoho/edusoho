@@ -119,7 +119,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             throw $e;
         }
 
-       throw new \Exception();
+        throw new \Exception();
     }
 
     /**
