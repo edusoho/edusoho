@@ -1,20 +1,16 @@
-let $content = $("#live-lesson-content-field");
+let $content = $('#live-lesson-content-field');
 let $form = $('#live-open-course-form');
 let now = new Date();
 let $btn = $('#live-open-course-form-btn');
-let thisTime = $('[name=startTime]').val();
-thisTime = thisTime.replace(/-/g, "/");
-thisTime = Date.parse(thisTime) / 1000;
-let nowTime = Date.parse(new Date()) / 1000;
 
-if (nowTime > thisTime) {
+if (!$form.data('update')) {
   $('[name=startTime]').attr('disabled', true);
   $('#live-length-field').attr('disabled', true);
   $('#live-open-course-form-btn').attr('disabled', true);
 
-  $('#starttime-help-block').html("直播已经开始或者结束,无法编辑");
+  $('#starttime-help-block').html('直播已经开始或者结束,无法编辑');
   $('#starttime-help-block').css('color', '#a94442');
-  $('#timelength-help-block').html("直播已经开始或者结束,无法编辑");
+  $('#timelength-help-block').html('直播已经开始或者结束,无法编辑');
   $('#timelength-help-block').css('color', '#a94442');
 } else {
   $('[name=startTime]').attr('disabled', false);
@@ -25,7 +21,15 @@ let validator = $form.validate({
   rules: {
     startTime: {
       required: true,
-      after_now: true
+      after_now: true,
+      es_remote: {
+        type: 'post',
+        data: {
+          clientTime: function () {
+            return $('[name=startTime]').val();
+          }
+        }
+      }
     },
     timeLength: {
       required: true,
@@ -42,14 +46,19 @@ let validator = $form.validate({
         }
       }
     }
+  },
+  messages: {
+    startTime: {
+      es_remote: Translator.trans('validate.after_now.message')
+    }
   }
 });
 
-$("[name=startTime]").datetimepicker({
+$('[name=startTime]').datetimepicker({
   autoclose: true,
   language: document.documentElement.lang
 }).on('hide', function (ev) {
-  $form.validate('[name=startTime]');
+  validator.element('[name=startTime]');
 });
 $('[name=startTime]').datetimepicker('setStartDate', now);
 
@@ -58,4 +67,4 @@ $btn.click(() => {
     $btn.button('loading');
     $form.submit();
   }
-})
+});

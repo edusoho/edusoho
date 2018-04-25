@@ -1,0 +1,13 @@
+{
+  "presets": [ "es2015","react", "stage-0"],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "common":"./app/Resources/static-src/common",
+        "test-src": "./app/Resources/static-src",
+        "test": "./tests/Js"
+      }
+    }]
+  ]
+}

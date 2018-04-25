@@ -261,6 +261,8 @@ class MaterialLibServiceTest extends BaseTestCase
             'convertHash' => 'course-task-14/20171212114426-njm92j6bgw0wgooo',
             'type' => 'video',
             'storage' => 'cloud',
+            'createdUserId' => '1',
+            'createdTime' => time(),
         );
         $file2 = array(
             'id' => '4',
@@ -274,6 +276,8 @@ class MaterialLibServiceTest extends BaseTestCase
             'convertHash' => 'course-task-15/20171212114426-njm92j6bgw0wgooo',
             'type' => 'video',
             'storage' => 'cloud',
+            'createdUserId' => '1',
+            'createdTime' => time(),
         );
         $this->getUploadFileDao()->create($file1);
         $this->getUploadFileDao()->create($file2);

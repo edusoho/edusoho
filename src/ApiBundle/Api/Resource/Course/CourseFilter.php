@@ -13,14 +13,14 @@ use AppBundle\Common\ServiceToolkit;
 class CourseFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title'
+        'id', 'title',
     );
 
     protected $publicFields = array(
         'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
-        'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime', 'access', 'isAudioOn'
+        'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime', 'access', 'isAudioOn',
     );
 
     protected function publicFields(&$data)
@@ -28,7 +28,7 @@ class CourseFilter extends Filter
         $this->learningExpiryDate($data);
         Converter::timestampToDate($data['buyExpiryTime']);
 
-        $data['services'] =  AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['services'])));;
+        $data['services'] = AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['services'])));
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
@@ -39,7 +39,7 @@ class CourseFilter extends Filter
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
 
-        /**
+        /*
          * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
          */
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];

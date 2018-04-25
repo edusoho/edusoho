@@ -14,19 +14,19 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
+        '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+        '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
-        '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
-        '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
-        '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
+        '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
         '5500a79e13a6ff0c087268676dcb4c2f' => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
-        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
+        '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -121,6 +121,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Codeages\\Biz\\RateLimiter\\' => 25,
             'Codeages\\Biz\\Pay\\' => 17,
             'Codeages\\Biz\\Order\\' => 19,
+            'Codeages\\Biz\\Invoice\\' => 21,
             'Codeages\\Biz\\Framework\\' => 23,
         ),
         'B' => 
@@ -349,6 +350,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Codeages\\Biz\\Order\\' => 
         array (
             0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Order',
+        ),
+        'Codeages\\Biz\\Invoice\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Invoice',
         ),
         'Codeages\\Biz\\Framework\\' => 
         array (

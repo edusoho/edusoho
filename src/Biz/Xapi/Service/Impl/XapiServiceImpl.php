@@ -11,8 +11,9 @@ use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
+use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use QiQiuYun\SDK\Auth;
+use QiQiuYun\SDK\QiQiuYunSDK;
 
 class XapiServiceImpl extends BaseService implements XapiService
 {
@@ -28,9 +29,28 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getStatementDao()->create($statement);
     }
 
+    public function batchCreateStatements($statements)
+    {
+        if (empty($this->biz['user'])) {
+            throw new AccessDeniedException('user is not login.');
+        }
+        $batchCreateHelper = new BatchCreateHelper($this->getStatementDao());
+        foreach ($statements as $statement) {
+            $statement['version'] = $this->biz['xapi.options']['version'];
+            $statement['uuid'] = $this->generateUUID();
+            $batchCreateHelper->add($statement);
+        }
+        $batchCreateHelper->flush();
+    }
+
     public function getStatement($id)
     {
         return $this->getStatementDao()->get($id);
+    }
+
+    public function deleteStatement($id)
+    {
+        return $this->getStatementDao()->update($id, array('status' => 'deleted'));
     }
 
     protected function generateUUID()
@@ -132,6 +152,17 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getActivityWatchLogDao()->update($id, $watchLog);
     }
 
+    public function batchUpdateWatchLogPushed($watchLogIds)
+    {
+        $batchUpdateHelper = new BatchUpdateHelper($this->getActivityWatchLogDao());
+        foreach ($watchLogIds as $id) {
+            $batchUpdateHelper->add('id', $id, array(
+                'is_push' => 1,
+            ));
+        }
+        $batchUpdateHelper->flush();
+    }
+
     public function searchWatchLogs($conditions, $orderBys, $start, $limit)
     {
         return $this->getActivityWatchLogDao()->search($conditions, $orderBys, $start, $limit);
@@ -196,26 +227,7 @@ class XapiServiceImpl extends BaseService implements XapiService
 
     public function getXapiSdk()
     {
-        $settings = $this->getSettingService()->get('storage', array());
-        $siteSettings = $this->getSettingService()->get('site', array());
-        $xapiSetting = $this->getSettingService()->get('xapi', array());
-
-        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'https://lrs.qiqiuyun.net/v1/xapi/';
-
-        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
-        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth($accessKey, $secretKey);
-
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => $pushUrl,
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
-            ),
-        ));
+        return $this->biz['qiQiuYunSdk.xapi'];
     }
 
     /**

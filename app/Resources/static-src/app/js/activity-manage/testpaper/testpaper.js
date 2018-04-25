@@ -1,8 +1,8 @@
 import { dateFormat } from '../../../common/unit';
 
 export default class Testpaper {
-	constructor($element) {
-		this.$element = $element;
+  constructor($element) {
+    this.$element = $element;
     this.$step2_form  = this.$element.find('#step2-form');
     this.$step3_form  = this.$element.find('#step3-form');
     this.$parentiframe = $(window.parent.document).find('#task-create-content-iframe');
@@ -18,68 +18,68 @@ export default class Testpaper {
   }
 
   initEvent() {
-  	this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
-  	this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
-  	this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event))
+    this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
+    this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
+    this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event));
     this.$element.find('input[name="length"]').on('blur',event=>this.changeEndTime(event));
     this.$element.find('#condition-select').on('change',event=>this.changeCondition(event));
     this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
   }
 
   setValidateRule() {
-    $.validator.addMethod("arithmeticFloat",function(value,element){  
+    $.validator.addMethod('arithmeticFloat',function(value,element){  
       return this.optional( element ) || /^[0-9]+(\.[0-9]?)?$/.test(value);
-    }, $.validator.format(Translator.trans("activity.testpaper_manage.arithmetic_float_error_hint")));
+    }, $.validator.format(Translator.trans('activity.testpaper_manage.arithmetic_float_error_hint')));
 
-    $.validator.addMethod("positiveInteger",function(value,element){  
+    $.validator.addMethod('positiveInteger',function(value,element){  
       return this.optional( element ) || /^[1-9]\d*$/.test(value);
-    }, $.validator.format(Translator.trans("activity.testpaper_manage.positive_integer_error_hint")));
+    }, $.validator.format(Translator.trans('activity.testpaper_manage.positive_integer_error_hint')));
 
     
   }
 
   initStepForm2() {
     var validator = this.$step2_form.validate({
-        onkeyup: false,
-        rules: {
-            title: {
-              required:true,
-              trim: true,
-              maxlength: 50,
-              course_title: true,
-            },
-            mediaId: {
-              required: true,
-              digits:true
-            },
-            length:{
-              required:true,
-              digits:true
-            },
-            startTime:{
-              required:function(){
-                return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
-              },
-              DateAndTime:function(){
-                return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
-              }
-            },
-            redoInterval:{
-              required:function(){
-                return $('[name="doTimes"]:checked').val() == 0;
-              },
-              arithmeticFloat:true,
-              max:1000000000
-            }
+      onkeyup: false,
+      rules: {
+        title: {
+          required:true,
+          trim: true,
+          maxlength: 50,
+          course_title: true,
         },
-        messages: {
-          mediaId: {
-            required:Translator.trans('activity.testpaper_manage.media_error_hint'),
+        mediaId: {
+          required: true,
+          digits:true
+        },
+        length:{
+          required:true,
+          digits:true
+        },
+        startTime:{
+          required:function(){
+            return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           },
-          redoInterval: {
-            max: Translator.trans("activity.testpaper_manage.max_error_hint")
+          DateAndTime:function(){
+            return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
+          }
+        },
+        redoInterval:{
+          required:function(){
+            return $('[name="doTimes"]:checked').val() == 0;
           },
+          arithmeticFloat:true,
+          max:1000000000
         }
+      },
+      messages: {
+        mediaId: {
+          required:Translator.trans('activity.testpaper_manage.media_error_hint'),
+        },
+        redoInterval: {
+          max: Translator.trans('activity.testpaper_manage.max_error_hint')
+        },
+      }
     });
     this.$step2_form.data('validator',validator);
   }
@@ -157,7 +157,7 @@ export default class Testpaper {
         'min': 0,
         'max': score
       }
-    }
+    };
     if(this.scoreSlider) {
       this.scoreSlider.updateOptions(option);
     }else {
@@ -169,10 +169,12 @@ export default class Testpaper {
         $('input[name="finishScore"]').val(parseInt(values[handle]));
       });
     }
+    
+    let tooltipInnerText = Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore': '<span class="js-passScore">'+passScore+'</span>'});
     let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
       <div class="tooltip-arrow"></div>
       <div class="tooltip-inner ">
-			${Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore': '<span class="js-passScore">'+passScore+'</span>'})}
+        ${tooltipInnerText}
       </div>
       </div></div>`;
     $('.noUi-handle').append(html);
@@ -181,7 +183,7 @@ export default class Testpaper {
   }
 
   getItemsTable(url, testpaperId) {
-  	$.post(url, {testpaperId:testpaperId},function(html){
+    $.post(url, {testpaperId:testpaperId},function(html){
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
     });
@@ -202,17 +204,17 @@ export default class Testpaper {
       minView: 'hour',
       endDate: new Date(Date.now() + 86400 * 365 * 10 *1000)
     })
-    .on('show', event => {
-      this.$parentiframe.height($('body').height() + 240);
-    })
-    .on('hide', event => {
-      this.$step2_form.data('validator').form();
-      this.$parentiframe.height($('body').height());
-    })
-    .on('changeDate',event =>{
-      let date = event.date.valueOf();
-      // this.showEndTime(date);
-    });
+      .on('show', event => {
+        this.$parentiframe.height($('body').height() + 240);
+      })
+      .on('hide', event => {
+        this.$step2_form.data('validator').form();
+        this.$parentiframe.height($('body').height());
+      })
+      .on('changeDate',event =>{
+        let date = event.date.valueOf();
+        // this.showEndTime(date);
+      });
     $starttime.datetimepicker('setStartDate',data);
     // this.showEndTime(Date.parse($starttime.val()));
   }

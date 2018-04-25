@@ -5,11 +5,6 @@ namespace ApiBundle\Api\Resource\Captcha;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Course\Course;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseSetService;
-use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
-use Biz\System\Service\SettingService;
 use ApiBundle\Api\Annotation\ApiConf;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -41,7 +36,7 @@ class Captcha extends AbstractResource
         }
 
         return array(
-            'status' => $this->getBizCaptcha()->check($captchaId, $phrase)
+            'status' => $this->getBizCaptcha()->check($captchaId, $phrase),
         );
     }
 }

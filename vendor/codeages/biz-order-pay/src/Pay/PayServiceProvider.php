@@ -16,7 +16,7 @@ class PayServiceProvider implements ServiceProviderInterface
 
         $biz['payment.options'] = null;
 
-        $biz['payment.final_options'] =  function () use ($biz) {
+        $biz['payment.final_options'] = function () use ($biz) {
             $options = array(
                 'closed_by_notify' => false,
                 'refunded_by_notify' => false,
@@ -64,7 +64,7 @@ class PayServiceProvider implements ServiceProviderInterface
                 'secret' => '',
                 'oid_partner' => '',
                 'signatureToolkit' => new SignatureToolkit(),
-            )
+            ),
         );
 
         $biz['payment.platforms.options'] = null;
@@ -88,7 +88,6 @@ class PayServiceProvider implements ServiceProviderInterface
             };
         }
     }
-
 
     private function registerStatus($biz)
     {

@@ -7,16 +7,16 @@ let validator = $form.validate({
       currency: true
     },
   }
-})
+});
 
 $('#classroom-save').click(()=>{
   validator.form();
-})
+});
 
-$("#price").on('input',function(){
-    var price = $("#price").val();
-    var rate = $("#coinPrice").data('rate');
-    var name = $("#coinPrice").data('name');
-    $("#coinPrice").text(Translator.trans('classroom.manage.coin_price_hint', {'coinPrice': price*rate, 'coinName': name}));
+$('#price').on('input',function(){
+  var price = $('#price').val();
+  var rate = $('#coinPrice').data('rate');
+  var name = $('#coinPrice').data('name');
+  $('#coinPrice').text(Translator.trans('classroom.manage.coin_price_hint', {'coinPrice': price*rate, 'coinName': name}));
 
 });

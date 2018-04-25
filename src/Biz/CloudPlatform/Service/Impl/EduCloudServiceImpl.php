@@ -13,8 +13,15 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
 {
     private $cloudApi;
 
-    public function isHiddenCloud()
+    private $isVisible;
+
+    public function isVisibleCloud()
     {
+        if (isset($this->isVisible)) {
+            return $this->isVisible;
+        }
+
+        $this->isVisible = false;
         try {
             $api = $this->createCloudApi();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
@@ -23,13 +30,14 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
             $logger->addInfo($e->getMessage());
 
-            return false;
-        }
-        if (!isset($overview['error'])) {
-            return $overview['accessCloud'] && $overview['enabled'];
+            return $this->isVisible;
         }
 
-        return false;
+        if (!isset($overview['error'])) {
+            $this->isVisible = $overview['accessCloud'] && $overview['enabled'];
+        }
+
+        return $this->isVisible;
     }
 
     public function getOldSmsUserStatus()

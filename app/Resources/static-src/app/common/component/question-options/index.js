@@ -10,7 +10,7 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
     optionLabel: Translator.trans('activity.testpaper_manage.question_options')+ numberConvertLetter(seq),
     inputValue: inputValue,
     checked: checked,
-  }
+  };
   validatorDatas.Options[obj.optionId] = inputValue.length > 0 ? 1 : 0;
   if(checked) {
     validatorDatas.checkedNum += 1;
@@ -65,7 +65,7 @@ function updateOption(dataSource,validatorDatas,id,value) {
     if(item.optionId == id) {
       dataSource[index].inputValue = value;
     }
-  })
+  });
 }
 
 export default class QuestionOptions extends Component {
@@ -74,7 +74,7 @@ export default class QuestionOptions extends Component {
     this.state = {
       dataSource:[],
       isValidator: false,
-    }
+    };
     //验证的数据
     this.validatorDatas = {
       checkedNum: 0,
@@ -91,7 +91,7 @@ export default class QuestionOptions extends Component {
           }
         }
         InitOptionData(this.state.dataSource,item,this.validatorDatas,index+1,checked);
-      })
+      });
     }else {
       for(let i = 1; i <= this.props.defaultNum;i++) {
         InitOptionData(this.state.dataSource,'',this.validatorDatas,i,false);
@@ -103,8 +103,8 @@ export default class QuestionOptions extends Component {
 
   subscriptionMessage() {
     postal.subscribe({
-      channel  : "manage-question",
-      topic    : "question-create-form-validator-start",
+      channel  : 'manage-question',
+      topic    : 'question-create-form-validator-start',
       callback : (data, envelope) =>{
         this.validatorOptions(data);
       }
@@ -113,8 +113,8 @@ export default class QuestionOptions extends Component {
 
   publishMessage(isValidator) {
     postal.publish({
-      channel : "manage-question",
-      topic : "question-create-form-validator-end",
+      channel : 'manage-question',
+      topic : 'question-create-form-validator-end',
       data : {
         isValidator: isValidator,
       }
@@ -127,7 +127,7 @@ export default class QuestionOptions extends Component {
     //触发视觉
     this.setState({
       isValidator: data.isValidator,
-    })
+    });
 
     for(let option in this.validatorDatas.Options){
       validNum += this.validatorDatas.Options[option];
@@ -189,7 +189,7 @@ export default class QuestionOptions extends Component {
     }
     this.setState({
       dataSource: this.state.dataSource,
-    })
+    });
 
     console.log(this.state.dataSource);
   }
@@ -202,7 +202,7 @@ export default class QuestionOptions extends Component {
           this.state.dataSource.map((item,index)=>{
             return (
               <Option imageUploadUrl= {this.props.imageUploadUrl} imageDownloadUrl={this.props.imageDownloadUrl}  isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id,value)=>this.updateInputValue(id,value)}></Option>
-            )
+            );
           })
         }
         <div className="form-group">
@@ -211,7 +211,7 @@ export default class QuestionOptions extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -221,4 +221,4 @@ QuestionOptions.defaultProps = {
   minNum: 2,//最少选项的个数
   isRadio: false,//是否为单选
   minCheckedNum:1,//至少选择几个答案
-}
+};

@@ -54,8 +54,8 @@
     <div class="form-group amount-form-group" style="display:none;">
       <label class="col-md-3 control-label" for="refund-coin-amount-field">{{'order.refund_coin_amount'|trans}}</label>
       <div class="col-md-8 controls">
-        <input id="refund-coin-amount-field" data-rate="{{ trade.rate }}" data-max-coin-amount="{{ order.paid_coin_amount|to_coin(0) }}" class="form-control width-input" type="text" name="refund_coin_amount" value="{{ refund.refund_coin_amount|to_coin(0) }}">
-        等于<span class="color-warning" id="coin-to-rmb">{{ (refund.refund_coin_amount/trade.rate)|to_cash(0) }}</span>{{ 'site.currency.CNY'|trans }}
+        <input id="refund-coin-amount-field" data-rate="{{ trade.rate|default(1) }}" data-max-coin-amount="{{ order.paid_coin_amount|to_coin(0) }}" class="form-control width-input" type="text" name="refund_coin_amount" value="{{ refund.refund_coin_amount|to_coin(0) }}">
+        等于<span class="color-warning" id="coin-to-rmb">{{ (refund.refund_coin_amount/trade.rate|default(1))|to_cash(0) }}</span>{{ 'site.currency.CNY'|trans }}
       </div>
     </div>
 

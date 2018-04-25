@@ -9,15 +9,15 @@ class AnonymousUserTest extends BaseTestCase
 {
     public function testSerialize()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->serialize();
 
-        $this->assertEquals('a:9', substr($result, 0, 3));
+        $this->assertEquals('a:1', substr($result, 0, 3));
     }
 
     public function testUnserialize()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $serialized = $anonymousUser->serialize();
 
         $anonymousUser->unserialize($serialized);
@@ -27,7 +27,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testSet()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->__set('nickname', 'testname');
 
         $this->assertEquals('testname', $anonymousUser->__get('nickname'));
@@ -35,7 +35,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGet()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result1 = $anonymousUser->__get('password');
 
         $this->assertEquals('', $result1);
@@ -47,7 +47,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsset()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->__isset('nickname');
 
         $this->assertTrue($result);
@@ -55,7 +55,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testUnset()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $anonymousUser->__unset('nickname');
         $result = $anonymousUser->__isset('nickname');
 
@@ -64,7 +64,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testClearNotifacationNum()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $anonymousUser->clearNotifacationNum();
 
         $this->assertEquals(0, $anonymousUser->__get('newNotificationNum'));
@@ -72,7 +72,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testClearMessageNum()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $anonymousUser->clearMessageNum();
 
         $this->assertEquals(0, $anonymousUser->__get('newMessageNum'));
@@ -80,7 +80,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testOffsetExists()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->offsetExists('nickname');
 
         $this->assertTrue($result);
@@ -88,7 +88,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testOffsetGet()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->offsetGet('nickname');
 
         $this->assertEquals('游客', $result);
@@ -96,7 +96,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testOffsetSet()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->offsetSet('nickname', 'testname');
 
         $this->assertEquals('testname', $anonymousUser->offsetGet('nickname'));
@@ -104,7 +104,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testOffsetUnset()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->offsetUnset('nickname');
 
         $this->assertNull($result);
@@ -112,7 +112,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetRoles()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getRoles();
 
         $this->assertEquals(array(), $result);
@@ -120,7 +120,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetPassword()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getPassword();
 
         $this->assertEquals('', $result);
@@ -128,7 +128,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetSalt()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getSalt();
 
         $this->assertEquals('', $result);
@@ -136,7 +136,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetUsername()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getUsername();
 
         $this->assertEquals('游客', $result);
@@ -144,7 +144,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetId()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getId();
 
         $this->assertEquals(0, $result);
@@ -152,7 +152,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsAccountNonExpired()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isAccountNonExpired();
 
         $this->assertTrue($result);
@@ -160,7 +160,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsAccountNonLocked()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isAccountNonLocked();
 
         $this->assertTrue($result);
@@ -168,7 +168,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsCredentialsNonExpired()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isCredentialsNonExpired();
 
         $this->assertTrue($result);
@@ -176,7 +176,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsEnabled()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isEnabled();
 
         $this->assertTrue($result);
@@ -184,7 +184,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsEqualTo()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isEqualTo($this->getCurrentUser());
 
         $this->assertFalse($result);
@@ -192,7 +192,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsLogin()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isLogin();
 
         $this->assertFalse($result);
@@ -200,7 +200,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsAdmin()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isAdmin();
 
         $this->assertFalse($result);
@@ -208,7 +208,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsSuperAdmin()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isSuperAdmin();
 
         $this->assertFalse($result);
@@ -216,7 +216,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testIsTeacher()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->isTeacher();
 
         $this->assertFalse($result);
@@ -224,55 +224,55 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetCurrentOrgId()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getCurrentOrgId();
-
-        $this->assertEquals(0, $result);
-    }
-
-    public function testGetCurrentOrg()
-    {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
-        $result = $anonymousUser->getCurrentOrg();
-
-        $this->assertEquals(array(), $result);
-    }
-
-    public function testGetSelectOrg()
-    {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
-        $result = $anonymousUser->getSelectOrg();
-
-        $this->assertEquals(array(), $result);
-    }
-
-    public function testGetOrg()
-    {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
-        $result = $anonymousUser->getOrg();
-
-        $this->assertEquals(array('id' => 1, 'orgCode' => '1.'), $result);
-    }
-
-    public function testGetOrgCode()
-    {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
-        $result = $anonymousUser->getOrgCode();
-
-        $this->assertEquals('1.', $result);
-    }
-
-    public function testGetOrgId()
-    {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
-        $result = $anonymousUser->getOrgId();
 
         $this->assertEquals(1, $result);
     }
 
+    public function testGetCurrentOrg()
+    {
+        $anonymousUser = new AnonymousUser();
+        $result = $anonymousUser->getCurrentOrg();
+
+        $this->assertEquals(array('id' => 1, 'orgCode' => '1.'), $result);
+    }
+
+    public function testGetSelectOrg()
+    {
+        $anonymousUser = new AnonymousUser();
+        $result = $anonymousUser->getSelectOrg();
+
+        $this->assertEquals(array('id' => 1, 'orgCode' => '1.'), $result);
+    }
+
+    public function testGetOrg()
+    {
+        $anonymousUser = new AnonymousUser();
+        $result = $anonymousUser->getOrg();
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testGetOrgCode()
+    {
+        $anonymousUser = new AnonymousUser();
+        $result = $anonymousUser->getOrgCode();
+
+        $this->assertEquals(null, $result);
+    }
+
+    public function testGetOrgId()
+    {
+        $anonymousUser = new AnonymousUser();
+        $result = $anonymousUser->getOrgId();
+
+        $this->assertEquals(null, $result);
+    }
+
     public function testGetSelectOrgCode()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getSelectOrgCode();
 
         $this->assertEquals('1.', $result);
@@ -280,7 +280,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetSelectOrgId()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getSelectOrgId();
 
         $this->assertEquals(1, $result);
@@ -288,7 +288,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testFromArray()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->fromArray(array());
 
         $this->assertEquals('Biz\User\AnonymousUser', get_class($result));
@@ -296,7 +296,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testToArray()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->toArray();
 
         $this->assertEquals(0, $result['id']);
@@ -304,7 +304,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testSetPermissions()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->setPermissions(array());
 
         $this->assertEquals('Biz\User\AnonymousUser', get_class($result));
@@ -312,7 +312,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testGetPermissions()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->getPermissions();
 
         $this->assertEquals(array(), $result);
@@ -320,7 +320,7 @@ class AnonymousUserTest extends BaseTestCase
 
     public function testHasPermission()
     {
-        $anonymousUser = new AnonymousUser('127.0.0.1');
+        $anonymousUser = new AnonymousUser();
         $result = $anonymousUser->hasPermission('');
 
         $this->assertFalse($result);

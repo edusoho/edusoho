@@ -355,6 +355,57 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals('success', $result3[0]);
     }
 
+    public function testFindFinishedLivesWithinTwoHours()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'returnValue' => array(array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => time() - 3600, 'endTime' => time() - 1800)),
+            ),
+        ));
+
+        $results = $this->getOpenCourseService()->findFinishedLivesWithinTwoHours();
+
+        $this->assertEquals(1, count($results));
+        $this->assertEquals('liveOpen', $results[0]['type']);
+        $this->assertLessThan(7200, time() - $results[0]['endTime']);
+    }
+
+    public function testUpdateLiveStatus()
+    {
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
+        $this->assertEmpty($result);
+
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'update',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'closed'),
+            ),
+        ));
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
+
+        $this->assertEquals('closed', $result['progressStatus']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testUpdateLiveStatusException()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
+            ),
+        ));
+
+        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'created');
+    }
+
     /**
      * open_course_member.
      */
@@ -580,6 +631,44 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals('title', $result[0]['title']);
     }
 
+    public function testBatchUpdateOrg()
+    {
+        $magic = $this->getSettingService()->set('magic', array('enable_org' => 1));
+        $magic = $this->getSettingService()->get('magic');
+
+        $org1 = $this->mookOrg($name = 'edusoho1');
+        $org1 = $this->getOrgService()->createOrg($org1);
+
+        $org2 = $this->mookOrg($name = 'edusoho2');
+        $org2 = $this->getOrgService()->createOrg($org2);
+
+        $course = array(
+            'type' => 'open',
+            'title' => '公开课',
+            'orgCode' => $org1['orgCode'],
+        );
+        $course = $this->getOpenCourseService()->createCourse($course);
+
+        $this->assertEquals($org1['id'], $course['orgId']);
+        $this->assertEquals($org1['orgCode'], $course['orgCode']);
+
+        $this->getOpenCourseService()->batchUpdateOrg($course['id'], $org2['orgCode']);
+
+        $course = $this->getOpenCourseService()->getCourse($course['id']);
+
+        $this->assertEquals($org2['id'], $course['orgId']);
+        $this->assertEquals($org2['orgCode'], $course['orgCode']);
+    }
+
+    private function mookOrg($name)
+    {
+        $org = array();
+        $org['name'] = $name;
+        $org['code'] = $name;
+
+        return $org;
+    }
+
     private function _createLiveOpenCourse()
     {
         $course = array(
@@ -691,6 +780,16 @@ class OpenCourseServiceTest extends BaseTestCase
             ),
         );
         $this->mockBiz('File:UploadFileService', $params);
+    }
+
+    public function getOrgService()
+    {
+        return $this->createService('Org:OrgService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

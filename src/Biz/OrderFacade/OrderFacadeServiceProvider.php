@@ -140,6 +140,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $site = $biz->service('System:SettingService')->get('site', array());
 
             return array(
+                'closed_by_notify' => true,
                 'coin_rate' => empty($setting['coin_enabled']) ? 1 : $setting['cash_rate'],
                 'goods_title' => empty($site['name']) ? 'EduSoho订单' : $site['name'].'订单',
             );

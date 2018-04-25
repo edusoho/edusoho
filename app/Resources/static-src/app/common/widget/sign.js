@@ -17,7 +17,7 @@ export default  class Sing {
     this.$element.on('mouseenter', '.sign_main', () => this.keep());
     this.$element.on('mouseleave', '.sign_main', () => this.remove());
     this.$element.on('click', '[data-role=previous]', () => this.previousMonth());
-    this.$element.on('click', '[data-role=next]', () => this.nextMonth())
+    this.$element.on('click', '[data-role=next]', () => this.nextMonth());
   }
 
   setup() {
@@ -52,9 +52,9 @@ export default  class Sing {
       success:  (data) => {
 
         $('#sign').html('<div  class="sign-area" data-role="signed" onclick="return false;" >' + '<a class="btn-signin after" >' + Translator.trans('classroom.member_signed') + '<br>' + Translator.trans('classroom.sign_keep_days', {'keepDays' : data.keepDays}) +  '</a></div>');
-       this.showSignTable();
-       this.initTable(true);
-       this.$element.find('.d-' + today).addClass('signed_anime_day');
+        this.showSignTable();
+        this.initTable(true);
+        this.$element.find('.d-' + today).addClass('signed_anime_day');
         // window.location.reload();
       },
       error:  (xhr)=> {
@@ -92,7 +92,7 @@ export default  class Sing {
     var month = parseInt(selectedDate[1]);
     var days = this.getDaysInMonth(month - 1, year);
     var $tbody = this.$element.find('tbody');
-    var newtr = "<tr><td class='t-1-0 '></td><td class='t-1-1 '></td><td class='t-1-2 '></td><td class='t-1-3 '></td><td class='t-1-4 '></td><td class='t-1-5 '></td><td class='t-1-6 '></td></tr>";
+    var newtr = '<tr><td class=\'t-1-0 \'></td><td class=\'t-1-1 \'></td><td class=\'t-1-2 \'></td><td class=\'t-1-3 \'></td><td class=\'t-1-4 \'></td><td class=\'t-1-5 \'></td><td class=\'t-1-6 \'></td></tr>';
 
     var url = this.signedRecordsUrl + '?startDay=' + year + '-' + month + '-1' + '&endDay=' + year + '-' + month + '-' + days;
 
@@ -101,8 +101,8 @@ export default  class Sing {
     var today = new Date().getDate();
     for (var day = 1; day <= days; day++) {
       var week = this.getWeekByDate(year, month, day);
-      $tbody.find(".t-" + row + '-' + week).html(day);
-      $tbody.find(".t-" + row + '-' + week).addClass('d-' + day);
+      $tbody.find('.t-' + row + '-' + week).html(day);
+      $tbody.find('.t-' + row + '-' + week).addClass('d-' + day);
 
       if (week == 6 && day != days) {
         row++;
@@ -118,7 +118,7 @@ export default  class Sing {
       success: (data)=> {
         for (var i = 0; i < data.records.length; i++) {
           var day = parseInt(data.records[i]['day']);
-          $tbody.find(".d-" + day).addClass('signed_day').attr('title', Translator.trans('classroom.sign_rank_hint', {'time' : data.records[i]['time'], 'rank' : data.records[i]['rank']}));
+          $tbody.find('.d-' + day).addClass('signed_day').attr('title', Translator.trans('classroom.sign_rank_hint', {'time' : data.records[i]['time'], 'rank' : data.records[i]['rank']}));
         }
         this.$element.find('.today-rank').html(data.todayRank);
         this.$element.find('.signed-number').html(data.signedNum);
@@ -150,7 +150,7 @@ export default  class Sing {
     var nextMonth = 0;
     var nextYear = currentYear;
     if (currentMonth == 1) {
-      nextMonth = 12
+      nextMonth = 12;
       nextYear = currentYear - 1;
     } else {
       nextMonth = currentMonth - 1;

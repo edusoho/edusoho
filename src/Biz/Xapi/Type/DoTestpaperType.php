@@ -8,37 +8,6 @@ class DoTestpaperType extends Type
 {
     const TYPE = 'completed_testpaper';
 
-    public function package($statement)
-    {
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($statement['target_id']);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($testpaperResult['courseSetId']);
-        $course['description'] = $courseSet['subtitle'];
-        $course['title'] = $courseSet['title'].'-'.$course['title'];
-
-        $object = array(
-            'id' => $testpaperResult['id'],
-            'name' => $testpaperResult['paperName'],
-            'course' => $course,
-        );
-
-        $actor = $this->getActor($statement['user_id']);
-        $result = array(
-            'score' => array(
-                'max' => $testpaper['score'],
-                'min' => 0,
-                'raw' => $testpaperResult['score'],
-            ),
-        );
-
-        if ('none' != $testpaperResult['passedStatus']) {
-            $result['success'] = ('passed' == $testpaperResult['passedStatus']) ? true : false;
-        }
-
-        return $this->createXAPIService()->finishTestpaper($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
-    }
-
     public function packages($statements)
     {
         if (empty($statements)) {
@@ -53,21 +22,9 @@ class DoTestpaperType extends Type
             $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
             $testpapers = ArrayToolkit::index($testpapers, 'id');
 
-            $courseIds = ArrayToolkit::column($testpaperResults, 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses, 'id');
-
-            $courseSetIds = ArrayToolkit::column($testpaperResults, 'courseSetId');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-            $courseSets = ArrayToolkit::index($courseSets, 'id');
-
-            foreach ($courses as &$course) {
-                if (!empty($courseSets[$course['courseSetId']])) {
-                    $courseSet = $courseSets[$course['courseSetId']];
-                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                    $course['title'] = $courseSet['title'].'-'.$course['title'];
-                }
-            }
+            $courses = $this->findCourses(
+                array($testpaperResults, 'courseId')
+            );
 
             $sdk = $this->createXAPIService();
             $pushStatements = array();

@@ -30,4 +30,14 @@ class Determine extends BaseQuestion implements TypeInterface
 
         return array('status' => $status, 'score' => $score);
     }
+
+    public function getAnswerStructure($question)
+    {
+        return array(0, 1);
+    }
+
+    public function analysisAnswerIndex($question, $userAnswer)
+    {
+        return array($question['id'] => $userAnswer['answer']);
+    }
 }

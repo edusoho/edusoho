@@ -32,11 +32,12 @@ class OrderFacadeServiceTest extends BaseTestCase
         $courseProduct->pickedDeducts = array(
             array('deduct_id' => 1, 'deduct_type' => 'rewardPoint', 'deduct_amount' => 20),
             array('deduct_id' => 2, 'deduct_type' => 'discount', 'deduct_amount' => 100),
+            array('deduct_id' => 2, 'deduct_type' => 'seckill', 'deduct_amount' => 20, 'deduct_type_name' => '秒杀'),
         );
 
         $order = $this->getOrderFacadeService()->create($courseProduct);
 
-        $this->assertEquals(80 * 100, $order['pay_amount']);
+        $this->assertEquals(60 * 100, $order['pay_amount']);
     }
 
     /**

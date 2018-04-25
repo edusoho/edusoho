@@ -133,10 +133,14 @@ class LianlianPayGateway extends AbstractGateway
         if (!empty($params['return_url'])) {
             $converted['url_return'] = $params['return_url'];
         }
+        if (empty($params['attach']['bindPhone'])) {
+            $params['attach']['bindPhone'] = '';
+        }
         $converted['risk_item']  = json_encode(array(
             'frms_ware_category'=>1008,
             'user_info_mercht_userno'=>$params['attach']['identify_user_id'],
-            'user_info_dt_register'=>date('YmdHis', $params['attach']['user_created_time'])
+            'user_info_dt_register'=>date('YmdHis', $params['attach']['user_created_time']),
+            'user_info_bind_phone' => $params['attach']['bindPhone']
         ));
 
         $converted['userreq_ip'] = str_replace(".", "_", $params['create_ip']);

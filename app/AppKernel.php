@@ -157,6 +157,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
+        $biz->register(new \Biz\DefaultSdkProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {
@@ -171,7 +172,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
         $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
         $biz->register(new \Biz\Xapi\XapiServiceProvider());
-        $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
+        $this->registerSessionServiceProvider($biz);
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
         $biz->boot();
 
@@ -180,6 +181,23 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
         }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
+    }
+
+    protected function registerSessionServiceProvider($biz)
+    {
+        if ($this->getContainer()->hasParameter('redis_host')) {
+            $biz->register(
+                new \Codeages\Biz\Framework\Provider\SessionServiceProvider(),
+                array(
+                    'session.options' => array(
+                        'max_life_time' => 7200,
+                        'session_storage' => 'redis', // exapmle: db, redis
+                    ),
+                )
+            );
+        } else {
+            $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
+        }
     }
 
     protected function registerCacheServiceProvider($biz)
@@ -207,8 +225,18 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $biz = $container->get('biz');
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
-
-            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
+            try {
+                //初始化项目时，biz_session 尚未创建
+                $invitedCode = @$container->get('session')->get('invitedCode', '');
+            } catch (\Exception $e) {
+                $invitedCode = '';
+            }
+            $currentUser = array(
+                'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
+                'isSecure' => $this->request->isSecure(),
+                'invitedCode' => $invitedCode,
+            );
+            $currentUser = new \Biz\User\AnonymousUser($currentUser);
 
             $biz['user'] = $currentUser;
             $serviceKernel

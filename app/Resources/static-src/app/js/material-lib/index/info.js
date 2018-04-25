@@ -14,7 +14,7 @@ export default class Info {
   initEvent() {
     $('#info-form').on('submit', (event) => {
       this.onSubmitInfoForm(event);
-    })
+    });
   }
   _initTag() {
     Select('#infoTags', 'remote', {
@@ -25,9 +25,9 @@ export default class Info {
     let $target = $(event.currentTarget);
     $target.find('#info-save-btn').button('loading');
     $.ajax({
-     type: 'POST',
-     url: $target.attr('action'),
-     data: $('#info-form').serialize()
+      type: 'POST',
+      url: $target.attr('action'),
+      data: $('#info-form').serialize()
 
     }).done(function() {
       notify('success', Translator.trans('site.save_success_hint'));

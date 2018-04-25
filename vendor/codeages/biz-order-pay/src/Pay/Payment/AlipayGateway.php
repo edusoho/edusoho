@@ -41,8 +41,20 @@ class AlipayGateway extends AbstractGateway
 
         return array(
             'url' => $response->getRedirectUrl(),
-            'data' => $response->getRedirectData()
+            'data' => $response->getRedirectData(),
         );
+    }
+
+    public function closeTrade($trade)
+    {
+        $platformType = empty($trade['platform_type']) ? 'Web' : $trade['platform_type'];
+        $gateway = $this->createGateway($platformType);
+
+        $response = $gateway->close(array(
+            'out_trade_no' => $trade['trade_sn'],
+        ))->send();
+
+        return $response;
     }
 
     protected function makeWebOrder($data)
@@ -51,7 +63,7 @@ class AlipayGateway extends AbstractGateway
         $order['subject'] = $data['goods_title'];
         $order['body'] = $data['goods_detail'];
         $order['out_trade_no'] = $data['trade_sn'];
-        $order['total_fee'] = $data['amount']/100;
+        $order['total_fee'] = $data['amount'] / 100;
         $order['exter_invoke_ip'] = $data['create_ip'];
 
         $order['extra_common_param'] = json_encode($data['attach']);
@@ -65,10 +77,9 @@ class AlipayGateway extends AbstractGateway
         $order['subject'] = $data['goods_title'];
         $order['body'] = $data['goods_detail'];
         $order['out_trade_no'] = $data['trade_sn'];
-        $order['total_fee'] = $data['amount']/100;
+        $order['total_fee'] = $data['amount'] / 100;
         $order['app_pay'] = isset($data['app_pay']) ? $data['app_pay'] : '';
         $order['show_url'] = isset($data['show_url']) ? $data['show_url'] : '';
-
 
         $order['passback_params'] = urlencode(json_encode($data['attach']));
 
@@ -86,12 +97,11 @@ class AlipayGateway extends AbstractGateway
         $response = $request->send();
 
         if ($response->isPaid()) {
-
             $method = "get{$platformType}PaidNotifyData";
 
             return array(
                 $this->$method($data),
-                'success'
+                'success',
             );
         }
 
@@ -100,7 +110,7 @@ class AlipayGateway extends AbstractGateway
                 'status' => 'failture',
                 'notify_data' => $data,
             ),
-            'fail'
+            'fail',
         );
     }
 
@@ -110,7 +120,7 @@ class AlipayGateway extends AbstractGateway
             'status' => 'paid',
             'cash_flow' => $data['trade_no'],
             'paid_time' => $this->getPaidTime($data),
-            'pay_amount' => (int)($data['total_fee']*1000/10),
+            'pay_amount' => (int) ($data['total_fee'] * 1000 / 10),
             'cash_type' => 'RMB',
             'trade_sn' => $data['out_trade_no'],
             'attach' => !empty($data['extra_common_param']) ? json_decode($data['extra_common_param'], true) : array(),
@@ -124,7 +134,7 @@ class AlipayGateway extends AbstractGateway
             'status' => 'paid',
             'cash_flow' => $data['trade_no'],
             'paid_time' => $this->getPaidTime($data),
-            'pay_amount' => (int)($data['total_fee']*1000/10),
+            'pay_amount' => (int) ($data['total_fee'] * 1000 / 10),
             'cash_type' => 'RMB',
             'trade_sn' => $data['out_trade_no'],
             'attach' => !empty($data['extra_common_param']) ? json_decode($data['extra_common_param'], true) : array(),
@@ -143,8 +153,7 @@ class AlipayGateway extends AbstractGateway
 
     protected function createGateway($platformType = 'Web')
     {
-
-        $ominpayType = $platformType == 'Web' ? 'LegacyExpress' : 'LegacyWap';
+        $ominpayType = 'Web' == $platformType ? 'LegacyExpress' : 'LegacyWap';
 
         $config = $this->getSetting();
         $gateway = Omnipay::create("Alipay_{$ominpayType}");
@@ -152,12 +161,14 @@ class AlipayGateway extends AbstractGateway
         $gateway->setSellerId($config['partner']);
         $gateway->setPartner($config['partner']);
         $gateway->setKey($config['key']);
+
         return $gateway;
     }
 
     protected function getSetting()
     {
         $config = $this->biz['payment.platforms']['alipay'];
+
         return array(
             'seller_email' => $config['seller_email'],
             'partner' => $config['partner'],

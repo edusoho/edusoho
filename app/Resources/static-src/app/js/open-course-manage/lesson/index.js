@@ -9,7 +9,7 @@ sortList({
   itemSelector: '.item-lesson, .item-chapter'
 }, (data) => {
   sortListAfter(data, $('#course-item-list'));
-})
+});
 
 $list.on('click', '.delete-lesson-btn', function (e) {
   if (!confirm(Translator.trans('open_course.lesson_delete_hint'))) {
@@ -18,14 +18,14 @@ $list.on('click', '.delete-lesson-btn', function (e) {
   let $btn = $(e.currentTarget);
   let _isTestPaper = function () {
     return $btn.parents('.item-chapter')[0];
-  }
+  };
   let _remove_item = function () {
     if (_isTestPaper()) {
       $btn.parents('.item-chapter').remove();
     } else {
       $btn.parents('.item-lesson').remove();
     }
-  }
+  };
   $.post($(this).data('url'), function (response) {
     _remove_item();
     sortListAfter($list);
@@ -116,8 +116,8 @@ $list.on('click', '.delete-homework-btn', function (e) {
 });
 
 
-$("#course-item-list .item-actions .btn-link").tooltip();
-$("#course-item-list .fileDeletedLesson").tooltip();
+$('#course-item-list .item-actions .btn-link').tooltip();
+$('#course-item-list .fileDeletedLesson').tooltip();
 
 $('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
   if ($(this).find('.dropdown-menu-more').css('display') == 'block') {
@@ -149,8 +149,8 @@ $('#lesson-create-btn').click(function () {
       $('#modal').html(data);
       $('#modal').modal('show');
     }
-  })
-})
+  });
+});
 
 function asyncLoadFiles() {
   let url = $('.lesson-manage-panel').data('file-status-url');
@@ -166,7 +166,7 @@ function asyncLoadFiles() {
     return;
   }
 
-  $.post(url, { 'ids': fileIds.join(",") }, function (data) {
+  $.post(url, { 'ids': fileIds.join(',') }, function (data) {
 
     if (!data || data.length == 0) {
       return;
@@ -177,12 +177,12 @@ function asyncLoadFiles() {
 
       if ($.inArray(file.type, ['video', 'ppt', 'document']) > -1) {
         if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
-          $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>"+Translator.trans('open_course.file_format_conversion_hint')+"</span>");
+          $('li[data-file-id=' + file.id + ']').find('span[data-role="mediaStatus"]').append('<span class=\'text-warning\'>'+Translator.trans('open_course.file_format_conversion_hint')+'</span>');
         } else if (file.convertStatus == 'error') {
-          $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>"+Translator.trans('open_course.file_format_conversion_failed_hint')+"</span>");
+          $('li[data-file-id=' + file.id + ']').find('span[data-role="mediaStatus"]').append('<span class=\'text-danger\'>'+Translator.trans('open_course.file_format_conversion_failed_hint')+'</span>');
         } else if (file.convertStatus == 'success') {
-          $("li[data-file-id=" + file.id + "]").find('.mark-manage').show();
-          $("li[data-file-id=" + file.id + "]").find('.mark-manage-divider').show();
+          $('li[data-file-id=' + file.id + ']').find('.mark-manage').show();
+          $('li[data-file-id=' + file.id + ']').find('.mark-manage-divider').show();
         }
       }
     }
@@ -191,7 +191,7 @@ function asyncLoadFiles() {
 
 function sortListAfter(data, $list) {
   $.post($list.data('sortUrl'), { ids: data }, function (response) {
-    let lessonNum = chapterNum = unitNum = 0;
+    let lessonNum = 0, chapterNum = 0, unitNum = 0;
 
     $list.find('.item-lesson, .item-chapter').each(function () {
       let $item = $(this);

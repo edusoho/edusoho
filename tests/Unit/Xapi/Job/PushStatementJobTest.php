@@ -10,9 +10,34 @@ class PushStatementJobTest extends BaseTestCase
 {
     public function testExecute()
     {
-        $this->mockBiz('System:SettingService', array(
-            array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
-        ));
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(
+                        'siteName' => 'abc',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('xapi', array()),
+                    'returnValue' => array(
+                        'pushUrl' => '',
+                        'enabled' => 1,
+                    ),
+                ),
+            )
+        );
 
         $xapiSdk = $this->getXapiService()->getXapiSdk();
         $mockObject = \Mockery::mock($xapiSdk);
@@ -30,6 +55,10 @@ class PushStatementJobTest extends BaseTestCase
                         'data' => array('uuid' => 'test'),
                     ),
                 ),
+            ),
+            array(
+                'functionName' => 'countStatements',
+                'returnValue' => 10,
             ),
             array(
                 'functionName' => 'getXapiSdk',

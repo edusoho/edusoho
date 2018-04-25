@@ -16,7 +16,7 @@ class CourseFileChoose extends Chooser {
   _initEvent() {
     $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
     $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-    $(this.container).on('click', '.js-course-browser-search', this._filterByFileName.bind(this))
+    $(this.container).on('click', '.js-course-browser-search', this._filterByFileName.bind(this));
     // $('.js-choose-trigger').on('click', this._open.bind(this))
   }
 
@@ -29,11 +29,11 @@ class CourseFileChoose extends Chooser {
   }
 
   _getParams() {
-      let params = {};
-      $('.js-course-file-search-form').find('input[type=hidden]').each(function() {
-          params[$(this).attr('name')] = $(this).val();
-      });
-      return params;
+    let params = {};
+    $('.js-course-file-search-form').find('input[type=hidden]').each(function() {
+      params[$(this).attr('name')] = $(this).val();
+    });
+    return params;
   }
 
   _paginationList(event) {
@@ -45,11 +45,11 @@ class CourseFileChoose extends Chooser {
     this._loadList();
   }
 
-_filterByFileName() {
+  _filterByFileName() {
     $('.js-course-file-search-form').find('input[name=keyword]').val($('.js-course-file-name').val());
     $('.js-course-file-search-form').find('input[name=page]').val(1);
     this._loadList();
-}
+  }
 
   _onSelectFile(event) {
     $('.file-browser-item').removeClass('active');
@@ -72,8 +72,8 @@ _filterByFileName() {
   _fillMinuteAndSecond(fileLength) {
     let minute = parseInt(fileLength / 60);
     let second = Math.round(fileLength % 60);
-    $("#minute").val(minute);
-    $("#second").val(second)
+    $('#minute').val(minute);
+    $('#second').val(second);
   }
 
 }

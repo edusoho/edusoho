@@ -77,5 +77,12 @@ define(function(require, exports, module) {
     $('.js-update-modal').modal('show');
   }
 
+  $('.modal').on('hidden.bs.modal', function(){
+    var $modal = $(this);
+    if ($modal.find('.modal-dialog').data('clear')) {
+      $modal.empty();
+    }
+  });
+
   $.ajax('/online/sample');
 });

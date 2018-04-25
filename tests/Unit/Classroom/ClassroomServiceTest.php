@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
+use AppBundle\Common\TimeMachine;
 
 class ClassroomServiceTest extends BaseTestCase
 {
@@ -545,10 +546,6 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testUpdateClassroomTeachers()
-    {
-    }
-
     public function testPublishClassroom()
     {
         $textClassroom = array(
@@ -736,10 +733,6 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(false, $enabled);
     }
 
-    public function testFindCoursesByCoursesIds()
-    {
-    }
-
     public function testDeleteClassroomCourses()
     {
         $textClassroom = array(
@@ -838,6 +831,21 @@ class ClassroomServiceTest extends BaseTestCase
         $result = $this->getClassroomService()->searchMemberCount(array('userId' => 1));
 
         $this->assertEquals(1, $result);
+    }
+
+    public function testSearchMemberCountGroupByFields()
+    {
+        $this->mockBiz('Classroom:ClassroomMemberDao', array(
+            array(
+                'functionName' => 'searchMemberCountGroupByFields',
+                'returnValue' => array(array('classroomId' => 1, 'count' => 2)),
+            ),
+        ));
+        $conditions = array('createdTime_GE' => strtotime('-30 days'), 'roles' => array('student', 'assistant'));
+        $result = $this->getClassroomService()->searchMemberCountGroupByFields($conditions, 'classroomId', 0, 10);
+
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(1, $result[0]['classroomId']);
     }
 
     public function testSearchMembers()
@@ -1214,6 +1222,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testBecomeTeacher()
     {
+        TimeMachine::setMockedTime(1517464454);
         $this->mockBiz(
             'Classroom:ClassroomDao',
             array(
@@ -1248,7 +1257,7 @@ class ClassroomServiceTest extends BaseTestCase
                             'levelId' => 0,
                             'role' => array('teacher'),
                             'remark' => '',
-                            'createdTime' => time(),
+                            'createdTime' => TimeMachine::time(),
                         ),
                     ),
                 ),
@@ -1394,7 +1403,7 @@ class ClassroomServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->getClassroomService()->updateAssistants(1, array(1, 2));
+        $result = $this->getClassroomService()->updateAssistants(1, array(1, 2));
         $this->getClassroomMemberDao()->shouldHaveReceived(
             'update',
             array(1, array('role' => array('student', 'assistant')))
@@ -1404,6 +1413,7 @@ class ClassroomServiceTest extends BaseTestCase
             array(3, array('role' => array('student')))
         );
         $this->getClassroomDao()->shouldHaveReceived('update');
+        $this->assertNull($result);
     }
 
     public function testBecomeAuditor()
@@ -1831,7 +1841,7 @@ class ClassroomServiceTest extends BaseTestCase
         ));
         $classroom1 = $this->getClassroomService()->updateClassroom($classroom1['id'], array(
             'expiryMode' => 'date',
-            'expiryValue' => time(),
+            'expiryValue' => time() + 1,
         ));
         $this->getClassroomService()->publishClassroom($classroom1['id']);
 
@@ -1852,7 +1862,7 @@ class ClassroomServiceTest extends BaseTestCase
         $result = $this->getClassroomService()->canJoinClassroom($classroom['id']);
         $this->assertEquals($result['code'], 'success');
 
-        sleep(1);
+        sleep(3);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
         $this->assertEquals($result1['code'], 'classroom.expired');
     }
@@ -2389,6 +2399,17 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->findMembersByMemberIds(array(1));
 
         $this->getClassroomMemberDao()->shouldHaveReceived('findMembersByMemberIds');
+    }
+
+    public function testRefreshClassroomHotSeq()
+    {
+        $classroom = $this->getClassroomDao()->create(array('title' => 'classroom title', 'hotSeq' => 10));
+        $this->assertEquals(10, $classroom['hotSeq']);
+
+        $this->getClassroomService()->refreshClassroomHotSeq();
+
+        $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
+        $this->assertEquals(0, $classroom['hotSeq']);
     }
 
     protected function mockCourse($title = 'Test Course 1')

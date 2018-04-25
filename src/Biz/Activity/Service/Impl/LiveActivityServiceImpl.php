@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Event\Event;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -125,7 +126,26 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'newLiveActivity' => $liveActivity,
         ));
 
+        $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
+
         return $liveActivity;
+    }
+
+    public function updateLiveStatus($id, $status)
+    {
+        $liveActivity = $this->getLiveActivityDao()->get($id);
+        if (empty($liveActivity)) {
+            return;
+        }
+
+        if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $update = $this->getLiveActivityDao()->update($liveActivity['id'], array('progressStatus' => $status));
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', "修改直播进行状态，由‘{$liveActivity['progressStatus']}’改为‘{$status}’", array('preLiveActivity' => $liveActivity, 'newLiveActivity' => $update));
+
+        return $update;
     }
 
     public function deleteLiveActivity($id)
@@ -139,7 +159,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
             $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+            $this->getLogService()->info(AppLoggerConstant::LIVE, 'delete_live_activity', "删除直播活动（#{$liveActivity['id']}）", $liveActivity);
         }
+    }
+
+    public function search($conditions, $orderbys, $start, $limit)
+    {
+        return $this->getLiveActivityDao()->search($conditions, $orderbys, $start, $limit);
     }
 
     /**

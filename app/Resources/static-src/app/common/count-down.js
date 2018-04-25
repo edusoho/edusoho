@@ -7,4 +7,4 @@ export const countDown = ($dom, num, url) => {
   } else {
     window.location.href = url;
   }
-}
+};

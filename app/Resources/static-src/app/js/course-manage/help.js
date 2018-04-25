@@ -3,7 +3,7 @@ import sortList from 'common/sortable';
 
 export const sortablelist = (list) => {
   let $list = $(list);
-  let data = $list.sortable("serialize").get();
+  let data = $list.sortable('serialize').get();
 
   let lessonNum = 0,
     chapterNum = 0,
@@ -30,7 +30,7 @@ export const sortablelist = (list) => {
   $.post($list.data('sortUrl'), { ids: data }, (response) => {
 
   });
-}
+};
 
 export const taskSortable = (list) => {
   if ($(list).length) {
@@ -41,7 +41,7 @@ export const taskSortable = (list) => {
       sortablelist(list);
     });
   }
-}
+};
 
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function (evt) {
@@ -124,7 +124,7 @@ export const deleteTask = () => {
         sortablelist('#sortable-list');
         console.log($('#sortable-list').children('li').length);
         if($('#sortable-list').children('li').length < 1 && $('.js-task-empty').hasClass('hidden') ) {
-            $('.js-task-empty').removeClass('hidden');
+          $('.js-task-empty').removeClass('hidden');
         }
         document.location.reload();
       } else {
@@ -140,15 +140,15 @@ export const publishTask = () => {
       if (data.success) {
         var parentLi = $(event.target).closest('.task-manage-item');
         notify('success', Translator.trans('course.manage.task_publish_success_hint'));
-        $(parentLi).find('.publish-item').addClass('hidden')
-        $(parentLi).find('.delete-item').addClass('hidden')
-        $(parentLi).find('.unpublish-item').removeClass('hidden')
-        $(parentLi).find('.publish-status').addClass('hidden')
+        $(parentLi).find('.publish-item').addClass('hidden');
+        $(parentLi).find('.delete-item').addClass('hidden');
+        $(parentLi).find('.unpublish-item').removeClass('hidden');
+        $(parentLi).find('.publish-status').addClass('hidden');
       } else {
         notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.message);
       }
     });
-  })
+  });
 };
 
 export const unpublishTask = () => {
@@ -157,19 +157,19 @@ export const unpublishTask = () => {
       if (data.success) {
         var parentLi = $(event.target).closest('.task-manage-item');
         notify('success', Translator.trans('course.manage.task_unpublish_success_hint'));
-        $(parentLi).find('.publish-item').removeClass('hidden')
-        $(parentLi).find('.delete-item').removeClass('hidden')
-        $(parentLi).find('.unpublish-item').addClass('hidden')
-        $(parentLi).find('.publish-status').removeClass('hidden')
+        $(parentLi).find('.publish-item').removeClass('hidden');
+        $(parentLi).find('.delete-item').removeClass('hidden');
+        $(parentLi).find('.unpublish-item').addClass('hidden');
+        $(parentLi).find('.publish-status').removeClass('hidden');
       } else {
         notify('danger', Translator.trans('course.manage.task_unpublish_fail_hint') + ':' + data.message);
       }
     });
-  })
+  });
 };
 
 export const showSettings = () => {
-  $("#sortable-list").on('click', '.js-item-content', (event) => {
+  $('#sortable-list').on('click', '.js-item-content', (event) => {
     console.log('click');
     let $this = $(event.currentTarget);
     let $li = $this.closest('.js-task-manage-item');
@@ -178,7 +178,7 @@ export const showSettings = () => {
     }
     else {
       $li.addClass('active').find('.js-settings-list').stop().slideDown(500);
-      $li.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
+      $li.siblings('.js-task-manage-item.active').removeClass('active').find('.js-settings-list').hide();
     }
   });
 };
@@ -186,7 +186,7 @@ export const showSettings = () => {
 export const TabChange = () => {
   $('[data-role="tab"]').click(function (event) {
     let $this = $(this);
-    $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
+    $($this.data('tab-content')).removeClass('hidden').siblings('[data-role="tab-content"]').addClass('hidden');
   });
 };
 
@@ -195,7 +195,7 @@ export const updateTaskNum = (container) => {
   // $container.on('finished',function(){
   //   $('#task-num').text($(container).find('i[data-role="task"]').length);
   // })
-}
+};
 
 export const TaskListHeaderFixed = () => {
   let $header = $('.js-task-list-header');
@@ -203,11 +203,11 @@ export const TaskListHeaderFixed = () => {
     return;
   }
   let headerTop = $header.offset().top;
-	$(window).scroll(function(event) {
-			if ($(window).scrollTop() >= headerTop) {
-				$header.addClass('fixed')
-			} else {
-				$header.removeClass('fixed');
-			}
-	});
-}
+  $(window).scroll(function(event) {
+    if ($(window).scrollTop() >= headerTop) {
+      $header.addClass('fixed');
+    } else {
+      $header.removeClass('fixed');
+    }
+  });
+};

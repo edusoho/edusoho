@@ -17,7 +17,7 @@ class Articles extends BaseResource
         $sort = $request->query->get('sort', 'published');
 
         if (!empty($conditions['categoryId'])) {
-            $conditions['categoryIds'] = $this->getArticleCategroyService()->findCategoryTreeIds($conditions['categoryId']);
+            $conditions['categoryIds'] = $this->getArticleCategoryService()->findCategoryTreeIds($conditions['categoryId']);
             unset($conditions['categoryId']);
         }
 
@@ -25,6 +25,7 @@ class Articles extends BaseResource
         $total = $this->getArticleService()->countArticles($conditions);
         $articles = $this->getArticleService()->searchArticles($conditions, $sort, $start, $limit);
         $articles = $this->assemblyArticles($articles);
+
         return $this->wrap($this->filter($articles), $total);
     }
 
@@ -36,7 +37,7 @@ class Articles extends BaseResource
     protected function assemblyArticles(&$articles)
     {
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
-        $categories = $this->getArticleCategroyService()->findCategoriesByIds($categoryIds);
+        $categories = $this->getArticleCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($articles as &$article) {
             if (isset($categories[$article['categoryId']])) {
@@ -57,6 +58,7 @@ class Articles extends BaseResource
         foreach ($res as $key => $one) {
             $res[$key] = $this->callFilter($name, $one);
         }
+
         return $res;
     }
 
@@ -70,7 +72,7 @@ class Articles extends BaseResource
         return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
-    protected function getArticleCategroyService()
+    protected function getArticleCategoryService()
     {
         return $this->getServiceKernel()->createService('Article:CategoryService');
     }

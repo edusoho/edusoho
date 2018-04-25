@@ -26,6 +26,7 @@ use Biz\Classroom\Dao\ClassroomMemberDao;
 use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
+use AppBundle\Common\TimeMachine;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -97,6 +98,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
+        $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit);
@@ -719,6 +721,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomMemberDao()->count($conditions);
+    }
+
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getClassroomMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
     public function getClassroomMember($classroomId, $userId)
@@ -1346,7 +1353,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId' => 0,
             'role' => array('teacher'),
             'remark' => '',
-            'createdTime' => time(),
+            'createdTime' => TimeMachine::time(),
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
@@ -1374,6 +1381,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function _prepareClassroomConditions($conditions)
     {
+        $intList = array('buyable', 'showable');
+        foreach ($intList as $key) {
+            if (isset($conditions[$key])) {
+                $conditions[$key] = (int) $conditions[$key];
+            }
+        }
+
         $conditions = array_filter(
             $conditions,
             function ($value) {
@@ -2014,6 +2028,31 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findMembersByMemberIds($ids)
     {
         $this->getClassroomMemberDao()->findMembersByMemberIds($ids);
+    }
+
+    public function refreshClassroomHotSeq()
+    {
+        return $this->getClassroomDao()->refreshHotSeq();
+    }
+
+    protected function getOrderBys($order)
+    {
+        if (is_array($order)) {
+            return $order;
+        }
+
+        $typeOrderByMap = array(
+            'hitNum' => array('hitNum' => 'DESC'),
+            'rating' => array('rating' => 'DESC'),
+            'studentNum' => array('studentNum' => 'DESC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
+            'hotSeq' => array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'),
+        );
+        if (isset($typeOrderByMap[$order])) {
+            return $typeOrderByMap[$order];
+        } else {
+            return array('createdTime' => 'DESC');
+        }
     }
 
     /**

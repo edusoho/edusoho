@@ -1,5 +1,6 @@
 searchResultType:
     course: 课程
+    classroom: 班级
     teacher: 教师
     thread: 小组话题
     article: 资讯
@@ -14,6 +15,14 @@ courseType:
     open: 录播公开课
     liveOpen: 直播公开课
     normal: 普通课程
+
+nonOpenCourseCateogry:
+    live: 直播课程
+    normal: 普通课程
+
+openCourseCategory:
+    liveOpen: 直播公开课
+    open: 录播公开课
 
 classroomStatus:
     draft: 未发布
@@ -264,6 +273,8 @@ userType:
     import: 手动导入
     qq: QQ登录
     weixin: 微信登录
+    marketing: 微营销
+    distributor: 分销
 
 userKeyWordTypes:
     nickname: 用户名
@@ -362,6 +373,10 @@ searchCourseType:
     free: 免费课程
     live: 直播课程
 
+searchClassroomType:
+    all: 全部班级
+    free: 免费班级
+
 userInfoFields:
     email: 邮箱地址
     truename: 真实姓名
@@ -384,6 +399,7 @@ processStatus:
     none: 未转码
     waiting: 转码中
     processing: 转码中
+    doing: 转码中
     ok: 转码成功
     error: 转码失败
 

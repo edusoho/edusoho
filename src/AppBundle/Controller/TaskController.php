@@ -64,11 +64,11 @@ class TaskController extends BaseController
         $activityConfig = $this->getActivityConfigByTask($task);
 
         if (null !== $member && 'student' === $member['role'] && $activityConfig->allowTaskAutoStart($task)) {
-            $this->getActivityService()->trigger(
-                $task['activityId'],
+            $this->getTaskService()->trigger(
+                $task['id'],
                 'start',
                 array(
-                    'task' => $task,
+                    'taskId' => $task['id'],
                 )
             );
         }
@@ -475,8 +475,9 @@ class TaskController extends BaseController
             if ($now - $taskStore['start'] > 60 * 60 * 5) {
                 return false;
             }
-            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
-            if ($now - $taskStore['lastTriggerTime'] < 55) {
+            //任务每分钟只允许触发一次，这里用设定周期-5秒作为标准判断，以应对网络延迟
+            $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
+            if ($now - $taskStore['lastTriggerTime'] < $learnTimeSec - 5) {
                 return false;
             }
             $taskStore['lastTriggerTime'] = $now;

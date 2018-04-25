@@ -21,6 +21,11 @@
           {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.course_manage.manage.status_placeholder'|trans) }}
         </select>
       </div>
+      <div class="form-group">
+        <select class="form-control" name="type">
+          {{ select_options(dict('nonOpenCourseCateogry'), app.request.query.get('type'), 'type'|trans) }}
+        </select>
+      </div>
 
       <div class="form-group">
         <input class="form-control" type="text" placeholder="{{ 'admin.course_manage.title_placeholder'|trans }}" name="title" value="{{ app.request.get('title') }}">

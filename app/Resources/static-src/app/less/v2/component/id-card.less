@@ -1,0 +1,98 @@
+.es-id-card {
+  position: relative;
+  text-align: center;
+  padding: 53px 20px;
+  background: @cd-bg-light;
+  border-radius: 4px;
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  margin-bottom: 32px;
+  .form-error-message {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 12px;
+  }
+  &.done {
+    .form-error-message {
+      display: none;
+    }
+    .card-icon i {
+      opacity: 0;
+      color: rgba(255, 255, 255, 0.7);
+      .cd-transition;
+    }
+    .card-title {
+      opacity: 0;
+      color: rgba(255, 255, 255, 0.7);
+      .cd-transition;
+    }
+    &:hover {
+      .card-icon i {
+        opacity: 1;
+        .cd-transition;
+      }
+      .card-title {
+        opacity: 1;
+        .cd-transition;
+      }
+      .mask {
+        opacity: 1;
+      }
+    }
+  }
+  .card-icon {
+    position: relative;
+    margin-bottom: 8px;
+    z-index: 1;
+    i {
+      font-size: 72px;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.16);
+    }
+  }
+  .card-title {
+    position: relative;
+    font-size: 14px;
+    color: @cd-dark-minor;
+    line-height: 1;
+    z-index: 1;
+  }
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    opacity: 0;
+  }
+  .card-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 0;
+    z-index: 2;
+    cursor: pointer;
+    > input {
+      display: none;
+    }
+  }
+  .card-img-tip {
+    position: absolute;
+    left: 0;
+    bottom: -40px;
+    text-align: left;
+    line-height: 1;
+    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+      bottom: -50px;
+    }
+    @media (max-width: @screen-sm-max) {
+      bottom: -30px;
+    }
+  }
+}

@@ -396,11 +396,11 @@ class CloudFileServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'searchFileCount',
+                    'functionName' => 'countCloudFilesFromLocal',
                     'returnValue' => 2,
                 ),
                 array(
-                    'functionName' => 'searchFiles',
+                    'functionName' => 'searchCloudFilesFromLocal',
                     'returnValue' => array(array('id' => 1, 'globalId' => 'fbb5c6ef413f4cbbb425d70793a23703', 'createdUserId' => 1, 'processStatus' => 'none'), array('id' => 2, 'globalId' => '56b1b123fe5847719b7234d96ba8af69', 'createdUserId' => 2, 'processStatus' => 'success')),
                 ),
                 array(

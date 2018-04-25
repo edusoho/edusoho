@@ -28,14 +28,14 @@ class UserProvider implements UserProviderInterface
 
         if (empty($user)) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
-        } elseif (isset($user['type']) && $user['type'] == 'system') {
+        } elseif (isset($user['type']) && 'system' == $user['type']) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
         $request = $this->container->get('request');
 
         $forbidden = AuthenticationHelper::checkLoginForbidden($request);
-        if ($forbidden['status'] == 'error') {
+        if ('error' == $forbidden['status']) {
             throw new AuthenticationException($forbidden['message']);
         }
 
@@ -44,6 +44,7 @@ class UserProvider implements UserProviderInterface
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $currentUser['isSecure'] = $request->isSecure();
         $biz = $this->container->get('biz');
         $biz['user'] = $currentUser;
         ServiceKernel::instance()->setCurrentUser($currentUser);
@@ -73,7 +74,7 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $class === 'Biz\User\CurrentUser';
+        return 'Biz\User\CurrentUser' === $class;
     }
 
     protected function getRoleService()

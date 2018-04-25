@@ -14,9 +14,13 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
+use Biz\Util\EdusohoLiveClient;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
+    const LIVE_STARTTIME_DIFF_SECONDS = 7200;
+    const LIVE_ENDTIME_DIFF_SECONDS = 7200;
+
     public function getActivity($id, $fetchMedia = false)
     {
         $activity = $this->getActivityDao()->get($id);
@@ -77,11 +81,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         if (empty($activity)) {
-            return;
+            return false;
         }
 
-        if ($eventName == 'start') {
+        if ('start' == $eventName) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+        }
+
+        if (isset($data['events']) && array_key_exists('finish', $data['events'])) {
+            $tempData['taskId'] = empty($data['taskId']) ? 0 : $data['taskId'];
+            $data = $tempData;
+            $eventName = 'finish';
         }
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
 
@@ -96,9 +106,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->triggerActivityLearnLogListener($activity, $key, $data);
             $this->triggerExtendListener($activity, $key, $data);
         }
-        if ($eventName == 'doing') {
+        if ('doing' == $eventName) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
+
+        return true;
     }
 
     protected function triggerActivityLearnLogListener($activity, $eventName, $data)
@@ -225,7 +237,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function syncActivityMaterials($activity, $materials, $mode = 'create')
     {
-        if ($mode === 'delete') {
+        if ('delete' === $mode) {
             $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
 
             return;
@@ -285,7 +297,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'description' => empty($material['summary']) ? '' : $material['summary'],
             'userId' => $this->getCurrentUser()->offsetGet('id'),
             'type' => 'course',
-            'source' => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
+            'source' => 'download' == $activity['mediaType'] ? 'coursematerial' : 'courseactivity',
             'link' => empty($material['link']) ? '' : $material['link'],
             'copyId' => 0, //$fields
         );
@@ -300,7 +312,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         foreach ($arr1 as $value1) {
             $contained = false;
             foreach ($arr2 as $value2) {
-                if ($value1['fileId'] == 0) {
+                if (0 == $value1['fileId']) {
                     $contained = $value1['link'] == $value2['link'];
                 } else {
                     $contained = $value1['fileId'] == $value2['fileId'];
@@ -326,8 +338,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         foreach ($exists as $exist) {
             foreach ($currents as $current) {
                 //如果fileId存在则匹配fileId，否则匹配link
-                if (($exist['fileId'] != 0 && $exist['fileId'] == $current['fileId'])
-                    || ($exist['fileId'] == 0 && $exist['link'] == $current['link'])
+                if ((0 != $exist['fileId'] && $exist['fileId'] == $current['fileId'])
+                    || (0 == $exist['fileId'] && $exist['link'] == $current['link'])
                 ) {
                     $current['id'] = $exist['id'];
                     if (empty($current['description'])) {
@@ -361,7 +373,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             )
         );
 
-        if (!empty($fields['startTime']) && !empty($fields['length']) && $fields['mediaType'] != 'testpaper') {
+        if (!empty($fields['startTime']) && !empty($fields['length']) && 'testpaper' != $fields['mediaType']) {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 
@@ -462,9 +474,74 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
+    public function isLiveFinished($activityId)
+    {
+        $activity = $this->getActivity($activityId, true);
+
+        if (empty($activity) || empty($activity['ext'])) {
+            return true;
+        }
+
+        $endLeftSeconds = time() - $activity['endTime'];
+        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
+
+        if ($this->checkLiveFinished($activity)) {
+            return true;
+        }
+
+        if ($activity['ext']['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function checkLiveStatus($courseId, $activityId)
+    {
+        $activity = $this->getActivity($activityId, true);
+        if (empty($activity)) {
+            return array('result' => false, 'message' => 'message_response.live_task_not_exist.message');
+        }
+
+        if ($activity['fromCourseId'] != $courseId) {
+            return array('result' => false, 'message' => 'message_response.illegal_params.message');
+        }
+
+        if (empty($activity['ext']['liveId'])) {
+            return array('result' => false, 'message' => 'message_response.live_class_not_exist.message');
+        }
+
+        if ($activity['startTime'] - time() > self::LIVE_STARTTIME_DIFF_SECONDS) {
+            return array('result' => false, 'message' => 'message_response.live_not_start.message');
+        }
+
+        if ($this->checkLiveFinished($activity)) {
+            return array('result' => false, 'message' => 'message_response.live_over.message');
+        }
+
+        return array('result' => true, 'message' => '');
+    }
+
+    public function findFinishedLivesWithinTwoHours()
+    {
+        return $this->getActivityDao()->findFinishedLivesWithinTwoHours();
+    }
+
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
+    }
+
+    protected function checkLiveFinished($activity)
+    {
+        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
+        $endLeftSeconds = time() - $activity['endTime'];
+
+        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
+        $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
+        $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
+
+        return $thirdLiveFinished || $esLiveFinished;
     }
 
     /**
@@ -576,7 +653,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $fileIds = ArrayToolkit::column($activities, 'fileId');
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
         $cloudFiles = array_filter($files, function ($file) {
-            return $file['storage'] === 'cloud';
+            return 'cloud' === $file['storage'];
         });
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 

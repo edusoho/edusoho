@@ -18,7 +18,7 @@ site.data.create: 添加
 site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
 site.data.uncheck_name_hint: 未选中任何%name%
-site.data.delete_check_name_hint: 确定要删除选中的条%name%吗？
+site.data.delete_check_name_hint: 确定要删除选中的%name%吗？
 site.data.delete_submiting_hint: 正在删除...
 site.date.year: 年
 site.date.month: 月
@@ -307,7 +307,7 @@ auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
 
-card.card_receive_success_hint: 学习卡已使用，充值%coin%虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。
+card.card_receive_success_hint: 学习卡已使用，充值%coinAmount%%coinName%成功，可前往【账户中心】-【我的账户】查看充值情况。
 card.card_receive_failed_hint: 失败!
 
 classroom.cancel_refund_hint: 真的要取消退款吗？
@@ -491,6 +491,7 @@ thread.post.like_error_hint: 点赞失败，请重试！
 group.manage.delete_member_hint: 真的要删除该成员？
 group.manage.delete_required_error_hint: 请选择要删除的成员
 group.manage.member_exit_hint: 真的要退出该小组？您在该小组的信息将删除
+group.manage.member_exit: 退出小组
 group.manage.choose_setting_member_hint: 请选择要设置的成员
 group.manage.setting_member_permission_hint: 确认要设置该成员的权限？
 group.manage.cancel_member_permission: 确认要取消该成员的权限？
@@ -577,6 +578,14 @@ testpaper.widget.save_success_hint: 已保存
 
 testpaper_manage.save_error_hint: 操作失败
 testpaper_manage.save_success_hint: 操作成功
+testpaper_manage.result_graph.score_distribution: 分数区间
+testpaper_manage.result_graph.person_num: 人数
+testpaper_manage.result_graph.first_score_num: 首次成绩得分人数
+testpaper_manage.result_graph.max_score_num: 最优成绩得分人数
+
+homework_manage.result_graph.status_distribution: 结果区间
+homework_manage.result_graph.first_status_num: 首次成绩结果人数
+homework_manage.result_graph.max_status_num: 最优成绩结果人数
 
 intro.confirm_hint: 我知道了
 
@@ -773,6 +782,7 @@ oauth.send.validate_message: 发送验证
 oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
 oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
 oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
+oauth.refresh.captcha_code_required_tip: 请输入图形验证码
 oauth.captcha_code_length_tip: 图形码为5位数
 oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
@@ -791,4 +801,10 @@ admin.data.lab.setting.error: 发生异常了，请重试！
 ## 资讯管理
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
+admin.article_setting.choose_category: --选择所属栏目--
 
+Bad credentials.: 用户名或密码错误
+User account is locked.: 帐号被封禁
+
+cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
+message.send.not_allowed: 不允许发送私信

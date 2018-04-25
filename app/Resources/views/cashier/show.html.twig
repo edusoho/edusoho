@@ -13,9 +13,11 @@
     <div class="order-center-card__img">
       {% if product.cover and product.cover.middle|default('') starts with '/assets' %}
         <img src="{{ asset(product.cover.middle) }}" alt="{{ order.title }}">
-      {% else %}
+      {% elseif product.targetType in ['vip', 'course','classroom'] %}
         <img src="{{ filepath(product.cover.middle|default(''), product.targetType ~ '.png') }}" alt="{{ order.title }}">
       {% endif %}
+
+      {{ slot('cashier.product.cover', {'product': product}) }}
     </div>
     <div class="order-center-card__info">
       <div class="order-center-product-info">
@@ -118,7 +120,7 @@
       <div class="order-center-price">
         <div class="order-center-price__title">
           {% if currency == 'coin' %}
-            <i class="cd-icon cd-icon-help cd-text-xs cd-text-gray-light" data-toggle="tooltip" data-placement="top"
+            <i class="cd-icon cd-icon-help cd-text-sm cd-dark-assist" data-toggle="tooltip" data-placement="top"
               title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
             </i>
           {% endif %}

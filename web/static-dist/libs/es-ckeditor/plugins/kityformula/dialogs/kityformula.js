@@ -1,55 +1,26 @@
 ﻿(function () {
     "use strict";
     function iframeSrcPath(srcpath) {
-        var filename = "kityformula.js";
+        var filename = "dialogs/kityformula.js",
+        scripts = document.getElementsByTagName('script'),
+        script = null,
+        len = scripts.length;
 
-        // 根据相对路径获取绝对路径
-        function getPath(relativePath, absolutePath){ 
-            var reg = new RegExp("\\.\\./","g"); 
-            var upCount = 0; // 相对路径中返回上层的次数。 
-            var m = relativePath.match(reg); 
-            if(m) upCount = m.length; 
-            var lastIndex = absolutePath.length-1; 
-            for(var i=0;i<=upCount;i++){ 
-                lastIndex = absolutePath.lastIndexOf("/",lastIndex); 
-            } 
-            return absolutePath.substr(0,lastIndex+1) + relativePath.replace(reg,""); 
+        for(var i = 0; i < scripts.length; i++) {
+            if(scripts[i].src.indexOf(filename) != -1) {
+                script = scripts[i];
+                break;
+            }
         }
 
-        // 获取当前文件绝对路径
-        function getAbsolutePath() {
-            var scripts = document.getElementsByTagName('script');
-            var script = null;
-            var len = scripts.length;
-            
-            for(var i = 0; i < scripts.length; i++) {
-                if(scripts[i].src.indexOf(filename) != -1) {
-                    script = scripts[i];
-                    break;
-                }
-            }
-            if(script) {
-                var src = script.src;
-                // 不是绝对路径需要修正
-                if(src.indexOf("http://") != 0 && src.indexOf("/") != 0){ 
-                    var url = location.href; 
-                    var index = url.indexOf("?"); 
-                    if(index != -1){ 
-                        url = url.substring(0, index-1); 
-                    } 
-                    src = getPath(src,url); 
-                }
-                return src;
-            }
-            return null;
+        if(script) {
+          var src = script.src; 
+          src = src.substr(0, src.lastIndexOf("/")+1);
+
+          return src + srcpath;
         }
-
-        var path = getAbsolutePath();
-        var dirpath = path.substr(0, path.lastIndexOf("/"));
-
-        return  getPath(srcpath,dirpath);
-
     }
+
     function KityformulaDialog(editor) {
         var isIE=!-[1,];
 
@@ -57,7 +28,6 @@
         if($("#editorContainer_"+editor.name).length > 0 ){
             $("#editorContainer_"+editor.name).remove();
         }
-        
         var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="'+ iframeSrcPath("../kityformula/index.html") +'" style="width: 100% !important; height: 300px !important"></iframe>';
         
         return {

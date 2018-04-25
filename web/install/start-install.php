@@ -1,5 +1,6 @@
 <?php
 
+date_default_timezone_set('Asia/Shanghai');
 // 尚存在问题：
 // 1.vendor不存在导致升级检测失败报错
 // 2.topxia:build命令没有打包新的api目录，打包6.5.5时需要修改该命令
@@ -22,7 +23,7 @@ $twig = new Twig_Environment($loader, array(
 $twig->addGlobal('edusho_version', \AppBundle\System::VERSION);
 
 $step = intval(empty($_GET['step']) ? 0 : $_GET['step']);
-$init_data = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
+$init_data = 1; //写入演示数据
 $functionName = 'install_step'.$step;
 
 $functionName($init_data);
@@ -114,11 +115,11 @@ function install_step1($init_data = 0)
 
     $safemode = ini_get('safe_mode');
 
-    if ($safemode == 'On') {
+    if ('On' == $safemode) {
         $pass = false;
     }
     $result = _checkWebRoot();
-    if ($result === false) {
+    if (false === $result) {
         $pass = false;
     }
     echo $twig->render('step-1.html.twig', array(
@@ -139,7 +140,7 @@ function install_step2($init_data = 0)
     $error = null;
     $post = array();
 
-    if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+    if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
         $post = $_POST;
         $post['index'] = empty($_GET['index']) ? 0 : $_GET['index'];
         $replace = empty($post['database_replace']) ? false : true;
@@ -165,34 +166,27 @@ function install_step3($init_data = 0)
 
     $error = null;
 
-    if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+    if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'].'/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
         $initializer = new \AppBundle\Common\SystemInitializer($output);
-        $biz['user'] = new \Biz\User\AnonymousUser('127.0.0.1');
+        $biz['user'] = new \Biz\User\AnonymousUser();
         $biz['user.register'] = new \Biz\User\Register\RegisterFactory($biz);
         $biz['user.register.email'] = new \Biz\User\Register\Impl\EmailRegistDecoderImpl($biz);
         try {
             if (!empty($init_data)) {
-                $biz['db']->exec('delete from `user` where id=1;');
-                $biz['db']->exec('delete from `user_profile` where id=1;');
+                $biz['db']->exec('update user set roles ="|ROLE_USER|ROLE_TEACHER|" where id = 1');
             }
             $admin = $initializer->initAdminUser($_POST);
-            if (empty($init_data)) {
-                $initializer->init();
-                _init_setting($admin);
-            } else {
-                $service = ServiceKernel::instance()->createService('System:SettingService');
-                $settings = $service->get('storage', array());
-                if (!empty($settings['cloud_key_applied'])) {
-                    unset($settings['cloud_access_key']);
-                    unset($settings['cloud_secret_key']);
-                    unset($settings['cloud_key_applied']);
-                    $service->set('storage', $settings);
-                }
-                $biz['db']->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
-                $biz['db']->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
+
+            $service = ServiceKernel::instance()->createService('System:SettingService');
+            $settings = $service->get('storage', array());
+            if (!empty($settings['cloud_key_applied'])) {
+                unset($settings['cloud_access_key']);
+                unset($settings['cloud_secret_key']);
+                unset($settings['cloud_key_applied']);
+                $service->set('storage', $settings);
             }
 
             $initializer->initFolders();
@@ -280,8 +274,8 @@ function _create_database($config, $replace)
         $pdo = new PDO("mysql:host={$config['database_host']};port={$config['database_port']}", "{$config['database_user']}", "{$config['database_password']}");
         $pdo->exec('SET NAMES utf8');
 
+        $database_init = 1; //写入演示数据
         //仅在第一次进来时初始化数据库表结构
-
         if (empty($config['index'])) {
             $result = $pdo->exec("create database `{$config['database_name']}`;");
 
@@ -294,20 +288,20 @@ function _create_database($config, $replace)
             $sql = file_get_contents('./edusoho.sql');
             $result = $pdo->exec($sql);
 
-            if ($result === false) {
-                return '创建数据库表结构失败，请删除数据库后重试！';
+            if (false === $result) {
+                return "创建数据库失败，查看<a href='http://www.qiqiuyu.com/faq/585/detail' target='_blank'>解决方案</a>";
             }
 
-            if (empty($config['database_init'])) {
+            /*if (empty($config['database_init'])) {
                 _create_config($config);
 
                 return array('success' => true);
-            }
+            }*/
         }
 
         //每次进来都执行一个演示数据初始化文件
 
-        if (!empty($config['database_init']) && $config['database_init'] == 1) {
+        if ($database_init) {
             $index = $config['index'];
 
             if ($index > 0) {
@@ -365,7 +359,7 @@ function _create_config($config)
 {
     $secret = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     $server = $_SERVER['SERVER_NAME'];
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
         $server = 'https://'.$server;
     } else {
         $server = 'http://'.$server;
@@ -522,7 +516,7 @@ EOD;
 function _initKey()
 {
     global $biz;
-    $currentUser = new \Biz\User\AnonymousUser('127.0.0.1');
+    $currentUser = new \Biz\User\AnonymousUser();
 
     $biz['user'] = $currentUser;
     $settingService = $biz->service('System:SettingService');

@@ -1,3 +1,5 @@
+import SmsSender from 'app/common/widget/sms-sender';
+
 export default class Register {
   constructor() {
     this.initDate();
@@ -6,11 +8,12 @@ export default class Register {
     this.initCaptchaCode();
     this.initRegisterTypeRule();
     this.initInviteCodeRule();
-    this.intiUserTermsRule();
+    this.initUserTermsRule();
+    this.initMobileMsgVeriCodeSendBtn();
   }
 
   initValidator() {
-    let validator = $('#register-form').validate({
+    $('#register-form').validate({
       rules: {
         nickname: {
           required: true,
@@ -29,17 +32,17 @@ export default class Register {
       },
     });
 
-    $.validator.addMethod("email_or_mobile_check", function (value, element, params) {
+    $.validator.addMethod('email_or_mobile_check', function(value, element, params) {
       let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       var reg_mobile = /^1\d{10}$/;
       var result = false;
       var isEmail = reg_email.test(value);
       var isMobile = reg_mobile.test(value);
       if (isMobile) {
-        $(".email_mobile_msg").removeClass('hidden');
+        $('.email_mobile_msg').removeClass('hidden');
         $('.js-captcha').addClass('hidden');
       } else {
-        $(".email_mobile_msg").addClass('hidden');
+        $('.email_mobile_msg').addClass('hidden');
         $('.js-captcha').removeClass('hidden');
       }
       if (isEmail || isMobile) {
@@ -51,19 +54,19 @@ export default class Register {
   }
 
   inEventMobile() {
-    $("#register_emailOrMobile").blur(() => {
-      let emailOrMobile = $("#register_emailOrMobile").val();
+    $('#register_emailOrMobile').blur(() => {
+      let emailOrMobile = $('#register_emailOrMobile').val();
       this.emSmsCodeValidate(emailOrMobile);
     });
 
-    $("#register_mobile").blur(() => {
-      let mobile = $("#register_mobile").val();
+    $('#register_mobile').blur(() => {
+      let mobile = $('#register_mobile').val();
       this.emSmsCodeValidate(mobile);
     });
   }
 
   initDate() {
-    $(".date").datetimepicker({
+    $('.date').datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd',
       minView: 'month',
@@ -74,8 +77,8 @@ export default class Register {
   initCaptchaCode() {
     let $getCodeNum = $('#getcode_num');
     if ($getCodeNum.length > 0) {
-      $getCodeNum.click(function () {
-        $(this).attr("src", $getCodeNum.data("url") + "?" + Math.random());
+      $getCodeNum.click(function() {
+        $(this).attr('src', $getCodeNum.data('url') + '?' + Math.random());
       });
       this.initCaptchaCodeRule();
     }
@@ -93,7 +96,7 @@ export default class Register {
         messages: {
           required: Translator.trans('validate.valid_email_input.message'),
         }
-      })
+      });
     }
 
     let $emailOrMobile = $('input[name="emailOrMobile"]');
@@ -103,11 +106,11 @@ export default class Register {
         email_or_mobile_check: true,
         es_remote: {
           type: 'get',
-          callback: function (bool) {
+          callback: function(bool) {
             if (bool) {
-              $('.js-sms-send').removeClass('disabled');
+              $('.js-sms-send-btn').removeClass('disabled');
             } else {
-              $('.js-sms-send').addClass('disabled');
+              $('.js-sms-send-btn').addClass('disabled');
             }
           }
         },
@@ -125,18 +128,18 @@ export default class Register {
         phone: true,
         es_remote: {
           type: 'get',
-          callback: function (bool) {
+          callback: function(bool) {
             if (bool) {
-              $('.js-sms-send').removeClass('disabled');
+              $('.js-sms-send-btn').removeClass('disabled');
             } else {
-              $('.js-sms-send').addClass('disabled');
+              $('.js-sms-send-btn').addClass('disabled');
             }
           }
         },
         messages: {
           required: Translator.trans('validate.phone.message')
         },
-      })
+      });
     }
   }
 
@@ -149,37 +152,40 @@ export default class Register {
         es_remote: {
           type: 'get'
         }
-      })
+      });
     }
   }
 
-  intiUserTermsRule() {
+  initUserTermsRule() {
     if ($('#user_terms').length) {
       $('#user_terms').rules('add', {
         required: true,
         messages: {
           required: Translator.trans('validate.user_terms.message')
         }
-      })
+      });
     }
   }
+
   initCaptchaCodeRule() {
     $('[name="captcha_code"]').rules('add', {
       required: true,
       alphanumeric: true,
       es_remote: {
         type: 'get',
-        callback: function (bool) {
+        callback: function(bool) {
           if (!bool) {
-            $('#getcode_num').attr("src", $('#getcode_num').data("url") + "?" + Math.random());
+            $('#getcode_num').attr('src', $('#getcode_num').data('url') + '?' + Math.random());
           }
         }
       },
-    })
+    });
   }
+
   initSmsCodeRule() {
     $('[name="sms_code"]').rules('add', {
       required: true,
+      unsigned_integer: true,
       rangelength: [6, 6],
       es_remote: {
         type: 'get',
@@ -187,7 +193,34 @@ export default class Register {
       messages: {
         rangelength: Translator.trans('validate.sms_code.message')
       }
-    })
+    });
+  }
+
+  initMobileMsgVeriCodeSendBtn() {
+    $('.js-sms-send-btn').click(function() {
+      let fieldName = 'emailOrMobile';
+      if ($('[name=\'verifiedMobile\']').length > 0) {
+        fieldName = 'verifiedMobile';
+      }
+
+      new SmsSender({
+        element: '.js-sms-send',
+        url: $('.js-sms-send').data('smsUrl'),
+        smsType: 'sms_registration',
+        dataTo: fieldName,
+        captcha: false,
+        preSmsSend: function() {
+          return true;
+        },
+        additionalAction: function(ackResponse) {
+          if (ackResponse == 'captchaRequired') {
+            $('.js-sms-send').click();
+            return true;
+          }
+          return false;
+        }
+      });
+    });
   }
 
   emSmsCodeValidate(mobile) {

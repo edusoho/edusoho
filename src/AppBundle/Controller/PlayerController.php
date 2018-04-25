@@ -36,7 +36,7 @@ class PlayerController extends BaseController
 
             $isEncryptionPlus = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
 
-            if (!$this->isHiddenVideoHeader()) {
+            if (!$this->getWebExtension()->isHiddenVideoHeader()) {
                 // 加入片头信息
                 $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
                 if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
@@ -242,7 +242,7 @@ class PlayerController extends BaseController
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
-                    $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
+                    $context['hideBeginning'] = $this->getWebExtension()->isHiddenVideoHeader($hideBeginning);
                     $token = $this->makeToken('hls.playlist', $file['id'], $context);
                     $params = array(
                         'id' => $file['id'],
@@ -309,16 +309,6 @@ class PlayerController extends BaseController
                 return 'local' == $file['storage'] ? 'local-video-player' : 'balloon-cloud-video-player';
             default:
                 return null;
-        }
-    }
-
-    protected function isHiddenVideoHeader($isHidden = false)
-    {
-        $storage = $this->setting('storage');
-        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
-            return false;
-        } else {
-            return true;
         }
     }
 

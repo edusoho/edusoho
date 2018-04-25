@@ -2,28 +2,24 @@
   padding-right: 0;
   .nav-pills {
     float: right;
-    >li {
+    > li {
       margin: 0 0 10px 20px;
-    }
-  }
-  .result-declare {
-    position: absolute;
-    top: 0;
-    left: 0;
-    line-height: 48px;
-    span {
-      color: red;
-      padding: 0 10px;
+      a {
+        @media (max-width: @screen-xs-min) {
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
+      }
     }
   }
   .btn-group {
-    >.btn-primary {
-      float: right;   
+    > .btn-primary {
+      float: right;
     }
-    >.dropdown-menu {
+    > .dropdown-menu {
       left: inherit;
       right:0;
-      >li >a {
+      > li > a {
         text-align: center;
       }
     }
@@ -37,6 +33,10 @@
   width: 100%;
   left : 0;
   top: 0;
+  @media (max-width: @screen-sm-max) {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
 }
 
 // 教育云搜索
@@ -106,11 +106,11 @@
         width: 100%;
         float: none;
       }
-      .tags-left{
+      .tags-left {
         position: absolute;
         left: 0px;
         top: 0px;
-        .tag-live{
+        .tag-live {
           display: inline-block;
           width: 40px;
           height: 50px;
@@ -118,11 +118,11 @@
           background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
         }
       }
-      .tags-right{
+      .tags-right {
         position: absolute;
         right: 0px;
         top: 0px;
-        .tag-public{
+        .tag-public {
           display: inline-block;
           width: 68px;
           height: 68px;
@@ -182,6 +182,24 @@
     text-align: center;
     >i {
       font-size: 40px;
+    }
+  }
+}
+
+.local-search-class-list {
+  .local-search-class-item {
+    .local-search-class-item__serve {
+      height: 36px;
+      ul {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+    }
+    .local-search-class-item__data {
+      padding: 0;
+      li {
+        line-height: 32px;
+      }
     }
   }
 }

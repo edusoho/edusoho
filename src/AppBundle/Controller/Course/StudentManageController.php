@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -97,15 +96,18 @@ class StudentManageController extends BaseController
 
     public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
     {
+        $operateUser = $this->getUser();
+        $courseSetting = $this->getSettingService()->get('course');
+        if (!$operateUser->isAdmin() && empty($courseSetting['teacher_manage_student'])) {
+            throw $this->createAccessDeniedException();
+        }
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
-            if ($this->getCurrentUser()->isAdmin()) {
-                $data['isAdminAdded'] = true;
-            }
-
-            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $data['source'] = 'outside';
+            $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
 
@@ -287,126 +289,6 @@ class StudentManageController extends BaseController
         $reportCard = $this->createReportCard($course, $user);
 
         return $this->render('course-manage/student/report-card.html.twig', $reportCard);
-    }
-
-    public function exportCsvAction(Request $request, $courseSetId, $courseId)
-    {
-        $fileName = sprintf('course-%s-students-(%s).csv', $courseId, date('Y-n-d'));
-
-        return ExportHelp::exportCsv($request, $fileName);
-    }
-
-    public function exportDatasAction(Request $request, $courseSetId, $courseId)
-    {
-        $courseSetting = $this->getSettingService()->get('course', array());
-        if (!$this->hasAdminRole() || !empty($courseSetting['teacher_export_student'])) {
-            $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        }
-
-        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
-
-        list($title, $students, $courseMemberCount) = $this->getExportContent(
-            $courseId,
-            $start,
-            $limit,
-            $exportAllowCount
-        );
-
-        $file = '';
-        if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request, 'course_students', $title);
-        }
-
-        $content = implode("\r\n", $students);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
-
-        $status = ExportHelp::getNextMethod($start + $limit, $courseMemberCount);
-
-        return $this->createJsonResponse(
-            array(
-                'status' => $status,
-                'fileName' => $file,
-                'start' => $start + $limit,
-            )
-        );
-    }
-
-    protected function getExportContent($id, $start, $limit, $exportAllowCount)
-    {
-        $gender = array(
-            'female' => $this->getServiceKernel()->trans('女'),
-            'male' => $this->getServiceKernel()->trans('男'),
-            'secret' => $this->getServiceKernel()->trans('秘密'),
-        );
-
-        $course = $this->getCourseService()->getCourse($id);
-
-        $condition = array(
-            'courseId' => $course['id'],
-            'role' => 'student',
-        );
-
-        $courseMemberCount = $this->getCourseMemberService()->countMembers($condition);
-
-        $courseMemberCount = ($courseMemberCount > $exportAllowCount) ? $exportAllowCount : $courseMemberCount;
-        if ($courseMemberCount < ($start + $limit + 1)) {
-            $limit = $courseMemberCount - $start;
-        }
-        $courseMembers = $this->getCourseMemberService()->searchMembers(
-            $condition,
-            array('createdTime' => 'DESC'),
-            $start,
-            $limit
-        );
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        $fields['weibo'] = $this->getServiceKernel()->trans('微博');
-
-        foreach ($userFields as $userField) {
-            $fields[$userField['fieldName']] = $userField['title'];
-        }
-
-        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');
-
-        $this->appendLearningProgress($courseMembers);
-
-        $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
-
-        foreach ($fields as $key => $value) {
-            $str .= ','.$value;
-        }
-
-        $students = array();
-
-        foreach ($courseMembers as $courseMember) {
-            $member = '';
-            $member .= $users[$courseMember['userId']]['nickname'].',';
-            $member .= $users[$courseMember['userId']]['email'].',';
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).',';
-            $member .= $courseMember['learningProgressPercent'].',';
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'].',' : '-'.',';
-            $member .= $gender[$profiles[$courseMember['userId']]['gender']].',';
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'].',' : '-'.',';
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'].',' : '-'.',';
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'].',' : '-'.',';
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'].',' : '-'.',';
-            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'].',' : '-'.',';
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'].',' : '-'.',';
-
-            foreach ($fields as $key => $value) {
-                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key].',' : '-'.',';
-            }
-
-            $students[] = $member;
-        }
-
-        return array($str, $students, $courseMemberCount);
     }
 
     private function appendLearningProgress(&$members)

@@ -27,7 +27,7 @@ class DatabaseDataClearer
         $sql = '';
 
         foreach ($tableNames as $tableName) {
-            if ($tableName == 'migrations') {
+            if ('migrations' == $tableName) {
                 continue;
             }
 

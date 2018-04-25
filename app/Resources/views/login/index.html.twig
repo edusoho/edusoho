@@ -19,7 +19,15 @@
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
 
         {% if error %}
-          <div class="alert alert-danger">{% if error.message == 'Bad credentials.' %}{{ 'site.user_password.error_tips'|trans }}{% else %}{{ error.message|trans }}{% endif %}</div>
+          <div class="alert alert-danger">
+            {% if error.message == 'Bad credentials.' %}
+              {{ 'site.user_password.error_tips'|trans }}
+            {% elseif error.message == 'User account is locked.' %}
+              {{ 'exception.user_lock'|trans }}
+            {% else %}
+              {{ error.message|trans }}
+            {% endif %}
+          </div>
         {% endif %}
         {{ web_macro.flash_messages() }}
         <div class="form-group mbl">

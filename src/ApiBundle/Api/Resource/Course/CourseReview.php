@@ -23,7 +23,7 @@ class CourseReview extends AbstractResource
 
         $conditions = array(
             'courseId' => $courseId,
-            'private' => 0
+            'private' => 0,
         );
 
         $offset = $request->query->get('offset', static::DEFAULT_PAGING_OFFSET);

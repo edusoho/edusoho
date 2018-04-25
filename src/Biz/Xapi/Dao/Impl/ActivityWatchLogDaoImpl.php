@@ -3,9 +3,9 @@
 namespace Biz\Xapi\Dao\Impl;
 
 use Biz\Xapi\Dao\ActivityWatchLogDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ActivityWatchLogDaoImpl extends GeneralDaoImpl implements ActivityWatchLogDao
+class ActivityWatchLogDaoImpl extends AdvancedDaoImpl implements ActivityWatchLogDao
 {
     protected $table = 'xapi_activity_watch_log';
 
@@ -19,6 +19,7 @@ class ActivityWatchLogDaoImpl extends GeneralDaoImpl implements ActivityWatchLog
             'serializes' => array(
             ),
             'conditions' => array(
+                'id IN ( :ids)',
                 'is_push = :is_push',
                 'created_time > :created_time_GT',
                 'created_time < :created_time_LT',

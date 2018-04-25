@@ -571,6 +571,35 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getUploadFileDao()->getByConvertHash($hash);
     }
 
+    public function searchCloudFilesFromLocal($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
+        $files = $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
+        if (empty($files)) {
+            return array();
+        }
+
+        $cloudFileConditions = array();
+        if (isset($conditions['resType'])) {
+            $cloudFileConditions['resType'] = $conditions['resType'];
+        }
+        $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, $cloudFileConditions);
+        $files = ArrayToolkit::index($files, 'id');
+        foreach ($cloudFiles as &$cloudFile) {
+            $cloudFile['type'] = $files[$cloudFile['id']]['type'];
+        }
+
+        return $cloudFiles;
+    }
+
+    public function countCloudFilesFromLocal($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
+        return $this->getUploadFileDao()->count($conditions);
+    }
+
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);

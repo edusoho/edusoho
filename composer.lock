@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c73aaac639018c3d45386a6445ed76c9",
+    "content-hash": "7b69b357873640a1de7b95ae622e9dd2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -221,7 +221,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/canuonifeng/omnipay-wechatpay/d0503c495b621bd4fda4290d8342009bd57c7222.zip",
+                "url": "https://api.github.com/repos/canuonifeng/omnipay-wechatpay/zipball/d0503c495b621bd4fda4290d8342009bd57c7222",
                 "reference": "d0503c495b621bd4fda4290d8342009bd57c7222",
                 "shasum": ""
             },
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.9",
+            "version": "v0.9.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
+                "reference": "44c16d634b3090aa819a303a721e650e7cffd31a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/c319ccece125b07da681f4893dfa50bf5bbb99f7.zip",
-                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/44c16d634b3090aa819a303a721e650e7cffd31a.zip",
+                "reference": "44c16d634b3090aa819a303a721e650e7cffd31a",
                 "shasum": ""
             },
             "require": {
@@ -324,6 +324,9 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^4.8|^5.7|^6.0"
             },
+            "suggest": {
+                "ramsey/uuid": "Dao UUID primary key feature need this package."
+            },
             "bin": [
                 "bin/biz"
             ],
@@ -341,20 +344,20 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-01-18T02:33:43+00:00"
+            "time": "2018-04-11T09:48:29+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.12",
+            "version": "v0.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33"
+                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/92750311508b7d23d6b4f16bbcca8fe245445e33.zip",
-                "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/9f343dac2299f78d1506833412e3e3215dc6dc89.zip",
+                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89",
                 "shasum": ""
             },
             "require": {
@@ -363,13 +366,15 @@
                 "wenqinruan/omnipay-alipay": "^2.3"
             },
             "require-dev": {
-                "mockery/mockery": "^0.9.9"
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "4.8.36"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Codeages\\Biz\\Order\\": "src/Order/",
-                    "Codeages\\Biz\\Pay\\": "src/Pay/"
+                    "Codeages\\Biz\\Pay\\": "src/Pay/",
+                    "Codeages\\Biz\\Invoice\\": "src/Invoice/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -377,7 +382,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-01-16T12:15:35+00:00"
+            "time": "2018-04-18T01:23:58+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -463,27 +468,26 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.0.6",
+            "version": "v0.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "6fa24884bb34e559649ebabe9fe3f8cd4771d97d"
+                "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/6fa24884bb34e559649ebabe9fe3f8cd4771d97d.zip",
-                "reference": "6fa24884bb34e559649ebabe9fe3f8cd4771d97d",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/01cf99a47f1fe4a67b2148736d8069f3144930ad",
+                "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad",
                 "shasum": ""
             },
             "require": {
-                "facebook/graph-sdk": "^5.6",
+                "ext-curl": "*",
                 "php": ">=5.3.3",
-                "psr/http-message": "^1.0",
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4 || ^5 || ^6",
-                "silex/silex": "^2.0"
+                "monolog/monolog": "^1.18",
+                "phpunit/phpunit": "^4 || ^5 || ^6"
             },
             "type": "library",
             "autoload": {
@@ -503,7 +507,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-01-04T13:37:05+00:00"
+            "time": "2018-04-10T03:46:42+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -886,7 +890,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/cache/b3217d58609e9c8e661cd41357a54d926c4a2a1a.zip",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "shasum": ""
             },
@@ -960,7 +964,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/collections/a01ee38fcd999f34d9bfbcee59dbda5105449cbf.zip",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/a01ee38fcd999f34d9bfbcee59dbda5105449cbf",
                 "reference": "a01ee38fcd999f34d9bfbcee59dbda5105449cbf",
                 "shasum": ""
             },
@@ -1252,7 +1256,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/DoctrineCacheBundle/9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1.zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineCacheBundle/zipball/9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1",
                 "reference": "9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1",
                 "shasum": ""
             },
@@ -1340,7 +1344,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/inflector/e11d84c6e018beedd929cff5220969a3c6d1d462.zip",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
                 "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
                 "shasum": ""
             },
@@ -1534,7 +1538,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/QrCode/zipball/5e56697d968ed60fd1b6444d36592fd6333c2724",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/5e56697d968ed60fd1b6444d36592fd6333c2724",
                 "reference": "5e56697d968ed60fd1b6444d36592fd6333c2724",
                 "shasum": ""
             },
@@ -1633,64 +1637,6 @@
             "time": "2017-03-13T06:30:53+00:00"
         },
         {
-            "name": "facebook/graph-sdk",
-            "version": "5.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/facebook/php-graph-sdk.git",
-                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/facebook/php-graph-sdk/2f9639c15ae043911f40ffe44080b32bac2c5280.zip",
-                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.4|^7.0"
-            },
-            "require-dev": {
-                "guzzlehttp/guzzle": "~5.0",
-                "mockery/mockery": "~0.8",
-                "phpunit/phpunit": "~4.0"
-            },
-            "suggest": {
-                "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
-                "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Facebook\\": "src/Facebook/"
-                },
-                "files": [
-                    "src/Facebook/polyfills.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Facebook Platform"
-            ],
-            "authors": [
-                {
-                    "name": "Facebook",
-                    "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
-                }
-            ],
-            "description": "Facebook SDK for PHP",
-            "homepage": "https://github.com/facebook/php-graph-sdk",
-            "keywords": [
-                "facebook",
-                "sdk"
-            ],
-            "time": "2017-08-16T17:28:07+00:00"
-        },
-        {
             "name": "gregwar/captcha",
             "version": "v1.1.1",
             "source": {
@@ -1748,7 +1694,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/guzzle/guzzle3/0645b70d953bc1c067bbc8d5bc53194706b628d9.zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
                 "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
                 "shasum": ""
             },
@@ -2293,7 +2239,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/thephpleague/omnipay-common/54910f2ece6b1be64f5e53e2111dd1254d50ee49.zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-common/zipball/54910f2ece6b1be64f5e53e2111dd1254d50ee49",
                 "reference": "54910f2ece6b1be64f5e53e2111dd1254d50ee49",
                 "shasum": ""
             },
@@ -2533,6 +2479,7 @@
                 "xls",
                 "xlsx"
             ],
+            "abandoned": "phpoffice/phpspreadsheet",
             "time": "2015-05-01T07:00:55+00:00"
         },
         {
@@ -2590,12 +2537,12 @@
             "version": "3.7.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/piwik/device-detector.git",
+                "url": "https://github.com/matomo-org/device-detector.git",
                 "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/piwik/device-detector/zipball/f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
                 "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
                 "shasum": ""
             },
@@ -2684,56 +2631,6 @@
                 "psr"
             ],
             "time": "2017-02-14T16:28:37+00:00"
-        },
-        {
-            "name": "psr/http-message",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/http-message.git",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/php-fig/http-message/f6561bf28d520154e4b0ec72be95418abe6d9363.zip",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Message\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for HTTP messages",
-            "homepage": "https://github.com/php-fig/http-message",
-            "keywords": [
-                "http",
-                "http-message",
-                "psr",
-                "psr-7",
-                "request",
-                "response"
-            ],
-            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -3347,7 +3244,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-apcu/04f62674339602def515bff4bc6901fc1d4951e8.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-apcu/zipball/04f62674339602def515bff4bc6901fc1d4951e8",
                 "reference": "04f62674339602def515bff4bc6901fc1d4951e8",
                 "shasum": ""
             },
@@ -3403,7 +3300,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-intl-icu/d2bb2ef00dd8605d6fbd4db53ed4af1395953497.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/d2bb2ef00dd8605d6fbd4db53ed4af1395953497",
                 "reference": "d2bb2ef00dd8605d6fbd4db53ed4af1395953497",
                 "shasum": ""
             },
@@ -3461,7 +3358,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-mbstring/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
                 "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
                 "shasum": ""
             },
@@ -3520,7 +3417,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php54/d7810a14b2c6c1aff415e1bb755f611b3d5327bc.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/d7810a14b2c6c1aff415e1bb755f611b3d5327bc",
                 "reference": "d7810a14b2c6c1aff415e1bb755f611b3d5327bc",
                 "shasum": ""
             },
@@ -3578,7 +3475,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php55/b64e7f0c37ecf144ecc16668936eef94e628fbfd.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/b64e7f0c37ecf144ecc16668936eef94e628fbfd",
                 "reference": "b64e7f0c37ecf144ecc16668936eef94e628fbfd",
                 "shasum": ""
             },
@@ -3634,7 +3531,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php56/265fc96795492430762c29be291a371494ba3a5b.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/265fc96795492430762c29be291a371494ba3a5b",
                 "reference": "265fc96795492430762c29be291a371494ba3a5b",
                 "shasum": ""
             },
@@ -3690,7 +3587,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php70/0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff",
                 "reference": "0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff",
                 "shasum": ""
             },
@@ -4206,16 +4103,16 @@
         },
         {
             "name": "wenqinruan/omnipay-alipay",
-            "version": "v2.3.5",
+            "version": "v2.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wenqinruan/omnipay-alipay.git",
-                "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25"
+                "reference": "7f906729a1685dda30e15186a827ccc098427e54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-alipay/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25.zip",
-                "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
+                "url": "https://api.github.com/repos/wenqinruan/omnipay-alipay/zipball/7f906729a1685dda30e15186a827ccc098427e54",
+                "reference": "7f906729a1685dda30e15186a827ccc098427e54",
                 "shasum": ""
             },
             "require": {
@@ -4256,7 +4153,7 @@
                 "php53",
                 "purchase"
             ],
-            "time": "2017-09-26T12:37:40+00:00"
+            "time": "2018-03-22T02:11:38+00:00"
         },
         {
             "name": "willdurand/js-translation-bundle",
@@ -4268,7 +4165,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/d9cb848fc66b502658994cf86e63ed3d940e1095.zip",
+                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/d9cb848fc66b502658994cf86e63ed3d940e1095",
                 "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095",
                 "shasum": ""
             },
@@ -4383,7 +4280,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/instantiator/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda.zip",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "shasum": ""
             },
@@ -4426,6 +4323,64 @@
                 "instantiate"
             ],
             "time": "2017-07-22T11:58:36+00:00"
+        },
+        {
+            "name": "facebook/graph-sdk",
+            "version": "5.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/php-graph-sdk.git",
+                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
+                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "~5.0",
+                "mockery/mockery": "~0.8",
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
+                "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Facebook\\": "src/Facebook/"
+                },
+                "files": [
+                    "src/Facebook/polyfills.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Facebook Platform"
+            ],
+            "authors": [
+                {
+                    "name": "Facebook",
+                    "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
+                }
+            ],
+            "description": "Facebook SDK for PHP",
+            "homepage": "https://github.com/facebook/php-graph-sdk",
+            "keywords": [
+                "facebook",
+                "sdk"
+            ],
+            "time": "2017-08-16T17:28:07+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -4962,6 +4917,56 @@
                 "xunit"
             ],
             "time": "2015-10-02T06:51:40+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "sebastian/comparator",

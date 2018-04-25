@@ -1,6 +1,8 @@
 {# 主题管理-分类挂件管理 #}
-{% set allBlockConfig = array_index(allBlockConfig|merge(blockConfig), 'id') %}
+
+{% set orginAllConfig = array_index(allBlockConfig, 'id') %}
 {% set blockConfig = array_index(blockConfig, 'id')  %}
+{% set allBlockConfig = orginAllConfig|merge(blockConfig) %}
 
 <div class="hide js-componet-setting" data-key="{{ configKey }}">
   {{ allBlockConfig|json_encode|raw }}

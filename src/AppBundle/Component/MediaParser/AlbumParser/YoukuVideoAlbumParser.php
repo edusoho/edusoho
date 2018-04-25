@@ -13,7 +13,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     public function parse($url)
     {
         $response = $this->fetchUrl($url);
-        if ($response['code'] != 200) {
+        if (200 != $response['code']) {
             throw new ParseException(array('获取优酷视频专辑(%url%)页面内容失败！', array('%url%' => $url)));
         }
 
@@ -63,7 +63,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
         foreach (range(1, ceil($album['number'] / 50)) as $page) {
             $url = "http://v.youku.com/v_vpvideoplaylistv5?pl=50&f={$album['id']}&pn={$page}";
             $response = $this->fetchUrl($url);
-            if ($response['code'] != 200) {
+            if (200 != $response['code']) {
                 throw new ParseException('获取优酷视频专辑视频条目失败');
             }
 
@@ -90,10 +90,5 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     public function detect($url)
     {
         return (bool) preg_match('/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s', $url);
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

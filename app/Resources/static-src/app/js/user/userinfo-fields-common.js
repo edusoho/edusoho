@@ -114,7 +114,7 @@ export default class UserInfoFieldsItemValidate {
           });
         }
       }
-      });
+    });
     this.getCustomFields();
   }
 
@@ -133,7 +133,7 @@ export default class UserInfoFieldsItemValidate {
               $('.js-sms-send').removeClass('disabled');
             } else {
               $('.js-sms-send').addClass('disabled');
-              $('.js-captch-num').find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+              $('.js-captch-num').find('#getcode_num').attr('src',$('#getcode_num').data('url')+ '?' + Math.random());
             }
           }
         },
@@ -152,11 +152,11 @@ export default class UserInfoFieldsItemValidate {
         messages: {
           required: Translator.trans('validate.sms_code_input.message'),
         }
-      })
+      });
     }
   }
 
-  sendSms(e) {
+  sendSms() {
 
     new SmsSender({
       element: '.js-sms-send',
@@ -188,7 +188,7 @@ export default class UserInfoFieldsItemValidate {
         date: true,
       });
     }
-    for (var i = 1; i <= 10; i++) {
+    for (i = 1; i <= 10; i++) {
       $(`[name="varcharField${i}"]`).rules('add', {
         required: true,
       });
@@ -200,6 +200,6 @@ export default class UserInfoFieldsItemValidate {
 
   changeCaptcha(e) {
     var $code = $(e.currentTarget);
-    $code.attr("src", $code.data("url") + "?" + Math.random());
+    $code.attr('src', $code.data('url') + '?' + Math.random());
   }
 }

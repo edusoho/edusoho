@@ -36,7 +36,7 @@ export default class Base {
       },
       initSelection: function (element, callback) {
         var data = [];
-        $(element.val().split(",")).each(function () {
+        $(element.val().split(',')).each(function () {
           data.push({
             id: this,
             name: this
@@ -57,12 +57,9 @@ export default class Base {
       multiple: true,
       maximumSelectionSize: 20,
       placeholder: Translator.trans('open_course.tag_required_hint'),
-      width: 'off',
-      multiple: true,
       createSearchChoice: function () {
         return null;
       },
-      maximumSelectionSize: 20
     });
   }
 
@@ -78,13 +75,13 @@ export default class Base {
           maxlength: 70,
         },
       }
-    })
+    });
 
     $('#course-create-btn').click(() => {
       if (validator.form()) {
         $form.submit();
       }
-    })
+    });
   }
 
   initCkeditor() {
