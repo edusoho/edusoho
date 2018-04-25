@@ -42,6 +42,7 @@ class BizDragCaptcha extends BizAware
         return array(
             'token' => $token['token'],
             'jigsaw' => $jigsaw,
+            'w' => $options,
         );
     }
 
