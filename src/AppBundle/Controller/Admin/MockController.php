@@ -89,6 +89,15 @@ class MockController extends BaseController
         return $this->createJsonResponse(array('result' => $result));
     }
 
+    public function downloadTokenAction()
+    {
+        $this->validate();
+
+        $path = $this->getMockedTokenPath();
+
+        return $this->createJsonResponse(array('result' => file_get_contents($path)));
+    }
+
     protected function getDistributorCourseOrderService()
     {
         return $this->createService('Distributor:DistributorCourseOrderService');
@@ -171,6 +180,7 @@ class MockController extends BaseController
         if ('true' == $apiAuthorized) {
             $token = $this->generateToken($apiUrl, '');
             $headers[] = 'Authorization: Signature '.$token;
+            $this->saveMockedToken($token);
         }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -276,5 +286,18 @@ class MockController extends BaseController
             'apiMethod' => $apiMethodsSegs[1],
             'apiAuthorized' => $apiAuthorizedSegs[1],
         );
+    }
+
+    private function saveMockedToken($token)
+    {
+        $mockedTokenStr = 'Accept: application/vnd.edusoho.v2+json; Authorization: Signature '.$token;
+        file_put_contents($this->getMockedTokenPath(), '['.date('Y-m-d H:i:s').'] '.$mockedTokenStr);
+    }
+
+    private function getMockedTokenPath()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['kernel.root_dir'].'/data/mockedToken';
     }
 }

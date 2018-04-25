@@ -40,6 +40,16 @@ define(function(require, exports, module) {
           $url, { 'data': $postData },
           function(data) {
             $('.result').html(JSON.stringify(data));
+
+            if ($('.doc').val().indexOf('api-authorized: true') != -1) {
+              $('.generatedToken').html('');
+              $.post(
+                $('.generatedToken').data('url'), {},
+                function(data) {
+                  $('.generatedToken').html(data.result);
+                }
+              );
+            }
           }
         );
       }
