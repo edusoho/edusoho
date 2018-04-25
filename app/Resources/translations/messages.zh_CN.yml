@@ -1889,6 +1889,10 @@ course.live_lesson_manage.live_about: 直播说明
 course.live_lesson_manage.live_length.input_placeholder: 时长
 course.live_lesson_manage.live_length.minutes: 分钟
 
+course.live_activity.room_type: 授课形式
+course.live_activity.large_room_type: 大班课
+course.live_activity.small_room_type: 小班课
+
 course.live.replay_manage.chapter: >
   第 <span class="number">%chapterName%</span>
 course.live.replay_manage.file_edit_btn: 编辑

@@ -19,4 +19,6 @@ interface LiveActivityService
     public function createLiveroom($activity);
 
     public function search($conditions, $orderbys, $start, $limit);
+
+    public function canUpdateRoomType($liveStartTime);
 }

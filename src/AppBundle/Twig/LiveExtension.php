@@ -30,6 +30,7 @@ class LiveExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('live_can_record', array($this, 'canRecord')),
             new \Twig_SimpleFunction('is_live_finished', array($this, 'isLiveFinished')),
+            new \Twig_SimpleFunction('get_live_room_type', array($this, 'getLiveRoomType')),
         );
     }
 
@@ -53,6 +54,46 @@ class LiveExtension extends \Twig_Extension
         }
     }
 
+    public function getLiveRoomType()
+    {
+        $setting = $this->getSettingService()->get('live-course', array());
+
+        $roomTypes = empty($setting['room_type']) ? array() : $setting['room_type'];
+        if (empty($roomTypes) || (time() - $setting['check_room_type_time']) >= 3600) {
+            $roomTypes = $this->getRoomTypes();
+            $setting['room_type'] = $roomTypes;
+            $setting['check_room_type_time'] = time();
+            $this->getSettingService()->set('live-course', $setting);
+        }
+
+        $default = array(
+            'large' => 'course.live_activity.large_room_type',
+            'small' => 'course.live_activity.small_room_type',
+        );
+
+        if (empty($roomTypes)) {
+            return array();
+        }
+
+        if (count($roomTypes) >= 2) {
+            return $default;
+        } else {
+            return array($roomTypes[0] => $default[$roomTypes[0]]);
+        }
+    }
+
+    protected function getRoomTypes()
+    {
+        $client = new EdusohoLiveClient();
+        try {
+            $result = $client->getLiveAccount();
+
+            return $result['roomType'];
+        } catch (CloudAPIIOException $cloudAPIIOException) {
+            return array();
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,5 +110,10 @@ class LiveExtension extends \Twig_Extension
     protected function getLiveCourseService()
     {
         return $this->biz->service('OpenCourse:LiveCourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

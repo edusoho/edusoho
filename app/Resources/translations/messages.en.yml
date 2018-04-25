@@ -1652,6 +1652,11 @@ course.live_lesson_manage.live_length: 'Duration'
 course.live_lesson_manage.live_about: 'About'
 course.live_lesson_manage.live_length.input_placeholder: Duration
 course.live_lesson_manage.live_length.minutes: Minutes
+
+course.live_activity.room_type: 授课形式
+course.live_activity.large_room_type: Large
+course.live_activity.small_room_type: Small
+
 course.live.replay_manage.chapter: 'No. <span class="number">%chapterName%</span>'
 course.live.replay_manage.file_edit_btn: Edit
 course.live.replay_manage.file_chooser_tips: 'Is converting the video format, the conversion takes some time, during which the video will not be played. <br/> After the conversion is complete, you will be notified by station message.'

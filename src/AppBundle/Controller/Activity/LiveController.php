@@ -61,10 +61,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $activity = $this->getActivityService()->getActivity($id, true);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $id);
 
+        $canUpdateRoomType = $this->getLiveActivityService()->canUpdateRoomType($activity['startTime']);
+
         return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity),
             'courseId' => $courseId,
             'taskId' => $task['id'],
+            'canUpdateRoomType' => $canUpdateRoomType,
         ));
     }
 
@@ -367,6 +370,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    protected function getLiveActivityService()
+    {
+        return $this->createService('Activity:LiveActivityService');
     }
 
     /**
