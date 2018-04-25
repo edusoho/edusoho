@@ -82,6 +82,8 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
                             'create_extra' => array('distributorToken' => $token),
                             'target_type' => 'course',
                             'target_id' => 9,
+                            'refund_id' => 3,
+                            'status' => 'refunded',
                         ),
                     ),
                 ),
@@ -113,6 +115,17 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
             )
         );
 
+        $mockedOrderRefundService = $this->mockBiz(
+            'Order:OrderRefundService',
+            array(
+                array(
+                    'functionName' => 'getOrderRefundById',
+                    'withParams' => array(3),
+                    'returnValue' => array('reason' => 'dsdfk'),
+                ),
+            )
+        );
+
         $order = array(
             'id' => $orderId,
             'user_id' => $userId,
@@ -124,7 +137,7 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
             'refund_deadline' => '1524324352',
             'price_amount' => '102',
             'pay_amount' => '2',
-            'status' => 'finished',
+            'status' => 'refunded',
             'updated_time' => '1524324352',
         );
 
@@ -137,6 +150,7 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
         $this->assertEquals($token, $result['token']);
         $this->assertEquals('nickname_test', $result['nickname']);
         $this->assertEquals('13675226221', $result['mobile']);
+        $this->assertEquals('dsdfk', $result['refundedReason']);
 
         $mockedOrderService->shouldHaveReceived('findOrderItemsByOrderId')->times(2);
         $mockedOrderService->shouldHaveReceived('findOrderItemDeductsByOrderId')->times(1);
