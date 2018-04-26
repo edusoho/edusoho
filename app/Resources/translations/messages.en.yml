@@ -2273,6 +2273,7 @@ user.register.email_label: Email
 user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload your avatar later'
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
+user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
 
 user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
