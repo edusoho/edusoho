@@ -40,7 +40,7 @@
   {% set orderBy = app.request.query.get('orderBy')|default('createdTime')%}
   {% set currentLevelId = filter.currentLevelId|default('all')%}
   {% set subCategory = app.request.query.get('subCategory', '') %}
-  {% set thirdLevelCategory = app.request.query.get('thirdLevelCategory', '') %}
+  {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
 
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'classroom'})) }}
   

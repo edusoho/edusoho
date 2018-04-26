@@ -52,7 +52,7 @@
   {% set currentLevelId = filter.currentLevelId|default('all') %}
   {% set path = app.request.get('_route') %}
   {% set subCategory = app.request.query.get('subCategory', '') %}
-  {% set thirdLevelCategory = app.request.query.get('thirdLevelCategory', '') %}
+  {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
 
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
 

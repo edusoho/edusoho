@@ -709,7 +709,7 @@ json_response.homework_has_submitted_cannot_change.message: 作业已提交，�
 json_response.must_choose_question.message: 请先选择题目
 json_response.cannot_send_message_self.message: 不能给自己发私信哦！
 json_response.receiver_not_exist.message: 该收件人不存在
-json_response.receiver_not_allowed.message: 无法向该用户发送私信
+json_response.receiver_not_allowed.message: 不支持向该用户发送私信
 
 validate_old.positive_currency.message: 请输入大于等于0的有效价格，最多两位小数，整数位不超过8位！
 validate_old.required.message: 请输入{{display}}

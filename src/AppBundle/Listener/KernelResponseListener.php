@@ -3,7 +3,6 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Controller\OAuth2\OAuthUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
