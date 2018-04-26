@@ -45,9 +45,9 @@ class RegisterController extends BaseController
                 $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
                 $registration['createdIp'] = $request->getClientIp();
                 $authSettings = $this->getSettingService()->get('auth', array());
-
-                //验证码校验
-                $this->captchaEnabledValidator($authSettings, $registration, $request);
+                
+                //拖动校验
+                $this->dragCaptchaValidator();
 
                 //手机校验码
                 if ($this->smsCodeValidator($authSettings, $registration)) {
@@ -548,6 +548,11 @@ class RegisterController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    protected function dragCaptchaValidator($authSettings, $registration)
+    {
+
     }
 
     //validate captcha

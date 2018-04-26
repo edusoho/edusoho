@@ -12,9 +12,9 @@ class BizDragCaptcha extends BizAware
 
     const STATUS_EXPIRED = 'expired';
 
-    const JIGSAW_WIDTH = 50;
+    const JIGSAW_WIDTH = 40;
 
-    const DEVIATION = 0.5;
+    const DEVIATION = 1;
 
     const TOKENTIMES = 5;
 
@@ -85,7 +85,7 @@ class BizDragCaptcha extends BizAware
 
         $options = $token['data'];
         $source = $this->getSource($options);
-        $sub = imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/jigsaw-border.png');
+        $sub = imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/jigsaw-border3.png');
         imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
         ob_start();
         imagepng($source);
