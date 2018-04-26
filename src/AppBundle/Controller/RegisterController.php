@@ -15,6 +15,8 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use AppBundle\Common\ArrayToolkit;
+use Biz\User\UserException;
 
 class RegisterController extends BaseController
 {
@@ -47,7 +49,7 @@ class RegisterController extends BaseController
                 $authSettings = $this->getSettingService()->get('auth', array());
                 
                 //拖动校验
-                $this->dragCaptchaValidator();
+                $this->dragCaptchaValidator($registration);
 
                 //手机校验码
                 if ($this->smsCodeValidator($authSettings, $registration)) {
@@ -550,9 +552,18 @@ class RegisterController extends BaseController
         return $this->container->get('web.twig.extension');
     }
 
-    protected function dragCaptchaValidator($authSettings, $registration)
+    protected function dragCaptchaValidator($registration)
     {
+        if(!ArrayToolkit::requireds($registration, array('drag_captcha_token', 'jigsaw'))) {
+            $this->createNewException(UserException::FORBIDDEN_REGISTER());
+        }
 
+        $biz = $this->getBiz();
+        $bizDragCaptcha = $biz['biz_drag_captcha'];
+        $checkResult = $bizDragCaptcha->checkByServer($registration['drag_captcha_token'], $registration['jigsaw']);
+        if (!$checkResult) {
+             $this->createNewException(UserException::FORBIDDEN_REGISTER());
+        }
     }
 
     //validate captcha
