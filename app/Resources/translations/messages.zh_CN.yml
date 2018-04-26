@@ -5675,6 +5675,7 @@ admin.sensitive_manage.add_sensitive_btn: 添加
 admin.sensitive_manage.error: 错误
 admin.sensitive_manage.prompt: 提示
 admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
+admin.sensitive_manage.existed: '敏感词已存在：%keywords%'
 
 # 咨询管理
 admin.operation_article.category_option: --所属栏目--

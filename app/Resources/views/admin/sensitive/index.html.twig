@@ -6,6 +6,7 @@
 {% set script_controller = 'topxiaadminbundle/controller/keyword/list' %}
 
 {% block main %}
+  {{ web_macro.flash_messages() }}
   <form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
     <div class="form-group">
       <select class="form-control" name="state">
