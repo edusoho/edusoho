@@ -14,7 +14,7 @@ class BizDragCaptcha extends BizAware
 
     const JIGSAW_WIDTH = 40;
 
-    const DEVIATION = 500;
+    const DEVIATION = 1;
 
     const TOKENTIMES = 5;
 
@@ -49,6 +49,26 @@ class BizDragCaptcha extends BizAware
         );
     }
 
+    public function getBackground($token)
+    {
+        $token = $this->getTokenDao()->getByToken($token);
+        if (empty($token)) {
+            return;
+        }
+
+        $options = $token['data'];
+        $source = $this->getSource($options);
+        $sub = imagecreatefrompng($this->getImagePath('jigsaw-border5.png'));
+        imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
+        ob_start();
+        imagepng($source);
+
+        imagedestroy($sub);
+        imagedestroy($source);
+
+        return ob_get_clean();
+    }
+
     public function checkByServer($token, $jigsaw)
     {
         $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
@@ -79,26 +99,6 @@ class BizDragCaptcha extends BizAware
         return abs($jigsaw - $token['data']['positionX']) > self::DEVIATION;
     }
 
-    public function getBackground($token)
-    {
-        $token = $this->getTokenDao()->getByToken($token);
-        if (empty($token)) {
-            return;
-        }
-
-        $options = $token['data'];
-        $source = $this->getSource($options);
-        $sub = imagecreatefrompng($this->getImagePath('jigsaw-border5.png'));
-        imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
-        ob_start();
-        imagepng($source);
-
-        imagedestroy($sub);
-        imagedestroy($source);
-
-        return ob_get_clean();
-    }
-
     private function getSource($options)
     {
         return imagecreatefromjpeg($this->getImagePath(self::IMAGE_NAME));
@@ -117,14 +117,16 @@ class BizDragCaptcha extends BizAware
         imagepng($jigsawBg);
         $str = ob_get_clean();
         imagedestroy($jigsawBg);
+        imagedestroy($source);
 
         return 'data:image/png;base64,'.base64_encode($str);
     }
 
     private function setJigsawPosition($options)
     {
-        $options['positionX'] = rand(self::JIGSAW_WIDTH, $options['width'] - self::JIGSAW_WIDTH);
-        $options['positionY'] = rand(self::JIGSAW_WIDTH, $options['height'] - self::JIGSAW_WIDTH);
+        $rate = 100;
+        $options['positionX'] = rand(self::JIGSAW_WIDTH * $rate, $rate * ($options['width'] - self::JIGSAW_WIDTH)) / $rate;
+        $options['positionY'] = rand(self::JIGSAW_WIDTH * $rate, $rate * ($options['height'] - self::JIGSAW_WIDTH)) / $rate;
 
         return $options;
     }
