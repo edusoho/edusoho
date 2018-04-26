@@ -108,9 +108,10 @@ class BizDragCaptcha extends BizAware
     {
         $source = $this->getSource($options);
 
-        $jigsawBg = imagecreate(self::JIGSAW_WIDTH, $options['height']);
-        $white = imagecolorallocatealpha($jigsawBg, 255, 255, 255, 0);
-        imagecolortransparent($jigsawBg, $white);
+        $jigsawBg = imagecreatetruecolor(self::JIGSAW_WIDTH, $options['height']);
+        imagesavealpha($jigsawBg, true);
+        $transColour = imagecolorallocatealpha($jigsawBg, 255, 255, 255, 127);
+        imagefill($jigsawBg, 0, 0, $transColour);
 
         imagecopymerge($jigsawBg, $source, 0, $options['positionY'], $options['positionX'], $options['positionY'], self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 100);
         ob_start();
