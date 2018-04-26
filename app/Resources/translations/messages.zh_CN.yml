@@ -2736,6 +2736,7 @@ user.register.email_label: 邮箱地址
 user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱

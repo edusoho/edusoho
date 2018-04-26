@@ -711,7 +711,8 @@ validate.visible_character.message: Not allowed to enter invisible characters, s
 validate.tag_required_hint: Please input tags
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
-
+validate.success: 验证成功
+validate.fail: 验证失败
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected

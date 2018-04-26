@@ -79,13 +79,17 @@ export default class Drag {
         console.log(res.status);
         if (res.status === 'invalid') {
           this.resetLocation($element[0], $target[0]);
+          cd.message({
+            type: 'danger',
+            message: Translator.trans('validate.fail')
+          });
         } else if (res.status === 'expired') {
           this.resetLocation($element[0], $target[0]);
           this.initDragCaptcha();
         } else {
           cd.message({
             type: 'success',
-            message: Translator.trans('验证成功')
+            message: Translator.trans('validate.success')
           });
         }
       });
@@ -115,9 +119,12 @@ export default class Drag {
     }
 
     const left = leftNum + 'px';
+    const movingLeft = leftNum + 20 + 'px';
     this.setCss($element[0], 'left', left);
     this.setCss($target[0], 'left', left);
     this.setCss($element[0], 'cursor', 'move');
+    $('.js-drag-bar-tip').addClass('hidden');
+    $('.js-drag-bar-mask').css('width', movingLeft);
     params.currentLeft = leftNum;
   }
 
@@ -130,6 +137,8 @@ export default class Drag {
   resetLocation(element, target) {
     this.setCss(element, 'left', '0px');
     this.setCss(target, 'left', '0px');
+    $('.js-drag-bar-mask').css('width', '0px');
+    $('.js-drag-bar-tip').toggleClass('hidden');
     this.getLocation(element);
   }
 
