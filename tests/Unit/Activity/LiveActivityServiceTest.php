@@ -138,7 +138,7 @@ class LiveActivityServiceTest extends BaseTestCase
         $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
         $this->assertEquals(1, $result);
 
-        $liveTime = time() + 3600 * 2 -10;
+        $liveTime = time() + 3600 * 2 - 10;
         $result = $this->getLiveActivityService()->canUpdateRoomType($liveTime);
         $this->assertEquals(0, $result);
 
