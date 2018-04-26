@@ -21,14 +21,17 @@ export default class LiveShow {
   startEvent() {
     let self = this;
     $('.js-start-live').on('click', function () {
-      if (!self.started) {
-        this.started = true;
-        self.emitter.emit('start', {}).then(() => {
-          console.log('live.start');
-        }).catch((error) => {
-          console.error(error);
-        });
-      }
+      let triggerUrl = $(this).data('finish');
+      $.post(triggerUrl, function(res){
+        if (!self.started) {
+          this.started = true;
+          self.emitter.emit('start', {}).then(() => {
+            console.log('live.start');
+          }).catch((error) => {
+            console.error(error);
+          });
+        }
+      });
     });
   }
 
