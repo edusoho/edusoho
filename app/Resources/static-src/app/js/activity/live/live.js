@@ -23,6 +23,9 @@ export default class LiveShow {
     $('.js-start-live').on('click', function () {
       let triggerUrl = $(this).data('finish');
       $.post(triggerUrl, function(res){
+        if (res.status === 'not_start') {
+          return ;
+        }
         if (!self.started) {
           this.started = true;
           self.emitter.emit('start', {}).then(() => {
