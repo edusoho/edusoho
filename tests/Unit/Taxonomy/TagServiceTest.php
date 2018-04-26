@@ -30,6 +30,10 @@ class TagServiceTest extends BaseTestCase
         $this->assertContains($createdTag1, $result3);
     }
 
+    public function testFindTagGroupsByTagId()
+    {
+    }
+
     /**
      * @group add
      */
