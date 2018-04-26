@@ -72,11 +72,10 @@ export default class Drag {
     this.getLocation($element[0]);
 
     if (params.currentLeft) {
-      const rate = 50 / 47;
-      const positionX = (params.currentLeft * rate).toFixed(2);
+      const positionX = params.currentLeft.toFixed(2);
       const data = { token: this.dragCaptchaToken, jigsaw: positionX };
       Api.dragCaptcha.validate({ params: data }).then((res) => {
-        console.log(res.status);
+        console.log(res);
         if (res.status === 'invalid') {
           this.resetLocation($element[0], $target[0]);
           cd.message({
@@ -91,6 +90,8 @@ export default class Drag {
             type: 'success',
             message: Translator.trans('validate.success')
           });
+          $('[name="drag_captcha_token"]').val(this.dragCaptchaToken);
+          $('[name="jigsaw"]').val(positionX);
         }
       });
     }
