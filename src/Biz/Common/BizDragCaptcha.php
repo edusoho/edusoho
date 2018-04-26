@@ -22,7 +22,7 @@ class BizDragCaptcha extends BizAware
 
     public function generate($options = array())
     {
-        $size = getimagesize('/private/var/www/edusoho/web/assets/img/captcha/2.png');
+        $size = getimagesize('/private/var/www/edusoho/web/assets/img/captcha/5.jpg');
 
         $default = array(
             'height' => $size[1],
@@ -85,7 +85,7 @@ class BizDragCaptcha extends BizAware
 
         $options = $token['data'];
         $source = $this->getSource($options);
-        $sub = imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/jigsaw-border3.png');
+        $sub = imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/jigsaw-border5.png');
         imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
         ob_start();
         imagepng($source);
@@ -98,7 +98,7 @@ class BizDragCaptcha extends BizAware
 
     private function getSource($options)
     {
-        return imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/2.png');
+        return imagecreatefromjpeg('/private/var/www/edusoho/web/assets/img/captcha/5.jpg');
     }
 
     private function getJigsaw($options)

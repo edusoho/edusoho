@@ -60,9 +60,8 @@
 							<p class="help-block"></p>
 						</div>
 					</div>
-
-          {% include 'register/captcha/normal.html.twig' %}
-
+          {# {% include 'register/captcha/normal.html.twig' %} #}
+          {% include 'register/captcha/drag.html.twig' %}
 					{% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
 						<div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
 							<label class="control-label required" for="sms_code">{{'user.settings.security.sms_code'|trans}}</label>
@@ -91,8 +90,7 @@
 							</div>
 						</div>
 					{% endif %}
-          
-          {% include 'register/captcha/drag.html.twig' %}
+        
 					<div class="form-group mbl">
 						<div class="controls">
 							<button type="submit" id="register-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary btn-lg btn-block">{% if setting('auth.user_terms') == 'opened' %}{{ 'user.register.agree_terms'|trans }}{% else %}{{'form.btn.register'|trans}}{% endif %}</button>

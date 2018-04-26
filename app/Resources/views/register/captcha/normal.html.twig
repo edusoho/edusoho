@@ -1,4 +1,3 @@
-
 {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
   <div class="form-group mbl js-captcha">
     <label class="control-label required" for="captcha_code">{{'user.register.account_with_sms_code_label'|trans}}</label>
