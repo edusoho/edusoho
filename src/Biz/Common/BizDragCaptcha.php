@@ -72,7 +72,7 @@ class BizDragCaptcha extends BizAware
     public function checkByServer($token, $jigsaw)
     {
         $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
-        if (!$this->validateJigsaw($token, $jigsaw)) {
+        if ($this->validateJigsaw($token, $jigsaw)) {
             throw new \Exception();
         }
 
