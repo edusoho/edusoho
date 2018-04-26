@@ -56,15 +56,7 @@ class LiveExtension extends \Twig_Extension
 
     public function getLiveRoomType()
     {
-        $setting = $this->getSettingService()->get('live-course', array());
-
-        $roomTypes = empty($setting['room_type']) ? array() : $setting['room_type'];
-        if (empty($roomTypes) || (time() - $setting['check_room_type_time']) >= 3600) {
-            $roomTypes = $this->getRoomTypes();
-            $setting['room_type'] = $roomTypes;
-            $setting['check_room_type_time'] = time();
-            $this->getSettingService()->set('live-course', $setting);
-        }
+        $roomTypes = $this->getRoomTypes();
 
         $default = array(
             'large' => 'course.live_activity.large_room_type',
