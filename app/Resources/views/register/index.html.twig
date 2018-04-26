@@ -105,8 +105,19 @@
 					{% endif %}
 
           <div class="form-group">
-            <div class="drag-section">
-              <div id="drag-btn" class="drag-section__btn">拖拽</div>
+            <label class="control-label required" for="">{{'验证码'|trans}}</label>
+            <div class="drag-section-wrap">
+              <div class="drag-section">
+                <div class="drag-img js-drag-img">
+                  <img class="js-jigsaw-bg drag-img__bg" src="{{ asset('static-dist/app/img/dragCaptcha.png') }}">
+                  <img class="js-jigsaw drag-img__jigsaw" src="{{ asset('static-dist/app/img/dragCaptcha.png') }}">
+                  <div class="drag-img__mask js-drag-img-mask infinite-loading hidden"></div>
+                </div>
+  
+                <div class="drag-bar">
+                  <div id="drag-btn" class="drag-bar__btn"><i class="es-icon es-icon-menu"></i></div>
+                </div>
+              </div>
             </div>
           </div>
 					<div class="form-group mbl">
