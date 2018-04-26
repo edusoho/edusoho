@@ -149,6 +149,7 @@ class AbstractCloudAPI
 
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
+        var_dump(json_encode($curlinfo));
 
         $header = substr($response, 0, $curlinfo['header_size']);
         $body = substr($response, $curlinfo['header_size']);
@@ -169,7 +170,7 @@ class AbstractCloudAPI
             $this->logger && $this->logger->error("[{$requestId}] NAME_LOOK_UP_TIMEOUT", $context);
         }
 
-        if (empty($curlinfo['connect_time'])) {
+        if (empty($curlinfo['connect_time']) && empty($curlinfo['size_download'])) {
             $this->logger && $this->logger->error("[{$requestId}] API_CONNECT_TIMEOUT", $context);
             throw new CloudAPIIOException("Connect api server timeout (url: {$url}).");
         }
