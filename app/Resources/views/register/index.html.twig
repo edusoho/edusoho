@@ -106,8 +106,6 @@
             </div>
           {% endif %}
 
-					<input type="hidden" name="drag_captcha_token" value="" />
-					<input type="hidden" name="jigsaw" value="" />
 					<input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 				</form>

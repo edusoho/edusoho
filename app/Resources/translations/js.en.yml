@@ -359,6 +359,7 @@ auth.register.email_required_error_hint: Please enter email
 auth.register.mobile_required_error_hint: Please enter your mobile number
 auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
 auth.register.number_validate_error_hint: 11 numbers, the first number can not be 1
+auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error

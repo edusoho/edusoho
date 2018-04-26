@@ -108,6 +108,10 @@
   padding: 8px;
   border: 1px solid @gray-light;
   .border-radius;
+  & + p {
+    position: absolute;
+    margin-top: 4px;
+  }
 }
 .drag-section {
   position: relative;
@@ -134,7 +138,12 @@
     color: #fff;
     font-size: 16px;
     i {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 9px;
       color: @brand-success;
+      font-size: 24px;
     }
     &:hover {
       cursor: pointer;

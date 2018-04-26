@@ -1,7 +1,9 @@
 
 {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
-  <div class="form-group">
-    <label class="control-label required" for="">{{'验证码'|trans}}</label>
+  <div class="form-group cd-mb32">
+    <label class="control-label required">{{ 'user.register.account_with_sms_code_label'|trans }}</label>
+    <input type="hidden" name="drag_captcha_token" value="" />
+    <input type="hidden" name="jigsaw" value="" />
     <div class="drag-section-wrap">
       <div class="drag-section">
         <div class="drag-img js-drag-img">
@@ -13,7 +15,7 @@
         <div class="drag-bar">
           <span class="drag-bar__tip js-drag-bar-tip">{{ 'user.register.drag_captcha_tips'|trans }}</span>
           <div class="drag-bar__mask js-drag-bar-mask"></div>
-          <div id="drag-btn" class="drag-bar__btn"><i class="es-icon es-icon-menu"></i></div>
+          <div id="drag-btn" class="drag-bar__btn"><i class="es-icon es-icon-shuxian"></i></div>
         </div>
       </div>
     </div>

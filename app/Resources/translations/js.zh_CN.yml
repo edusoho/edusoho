@@ -303,6 +303,7 @@ auth.register.email_required_error_hint: 请输入邮箱
 auth.register.mobile_required_error_hint: 请输入手机
 auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
 auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
+auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误

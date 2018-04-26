@@ -90,7 +90,11 @@ export default class Drag {
             type: 'success',
             message: Translator.trans('validate.success')
           });
-          $('[name="drag_captcha_token"]').val(this.dragCaptchaToken);
+          const $tokenDom = $('[name="drag_captcha_token"]');
+          $tokenDom.val(this.dragCaptchaToken);
+          const $dargForm = $tokenDom.closest('.form-group');
+          $dargForm.removeClass('has-error');
+          $dargForm.find('.jq-validate-error').remove();
           $('[name="jigsaw"]').val(positionX);
         }
       });
