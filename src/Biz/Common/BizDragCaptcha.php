@@ -20,9 +20,12 @@ class BizDragCaptcha extends BizAware
 
     const TOKENTYPE = 'drag_captcha';
 
+    const IMAGE_NAME = '5.jpg';
+
     public function generate($options = array())
     {
-        $size = getimagesize('/private/var/www/edusoho/web/assets/img/captcha/5.jpg');
+        $imagePath = $this->getImagePath(self::IMAGE_NAME);
+        $size = getimagesize($imagePath);
 
         $default = array(
             'height' => $size[1],
@@ -85,7 +88,7 @@ class BizDragCaptcha extends BizAware
 
         $options = $token['data'];
         $source = $this->getSource($options);
-        $sub = imagecreatefrompng('/private/var/www/edusoho/web/assets/img/captcha/jigsaw-border5.png');
+        $sub = imagecreatefrompng($this->getImagePath('jigsaw-border5.png'));
         imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
         ob_start();
         imagepng($source);
@@ -98,7 +101,7 @@ class BizDragCaptcha extends BizAware
 
     private function getSource($options)
     {
-        return imagecreatefromjpeg('/private/var/www/edusoho/web/assets/img/captcha/5.jpg');
+        return imagecreatefromjpeg($this->getImagePath(self::IMAGE_NAME));
     }
 
     private function getJigsaw($options)
@@ -124,6 +127,13 @@ class BizDragCaptcha extends BizAware
         $options['positionY'] = rand(self::JIGSAW_WIDTH, $options['height'] - self::JIGSAW_WIDTH);
 
         return $options;
+    }
+
+    private function getImagePath($name)
+    {
+        $rootPath = $this->biz['root_directory'];
+
+        return $rootPath.'web/assets/img/captcha/'.$name;
     }
 
     /**
