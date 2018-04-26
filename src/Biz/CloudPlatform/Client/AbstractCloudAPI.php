@@ -149,7 +149,6 @@ class AbstractCloudAPI
 
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
-        var_dump(json_encode($curlinfo));
 
         $header = substr($response, 0, $curlinfo['header_size']);
         $body = substr($response, $curlinfo['header_size']);
