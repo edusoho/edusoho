@@ -33,16 +33,18 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
      */
     public function decodeToken($token)
     {
+        $tokenInfo = array('valid' => false);
         try {
             $drpService = $this->getDrpService();
-            $parsedInfo = $drpService->parseToken($token);
-            $tokenInfo = array(
-                'type' => 'courseOrder',
-                'product_id' => $parsedInfo['data']['course_id'],
-                'valid' => true,
-            );
+            if (!empty($drpService)) {
+                $parsedInfo = $drpService->parseToken($token);
+                $tokenInfo = array(
+                    'type' => 'courseOrder',
+                    'product_id' => $parsedInfo['data']['course_id'],
+                    'valid' => true,
+                );
+            }
         } catch (\Exception $e) {
-            $tokenInfo = array('valid' => false);
             $this->biz['logger']->error('distributor sign error DistributorCourseOrderServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
         }
 
