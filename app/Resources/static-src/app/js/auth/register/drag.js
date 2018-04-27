@@ -43,7 +43,7 @@ export default class Drag {
     const img = new Image();
     img.onload = () => {
       $(img).prependTo('.js-drag-img');
-      $('.js-jigsaw-placeholder').remove();
+      $('.js-jigsaw-placeholder').toggleClass('hidden');
       $('.js-jigsaw').attr('src', src);
     };
     img.className = 'js-jigsaw-bg drag-img__bg';
@@ -96,6 +96,9 @@ export default class Drag {
           });
         } else if (res.status === 'expired') {
           this.resetLocation($element[0], $target[0]);
+          $('.js-jigsaw-bg').remove();
+          $('.js-jigsaw-placeholder').toggleClass('hidden');
+          $('.js-jigsaw').attr('src', '');
           this.initDragCaptcha();
         } else {
           cd.message({
