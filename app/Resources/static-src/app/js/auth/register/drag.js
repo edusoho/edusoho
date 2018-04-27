@@ -83,7 +83,7 @@ export default class Drag {
     this.getLocation($element[0]);
 
     if (params.currentLeft) {
-      const rate =  (40 / $('.js-jigsaw').width()).toFixed(2);
+      const rate = 40 / $('.js-jigsaw').width();
       const positionX = (params.currentLeft * rate).toFixed(2);
       console.log(positionX);
       const data = { token: this.dragCaptchaToken, jigsaw: positionX };
