@@ -639,6 +639,7 @@ t.add("json_response.homework_has_submitted_cannot_change.message", "The Homewor
 t.add("json_response.must_choose_question.message", "Please select the title first", "js", "en");
 t.add("json_response.cannot_send_message_self.message", "Can not send yourself a private message!", "js", "en");
 t.add("json_response.receiver_not_exist.message", "The receiver does not exist", "js", "en");
+t.add("json_response.receiver_not_allowed.message", "The receiver is not allowed", "js", "en");
 t.add("validate_old.positive_currency.message", "Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!", "js", "en");
 t.add("validate_old.required.message", "Please enter {{display}}", "js", "en");
 t.add("validate_old.valid_email_input.message", "%display% is not formatted correctly", "js", "en");

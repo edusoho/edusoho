@@ -65,8 +65,12 @@ class ExceptionListener
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         }
         //兼容老代码
-        if (403 === $statusCode && empty($user)) {
-            $error['code'] = UserException::UN_LOGIN;
+        if (403 === $statusCode) {
+            if (empty($user)) {
+                $error['code'] = UserException::UN_LOGIN;
+            } else {
+                $error['message'] = $this->trans('exception.common_forbidden');
+            }
         }
 
         $response = new JsonResponse(array('error' => $error), $statusCode);

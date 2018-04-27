@@ -30,6 +30,7 @@ class LiveExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('live_can_record', array($this, 'canRecord')),
             new \Twig_SimpleFunction('is_live_finished', array($this, 'isLiveFinished')),
+            new \Twig_SimpleFunction('get_live_room_type', array($this, 'getLiveRoomType')),
         );
     }
 
@@ -53,6 +54,38 @@ class LiveExtension extends \Twig_Extension
         }
     }
 
+    public function getLiveRoomType()
+    {
+        $roomTypes = $this->getRoomTypes();
+
+        $default = array(
+            'large' => 'course.live_activity.large_room_type',
+            'small' => 'course.live_activity.small_room_type',
+        );
+
+        if (empty($roomTypes)) {
+            return array();
+        }
+
+        if (count($roomTypes) >= 2) {
+            return $default;
+        } else {
+            return array($roomTypes[0] => $default[$roomTypes[0]]);
+        }
+    }
+
+    protected function getRoomTypes()
+    {
+        $client = new EdusohoLiveClient();
+        try {
+            $result = $client->getLiveAccount();
+
+            return $result['roomType'];
+        } catch (CloudAPIIOException $cloudAPIIOException) {
+            return array();
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,5 +102,10 @@ class LiveExtension extends \Twig_Extension
     protected function getLiveCourseService()
     {
         return $this->biz->service('OpenCourse:LiveCourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }
