@@ -9,6 +9,7 @@ use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
 use Codeages\Weblib\Auth\SignatureTokenAlgo;
+use Biz\Distributor\Util\DistributorUtil;
 
 class MockController extends BaseController
 {
@@ -24,19 +25,12 @@ class MockController extends BaseController
         ));
     }
 
-    public function mockDistributorTokenAction(Request $request)
+    public function mockDistributorTokenAction(Request $request, $type)
     {
         $this->validate();
 
-        $data = array(
-            'merchant_id' => '123',
-            'agency_id' => '22221',
-            'coupon_price' => $request->request->get('couponPrice'),
-            'coupon_expiry_day' => $request->request->get('couponExpiryDay'),
-        );
-
-        $tokenExpireDateNum = strtotime($request->request->get('tokenExpireDateStr'));
-        $token = $this->getDistributorUserService()->encodeToken($data, $tokenExpireDateNum);
+        $params = $request->request->all();
+        $token = DistributorUtil::generateTokenByType($this->getBiz(), $type, $params);
 
         return $this->createJsonResponse(array(
             'token' => $token,
@@ -95,9 +89,9 @@ class MockController extends BaseController
         return $this->createJsonResponse(array('result' => $result));
     }
 
-    protected function getDistributorUserService()
+    protected function getDistributorCourseOrderService()
     {
-        return $this->createService('Distributor:DistributorUserService');
+        return $this->createService('Distributor:DistributorCourseOrderService');
     }
 
     protected function getDistributorService($type)
@@ -112,7 +106,7 @@ class MockController extends BaseController
 
     private function validate()
     {
-        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost');
+        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost', 'www.edusoho-test1.com');
         $host = $_SERVER['HTTP_HOST'];
         if (!in_array($host, $validHosts) && false === strpos($host, '.st.edusoho.cn')) {
             throw new AccessDeniedException($host.'不允许使用此功能！！！');

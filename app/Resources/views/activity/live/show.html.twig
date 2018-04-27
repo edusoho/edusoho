@@ -3,6 +3,7 @@
 {% set endLeftSeconds = activity.endTime - activity.nowDate %}
 {% set startLeftSeconds = activity.startTime - activity.nowDate %}
 {% set replayGuid = activity.ext.liveProvider == 1 ? 'activity.live.replay_guid_1'|trans : 'activity.live.replay_guid'|trans %}
+{% set isFinished = is_live_finished(activity.id, 'course') %}
 
 {% block body %}
   <div class="iframe-parent-content ph20 pv20">
@@ -29,7 +30,7 @@
             </div>
               {% if startLeftSeconds < 7200 %}
                 <div class='live-show-item'>
-                  <a target="_blank" class='btn btn-primary js-start-live' href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                  <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
                       {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
                 </div>
@@ -39,7 +40,7 @@
                 </div>
                 {% endif %}
               {% endif %}
-          {% elseif startLeftSeconds < 0  and endLeftSeconds > 0  %}
+          {% elseif startLeftSeconds < 0  and not isFinished  %}
 
               <div class='live-show-item'>
                   <p class="title">{{ 'homepage.live_course.start_time'|trans }}</p>
@@ -52,7 +53,7 @@
                   {{ summary|raw }}
               </div>
               <div class='live-show-item'>
-                  <a target="_blank" class='btn btn-primary js-start-live' href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                  <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
                      {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
               </div>
@@ -63,7 +64,7 @@
                   </div>
               {% endif %}
 
-          {% elseif endLeftSeconds < 0 %}
+          {% elseif isFinished %}
 
               <div class='live-show-item'>
                   <i class='es-icon es-icon-xinxi color-danger icon-live-end'></i>

@@ -1180,7 +1180,7 @@ course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
-course.thread.mission_seq: Task%seq%
+course.thread.mission_number: Task%number%
 course.thread.teacher_answer: 'Tearcher''s answer'
 course.thread.form.edit: 'Edit'
 course.thread.form.create: 'Publish'
@@ -1652,6 +1652,11 @@ course.live_lesson_manage.live_length: 'Duration'
 course.live_lesson_manage.live_about: 'About'
 course.live_lesson_manage.live_length.input_placeholder: Duration
 course.live_lesson_manage.live_length.minutes: Minutes
+
+course.live_activity.room_type: 授课形式
+course.live_activity.large_room_type: Large
+course.live_activity.small_room_type: Small
+
 course.live.replay_manage.chapter: 'No. <span class="number">%chapterName%</span>'
 course.live.replay_manage.file_edit_btn: Edit
 course.live.replay_manage.file_chooser_tips: 'Is converting the video format, the conversion takes some time, during which the video will not be played. <br/> After the conversion is complete, you will be notified by station message.'
@@ -5580,7 +5585,7 @@ admin.user_center.message_title_name: Message setting
 admin.user_center.message_student_to_student: Allow student to student send message
 admin.user_center.message_student_to_teacher: Allow student to teacher send message
 admin.user_center.message_teacher_to_student: Allow teacher to student send message
-admin.user_center.message.setting_tip: 提示：设置仅对PC端有效
+admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
 admin.role_manage.keyword_type: '-- Keyword type--'
 admin.role_manage.nameLike: 'Role name'
@@ -7005,3 +7010,10 @@ admin.datalab.setting.btn_cancel: 取消
 admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
+
+exception.common_forbidden: 被禁止的操作
+exception.common_error: 服务器内部错误
+exception.article.notfound: 资讯不存在
+exception.user.unlogin: 未登陆，请登陆后操作
+exception.user.message_forbidden: 不支持向该用户发送私信
+exception.form.expire: 页面已过期，请重新提交数据！

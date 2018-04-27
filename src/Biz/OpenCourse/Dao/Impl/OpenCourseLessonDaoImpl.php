@@ -79,6 +79,15 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return $this->db()->fetchColumn($sql, array($courseId));
     }
 
+    public function findFinishedLivesWithinTwoHours()
+    {
+        $currentTime = time();
+        $expiredTime = 3600 * 2;
+        $sql = "SELECT * FROM {$this->table} WHERE type = 'liveOpen' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime} AND replayStatus = 'ungenerated' AND progressStatus != 'closed';";
+
+        return $this->db()->fetchAll($sql, array());
+    }
+
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import 'codeages-design';
 import 'common/tabs-lavalamp';
 import 'common/card';
+import 'common/ajax-event';
 import 'common/bootstrap-modal-hack';
 import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
@@ -12,11 +13,6 @@ import './alert';
 
 let rpn = new RewardPointNotify();
 rpn.display();
-
-$(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
-  rpn.push(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
-  rpn.display();
-});
 
 if ($('#rewardPointNotify').length > 0) {
   let message = $('#rewardPointNotify').text();
@@ -31,52 +27,6 @@ $('[data-toggle="popover"]').popover({
 
 $('[data-toggle="tooltip"]').tooltip({
   html: true,
-});
-
-$(document).ajaxError(function (event, jqxhr, settings, exception) {
-  if (jqxhr.responseText === 'LoginLimit') {
-    location.href = '/login';
-  }
-  let json = jQuery.parseJSON(jqxhr.responseText);
-  let error = json.error;
-  if (!error) {
-    return;
-  }
-
-  if (error.name === 'Unlogin') {
-    let ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/micromessenger/i) == 'micromessenger' && $('meta[name=is-open]').attr('content') != 0) {
-      window.location.href = '/login/bind/weixinmob?_target_path=' + location.href;
-    } else {
-      let $loginModal = $('#login-modal');
-      $('.modal').modal('hide');
-      $loginModal.modal('show');
-      $.get($loginModal.data('url'), function (html) {
-        $loginModal.html(html);
-      });
-    }
-  }
-});
-
-$(document).ajaxSend(function (a, b, c) {
-  // 加载loading效果
-  let url = c.url;
-  url = url.split('?')[0];
-  let $dom = $(`[data-url="${url}"]`);
-  if ($dom.data('loading')) {
-    let loading;
-    loading = cd.loading({
-      isFixed: $dom.data('is-fixed')
-    });
-
-    let loadingBox = $($dom.data('target') || $dom);
-    loadingBox.html(loading);
-  }
-
-  if (c.type === 'POST') {
-    b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
-  }
-
 });
 
 if (app.scheduleCrontab) {
@@ -134,6 +84,13 @@ $('.event-report').each(function(){
 $('body').on('event-report', function(e, name){
   let $obj = $(name);
   eventPost($obj);
+});
+
+$('.modal').on('hidden.bs.modal', function(){
+  let $modal = $(this);
+  if ($modal.find('.modal-dialog').data('clear')) {
+    $modal.empty();
+  }
 });
 
 $.ajax('/online/sample');
