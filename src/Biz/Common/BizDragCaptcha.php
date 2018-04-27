@@ -18,7 +18,7 @@ class BizDragCaptcha extends BizAware
 
     const DEVIATION = 1;
 
-    const TOKENTIMES = 3;
+    const TOKENTIMES = 30;
 
     const TOKENTYPE = 'drag_captcha';
 
@@ -82,7 +82,7 @@ class BizDragCaptcha extends BizAware
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_EXPIRED();
         }
 
-        if(!$this->validateJigsaw($data['drag_captcha_token'], $registration['jigsaw']))
+        if(!$this->validateJigsaw($token, $data['jigsaw']))
         {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
         }
