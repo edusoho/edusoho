@@ -78,6 +78,7 @@ class BizDragCaptcha extends BizAware
         }
 
         $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $data['drag_captcha_token']);
+        
         if (empty($token)) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_EXPIRED();
         }
@@ -86,6 +87,8 @@ class BizDragCaptcha extends BizAware
         {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
         }
+
+        return true;
     }
 
     public function check($token, $jigsaw)
