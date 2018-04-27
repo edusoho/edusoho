@@ -70,7 +70,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
            'fillMediaSource',
            'addColumn',
-           'updateLiveRoomType',
         );
 
         $funcNames = array();
@@ -117,43 +116,6 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('activity_live', 'roomType')) {
             $this->getConnection()->exec("ALTER TABLE `activity_live` ADD `roomType` varchar(20) NOT NULL DEFAULT 'large' COMMENT '直播大小班课类型' AFTER `mediaId`;");
         }
-
-        return 1;
-    }
-
-    protected function updateLiveRoomType()
-    {
-        $time = time();
-        $sql = "SELECT id,mediaId FROM activity WHERE mediaType = 'live' AND startTime > {$time}";
-        $results = $this->getConnection()->fetchAll($sql);
-
-        if (empty($results)) {
-            return 1;
-        }
-
-        try {
-            $client = CloudAPIFactory::create('root');
-            $account = $client->get('/lives/account');
-        } catch (\Exception $e) {
-            $this->logger('error', '获取直播账户信息失败');
-        }
-
-        //数据库设有默认值large，只有当授课类型只有小班的时候才需要更新数据
-        $roomTypes = $account['roomType'];
-        if (empty($roomTypes) || count($roomTypes) >= 2 || $roomTypes[0] == 'large') {
-            return 1;
-        }
-
-        $roomType = $roomTypes[0];
-        $liveActivityIds = ArrayToolkit::column($results, 'mediaId');
-
-        foreach ($liveActivityIds as $liveId) {
-            $sql = "UPDATE activity_live set roomType = '{$roomType}' where id = {$liveId}";
-            $this->getConnection()->exec($sql);
-        }
-
-        $ids = implode(',', $liveActivityIds);
-        $this->logger('info', "更新activity_live表中id为：{$ids}的roomType为{$roomType}");
 
         return 1;
     }
