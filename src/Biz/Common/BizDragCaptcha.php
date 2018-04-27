@@ -18,7 +18,7 @@ class BizDragCaptcha extends BizAware
 
     const DEVIATION = 1;
 
-    const TOKENTIMES = 30;
+    const TOKENTIMES = 5;
 
     const TOKENTYPE = 'drag_captcha';
 

@@ -22,6 +22,7 @@ export default class Create {
     this.sendMessage();
     this.submitForm();
     this.removeSmsErrorTip();
+    this.initDragCaptchaCodeRule();
   }
 
   initValidator() {
@@ -115,6 +116,17 @@ export default class Create {
     return this.captchaToken;
   }
 
+  initDragCaptchaCodeRule() {
+    if ($('.js-drag-img').length) {
+      $('[name="jigsaw"], [name="drag_captcha_token"]').rules('add', {
+        required: true,
+        messages: {
+          required: Translator.trans('auth.register.drag_captcha_tips')
+        }
+      });
+    }
+  }
+
   sendMessage() {
     const $smsCode = $('.js-sms-send');
     const $captchaCode = $('#captcha_code');
@@ -185,7 +197,9 @@ export default class Create {
         smsToken: this.smsToken,
         smsCode: $('#sms-code').val(),
         captchaToken: this.captchaToken,
-        phrase: $('#captcha_code').val()
+        // phrase: $('#captcha_code').val()
+        drag_captcha_token: $('[name="drag_captcha_token"]').val(),
+        jigsaw: $('[name="jigsaw"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
