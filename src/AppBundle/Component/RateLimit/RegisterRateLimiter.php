@@ -66,6 +66,11 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
         }
     }
 
+    protected function validateCaptcha($request)
+    {
+        
+    }  
+
     private function getRegisterProtective()
     {
         $registerSetting = $this->getSettingService()->get('auth');

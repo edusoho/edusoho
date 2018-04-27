@@ -555,16 +555,9 @@ class RegisterController extends BaseController
     protected function dragCaptchaValidator($registration, $authSettings)
     {
         if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
-            if (!ArrayToolkit::requireds($registration, array('drag_captcha_token', 'jigsaw'))) {
-                $this->createNewException(UserException::FORBIDDEN_REGISTER());
-            }
-
             $biz = $this->getBiz();
             $bizDragCaptcha = $biz['biz_drag_captcha'];
-            $checkResult = $bizDragCaptcha->checkByServer($registration['drag_captcha_token'], $registration['jigsaw']);
-            if (!$checkResult) {
-                $this->createNewException(UserException::FORBIDDEN_REGISTER());
-            }
+            $bizDragCaptcha->checkByServer($registration);
         }
     }
 
