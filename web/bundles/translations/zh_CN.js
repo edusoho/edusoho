@@ -580,6 +580,7 @@ t.add("json_response.homework_has_submitted_cannot_change.message", "\u4f5c\u4e1
 t.add("json_response.must_choose_question.message", "\u8bf7\u5148\u9009\u62e9\u9898\u76ee", "js", "zh_CN");
 t.add("json_response.cannot_send_message_self.message", "\u4e0d\u80fd\u7ed9\u81ea\u5df1\u53d1\u79c1\u4fe1\u54e6\uff01", "js", "zh_CN");
 t.add("json_response.receiver_not_exist.message", "\u8be5\u6536\u4ef6\u4eba\u4e0d\u5b58\u5728", "js", "zh_CN");
+t.add("json_response.receiver_not_allowed.message", "\u4e0d\u652f\u6301\u5411\u8be5\u7528\u6237\u53d1\u9001\u79c1\u4fe1", "js", "zh_CN");
 t.add("validate_old.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e\u7b49\u4e8e0\u7684\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
 t.add("validate_old.required.message", "\u8bf7\u8f93\u5165{{display}}", "js", "zh_CN");
 t.add("validate_old.valid_email_input.message", "%display%\u7684\u683c\u5f0f\u4e0d\u6b63\u786e", "js", "zh_CN");
