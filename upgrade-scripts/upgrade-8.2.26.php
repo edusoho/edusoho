@@ -70,6 +70,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
            'fillMediaSource',
            'addColumn',
+           'deleteTable'
         );
 
         $funcNames = array();
@@ -117,7 +118,19 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `activity_live` ADD `roomType` varchar(20) NOT NULL DEFAULT 'large' COMMENT '直播大小班课类型' AFTER `mediaId`;");
         }
 
+        if (!$this->isFieldExist('course_chapter', 'updatedTime')) {
+            $this->getConnection()->exec("ALTER TABLE `course_chapter` ADD COLUMN `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间' AFTER `createdTime`;");
+        }
+
         return 1;
+    }
+
+    protected function deleteTable()
+    {
+        $this->getConnection()->exec("DROP TABLE IF EXISTS `sessions`;");
+        $this->getConnection()->exec("DROP TABLE IF EXISTS `testpaper_v8_8_0_18_backup`;");
+        $this->getConnection()->exec("DROP TABLE IF EXISTS `question_8_0_18_backup`;");
+        $this->getConnection()->exec("DROP TABLE IF EXISTS `course_chapter_8_0_19_backup`;");
     }
 
     protected function generateIndex($step, $page)
