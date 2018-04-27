@@ -41,7 +41,7 @@ class DistributorCookieToolkitTest extends BaseTestCase
             array('checkedType' => DistributorCookieToolkit::PRODUCT_ORDER)
         );
         $cookieExpire = ReflectionUtils::getProperty($response->headers->getCookie(), 'expire');
-        $this->assertEquals(0, $cookieExpire);
+        $this->assertEquals(1521791574, $cookieExpire);
 
         // cookie 内不存在 用户拉新，自动触发清除操作
         $response = DistributorCookieToolkit::clearCookieToken(
