@@ -9,6 +9,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Biz\Article\ArticleException;
 
 class ArticleController extends BaseController
 {
@@ -78,7 +79,7 @@ class ArticleController extends BaseController
         $article = $this->getArticleService()->getArticle($id);
 
         if (empty($article)) {
-            throw $this->createNotFoundException('文章已删除或者未发布！');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array(

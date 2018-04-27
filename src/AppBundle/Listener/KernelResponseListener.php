@@ -3,7 +3,6 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Controller\OAuth2\OAuthUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -128,18 +127,18 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
         return $isFillUserInfo;
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->container->get('biz');
     }
 }

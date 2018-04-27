@@ -61,7 +61,6 @@ class Articles extends BaseProvider
         $groupTagIds = $this->getTagService()->findGroupTagIdsByOwnerTypeAndOwnerIds('article', $articleIds);
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         foreach ($articles as &$article) {
             $articleTagIds = !empty($groupTagIds[$article['id']]) ? $groupTagIds[$article['id']] : array();
             if (!empty($articleTagIds)) {
