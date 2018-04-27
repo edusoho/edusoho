@@ -6,6 +6,24 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class InviteRecordDaoTest extends BaseDaoTestCase
 {
+    public function testGetByInvitedUserId()
+    {
+        $create = $this->mockDataObject();
+
+        $result = $this->getDao()->getByInvitedUserId($create['invitedUserId']);
+
+        $this->assertNotEmpty($result);
+    }
+
+    public function testUpdateByInvitedUserId()
+    {
+        $create = $this->mockDataObject();
+        $this->getDao()->updateByInvitedUserId($create['invitedUserId'], array('inviteUserId' => 3));
+        $result = $this->getDao()->get($create['id']);
+
+        $this->assertEquals(3, $result['inviteUserId']);
+    }
+
     public function testFindByInvitedUserIds()
     {
         $default = $this->getDefaultMockFields();
@@ -90,6 +108,42 @@ class InviteRecordDaoTest extends BaseDaoTestCase
         $defaultInvite['inviteUserCardId'] = 9;
         $this->getDao()->create($defaultInvite);
         $this->assertEquals(24, $this->getDao()->sumCouponRateByInviteUserId(1));
+    }
+
+    public function testSearchRecordGroupByInviteUserId()
+    {
+        $this->mockDataObject(array('inviteUserId' => 1));
+        $this->mockDataObject(array('inviteUserId' => 2));
+        $this->mockDataObject(array('inviteUserId' => 3));
+
+        $result = $this->getDao()->searchRecordGroupByInviteUserId(array(), 0, 10);
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testCountInviteUser()
+    {
+        $this->mockDataObject(array('inviteUserId' => 1));
+        $this->mockDataObject(array('inviteUserId' => 2));
+        $this->mockDataObject(array('inviteUserId' => 3));
+
+        $result = $this->getDao()->countInviteUser(array());
+        $this->assertEquals(3, $result);
+    }
+
+    public function testCountPremiumUserByInviteUserIds()
+    {
+        $this->mockDataObject(array('inviteUserId' => 1, 'cashAmount' => 1.00));
+        $this->mockDataObject(array('inviteUserId' => 2, 'cashAmount' => 1.00));
+        $this->mockDataObject(array('inviteUserId' => 3, 'cashAmount' => 1.00));
+
+        $result = $this->getDao()->countPremiumUserByInviteUserIds(array(1, 2, 3, 4));
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testCountPremiumUserByInviteUserIdsWithEmoty()
+    {
+        $result = $this->getDao()->countPremiumUserByInviteUserIds(array());
+        $this->assertEquals(array(), $result);
     }
 
     private function getCouponDao()

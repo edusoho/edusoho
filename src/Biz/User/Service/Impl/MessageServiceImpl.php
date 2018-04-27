@@ -335,9 +335,4 @@ class MessageServiceImpl extends BaseService implements MessageService
     {
         return $this->biz->service('User:UserService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
 }

@@ -940,7 +940,7 @@ admin_mocked:
     defaults: { _controller: AppBundle:Admin/Mock:index }
 
 admin_mocked_distributor_token:
-    path: /mock/distributor_token
+    path: /mock/distributor_token/{type}
     defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
 
 admin_mocked_distributor_get_post_data:
@@ -960,6 +960,11 @@ admin_mocked_marketing_post_data:
 admin_mocked_post_data_version_3:
     path: /mock/post_data_version_3
     defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
+    methods: [POST]
+
+admin_mocked_download_token:
+    path: /mock/download_token
+    defaults: { _controller: AppBundle:Admin/Mock:downloadToken }
     methods: [POST]
 
 admin_optimize:

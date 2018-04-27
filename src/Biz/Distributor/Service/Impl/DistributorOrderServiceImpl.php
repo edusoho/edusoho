@@ -4,9 +4,14 @@ namespace Biz\Distributor\Service\Impl;
 
 class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
 {
-    public function getSendType()
+    public function getSendType($data)
     {
         return 'order';
+    }
+
+    protected function getJobType()
+    {
+        return 'Order';
     }
 
     protected function convertData($order)
@@ -39,11 +44,6 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
             'status' => $order['status'],
             'updated_time' => $order['updated_time'],
         );
-    }
-
-    protected function getJobType()
-    {
-        return 'Order';
     }
 
     protected function getOrderService()

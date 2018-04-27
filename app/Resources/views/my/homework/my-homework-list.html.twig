@@ -38,7 +38,7 @@
                     </div>
                   </td>
 
-                  <td>
+                  <td class="vertical-middle">
                     {% if paperResult.status == 'reviewing' %}
                       <span class="color-warning">{{'my.learning.homework.checking'|trans}}</span>
                     {% elseif paperResult.status == 'finished' %}
@@ -50,11 +50,11 @@
                       <span class="color-gray">{{'my.learning.homework.uncommit'|trans}}</span>
                     {% endif %}
                   </td>
-                  <td>
+                  <td class="vertical-middle">
                     {% if paperResult.status in ['doing', 'paused'] %}
                       <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-default btn-sm">{{'my.learning.homework.continue_do'|trans}}</a>
                     {% elseif paperResult.status == 'finished' and homework %}
-                      <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'my.learning.homework.show_result'|trans}}</a>
+                      <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'my'}) }}" class="color-primary" target="_blank">{{'my.learning.homework.show_result'|trans}}</a>
                     {% endif %}
                   </td>
                 </tr>

@@ -10,9 +10,289 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Classroom\Service\ClassroomService;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 class CourseServiceTest extends BaseTestCase
 {
+    public function testRecommendCourseByCourseSetId()
+    {
+        TimeMachine::setMockedTime(time());
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $this->getCourseService()->recommendCourseByCourseSetId(1, array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 1,
+        ));
+        $course = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['recommended'], 1);
+        $this->assertEquals($course['recommendedTime'], TimeMachine::time());
+        $this->assertEquals($course['recommendedSeq'], 1);
+
+        try {
+            $errorMessage = '';
+            $this->getCourseService()->recommendCourseByCourseSetId(1, array(
+                'recommended' => 1,
+                'recommendedTime' => TimeMachine::time(),
+            ));
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage();
+        }
+        $this->assertEquals($errorMessage, 'Lack of required fields');
+    }
+
+    public function testCancelRecommendCourseByCourseSetId()
+    {
+        TimeMachine::setMockedTime(time());
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $this->getCourseService()->recommendCourseByCourseSetId(1, array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 1,
+        ));
+        $course = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['recommended'], 1);
+        $this->assertEquals($course['recommendedTime'], TimeMachine::time());
+        $this->assertEquals($course['recommendedSeq'], 1);
+
+        $this->getCourseService()->cancelRecommendCourseByCourseSetId(1);
+        $course = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['recommended'], 0);
+        $this->assertEquals($course['recommendedTime'], 0);
+        $this->assertEquals($course['recommendedSeq'], 0);
+    }
+
+    public function testUpdateMaxRate()
+    {
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $newCourse = $this->getCourseService()->updateMaxRate($course['id'], 4);
+        $this->assertEquals($course['maxRate'], 0);
+        $this->assertEquals($newCourse['maxRate'], 4);
+    }
+
+    public function testUpdateMaxRateByCourseSetId()
+    {
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $this->getCourseService()->updateMaxRateByCourseSetId($course['id'], 4);
+        $newCourse = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($course['maxRate'], 0);
+        $this->assertEquals($newCourse['maxRate'], 4);
+    }
+
+    public function testUpdateCourseRewardPoint()
+    {
+        $courseParams = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course = $this->getCourseService()->createCourse($courseParams);
+        $newCourse = $this->getCourseService()->updateCourseRewardPoint(
+            $course['id'],
+            array(
+                'taskRewardPoint' => 10,
+                'rewardPoint' => 5,
+                'title' => 'changeTitle',
+            )
+        );
+        $this->assertEquals($course['taskRewardPoint'], 0);
+        $this->assertEquals($newCourse['taskRewardPoint'], 10);
+        $this->assertEquals($course['rewardPoint'], 0);
+        $this->assertEquals($newCourse['rewardPoint'], 5);
+        $this->assertEquals($course['title'], '默认教学计划');
+        $this->assertEquals($newCourse['title'], '默认教学计划');
+    }
+
+    public function testValidateCourseRewardPoint()
+    {
+        //全为空
+        $result = $this->getCourseService()->validateCourseRewardPoint(array());
+        $this->assertTrue(!$result);
+        //一个通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('rewardPoint' => 100));
+        $this->assertTrue(!$result);
+        //一个不通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('rewardPoint' => 100001));
+        $this->assertTrue($result);
+        //两个通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('taskRewardPoint' => 1, 'rewardPoint' => 1000));
+        $this->assertTrue(!$result);
+        //两个有一个不通过
+        $result = $this->getCourseService()->validateCourseRewardPoint(array('taskRewardPoint' => 1, 'rewardPoint' => 100001));
+        $this->assertTrue($result);
+    }
+
+    public function testValidateExpiryModeWhenIsEmpty()
+    {
+        $course = array(
+            'expiryStartDate' => 1,
+            'expiryEndDate' => 2,
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals($course, $result);
+    }
+
+    public function testValidateExpiryModeWhenIsDays()
+    {
+        //happy pass
+        $course = array(
+            'expiryMode' => 'days',
+            'expiryStartDate' => 1,
+            'expiryEndDate' => 2,
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'days',
+            'expiryStartDate' => null,
+            'expiryEndDate' => null,
+            'expiryDays' => 3,
+        ), $result);
+
+        //error path
+        unset($course['expiryDays']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Invalid: expiryDays', $message);
+    }
+
+    public function testValidateExpiryModeWhenIsEnd_date()
+    {
+        //happy pass1 str
+        $course = array(
+            'expiryMode' => 'end_date',
+            'expiryStartDate' => 1,
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'end_date',
+            'expiryStartDate' => null,
+            'expiryEndDate' => strtotime($course['expiryEndDate'].' 23:59:59'),
+            'expiryDays' => 0,
+        ), $result);
+
+        //happy pass2 timestamp
+        $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'end_date',
+            'expiryStartDate' => null,
+            'expiryEndDate' => $course['expiryEndDate'],
+            'expiryDays' => 0,
+        ), $result);
+
+        //error path
+        unset($course['expiryEndDate']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Invalid: expiryEndDate', $message);
+    }
+
+    public function testValidateExpiryModeWhenIsDate()
+    {
+        //happy pass1 str
+        $course = array(
+            'expiryMode' => 'date',
+            'expiryStartDate' => '2018-04-10',
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'date',
+            'expiryStartDate' => strtotime($course['expiryStartDate']),
+            'expiryEndDate' => strtotime($course['expiryEndDate'].' 23:59:59'),
+            'expiryDays' => 0,
+        ), $result);
+
+        //happy pass2 timestamp
+        $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
+        $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'date',
+            'expiryStartDate' => $course['expiryStartDate'],
+            'expiryEndDate' => $course['expiryEndDate'],
+            'expiryDays' => 0,
+        ), $result);
+
+        //error path1 startDate not set
+        unset($course['expiryStartDate']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Required: expiryStartDate', $message);
+
+        //error path2 endDate not set
+        $course['expiryStartDate'] = '2018-04-10';
+        unset($course['expiryEndDate']);
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Required: expiryEndDate', $message);
+
+        //error path3 endDate<=startDate
+        $course['expiryStartDate'] = '2018-04-10';
+        $course['expiryEndDate'] = '2018-04-09';
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Value of Params expiryEndDate must later than expiryStartDate', $message);
+    }
+
+    public function testValidateExpiryModeWhenIsForever()
+    {
+        $course = array(
+            'expiryMode' => 'forever',
+            'expiryStartDate' => '2018-04-10',
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        $this->assertArrayEquals(array(
+            'expiryMode' => 'forever',
+            'expiryStartDate' => 0,
+            'expiryEndDate' => 0,
+            'expiryDays' => 0,
+        ), $result);
+    }
+
+    public function testValidateExpiryModeWhenIsOther()
+    {
+        $course = array(
+            'expiryMode' => 'other_mode',
+            'expiryStartDate' => '2018-04-10',
+            'expiryEndDate' => '2018-04-20',
+            'expiryDays' => 3,
+        );
+        try {
+            $message = '';
+            $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->assertEquals('Param Invalid: expiryMode', $message);
+    }
+
     public function testUpdateMembersDeadlineByClassroomId()
     {
         $textClassroom = array(
