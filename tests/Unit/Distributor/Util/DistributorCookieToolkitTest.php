@@ -25,19 +25,33 @@ class DistributorCookieToolkitTest extends BaseTestCase
     {
         $request = $this->mockCookieRequest();
         $response = $this->mockCookieResponse();
-        $firstSetResponse = $this->setTokenToCookie($this->mockCookieResponse(), DistributorCookieToolkit::USER);
+        $response = $this->setTokenToCookie($this->mockCookieResponse(), DistributorCookieToolkit::USER);
 
-        $cookieName = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'name');
-        $cookieExpire = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'expire');
-        $cookieValue = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'value');
+        $cookieName = ReflectionUtils::getProperty($response->headers->getCookie(), 'name');
+        $cookieExpire = ReflectionUtils::getProperty($response->headers->getCookie(), 'expire');
+        $cookieValue = ReflectionUtils::getProperty($response->headers->getCookie(), 'value');
         $this->assertEquals('distributor-user-token', $cookieName);
         $this->assertEquals(1521791574, $cookieExpire);
         $this->assertEquals('123123', $cookieValue);
 
-        $secondSetResponse = DistributorCookieToolkit::clearCookieToken($request, $firstSetResponse);
-        $cookieName = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'name');
-        $cookieExpire = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'expire');
-        $cookieValue = ReflectionUtils::getProperty($firstSetResponse->headers->getCookie(), 'value');
+        // cookie 内不存在 商品分销，无法触发清除操作
+        $response = DistributorCookieToolkit::clearCookieToken(
+            $request,
+            $response,
+            array('checkedType' => DistributorCookieToolkit::PRODUCT_ORDER)
+        );
+        $cookieExpire = ReflectionUtils::getProperty($response->headers->getCookie(), 'expire');
+        $this->assertEquals(0, $cookieExpire);
+
+        // cookie 内不存在 用户拉新，自动触发清除操作
+        $response = DistributorCookieToolkit::clearCookieToken(
+            $request,
+            $response,
+            array('checkedType' => DistributorCookieToolkit::USER)
+        );
+        $cookieName = ReflectionUtils::getProperty($response->headers->getCookie(), 'name');
+        $cookieExpire = ReflectionUtils::getProperty($response->headers->getCookie(), 'expire');
+        $cookieValue = ReflectionUtils::getProperty($response->headers->getCookie(), 'value');
         $this->assertEquals('distributor-user-token', $cookieName);
         $this->assertEquals(0, $cookieExpire);
         $this->assertEquals('', $cookieValue);

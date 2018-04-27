@@ -94,7 +94,11 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+                $response = DistributorCookieToolkit::clearCookieToken(
+                    $request,
+                    $response,
+                    array('checkedType' => DistributorCookieToolkit::USER)
+                );
 
                 return $response;
             } catch (ServiceException $se) {
