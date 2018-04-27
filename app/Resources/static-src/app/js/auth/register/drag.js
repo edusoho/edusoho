@@ -24,18 +24,30 @@ export default class Drag {
   }
 
   initDragCaptcha() {
+    const self = this;
     Api.dragCaptcha.get({
       before() {
         $('.js-drag-img-mask').toggleClass('hidden');
       }
     }).then((res) => {
       $('.js-drag-img-mask').toggleClass('hidden');
-      $('.js-jigsaw-bg').attr('src', res.url);
-      setTimeout(function() {
-        $('.js-jigsaw').attr('src', res.jigsaw);
-      }, 500);
+      console.log($('.js-jigsaw-bg').length);
+      if (!$('.js-jigsaw-bg').length) {
+        self.loadingImg(res.url, res.jigsaw);
+      }
       this.dragCaptchaToken = res.token;
     });
+  }
+
+  loadingImg(url, src) {
+    const img = new Image();
+    img.onload = () => {
+      $(img).prependTo('.js-drag-img');
+      $('.js-jigsaw-placeholder').toggleClass('hidden');
+      $('.js-jigsaw').attr('src', src);
+    };
+    img.className = 'js-jigsaw-bg drag-img__bg';
+    img.src = url;
   }
 
   initEvent() {
@@ -43,7 +55,6 @@ export default class Drag {
     $element.mousedown((event) => {
       this.startDrag(event);
     });
-    console.log(document);
     $(document).mouseup((event) => {
       this.stopDrag(event);
     });
@@ -72,10 +83,11 @@ export default class Drag {
     this.getLocation($element[0]);
 
     if (params.currentLeft) {
-      const positionX = params.currentLeft.toFixed(2);
+      const rate = 40 / $('.js-jigsaw').width();
+      const positionX = (params.currentLeft * rate).toFixed(2);
+      console.log(positionX);
       const data = { token: this.dragCaptchaToken, jigsaw: positionX };
       Api.dragCaptcha.validate({ params: data }).then((res) => {
-        console.log(res);
         if (res.status === 'invalid') {
           this.resetLocation($element[0], $target[0]);
           cd.message({
@@ -84,6 +96,9 @@ export default class Drag {
           });
         } else if (res.status === 'expired') {
           this.resetLocation($element[0], $target[0]);
+          $('.js-jigsaw-bg').remove();
+          $('.js-jigsaw-placeholder').toggleClass('hidden');
+          $('.js-jigsaw').attr('src', '');
           this.initDragCaptcha();
         } else {
           cd.message({
@@ -96,6 +111,9 @@ export default class Drag {
           $dargForm.removeClass('has-error');
           $dargForm.find('.jq-validate-error').remove();
           $('[name="jigsaw"]').val(positionX);
+          $(document).unbind('mousemove');
+          $(document).unbind('mouseup');
+          this.setCss($element[0], 'cursor', 'not-allowed');
         }
       });
     }
