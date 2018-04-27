@@ -34,7 +34,8 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     public function decodeToken($token)
     {
         try {
-            $parsedInfo = $this->getDrpService()->parseToken($token);
+            $drpService = $this->getDrpService();
+            $parsedInfo = $drpService->parseToken($token);
             $tokenInfo = array(
                 'type' => 'courseOrder',
                 'product_id' => $parsedInfo['data']['course_id'],
