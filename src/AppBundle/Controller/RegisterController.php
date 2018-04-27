@@ -49,7 +49,7 @@ class RegisterController extends BaseController
                 $authSettings = $this->getSettingService()->get('auth', array());
                 
                 //拖动校验
-                $this->dragCaptchaValidator($registration);
+                $this->dragCaptchaValidator($registration, $authSettings);
 
                 //手机校验码
                 if ($this->smsCodeValidator($authSettings, $registration)) {
@@ -552,17 +552,19 @@ class RegisterController extends BaseController
         return $this->container->get('web.twig.extension');
     }
 
-    protected function dragCaptchaValidator($registration)
+    protected function dragCaptchaValidator($registration, $authSettings)
     {
-        if(!ArrayToolkit::requireds($registration, array('drag_captcha_token', 'jigsaw'))) {
-            $this->createNewException(UserException::FORBIDDEN_REGISTER());
-        }
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && !isset($registration['mobile'])) {
+            if (!ArrayToolkit::requireds($registration, array('drag_captcha_token', 'jigsaw'))) {
+                $this->createNewException(UserException::FORBIDDEN_REGISTER());
+            }
 
-        $biz = $this->getBiz();
-        $bizDragCaptcha = $biz['biz_drag_captcha'];
-        $checkResult = $bizDragCaptcha->checkByServer($registration['drag_captcha_token'], $registration['jigsaw']);
-        if (!$checkResult) {
-             $this->createNewException(UserException::FORBIDDEN_REGISTER());
+            $biz = $this->getBiz();
+            $bizDragCaptcha = $biz['biz_drag_captcha'];
+            $checkResult = $bizDragCaptcha->checkByServer($registration['drag_captcha_token'], $registration['jigsaw']);
+            if (!$checkResult) {
+                $this->createNewException(UserException::FORBIDDEN_REGISTER());
+            }
         }
     }
 

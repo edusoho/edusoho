@@ -14,7 +14,7 @@ class BizDragCaptcha extends BizAware
 
     const JIGSAW_WIDTH = 40;
 
-    const DEVIATION = 1;
+    const DEVIATION = 20;
 
     const TOKENTIMES = 5;
 
@@ -72,7 +72,7 @@ class BizDragCaptcha extends BizAware
     public function checkByServer($token, $jigsaw)
     {
         $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
-        if ($this->validateJigsaw($token, $jigsaw)) {
+        if (!$this->validateJigsaw($token, $jigsaw)) {
             throw new \Exception();
         }
 
@@ -87,7 +87,7 @@ class BizDragCaptcha extends BizAware
             return self::STATUS_EXPIRED;
         }
 
-        if ($this->validateJigsaw($token, $jigsaw)) {
+        if (!$this->validateJigsaw($token, $jigsaw)) {
             return $token['remainedTimes'] > 2 ? self::STATUS_INVALID : self::STATUS_EXPIRED;
         }
 
@@ -96,7 +96,7 @@ class BizDragCaptcha extends BizAware
 
     private function validateJigsaw($token, $jigsaw)
     {
-        return abs($jigsaw - $token['data']['positionX']) > self::DEVIATION;
+        return abs($jigsaw - $token['data']['positionX']) < self::DEVIATION;
     }
 
     private function getSource($options)
