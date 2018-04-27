@@ -61,7 +61,7 @@ class BizDragCaptcha extends BizAware
         $sub = imagecreatefrompng($this->getImagePath('jigsaw-border5.png'));
         imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
         ob_start();
-        imagepng($source);
+        imagejpeg($source);
 
         imagedestroy($sub);
         imagedestroy($source);

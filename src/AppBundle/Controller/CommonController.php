@@ -114,8 +114,8 @@ class CommonController extends BaseController
         $dragCaptcha = $biz['biz_drag_captcha'];
         $result = $dragCaptcha->getBackground($token);
 
-        $headers = array('Content-Type' => 'image/png',
-            'Content-Disposition' => 'inline; filename="image.png"', );
+        $headers = array('Content-Type' => 'image/jpeg',
+            'Content-Disposition' => 'inline; filename="image.jpg"', );
 
         return new Response($result, 200, $headers);
     }
