@@ -26,7 +26,27 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
 
     public function testDecodeToken()
     {
-        $token = 'courseOrder:9:333:123:1524313483:8a4323be2ae4d5b7fa1bec53c43b203c:Sgts-yLzLy5PH5c2NJ_s2Xdd_4U=';
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('storage', array()),
+                    'returnValue' => array(
+                        'cloud_access_key' => 'abc',
+                        'cloud_secret_key' => 'efg',
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('developer', array()),
+                    'returnValue' => array(
+                    ),
+                ),
+            )
+        );
+
+        $token = 'courseOrder:9:123:333:1524324352:c9a10dc1737f63a43d2ca6d155155999:2DQ1xlkUFVceNkn_QLOvf3acM8w=';
         $splitedTokens = $this->getDistributorCourseOrderService()->decodeToken($token);
 
         $this->assertTrue($splitedTokens['valid']);
@@ -54,7 +74,7 @@ class DistributorCourseOrderServiceTest extends BaseTestCase
         $token = $this->getDistributorCourseOrderService()->generateMockedToken(array('courseId' => '9'));
 
         $this->assertEquals(
-            'courseOrder:9:333:123:1524324352:c9a10dc1737f63a43d2ca6d155155999:dBosdWlh2mWCauQzO94D0w7IIOs=',
+            'courseOrder:9:123:333:1524324352:c9a10dc1737f63a43d2ca6d155155999:2DQ1xlkUFVceNkn_QLOvf3acM8w=',
             $token
         );
         $settingService->shouldHaveReceived('get');

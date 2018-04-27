@@ -34,11 +34,10 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     public function decodeToken($token)
     {
         try {
-            // $parsedInfo = $this->getDrpService()->parseCourseActivityToken($token);
-            $splitedStr = explode(':', $token);
+            $parsedInfo = $this->getDrpService()->parseToken($token);
             $tokenInfo = array(
                 'type' => 'courseOrder',
-                'product_id' => $splitedStr[1],
+                'product_id' => $parsedInfo['data']['course_id'],
                 'valid' => true,
             );
         } catch (\Exception $e) {
@@ -52,10 +51,10 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     public function generateMockedToken($params)
     {
         $data = array(
-            'type' => 'courseOrder',
+            'distribution_type' => 'courseOrder',
             'course_id' => $params['courseId'],
-            'org_id' => '333',
             'merchant_id' => '123',
+            'agency_id' => '333',
         );
         $tokenExpireDateNum = null;
 
