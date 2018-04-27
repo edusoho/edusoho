@@ -68,7 +68,9 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
 
     protected function validateCaptcha($request)
     {
+        $data = $request->request->all();
         
+        $this->getDragCaptcha($data);
     }  
 
     private function getRegisterProtective()
@@ -76,6 +78,11 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
         $registerSetting = $this->getSettingService()->get('auth');
 
         return empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
+    }
+
+    private function getDragCaptcha()
+    {
+        return $this->biz['biz_drag_captcha'];
     }
 
     /**
