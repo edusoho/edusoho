@@ -2,9 +2,7 @@
 
 namespace Tests\Unit\File;
 
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\BaseTestCase;
-use Mockery;
 
 class CloudDataServiceTest extends BaseTestCase
 {
