@@ -197,6 +197,14 @@ class StudyCenterMissionsDataTagTest extends BaseTestCase
         ), $result);
 
         // finishedTasks不为空
+        $this->mockBiz('Task:TaskResultService',
+            array(
+                array('functionName' => 'findUserFinishedTaskResultsByCourseId', 'returnValue' => array('id' => 1)),
+                array('functionName' => 'findUserProgressingTaskResultByCourseId', 'returnValue' => array('id' => 1)),
+                array('functionName' => 'getUserTaskResultByTaskId', 'returnValue' => array()),
+            )
+        );
+
         $this->mockBiz('Task:TaskService',
             array(
                 array('functionName' => 'searchTasks', 'returnValue' => array(
@@ -204,6 +212,8 @@ class StudyCenterMissionsDataTagTest extends BaseTestCase
                 )),
             )
         );
+        $studyCenterMissionsDataTag = new StudyCenterMissionsDataTag();
+        $result = $studyCenterMissionsDataTag->getData($arguments);
         $this->assertArrayEquals(array(
             'courses' => array(),
             'classrooms' => array(
@@ -214,7 +224,7 @@ class StudyCenterMissionsDataTagTest extends BaseTestCase
                         array('id' => 1, 'title' => 'task1', 'result' => array()),
                     ),
                     'allTaskNum' => 2,
-                    'learnedTaskNum' => 0,
+                    'learnedTaskNum' => 1,
                 ),
                 'class-2' => array(
                     'id' => 2,
@@ -223,7 +233,7 @@ class StudyCenterMissionsDataTagTest extends BaseTestCase
                         array('id' => 1, 'title' => 'task1', 'result' => array()),
                     ),
                     'allTaskNum' => 2,
-                    'learnedTaskNum' => 0,
+                    'learnedTaskNum' => 1,
                 ),
             ),
         ), $result);
