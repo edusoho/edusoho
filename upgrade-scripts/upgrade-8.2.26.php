@@ -70,8 +70,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
            'fillMediaSource',
            'addColumn',
-
-           'updateLiveRoomType',
            'deleteTable'
         );
 
