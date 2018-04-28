@@ -56,9 +56,9 @@ class Biz extends Container
 
         $biz['autoload.object_maker.service'] = function ($biz) {
             return function ($namespace, $name) use ($biz) {
-                $class = "{$namespace}\\Service\\Impl\\{$name}Impl";
+                $className = "{$namespace}\\Service\\Impl\\{$name}Impl";
 
-                return new $class($biz);
+                return new Map($biz, $className);
             };
         };
 
