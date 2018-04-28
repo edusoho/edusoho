@@ -20,6 +20,7 @@ class AnnotationInterceptor
     public function __construct(Biz $biz, $className, &$interceptor)
     {
         $annotationReader = new AnnotationReader();
+        $annotationReader::addGlobalIgnoredName('before');
         $reflectClass = new \ReflectionClass($className);
         $interfaces = $reflectClass->getInterfaces();
         foreach ($interfaces as $interfaceName => $interfaceObj) {

@@ -31,6 +31,5 @@ class Map
         foreach ($interceptors as $interceptor) {
             new $interceptor($this->biz, $this->className, $this->interceptors);
         }
-        var_dump($this->interceptors);
     }
 }
