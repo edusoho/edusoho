@@ -165,6 +165,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'coinPrice > :coinPrice_GT',
                 'coinPrice = :coinPrice',
                 'originCoinPrice > :originCoinPrice_GT',
+                'originCoinPrice > :originCoinPrice_GE',
                 'originCoinPrice = :originCoinPrice',
                 'title LIKE :titleLike',
                 'userId = :userId',
