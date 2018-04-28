@@ -68,11 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-           'fillMediaSource',
-           'addColumn',
-
-           'updateLiveRoomType',
-           'deleteTable'
+           'addCourseSetTitle'
         );
 
         $funcNames = array();
@@ -108,31 +104,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function fillMediaSource()
+
+    protected function addCourseSetTitle()
     {
-        $this->getConnection()->exec("UPDATE `course_task` SET mediaSource = 'self' WHERE mediaSource = '' AND type IN ('video','audio','doc','ppt','flash');");
+        $this->getConnection()->exec("update course_v8 cv,course_set_v8 cvs set cv.courseSetTitle=cvs.title where cv.coursesetid=cvs.id");
         return 1;
-    }
-
-    protected function addColumn()
-    {
-        if (!$this->isFieldExist('activity_live', 'roomType')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD `roomType` varchar(20) NOT NULL DEFAULT 'large' COMMENT '直播大小班课类型' AFTER `mediaId`;");
-        }
-
-        if (!$this->isFieldExist('course_chapter', 'updatedTime')) {
-            $this->getConnection()->exec("ALTER TABLE `course_chapter` ADD COLUMN `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间' AFTER `createdTime`;");
-        }
-
-        return 1;
-    }
-
-    protected function deleteTable()
-    {
-        $this->getConnection()->exec("DROP TABLE IF EXISTS `sessions`;");
-        $this->getConnection()->exec("DROP TABLE IF EXISTS `testpaper_v8_8_0_18_backup`;");
-        $this->getConnection()->exec("DROP TABLE IF EXISTS `question_8_0_18_backup`;");
-        $this->getConnection()->exec("DROP TABLE IF EXISTS `course_chapter_8_0_19_backup`;");
     }
 
     protected function generateIndex($step, $page)
