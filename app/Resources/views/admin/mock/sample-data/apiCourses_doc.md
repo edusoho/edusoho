@@ -29,6 +29,7 @@ api-login: false
 'price > :price_GT',
 'price >= :price_GE',   //价格大于等于， 单位为元
 'originPrice > :originPrice_GT',
+'originPrice >= :originPrice_GE', //原价大于等于， 单位为元
 'originPrice = :originPrice',
 'coinPrice > :coinPrice_GT',
 'coinPrice = :coinPrice',
