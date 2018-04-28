@@ -23,6 +23,7 @@ class AnnotationInterceptor
         $annotationReader::addGlobalIgnoredName('before');
         $reflectClass = new \ReflectionClass($className);
         $interfaces = $reflectClass->getInterfaces();
+
         foreach ($interfaces as $interfaceName => $interfaceObj) {
             $reflectInterface = new \ReflectionClass($interfaceName);
             $methods = $reflectInterface->getMethods();

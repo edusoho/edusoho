@@ -27,7 +27,6 @@ class Map
         $interceptors = array(
             '\Codeages\Biz\Framework\Targetlog\Interceptor\AnnotationInterceptor',
         );
-
         foreach ($interceptors as $interceptor) {
             new $interceptor($this->biz, $this->className, $this->interceptors);
         }
