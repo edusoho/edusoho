@@ -2,8 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
 {
     public function canAccess($attachment)
@@ -28,18 +26,13 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
         return false;
     }
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getQuestionService()
     {
-        return $this->getKernel()->createService('Question:QuestionService');
+        return $this->biz->service('Question:QuestionService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getKernel()->createService('Testpaper:TestpaperService');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 }

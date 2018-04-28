@@ -226,4 +226,21 @@ class ArrayToolkitTest extends BaseTestCase
             array('id' => 3, 'name' => 'tom3'),
         ), $result);
     }
+
+    public function testAppendKeyPrefix()
+    {
+        $array = array(
+            'id' => 1,
+            'name' => 'test',
+        );
+
+        $result = ArrayToolkit::appendKeyPrefix($array, 'user.');
+        $this->assertArrayEquals(
+            array(
+                'user.id' => 1,
+                'user.name' => 'test',
+            ),
+            $result
+        );
+    }
 }

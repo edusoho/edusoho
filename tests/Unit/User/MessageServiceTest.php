@@ -3,10 +3,43 @@
 namespace Tests\Unit\User;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
+use Biz\User\Service\MessageService;
+use Biz\User\Service\UserService;
 
 class MessageServiceTest extends BaseTestCase
 {
+    public function testCountMessage()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
+            $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
+        }
+
+        $result = $this->getMessageService()->countMessages(array());
+
+        $this->assertEquals(4, $result);
+    }
+
+    public function testSearchMessage()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
+            $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
+        }
+
+        $results = $this->getMessageService()->searchMessages(array(), array(), 0, 10);
+
+        $this->assertEquals(4, count($results));
+    }
+
     public function testDeleteMessagesByAdmin()
     {
         /*create*/
@@ -20,6 +53,10 @@ class MessageServiceTest extends BaseTestCase
         $conversation = $this->getMessageService()->getConversationByFromIdAndToId($receiver['id'], $sender['id']);
         $messageByConversation = $this->getMessageService()->findConversationMessages($conversation['id'], 0, 10);
         $this->getMessageService()->deleteMessagesByIds(ArrayToolkit::column($messageByConversation, 'id'));
+
+        $result = $this->getMessageService()->countMessages(array('isDelete' => 1));
+
+        $this->assertEquals(4, $result);
     }
 
     public function testSendMessage()
@@ -67,6 +104,131 @@ class MessageServiceTest extends BaseTestCase
             $this->assertEquals($messageByConversationToReceiver['fromId'], $sender['id']);
             $this->assertEquals($messageByConversationToReceiver['toId'], $receiver['id']);
         }
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testSendMessageWithEmptyFromIdAndToId()
+    {
+        $content = 'testSendMessage';
+        $this->getMessageService()->sendMessage(0, 0, $content);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testSendMessageWithEqualFromIdAndToId()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $content = 'testSendMessage';
+
+        $this->getMessageService()->sendMessage($sender['id'], $sender['id'], $content);
+
+        $this->getMessageService()->sendMessage(0, 0, $content);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testSendMessageWithEmptyContent()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = '';
+
+        $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $content);
+
+        $this->getMessageService()->sendMessage(0, 0, $content);
+    }
+
+    public function testDeleteMessagesByIds()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
+            $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
+        }
+
+        $conversation = $this->getMessageService()->getConversationByFromIdAndToId($receiver['id'], $sender['id']);
+        $messageByConversation = $this->getMessageService()->findConversationMessages($conversation['id'], 0, 10);
+        $this->getMessageService()->deleteMessagesByIds(ArrayToolkit::column($messageByConversation, 'id'));
+
+        $result = $this->getMessageService()->countMessages(array('isDelete' => 1));
+
+        $this->assertEquals(4, $result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testDeleteMessagesByIdsWithEmptyException()
+    {
+        $this->getMessageService()->deleteMessagesByIds();
+    }
+
+    public function testFindUserConversations()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = 'testSendMessage';
+        $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $content);
+
+        $results = $this->getMessageService()->findUserConversations($receiver['id'], 0, 10);
+
+        $this->assertEquals(1, count($results));
+    }
+
+    public function testCountUserConversations()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = 'testSendMessage';
+        $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $content);
+
+        $result = $this->getMessageService()->countUserConversations($receiver['id']);
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testClearUserNewMessageCounter()
+    {
+        /*create*/
+        $sender = $this->createSender();
+        $receiver = $this->createReceiver();
+        $content = 'testSendMessage';
+        $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $content);
+
+        $beforeUser = $this->getUserService()->getUser($receiver['id']);
+        $this->assertEquals(1, $beforeUser['newMessageNum']);
+
+        $this->getMessageService()->clearUserNewMessageCounter($receiver['id']);
+
+        $afterUser = $this->getUserService()->getUser($receiver['id']);
+        $this->assertEquals(0, $afterUser['newMessageNum']);
+    }
+
+    public function testFilterMessageConditions()
+    {
+        $conditions = ReflectionUtils::invokeMethod($this->getMessageService(), 'filterMessageConditions', array(
+            array(
+                'nickname' => 'admin',
+                'startDate' => 'now',
+                'endDate' => 'now',
+            ),
+        ));
+        $this->assertNotEmpty($conditions['fromIds']);
+        $this->assertNotEquals('now', $conditions['startDate']);
+        $this->assertNotEmpty($conditions['startDate']);
+
+        $this->assertNotEquals('now', $conditions['endDate']);
+        $this->assertNotEmpty($conditions['endDate']);
     }
 
     public function testShowConversation()
@@ -238,11 +400,17 @@ class MessageServiceTest extends BaseTestCase
         return $this->getUserService()->register($receiver);
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return MessageService
+     */
     protected function getMessageService()
     {
         return $this->createService('User:MessageService');

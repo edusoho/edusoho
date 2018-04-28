@@ -212,13 +212,16 @@ class SystemInitializerTest extends BaseTestCase
         $initializer = new \AppBundle\Common\SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initRole', array());
 
-        $reuslt = $this->getRoleService()->searchRoles(array(), array(), 0, \PHP_INT_MAX);
-        $this->assertArrayEquals(array(
-        0 => 'ROLE_USER',
-        1 => 'ROLE_TEACHER',
-        2 => 'ROLE_ADMIN',
-        3 => 'ROLE_SUPER_ADMIN',
-        ), ArrayToolkit::column($reuslt, 'code'));
+        $result = $this->getRoleService()->searchRoles(array(), array(), 0, \PHP_INT_MAX);
+
+        $roles = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN');
+        $roleCodes = ArrayToolkit::column($result, 'code');
+
+        $this->assertEquals(4, count($roleCodes));
+
+        foreach ($roleCodes as $roleCode) {
+            $this->assertTrue(in_array($roleCode, $roles));
+        }
     }
 
     public function testinitLockFile()

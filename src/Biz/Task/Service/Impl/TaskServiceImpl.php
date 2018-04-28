@@ -19,6 +19,12 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
+    /**
+     * @var array
+     *            包含序列化字段的学习类型，mediaType
+     */
+    private static $mediaList = array('video', 'audio', 'doc', 'ppt', 'flash');
+
     public function getTask($id)
     {
         return $this->getTaskDao()->get($id);
@@ -102,11 +108,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['type'] = $fields['mediaType'];
         $fields['endTime'] = $activity['endTime'];
 
-        if ('video' === $activity['mediaType']) {
+        if (in_array($activity['mediaType'], self::$mediaList)) {
             $media = json_decode($fields['media'], true);
             $fields['mediaSource'] = $media['source'];
 
-            if ('self' == $fields['mediaSource']) {
+            if ('video' === $activity['mediaType'] && 'self' == $fields['mediaSource']) {
                 $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
             }
         }
@@ -147,7 +153,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
 
-            if ('video' === $activity['mediaType']) {
+            if (in_array($activity['mediaType'], self::$mediaList)) {
                 $media = json_decode($fields['media'], true);
                 $fields['mediaSource'] = $media['source'];
             }
@@ -883,7 +889,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
-
         if (!empty($finishedTasks)) {
             $taskIds = ArrayToolkit::column($finishedTasks, 'courseTaskId');
             $electiveTaskIds = $this->getStartElectiveTaskIds($courseId);

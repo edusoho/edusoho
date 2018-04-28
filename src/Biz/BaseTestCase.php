@@ -14,6 +14,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Topxia\Service\Common\ServiceKernel;
 use PHPUnit\Framework\TestCase;
 use Biz\TestTool\MockedRequest;
+use AppBundle\Common\ArrayToolkit;
 
 class BaseTestCase extends TestCase
 {
@@ -211,40 +212,22 @@ class BaseTestCase extends TestCase
      */
     protected function mockBiz($alias, $params = array())
     {
-        $aliasList = explode(':', $alias);
-        $className = end($aliasList);
-        $mockObj = Mockery::mock($className);
-
-        foreach ($params as $param) {
-            $expectation = $mockObj->shouldReceive($param['functionName']);
-
-            if (!empty($param['runTimes'])) {
-                $expectation = $expectation->times($param['runTimes']);
-            }
-
-            if (!empty($param['withParams'])) {
-                $expectation = $expectation->withArgs($param['withParams']);
-            } else {
-                $expectation = $expectation->withAnyArgs();
-            }
-
-            if (!empty($param['returnValue'])) {
-                $expectation->andReturn($param['returnValue']);
-            }
-
-            if (!empty($param['andReturnValues'])) {
-                $expectation->andReturnValues($param['andReturnValues']);
-            }
-
-            if (!empty($param['throwException'])) {
-                $expectation->andThrow($param['throwException']);
-            }
-        }
+        $mockedObj = $this->mockObject($alias, $params);
 
         $biz = $this->getBiz();
-        $biz['@'.$alias] = $mockObj;
+        $biz['@'.$alias] = $mockedObj;
 
-        return $mockObj;
+        return $mockedObj;
+    }
+
+    protected function mockPureBiz($alias, $params = array())
+    {
+        $mockedObj = $this->mockObject($alias, $params);
+
+        $biz = $this->getBiz();
+        $biz[$alias] = $mockedObj;
+
+        return $mockedObj;
     }
 
     /**
@@ -276,18 +259,31 @@ class BaseTestCase extends TestCase
         return $this->biz;
     }
 
-    protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())
+    /**
+     * @param $uniqueCols 如果有值，会以指定的列来认为是数组的唯一键，比较时，只比较 唯一键相同的数组
+     *   如 array('id'), 比较的数组 中 id 相等的才会进行比较
+     *   注意： 目前只支持设置单属性
+     */
+    protected function assertArrayEquals(array $arr1, array $arr2, array $keyAry = array(), $uniqueCols = array())
     {
         if (count($keyAry) >= 1) {
             foreach ($keyAry as $key) {
-                $this->assertEquals($ary1[$key], $ary2[$key]);
+                $this->assertEquals($arr1[$key], $arr2[$key]);
             }
         } else {
-            foreach (array_keys($ary1) as $key) {
-                if (is_array($ary1[$key])) {
-                    $this->assertArrayEquals($ary1[$key], $ary2[$key]);
+            if (!empty($uniqueCols)) {
+                $formatedArr1 = ArrayToolkit::index($arr1, $uniqueCols[0]);
+                $formatedArr2 = ArrayToolkit::index($arr2, $uniqueCols[0]);
+            } else {
+                $formatedArr1 = $arr1;
+                $formatedArr2 = $arr2;
+            }
+
+            foreach (array_keys($formatedArr1) as $key) {
+                if (is_array($formatedArr1[$key])) {
+                    $this->assertArrayEquals($formatedArr1[$key], $formatedArr2[$key]);
                 } else {
-                    $this->assertEquals($ary1[$key], $ary2[$key]);
+                    $this->assertEquals($formatedArr1[$key], $formatedArr2[$key]);
                 }
             }
         }
@@ -306,6 +302,46 @@ class BaseTestCase extends TestCase
         $permissions['admin_course_content_manage'] = true;
         /* @var $currentUser CurrentUser */
         $currentUser->setPermissions($permissions);
+    }
+
+    protected function mockObject($alias, $params = array())
+    {
+        $splitedChars = array(':', '.');
+        $className = $alias;
+        foreach ($splitedChars as $char) {
+            $aliasList = explode($char, $className);
+            $className = end($aliasList);
+        }
+
+        $mockObj = Mockery::mock($className);
+
+        foreach ($params as $param) {
+            $expectation = $mockObj->shouldReceive($param['functionName']);
+
+            if (!empty($param['runTimes'])) {
+                $expectation = $expectation->times($param['runTimes']);
+            }
+
+            if (!empty($param['withParams'])) {
+                $expectation = $expectation->withArgs($param['withParams']);
+            } else {
+                $expectation = $expectation->withAnyArgs();
+            }
+
+            if (!empty($param['returnValue'])) {
+                $expectation->andReturn($param['returnValue']);
+            }
+
+            if (!empty($param['andReturnValues'])) {
+                $expectation->andReturnValues($param['andReturnValues']);
+            }
+
+            if (!empty($param['throwException'])) {
+                $expectation->andThrow($param['throwException']);
+            }
+        }
+
+        return $mockObj;
     }
 }
 

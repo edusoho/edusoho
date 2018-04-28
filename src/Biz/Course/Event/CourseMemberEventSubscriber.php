@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\MathToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
@@ -19,6 +18,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use AppBundle\Common\ArrayToolkit;
 
 class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -83,23 +83,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         if (empty($members)) {
             return;
         }
+
         $memberIds = ArrayToolkit::column($members, 'userId');
-        $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds);
-        //add classroom students to course
-        /*$existedMembers = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, PHP_INT_MAX);
-        $diffMemberIds = $memberIds;
-        if (!empty($existedMembers)) {
-            $existedMemberIds = ArrayToolkit::column($existedMembers, 'userId');
-            $diffMemberIds = array_diff($memberIds, $existedMemberIds);
-        }
-
-        if (empty($diffMemberIds)) {
-            return;
-        }
-
-        foreach ($diffMemberIds as $memberId) {
-            $this->getCourseMemberService()->becomeStudent($course['id'], $memberId);
-        }*/
+        $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds, $classroomId);
     }
 
     private function countStudentMember(Event $event)

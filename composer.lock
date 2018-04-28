@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b69b357873640a1de7b95ae622e9dd2",
+    "content-hash": "129f1c32b3ae6b7a941b4bf5ea787cce",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -301,7 +301,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/44c16d634b3090aa819a303a721e650e7cffd31a.zip",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/44c16d634b3090aa819a303a721e650e7cffd31a",
                 "reference": "44c16d634b3090aa819a303a721e650e7cffd31a",
                 "shasum": ""
             },
@@ -356,7 +356,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/9f343dac2299f78d1506833412e3e3215dc6dc89.zip",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/9f343dac2299f78d1506833412e3e3215dc6dc89",
                 "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89",
                 "shasum": ""
             },
@@ -468,16 +468,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.2.10",
+            "version": "v0.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad"
+                "reference": "276255ea173cad91a690ddfa7c81c345b6589cbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/01cf99a47f1fe4a67b2148736d8069f3144930ad",
-                "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/276255ea173cad91a690ddfa7c81c345b6589cbf",
+                "reference": "276255ea173cad91a690ddfa7c81c345b6589cbf",
                 "shasum": ""
             },
             "require": {
@@ -507,7 +507,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-04-10T03:46:42+00:00"
+            "time": "2018-04-24T08:18:41+00:00"
         },
         {
             "name": "codeages/rate-limiter",

@@ -62,16 +62,6 @@ class SyncDailyPastDataJob extends AbstractJob
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->biz->service('User:UserService');
-    }
-
     protected function getJobDao()
     {
         return $this->biz->dao('Scheduler:JobDao');
