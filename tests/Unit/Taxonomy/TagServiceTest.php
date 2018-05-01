@@ -2,6 +2,8 @@
 
 namespace  Tests\Taxonomy;
 
+use AppBundle\Common\ReflectionUtils;
+use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Service\TagService;
 use Biz\BaseTestCase;
 
@@ -32,6 +34,45 @@ class TagServiceTest extends BaseTestCase
 
     public function testFindTagGroupsByTagId()
     {
+        $tagGroup1 = $this->addTagGroup();
+        $tagGroup2 = $this->addTagGroup(array('name' => '测试分组1'));
+
+        $tag1 = $this->createTag();
+
+        $this->addTagGroupTag(array('tagId' => $tag1['id'], 'groupId' => $tagGroup1['id']));
+        $this->addTagGroupTag(array('tagId' => $tag1['id'], 'groupId' => $tagGroup2['id']));
+
+        $results = $this->getTagService()->findTagGroupsByTagId($tag1['id']);
+        $this->assertContains($tagGroup1, $results);
+        $this->assertContains($tagGroup2, $results);
+    }
+
+    public function testFindTagsByOwner()
+    {
+        $tag1 = $this->createTag(array('name' => '测试标签1'));
+        $tag2 = $this->createTag(array('name' => '测试标签2'));
+
+        $opUser = $this->getCurrentUser();
+        $this->addTagOwner(array(
+            'userId' => $opUser['id'],
+            'tagId' => $tag1['id'],
+            'ownerId' => 10,
+        ));
+        $this->addTagOwner(array(
+            'userId' => $opUser['id'],
+            'tagId' => $tag2['id'],
+            'ownerId' => 10,
+        ));
+
+        $results = $this->getTagService()->findTagsByOwner(array('ownerId' => 10, 'ownerType' => 'course-set'));
+        $this->assertContains($tag1, $results);
+        $this->assertContains($tag2, $results);
+    }
+
+    public function testPrepareConditions()
+    {
+//        $stub =
+//        $return = ReflectionUtils::invokeMethod($stub, 'getLogger', array('testLogger'));
     }
 
     /**
@@ -503,11 +544,57 @@ class TagServiceTest extends BaseTestCase
         return $this->getTagService()->addTag($tag);
     }
 
+    private function addTagGroup($param = array())
+    {
+        $group = array(
+            'name' => '测试标签组',
+            'scope' => array('course'),
+            'tagNum' => 1,
+        );
+
+        $group = array_merge($group, $param);
+
+        return $this->getTagService()->addTagGroup($group);
+    }
+
+    private function addTagGroupTag($param = array())
+    {
+        $tagGroupTag = array(
+            'tagId' => 1,
+            'groupId' => 1,
+        );
+
+        $tagGroupTag = array_merge($tagGroupTag, $param);
+
+        return $this->getTagGroupTagDao()->create($tagGroupTag);
+    }
+
+    private function addTagOwner($param = array())
+    {
+        $tagOwner = array(
+            'ownerType' => 'course-set',
+            'ownerId' => 1,
+            'tagId' => 1,
+            'userId' => 1,
+        );
+        $tagOwner = array_merge($tagOwner, $param);
+
+        return $this->getTagService()->addTagOwnerRelation($tagOwner);
+    }
+
     /**
      * @return TagService
      */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    /**
+     * @return TagGroupDao
+     */
+    protected function getTagGroupTagDao()
+    {
+        return $this->createDao('Taxonomy:TagGroupTagDao');
     }
 }
