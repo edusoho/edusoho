@@ -158,6 +158,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['maxRate'] = $courseSet['maxRate'];
+        $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
 
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
@@ -221,6 +222,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields,
             array(
                 'title',
+                'courseSetTitle',
                 'about', //@todo 目前没有这个字段
                 'courseSetId',
                 'summary',
