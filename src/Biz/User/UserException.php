@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class UserException extends AbstractException
 {
-    const MODUAL = 01;
+    const EXCEPTION_MODUAL = 01;
 
     const UN_LOGIN = 4040101;
 
@@ -21,6 +21,5 @@ class UserException extends AbstractException
         4030102 => 'exception.user.unlogin',
         4030103 => 'exception.user.register_error',
         4030110 => 'exception.user.message_forbidden',
-
     );
 }

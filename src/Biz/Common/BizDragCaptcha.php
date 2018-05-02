@@ -3,6 +3,7 @@
 namespace Biz\Common;
 
 use Codeages\Biz\Framework\Context\BizAware;
+use AppBundle\Common\ArrayToolkit;
 
 class BizDragCaptcha extends BizAware
 {
@@ -16,7 +17,7 @@ class BizDragCaptcha extends BizAware
 
     const DEVIATION = 1;
 
-    const TOKENTIMES = 5;
+    const TOKENTIMES = 30;
 
     const TOKENTYPE = 'drag_captcha';
 
@@ -69,11 +70,20 @@ class BizDragCaptcha extends BizAware
         return ob_get_clean();
     }
 
-    public function checkByServer($token, $jigsaw)
+    public function checkByServer($data)
     {
-        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
-        if (!$this->validateJigsaw($token, $jigsaw)) {
-            throw new \Exception();
+        if (!ArrayToolkit::requireds($data, array('drag_captcha_token', 'jigsaw'))) {
+            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_REQUIRED();
+        }
+
+        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $data['drag_captcha_token']);
+
+        if (empty($token)) {
+            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_EXPIRED();
+        }
+
+        if (!$this->validateJigsaw($token, $data['jigsaw'])) {
+            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
         }
 
         return true;

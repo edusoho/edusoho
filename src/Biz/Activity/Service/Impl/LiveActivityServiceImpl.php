@@ -184,7 +184,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function canUpdateRoomType($liveStartTime)
     {
         $timeDiff = $liveStartTime - time();
-        $disableSeconds = 10 * 60;
+        $disableSeconds = 3600 * 2;
 
         if ($timeDiff < 0 || ($timeDiff > 0 && $timeDiff <= $disableSeconds)) {
             return 0;
