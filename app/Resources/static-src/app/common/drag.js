@@ -52,13 +52,14 @@ export default class Drag {
 
   initEvent() {
     const $element = this.$element;
-    $element.mousedown((event) => {
+    $element.on('mousedown touchstart', (event) => {
       this.startDrag(event);
     });
-    $(document).mouseup((event) => {
+
+    $(document).on('mouseup touchend', (event) => {
       this.stopDrag(event);
     });
-    $(document).mousemove((event) => {
+    $(document).on('mousemove touchmove', (event) => {
       this.dragMove(event);
     });
   }
@@ -67,7 +68,8 @@ export default class Drag {
     const params = this.params;
     params.flag = true;
     const e = event;
-    params.currentX = e.clientX;
+    const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
+    params.currentX = currentX;
     params.currentY = e.clientY;
   }
 
@@ -85,7 +87,6 @@ export default class Drag {
     if (params.currentLeft) {
       const rate = 40 / $('.js-jigsaw').width();
       const positionX = (params.currentLeft * rate).toFixed(2);
-      console.log(positionX);
       const data = { token: this.dragCaptchaToken, jigsaw: positionX };
       Api.dragCaptcha.validate({ params: data }).then((res) => {
         if (res.status === 'invalid') {
@@ -101,19 +102,7 @@ export default class Drag {
           $('.js-jigsaw').attr('src', '');
           this.initDragCaptcha();
         } else {
-          cd.message({
-            type: 'success',
-            message: Translator.trans('validate.success')
-          });
-          const $tokenDom = $('[name="drag_captcha_token"]');
-          $tokenDom.val(this.dragCaptchaToken);
-          const $dargForm = $tokenDom.closest('.form-group');
-          $dargForm.removeClass('has-error');
-          $dargForm.find('.jq-validate-error').remove();
-          $('[name="jigsaw"]').val(positionX);
-          $(document).unbind('mousemove');
-          $(document).unbind('mouseup');
-          this.setCss($element[0], 'cursor', 'not-allowed');
+          this.validateSuccess($element[0], positionX);
         }
       });
     }
@@ -125,9 +114,8 @@ export default class Drag {
     const params = this.params;
     if (!params.flag) return;
     const e = event;
-    e.preventDefault();
-
-    const nowX = e.clientX;
+    const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
+    const nowX = currentX;
     const nowY = e.clientY;
     const disX = nowX - params.currentX;
     const disY = nowY - params.currentY;
@@ -151,6 +139,21 @@ export default class Drag {
     params.currentLeft = leftNum;
   }
 
+  validateSuccess(target, positionX) {
+    cd.message({
+      type: 'success',
+      message: Translator.trans('validate.success')
+    });
+    const $tokenDom = $('[name="drag_captcha_token"]');
+    $tokenDom.val(this.dragCaptchaToken);
+    const $dargForm = $tokenDom.closest('.form-group');
+    $dargForm.removeClass('has-error');
+    $dargForm.find('.jq-validate-error').remove();
+    $('[name="jigsaw"]').val(positionX);
+    $(document).unbind('mousemove touchmove');
+    $(document).unbind('mouseup touchend');
+    this.setCss(target, 'cursor', 'not-allowed');
+  }
   getLocation(target) {
     if (this.getCss(target, 'left') !== 'auto') {
       this.params.left = this.getCss(target, 'left');
