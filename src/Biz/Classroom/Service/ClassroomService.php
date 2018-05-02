@@ -2,8 +2,6 @@
 
 namespace Biz\Classroom\Service;
 
-use Codeages\Biz\Framework\Targetlog\Annotation\Log;
-
 interface ClassroomService
 {
     /**
@@ -13,7 +11,6 @@ interface ClassroomService
      * @param $limit
      *
      * @return mixed
-     * @Log(desc=123)
      */
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
