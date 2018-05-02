@@ -4,7 +4,7 @@ namespace Biz\Xapi;
 
 use Biz\Xapi\Type\AskQuestionType;
 use Biz\Xapi\Type\AudioListen;
-use Biz\Xapi\Type\BookmarkedCourseSetType;
+use Biz\Xapi\Type\BookmarkedCourseType;
 use Biz\Xapi\Type\DoExerciseType;
 use Biz\Xapi\Type\DoHomeworkType;
 use Biz\Xapi\Type\DoQuestionType;
@@ -134,8 +134,8 @@ class XapiServiceProvider implements ServiceProviderInterface
             return $type;
         });
 
-        $biz[sprintf('xapi.push.%s', BookmarkedCourseSetType::TYPE)] = $biz->factory(function ($biz) {
-            $type = new BookmarkedCourseSetType();
+        $biz[sprintf('xapi.push.%s', BookmarkedCourseType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new BookmarkedCourseType();
             $type->setBiz($biz);
 
             return $type;

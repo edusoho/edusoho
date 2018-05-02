@@ -154,7 +154,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $favorite = $event->getSubject();
         $courseSet = $event->getArgument('courseSet');
-        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $courseSet['id'], 'courseSet', array(
+        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $courseSet['id'], 'course', array(
             'name' => $courseSet['title']
         ));
     }

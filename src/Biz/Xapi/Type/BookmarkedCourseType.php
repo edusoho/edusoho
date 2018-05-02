@@ -4,9 +4,9 @@ namespace Biz\Xapi\Type;
 
 use QiQiuYun\SDK\Constants\XAPIActivityTypes;
 
-class BookmarkedCourseSetType extends Type
+class BookmarkedCourseType extends Type
 {
-    const TYPE = 'bookmarked_courseSet';
+    const TYPE = 'bookmarked_course';
 
     public function packages($statements)
     {
