@@ -42,7 +42,6 @@ class PopularArticlePostsDataTagTest extends BaseTestCase
         $this->mockBiz('Thread:ThreadService', array(
             array(
                 'functionName' => 'searchPosts',
-                //'withParams' => array(array('targetType' => 'article', 'parentId' => 0, 'latest' => 'week'), array('ups' => 'DESC', 'createdTime' => 'DESC'), 0, $limitCount),
                 'returnValue' => array(array('id' => 1, 'targetId' => 1, 'userId' => 1), array('id' => 2, 'targetId' => 2, 'userId' => 2)),
             ),
         ));
