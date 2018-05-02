@@ -36,6 +36,7 @@ api-login: false
 'originCoinPrice > :originCoinPrice_GT',
 'originCoinPrice = :originCoinPrice',
 'title LIKE :titleLike',
+'courseSetTitle LIKE :courseSetTitleLike',
 'userId = :userId',
 'recommended = :recommended',
 'createdTime >= :startTime',
