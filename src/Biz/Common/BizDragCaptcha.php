@@ -15,29 +15,40 @@ class BizDragCaptcha extends BizAware
 
     const JIGSAW_WIDTH = 40;
 
-    const DEVIATION = 1;
+    const DEVIATION = 0.3;
 
-    const TOKENTIMES = 5;
+    const SERVER_TOKENTIMES = 1;
+
+    const TOKENTIMES = 3;
 
     const TOKENTYPE = 'drag_captcha';
 
-    const IMAGE_NAME = '5.jpg';
+    private $backgroundImages = array(
+        '1.jpg',
+        '2.jpg',
+        '3.jpg',
+        '4.jpg',
+        '5.jpg',
+        '6.jpg',
+    );
 
     public function generate($options = array())
     {
-        $imagePath = $this->getImagePath(self::IMAGE_NAME);
+        $bg = $this->backgroundImages[rand(0, 5)];
+        $imagePath = $this->getImagePath($bg);
         $size = getimagesize($imagePath);
 
         $default = array(
             'height' => $size[1],
             'width' => $size[0],
+            'bg' => $imagePath,
         );
         $options = array_merge($options, $default);
         $options = $this->setJigsawPosition($options);
         $jigsaw = $this->getJigsaw($options);
 
         $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
-            'times' => self::TOKENTIMES + 1,
+            'times' => self::TOKENTIMES + self::SERVER_TOKENTIMES,
             'duration' => 60 * 10,
             'userId' => 0,
             'data' => $options,
@@ -59,7 +70,7 @@ class BizDragCaptcha extends BizAware
 
         $options = $token['data'];
         $source = $this->getSource($options);
-        $sub = imagecreatefrompng($this->getImagePath('jigsaw-border5.png'));
+        $sub = imagecreatefrompng($this->getImagePath('jigsaw-border.png'));
         imagecopyresampled($source, $sub, $options['positionX'], $options['positionY'], 0, 0, self::JIGSAW_WIDTH, self::JIGSAW_WIDTH, 80, 80);
         ob_start();
         imagejpeg($source);
@@ -72,7 +83,7 @@ class BizDragCaptcha extends BizAware
 
     public function checkByServer($data)
     {
-        if (!ArrayToolkit::requireds($data, array('drag_captcha_token', 'jigsaw'))) {
+        if (!ArrayToolkit::requireds($data, array('drag_captcha_token', 'jigsaw'), true)) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_REQUIRED();
         }
 
@@ -111,7 +122,7 @@ class BizDragCaptcha extends BizAware
 
     private function getSource($options)
     {
-        return imagecreatefromjpeg($this->getImagePath(self::IMAGE_NAME));
+        return imagecreatefromjpeg($options['bg']);
     }
 
     private function getJigsaw($options)
