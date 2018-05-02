@@ -139,12 +139,6 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     public function resetConfig()
     {
-        $currentTheme = $this->getSettingService()->get('theme');
-
-        if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = '简墨';
-        }
-
         return $this->saveCurrentThemeConfig($this->defaultConfig);
     }
 
@@ -178,7 +172,6 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         if (empty($theme)) {
             return false;
         }
-
         if (!$this->isThemeSupportEs($theme)) {
             return false;
         }
@@ -193,10 +186,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     private function isThemeSupportEs($theme)
     {
-        $supportVersion = explode('.', $theme['support_version']);
-        $EsVerson = explode('.', System::VERSION);
-
-        if ($theme['protocol'] < 3 || version_compare(array_shift($supportVersion), array_shift($EsVerson), '<')) {
+        if ($theme['protocol'] < 3 || version_compare(rtrim($theme['support_version'], '+'), System::VERSION, '>')) {
             return false;
         }
 

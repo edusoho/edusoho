@@ -5,7 +5,6 @@ namespace Biz\Course\Dao\Impl;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
-use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 use Codeages\Biz\Framework\Dao\DaoException;
 
 class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
@@ -274,7 +273,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->update($this->table, $updateFields, $conditions);
     }
 
-    public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discuss')
+    public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discussion')
     {
         $sql = "SELECT count(id) FROM course_thread WHERE type='{$type}' AND courseId = ? AND userId = ?";
 
@@ -418,33 +417,6 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             ->orderBy('date', 'ASC');
 
         return $builder->execute()->fetchAll();
-    }
-
-    protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')
-    {
-        $conditions = array_filter($conditions, function ($value) {
-            if ('' === $value || null === $value) {
-                return false;
-            }
-
-            return true;
-        });
-
-        $builder = new DynamicQueryBuilder($this->db(), $conditions);
-        $builder->from($this->table(), 'm')
-            ->join('m', 'course_v8', 'c', 'm.courseId = c.id '.$joinConnections)
-            ->andWhere('m.isLearned = :isLearned')
-            ->andWhere('m.userId = :userId')
-            ->andWhere('m.role = :role')
-            ->andWhere('m.courseId = :courseId')
-            ->andWhere('m.joinedType =:joinedType')
-            ->andWhere('m.noteNum > :noteNumGreaterThan')
-            ->andWhere('c.type = :type')
-            ->andWhere('c.parentId = :parentId')
-            ->andWhere('c.serializeMode =  :serializeMode')
-            ->andWhere('c.serializeMode IN ( :serializeModes)');
-
-        return $builder;
     }
 
     public function declares()

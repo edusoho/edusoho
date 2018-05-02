@@ -86,7 +86,7 @@ class DistributorUserServiceTest extends BaseTestCase
 
     public function testGetSendType()
     {
-        $this->assertEquals('user', $this->getDistributorUserService()->getSendType());
+        $this->assertEquals('user', $this->getDistributorUserService()->getSendType(array('data' => array())));
     }
 
     public function testGetJobType()

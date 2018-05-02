@@ -33,22 +33,32 @@ class SensitiveController extends BaseController
 
     public function createAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $keyword = $request->request->get('name');
-            $keyword = trim($keyword);
-            $keyword = preg_split('/\r/', $keyword, -1, PREG_SPLIT_NO_EMPTY);
+        if ('POST' == $request->getMethod()) {
+            $name = $request->request->get('name');
+            $keywords = preg_split('/\r/', trim($name), -1, PREG_SPLIT_NO_EMPTY);
             $state = $request->request->get('state');
-
-            foreach ($keyword as $key => $value) {
+            $existedKeyWords = array();
+            foreach ($keywords as $value) {
                 $value = trim($value);
 
                 if (!empty($value)) {
                     $keyword = $this->getSensitiveService()->getKeywordByName($value);
 
                     if (empty($keyword)) {
-                        $keyword = $this->getSensitiveService()->addKeyword($value, $state);
+                        $this->getSensitiveService()->addKeyword($value, $state);
+                        continue;
                     }
+                    $existedKeyWords[] = $value;
                 }
+            }
+            if (!empty($existedKeyWords)) {
+                $this->setFlashMessage(
+                    'warning',
+                    $this->get('translator')->trans(
+                        'admin.sensitive_manage.existed',
+                        array('%keywords%' => implode(',', array_unique($existedKeyWords)))
+                    )
+                );
             }
 
             return $this->redirect($this->generateUrl('admin_keyword'));
@@ -68,7 +78,7 @@ class SensitiveController extends BaseController
     {
         $state = $request->query->get('state');
 
-        if ($state == 'banned') {
+        if ('banned' == $state) {
             $conditions['state'] = 'replaced';
         } else {
             $conditions['state'] = 'banned';
@@ -98,7 +108,7 @@ class SensitiveController extends BaseController
             $banlogs = array();
         }
 
-        if ($conditions['searchBanlog'] == 'userName') {
+        if ('userName' == $conditions['searchBanlog']) {
             $userName = $conditions['keyword'];
             $userTemp = $this->getUserService()->searchUsers(
                 array('nickname' => $userName),

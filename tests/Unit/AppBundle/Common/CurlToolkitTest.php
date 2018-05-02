@@ -4,6 +4,7 @@ namespace Tests\Unit\AppBundle\Common\Tests;
 
 use AppBundle\Common\CurlToolkit;
 use Biz\BaseTestCase;
+use AppBundle\Common\ReflectionUtils;
 
 class CurlToolkitTest extends BaseTestCase
 {
@@ -47,5 +48,22 @@ class CurlToolkitTest extends BaseTestCase
         } else {
             $this->assertEquals(32, strlen($result));
         }
+    }
+
+    public function testWhiteList()
+    {
+        $curlToolkit = new CurlToolkit();
+        $whiteList = ReflectionUtils::getProperty($curlToolkit, 'whiteList');
+        $this->assertArrayEquals(
+            array(
+                'formula.edusoho.net',
+                'www.edusoho.com',
+                'open.edusoho.com',
+                'kzedu.cc',
+                'dwz.cn',
+                'qqurl.com',
+                'api.edusoho.net',
+            ), $whiteList
+        );
     }
 }

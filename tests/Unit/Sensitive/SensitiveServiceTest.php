@@ -54,7 +54,7 @@ class SensitiveServiceTest extends BaseTestCase
             )
         );
         $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', array('name', ''));
-        $this->assertEquals(array('success' => false, 'text' => ''), $result);
+        $this->assertEquals(array('success' => false, 'text' => 'name'), $result);
 
         $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', array('测试的', ''));
         $this->assertEquals(array('success' => false, 'text' => '测试的'), $result);
@@ -296,6 +296,17 @@ class SensitiveServiceTest extends BaseTestCase
         );
         $result = $this->getSensitiveService()->searchBanlogsByUserIds(array(2, 3), array(), 0, 5);
         $this->assertEquals(array(array('id' => 3, 'keywordId' => 2, 'userId' => 2)), $result);
+    }
+
+    public function testPlainTextFilter()
+    {
+        $params = array('测试name &nbsp; ', false);
+        $result = ReflectionUtils::invokeMethod($this->getSensitiveService(), 'plainTextFilter', $params);
+        $this->assertEquals($result, '测试name');
+
+        $params = array('测试name &nbsp; ', true);
+        $result = ReflectionUtils::invokeMethod($this->getSensitiveService(), 'plainTextFilter', $params);
+        $this->assertEquals($result, '测试');
     }
 
     private function getSensitiveService()
