@@ -10,10 +10,10 @@ class PublishedLivingTasksDataTagTest extends BaseTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function checkEmptyArgumentError()
+    public function testCheckEmptyArgumentError()
     {
         $dataTag = new PublishedLivingTasksDataTag();
-        $dataTag->getData();
+        $dataTag->getData(array());
     }
 
     public function testGetData()
@@ -25,7 +25,7 @@ class PublishedLivingTasksDataTagTest extends BaseTestCase
             ),
         ));
 
-        $dataTag = new PublishedTasksDataTag();
+        $dataTag = new PublishedLivingTasksDataTag();
         $data = $dataTag->getData(array('courseSetId' => 1, 'count' => 5));
 
         $this->assertEquals(3, count($data));
