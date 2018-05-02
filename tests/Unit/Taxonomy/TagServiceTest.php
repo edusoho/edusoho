@@ -2,11 +2,168 @@
 
 namespace  Tests\Taxonomy;
 
+use AppBundle\Common\ReflectionUtils;
+use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Service\TagService;
 use Biz\BaseTestCase;
 
 class TagServiceTest extends BaseTestCase
 {
+    public function testGetTagByLikeName()
+    {
+        $createdTag = $this->createTag();
+        $createdTag1 = $this->createTag(
+            array(
+                'name' => '自定义标签',
+            )
+        );
+
+        $result1 = $this->getTagService()->findTagsByLikeName('测试');
+        $this->assertCount(1, $result1);
+        $this->assertContains($createdTag, $result1);
+
+        $result2 = $this->getTagService()->findTagsByLikeName('自定义');
+        $this->assertCount(1, $result2);
+        $this->assertContains($createdTag1, $result2);
+
+        $result3 = $this->getTagService()->findTagsByLikeName('标签');
+        $this->assertCount(2, $result3);
+        $this->assertContains($createdTag, $result3);
+        $this->assertContains($createdTag1, $result3);
+    }
+
+    public function testBatchCreateTagOwner()
+    {
+        $tagOwner1 = array(
+            'ownerType' => 'course-set',
+            'ownerId' => 1,
+            'tagId' => 1,
+            'userId' => 1,
+        );
+
+        $tagOwner2 = array(
+            'ownerType' => 'course-set',
+            'ownerId' => 2,
+            'tagId' => 2,
+            'userId' => 2,
+        );
+        $tagOwners = array($tagOwner1, $tagOwner2);
+
+        $result = $this->getTagService()->batchCreateTagOwner($tagOwners);
+        $this->assertTrue($result);
+    }
+
+    public function testSetTagOrg()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('magic'),
+                    'returnValue' => array(
+                        'enable_org' => 1,
+                    ),
+                ),
+            )
+        );
+        $biz = $this->getBiz();
+        $biz['user']['org'] = array(
+            'id' => 1,
+            'orgCode' => 'test',
+        );
+
+        $return = ReflectionUtils::invokeMethod($this->getTagService(), 'setTagOrg', array(array()));
+
+        $this->assertEquals('test', $return['orgCode']);
+    }
+
+    public function testBatchCreateTagOwnerWithEmpty()
+    {
+        $result = $this->getTagService()->batchCreateTagOwner(array());
+        $this->assertEmpty($result);
+    }
+
+    public function testFindTagGroupsByTagId()
+    {
+        $tagGroup1 = $this->addTagGroup();
+        $tagGroup2 = $this->addTagGroup(array('name' => '测试分组1'));
+
+        $tag1 = $this->createTag();
+
+        $this->addTagGroupTag(array('tagId' => $tag1['id'], 'groupId' => $tagGroup1['id']));
+        $this->addTagGroupTag(array('tagId' => $tag1['id'], 'groupId' => $tagGroup2['id']));
+
+        $results = $this->getTagService()->findTagGroupsByTagId($tag1['id']);
+        $this->assertContains($tagGroup1, $results);
+        $this->assertContains($tagGroup2, $results);
+    }
+
+    public function testFindTagsByOwner()
+    {
+        $tag1 = $this->createTag(array('name' => '测试标签1'));
+        $tag2 = $this->createTag(array('name' => '测试标签2'));
+
+        $opUser = $this->getCurrentUser();
+        $this->addTagOwner(array(
+            'userId' => $opUser['id'],
+            'tagId' => $tag1['id'],
+            'ownerId' => 10,
+        ));
+        $this->addTagOwner(array(
+            'userId' => $opUser['id'],
+            'tagId' => $tag2['id'],
+            'ownerId' => 10,
+        ));
+
+        $results = $this->getTagService()->findTagsByOwner(array('ownerId' => 10, 'ownerType' => 'course-set'));
+        $this->assertContains($tag1, $results);
+        $this->assertContains($tag2, $results);
+    }
+
+    public function testPrepareConditions()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('magic'),
+                    'returnValue' => array(
+                        'enable_org' => 1,
+                    ),
+                ),
+            )
+        );
+        $return = ReflectionUtils::invokeMethod($this->getTagService(), '_prepareConditions', array(array()));
+
+        $this->assertEquals(array('orgId' => 1), $return);
+    }
+
+    public function testIsTagNameAvailable()
+    {
+        $return1 = $this->getTagService()->isTagNameAvailable('');
+        $this->assertFalse($return1);
+
+        $return2 = $this->getTagService()->isTagNameAvailable('test1', 'test1');
+        $this->assertTrue($return2);
+
+        $return3 = $this->getTagService()->isTagNameAvailable('test1', 'test2');
+        $this->assertTrue($return3);
+    }
+
+    public function testIsTagGroupNameAvailableWithThree()
+    {
+        $return1 = $this->getTagService()->isTagGroupNameAvailable('');
+        $this->assertFalse($return1);
+
+        $return2 = $this->getTagService()->isTagGroupNameAvailable('test1', 'test1');
+        $this->assertTrue($return2);
+
+        $return3 = $this->getTagService()->isTagGroupNameAvailable('test1', 'test2');
+        $this->assertTrue($return3);
+    }
+
     /**
      * @group add
      */
@@ -36,6 +193,90 @@ class TagServiceTest extends BaseTestCase
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
         $this->assertEquals(2, $tagGroup['tagNum']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage 标签组名字未填写，请添加
+     */
+    public function testAddTagGroupWithException1()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $this->getTagService()->addTag($tagA);
+        $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '',
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
+        );
+
+        $this->getTagService()->addTagGroup($tagGroup);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage 标签组名字已存在，请重新填写
+     */
+    public function testAddTagGroupWithException2()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $this->getTagService()->addTag($tagA);
+        $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
+        );
+
+        $this->getTagService()->addTagGroup($tagGroup); //1
+        $this->getTagService()->addTagGroup($tagGroup); //2
+    }
+
+    public function testUpdateTagGroupWithTagIds()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+        $this->assertEquals(2, $tagGroup['tagNum']);
+
+        $result = $this->getTagService()->updateTagGroup($tagGroup['id'], $tagGroup);
+
+        $this->assertEquals($tagGroup, $result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testUpdateTagGroupWithException()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+        $this->assertEquals(2, $tagGroup['tagNum']);
+
+        $result = $this->getTagService()->updateTagGroup($tagGroup['id'] + 100, $tagGroup);
     }
 
     /**
@@ -327,6 +568,21 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(0, $this->getTagService()->deleteTag(999));
     }
 
+    public function testDeleteTagWithRelation()
+    {
+        $tag = array('name' => '测试标签');
+        $tag = $this->getTagService()->addTag($tag);
+        $ownerId = 1;
+        $fields = array(
+            'tagId' => $tag['id'],
+            'ownerType' => 'course',
+            'ownerId' => $ownerId,
+        );
+
+        $this->getTagService()->addTagOwnerRelation($fields);
+        $this->assertNull($this->getTagService()->deleteTag($tag['id']));
+    }
+
     public function testDeleteTagGroup()
     {
         $tagA = array('name' => '测试标签1');
@@ -465,11 +721,68 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(2, count($tagIds));
     }
 
+    private function createTag($param = array())
+    {
+        $tag = array(
+            'name' => '测试标签',
+        );
+
+        $tag = array_merge($tag, $param);
+
+        return $this->getTagService()->addTag($tag);
+    }
+
+    private function addTagGroup($param = array())
+    {
+        $group = array(
+            'name' => '测试标签组',
+            'scope' => array('course'),
+            'tagNum' => 1,
+        );
+
+        $group = array_merge($group, $param);
+
+        return $this->getTagService()->addTagGroup($group);
+    }
+
+    private function addTagGroupTag($param = array())
+    {
+        $tagGroupTag = array(
+            'tagId' => 1,
+            'groupId' => 1,
+        );
+
+        $tagGroupTag = array_merge($tagGroupTag, $param);
+
+        return $this->getTagGroupTagDao()->create($tagGroupTag);
+    }
+
+    private function addTagOwner($param = array())
+    {
+        $tagOwner = array(
+            'ownerType' => 'course-set',
+            'ownerId' => 1,
+            'tagId' => 1,
+            'userId' => 1,
+        );
+        $tagOwner = array_merge($tagOwner, $param);
+
+        return $this->getTagService()->addTagOwnerRelation($tagOwner);
+    }
+
     /**
      * @return TagService
      */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    /**
+     * @return TagGroupDao
+     */
+    protected function getTagGroupTagDao()
+    {
+        return $this->createDao('Taxonomy:TagGroupTagDao');
     }
 }
