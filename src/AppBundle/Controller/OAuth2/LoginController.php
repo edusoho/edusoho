@@ -161,7 +161,11 @@ class LoginController extends LoginBindController
             $this->authenticatedOauthUser();
 
             $response = $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
-            $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+            $response = DistributorCookieToolkit::clearCookieToken(
+                $request,
+                $response,
+                array('checkedType' => DistributorCookieToolkit::USER)
+            );
 
             return $response;
         } else {

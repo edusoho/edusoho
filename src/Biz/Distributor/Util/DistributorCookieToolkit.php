@@ -42,19 +42,35 @@ class DistributorCookieToolkit
         return $defaultValue;
     }
 
-    public static function clearCookieToken($request, $response, $cookieType = null)
+    /**
+     * @params $config
+     * array(
+     *  'clearedType' => DistributorCookieToolkit::User,
+     *          // 有 USER 和 PRODUCT_ORDER 2种类型，默认全清
+     *
+     *  'checkedType' => DistributorCookieToolkit::User,
+     *          // 有 USER 和 PRODUCT_ORDER 2种类型，单选，当cookie中有相应的值，才会触发清除操作
+     * )
+     */
+    public static function clearCookieToken($request, $response, $config)
     {
-        if (empty($cookieType)) {
-            $clearedTypes = self::getTypes();
-        } else {
-            $clearedTypes = array($cookieType);
-        }
+        if (!empty($config['checkedType'])) {
+            $checkedCookieName = self::getCookieName($config['checkedType']);
+            $checkedCookie = $request->cookies->get($checkedCookieName);
+            if (!empty($checkedCookie)) {
+                if (empty($config['clearedType'])) {
+                    $clearedTypes = self::getTypes();
+                } else {
+                    $clearedTypes = array($config['clearedType']);
+                }
 
-        foreach ($clearedTypes as $type) {
-            $cookieName = self::getCookieName($type);
-            $distributorTokenCookie = $request->cookies->get($cookieName);
-            if (!empty($distributorTokenCookie)) {
-                $response->headers->setCookie(new Cookie($cookieName, ''));
+                foreach ($clearedTypes as $type) {
+                    $cookieName = self::getCookieName($type);
+                    $distributorTokenCookie = $request->cookies->get($cookieName);
+                    if (!empty($distributorTokenCookie)) {
+                        $response->headers->setCookie(new Cookie($cookieName, ''));
+                    }
+                }
             }
         }
 
