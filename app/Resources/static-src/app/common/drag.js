@@ -71,6 +71,8 @@ export default class Drag {
     params.flag = true;
     const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
     params.currentX = currentX;
+    const startTimeStamp = Date.parse(new Date());
+    console.log(startTimeStamp);
   }
 
   stopDrag(e) {
@@ -80,6 +82,8 @@ export default class Drag {
     if (!params.flag) {
       return;
     }
+    const endTimeStamp = Date.parse(new Date());
+    console.log(endTimeStamp);
     this.setCss($element[0], 'cursor', 'pointer');
     params.flag = false;
     this.getLocation($element[0]);
