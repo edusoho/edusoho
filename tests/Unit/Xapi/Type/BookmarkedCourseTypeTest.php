@@ -18,13 +18,13 @@ class BookmarkedCourseTypeTest extends BaseTestCase
         $type->setBiz($this->biz);
 
         $statements = array(
-            array('user_id' => 1, 'uuid' => 10, 'target_type' => 'course', 'occur_time' => time(), array('context' => array('name' => '数据结构(上)(自主模式)'))),
-            array('user_id' => 2, 'uuid' => 20, 'target_type' => 'course', 'occur_time' => time(), array('context' => array('name' => '数据结构(下)(自主模式)'))),
+            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('name' => '数据结构(上)(自主模式)')),
+            array('user_id' => 2, 'uuid' => 20, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('name' => '数据结构(下)(自主模式)')),
         );
         $pushStatements = $type->packages($statements);
 
-        $this->assertEquals(array('id', 'actor', 'verb', 'timestamp'), array_keys($pushStatements[0]));
-        foreach ($statements as $index => $st) {
+        $this->assertEquals(array('id', 'actor', 'verb', 'object', 'timestamp'), array_keys($pushStatements[0]));
+        foreach ($pushStatements as $index => $st) {
 
             $this->assertEquals(array('id' => 'https://w3id.org/xapi/adb/verbs/bookmarked', 'display' => array(
                 'zh-CN' => '收藏了', 'en-US' => 'bookmarked'

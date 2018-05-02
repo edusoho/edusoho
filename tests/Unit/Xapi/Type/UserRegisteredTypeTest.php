@@ -24,8 +24,7 @@ class UserRegisteredTypeTest extends BaseTestCase
         $pushStatements = $type->packages($statements);
 
         $this->assertEquals(array('id', 'actor', 'verb', 'timestamp'), array_keys($pushStatements[0]));
-        foreach ($statements as $index => $st) {
-
+        foreach ($pushStatements as $index => $st) {
             $this->assertEquals(array('id' => 'http://adlnet.gov/expapi/verbs/registered', 'display' => array(
                 'zh-CN' => '注册了', 'en-US' => 'registered'
             )), $st['verb']);

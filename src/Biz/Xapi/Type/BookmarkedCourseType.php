@@ -21,7 +21,7 @@ class BookmarkedCourseType extends Type
                 $actor = $this->getActor($statement['user_id']);
                 $data = $statement['context'];
                 $object = array(
-                    'id' => $data['uri'],
+                    'id' => $statement['target_id'],
                     'definitionType' => XAPIActivityTypes::COURSE,
                     'name' => $data['name'],
                 );

@@ -3,7 +3,7 @@
 namespace Tests\Unit\Xapi\Type;
 
 use Biz\BaseTestCase;
-use Biz\Xapi\Type\RatedClassroomType;
+use Biz\Xapi\Type\RatedCourseType;
 
 class RatedCourseTypeTest extends BaseTestCase
 {
@@ -21,10 +21,10 @@ class RatedCourseTypeTest extends BaseTestCase
                 array(
                     'functionName' => 'search',
                     'returnValue' => array(
-                        0 => array(
-                            'id' => 2,
+                        1 => array(
+                            'id' => 1,
                             'title' => 'course title',
-                            'courseSetId' => 3,
+                            'courseSetId' => 1,
                         ),
                     ),
                 ),
@@ -37,8 +37,8 @@ class RatedCourseTypeTest extends BaseTestCase
                 array(
                     'functionName' => 'search',
                     'returnValue' => array(
-                        0 => array(
-                            'id' => 3,
+                        1 => array(
+                            'id' => 1,
                             'title' => 'course set title',
                             'subtitle' => 'course set subtitle',
                         ),
@@ -47,10 +47,7 @@ class RatedCourseTypeTest extends BaseTestCase
             )
         );
 
-        $courseDao->shouldHaveReceived('search');
-        $courseSetDao->shouldHaveReceived('search');
-
-        $type = new RatedClassroomType();
+        $type = new RatedCourseType();
         $type->setBiz($this->biz);
 
         $statements = array(
@@ -58,11 +55,15 @@ class RatedCourseTypeTest extends BaseTestCase
         );
         $pushStatements = $type->packages($statements);
 
-        $this->assertEquals(array('id', 'actor', 'verb', 'timestamp', 'object', 'result'), array_keys($pushStatements[0]));
+        $courseDao->shouldHaveReceived('search');
+        $courseSetDao->shouldHaveReceived('search');
+
+        $this->assertEquals(array('id', 'actor', 'verb', 'object', 'result', 'timestamp'), array_keys($pushStatements[0]));
         $this->assertEquals(array('id' => 'http://id.tincanapi.com/verb/rated', 'display' => array(
             'zh-CN' => '评分了', 'en-US' => 'rated'
         )), $pushStatements[0]['verb']);
 
+        $this->assertEquals(1, $pushStatements[0]['object']['id']);
         $this->assertEquals(array('score' => array('raw' => 3, 'max' => 5, 'min' => 0)), $pushStatements[0]['result']);
     }
 
