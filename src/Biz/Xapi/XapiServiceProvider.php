@@ -13,8 +13,11 @@ use Biz\Xapi\Type\FinishActivityType;
 use Biz\Xapi\Type\LiveWatchType;
 use Biz\Xapi\Type\PurchasedClassroomType;
 use Biz\Xapi\Type\PurchasedCourseType;
+use Biz\Xapi\Type\RatedClassroomType;
+use Biz\Xapi\Type\RatedCourseType;
 use Biz\Xapi\Type\SearchKeywordType;
 use Biz\Xapi\Type\UserLoggedInType;
+use Biz\Xapi\Type\UserRegisteredType;
 use Biz\Xapi\Type\VideoWatchType;
 use Biz\Xapi\Type\WriteNoteType;
 use Pimple\Container;
@@ -136,6 +139,27 @@ class XapiServiceProvider implements ServiceProviderInterface
 
         $biz[sprintf('xapi.push.%s', BookmarkedCourseType::TYPE)] = $biz->factory(function ($biz) {
             $type = new BookmarkedCourseType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', RatedCourseType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new RatedCourseType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', RatedClassroomType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new RatedCourseType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', UserRegisteredType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new UserRegisteredType();
             $type->setBiz($biz);
 
             return $type;

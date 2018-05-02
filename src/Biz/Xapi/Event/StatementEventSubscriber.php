@@ -29,15 +29,20 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.finish' => 'onCourseTaskFinish',
             'exam.finish' => 'onExamFinish',
+            'question_marker.finish' => 'onQuestionMarkerFinish',
+            'order.paid' => 'onOrderPaid',
+            'classReview.add' => 'onClassroomReviewAdd',
+
+            'user.search' => 'onUserSearch',
+            'user.daily.active' => 'onUserDailyActive',
+            'user.registered' => 'onUserRegistered',
+
+            'course.task.finish' => 'onCourseTaskFinish',
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
-            'question_marker.finish' => 'onQuestionMarkerFinish',
-            'user.search' => 'onUserSearch',
-            'order.paid' => 'onOrderPaid',
-            'user.daily.active' => 'onUserDailyActive',
             'courseSet.favorite' => 'onCourseSetFavorite',
+            'course.review.add' => 'onCourseReviewAdd',
         );
     }
 
@@ -157,6 +162,37 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $courseSet['id'], 'course', array(
             'name' => $courseSet['title']
         ));
+    }
+
+    public function onCourseReviewAdd(Event $event)
+    {
+        $review = $event->getSubject();
+
+        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', array(
+            'score' => array(
+                'raw' => $review['rating'],
+                'max' => 5,
+                'min' => 0,
+            )
+        ));
+    }
+
+    public function onClassroomReviewAdd(Event $event)
+    {
+        $review = $event->getSubject();
+        $classroom = $event->getArgument('classroom');
+
+        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['classroomId'], 'classroom', array(
+            'score' => array('raw' => $review['rating'], 'max' => 5, 'min' => 0),
+            'name' => $classroom['title']
+        ));
+    }
+
+    public function onUserRegistered(Event $event)
+    {
+        $user = $event->getSubject();
+
+        $this->createStatement($user['id'], XAPIVerbs::REGISTERED, $user['id'], 'user', array());
     }
 
     private function createStatement($userId, $verb, $targetId, $targetType, $context = array())
