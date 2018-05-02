@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 
 class OrderLog extends AbstractResource
 {
@@ -27,11 +26,10 @@ class OrderLog extends AbstractResource
                 'user'
             );
 
-            $dicts = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('orderStatus');
-            $prefixDicts = ArrayToolkit::appendKeyPrefix($dicts, 'order.');
+            $dicts = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('orderLogStatus');
 
             foreach ($orderLogs as &$orderLog) {
-                $orderLog['statusName'] = $prefixDicts[$orderLog['status']];
+                $orderLog['statusName'] = empty($dicts[$orderLog['status']]) ? '' : $dicts[$orderLog['status']];
             }
         }
 

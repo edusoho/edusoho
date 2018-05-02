@@ -59,6 +59,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     public function onCourseSetUpdate(Event $event)
     {
         $courseSet = $event->getSubject();
+        $this->updateCourseSetTitleByCourseSet($courseSet);
         if ($courseSet['parentId'] > 0) {
             return;
         }
@@ -89,6 +90,15 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
     }
 
+    protected function updateCourseSetTitleByCourseSet($courseSet)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        foreach ($courses as $course) {
+            $course['courseSetTitle'] = $courseSet['title'];
+            $this->getCourseService()->updateCourse($course['id'], $course);
+        }
+    }
+
     public function onCourseUpdate(Event $event)
     {
         $course = $event->getSubject();
@@ -103,6 +113,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
 
         $syncFields = ArrayToolkit::parts($course, array(
             'title',
+            'courseSetTitle',
             'learnMode',
             'summary',
             'goals',
