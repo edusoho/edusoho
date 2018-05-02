@@ -21,8 +21,8 @@ class PublishedTasksDataTagTest extends BaseTestCase
         $service = $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'searchTasks',
-                'returnValue' => array(array('id' => 1), array('id' => 2), array('id' => 3))
-            )
+                'returnValue' => array(array('id' => 1), array('id' => 2), array('id' => 3)),
+            ),
         ));
 
         $dataTag = new PublishedTasksDataTag();
@@ -37,11 +37,11 @@ class PublishedTasksDataTagTest extends BaseTestCase
         $service = $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'countTasks',
-                'returnValue' => 2
+                'returnValue' => 2,
             ),
             array(
                 'functionName' => 'searchTasks',
-                'returnValue' => array(array('id' => 1), array('id' => 2))
+                'returnValue' => array(array('id' => 1), array('id' => 2)),
             ),
         ));
 

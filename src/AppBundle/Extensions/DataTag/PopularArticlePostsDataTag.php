@@ -5,7 +5,6 @@ namespace AppBundle\Extensions\DataTag;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Article\Service\ArticleService;
 use Biz\Group\Service\ThreadService;
-use Topxia\Service\Common\ServiceKernel;
 
 class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 {

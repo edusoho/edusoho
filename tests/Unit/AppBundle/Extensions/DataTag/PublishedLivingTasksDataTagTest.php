@@ -21,8 +21,8 @@ class PublishedLivingTasksDataTagTest extends BaseTestCase
         $service = $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'findPublishedLivingTasksByCourseSetId',
-                'returnValue' => array(array('id' => 1), array('id' => 2), array('id' => 3))
-            )
+                'returnValue' => array(array('id' => 1), array('id' => 2), array('id' => 3)),
+            ),
         ));
 
         $dataTag = new PublishedTasksDataTag();

@@ -30,8 +30,8 @@ class PublishedArticlesDataTagTest extends BaseTestCase
         $service = $this->mockBiz('Article:ArticleService', array(
             array(
                 'functionName' => 'searchArticles',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
         $dataTag = new PublishedArticlesDataTag();
@@ -46,15 +46,15 @@ class PublishedArticlesDataTagTest extends BaseTestCase
         $articleService = $this->mockBiz('Article:ArticleService', array(
             array(
                 'functionName' => 'searchArticles',
-                'returnValue' => array(array('id' => 1), array('id' => 2, 'categoryId' => 10), array('id' => 3, 'categoryId' => 10))
-            )
+                'returnValue' => array(array('id' => 1), array('id' => 2, 'categoryId' => 10), array('id' => 3, 'categoryId' => 10)),
+            ),
         ));
 
         $categoryService = $this->mockBiz('Article:CategoryService', array(
             array(
                 'functionName' => 'findCategoriesByIds',
-                'returnValue' => array(10 => array('id' => 10))
-            )
+                'returnValue' => array(10 => array('id' => 10)),
+            ),
         ));
 
         $dataTag = new PublishedArticlesDataTag();
