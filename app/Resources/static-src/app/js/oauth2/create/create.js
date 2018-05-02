@@ -197,7 +197,6 @@ export default class Create {
         smsToken: this.smsToken,
         smsCode: $('#sms-code').val(),
         captchaToken: this.captchaToken,
-        // phrase: $('#captcha_code').val()
         drag_captcha_token: $('[name="drag_captcha_token"]').val(),
         jigsaw: $('[name="jigsaw"]').val(),
       };
