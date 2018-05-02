@@ -37,6 +37,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'user.search' => 'onUserSearch',
             'order.paid' => 'onOrderPaid',
             'user.daily.active' => 'onUserDailyActive',
+            'courseSet.favorite' => 'onCourseSetFavorite',
         );
     }
 
@@ -147,6 +148,15 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         }
 
         $this->createStatement($thread['userId'], 'asked', $thread['id'], 'question');
+    }
+
+    public function onCourseSetFavorite(Event $event)
+    {
+        $favorite = $event->getSubject();
+        $courseSet = $event->getArgument('courseSet');
+        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $courseSet['id'], 'courseSet', array(
+            'name' => $courseSet['title']
+        ));
     }
 
     private function createStatement($userId, $verb, $targetId, $targetType, $context = array())
