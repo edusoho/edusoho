@@ -89,7 +89,7 @@ export default class Drag {
       
       Api.dragCaptcha.validate({ params: data }).then((res) => {
         self.validateSuccess($element[0], token);
-      }).catch(function(){
+      }).catch(function() {
         self.resetLocation($element[0], $target[0]);
         self.initDragCaptcha();
       });

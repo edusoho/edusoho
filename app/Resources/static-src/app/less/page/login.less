@@ -137,8 +137,9 @@
     line-height: 40px;
     color: #fff;
     font-size: 16px;
-    i {
-      position: absolute;
+    &:after {
+      content: "\e68d";
+      font-family: 'es-icon';
       left: 0;
       right: 0;
       top: 9px;
@@ -191,7 +192,6 @@
     background-color: @gray-light;
     opacity: 0.7;
     &:after {
-      content: "\e688";
       margin-top: 25%;
       font-size: 48px;
       color: #fff;

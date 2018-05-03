@@ -43,27 +43,8 @@
           <img class="third-party-captcha__img" src="{{ asset('static-dist/app/img/captcha.png') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}">
         </div>
       </div> #}
-      
-      <div class="form-group cd-form-group {% if oauthUser.captchaEnabled == false %} hidden {% endif %}">
-        <label class="control-label required cd-mb8">{{ 'user.register.account_with_sms_code_label'|trans }}</label>
-        <input type="hidden" name="drag_captcha_token" value="" />
-        <input type="hidden" name="jigsaw" value="" />
-        <div class="drag-section-wrap">
-          <div class="drag-section">
-            <div class="drag-img js-drag-img">
-              <img class="js-jigsaw-placeholder drag-img__bg" src="{{ asset('static-dist/app/img/dragCaptcha.png') }}">
-              <img class="js-jigsaw drag-img__jigsaw" src="{{ asset('static-dist/app/img/dragCaptcha.png') }}">
-              <div class="drag-img__mask js-drag-img-mask infinite-loading hidden"></div>
-            </div>
 
-            <div class="drag-bar">
-              <span class="drag-bar__tip js-drag-bar-tip">{{ 'user.register.drag_captcha_tips'|trans }}</span>
-              <div class="drag-bar__mask js-drag-bar-mask"></div>
-              <div id="drag-btn" class="drag-bar__btn"><i class="es-icon es-icon-shuxian"></i></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="form-group cd-form-group {% if oauthUser.captchaEnabled == false %} hidden {% endif %}">{% include 'common/drag.html.twig' with { oauth2: true } %}</div>
 
       {% if oauthUser.accountType == "mobile" %}
         <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">
