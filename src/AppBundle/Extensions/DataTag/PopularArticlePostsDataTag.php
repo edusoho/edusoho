@@ -5,7 +5,6 @@ namespace AppBundle\Extensions\DataTag;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Article\Service\ArticleService;
 use Biz\Group\Service\ThreadService;
-use Topxia\Service\Common\ServiceKernel;
 
 class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 {
@@ -74,7 +73,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -82,7 +81,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
      */
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->createService('Article:ArticleService');
     }
 
     /**
@@ -90,6 +89,6 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
      */
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 }
