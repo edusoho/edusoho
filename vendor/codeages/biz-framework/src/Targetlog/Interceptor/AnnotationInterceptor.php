@@ -56,7 +56,7 @@ class AnnotationInterceptor
             $context['@action'] = $annotation->getAction();
             $context['@args'] = $args;
             $context['@user_id'] = empty($currentUser['id']) ? 0 : $currentUser['id'];
-            $context['@ip'] = empty($currentUser['ip']) ? '' : $currentUser['ip'];
+            $context['@ip'] = empty($currentUser['currentIp']) ? '' : $currentUser['currentIp'];
             $message = $annotation->getMessage();
             $this->getTargetlogService()->log($level, $targetType, $targetId, $message, $context);
         }
