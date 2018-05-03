@@ -152,7 +152,7 @@ class XapiServiceProvider implements ServiceProviderInterface
         });
 
         $biz[sprintf('xapi.push.%s', RatedClassroomType::TYPE)] = $biz->factory(function ($biz) {
-            $type = new RatedCourseType();
+            $type = new RatedClassroomType();
             $type->setBiz($biz);
 
             return $type;
