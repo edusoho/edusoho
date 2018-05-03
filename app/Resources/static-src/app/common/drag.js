@@ -24,17 +24,18 @@ export default class Drag {
   }
 
   initDragCaptcha() {
-    const self = this;
     Api.dragCaptcha.get({
       before() {
-        $('.js-drag-img-mask').toggleClass('hidden');
+        $('.js-drag-img-mask').removeClass('hidden');
+        const $jigsawBg = $('.js-jigsaw-bg');
+        if ($jigsawBg.length) {
+          $jigsawBg.remove();
+          $('.js-jigsaw-placeholder').toggleClass('hidden');
+          $('.js-jigsaw').attr('src', '');
+        }
       }
     }).then((res) => {
-      $('.js-drag-img-mask').toggleClass('hidden');
-      console.log($('.js-jigsaw-bg').length);
-      if (!$('.js-jigsaw-bg').length) {
-        self.loadingImg(res.url, res.jigsaw);
-      }
+      this.loadingImg(res.url, res.jigsaw);
       this.dragCaptchaToken = res.token;
     });
   }
@@ -43,6 +44,7 @@ export default class Drag {
     const img = new Image();
     img.onload = () => {
       $(img).prependTo('.js-drag-img');
+      $('.js-drag-img-mask').addClass('hidden');
       $('.js-jigsaw-placeholder').toggleClass('hidden');
       $('.js-jigsaw').attr('src', src);
     };
@@ -64,30 +66,33 @@ export default class Drag {
     });
   }
 
-  startDrag(event) {
+  startDrag(e) {
     const params = this.params;
     params.flag = true;
-    const e = event;
     const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
     params.currentX = currentX;
-    params.currentY = e.clientY;
+    const startTimeStamp = Date.parse(new Date());
+    console.log(startTimeStamp);
   }
 
-  stopDrag(event) {
+  stopDrag(e) {
     const $element = this.$element;
     const $target = this.$target;
     const params = this.params;
     if (!params.flag) {
       return;
     }
+    const endTimeStamp = Date.parse(new Date());
+    console.log(endTimeStamp);
     this.setCss($element[0], 'cursor', 'pointer');
     params.flag = false;
     this.getLocation($element[0]);
 
     if (params.currentLeft) {
-      const rate = 40 / $('.js-jigsaw').width();
-      const positionX = (params.currentLeft * rate).toFixed(2);
+      const $jigsaw = $('.js-jigsaw');
+      const positionX = this.calPositionX($jigsaw);
       const data = { token: this.dragCaptchaToken, jigsaw: positionX };
+      console.log(positionX);
       Api.dragCaptcha.validate({ params: data }).then((res) => {
         if (res.status === 'invalid') {
           this.resetLocation($element[0], $target[0]);
@@ -97,9 +102,6 @@ export default class Drag {
           });
         } else if (res.status === 'expired') {
           this.resetLocation($element[0], $target[0]);
-          $('.js-jigsaw-bg').remove();
-          $('.js-jigsaw-placeholder').toggleClass('hidden');
-          $('.js-jigsaw').attr('src', '');
           this.initDragCaptcha();
         } else {
           this.validateSuccess($element[0], positionX);
@@ -108,17 +110,13 @@ export default class Drag {
     }
   }
 
-  dragMove(event) {
+  dragMove(e) {
     const $element = this.$element;
     const $target = this.$target;
     const params = this.params;
     if (!params.flag) return;
-    const e = event;
     const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
-    const nowX = currentX;
-    const nowY = e.clientY;
-    const disX = nowX - params.currentX;
-    const disY = nowY - params.currentY;
+    const disX = currentX - params.currentX;
     const width = $element.parent().width() - $element.width();
     let leftNum = parseInt(params.left) + disX;
 
@@ -128,15 +126,20 @@ export default class Drag {
     if (leftNum >= width) {
       leftNum = width;
     }
-
+    params.currentLeft = leftNum;
     const left = leftNum + 'px';
-    const movingLeft = leftNum + 20 + 'px';
     this.setCss($element[0], 'left', left);
     this.setCss($target[0], 'left', left);
     this.setCss($element[0], 'cursor', 'move');
     $('.js-drag-bar-tip').addClass('hidden');
+    const movingLeft = leftNum + 20 + 'px';
     $('.js-drag-bar-mask').css('width', movingLeft);
-    params.currentLeft = leftNum;
+  }
+
+  calPositionX($target) {
+    const rate = $target[0].naturalWidth / $target.width();
+    const positionX = (this.params.currentLeft * rate).toFixed(2);
+    return positionX;
   }
 
   validateSuccess(target, positionX) {
@@ -154,6 +157,7 @@ export default class Drag {
     $(document).unbind('mouseup touchend');
     this.setCss(target, 'cursor', 'not-allowed');
   }
+
   getLocation(target) {
     if (this.getCss(target, 'left') !== 'auto') {
       this.params.left = this.getCss(target, 'left');
@@ -163,9 +167,9 @@ export default class Drag {
   resetLocation(element, target) {
     this.setCss(element, 'left', '0px');
     this.setCss(target, 'left', '0px');
+    this.getLocation(element);
     $('.js-drag-bar-mask').css('width', '0px');
     $('.js-drag-bar-tip').toggleClass('hidden');
-    this.getLocation(element);
   }
 
   getCss(o, key) {
