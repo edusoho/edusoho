@@ -86,7 +86,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'maxRate',
                 'materialNum',
             ));
-            $this->getCourseSetDao()->update($cc['id'], $cc);
+            $copyCourseSet = $this->getCourseSetDao()->update($cc['id'], $cc);
+            $this->updateCourseSetTitleByCourseSet($copyCourseSet);
         }
     }
 
@@ -96,7 +97,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         foreach ($courses as $course) {
             $course['courseSetTitle'] = $courseSet['title'];
             $this->getCourseDao()->update($course['id'], $course);
-            $this->updateCopiedCourses($course);
         }
     }
 
