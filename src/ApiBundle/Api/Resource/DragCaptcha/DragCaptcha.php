@@ -34,12 +34,8 @@ class DragCaptcha extends AbstractResource
      */
     public function get(ApiRequest $request, $token)
     {
-        if (!($jigsaw = $request->query->get('jigsaw'))) {
-            throw new BadRequestHttpException('jigsaw', ErrorCode::INVALID_ARGUMENT);
-        }
-
         return array(
-            'status' => $this->getBizDragCaptcha()->check($token, $jigsaw),
+            'status' => $this->getBizDragCaptcha()->check($token),
         );
     }
 }

@@ -17,10 +17,6 @@ class BizDragCaptcha extends BizAware
 
     const DEVIATION = 1;
 
-    const SERVER_TOKENTIMES = 1;
-
-    const TOKENTIMES = 3;
-
     const TOKENTYPE = 'drag_captcha';
 
     private $backgroundImages = array(
@@ -32,24 +28,23 @@ class BizDragCaptcha extends BizAware
         '6.jpg',
     );
 
-    public function generate($options = array())
+    public function generate()
     {
         $bg = $this->backgroundImages[rand(0, 5)];
         $imagePath = $this->getImagePath($bg);
         $size = getimagesize($imagePath);
 
-        $default = array(
+        $options = array(
             'height' => $size[1],
             'width' => $size[0],
             'bg' => $imagePath,
         );
-        $options = array_merge($options, $default);
         $options = $this->setJigsawPosition($options);
         $jigsaw = $this->getJigsaw($options);
 
         $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
-            'times' => self::TOKENTIMES + self::SERVER_TOKENTIMES,
-            'duration' => 60 * 10,
+            'times' => 2,
+            'duration' => 60 * 2,
             'userId' => 0,
             'data' => $options,
         ));
@@ -57,7 +52,6 @@ class BizDragCaptcha extends BizAware
         return array(
             'token' => $token['token'],
             'jigsaw' => $jigsaw,
-            'w' => $options,
         );
     }
 
@@ -81,43 +75,35 @@ class BizDragCaptcha extends BizAware
         return ob_get_clean();
     }
 
-    public function checkByServer($data)
+    public function check($dragToken)
     {
-        if (!ArrayToolkit::requireds($data, array('drag_captcha_token', 'jigsaw'), true)) {
+        $data = $this->decodeToken($dragToken);
+
+        if (!ArrayToolkit::requireds($data, array('token', 'captcha'), true)) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_REQUIRED();
         }
 
-        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $data['drag_captcha_token']);
+        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $data['token']);
 
         if (empty($token)) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_EXPIRED();
         }
 
-        if (!$this->validateJigsaw($token, $data['jigsaw'])) {
+        if (!$this->validateJigsaw($token, $data['captcha'])) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
         }
 
         return true;
     }
 
-    public function check($token, $jigsaw)
+    private function decodeToken($toke)
     {
-        // 由于前端后端都要消耗token使用次数，所以验证正确之后，必须保证剩余验证次数大于一次
-        $token = $this->getTokenService()->verifyToken(self::TOKENTYPE, $token);
-        if (empty($token)) {
-            return self::STATUS_EXPIRED;
-        }
-
-        if (!$this->validateJigsaw($token, $jigsaw)) {
-            return $token['remainedTimes'] > 2 ? self::STATUS_INVALID : self::STATUS_EXPIRED;
-        }
-
-        return self::STATUS_SUCCESS;
+        return json_decode(base64_decode(strrev($toke)), true);
     }
 
-    private function validateJigsaw($token, $jigsaw)
+    private function validateJigsaw($token, $captcha)
     {
-        return abs($jigsaw - $token['data']['positionX']) <= self::DEVIATION;
+        return abs($captcha - $token['data']['positionX']) <= self::DEVIATION;
     }
 
     private function getSource($options)

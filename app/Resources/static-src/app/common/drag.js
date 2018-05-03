@@ -26,13 +26,9 @@ export default class Drag {
   initDragCaptcha() {
     Api.dragCaptcha.get({
       before() {
-        $('.js-drag-img-mask').removeClass('hidden');
-        const $jigsawBg = $('.js-jigsaw-bg');
-        if ($jigsawBg.length) {
-          $jigsawBg.remove();
-          $('.js-jigsaw-placeholder').toggleClass('hidden');
-          $('.js-jigsaw').attr('src', '');
-        }
+        $('.js-jigsaw-placeholder,.js-drag-img-mask').removeClass('hidden');
+        $('.js-jigsaw-bg').remove();
+        $('.js-jigsaw').attr('src', '');
       }
     }).then((res) => {
       this.loadingImg(res.url, res.jigsaw);
@@ -42,14 +38,13 @@ export default class Drag {
 
   loadingImg(url, src) {
     const img = new Image();
+    img.src = url;
+    img.className = 'js-jigsaw-bg drag-img__bg';
     img.onload = () => {
       $(img).prependTo('.js-drag-img');
-      $('.js-drag-img-mask').addClass('hidden');
-      $('.js-jigsaw-placeholder').toggleClass('hidden');
+      $('.js-drag-img-mask,.js-jigsaw-placeholder').addClass('hidden');
       $('.js-jigsaw').attr('src', src);
     };
-    img.className = 'js-jigsaw-bg drag-img__bg';
-    img.src = url;
   }
 
   initEvent() {
@@ -71,41 +66,32 @@ export default class Drag {
     params.flag = true;
     const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
     params.currentX = currentX;
-    const startTimeStamp = Date.parse(new Date());
-    console.log(startTimeStamp);
   }
 
   stopDrag(e) {
+    let self = this;
     const $element = this.$element;
     const $target = this.$target;
     const params = this.params;
     if (!params.flag) {
       return;
     }
-    const endTimeStamp = Date.parse(new Date());
-    console.log(endTimeStamp);
+
     this.setCss($element[0], 'cursor', 'pointer');
     params.flag = false;
     this.getLocation($element[0]);
 
     if (params.currentLeft) {
       const $jigsaw = $('.js-jigsaw');
-      const positionX = this.calPositionX($jigsaw);
-      const data = { token: this.dragCaptchaToken, jigsaw: positionX };
-      console.log(positionX);
+      let positionX = this.calPositionX($jigsaw);
+      let token = this._getToken(this.dragCaptchaToken, positionX);
+      let data = {token: token};
+      
       Api.dragCaptcha.validate({ params: data }).then((res) => {
-        if (res.status === 'invalid') {
-          this.resetLocation($element[0], $target[0]);
-          cd.message({
-            type: 'danger',
-            message: Translator.trans('validate.fail')
-          });
-        } else if (res.status === 'expired') {
-          this.resetLocation($element[0], $target[0]);
-          this.initDragCaptcha();
-        } else {
-          this.validateSuccess($element[0], positionX);
-        }
+        self.validateSuccess($element[0], token);
+      }).catch(function(){
+        self.resetLocation($element[0], $target[0]);
+        self.initDragCaptcha();
       });
     }
   }
@@ -142,17 +128,16 @@ export default class Drag {
     return positionX;
   }
 
-  validateSuccess(target, positionX) {
+  validateSuccess(target, token) {
     cd.message({
       type: 'success',
       message: Translator.trans('validate.success')
     });
     const $tokenDom = $('[name="drag_captcha_token"]');
-    $tokenDom.val(this.dragCaptchaToken);
+    $tokenDom.val(token);
     const $dargForm = $tokenDom.closest('.form-group');
     $dargForm.removeClass('has-error');
     $dargForm.find('.jq-validate-error').remove();
-    $('[name="jigsaw"]').val(positionX);
     $(document).unbind('mousemove touchmove');
     $(document).unbind('mouseup touchend');
     this.setCss(target, 'cursor', 'not-allowed');
@@ -180,5 +165,11 @@ export default class Drag {
     o.style[key] = value;
   }
 
+  _getToken(token, position) {
+    let dragToken = {token: token, captcha: position};
+    token = JSON.stringify(dragToken);
+
+    return [...btoa(token)].reverse().join('');
+  }
 }
 

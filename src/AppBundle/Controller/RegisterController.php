@@ -15,8 +15,6 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use AppBundle\Common\ArrayToolkit;
-use Biz\User\UserException;
 
 class RegisterController extends BaseController
 {
@@ -47,7 +45,7 @@ class RegisterController extends BaseController
                 $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
                 $registration['createdIp'] = $request->getClientIp();
                 $authSettings = $this->getSettingService()->get('auth', array());
-                
+
                 //拖动校验
                 $this->dragCaptchaValidator($registration, $authSettings);
 
@@ -557,7 +555,9 @@ class RegisterController extends BaseController
         if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
             $biz = $this->getBiz();
             $bizDragCaptcha = $biz['biz_drag_captcha'];
-            $bizDragCaptcha->checkByServer($registration);
+
+            $dragcaptchaToken = empty($registration['drag_captcha_token']) ? '' : $registration['drag_captcha_token'];
+            $bizDragCaptcha->check($dragcaptchaToken);
         }
     }
 

@@ -9,9 +9,8 @@ const dragCaptchaModule = (api) => {
       }, options));
     },
     validate(options) {
-      console.log(options);
       return ajax(Object.assign({
-        url: `${api}/drag_captcha/${options.params.token}?jigsaw=${options.params.jigsaw}`,
+        url: `${api}/drag_captcha/${options.params.token}`,
         type: 'GET',
       }, options));
     }
