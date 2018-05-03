@@ -75,69 +75,67 @@ class RegisterRateLimiterTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    // public function testHandleWithLowAndNotFirstRegistSecurity()
-    // {
-    //     $limiter = new RegisterRateLimiter($this->biz);
+    public function testHandleWithLowAndNotFirstRegistSecurity()
+    {
+        $limiter = new RegisterRateLimiter($this->biz);
 
-    //     $request = new Request(
-    //         array(),
-    //         array(
-    //             'drag_captcha_token' => 'kuozhi',
-    //             'jigsaw' => '12',
-    //         )
-    //     );
+        $request = new Request(
+            array(),
+            array(
+                'drag_captcha_token' => 'kuozhi',
+            )
+        );
 
-    //     $this->setOauthUser($request, false);
+        $this->setOauthUser($request, false);
 
-    //     $settingService = $this->mockBiz(
-    //         'System:SettingService',
-    //         array(
-    //             array(
-    //                 'functionName' => 'get',
-    //                 'withParams' => array('auth'),
-    //                 'returnValue' => array(
-    //                     'register_protective' => 'low',
-    //                 ),
-    //             ),
-    //         )
-    //     );
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth'),
+                    'returnValue' => array(
+                        'register_protective' => 'low',
+                    ),
+                ),
+            )
+        );
 
-    //     $captcha = $this->mockBiz(
-    //         'biz_drag_captcha',
-    //         array(
-    //             array(
-    //                 'functionName' => 'checkByServer',
-    //                 'withParams' => array(array(
-    //                     'drag_captcha_token' => 'kuozhi',
-    //                     'jigsaw' => '12',
-    //                 )),
-    //                 'returnValue' => true,
-    //             ),
-    //         )
-    //     );
+        $captcha = $this->mockBiz(
+            'biz_drag_captcha',
+            array(
+                array(
+                    'functionName' => 'check',
+                    'withParams' => array(
+                        'kuozhi',
+                    ),
+                    'returnValue' => true,
+                ),
+            )
+        );
 
-    //     $this->mockBiz(
-    //         'User:TokenService',
-    //         array(
-    //             array(
-    //                 'functionName' => 'verifyToken',
-    //                 'returnValue' => array(
-    //                     'data' => array(
-    //                         'positionX' => 12
-    //                     )
-    //                 ),
-    //             ),
-    //         )
-    //     );
+        $this->mockBiz(
+            'User:TokenService',
+            array(
+                array(
+                    'functionName' => 'verifyToken',
+                    'returnValue' => array(
+                        'data' => array(
+                            'positionX' => 12,
+                        ),
+                    ),
+                ),
+            )
+        );
 
-    //     $this->biz['biz_drag_captcha'] = $captcha;
+        $this->biz['biz_drag_captcha'] = $captcha;
 
-    //     $result = $limiter->handle($request);
+        $result = $limiter->handle($request);
 
-    //     $settingService->shouldHaveReceived('get')->times(1);
-    //     $captcha->shouldHaveReceived('checkByServer')->times(1);
-    //     $this->assertNull($result);
-    // }
+        $settingService->shouldHaveReceived('get')->times(1);
+        $captcha->shouldHaveReceived('check')->times(1);
+        $this->assertNull($result);
+    }
 
     public function testHandleWithMiddleAndFristRegistSecurity()
     {
@@ -182,7 +180,6 @@ class RegisterRateLimiterTest extends BaseTestCase
             array(),
             array(
                 'drag_captcha_token' => 'kuozhi',
-                'jigsaw' => '12',
             ),
             array(),
             array(),
@@ -209,7 +206,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             'biz_drag_captcha',
             array(
                 array(
-                    'functionName' => 'checkByServer',
+                    'functionName' => 'check',
                     'withParams' => array(
                     ),
                     'returnValue' => true,
@@ -236,7 +233,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $result = $limiter->handle($request);
 
         $settingService->shouldHaveReceived('get')->times(1);
-        $captcha->shouldHaveReceived('checkByServer')->times(1);
+        $captcha->shouldHaveReceived('check')->times(1);
         $this->assertNull($result);
     }
 
@@ -286,7 +283,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             'biz_drag_captcha',
             array(
                 array(
-                    'functionName' => 'checkByServer',
+                    'functionName' => 'check',
                     'returnValue' => true,
                 ),
             )
@@ -297,7 +294,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $result = $limiter->handle($request);
 
         $settingService->shouldHaveReceived('get')->times(1);
-        $captcha->shouldHaveReceived('checkByServer')->times(1);
+        $captcha->shouldHaveReceived('check')->times(1);
         $this->assertNull($result);
     }
 
