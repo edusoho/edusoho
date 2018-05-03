@@ -82,11 +82,11 @@ export default class Drag {
     this.getLocation($element[0]);
 
     if (params.currentLeft) {
-      const $jigsaw = $('.js-jigsaw');
-      let positionX = this.calPositionX($jigsaw);
+      const $jigsawBg = $('.js-jigsaw-bg');
+      let positionX = this.calPositionX($jigsawBg);
       let token = this._getToken(this.dragCaptchaToken, positionX);
       let data = {token: token};
-      
+
       Api.dragCaptcha.validate({ params: data }).then((res) => {
         self.validateSuccess($element[0], token);
       }).catch(function() {
@@ -123,8 +123,9 @@ export default class Drag {
   }
 
   calPositionX($target) {
-    const rate = $target[0].naturalWidth / $target.width();
-    const positionX = (this.params.currentLeft * rate).toFixed(2);
+    const rate = ($target[0].naturalWidth / $target.width()).toFixed(2);
+    const paramsLeft = this.params.currentLeft.toFixed(2);
+    const positionX = (paramsLeft * rate).toFixed(2);
     return positionX;
   }
 
