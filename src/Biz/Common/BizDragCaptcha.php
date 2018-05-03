@@ -15,7 +15,7 @@ class BizDragCaptcha extends BizAware
 
     const JIGSAW_WIDTH = 40;
 
-    const DEVIATION = 0.3;
+    const DEVIATION = 1;
 
     const SERVER_TOKENTIMES = 1;
 
@@ -117,7 +117,7 @@ class BizDragCaptcha extends BizAware
 
     private function validateJigsaw($token, $jigsaw)
     {
-        return abs($jigsaw - $token['data']['positionX']) < self::DEVIATION;
+        return abs($jigsaw - $token['data']['positionX']) <= self::DEVIATION;
     }
 
     private function getSource($options)
@@ -146,9 +146,9 @@ class BizDragCaptcha extends BizAware
 
     private function setJigsawPosition($options)
     {
-        $rate = 100;
-        $options['positionX'] = rand(self::JIGSAW_WIDTH * $rate, $rate * ($options['width'] - self::JIGSAW_WIDTH)) / $rate;
-        $options['positionY'] = rand(self::JIGSAW_WIDTH * $rate, $rate * ($options['height'] - self::JIGSAW_WIDTH)) / $rate;
+        $rate = 1000;
+        $options['positionX'] = round(rand(self::JIGSAW_WIDTH * $rate, $rate * ($options['width'] - self::JIGSAW_WIDTH)) / $rate);
+        $options['positionY'] = round(rand(self::JIGSAW_WIDTH * $rate, $rate * ($options['height'] - self::JIGSAW_WIDTH)) / $rate);
 
         return $options;
     }
