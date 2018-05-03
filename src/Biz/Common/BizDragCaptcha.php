@@ -44,7 +44,7 @@ class BizDragCaptcha extends BizAware
 
         $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
             'times' => 2,
-            'duration' => 60 * 2,
+            'duration' => 60 * 3,
             'userId' => 0,
             'data' => $options,
         ));
