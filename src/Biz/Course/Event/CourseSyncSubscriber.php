@@ -95,7 +95,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
         foreach ($courses as $course) {
             $course['courseSetTitle'] = $courseSet['title'];
-            $this->getCourseService()->updateCourse($course['id'], $course);
+            $this->getCourseDao()->update($course['id'], $course);
+            $this->updateCopiedCourses($course);
         }
     }
 
@@ -105,7 +106,11 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($course['parentId'] > 0) {
             return;
         }
+        $this->updateCopiedCourses($course);
+    }
 
+    protected function updateCopiedCourses($course)
+    {
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
         if (empty($copiedCourses)) {
             return;
