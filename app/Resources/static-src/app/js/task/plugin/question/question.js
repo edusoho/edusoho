@@ -16,13 +16,29 @@ export default class {
     this.$element.on('click', '.back-to-list', () => {
       this.channel.publish('back-to-list');
     });
+    this.toggleShow();
+    this.$element.on('click', '.js-more-show', (event) => {
+      this.channel.publish('js-more-show', event);
+    });
+
 
     this.$form.on('click', '.btn-primary', event => this.onSavePost(event));
   }
 
+  toggleShow() {
+    this.$element.find('.task-question-plugin-pane-thread__content').each(function () {
+      let height = $(this).height();
+      console.log(height);
+      if (height >= 70) {
+        console.log('高度');
+        $(this).next().show();
+      }
+    });
+  }
+
   onSavePost(event) {
     event.preventDefault();
-
+    console.log('提交时候的展开收起');
     if (!this.validator || !this.validator.form()) {
       return;
     }

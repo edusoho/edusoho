@@ -1,14 +1,11 @@
-<li class="post-item media">
-	<div class="media-left">
-		<img class="avatar" src="{{ filepath(user.smallAvatar, 'avatar.png') }}">
-	</div>
-
-	<div class="post-item-body media-body">
-    <a class="nickname" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
-    {% if user.id in course.teacherIds %}
-      <span class="teacher-flag">{{'course.plan_task.course_teacher'|trans}}</span>
-    {% endif %}
-    <span class="time cd-text-sm cd-ml8">{{ post.createdTime|smart_time }}</span>
-		<div>{{ post.content|raw }}</div>
-	</div>
+<li class="cd-mt16 post-item task-question-plugin-pane-thread__item">
+  <div class="task-question-plugin-pane-thread__info cd-mb8">
+    <a class="cd-mr8 nickname" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>回复
+    <i class="es-icon es-icon-dot"></i><span class="time cd-text-sm cd-ml8">{{ post.createdTime|smart_time }}</span>
+  </div>
+  <div class="task-question-plugin-pane-thread__content editor-text">{{ post.content|raw }}</div>
+  <a href="javascript:;" class="more js-more-show">
+    <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+    <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+  </a>
 </li>

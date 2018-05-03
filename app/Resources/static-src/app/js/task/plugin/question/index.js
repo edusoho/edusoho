@@ -24,6 +24,7 @@ class QuestionPlugin {
     });
 
     channel.subscribe('back-to-list', () => this.onBackList());
+    channel.subscribe('js-more-show', (event) => this.onToggleShow(event));
 
     $('[data-toggle=\'popover\']').popover();
   }
@@ -41,6 +42,15 @@ class QuestionPlugin {
     this.$list.show();
     this.$detail.hide();
   }
+
+  onToggleShow(event) {
+    const $target = $(event.currentTarget);
+    console.log($target);
+    $target.find('.js-change-btn').toggle();
+    $target.prev().toggleClass('active');
+  }
 }
 
 new QuestionPlugin();
+
+

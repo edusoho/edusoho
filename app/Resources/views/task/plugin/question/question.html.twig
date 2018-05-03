@@ -1,27 +1,24 @@
 <div class="task-question-plugin-pane">
 
   <div class="task-question-plugin-pane-header clearfix">
-    <a class="back-to-list link-gray" href="javascript:;"><i class="es-icon es-icon-chevronleft"></i>{{'course.plan_task.go_back_btn'|trans}}</a>
+    <a class="back-to-list task-question-plugin-pane-header__btn" href="javascript:;">{{'course.plan_task.go_back_btn'|trans}}</a>
   </div>
 
   <div class="task-question-plugin-pane-thread">
-  	<h5><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></h5>
-  	<div class="lesson-question-plugin-pane-thread-content editor-text">{{ thread.content|cdn|raw }}</div>
-    <div class="cd-text-sm">{{'course.plan_task.question_author'|trans({'%nickname%': threader.nickname})|raw}}</div>
+  	<div class="task-question-plugin-pane-thread__title cd-mb8"><span class="cd-tag cd-tag-blue">问</span><a class="vertical-middle cd-link-major cd-ml8" href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></div>
+    <div class="task-question-plugin-pane-thread__info cd-mb16">{{'course.plan_task.question_author'|trans}}<a href="{{ path('user_show', {id:threader.id}) }}" target="_blank">{{ threader.nickname }}</a> <i class="es-icon es-icon-dot"></i><span data-role="post-number">{{ thread.postNum }}</span> {{'course.plan_task.question_answer'|trans}}</div>
+  	<div class="task-question-plugin-pane-thread__content editor-text">{{ thread.content|cdn|raw }}</div>
   </div>
 
-  <div class="task-question-plugin-pane-posts">
-  	<div class="posts-header"><h5><span data-role="post-number">{{ thread.postNum }}</span> {{'course.plan_task.question_answer'|trans}}</h5></div>
-  </div>
-
-  <ul data-role="post-list" class="posts media-list">
+  <ul class="task-question-plugin-pane-thread js-task-thread-list media-list cd-mt16" data-role="post-list">
+    <div class="task-question-plugin-pane-thread__title cd-mt8"><span class="cd-tag post-tag-success">答</span><span class="vertical-middle cd-link-major cd-ml8">全部的回答</span></div>
   	{% for post in posts %}
   		{% set user = users[post.userId] %}
   		{% include 'task/plugin/question/post-item.html.twig' %}
   	{% endfor %}
   </ul>
 
-  <form class="post-form" data-role="post-form" method="post" action="{{ path('course_task_plugin_thread_answer', {courseId:thread.courseId, taskId: thread.taskId, threadId: thread.id}) }}" novalidate>
+  <form class="task-question-plugin-pane-post-form post-form" data-role="post-form" method="post" action="{{ path('course_task_plugin_thread_answer', {courseId:thread.courseId, taskId: thread.taskId, threadId: thread.id}) }}" novalidate>
   	<div class="form-group">
   		<div class="controls">
   			{{ form_widget(form.content, {attr:{class:'form-control', rows:4, 'data-display':'course.plan_task.question_content'|trans}}) }}

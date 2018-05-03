@@ -201,8 +201,73 @@
       }
     }
   }
-}
 
+  .task-question-plugin-pane-header {
+    margin-bottom: 24px;
+    padding-left: 14px;
+  }
+
+  .task-question-plugin-pane-header__btn {
+    padding: 6px 9px;
+    background:#f1f1f1;
+    border: 1px solid @gray-light;
+    .border-radius(2px);
+    color: #b1b1b1;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .task-question-plugin-pane-thread {
+    padding: 0 14px;
+  }
+
+  .task-question-plugin-pane-thread__title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: @gray-darker;
+    .post-tag-success {
+      color: #fff;
+      background-color: @brand-success;
+    }
+  }
+  .task-question-plugin-pane-thread__info {
+    font-size: 12px;
+    line-height: 1;
+    color: @gray;
+    .nickname {
+      font-weight: 600;
+    }
+  }
+  .task-question-plugin-pane-thread__content {
+    font-size: 14px;
+    line-height: 22px;
+    max-height: 90px;
+    overflow: hidden;
+    // display: inline;
+    &.active {
+      max-height: none;
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  .task-question-plugin-pane-thread__item {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f1f1;
+    &:last-child {
+      border: none;
+    }
+    .more {
+      display: none;
+    }
+  }
+  .task-question-plugin-pane-post-form {
+    margin-top: 16px;
+    padding: 8px 14px;
+  }
+}
 .screen-full {
   position: fixed;
   left: 0;
