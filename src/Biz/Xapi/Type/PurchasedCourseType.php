@@ -26,7 +26,7 @@ class PurchasedCourseType extends Type
                     'id' => $statement['target_id'],
                     'definitionType' => $this->convertActivityType($statement['target_type']),
                     'name' => $data['title'],
-                    'course' => $course
+                    'course' => $course,
                 );
                 $result = array(
                     'amount' => $data['pay_amount'],
