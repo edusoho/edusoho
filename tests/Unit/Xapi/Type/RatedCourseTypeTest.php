@@ -51,7 +51,7 @@ class RatedCourseTypeTest extends BaseTestCase
         $type->setBiz($this->biz);
 
         $statements = array(
-            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('score' => array('raw' => 3, 'max' => 5, 'min' => 0))),
+            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('score' => array('raw' => 3, 'max' => 5, 'min' => 1), 'response' => '这门课程很好')),
         );
         $pushStatements = $type->packages($statements);
 
@@ -64,7 +64,8 @@ class RatedCourseTypeTest extends BaseTestCase
         )), $pushStatements[0]['verb']);
 
         $this->assertEquals(1, $pushStatements[0]['object']['id']);
-        $this->assertEquals(array('score' => array('raw' => 3, 'max' => 5, 'min' => 0)), $pushStatements[0]['result']);
+        $this->assertEquals(array('raw' => 3, 'max' => 5, 'min' => 1), $pushStatements[0]['result']['score']);
+        $this->assertEquals('这门课程很好', $pushStatements[0]['result']['response']);
     }
 
     /**

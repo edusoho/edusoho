@@ -172,8 +172,9 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'score' => array(
                 'raw' => $review['rating'],
                 'max' => 5,
-                'min' => 0,
-            )
+                'min' => 1,
+            ),
+            'response' => $review['content'],
         ));
     }
 
@@ -183,7 +184,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $classroom = $event->getArgument('classroom');
 
         $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['classroomId'], 'classroom', array(
-            'score' => array('raw' => $review['rating'], 'max' => 5, 'min' => 0),
+            'score' => array('raw' => $review['rating'], 'max' => 5, 'min' => 1),
+            'response' => $review['content'],
             'name' => $classroom['title']
         ));
     }

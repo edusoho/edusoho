@@ -305,7 +305,7 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        
+
         if (!empty($result)) {
             $statement['result'] = $result;
         }
@@ -360,7 +360,7 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-        
+
         if (!empty($result)) {
             $statement['result'] = $result;
         }
@@ -729,7 +729,8 @@ class XAPIService extends BaseService
                 'raw' => $result['score']['raw'],
                 'max' => $result['score']['max'],
                 'min' => $result['score']['min'],
-            )
+            ),
+            'response' => $result['response'],
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
