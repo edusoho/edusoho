@@ -16,7 +16,7 @@ class RatedCourseType extends Type
 
         $pushStatements = array();
         $sdk = $this->createXAPIService();
-        $courses = $this->findCourses(array($statements,'target_id'));
+        $courses = $this->findCourses(array($statements, 'target_id'));
 
         foreach ($statements as $statement) {
             try {
