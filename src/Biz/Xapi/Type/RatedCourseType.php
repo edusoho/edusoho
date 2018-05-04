@@ -17,15 +17,17 @@ class RatedCourseType extends Type
         $pushStatements = array();
         $sdk = $this->createXAPIService();
         $courses = $this->findCourses(array($statements,'target_id'));
+
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
+                $course = $courses[$statement['target_id']];
                 $data = $statement['context'];
                 $object = array(
                     'id' => $statement['target_id'],
                     'definitionType' => XAPIActivityTypes::COURSE,
-                    'name' => $courses[$statement['target_id']]['title'],
-                    'course' => $data['course'],
+                    'name' => $course['title'],
+                    'course' => $course,
                 );
 
                 $result = array(
