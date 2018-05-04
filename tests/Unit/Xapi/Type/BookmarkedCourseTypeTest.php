@@ -31,7 +31,7 @@ class BookmarkedCourseTypeTest extends BaseTestCase
             $this->assertEquals(array('id' => 'https://w3id.org/xapi/adb/verbs/bookmarked', 'display' => array(
                 'zh-CN' => '收藏了', 'en-US' => 'bookmarked'
             )), $st['verb']);
-            $this->assertNotNull($st['object']['extensions']);
+            $this->assertNotNull($st['object']['definition']['extensions']);
         }
     }
 
