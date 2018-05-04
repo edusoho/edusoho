@@ -62,7 +62,7 @@ abstract class Type extends BizAware
         $courses = $this->find(
             $subject,
             'Course:CourseDao',
-            array('courseSetId', 'title'),
+            array('courseSetId', 'title', 'price'),
             $conditions
         );
 
@@ -70,15 +70,43 @@ abstract class Type extends BizAware
             array($courses, 'courseSetId')
         );
 
+        $this->appendTags($courseSets);
+
         foreach ($courses as &$course) {
             if (!empty($courseSets[$course['courseSetId']])) {
                 $courseSet = $courseSets[$course['courseSetId']];
                 $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
                 $course['title'] = $courseSet['title'].'-'.$course['title'];
+                $course['tags'] = empty($courseSet['tagsStr']) ? '' : $courseSet['tagsStr'];
             }
         }
 
         return $courses;
+    }
+
+    private function appendTags(&$courseSets)
+    {
+        $tagIdGroups = ArrayToolkit::column($courseSets, 'tags');
+
+        if (empty($tagIdGroups)) {
+            return;
+        }
+
+        $tagIds = ArrayToolkit::mergeArraysValue($tagIdGroups);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
+
+        array_walk($courseSets, function(&$courseSet) use ($tags) {
+
+            $courseSetTags = array();
+
+            foreach ($courseSet['tags'] as $tagId) {
+                if (isset($tags[$tagId])) {
+                    $courseSetTags[] = $tags[$tagId]['name'];
+                }
+            }
+
+            $courseSet['tagsStr'] = $courseSetTags ? '|'.implode('|', $courseSetTags).'|' : '';
+        });
     }
 
     protected function findCourseSets($subject, $conditions = array())
@@ -86,7 +114,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Course:CourseSetDao',
-            array('title', 'subtitle'),
+            array('title', 'subtitle', 'tags'),
             $conditions
         );
     }
@@ -266,6 +294,14 @@ abstract class Type extends BizAware
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return \Biz\Taxonomy\Service\TagService
+     */
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getActor($userId)
