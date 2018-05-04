@@ -14,7 +14,7 @@ class PurchasedCourseTypeTest extends BaseTestCase
             'cloud_secret_key' => 2,
         ));
 
-        $courseService = $this->mockBiz(
+        $courseDao = $this->mockBiz(
             'Course:CourseDao',
             array(
                 array(
@@ -37,7 +37,7 @@ class PurchasedCourseTypeTest extends BaseTestCase
             )
         );
 
-        $courseSetService = $this->mockBiz(
+        $courseSetDao = $this->mockBiz(
             'Course:CourseSetDao',
             array(
                 array(

@@ -158,27 +158,15 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseSetFavorite(Event $event)
     {
         $favorite = $event->getSubject();
-        $courseSet = $event->getArgument('courseSet');
         $course = $event->getArgument('course');
-        $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
-        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $courseSet['id'], 'course', array(
-            'course' => array(
-                'title' => $courseSet['title'],
-                'id' => $course['id'],
-                'tags' => $tags ? '|'.implode('|', $tags).'|'  : '',
-                'description' => $courseSet['subtitle'],
-                'price' => $course['price'],
-            )
+        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $course['id'], 'course', array(
         ));
     }
 
     public function onCourseReviewAdd(Event $event)
     {
         $review = $event->getSubject();
-        $course = $event->getArgument('course');
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
         $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', array(
             'score' => array(
@@ -187,13 +175,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'min' => 1,
             ),
             'response' => $review['content'],
-            'course' => array(
-                'title' => $courseSet['title'],
-                'id' => $course['id'],
-                'tags' => $tags ? '|'.implode('|', $tags).'|'  : '',
-                'description' => $courseSet['subtitle'],
-                'price' => $course['price'],
-            )
         ));
     }
 
