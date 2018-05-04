@@ -18,8 +18,10 @@ class BookmarkedCourseTypeTest extends BaseTestCase
         $type->setBiz($this->biz);
 
         $statements = array(
-            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('name' => '数据结构(上)(自主模式)')),
-            array('user_id' => 2, 'uuid' => 20, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('name' => '数据结构(下)(自主模式)')),
+            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(),
+                'context' => array('course' => array('id' => 1, 'tags' => '|数据结构|', 'price' => 99, 'title' => '数据结构(上)(自主模式)', 'description' => 'aaa'))),
+            array('user_id' => 2, 'uuid' => 20, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(),
+                'context' => array('course' => array('id' => 2, 'tags' => '|数据结构|', 'price' => 299, 'title' => '数据结构(下)(自主模式)', 'description' => 'aaa'))),
         );
         $pushStatements = $type->packages($statements);
 
@@ -29,6 +31,7 @@ class BookmarkedCourseTypeTest extends BaseTestCase
             $this->assertEquals(array('id' => 'https://w3id.org/xapi/adb/verbs/bookmarked', 'display' => array(
                 'zh-CN' => '收藏了', 'en-US' => 'bookmarked'
             )), $st['verb']);
+            $this->assertNotNull($st['object']['extensions']);
         }
     }
 

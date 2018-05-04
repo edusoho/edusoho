@@ -159,14 +159,26 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $favorite = $event->getSubject();
         $courseSet = $event->getArgument('courseSet');
+        $course = $event->getArgument('course');
+        $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
+
         $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $courseSet['id'], 'course', array(
-            'name' => $courseSet['title']
+            'course' => array(
+                'title' => $courseSet['title'],
+                'id' => $course['id'],
+                'tags' => $tags ? '|'.implode('|', $tags).'|'  : '',
+                'description' => $courseSet['subtitle'],
+                'price' => $course['price'],
+            )
         ));
     }
 
     public function onCourseReviewAdd(Event $event)
     {
         $review = $event->getSubject();
+        $course = $event->getArgument('course');
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
         $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', array(
             'score' => array(
@@ -175,6 +187,13 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'min' => 1,
             ),
             'response' => $review['content'],
+            'course' => array(
+                'title' => $courseSet['title'],
+                'id' => $course['id'],
+                'tags' => $tags ? '|'.implode('|', $tags).'|'  : '',
+                'description' => $courseSet['subtitle'],
+                'price' => $course['price'],
+            )
         ));
     }
 
@@ -329,6 +348,14 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return \Biz\Taxonomy\Service\TagService
+     */
+    private function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function createService($alias)

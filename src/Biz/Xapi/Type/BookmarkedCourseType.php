@@ -23,7 +23,8 @@ class BookmarkedCourseType extends Type
                 $object = array(
                     'id' => $statement['target_id'],
                     'definitionType' => XAPIActivityTypes::COURSE,
-                    'name' => $data['name'],
+                    'name' => $data['course']['title'],
+                    'course' => $data['course']
                 );
 
                 $pushStatements[] = $sdk->bookmarked($actor, $object, null, $statement['uuid'], $statement['occur_time'], false);

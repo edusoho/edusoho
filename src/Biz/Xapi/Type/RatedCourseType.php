@@ -25,6 +25,7 @@ class RatedCourseType extends Type
                     'id' => $statement['target_id'],
                     'definitionType' => XAPIActivityTypes::COURSE,
                     'name' => $courses[$statement['target_id']]['title'],
+                    'course' => $data['course'],
                 );
 
                 $result = array(

@@ -135,7 +135,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $favorite = $this->getFavoriteDao()->create($favorite);
 
-        $this->dispatch('courseSet.favorite', $favorite, array('courseSet' => $courseSet));
+        $this->dispatch('courseSet.favorite', $favorite, array('courseSet' => $courseSet, 'course' => $course));
 
         return !empty($favorite);
     }

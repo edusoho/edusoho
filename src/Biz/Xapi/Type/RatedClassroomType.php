@@ -28,6 +28,7 @@ class RatedClassroomType extends Type
 
                 $result = array(
                     'score' => $data['score'],
+                    'response' => $data['response'],
                 );
 
                 $pushStatements[] = $sdk->rated($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);

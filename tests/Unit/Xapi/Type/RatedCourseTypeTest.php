@@ -51,7 +51,8 @@ class RatedCourseTypeTest extends BaseTestCase
         $type->setBiz($this->biz);
 
         $statements = array(
-            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('score' => array('raw' => 3, 'max' => 5, 'min' => 1), 'response' => '这门课程很好')),
+            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(),
+                'context' => array('score' => array('raw' => 3, 'max' => 5, 'min' => 1), 'response' => '这门课程很好', 'course' => array('course' => array('id' => 1, 'tags' => '|数据结构|', 'price' => 99, 'title' => '数据结构(上)(自主模式)', 'description' => 'aaa')))),
         );
         $pushStatements = $type->packages($statements);
 
