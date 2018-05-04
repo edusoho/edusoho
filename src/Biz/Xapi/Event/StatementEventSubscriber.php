@@ -186,7 +186,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['classroomId'], 'classroom', array(
             'score' => array('raw' => $review['rating'], 'max' => 5, 'min' => 1),
             'response' => $review['content'],
-            'name' => $classroom['title']
+            'name' => $classroom['title'],
         ));
     }
 

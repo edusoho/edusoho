@@ -17,7 +17,7 @@ class BookmarkedCourseType extends Type
         $pushStatements = array();
         $sdk = $this->createXAPIService();
 
-        $courses = $this->findCourses(array($statements,'target_id'));
+        $courses = $this->findCourses(array($statements, 'target_id'));
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
@@ -26,7 +26,7 @@ class BookmarkedCourseType extends Type
                     'id' => $statement['target_id'],
                     'definitionType' => XAPIActivityTypes::COURSE,
                     'name' => $course['title'],
-                    'course' => $course
+                    'course' => $course,
                 );
 
                 $pushStatements[] = $sdk->bookmarked($actor, $object, null, $statement['uuid'], $statement['occur_time'], false);
