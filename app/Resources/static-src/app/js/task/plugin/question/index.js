@@ -45,12 +45,9 @@ class QuestionPlugin {
 
   onToggleShow(event) {
     const $target = $(event.currentTarget);
-    console.log($target);
     $target.find('.js-change-btn').toggle();
     $target.prev().toggleClass('active');
   }
 }
 
 new QuestionPlugin();
-
-

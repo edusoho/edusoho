@@ -28,7 +28,7 @@ export default class {
   toggleShow() {
     this.$element.find('.task-question-plugin-pane-thread__content').each(function () {
       let height = $(this).height();
-      if (height >= 70) {
+      if (height >= 76) {
         $(this).next().show();
       }
     });
