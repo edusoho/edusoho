@@ -3557,6 +3557,8 @@ thread.status.top: 头条
 thread.status.recommend: 推荐
 thread.status.reward: 奖
 thread.status.question: 问
+thread.status.answer: 答
+thread.status.all.answer: 全部的问答
 thread.hover_tips.question: 问答
 thread.hover_tips.activiy: 活动
 thread.hover_tips.thread: 话题

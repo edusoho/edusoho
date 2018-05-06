@@ -28,24 +28,27 @@ export default class {
   toggleShow() {
     this.$element.find('.task-question-plugin-pane-thread__content').each(function () {
       let height = $(this).height();
-      console.log(height);
       if (height >= 70) {
-        console.log('高度');
         $(this).next().show();
       }
     });
   }
 
   onSavePost(event) {
+    const self = this;
     event.preventDefault();
-    console.log('提交时候的展开收起');
     if (!this.validator || !this.validator.form()) {
       return;
     }
-
     $.post(this.$form.attr('action'), this.$form.serialize())
       .done((html) => {
+        if (!$('.js-post-answer-item').length) {
+          $('.js-answer-title').removeClass('hidden');
+        }
         this.$element.find('[data-role=post-list]').append(html);
+        if ($(event.target).data('type') === 'question') {
+          self.toggleShow();
+        }
         const number = parseInt(this.$element.find('[data-role=post-number]').text());
         this.$element.find('[data-role=post-number]').text(number + 1);
         this.$form.find('textarea').val('');
