@@ -12,6 +12,7 @@ class WeChatAppController extends BaseController
         if ($mpSdk->getCurrentMpRequest()) {
             return $this->redirect($this->generateUrl('admin_wechat_app_request_success'));
         }
+
         return $this->render('admin/wechat-app/index.html.twig', array());
     }
 
