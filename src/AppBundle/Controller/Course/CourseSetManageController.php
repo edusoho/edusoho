@@ -11,7 +11,6 @@ use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class CourseSetManageController extends BaseController
 {
@@ -40,7 +39,7 @@ class CourseSetManageController extends BaseController
             'courseset-manage/create.html.twig',
             array(
                 'userProfile' => $userProfile,
-                'courseTypes' => $visibleCourseTypes
+                'courseTypes' => $visibleCourseTypes,
             )
         );
     }
@@ -49,7 +48,7 @@ class CourseSetManageController extends BaseController
     {
         $data = $request->request->all();
         $courseSet = $this->getCourseSetService()->createCourseSet($data);
-         
+
         return $this->redirectToRoute(
             'course_set_manage_base',
             array(

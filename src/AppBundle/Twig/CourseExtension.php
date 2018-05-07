@@ -148,10 +148,11 @@ class CourseExtension extends \Twig_Extension
             return $type['visible'] == 1;
         });
 
-        uasort($visibleCourseTypes, function($type1, $type2) {
+        uasort($visibleCourseTypes, function ($type1, $type2) {
             if ($type1['priority'] == $type2['priority']) {
                 return 0;
             }
+
             return $type1['priority'] > $type2['priority'] ? -1 : 1;
         });
 

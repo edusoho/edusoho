@@ -6,7 +6,7 @@ interface OpenCourseService
 {
     const LIVE_OPEN_TYPE = 'liveOpen';
     const OPEN_TYPE = 'open';
-    
+
     /**
      * open_course.
      */
