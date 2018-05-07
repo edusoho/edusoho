@@ -6,6 +6,7 @@ export default class Register {
     this.initValidator();
     this.inEventMobile();
     this.initCaptchaCode();
+    this.initDragCaptchaCodeRule();
     this.initRegisterTypeRule();
     this.initInviteCodeRule();
     this.initUserTermsRule();
@@ -180,6 +181,17 @@ export default class Register {
         }
       },
     });
+  }
+
+  initDragCaptchaCodeRule() {
+    if ($('.js-drag-img').length) {
+      $('[name="jigsaw"], [name="drag_captcha_token"]').rules('add', {
+        required: true,
+        messages: {
+          required: Translator.trans('auth.register.drag_captcha_tips')
+        }
+      });
+    }
   }
 
   initSmsCodeRule() {
