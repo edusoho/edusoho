@@ -268,7 +268,7 @@ admin.system.roles_menu: 角色管理
 admin.system.course_menu: 课程设置
 admin.system.operation_menu: 运营设置
 admin.system.finance_menu: 账务设置
-admin.system.mobile_menu: 移动端设置
+admin.system.mobile_menu: APP 设置
 admin.system.mobile_iap_product_menu: IOS内购商品设置
 admin.system.optimize_menu: 系统优化
 admin.system.jobs_menu: 定时任务
@@ -324,7 +324,7 @@ admin.system.finance.coin_tab: 虚拟币
 admin.system.finance.refund_tab: 退款
 
 ##移动端设置模块
-admin.system.mobile.basic_tab: 移动端设置
+admin.system.mobile.basic_tab: APP 设置
 
 ##IOS内购商品设置模块
 admin.system.mobile_iap_product.basic_tab: IOS内购商品设置

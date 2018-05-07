@@ -7,9 +7,9 @@ use Biz\Distributor\Util\DistributorUtil;
 
 class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl implements DistributorProductService
 {
-    public function getSendType()
+    public function getSendType($data)
     {
-        return 'courseOrder';
+        return 'order.'.$data['status'];
     }
 
     public function getRoutingName()
@@ -33,15 +33,18 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
      */
     public function decodeToken($token)
     {
+        $tokenInfo = array('valid' => false);
         try {
-            $splitedStr = explode(':', $token);
-            $tokenInfo = array(
-                'type' => $this->getSendType(),
-                'product_id' => $splitedStr[1],
-                'valid' => true,
-            );
+            $drpService = $this->getDrpService();
+            if (!empty($drpService)) {
+                $parsedInfo = $drpService->parseCourseActivityToken($token);
+                $tokenInfo = array(
+                    'type' => 'courseOrder',
+                    'product_id' => $parsedInfo['data']['course_id'],
+                    'valid' => true,
+                );
+            }
         } catch (\Exception $e) {
-            $tokenInfo = array('valid' => false);
             $this->biz['logger']->error('distributor sign error DistributorCourseOrderServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
         }
 
@@ -51,10 +54,10 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     public function generateMockedToken($params)
     {
         $data = array(
-            'type' => $this->getSendType(),
+            'distribution_type' => 'courseOrder',
             'course_id' => $params['courseId'],
-            'org_id' => '333',
             'merchant_id' => '123',
+            'agency_id' => '333',
         );
         $tokenExpireDateNum = null;
 
@@ -66,11 +69,17 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
         $result = parent::convertData($order);
 
         $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $orderItem = $items[0];
         $user = $this->getUserService()->getUser($order['user_id']);
 
-        $result['token'] = $items[0]['create_extra']['distributorToken'];
+        $result['token'] = $orderItem['create_extra']['distributorToken'];
         $result['nickname'] = $user['nickname'];
         $result['mobile'] = $user['verifiedMobile'];
+
+        if ('refunded' == $orderItem['status']) {
+            $refund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
+            $result['refundedReason'] = $refund['reason'];
+        }
 
         return $result;
     }
@@ -83,5 +92,10 @@ class DistributorCourseOrderServiceImpl extends DistributorOrderServiceImpl impl
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getOrderRefundService()
+    {
+        return $this->createService('Order:OrderRefundService');
     }
 }
