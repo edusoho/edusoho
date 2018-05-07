@@ -6,7 +6,7 @@
 
   <div class="task-question-plugin-pane-thread">
     <div class="task-question-plugin-pane-thread__title cd-mb8"><span class="cd-tag cd-tag-blue">{{ 'thread.status.question'|trans }}</span><a class="vertical-middle cd-link-major cd-ml8" href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></div>
-    <div class="task-question-plugin-pane-thread__info cd-mb16">{{'course.plan_task.question_author'|trans}}<a href="{{ path('user_show', {id:threader.id}) }}" target="_blank">{{ threader.nickname }}</a> <i class="es-icon es-icon-dot"></i><span data-role="post-number">{{ thread.postNum }}</span> {{'course.plan_task.question_answer'|trans}}</div>
+    <div class="task-question-plugin-pane-thread__info cd-mb16">{{'course.plan_task.question_author'|trans}}<a href="{{ path('user_show', {id:threader.id}) }}" target="_blank">{{ threader.nickname }}</a><span class="gray-medium cd-ml8 cd-mr8">•</span><span data-role="post-number">{{ thread.postNum }}</span> {{'course.plan_task.question_answer'|trans}}</div>
     <div class="task-question-plugin-pane-thread__content editor-text">{{ thread.content|cdn|raw }}</div>
   </div>
 
