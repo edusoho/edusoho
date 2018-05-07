@@ -2967,7 +2967,7 @@ thread.status.recommend: Recommend
 thread.status.reward: Reward
 thread.status.question: Ask
 thread.status.answer: 答
-thread.status.all.answer: 全部的问答
+thread.status.all.answer: 全部的回答
 thread.hover_tips.question: 'Q&A'
 thread.hover_tips.activiy: Activity
 thread.hover_tips.thread: 'Discussions'
