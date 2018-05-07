@@ -1494,7 +1494,7 @@ course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
 course.plan_task.go_back_btn: Back
-course.plan_task.question_author: By '%nickname%'
+course.plan_task.question_author: By 
 course.plan_task.question_answer: Answer
 course.plan_task.question_content: Content
 course.plan_task.add_answer_btn: 'Add answer'
