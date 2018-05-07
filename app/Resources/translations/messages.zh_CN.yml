@@ -1685,7 +1685,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  %nickname%<i>问...</i>
+  By 
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
@@ -3561,6 +3561,8 @@ thread.status.top: 头条
 thread.status.recommend: 推荐
 thread.status.reward: 奖
 thread.status.question: 问
+thread.status.answer: 答
+thread.status.all.answer: 全部的问答
 thread.hover_tips.question: 问答
 thread.hover_tips.activiy: 活动
 thread.hover_tips.thread: 话题

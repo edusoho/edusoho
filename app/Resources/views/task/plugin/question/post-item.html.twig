@@ -1,18 +1,11 @@
-<li class="post-item">
-	<div class="post-item-heading clearfix">
-		<img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="avatar">
-		<div class="infos">
-			<div class="nickname">
-				<a href="{{ path('user_show', {id:user.id}) }}" class="nickname" target="_blank">{{ user.nickname }}</a>
-				{% if user.id in course.teacherIds %}
-					<span class="teacher-flag">{{'course.plan_task.course_teacher'|trans}}</span>
-				{% endif %}
-			</div>
-			<div class="time">{{ post.createdTime|smart_time }}</div>
-		</div>
-	</div>
-
-	<div class="post-item-body">
-		{{ post.content|raw }}
-	</div>
+<li class="cd-mt16 post-item task-question-plugin-pane-thread__item js-post-answer-item">
+  <div class="task-question-plugin-pane-thread__info cd-mb8">
+    <a class="cd-mr8 nickname" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>回复
+    <i class="es-icon es-icon-dot"></i><span class="time cd-text-sm cd-ml8">{{ post.createdTime|smart_time }}</span>
+  </div>
+  <div class="task-question-plugin-pane-thread__content editor-text">{{ post.content|raw }}</div>
+  <a href="javascript:;" class="more js-more-show">
+    <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+    <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+  </a>
 </li>
