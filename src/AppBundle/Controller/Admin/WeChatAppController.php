@@ -8,6 +8,10 @@ class WeChatAppController extends BaseController
 {
     public function indexAction()
     {
+        $mpSdk = $this->getMpService()->getMpSdk();
+        if ($mpSdk->getCurrentMpRequest()) {
+            return $this->redirect($this->generateUrl('admin_wechat_app_request_success'));
+        }
         return $this->render('admin/wechat-app/index.html.twig', array());
     }
 
