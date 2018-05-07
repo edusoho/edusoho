@@ -962,11 +962,6 @@ admin_mocked_post_data_version_3:
     defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
     methods: [POST]
 
-admin_mocked_download_token:
-    path: /mock/download_token
-    defaults: { _controller: AppBundle:Admin/Mock:downloadToken }
-    methods: [POST]
-
 admin_optimize:
     path:  /setting/optimize
     defaults: { _controller: AppBundle:Admin/Optimize:index }
