@@ -83,17 +83,12 @@ class CourseSetServiceTest extends BaseTestCase
     /**
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
-    public function testCreateErrorType()
+    public function testCreateError()
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type' => 'ope2n',
         );
-        $created = $this->getCourseSetService()->createCourseSet($courseSet);
-        $this->assertTrue($created['id'] > 0);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
-        $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->getCourseSetService()->createCourseSet($courseSet);
     }
 
     public function testFindCourseSetsLikeTitle()

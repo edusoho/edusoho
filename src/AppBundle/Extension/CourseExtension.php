@@ -4,12 +4,44 @@ namespace AppBundle\Extension;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Biz\Course\Service\CourseSetService;
+use Biz\OpenCourse\Service\OpenCourseService;
 
 class CourseExtension extends Extension implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
         // TODO: Implement register() method.
+    }
+
+    public function getCourseTypes()
+    {
+        return array(
+            CourseSetService::NORMAL_TYPE => array(
+                'template' => 'courseset-manage/normal/create-show.html.twig',
+                'saveAction' => 'AppBundle:Course/CourseSetManage:saveCourse',
+                'priority' => 30,
+                'visible' => 1,
+            ),
+            CourseSetService::LIVE_TYPE => array(
+                'template' => 'courseset-manage/live/create-show.html.twig',
+                'saveAction' => 'AppBundle:Course/CourseSetManage:saveCourse',
+                'priority' => 20,
+                'visible' => 1,
+            ),
+            OpenCourseService::OPEN_TYPE => array(
+                'template' => 'open-course-manage/open/create-show.html.twig',
+                'saveAction' => 'AppBundle:OpenCourseManage:saveCourse',
+                'priority' => 10,
+                'visible' => 1,
+            ),
+            OpenCourseService::LIVE_OPEN_TYPE => array(
+                'template' => 'open-course-manage/liveOpen/create-show.html.twig',
+                'saveAction' => 'AppBundle:OpenCourseManage:saveCourse',
+                'priority' => 0,
+                'visible' => 1,
+            ),
+        );
     }
 
     public function getCourseShowMetas()
