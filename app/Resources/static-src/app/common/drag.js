@@ -56,12 +56,14 @@ export default class Drag {
     $(document).on('mouseup touchend', (event) => {
       this.stopDrag(event);
     });
+
     $(document).on('mousemove touchmove', (event) => {
       this.dragMove(event);
     });
   }
 
   startDrag(e) {
+    e.preventDefault();
     const params = this.params;
     params.flag = true;
     const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
@@ -101,6 +103,7 @@ export default class Drag {
     const $target = this.$target;
     const params = this.params;
     if (!params.flag) return;
+    e.preventDefault();
     const currentX = e.clientX ? e.clientX.toFixed(2) : e.originalEvent.targetTouches[0].pageX.toFixed(2);
     const disX = currentX - params.currentX;
     const width = $element.parent().width() - $element.width();
