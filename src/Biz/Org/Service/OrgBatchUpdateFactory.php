@@ -63,6 +63,7 @@ class OrgBatchUpdateFactory
             'classroom' => '班级',
             'article' => '咨询',
             'announcement' => '网站公告',
+            'openCourse' => '公开课',
         );
         if (array_key_exists($key, $modules)) {
             return $modules[$key];
