@@ -838,6 +838,13 @@ admin:
                             name: admin.system.mobile.basic_tab
                             disable: true
                             router_name: admin_setting_mobile
+                admin_h5_set:
+                    name: admin.system.mobile.h5
+                    children:
+                        admin_wap_set:
+                            name: admin.system.operation.wap_tab
+                            disable: true
+                            router_name: admin_wap_set
         admin_system:
             name: admin.nav.system
             router_name: admin_setting_site
@@ -966,9 +973,6 @@ admin:
                             disable: true
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
-                            disable: true
-                        admin_wap_set:
-                            name: admin.system.operation.wap_tab
                             disable: true
                 admin_setting_finance:
                     name: admin.system.finance_menu

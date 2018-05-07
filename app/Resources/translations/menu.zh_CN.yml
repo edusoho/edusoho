@@ -324,6 +324,7 @@ admin.system.finance.coin_tab: 虚拟币
 admin.system.finance.refund_tab: 退款
 
 ##移动端设置模块
+admin.system.mobile.h5: 微网校设置
 admin.system.mobile.basic_tab: APP 设置
 
 ##IOS内购商品设置模块
