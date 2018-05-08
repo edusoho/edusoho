@@ -13,7 +13,7 @@ use AppBundle\Common\ServiceToolkit;
 class CourseFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title',
+        'id', 'title', 'courseSetTitle',
     );
 
     protected $publicFields = array(

@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\TestpaperProcessor;
 
@@ -30,11 +31,11 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             return $this->createErrorResponse('error', '试卷不存在！或已删除!');
         }
 
-        if ($testpaper['status'] == 'draft') {
+        if ('draft' == $testpaper['status']) {
             return $this->createErrorResponse('error', '该试卷未发布，如有疑问请联系老师！!');
         }
 
-        if ($testpaper['status'] == 'closed') {
+        if ('closed' == $testpaper['status']) {
             return $this->createErrorResponse('error', '该试卷已关闭，如有疑问请联系老师！!');
         }
 
@@ -53,7 +54,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activity['id'], $testpaper['type']);
 
-        if ($testpaperActivity['doTimes'] && $testpaperResult && $testpaperResult['status'] == 'finished') {
+        if ($testpaperActivity['doTimes'] && $testpaperResult && 'finished' == $testpaperResult['status']) {
             return $this->createErrorResponse('error', '该试卷只能考一次，不能再考！');
         } elseif ($testpaperActivity['redoInterval']) {
             $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
@@ -64,7 +65,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             }
         }
 
-        if (!$testpaperResult || ($testpaperResult && $testpaperResult['status'] == 'finished')) {
+        if (!$testpaperResult || ($testpaperResult && 'finished' == $testpaperResult['status'])) {
             $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $testpaperActivity['limitedTime']));
         }
 
@@ -91,7 +92,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $targetId = $this->getParam('targetId');
         $target = $targetType.'-'.$targetId;
 
-        if ($action == 'favorite') {
+        if ('favorite' == $action) {
             $favorite = array(
                 'questionId' => $id,
                 'targetId' => $targetId,
@@ -238,7 +239,6 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         if (!$user->isLogin()) {
             return false;
         }
-
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
@@ -250,11 +250,6 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         $data = $this->request->request->all();
-        $answers = empty($data) ? $data['data'] : array();
-        $usedTime = $data['usedTime'];
-
-        //提交变化的答案
-        //$results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
 
         $this->getTestpaperService()->finishTest($testpaperResult['id'], $data);
 
@@ -327,10 +322,10 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         if (empty($testpaperResult)) {
-            if ($testpaper['status'] == 'draft') {
+            if ('draft' == $testpaper['status']) {
                 return $this->createErrorResponse('error', '该试卷未发布，如有疑问请联系老师！!');
             }
-            if ($testpaper['status'] == 'closed') {
+            if ('closed' == $testpaper['status']) {
                 return $this->createErrorResponse('error', '该试卷已关闭，如有疑问请联系老师！!');
             }
 
@@ -358,7 +353,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $answerShowMode = $this->controller->setting('questions.testpaper_answers_show_mode', 'submitted');
 
         // 不显示题目
-        if ($answerShowMode == 'hide') {
+        if ('hide' == $answerShowMode) {
             return $this->createErrorResponse('error', '网校已关闭交卷后答案解析的显示!');
         }
 
@@ -370,7 +365,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         //客观题自动批阅完后先显示答案解析
-        if ($answerShowMode == 'reviewed' && $testpaperResult['status'] != 'finished') {
+        if ('reviewed' == $answerShowMode && 'finished' != $testpaperResult['status']) {
             return $this->createErrorResponse('error', '试卷正在批阅，需要批阅完后才能显示答案解析!');
         }
 
@@ -443,7 +438,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $item = array_map(function ($itemValue) use ($controller, $isShowTestResult) {
                 $question = $itemValue['question'];
 
-                if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
+                if (isset($question['isDeleted']) && true == $question['isDeleted']) {
                     return array();
                 }
                 if (isset($itemValue['items'])) {
@@ -476,7 +471,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             }
 
             $result[$key] = array_values($result[$key]);
-            
+
             uasort(
                 $result[$key],
                 function ($item1, $item2) {
@@ -526,7 +521,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $metas = $question['metas'];
             if (isset($metas['choices'])) {
                 $metas = array_values($metas['choices']);
-                
+
                 $itemValue['question']['metas'] = array_map(function ($choice) use ($self, $container) {
                     return $self->controller->convertAbsoluteUrl($container->get('request'), $choice);
                 }, $metas);
@@ -535,7 +530,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $answer = $question['answer'];
         if (is_array($answer)) {
-            $itemValue['question']['answer'] = array_map(function ($answerValue)  use ($self, $container) {
+            $itemValue['question']['answer'] = array_map(function ($answerValue) use ($self, $container) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
@@ -583,7 +578,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $questions[$questionId]['score'] = $item['score'];
             $items[$questionId]['question'] = $questions[$questionId];
 
-            if ($item['parentId'] != 0) {
+            if (0 != $item['parentId']) {
                 if (!array_key_exists('items', $items[$item['parentId']])) {
                     $items[$item['parentId']]['items'] = array();
                 }
@@ -617,6 +612,9 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         return $questions;
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');

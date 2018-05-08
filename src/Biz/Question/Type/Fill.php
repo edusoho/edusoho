@@ -27,7 +27,7 @@ class Fill extends BaseQuestion implements TypeInterface
         $questionAnswers = array_values($question['answer']);
         $answer = array_values($answer);
 
-        if (count($answer) != count($questionAnswers)) {
+        if (0 == count($answer)) {
             return array('status' => 'wrong', 'score' => 0);
         }
 
@@ -94,7 +94,7 @@ class Fill extends BaseQuestion implements TypeInterface
                 $expectAnswer[] = $value;
             }
 
-            $actualAnswer = trim($answer[$index]);
+            $actualAnswer = empty($answer[$index]) ? '' : trim($answer[$index]);
             $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", ' ', $actualAnswer);
             if (in_array($actualAnswer, $expectAnswer)) {
                 $userRightAnswerIndex[] = $index;

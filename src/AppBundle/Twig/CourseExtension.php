@@ -45,6 +45,7 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
+            new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
         );
     }
 
@@ -138,6 +139,17 @@ class CourseExtension extends \Twig_Extension
         $setting = $this->getSettingService()->get('course');
 
         return !empty($setting['buy_fill_userinfo']);
+    }
+
+    public function isTaskAvailable($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        if ('published' == $task['status'] and 'published' == $course['status']) {
+            return true;
+        }
+        $result = $this->getCourseService()->canLearnTask($task['id']);
+
+        return 'success' == $result['code'];
     }
 
     /**
