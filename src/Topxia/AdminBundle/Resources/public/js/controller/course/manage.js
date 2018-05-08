@@ -38,42 +38,42 @@ define(function (require, exports, module) {
       });
     });
 
-		$table.on('click', '.publish-course', function() {
-			var studentNum = $(this).closest('tr').next().val();
-			if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
-			$.post($(this).data('url'), function(response) {
-				if (!response['success'] && response['message']) {
-					Notify.danger(response['message']);
-				} else {
-					var $tr = $(response.message);
-					$table.find('#' + $tr.attr('id')).replaceWith($tr);
-					Notify.success(Translator.trans('课程发布成功！'));
-				}
-			}).error(function(e) {
-				var res = e.responseJSON.error.message || '未知错误';
-                Notify.danger(res);
-			})
-		});
+    $table.on('click', '.publish-course', function() {
+      var studentNum = $(this).closest('tr').next().val();
+      if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
+      $.post($(this).data('url'), function(response) {
+        if (!response['success'] && response['message']) {
+          Notify.danger(response['message']);
+        } else {
+          var $tr = $(response);
+          $table.find('#' + $tr.attr('id')).replaceWith($tr);
+          Notify.success(Translator.trans('课程发布成功！'));
+        }
+      }).error(function(e) {
+        var res = e.responseJSON.error.message || '未知错误';
+        Notify.danger(res);
+      });
+    });
 
-		$table.on('click', '.delete-course', function() {
-			var chapter_name = $(this).data('chapter');
-			var part_name = $(this).data('part');
-			var user_name = $(this).data('user');
-			var $this = $(this);
-			if (!confirm(Translator.trans('删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？')))
-					return;
-			var $tr = $this.parents('tr');
-			$.post($this.data('url'), function(data) {
-				if (data.code > 0) {
-					Notify.danger(data.message);
-				} else if (data.code == 0) {
-					$tr.remove();
-					Notify.success(data.message);
-				} else {
-					$('#modal').modal('show').html(data);
-				}
-			});
-		});
+    $table.on('click', '.delete-course', function() {
+      var chapter_name = $(this).data('chapter');
+      var part_name = $(this).data('part');
+      var user_name = $(this).data('user');
+      var $this = $(this);
+      if (!confirm(Translator.trans('删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？')))
+        return;
+      var $tr = $this.parents('tr');
+      $.post($this.data('url'), function(data) {
+        if (data.code > 0) {
+          Notify.danger(data.message);
+        } else if (data.code == 0) {
+          $tr.remove();
+          Notify.success(data.message);
+        } else {
+          $('#modal').modal('show').html(data);
+        }
+      });
+    });
 
     $table.find('.copy-course[data-type="live"]').tooltip();
 
@@ -113,7 +113,7 @@ define(function (require, exports, module) {
         },
         initSelection: function (element, callback) {
           var data = [];
-          $(element.val().split(",")).each(function () {
+          $(element.val().split(',')).each(function () {
             data.push({
               id: this,
               name: this
@@ -127,16 +127,13 @@ define(function (require, exports, module) {
         formatResult: function (item) {
           return item.name;
         },
-        width: 'off',
         multiple: true,
         maximumSelectionSize: 20,
         placeholder: Translator.trans('请输入标签'),
         width: '162px',
-        multiple: true,
         createSearchChoice: function () {
           return null;
         },
-        maximumSelectionSize: 20
       });
     }
   };
