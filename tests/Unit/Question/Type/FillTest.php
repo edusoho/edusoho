@@ -67,7 +67,7 @@ class FillTest extends BaseTestCase
 
         $answer1 = array('2');
         $result = $typeObj->judge($question, $answer1);
-        $this->assertEquals('partRight', $result['status']);
+        $this->assertEquals('wrong', $result['status']);
         $this->assertEquals(1.0, $result['score']);
 
         $answer2 = array('3', '4');

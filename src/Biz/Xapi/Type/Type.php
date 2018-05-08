@@ -95,8 +95,7 @@ abstract class Type extends BizAware
         $tagIds = ArrayToolkit::mergeArraysValue($tagIdGroups);
         $tags = $this->getTagService()->findTagsByIds($tagIds);
 
-        array_walk($courseSets, function(&$courseSet) use ($tags) {
-
+        array_walk($courseSets, function (&$courseSet) use ($tags) {
             $courseSetTags = array();
 
             foreach ($courseSet['tags'] as $tagId) {

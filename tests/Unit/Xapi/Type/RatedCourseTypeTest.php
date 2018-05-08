@@ -14,7 +14,6 @@ class RatedCourseTypeTest extends BaseTestCase
             'cloud_secret_key' => 2,
         ));
 
-
         $courseDao = $this->mockBiz(
             'Course:CourseDao',
             array(
@@ -52,7 +51,7 @@ class RatedCourseTypeTest extends BaseTestCase
 
         $statements = array(
             array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(),
-                'context' => array('score' => array('raw' => 3, 'max' => 5, 'min' => 1), 'response' => '这门课程很好', 'course' => array('course' => array('id' => 1, 'tags' => '|数据结构|', 'price' => 99, 'title' => '数据结构(上)(自主模式)', 'description' => 'aaa')))),
+                'context' => array('score' => array('raw' => 3, 'max' => 5, 'min' => 1), 'response' => '这门课程很好', 'course' => array('course' => array('id' => 1, 'tags' => '|数据结构|', 'price' => 99, 'title' => '数据结构(上)(自主模式)', 'description' => 'aaa'))), ),
         );
         $pushStatements = $type->packages($statements);
 
@@ -61,7 +60,7 @@ class RatedCourseTypeTest extends BaseTestCase
 
         $this->assertEquals(array('id', 'actor', 'verb', 'object', 'result', 'timestamp'), array_keys($pushStatements[0]));
         $this->assertEquals(array('id' => 'http://id.tincanapi.com/verb/rated', 'display' => array(
-            'zh-CN' => '评分了', 'en-US' => 'rated'
+            'zh-CN' => '评分了', 'en-US' => 'rated',
         )), $pushStatements[0]['verb']);
 
         $this->assertEquals(1, $pushStatements[0]['object']['id']);

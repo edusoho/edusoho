@@ -222,10 +222,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             return array('status' => 'noAnswer', 'score' => 0);
         }
 
+        // 判断values为空["","",""]
         if (is_array($answer)) {
             $isEmpty = true;
             foreach ($answer as $value) {
-                if (!empty($value)) {
+                if ('' !== $value) {
                     $isEmpty = false;
                     break;
                 }
