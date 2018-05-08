@@ -419,6 +419,17 @@ class CourseController extends BaseController
     protected function makeTasksDatasByCourseId($courseId, $start = 0, $limit = 1000)
     {
         $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('id' => 'ASC'), $start, $limit);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        array_walk(
+            $tasks,
+            function (&$task) use ($activities) {
+                $task['activity'] = $activities[$task['activityId']];
+            }
+        );
+
         $tasks = $this->taskDataStatistics($tasks);
 
         return $tasks;
@@ -517,9 +528,9 @@ class CourseController extends BaseController
 
             if ('testpaper' == $task['type'] && !empty($task['activity'])) {
                 $activity = $task['activity'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
+                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['ext']['mediaId']));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
-                    array('testId' => $activity['mediaId'])
+                    array('testId' => $activity['ext']['mediaId'])
                 );
 
                 $task['score'] = 0 == $paperNum ? 0 : intval($score / $paperNum);
@@ -684,5 +695,13 @@ class CourseController extends BaseController
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

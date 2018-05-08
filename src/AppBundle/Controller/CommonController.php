@@ -108,6 +108,18 @@ class CommonController extends BaseController
         return new Response($img, 200, $headers);
     }
 
+    public function dragCaptchaAction($token)
+    {
+        $biz = $this->getbiz();
+        $dragCaptcha = $biz['biz_drag_captcha'];
+        $result = $dragCaptcha->getBackground($token);
+
+        $headers = array('Content-Type' => 'image/jpeg',
+            'Content-Disposition' => 'inline; filename="image.jpg"', );
+
+        return new Response($result, 200, $headers);
+    }
+
     /**
      * @return TokenService
      */

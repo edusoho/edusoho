@@ -36,13 +36,15 @@
         <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
       </div>
 
-      <div class="form-group cd-form-group third-party-captcha-form-group js-captcha {% if oauthUser.captchaEnabled == false %} hidden {% endif %}">
+      {# <div class="form-group cd-form-group third-party-captcha-form-group js-captcha {% if oauthUser.captchaEnabled == false %} hidden {% endif %}">
         <label class="third-party-form__label" for="captcha_code">{{'form.captcha_code'|trans}}</label>
         <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
         <div class="third-party-captcha">
           <img class="third-party-captcha__img" src="{{ asset('static-dist/app/img/captcha.png') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}">
         </div>
-      </div>
+      </div> #}
+
+      <div class="form-group cd-form-group {% if oauthUser.captchaEnabled == false %} hidden {% endif %}">{% include 'common/drag.html.twig' with { oauth2: true } %}</div>
 
       {% if oauthUser.accountType == "mobile" %}
         <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">

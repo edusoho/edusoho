@@ -1,5 +1,4 @@
 import RewardPointNotify from 'app/common/reward-point-notify';
-import notify from 'common/notify';
 
 let $loginModal = $('#login-modal');
 let rpn = new RewardPointNotify();
@@ -33,7 +32,10 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
     }
     break;
   default:
-    notify('danger', message);
+    cd.message({
+      type: 'danger',
+      message: message
+    });
   }
 });
 

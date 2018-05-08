@@ -40,6 +40,7 @@ class CourseCopy extends AbstractEntityCopy
     {
         return array(
             'title',
+            'courseSetTitle',
             'learnMode',
             'expiryMode',
             'expiryDays',

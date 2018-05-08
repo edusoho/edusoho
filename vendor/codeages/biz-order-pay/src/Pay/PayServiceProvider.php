@@ -65,6 +65,14 @@ class PayServiceProvider implements ServiceProviderInterface
                 'oid_partner' => '',
                 'signatureToolkit' => new SignatureToolkit(),
             ),
+            'wechat_app' => array(
+                'class' => '\Codeages\Biz\Pay\Payment\WeChatAppGateway',
+                'appid' => '',
+                'mch_id' => '',
+                'key' => '',
+                'cert_path' => '',
+                'key_path' => '',
+            ),
         );
 
         $biz['payment.platforms.options'] = null;

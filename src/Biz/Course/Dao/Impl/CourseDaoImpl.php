@@ -161,12 +161,14 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'price > :price_GT',
                 'price >= :price_GE',
                 'originPrice > :originPrice_GT',
+                'originPrice >= :originPrice_GE',
                 'originPrice = :originPrice',
                 'coinPrice > :coinPrice_GT',
                 'coinPrice = :coinPrice',
                 'originCoinPrice > :originCoinPrice_GT',
                 'originCoinPrice = :originCoinPrice',
                 'title LIKE :titleLike',
+                'courseSetTitle LIKE :courseSetTitleLike',
                 'userId = :userId',
                 'recommended = :recommended',
                 'createdTime >= :startTime',
@@ -200,6 +202,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             unset($conditions['title']);
         }
 
+        if (isset($conditions['courseSetTitle'])) {
+            $conditions['courseSetTitleLike'] = "{$conditions['courseSetTitle']}";
+            unset($conditions['courseSetTitle']);
+        }
+
         if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
@@ -211,7 +218,6 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= '%';
         }
-
         $builder = parent::createQueryBuilder($conditions);
 
         if (isset($conditions['types'])) {

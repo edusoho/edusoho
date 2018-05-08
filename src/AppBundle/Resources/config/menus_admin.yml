@@ -819,7 +819,32 @@ admin:
                         _distributor_page:
                             name: admin.distributor.menu
                             router_name: admin_login_distributor
-
+        admin_mobile:
+            name: 移动端
+            router_name: admin_wechat_app
+            children:
+                admin_wechat_app_manage:
+                    name: 小程序设置
+                    router_name: admin_wechat_app
+                    children:
+                        admin_wechat_app:
+                            name: 小程序设置
+                            router_name: admin_wechat_app
+                            disable: true
+                admin_setting_mobile:
+                    name: admin.system.mobile_menu
+                    children:
+                        admin_setting_mobile_settings:
+                            name: admin.system.mobile.basic_tab
+                            disable: true
+                            router_name: admin_setting_mobile
+                admin_h5_set:
+                    name: admin.system.mobile.h5
+                    children:
+                        admin_wap_set:
+                            name: admin.system.operation.wap_tab
+                            disable: true
+                            router_name: admin_wap_set
         admin_system:
             name: admin.nav.system
             router_name: admin_setting_site
@@ -949,9 +974,6 @@ admin:
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
                             disable: true
-                        admin_wap_set:
-                            name: admin.system.operation.wap_tab
-                            disable: true
                 admin_setting_finance:
                     name: admin.system.finance_menu
                     children:
@@ -966,13 +988,6 @@ admin:
                         admin_setting_refund:
                             name: admin.system.finance.refund_tab
                             disable: true
-                admin_setting_mobile:
-                    name: admin.system.mobile_menu
-                    children:
-                        admin_setting_mobile_settings:
-                            name: admin.system.mobile.basic_tab
-                            disable: true
-                            router_name: admin_setting_mobile
                 admin_setting_mobile_iap_product:
                     name: admin.system.mobile_iap_product_menu
                     disable: true
