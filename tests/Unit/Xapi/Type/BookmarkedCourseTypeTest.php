@@ -3,9 +3,9 @@
 namespace Tests\Unit\Xapi\Type;
 
 use Biz\BaseTestCase;
-use Biz\Xapi\Type\PurchasedCourseType;
+use Biz\Xapi\Type\BookmarkedCourseType;
 
-class PurchasedCourseTypeTest extends BaseTestCase
+class BookmarkedCourseTypeTest extends BaseTestCase
 {
     public function testPackages()
     {
@@ -79,25 +79,24 @@ class PurchasedCourseTypeTest extends BaseTestCase
             )
         );
 
-        $type = new PurchasedCourseType();
+        $type = new BookmarkedCourseType();
         $type->setBiz($this->biz);
 
         $statements = array(
-            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(), 'context' => array('title' => 'PHP基础入门', 'pay_amount' => 399.99)),
-            array('user_id' => 2, 'uuid' => 20, 'target_id' => 2, 'target_type' => 'classroom', 'occur_time' => time(), 'context' => array('title' => 'Java入门班', 'pay_amount' => 1024.10)),
+            array('user_id' => 1, 'uuid' => 10, 'target_id' => 1, 'target_type' => 'course', 'occur_time' => time(),
+                'context' => array('course' => array('id' => 1, 'tags' => '|数据结构|', 'price' => 99, 'title' => '数据结构(上)(自主模式)', 'description' => 'aaa')), ),
+            array('user_id' => 2, 'uuid' => 20, 'target_id' => 2, 'target_type' => 'course', 'occur_time' => time(),
+                'context' => array('course' => array('id' => 2, 'tags' => '|数据结构|', 'price' => 299, 'title' => '数据结构(下)(自主模式)', 'description' => 'aaa')), ),
         );
         $pushStatements = $type->packages($statements);
 
-        $this->assertEquals(array('id', 'actor', 'verb', 'object', 'result', 'timestamp'), array_keys($pushStatements[0]));
-        foreach ($statements as $index => $st) {
-            $this->assertEquals($st['target_id'], $pushStatements[$index]['object']['id']);
-            $this->assertEquals($st['context']['title'], $pushStatements[$index]['object']['definition']['name']['zh-CN']);
-            $this->assertEquals($st['context']['pay_amount'], $pushStatements[$index]['result']['extensions']['http://xapi.edusoho.com/extensions/amount']);
+        $this->assertEquals(array('id', 'actor', 'verb', 'object', 'timestamp'), array_keys($pushStatements[0]));
+        foreach ($pushStatements as $index => $st) {
+            $this->assertEquals(array('id' => 'https://w3id.org/xapi/adb/verbs/bookmarked', 'display' => array(
+                'zh-CN' => '收藏了', 'en-US' => 'bookmarked',
+            )), $st['verb']);
+            $this->assertNotNull($st['object']['definition']['extensions']);
         }
-
-        $this->assertEquals('http://adlnet.gov/expapi/activities/course', $pushStatements[0]['object']['definition']['type']);
-        $this->assertEquals('https://w3id.org/xapi/acrossx/activities/class-online', $pushStatements[1]['object']['definition']['type']);
-        $this->assertNotNull($pushStatements[0]['object']['definition']['extensions']);
     }
 
     /**

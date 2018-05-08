@@ -57,7 +57,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         }
 
         foreach ($materials as $key => $material) {
-            if ($material['source'] == 'coursematerial' && $material['lessonId']) {
+            if ('coursematerial' == $material['source'] && $material['lessonId']) {
                 $this->getMaterialService()->deleteMaterial($material['courseId'], $material['id']);
             }
         }
@@ -148,7 +148,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         );
 
         if ($material) {
-            if ($lesson['mediaId'] != 0 && $lesson['mediaSource'] == 'self') {
+            if (0 != $lesson['mediaId'] && 'self' == $lesson['mediaSource']) {
                 $this->_resetExistMaterialLessonId($material[0]);
 
                 $fields = array(
@@ -160,7 +160,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                     'courseSetId' => 0,
                 );
                 $this->getMaterialService()->uploadMaterial($fields);
-            } elseif ($lesson['mediaSource'] != 'self' && $lesson['mediaId'] == 0) {
+            } elseif ('self' != $lesson['mediaSource'] && 0 == $lesson['mediaId']) {
                 $this->_resetExistMaterialLessonId($material[0]);
             }
         } else {
@@ -194,7 +194,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         }
 
         foreach ($materials as $key => $material) {
-            if ($material['fileId'] == 0 && !empty($material['link'])) {
+            if (0 == $material['fileId'] && !empty($material['link'])) {
                 $this->getMaterialService()->deleteMaterial($material['courseId'], $material['id']);
             } else {
                 $updateFields = array(
@@ -210,7 +210,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         $context = $event->getSubject();
         $lesson = $context['lesson'];
 
-        if ($lesson['type'] != 'live' || ($lesson['type'] == 'live' && $lesson['replayStatus'] != 'videoGenerated')) {
+        if ('live' != $lesson['type'] || ('live' == $lesson['type'] && 'videoGenerated' != $lesson['replayStatus'])) {
             return false;
         }
 
@@ -241,7 +241,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     {
         $context = $event->getSubject();
         $lesson = $context['lesson'];
-        if ($lesson['type'] != 'liveOpen' || ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] != 'videoGenerated')) {
+        if ('liveOpen' != $lesson['type'] || ('liveOpen' == $lesson['type'] && 'videoGenerated' != $lesson['replayStatus'])) {
             return false;
         }
 

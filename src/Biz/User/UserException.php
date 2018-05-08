@@ -15,7 +15,7 @@ class UserException extends AbstractException
     const FORBIDDEN_SEND_MESSAGE = 4030110;
 
     const FORBIDDEN_REGISTER = 4030103;
-  
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',

@@ -111,7 +111,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'createdTime' => time(),
                 'meta' => array(),
             ));
-            $this->dispatchEvent('classReview.add', new Event($review));
+            $this->dispatchEvent('classReview.add', new Event($review,  array('classroom' => $classroom)));
         } else {
             $review = $this->getClassroomReviewDao()->update($review['id'], array(
                 'rating' => $fields['rating'],

@@ -2,37 +2,36 @@
 
 namespace Biz\Xapi\Type;
 
-class PurchasedCourseType extends Type
+use QiQiuYun\SDK\Constants\XAPIActivityTypes;
+
+class RatedClassroomType extends Type
 {
-    const TYPE = 'purchased_course';
+    const TYPE = 'rated_classroom';
 
     public function packages($statements)
     {
         if (empty($statements)) {
             return array();
         }
-        $pushStatements = array();
 
+        $pushStatements = array();
         $sdk = $this->createXAPIService();
-        $courses = $this->findCourses(
-            array($statements, 'target_id')
-        );
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
                 $data = $statement['context'];
-                $course = $courses[$statement['target_id']];
                 $object = array(
                     'id' => $statement['target_id'],
-                    'definitionType' => $this->convertActivityType($statement['target_type']),
-                    'name' => $data['title'],
-                    'course' => $course,
-                );
-                $result = array(
-                    'amount' => $data['pay_amount'],
+                    'definitionType' => XAPIActivityTypes::CLASS_ONLINE,
+                    'name' => $data['name'],
                 );
 
-                $pushStatements[] = $sdk->purchased($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+                $result = array(
+                    'score' => $data['score'],
+                    'response' => $data['response'],
+                );
+
+                $pushStatements[] = $sdk->rated($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
             } catch (\Exception $e) {
                 $this->biz['logger']->error($e->getMessage());
             }
