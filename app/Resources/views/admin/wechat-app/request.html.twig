@@ -1,0 +1,71 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_wechat_app' %}
+
+{% set script_controller = 'wechat-app/request' %}
+
+{% block main %}
+    <h3 class="text-center">申请开通小程序</h3>
+    <form id="request-form" class="form-horizontal" method="post" action="{{ path('admin_wechat_app_request') }}">
+    <fieldset>
+        <legend>小程序基本信息</legend>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                <label for="mpName">小程序名称</label>
+            </div>
+            <div class="col-md-8 controls">
+                <input type="text" id="mpName" name="mpName" class="form-control" value="">
+                <p class="help-block">显示在小程序顶部导航栏上，建议与小程序注册时填写的名称保持一致</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                <label for="mpDescription">小程序介绍</label>
+            </div>
+            <div class="col-md-8 controls">
+                <textarea id="mpDescription" name="mpDescription" class="form-control" rows="4"></textarea>
+                <p class="help-block">介绍该小程序的核心价值，会显示在关于页面中，建议 8-10 个字</p>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>联系人信息</legend>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                <label for="contactName">联系人姓名</label>
+            </div>
+            <div class="col-md-8 controls">
+                <input type="text" id="contactName" name="contactName" class="form-control" placeholder="在此处填写联系人姓名" value="">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                <label for="contactPhone">联系人电话</label>
+            </div>
+            <div class="col-md-8 controls">
+                <input type="text" id="contactPhone" name="contactPhone" class="form-control" placeholder="在此处填写联系人电话" value="">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                <label for="contactQq">联系人QQ</label>
+            </div>
+            <div class="col-md-8 controls">
+                <input type="text" id="contactQq" name="contactQq" class="form-control" placeholder="在此处填写联系人QQ" value="">
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="controls col-md-offset-2 col-md-8">
+                <button type="submit" class="btn btn-primary" id="save-site">提交申请</button>
+                <a class="btn btn-link" href="{{ path('admin_wechat_app') }}">返回</a>
+            </div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </fieldset>
+    </form>
+{% endblock %}

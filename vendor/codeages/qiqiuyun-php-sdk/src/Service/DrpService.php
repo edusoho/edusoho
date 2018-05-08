@@ -127,6 +127,7 @@ class DrpService extends BaseService
      *               - time 链接生成时间
      *               - nonce 参与签名计算的随机字符串
      *               - data Array类型，不同分销类型有不同的数据
+     *                 
      *
      *
      * @throws SDKException 签名不通过

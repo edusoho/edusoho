@@ -9,8 +9,7 @@
   <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label >{{'admin.wap_setting'|trans}}</label>
-
+        <label>{{'admin.wap_setting'|trans}}</label>
       </div>
       <div class="controls col-md-7 radios">
         {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, wapSetting.enabled) }}

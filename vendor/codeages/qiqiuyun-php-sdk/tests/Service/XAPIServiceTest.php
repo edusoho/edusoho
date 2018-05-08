@@ -5,7 +5,6 @@ namespace QiQiuYun\SDK\Tests\Service;
 use QiQiuYun\SDK\Tests\BaseTestCase;
 use QiQiuYun\SDK\Service\XAPIService;
 use QiQiuYun\SDK\Constants\XAPIActivityTypes;
-use QiQiuYun\SDK\Constants\XAPIObjectTypes;
 
 class XAPIServiceTest extends BaseTestCase
 {
@@ -90,7 +89,7 @@ class XAPIServiceTest extends BaseTestCase
         $actor = $this->getActor();
         $object = array(
             'id' => '/cloud/search?q=单反&type=course',
-            'definitionType' => XAPIActivityTypes::SEARCH_ENGINE
+            'definitionType' => XAPIActivityTypes::SEARCH_ENGINE,
         );
         $result = array(
             'response' => '单反',
@@ -118,11 +117,11 @@ class XAPIServiceTest extends BaseTestCase
         $actor = $this->getActor();
         $object = array(
             'id' => '/cloud/search?q=李老师&type=teacher',
-            'definitionType' => XAPIActivityTypes::SEARCH_ENGINE
+            'definitionType' => XAPIActivityTypes::SEARCH_ENGINE,
         );
         $result = array(
             'response' => '李老师',
-            'type' => 'user-profile'
+            'type' => 'user-profile',
         );
 
         $httpClient = $this->mockHttpClient(array(
@@ -144,7 +143,7 @@ class XAPIServiceTest extends BaseTestCase
         $object = array(
             'id' => '网校accessKey',
             'name' => 'ABC摄影网',
-            'definitionType' => XAPIActivityTypes::APPLICATION
+            'definitionType' => XAPIActivityTypes::APPLICATION,
         );
         $httpClient = $this->mockHttpClient(array(
             'actor' => $actor,
@@ -167,7 +166,7 @@ class XAPIServiceTest extends BaseTestCase
             'definitionType' => XAPIActivityTypes::CLASS_ONLINE,
         );
         $result = array(
-            'amount' => 199.99
+            'amount' => 199.99,
         );
         $httpClient = $this->mockHttpClient(array(
             'actor' => $actor,
@@ -192,15 +191,17 @@ class XAPIServiceTest extends BaseTestCase
                 'name' => '张三',
                 'email' => 'zhangsan@howzhi.com',
                 'homePage' => 'http://www.example.com',
-                'phone' => '13588888888'
-            )
+                'phone' => '13588888888',
+            ),
         );
     }
 
     protected function createXAPIService($httpClient = null)
     {
         return new XAPIService($this->auth, array(
-            'school_name' => '测试网校', 'school_url' => 'http://demo.edusoho.com'
+            'school_name' => '测试网校',
+            'school_url' => 'http://demo.edusoho.com',
+            'school_version' => '8.0.0',
         ), null, $httpClient);
     }
 }
