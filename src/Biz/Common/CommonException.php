@@ -7,11 +7,11 @@ use AppBundle\Common\Exception\AbstractException;
 class CommonException extends AbstractException
 {
     const EXCEPTION_MODUAL = 03;
-  
+
     const FORBIDDEN_DRAG_CAPTCHA_ERROR = 4030301;
 
     const FORBIDDEN_DRAG_CAPTCHA_EXPIRED = 4030302;
-    
+
     const FORBIDDEN_DRAG_CAPTCHA_REQUIRED = 4030303;
 
     public $messages = array(

@@ -71,7 +71,7 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
         $token = $request->request->get('drag_captcha_token', '');
 
         $this->getDragCaptcha()->check($token);
-    }  
+    }
 
     private function getRegisterProtective()
     {
