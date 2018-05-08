@@ -5,13 +5,18 @@
   <div class="container">
     <div class="panel panel-default error-panel">
       <div class="panel-heading">
-        <span class="error-title">404</span>该内容不存在或已被删除！
+        <span class="error-title">404</span>
       </div>
       <div class="panel-body">
         <div class="well">
-          <p>该内容似乎已经被删除，或者已被网校遗忘。</p>
-          <p>请确认您的来源链接是否正确？
-            课程、{{setting("classroom.name")|default('班级')}}是否存在？</p>
+          <p>
+            {% if exception.code|default(0) > 0 %}
+              {{ exception.message|trans|default('该内容不存在或已被删除！') }} {{ exception.code }}
+            {% else %}
+              该内容不存在或已被删除！
+            {% endif %}
+          </p>
+          <p>请确认您的来源链接是否正确？</p>
           <p><a href="{{ path('homepage', {ref:404}) }}">返回首页 ></a></p>
           <span class="error-404-icon hidden-xs"></span>
         </div>

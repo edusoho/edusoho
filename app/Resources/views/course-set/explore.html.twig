@@ -6,10 +6,17 @@
 
 {% do script(['libs/echo-js.js','app/js/course/explore/index.js']) %}
 
-{% block keywords %}{% if categoryArray %}{{ categoryArray.name }}{% if categoryParent %}{{ ',' }}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{ 'category.all_category' }}{% endif %}{% endblock %}
-  {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('category.all_category'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
-    {% endblock %}
+{% block keywords %}
+  {{ categoryArray.name|default('category.all_category'|trans) }}
+  {% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}
+{% endblock %}
+
+{% block description %}
+  {{ categoryArray.description|default('')|striptags|trim|plain_text(100) }}
+{% endblock %}
+
+{% block title %}{{ categoryArray.name|default('category.all_category'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+{% endblock %}
 
 {% block top_content %}
   <div class="es-banner">
@@ -41,31 +48,33 @@
 {% block content %}
   {% set type = filter.type|default('all') %}
   {% set price = filter.price|default('all') %}
-  {% set orderBy = orderBy|default('latest') %}
+  {% set orderBy = app.request.query.get('orderBy')|default('latest')%}
   {% set currentLevelId = filter.currentLevelId|default('all') %}
   {% set path = app.request.get('_route') %}
+  {% set subCategory = app.request.query.get('subCategory', '') %}
+  {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
 
-  {{ render(controller('AppBundle:Category:treeNav',{tags:tags, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy, group:'course'})) }}
+  {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
 
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
       <li>
         <a
-          href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}"
+          href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}"
           class="{% if (orderBy == 'latest') %}active{% endif %}">
           {{ 'site.datagrid.filter.latest'|trans }}
         </a>
       </li>
       <li>
         <a
-          href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}"
+          href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}"
           class="{% if (orderBy == 'hotSeq') %}active{% endif %}">
           {{ 'site.datagrid.filter.hotest'|trans }}
         </a>
       </li>
       <li>
         <a
-          href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}"
+          href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}"
           class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">
           {{ 'site.datagrid.filter.recommended'|trans }}
         </a>
@@ -81,11 +90,11 @@
           </button>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="{% if (currentLevelId == 'all') %}active {% endif %}"><a
-                href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{ 'category.all_category'|trans }}</a>
+                href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{ 'category.all_category'|trans }}</a>
             </li>
             {% for level in levels %}
               <li role="presentation" class="{% if (level.id == currentLevelId) %}active {% endif %}"><a
-                  href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{ level.name }}</a>
+                  href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{ level.name }}</a>
               </li>
             {% endfor %}
           </ul>
@@ -94,17 +103,17 @@
       <label class="checkbox-inline">
         <input type="checkbox" {% if type == 'live' %}checked="true" {% endif %} id="live" value="
         {% if type == 'all' %}
-          {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}"> {{ 'search.live_courses'|trans }}
       </label>
       <label class="checkbox-inline">
         <input type="checkbox" {% if price == 'free' %}checked="true" {% endif %} id="free" value="
         {% if price == 'all' %}
-          {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
         "> {{ 'search.free_courses'|trans }}
       </label>

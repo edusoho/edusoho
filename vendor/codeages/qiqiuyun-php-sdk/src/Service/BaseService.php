@@ -42,6 +42,13 @@ abstract class BaseService
     protected $host = '';
 
     /**
+     * API leaf host
+     *
+     * @var string
+     */
+    protected $leafHost = '';
+
+    /**
      * Logger
      *
      * @var LoggerInterface
@@ -60,6 +67,10 @@ abstract class BaseService
 
         if (!empty($this->options['host'])) {
             $this->host = $options['host'];
+        }
+
+        if (!empty($this->options['leafHost'])) {
+            $this->leafHost = $options['leafHost'];
         }
     }
 
@@ -84,7 +95,7 @@ abstract class BaseService
      *
      * @return array
      */
-    protected function request($method, $uri, array $data = array(), array $headers = array())
+    protected function request($method, $uri, array $data = array(), array $headers = array(), $node = 'root')
     {
         $options = array();
 
@@ -101,12 +112,12 @@ abstract class BaseService
         }
 
         if (!isset($headers['Authorization'])) {
-            $headers['Authorization'] = $this->auth->makeRequestAuthorization($uri, $options['body']);
+            $headers['Authorization'] = $this->auth->makeRequestAuthorization($uri, isset($options['body']) ? $options['body'] : '');
         }
         $headers['Content-Type'] = 'application/json';
         $options['headers'] = $headers;
 
-        $response = $this->createClient()->request($method, $this->getRequestUri($uri), $options);
+        $response = $this->createClient()->request($method, $this->getRequestUri($uri, 'http', $node), $options);
 
         return $this->extractResultFromResponse($response);
     }
@@ -121,9 +132,9 @@ abstract class BaseService
         try {
             $result = SDK\json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            throw new SDKException($e->getMessage(). "(response: {$response->getBody()}");
+            throw new SDKException($e->getMessage()."(response: {$response->getBody()}");
         }
-        
+
         $responseCode = $response->getHttpResponseCode();
 
         if ($responseCode < 200 || $responseCode > 299 || isset($result['error'])) {
@@ -141,19 +152,19 @@ abstract class BaseService
      *
      * @return string 请求地址
      */
-    protected function getRequestUri($uri, $protocol = 'http')
+    protected function getRequestUri($uri, $protocol = 'http', $node = 'root')
     {
         if (!in_array($protocol, array('http', 'https', 'auto'))) {
             throw new SDKException("The protocol parameter must be in 'http', 'https', 'auto', your value is '{$protocol}'.");
         }
 
-        if (is_array($this->host)) {
-            shuffle($this->host);
-            reset($this->host);
-            $host = current($this->host);
-        } else {
-            $host = $this->host;
+        $host = $this->getHostByNode($node);
+        if (is_array($host)) {
+            shuffle($host);
+            reset($host);
+            $host = current($host);
         }
+
         $host = (string) $host;
 
         if (!$host) {
@@ -170,5 +181,14 @@ abstract class BaseService
         return array_replace(array(
             'host' => '',
         ), $options);
+    }
+
+    private function getHostByNode($node)
+    {
+        if ('leaf' == $node) {
+            return empty($this->leafHost) ? $this->host : $this->leafHost;
+        }
+
+        return $this->host;
     }
 }

@@ -31,10 +31,6 @@ class CourseSetFileManageController extends BaseController
             'courseSetId' => $courseSet['id'],
             'type' => 'course',
         );
-        // XXX
-        // if ($courseSet['parentId'] > 0 && $courseSet['locked'] == 1) {
-        //     $conditions['courseSetId'] = $courseSet['parentId'];
-        // }
 
         $paginator = new Paginator(
             $request,
@@ -62,6 +58,10 @@ class CourseSetFileManageController extends BaseController
         $filesQuote = $this->getMaterialService()->findUsedCourseSetMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaIds($fileIds);
+        if (!empty($subtitles)) {
+            $subtitles = ArrayToolkit::index($subtitles, 'mediaId');
+        }
 
         return $this->render('courseset-manage/file/index.html.twig', array(
             'courseSet' => $courseSet,
@@ -70,6 +70,7 @@ class CourseSetFileManageController extends BaseController
             'paginator' => $paginator,
             'now' => time(),
             'filesQuote' => $filesQuote,
+            'subtitles' => $subtitles,
         ));
     }
 
@@ -235,6 +236,11 @@ class CourseSetFileManageController extends BaseController
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');
+    }
+
+    protected function getSubtitleService()
+    {
+        return $this->getBiz()->service('Subtitle:SubtitleService');
     }
 
     protected function createPrivateFileDownloadResponse(Request $request, $file)

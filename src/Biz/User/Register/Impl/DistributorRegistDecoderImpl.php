@@ -13,7 +13,7 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         $splitedInfos = $this->splitToken($registration);
 
         // 有效，则注册来源为分销平台
-        if ($splitedInfos['registable']) {
+        if ($splitedInfos['valid']) {
             $user['type'] = 'distributor';
             $user['distributorToken'] = $registration['distributorToken'];
         }
@@ -26,11 +26,11 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         $splitedInfos = $this->splitToken($registration);
 
         $errMsg = '';
-        if ($splitedInfos['registable']) {
+        if ($splitedInfos['valid']) {
             $user['token'] = $registration['distributorToken'];
             $this->getDistributorUserService()->createJobData($user);
         } else {
-            $errMsg .= 'not registable ';
+            $errMsg .= 'not valid ';
         }
 
         if ($splitedInfos['rewardable']) {

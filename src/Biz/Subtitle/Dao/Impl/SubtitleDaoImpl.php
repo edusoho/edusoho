@@ -17,6 +17,18 @@ class SubtitleDaoImpl extends GeneralDaoImpl implements SubtitleDao
     public function declares()
     {
         return array(
+            'serializes' => array(
+            ),
+            'orderbys' => array(
+                'id',
+                'createdTime',
+            ),
+            'conditions' => array(
+                'id = :id',
+                'id IN ( :ids)',
+                'mediaId = :mediaId',
+                'mediaId IN ( :mediaIds)',
+            ),
         );
     }
 }

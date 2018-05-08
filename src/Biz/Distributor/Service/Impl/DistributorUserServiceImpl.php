@@ -2,59 +2,18 @@
 
 namespace Biz\Distributor\Service\Impl;
 
-use QiQiuYun\SDK\Auth;
 use AppBundle\Common\Exception\RuntimeException;
 use AppBundle\Common\TimeMachine;
 
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 {
     /**
-     * 分销平台的token编码方式
-     *   注意，$data 内的参数值必须为字符串
-     *
-     * @param $data, key顺序不能错误
-     * array(
-     *   'merchant_id' => '123',
-     *   'agency_id' => '222',
-     *   'coupon_price' => '222',  // 单位为分
-     *   'coupon_expiry_day' => '12', //单位为天
-     * )
-     * @param $tokenExpireDateNum unix_time, 如果填了，则使用填写的时间，不填，则使用当前时间
-     *
-     * @return {merchant_id}:{agency_id}:{coupon_price}:{coupon_expiry_day}:{time}:{nonce}:{sign}
-     *                                                                                            sign 为 添加 secretKey 后的加密方法
-     */
-    public function encodeToken($data, $tokenExpireDateNum = null)
-    {
-        if (empty($tokenExpireDateNum)) {
-            $time = TimeMachine::time().'';
-        } else {
-            $time = strtotime('-1 day', $tokenExpireDateNum);
-        }
-
-        $once = md5(TimeMachine::time());
-
-        $resultStr = '';
-        foreach ($data as $key => $value) {
-            if (!empty($resultStr)) {
-                $resultStr .= ':';
-            }
-
-            $resultStr .= $value;
-        }
-
-        $resultStr .= ":{$time}:{$once}:{$this->sign($once, $time, $data)}";
-
-        return $resultStr;
-    }
-
-    /**
-     * 分销平台的token，只能使用一次
+     * @param token 分销平台的token，只能使用一次
      *
      * @return array(
      *                'couponPrice' => 123, //优惠券，奖励多少分 （单位为分）
      *                'couponExpiryDay' => unix_time, //优惠券有效时间
-     *                'registable'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
+     *                'valid'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
      *                'rewardable' => false  //是否有奖励, 当couponPrice或couponExpiryday=0时, 则注册的用户不会发放优惠券
      *                )
      */
@@ -63,7 +22,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         $splitedStr = explode(':', $token);
 
         $tokenInfo = array(
-            'registable' => false,
+            'valid' => false,
             'rewardable' => false,
         );
 
@@ -72,7 +31,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
             if (!empty($drpService)) {
                 $this->validateExistedToken($token);
                 $parsedInfo = $this->getDrpService()->parseRegisterToken($token);
-                $tokenInfo['registable'] = true;
+                $tokenInfo['valid'] = true;
                 $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
                 if ($tokenExpireTime >= TimeMachine::time()) {
                     $tokenInfo['couponPrice'] = $parsedInfo['coupon_price'];
@@ -83,7 +42,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
                 }
             }
         } catch (\Exception $e) {
-            $this->biz['logger']->error('distributor sign error BaseDistributorServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
+            $this->biz['logger']->error('distributor sign error DistributorUserServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
         }
 
         return $tokenInfo;
@@ -92,6 +51,19 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     public function getSendType()
     {
         return 'user';
+    }
+
+    public function generateMockedToken($params)
+    {
+        $data = array(
+            'merchant_id' => '123',
+            'agency_id' => '22221',
+            'coupon_price' => $params['couponPrice'],
+            'coupon_expiry_day' => $params['couponExpiryDay'],
+        );
+        $tokenExpireDateNum = strtotime($params['tokenExpireDateStr']);
+
+        return $this->encodeToken($data, $tokenExpireDateNum);
     }
 
     protected function convertData($user)
@@ -114,17 +86,6 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    private function sign($once, $time, $arr)
-    {
-        ksort($arr);
-        $json = implode("\n", array($once, $time, json_encode($arr)));
-
-        $settings = $this->getSettingService()->get('storage', array());
-        $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-
-        return $auth->makeSignature($json);
     }
 
     private function validateExistedToken($token)
