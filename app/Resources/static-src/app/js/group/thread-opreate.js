@@ -24,15 +24,6 @@ export const initThread = () => {
         trim: true
       }
     },
-    submitError: function (data) {
-      data = data.responseText;
-      data = $.parseJSON(data);
-      if (data.error) {
-        notify('danger', data.error.message);
-      } else {
-        notify('danger', Translator.trans('group.post.reply_fail_hint'));
-      }
-    },
     submitSuccess: function (data) {
       console.log(data);
       if (data == '/login') {
@@ -43,7 +34,6 @@ export const initThread = () => {
       window.location.reload();
     },
   });
-  console.log(formValidator);
   $(btn).click(() => {
     formValidator.form();
   });

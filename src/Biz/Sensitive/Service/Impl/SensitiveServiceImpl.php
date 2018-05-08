@@ -5,6 +5,7 @@ namespace Biz\Sensitive\Service\Impl;
 use Biz\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Sensitive\Service\SensitiveService;
+use Biz\Sensitive\SensitiveException;
 
 class SensitiveServiceImpl extends BaseService implements SensitiveService
 {
@@ -13,7 +14,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $bannedResult = $this->bannedKeyword($text, $type);
 
         if ($bannedResult['success']) {
-            throw $this->createServiceException('您填写的内容中包含敏感词!');
+            $this->createNewException(SensitiveException::FORBIDDEN_WORDS());
         } else {
             return $this->replaceText($text, $type);
         }
