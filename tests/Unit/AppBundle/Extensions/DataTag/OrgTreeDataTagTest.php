@@ -13,8 +13,8 @@ class OrgTreeDataTagTest extends BaseTestCase
         $this->mockBiz('Org:OrgService', array(
             array(
                 'functionName' => 'findOrgsByPrefixOrgCode',
-                'returnValue' => $mockData
-            )
+                'returnValue' => $mockData,
+            ),
         ));
         $dataTag = new OrgTreeDataTag();
         $result = $dataTag->getData(array('orgCode' => 'codename'));
