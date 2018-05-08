@@ -1,6 +1,6 @@
 import DoTestBase from 'app/js/testpaper/widget/do-test-base';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
-import ActivityEmitter from "app/js/activity/activity-emitter";
+import ActivityEmitter from 'app/js/activity/activity-emitter';
 
 import {
   initScrollbar,
@@ -28,7 +28,7 @@ class DoExercise extends DoTestBase {
   _getSeq() {
     let seq = [];
     $('.js-testpaper-question,.js-testpaper-question-stem-material').each(function () {
-      seq.push($(this).attr('id').replace(/[^0-9]/ig,""));
+      seq.push($(this).attr('id').replace(/[^0-9]/ig,''));
     });
     return seq;
   }

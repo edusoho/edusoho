@@ -29,7 +29,7 @@ $('.js-btn-thread-post-form-save').click(() => {
   if (validator.form()) {
     $('.js-btn-thread-post-form-save').button('loading');
     $('.thread-post-list').find('li.empty').remove();
-    var $form = $("#thread-post-form");
+    var $form = $('#thread-post-form');
     $.ajax({
       'url': $form.attr('action'),
       'type': 'post',
@@ -37,12 +37,12 @@ $('.js-btn-thread-post-form-save').click(() => {
       success: function (html) {
         $('.js-btn-thread-post-form-save').button('reset');
         console.log('success');
-        $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
+        $('#thread-post-num').text(parseInt($('#thread-post-num').text()) + 1);
         var id = $(html).appendTo('.thread-post-list').attr('id');
         editor.setData('');
         //清除附件
         $('.js-attachment-list').empty();
-        $('.js-attachment-ids').val("");
+        $('.js-attachment-ids').val('');
         $('.js-upload-file').show();
 
         $form.find('[type=submit]').removeAttr('disabled');
@@ -60,7 +60,7 @@ $('.js-btn-thread-post-form-save').click(() => {
       }
     });
   }
-})
+});
 
 $('[data-role=confirm-btn]').click(function () {
   var $btn = $(this);
@@ -86,7 +86,7 @@ $('.thread-post-list').on('click', '.thread-post-action', function () {
 
 });
 
-$(".thread-post-list").on('click', '[data-action=post-delete]', function () {
+$('.thread-post-list').on('click', '[data-action=post-delete]', function () {
   if (!confirm(Translator.trans('course.thread_delete_hint'))) {
     return false;
   }

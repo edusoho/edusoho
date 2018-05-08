@@ -32,7 +32,7 @@ class TestpaperForm {
         'min': 0,
         'max': score
       }
-    }
+    };
     if (this.scoreSlider) {
       this.scoreSlider.updateOptions(option);
     } else {
@@ -43,7 +43,7 @@ class TestpaperForm {
       });
     }
     $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore' : passScore})).attr('data-container', 'body');
-    $('.noUi-handle').tooltip({ html: true })
+    $('.noUi-handle').tooltip({ html: true });
     $('.noUi-tooltip').text(`${(passScore / score * 100).toFixed(0)}%`);
   }
 
@@ -53,7 +53,7 @@ class TestpaperForm {
       this.$form.find('#difficulty-form-group').removeClass('hidden');
       this.initDifficultySlider();
     } else {
-      this.$form.find('#difficulty-form-group').addClass('hidden')
+      this.$form.find('#difficulty-form-group').addClass('hidden');
     }
   }
 
@@ -166,13 +166,13 @@ class TestpaperForm {
           return parseInt(self.find('[role="questionNum"]').text());
         },
         digits: true
-      })
+      });
 
       self.find('[data-role="score"]').rules('add', {
         min: 0,
         max: 1000,
         es_score: true
-      })
+      });
 
       if (self.find('[data-role="missScore"]').length > 0) {
         self.find('[data-role="missScore"]').rules('add', {
@@ -181,9 +181,9 @@ class TestpaperForm {
             return parseInt(self.find('[data-role="score"]').val());
           },
           es_score: true
-        })
+        });
       }
-    })
+    });
     this._initEditor(this.validator);
   }
 
@@ -210,7 +210,7 @@ class TestpaperForm {
           $target.button('loading').addClass('disabled');
           this.$form.submit();
         }
-      })
+      });
 
     }
   }
@@ -222,12 +222,12 @@ new SelectLinkage($('[name="ranges[courseId]"]'),$('[name="ranges[lessonId]"]'))
 $('[name="ranges[courseId]"]').change(function(){
   let url = $(this).data('checkNumUrl');
   checkQuestionNum(url);
-})
+});
 
 $('[name="ranges[lessonId]"]').change(function(){
   let url = $(this).data('checkNumUrl');
   checkQuestionNum(url);
-})
+});
 
 function checkQuestionNum(url) {
   let courseId = $('[name="ranges[courseId]"]').val();
@@ -237,7 +237,7 @@ function checkQuestionNum(url) {
     $('[role="questionNum"]').text(0);
 
     $.each(data,function(i,n){
-      $("[type='"+i+"']").text(n.questionNum);
+      $('[type=\''+i+'\']').text(n.questionNum);
     });
-  })
+  });
 }

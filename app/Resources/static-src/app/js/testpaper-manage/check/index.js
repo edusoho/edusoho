@@ -3,7 +3,7 @@ import {
   testpaperCardFixed,
 } from 'app/js/testpaper/widget/part';
 
-$.validator.addMethod("score",function(value,element){ 
+$.validator.addMethod('score',function(value,element){ 
   let isFloat = /^\d+(\.\d)?$/.test(value);
   if (!isFloat){
     return false;
@@ -116,8 +116,8 @@ class CheckTest
           messages: {    
             required: Translator.trans('activity.testpaper_manage.required_error_hint'),    
           } 
-        })
-      })
+        });
+      });
     }
 
   }
@@ -143,7 +143,7 @@ class CheckTest
 
         self.checkContent[questionId] = content;
         scoreTotal = scoreTotal + Number($(this).val());
-      })
+      });
 
       let subjectiveScore = Number(this.$dialog.find('[name="objectiveScore"]').val());
       let totalScore = Number(scoreTotal) + subjectiveScore;
@@ -163,8 +163,8 @@ class CheckTest
 
     $target.button('loading');
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
-        window.location.reload();
-    })
+      window.location.reload();
+    });
   }
 
   _teacherSayFill(event) {

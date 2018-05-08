@@ -15,7 +15,7 @@ $btn.click(() => {
   if (validator.form()) {
     $btn.button('loading');
     $modal.modal('hide');
-    let payAgreementId = $("input[name='payAgreementId']").val();
+    let payAgreementId = $('input[name=\'payAgreementId\']').val();
     $.post($form.attr('action'), $form.serialize(), function (response) {
       if (response.success) {
         $('#unbind-bank-' + payAgreementId).remove();
@@ -25,7 +25,7 @@ $btn.click(() => {
       }
     });
   }
-})
+});
 
 
 

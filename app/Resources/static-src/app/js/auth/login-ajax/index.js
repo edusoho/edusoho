@@ -9,7 +9,7 @@ let validator = $form.validate({
       required: true,
     }
   }
-})
+});
 
 
 $btn.click((event) => {
@@ -22,4 +22,4 @@ $btn.click((event) => {
       $form.find('.alert-danger').html(json.message).show();
     });
   }
-})
+});

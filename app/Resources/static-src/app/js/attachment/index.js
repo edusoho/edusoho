@@ -1,4 +1,4 @@
-import notify from "common/notify";
+import notify from 'common/notify';
 
 let $modal = $('#attachment-modal');
 let $uploader = $modal.find('#uploader-container');
@@ -22,9 +22,9 @@ uploader.on('file.finish', (file) => {
   if (file.length && file.length > 0) {
     let minute = parseInt(file.length / 60);
     let second = Math.round(file.length % 60);
-    $("#minute").val(minute);
-    $("#second").val(second);
-    $("#length").val(minute * 60 + second);
+    $('#minute').val(minute);
+    $('#second').val(second);
+    $('#length').val(minute * 60 + second);
   }
 
   const $metas = $('[data-role="metas"]');
@@ -42,7 +42,7 @@ uploader.on('file.finish', (file) => {
     $ids.val(file.id);
     $modal.modal('hide');
     $list.siblings('.js-upload-file').hide();
-  })
+  });
 });
 
 //只执行一次

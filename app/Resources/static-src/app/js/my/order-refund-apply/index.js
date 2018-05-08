@@ -1,7 +1,7 @@
 import notify from 'common/notify';
 
 let $form = $('#refund-apply-form');
-let $btn = $("#refund-apply-btn");
+let $btn = $('#refund-apply-btn');
 let validator = $form.validate({
   rules: {
     reason : {
@@ -11,7 +11,7 @@ let validator = $form.validate({
   ajax: true,
   currentDom: '#refund-apply-btn',
   submitSuccess: function () {
-    $("#modal").modal('hide');
+    $('#modal').modal('hide');
     window.location.href = $form.data('redirect');
   }
 });

@@ -10,11 +10,11 @@ class Students {
   }
 
   initTooltips() {
-    $("#refund-coin-tips").popover({
+    $('#refund-coin-tips').popover({
       html: true,
       trigger: 'hover',//'hover','click'
       placement: 'left',//'bottom',
-      content: $("#refund-coin-tips-html").html()
+      content: $('#refund-coin-tips-html').html()
     });
   }
 
@@ -35,7 +35,7 @@ class Students {
   }
 
   initFollowActions() {
-    $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function () {
+    $('#course-student-list').on('click', '.follow-student-btn, .unfollow-student-btn', function () {
       let $this = $(this);
       $.post($this.data('url'), function () {
         $this.hide();
@@ -68,9 +68,9 @@ class Students {
 
 
   initExpiryDayActions() {
-      $('.js-expiry-days').on('click', () => {
-          notify('danger', '只有按天数设置的学习有效期，才可手动增加有效期。');
-      });
+    $('.js-expiry-days').on('click', () => {
+      notify('danger', '只有按天数设置的学习有效期，才可手动增加有效期。');
+    });
   }
 
   exportStudents(start, fileName) {

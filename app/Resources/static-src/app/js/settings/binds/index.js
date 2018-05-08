@@ -16,5 +16,5 @@ $('.js-unbind-btn').on('click', function() {
         }, 3000);
       });
     }
-  })
+  });
 });

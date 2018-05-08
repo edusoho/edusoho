@@ -17,7 +17,7 @@ class Creator {
   }
 
   initValidator() {
-    let $form = $("#course-create-form");
+    let $form = $('#course-create-form');
     this.validator = $form.validate({
       groups: {
         date: 'expiryStartDate expiryEndDate'
@@ -101,7 +101,7 @@ class Creator {
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     }).on('hide', () => {
       this.validator.form();
-    })
+    });
     $picker.datetimepicker('setStartDate', new Date());
   }
 
@@ -118,23 +118,23 @@ class Creator {
     this.elementRemoveRules($expiryEndDate);
 
     switch (expiryMode) {
-      case 'days':
-        let $deadlineType = $('[name="deadlineType"]:checked');
-        if ($deadlineType.val() === 'end_date') {
-          this.elementAddRules($deadline, this.getDeadlineEndDateRules());
-          this.validator.form();
-          return;
-        }
-        this.elementAddRules($expiryDays, this.getExpiryDaysRules());
+    case 'days':
+      let $deadlineType = $('[name="deadlineType"]:checked');
+      if ($deadlineType.val() === 'end_date') {
+        this.elementAddRules($deadline, this.getDeadlineEndDateRules());
         this.validator.form();
-        break;
-      case 'date':
-        this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
-        this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
-        this.validator.form();
-        break;
-      default:
-        break;
+        return;
+      }
+      this.elementAddRules($expiryDays, this.getExpiryDaysRules());
+      this.validator.form();
+      break;
+    case 'date':
+      this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
+      this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
+      this.validator.form();
+      break;
+    default:
+      break;
     }
   }
 
@@ -146,7 +146,7 @@ class Creator {
       messages: {
         required:Translator.trans('course.manage.expiry_end_date_error_hint')
       }
-    }
+    };
   }
 
   getExpiryStartDateRules() {
@@ -158,7 +158,7 @@ class Creator {
       messages: {
         required: Translator.trans('course.manage.expiry_start_date_error_hint')
       }
-    }
+    };
   }
 
   getExpiryDaysRules() {
@@ -169,7 +169,7 @@ class Creator {
       messages: {
         required: Translator.trans('course.manage.expiry_days_error_hint')
       }
-    }
+    };
   }
 
   getDeadlineEndDateRules() {
@@ -180,11 +180,11 @@ class Creator {
       messages: {
         required: Translator.trans('course.manage.deadline_end_date_error_hint')
       }
-    }
+    };
   }
 
   elementAddRules($element, options) {
-    $element.rules("add", options);
+    $element.rules('add', options);
   }
 
   elementRemoveRules($element) {

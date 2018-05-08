@@ -3,20 +3,20 @@ import 'app/js/classroom-manage/classroom-create';
 
 initEditor();
 const validator = initValidator();
-toggleExpiryValue($("[name=expiryMode]:checked").val());
+toggleExpiryValue($('[name=expiryMode]:checked').val());
 
-$("[name='expiryMode']").change(function () {
+$('[name=\'expiryMode\']').change(function () {
   if (app.arguments.classroomStatus === 'published') {
     return false;
   }
-  var expiryValue = $("[name='expiryValue']").val();
+  var expiryValue = $('[name=\'expiryValue\']').val();
   if (expiryValue) {
-    if (expiryValue.match("-")) {
-      $("[name='expiryValue']").data('date', $("[name='expiryValue']").val());
+    if (expiryValue.match('-')) {
+      $('[name=\'expiryValue\']').data('date', $('[name=\'expiryValue\']').val());
     } else {
-      $("[name='expiryValue']").data('days', $("[name='expiryValue']").val());
+      $('[name=\'expiryValue\']').data('days', $('[name=\'expiryValue\']').val());
     }
-    $("[name='expiryValue']").val('')
+    $('[name=\'expiryValue\']').val('');
   }
 
   if ($(this).val() == 'forever') {
@@ -57,39 +57,39 @@ function initValidator() {
 
   $('#classroom-save').click(() => {
     // validator.form();
-  })
+  });
 }
 
 function toggleExpiryValue(expiryMode) {
-  if (!$("[name='expiryValue']").val()) {
-    $("[name='expiryValue']").val($("[name='expiryValue']").data(expiryMode));
+  if (!$('[name=\'expiryValue\']').val()) {
+    $('[name=\'expiryValue\']').val($('[name=\'expiryValue\']').data(expiryMode));
   }
-  elementRemoveRules($("[name='expiryValue']"));
+  elementRemoveRules($('[name=\'expiryValue\']'));
   switch (expiryMode) {
-    case 'days':
-      $('[name="expiryValue"]').datetimepicker('remove');
-      $(".expiry-value-js .controls > span").removeClass('hidden');
-      elementAddRules($('[name="expiryValue"]'),getExpiryModeDaysRules());
-      validator.form();
-      break;
-    case 'date':
-      if($('#classroom_expiryValue').attr('readonly') !== undefined){
-        return false;
-      }
-      $(".expiry-value-js .controls > span").addClass('hidden');
-      $("#classroom_expiryValue").datetimepicker({
-        language: document.documentElement.lang,
-        autoclose: true,
-        format: 'yyyy-mm-dd',
-        minView: 'month',
-        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
-      });
-      $("#classroom_expiryValue").datetimepicker('setStartDate', new Date);
-       elementAddRules($('[name="expiryValue"]'),getExpiryModeDateRules());
-       validator.form();
-      break;
-    default:
-      break;
+  case 'days':
+    $('[name="expiryValue"]').datetimepicker('remove');
+    $('.expiry-value-js .controls > span').removeClass('hidden');
+    elementAddRules($('[name="expiryValue"]'),getExpiryModeDaysRules());
+    validator.form();
+    break;
+  case 'date':
+    if($('#classroom_expiryValue').attr('readonly') !== undefined){
+      return false;
+    }
+    $('.expiry-value-js .controls > span').addClass('hidden');
+    $('#classroom_expiryValue').datetimepicker({
+      language: document.documentElement.lang,
+      autoclose: true,
+      format: 'yyyy-mm-dd',
+      minView: 'month',
+      endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+    });
+    $('#classroom_expiryValue').datetimepicker('setStartDate', new Date);
+    elementAddRules($('[name="expiryValue"]'),getExpiryModeDateRules());
+    validator.form();
+    break;
+  default:
+    break;
   }
 }
 
@@ -102,7 +102,7 @@ function getExpiryModeDaysRules() {
     messages: {
       required: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
     }
-  }
+  };
 }
 
 function getExpiryModeDateRules() {
@@ -113,11 +113,11 @@ function getExpiryModeDateRules() {
     messages: {
       required: Translator.trans('classroom.manage.expiry_mode_date_error_hint'),
     }
-  }
+  };
 }
 
 function elementAddRules($element, options) {
-  $element.rules("add", options);
+  $element.rules('add', options);
 }
 
 function elementRemoveRules($element) {

@@ -39,4 +39,4 @@ cd.upload({
       notify('danger', Translator.trans('uploader.type_denied_limit_hint'));
     }
   }
-})
+});
