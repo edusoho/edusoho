@@ -62,7 +62,7 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
 
         $parameters['lesson_title'] = '';
 
-        if ($lesson['type'] == 'liveOpen') {
+        if ('liveOpen' == $lesson['type']) {
             $parameters['startTime'] = date('Y-m-d H:i:s', $lesson['startTime']);
         }
 
@@ -74,11 +74,6 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         $parameters['url'] = $url.' ';
 
         return array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters);
-    }
-
-    protected function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()

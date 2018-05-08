@@ -59,6 +59,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     public function onCourseSetUpdate(Event $event)
     {
         $courseSet = $event->getSubject();
+        $this->updateCourseSetTitleByCourseSet($courseSet);
         if ($courseSet['parentId'] > 0) {
             return;
         }
@@ -85,7 +86,17 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'maxRate',
                 'materialNum',
             ));
-            $this->getCourseSetDao()->update($cc['id'], $cc);
+            $copyCourseSet = $this->getCourseSetDao()->update($cc['id'], $cc);
+            $this->updateCourseSetTitleByCourseSet($copyCourseSet);
+        }
+    }
+
+    protected function updateCourseSetTitleByCourseSet($courseSet)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        foreach ($courses as $course) {
+            $course['courseSetTitle'] = $courseSet['title'];
+            $this->getCourseDao()->update($course['id'], $course);
         }
     }
 
@@ -95,7 +106,11 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($course['parentId'] > 0) {
             return;
         }
+        $this->updateCopiedCourses($course);
+    }
 
+    protected function updateCopiedCourses($course)
+    {
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
         if (empty($copiedCourses)) {
             return;
@@ -103,6 +118,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
 
         $syncFields = ArrayToolkit::parts($course, array(
             'title',
+            'courseSetTitle',
             'learnMode',
             'summary',
             'goals',

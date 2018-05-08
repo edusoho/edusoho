@@ -1685,7 +1685,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  %nickname%<i>问...</i>
+  By 
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
@@ -2740,6 +2740,7 @@ user.register.email_label: 邮箱地址
 user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱
@@ -3561,6 +3562,8 @@ thread.status.top: 头条
 thread.status.recommend: 推荐
 thread.status.reward: 奖
 thread.status.question: 问
+thread.status.answer: 答
+thread.status.all.answer: 全部的回答
 thread.hover_tips.question: 问答
 thread.hover_tips.activiy: 活动
 thread.hover_tips.thread: 话题
@@ -5678,6 +5681,7 @@ admin.sensitive_manage.add_sensitive_btn: 添加
 admin.sensitive_manage.error: 错误
 admin.sensitive_manage.prompt: 提示
 admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
+admin.sensitive_manage.existed: '敏感词已存在：%keywords%'
 
 # 咨询管理
 admin.operation_article.category_option: --所属栏目--
@@ -8329,7 +8333,12 @@ admin.datalab.setting.btn_use: 再用用看
 
 exception.common_forbidden: 被禁止的操作
 exception.common_error: 服务器内部错误
+exception.common_drag_captcha_error: 验证码验证失败！
+exception.common_drag_captcha_expired: 验证码失效！
+exception.common_drag_captcha_required: 验证码参数缺失！
+
 exception.article.notfound: 资讯不存在
 exception.user.unlogin: 未登陆，请登陆后操作
 exception.user.message_forbidden: 不支持向该用户发送私信
 exception.form.expire: 页面已过期，请重新提交数据！
+exception.user.register_error: 用户数据异常，注册失败！

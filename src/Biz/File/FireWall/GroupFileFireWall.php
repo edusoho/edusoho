@@ -2,8 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class GroupFileFireWall extends BaseFireWall implements FireWallInterface
 {
     public function canAccess($attachment)
@@ -34,18 +32,13 @@ class GroupFileFireWall extends BaseFireWall implements FireWallInterface
         return false;
     }
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Group:ThreadService');
+        return $this->biz->service('Group:ThreadService');
     }
 
     protected function getGroupService()
     {
-        return $this->getKernel()->createService('Group:GroupService');
+        return $this->biz->service('Group:GroupService');
     }
 }

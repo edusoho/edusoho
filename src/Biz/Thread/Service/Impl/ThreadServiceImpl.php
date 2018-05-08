@@ -501,14 +501,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function deleteMember($memberId)
     {
         $member = $this->getMember($memberId);
-        $thread = $this->getThread($member['threadId']);
-        $member['targetType'] = $thread['targetType'];
-        $member['targetId'] = $thread['targetId'];
-        $this->tryAccess('thread.member.delete', $member);
 
         if (empty($member)) {
             throw $this->createNotFoundException('thread member not found');
         }
+
+        $thread = $this->getThread($member['threadId']);
+        $member['targetType'] = $thread['targetType'];
+        $member['targetId'] = $thread['targetId'];
+        $this->tryAccess('thread.member.delete', $member);
 
         $this->getThreadMemberDao()->delete($memberId);
         $this->waveThread($member['threadId'], 'memberNum', -1);
@@ -516,11 +517,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function deleteMembersByThreadId($threadId)
     {
-        if (empty($threadId)) {
+        $thread = $this->getThread($threadId);
+        if (empty($thread)) {
             throw $this->createNotFoundException("thread(#{$threadId}) not found");
         }
 
-        $thread = $this->getThread($threadId);
         $this->tryAccess('thread.delete', $thread);
 
         $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);

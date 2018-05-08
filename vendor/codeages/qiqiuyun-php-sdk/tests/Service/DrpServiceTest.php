@@ -34,6 +34,28 @@ class DrpServiceTest extends BaseTestCase
         $this->assertEquals($nonce, $actualData['nonce']);
     }
 
+    public function testParseCourseActivityToken_normal()
+    {
+        $data = array(
+            'agency_id' => '120', 
+            'merchant_id' => '110', 
+            'course_id' => '100');
+        $nonce = 'abcedf';
+        $time = time();
+        ksort($data);
+        $dataStr = json_encode($data);
+        $signingText = implode("\n", array($nonce, $time, $dataStr));
+        $sign =  $this->auth->makeSignature($signingText);
+
+        $token = "courseOrder:{$data['course_id']}:{$data['merchant_id']}:{$data['agency_id']}:{$time}:{$nonce}:{$sign}";
+        $actualData = $this->getDrpService()->parseCourseActivityToken($token);
+
+        $this->assertEquals('courseOrder', $actualData['distribution_type']);
+        $this->assertEquals($data['course_id'], $actualData['course_id']);
+        $this->assertEquals($time, $actualData['time']);
+        $this->assertEquals($nonce, $actualData['nonce']);
+    }
+
     private function getDrpService(){
         return new DrpService($this->auth);
     }

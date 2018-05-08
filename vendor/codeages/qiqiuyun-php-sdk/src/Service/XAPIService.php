@@ -305,7 +305,7 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-
+        
         if (!empty($result)) {
             $statement['result'] = $result;
         }
@@ -360,7 +360,7 @@ class XAPIService extends BaseService
                 ),
             ),
         );
-
+        
         if (!empty($result)) {
             $statement['result'] = $result;
         }
