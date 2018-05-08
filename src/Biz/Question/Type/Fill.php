@@ -25,8 +25,9 @@ class Fill extends BaseQuestion implements TypeInterface
     public function judge($question, $answer)
     {
         $questionAnswers = array_values($question['answer']);
+        $answer = array_values($answer);
 
-        if (0 == count($answer)) {
+        if (count($answer) != count($questionAnswers)) {
             return array('status' => 'wrong', 'score' => 0);
         }
 
