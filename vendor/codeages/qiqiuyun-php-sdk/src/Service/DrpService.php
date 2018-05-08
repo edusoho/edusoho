@@ -87,7 +87,7 @@ class DrpService extends BaseService
      *               - time 链接生成时间
      *               - nonce 参与签名计算的随机字符串
      *               - data Array
-     *                   - course_id 课程id
+     *               - course_id 课程id
      *
      * @throws SDKException 签名不通过
      */
@@ -99,7 +99,7 @@ class DrpService extends BaseService
         }
         list($distributionType, $courseId, $merchantId, $agencyId, $time, $nonce, $expectSign) = $token;
 
-        $data = array('distribution_type'=> $distributionType, 'merchant_id' => $merchantId, 'agency_id' => $agencyId, 'course_id' => $courseId);
+        $data = array('distribution_type' => $distributionType, 'merchant_id' => $merchantId, 'agency_id' => $agencyId, 'course_id' => $courseId);
         ksort($data);
         $dataStr = json_encode($data);
         $signingText = implode("\n", array($nonce, $time, $dataStr));
@@ -107,6 +107,7 @@ class DrpService extends BaseService
         if ($expectSign != $actualSign) {
             throw new SDKException('非法请求:sign值不一致');
         }
+
         return array(
             'distribution_type' => $distributionType,
             'time' => $time,
@@ -127,8 +128,6 @@ class DrpService extends BaseService
      *               - time 链接生成时间
      *               - nonce 参与签名计算的随机字符串
      *               - data Array类型，不同分销类型有不同的数据
-     *                 
-     *
      *
      * @throws SDKException 签名不通过
      */
@@ -137,6 +136,7 @@ class DrpService extends BaseService
         $explodedToken = explode(':', $token);
         list($distributionType) = $explodedToken;
         $parseMethod = 'parse'.ucfirst($distributionType).'Token';
+
         return $this->$parseMethod($token);
     }
 
