@@ -64,6 +64,7 @@ export default class CustomFullCalendar {
 
   _init() {
     let calendarOptions = {
+      selectable: true,
       header: {
         left: '',
         center: 'title',
@@ -75,6 +76,39 @@ export default class CustomFullCalendar {
       defaultView: this.options['defaultView'],
       allDaySlot: false,
       scrollTime: '08:00:00', //默认移动到　８点位置
+      eventRender: function(event, element) {
+        element.bind('contextmenu', function(event) {
+          console.log('right!');
+          cd.confirm({
+            title: Translator.trans('user.account.refund_cancel_title'),
+            content: Translator.trans('user.account.refund_cancel_hint'),
+            okText: Translator.trans('site.confirm'),
+            cancelText: Translator.trans('site.close'),
+          }).on('ok', () => {
+            console.log('kkkkk');
+            $(this.options['calendarContainer']).fullCalendar('‘unselect');
+          });
+          return false;
+        });
+
+      },
+      dayClick: function(date, jsEvent, view, resource) {
+        console.log('点击');
+      },
+      select: function(startDate, endDate, jsEvent, view, resource) {
+        console.log('高亮');
+        // 选中后触发组件
+        cd.confirm({
+          title: Translator.trans('user.account.refund_cancel_title'),
+          content: Translator.trans('user.account.refund_cancel_hint'),
+          okText: Translator.trans('site.confirm'),
+          cancelText: Translator.trans('site.close'),
+        }).on('ok', () => {
+          console.log('kkkkk');
+          $(this.options['calendarContainer']).fullCalendar('‘unselect');
+        });
+      }
+
     };
 
     if (calendarOptions['defaultView'] == 'agendaWeek') {
