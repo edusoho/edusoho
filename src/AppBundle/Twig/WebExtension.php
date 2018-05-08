@@ -161,6 +161,10 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
+            new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
+            new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
+            new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
+            new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
         );
     }
 
@@ -312,10 +316,19 @@ class WebExtension extends \Twig_Extension
 
         if ($cdnUrl) {
             $publicUrlPath = $this->container->getParameter('topxia.upload.public_url_path');
+            $themeUrlPath = $this->container->getParameter('topxia.web_themes_url_path');
+            $assetUrlPath = $this->container->getParameter('topxia.web_assets_url_path');
+            $bundleUrlPath = $this->container->getParameter('topxia.web_bundles_url_path');
+            $staticDistUrlPath = $this->container->getParameter('front_end.web_static_dist_url_path');
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
             if ($imgs) {
-                foreach ($imgs[1] as $img) {
-                    if (0 === strpos($img, $publicUrlPath)) {
+                $urls = array_unique($imgs[1]);
+                foreach ($urls as $img) {
+                    if (0 === strpos($img, $publicUrlPath)
+                        || 0 === strpos($img, $themeUrlPath)
+                        || 0 === strpos($img, $assetUrlPath)
+                        || 0 === strpos($img, $bundleUrlPath)
+                        || 0 === strpos($img, $staticDistUrlPath)) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -1718,7 +1731,7 @@ class WebExtension extends \Twig_Extension
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-v2.js',
+            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
@@ -1733,5 +1746,82 @@ class WebExtension extends \Twig_Extension
         $timestamp = round(time() / 100);
 
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
+    }
+
+    public function isWechatLoginBind()
+    {
+        $wechat = $this->isMicroMessenger();
+        $loginBind = $this->getSetting('login_bind');
+
+        return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
+    }
+
+    public function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->getSetting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function canSendMessage($userId)
+    {
+        $user = $this->biz['user'];
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->isAdmin() || $user->isSuperAdmin()) {
+            return true;
+        }
+
+        $toUser = $this->getUserService()->getUser($userId);
+        if ($user['id'] == $toUser['id']) {
+            return false;
+        }
+
+        if (in_array('ROLE_ADMIN', $toUser['roles']) || in_array('ROLE_SUPER_ADMIN', $toUser['roles'])) {
+            return true;
+        }
+
+        $messageSetting = $this->getSetting('message', array());
+
+        if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+            return false;
+        }
+
+        if (empty($messageSetting['studentToStudent']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+            return false;
+        }
+
+        if (empty($messageSetting['studentToTeacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isTeacher($roles)
+    {
+        return in_array('ROLE_TEACHER', $roles);
+    }
+
+    private function isOnlyStudent($roles)
+    {
+        return in_array('ROLE_USER', $roles) && !in_array('ROLE_TEACHER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles);
+    }
+
+    public function arraysKeyConvert($arrays, $beforeKey, $afterKey)
+    {
+        foreach ($arrays as $key => $value) {
+            if ($value == $beforeKey) {
+                $arrays[$key][$afterKey] = $arrays[$key][$beforeKey];
+                unset($arrays[$key][$beforeKey]);
+            }
+        }
+
+        return $arrays;
     }
 }

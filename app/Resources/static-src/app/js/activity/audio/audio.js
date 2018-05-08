@@ -24,20 +24,20 @@ export default class AudioPlay {
       type: 'parent'
     });
 
-    messenger.on("ended", (msg) => {
+    messenger.on('ended', (msg) => {
       this.player.playing = false;
       this._onFinishLearnTask(msg);
     });
 
-    messenger.on("playing", (msg) => {
+    messenger.on('playing', (msg) => {
       this.player.playing = true;
     });
 
-    messenger.on("paused", (msg) => {
+    messenger.on('paused', (msg) => {
       this.player.playing = false;
     });
 
-    messenger.on("timechange", (msg) => {})
+    messenger.on('timechange', (msg) => {});
 
     this.record();
   }

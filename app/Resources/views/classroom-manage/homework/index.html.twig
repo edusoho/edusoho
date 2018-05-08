@@ -11,7 +11,7 @@
         <span class="color-danger">{{'classroom.homework_check_tips'|trans}}</span>
       {% endif %}
 
-      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'homework',testpaperIds:homeworkIds})) }}
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'homework'})) }}
 
     </div>
   </div>

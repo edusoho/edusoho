@@ -1,13 +1,10 @@
 import notify from 'common/notify';
 
 class SubtitleDialog {
-
-  upload_id = 'subtitle-uploader';
-  inited = false;
-
   constructor(element) {
     this.element = $(element);
-
+    this.upload_id = 'subtitle-uploader';
+    this.inited = false;
     if (this.element.length > 0) {
       this.init();
       this.inited = true;
@@ -73,7 +70,9 @@ class SubtitleDialog {
       },
       type: 'sub',
       process: {
-        videoNo: globalId,
+        common: {
+          videoNo: globalId,
+        }
       },
       locale: document.documentElement.lang
     });
@@ -86,9 +85,9 @@ class SubtitleDialog {
 
     uploader.on('file.finish', function (file) {
       $.post($elem.data('subtitleCreateUrl'), {
-        "name": file.name,
-        "subtitleId": file.id,
-        "mediaId": mediaId
+        'name': file.name,
+        'subtitleId': file.id,
+        'mediaId': mediaId
       }).success(function (data) {
         let convertStatus = {
           waiting: Translator.trans('activity.video_manage.convert_status_waiting'),
@@ -97,8 +96,8 @@ class SubtitleDialog {
           error: Translator.trans('activity.video_manage.convert_status_error'),
           none: Translator.trans('activity.video_manage.convert_status_none')
         };
-        $('.js-media-subtitle-list').append('<li class="pvs">' +
-          '<span class="subtitle-name prl">' + data.name + '</span>' +
+        $('.js-media-subtitle-list').append('<li class="pvs mtm">' +
+          '<span class="subtitle-name prl pull-left">' + data.name + '</span>' +
           '<span class="subtitle-transcode-status ' + data.convertStatus + '">' + convertStatus[data.convertStatus] + '</span>' +
           '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">'+Translator.trans('activity.video_manage.subtitle_delete_hint')+'</a>' +
           '</li>');

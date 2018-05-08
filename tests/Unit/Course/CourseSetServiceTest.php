@@ -244,7 +244,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertArraySternEquals($relatedCourseSets, array($createdC, $createdB, $createdD));
     }
 
-    public function testRelatedCourseSet_courseSetNoTags()
+    public function testRelatedCourseSetNoTags()
     {
         $courseSetA = array(
             'title' => '新课程开始！',
@@ -258,6 +258,23 @@ class CourseSetServiceTest extends BaseTestCase
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $relatedCourseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($createdA['id'], 4);
         $this->assertEmpty($relatedCourseSets);
+    }
+
+    public function testRefreshHotSeq()
+    {
+        $fields = array(
+            'title' => '新课程开始！',
+            'type' => 'normal',
+            'hotSeq' => 10,
+        );
+        $courseSet = $this->getCourseSetDao()->create($fields);
+        $this->assertEquals($fields['hotSeq'], $courseSet['hotSeq']);
+
+        $this->getCourseSetService()->refreshHotSeq();
+
+        $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+
+        $this->assertEquals(0, $result['hotSeq']);
     }
 
     protected function getCourseSetService()
@@ -284,5 +301,10 @@ class CourseSetServiceTest extends BaseTestCase
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
     }
 }

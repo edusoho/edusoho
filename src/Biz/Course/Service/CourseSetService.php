@@ -273,4 +273,6 @@ interface CourseSetService
      * @return mixed
      */
     public function cloneCourseSet($courseSetId, $params);
+
+    public function refreshHotSeq();
 }

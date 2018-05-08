@@ -23,8 +23,9 @@ class Order {
   calculatePrice() {
     let formData = this.$element.serializeArray();
     $.get(this.$element.data('priceCalculate'), formData, (data) => {
-      this.$realpayPrice.text(data);
-    })
+      this.$realpayPrice.text(data.priceFormat);
+      this.$element.trigger('afterCalculatePrice', data);
+    });
   }
 
   hasPriceItem(event, id) {

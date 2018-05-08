@@ -268,7 +268,7 @@ admin.system.roles_menu: 角色管理
 admin.system.course_menu: 课程设置
 admin.system.operation_menu: 运营设置
 admin.system.finance_menu: 账务设置
-admin.system.mobile_menu: 移动端设置
+admin.system.mobile_menu: APP 设置
 admin.system.mobile_iap_product_menu: IOS内购商品设置
 admin.system.optimize_menu: 系统优化
 admin.system.jobs_menu: 定时任务
@@ -296,6 +296,7 @@ admin.system.user.login_bind_tab: 登录
 admin.system.user.user_center_tab: 用户中心
 admin.system.user.user_fields_tab: 用户信息设置
 admin.system.user.avatar_tab: 默认头像
+admin.system.user.message: 私信
 
 ##角色管理模块
 admin.system.roles.basic_tab: 角色管理
@@ -323,7 +324,8 @@ admin.system.finance.coin_tab: 虚拟币
 admin.system.finance.refund_tab: 退款
 
 ##移动端设置模块
-admin.system.mobile.basic_tab: 移动端设置
+admin.system.mobile.h5: 微网校设置
+admin.system.mobile.basic_tab: APP 设置
 
 ##IOS内购商品设置模块
 admin.system.mobile_iap_product.basic_tab: IOS内购商品设置
@@ -349,8 +351,10 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
-##微营销模块
+
+##营销模块
 admin.marketing.menu: 微营销
+admin.distributor.menu: 分销
 
 #web模块
 web.course: 课程管理

@@ -1,4 +1,5 @@
 import 'jquery-validation';
+import { isEmpty } from 'common/utils';
 import axis from 'common/axis';
 
 $.validator.setDefaults({
@@ -398,15 +399,23 @@ $.validator.addMethod('nickname', function(value, element, params) {
 
 $.validator.addMethod('es_remote', function(value, element, params) {
   console.log('es_remote');
-  let $element = $(element);
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = params.type ? params.type : 'GET';
   let data = params.data ? params.data : { value: value };
+  const finalData = {};
+  for (let item in data) {
+    const prop = data[item];
+    if (typeof prop === 'function') {
+      finalData[item] = prop();
+    }
+  }
+
   let callback = params.callback ? params.callback : null;
   let isSuccess = 0;
   this.valueCache ? this.valueCache : {};
-  let cacheKey = url + type + JSON.stringify(data);
-  
+  let dataValue = isEmpty(finalData) ? data : finalData;
+  let cacheKey = url + type + JSON.stringify(dataValue);
+
   if (cacheKey in this.valueCache) {
     $.validator.messages.es_remote = this.valueCache[cacheKey].message;
     return this.optional(element) || this.valueCache[cacheKey].isSuccess;

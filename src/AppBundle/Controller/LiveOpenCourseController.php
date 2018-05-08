@@ -183,7 +183,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
-            $lesson['isEnd'] = (int) (time() - $lesson['endTime']) > 0;
+            $lesson['isEnd'] = $this->get('web.twig.live_extension')->isLiveFinished($lesson['id'], 'openCourse');
             $lesson['canRecord'] = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
             $lesson['file'] = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
@@ -246,15 +246,9 @@ class LiveOpenCourseController extends BaseOpenCourseController
         if ($lesson['replayStatus'] == 'videoGenerated') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!empty($file)) {
-                $lesson['media'] = array(
-                    'id' => $file['id'],
-                    'status' => $file['convertStatus'],
-                    'source' => 'self',
-                    'filename' => $file['filename'],
-                    'uri' => '',
-                );
+                $lesson['media'] = $file;
             } else {
-                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '');
+                $lesson['media'] = array('id' => 0, 'convertStatus' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '', 'length' => 0, 'fileSize' => 0);
             }
         }
 

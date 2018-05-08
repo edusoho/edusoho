@@ -12,6 +12,11 @@
 {% endblock %}
 
 {% block body %}
+  <style>
+  .cd-select .select-options {
+    max-height: 176px;
+  }
+  </style>
   {% if not hasSecurityQuestions %}
   <div class="alert cd-alert cd-alert-warning">
     {{'user.settings.security.questions.setting.warning'|trans}}
@@ -19,11 +24,7 @@
   <form id="settings-security-questions-form" method="post" action="{{ path('settings_security_questions') }}">
     <div class="form-group cd-form-group">
       <label for="question-2">{{'user.settings.security.questions.first_question'|trans}}</label>
-      <div class="cd-select">
-        <select class="form-control" id="question-1" name="question-1">
-          {{ select_options(questionOptions, question1|default('parents') ) }}
-        </select>
-      </div>
+      {{ web_macro.cd_select(questionOptions, question1|default('parents'), 'question-1', 'js-cd-select') }}
     </div>
     <div class="form-group cd-form-group">
       <label for="answer-1">{{'user.settings.security.questions.answer'|trans}}</label>
@@ -32,11 +33,7 @@
 
     <div class="form-group cd-form-group">
       <label for="question-2">{{'user.settings.security.questions.second_question'|trans}}</label>
-      <div class="cd-select">
-        <select class="form-control" id="question-2" name="question-2">
-          {{ select_options(questionOptions, question2|default('teacher') ) }}
-        </select>
-      </div>
+      {{ web_macro.cd_select(questionOptions, question2|default('teacher'), 'question-2', 'js-cd-select') }}
     </div>
     <div class="form-group cd-form-group">
       <label for="answer-2">{{'user.settings.security.questions.answer'|trans}}</label>
@@ -45,11 +42,7 @@
 
     <div class="form-group cd-form-group">
       <label for="question-3">{{'user.settings.security.questions.third_question'|trans}}</label>
-      <div class="cd-select">
-        <select class="form-control" id="question-3" name="question-3">
-          {{ select_options(questionOptions, question3|default('lover') ) }}
-        </select>
-      </div>
+      {{ web_macro.cd_select(questionOptions, question3|default('lover'), 'question-3', 'js-cd-select') }}
     </div>
     <div class="form-group cd-form-group">
       <label for="answer-3">{{'user.settings.security.questions.answer'|trans}}</label>

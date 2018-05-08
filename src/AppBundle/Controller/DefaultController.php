@@ -38,7 +38,7 @@ class DefaultController extends BaseController
         $meCount = $this->getMeCount();
         $mobileCode = (empty($meCount['mobileCode']) ? 'edusohov3' : $meCount['mobileCode']);
 
-        if ($this->getWebExtension()->isMicroMessenger()) {
+        if ($this->getWebExtension()->isMicroMessenger() && 'edusohov3' == $mobileCode) {
             $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
         } else {
             $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
@@ -61,7 +61,7 @@ class DefaultController extends BaseController
             );
         }
 
-        if (isset($teacher['locked']) && $teacher['locked'] !== '0') {
+        if (isset($teacher['locked']) && '0' !== $teacher['locked']) {
             $teacher = null;
         }
 
@@ -155,8 +155,8 @@ class DefaultController extends BaseController
             $config = $config['confirmConfig']['blocks']['left'];
 
             foreach ($config as $template) {
-                if (($template['code'] == 'course-grid-with-condition-index' && $courseType == 'course')
-                    || ($template['code'] == 'open-course' && $courseType == 'open-course')) {
+                if (('course-grid-with-condition-index' == $template['code'] && 'course' == $courseType)
+                    || ('open-course' == $template['code'] && 'open-course' == $courseType)) {
                     $config = $template;
                 }
             }
@@ -191,10 +191,22 @@ class DefaultController extends BaseController
         return $this->redirectSafely($targetPath);
     }
 
+    public function clientTimeCheckAction(Request $request)
+    {
+        $clientTime = $request->request->get('clientTime');
+        $clientTime = strtotime($clientTime);
+
+        if ($clientTime < time()) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     private function getMeCount()
     {
         $meCount = $this->setting('meCount', false);
-        if ($meCount === false) {
+        if (false === $meCount) {
             //判断是否是定制用户
             $result = CloudAPIFactory::create('leaf')->get('/me');
             $this->getSettingService()->set('meCount', $result);

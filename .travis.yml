@@ -5,9 +5,7 @@ branches:
 language: php
 
 php:
-  - '5.3'
   - '5.4'
-  - '5.5'
   - '5.6'
   - '7.0'
 
@@ -15,16 +13,26 @@ env:
   - SYMFONY_VERSION="~2.8.12" DB=mysql
 
 before_script:
-  - mysql -e 'CREATE DATABASE `edusoho-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
+  - mysql -e 'CREATE DATABASE `edusoho_test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
   - mysql -u root -e "CREATE USER 'tester'@'localhost' IDENTIFIED BY 'tester'"
   - mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'tester'@'localhost'"
-  - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
+  - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - "sed -i 's/\\s*database_host.*/    database_host: 127.0.0.1/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_user.*/    database_user: tester/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_password.*/    database_password: tester/g' app/config/parameters_test.yml"
   - mkdir web/files
+  - mkdir -p app/data
   - touch app/config/routing_plugins.yml
+  - touch app/data/crontab_config.yml
 
 script:
-  - phpunit -c app/
+  - phpunit -c app/ --testsuite UnitA2B
+  - phpunit -c app/ --testsuite UnitC2D
+  - phpunit -c app/ --testsuite UnitE2P
+  - phpunit -c app/ --testsuite UnitQ2T
+  - phpunit -c app/ --testsuite UnitU2Z
 
 cache:
   directories:

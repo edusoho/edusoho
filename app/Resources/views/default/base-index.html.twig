@@ -3,7 +3,7 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
-{% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null) and is_show_mobile_page() %}
+{% set appDownload = is_ES_copyright() and setting('mobile.enabled', null) and is_show_mobile_page() %}
 {% set bodyClass = appDownload ? 'homepage has-app' : 'homepage' %}
 {% set siteNav = '/' %}
 

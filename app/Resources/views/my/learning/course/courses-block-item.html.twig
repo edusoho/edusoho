@@ -5,32 +5,36 @@
   </a>
   <div class="my-course-item__info">
     <div class="my-course-item__title text-overflow">
-      <a class="cd-link-gray-dark" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+      <a class="cd-link-major" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
     </div>
 
     {% if classroom|default(null) %}
       <div class="my-course-item__classroom">
-        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-gray" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
+        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-minor" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
       </div>
     {% endif %}
 
     {% set percent = courseSet.percent ~ '%' %}
-    <div class="my-course-item__progress cd-mt24">
-      <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
-      <div class="cd-progress cd-progress-xs">
-        <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent }};"></div>
+    <div class="my-course-item__progress cd-mt24 cd-clearfix">
+      <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
+      <div class="cd-progress cd-progress-sm">
+        <div class="progress-bar">
+          <div class="progress-outer">
+            <div class="progress-inner" style="width: {{ percent }};"></div> 
+          </div>
+        </div>
+        <div class="progress-text">{{ percent }}</div>
       </div>
-      <span>{{ percent }}</span>
     </div>
   </div>
 
   {% if currentCourses|length > 1 %}
-    <div class="my-course-item__btn dropdown">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg dropdown-toggle" href="javascript:;" data-toggle="dropdown">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
-      <ul class="my-course-item__dropdown dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
+    <div class="my-course-item__btn my-course-item__dropdown cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg dropdown-toggle" href="javascript:;">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
+      <ul class="dropdown-menu" role="menu">
         {% for course in currentCourses %}
           {% set member = members[course.id]|default(null) %}
-          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{  member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-text-gray-light">/{{ course.compulsoryTaskNum }}</span></span></a></li>
+          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}"><span class="pull-right">{{ member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-dark-assist">/{{ course.compulsoryTaskNum }}</span></span>{{ course.title|sub_text(10) }}</a></li>
         {% endfor %}
       </ul>
     </div>

@@ -67,19 +67,6 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $courseSetIds) ?: null;
     }
 
-    // rename: analysisCourseSumByTime
-    public function countCreatedCoursesLessThanEndTimeByGroupDate($endTime)
-    {
-        $sql
-        = "SELECT date , max(a.Count) as count from (
-                    SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,(
-                        SELECT count(id) as count FROM  `{$this->getTable()}` i WHERE i.createdTime<=o.createdTime and i.parentId = 0
-                    )  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2
-                ) as a group by date ";
-
-        return $this->getConnection()->fetchAll($sql);
-    }
-
     public function countGroupByCourseSetIds($courseSetIds)
     {
         if (empty($courseSetIds)) {
@@ -182,6 +169,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'type = :type',
                 'price = :price',
                 'price > :price_GT',
+                'price >= :price_GE',
                 'originPrice > :originPrice_GT',
                 'originPrice = :originPrice',
                 'coinPrice > :coinPrice_GT',
@@ -205,6 +193,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'parentId IN ( :parentIds )',
                 'id NOT IN ( :excludeIds )',
                 'id IN ( :courseIds )',
+                'id IN ( :ids)',
                 'locked = :locked',
                 'lessonNum > :lessonNumGT',
                 'orgCode = :orgCode',

@@ -19,32 +19,40 @@ before_script:
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
 
-Unit Test With PHP 5.3:
+5.3 with nothing:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
     - mysql:5.5
   script:
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
   only:
     - develop
     - master
     - trigger
 
-Unit Test With PHP 5.3 And Redis:
+5.3 with Redis:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
     - mysql:5.5
     - redis:latest
   script:
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
   only:
     - develop
     - master
     - trigger
 
-Unit Test With PHP 5.5:
+5.5 with php-cs-fixer:
   stage: test
   image: codeages/ci-php:5.5-5
   services:
@@ -52,30 +60,38 @@ Unit Test With PHP 5.5:
     - redis:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
 
-Unit Test With PHP 7.0 For Non-Develop:
+7.0 For Non-Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/
+    - bin/phpunit -c app/ --testsuite UnitA2B
+    - bin/phpunit -c app/ --testsuite UnitC2D
+    - bin/phpunit -c app/ --testsuite UnitE2P
+    - bin/phpunit -c app/ --testsuite UnitQ2T
+    - bin/phpunit -c app/ --testsuite UnitU2Z
+
   only:
     - master
     - release
     - trigger
 
-Unit Test With PHP 7.0 For Develop:
+7.0 For Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 5000M/g' /etc/php/7.0/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
     - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
@@ -130,7 +146,8 @@ Api Test With 5.5:
     # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
-
+    - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
+    - bin/phpmig migrate
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
     - composer config repo.packagist composer https://packagist.phpcomposer.com
     - composer require "codeception/codeception:*" --ignore-platform-reqs
@@ -139,16 +156,30 @@ Api Test With 5.5:
     - app/console server:start
 
     # install plugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/chargecoin\.git} plugins/ChargeCoinPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/coupon\.git} plugins/CouponPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
+    - wget -O app/config/plugin.php http://download-devtest.codeages.net/api-test-data/20180209/plugin.php
+    - wget -O app/config/routing_plugins.yml http://download-devtest.codeages.net/api-test-data/20180209/routing_plugins.yml
 
     # 执行codeception的A PI 单元测试
     - bin/codecept run api
 
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
+  only:
+    - develop
+
+5.5 with js-test-unit:
+  stage: test
+  image: tianshengjie/codeage-node
+  script:
+    - npm install yarn
+    - node_modules/yarn/bin/yarn config set registry https://registry.npm.taobao.org
+    - node_modules/yarn/bin/yarn
+    - npm run test:simple tests/Js/test/*
   only:
     - develop

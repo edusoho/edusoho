@@ -24,4 +24,14 @@ class Material extends BaseQuestion implements TypeInterface
     {
         return array('status' => 'none', 'score' => 0);
     }
+
+    public function getAnswerStructure($question)
+    {
+        return array();
+    }
+
+    public function analysisAnswerIndex($question, $userAnswer)
+    {
+        return array();
+    }
 }

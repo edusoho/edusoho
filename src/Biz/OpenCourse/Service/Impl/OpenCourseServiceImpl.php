@@ -11,6 +11,8 @@ use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\AppLoggerConstant;
+use Biz\Util\EdusohoLiveClient;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -51,7 +53,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['userId'] = $this->getCurrentUser()->id;
-        $course['createdTime'] = time();
         $course['teacherIds'] = array($course['userId']);
 
         $course = $this->getOpenCourseDao()->create($course);
@@ -159,6 +160,19 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->dispatchEvent('open.course.close', $course);
 
         return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
+    }
+
+    public function batchUpdateOrg($openCourseIds, $orgCode)
+    {
+        if (!is_array($openCourseIds)) {
+            $openCourseIds = array($openCourseIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($openCourseIds as $openCourseId) {
+            $this->getOpenCourseDao()->update($openCourseId, $fields);
+        }
     }
 
     public function tryManageOpenCourse($courseId)
@@ -686,6 +700,28 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return array('success', '');
     }
 
+    public function findFinishedLivesWithinTwoHours()
+    {
+        return $this->getOpenCourseLessonDao()->findFinishedLivesWithinTwoHours();
+    }
+
+    public function updateLiveStatus($id, $status)
+    {
+        $lesson = $this->getLesson($id);
+        if (empty($lesson)) {
+            return;
+        }
+
+        if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('progressStatus' => $status));
+        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", array('preLesson' => $lesson, 'newLesson' => $updateLesson));
+
+        return $updateLesson;
+    }
+
     /**
      * open_course_member.
      */
@@ -1115,5 +1151,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    protected function getLiveCourseService()
+    {
+        return $this->createService('OpenCourse:LiveCourseService');
     }
 }

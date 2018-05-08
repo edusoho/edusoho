@@ -3,13 +3,14 @@
 namespace AppBundle\Util;
 
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\TimeMachine;
 
 class UploadToken
 {
     public function make($group, $type = 'image', $duration = 18000)
     {
         $user = $this->getCurrentUser();
-        $deadline = time() + $duration;
+        $deadline = TimeMachine::time() + $duration;
         $secret = $this->getServiceKernel()->getParameter('secret');
         $key = "{$user['id']}|{$group}|{$type}|{$deadline}";
         $sign = md5("{$key}|{$secret}");
@@ -26,7 +27,7 @@ class UploadToken
 
         list($userId, $group, $type, $deadline, $sign) = explode('|', $token);
 
-        if ($deadline < time()) {
+        if ($deadline < TimeMachine::time()) {
             return null;
         }
 

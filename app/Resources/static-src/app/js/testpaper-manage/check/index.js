@@ -1,4 +1,3 @@
-import QuestionTypeBuilder from '../../testpaper/widget/question-type-builder';
 import {
   testpaperCardFixed,
 } from 'app/js/testpaper/widget/part';
@@ -30,6 +29,7 @@ class CheckTest
     this._init();
     this._initValidate();
     testpaperCardFixed();
+    this.isContinue = false;
   }
 
   _initEvent() {
@@ -37,6 +37,7 @@ class CheckTest
     this.$container.on('click','[data-role="check-submit"]',event=>this._submitValidate(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
     this.$dialog.on('click','[data-role="finish-check"]',event=>this._submit(event));
+    this.$dialog.on('click','.js-next-check',event=>this._continue(event));
     this.$dialog.on('change','select',event=>this._teacherSayFill(event));
   }
 
@@ -65,7 +66,7 @@ class CheckTest
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', function(e) {
+      editor.on('blur', function() {
         editor.updateElement();
         setTimeout(function() {
           $longTextarea.val(editor.getData());
@@ -73,7 +74,7 @@ class CheckTest
         }, 1);
       });
 
-      editor.on('instanceReady', function(e) {
+      editor.on('instanceReady', function() {
         this.focus();
 
         $textareaBtn.one('click', function() {
@@ -93,7 +94,7 @@ class CheckTest
         }, 1);
       });
 
-      editor.on('insertHtml', function(e) {
+      editor.on('insertHtml', function() {
         editor.updateElement();
         setTimeout(function() {
           $longTextarea.val(editor.getData());
@@ -104,11 +105,11 @@ class CheckTest
     
   }
 
-  _initValidate(event) {
+  _initValidate() {
     this.validator = this.$form.validate();
 
     if ($('*[data-score]:visible').length > 0) {
-      $('*[data-score]:visible').each(function(index){
+      $('*[data-score]:visible').each(function(){
         $(this).rules('add',{
           required:true,
           score:true,
@@ -128,8 +129,7 @@ class CheckTest
     $(document).scrollTop(position.top - 55);
   }
 
-  _submitValidate(event) {
-    let $target = $(event.currentTarget);
+  _submitValidate() {
     let scoreTotal = 0;
 
     if (this.validator == undefined || this.validator.form()) {
@@ -155,6 +155,11 @@ class CheckTest
 
   }
 
+  _continue(event) {
+    this.isContinue = true;
+    this._submit(event);
+  }
+
   _submit(event) {
 
     let $target = $(event.currentTarget);
@@ -162,8 +167,12 @@ class CheckTest
     let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
 
     $target.button('loading');
-    $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
-      window.location.reload();
+    $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus,isContinue:this.isContinue}, function(response) {
+      if (response.goto != '') {
+        window.location.href = response.goto;
+      } else {
+        window.location.reload();
+      }
     });
   }
 
@@ -179,4 +188,4 @@ class CheckTest
   }
 }
 
-new CheckTest($('.container'));
+new CheckTest($('.js-testpaper-container'));

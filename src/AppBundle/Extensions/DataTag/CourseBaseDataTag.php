@@ -8,7 +8,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceKernel;
 
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
@@ -33,7 +32,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
     }
 
     /**
@@ -41,7 +40,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     /**
@@ -49,7 +48,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 
     protected function getCategoryService()
@@ -159,7 +158,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         foreach ($users as $key => $user) {
-            if ($user['id'] == $profiles[$user['id']]['id']) {
+            if ($profiles[$user['id']]['id'] == $user['id']) {
                 $users[$key]['profile'] = $profiles[$user['id']];
             }
         }
@@ -168,7 +167,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
         foreach ($courseSets as &$set) {
             $categoryId = $set['categoryId'];
-            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
+            if (0 != $categoryId && array_key_exists($categoryId, $categories)) {
                 $set['category'] = $categories[$categoryId];
             }
 
@@ -211,7 +210,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         foreach ($users as $key => $user) {
-            if ($user['id'] == $profiles[$user['id']]['id']) {
+            if ($profiles[$user['id']]['id'] == $user['id']) {
                 $users[$key]['profile'] = $profiles[$user['id']];
             }
         }
@@ -236,7 +235,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
             $categoryId = $course['categoryId'];
 
-            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
+            if (0 != $categoryId && array_key_exists($categoryId, $categories)) {
                 $course['category'] = $categories[$categoryId];
             }
         }
@@ -287,7 +286,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         if (!empty($courses)) {
             $tryLookAbleCourses = array_filter($courses, function ($course) {
-                return !empty($course['tryLookable']) && $course['status'] === 'published';
+                return !empty($course['tryLookable']) && 'published' === $course['status'];
             });
             $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
             $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);

@@ -3,12 +3,18 @@ import notify from 'common/notify';
 let $modal = $('#attachment-modal');
 let $uploader = $modal.find('#uploader-container');
 
+const uploadProcess = {
+  document: {
+    type: 'html',
+  },
+};
+
 let uploader = new UploaderSDK({
   id: $uploader.attr('id'),
   initUrl: $uploader.data('initUrl'),
   finishUrl: $uploader.data('finishUrl'),
   accept: $uploader.data('accept'),
-  process: $uploader.data('process'),
+  process: uploadProcess,
   fileSingleSizeLimit: $uploader.data('fileSingleSizeLimit'),
   ui: 'single',
   locale: document.documentElement.lang

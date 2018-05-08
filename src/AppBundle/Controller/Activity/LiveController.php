@@ -61,10 +61,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $activity = $this->getActivityService()->getActivity($id, true);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $id);
 
+        $canUpdateRoomType = $this->getLiveActivityService()->canUpdateRoomType($activity['startTime']);
+
         return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity),
             'courseId' => $courseId,
             'taskId' => $task['id'],
+            'canUpdateRoomType' => $canUpdateRoomType,
         ));
     }
 
@@ -82,26 +85,12 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             return $this->createMessageResponse('info', 'message_response.login_forget.message', null, 3000, $this->generateUrl('login'));
         }
 
+        $result = $this->getActivityService()->checkLiveStatus($courseId, $activityId);
+        if (!$result['result']) {
+            return $this->createMessageResponse('info', $result['message']);
+        }
+
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
-
-        if (empty($activity)) {
-            return $this->createMessageResponse('info', 'message_response.live_task_not_exist.message');
-        }
-        if ($activity['fromCourseId'] != $courseId) {
-            return $this->createMessageResponse('info', 'message_response.illegal_params.message');
-        }
-
-        if (empty($activity['ext']['liveId'])) {
-            return $this->createMessageResponse('info', 'message_response.live_class_not_exist.message');
-        }
-
-        if ($activity['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', 'message_response.live_not_start.message');
-        }
-
-        if ($activity['endTime'] < time()) {
-            return $this->createMessageResponse('info', 'message_response.live_over.message');
-        }
 
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
@@ -174,12 +163,15 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         if ($this->validTaskLearnStat($request, $activity['id'])) {
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            if (empty($taskResult)) {
+                $this->getTaskService()->startTask($task['id']);
+            }
             $eventName = $request->query->get('eventName');
             $data = $request->query->get('data');
             if (!empty($eventName)) {
                 $this->getTaskService()->trigger($task['id'], $eventName, $data);
             }
-            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
             if ('start' == $taskResult['status']) {
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
@@ -381,6 +373,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    protected function getLiveActivityService()
+    {
+        return $this->createService('Activity:LiveActivityService');
     }
 
     /**

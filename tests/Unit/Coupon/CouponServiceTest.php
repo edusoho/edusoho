@@ -61,6 +61,26 @@ class CouponServiceTest extends BaseTestCase
         $this->assertInstanceOf('Biz\Coupon\State\UsingCoupon', $this->getCouponService()->getCouponStateById($coupon['id']));
     }
 
+    public function testGenerateDistributionCoupon()
+    {
+        $notificationService = $this->mockBiz(
+            'User:NotificationService',
+            array(
+                array(
+                    'functionName' => 'notify',
+                ),
+            )
+        );
+
+        $result = $this->getCouponService()->generateDistributionCoupon(
+            123, 123, 1
+        );
+
+        $this->assertEquals('minus', $result['type']);
+        $this->assertTrue(0 == strstr($result['code'], 'distributionCoupon'));
+        $notificationService->shouldHaveReceived('notify')->times(1);
+    }
+
     public function testAddCoupon()
     {
         $coupon = array(

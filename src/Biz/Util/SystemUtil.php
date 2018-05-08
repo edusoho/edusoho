@@ -3,9 +3,12 @@
 namespace Biz\Util;
 
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\RandMachine;
 
 class SystemUtil
 {
+    private static $mockedDump;
+
     public static function getDownloadPath()
     {
         return ServiceKernel::instance()->getParameter('topxia.disk.upgrade_dir');
@@ -41,10 +44,15 @@ class SystemUtil
     public static function backupdb()
     {
         $backUpdir = self::getUploadTmpPath();
-        $backUpdir .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.txt';
+        $backUpdir .= DIRECTORY_SEPARATOR.RandMachine::uniqidWithMtRand().'.txt';
         $dbSetting = array('exclude' => array('session', 'cache'));
-        $dump = new MySQLDumper(ServiceKernel::instance()->getConnection(), $dbSetting);
 
-        return $dump->export($backUpdir);
+        if (empty(self::$mockedDump)) {
+            $dump = new MySQLDumper(ServiceKernel::instance()->getConnection(), $dbSetting);
+
+            return $dump->export($backUpdir);
+        } else {
+            return self::$mockedDump->export($backUpdir);
+        }
     }
 }

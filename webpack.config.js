@@ -52,7 +52,8 @@ module.exports = {
     'echarts': 'echarts/dist/echarts.js',
     'handlebars': 'handlebars/dist/handlebars.min.js',
     'moment': 'moment/moment.js',
-    'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js'
+    'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',
+    'codeages-design': 'codeages-design/dist/codeages-design.js'
   },
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {

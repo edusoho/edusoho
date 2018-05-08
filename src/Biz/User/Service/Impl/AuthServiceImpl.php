@@ -5,7 +5,6 @@ namespace Biz\User\Service\Impl;
 use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\SimpleValidator;
-use AppBundle\Common\RegisterTypeUtils;
 use AppBundle\Common\TimeMachine;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -30,10 +29,9 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $registration = $this->refillFormData($registration, $type);
             $registration['providerType'] = $this->getAuthProvider()->getProviderName();
-
             $newUser = $this->getUserService()->register(
                 $registration,
-                RegisterTypeUtils::getRegisterTypes($registration)
+                $this->biz['user.register.type.toolkit']->getRegisterTypes($registration)
             );
 
             $this->getKernel()->getConnection()->commit();
@@ -155,7 +153,6 @@ class AuthServiceImpl extends BaseService implements AuthService
                 $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
             }
         }
-
         $this->getUserService()->changeNickname($userId, $newName);
     }
 

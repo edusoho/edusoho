@@ -49,7 +49,7 @@ class CourseMemberImporter extends Importer
                 $data = array(
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                    'isAdminAdded' => 1,
+                    'source' => 'outside',
                 );
                 $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], $data);
 

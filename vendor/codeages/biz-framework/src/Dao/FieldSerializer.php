@@ -7,12 +7,19 @@ class FieldSerializer implements SerializerInterface
     /**
      * {@inheritdoc}
      */
-    public function serialize($name, $value)
+    public function serialize($method, $value)
     {
         $methods = array(
             'json' => function ($value) {
                 if (empty($value)) {
                     return '';
+                }
+
+                return json_encode($value);
+            },
+            'mysql_json' => function ($value) {
+                if (empty($value)) {
+                    return '{}';
                 }
 
                 return json_encode($value);
@@ -29,16 +36,23 @@ class FieldSerializer implements SerializerInterface
             },
         );
 
-        return $methods[$name]($value);
+        return $methods[$method]($value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function unserialize($name, $value)
+    public function unserialize($method, $value)
     {
         $methods = array(
             'json' => function ($value) {
+                if (empty($value)) {
+                    return array();
+                }
+
+                return json_decode($value, true);
+            },
+            'mysql_json' => function ($value) {
                 if (empty($value)) {
                     return array();
                 }
@@ -57,6 +71,6 @@ class FieldSerializer implements SerializerInterface
             },
         );
 
-        return $methods[$name]($value);
+        return $methods[$method]($value);
     }
 }

@@ -2,12 +2,8 @@ let $content = $('#live-lesson-content-field');
 let $form = $('#live-open-course-form');
 let now = new Date();
 let $btn = $('#live-open-course-form-btn');
-let thisTime = $('[name=startTime]').val();
-thisTime = thisTime.replace(/-/g, '/');
-thisTime = Date.parse(thisTime) / 1000;
-let nowTime = Date.parse(new Date()) / 1000;
 
-if (nowTime > thisTime) {
+if (!$form.data('update')) {
   $('[name=startTime]').attr('disabled', true);
   $('#live-length-field').attr('disabled', true);
   $('#live-open-course-form-btn').attr('disabled', true);
@@ -25,7 +21,15 @@ let validator = $form.validate({
   rules: {
     startTime: {
       required: true,
-      after_now: true
+      after_now: true,
+      es_remote: {
+        type: 'post',
+        data: {
+          clientTime: function () {
+            return $('[name=startTime]').val();
+          }
+        }
+      }
     },
     timeLength: {
       required: true,
@@ -42,6 +46,11 @@ let validator = $form.validate({
         }
       }
     }
+  },
+  messages: {
+    startTime: {
+      es_remote: Translator.trans('validate.after_now.message')
+    }
   }
 });
 
@@ -49,7 +58,7 @@ $('[name=startTime]').datetimepicker({
   autoclose: true,
   language: document.documentElement.lang
 }).on('hide', function (ev) {
-  $form.validate('[name=startTime]');
+  validator.element('[name=startTime]');
 });
 $('[name=startTime]').datetimepicker('setStartDate', now);
 

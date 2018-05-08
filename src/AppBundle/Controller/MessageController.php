@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\MessageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Biz\User\UserException;
 
 class MessageController extends BaseController
 {
@@ -38,13 +39,23 @@ class MessageController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
-        if ($result) {
-            $response = array('success' => false, 'message' => 'json_response.receiver_not_exist.message');
-        } elseif ($currentUser['nickname'] == $nickname) {
+        $response = array('success' => true, 'message' => '');
+
+        if ($currentUser['nickname'] == $nickname) {
             $response = array('success' => false, 'message' => 'json_response.cannot_send_message_self.message');
-        } else {
-            $response = array('success' => true, 'message' => '');
+
+            return $this->createJsonResponse($response);
+        }
+
+        $user = $this->getUserService()->getUserByNickname($nickname);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => 'json_response.receiver_not_exist.message');
+
+            return $this->createJsonResponse($response);
+        }
+
+        if (!$this->getWebExtension()->canSendMessage($user['id'])) {
+            $response = array('success' => false, 'message' => 'json_response.receiver_not_allowed.message');
         }
 
         return $this->createJsonResponse($response);
@@ -74,6 +85,9 @@ class MessageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message_reply');
+            if (!$this->getWebExtension()->canSendMessage($conversation['fromId'])) {
+                $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
+            }
             $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
             $html = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
 
@@ -100,6 +114,9 @@ class MessageController extends BaseController
             if (empty($receiver)) {
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
+                $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
+            }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
             return $this->redirect($this->generateUrl('message'));
@@ -120,6 +137,9 @@ class MessageController extends BaseController
             if (empty($receiver)) {
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
+                throw $this->createAccessDeniedException('not_allowd_send_message');
+            }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
             return $this->redirect($this->generateUrl('message'));
@@ -139,6 +159,9 @@ class MessageController extends BaseController
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
                 throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
+            }
+            if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
+                $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 

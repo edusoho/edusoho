@@ -74,7 +74,7 @@ class Importer {
         }).fail((res) => {
           $btn.button('reset');
           console.log('error:', res);
-        })
+        });
       }
     });
 
@@ -157,7 +157,7 @@ class Importer {
       importData: this.importData,
       $container: this.$container,
       formData: this.formData
-    })
+    });
   }
 }
 

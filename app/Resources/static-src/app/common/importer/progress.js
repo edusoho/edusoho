@@ -21,7 +21,7 @@ class Progress {
     this.importData.forEach((value, index) => {
       let i = Math.floor(index / this.chunkSize);
       if (this.chunkData[i]) {
-        this.chunkData[i].push(value)
+        this.chunkData[i].push(value);
       } else {
         this.chunkData[i] = [];
         this.chunkData[i][0] = value;
@@ -48,8 +48,8 @@ class Progress {
 
   onError() {
     this.$container.find('.progress-bar').css('width', '100%')
-    .removeClass('progress-bar-success')
-    .addClass('progress-bar-danger');
+      .removeClass('progress-bar-success')
+      .addClass('progress-bar-danger');
 
     this.$container.find('.progress-text').text(Translator.trans('importer.import_error')).removeClass('text-success').addClass('text-danger');
     this.$container.find('.js-import-finish-btn').removeClass('hidden').text(Translator.trans('importer.import_reselect_btn'));
@@ -83,7 +83,7 @@ class Progress {
       this.import(index + 1);
     }, (res) => {
       this.onError();
-    })
+    });
   }
 }
 

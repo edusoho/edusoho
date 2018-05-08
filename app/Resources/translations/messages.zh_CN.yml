@@ -272,6 +272,7 @@ user.fileds.wechat: 微信
 user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
+user.fields.gender.secret: 秘密
 user.fields.idcard_label: 身份证号
 user.fields.idcard_front_title: 上传身份证正面照
 user.fields.idcard_back_title: 上传身份证反面照
@@ -342,6 +343,7 @@ form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.know: 了解
 form.btn.return: 返回
 form.btn.cancel: 取消
 form.btn.confirm: 确定
@@ -487,6 +489,7 @@ order.refund_feedback: 反馈信息
 order.refund.id: 退款号
 order.created_time: 创建时间
 order.pay_time: 付款时间
+order.closed_time: 关闭时间
 order.status: 订单状态
 order.deduct: 优惠抵扣
 order.item_type: 订单类型
@@ -867,7 +870,7 @@ course.create.finish: 已完成
 course.create.unfinish: 未完成
 course.create.user_avatar: 用户头像
 course.create.upload_tips: >
-  <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>
+  <p class="help-block">请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>。</p>
 course.create.upload_btn: 上传新头像
 course.create.rank: 头衔
 course.create.introduction: 自我介绍
@@ -879,6 +882,8 @@ course.delete_from_classroom_tips: 课程已从%classroomName%中移除
 course.not_member_in_classroom_tips: >
   还不是%classroomName%成员,请先<a href="%classroomUrl%">加入%classroomName%</a>
 buy.approve_tips: 购买需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
+buy.payments_disabled_title: 开通支付功能提醒
+buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
@@ -1078,10 +1083,23 @@ course.members_manage.join_records.date: 加入日期
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
 course.testpaper_check.empty: 暂无数据
-course.testpaper_check.start_date: 开始日期
+course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
+course.testpaper_check.optional_task_title: 选修任务：%title%
+course.testpaper_check.testpaper_delete: 该试卷已删除
+course.testpaper_check.graph_avg_score: 平均分：%avgScore% 分
+course.testpaper_check.graph_max_score: 最高分：%maxScore% 分
+course.testpaper_check.graph_passed_percent: 合格率：%percent%%
+course.testpaper_check.btn_score_distribution: 成绩分布
+course.testpaper_check.btn_question_distribution: 答题分布
+course.testpaper_check.btn_check: 批阅
+course.testpaper_check.first_answer: 初次答题
+course.testpaper_check.number: 人次
+course.testpaper_check.get_score: 得 %questonScore% 分
+course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
+course.testpaper_check.testpaper_analysis: 试题分析
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
@@ -1203,7 +1221,7 @@ course.cover: 课程封面
 course.cover_image: 封面图片
 course.cover_image.content_title: 封面图片
 course.cover_image.upload_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>建议图片大小不超过<strong>2MB</strong>。
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
@@ -1313,11 +1331,12 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_seq: 任务%seq%
+course.thread.mission_number: 任务%number%
 course.thread.teacher_answer: 教师的答案
 course.thread.form.edit: 编辑话题
 course.thread.form.create: 发表话题
@@ -1395,7 +1414,7 @@ course.base.serialize_mode.serialized: 更新中
 course.base.serialize_mode.finished: 已完结
 course.mask.rating_num: (%ratingNum%人评价)
 
-course.teach_plan_manage: 教学计划管理
+
 
 course.detail: 详细信息
 course.detail.content_title: 详细信息
@@ -1560,6 +1579,13 @@ course.testpaper_manage.question.replace_modal.empty: 无题目记录,请先去
 course.testpaper_manage.question.replace_modal.create_btn: 创建题目
 course.testpaper_manage.question.replace_modal.select_all_btn: 全选
 course.testpaper_manage.question.replace_modal.select_btn: 请选择题目
+course.testpaper_manage.analysis_card.course_total_person: 计划人数：
+course.testpaper_manage.analysis_card.classroom_total_person: 班级人数：
+course.testpaper_manage.analysis_card.join_person: 参加人数：
+course.testpaper_manage.analysis_card.complete_person: 完成人数：
+course.testpaper_manage.analysis_card.total_score: 总分：
+course.testpaper_manage.analysis_card.avg_score: 平均成绩：
+course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 课程文件
 course.course_files.content_title: 课程文件
@@ -1760,7 +1786,7 @@ course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
-  作业题目<small class="color-gray">共%itemCount%题</small>
+  作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
@@ -1822,7 +1848,7 @@ course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
 course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
 course.plan_task.activity_manage.video.code_convert_tips: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
 course.plan_task.activity_manage.video.time_finish_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.video.last_finish_tips: >
@@ -1859,6 +1885,10 @@ course.live_lesson_manage.live_length: 直播时长
 course.live_lesson_manage.live_about: 直播说明
 course.live_lesson_manage.live_length.input_placeholder: 时长
 course.live_lesson_manage.live_length.minutes: 分钟
+
+course.live_activity.room_type: 授课形式
+course.live_activity.large_room_type: 大班课
+course.live_activity.small_room_type: 小班课
 
 course.live.replay_manage.chapter: >
   第 <span class="number">%chapterName%</span>
@@ -1900,152 +1930,15 @@ course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 
-course.cover: 课程封面
-course.cover_image: 封面图片
-course.cover_image.content_title: 封面图片
-course.cover_image.upload_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
-course.cover_image.upload_btn: 选择要上传的图片
 
-course.expiry_date: 学习有效期
-course.expiry_date.days_mode: >
-  %expiryDays% 天（随到随学）
-course.expiry_date.days_mode.total_days: 共%expiryDays%天
-course.expiry_date.end_date_mode: >
-  截止：%expiryEndDate%（随到随学）
-course.expiry_date.date_mode: >
-  开始：%expiryStartDate% &nbsp;
-  截止：%expiryEndDate%
-course.expiry_date.forever_mode: 永久有效
-course.expiry_date.expiryStartDate: >
-  课程将于%expiryStartDate%开始授课，请耐心等待
-course.expiry_date.overdue: （已到期）
-course.expiry_date.today_will_overdue: （今日过期）
-course.expiry_date.tomorrow_will_overdue: （明日过期）
-course.expiry_date.days_remaining: （剩余 %lastDays% 天）
 
-course.buy_expiry_date: 购买有效期
-course.buy_expiry_date.buy_expiry_time: >
-  <span class="course-detail-title ">购买截止日期</span>
-  <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
 
-course.showServices: 承诺服务
-course.showServices.empty: 暂未提供
-course.status.followed: 已收藏
-course.status.follow: 收藏
-course.status.closed: 已关闭
-course.status.unpublished: 未发布
-course.status.serialized: 更新中
-course.status.finished: 已完结
-course.status.published: 已发布
-course.share: 分享
-course.belong_to_classroom_tips: >
-  该课程属于
-  <a href="%classroomUrl%">%classroomTitle%</a>
-  请加入后再学习
-course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，教学计划%title%已关闭！
-course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
-course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
-course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
-course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
-course.introduction: 介绍
-course.introduction.more_teaching_plan: >
-  想查看更多教学计划？<a href="%courseUrl%">返回课程宣传页</a>
-course.introduction.course_introduction: 课程介绍
-course.introduction.course_target: 课程目标
-course.introduction.course_target_empty: 为设置目标
-course.introduction.audiences: 适合人群
-course.introduction.audiences_empty: 为设置目标
-course.catalogue.content_title: 目录
-course.catalogue.task.preview_btn: 预览
-course.catalogue.task.try_look_btn: 试看
-course.catalogue.task.join_btn: 加入
-course.catalogue.task.buy_btn: 购买
-course.catalogue.task.name: %name%任务
-course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
-course.catalogue.task_status.free: 免费
-course.catalogue.task_status.try_lookable: 试看
-course.catalogue.task_status.is_optional: 选修
-course.catalogue.task_status.looking_forward: 敬请期待
-course.catalogue.view_all_btn: 查看全部  &gt;
-course.reviews.teaching_plan: 教学计划
-course.reviews.additional_reviews_btn: 追评
-course.reviews.expand_btn: 展开全文
-course.reviews.reply_btn: 回复
-course.reviews.content: 内容
-course.reviews.delete_btn: 删除
-course.reviews.cancel_reply_btn: 收起
-course.reviews.collapse_btn: 收起全文
-course.reviews.teaching_plan_progress: 完成进度
-course.reviews.all_catagory: 全部
-course.reviews.review_again: 重新评价
-course.reviews.mark: 请打分：
-course.reviews.detail: 评价详细内容
-course.reviews.success_tips: 评价已保存！
-course.reviews.empty: 暂无评价
-course.teacher: 教师：
-course.teacher.content_title: 授课教师
-course.characteristic.content_title: 课程特色
-course.newest_students.content_title: 最新学员
-course.students_dynamic.content_title: 学员动态
-course.students_dynamic.empty: 还没有动态
 course.note.expand_btn: '[展开全文]'
+course.note.collapse_btn: '[收起全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
-course.note.mission_delete_tips: · 该任务已被删除
-course.note.empty: 暂无笔记
-course.task: 任务
-course.task.lock_tips: 需要解锁上一个任务才能学习
-course.task.learning: 任务学习
-course.task.learning.back_course_btn: 返回课程
-course.task.learning.finish_condition: 任务完成条件
-course.task.learning.finish_btn: 任务完成
-course.task.learning.learned_btn: 学过了
-course.task.preview.content_title: 任务预览
-course.task.preview.login_and_learn_tips: 登录后加入学习
-course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
-course.task.preview.free_join_tips: 觉得不错？点击加入此课程
-course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
-course.task.preview.free_learn_tips: 免费加入学习
 course.task.learning.remaining.watch_time: 剩余观看时长
-course.thread: 讨论区
-course.thread.empty: >
-  还没有%thread%，赶快添加一个吧！
-course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_seq: 任务%seq%
-course.thread.teacher_answer: 教师的答案
-course.material.unpublished_tips: 任务未发布，不能下载该资料
-course.material.links: 网络链接资料
-course.material.upload_time: 上传于%createdTime%
-course.material.empty: 课程暂无资料
-course.btn.learn: 去学习
-course.btn.join: 加入学习
-course.btn.free_join: 免费加入
 course.btn.pay_tips: 正在创建订单...
-course.btn.pay: 去支付
-course.btn.buy: 购买课程
-course.btn.announcement: 公告
-course.btn.start_learning: 开始学习
-course.btn.continue_learning_btn: 继续学习
-course.btn.edit_help_btn: 编辑帮助
-course.btn.back_course_homepage: 返回课程主页
-course.btn.back_course_edit: 返回课程编辑
-course.btn.preview: 预览
-course.btn.more: 更多
-course.btn.publish: 发布课程
-course.btn.publish_task: 发布教学计划
-course.base: 基本信息
-course.base.content_title: 基础信息
-course.base.title: 标题
-course.base.sub_title: 副标题
-course.base.tag: 标签
-course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
-course.base.category: 分类
-course.base.serialize_mode: 连载状态
-course.base.serialize_mode.none: 非连载课程
-course.base.serialize_mode.serialized: 更新中
-course.base.serialize_mode.finished: 已完结
 
 # 文件
 file_chooser.empty: 没有资源...
@@ -2368,7 +2261,7 @@ classroom.thread.create.event_time: 活动时间
 classroom.thread.create.event_start_time: 活动开始时间
 classroom.thread.create.event_location: 活动地点
 classroom.thread.create.cover_image: 封面图片
-classroom.thread.create.cover_image.placeholder: 推荐图片大小200*112
+classroom.thread.create.cover_image.placeholder: 建议图片尺寸为 200×112px，建议图片大小不超过2MB。
 classroom.thread.create.views_btn: 浏览...
 classroom.thread.create.maxUsers: 最大人数
 classroom.thread.create.maxUsers.placeholder: 不限
@@ -2534,7 +2427,7 @@ classroom.price_tips: >
 classroom.amount: >
   相当于%price%
 classroom.picture_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为525x350。<br>文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 525×350px。<br>建议图片大小不超过<strong>2MB</strong>。
 classroom.upload_picture_btn: 上传新图片
 classroom.commitment_service_label: 承诺提供服务
 classroom.activiy: 活动
@@ -2723,6 +2616,7 @@ form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
+form.btn.continue: 完成并继续
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
@@ -2888,6 +2782,7 @@ user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
+user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -3080,7 +2975,7 @@ user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
 user.settings.avatar.upload_hint: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片，文件大小不能超过<strong>2M</strong>。
 user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
@@ -3126,7 +3021,7 @@ user.account_center: 账户中心
 user.menu_heading: 账户中心
 user.account_menu: 我的账户
 user.order_menu: 我的订单
-user.cards_menu: 我的卡包
+user.cards_menu: 优惠券
 user.vip_history_menu: 会员记录
 
 # 账户中心模块-我的账户
@@ -3358,14 +3253,19 @@ teacher.promoted_teacher.see_ben: 去老师主页看看
 custom_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
 
 # 搜索模块
-search.empty: 没有搜到相关课程，请换个关键词试试！
+search.empty: 没有搜到相关%name%，请换个关键词试试！
 search.content_title: 搜索
-search.relative_courses_result: 共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程
-search.result_course_copy: 共找到<span>%count%</span>门课程
+search.relative_courses_result: 共找到<span class="color-danger phm">%count%</span>门<span class="color-danger phm">“%keywords%”</span>相关课程
+search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
+search.result_course_copy: 共找到<span class="color-danger phm">%count%</span>门课程
+search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个%classroom%
 search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
 search.live_courses: 直播课程
+search.all_classrooms: 全部%classroom%
+search.free_classrooms: 免费%classroom%
+
 
 #云资源
 cloud_file.preview: 资料预览
@@ -3415,7 +3315,7 @@ cloud_search.result_sum: 个
 cloud_search.common_keywords: 常用关键字
 cloud_search.result: 搜索结果
 cloud_search.all_courses: 全部课程
-cloud_search.input_placeholder: 可搜索课程、教师、话题、资讯
+cloud_search.input_placeholder: 可搜索
 
 cloud_search.course: 课程
 cloud_search.course.result: >
@@ -3426,6 +3326,14 @@ cloud_search.course.learned: (%studentNum%)人学习
 cloud_search.course.task: 课时
 cloud_search.course.recommend.content_title: 推荐课程
 cloud_search.course.recommend.empty: 暂无推荐课程
+
+cloud_search.classroom: 班级
+cloud_search.classroom.result: >
+  为您找到%classroom%结果约 <span class="color-danger">%counts%</span>个
+cloud_search.classroom.evaluate: %ratingNum%人评价
+cloud_search.classroom.learned: (%studentNum%)人学习
+cloud_search.classroom.recommend.content_title: 推荐%classroom%
+cloud_search.classroom.recommend.empty: 暂无推荐%classroom%
 
 cloud_search.teacher: 教师
 cloud_search.teacher.result: >
@@ -3568,12 +3476,12 @@ group.detail.group_settings.group_edit.introduction: 小组介绍
 group.detail.group_settings.logo_setup: 图标设置
 group.detail.group_settings.logo_setup.current_logo: 当前图标
 group.detail.group_settings.logo_setup.tips: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（180*180）
+  请上传jpg, gif, png格式的图片，建议图片尺寸为 180×180px。建议图片大小不超过2MB。
 group.detail.group_settings.logo_setup.upload_btn: 上传新图标
 group.detail.group_settings.background_image_setup: 背景设置
 group.detail.group_settings.background_image_setup.current_image: 当前背景
 group.detail.group_settings.background_image_setup.tips: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（1140*150）
+  请上传jpg, gif, png格式的图片，建议图片尺寸为 1140×150px。建议图片大小不超过2MB。
 group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
@@ -3926,7 +3834,7 @@ my.teaching.open_course.Basic_Info.about: 课程简介
 my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
 my.teaching.open_course.course_picture.title: 课程图片
 my.teaching.open_course.course_picture.title.help_block: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>建议图片大小不超过
 my.teaching.open_course.lesson.add_btn: 课时
 my.teaching.open_course.lesson.tips: 公开课当前仅支持添加一个课时！
 my.teaching.open_course.lesson.manage: 课时管理
@@ -3953,7 +3861,7 @@ my.teaching.open_course.lesson.modal.lesson_content: 内容
 my.teaching.open_course.lesson.modal.lesson_content.tips: 您有一段自动保存内容，继续编辑请点击
 my.teaching.open_course.lesson.modal.media_dialog: 视频字幕
 my.teaching.open_course.lesson.modal.media_dialog.help_block: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
 my.teaching.open_course.lesson.modal.upload.tips: 请等待视频上传完之后再添加字幕
 my.teaching.open_course.lesson.modal.video_length: 视频时长
 my.teaching.open_course.lesson.modal.audio_length: 音频时长
@@ -4369,8 +4277,8 @@ card.info.moneycard: 学习卡
 card.info.moneycard.tips: 学习卡可以用于账户充值
 card.info.moneycard.date_format: Y年n月d日
 card.info.moneycard.use_btn: 立即使用
-card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
-card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
+card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“账户中心—优惠券“
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已经充值到“账户中心—%coinName%账户”
 card.notLogin.receive.tips: 还没有登录，请在登录后领取。
 card.receive.login_view_btn: 登录查看
 
@@ -4972,7 +4880,7 @@ admin.live_manage.live_student_limit: 同时在线人数上限
 admin.live_manage.live_student_limit_tips: 扩充在线人数，请联系客服：4008041114
 admin.live_manage.logo_tips: >
   <b>只针对直播新方案。</b><br>
-  请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
+  请上传jpg, gif, png格式的图片。logo 图片建议尺寸不要超过 100×23px。
 admin.live_manage.edu_cloud_closed: 尚未接入教育云，不能使用直播服务
 admin.live_manage.show_detail: 查看详情
 admin.live_manage.cloud_live_closed: 尚未启用云直播服务，不能创建直播课程
@@ -5284,10 +5192,10 @@ admin.setting.site.slogan: 网站副标题
 admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
-admin.setting.site.logo.help_block: 请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,
+admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>网校 logo 设置后将显示顶部导航左侧，
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
-admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议大小16*16或者32*32。
+admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
 admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
 admin.setting.site.seo_description: SEO描述信息
@@ -5465,7 +5373,7 @@ admin.setting.consult.Contact: 联系人
 admin.setting.consult.phone: 联系电话
 admin.setting.consult.other_setting: 其他设置
 admin.setting.consult.WeChat_QR_code: 微信二维码
-admin.setting.consult.other_setting.help_block: 请上传png, gif, jpg格式的图片文件。
+admin.setting.consult.other_setting.help_block: 请上传jpg, gif, png格式的图片。
 admin.setting.consult.work_email: 工作邮箱
 admin.setting.es_bar.esbar_function: 侧边栏功能
 admin.setting.es_bar.esbar_function.open: 开启
@@ -5482,8 +5390,8 @@ admin.setting.share.as_group_name: 为小组名称
 admin.setting.share.as_thread_name: 为话题名称
 admin.setting.share.classroom_share_content: 班级分享内容
 admin.setting.share.as_classroom_name: 为班级名称
-admin.setting.security.IFrame_white_domain: IFrame白名单域名
-admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的iframe网址。一行一个域名，请不要添加http://前缀。
+admin.setting.security.IFrame_white_domain: 白名单域名
+admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe、图片等涉及外链的代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的外链网址。一行一个域名，请不要添加http://前缀。
 # 运营模块
 # 编辑区管理
 admin.block_manage.all: 所有
@@ -5557,14 +5465,14 @@ admin.block_manage.visual_edit.poster_img_upload: 上传
 admin.block_manage.visual_edit.poster_live_top_banner_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px<br>
-  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+  建议所有海报都选择相同的 [ 布局模式 ]， 并且所有海报的[ 海报尺寸 ] 保持一致。
 admin.block_manage.visual_edit.poster_cloud_search_banner_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：200px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1440px，高：200px<br>
 admin.block_manage.visual_edit.poster_other_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px<br>
-  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+  建议所有海报都选择相同的 [ 布局模式 ]， 并且所有海报的[ 海报尺寸 ] 保持一致。
 admin.block_manage.visual_edit.poster_link_url: 海报链接地址
 admin.block_manage.visual_edit_history.edit_time: 修改时间
 admin.block_manage.visual_edit_history.edit_user: 修改用户
@@ -5573,6 +5481,7 @@ admin.block_manage.visual_edit_history.user_deleted: 用户已删除
 admin.block_manage.visual_edit_history.preview: 预览
 admin.block_manage.visual_edit_history.recovery_content: 恢复此内容
 admin.block_manage.visual_edit_history.empty: 暂无记录
+admin.block_manage.visual_edit_img_compress_url: 图片优化教程
 
 #自定义页面管理
 admin.custom_page_manage.top_button: 添加
@@ -5611,11 +5520,11 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
-admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，请上传jpg, png格式的图片。建议图片尺寸为 750×300px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
-admin.mobile_manage.img_tips: 请上传png, gif, jpg格式的图片文件。
+admin.mobile_manage.img_tips: 请上传jpg, png格式的图片。
 admin.mobile_manage.default_click_radio: 默认（无触发动作）
 admin.mobile_manage.goto_link_radio: 跳转到连接地址
 admin.mobile_manage.goto_inside_course_radio: 跳转到内部课程
@@ -5982,7 +5891,7 @@ admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
-admin.user.manage.user_avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
+admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
@@ -6136,7 +6045,7 @@ admin.edu_cloud.register: 没有帐号? 去注册
 admin.edu_cloud.project: 项目
 admin.edu_cloud.content: 内容
 admin.edu_cloud.operation: 操作
-admin.edu_cloud.connect_failed_tips: 网络问题，无法连接%Edusoho%开放云平台
+admin.edu_cloud.connect_failed_tips: 网络问题，无法连接到 %EduSoho% 开放云平台
 admin.edu_cloud.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.side_bar.introduction: 概览
 admin.edu_cloud.side_bar.setup: 设置
@@ -6262,11 +6171,11 @@ admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
 admin.edu_cloud.edu_video.open_embed_watermark_tips: >
   能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
 admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸150×50。
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
@@ -6332,9 +6241,9 @@ admin.edu_cloud.edu_live.live_logo_app: 直播LOGO 欢拓客户端
 admin.edu_cloud.edu_live.upload_btn: 上传
 admin.edu_cloud.edu_live.delete_btn: 删除
 admin.edu_cloud.edu_live.upload_web_tips: >
-  上传尺寸大小必须为280*60，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+  上传尺寸大小必须为 280×60px，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
 admin.edu_cloud.edu_live.upload_app_tips: >
-  上传尺寸大小必须为280*40，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+  上传尺寸大小必须为 280×40px，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
 admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
 admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: 升级
@@ -6584,46 +6493,50 @@ admin.edu_cloud.edu_search.flow_item.more_btn: 更多
 admin.edu_cloud.edu_search.clause: 云搜索条款
 admin.edu_cloud.edu_search.clause_content: >
   <h3 class="text-center">EduSoho云搜索服务使用条款</h3>
-  <p>本服务条款作为《EduSoho开放云服务条款》的补充条款，是EduSoho开放云平台（open.edusoho.com）的经营者杭州阔知网络科技有限公司（以下简称为“阔知网络”），与用户（下称为“您”），共同缔结的对双方具有约束力的有效契约。
-  EduSoho云搜索服务（下简称“云搜索服务”、“本服务”）由EduSoho开放云提供，并将不断更新服务内容。</p>
-  <h5>1.总则</h5>
-  <p>1.1您确认：您在使用本服务之前，已经充分阅读、理解并接受本服务条款的全部内容（特别是以加粗及/或下划线标注的内容），一旦您选择“同意”并开通、使用本服务，即表示您同意遵循本服务条款之所有约定。</p>
-  <p>1.2您同意：EduSoho开放云有权随时对本服务条款及相应的服务规则内容进行单方面的变更，并有权以消息推送、网页公告等方式予以公布，而无需另行单独通知您；若您在本服务条款内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的条款内容使用本服务；若您不同意修改后的服务条款，您应立即停止使用本服务。</p>
-  <h5>2.服务内容</h5>
-  <p>2.1本服务为您的EduSoho网校提供以下内容的搜索功能：</p>
-  <p>（一）课程相关信息；</p>
-  <p>（二）老师相关信息；</p>
-  <p>（三）小组话题和班级话题相关信息；</p>
-  <p>（四）网校资讯相关信息。</p>
-  <p>您的学员可以通过本服务在您的EduSoho网校内搜索上述四类信息。</p>
-  <h5>3.您的权利和义务</h5>
-  <p>3.1您理解并同意，EduSoho开放云收集您网校内以下信息：</p>
-  <p>（一）课程相关信息（包括：课程标题、课程副标题、课程简介、适合人群、课程目标、课时标题、课时摘要等信息）；</p>
-  <p>（二）老师相关信息（包括：老师昵称、老师简介等信息）； </p>
-  <p>（三）小组话题和班级话题相关信息（包括：话题标题、话题内容、话题发布时间等信息）；</p>
-  <p>（四）网校资讯相关信息（包括：资讯标题、资讯内容、资讯发布时间等信息）。</p>
-  <p>上述四类信息仅用于为您的EduSoho网校提供搜索服务。</p>
-  <h5>4.EduSoho开放云的权利和义务</h5>
-  <p>4.1EduSoho开放云承诺对您网校的课程相关信息、老师相关信息、小组话题和班级话题相关、资讯相关信息采取对外保密措施，不向第三方披露这些信息，不授权第三方使用这些信息，除非：</p>
-  <p>4.1.1依据本服务条款或者您与EduSoho开放云之间其他服务协议、合同、在线条款等规定可以提供；</p>
-  <p>4.1.2依据法律法规的规定应当提供；</p>
-  <p>4.1.3行政、司法等职权部门要求EduSoho开放云提供；</p>
-  <p>4.1.4您同意EduSoho开放云向第三方提供；</p>
-  <p>4.1.5EduSoho开放云解决举报事件、提起诉讼而提交的；</p>
-  <p>4.1.6EduSoho开放云为防止严重违法行为或涉嫌犯罪行为发生而采取必要合理行动所必须提交的；</p>
-  <p>4.1.7EduSoho开放云为向您提供产品、服务、信息而向第三方提供的，包括EduSoho开放云通过第三方的技术及服务向您提供产品、服务、信息的情况。</p>
-  <h5>5.责任范围及责任限制</h5>
-  <p>5.1EduSoho开放云对本服务条款中列明的责任承担范围负责。</p>
-  <h5>6.完整协议</h5>
-  <p>6.1本服务条款作为《EduSoho开放云服务条款》的补充条款，除另外说明，相关名词与《EduSoho开放云服务条款》的定义相同。</p>
-  <p>6.2一旦您同意本服务条款或使用本服务，本服务条款即成为《EduSoho开放云服务条款》不可分割的组成部分，与《EduSoho开放云服务条款》具有同等的法律效力。</p>
-  <p>6.3除本服务条款中明确所作修改的条款之外，《EduSoho开放云服务条款》中的其余部分应完全继续有效。</p>
-  <p>6.4本服务条款与《EduSoho开放云服务条款》有相互冲突时，以本服务条款为准。</p>
-  <p>6.5本服务条款的章节标题仅为行文方便而设，不具有法律或合同效力。</p>
-  <p>6.6您对本服务条款理解和认同，您即对本服务条款所有组成部分的内容理解并认同，一旦您使用本服务，您和EduSoho开放云即受本服务条款所有组成部分的约束。</p>
-  <p>6.7本服务条款部分内容被有管辖权的法院认定为违法的，不因此影响其他内容的效力。</p>
-  <h5>7.法律适用与管辖</h5>
-  <p>本服务条款之效力、解释、变更、执行与争议解决均适用中华人民共和国法律。因本服务条款产生之争议，均应依照中华人民共和国法律予以处理，并提交浙江省杭州市滨江区人民法院仲裁。</p>
+    <p>本服务条款作为《EduSoho开放云服务条款》的补充条款，是EduSoho开放云平台（open.edusoho.com）的经营者杭州阔知网络科技有限公司（以下简称为“阔知网络”），与用户（下称为“您”），共同缔结的对双方具有约束力的有效契约。
+    EduSoho云搜索服务（下简称“云搜索服务”、“本服务”）由EduSoho开放云提供，并将不断更新服务内容。</p>
+    <h5>1.总则</h5>
+    <p>1.1您确认：您在使用本服务之前，已经充分阅读、理解并接受本服务条款的全部内容（特别是以加粗及/或下划线标注的内容），一旦您选择“同意”并开通、使用本服务，即表示您同意遵循本服务条款之所有约定。</p>
+    <p>1.2您同意：EduSoho开放云有权随时对本服务条款及相应的服务规则内容进行单方面的变更，并有权以消息推送、网页公告等方式予以公布，而无需另行单独通知您；若您在本服务条款内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的条款内容使用本服务；若您不同意修改后的服务条款，您应立即停止使用本服务。</p>
+    <h5>2.服务内容</h5>
+    <p>2.1本服务为您的EduSoho网校提供以下内容的搜索功能：</p>
+    <p>（一）课程相关信息；</p>
+    <p>（二）班级相关信息；</p>
+    <p>（三）老师相关信息；</p>
+    <p>（四）小组话题和班级话题相关信息；</p>
+    <p>（五）网校资讯相关信息。</p>
+    <p>您的学员可以通过本服务在您的EduSoho网校内搜索上述四类信息。</p>
+    <h5>3.您的权利和义务</h5>
+    <p>3.1您理解并同意，EduSoho开放云收集您网校内以下信息：</p>
+    <p>（一）课程相关信息（包括：课程标题、课程副标题、课程简介、适合人群、课程目标、课时标题、课时摘要等信息）；</p>
+
+    <p>（二）班级相关信息（包括：班级标题、班级介绍、班级课程等信息）；</p>
+
+    <p>（三）老师相关信息（包括：老师昵称、老师简介等信息）； </p>
+    <p>（四）小组话题和班级话题相关信息（包括：话题标题、话题内容、话题发布时间等信息）；</p>
+    <p>（五）网校资讯相关信息（包括：资讯标题、资讯内容、资讯发布时间等信息）。</p>
+    <p>上述四类信息仅用于为您的EduSoho网校提供搜索服务。</p>
+    <h5>4.EduSoho开放云的权利和义务</h5>
+    <p>4.1EduSoho开放云承诺对您网校的课程相关信息、老师相关信息、小组话题和班级话题相关、资讯相关信息采取对外保密措施，不向第三方披露这些信息，不授权第三方使用这些信息，除非：</p>
+    <p>4.1.1依据本服务条款或者您与EduSoho开放云之间其他服务协议、合同、在线条款等规定可以提供；</p>
+    <p>4.1.2依据法律法规的规定应当提供；</p>
+    <p>4.1.3行政、司法等职权部门要求EduSoho开放云提供；</p>
+    <p>4.1.4您同意EduSoho开放云向第三方提供；</p>
+    <p>4.1.5EduSoho开放云解决举报事件、提起诉讼而提交的；</p>
+    <p>4.1.6EduSoho开放云为防止严重违法行为或涉嫌犯罪行为发生而采取必要合理行动所必须提交的；</p>
+    <p>4.1.7EduSoho开放云为向您提供产品、服务、信息而向第三方提供的，包括EduSoho开放云通过第三方的技术及服务向您提供产品、服务、信息的情况。</p>
+    <h5>5.责任范围及责任限制</h5>
+    <p>5.1EduSoho开放云对本服务条款中列明的责任承担范围负责。</p>
+    <h5>6.完整协议</h5>
+    <p>6.1本服务条款作为《EduSoho开放云服务条款》的补充条款，除另外说明，相关名词与《EduSoho开放云服务条款》的定义相同。</p>
+    <p>6.2一旦您同意本服务条款或使用本服务，本服务条款即成为《EduSoho开放云服务条款》不可分割的组成部分，与《EduSoho开放云服务条款》具有同等的法律效力。</p>
+    <p>6.3除本服务条款中明确所作修改的条款之外，《EduSoho开放云服务条款》中的其余部分应完全继续有效。</p>
+    <p>6.4本服务条款与《EduSoho开放云服务条款》有相互冲突时，以本服务条款为准。</p>
+    <p>6.5本服务条款的章节标题仅为行文方便而设，不具有法律或合同效力。</p>
+    <p>6.6您对本服务条款理解和认同，您即对本服务条款所有组成部分的内容理解并认同，一旦您使用本服务，您和EduSoho开放云即受本服务条款所有组成部分的约束。</p>
+    <p>6.7本服务条款部分内容被有管辖权的法院认定为违法的，不因此影响其他内容的效力。</p>
+    <h5>7.法律适用与管辖</h5>
+    <p>本服务条款之效力、解释、变更、执行与争议解决均适用中华人民共和国法律。因本服务条款产生之争议，均应依照中华人民共和国法律予以处理，并提交浙江省杭州市滨江区人民法院仲裁。</p>
 admin.edu_cloud.edu_search.agree_btn: 同意
 admin.edu_cloud.edu_search.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
 admin.edu_cloud.edu_search.switch_title: 云搜索开关
@@ -6637,6 +6550,7 @@ admin.edu_cloud.edu_search.search_tips: >
 admin.edu_cloud.edu_search.rage_introduction: 搜索范围说明
 admin.edu_cloud.edu_search.rage_introduction_content: >
   －课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。<br>
+  －班级：包括班级标题、班级介绍等内容。<br>
   －教师：教师姓名、教师头衔。<br>
   －小组话题：包括话题标题、正文等关键词全文搜索。<br>
   －资讯：包括资讯标题、正文等关键词全文搜索。<br>
@@ -6644,7 +6558,6 @@ admin.edu_cloud.edu_search.rage_introduction_content: >
 admin.edu_cloud.edu_search.base_setting: 基本设置
 admin.edu_cloud.edu_search.power_by: >
   云搜索服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a>
-admin.edu_cloud.edu_search.connect_failed_tips: 网络问题，无法连接%edusoho%开放云平台
 admin.edu_cloud.edu_search.rebuild_index: 重建索引
 admin.edu_cloud.edu_search.rebuild_index.rebuild_btn: 重建索引
 admin.edu_cloud.edu_search.rebuild_index.sure_tips: 确定重建索引？
@@ -6693,6 +6606,7 @@ admin.edu_cloud.edu_search.binded_error_url_tips: >
 admin.edu_cloud.edu_search.search_range_describe: 搜索范围说明
 admin.edu_cloud.edu_search.search_range_tips: >
   <p>－课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。</p>
+  <p>－班级：包括班级标题、班级介绍等内容。</p>
   <p>－教师：教师姓名、教师头衔。</p>
   <p>－小组话题：包括话题标题、正文等关键词全文搜索。</p>
   <p>－资讯：包括资讯标题、正文等关键词全文搜索。</p>
@@ -6796,11 +6710,15 @@ admin.user_auth.Protection.none: 无
 admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
-admin.user_auth.Protection.low.Explanation: 方案说明：
-admin.user_auth.Protection.low.Verification_code: 注册时需填写图形验证码。
-admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
-admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
-admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
+admin.user_auth.Protection.Explaination: 方案说明：
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
+admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
+admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+                                           
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
@@ -6867,6 +6785,7 @@ admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口�
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
 admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
 admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
 admin.user_center.Configration.help_block: 如何配置？
@@ -6931,9 +6850,14 @@ admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,
 admin.user_fields.modal.date_fields: 日期
 admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
-admin.user_avatar.customer_default_avatar.help_block: 你可以上传JPG、GIF或PNG格式的文件
+admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
-admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）
+admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.user_center.message_title_name: 私信发送设置
+admin.user_center.message_student_to_student: 允许学员给学员发送私信
+admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
+admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
+admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -7001,7 +6925,7 @@ admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显�
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
-admin.setting_course.course_avatar.tips: 支持jpg、gif、png格式的图片，建议尺寸：480*270px.
+admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting_course.classroom.setting_classroom_name: 班级称谓设置
 admin.setting_course.classroom.setting_classroom_name.help_block: 用户所能看到的是这里设置的称谓
 admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
@@ -7021,7 +6945,8 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 微营销地址
+admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
+admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
@@ -7054,13 +6979,19 @@ admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
 admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
+admin.magic_setting.learn_time_sec: 学习时长上报周期
+admin.magic_setting.learn_time_sec_tip: 秒为单位
+admin.magic_setting.watch_time_sec: 视频观看时长上报周期
+admin.magic_setting.watch_time_sec_tip: 秒为单位
+
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
 admin.magic_setting.zero_for_close: 0为关闭
 admin.magic_setting.true_for_open: true为开启
 admin.magic_setting.false_for_close: false为关闭
-admin.magic_setting.export_max_limit_tips: 建议最大值不超过20000
+admin.magic_setting.max_limit_tips: 建议最大值不超过%number%
+admin.magic_setting.sync_user_data: 同步用户学习的总量数据分页
 
 admin.redis_setting.need_careful_tips: 注意事项
 admin.redis_setting.redis_config_case: redis配置案例：
@@ -7299,7 +7230,7 @@ admin.coin_setting.promotion_proposal_hint: >
   2、 网校可鼓励学员充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
-  请上传png, gif, jpg格式的大于等于50*50的<span class="text-danger">等比例</span>图片，否则无法上传
+  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.coin_setting.coin_description: 虚拟币说明
 admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
 admin.coin_setting.update_submit_btn: 提交更新
@@ -7352,7 +7283,6 @@ admin.article_setting.category.publish.tips: 建议等栏目内容整理编辑�
 admin.article_setting.category.edit: 编辑栏目
 admin.article_setting.category.create: 添加栏目
 
-admin.article_setting.choose_category: 选择所属栏目
 admin.article_setting.tag: TAG标签
 admin.article_setting.content: 正文
 admin.article_setting.property: 资讯属性
@@ -7363,14 +7293,14 @@ admin.article_setting.source_address: 来源地址
 admin.article_setting.thumb_setting: 设置缩略图
 admin.article_setting.thumb_setting.upload_btn: 上传
 admin.article_setting.thumb_setting.upload_tips: >
-  <p class="help-block">请上传png, gif, jpg格式的图片文件</p>
-  <p class="help-block mbs">请推荐尺寸754*424px。
+  <p class="help-block">请上传jpg, gif, png格式的图片</p>
+  <p class="help-block mbs">建议图片尺寸为 754×424px。
 admin.article_setting.publish_time: 发布时间
 admin.article_setting.publish_time_tips: 内容条目默认按发布时间的倒序显示
 admin.article_setting.image.content_title: 设置资讯图片
 admin.article_setting.image: 资讯图片
 admin.article_setting.image.tips: 提示：请选择图片裁剪区域。
-admin.article_setting.image.upload_tips: 你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过2M。
+admin.article_setting.image.upload_tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 754×424px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.article_setting.image.choose_btn: 选择上传的文件
 
 admin.group_settings.homepage_show_group: 首页显示小组信息
@@ -7390,23 +7320,24 @@ admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
   <p class="help-block">开启后，网校在手机浏览器和微信上默认使用微网校进行显示</p>
   <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
+  <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
 
+admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
+admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致网校用户无法购买商品。
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
 admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
 admin.payment_setting.payment: 支付功能
 admin.payment_setting.api_status: 接口状态
 admin.payment_setting.api_type: 接口类型
-admin.payment_setting.alipay_api_type.direct: 电脑网站支付
-admin.payment_setting.alipay_api_type.escow: 担保交易接口
-admin.payment_setting.alipay_api_type.dualfun: 标准双接口
-admin.payment_setting.alipay_api_hint: >
-  PID和Key可在申请支付宝接口后获取，
-  <a href="%alipayApplication%" target="_blank">如何申请？</a>
-  <br>
-  “立即到账接口”如需在移动客户端使用，请开通<a href="%mobileAlipayApplication%" target="blank">手机网站支付</a>
-  <br>
-  “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签电脑网站支付。
+admin.payment_setting.alipay_api_type.direct: 电脑网站支付接口
+admin.payment_setting.alipay_api_type.direct.hint: >
+  开通此接口后支持<span class="warning-state">电脑浏览器</span>支付，需前往支付宝开通，查看
+  <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
+admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
+admin.payment_setting.alipay_api_type.mobile.hint: >
+  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
+  <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_secret: MD5密钥
 admin.payment_setting.alipay_hint: >
   登录【支付宝商家服务】-【我的商家服务】-【签约管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
@@ -7452,13 +7383,15 @@ admin.payment_setting.wxpay_secret_word: >
   如需支持微信内购买，必须填写。AppSecret来自<a target="_blank" href="%wxpayUrl%">微信公众平台</a>内左侧栏【开发】-【基本配置】
 
 admin.payment_setting.wxpay_secret: MP文件验证码
-admin.payment_setting.wxpay_mp_secret_hint: 请填写微信提供的MP_verify文件中的内容
+admin.payment_setting.wxpay_mp_secret_hint: >
+  请填写微信提供的MP_verify文件中的内容<a target="_blank" href="%wxpMPHelpUrl%">获取教程</a>
 admin.payment_setting.wxpay_account: 商户号
 admin.payment_setting.wxpay_account_hint: >
   商户号来自<a target="_blank" href="%wxpayUrl%">微信公众平台</a>内左侧栏【微信支付】-【商户信息】
 admin.payment_setting.wxpay_key: 微信商户平台API密钥
 admin.payment_setting.wxpay_key_hint: >
   微信商户平台API密钥需要登录<a href="%wxpayUrl%" target="_blank">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙。
+admin.payment_setting.submit_error.tips: 请按需开启网校的支付方式
 
 admin.finance_refund.max_refund_days: 退款期限
 admin.finance_refund.max_refund_days_hint: >
@@ -7478,23 +7411,19 @@ admin.mobile_setting.mobile_homepage_set_hint: >
   1.开启后，可将<a target="_blank" href="%mobileHomepage%">移动端首页</a>（域名/mobile）地址添加到网站顶部导航中
 admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
-admin.mobile_setting.splash_pic_setting_hint: 请上传png, gif, jpg格式的图片文件。
+admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图片。
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
-admin.mobile_setting.online_school_logo_hint: 请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。
+admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
 admin.mobile_setting.app_custom_logo: APP图标
-admin.mobile_setting.app_custom_logo_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸 120*120。
+admin.mobile_setting.app_custom_logo_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 120×120px。
 admin.mobile_setting.app_custom_cover: APP封面
-admin.mobile_setting.app_custom_cover_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。
+admin.mobile_setting.app_custom_cover_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 225×400px。
 admin.mobile_setting.splash_setting: 设置启动图
-admin.mobile_setting.splash_setting_hint: 最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。
-admin.mobile_setting.splash1: 启动图1
-admin.mobile_setting.splash2: 启动图2
-admin.mobile_setting.splash3: 启动图3
-admin.mobile_setting.splash4: 启动图4
-admin.mobile_setting.splash5: 启动图5
+admin.mobile_setting.splash_setting_hint: 请上传jpg, gif, png格式的图片。最多设置5张启动图，建议图片尺寸为 640×960px，建议图片大小不超过2MB。用户首次登录网校时会显示启动图。
+admin.mobile_setting.splash: 启动图%splashNum%
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
   <br>
@@ -7551,7 +7480,6 @@ admin.cloud_setting.trial_hint: 当前版本为试用版,不能进行更多操�
 admin.cloud_setting.package_info: 套餐信息
 admin.cloud_setting.package_name: 套餐名称
 admin.cloud_setting.service_deadline: 服务期限
-admin.cloud_setting.network_error_hint: 网络问题，无法连接到EduSoho开放云平台，暂时无法获取信息
 admin.cloud_setting.buy_package_hint: >
   尚未购买套餐，点击<a href="%servicePriceUrl%" target="_blank">这里</a>了解详情
 admin.cloud_setting.access_key: 授权码
@@ -7625,7 +7553,6 @@ admin.app_center.type.app: 应用
 admin.app_center.buyed_app_hidden: 隐藏已购应用
 admin.app_center.error_tips: >
   AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="%cloudSettingUrl%">请修改设置。</a>
-admin.app_center.unlink_tips: 您的服务器无法连接到更新服务器，请检查网络连接状况。
 admin.app_center.package_update_btn: 安装
 admin.app_center.user_access: 商业专属
 admin.app_center.buy_btn: 购买
@@ -7904,11 +7831,12 @@ notification.coupon.receive_discount: 您有一张抵扣为%rate%折的优惠券
 notification.materialLib.share: %who% 已将资料分享给你,%do%。
 notification.materialLib.click_to_view: 点击查看
 
-
 notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
 notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
 notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
+notification.distributor-reward: 恭喜您获得注册成功奖励：%money%元面值抵价优惠券一张，可用于全站消费，已发至【%account%】-【%coupon%】。
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
@@ -7999,7 +7927,7 @@ admin.reward_point_product.product_img: 商品图片
 admin.reward_point_product.product_price: 商品价格
 admin.reward_point_product.product_introduction: 商品简介
 admin.reward_point_product.product_delivery_information: 发货信息
-admin.reward_point_product.cover_message: 你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为360x360。文件大小不能超过2M。
+admin.reward_point_product.cover_message: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 360×360px。文件大小不能超过2M。
 admin.reward_point_product.edit_product: 编辑商品
 admin.reward_point_product.add_product: 添加商品
 admin.reward_point_product.cover_crop: 图片裁剪
@@ -8307,6 +8235,7 @@ cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成录播回放
+log.action.live.delete_live_activity: 删除直播活动
 
 cashflow.title: 名称
 cashflow.sn: 流水号
@@ -8378,7 +8307,7 @@ user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
 user.learn.statistics.exit.course.num: 退出计划数
 user.learn.statistics.finished.task.num: 学完任务数
-user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.learned.seconds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
@@ -8394,3 +8323,10 @@ admin.datalab.setting.btn_cancel: 取消
 admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
+
+exception.common_forbidden: 被禁止的操作
+exception.common_error: 服务器内部错误
+exception.article.notfound: 资讯不存在
+exception.user.unlogin: 未登陆，请登陆后操作
+exception.user.message_forbidden: 不支持向该用户发送私信
+exception.form.expire: 页面已过期，请重新提交数据！

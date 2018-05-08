@@ -7,7 +7,7 @@ let removeNavMobile = function () {
   $('html,.es-wrap').removeClass('nav-active');
 };
 
-$('.js-navbar-more').click(function (e) {
+$('.js-navbar-more').click(function () {
   let $nav = $('.nav-mobile');
 
   if ($nav.hasClass('active')) {
@@ -22,6 +22,6 @@ $('.js-navbar-more').click(function (e) {
   }
 });
 
-$('body').on(eventtype, '.html-mask.active', function (e) {
+$('body').on(eventtype, '.html-mask.active', function () {
   removeNavMobile();
 });

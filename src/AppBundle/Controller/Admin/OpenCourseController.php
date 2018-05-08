@@ -12,8 +12,6 @@ class OpenCourseController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $conditions['types'] = array('open', 'liveOpen');
-
         if (empty($conditions['categoryId'])) {
             unset($conditions['categoryId']);
         }
@@ -37,6 +35,8 @@ class OpenCourseController extends BaseController
                 $conditions['userIds'] = array(-1);
             }
         }
+
+        $conditions = $this->fillOrgCode($conditions);
 
         $count = $this->getOpenCourseService()->countCourses($conditions);
 
@@ -72,11 +72,11 @@ class OpenCourseController extends BaseController
 
         $result = $this->getOpenCourseService()->publishCourse($id);
 
-        if ($course['type'] == 'liveOpen' && !$result['result']) {
+        if ('liveOpen' == $course['type'] && !$result['result']) {
             return $this->createJsonResponse(array('message' => '请先设置直播时间'));
         }
 
-        if ($course['type'] == 'open' && !$result['result']) {
+        if ('open' == $course['type'] && !$result['result']) {
             return $this->createJsonResponse(array('message' => '请先创建课时'));
         }
 
@@ -100,17 +100,17 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
-        if ($course['status'] == 'published') {
+        if ('published' == $course['status']) {
             throw $this->createAccessDeniedException('发布课程，不能删除！');
         }
 
-        if ($course['status'] == 'draft') {
+        if ('draft' == $course['status']) {
             $this->getOpenCourseService()->deleteCourse($courseId);
 
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 
-        if ($course['status'] == 'closed') {
+        if ('closed' == $course['status']) {
             if ($type) {
                 $isCheckPassword = $request->getSession()->get('checkPassword');
 
@@ -164,7 +164,7 @@ class OpenCourseController extends BaseController
         $ref = $request->query->get('ref');
         $filter = $request->query->get('filter');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData['recommended'] = 1;
             $formData['recommendedSeq'] = $request->request->get('number');
             $formData['recommendedTime'] = time();
@@ -173,7 +173,7 @@ class OpenCourseController extends BaseController
 
             $user = $this->getUserService()->getUser($course['userId']);
 
-            if ($ref == 'recommendList') {
+            if ('recommendList' == $ref) {
                 return $this->render('admin/open-course/recommend-tr.html.twig', array(
                     'course' => $course,
                     'user' => $user,
@@ -194,13 +194,13 @@ class OpenCourseController extends BaseController
     {
         $course = $this->getOpenCourseService()->updateCourse($id, array('recommended' => 0, 'recommendedSeq' => 0));
 
-        if ($target == 'recommend_list') {
+        if ('recommend_list' == $target) {
             return $this->forward('AppBundle:Admin/OpenCourse:recommendList', array(
                 'request' => $request,
             ));
         }
 
-        if ($target == 'open_index') {
+        if ('open_index' == $target) {
             return $this->renderOpenCourseTr($id, $request);
         }
     }

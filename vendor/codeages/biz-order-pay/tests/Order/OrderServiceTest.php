@@ -26,7 +26,10 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $orderItems = $this->mockOrderItems();
         $order = $this->mockOrder();
-        unset($this->biz['user']);
+        $currentUser = array(
+            'id' => ''
+        );
+        $this->biz['user'] = $currentUser;
         $this->getWorkflowService()->start($order, $orderItems);
     }
 
@@ -354,6 +357,7 @@ class OrderServiceTest extends IntegrationTestCase
             'item_id' => 0,
             'deduct_id' => 1,
             'deduct_type' => 'test',
+            'deduct_type_name' => 'test',
             'deduct_amount' => 100,
             'user_id' => 1,
         );

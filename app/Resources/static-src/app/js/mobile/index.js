@@ -1,10 +1,11 @@
-$('.js-mobile-item').waypoint(function(){
+$('.js-mobile-item').waypoint(function() {
   $(this).addClass('active');
-},{offset:500});
+}, { offset:500 });
 
-$('.es-mobile .btn-mobile').click(function(){
+$('.js-btn-mobile').click((event) => {
+  const $this = $(event.currentTarget);
+  const $offsetTarget = $($this.attr('data-url'));
   $('html,body').animate({
-    scrollTop: $($(this).attr('data-url')).offset().top + 50
-  },300);
+    scrollTop: $offsetTarget.offset().top + 50
+  }, 300);
 });
-

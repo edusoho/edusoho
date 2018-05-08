@@ -100,6 +100,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $unit = '';
 
     /**
+     * 是否可以使用优惠券
+     *
+     * @var bool
+     */
+    public $couponEnable = true;
+
+    /**
+     * 扩展字段
+     */
+    private $createExtra;
+
+    /**
      * 封面
      *
      * @var array
@@ -138,6 +150,16 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return $payablePrice > 0 ? $payablePrice : 0;
     }
 
+    public function getDeducts()
+    {
+        $deducts = array();
+        foreach ($this->pickedDeducts as $deduct) {
+            $deducts[$deduct['deduct_type']] = $deduct['deduct_amount'];
+        }
+
+        return $deducts;
+    }
+
     public function getMaxCoinAmount()
     {
         return round(($this->maxRate / 100) * $this->getCurrency()->convertToCoin($this->originPrice), 2);
@@ -161,7 +183,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
                 $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", $e->getMessage());
+            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", array('error' => $e->getMessage()));
         }
     }
 
@@ -178,6 +200,16 @@ abstract class Product extends BizAware implements OrderStatusCallback
     }
 
     public function getCreateExtra()
+    {
+        return empty($this->createExtra) ? array() : $this->createExtra;
+    }
+
+    public function setCreateExtra($createExtra)
+    {
+        $this->createExtra = $createExtra;
+    }
+
+    public function getSnapShot()
     {
         return array();
     }

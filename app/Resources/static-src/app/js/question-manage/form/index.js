@@ -8,7 +8,7 @@ import Essay from '../type/question-essay';
 import Material from '../type/question-material';
 import SelectLinkage from '../widget/select-linkage.js';
 
-
+let questionCreator;
 class QuestionCreator {
   constructor() {
   }
@@ -16,33 +16,33 @@ class QuestionCreator {
   static getCreator(type, $form) {
     switch (type) {
     case 'single_choice':
-      QuestionCreator = new SingleChoice($form);
+      questionCreator = new SingleChoice($form);
       break;
     case 'uncertain_choice':
-      QuestionCreator = new UncertainChoice($form);
+      questionCreator = new UncertainChoice($form);
       break;
     case 'choice':
-      QuestionCreator = new Choice($form);
+      questionCreator = new Choice($form);
       break;
     case 'determine':
-      QuestionCreator = new Determine($form);
+      questionCreator = new Determine($form);
       break;
     case 'essay':
-      QuestionCreator = new Essay($form);
+      questionCreator = new Essay($form);
       break;
     case 'fill':
-      QuestionCreator = new Fill($form);
+      questionCreator = new Fill($form);
       break;
     case 'material':
-      QuestionCreator = new Material($form);
+      questionCreator = new Material($form);
       break;
     default:
-      QuestionCreator = new QuestionFormBase($form);
-      QuestionCreator.initTitleEditor();
-      QuestionCreator.initAnalysisEditor();
+      questionCreator = new QuestionFormBase($form);
+      questionCreator.initTitleEditor();
+      questionCreator.initAnalysisEditor();
     }
 
-    return QuestionCreator;
+    return questionCreator;
   }
 }
 

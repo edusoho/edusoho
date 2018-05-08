@@ -21,6 +21,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\User\UserException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -110,7 +111,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user is not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
@@ -414,7 +415,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'clone_course_set', "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", $e->getMessage());
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'clone_course_set', "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", array('error' => $e->getMessage()));
 
             throw $e;
         }
@@ -762,6 +763,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'rating' => array('rating' => 'DESC'),
             'studentNum' => array('studentNum' => 'DESC'),
             'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
+            'hotSeq' => array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'),
         );
         if (isset($typeOrderByMap[$order])) {
             return $typeOrderByMap[$order];
@@ -919,6 +921,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             unset($conditions['categoryId']);
         }
 
+        if (isset($conditions['recommendedSeq'])) {
+            $conditions['recommended'] = 1;
+            unset($conditions['recommendedSeq']);
+        }
+
         return $conditions;
     }
 
@@ -955,6 +962,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         return $relatedCourseSets;
+    }
+
+    public function refreshHotSeq()
+    {
+        return $this->getCourseSetDao()->refreshHotSeq();
     }
 
     protected function getRelatedCourseSetDao()

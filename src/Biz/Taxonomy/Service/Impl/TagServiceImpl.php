@@ -305,7 +305,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         $tagGroupRelations = $this->getTagGroupTagDao()->findTagRelationsByTagId($id);
 
-        if (count($tagGroupRelations) != 0) {
+        if (0 != count($tagGroupRelations)) {
             foreach ($tagGroupRelations as $tagGroupRelation) {
                 $this->getTagGroupTagDao()->deleteByGroupIdAndTagId($tagGroupRelation['groupId'], $id);
 
@@ -337,13 +337,46 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->deleteByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
     }
 
-    public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
+    public function findGroupTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
     {
         $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerIds($ownerType, $ids);
         $tagIds = ArrayToolkit::group($tagOwnerRelations, 'ownerId');
         foreach ($tagIds as $key => $value) {
             $tagIds[$key] = ArrayToolkit::column($value, 'tagId');
         }
+
+        return $tagIds;
+    }
+
+    public function findOwnerIdsByTagIdsAndOwnerType($tagIds, $ownerType)
+    {
+        $ownerIds = array();
+        if (empty($tagIds)) {
+            return $ownerIds;
+        }
+
+        $tagOwnerRelations = $this->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
+        if (empty($tagOwnerRelations)) {
+            return $ownerIds;
+        }
+
+        $ownerIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+        $ownerTagCount = array_count_values($ownerIds);
+
+        $tagIdsCount = count($tagIds);
+        foreach ($ownerTagCount as $ownerId => $count) {
+            if ($count != $tagIdsCount) {
+                unset($ownerTagCount[$ownerId]);
+            }
+        }
+
+        return array_keys($ownerTagCount);
+    }
+
+    public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
+    {
+        $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerIds($ownerType, $ids);
+        $tagIds = ArrayToolkit::column($tagOwnerRelations, 'tagId');
 
         return $tagIds;
     }

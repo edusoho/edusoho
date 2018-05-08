@@ -1,3 +1,5 @@
+{% set isLiveFinished = is_live_finished(lesson.id, 'openCourse') %}
+
 {% if lesson is empty or lesson.startTime is empty or lesson.endTime is empty %}
   <div class="mask">
     <div class="modal-dialog" style="width:200px;margin:22% auto;">
@@ -44,7 +46,7 @@
           <div class="color-gray mtl js-member-num">{{ 'my.teaching.open_course.lesson.header.remind.tips'|trans({'%notifyNum%':notifyNum})|raw }}</div>
         {% endif %}
       </div>
-    {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
+    {% elseif ("now"|date("U")) > lesson.startTime and not isLiveFinished %}
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.header.content.tips'|trans }}<span
             class="phm">{{ lesson.endTime|date('m') }}{{ 'date.month'|trans }}{{ lesson.endTime|date('d') }}{{ 'date.day'|trans }} {{ lesson.endTime|date('H:i') }}</span>{{ 'my.teaching.open_course.lesson.header.content.end.tips'|trans }}
@@ -58,7 +60,7 @@
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
         {% if lesson.replayStatus == 'videoGenerated' %}
-          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
+          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn hidden" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
         {% elseif lesson.replayStatus == 'generated' %}
           {% for replay in lesson.replays if replay %}
             {% if lesson.liveProvider == 5 %}
@@ -72,12 +74,12 @@
             {% endif %}
           {% endfor %}
         {% else %}
-          <p class="text-info">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
+          <p class="mask-content__tip">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
         {% endif %}
       </div>
     {% endif %}
   </div>
-  {% if lesson.endTime < ("now"|date("U")) and lesson.replayStatus == 'videoGenerated' %}
+  {% if isLiveFinished and lesson.replayStatus == 'videoGenerated' %}
     {% include 'open-course/lesson-play.html.twig' %}
   {% endif %}
 {% endif %}

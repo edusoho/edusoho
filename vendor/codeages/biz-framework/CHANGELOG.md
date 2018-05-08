@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.9.13] - 2018-03-02
+
+* 修复 Dao 的 `update` 方法，当主键`id`为UUID时，无法更新的问题。
+
+## [0.9.12] - 2018-02-24
+
+* Dao 的 `batchCreate` 方法支持 UUID。
+
+## [0.9.11] - 2018-02-22
+
+* Dao支持UUID，需PHP 5.5+。@see https://github.com/ramsey/uuid/wiki/Ramsey%5CUuid-Codecs
+
 ## [0.9.8] - 2018-01-10
 
 * 删除`Codeages\Biz\Framework\Context\CurrentUserInterface`接口，新增 `Codeages\Biz\Framework\Context\CurrentUser`类。

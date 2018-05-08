@@ -2,6 +2,7 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% set target = ''~filter~'_index' %}
 <tr id="course-tr-{{ course.id }}">
+  {% include 'org/parts/table-body-checkbox.html.twig' %}
   <td>{{ course.id }}</td>
   <td>
     <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
@@ -18,6 +19,7 @@
   </td>
     
   <td>{{ dict_macro.courseStatus(course.status) }}</td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: course.orgCode} %}
   <td>
     {{ admin_macro.user_link(user) }}
     <br>
@@ -52,7 +54,7 @@
 
         {% if course.status != 'published' and app.user.isSuperAdmin() %}
           <li class="divider"></li>
-          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span>{{ 'admin.open_manage.manage.delete_course_btn'|trans }}</a></li>
+          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span> {{ 'admin.open_manage.manage.delete_course_btn'|trans }}</a></li>
         {% endif %}
       </ul>
     </div>

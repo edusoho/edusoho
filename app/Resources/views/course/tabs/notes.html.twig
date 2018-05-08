@@ -22,6 +22,11 @@
       </button>
       {% if tasks %}
         <ul class="dropdown-menu" role="menu">
+          <li class="{% if selectedTaskId == 0  %}active{% endif %}">
+            <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: 0, selectedCourse: selectedCourseId }) }}#notes">
+              {{ 'course.note.all_task'|trans }}
+            </a>
+          </li>
           {% for task in tasks %}
             <li class="{% if task.id == selectedTaskId %} active {% endif %}">
               <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">
@@ -78,7 +83,10 @@
                 {{ note.content|cdn|raw }}
             </div>
           </div>
-          <a href="javascript:;" class="more js-more-show">{{ 'course.note.expand_btn'|trans|raw }}</a>
+          <a href="javascript:;" class="more js-more-show">
+            <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+            <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+          </a>
           <div class="metas clearfix">
             <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
             · <span>{{ note.updatedTime|smart_time }}</span>

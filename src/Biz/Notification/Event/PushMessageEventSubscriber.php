@@ -51,6 +51,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classroom.join' => 'onClassroomJoin',
             'classroom.quit' => 'onClassroomQuit',
 
+            'classroom.update' => 'onClassroomUpdate',
+
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
             'thread.create' => 'onThreadCreate',
             'thread.update' => 'onThreadUpdate',
@@ -82,6 +84,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'course-set.update' => 'onCourseUpdate',
             'course-set.delete' => 'onCourseDelete',
             'course-set.closed' => 'onCourseDelete',
+
+            'open.course.publish' => 'onOpenCourseCreate',
+            'open.course.delete' => 'onOpenCourseDelete',
+            'open.course.close' => 'onOpenCourseDelete',
+            'open.course.update' => 'onOpenCourseUpdate',
 
             //教学计划购买
             'course.join' => 'onCourseJoin',
@@ -1795,7 +1802,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'category' => 'openCourse',
                 'id' => $openCourse['id'],
             );
-            $this->createSearchJob('update', $args);
+            $this->createSearchJob('delete', $args);
         }
     }
 
@@ -1805,7 +1812,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $course = $subject['course'];
         $course = $this->convertOpenCourse($course);
 
-        if ($this->isCloudSearchEnabled()) {
+        if ($this->isCloudSearchEnabled() && 'published' == $course['status']) {
             $args = array(
                 'category' => 'openCourse',
             );
@@ -1836,6 +1843,37 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    //-----------班级相关----------
+
+    public function onClassroomUpdate(Event $event)
+    {
+        $args = $event->getSubject();
+        $classroom = empty($args['classroom']) ? null : $args['classroom'];
+        $fields = empty($args['fields']) ? null : $args['fields'];
+
+        if (!empty($fields)) {
+            if ($this->isCloudSearchEnabled()) {
+                if ('draft' == $classroom['status']) {
+                    return;
+                }
+                if ('published' == $classroom['status']) {
+                    $args = array(
+                        'category' => 'classroom',
+                    );
+                    $this->createSearchJob('update', $args);
+                }
+
+                if ('closed' == $classroom['status']) {
+                    $args = array(
+                        'category' => 'classroom',
+                        'id' => $classroom['id'],
+                    );
+                    $this->createSearchJob('delete', $args);
+                }
+            }
         }
     }
 
@@ -1945,11 +1983,13 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         //            $this->getSchedulerService()->register($startJob);
         //        }
 
+        //在直播开始前，通知都有效，但不是一直需要执行
         if ('live' == $lesson['type']) {
             $startJob = array(
                 'name' => 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id'],
-                'expression' => $lesson['startTime'] - 10 * 60,
+                'expression' => intval($lesson['startTime'] - 10 * 60),
                 'class' => 'Biz\Notification\Job\LiveLessonStartNotifyJob',
+                'misfire_threshold' => 10 * 60,
                 'args' => array(
                     'targetType' => 'liveLesson',
                     'targetId' => $lesson['id'],

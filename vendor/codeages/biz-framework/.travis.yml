@@ -16,16 +16,26 @@ php:
   - '7.1'
 
 env:
-  - DB=mysql
+  global:
+    - DB=mysql
+    - CC_TEST_REPORTER_ID=6a13e586b82f19085d3f154af6468ae131c89ad69974b724d93e8a06e22bfd20
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
 
 before_script:
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - mysql -e 'CREATE DATABASE `biz-framework-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
   - composer install
+  - if [ $(phpenv version-name) = "5.5" ]; then composer require ramsey/uuid; fi
+  - if [ $(phpenv version-name) = "7.0" ]; then composer require ramsey/uuid; fi
+  - if [ $(phpenv version-name) = "7.1" ]; then composer require ramsey/uuid; fi
 
 script: 
   - vendor/bin/phpunit
-  - CACHE_ENABLED=true vendor/bin/phpunit
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - if [ $(phpenv version-name) = "7.1" ]; then ./cc-test-reporter before-build; fi
+  - if [ $(phpenv version-name) = "7.1" ]; then CACHE_ENABLED=true vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml; else CACHE_ENABLED=true vendor/bin/phpunit; fi
+  - if [ $(phpenv version-name) = "7.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
 
 cache:
   directories:

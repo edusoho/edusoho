@@ -48,7 +48,7 @@ enterSubmit($form, $btn);
 
 $btn.click((event) => {
   let type;
-  const reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  const reg_email = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
   if (validator.form()) {
     $(event.target).button('loading');

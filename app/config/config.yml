@@ -28,6 +28,7 @@ framework:
     trusted_proxies: ~
     session:
         handler_id:  "%session.service_id%"
+        cookie_domain: "%cookie_domain%"
     fragments:       ~
     http_method_override: true
     assets:
@@ -72,6 +73,10 @@ parameters:
     topxia.disk.backup_dir: "%kernel.root_dir%/data/backup"
     topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
     topxia.upload.public_url_path: "/files"
+    topxia.web_themes_url_path: "/themes"
+    topxia.web_assets_url_path: "/assets"
+    topxia.web_bundles_url_path: "/bundles"
+    front_end.web_static_dist_url_path: "/static-dist"
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
     permission.path_regular_expression: ['/^\/admin/']
     router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper

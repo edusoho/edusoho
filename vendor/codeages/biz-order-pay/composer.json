@@ -11,7 +11,8 @@
     "autoload": {
         "psr-4": {
             "Codeages\\Biz\\Order\\": "src/Order/",
-            "Codeages\\Biz\\Pay\\": "src/Pay/"
+            "Codeages\\Biz\\Pay\\": "src/Pay/",
+            "Codeages\\Biz\\Invoice\\": "src/Invoice/"
         }
     },
     "autoload-dev": {
@@ -20,6 +21,7 @@
         }
     },
     "require-dev": {
-        "mockery/mockery": "^0.9.9"
+        "mockery/mockery": "^0.9.9",
+        "phpunit/phpunit": "4.8.36"
     }
 }

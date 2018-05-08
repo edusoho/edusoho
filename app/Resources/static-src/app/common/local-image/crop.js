@@ -10,30 +10,30 @@ class LocalImageCrop {
     this.group = props.group;
     
     this.uploadInput = props.uploadInput || '.js-upload-input';
-    this.sourceImg = props.sourceImg || '.js-source-img';
     this.modal = props.modal || '#modal';
 
     this.init();
   }
 
   init() {
-    let $sourceImg = $(this.sourceImg);
-    this.initImage($sourceImg);
+    this.initImage();
 
     let imageCrop = this.imageCrop();
     this.initEvent(imageCrop);
   }
 
   initImage($sourceImg) {
+    let imageAttr = JSON.parse(localStorage.getItem('crop_image_attr'));
+
     $(this.cropImg).attr({
-      'src': $sourceImg.attr('src'),
-      'width': $sourceImg.attr('width'),
-      'height': $sourceImg.attr('height'),
-      'data-natural-width': $sourceImg.data('natural-width'),
-      'data-natural-height': $sourceImg.data('natural-height')
+      'src': imageAttr.src,
+      'width': imageAttr.width,
+      'height': imageAttr.height,
+      'data-natural-width': imageAttr['natural-width'],
+      'data-natural-height': imageAttr['natural-height'],
     });
 
-    $sourceImg.remove();
+    localStorage.removeItem('crop_image_attr');
   }
 
   initEvent(imageCrop) {
@@ -44,7 +44,7 @@ class LocalImageCrop {
   saveEvent(event, imageCrop) {
     event.stopPropagation();
     const $this = $(event.currentTarget);
-    console.log('start crop')
+    console.log('start crop');
     imageCrop.crop({
       imgs: this.imgs,
       post: false
@@ -67,7 +67,7 @@ class LocalImageCrop {
 
     imageCrop.afterCrop = (res) => {
       this.afterCrop(res);
-    }
+    };
 
     return imageCrop;
   }
@@ -93,7 +93,7 @@ class LocalImageCrop {
           resolve(data);
         });
       });
-    }
+    };
 
     let cropImage = function(res) {
       return new Promise(function(resolve, reject) {
@@ -115,9 +115,9 @@ class LocalImageCrop {
         }).always(function() {
           $input.val('');
           $modal.modal('hide');
-        })
+        });
       });
-    }
+    };
 
     uploadImage().then(function(res) {
       return cropImage(res);

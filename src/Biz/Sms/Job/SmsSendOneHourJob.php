@@ -4,7 +4,6 @@ namespace Biz\Sms\Job;
 
 use Biz\AppLoggerConstant;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 
@@ -29,23 +28,18 @@ class SmsSendOneHourJob extends AbstractJob
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
             } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", $e->getMessage());
+                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", array('error' => $e->getMessage()));
             }
         }
     }
 
     protected function getLogService()
     {
-        return $this->getKernel()->createService('System:LogService');
+        return $this->biz->service('System:LogService');
     }
 
     protected function getSmsService()
     {
-        return $this->getKernel()->createService('Sms:SmsService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->biz->service('Sms:SmsService');
     }
 }

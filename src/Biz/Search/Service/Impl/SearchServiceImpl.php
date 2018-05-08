@@ -27,16 +27,21 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $api = $this->getCloudApi('leaf');
 
-        if ($type === 'course') {
+        if ('course' === $type) {
             $conditions['type'] = 'course,openCourse';
         }
 
         $conditions = $this->searchBase64Encode($conditions);
 
-        $result = $api->get('/search', $conditions);
+        try {
+            $result = $api->get('/search', $conditions);
 
-        if (empty($result['success'])) {
-            throw new \RuntimeException('搜索失败，请稍后再试.', 1);
+            if (empty($result['success'])) {
+                throw new \RuntimeException('搜索失败，请稍后再试.', 1);
+            }
+        } catch (\RuntimeException $e) {
+            $this->getSettingService()->set('_cloud_search_restore_time', time() + 60 * 10);
+            throw $e;
         }
 
         if (empty($result['body']['datas'])) {
@@ -53,7 +58,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     public function refactorAllDocuments()
     {
         $api = $this->getCloudApi('root');
-        $conditions = array('categorys' => 'course,user,thread,article');
+        $conditions = array('categorys' => 'course,classroom,user,thread,article');
 
         return $api->post('/search/refactor_documents', $conditions);
     }
@@ -92,6 +97,10 @@ class SearchServiceImpl extends BaseService implements SearchService
                 'category' => 'openLesson',
                 'url' => $siteUrl.'/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
             ),
+            array(
+                'category' => 'classroom',
+                'url' => $siteUrl.'/callback/cloud_search?provider=classrooms&cursor=0&start=0&limit=100',
+            ),
         );
         $urls = urlencode(json_encode($urls));
 
@@ -111,7 +120,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $siteSetting = $this->getSettingService()->get('site');
         $siteUrl = $siteSetting['url'];
-        if (strpos($siteUrl, 'http://') !== 0) {
+        if (0 !== strpos($siteUrl, 'http://')) {
             $siteUrl = 'http://'.$siteUrl;
         }
 
@@ -126,6 +135,7 @@ class SearchServiceImpl extends BaseService implements SearchService
             'status' => 'waiting',
             'type' => array(
                 'course' => 1,
+                'classroom' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,

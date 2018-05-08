@@ -157,6 +157,8 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
         if (!empty($order['trade_sn'])) {
             $this->getPayService()->applyRefundByTradeSn($order['trade_sn'], $data);
+        } else {
+            $this->setRefunded($id, $data);
         }
 
         return $refund;
@@ -205,6 +207,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
                 'order_id' => $order['id'],
                 'item_id' => 0,
                 'deduct_type' => 'adjust_price',
+                'deduct_type_name' => '改价',
                 'deduct_id' => 0,
                 'deduct_amount' => $adjustAmount,
                 'user_id' => $order['user_id'],

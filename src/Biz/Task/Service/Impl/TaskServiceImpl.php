@@ -19,6 +19,12 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
+    /**
+     * @var array
+     *            包含序列化字段的学习类型，mediaType
+     */
+    private static $mediaList = array('video', 'audio', 'doc', 'ppt', 'flash');
+
     public function getTask($id)
     {
         return $this->getTaskDao()->get($id);
@@ -102,11 +108,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['type'] = $fields['mediaType'];
         $fields['endTime'] = $activity['endTime'];
 
-        if ('video' === $activity['mediaType']) {
+        if (in_array($activity['mediaType'], self::$mediaList)) {
             $media = json_decode($fields['media'], true);
             $fields['mediaSource'] = $media['source'];
 
-            $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
+            if ('video' === $activity['mediaType'] && 'self' == $fields['mediaSource']) {
+                $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
+            }
         }
 
         return $fields;
@@ -145,7 +153,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
 
-            if ('video' === $activity['mediaType']) {
+            if (in_array($activity['mediaType'], self::$mediaList)) {
                 $media = json_decode($fields['media'], true);
                 $fields['mediaSource'] = $media['source'];
             }
@@ -184,6 +192,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
         }
 
+        if (!$this->canPublish($task['id'])) {
+            return false;
+        }
+
         $strategy = $this->createCourseStrategy($task['courseId']);
 
         $task = $strategy->publishTask($task);
@@ -204,10 +216,32 @@ class TaskServiceImpl extends BaseService implements TaskService
                     if (!empty($task['mode']) && 'lesson' !== $task['mode']) {
                         continue;
                     }
+                    if (!$this->canPublish($task['id'])) {
+                        continue;
+                    }
                     $this->publishTask($task['id']);
                 }
             }
         }
+    }
+
+    protected function canPublish($taskId)
+    {
+        $jobName = 'course_task_create_sync_job_'.$taskId;
+
+        $fireJobs = $this->getSchedulerService()->searchJobFires(
+            array('job_name' => $jobName),
+            array('id' => 'desc'),
+            0,
+            1
+        );
+        $syncCreateTaskFireJob = reset($fireJobs);
+
+        if (!empty($syncCreateTaskFireJob) && in_array($syncCreateTaskFireJob['status'], array('executing', 'acquired'))) {
+            return false;
+        }
+
+        return true;
     }
 
     public function unpublishTask($id)
@@ -783,7 +817,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $tasks = $this->findTasksByChapterId($chapterId);
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         array_walk(
@@ -844,10 +878,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $toLearnTasks;
     }
 
+    public function getTimeSec($type)
+    {
+        $magicSetting = $this->getSettingService()->get('magic');
+        $default = 'watch' == $type ? TaskService::WATCH_TIME_STEP : TaskService::LEARN_TIME_STEP;
+
+        return empty($magicSetting[$type.'_time_sec']) ? $default : $magicSetting[$type.'_time_sec'];
+    }
+
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
-
         if (!empty($finishedTasks)) {
             $taskIds = ArrayToolkit::column($finishedTasks, 'courseTaskId');
             $electiveTaskIds = $this->getStartElectiveTaskIds($courseId);
@@ -1202,5 +1243,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

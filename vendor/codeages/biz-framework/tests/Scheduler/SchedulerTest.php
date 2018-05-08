@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Codeages\Biz\Framework\Util\TimeMachine;
+
 class SchedulerTest extends IntegrationTestCase
 {
     /**
@@ -56,6 +58,25 @@ class SchedulerTest extends IntegrationTestCase
         );
 
         $this->getSchedulerService()->register($job);
+    }
+
+    public function testDeleteUnacquiredJobFired()
+    {
+        TimeMachine::setMockedTime(1521598571);
+        $jobFiredDao = $this->mockObjectIntoBiz(
+            'Scheduler:JobFiredDao',
+            array(
+                array(
+                    'functionName' => 'deleteUnacquiredBeforeCreatedTime',
+                    'withParams' => array(1521512171), //1521598571-60*60*24, 1天前
+                    'returnValue' => 1,
+                ),
+            )
+        );
+
+        $result = $this->getSchedulerService()->deleteUnacquiredJobFired(1);
+        $jobFiredDao->shouldHaveReceived('deleteUnacquiredBeforeCreatedTime')->times(1);
+        $this->assertEquals(1, $result);
     }
 
     public function testCreateJob()
@@ -257,6 +278,24 @@ class SchedulerTest extends IntegrationTestCase
         $this->assertEquals('timeout', $jobFireds[0]['status']);
     }
 
+    public function testCreateErrorLog()
+    {
+        $job = array(
+            'id' => 22,
+            'name' => 'test',
+            'source' => 'MAIN',
+            'expression' => '0 17 * * *',
+            'class' => 'Tests\\Example\\Job\\ExampleJob',
+            'args' => array('courseId' => 1),
+            'priority' => 100,
+            'misfire_threshold' => 3000,
+            'misfire_policy' => 'missed',
+        );
+        $this->getSchedulerService()->createErrorLog(array('job_detail' => $job), 'error', 'error');
+        $result = $this->getJobLogDao()->search(array('job_fired_id' => 0), array('created_time' => 'DESC'), 0, PHP_INT_MAX);
+        $this->assertEquals('error', $result[0]['message']);
+    }
+
     protected function wavePoolNum($id, $diff)
     {
         $ids = array($id);
@@ -288,6 +327,11 @@ class SchedulerTest extends IntegrationTestCase
     protected function getJobFiredDao()
     {
         return $this->biz->dao('Scheduler:JobFiredDao');
+    }
+
+    protected function getJobLogDao()
+    {
+        return $this->biz->dao('Scheduler:JobLogDao');
     }
 
     protected function getSchedulerService()

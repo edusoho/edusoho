@@ -294,6 +294,7 @@ admin.system.user.login_bind_tab: Log In
 admin.system.user.user_center_tab: User Center
 admin.system.user.user_fields_tab: User Setting
 admin.system.user.avatar_tab: Default
+admin.system.user.message: Message
 
 ##角色管理模块
 admin.system.roles.basic_tab: Roles
@@ -348,8 +349,9 @@ admin.system.logs.logs_prod_tab: Program Log
 ##组织机构管理模块
 admin.system.org.basic_tab: Organization
 
-##微营销模块
+##营销模块
 admin.marketing.menu: Marketing
+admin.distributor.menu: 分销
 
 #web模块
 web.course: Courses
@@ -401,7 +403,3 @@ web.classroom.setting.assistants_side_nav: Assistants
 web.classroom.content.courses_side_nav: Courses
 web.classroom.content.students_side_nav: Students
 web.classroom.content.testpaper_check_side_nav: Testpaper Review
-
-## 资讯管理
-admin.article.save.success: 保存文章成功！
-admin.article.choose_column_tip: 请选择所属栏目

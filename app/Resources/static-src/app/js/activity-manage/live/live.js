@@ -1,4 +1,4 @@
-import { initEditor } from '../editor'
+import { initEditor } from '../editor';
 export default class Live {
   constructor(props) {
     this.$startTime = $('#startTime');
@@ -14,7 +14,7 @@ export default class Live {
     jQuery.validator.addMethod('show_overlap_time_error', function(value, element) {
       return this.optional( element ) || !$(element).data('showError');
     }, '所选时间已经有直播了，请换个时间');
-    let $step2_form = $("#step2-form");
+    let $step2_form = $('#step2-form');
     this.validator2 = $step2_form.validate({
       onkeyup: false,
       rules: {
@@ -27,7 +27,15 @@ export default class Live {
         startTime: {
           required: true,
           DateAndTime: true,
-          after_now:true,
+          after_now: true,
+          es_remote: {
+            type: 'post',
+            data: {
+              clientTime: function () {
+                return $('[name=startTime]').val();
+              }
+            }
+          }
         },
         length: {
           required: true,
@@ -39,6 +47,11 @@ export default class Live {
         remark: {
           maxlength: 1000
         },
+      },
+      messages: {
+        startTime: {
+          es_remote: Translator.trans('validate.after_now.message')
+        }
       }
     });
     initEditor($('[name="remark"]'), this.validator2);
@@ -87,14 +100,14 @@ export default class Live {
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     }).on('hide', () => {
       validator.form();
-    })
+    });
     $starttime.datetimepicker('setStartDate', new Date());
   }
 
   _timePickerHide() {
-      let $starttime = this.$startTime;
-      parent.$('#modal', window.parent.document).on('afterNext',function(){
-          $starttime.datetimepicker('hide');
-      });
+    let $starttime = this.$startTime;
+    parent.$('#modal', window.parent.document).on('afterNext',function(){
+      $starttime.datetimepicker('hide');
+    });
   }
 }

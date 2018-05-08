@@ -1,0 +1,76 @@
+.es-setting {
+  padding: 15px 0;
+  .cd-box-shadow-inset(0 -1px 0 0);
+  .setting-icon {
+    margin-right: 24px;
+    @media(max-width: @screen-xs-max) {
+      margin-right: 4px;
+    }
+    i {
+      font-size: 24px;
+      color: rgba(0, 0, 0, 0.32);
+      vertical-align: middle;
+    }
+    .cd-icon-weibo {
+      color: @brand-danger;
+    }
+    .cd-icon-weixin {
+      color: #93d179;
+    }
+    .cd-icon-qq {
+      color: #6cc5f5;
+    }
+    .cd-icon-renren {
+      color: #6c96fd;
+    }
+  }
+  .setting-title {
+    vertical-align: middle;
+    font-size: 14px;
+    color: @cd-dark-major;
+    font-weight: 500;
+    margin-right: 24px;
+    line-height: 34px;
+    @media(max-width: @screen-xs-max) {
+      margin-right: 12px;
+    }
+  }
+  .setting-content {
+    vertical-align: middle;
+    font-size: 12px;
+    color: @cd-dark-minor;
+    line-height: 34px;
+    @media(max-width: @screen-xs-max) {
+      display: none;
+    }
+  }
+  .setting-action {
+    float: right;
+    .btn {
+      float: left;
+      margin-left: 16px;
+    }
+  }
+  .es-setting-status {
+    float: left;
+    line-height: 34px;
+  }
+}
+
+.es-setting-status {
+  color: @brand-warning;
+  font-size: 12px;
+  vertical-align: middle;
+  &.es-setting-status-done {
+    color: @brand-success;
+    &:before {
+      content: '\e96c';
+    }
+  }
+  &:before {
+    content: '\e96d';
+    font-family: 'codeages-icon';
+    font-size: 12px;
+    margin-right: 4px;
+  }
+}

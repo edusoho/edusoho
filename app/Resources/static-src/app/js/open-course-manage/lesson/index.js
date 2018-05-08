@@ -191,7 +191,7 @@ function asyncLoadFiles() {
 
 function sortListAfter(data, $list) {
   $.post($list.data('sortUrl'), { ids: data }, function (response) {
-    let lessonNum = chapterNum = unitNum = 0;
+    let lessonNum = 0, chapterNum = 0, unitNum = 0;
 
     $list.find('.item-lesson, .item-chapter').each(function () {
       let $item = $(this);

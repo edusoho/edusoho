@@ -1,0 +1,17 @@
+{% import 'macro.html.twig' as macro %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+    {% set data = notification.content %}
+    {% set account = macro.link('user.account_center'|trans, path('my_orders')) %}
+    {% set coupon = macro.link('user.cards_menu'|trans, path('my_cards', {cardType:'coupon'})) %}
+    {{ 'notification.distributor-reward'|trans({'%money%':data.rate, '%account%':account ,'%coupon%':coupon})|raw }}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

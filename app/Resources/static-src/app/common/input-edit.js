@@ -76,14 +76,14 @@ class InputEdit {
       })
       .fail((data) => {
         this.fail(data);
-      })
+      });
   }
 
   success(data) {
-    console.log('success')
+    console.log('success');
   }
   fail(data) {
-    console.log('fail')
+    console.log('fail');
   }
 }
 

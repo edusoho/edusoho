@@ -16,6 +16,8 @@ interface UserService
 
     public function getUserByType($type);
 
+    public function getUserByUUID($uuid);
+
     public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
@@ -130,7 +132,7 @@ interface UserService
 
     public function getUserProfile($id);
 
-    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit, $columns = array());
 
     public function searchUserProfileCount(array $conditions);
 
@@ -296,4 +298,12 @@ interface UserService
     public function getUserIdsByKeyword($word);
 
     public function updateUserNewMessageNum($id, $num);
+
+    public function makeUUID();
+
+    public function generateUUID();
+
+    public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
+
+    public function updateSmsRegisterCaptchaStatus($clientIp);
 }

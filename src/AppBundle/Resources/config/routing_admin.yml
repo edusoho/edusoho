@@ -101,27 +101,6 @@ admin_content:
     path:  /content
     defaults: { _controller: AppBundle:Admin/Content:index }
 
-admin_dictionary:
-    path:  /dictionary
-    defaults: { _controller: AppBundle:Admin/Dictionary:index }
-
-admin_dictionary_create:
-    path: /dictionary/create/{type}
-    defaults: { _controller: AppBundle:Admin/Dictionary:create }
-
-admin_dictionary_delete:
-    path:  /dictionary/{id}/delete
-    defaults: { _controller: AppBundle:Admin/Dictionary:delete }
-    methods: [POST]
-
-admin_dictionary_edit:
-    path:  /dictionary/{id}/edit
-    defaults: { _controller: AppBundle:Admin/Dictionary:edit }
-
-admin_dictionary_name_check:
-    path:  /dictionary/{id}/name_check
-    defaults: { _controller: AppBundle:Admin/Dictionary:checkName }
-
 admin_content_create:
     path:  /content/create/{type}
     defaults: { _controller: AppBundle:Admin/Content:create }
@@ -882,6 +861,11 @@ admin_setting_avatar:
     defaults: { _controller: AppBundle:Admin/UserSetting:userAvatar }
     permissions: [admin_setting_avatar]
 
+admin_setting_user_message:
+    path:  /setting/message
+    defaults: { _controller: AppBundle:Admin/UserSetting:message }
+    permissions: [admin_setting_user_message]
+
 admin_setting_user_fields:
     path:  /setting/user-fields
     defaults: { _controller: AppBundle:Admin/UserSetting:userFields }
@@ -949,6 +933,34 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:Admin/CdnSetting:index }
+
+
+admin_mocked:
+    path: /mock
+    defaults: { _controller: AppBundle:Admin/Mock:index }
+
+admin_mocked_distributor_token:
+    path: /mock/distributor_token/{type}
+    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+
+admin_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:getPostDistributorData }
+
+admin_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
+    methods: [POST]
+
+admin_mocked_marketing_post_data:
+    path: /mock/marketing_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postMarketingData }
+    methods: [POST]
+
+admin_mocked_post_data_version_3:
+    path: /mock/post_data_version_3
+    defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
+    methods: [POST]
 
 admin_optimize:
     path:  /setting/optimize
@@ -2196,9 +2208,14 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
+admin_login_marketing:
+    path: /login/marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:loginMarketing}
+
+admin_login_distributor:
+   path: /login/distributor
+   defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
+
 
 admin_jobs:
     path: /jobs
@@ -2319,3 +2336,15 @@ admin_cloud_data_lab_setting_enable_modal:
 admin_cloud_data_lab_setting_disable_modal:
     path: /data/lab/setting/modal/disable
     defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }
+
+admin_wechat_app:
+    path: /wechat_app
+    defaults: { _controller: AppBundle:Admin/WeChatApp:index }
+
+admin_wechat_app_request:
+    path: /wechat_app/request
+    defaults: { _controller: AppBundle:Admin/WeChatApp:request }
+
+admin_wechat_app_request_success:
+    path: /wechat_app/request/success
+    defaults: { _controller: AppBundle:Admin/WeChatApp:requestSuccess }

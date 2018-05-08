@@ -58,8 +58,8 @@ $('#export-students-btn').on('click', function () {
 });
 
 function exportStudents(start, fileName) {
-  var start = start || 0,
-    fileName = fileName || '';
+  start = start || 0,
+  fileName = fileName || '';
 
   $.get($('#export-students-btn').data('datasUrl'), { start: start, fileName: fileName }, function (response) {
     if (response.status === 'getData') {

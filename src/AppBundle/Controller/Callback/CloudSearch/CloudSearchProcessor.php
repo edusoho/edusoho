@@ -29,6 +29,8 @@ class CloudSearchProcessor extends BizAware implements ProcessorInterface
             'users' => $namespace.'\\Resource\\Users',
             'user' => $namespace.'\\Resource\\User',
             'chaos_threads' => $namespace.'\\Resource\\ChaosThreads',
+            'classroom' => $namespace.'\\Resource\\Classroom',
+            'classrooms' => $namespace.'\\Resource\\Classrooms',
         );
 
         if (!isset($classMap[$type])) {

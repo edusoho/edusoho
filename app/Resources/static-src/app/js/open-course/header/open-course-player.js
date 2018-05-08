@@ -30,7 +30,7 @@ class OpenCoursePlayer {
 
   showPlayer() {
     $.get(this.url, (lesson) => {
-      console.log(this.url, lesson)
+      console.log(this.url, lesson);
       if (lesson.mediaError) {
         $('#media-error-dialog').show();
         $('#media-error-dialog').find('.modal-body .media-error').html(lesson.mediaError);
@@ -38,6 +38,7 @@ class OpenCoursePlayer {
       }
       $('#media-error-dialog').hide();
       this.lesson = lesson;
+      $('.js-live-video-replay-btn').removeClass('hidden');
 
       let mediaSourceActionsMap = {
         'iframe': this.onIframe,
@@ -56,7 +57,7 @@ class OpenCoursePlayer {
       
       caller(this);
       
-    })
+    });
   }
 
   onIframe() {
@@ -94,7 +95,7 @@ class OpenCoursePlayer {
     swfobject.removeSWF('lesson-preview-swf-player');
     $swfContent.html('<div id="lesson-swf-player"></div>');
     swfobject.embedSWF(lesson.mediaUri,
-      'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {
+      'lesson-swf-player', '100%', '100%', '9.0.0', null, null, {
         wmode: 'opaque',
         allowFullScreen: 'true'
       });
@@ -127,9 +128,9 @@ class OpenCoursePlayer {
 
     if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
       if ((lesson.convertStatus != 'success' && lesson.storage == 'cloud')) {
-          $('#media-error-dialog').show();
-          $('#media-error-dialog').find('.modal-body .media-error').html(Translator.trans('open_course.converting_hint'));
-          return;
+        $('#media-error-dialog').show();
+        $('#media-error-dialog').find('.modal-body .media-error').html(Translator.trans('open_course.converting_hint'));
+        return;
       }
 
       let referer = $target.data('referer');
@@ -143,8 +144,8 @@ class OpenCoursePlayer {
   }
 
   getPlayer() {
-    return window.frames["viewerIframe"].window.BalloonPlayer ||
-           window.frames["viewerIframe"].window.player;
+    return window.frames['viewerIframe'].window.BalloonPlayer ||
+           window.frames['viewerIframe'].window.player;
   }
 
   videoPlay(playerUrl) {
@@ -171,14 +172,14 @@ class OpenCoursePlayer {
       type: 'parent'
     });
 
-    messenger.on("ready", () => {
+    messenger.on('ready', () => {
       // @TODO 不清楚这边有什么用
       let player = this.getPlayer();
       this.player = player;
-      console.log('player', player)
+      console.log('player', player);
     });
 
-    messenger.on("ended", () => {
+    messenger.on('ended', () => {
       console.log('ended');
       this.onPlayEnd();
     });
@@ -197,7 +198,7 @@ class OpenCoursePlayer {
     this.courseAd = new CourseAd({
       element: '#open-course-ad-modal',
       courseUrl: this.$element.data('get-recommend-course-url')
-    })
+    });
     this.courseAd.show();
   }
 

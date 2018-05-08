@@ -5,7 +5,6 @@ import LianlianpayWap from './lianlianpay_wap';
 import LianlianpayWeb from './lianlianpay_web';
 import WechatPayJs from './wechatpay_js';
 import WechatPayMweb from './wechatpay_mweb';
-
 import 'store';
 
 export default class PaySDK {
@@ -20,6 +19,8 @@ export default class PaySDK {
     }, options);
 
     paySdk.pay(params);
+
+    return paySdk;
   }
 
   checkOrderStatus() {
@@ -32,7 +33,7 @@ export default class PaySDK {
   cancelCheckOrder() {
     let paySdk = this.initPaySdk();
     if (paySdk != null) {
-      paySdk.cancelCheckOrder()
+      paySdk.cancelCheckOrder();
     }
   }
 
@@ -40,27 +41,27 @@ export default class PaySDK {
     gateway = gateway === undefined ? store.get('payment_gateway') : gateway;
     var paySdk = null;
     switch (gateway) {
-      case 'WechatPay_Native':
-        paySdk = this.wpn ? this.wpn : this.wpn = new WechatPayNative();
-        break;
-      case 'WechatPay_MWeb':
-        paySdk = this.wpm ? this.wpm : this.wpm = new WechatPayMweb();
-        break;
-      case 'WechatPay_Js':
-        paySdk = this.wpj ? this.wpj : this.wpj = new WechatPayJs();
-        break;
-      case 'Alipay_LegacyExpress':
-        paySdk = this.ale ? this.ale : this.ale = new AlipayLegacyExpress();
-        break;
-      case 'Alipay_LegacyWap':
-        paySdk = this.alw ? this.alw : this.alw = new AlipayLegacyWap();
-        break;
-      case 'Lianlian_Wap':
-        paySdk = this.llwp ? this.llwp : this.llwp = new LianlianpayWap();
-        break;
-      case 'Lianlian_Web':
-        paySdk = this.llwb ? this.llwb : this.llwb = new LianlianpayWeb();
-        break;
+    case 'WechatPay_Native':
+      paySdk = this.wpn ? this.wpn : this.wpn = new WechatPayNative();
+      break;
+    case 'WechatPay_MWeb':
+      paySdk = this.wpm ? this.wpm : this.wpm = new WechatPayMweb();
+      break;
+    case 'WechatPay_Js':
+      paySdk = this.wpj ? this.wpj : this.wpj = new WechatPayJs();
+      break;
+    case 'Alipay_LegacyExpress':
+      paySdk = this.ale ? this.ale : this.ale = new AlipayLegacyExpress();
+      break;
+    case 'Alipay_LegacyWap':
+      paySdk = this.alw ? this.alw : this.alw = new AlipayLegacyWap();
+      break;
+    case 'Lianlian_Wap':
+      paySdk = this.llwp ? this.llwp : this.llwp = new LianlianpayWap();
+      break;
+    case 'Lianlian_Web':
+      paySdk = this.llwb ? this.llwb : this.llwb = new LianlianpayWeb();
+      break;
     }
     return paySdk;
   }
@@ -68,30 +69,30 @@ export default class PaySDK {
   getGateway(payment, isMobile, isWechat) {
     let gateway = '';
     switch (payment) {
-      case 'wechat':
-        if (isWechat) {
-          gateway = 'WechatPay_Js';
-        } else if (isMobile) {
-          gateway = 'WechatPay_MWeb';
-        } else {
-          gateway = 'WechatPay_Native';
-        }
-        break;
-      case 'alipay':
-        if (isMobile) {
-          gateway = 'Alipay_LegacyWap';
-        } else {
-          gateway = 'Alipay_LegacyExpress';
-        }
-        break;
+    case 'wechat':
+      if (isWechat) {
+        gateway = 'WechatPay_Js';
+      } else if (isMobile) {
+        gateway = 'WechatPay_MWeb';
+      } else {
+        gateway = 'WechatPay_Native';
+      }
+      break;
+    case 'alipay':
+      if (isMobile) {
+        gateway = 'Alipay_LegacyWap';
+      } else {
+        gateway = 'Alipay_LegacyExpress';
+      }
+      break;
 
-      case 'lianlianpay':
-        if (isMobile) {
-          gateway = 'Lianlian_Wap';
-        } else {
-          gateway = 'Lianlian_Web';
-        }
-        break;
+    case 'lianlianpay':
+      if (isMobile) {
+        gateway = 'Lianlian_Wap';
+      } else {
+        gateway = 'Lianlian_Web';
+      }
+      break;
     }
 
     store.set('payment_gateway', gateway);

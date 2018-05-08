@@ -2,13 +2,17 @@ define(function(require, exports, module) {
   require('new-uploader');
   exports.run = function() {
     var $uploader = $('#uploader-container');
-
+    var uploadProcess = {
+      document: {
+        type: 'html',
+      },
+    };
     var uploader = new UploaderSDK({
       id: $uploader.attr('id'),
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
-      process: $uploader.data('process'),
+      process: uploadProcess,
       fileSingleSizeLimit: $uploader.data('fileSingleSizeLimit'),
       ui: 'single'
     });

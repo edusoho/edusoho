@@ -22,7 +22,7 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
         return parent::count($conditions);
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit, $columns = array())
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

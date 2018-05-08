@@ -131,6 +131,18 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                 );
             }
 
+            $wechatAppSetting = $settingService->get('wechat_app', array());
+            if (isset($wechatAppSetting['enabled']) && $wechatAppSetting['enabled']) {
+                $enabledPayments['wechat_app'] = array(
+                    'appid' => $wechatAppSetting['appid'],
+                    'mch_id' => $wechatAppSetting['account'],
+                    'key' => $wechatAppSetting['key'],
+                    'secret' => $wechatAppSetting['secret'],
+                    'cert_path' => '',
+                    'key_path' => '',
+                );
+            }
+
             return $enabledPayments;
         };
 
@@ -140,6 +152,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $site = $biz->service('System:SettingService')->get('site', array());
 
             return array(
+                'closed_by_notify' => true,
                 'coin_rate' => empty($setting['coin_enabled']) ? 1 : $setting['cash_rate'],
                 'goods_title' => empty($site['name']) ? 'EduSoho订单' : $site['name'].'订单',
             );

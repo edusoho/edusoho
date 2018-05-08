@@ -1,5 +1,6 @@
 // import { initEditor } from "app/js/activity-manage/editor";
-import "store";
+import { initEditor } from '../editor';
+import 'store';
 export default class Text {
   constructor(props) {
     this._init();

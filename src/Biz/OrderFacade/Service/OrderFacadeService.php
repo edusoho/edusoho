@@ -12,9 +12,11 @@ interface OrderFacadeService
 
     public function getTradePayCashAmount($order, $coinAmount);
 
+    public function getRefundDays();
+
     public function isOrderPaid($orderId);
 
-    public function createSpecialOrder(Product $product, $userId, $params = array());
+    public function createSpecialOrder(Product $product, $userId, $params = array(), $type = 'OrderFacade');
 
     /**
      * @param $targetType
@@ -33,4 +35,6 @@ interface OrderFacadeService
     public function adjustOrderPrice($orderId, $newPayAmount);
 
     public function getOrderAdjustInfo($order);
+
+    public function addDealer(ProductDealerService $dealer);
 }

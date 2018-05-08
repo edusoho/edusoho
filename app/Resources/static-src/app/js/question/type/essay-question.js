@@ -1,16 +1,16 @@
 class EssayQuestion
 {
-	constructor() {
+  constructor() {
 		
-	}
+  }
 
-	getAnswer(questionId) {
-		let answers = [];
-		let value = $('[name='+questionId+']').val();
-		answers.push(value);
+  getAnswer(questionId) {
+    let answers = [];
+    let value = $('[name='+questionId+']').val();
+    answers.push(value);
 
-		return answers;
-	}
+    return answers;
+  }
 
   getAttachment(questionId) {
     let attachment = [];

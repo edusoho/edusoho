@@ -8,12 +8,28 @@
 {% endif %}
 
 {% block activity_content %}
+  {% set roomTypes = get_live_room_type() %}
+  {% if roomTypes %}
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label for="roomType">{{ 'course.live_activity.room_type'|trans }}</label>
+      </div>
+      <div class="col-sm-10">
+        <select class="form-control width-input" name="roomType" {% if not canUpdateRoomType|default(1) %}disabled{% endif %}>
+          {% for key, roomType in roomTypes if roomTypes %}
+            <option value="{{ key }}" {% if activity.ext.roomType|default('large') == key %}selected{% endif %}>{{ roomType|trans }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  {% endif %}
+
   <div class="form-group expiry-day-js">
     <div class="col-sm-2 control-label">
       <label for="startTime" class="control-label-required">{{ 'course.plan_task.activity_manage.live.start_time'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
+      <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" data-url="{{ path('client_time_check') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
       {% if not activity.ext.roomCreated|default(true) %}
       <div class="color-warning">{{'course.plan_task.activity_manage.live.create_tips'|trans}}</div>
       {% endif %}

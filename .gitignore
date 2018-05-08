@@ -57,3 +57,5 @@ deployment-config.json
 .webpack-watch.log
 /web/MP_*
 yarn-error.log
+/mochawesome-report/*
+/coverage/*

@@ -55,16 +55,6 @@
       </div>
     </div>
 
-    <div class="form-group">
-       <div class="controls col-sm-offset-4 col-sm-5">
-         <div class="checkbox">
-           <label>
-            <input type="checkbox" name="database_init" value="1" checked> 生成演示数据
-           </label>
-         </div>
-      </div>
-    </div>
-
     <div id="package-update-progress" class="package-update-progress" style="display:none;">
       <div class="progress progress-striped active">
         <div class="progress-bar progress-bar-success" style="width: 0%"></div>
@@ -129,16 +119,14 @@
                 url = url.replace(/index=\d+/g,'index='+response.index);
                 exec(url, data, progress);
             } else if (typeof(response.success) != 'undefined') {
-                var checked = $form.find('[name=database_init]').is(':checked');
-                var init_data = checked ? 1 : 0;
-                window.location.href = 'start-install.php?step=3&init_data='+init_data;
+                window.location.href = 'start-install.php?step=3';
             } else {
                 $('.init-error').show().html(response);
                 $('.progress-bar').css({width: '0%'});
                 $('#create-database-btn').removeClass('disabled').html('创建数据库');
             }
         }).fail(function(){
-            $('.init-error').show().html("创建数据库失败");
+            $('.init-error').show().html('创建数据库失败，查看<a href="http://www.qiqiuyu.com/faq/585/detail" target="_blank">解决方案</a>');
             $('.progress-bar').css({width: '0%'});
             $('#create-database-btn').removeClass('disabled').html('创建数据库');
         });
