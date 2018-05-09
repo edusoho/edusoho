@@ -60,7 +60,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = $this->checkChangeRole($id);
         if (!empty($role)) {
             $this->getRoleDao()->delete($id);
-            $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
+            $this->getLogService()->info('role', 'delete_role', '删除角色"'.$role['name'].'"', $role);
         }
     }
 
