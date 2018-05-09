@@ -121,7 +121,7 @@ export default class Create {
     const isMobile = $('.js-drag-jigsaw').hasClass('hidden');
     console.log($('.js-drag-img').length);
     if ($('.js-drag-img').length && !isMobile) {
-      $('[name="jigsaw"], [name="drag_captcha_token"]').rules('add', {
+      $('[name="drag_captcha_token"]').rules('add', {
         required: true,
         messages: {
           required: Translator.trans('auth.register.drag_captcha_tips')
@@ -201,8 +201,8 @@ export default class Create {
         smsToken: this.smsToken,
         smsCode: $('#sms-code').val(),
         captchaToken: this.captchaToken,
+        phrase: $('#captcha_code').val(),
         drag_captcha_token: $('[name="drag_captcha_token"]').val(),
-        jigsaw: $('[name="jigsaw"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
