@@ -35,6 +35,7 @@ use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
+use Biz\Util\FileToolkit;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -167,6 +168,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['register_sms_rate_limiter'] = function ($biz) {
             return new RegisterSmsRateLimiter($biz);
+        };
+
+        $biz['file_toolkit'] = function ($biz) {
+            return new FileToolkit();
         };
     }
 }

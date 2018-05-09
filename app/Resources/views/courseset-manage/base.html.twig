@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends course_url('courseset-manage/layout.html.twig', {type: courseSet.type}) %}
 
 {% block title %}{{ 'course.base'|trans }} - {{ parent() }}{% endblock %}
 
