@@ -58,3 +58,4 @@ api-login: false
 'lessonNum > :lessonNumGT',
 'orgCode = :orgCode',
 'orgCode LIKE :likeOrgCode',
+'concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
