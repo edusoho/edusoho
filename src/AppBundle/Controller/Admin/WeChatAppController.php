@@ -11,7 +11,7 @@ class WeChatAppController extends BaseController
     {
         $mpSdk = $this->getMpService()->getMpSdk();
         if ($mpSdk->getCurrentMpRequest()) {
-            return $this->forward('admin_wechat_app_request_success', array());
+            return $this->forward('AppBundle:Admin/WeChatApp:requestSuccess', array());
         }
 
         return $this->render('admin/wechat-app/index.html.twig', array(
@@ -27,7 +27,7 @@ class WeChatAppController extends BaseController
 
         $mpSdk = $this->getMpService()->getMpSdk();
         if ($mpSdk->getCurrentMpRequest()) {
-            return $this->forward('admin_wechat_app_request_success', array());
+            return $this->forward('AppBundle:Admin/WeChatApp:requestSuccess', array());
         }
 
         if ($request->isMethod('POST')) {
