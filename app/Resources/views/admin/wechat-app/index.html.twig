@@ -3,6 +3,12 @@
 {% set menu = 'admin_wechat_app' %}
 
 {% block main %}
+    {% if isNoneLevel %}
+        <div class="alert alert-warning">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            您的网校为<strong>免费版</strong>，请联系官方购买<strong>SaaS套餐</strong>才能申请小程序。
+        </div>
+    {% endif %}
     <div class="wechat-app-banner">
         <div class="banner-content">
             <h3 class="banner-title">
@@ -11,7 +17,16 @@
             <p class="banner-introduce">
                 网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
             </p>
-            <a class="button request-button" href="{{ path('admin_wechat_app_request') }}">立即开通</a>
+                {% if isNoneLevel %}
+                    <a class="btn btn-primary "
+                        href="javascript:;"
+                        data-toggle="tooltip" title="您的网校为免费版，请先升级为SaaS套餐才能申请小程序"
+                    >立即开通</a>
+                {% else %}
+                    <a class="btn btn-primary "
+                        href="{{ path('admin_wechat_app_request') }}"
+                    >立即开通</a>
+                {% endif %}
         </div>
     </div>
     <div class="wechat-app-introduction row">
