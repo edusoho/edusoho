@@ -40,9 +40,12 @@ class ActivityController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($id, true);
 
-        $container = $this->get('activity_runtime_container');
-
-        return $container->update($activity);
+        return $this->render(
+            'activity/create.html.twig',
+            array(
+                'activity' => $activity,
+            )
+        );
     }
 
     public function createAction($type, $courseId)
@@ -52,9 +55,27 @@ class ActivityController extends BaseController
             'mediaType' => $type,
             'fromCourseId' => $courseId,
         );
+
+        return $this->render(
+            'activity/create.html.twig',
+            array(
+                'activity' => $activity,
+            )
+        );
+    }
+
+    public function contentModalAction($activity)
+    {
         $container = $this->get('activity_runtime_container');
 
-        return $container->create($activity);
+        return $container->content($activity);
+    }
+
+    public function finishModalAction($activity)
+    {
+        $container = $this->get('activity_runtime_container');
+
+        return $container->finish($activity);
     }
 
     public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)

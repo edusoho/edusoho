@@ -61,6 +61,24 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
         ));
     }
 
+    public function content($activity)
+    {
+        $activityProxy = $this->createActivityProxy($activity);
+
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_CONTENT, array(
+            'activity' => $activity,
+        ));
+    }
+
+    public function finish($activity)
+    {
+        $activityProxy = $this->createActivityProxy($activity);
+
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_FINISH, array(
+            'activity' => $activity,
+        ));
+    }
+
     public function update($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);

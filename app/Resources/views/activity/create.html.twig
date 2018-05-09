@@ -1,0 +1,9 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% block activity_content %}
+  {{ render(controller('AppBundle:Activity/Activity:contentModal', {activity: activity})) }}
+{% endblock %}
+
+{% block activity_finish %}
+  {{ render(controller('AppBundle:Activity/Activity:finishModal', {activity: activity})) }}
+{% endblock %}
