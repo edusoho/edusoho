@@ -33,7 +33,7 @@ class VideoActivityWatchListenerTest extends BaseTestCase
                 'returnValue' => array(),
             ),
         ));
-        
+
         $listener = new VideoActivityWatchListener($this->getBiz());
         $result = $listener->handle(array('id' => 1, 'mediaType' => 'video', 'mediaId' => 1), array('task' => array('id' => 1), 'watchTime' => 20));
 
