@@ -38,11 +38,11 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     private function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User:StatusService');
+        return $this->createService('User:StatusService');
     }
 }
