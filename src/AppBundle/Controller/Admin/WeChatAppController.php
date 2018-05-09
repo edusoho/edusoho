@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class WeChatAppController extends BaseController
@@ -10,18 +11,25 @@ class WeChatAppController extends BaseController
     {
         $mpSdk = $this->getMpService()->getMpSdk();
         if ($mpSdk->getCurrentMpRequest()) {
-            return $this->redirect($this->generateUrl('admin_wechat_app_request_success'));
+            return $this->forward('admin_wechat_app_request_success', array());
         }
 
-        return $this->render('admin/wechat-app/index.html.twig', array());
+        return $this->render('admin/wechat-app/index.html.twig', array(
+            'isNoneLevel' => $this->isNoneLevel()
+        ));
     }
 
     public function requestAction(Request $request)
     {
+        if ($this->isNoneLevel()) {
+            return $this->render('admin/wechat-app/request-fail.html.twig', array());
+        }
+
         $mpSdk = $this->getMpService()->getMpSdk();
         if ($mpSdk->getCurrentMpRequest()) {
-            return $this->redirect($this->generateUrl('admin_wechat_app_request_success'));
+            return $this->forward('admin_wechat_app_request_success', array());
         }
+
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
             $mpSdk->sendMpRequest($fields);
@@ -30,6 +38,17 @@ class WeChatAppController extends BaseController
         }
 
         return $this->render('admin/wechat-app/request.html.twig', array());
+    }
+
+    protected function isNoneLevel()
+    {
+        $me = $this->createApi()->get('/me');
+        return !empty($me) && $me['level'] == 'none';
+    }
+
+    protected function createApi($node = 'root')
+    {
+        return CloudAPIFactory::create($node);
     }
 
     public function requestSuccessAction()
