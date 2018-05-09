@@ -26,7 +26,7 @@ class RatedClassroomTypeTest extends BaseTestCase
         $this->assertEquals(array('id', 'actor', 'verb', 'object', 'result', 'timestamp'), array_keys($pushStatements[0]));
         foreach ($pushStatements as $index => $st) {
             $this->assertEquals(array('id' => 'http://id.tincanapi.com/verb/rated', 'display' => array(
-                'zh-CN' => '评分了', 'en-US' => 'rated'
+                'zh-CN' => '评分了', 'en-US' => 'rated',
             )), $st['verb']);
         }
 
