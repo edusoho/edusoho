@@ -1,4 +1,5 @@
-import 'jquery';
+// import 'jquery';
+import 'store';
 $('#text-activity').perfectScrollbar();
 $('#text-activity').perfectScrollbar('update');
 
@@ -19,9 +20,12 @@ if ($('#text-activity').data('disableCopy')) {
 	}, false);
 }
 
-const sdk = ltcsdk.config();
+const sdk = window.ltcsdk.config();
 const sdkUi = sdk.getUi();
+// const sdkApi = sdk.getApi();
 
+
+// console.log(sdkApi);
 sdkUi.message({
   type: 'danger',
   message: '这是消息'
@@ -41,3 +45,5 @@ sdkUi.message({
 //     }
 //   }, false);
 // }
+
+

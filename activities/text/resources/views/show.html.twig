@@ -5,7 +5,8 @@
   <base target="_blank">
 {% endblock %}
 
-{% do script(['libs/ltc-sdk.js', 'libs/perfect-scrollbar.js', 'textactivity/js/show/index.js']) %}
+{% do script(['libs/ltc-sdk.js', 'libs/perfect-scrollbar.js', 'textactivity/js/show/index.js'], 300) %}
+
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% block body %}
   <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ enableCopy }}">

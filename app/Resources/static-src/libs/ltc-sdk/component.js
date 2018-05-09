@@ -1,7 +1,8 @@
 import { script } from './utils';
 
+
 const resource = {
-  ckeditor: '/static-dist/libs/es-ckeditor/ckeditor.js'
+  ckeditor: '/static-dist/libs/es-ckeditor/ckeditor.js',
 }
 
 export const ckeditor = (callback) => {
