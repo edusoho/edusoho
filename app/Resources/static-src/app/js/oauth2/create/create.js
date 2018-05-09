@@ -116,8 +116,11 @@ export default class Create {
     return this.captchaToken;
   }
 
+  // 当手机注册的时候，滑块隐藏，并
   initDragCaptchaCodeRule() {
-    if ($('.js-drag-img').length) {
+    const isMobile = $('.js-drag-jigsaw').hasClass('hidden');
+    console.log($('.js-drag-img').length);
+    if ($('.js-drag-img').length && !isMobile) {
       $('[name="jigsaw"], [name="drag_captcha_token"]').rules('add', {
         required: true,
         messages: {
@@ -145,6 +148,7 @@ export default class Create {
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
+        // 自定义code 自动捕获
         const code = res.responseJSON.error.code;
         switch (code) {
         case 30001:
@@ -212,6 +216,7 @@ export default class Create {
         }
       }).error((response) => {
         $target.button('reset');
+        // 自定义code 自动捕获
         if (response.status === 429) {
           notify('danger', Translator.trans('oauth.register.time_limit'));
         } else {
