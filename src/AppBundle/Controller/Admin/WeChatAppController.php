@@ -43,6 +43,7 @@ class WeChatAppController extends BaseController
     protected function isNoneLevel()
     {
         $me = $this->createApi()->get('/me');
+
         return empty($me['level']) || $me['level'] == 'none';
     }
 
