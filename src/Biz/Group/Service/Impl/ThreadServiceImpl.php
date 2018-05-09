@@ -375,7 +375,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('Creating threads too frequently');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
