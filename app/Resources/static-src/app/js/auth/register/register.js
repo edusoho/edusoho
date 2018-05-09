@@ -41,10 +41,10 @@ export default class Register {
       var isMobile = reg_mobile.test(value);
       if (isMobile) {
         $('.email_mobile_msg').removeClass('hidden');
-        $('.js-captcha').addClass('hidden');
+        $('.js-captcha, .js-drag-jigsaw').addClass('hidden');
       } else {
         $('.email_mobile_msg').addClass('hidden');
-        $('.js-captcha').removeClass('hidden');
+        $('.js-captcha, .js-drag-jigsaw').removeClass('hidden');
       }
       if (isEmail || isMobile) {
         result = true;
@@ -240,9 +240,10 @@ export default class Register {
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
       this.initSmsCodeRule();
-      $('[name="captcha_code"]').rules('remove');
+      $('[name="captcha_code"], [name="jigsaw"], [name="drag_captcha_token"]').rules('remove');
     } else {
       this.initCaptchaCodeRule();
+      this.initDragCaptchaCodeRule();
       $('[name="sms_code"]').rules('remove');
     }
   }
