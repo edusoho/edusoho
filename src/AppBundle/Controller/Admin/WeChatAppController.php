@@ -15,7 +15,7 @@ class WeChatAppController extends BaseController
         }
 
         return $this->render('admin/wechat-app/index.html.twig', array(
-            'isNoneLevel' => $this->isNoneLevel()
+            'isNoneLevel' => $this->isNoneLevel(),
         ));
     }
 
@@ -43,7 +43,7 @@ class WeChatAppController extends BaseController
     protected function isNoneLevel()
     {
         $me = $this->createApi()->get('/me');
-        return !empty($me) && $me['level'] == 'none';
+        return empty($me['level']) || $me['level'] == 'none';
     }
 
     protected function createApi($node = 'root')
