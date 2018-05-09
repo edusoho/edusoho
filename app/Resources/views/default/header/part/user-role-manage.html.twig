@@ -5,7 +5,8 @@
       {% if has_permission('admin') %}
         <li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
       {% endif %}
-      {% if ('ROLE_TEACHER' in app.user.roles) or ('ROLE_SUPER_ADMIN' in app.user.roles) %}
+
+      {% if app.user.isTeacher() %}
         <li><a href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a></li>
       {% endif %}
       <li><a href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a></li>
