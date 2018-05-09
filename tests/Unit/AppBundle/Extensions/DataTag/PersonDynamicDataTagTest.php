@@ -12,15 +12,15 @@ class PersonDynamicDataTagTest extends BaseTestCase
         $this->mockBiz('User:StatusService', array(
             array(
                 'functionName' => 'searchStatuses',
-                'returnValue' => array(array('id' => 1, 'userId' => 1), array('id' => 2, 'userId' => 2))
-            )
+                'returnValue' => array(array('id' => 1, 'userId' => 1), array('id' => 2, 'userId' => 2)),
+            ),
         ));
 
         $this->mockBiz('User:UserService', array(
             array(
                 'functionName' => 'findUsersByIds',
-                'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2))
-            )
+                'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2)),
+            ),
         ));
 
         $datatag = new PersonDynamicDataTag();

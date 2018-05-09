@@ -3,7 +3,6 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class PersonDynamicDataTag extends BaseDataTag implements DataTag
 {

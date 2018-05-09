@@ -13,12 +13,12 @@ class TagMarksDataTagTest extends BaseTestCase
             array(
                 'functionName' => 'getTag',
                 'withParams' => array(2),
-                'returnValue' => array('id' => 2, 'name' => 'tag1 name', 'groupId' => 1)
+                'returnValue' => array('id' => 2, 'name' => 'tag1 name', 'groupId' => 1),
             ),
             array(
                 'functionName' => 'getTag',
                 'withParams' => array(3),
-                'returnValue' => array('id' => 3, 'name' => 'tag2 name', 'groupId' => 2)
+                'returnValue' => array('id' => 3, 'name' => 'tag2 name', 'groupId' => 2),
             ),
         ));
 
