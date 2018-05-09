@@ -52,6 +52,12 @@
             <directory>../tests/Unit/Y*</directory>
             <directory>../tests/Unit/Z*</directory>
         </testsuite>
+        <testsuite name="Unit1">
+            <directory>../tests/Unit/Util</directory>
+        </testsuite>
+        <testsuite name="Unit2">
+            <directory>../tests/Unit/Xapi</directory>
+        </testsuite>
         <testsuite name="CustomBundle">
             <directory>../src/CustomBundle/Tests</directory>
             <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>

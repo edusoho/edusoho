@@ -65,6 +65,10 @@ before_script:
     - bin/phpunit -c app/ --testsuite UnitE2P
     - bin/phpunit -c app/ --testsuite UnitQ2T
     - bin/phpunit -c app/ --testsuite UnitU2Z
+  only:
+    - master
+    - release
+    - trigger
 
 7.0 For Non-Develop:
   stage: test
@@ -92,14 +96,13 @@ before_script:
     - redis:latest
   script:
     - sed -i 's/memory_limit.*/memory_limit = 5000M/g' /etc/php/7.0/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite Unit1 --coverage-clover reports/phpunit.coverage.xml_1 --log-junit reports/phpunit.xml_1
+    - bin/coverage-caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
     - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
     - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - /opt/sonar-scanner/bin/sonar-scanner
-  only:
-    - develop
 
 
 AT With Java And Selenium:

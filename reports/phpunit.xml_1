@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="28" assertions="64" failures="0" errors="0" time="95.024387">
+    <testsuite name="Unit1" tests="28" assertions="64" failures="0" errors="0" time="95.024387">
+      <testsuite name="Tests\Unit\Util\Dao\MobileDeviceDaoTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/Dao/MobileDeviceDaoTest.php" tests="2" assertions="11" failures="0" errors="0" time="9.392534">
+        <testcase name="testGetMobileDeviceById" class="Tests\Unit\Util\Dao\MobileDeviceDaoTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/Dao/MobileDeviceDaoTest.php" line="9" assertions="6" time="6.206329"/>
+        <testcase name="testAddMobileDevice" class="Tests\Unit\Util\Dao\MobileDeviceDaoTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/Dao/MobileDeviceDaoTest.php" line="19" assertions="5" time="3.186205"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\Util\Dao\SystemUtilDaoTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/Dao/SystemUtilDaoTest.php" tests="2" assertions="2" failures="0" errors="0" time="6.341821">
+        <testcase name="testGetCourseIdsWhereCourseHasDeleted" class="Tests\Unit\Util\Dao\SystemUtilDaoTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/Dao/SystemUtilDaoTest.php" line="9" assertions="1" time="3.190457"/>
+        <testcase name="testDeclares" class="Tests\Unit\Util\Dao\SystemUtilDaoTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/Dao/SystemUtilDaoTest.php" line="16" assertions="1" time="3.151364"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" tests="14" assertions="26" failures="0" errors="0" time="44.967317">
+        <testcase name="testCreateLive" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="12" assertions="2" time="3.354187"/>
+        <testcase name="testUpdateLive" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="32" assertions="2" time="3.329867"/>
+        <testcase name="testGetCapacity" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="46" assertions="2" time="3.151867"/>
+        <testcase name="testGetRoomUrl" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="60" assertions="1" time="3.047022"/>
+        <testcase name="testDeleteLive" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="73" assertions="1" time="3.022875"/>
+        <testcase name="testGetMaxOnline" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="85" assertions="1" time="3.047205"/>
+        <testcase name="testEntryLive" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="97" assertions="1" time="3.014139"/>
+        <testcase name="testEntryReplay" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="109" assertions="2" time="3.321688"/>
+        <testcase name="testCreateReplayList" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="122" assertions="2" time="3.496685"/>
+        <testcase name="testIsAvailableRecord" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="135" assertions="1" time="3.333165"/>
+        <testcase name="testSetLiveLogo" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="147" assertions="3" time="3.168150"/>
+        <testcase name="testCheckLiveStatus" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="162" assertions="2" time="3.301380"/>
+        <testcase name="testIsEsLive" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="176" assertions="3" time="3.171376"/>
+        <testcase name="testGetLiveAccount" class="Tests\Unit\Util\EdusohoLiveClientlTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/EdusohoLiveClientTest.php" line="188" assertions="3" time="3.207711"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\Util\FileUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/FileUtilTest.php" tests="2" assertions="10" failures="0" errors="0" time="6.747917">
+        <testcase name="testEmptyDir" class="Tests\Unit\Util\FileUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/FileUtilTest.php" line="21" assertions="6" time="3.268346"/>
+        <testcase name="testDeepCopy" class="Tests\Unit\Util\FileUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/FileUtilTest.php" line="42" assertions="4" time="3.479571"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\Util\MobileDeviceServicelTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/MobileDeviceServiceTest.php" tests="2" assertions="8" failures="0" errors="0" time="6.977893">
+        <testcase name="testAddMobileDevice" class="Tests\Unit\Util\MobileDeviceServicelTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/MobileDeviceServiceTest.php" line="9" assertions="2" time="3.546864"/>
+        <testcase name="testFindMobileDeviceByIMEI" class="Tests\Unit\Util\MobileDeviceServicelTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/MobileDeviceServiceTest.php" line="28" assertions="6" time="3.431029"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\Util\SystemUtilServiceImplTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilServiceImplTest.php" tests="1" assertions="2" failures="0" errors="0" time="3.424063">
+        <testcase name="testRemoveUnusedUploadFiles" class="Tests\Unit\Util\SystemUtilServiceImplTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilServiceImplTest.php" line="9" assertions="2" time="3.424063"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\Util\SystemUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilTest.php" tests="5" assertions="5" failures="0" errors="0" time="17.172841">
+        <testcase name="testGetDownloadPath" class="Tests\Unit\Util\SystemUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilTest.php" line="12" assertions="1" time="3.458518"/>
+        <testcase name="testGetBackUpPath" class="Tests\Unit\Util\SystemUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilTest.php" line="18" assertions="1" time="3.447947"/>
+        <testcase name="testGetCachePath" class="Tests\Unit\Util\SystemUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilTest.php" line="24" assertions="1" time="3.426306"/>
+        <testcase name="testGetUploadTmpPath" class="Tests\Unit\Util\SystemUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilTest.php" line="30" assertions="1" time="3.432172"/>
+        <testcase name="testBackupdb" class="Tests\Unit\Util\SystemUtilTest" file="/private/var/www/projects/edusoho_bak/tests/Unit/Util/SystemUtilTest.php" line="36" assertions="1" time="3.407898"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
