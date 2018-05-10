@@ -198,4 +198,18 @@ class EdusohoLiveClientlTest extends BaseTestCase
 
         $this->assertArrayEquals($return, $result);
     }
+
+    public function testGetLiveOverview()
+    {
+        $return = array('account' => array('status' => 'activate', 'capacity' => 20), 'data' => array());
+        $cloudApi = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($cloudApi);
+        $mockObject->shouldReceive('get')->times(1)->andReturn($return);
+        $client = new EdusohoLiveClient();
+        $client->setCloudApi($mockObject, 'root');
+
+        $result = $client->getLiveOverview();
+
+        $this->assertArrayEquals($return, $result);
+    }
 }

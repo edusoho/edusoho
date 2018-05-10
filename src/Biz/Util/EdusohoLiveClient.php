@@ -132,6 +132,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->get('/lives/account');
     }
 
+    public function getLiveOverview()
+    {
+        return $this->createCloudApi('root')->get('/me/live/overview');
+    }
+
     public static function isEsLive($liveProvider)
     {
         return in_array($liveProvider, array(self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER));

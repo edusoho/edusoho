@@ -18,58 +18,14 @@
           {{ web_macro.flash_messages() }}
           <div class="course-piece">{{ 'my.teaching.course_set.select_type'|trans }}</div>
           <div class="form-group">
-            <div class="col-md-3">
-              <div class="course-select js-courseSetType active" data-type="normal"><i
-                    class="es-icon es-icon-putongkecheng "></i>
-                <div class="course-type">{{ 'my.teaching.course_set.select_type.course'|trans }}</div>
-                <div class="course-intro">{{ 'my.teaching.course_set.select_type.course.tips'|trans }}</div>
+            {% set typeCount = courseTypes|length %}
+            {% for key,type in courseTypes %}
+              <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2{% endif %}">
+                {% include type.template with {type: key} %}
               </div>
-            </div>
-            <div class="col-md-3">
-              {% if not liveStatus.isBuy %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                   title="{{'my.teaching.course_set.select_type.live_open_course.not_purchase_live'|trans}}" data-type="live">
-              {% elseif not setting('live-course.live_course_enabled') %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                  title="{{'my.teaching.course_set.select_type.live_open_course.available_after_open'|trans}}" data-type="live">
-              {% elseif liveStatus.isExpired is defined and liveStatus.isExpired == true %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="live">
-              {% else %}
-                <div class="course-select js-courseSetType" data-type="live">
-              {% endif %}
-                  <i class="es-icon es-icon-zhibokecheng "></i>
-                  <div class="course-type">{{ 'my.teaching.course_set.select_type.live_course'|trans }}</div>
-                  <div class="course-intro">{{ 'my.teaching.course_set.select_type.live_course.tips'|trans }}</div>
-                </div>
-            </div>
-
-              <div class="col-md-3">
-                <div class="course-select js-courseSetType" data-type="open">
-                  <i class="es-icon es-icon-lubogongkaike"></i>
-                  <div class="course-type">{{ 'my.teaching.course_set.select_type.record_open_course'|trans }}</div>
-                  <div class="course-intro">{{ 'my.teaching.course_set.select_type.record_open_course.tips'|trans }}</div>
-                </div>
-              </div>
-
-            <div class="col-md-3">
-              {% if not liveStatus.isBuy %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.not_purchase_live'|trans}}" data-type="liveOpen">
-              {% elseif not setting('live-course.live_course_enabled') %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.available_after_open'|trans}}" data-type="liveOpen">
-              {% elseif liveStatus.isExpired is defined and liveStatus.isExpired == true %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="liveOpen">
-              {% else %}
-                <div class="course-select js-courseSetType" data-type="liveOpen">
-              {% endif %}
-                  <i class="es-icon es-icon-zhibokecheng2"></i>
-                  <div class="course-type">{{ 'my.teaching.course_set.select_type.live_open_course'|trans }}</div>
-                  <div class="course-intro">{{ 'my.teaching.course_set.select_type.live_open_course.tips'|trans }}</div>
-                </div>
-            </div>
+            {% endfor %}
+          </div>
+          
             {% include 'org/course-create-org-tree-select.html.twig' %}
             <div class="course-title form-group">
               <div class="col-md-2 controls-label text-lg">

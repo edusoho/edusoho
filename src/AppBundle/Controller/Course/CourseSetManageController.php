@@ -11,46 +11,27 @@ use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class CourseSetManageController extends BaseController
 {
     public function createAction(Request $request)
     {
+        $visibleCourseTypes = $this->getCourseTypes();
+
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
+            $type = $request->request->get('type', '');
 
-            if (!isset($data['type'])) {
+            if (empty($type) || empty($visibleCourseTypes[$type])) {
                 throw $this->createNotFoundException('未设置课程类型');
-            } else {
-                $type = $data['type'];
             }
 
-            if (in_array($type, array('open', 'liveOpen'))) {
-                $openCourse = $this->getOpenCourseService()->createCourse($data);
-
-                return $this->redirectToRoute(
-                    'open_course_manage',
-                    array(
-                        'id' => $openCourse['id'],
-                    )
-                );
-            } else {
-                $courseSet = $this->getCourseSetService()->createCourseSet($data);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'course_set_manage_base',
-                        array(
-                            'id' => $courseSet['id'],
-                        )
-                    )
-                );
-            }
+            return $this->forward($visibleCourseTypes[$type]['saveAction'], array('request' => $request));
         }
+
         if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
             throw  $this->createAccessDeniedException();
         }
+
         $user = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user = $this->getUserService()->getUser($user->getId());
@@ -87,9 +68,21 @@ class CourseSetManageController extends BaseController
         return $this->render(
             'courseset-manage/create.html.twig',
             array(
-                'user' => $user,
                 'userProfile' => $userProfile,
-                'liveStatus' => $liveStatus,
+                'courseTypes' => $visibleCourseTypes,
+            )
+        );
+    }
+
+    public function saveCourseAction(Request $request)
+    {
+        $data = $request->request->all();
+        $courseSet = $this->getCourseSetService()->createCourseSet($data);
+
+        return $this->redirectToRoute(
+            'course_set_manage_base',
+            array(
+                'id' => $courseSet['id'],
             )
         );
     }
@@ -505,6 +498,11 @@ class CourseSetManageController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
         }
+    }
+
+    protected function getCourseTypes()
+    {
+        return $this->get('web.twig.course_extension')->getCourseTypes();
     }
 
     /**

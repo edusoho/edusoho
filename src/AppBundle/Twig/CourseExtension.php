@@ -47,6 +47,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
             new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
+            new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
         );
     }
 
@@ -145,6 +146,24 @@ class CourseExtension extends \Twig_Extension
         $setting = $this->getSettingService()->get('course');
 
         return !empty($setting['buy_fill_userinfo']);
+    }
+
+    public function getCourseTypes()
+    {
+        $courseTypes = $this->container->get('extension.manager')->getCourseTypes();
+        $visibleCourseTypes = array_filter($courseTypes, function ($type) {
+            return 1 == $type['visible'];
+        });
+
+        uasort($visibleCourseTypes, function ($type1, $type2) {
+            if ($type1['priority'] == $type2['priority']) {
+                return 0;
+            }
+
+            return $type1['priority'] > $type2['priority'] ? -1 : 1;
+        });
+
+        return $visibleCourseTypes;
     }
 
     /**
