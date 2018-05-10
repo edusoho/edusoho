@@ -110,6 +110,11 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isIndexExist('course_v8', 'courseSetId', 'courseset_id_index')) {
             $this->createIndex('course_v8', 'courseset_id_index', 'courseSetId');
         }
+
+        if (!$this->isFieldExist('course_v8', 'courseSetTitle')) {
+            $this->getConnection()->exec("ALTER TABLE `course_v8` ADD COLUMN `courseSetTitle` varchar(128) NOT NULL DEFAULT '' COMMENT '所属课程名称' AFTER `title`;");
+        }
+
         $this->getConnection()->exec("update course_v8 cv,course_set_v8 cvs set cv.courseSetTitle=cvs.title where cv.coursesetid=cvs.id");
         return 1;
     }
