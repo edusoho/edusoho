@@ -96,7 +96,11 @@ before_script:
     - redis:latest
   script:
     - sed -i 's/memory_limit.*/memory_limit = 5000M/g' /etc/php/7.0/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite Unit1 --coverage-clover reports/phpunit.coverage.xml_1 --log-junit reports/phpunit.xml_1
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports/phpunit.xml
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitC2D --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports/phpunit.xml
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports/phpunit.xml
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports/phpunit.xml
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports/phpunit.xml
     - bin/coverage-caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
     - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
