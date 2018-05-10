@@ -244,6 +244,7 @@ t.add("auth.register.email_required_error_hint", "\u8bf7\u8f93\u5165\u90ae\u7bb1
 t.add("auth.register.mobile_required_error_hint", "\u8bf7\u8f93\u5165\u624b\u673a", "js", "zh_CN");
 t.add("auth.register.email_or_mobile_required_error_hint", "\u8bf7\u8f93\u5165\u624b\u673a\/\u90ae\u7bb1", "js", "zh_CN");
 t.add("auth.register.number_validate_error_hint", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
+t.add("auth.register.drag_captcha_tips", "\u8bf7\u62d6\u52a8\u5de6\u8fb9\u6ed1\u5757\u5b8c\u6210\u4e0a\u65b9\u62fc\u56fe", "js", "zh_CN");
 t.add("auth.mobile_captcha_required_error_hint", "\u8bf7\u8f93\u5165\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_error_hint", "\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("card.card_receive_success_hint", "\u5b66\u4e60\u5361\u5df2\u4f7f\u7528\uff0c\u5145\u503c%coinAmount%%coinName%\u6210\u529f\uff0c\u53ef\u524d\u5f80\u3010\u8d26\u6237\u4e2d\u5fc3\u3011-\u3010\u6211\u7684\u8d26\u6237\u3011\u67e5\u770b\u5145\u503c\u60c5\u51b5\u3002", "js", "zh_CN");
@@ -532,6 +533,8 @@ t.add("validate.user_terms.message", "\u52fe\u9009\u540c\u610f\u6b64\u670d\u52a1
 t.add("validate.visible_character.message", "\u4e0d\u5141\u8bb8\u8f93\u5165\u4e0d\u53ef\u89c1\u5b57\u7b26\uff0c\u5982\u7a7a\u683c\u7b49", "js", "zh_CN");
 t.add("validate.valid_score_input.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u5206\u6570\u683c\u5f0f\uff0c\u6700\u591a\u4fdd\u7559\u4e00\u4f4d\u5c0f\u6570", "js", "zh_CN");
 t.add("validate.mobile_or_email_message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\uff0f\u90ae\u7bb1", "js", "zh_CN");
+t.add("validate.success", "\u9a8c\u8bc1\u6210\u529f", "js", "zh_CN");
+t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
 t.add("alert.file_convert_error.message", "\u6587\u4ef6\u8f6c\u6362\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("notify.file_not_select.message", "\u672a\u9009\u4e2d\u4efb\u4f55\u6587\u4ef6\u8bb0\u5f55", "js", "zh_CN");
 t.add("page.file_converting.message", "\u6b63\u5728\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362", "js", "zh_CN");
