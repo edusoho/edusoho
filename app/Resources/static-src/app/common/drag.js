@@ -1,4 +1,5 @@
 import Api from 'common/api';
+import { strToBase64 } from 'common/utils';
 
 export default class Drag {
   constructor(bar, target) {
@@ -173,7 +174,7 @@ export default class Drag {
     let dragToken = {token: token, captcha: position};
     token = JSON.stringify(dragToken);
 
-    return [...btoa(token)].reverse().join('');
+    return [...strToBase64(token)].reverse().join('');
   }
 }
 

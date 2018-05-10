@@ -116,7 +116,6 @@ export default class Create {
     return this.captchaToken;
   }
 
-  // 当手机注册的时候，滑块隐藏，并
   initDragCaptchaCodeRule() {
     const isMobile = $('.js-drag-jigsaw').hasClass('hidden');
     console.log($('.js-drag-img').length);
