@@ -60,6 +60,7 @@ before_script:
     - redis:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - phpunit -c app/ /builds/edusoho/edusoho/tests/Unit/User/UserServiceTest.php
     - bin/phpunit-diff
 #    - bin/phpunit -c app/ --testsuite UnitA2B
 #    - bin/phpunit -c app/ --testsuite UnitC2D
