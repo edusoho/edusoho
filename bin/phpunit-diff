@@ -7,6 +7,7 @@ phpunitStr=''
 sourceStr=''
 index=1
 currentPath=`pwd`
+xml=''
 
 function inArray() {
 	value=$1
@@ -34,7 +35,7 @@ function filterClassName() {
 			if [[  $flag = 0  ]]; then
 				sourceArray[$index]=$sourceClassName
 			fi
-			testClassName=${className//src\/Biz//tests\/Unit}
+			testClassName=${className//src\/Biz/tests\/Unit}
 			testClassName=${testClassName//\/Impl/}
 			testClassName=${testClassName//Impl\.php/Test\.php}
 			flag=0
@@ -64,16 +65,26 @@ do
 	((index++))
 done < app/data/phpunit-dif-files
 
+suite=1
 for class in ${phpunitArray[@]}
 do
 	fileName=${currentPath}/${class}
+	zfileName=${fileName//\//\\\/}
+	echo $fileName
+	xml="<testsuite name=\"suite$suite\"><file>$zfileName<\/file><\/testsuite><\/testsuites>"
+
 	if [  -f "$fileName" ]; then
 		echo "------------------------------------"
 		echo "测试文件 $fileName"
-		bin/phpunit -c app/ $fileName
+		line=`sed -n '/<\/testsuites>/=' app/phpunit.xml.dist | tail -n1`
+        sed -i "" "${line}s/.*/$xml/" app/phpunit.xml.dist
+		bin/phpunit -c app/ --testsuite suite$suite
+		((suite++))
+
 	else
 		echo "测试文件#$fileName不存在"
 	fi
 done
+echo $xml
 rm app/data/phpunit-dif-files
 echo '结束'
