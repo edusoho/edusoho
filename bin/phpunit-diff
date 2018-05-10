@@ -89,6 +89,5 @@ do
 		echo "测试文件#$fileName不存在"
 	fi
 done
-echo $xml
 rm app/data/phpunit-dif-files
 echo '结束'
