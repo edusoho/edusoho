@@ -6724,7 +6724,7 @@ admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同�
 admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
-admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需须要完成安全验证。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
                                            
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
