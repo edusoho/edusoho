@@ -77,7 +77,7 @@ do
 		echo "------------------------------------"
 		echo "测试文件 $fileName"
 		line=`sed -n '/<\/testsuites>/=' app/phpunit.xml.dist | tail -n1`
-        sed -i "" "${line}s/.*/$xml/" app/phpunit.xml.dist
+        sed -i "${line}s/.*/$xml/" app/phpunit.xml.dist
 		bin/phpunit -c app/ --testsuite suite$suite
 		((suite++))
 
