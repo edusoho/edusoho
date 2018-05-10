@@ -101,15 +101,26 @@
         </div>
       {% endif %}
       <label class="checkbox-inline">
-        <input type="checkbox" {% if type == 'live' %}checked="true" {% endif %} id="live" value="
-        {% if type == 'all' %}
-          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
-        {% else %}
+        <input type="checkbox" class="js-search-type" {% if type == 'live' %}checked="true" {% endif %} id="live" value="
+        {% if type == 'live' %}
           {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% else %}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}"> {{ 'search.live_courses'|trans }}
       </label>
+      {% if is_plugin_installed('reservation') %}
+        <label class="checkbox-inline">
+          <input type="checkbox" class="js-search-type" {% if type == 'reservation' %}checked="true" {% endif %} id="reservation" value="
+          {% if type == 'reservation' %}
+            {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {% else %}
+            {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'reservation',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {% endif %}"> {{ 'search.reservation_courses'|trans }}
+        </label>
+      {% endif %}
+
       <label class="checkbox-inline">
-        <input type="checkbox" {% if price == 'free' %}checked="true" {% endif %} id="free" value="
+        <input type="checkbox" class="js-search-type" {% if price == 'free' %}checked="true" {% endif %} id="free" value="
         {% if price == 'all' %}
           {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}

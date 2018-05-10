@@ -2712,6 +2712,7 @@ search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
 search.live_courses: 'Live courses'
+search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
 cloud_file.preview: 'File preview'

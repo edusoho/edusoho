@@ -277,9 +277,10 @@ class ExploreController extends BaseController
             $conditions['price'] = '0.00';
         }
 
-        if (isset($filter['type']) && $filter['type'] === 'live') {
-            $conditions['type'] = 'live';
+        if (isset($filter['type'])) {
+            $conditions['type'] = strip_tags($filter['type']);
         }
+
         unset($conditions['filter']);
 
         return array($conditions, $filter);
