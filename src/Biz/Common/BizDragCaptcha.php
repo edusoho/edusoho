@@ -15,7 +15,7 @@ class BizDragCaptcha extends BizAware
 
     const JIGSAW_WIDTH = 40;
 
-    const DEVIATION = 1.5;
+    const DEVIATION = 2.5;
 
     const TOKENTYPE = 'drag_captcha';
 
