@@ -16,7 +16,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             pick: '.' + editor.id + ' .ckeditor-uploadpictures-pick-btn',
             compress: {
                 width: 1200,
-                height: 1200,
+                height: 8000,
                 quality: 90,
                 allowMagnify: false,
                 crop: false,
