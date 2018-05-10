@@ -151,26 +151,15 @@ export default class Create {
         // 自定义code 自动捕获
         const code = res.responseJSON.error.code;
         switch (code) {
-        case 30001:
+        case 5000601:
           if ($('.js-captcha').hasClass('hidden')) {
             $('.js-captcha').removeClass('hidden');
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_required_tip'));
             $('[name=\'captcha_code\']').rules('add', this.getCaptchaCodeRule());
           } else {
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
             $captchaCode.val('');
             this.initCaptchaCode();
           }
           $target.attr('disabled', true);
-          break;
-        case 30002:
-          notify('danger', Translator.trans('oauth.send.error_message_tip'));
-          break;
-        case 30003:
-          notify('danger', Translator.trans('admin.site.cloude_sms_enable_hint'));
-          break;
-        default:
-          notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
           break;
         }
       });
