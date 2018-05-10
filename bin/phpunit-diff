@@ -54,7 +54,7 @@ function filterClassName() {
 echo '创建app/data目录'
 mkdir -p app/data
 echo '开始比对差异文件'
-git diff master --name-only --diff-filter=ACMRTUXB >> app/data/phpunit-dif-files
+git diff origin/master --name-only --diff-filter=ACMRTUXB >> app/data/phpunit-dif-files
 echo '显示差异文件'
 cat app/data/phpunit-dif-files
 echo '开始跑单元测试'
