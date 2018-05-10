@@ -175,11 +175,5 @@ class DefaultServiceProvider implements ServiceProviderInterface
                 new CourseRenderViewResolver($biz),
             );
         };
-
-        $biz['task-manage/modal'] = function ($biz) {
-            return array(
-                'normal' => 'task-manage/normal/modal.html.twig',
-            );
-        };
     }
 }
