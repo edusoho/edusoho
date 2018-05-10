@@ -34,36 +34,6 @@ class CourseSetManageController extends BaseController
 
         $user = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
-        $user = $this->getUserService()->getUser($user->getId());
-
-        try {
-            $api = CloudAPIFactory::create('root');
-            $overview = $api->get('/me/live/overview');
-        } catch (\RuntimeException $e) {
-            $overview = array(
-                'error' => array(
-                    'code' => '500',
-                    'message' => $e->getMessage(),
-                ),
-            );
-        }
-
-        $liveStatus = array(
-            'isBuy' => (isset($overview['isBuy']) && false == $overview['isBuy']) ? false : true,
-        );
-
-        if (!empty($overview) && isset($overview['account'])) {
-            $liveAccount = $overview['account'];
-            $liveStatus['effective'] = strtotime($liveAccount['effective']);
-            $liveStatus['expire'] = strtotime($liveAccount['expire']) + 24 * 60 * 60;
-
-            $current = time();
-            $liveStatus['isExpired'] = true;
-
-            if ($liveStatus['effective'] < $current && $liveStatus['expire'] > $current) {
-                $liveStatus['isExpired'] = false;
-            }
-        }
 
         return $this->render(
             'courseset-manage/create.html.twig',
