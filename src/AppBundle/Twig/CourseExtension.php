@@ -6,11 +6,11 @@ use AppBundle\Util\AvatarAlert;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Util\CourseUtils;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DynUrlToolkit;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -46,13 +46,13 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
-            new \Twig_SimpleFunction('course_url', array($this, 'getCourseUrl')),
+            new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
         );
     }
 
-    public function getCourseUrl($baseUrl, $params)
+    public function getDynUrl($baseUrl, $params)
     {
-        return CourseUtils::getCourseUrl($this->biz, $baseUrl, $params);
+        return DynUrlToolkit::getUrl($this->biz, $baseUrl, $params);
     }
 
     public function isSupportEnableAudio($enableAudioStatus)

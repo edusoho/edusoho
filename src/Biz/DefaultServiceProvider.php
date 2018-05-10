@@ -4,6 +4,7 @@ namespace Biz;
 
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
+use Biz\Course\Util\CourseRenderViewResolver;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -35,7 +36,6 @@ use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
-use Biz\Util\FileToolkit;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -170,8 +170,16 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new RegisterSmsRateLimiter($biz);
         };
 
-        $biz['file_toolkit'] = function ($biz) {
-            return new FileToolkit();
+        $biz['render_view_resolvers'] = function ($biz) {
+            return array(
+                new CourseRenderViewResolver($biz),
+            );
+        };
+
+        $biz['task-manage/modal'] = function ($biz) {
+            return array(
+                'normal' => 'task-manage/normal/modal.html.twig',
+            );
         };
     }
 }
