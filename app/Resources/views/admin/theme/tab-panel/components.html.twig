@@ -22,16 +22,14 @@
       <!-- List group -->
       <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
         {% for key, pendant in blockConfig %}
-          {% if key != 'ReservationCourses' or (key == 'ReservationCourses' and is_plugin_installed('reservation')) %}
+          {% if orginAllConfig[key]|default() %}
             {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: true} %}
           {% endif %}
         {% endfor %}
         
         {% for key, pendant in allBlockConfig %}
           {% if not blockConfig[key]|default() %}
-            {% if key != 'ReservationCourses' or (key == 'ReservationCourses' and is_plugin_installed('reservation')) %}
-              {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: false} %}
-            {% endif %}
+            {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: false} %}
           {% endif %}
         {% endfor %}
       </ul>

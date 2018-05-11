@@ -6,6 +6,7 @@ use AppBundle\System;
 use Biz\Theme\Service\ThemeService;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\ArrayToolkit;
 
 class ThemeController extends BaseController
 {
