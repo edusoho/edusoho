@@ -94,7 +94,7 @@ class SmsServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Sms\SmsException
      */
     public function testSendException()
     {

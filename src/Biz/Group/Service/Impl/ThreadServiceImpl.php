@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Dao\ThreadCollectDao;
 use Biz\Group\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Thread\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -141,7 +142,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('Creating threads too frequently');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $thread['title'] = $this->sensitiveFilter($thread['title'], 'group-thread-create');
@@ -374,7 +375,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('Creating threads too frequently');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');

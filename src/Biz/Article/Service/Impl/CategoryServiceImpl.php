@@ -121,7 +121,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findAll();
     }
 
-    public function isCategoryCodeAvaliable($code, $exclude = null)
+    public function isCategoryCodeAvailable($code, $exclude = null)
     {
         if (empty($code)) {
             return false;

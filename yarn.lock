@@ -3550,6 +3550,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
+jquery-base64@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/jquery-base64/-/jquery-base64-1.0.0.tgz#154933ed4afff94a9e2fd8f821d7c837c202cb19"
+
 jquery-blurr@0.1.2:
   version "0.1.2"
   resolved "http://registry.npm.taobao.org/jquery-blurr/download/jquery-blurr-0.1.2.tgz#57229111e827ce0247b5b152cbc2706e20f8d065"
