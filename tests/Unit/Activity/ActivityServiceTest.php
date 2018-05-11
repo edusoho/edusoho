@@ -106,6 +106,15 @@ class ActivityServiceTest extends BaseTestCase
             )
         );
 
+        $this->mockBiz(
+            'Course:MaterialService',
+            array(
+                array(
+                    'functionName' => 'deleteMaterialsByLessonId',
+                    'returnValue' => 1,
+                ),
+            )
+        );
         $this->getActivityService()->deleteActivity($savedActivity['id']);
 
         $savedActivity = $this->getActivityService()->getActivity($savedActivity['id']);

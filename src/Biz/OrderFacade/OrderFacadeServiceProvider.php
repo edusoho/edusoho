@@ -131,6 +131,18 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                 );
             }
 
+            $wechatAppSetting = $settingService->get('wechat_app', array());
+            if (isset($wechatAppSetting['enabled']) && $wechatAppSetting['enabled']) {
+                $enabledPayments['wechat_app'] = array(
+                    'appid' => $wechatAppSetting['appid'],
+                    'mch_id' => $wechatAppSetting['account'],
+                    'key' => $wechatAppSetting['key'],
+                    'secret' => $wechatAppSetting['secret'],
+                    'cert_path' => '',
+                    'key_path' => '',
+                );
+            }
+
             return $enabledPayments;
         };
 

@@ -1076,7 +1076,6 @@ class TestpaperServiceTest extends BaseTestCase
         );
 
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
-
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
 
         $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($accuracy));

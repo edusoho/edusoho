@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Group;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
+use Biz\Group\Service\GroupService;
 
 class GroupServiceTest extends BaseTestCase
 {
@@ -22,6 +24,19 @@ class GroupServiceTest extends BaseTestCase
         $this->assertEquals($textGroup['about'], $group['about']);
 
         $this->assertEquals('open', $group['status']);
+    }
+
+    public function testSearchGroups()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+            'about' => 'aaaaaa',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $results = $this->getGroupService()->searchGroups(array('userId' => $user['id']), array(), 0, 10);
+        $this->assertEquals($group, reset($results));
     }
 
     /**
@@ -65,6 +80,7 @@ class GroupServiceTest extends BaseTestCase
         $group = $this->getGroupService()->addGroup($user, $textGroup);
         $fields = array(
             'title' => 'textgroup22222',
+            'about' => '123456789test',
         );
 
         $group = $this->getGroupService()->updateGroup($group['id'], $fields);
@@ -176,6 +192,107 @@ class GroupServiceTest extends BaseTestCase
         $this->assertEquals($group['id'], $groupMember['groupId']);
     }
 
+    public function testExistGroup()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $user1 = $this->createUser1();
+        $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
+
+        $this->assertTrue(is_array($groupMember));
+
+        $this->assertEquals($user1['id'], $groupMember['userId']);
+
+        $this->assertEquals('member', $groupMember['role']);
+
+        $this->assertEquals($group['id'], $groupMember['groupId']);
+
+        $this->getGroupService()->exitGroup($user1, $group['id']);
+
+        $afterGet = $this->getGroupService()->getMemberByGroupIdAndUserId($group['id'], $user1['id']);
+        $this->assertEmpty($afterGet);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testExistGroupWithEmptyGroup()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $user1 = $this->createUser1();
+        $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
+
+        $this->assertTrue(is_array($groupMember));
+
+        $this->assertEquals($user1['id'], $groupMember['userId']);
+
+        $this->assertEquals('member', $groupMember['role']);
+
+        $this->assertEquals($group['id'], $groupMember['groupId']);
+
+        $this->getGroupService()->exitGroup($user1, $group['id'] + 1);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testExistGroupWithEmptyUser()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $user1 = $this->createUser1();
+        $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
+
+        $this->assertTrue(is_array($groupMember));
+
+        $this->assertEquals($user1['id'], $groupMember['userId']);
+
+        $this->assertEquals('member', $groupMember['role']);
+
+        $this->assertEquals($group['id'], $groupMember['groupId']);
+
+        $user1['id'] = 100;
+        $this->getGroupService()->exitGroup($user1, $group['id']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testJoinGroupWithJoinGroupExist()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $user1 = $this->createUser1();
+        $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
+
+        $this->assertTrue(is_array($groupMember));
+
+        $this->assertEquals($user1['id'], $groupMember['userId']);
+
+        $this->assertEquals('member', $groupMember['role']);
+
+        $this->assertEquals($group['id'], $groupMember['groupId']);
+
+        $this->getGroupService()->joinGroup($user1, $group['id']);
+    }
+
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
@@ -188,9 +305,47 @@ class GroupServiceTest extends BaseTestCase
         $user1 = $this->createUser1();
         $group = $this->getGroupService()->addGroup($user, $textGroup);
 
-        $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
+        $this->getGroupService()->joinGroup($user1, $group['id']);
 
-        $groupMember = $this->getGroupService()->joinGroup($user1, 999);
+        $this->getGroupService()->joinGroup($user1, 999);
+    }
+
+    public function testIsAdmin()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $user1 = $this->createUser1();
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $bool = $this->getGroupService()->isAdmin($group['id'], $user1['id']);
+        $this->assertFalse($bool);
+    }
+
+    public function testPrepareGroupConditions()
+    {
+        $user = $this->createUser();
+
+        $conditions = ReflectionUtils::invokeMethod($this->getGroupService(), 'prepareGroupConditions', array(
+            array(
+                'ownerName' => $user['nickname'],
+                'status' => 'created',
+            ),
+        ));
+
+        $this->assertEquals('created', $conditions['status']);
+        $this->assertEquals($user['id'], $conditions['ownerId']);
+
+        $conditions = ReflectionUtils::invokeMethod($this->getGroupService(), 'prepareGroupConditions', array(
+            array(
+                'ownerName' => $user['nickname'].'123',
+                'status' => '',
+            ),
+        ));
+
+        $this->assertFalse(isset($conditions['status']));
+        $this->assertEquals(0, $conditions['ownerId']);
     }
 
     public function testFindGroupsByUserId()
@@ -271,9 +426,54 @@ class GroupServiceTest extends BaseTestCase
 
         $this->assertEquals(2, $count);
 
+        $count = $this->getGroupService()->countMembers(array('groupId' => $group1['id']));
+        $this->assertEquals(2, $count);
+
         $count = $this->getGroupService()->getMembersCountByGroupId(999);
 
         $this->assertEquals(0, $count);
+    }
+
+    public function testUpdateMember()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $user1 = $this->createUser1();
+        $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
+
+        $this->assertTrue(is_array($groupMember));
+
+        $this->assertEquals($user1['id'], $groupMember['userId']);
+
+        $this->assertEquals('member', $groupMember['role']);
+
+        $this->assertEquals($group['id'], $groupMember['groupId']);
+
+        $updateResult = $this->getGroupService()->updateMember($groupMember['id'], array(
+            'postNum' => 10,
+        ));
+
+        $this->assertEquals(10, $updateResult['postNum']);
+    }
+
+    public function testAddOwner()
+    {
+        $user = $this->createUser();
+        $textGroup = array(
+            'title' => 'textgroup',
+        );
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
+
+        $user1 = $this->createUser1();
+        $member = $this->getGroupService()->addOwner($group['id'], $user1['id']);
+        $this->assertEquals('owner', $member['role']);
+
+        $getGroup = $this->getGroupService()->getGroup($group['id']);
+        $this->assertEquals(2, $getGroup['memberNum']);
     }
 
     public function testIsOwner()
@@ -309,6 +509,141 @@ class GroupServiceTest extends BaseTestCase
         $status = $this->getGroupService()->isMember($group1['id'], $user1['id']);
 
         $this->assertTrue($status);
+    }
+
+    public function testChangeGroupImg()
+    {
+        $this->mockBiz(
+            'Content:FileService',
+            array(
+                array(
+                    'functionName' => 'getFilesByIds',
+                    'withParams' => array(array(1, 2)),
+                    'returnValue' => array(
+                        array('id' => 1, 'uri' => '/files/1.jpg'),
+                        array('id' => 2, 'uri' => '/files/3.jpg'),
+                    ),
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                ),
+            )
+        );
+
+        $user = $this->createUser();
+        $textGroup1 = array(
+            'title' => 'textgroup',
+        );
+        $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
+
+        $member = $this->getGroupService()->changeGroupImg($group1['id'], 'logo', array(
+            array(
+                'type' => 'logo',
+                'id' => 1,
+            ),
+            array(
+                'type' => 'backgroundLogo',
+                'id' => 2,
+            ),
+        ));
+
+        $this->assertEquals('/files/1.jpg', $member['logo']);
+
+        // deleteOldAvatar
+        $this->getGroupService()->changeGroupImg($group1['id'], 'logo', array(
+            array(
+                'type' => 'logo',
+                'id' => 1,
+            ),
+            array(
+                'type' => 'backgroundLogo',
+                'id' => 2,
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testChangeGroupImgWithErrorType()
+    {
+        $this->mockBiz(
+            'Content:FileService',
+            array(
+                array(
+                    'functionName' => 'getFilesByIds',
+                    'withParams' => array(array(1, 2)),
+                    'returnValue' => array(
+                        array('id' => 1, 'uri' => '/files/1.jpg'),
+                        array('id' => 2, 'uri' => '/files/3.jpg'),
+                    ),
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                ),
+            )
+        );
+
+        $user = $this->createUser();
+        $textGroup1 = array(
+            'title' => 'textgroup',
+        );
+        $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
+
+        $member = $this->getGroupService()->changeGroupImg($group1['id'], 'errorType', array(
+            array(
+                'type' => 'logo',
+                'id' => 1,
+            ),
+            array(
+                'type' => 'backgroundLogo',
+                'id' => 2,
+            ),
+        ));
+
+        $this->assertEquals('/files/1.jpg', $member['logo']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testChangeGroupImgWithGroupNonExist()
+    {
+        $this->mockBiz(
+            'Content:FileService',
+            array(
+                array(
+                    'functionName' => 'getFilesByIds',
+                    'withParams' => array(array(1, 2)),
+                    'returnValue' => array(
+                        array('id' => 1, 'uri' => '/files/1.jpg'),
+                        array('id' => 2, 'uri' => '/files/3.jpg'),
+                    ),
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                ),
+            )
+        );
+
+        $user = $this->createUser();
+        $textGroup1 = array(
+            'title' => 'textgroup',
+        );
+        $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
+
+        $member = $this->getGroupService()->changeGroupImg($group1['id'] + 1, 'logo', array(
+            array(
+                'type' => 'logo',
+                'id' => 1,
+            ),
+            array(
+                'type' => 'backgroundLogo',
+                'id' => 2,
+            ),
+        ));
+
+        $this->assertEquals('/files/1.jpg', $member['logo']);
     }
 
     public function testGetMembersCountByGroupId()
@@ -385,6 +720,9 @@ class GroupServiceTest extends BaseTestCase
         $this->assertEquals(10, $member['threadNum']);
     }
 
+    /**
+     * @return GroupService
+     */
     protected function getGroupService()
     {
         return $this->createService('Group:GroupService');

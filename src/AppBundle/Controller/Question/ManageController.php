@@ -64,8 +64,11 @@ class ManageController extends BaseController
 
         $user = $this->getUser();
         $searchCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-
-        $showTasks = $this->getTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
+        $conditions = array(
+            'courseId' => $request->query->get('courseId', 0),
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
+        );
+        $showTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
         $showTasks = ArrayToolkit::index($showTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(
@@ -86,14 +89,14 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
 
             $data['courseSetId'] = $courseSet['id'];
 
             $question = $this->getQuestionService()->create($data);
 
-            if ($data['submission'] === 'continue') {
+            if ('continue' === $data['submission']) {
                 $urlParams = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
                 $urlParams['type'] = $type;
                 $urlParams['id'] = $courseSet['id'];
@@ -102,7 +105,7 @@ class ManageController extends BaseController
 
                 return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
             }
-            if ($data['submission'] === 'continue_sub') {
+            if ('continue_sub' === $data['submission']) {
                 $this->setFlashMessage('success', 'site.add.success');
 
                 return $this->redirect(
@@ -148,7 +151,7 @@ class ManageController extends BaseController
             throw new ResourceNotFoundException('question', $questionId);
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
             $this->getQuestionService()->update($question['id'], $fields);
 

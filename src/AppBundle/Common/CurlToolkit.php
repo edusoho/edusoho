@@ -6,10 +6,20 @@ use AppBundle\Common\Exception\AccessDeniedException;
 
 class CurlToolkit
 {
+    private static $whiteList = array(
+        'formula.edusoho.net', //公式编辑器
+        'www.edusoho.com', //官网
+        'open.edusoho.com', //open站
+        'kzedu.cc', //eduCloud短链
+        'dwz.cn', //百度短链
+        'qqurl.com', //qq短链
+        'api.edusoho.net', //云平台接口
+    );
+
     public static function request($method, $url, $params = array(), $conditions = array())
     {
         $parseUrl = parse_url($url);
-        if (!in_array($parseUrl['host'], self::whiteList())) {
+        if (!in_array($parseUrl['host'], self::$whiteList)) {
             throw new AccessDeniedException('url is not allowed!');
         }
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
@@ -46,7 +56,9 @@ class CurlToolkit
 
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
-
+        if (!empty($conditions['headers'])) {
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $conditions['headers']);
+        }
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
 
@@ -66,17 +78,5 @@ class CurlToolkit
         $body = json_decode($body, true);
 
         return $body;
-    }
-
-    private static function whiteList()
-    {
-        return array(
-            'formula.edusoho.net', //公式编辑器
-            'www.edusoho.com', //官网
-            'open.edusoho.com', //open站
-            'kzedu.cc', //eduCloud短链
-            'dwz.cn', //百度短链
-            'qqurl.com', //qq短链
-        );
     }
 }

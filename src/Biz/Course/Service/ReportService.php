@@ -6,8 +6,6 @@ interface ReportService
 {
     public function summary($courseId);
 
-    public function getLateMonthLearnData($courseId);
-
     public function getCompletionRateTrend($courseId, $startDate, $endDate);
 
     public function getStudentTrend($courseId, $timeRange);

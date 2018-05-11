@@ -41,8 +41,7 @@
             {% if  task_lock %}
               data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans }}"
             {% endif %} ></i>
-          {% if course.status == 'published' and task.status == 'published' %}
-
+          {% if is_task_available(task) %}
             {% if member %}
               {% if not task_lock %}
                 <a class="title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
@@ -85,11 +84,11 @@
           {% else %}
             {#not published#}
             <span class="title">
-                {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              </span>
+              {% include 'course/task-list/parts/list-li-title.html.twig' %}
+            </span>
             <span class="right-menu">
-                {{ 'course.catalogue.task_status.looking_forward'|trans }}
-              </span>
+              {{ 'course.catalogue.task_status.looking_forward'|trans }}
+            </span>
           {% endif %}
         </li>
       {% endif %}

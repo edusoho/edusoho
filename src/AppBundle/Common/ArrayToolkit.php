@@ -69,7 +69,7 @@ class ArrayToolkit
             if (!array_key_exists($key, $array)) {
                 return false;
             }
-            if ($strictMode && (is_null($array[$key]) || $array[$key] === '' || $array[$key] === 0)) {
+            if ($strictMode && (is_null($array[$key]) || '' === $array[$key] || 0 === $array[$key])) {
                 return false;
             }
         }
@@ -262,5 +262,18 @@ class ArrayToolkit
         unset($array);
 
         return $thinner;
+    }
+
+    /**
+     * 给数组中的所有key加上前缀
+     */
+    public static function appendKeyPrefix($array, $prefix)
+    {
+        $result = array();
+        foreach ($array as $key => $value) {
+            $result[$prefix.$key] = $value;
+        }
+
+        return $result;
     }
 }

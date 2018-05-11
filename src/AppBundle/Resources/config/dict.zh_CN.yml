@@ -109,6 +109,7 @@ payment:
     iap: 苹果应用内支付
     lianlianpay: 连连支付
     coin: 虚拟币
+    wechat_app: 微信小程序
     none: 其他
 
 paymentSelect:
@@ -117,6 +118,7 @@ paymentSelect:
     iap: 苹果应用内支付
     lianlianpay: 连连支付
     coin: 虚拟币
+    wechat_app: 微信小程序
     none: 其他
 
 orderSource:

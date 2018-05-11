@@ -222,6 +222,21 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             return array('status' => 'noAnswer', 'score' => 0);
         }
 
+        // 判断values为空["","",""]
+        if (is_array($answer)) {
+            $isEmpty = true;
+            foreach ($answer as $value) {
+                if ('' !== $value) {
+                    $isEmpty = false;
+                    break;
+                }
+            }
+
+            if ($isEmpty) {
+                return array('status' => 'noAnswer', 'score' => 0);
+            }
+        }
+
         $questionConfig = $this->getQuestionConfig($question['type']);
 
         return $questionConfig->judge($question, $answer);

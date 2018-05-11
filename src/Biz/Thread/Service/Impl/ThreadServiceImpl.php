@@ -15,6 +15,7 @@ use Biz\Thread\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;
 use Biz\Sensitive\Service\SensitiveService;
+use Biz\Thread\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -50,7 +51,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍后尝试。');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
@@ -322,7 +323,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.post.before_create', $fields);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('回复次数过多，请稍后尝试。');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');
@@ -501,14 +502,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function deleteMember($memberId)
     {
         $member = $this->getMember($memberId);
-        $thread = $this->getThread($member['threadId']);
-        $member['targetType'] = $thread['targetType'];
-        $member['targetId'] = $thread['targetId'];
-        $this->tryAccess('thread.member.delete', $member);
 
         if (empty($member)) {
             throw $this->createNotFoundException('thread member not found');
         }
+
+        $thread = $this->getThread($member['threadId']);
+        $member['targetType'] = $thread['targetType'];
+        $member['targetId'] = $thread['targetId'];
+        $this->tryAccess('thread.member.delete', $member);
 
         $this->getThreadMemberDao()->delete($memberId);
         $this->waveThread($member['threadId'], 'memberNum', -1);
@@ -516,11 +518,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function deleteMembersByThreadId($threadId)
     {
-        if (empty($threadId)) {
+        $thread = $this->getThread($threadId);
+        if (empty($thread)) {
             throw $this->createNotFoundException("thread(#{$threadId}) not found");
         }
 
-        $thread = $this->getThread($threadId);
         $this->tryAccess('thread.delete', $thread);
 
         $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);

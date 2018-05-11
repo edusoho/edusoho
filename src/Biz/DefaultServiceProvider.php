@@ -35,6 +35,7 @@ use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
+use Biz\Common\BizDragCaptcha;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -156,6 +157,13 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $bizCaptcha->setCaptchaBuilder(new CaptchaBuilder());
 
             return $bizCaptcha;
+        });
+
+        $biz['biz_drag_captcha'] = $biz->factory(function ($biz) {
+            $bizDragCaptcha = new BizDragCaptcha();
+            $bizDragCaptcha->setBiz($biz);
+
+            return $bizDragCaptcha;
         });
 
         $biz['biz_sms'] = function ($biz) {

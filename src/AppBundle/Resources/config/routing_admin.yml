@@ -962,6 +962,11 @@ admin_mocked_post_data_version_3:
     defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
     methods: [POST]
 
+admin_mocked_download_token:
+    path: /mock/download_token
+    defaults: { _controller: AppBundle:Admin/Mock:downloadToken }
+    methods: [POST]
+
 admin_optimize:
     path:  /setting/optimize
     defaults: { _controller: AppBundle:Admin/Optimize:index }
@@ -2336,3 +2341,15 @@ admin_cloud_data_lab_setting_enable_modal:
 admin_cloud_data_lab_setting_disable_modal:
     path: /data/lab/setting/modal/disable
     defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }
+
+admin_wechat_app:
+    path: /wechat_app
+    defaults: { _controller: AppBundle:Admin/WeChatApp:index }
+
+admin_wechat_app_request:
+    path: /wechat_app/request
+    defaults: { _controller: AppBundle:Admin/WeChatApp:request }
+
+admin_wechat_app_request_success:
+    path: /wechat_app/request/success
+    defaults: { _controller: AppBundle:Admin/WeChatApp:requestSuccess }

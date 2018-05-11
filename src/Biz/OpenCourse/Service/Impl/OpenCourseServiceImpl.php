@@ -91,7 +91,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $fields = $this->_filterCourseFields($fields);
 
-        $tagIds = empty($fields['tags']) ? array() : $fields['tags'];
+        $tagIds = isset($fields['tags']) ? $fields['tags'] : null;
 
         unset($fields['tags']);
 

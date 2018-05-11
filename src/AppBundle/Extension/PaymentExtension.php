@@ -32,6 +32,11 @@ class PaymentExtension extends Extension implements ServiceProviderInterface
                 'notify' => 'AppBundle:Cashier/Lianlianpay:notify',
                 'return' => 'AppBundle:Cashier/Lianlianpay:return',
             ),
+
+            'wechat_app' => array(
+                'notify' => 'AppBundle:Cashier/Wechat:notify',
+                'return' => 'AppBundle:Cashier/Wechat:return',
+            ),
         );
     }
 }
