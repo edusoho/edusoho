@@ -71,7 +71,6 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
 
                 $classroomRef = $classroomRefs[$course['id']];
                 $classroomId = $classroomRef['classroomId'];
-
                 $classroom = empty($courseClassrooms[$classroomId]) ? array() : $courseClassrooms[$classroomId];
                 if (empty($classrooms['class-'.$classroomId])) {
                     $classroom['tasks'] = array();
@@ -146,7 +145,6 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
             'courseId' => $course['id'],
             'status' => 'finish',
         ));
-
         if ($finishTaskCount == $course['taskNum']) {
             return null;
         }

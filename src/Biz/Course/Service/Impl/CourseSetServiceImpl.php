@@ -21,6 +21,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\User\UserException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -110,7 +111,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user is not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
@@ -133,6 +134,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $favorite = $this->getFavoriteDao()->create($favorite);
+
+        $this->dispatch('courseSet.favorite', $favorite, array('courseSet' => $courseSet, 'course' => $course));
 
         return !empty($favorite);
     }

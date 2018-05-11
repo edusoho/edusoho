@@ -62,7 +62,7 @@ class RefreshAllCourseTaskSeqJobTest extends BaseTestCase
             'status' => 'create',
             'createdUserId' => '1',
         );
-        if ($type == 'default') {
+        if ('default' == $type) {
             $task = $this->getDefaultStrategy()->createTask($field);
         } else {
             $task = $this->getNormalStrategy()->createTask($field);

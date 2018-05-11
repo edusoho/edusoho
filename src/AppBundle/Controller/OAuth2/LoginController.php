@@ -6,7 +6,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
-use Biz\User\Register\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -161,7 +161,11 @@ class LoginController extends LoginBindController
             $this->authenticatedOauthUser();
 
             $response = $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
-            $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+            $response = DistributorCookieToolkit::clearCookieToken(
+                $request,
+                $response,
+                array('checkedType' => DistributorCookieToolkit::USER)
+            );
 
             return $response;
         } else {
@@ -231,7 +235,7 @@ class LoginController extends LoginBindController
             $registerFields['email'] = $this->getUserService()->generateEmail($registerFields);
         }
 
-        $registerFields = DistributorCookieToolkit::setCookieTokenToFields($request, $registerFields);
+        $registerFields = DistributorCookieToolkit::setCookieTokenToFields($request, $registerFields, DistributorCookieToolkit::USER);
 
         $this->getUserService()->register(
             $registerFields,

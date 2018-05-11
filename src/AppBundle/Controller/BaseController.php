@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\AbstractException;
 
 class BaseController extends Controller
 {
@@ -300,6 +301,15 @@ class BaseController extends Controller
         return new AccessDeniedException($message, 403, $previous);
     }
 
+    protected function createNewException($e)
+    {
+        if ($e instanceof AbstractException) {
+            throw $e;
+        }
+
+        throw new \Exception();
+    }
+    
     /**
      * 安全的重定向.
      *

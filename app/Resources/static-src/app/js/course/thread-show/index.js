@@ -48,12 +48,6 @@ $('.js-btn-thread-post-form-save').click(() => {
       },
       error: function (data) {
         $('.js-btn-thread-post-form-save').button('reset');
-        data = $.parseJSON(data.responseText);
-        if (data.error) {
-          notify('danger', data.error.message);
-        } else {
-          notify('danger', Translator.trans('course.thread_replay_failed_hint'));
-        }
       }
     });
   }

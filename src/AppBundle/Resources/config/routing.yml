@@ -91,7 +91,11 @@ user_terms:
 
 distributor_register:
    path:  /distributor_register
-   defaults: { _controller: AppBundle:Register:distributorIndex }
+   defaults: { _controller: AppBundle:Distributor:register }
+
+distributor_product:
+   path:  /distributor_product
+   defaults: { _controller: AppBundle:Distributor:product }
 
 register:
     path:  /register
@@ -3040,3 +3044,7 @@ client_time_check:
     path: /client_time_check
     defaults: { _controller: AppBundle:Default:clientTimeCheck }
     methods: [POST]
+
+drag_captcha:
+    path:     /drag_captcha/{token}
+    defaults: { _controller: AppBundle:Common:dragCaptcha }

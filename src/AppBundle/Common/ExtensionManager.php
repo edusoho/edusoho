@@ -66,12 +66,19 @@ class ExtensionManager
         return self::$_instance;
     }
 
+    /**
+     * @param $status array(
+     *  'type' => 'task_start', // src/AppBundle/Extensions/StatusTemplate/{type}.tpl.html.twig
+     * )
+     * @param mode  分为 simple 和 full
+     */
     public function renderStatus($status, $mode)
     {
+        // src/AppBundle/Extensions/StatusTemplate/*.tpl.html.twig
         $this->loadTemplates('statusTemplates');
 
         if (!isset($this->statusTemplates[$status['type']])) {
-            return $this->getServiceKernel()->trans('无法显示该动态。');
+            return self::getServiceKernel()->trans('无法显示该动态。');
         }
 
         return $this->kernel->getContainer()->get('templating')->render(
@@ -85,6 +92,9 @@ class ExtensionManager
         return $this->kernel->getContainer()->get('codeages_plugin.dict_twig_extension')->getDict($type);
     }
 
+    /**
+     * @name {name}DataTag.php 中的 {name}, 如 OrgDataTag 的 name为 Org
+     */
     public function getDataTag($name)
     {
         if (isset($this->dataTags[$name])) {
@@ -94,7 +104,7 @@ class ExtensionManager
         $this->loadDataTagClassmap();
 
         if (!isset($this->dataTagClassmap[$name])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' => $name)));
+            throw new \RuntimeException(self::getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' => $name)));
         }
 
         $class = $this->dataTagClassmap[$name];
@@ -104,6 +114,11 @@ class ExtensionManager
         return $this->dataTags[$name];
     }
 
+    /**
+     * @param $notification array(
+     *  'type' => 'global', // src/AppBundle/Extensions/NotificationTemplate/{type}.tpl.html.twig
+     * )
+     */
     public function renderNotification($notification)
     {
         $this->loadTemplates('notificationTemplates');
@@ -223,9 +238,9 @@ class ExtensionManager
             $tempName[$template] = $path;
         }
 
-        if ($type == 'statusTemplates') {
+        if ('statusTemplates' == $type) {
             $this->statusTemplates = $tempName;
-        } elseif ($type == 'notificationTemplates') {
+        } elseif ('notificationTemplates' == $type) {
             $this->notificationTemplates = $tempName;
         }
 
@@ -253,7 +268,7 @@ class ExtensionManager
         return $this->bundles;
     }
 
-    protected function getServiceKernel()
+    protected static function getServiceKernel()
     {
         return ServiceKernel::instance();
     }

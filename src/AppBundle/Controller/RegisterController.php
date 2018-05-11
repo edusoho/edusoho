@@ -8,7 +8,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
-use Biz\User\Register\Common\DistributorCookieToolkit;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
@@ -18,27 +18,6 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class RegisterController extends BaseController
 {
-    /**
-     * 分销平台分享后，进入的注册页面，需要记录token 到 cookie， 注册成功后，清除
-     */
-    public function distributorIndexAction(Request $request)
-    {
-        $fields = $request->query->all();
-        $registerUrl = $this->generateUrl('register');
-        if (!empty($fields['token'])) {
-            if ($this->getCurrentUser()->isLogin()) {
-                $response = $this->redirect($this->generateUrl('logout').'?goto='.$registerUrl);
-            } else {
-                $response = $this->redirect($registerUrl);
-            }
-            $response = DistributorCookieToolkit::setTokenToCookie($response, $fields['token']);
-
-            return $response;
-        }
-
-        return $this->redirect($registerUrl);
-    }
-
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
@@ -67,8 +46,8 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
                 $authSettings = $this->getSettingService()->get('auth', array());
 
-                //验证码校验
-                $this->captchaEnabledValidator($authSettings, $registration, $request);
+                //拖动校验
+                $this->dragCaptchaValidator($registration, $authSettings);
 
                 //手机校验码
                 if ($this->smsCodeValidator($authSettings, $registration)) {
@@ -86,7 +65,7 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
-                $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration);
+                $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration, DistributorCookieToolkit::USER);
 
                 $user = $this->getAuthService()->register($registration);
 
@@ -115,7 +94,11 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+                $response = DistributorCookieToolkit::clearCookieToken(
+                    $request,
+                    $response,
+                    array('checkedType' => DistributorCookieToolkit::USER)
+                );
 
                 return $response;
             } catch (ServiceException $se) {
@@ -569,6 +552,17 @@ class RegisterController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    protected function dragCaptchaValidator($registration, $authSettings)
+    {
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
+            $biz = $this->getBiz();
+            $bizDragCaptcha = $biz['biz_drag_captcha'];
+
+            $dragcaptchaToken = empty($registration['drag_captcha_token']) ? '' : $registration['drag_captcha_token'];
+            $bizDragCaptcha->check($dragcaptchaToken);
+        }
     }
 
     //validate captcha

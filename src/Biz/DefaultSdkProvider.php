@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use AppBundle\System;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
@@ -36,6 +37,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $sdk = $that->generateSdk($biz, array());
             if (!empty($sdk)) {
                 $service = $sdk->getPlayService();
+            }
+
+            return $service;
+        };
+
+        $biz['qiQiuYunSdk.mp'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, array());
+            if (!empty($sdk)) {
+                $service = $sdk->getMpService();
             }
 
             return $service;
@@ -99,6 +110,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
                 'host' => $pushUrl,
                 'school_name' => $siteName,
                 'school_url' => $siteUrl,
+                'school_version' => System::VERSION,
             ),
         );
     }

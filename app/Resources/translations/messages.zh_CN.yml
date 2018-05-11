@@ -1346,11 +1346,12 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_seq: 任务%seq%
+course.thread.mission_number: 任务%number%
 course.thread.teacher_answer: 教师的答案
 course.thread.form.edit: 编辑话题
 course.thread.form.create: 发表话题
@@ -1704,7 +1705,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  %nickname%<i>问...</i>
+  By 
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
@@ -1913,6 +1914,10 @@ course.live_lesson_manage.live_length: 直播时长
 course.live_lesson_manage.live_about: 直播说明
 course.live_lesson_manage.live_length.input_placeholder: 时长
 course.live_lesson_manage.live_length.minutes: 分钟
+
+course.live_activity.room_type: 授课形式
+course.live_activity.large_room_type: 大班课
+course.live_activity.small_room_type: 小班课
 
 course.live.replay_manage.chapter: >
   第 <span class="number">%chapterName%</span>
@@ -2759,6 +2764,7 @@ user.register.email_label: 邮箱地址
 user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱
@@ -3580,6 +3586,8 @@ thread.status.top: 头条
 thread.status.recommend: 推荐
 thread.status.reward: 奖
 thread.status.question: 问
+thread.status.answer: 答
+thread.status.all.answer: 全部的回答
 thread.hover_tips.question: 问答
 thread.hover_tips.activiy: 活动
 thread.hover_tips.thread: 话题
@@ -4299,8 +4307,8 @@ card.info.moneycard: 学习卡
 card.info.moneycard.tips: 学习卡可以用于账户充值
 card.info.moneycard.date_format: Y年n月d日
 card.info.moneycard.use_btn: 立即使用
-card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
-card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
+card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“账户中心—优惠券“
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已经充值到“账户中心—%coinName%账户”
 card.notLogin.receive.tips: 还没有登录，请在登录后领取。
 card.receive.login_view_btn: 登录查看
 
@@ -5697,6 +5705,7 @@ admin.sensitive_manage.add_sensitive_btn: 添加
 admin.sensitive_manage.error: 错误
 admin.sensitive_manage.prompt: 提示
 admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
+admin.sensitive_manage.existed: '敏感词已存在：%keywords%'
 
 # 咨询管理
 admin.operation_article.category_option: --所属栏目--
@@ -6733,13 +6742,13 @@ admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
 admin.user_auth.Protection.Explaination: 方案说明：
-admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
-admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
-admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时须要完成安全验证。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无安全验证。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，须要完成安全验证。
 admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
-admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
                                            
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
@@ -6807,6 +6816,7 @@ admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口�
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
 admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
 admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
 admin.user_center.Configration.help_block: 如何配置？
@@ -6874,6 +6884,11 @@ admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
 admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.user_center.message_title_name: 私信发送设置
+admin.user_center.message_student_to_student: 允许学员给学员发送私信
+admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
+admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
+admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
 admin.user_center.message_title_name: 私信发送设置
 admin.user_center.message_student_to_student: 允许学员给学员发送私信
@@ -8345,3 +8360,20 @@ admin.datalab.setting.btn_cancel: 取消
 admin.datalab.setting.btn_open: 确认开启
 admin.datalab.setting.btn_close: 确认关闭
 admin.datalab.setting.btn_use: 再用用看
+
+exception.common_forbidden: 被禁止的操作
+exception.common_error: 服务器内部错误
+exception.common_drag_captcha_error: 验证码验证失败！
+exception.common_drag_captcha_expired: 验证码失效！
+exception.common_drag_captcha_required: 验证码参数缺失！
+
+exception.article.notfound: 资讯不存在!
+exception.user.unlogin: 未登陆，请登陆后操作!
+exception.user.message_forbidden: 不支持向该用户发送私信!
+exception.form.expire: 页面已过期，请重新提交数据！
+exception.user.register_error: 用户数据异常，注册失败！
+exception.sensitive.words: 您填写的内容中包含敏感词!
+exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_error_captcha: 图形验证码错误!
+exception.sms.setting_enbale: 云短信相关设置未开启!

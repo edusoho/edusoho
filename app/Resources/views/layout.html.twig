@@ -37,7 +37,7 @@
           content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}"/>
     <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
     <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
-    <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open"/>
+    <meta content="{{ wechat_login_bind_enabled()|default(0) }}" name="wechat_login_bind"/>
   {% endblock %}
 
 

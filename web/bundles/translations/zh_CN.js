@@ -244,9 +244,10 @@ t.add("auth.register.email_required_error_hint", "\u8bf7\u8f93\u5165\u90ae\u7bb1
 t.add("auth.register.mobile_required_error_hint", "\u8bf7\u8f93\u5165\u624b\u673a", "js", "zh_CN");
 t.add("auth.register.email_or_mobile_required_error_hint", "\u8bf7\u8f93\u5165\u624b\u673a\/\u90ae\u7bb1", "js", "zh_CN");
 t.add("auth.register.number_validate_error_hint", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
+t.add("auth.register.drag_captcha_tips", "\u8bf7\u62d6\u52a8\u5de6\u8fb9\u6ed1\u5757\u5b8c\u6210\u4e0a\u65b9\u62fc\u56fe", "js", "zh_CN");
 t.add("auth.mobile_captcha_required_error_hint", "\u8bf7\u8f93\u5165\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_error_hint", "\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
-t.add("card.card_receive_success_hint", "\u5b66\u4e60\u5361\u5df2\u4f7f\u7528\uff0c\u5145\u503c%coin%\u865a\u62df\u5e01\u6210\u529f\uff0c\u53ef\u524d\u5f80\u3010\u8d26\u6237\u4e2d\u5fc3\u3011-\u3010\u6211\u7684\u8d26\u6237\u3011\u67e5\u770b\u5145\u503c\u60c5\u51b5\u3002", "js", "zh_CN");
+t.add("card.card_receive_success_hint", "\u5b66\u4e60\u5361\u5df2\u4f7f\u7528\uff0c\u5145\u503c%coinAmount%%coinName%\u6210\u529f\uff0c\u53ef\u524d\u5f80\u3010\u8d26\u6237\u4e2d\u5fc3\u3011-\u3010\u6211\u7684\u8d26\u6237\u3011\u67e5\u770b\u5145\u503c\u60c5\u51b5\u3002", "js", "zh_CN");
 t.add("card.card_receive_failed_hint", "\u5931\u8d25!", "js", "zh_CN");
 t.add("classroom.cancel_refund_hint", "\u771f\u7684\u8981\u53d6\u6d88\u9000\u6b3e\u5417\uff1f", "js", "zh_CN");
 t.add("classroom.quit_hint", "\u786e\u5b9a\u9000\u51fa\u73ed\u7ea7\u5417\uff1f", "js", "zh_CN");
@@ -391,6 +392,7 @@ t.add("thread.post.like_error_hint", "\u70b9\u8d5e\u5931\u8d25\uff0c\u8bf7\u91cd
 t.add("group.manage.delete_member_hint", "\u771f\u7684\u8981\u5220\u9664\u8be5\u6210\u5458\uff1f", "js", "zh_CN");
 t.add("group.manage.delete_required_error_hint", "\u8bf7\u9009\u62e9\u8981\u5220\u9664\u7684\u6210\u5458", "js", "zh_CN");
 t.add("group.manage.member_exit_hint", "\u771f\u7684\u8981\u9000\u51fa\u8be5\u5c0f\u7ec4\uff1f\u60a8\u5728\u8be5\u5c0f\u7ec4\u7684\u4fe1\u606f\u5c06\u5220\u9664", "js", "zh_CN");
+t.add("group.manage.member_exit", "\u9000\u51fa\u5c0f\u7ec4", "js", "zh_CN");
 t.add("group.manage.choose_setting_member_hint", "\u8bf7\u9009\u62e9\u8981\u8bbe\u7f6e\u7684\u6210\u5458", "js", "zh_CN");
 t.add("group.manage.setting_member_permission_hint", "\u786e\u8ba4\u8981\u8bbe\u7f6e\u8be5\u6210\u5458\u7684\u6743\u9650\uff1f", "js", "zh_CN");
 t.add("group.manage.cancel_member_permission", "\u786e\u8ba4\u8981\u53d6\u6d88\u8be5\u6210\u5458\u7684\u6743\u9650\uff1f", "js", "zh_CN");
@@ -531,6 +533,8 @@ t.add("validate.user_terms.message", "\u52fe\u9009\u540c\u610f\u6b64\u670d\u52a1
 t.add("validate.visible_character.message", "\u4e0d\u5141\u8bb8\u8f93\u5165\u4e0d\u53ef\u89c1\u5b57\u7b26\uff0c\u5982\u7a7a\u683c\u7b49", "js", "zh_CN");
 t.add("validate.valid_score_input.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u5206\u6570\u683c\u5f0f\uff0c\u6700\u591a\u4fdd\u7559\u4e00\u4f4d\u5c0f\u6570", "js", "zh_CN");
 t.add("validate.mobile_or_email_message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\uff0f\u90ae\u7bb1", "js", "zh_CN");
+t.add("validate.success", "\u9a8c\u8bc1\u6210\u529f", "js", "zh_CN");
+t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
 t.add("alert.file_convert_error.message", "\u6587\u4ef6\u8f6c\u6362\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("notify.file_not_select.message", "\u672a\u9009\u4e2d\u4efb\u4f55\u6587\u4ef6\u8bb0\u5f55", "js", "zh_CN");
 t.add("page.file_converting.message", "\u6b63\u5728\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362", "js", "zh_CN");
@@ -579,6 +583,7 @@ t.add("json_response.homework_has_submitted_cannot_change.message", "\u4f5c\u4e1
 t.add("json_response.must_choose_question.message", "\u8bf7\u5148\u9009\u62e9\u9898\u76ee", "js", "zh_CN");
 t.add("json_response.cannot_send_message_self.message", "\u4e0d\u80fd\u7ed9\u81ea\u5df1\u53d1\u79c1\u4fe1\u54e6\uff01", "js", "zh_CN");
 t.add("json_response.receiver_not_exist.message", "\u8be5\u6536\u4ef6\u4eba\u4e0d\u5b58\u5728", "js", "zh_CN");
+t.add("json_response.receiver_not_allowed.message", "\u4e0d\u652f\u6301\u5411\u8be5\u7528\u6237\u53d1\u9001\u79c1\u4fe1", "js", "zh_CN");
 t.add("validate_old.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e\u7b49\u4e8e0\u7684\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
 t.add("validate_old.required.message", "\u8bf7\u8f93\u5165{{display}}", "js", "zh_CN");
 t.add("validate_old.valid_email_input.message", "%display%\u7684\u683c\u5f0f\u4e0d\u6b63\u786e", "js", "zh_CN");
@@ -660,5 +665,7 @@ t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01"
 t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "zh_CN");
 t.add("admin.article_setting.choose_category", "--\u9009\u62e9\u6240\u5c5e\u680f\u76ee--", "js", "zh_CN");
 t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");
+t.add("User account is locked.", "\u5e10\u53f7\u88ab\u5c01\u7981", "js", "zh_CN");
 t.add("cloud_search.network.error_message", "\u7f51\u7edc\u4e0d\u7ed9\u529b\uff0c\u4e3a\u60a8\u5207\u6362\u6781\u7b80\u641c\u7d22\u6a21\u5f0f", "js", "zh_CN");
+t.add("message.send.not_allowed", "\u4e0d\u5141\u8bb8\u53d1\u9001\u79c1\u4fe1", "js", "zh_CN");
 })(Translator);

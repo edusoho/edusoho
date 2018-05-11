@@ -409,13 +409,14 @@ class CourseSetController extends BaseController
         if ($jobs) {
             return new JsonResponse(array('success' => 0, 'msg' => 'notify.job_redo_warning.hint'));
         } else {
+            //复制整个课程，在预期时间后一个小时有效，非无限时间
             $this->getSchedulerService()->register(array(
                 'name' => $jobName,
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                'expression' => time() + 10,
+                'expression' => intval(time() + 10),
                 'class' => 'Biz\Course\Job\CloneCourseSetJob',
                 'args' => array('courseSetId' => $courseSetId, 'userId' => $user->getId(), 'params' => array('title' => $title)),
-                'misfire_threshold' => 3000,
+                'misfire_threshold' => 60 * 60,
             ));
         }
 

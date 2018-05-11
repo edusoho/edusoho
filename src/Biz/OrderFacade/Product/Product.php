@@ -107,6 +107,11 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $couponEnable = true;
 
     /**
+     * 扩展字段
+     */
+    private $createExtra;
+
+    /**
      * 封面
      *
      * @var array
@@ -196,7 +201,12 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     public function getCreateExtra()
     {
-        return array();
+        return empty($this->createExtra) ? array() : $this->createExtra;
+    }
+
+    public function setCreateExtra($createExtra)
+    {
+        $this->createExtra = $createExtra;
     }
 
     public function getSnapShot()

@@ -96,15 +96,18 @@ class StudentManageController extends BaseController
 
     public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
     {
+        $operateUser = $this->getUser();
+        $courseSetting = $this->getSettingService()->get('course');
+        if (!$operateUser->isAdmin() && empty($courseSetting['teacher_manage_student'])) {
+            throw $this->createAccessDeniedException();
+        }
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
-            if ($this->getCurrentUser()->isAdmin()) {
-                $data['isAdminAdded'] = true;
-            }
-
-            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $data['source'] = 'outside';
+            $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
 

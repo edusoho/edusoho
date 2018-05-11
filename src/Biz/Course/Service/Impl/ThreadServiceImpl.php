@@ -14,6 +14,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;
 use Biz\Course\Dao\Impl\ThreadPostDaoImpl;
 use Biz\Sensitive\Service\SensitiveService;
+use Biz\Thread\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -139,7 +140,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('course.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍后尝试。');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
@@ -381,7 +382,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('course.thread.post.before_create', $post);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createAccessDeniedException('Creating too frequently');
+            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $thread = $this->getThread($post['courseId'], $post['threadId']);

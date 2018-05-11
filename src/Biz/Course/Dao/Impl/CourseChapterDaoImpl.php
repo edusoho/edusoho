@@ -103,7 +103,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'copyId = :copyId',
                 'courseId = :courseId',

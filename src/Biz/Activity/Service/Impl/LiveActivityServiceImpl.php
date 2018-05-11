@@ -13,7 +13,6 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Event\Event;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
@@ -62,14 +61,16 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             throw $this->createServiceException($error);
         }
 
-        $activity['liveId'] = $live['id'];
-        $activity['liveProvider'] = $live['provider'];
+        if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
+            throw $this->createServiceException('Argument room type error');
+        }
 
         $liveActivity = array(
             'liveId' => $live['id'],
             'liveProvider' => $live['provider'],
+            'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
+            'roomCreated' => $live['id'] > 0 ? 1 : 0,
         );
-        $liveActivity['roomCreated'] = $live['id'] > 0 ? 1 : 0;
 
         return $this->getLiveActivityDao()->create($liveActivity);
     }
@@ -88,6 +89,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $liveActivity['liveId'] = $live['id'];
                 $liveActivity['liveProvider'] = $live['provider'];
                 $liveActivity['roomCreated'] = 1;
+                $liveActivity['roomType'] = empty($fields['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $fields['roomType'];
 
                 $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
             }
@@ -104,10 +106,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $liveParams['endTime'] = (string) ($fields['startTime'] + $fields['length'] * 60);
             }
 
+            if (!empty($fields['roomType']) && $this->canUpdateRoomType($activity['startTime'])) {
+                $liveParams['roomType'] = $fields['roomType'];
+            }
+
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
 
-        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
+        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId', 'roomType'));
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
@@ -131,6 +137,23 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $liveActivity;
     }
 
+    public function updateLiveStatus($id, $status)
+    {
+        $liveActivity = $this->getLiveActivityDao()->get($id);
+        if (empty($liveActivity)) {
+            return;
+        }
+
+        if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $update = $this->getLiveActivityDao()->update($liveActivity['id'], array('progressStatus' => $status));
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', "修改直播进行状态，由‘{$liveActivity['progressStatus']}’改为‘{$status}’", array('preLiveActivity' => $liveActivity, 'newLiveActivity' => $update));
+
+        return $update;
+    }
+
     public function deleteLiveActivity($id)
     {
         //删除直播室
@@ -146,17 +169,41 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
     }
 
+    public function search($conditions, $orderbys, $start, $limit)
+    {
+        return $this->getLiveActivityDao()->search($conditions, $orderbys, $start, $limit);
+    }
+
+    /**
+     * 是否可以更新 roomType， 直播开始前10分钟内和直播结束后不可修改
+     *
+     * @param [type] $liveStartTime 直播开始时间
+     *
+     * @return bool
+     */
+    public function canUpdateRoomType($liveStartTime)
+    {
+        $timeDiff = $liveStartTime - time();
+        $disableSeconds = 3600 * 2;
+
+        if ($timeDiff < 0 || ($timeDiff > 0 && $timeDiff <= $disableSeconds)) {
+            return 0;
+        }
+
+        return 1;
+    }
+
+    protected function isRoomType($liveRoomType)
+    {
+        return in_array($liveRoomType, array(EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL));
+    }
+
     /**
      * @return LiveActivityDao
      */
     protected function getLiveActivityDao()
     {
         return $this->createDao('Activity:LiveActivityDao');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     /**
@@ -197,6 +244,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($speaker)) {
             throw $this->createNotFoundException('教师不存在！');
         }
+
+        if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
+            throw $this->createServiceException('Argument roomType error');
+        }
+
         $speaker = $speaker['nickname'];
 
         $liveLogo = $this->getSettingService()->get('course');
@@ -217,6 +269,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
             'callback' => $callbackUrl,
+            'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
         ));
 
         return $live;

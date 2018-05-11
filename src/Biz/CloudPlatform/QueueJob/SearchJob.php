@@ -20,11 +20,11 @@ class SearchJob extends AbstractJob
         }
 
         try {
-            if ($type == 'update') {
+            if ('update' == $type) {
                 $result = $this->getSearchService()->notifyUpdate($args);
             }
 
-            if ($type == 'delete') {
+            if ('delete' == $type) {
                 $result = $this->getSearchService()->notifyDelete($args);
             }
             if (!empty($result['error'])) {

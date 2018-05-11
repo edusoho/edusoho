@@ -106,6 +106,15 @@ class ActivityServiceTest extends BaseTestCase
             )
         );
 
+        $this->mockBiz(
+            'Course:MaterialService',
+            array(
+                array(
+                    'functionName' => 'deleteMaterialsByLessonId',
+                    'returnValue' => 1,
+                ),
+            )
+        );
         $this->getActivityService()->deleteActivity($savedActivity['id']);
 
         $savedActivity = $this->getActivityService()->getActivity($savedActivity['id']);
@@ -559,6 +568,212 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertEquals(array(), $result);
     }
 
+    public function testIsLiveFinishedActivityEmpty()
+    {
+        $this->mockBiz('Activity:ActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array(),
+            ),
+        ));
+
+        $this->mockBiz('Activity:LiveActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array(),
+            ),
+        ));
+
+        $result = $this->getActivityService()->isLiveFinished(1);
+
+        $this->assertTrue($result);
+    }
+
+    public function testIsLiveFinishedThirdLiveProvider()
+    {
+        $startTime = time() - 3600;
+        $endTime = time() - 1800;
+        $this->mockBiz('Activity:ActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'mediaType' => 'live', 'startTime' => $startTime, 'endTime' => $endTime),
+            ),
+        ));
+        $this->mockBiz('Activity:LiveActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'liveId' => '1001', 'liveProvider' => 1, 'progressStatus' => 'created'),
+            ),
+        ));
+
+        $result = $this->getActivityService()->isLiveFinished(1);
+
+        $this->assertTrue($result);
+    }
+
+    public function testIsLiveFinishedEsLive()
+    {
+        $startTime1 = time() - 3600 * 4;
+        $endTime1 = time() - 3600 * 3;
+
+        $startTime2 = time() - 3600;
+        $endTime2 = time() - 1800;
+        $this->mockBiz('Activity:ActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'mediaType' => 'live', 'startTime' => $startTime1, 'endTime' => $endTime1),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2, 'mediaId' => 2, 'mediaType' => 'live', 'startTime' => $startTime2, 'endTime' => $endTime2),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'mediaId' => 3, 'mediaType' => 'live', 'startTime' => $startTime2, 'endTime' => $endTime2),
+            ),
+        ));
+
+        $this->mockBiz('Activity:LiveActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'liveId' => '1001', 'liveProvider' => 9, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2, 'liveId' => '1002', 'liveProvider' => 9, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'liveId' => '1003', 'liveProvider' => 9, 'progressStatus' => 'closed'),
+            ),
+        ));
+
+        $result = $this->getActivityService()->isLiveFinished(1);
+        $this->assertTrue($result);
+
+        $result = $this->getActivityService()->isLiveFinished(2);
+        $this->assertFalse($result);
+
+        $result = $this->getActivityService()->isLiveFinished(3);
+        $this->assertTrue($result);
+    }
+
+    public function testCheckLiveStatusActivityEmpty()
+    {
+        $result = $this->getActivityService()->checkLiveStatus(1, 1);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.live_task_not_exist.message', $result['message']);
+
+        $this->mockBiz('Activity:ActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'mediaType' => 'live', 'fromCourseId' => 2),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2, 'mediaId' => 2, 'mediaType' => 'live', 'fromCourseId' => 2),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'mediaId' => 3, 'mediaType' => 'live', 'fromCourseId' => 2, 'startTime' => time() + 3600 * 4),
+            ),
+        ));
+
+        $result = $this->getActivityService()->checkLiveStatus(1, 1);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.illegal_params.message', $result['message']);
+
+        $this->mockBiz('Activity:LiveActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'liveId' => 1001),
+            ),
+        ));
+
+        $result = $this->getActivityService()->checkLiveStatus(2, 2);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.live_class_not_exist.message', $result['message']);
+
+        $result = $this->getActivityService()->checkLiveStatus(2, 3);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.live_not_start.message', $result['message']);
+    }
+
+    public function testCheckLiveStatus()
+    {
+        $startTime1 = time() - 3600 * 4;
+        $endTime1 = time() - 3600 * 3;
+
+        $startTime2 = time() - 3600;
+        $endTime2 = time() - 1800;
+        $this->mockBiz('Activity:ActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 2, 'mediaType' => 'live', 'startTime' => $startTime1, 'endTime' => $endTime1),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2, 'mediaId' => 2, 'fromCourseId' => 2, 'mediaType' => 'live', 'startTime' => $startTime1, 'endTime' => $endTime1),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'mediaId' => 3, 'fromCourseId' => 2, 'mediaType' => 'live', 'startTime' => $startTime2, 'endTime' => $endTime2),
+            ),
+        ));
+
+        $this->mockBiz('Activity:LiveActivityDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array(1),
+                'returnValue' => array('id' => 1, 'liveId' => '1001', 'liveProvider' => 1, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2, 'liveId' => '1002', 'liveProvider' => 9, 'progressStatus' => 'created'),
+            ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array(3),
+                'returnValue' => array('id' => 3, 'liveId' => '1003', 'liveProvider' => 9, 'progressStatus' => 'closed'),
+            ),
+        ));
+
+        $result = $this->getActivityService()->checkLiveStatus(2, 1);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.live_over.message', $result['message']);
+
+        $result = $this->getActivityService()->checkLiveStatus(2, 2);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.live_over.message', $result['message']);
+
+        $result = $this->getActivityService()->checkLiveStatus(2, 3);
+        $this->assertTrue($result['result']);
+        $this->assertEmpty($result['message']);
+    }
+
     public function testGetMaterialsFromActivity()
     {
         $result1 = $this->getActivityService()->getMaterialsFromActivity(
@@ -648,6 +863,22 @@ class ActivityServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'diffMaterials', array($arr1, $arr2));
         $this->assertEquals($result[0]['fileId'], 1);
         $this->assertEquals($result[0]['link'], 'www.edusoho.com1');
+    }
+
+    public function testFindFinishedLivesWithinTwoHours()
+    {
+        $this->mockBiz('Activity:ActivityDao', array(
+            array(
+                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'returnValue' => array(array('id' => 1, 'mediaId' => 1, 'mediaType' => 'live', 'startTime' => time() - 3600, 'endTime' => time() - 1800)),
+            ),
+        ));
+
+        $results = $this->getActivityService()->findFinishedLivesWithinTwoHours();
+
+        $this->assertEquals(1, count($results));
+        $this->assertEquals('live', $results[0]['mediaType']);
+        $this->assertLessThan(7200, time() - $results[0]['endTime']);
     }
 
     /**

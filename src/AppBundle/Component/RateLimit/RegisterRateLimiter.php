@@ -66,11 +66,27 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
         }
     }
 
+    protected function validateCaptcha($request)
+    {
+        $oauthUser = $this->getOauthUser($request);
+        if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
+            parent::validateCaptcha($request);
+        } else {
+            $token = $request->request->get('drag_captcha_token', '');
+            $this->getDragCaptcha()->check($token);
+        }
+    }
+
     private function getRegisterProtective()
     {
         $registerSetting = $this->getSettingService()->get('auth');
 
         return empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
+    }
+
+    private function getDragCaptcha()
+    {
+        return $this->biz['biz_drag_captcha'];
     }
 
     /**

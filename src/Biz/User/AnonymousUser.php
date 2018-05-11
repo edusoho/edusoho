@@ -18,6 +18,7 @@ class AnonymousUser extends CurrentUser
             'org' => array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode),
             'orgId' => $this->rootOrgId,
             'orgCode' => $this->rootOrgCode,
+            'password' => '',
         ), $user);
 
         $this->data = $user;
@@ -36,17 +37,6 @@ class AnonymousUser extends CurrentUser
     public function __set($name, $value)
     {
         return parent::__set($name, $value);
-    }
-
-    public function __get($name)
-    {
-        $method = 'get'.ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return $this->$method();
-        }
-
-        return parent::__get($name);
     }
 
     public function __isset($name)
@@ -162,56 +152,6 @@ class AnonymousUser extends CurrentUser
     public function isTeacher()
     {
         return false;
-    }
-
-    public function getCurrentOrgId()
-    {
-        return 0;
-    }
-
-    public function getCurrentOrg()
-    {
-        return array();
-    }
-
-    public function getSelectOrg()
-    {
-        return array();
-    }
-
-    public function getOrg()
-    {
-        return array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode);
-    }
-
-    public function getOrgCode()
-    {
-        return $this->rootOrgCode;
-    }
-
-    public function getOrgId()
-    {
-        return $this->rootOrgId;
-    }
-
-    public function getSelectOrgCode()
-    {
-        return $this->rootOrgCode;
-    }
-
-    public function getSelectOrgId()
-    {
-        return $this->rootOrgId;
-    }
-
-    public function fromArray(array $user)
-    {
-        return $this;
-    }
-
-    public function toArray()
-    {
-        return $this->data;
     }
 
     public function setPermissions($permissions)

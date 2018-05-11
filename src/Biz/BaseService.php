@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\AbstractException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -112,6 +113,15 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return new NotFoundException($message);
     }
 
+    protected function createNewException($e)
+    {
+        if ($e instanceof AbstractException) {
+            throw $e;
+        }
+
+        throw new \Exception();
+    }
+
     /**
      * @param string $message
      *
@@ -127,7 +137,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $magic = $this->biz->service('System:SettingService')->get('magic');
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = ServiceKernel::instance()->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = $this->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw $this->createNotFoundException('组织机构不存在,更新失败');
                 }

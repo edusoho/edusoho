@@ -72,7 +72,7 @@
 
     {% if payments %}
       <div class="order-pay-list">
-        {% for type, payment in payments if not (type == 'alipay' and is_micro_messenger()) %}
+        {% for type, payment in payments if not ((type == 'alipay' and is_micro_messenger()) or type == 'wechat_app') %}
           <div class="order-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
             <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"
               srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>

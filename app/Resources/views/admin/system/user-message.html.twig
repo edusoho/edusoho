@@ -6,20 +6,25 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" >
-  <div class="form-group">
-    <div class="col-md-2 control-label">{{ 'admin.user_center.message_title_name'|trans }}</div>
-    <div class="controls col-md-8">
-      <label><input type="checkbox" name="studentToStudent" {% if setting('message.studentToStudent', 1) %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
-      <label><input type="checkbox" name="studentToTeacher" {% if setting('message.studentToTeacher', 1) %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
-      <label><input type="checkbox" name="teacherToStudent" {% if setting('message.teacherToStudent', 1) %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
+
+  <fieldset>
+    <legend>{{ 'admin.user_center.message_title_name'|trans }}</legend>
+    <div class="form-group">
+      <div class="controls col-md-8">
+        <label><input type="checkbox" name="studentToStudent" {% if setting('message.studentToStudent', 1) %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
+        <label><input type="checkbox" name="studentToTeacher" {% if setting('message.studentToTeacher', 1) %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
+        <label><input type="checkbox" name="teacherToStudent" {% if setting('message.teacherToStudent', 1) %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
+        <p class="help-block">{{ 'admin.user_center.message.setting_tip'|trans }}</p>
+      </div>
     </div>
-  </div>
+  </fieldset>
+  
 
   <div class="form-group">
-    <div class="col-md-3 control-label"></div>
-    <div class="controls col-md-8">
-      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+    <div class="controls col-md-3">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button> 
     </div>
+    <div class="controls col-md-8"></div>
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

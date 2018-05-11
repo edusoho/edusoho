@@ -147,8 +147,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if (isset($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        if (isset($course['about'])) {
+            $course['about'] = $this->purifyHtml($course['about'], true);
         }
 
         if (!isset($course['isFree'])) {
@@ -159,6 +159,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['maxRate'] = $courseSet['maxRate'];
+        $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
 
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
@@ -219,6 +220,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields,
             array(
                 'title',
+                'courseSetTitle',
+                'about', //@todo 目前没有这个字段
                 'courseSetId',
                 'summary',
                 'goals',
@@ -281,12 +284,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate)
     {
-        $course = $this->getCourseDao()->updateMaxRateByCourseSetId(
+        $this->getCourseDao()->updateMaxRateByCourseSetId(
             $courseSetId,
             array('updatedTime' => time(), 'maxRate' => $maxRate)
         );
-
-        return $course;
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -424,21 +425,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function validateCourseRewardPoint($fields)
     {
-        $result = false;
-
         if (isset($fields['taskRewardPoint'])) {
             if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) || ($fields['taskRewardPoint'] > self::MAX_REWARD_POINT)) {
-                $result = true;
+                return true;
             }
         }
 
         if (isset($fields['rewardPoint'])) {
             if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) || ($fields['rewardPoint'] > self::MAX_REWARD_POINT)) {
-                $result = true;
+                return true;
             }
         }
 
-        return $result;
+        return false;
     }
 
     protected function isTeacherAllowToSetRewardPoint()
@@ -656,19 +655,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-        $tasks = $this->findTasksByCourseId($course);
+        $tasks = $this->findTasksByCourseId($course['id']);
 
         return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }
 
-    protected function findTasksByCourseId($course)
+    protected function findTasksByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
+            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
         }
 
-        return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+        return $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
     }
 
     public function findCourseItemsByPaging($courseId, $paging = array())

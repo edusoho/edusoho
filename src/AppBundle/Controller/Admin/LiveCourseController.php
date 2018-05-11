@@ -20,7 +20,7 @@ class LiveCourseController extends BaseController
         $taskConditions['type'] = 'live';
 
         if (!empty($taskConditions['keywordType']) && !empty($taskConditions['keyword'])) {
-            if ($taskConditions['keywordType'] == 'courseSetTitle') {
+            if ('courseSetTitle' == $taskConditions['keywordType']) {
                 $courseSets = $this->getCourseSetsByKeyWord($taskConditions['keyword']);
                 if (empty($courseSets)) {
                     return $this->render(
@@ -38,7 +38,7 @@ class LiveCourseController extends BaseController
                 $taskConditions['fromCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             }
 
-            if ($taskConditions['keywordType'] == 'taskTitle') {
+            if ('taskTitle' == $taskConditions['keywordType']) {
                 $taskConditions['titleLike'] = $taskConditions['keyword'];
             }
             unset($taskConditions['keywordType']);
@@ -98,7 +98,7 @@ class LiveCourseController extends BaseController
 
             $client = new EdusohoLiveClient();
 
-            if ($lesson['type'] == 'live') {
+            if ('live' == $lesson['type']) {
                 $result = $client->getMaxOnline($lesson['mediaId']);
                 $lesson = $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'], $result['onLineNum']);
             }
@@ -110,16 +110,16 @@ class LiveCourseController extends BaseController
     private function getConditionAndOrderByStatus($status, $conditions)
     {
         $orderBy = array('startTime' => 'ASC');
-        if ($status == 'coming') {
+        if ('coming' == $status) {
             $conditions['startTime_GT'] = time();
         }
 
-        if ($status == 'underway') {
+        if ('underway' == $status) {
             $conditions['startTime_LE'] = time();
             $conditions['endTime_GT'] = time();
         }
 
-        if ($status == 'end') {
+        if ('end' == $status) {
             $conditions['endTime_LT'] = time();
             $orderBy = array('startTime' => 'DESC');
         }
@@ -150,7 +150,7 @@ class LiveCourseController extends BaseController
 
     private function getEduCloudStatus()
     {
-        $status = $this->getEduCloudService()->isHiddenCloud();
+        $status = $this->getEduCloudService()->isVisibleCloud();
         if ($status) {
             $eduCloudStatus = 'open';
         } else {

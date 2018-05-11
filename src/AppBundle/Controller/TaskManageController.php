@@ -206,7 +206,10 @@ class TaskManageController extends BaseController
     public function publishAction(Request $request, $courseId, $id)
     {
         $this->tryManageCourse($courseId);
-        $this->getTaskService()->publishTask($id);
+        $task = $this->getTaskService()->publishTask($id);
+        if (false === $task) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('course.task.classroom_sync_job_executing_tips')));
+        }
 
         return $this->createJsonResponse(array('success' => true));
     }

@@ -304,6 +304,7 @@ auth.register.email_required_error_hint: 请输入邮箱
 auth.register.mobile_required_error_hint: 请输入手机
 auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
 auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
+auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
@@ -499,6 +500,7 @@ thread.post.like_error_hint: 点赞失败，请重试！
 group.manage.delete_member_hint: 真的要删除该成员？
 group.manage.delete_required_error_hint: 请选择要删除的成员
 group.manage.member_exit_hint: 真的要退出该小组？您在该小组的信息将删除
+group.manage.member_exit: 退出小组
 group.manage.choose_setting_member_hint: 请选择要设置的成员
 group.manage.setting_member_permission_hint: 确认要设置该成员的权限？
 group.manage.cancel_member_permission: 确认要取消该成员的权限？
@@ -663,6 +665,8 @@ validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
 validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.success: 验证成功
+validate.fail: 验证失败
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -714,6 +718,7 @@ json_response.homework_has_submitted_cannot_change.message: 作业已提交，�
 json_response.must_choose_question.message: 请先选择题目
 json_response.cannot_send_message_self.message: 不能给自己发私信哦！
 json_response.receiver_not_exist.message: 该收件人不存在
+json_response.receiver_not_allowed.message: 不支持向该用户发送私信
 
 validate_old.positive_currency.message: 请输入大于等于0的有效价格，最多两位小数，整数位不超过8位！
 validate_old.required.message: 请输入{{display}}
@@ -814,5 +819,7 @@ lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 Bad credentials.: 用户名或密码错误
+User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
+message.send.not_allowed: 不允许发送私信

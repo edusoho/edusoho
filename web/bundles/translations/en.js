@@ -305,9 +305,10 @@ t.add("auth.register.email_required_error_hint", "Please enter email", "js", "en
 t.add("auth.register.mobile_required_error_hint", "Please enter your mobile number", "js", "en");
 t.add("auth.register.email_or_mobile_required_error_hint", "Please enter your mobile number \/ email", "js", "en");
 t.add("auth.register.number_validate_error_hint", "11 numbers, the first number can not be 1", "js", "en");
+t.add("auth.register.drag_captcha_tips", "\u8bf7\u62d6\u52a8\u5de6\u8fb9\u6ed1\u5757\u5b8c\u6210\u4e0a\u65b9\u62fc\u56fe", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
-t.add("card.card_receive_success_hint", "Learning card has been used, recharge% coin% virtual currency success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
+t.add("card.card_receive_success_hint", "Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
 t.add("card.card_receive_failed_hint", "Failed!", "js", "en");
 t.add("classroom.cancel_refund_hint", "Do you really want to cancel your refund?", "js", "en");
 t.add("classroom.quit_hint", "Are you sure to quit the class?", "js", "en");
@@ -451,6 +452,7 @@ t.add("thread.post.like_error_hint", "Favour failed, please try again!", "js", "
 t.add("group.manage.delete_member_hint", "Really want to delete that member?", "js", "en");
 t.add("group.manage.delete_required_error_hint", "Please select the member you want to delete", "js", "en");
 t.add("group.manage.member_exit_hint", "Really want to quit the group? Your information in this group will be deleted", "js", "en");
+t.add("group.manage.member_exit", "\u9000\u51fa\u5c0f\u7ec4", "js", "en");
 t.add("group.manage.choose_setting_member_hint", "Please select the member you want to set", "js", "en");
 t.add("group.manage.setting_member_permission_hint", "Are you sure to set the member's permission?", "js", "en");
 t.add("group.manage.cancel_member_permission", "Are you sure you want to cancel this member's permisiion?", "js", "en");
@@ -590,6 +592,8 @@ t.add("validate.visible_character.message", "Not allowed to enter invisible char
 t.add("validate.tag_required_hint", "Please input tags", "js", "en");
 t.add("validate.valid_score_input.message", "Please enter the correct decimals, leaving only ONE decimal places", "js", "en");
 t.add("validate.mobile_or_email_message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\uff0f\u90ae\u7bb1", "js", "en");
+t.add("validate.success", "\u9a8c\u8bc1\u6210\u529f", "js", "en");
+t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");
@@ -638,6 +642,7 @@ t.add("json_response.homework_has_submitted_cannot_change.message", "The Homewor
 t.add("json_response.must_choose_question.message", "Please select the title first", "js", "en");
 t.add("json_response.cannot_send_message_self.message", "Can not send yourself a private message!", "js", "en");
 t.add("json_response.receiver_not_exist.message", "The receiver does not exist", "js", "en");
+t.add("json_response.receiver_not_allowed.message", "The receiver is not allowed", "js", "en");
 t.add("validate_old.positive_currency.message", "Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!", "js", "en");
 t.add("validate_old.required.message", "Please enter {{display}}", "js", "en");
 t.add("validate_old.valid_email_input.message", "%display% is not formatted correctly", "js", "en");
@@ -719,5 +724,7 @@ t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01"
 t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "en");
 t.add("admin.article_setting.choose_category", "Choose column", "js", "en");
 t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "en");
+t.add("User account is locked.", "\u5e10\u53f7\u88ab\u5c01\u7981", "js", "en");
 t.add("cloud_search.network.error_message", "\u7f51\u7edc\u4e0d\u7ed9\u529b\uff0c\u4e3a\u60a8\u5207\u6362\u6781\u7b80\u641c\u7d22\u6a21\u5f0f", "js", "en");
+t.add("message.send.not_allowed", "\u4e0d\u5141\u8bb8\u53d1\u9001\u79c1\u4fe1", "js", "en");
 })(Translator);

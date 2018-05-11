@@ -49,7 +49,7 @@ class UserController extends BaseController
 
         //根据mobile查询user_profile获得userIds
 
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
+        if (isset($conditions['keywordType']) && 'verifiedMobile' == $conditions['keywordType'] && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
             $userProfiles = $this->getUserService()->searchUserProfiles(
                 array('mobile' => $conditions['keyword']),
@@ -152,7 +152,7 @@ class UserController extends BaseController
 
     protected function validateResult($result, $message)
     {
-        if ($result === 'success') {
+        if ('success' === $result) {
             $response = array('success' => true, 'message' => '');
         } else {
             $response = array('success' => false, 'message' => $message);
@@ -163,7 +163,7 @@ class UserController extends BaseController
 
     public function createAction(Request $request)
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
             $formData['type'] = 'import';
             $registration = $this->getRegisterData($formData, $request->getClientIp());
@@ -215,9 +215,9 @@ class UserController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth');
 
-        if (isset($auth['register_mode']) && $auth['register_mode'] == 'email_or_mobile') {
+        if (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
             return 'admin/user/create-by-mobile-or-email-modal.html.twig';
-        } elseif (isset($auth['register_mode']) && $auth['register_mode'] == 'mobile') {
+        } elseif (isset($auth['register_mode']) && 'mobile' == $auth['register_mode']) {
             return 'admin/user/create-by-mobile-modal.html.twig';
         } else {
             return 'admin/user/create-modal.html.twig';
@@ -231,7 +231,7 @@ class UserController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $profile = $request->request->all();
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
@@ -290,7 +290,7 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
         $currentUser = $this->getUser();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $roles = $request->request->get('roles');
 
             $this->getUserService()->changeUserRoles($user['id'], $roles);
@@ -333,7 +333,7 @@ class UserController extends BaseController
         foreach ($roles as $role) {
             if (in_array($role, $roleDictCodes)) {
                 $roleNames[] = $userRoleDict[$role];
-            } elseif ($role === 'ROLE_BACKEND') {
+            } elseif ('ROLE_BACKEND' === $role) {
                 continue;
             } else {
                 $role = $roleSet[$role];
@@ -395,7 +395,7 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $options = $request->request->all();
             $this->getUserService()->changeAvatar($id, $options['images']);
 
@@ -508,7 +508,7 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
             $this->kickUserLogout($user['id']);

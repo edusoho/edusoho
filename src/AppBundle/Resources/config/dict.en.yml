@@ -96,6 +96,7 @@ payment:
     iap: iOSiap
     lianlianpay: LLPay
     coin: Coin
+    wechat_app: MiniProgram
     none: Others
 
 paymentSelect:
@@ -104,6 +105,7 @@ paymentSelect:
     iap: iOSiap
     lianlianpay: LLPay
     coin: Coin
+    wechat_app: MiniProgram
     none: Others
 
 orderSource:

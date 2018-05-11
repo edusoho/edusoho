@@ -2,8 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class GroupFileFireWall extends BaseFireWall implements FireWallInterface
 {
     public function canAccess($attachment)
@@ -15,14 +13,14 @@ class GroupFileFireWall extends BaseFireWall implements FireWallInterface
 
         $targetTypes = explode('.', $attachment['targetType']);
         $type = array_pop($targetTypes);
-        if ($type === 'thread') {
+        if ('thread' === $type) {
             $thread = $this->getThreadService()->getThread($attachment['targetId']);
             $group = $this->getGroupService()->getGroup($thread['groupId']);
 
             if ($user['id'] == $thread['userId'] || $user['id'] == $group['ownerId']) {
                 return true;
             }
-        } elseif ($type === 'post') {
+        } elseif ('post' === $type) {
             $post = $this->getThreadService()->getPost($attachment['targetId']);
             $thread = $this->getThreadService()->getThread($post['threadId']);
             $group = $this->getGroupService()->getGroup($thread['groupId']);
@@ -34,18 +32,13 @@ class GroupFileFireWall extends BaseFireWall implements FireWallInterface
         return false;
     }
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Group:ThreadService');
+        return $this->biz->service('Group:ThreadService');
     }
 
     protected function getGroupService()
     {
-        return $this->getKernel()->createService('Group:GroupService');
+        return $this->biz->service('Group:GroupService');
     }
 }
