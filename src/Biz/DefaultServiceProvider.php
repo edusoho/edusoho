@@ -4,6 +4,7 @@ namespace Biz;
 
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
+use Biz\Course\Util\CourseRenderViewResolver;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -175,6 +176,12 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['register_sms_rate_limiter'] = function ($biz) {
             return new RegisterSmsRateLimiter($biz);
+        };
+
+        $biz['render_view_resolvers'] = function ($biz) {
+            return array(
+                new CourseRenderViewResolver($biz),
+            );
         };
     }
 }

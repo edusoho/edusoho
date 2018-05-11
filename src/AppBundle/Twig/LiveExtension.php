@@ -48,7 +48,7 @@ class LiveExtension extends \Twig_Extension
 
     public function isLiveFinished($mediaId, $type)
     {
-        if ($type == 'openCourse') {
+        if ('openCourse' == $type) {
             return $this->getLiveCourseService()->isLiveFinished($mediaId);
         } else {
             return $this->getActivityService()->isLiveFinished($mediaId);

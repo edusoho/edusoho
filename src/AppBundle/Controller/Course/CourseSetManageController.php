@@ -120,7 +120,7 @@ class CourseSetManageController extends BaseController
         $tasks = $this->getTaskService()->findTasksByCourseId($curCourse['id']);
 
         $hasLiveTasks = ArrayToolkit::some($tasks, function ($task) {
-            return $task['type'] === 'live';
+            return 'live' === $task['type'];
         });
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
@@ -247,7 +247,7 @@ class CourseSetManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data['images'], true));
 
@@ -295,7 +295,7 @@ class CourseSetManageController extends BaseController
         try {
             $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-            if ($courseSet['type'] == 'live') {
+            if ('live' == $courseSet['type']) {
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
                 if (empty($course['maxStudentNum'])) {
