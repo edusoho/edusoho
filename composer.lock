@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d07793ba9e1ea21bfb78b24c6d5b4e3",
+    "content-hash": "7243ed2e343161129a3f213b865f1fb3",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -348,16 +348,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.19",
+            "version": "v0.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "5094b43397519082f48804edebf393196efefd6a"
+                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/5094b43397519082f48804edebf393196efefd6a",
-                "reference": "5094b43397519082f48804edebf393196efefd6a",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/9f343dac2299f78d1506833412e3e3215dc6dc89",
+                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89",
                 "shasum": ""
             },
             "require": {
@@ -382,7 +382,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-05-07T00:05:01+00:00"
+            "time": "2018-04-18T01:23:58+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -468,16 +468,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.2.22",
+            "version": "v0.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "6b8171b13765c3e4bcb2b859cd3c9540488fb608"
+                "reference": "c5a9d11da5f94cbc78a4a65a7c41a91828784bf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/6b8171b13765c3e4bcb2b859cd3c9540488fb608",
-                "reference": "6b8171b13765c3e4bcb2b859cd3c9540488fb608",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/c5a9d11da5f94cbc78a4a65a7c41a91828784bf1",
+                "reference": "c5a9d11da5f94cbc78a4a65a7c41a91828784bf1",
                 "shasum": ""
             },
             "require": {
@@ -507,7 +507,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-05-07T02:19:01+00:00"
+            "time": "2018-05-08T03:48:04+00:00"
         },
         {
             "name": "codeages/rate-limiter",

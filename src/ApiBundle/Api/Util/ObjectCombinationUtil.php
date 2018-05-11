@@ -11,13 +11,13 @@ class ObjectCombinationUtil
     private $serviceMap = array(
         'user' => 'User:UserService',
         'course' => 'Course:CourseService',
-        'courseSet' => 'Course:CourseSetService'
+        'courseSet' => 'Course:CourseSetService',
     );
 
     private $methodMap = array(
         'user' => 'findUsersByIds',
         'course' => 'findCoursesByIds',
-        'courseSet' => 'findCourseSetsByIds'
+        'courseSet' => 'findCourseSetsByIds',
     );
 
     public function __construct($biz)
@@ -42,13 +42,18 @@ class ObjectCombinationUtil
         $this->replaceSourceObject($targetObjects, $sourceObj, $targetIdFields);
     }
 
+    /**
+     * 将 指定属性替换为对象
+     * 如 multiple($orderLogs, array('user_id'), 'user')，会将 orderLogs 中的 user_id 替换为 user对象
+     *
+     * @param $targetObjectType 分为 user, course, courseset, 见全局变量 $serviceMap
+     */
     public function multiple(&$sourceObjects, array $targetIdFields, $targetObjectType = 'user')
     {
-
         if (!$sourceObjects) {
             return;
         }
-        
+
         $targetIds = array();
         foreach ($sourceObjects as $sourceObject) {
             $tempTargetIds = $this->findTargetIds($sourceObject, $targetIdFields);
@@ -58,6 +63,57 @@ class ObjectCombinationUtil
         $targetObjects = $this->findTargetObjects($targetObjectType, $targetIds);
         foreach ($sourceObjects as &$sourceObject) {
             $this->replaceSourceObject($targetObjects, $sourceObject, $targetIdFields);
+        }
+    }
+
+    /**
+     * 指定数组中的值替换为相应对象中的指定属性
+     * 如
+     *  $orderItems = array(
+     *      array(
+     *          'user_id' => 1,
+     *      ),
+     *      array(
+     *          'user_id' => 2,
+     *      ),
+     *  );
+     *
+     *  replaceWithObjValue(
+     *      $orderItems,
+     *      array(
+     *          'user_id' => array(
+     *              'nickname' => 'nickname',
+     *              'mobile' => 'verifiedMobile'
+     *          )
+     *      ),
+     *      'user'
+     *  )
+     *
+     * 结果为
+     *  $orderItems = array(
+     *      array(
+     *          'nickname' => {id=1的user的nickname属性},
+     *          'mobile' => {id=1的user的verifiedMobile属性},
+     *      ),
+     *      array(
+     *          'nickname' => {id=2的user的nickname属性},
+     *          'mobile' => {id=2的user的verifiedMobile属性},
+     *      )
+     *  )
+     */
+    public function replaceWithObjValue(&$sourceObjects, array $targetIdFields, $targetObjectType = 'user')
+    {
+        $keys = array_keys($targetIdFields);
+        $this->multiple($sourceObjects, $keys, $targetObjectType);
+
+        foreach ($sourceObjects as &$sourceObj) {
+            foreach ($targetIdFields as $key => $attrs) {
+                $data = $sourceObj[$key];
+                unset($sourceObj[$key]);
+                foreach ($attrs as $attrKey => $attrValue) {
+                    $sourceObj[$attrKey] = $data[$attrValue];
+                }
+            }
         }
     }
 
@@ -74,6 +130,7 @@ class ObjectCombinationUtil
 
     /**
      * @param $userIds
+     *
      * @return mixed
      */
     private function findTargetObjects($targetObjectType, $targetIds)
@@ -81,6 +138,7 @@ class ObjectCombinationUtil
         $targetIds = array_values(array_unique($targetIds));
         $method = $this->methodMap[$targetObjectType];
         $targetObjects = $this->biz->service($this->serviceMap[$targetObjectType])->{$method}($targetIds);
+
         return ArrayToolkit::index($targetObjects, 'id');
     }
 
@@ -103,7 +161,6 @@ class ObjectCombinationUtil
                 } else {
                     $sourceObj[$newField] = null;
                 }
-
             }
 
             if ($targetIdField !== $newField) {
@@ -111,7 +168,6 @@ class ObjectCombinationUtil
             }
         }
     }
-
 
     private function pushIdToArray(&$sourceArr, $idValue)
     {

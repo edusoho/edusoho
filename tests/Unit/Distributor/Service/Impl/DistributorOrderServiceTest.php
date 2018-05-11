@@ -10,7 +10,7 @@ class DistributorOrderServiceTest extends BaseTestCase
 {
     public function testGetSendType()
     {
-        $this->assertEquals('order', $this->getDistributorOrderService()->getSendType());
+        $this->assertEquals('order', $this->getDistributorOrderService()->getSendType(array()));
     }
 
     public function testGetJobType()

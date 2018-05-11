@@ -14,6 +14,71 @@ class PurchasedCourseTypeTest extends BaseTestCase
             'cloud_secret_key' => 2,
         ));
 
+        $courseDao = $this->mockBiz(
+            'Course:CourseDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                        1 => array(
+                            'id' => 1,
+                            'courseSetId' => 1,
+                            'title' => 'course title',
+                            'price' => 199,
+                        ),
+                        2 => array(
+                            'id' => 2,
+                            'courseSetId' => 1,
+                            'title' => 'course title',
+                            'price' => 199,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $courseSetDao = $this->mockBiz(
+            'Course:CourseSetDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                        1 => array(
+                            'id' => 1,
+                            'title' => 'course set title',
+                            'subtitle' => 'course set subtitle',
+                            'tags' => array(1, 2),
+                        ),
+                        2 => array(
+                            'id' => 2,
+                            'title' => 'course set title',
+                            'subtitle' => 'course set subtitle',
+                            'tags' => array(1, 2),
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $tagService = $this->mockBiz(
+            'Taxonomy:TagService',
+            array(
+                array(
+                    'functionName' => 'findTagsByIds',
+                    'returnValue' => array(
+                        1 => array(
+                            'id' => 1,
+                            'name' => 'java',
+                        ),
+                        2 => array(
+                            'id' => 2,
+                            'name' => 'php',
+                        ),
+                    ),
+                ),
+            )
+        );
+
         $type = new PurchasedCourseType();
         $type->setBiz($this->biz);
 
@@ -32,6 +97,7 @@ class PurchasedCourseTypeTest extends BaseTestCase
 
         $this->assertEquals('http://adlnet.gov/expapi/activities/course', $pushStatements[0]['object']['definition']['type']);
         $this->assertEquals('https://w3id.org/xapi/acrossx/activities/class-online', $pushStatements[1]['object']['definition']['type']);
+        $this->assertNotNull($pushStatements[0]['object']['definition']['extensions']);
     }
 
     /**

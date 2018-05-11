@@ -36,7 +36,11 @@ class OrderController extends BaseController
             'sn' => $order['sn'],
         )));
 
-        $resonse = DistributorCookieToolkit::clearCookieToken($request, $response);
+        $resonse = DistributorCookieToolkit::clearCookieToken(
+            $request,
+            $response,
+            array('checkedType' => DistributorCookieToolkit::PRODUCT_ORDER)
+        );
 
         return $response;
     }

@@ -86,6 +86,7 @@ class WriteNoteTypeTest extends BaseTestCase
                             'id' => 1,
                             'courseSetId' => 1,
                             'title' => 'course title',
+                            'price' => 199,
                         ),
                     ),
                 ),
@@ -102,6 +103,7 @@ class WriteNoteTypeTest extends BaseTestCase
                             'id' => 1,
                             'title' => 'course set title',
                             'subtitle' => 'course set subtitle',
+                            'tags' => array(1, 2),
                         ),
                     ),
                 ),
@@ -120,6 +122,25 @@ class WriteNoteTypeTest extends BaseTestCase
                             'ext' => array(
                                 'mediaId' => 333333,
                             ),
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $tagService = $this->mockBiz(
+            'Taxonomy:TagService',
+            array(
+                array(
+                    'functionName' => 'findTagsByIds',
+                    'returnValue' => array(
+                        1 => array(
+                            'id' => 1,
+                            'name' => 'java',
+                        ),
+                        2 => array(
+                            'id' => 2,
+                            'name' => 'php',
                         ),
                     ),
                 ),
@@ -161,7 +182,10 @@ class WriteNoteTypeTest extends BaseTestCase
         $courseSetService->shouldHaveReceived('search');
         $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
+        $tagService->shouldHaveReceived('findTagsByIds');
 
+        $this->assertEquals('|java|php|', $packageInfo['object']['definition']['extensions']['http://xapi.edusoho.com/extensions/course']['tags']);
+        $this->assertEquals(199, $packageInfo['object']['definition']['extensions']['http://xapi.edusoho.com/extensions/course']['price']);
         $this->assertEquals('123123123dse', $packageInfo['id']);
         $this->assertEquals('https://w3id.org/xapi/adb/verbs/noted', $packageInfo['verb']['id']);
         $this->assertEquals(1000, $packageInfo['object']['id']);

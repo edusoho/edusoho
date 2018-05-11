@@ -25,7 +25,7 @@ class DistributorUtilTest extends BaseTestCase
             )
         );
 
-        $token = 'courseOrder:9:333:123:1524324352:c9a10dc1737f63a43d2ca6d155155999:51imxY0F11R2ZHWK1TpLiYk9bo4=';
+        $token = 'courseOrder:9:123:333:1524324352:c9a10dc1737f63a43d2ca6d155155999:s33g5SunilAmz8Asp9vM5oZot5c=';
         $result = DistributorUtil::generateTokenByType(
             $this->biz,
             'courseOrder',

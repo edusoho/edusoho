@@ -148,7 +148,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'createdTime' => time(),
                 'meta' => $meta,
             ));
-            $this->dispatchEvent('course.review.add', new Event($review));
+            $this->dispatchEvent('course.review.add', new Event($review, array('course' => $course)));
         } else {
             $review = $this->getReviewDao()->update($review['id'], array(
                 'rating' => $fields['rating'],

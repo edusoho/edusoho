@@ -16,20 +16,39 @@ export default class {
     this.$element.on('click', '.back-to-list', () => {
       this.channel.publish('back-to-list');
     });
+    this.toggleShow();
+    this.$element.on('click', '.js-more-show', (event) => {
+      this.channel.publish('js-more-show', event);
+    });
+
 
     this.$form.on('click', '.btn-primary', event => this.onSavePost(event));
   }
 
-  onSavePost(event) {
-    event.preventDefault();
+  toggleShow() {
+    this.$element.find('.task-question-plugin-pane-thread__content').each(function () {
+      let height = $(this).height();
+      if (height >= 76) {
+        $(this).next().show();
+      }
+    });
+  }
 
+  onSavePost(event) {
+    const self = this;
+    event.preventDefault();
     if (!this.validator || !this.validator.form()) {
       return;
     }
-
     $.post(this.$form.attr('action'), this.$form.serialize())
       .done((html) => {
+        if (!$('.js-post-answer-item').length) {
+          $('.js-answer-title').removeClass('hidden');
+        }
         this.$element.find('[data-role=post-list]').append(html);
+        if ($(event.target).data('type') === 'question') {
+          self.toggleShow();
+        }
         const number = parseInt(this.$element.find('[data-role=post-number]').text());
         this.$element.find('[data-role=post-number]').text(number + 1);
         this.$form.find('textarea').val('');

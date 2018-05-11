@@ -29,4 +29,8 @@ final class XAPIVerbs
     const SHARED = 'shared';
 
     const WATCHED = 'watched';
+
+    const REGISTERED = 'registered';
+
+    const RATED = 'rated';
 }

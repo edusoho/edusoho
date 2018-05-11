@@ -47,7 +47,7 @@ class SmsRateLimiterTest extends BaseTestCase
         $limiter = new SmsRateLimiter($this->biz);
         $exception = ReflectionUtils::invokeMethod($limiter, 'createMaxRequestOccurException');
         $this->assertEquals(
-            'Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException',
+            'AppBundle\Component\RateLimit\RateLimitException',
             get_class($exception)
         );
     }

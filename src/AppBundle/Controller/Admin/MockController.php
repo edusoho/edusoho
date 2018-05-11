@@ -89,6 +89,15 @@ class MockController extends BaseController
         return $this->createJsonResponse(array('result' => $result));
     }
 
+    public function downloadTokenAction()
+    {
+        $this->validate();
+
+        $path = $this->getMockedTokenPath();
+
+        return $this->createJsonResponse(array('result' => file_get_contents($path)));
+    }
+
     protected function getDistributorCourseOrderService()
     {
         return $this->createService('Distributor:DistributorCourseOrderService');
@@ -106,7 +115,7 @@ class MockController extends BaseController
 
     private function validate()
     {
-        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost', 'www.edusoho-test1.com');
+        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost', 'www.edusoho-test1.com', 'chenwei.st.edusoho.cn');
         $host = $_SERVER['HTTP_HOST'];
         if (!in_array($host, $validHosts) && false === strpos($host, '.st.edusoho.cn')) {
             throw new AccessDeniedException($host.'不允许使用此功能！！！');
@@ -168,10 +177,12 @@ class MockController extends BaseController
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
         $headers = array('Accept: application/vnd.edusoho.v2+json');
-        if ($apiAuthorized) {
+        if ('true' == $apiAuthorized) {
             $token = $this->generateToken($apiUrl, '');
             $headers[] = 'Authorization: Signature '.$token;
+            $this->saveMockedToken($token);
         }
+
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         if ('POST' == $apiMethod) {
@@ -275,5 +286,18 @@ class MockController extends BaseController
             'apiMethod' => $apiMethodsSegs[1],
             'apiAuthorized' => $apiAuthorizedSegs[1],
         );
+    }
+
+    private function saveMockedToken($token)
+    {
+        $mockedTokenStr = 'Accept: application/vnd.edusoho.v2+json; Authorization: Signature '.$token;
+        file_put_contents($this->getMockedTokenPath(), '['.date('Y-m-d H:i:s').'] '.$mockedTokenStr);
+    }
+
+    private function getMockedTokenPath()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['kernel.root_dir'].'/data/mockedToken';
     }
 }

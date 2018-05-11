@@ -27,7 +27,7 @@ class XapiServiceTest extends BaseTestCase
         $result = $this->getXapiService()->searchStatements(array(), array(), 0, 100);
 
         $this->assertNotEmpty($result);
-        $this->assertEquals($statement['user_id'], $result[0]['user_id']);
+        $this->assertEquals($statement['user_id'], $result[1]['user_id']);
     }
 
     public function testBatchUpdateWatchLogPushed()
@@ -91,7 +91,7 @@ class XapiServiceTest extends BaseTestCase
 
         $results = $this->getXapiService()->searchStatements(array('status' => 'created'), array(), 0, 10);
 
-        $this->assertEquals(1, count($results));
+        $this->assertEquals(2, count($results));
     }
 
     public function testCountStatements()
@@ -101,7 +101,7 @@ class XapiServiceTest extends BaseTestCase
 
         $count = $this->getXapiService()->countStatements(array('status' => 'created'));
 
-        $this->assertEquals(1, $count);
+        $this->assertEquals(2, $count);
     }
 
     private function mockStatement()

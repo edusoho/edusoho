@@ -53,6 +53,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -110,6 +112,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -168,6 +172,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -228,6 +234,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                     'http://xapi.edusoho.com/extensions/activity' => array(
                         'id' => $object['activity']['id'],
@@ -291,6 +299,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                 ),
             ),
@@ -344,6 +354,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                 ),
             ),
@@ -397,6 +409,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                 ),
             ),
@@ -447,6 +461,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -500,6 +516,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -557,6 +575,8 @@ class XAPIService extends BaseService
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                        'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                        'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
                     ),
                 ),
             ),
@@ -659,6 +679,129 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
+    public function registered($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'http://adlnet.gov/expapi/verbs/registered',
+            'display' => array(
+                'zh-CN' => '注册了',
+                'en-US' => XAPIVerbs::REGISTERED,
+            ),
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    public function rated($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'http://id.tincanapi.com/verb/rated',
+            'display' => array(
+                'zh-CN' => '评分了',
+                'en-US' => XAPIVerbs::RATED,
+            ),
+        );
+
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
+                'name' => array(
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
+        );
+
+        $this->addCourseExtension($object, $statement);
+
+        $statement['result'] = array(
+            'score' => array(
+                'raw' => $result['score']['raw'],
+                'max' => $result['score']['max'],
+                'min' => $result['score']['min'],
+            ),
+            'response' => $result['response'],
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    public function bookmarked($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'https://w3id.org/xapi/adb/verbs/bookmarked',
+            'display' => array(
+                'zh-CN' => '收藏了',
+                'en-US' => XAPIVerbs::BOOKMARKED,
+            ),
+        );
+
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
+                'name' => array(
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
+        );
+
+        $this->addCourseExtension($object, $statement);
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
+    public function shared($actor, $object = null, $result = null, $uuid = null, $timestamp = null, $isPush = true)
+    {
+        $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'http://adlnet.gov/expapi/verbs/shared',
+            'display' => array(
+                'zh-CN' => '分享了',
+                'en-US' => XAPIVerbs::SHARED,
+            ),
+        );
+
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
+                'name' => array(
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
+        );
+
+        $statement['timestamp'] = $this->getTime($timestamp);
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
+    }
+
     /**
      * 提交"购买"的记录
      *
@@ -692,6 +835,8 @@ class XAPIService extends BaseService
                 ),
             ),
         );
+
+        $this->addCourseExtension($object, $statement);
 
         $statement['result'] = array(
             'extensions' => array(
@@ -776,6 +921,21 @@ class XAPIService extends BaseService
     private function getActivityType($minType)
     {
         return XAPIActivityTypes::getFullName($minType);
+    }
+
+    private function addCourseExtension($object, &$statement)
+    {
+        if (XAPIActivityTypes::COURSE == $object['definitionType']) {
+            $statement['object']['definition']['extensions'] = array(
+                'http://xapi.edusoho.com/extensions/course' => array(
+                    'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                    'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                    'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                    'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
+                    'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
+                ),
+            );
+        }
     }
 
     /**

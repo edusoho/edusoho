@@ -22,6 +22,7 @@ export default class Create {
     this.sendMessage();
     this.submitForm();
     this.removeSmsErrorTip();
+    this.initDragCaptchaCodeRule();
   }
 
   initValidator() {
@@ -115,6 +116,19 @@ export default class Create {
     return this.captchaToken;
   }
 
+  initDragCaptchaCodeRule() {
+    const isMobile = $('.js-drag-jigsaw').hasClass('hidden');
+    console.log($('.js-drag-img').length);
+    if ($('.js-drag-img').length && !isMobile) {
+      $('[name="drag_captcha_token"]').rules('add', {
+        required: true,
+        messages: {
+          required: Translator.trans('auth.register.drag_captcha_tips')
+        }
+      });
+    }
+  }
+
   sendMessage() {
     const $smsCode = $('.js-sms-send');
     const $captchaCode = $('#captcha_code');
@@ -133,28 +147,18 @@ export default class Create {
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
+        // 自定义code 自动捕获
         const code = res.responseJSON.error.code;
         switch (code) {
-        case 30001:
+        case 5000601:
           if ($('.js-captcha').hasClass('hidden')) {
             $('.js-captcha').removeClass('hidden');
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_required_tip'));
             $('[name=\'captcha_code\']').rules('add', this.getCaptchaCodeRule());
           } else {
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
             $captchaCode.val('');
             this.initCaptchaCode();
           }
           $target.attr('disabled', true);
-          break;
-        case 30002:
-          notify('danger', Translator.trans('oauth.send.error_message_tip'));
-          break;
-        case 30003:
-          notify('danger', Translator.trans('admin.site.cloude_sms_enable_hint'));
-          break;
-        default:
-          notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
           break;
         }
       });
@@ -185,7 +189,8 @@ export default class Create {
         smsToken: this.smsToken,
         smsCode: $('#sms-code').val(),
         captchaToken: this.captchaToken,
-        phrase: $('#captcha_code').val()
+        phrase: $('#captcha_code').val(),
+        drag_captcha_token: $('[name="drag_captcha_token"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
@@ -199,6 +204,7 @@ export default class Create {
         }
       }).error((response) => {
         $target.button('reset');
+        // 自定义code 自动捕获
         if (response.status === 429) {
           notify('danger', Translator.trans('oauth.register.time_limit'));
         } else {

@@ -52,9 +52,9 @@
     "piwik/device-detector": "3.7.7",
     "codeages/web-lib": "^0.1.1",
     "tiben/crontab-manager": "1.2.1",
-    "codeages/qiqiuyun-php-sdk": "0.2.22",
+    "codeages/qiqiuyun-php-sdk": "0.2.24",
     "phpdocumentor/reflection-docblock": "2.0.5",
-    "codeages/biz-order-pay": "0.1.19"
+    "codeages/biz-order-pay": "0.1.18"
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",
