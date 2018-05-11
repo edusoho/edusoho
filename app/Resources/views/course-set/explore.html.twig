@@ -108,16 +108,6 @@
           {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}"> {{ 'search.live_courses'|trans }}
       </label>
-      {% if is_plugin_installed('reservation') %}
-        <label class="checkbox-inline">
-          <input type="checkbox" class="js-search-type" {% if type == 'reservation' %}checked="true" {% endif %} id="reservation" value="
-          {% if type == 'reservation' %}
-            {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
-          {% else %}
-            {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'reservation',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
-          {% endif %}"> {{ 'search.reservation_courses'|trans }}
-        </label>
-      {% endif %}
 
       <label class="checkbox-inline">
         <input type="checkbox" class="js-search-type" {% if price == 'free' %}checked="true" {% endif %} id="free" value="
@@ -128,6 +118,8 @@
         {% endif %}
         "> {{ 'search.free_courses'|trans }}
       </label>
+
+      {{ slot('course.list.search', {request:app.request, filter:filter, category:category, tags:tags}) }}
     </div>
   </div>
 

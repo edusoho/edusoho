@@ -34,8 +34,8 @@ class ExploreController extends BaseController
 
         unset($conditions['code']);
 
-        if (isset($conditions['ids']) && $conditions['ids'] === self::EMPTY_COURSE_SET_IDS) {
-            $conditions['ids'] = array(0);
+        if (isset($conditions['ids']) && empty($conditions['ids'])) {
+            $conditions['ids'] = array(-1);
         }
 
         list($conditions, $orderBy) = $this->getCourseSetSearchOrderBy($conditions);
@@ -277,7 +277,7 @@ class ExploreController extends BaseController
             $conditions['price'] = '0.00';
         }
 
-        if (isset($filter['type'])) {
+        if (isset($filter['type']) && $filter['type'] != 'all') {
             $conditions['type'] = strip_tags($filter['type']);
         }
 
