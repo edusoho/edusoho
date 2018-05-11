@@ -19,7 +19,8 @@ class DynUrlToolkit
      */
     public static function getUrl($biz, $baseUrl, $params)
     {
-        $bizPrefix = explode('.html.twig', $baseUrl)[0];
+        $twigSegs = explode('.html.twig', $baseUrl);
+        $bizPrefix = $twigSegs[0];
         if (!empty($biz[$bizPrefix][$params['type']])) {
             return $biz[$bizPrefix][$params['type']];
         }
