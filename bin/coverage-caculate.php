@@ -39,15 +39,16 @@ while (true) {
  *      </project>
  *    </coverage>
  *
- * @return array(
- *                '{fileName} => array(   // fileName 为 <file 节点中的 name
- *                'num_{num}' => array(
- *                'type' => 'method',  //类型，只有 method 和 stmt 2种, num, type, count, 对应到 line 中的相应属性
- *                'count' => 1  //所有coverage的count总和
- *                'num' => {num}
- *                )
- *                )
- *                )
+ * @return
+ *  array(
+ *      '{fileName} => array(   // fileName 为 <file 节点中的 name
+ *          'num_{num}' => array(
+ *              'type' => 'method',  //类型，只有 method 和 stmt 2种, num, type, count, 对应到 line 中的相应属性
+ *              'count' => 1  //所有coverage的count总和
+ *              'num' => {num}
+ *          )
+ *      )
+ *  )
  */
 $nodeInfos = array();
 
@@ -71,6 +72,7 @@ foreach ($xmls as $xml) {
                         'type' => $type,
                         'count' => 0,
                         'num' => $lineNum,
+                        'existedCount' => 0,
                     );
 
                     if ('method' == $type) {
@@ -82,10 +84,16 @@ foreach ($xmls as $xml) {
                 }
 
                 $nodeInfos[$fileName]['num_'.$lineNum]['count'] += $count;
+                $nodeInfos[$fileName]['num_'.$lineNum]['existedCount'] += 1;
             }
         }
     }
 }
+
+// 执行单元测试时，才会判断 某些行是否为 有效代码行（如 左大花括号{ 独立一行，会被认为非代码行），
+//  分批执行单元测试，有些批次由于没有执行到相应的代码，不会过滤掉非代码行，这些代码行需要过滤
+//  即，existedCount != xmls 数量时，直接忽略
+$validExistedCount = count($xmls);
 
 foreach ($result->project->package as $packageNode) {
     foreach ($packageNode->file as $fileNode) {
@@ -98,6 +106,11 @@ foreach ($result->project->package as $packageNode) {
         $coveredStatementsCount = 0;
 
         foreach ($nodeInfos[$fileName] as $key => $attrs) {
+            if ($validExistedCount != $attrs['existedCount']) {
+                continue;
+            }
+
+            unset($attrs['existedCount']);
             $lineNode = $fileNode->addChild('line');
 
             if ('method' == $attrs['type']) {
@@ -120,10 +133,10 @@ foreach ($result->project->package as $packageNode) {
         }
 
         $metric = $fileNode->class->metrics[0];
-        $metric->addAttribute('methods', $methodCount);
-        $metric->addAttribute('coveredmethods', $methodCount);
-        $metric->addAttribute('statements', $statementsCount);
-        $metric->addAttribute('coveredstatements', $coveredStatementsCount);
+        $metric->attributes()->methods = $methodCount;
+        $metric->attributes()->coveredmethods = $coveredMethodsCount;
+        $metric->attributes()->statements = $statementsCount;
+        $metric->attributes()->coveredstatements = $coveredStatementsCount;
     }
 }
 
