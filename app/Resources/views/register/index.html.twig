@@ -62,7 +62,7 @@
 					</div>
           {# {% include 'register/captcha/normal.html.twig' %} #}
           {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
-            <div class="form-group cd-mb32">
+            <div class="form-group cd-mb32 js-drag-jigsaw">
               {% include 'common/drag.html.twig' %}
             </div>
           {% endif %}
