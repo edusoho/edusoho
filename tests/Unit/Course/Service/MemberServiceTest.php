@@ -21,6 +21,53 @@ class MemberServiceTest extends BaseTestCase
         $this->getMemberService()->becomeStudentAndCreateOrder(1, 1, array());
     }
 
+    public function testFindWillOverdueCourses()
+    {
+        $user = $this->getCurrentUser();
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'findCoursesByIds',
+                    'withParams' => array(array(1)),
+                    'returnValue' => array(
+                        array('id' => 1),
+                    ),
+                ),
+            )
+        );
+        $member = array(
+            'courseId' => 1,
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'deadline' => time() + 3600,
+        );
+        $member = $this->getMemberDao()->create($member);
+
+        $results = $this->getMemberService()->findWillOverdueCourses();
+
+        $this->assertEquals(array('id' => 1), reset($results[0]));
+        $this->assertEquals($member, reset($results[1]));
+    }
+
+    public function testFindLatestStudentsByCourseSetId()
+    {
+        $user = $this->getCurrentUser();
+        $member = array(
+            'courseId' => 1,
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'deadline' => time() + 3600,
+        );
+        $member = $this->getMemberDao()->create($member);
+
+        $results = $this->getMemberService()->findLatestStudentsByCourseSetId(1, 0, 10);
+        $this->assertCount(1, $results);
+        $this->assertEquals($member, reset($results));
+    }
+
     public function testWaveMember()
     {
         $user = $this->createNormalUser();
