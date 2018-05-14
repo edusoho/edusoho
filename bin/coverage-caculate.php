@@ -2,17 +2,16 @@
 
 $i = 0;
 
-$result = null;   //第一份xml
+$result = null;   //最后一份xml
 $xmls = array();  //除第一份xml外的其他xml
 while (true) {
     ++$i;
 
     $filePath = __DIR__.'/../reports_tmp/phpunit.coverage.xml_'.$i;
     if (file_exists($filePath)) {
-        if (empty($result)) {
-            $result = simplexml_load_file($filePath);
-        }
-        $xmls[] = simplexml_load_file($filePath);
+        $xmlInfo = simplexml_load_file($filePath);
+        $result = $xmlInfo;
+        $xmls[] = $xmlInfo;
     } else {
         break;
     }
