@@ -15,7 +15,7 @@
         {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
 
         {% if isPlugin and is_plugin_installed(config.pluginName) %}
-          {% include config.pluginName|capitalize ~ 'Plugin:' ~ 'default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
+          {% include config.show with {config:config, category: category} %}
         {% elseif not isPlugin %}
           {% if code == 'friend-link' %}
               {% include 'default/' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
