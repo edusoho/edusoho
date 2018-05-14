@@ -68,6 +68,24 @@ class MemberServiceTest extends BaseTestCase
         $this->assertEquals($member, reset($results));
     }
 
+    public function testRemoveStudent()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'deadline' => time() + 3600,
+        );
+        $member = $this->getMemberDao()->create($member);
+        $this->assertNotEmpty($member);
+        $this->getMemberService()->removeStudent($course['id'], $user['id']);
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        $this->assertNull($result);
+    }
+
     public function testWaveMember()
     {
         $user = $this->createNormalUser();
