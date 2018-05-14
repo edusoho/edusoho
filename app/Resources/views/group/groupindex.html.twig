@@ -13,7 +13,7 @@
     <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introduction'|trans}}</h3></div>
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
-        <div class="well editor-text">
+        <div class="well editor-text cke_editable cke_contents_ltr">
           {% if groupinfo.about%} {{groupinfo.about|cdn|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
         </div>
       {% endif %}
