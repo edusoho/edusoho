@@ -113,8 +113,8 @@ class FileServiceTest extends BaseTestCase
 
     public function testUploadFile()
     {
-        $sourceFile = __DIR__.'/Fixtures/test.gif';
-        $testFile = __DIR__.'/Fixtures/test_test.gif';
+        $sourceFile = __DIR__.'/../Fixtures/test.gif';
+        $testFile = __DIR__.'/../Fixtures/test_test.gif';
 
         $this->getFileService()->addFileGroup(array(
             'name' => '临时目录',
@@ -150,8 +150,8 @@ class FileServiceTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
-        $sourceFile = __DIR__.'/Fixtures/test.gif';
-        $testFile = __DIR__.'/Fixtures/test_test.gif';
+        $sourceFile = __DIR__.'/../Fixtures/test.gif';
+        $testFile = __DIR__.'/../Fixtures/test_test.gif';
 
         $this->getFileService()->addFileGroup(array(
             'name' => '临时目录',
@@ -221,8 +221,8 @@ class FileServiceTest extends BaseTestCase
 
     public function testGetFileObject()
     {
-        $sourceFile = __DIR__.'/Fixtures/test.gif';
-        $testFile = __DIR__.'/Fixtures/test_test.gif';
+        $sourceFile = __DIR__.'/../Fixtures/test.gif';
+        $testFile = __DIR__.'/../Fixtures/test_test.gif';
 
         $this->getFileService()->addFileGroup(array(
             'name' => '临时目录',
@@ -356,8 +356,8 @@ class FileServiceTest extends BaseTestCase
 
     public function testGetImgFileMetaInfo()
     {
-        $sourceFile = __DIR__.'/Fixtures/test.gif';
-        $testFile = __DIR__.'/Fixtures/test_test.gif';
+        $sourceFile = __DIR__.'/../Fixtures/test.gif';
+        $testFile = __DIR__.'/../Fixtures/test_test.gif';
 
         $this->getFileService()->addFileGroup(array(
             'name' => '临时目录',
