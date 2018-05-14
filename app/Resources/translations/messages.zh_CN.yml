@@ -6718,13 +6718,13 @@ admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
 admin.user_auth.Protection.Explaination: 方案说明：
-admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
-admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
-admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时须要完成安全验证。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无安全验证。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，须要完成安全验证。
 admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
-admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
                                            
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
@@ -8337,10 +8337,13 @@ exception.common_drag_captcha_error: 验证码验证失败！
 exception.common_drag_captcha_expired: 验证码失效！
 exception.common_drag_captcha_required: 验证码参数缺失！
 
-exception.article.notfound: 资讯不存在
-exception.user.unlogin: 未登陆，请登陆后操作
-exception.user.message_forbidden: 不支持向该用户发送私信
+exception.article.notfound: 资讯不存在!
+exception.user.unlogin: 未登陆，请登陆后操作!
+exception.user.message_forbidden: 不支持向该用户发送私信!
 exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_error_captcha: 图形验证码错误!
+exception.sms.setting_enbale: 云短信相关设置未开启!

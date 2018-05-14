@@ -251,7 +251,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             array(),
             array('REMOTE_ADDR' => '128.2.2.1')
         );
-
+        $this->setOauthUser($request, true);
         $this->mockBiz(
             'User:TokenService',
             array(

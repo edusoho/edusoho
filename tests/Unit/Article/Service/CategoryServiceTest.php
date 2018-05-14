@@ -36,16 +36,16 @@ class CategoryServiceTest extends BaseTestCase
         $this->assertEquals($createdCategory['name'], $result['name']);
     }
 
-    public function testIsCategoryCodeAvaliable()
+    public function testIsCategoryCodeAvailable()
     {
         $createdCategory = $this->createCategory();
-        $result1 = $this->getCategoryService()->isCategoryCodeAvaliable('');
+        $result1 = $this->getCategoryService()->isCategoryCodeAvailable('');
         $this->assertFalse($result1);
 
-        $result2 = $this->getCategoryService()->isCategoryCodeAvaliable('test', 'test');
+        $result2 = $this->getCategoryService()->isCategoryCodeAvailable('test', 'test');
         $this->assertTrue($result2);
 
-        $result3 = $this->getCategoryService()->isCategoryCodeAvaliable($createdCategory['code'], 'test');
+        $result3 = $this->getCategoryService()->isCategoryCodeAvailable($createdCategory['code'], 'test');
         $this->assertFalse($result3);
     }
 

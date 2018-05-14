@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Biz\Sms\SmsException;
 
 class SmsServiceImpl extends BaseService implements SmsService
 {
@@ -52,7 +53,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         if (!$this->isOpen($smsType)) {
-            throw new ServiceException('云短信相关设置未开启!', 30003);
+            $this->createNewException(SmsException::FORBIDDEN_SMS_SETTING());
         }
 
         $allowedTime = 120;

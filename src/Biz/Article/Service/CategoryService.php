@@ -26,7 +26,7 @@ interface CategoryService
 
     public function findCategoryBreadcrumbs($categoryId);
 
-    public function isCategoryCodeAvaliable($code, $exclude = null);
+    public function isCategoryCodeAvailable($code, $exclude = null);
 
     public function createCategory(array $category);
 

@@ -305,6 +305,7 @@ t.add("auth.register.email_required_error_hint", "Please enter email", "js", "en
 t.add("auth.register.mobile_required_error_hint", "Please enter your mobile number", "js", "en");
 t.add("auth.register.email_or_mobile_required_error_hint", "Please enter your mobile number \/ email", "js", "en");
 t.add("auth.register.number_validate_error_hint", "11 numbers, the first number can not be 1", "js", "en");
+t.add("auth.register.drag_captcha_tips", "\u8bf7\u62d6\u52a8\u5de6\u8fb9\u6ed1\u5757\u5b8c\u6210\u4e0a\u65b9\u62fc\u56fe", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
 t.add("card.card_receive_success_hint", "Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
@@ -591,6 +592,8 @@ t.add("validate.visible_character.message", "Not allowed to enter invisible char
 t.add("validate.tag_required_hint", "Please input tags", "js", "en");
 t.add("validate.valid_score_input.message", "Please enter the correct decimals, leaving only ONE decimal places", "js", "en");
 t.add("validate.mobile_or_email_message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\uff0f\u90ae\u7bb1", "js", "en");
+t.add("validate.success", "\u9a8c\u8bc1\u6210\u529f", "js", "en");
+t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");
