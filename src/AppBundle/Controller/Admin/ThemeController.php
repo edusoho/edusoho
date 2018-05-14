@@ -165,7 +165,7 @@ class ThemeController extends BaseController
         } elseif (empty($config['isPlugin'])) {
             $template = 'admin/theme/edit-modal/edit-'.$code.'-modal.html.twig';
         }
-        
+
         return $this->render(
             $template,
             array(
