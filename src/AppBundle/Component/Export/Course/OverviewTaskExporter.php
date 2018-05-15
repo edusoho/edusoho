@@ -51,8 +51,8 @@ class OverviewTaskExporter extends Exporter
             $data = array();
             $data[] = $task['title'];
             $data[] = $task['finishedNum'];
-            $data[] = $task['notStartedNum'];
             $data[] = $task['learnNum'];
+            $data[] = $task['notStartedNum'];
             $data[] = $task['rate'];
 
             $datas[] = $data;
