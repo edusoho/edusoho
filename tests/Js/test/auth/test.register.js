@@ -145,7 +145,7 @@ describe('register:emSmsCodeValidate', function() {
     let emSmsCodeValidate = Register.prototype.emSmsCodeValidate;
     let mockObject = {
       initSmsCodeRule: function(){},
-      initCaptchaCodeRule: function(){},
+      initCaptchaCodeRule: function(){}
     };
     let initSmsCodeRuleStub = sinon.stub(mockObject, 'initSmsCodeRule');
     emSmsCodeValidate.apply(mockObject, [13967340627]);
