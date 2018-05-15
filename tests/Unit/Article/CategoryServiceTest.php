@@ -19,6 +19,70 @@ class CategoryServiceTest extends BaseTestCase
         $this->getCategoryService()->createCategory($categoery);
     }
 
+    public function testGetCategoryByCode()
+    {
+        $createdCategory = $this->createCategory();
+
+        $result = $this->getCategoryService()->getCategoryByCode('code1');
+        $this->assertEquals($createdCategory, $result);
+    }
+
+    public function testGetCategoryStructureTree()
+    {
+        $createdCategory = $this->createCategory();
+        $tree = $this->getCategoryService()->getCategoryStructureTree();
+
+        $result = reset($tree);
+        $this->assertEquals($createdCategory['name'], $result['name']);
+    }
+
+    public function testIsCategoryCodeAvailable()
+    {
+        $createdCategory = $this->createCategory();
+        $result1 = $this->getCategoryService()->isCategoryCodeAvailable('');
+        $this->assertFalse($result1);
+
+        $result2 = $this->getCategoryService()->isCategoryCodeAvailable('test', 'test');
+        $this->assertTrue($result2);
+
+        $result3 = $this->getCategoryService()->isCategoryCodeAvailable($createdCategory['code'], 'test');
+        $this->assertFalse($result3);
+    }
+
+    public function testFindCategoryBreadcrumbsWithEmptyCategory()
+    {
+        $results = $this->getCategoryService()->findCategoryBreadcrumbs(999);
+        $this->assertEquals(array(), $results);
+    }
+
+    public function testFindCategoryBreadcrumbs()
+    {
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $this->getCategoryService()->createCategory($categoryB);
+        $results = $this->getCategoryService()->findCategoryBreadcrumbs($createdCategoryA['id']);
+        $parentCategory = reset($results);
+        $childCategory = end($results);
+        $this->assertEquals($createdParentCategoryA['code'], $parentCategory['code']);
+        $this->assertEquals($createdCategoryA['code'], $childCategory['code']);
+    }
+
+    public function testMakeNavCategories()
+    {
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $this->getCategoryService()->createCategory($categoryA);
+        $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->makeNavCategories('codeA');
+        $this->assertEquals(3, count($results));
+    }
+
     public function testCreateCategoery()
     {
         $createdCategory = $this->createCategory();
@@ -35,6 +99,63 @@ class CategoryServiceTest extends BaseTestCase
         $ids = array($createdCategory1['id'], $createdCategory2['id']);
         $finds = $this->getCategoryService()->findCategoriesByIds($ids);
         $this->assertEquals(2, count($finds));
+    }
+
+    public function testSortCategories()
+    {
+        $rootCategory = array('name' => '测试分类1', 'code' => 'code', 'groupId' => 1, 'parentId' => 0);
+        $rootCategory = $this->getCategoryService()->createCategory($rootCategory);
+
+        $category = array('name' => '测试分类1', 'code' => 'code2', 'groupId' => 1, 'parentId' => $rootCategory['id']);
+        $category = $this->getCategoryService()->createCategory($category);
+
+        $this->getCategoryService()->sortCategories(array($rootCategory['id'], $category['id']));
+
+        $expectedRootCategory = $this->getCategoryService()->getCategory($rootCategory['id']);
+        $expectedCategory = $this->getCategoryService()->getCategory($category['id']);
+
+        $this->assertEquals($rootCategory['weight'] + 1, $expectedRootCategory['weight']);
+        $this->assertEquals($category['weight'] + 2, $expectedCategory['weight']);
+    }
+
+    public function testFindCategoryChildrenIds()
+    {
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+
+        $results = $this->getCategoryService()->findCategoryChildrenIds($createdParentCategoryA['id']);
+        $this->assertContains($createdCategoryA['id'], $results);
+        $this->assertContains($createdCategoryB['id'], $results);
+    }
+
+    public function testFindAllCategoriesByParentId()
+    {
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+        $categories = $this->getCategoryService()->findAllCategoriesByParentId($createdParentCategoryA['id']);
+        $this->assertContains($createdCategoryA, $categories);
+        $this->assertContains($createdCategoryB, $categories);
+    }
+
+    public function findCategoriesCountByParentId()
+    {
+        $parentCategoryA = array('name' => '测试分类1', 'code' => 'parentCodeA', 'parentId' => 0, 'groupId' => 1);
+        $createdParentCategoryA = $this->getCategoryService()->createCategory($parentCategoryA);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'parentId' => $createdParentCategoryA['id'], 'groupId' => 1);
+        $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
+        $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
+        $categories = $this->getCategoryService()->findCategoriesCountByParentId($createdParentCategoryA['id']);
+        $this->assertContains($createdCategoryA, $categories);
+        $this->assertContains($createdCategoryB, $categories);
     }
 
     public function testGetCategoryByParentId()

@@ -99,7 +99,7 @@ class DrpService extends BaseService
         }
         list($distributionType, $courseId, $merchantId, $agencyId, $time, $nonce, $expectSign) = $token;
 
-        $data = array('distribution_type' => $distributionType, 'course_id' => $courseId, 'merchant_id' => $merchantId, 'agency_id' => $agencyId);
+        $data = array('distribution_type' => $distributionType, 'merchant_id' => $merchantId, 'agency_id' => $agencyId, 'course_id' => $courseId);
         ksort($data);
         $dataStr = json_encode($data);
         $signingText = implode("\n", array($nonce, $time, $dataStr));

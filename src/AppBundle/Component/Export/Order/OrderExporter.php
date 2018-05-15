@@ -13,7 +13,19 @@ class OrderExporter extends Exporter
     {
         $user = $this->getUser();
 
-        return $user->isAdmin();
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if (isset($this->parameter['courseId'])) {
+            $course = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
+            $courseSetting = $this->getSettingService()->get('course');
+            if (!empty($courseSetting['teacher_search_order'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getCount()
@@ -129,6 +141,16 @@ class OrderExporter extends Exporter
         return $ordersContent;
     }
 
+    public function buildParameter($conditions)
+    {
+        $parameter = parent::buildParameter($conditions);
+        if (!empty($conditions['courseId'])) {
+            $parameter['courseId'] = $conditions['courseId'];
+        }
+
+        return $parameter;
+    }
+
     private function getExportStatus($orderStatus)
     {
         if (!$this->statusMap) {
@@ -157,6 +179,16 @@ class OrderExporter extends Exporter
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 
     /**

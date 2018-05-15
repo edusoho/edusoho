@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ArticleException extends AbstractException
 {
-    const MODUAL = 02;
+    const EXCEPTION_MODUAL = 02;
 
     const NOTFOUND = 4040201;
 

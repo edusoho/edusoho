@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Course;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseNoteService;
@@ -10,6 +11,360 @@ use Biz\Course\Service\CourseSetService;
 
 class NoteServiceTest extends BaseTestCase
 {
+    public function testFindPublicNotesByCourseSetId()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+
+        $result = $this->getNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+        $this->assertContains($note, $result);
+    }
+
+    public function testFindPublicNotesByCourseId()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+
+        $result = $this->getNoteService()->findPublicNotesByCourseId($course['id']);
+        $this->assertContains($note, $result);
+    }
+
+    public function testFindCourseNotesByUserIdAndCourseId()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+
+        $user = $this->getCurrentUser();
+        $result = $this->getNoteService()->findCourseNotesByUserIdAndCourseId($user['id'], $course['id']);
+        $this->assertContains($note, $result);
+    }
+
+    public function testWaveLikeNum()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->waveLikeNum($note['id'], 2);
+
+        $result = $this->getNoteService()->getNote($note['id']);
+
+        $this->assertEquals(2, $result['likeNum']);
+    }
+
+    public function testLike()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $result = $this->getNoteService()->like($note['id']);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testLikeWithEmptyNote()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $result = $this->getNoteService()->like($note['id'] + 100);
+    }
+
+    /**
+     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testLikeWithRetry()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $this->getNoteService()->like($note['id']);
+    }
+
+    public function testCancelLike()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $result1 = $this->getNoteService()->getNote($note['id']);
+        $this->assertEquals(1, $result1['likeNum']);
+
+        $this->getNoteService()->cancelLike($note['id']);
+        $result2 = $this->getNoteService()->getNote($note['id']);
+        $this->assertEquals(0, $result2['likeNum']);
+    }
+
+    /**
+     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testCancelLikeWithException()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $result1 = $this->getNoteService()->getNote($note['id']);
+        $this->assertEquals(1, $result1['likeNum']);
+
+        $this->getNoteService()->cancelLike($note['id'] + 100);
+    }
+
+    public function testPrepareSearchNoteConditions()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getNoteService(), 'prepareSearchNoteConditions', array(
+            array(
+                'keywordType' => 'courseId',
+                'keyword' => 1,
+                'author' => 'test',
+            ),
+        ));
+        $this->assertEquals(1, $result['courseId']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testPrepareSearchNoteConditionsWithException()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getNoteService(), 'prepareSearchNoteConditions', array(
+            array(
+                'keywordType' => 'courseId-wrong',
+                'keyword' => 1,
+            ),
+        ));
+    }
+
+    public function testFindNoteLikesByUserId()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $results = $this->getNoteService()->findNoteLikesByUserId($this->getCurrentUser()->getId());
+        $this->assertCount(1, $results);
+    }
+
+    public function testFindNoteLikesByNoteId()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $results = $this->getNoteService()->findNoteLikesByNoteId($note['id']);
+        $this->assertCount(1, $results);
+    }
+
+    public function testFindNoteLikesByNoteIds()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $results = $this->getNoteService()->findNoteLikesByNoteIds(array($note['id']));
+        $this->assertCount(1, $results);
+    }
+
+    public function testFindNoteLikesByNoteIdsAndUserId()
+    {
+        $courseSet = $this->createCourseSet();
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
+        ));
+        $note = $this->getNoteService()->saveNote(array(
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+        ));
+        $this->assertEquals(0, $note['likeNum']);
+
+        $this->getNoteService()->like($note['id']);
+        $results = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(array($note['id']), $this->getCurrentUser()->getId());
+        $this->assertCount(1, $results);
+    }
+
     public function testGetNote()
     {
         $note = $this->createNote();

@@ -34,11 +34,7 @@ export default class {
         });
         $btn.removeAttr('disabled');
         this.collapse();
-      })
-      .fail((error) => {
-        notify('danger', error);
-      })
-    ;
+      });
   }
 
   expand() {

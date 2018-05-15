@@ -481,17 +481,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.2.11",
-        "version_normalized": "0.2.11.0",
+        "version": "v0.2.24",
+        "version_normalized": "0.2.24.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "276255ea173cad91a690ddfa7c81c345b6589cbf"
+            "reference": "c5a9d11da5f94cbc78a4a65a7c41a91828784bf1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/276255ea173cad91a690ddfa7c81c345b6589cbf",
-            "reference": "276255ea173cad91a690ddfa7c81c345b6589cbf",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/c5a9d11da5f94cbc78a4a65a7c41a91828784bf1",
+            "reference": "c5a9d11da5f94cbc78a4a65a7c41a91828784bf1",
             "shasum": ""
         },
         "require": {
@@ -503,7 +503,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2018-04-24T08:18:41+00:00",
+        "time": "2018-05-08T03:48:04+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

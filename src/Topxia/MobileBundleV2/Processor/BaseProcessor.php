@@ -3,8 +3,30 @@
 namespace Topxia\MobileBundleV2\Processor;
 
 use AppBundle\Util\CdnUrl;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\Article\Service\ArticleService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\CloudPlatform\Service\EduCloudService;
+use Biz\Content\Service\BlockService;
+use Biz\Content\Service\FileService;
+use Biz\Coupon\Service\CouponService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\File\Service\UploadFileService;
+use Biz\Question\Service\QuestionService;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\MessageService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserFieldService;
+use Biz\User\Service\UserService;
+use Biz\Util\Service\MobileDeviceService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor
@@ -12,6 +34,9 @@ class BaseProcessor
     const API_VERSIN_RANGE = '3.6.0';
 
     public $formData;
+    /**
+     * @var MobileBaseController
+     */
     public $controller;
     /**
      * @var Request
@@ -140,124 +165,196 @@ class BaseProcessor
         return $this->controller->getContainer();
     }
 
+    /**
+     * @return AccountService
+     */
     protected function getAccountService()
     {
-        return ServiceKernel::instance()->createService('Pay:AccountService');
+        return $this->controller->getService('Pay:AccountService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->controller->getService('CloudPlatform.AppService');
     }
 
+    /**
+     * @return BlockService
+     */
     protected function getBlockService()
     {
         return $this->controller->getService('Content.BlockService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->controller->getService('File:UploadFileService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->controller->getService('User:UserService');
     }
 
+    /**
+     * @return MessageService
+     */
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->createService('User:MessageService');
+        return $this->controller->getService('User:MessageService');
     }
 
+    /**
+     * @return CouponService
+     */
     protected function getCouponService()
     {
         return $this->controller->getService('Coupon:CouponService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->controller->getService('Question.QuestionService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->controller->getService('User:NotificationService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->controller->getService('User:TokenService');
     }
 
+    /**
+     * @return MobileDeviceService
+     */
     protected function getMobileDeviceService()
     {
         return $this->controller->getService('Util:MobileDeviceService');
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
-        return ServiceKernel::instance()->createService('Article:ArticleService');
+        return $this->controller->getService('Article:ArticleService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->controller->getService('Order:OrderService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->controller->getService('Taxonomy:TagService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->controller->getService('Content:FileService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->controller->getService('System:SettingService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->controller->getService('Course:CourseService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->controller->getService('Course:MemberService');
     }
 
+    /**
+     * @todo 不存在的service,检查一下调用方，没用的就删除掉
+     */
     protected function getPayCenterService()
     {
         return $this->controller->getService('PayCenter:PayCenterService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->controller->getService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return AnnouncementService
+     */
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
+        return $this->controller->getService('Announcement:AnnouncementService');
     }
 
+    /**
+     * @return EduCloudService
+     */
     public function getEduCloudService()
     {
         return $this->controller->getService('EduCloud:EduCloudService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->controller->getService('System:LogService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->controller->getService('User:UserFieldService');
     }
 
     public function createErrorResponse($name, $message)
@@ -326,7 +423,7 @@ class BaseProcessor
 
         return array(
             'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost() .'/mapi_v'.$version,
+            'url' => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
             'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
