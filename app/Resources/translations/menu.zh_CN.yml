@@ -140,7 +140,7 @@ admin.operation.sensitive_words_menu: 敏感词管理
 admin.operation.reward_point_menu:　积分管理
 admin.operation.reward_point_mall_menu: 积分商城
 
-##咨询管理模块
+##资讯管理模块
 admin.operation.article.basic_tab: 资讯管理
 admin.operation.article.category_tab: '栏目管理'
 

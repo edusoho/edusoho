@@ -5683,7 +5683,7 @@ admin.sensitive_manage.prompt: 提示
 admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
 admin.sensitive_manage.existed: '敏感词已存在：%keywords%'
 
-# 咨询管理
+# 资讯管理
 admin.operation_article.category_option: --所属栏目--
 admin.operation_article.property_option: --属性--
 admin.operation_article.status_option: --发布状态--
