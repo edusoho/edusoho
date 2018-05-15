@@ -16,7 +16,7 @@ use Codeages\Biz\Order\Status\Order\PayingOrderStatus;
 class OrderServiceImpl extends BaseService implements OrderService
 {
     private $allowed_deducts_fields = array(
-        'order_id', 'item_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', 'detail', 'seller_id', 'snapshot', 'deduct_type_name'
+        'order_id', 'item_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', 'detail', 'seller_id', 'snapshot', 'deduct_type_name',
     );
 
     public function findOrderItemDeductsByOrderId($orderId)
@@ -61,31 +61,40 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $orderBy, $start, $limit)
     {
-        $conditions = $this->filterConditions($conditions);
+        if ($this->hasOrderItemConditions($conditions)) {
+            return $this->getOrderDao()->queryWithItemConditions($conditions, $orderBy, $start, $limit);
+        }
+
         return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countOrders($conditions)
     {
-        $conditions = $this->filterConditions($conditions);
+        if ($this->hasOrderItemConditions($conditions)) {
+            return $this->getOrderDao()->queryCountWithItemConditions($conditions);
+        }
+
         return $this->getOrderDao()->count($conditions);
     }
 
     public function countGroupByDate($conditions, $sort, $dateColumn = 'pay_time')
     {
         $conditions = $this->filterConditions($conditions);
+
         return $this->getOrderDao()->countGroupByDate($conditions, $sort, $dateColumn);
     }
 
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
     {
         $conditions = $this->filterConditions($conditions);
+
         return $this->getOrderDao()->sumGroupByDate($column, $conditions, $sort, $dateColumn);
     }
 
     public function sumPaidAmount($conditions)
     {
         $conditions = $this->filterConditions($conditions);
+
         return $this->getOrderDao()->sumPaidAmount($conditions);
     }
 
@@ -136,8 +145,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function addOrderItemDeduct($deduct)
     {
-        if (!ArrayToolkit::requireds($deduct, array(
-            'order_id','deduct_id', 'deduct_type', 'deduct_amount', 'user_id'))) {
+        if (!ArrayToolkit::requireds($deduct, array('order_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id'))) {
             throw new InvalidArgumentException('Invalid argument.');
         }
 
@@ -183,7 +191,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new NotFoundException('order not found');
         }
 
-        if ($order['user_id'] != $this->biz['user']['id']) {
+        if ($this->biz['user']['id'] != $order['user_id']) {
             throw new AccessDeniedException('Order owner is invalid.');
         }
 
@@ -199,20 +207,37 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->getOrderDao()->update($order['id'], array('pay_amount' => $payAmount));
     }
 
+    private function hasOrderItemConditions($conditions)
+    {
+        $orderItemQueryFields = array(
+            'order_item_title',
+            'order_item_target_ids',
+            'order_item_target_type',
+        );
+
+        foreach ($orderItemQueryFields as $field) {
+            if (isset($conditions[$field])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function filterConditions($conditions)
     {
         foreach ($conditions as $key => $value) {
-            if ($key == 'order_item_title') {
+            if ('order_item_title' == $key) {
                 $customConditions['title_LIKE'] = $value;
                 unset($conditions[$key]);
             }
 
-            if ($key == 'order_item_target_ids') {
+            if ('order_item_target_ids' == $key) {
                 $customConditions['target_ids'] = $value;
                 unset($conditions[$key]);
             }
 
-            if ($key == 'order_item_target_type') {
+            if ('order_item_target_type' == $key) {
                 $customConditions['target_type'] = $value;
                 unset($conditions[$key]);
             }
