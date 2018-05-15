@@ -139,7 +139,7 @@ admin.operation.sensitive_words_menu: Sensitive Words
 admin.operation.reward_point_menu:　Reward Point
 admin.operation.reward_point_mall_menu: Reward Point Mall
 
-##咨询管理模块
+##资讯管理模块
 admin.operation.article.basic_tab: Articles
 admin.operation.article.category_tab: 'Categories'
 
