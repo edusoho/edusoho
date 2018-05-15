@@ -123,7 +123,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     protected function createItemQueryBuilder($conditions)
     {
-        $builder = Parent::createQueryBuilder($conditions);
+        $builder = parent::createQueryBuilder($conditions);
         $builder->innerJoin($this->table, 'biz_order_item', 'item', 'item.order_id = '.$this->table.'.id');
 
         $itemConditions = array(
