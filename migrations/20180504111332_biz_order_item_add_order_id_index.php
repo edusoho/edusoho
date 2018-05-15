@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class Coursev8AddCoursesetidIndex extends Migration
+class BizOrderItemAddOrderIdIndex extends Migration
 {
     /**
      * Do the migration
@@ -13,7 +13,7 @@ class Coursev8AddCoursesetidIndex extends Migration
         $connection = $biz['db'];
 
         $connection->exec('
-            ALTER TABLE `course_v8` ADD INDEX `courseset_id_index` (`courseSetId`);
+            ALTER TABLE `biz_order_item` ADD INDEX `order_id` (`order_id`);
         ');
     }
 
