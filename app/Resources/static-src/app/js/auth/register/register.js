@@ -3,82 +3,25 @@ import Drag from 'app/common/drag';
 
 export default class Register {
   constructor() {
+    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw')) : null;
+    this.dragEvent();
     this.initValidator();
     this.inEventMobile();
-    this.initDragCaptchaCodeRule();
-    this.initInviteCodeRule();
-    this.initUserTermsRule();
     this.initMobileMsgVeriCodeSendBtn();
+  }
 
-    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw')) : null;
+  dragEvent() {
+    let self = this;
+    if (this.drag) {
+      this.drag.on('success', function(token){
+        self._smsBtnable();
+      });
+    }
   }
 
   initValidator() {
-    $('#register-form').validate({
-      rules: {
-        nickname: {
-          required: true,
-          byte_minlength: 4,
-          byte_maxlength: 18,
-          nickname: true,
-          chinese_alphanumeric: true,
-          es_remote: {
-            type: 'get',
-          }
-        },
-        password: {
-          minlength: 5,
-          maxlength: 20,
-        },
-        email: {
-          required: true,
-          email: true,
-          es_remote: {
-            type: 'get'
-          }
-        },
-        emailOrMobile: {
-          required: true,
-          email_or_mobile_check: true,
-          es_remote: {
-            type: 'get',
-            callback: function(bool) {
-              if (bool) {
-                $('.js-sms-send-btn').removeClass('disabled');
-              } else {
-                $('.js-sms-send-btn').addClass('disabled');
-              }
-            }
-          }
-        },
-        verifiedMobile: {
-          required: true,
-          phone: true,
-          es_remote: {
-            type: 'get',
-            callback: function(bool) {
-              if (bool) {
-                $('.js-sms-send-btn').removeClass('disabled');
-              } else {
-                $('.js-sms-send-btn').addClass('disabled');
-              }
-            }
-          }
-        }
-      },
-      messages: {
-        verifiedMobile: {
-          required: Translator.trans('validate.phone.message'),
-        },
-        emailOrMobile: {
-          required: Translator.trans('validate.phone_and_email_input.message'),
-        },
-        email: {
-          required: Translator.trans('validate.valid_email_input.message'),
-        }
-      },
-    });
-
+    let self = this;
+    $('#register-form').validate(this._validataRules());
     $.validator.addMethod('email_or_mobile_check', function(value, element, params) {
       let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       var reg_mobile = /^1\d{10}$/;
@@ -111,31 +54,6 @@ export default class Register {
       this.emSmsCodeValidate(mobile);
     });
   }
-  
-
-  initInviteCodeRule() {
-    let $invitecode = $('.invitecode');
-    if ($invitecode.length > 0) {
-      $invitecode.rules('add', {
-        required: false,
-        reg_inviteCode: true,
-        es_remote: {
-          type: 'get'
-        }
-      });
-    }
-  }
-
-  initUserTermsRule() {
-    if ($('#user_terms').length) {
-      $('#user_terms').rules('add', {
-        required: true,
-        messages: {
-          required: Translator.trans('validate.user_terms.message')
-        }
-      });
-    }
-  }
 
   initDragCaptchaCodeRule() {
     if ($('.js-drag-img').length) {
@@ -146,6 +64,14 @@ export default class Register {
         }
       });
     }
+  }
+
+  _smsBtnDisable() {
+    $('.js-sms-send-btn').addClass('disabled').attr('disabled', true);
+  }
+
+  _smsBtnable() {
+    $('.js-sms-send-btn').removeClass('disabled').attr('disabled', false);
   }
 
   initSmsCodeRule() {
@@ -164,22 +90,26 @@ export default class Register {
 
   initMobileMsgVeriCodeSendBtn() {
     let $smsSendBtn =  $('.js-sms-send-btn');
+    let self = this;
     $smsSendBtn.click(function() {
+      self._smsBtnDisable();
       let fieldName = $('[name=\'verifiedMobile\']').length ? 'verifiedMobile' : 'emailOrMobile';
       new SmsSender({
-        element: '.js-sms-send',
+        element: $smsSendBtn,
         url: $(this).data('smsUrl'),
         smsType: 'sms_registration',
         dataTo: fieldName,
-        captcha: false,
+        captcha: true,
+        captchaValidated: true,
+        captchaNum: 'dragCaptchaToken',
         preSmsSend: function() {
           return true;
         },
         additionalAction: function(ackResponse) {
-          console.log(ackResponse);
           if (ackResponse == 'captchaRequired') {
             $smsSendBtn.attr('disabled', true);
             $('.js-drag-jigsaw').removeClass('hidden');
+            self.drag.initDragCaptcha();
             return true;
           }
           return false;
@@ -188,11 +118,93 @@ export default class Register {
     });
   }
 
+  _validataRules() {
+    let self = this;
+    return {
+      rules: {
+        nickname: {
+          required: true,
+          byte_minlength: 4,
+          byte_maxlength: 18,
+          nickname: true,
+          chinese_alphanumeric: true,
+          es_remote: {
+            type: 'get',
+          }
+        },
+        password: {
+          minlength: 5,
+          maxlength: 20,
+        },
+        email: {
+          required: true,
+          email: true,
+          es_remote: {
+            type: 'get'
+          }
+        },
+        invitedCode: {
+          required: false,
+          reg_inviteCode: true,
+          es_remote: {
+            type: 'get'
+          }
+        },
+        emailOrMobile: {
+          required: true,
+          email_or_mobile_check: true,
+          es_remote: {
+            type: 'get',
+            callback: function(bool) {
+              if (bool) {
+                self._smsBtnable();
+              } else {
+                self._smsBtnDisable();
+              }
+            }
+          }
+        },
+        verifiedMobile: {
+          required: true,
+          phone: true,
+          es_remote: {
+            type: 'get',
+            callback: function(bool) {
+              if (bool) {
+                self._smsBtnable();
+              } else {
+                self._smsBtnDisable();
+              }
+            }
+          }
+        },
+        dragCaptchaToken: {
+          required: true,
+        }
+      },
+      messages: {
+        verifiedMobile: {
+          required: Translator.trans('validate.phone.message'),
+        },
+        emailOrMobile: {
+          required: Translator.trans('validate.phone_and_email_input.message'),
+        },
+        email: {
+          required: Translator.trans('validate.valid_email_input.message'),
+        },
+        dragCaptchaToken: {
+          required: Translator.trans('auth.register.drag_captcha_tips')
+        },
+      },
+    };
+  }
+
   emSmsCodeValidate(mobile) {
     let reg_mobile = /^1\d{10}$/;
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
       this.initSmsCodeRule();
+      this.drag.initDragCaptcha();
       $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();

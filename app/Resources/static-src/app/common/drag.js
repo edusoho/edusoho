@@ -23,15 +23,18 @@ export default class Drag extends Emitter{
   init() {
     this.initDragCaptcha();
     this.getLocation(this.$element[0]);
-    this.initEvent();
   }
 
   initDragCaptcha() {
+    let self = this;
     Api.dragCaptcha.get({
       before() {
         $('.js-jigsaw-placeholder,.js-drag-img-mask').removeClass('hidden');
         $('.js-jigsaw-bg').remove();
         $('.js-jigsaw').attr('src', '');
+        self.setCss(self.$element[0], 'cursor', 'pointer');
+        self.resetLocation(self.$element[0], self.$target[0]);
+        self.initEvent();
       }
     }).then((res) => {
       this.loadingImg(res.url, res.jigsaw);
@@ -51,18 +54,24 @@ export default class Drag extends Emitter{
   }
 
   initEvent() {
-    const $element = this.$element;
-    $element.on('mousedown touchstart', (event) => {
+    this.unbindEvent();
+    const $document = $(document);
+    this.$element.on('mousedown.drag.captcha touchstart.drag.captcha', (event) => {
       this.startDrag(event);
     });
 
-    $(document).on('mouseup touchend', (event) => {
+    $document.on('mouseup.drag.captcha touchend.drag.captcha', (event) => {
       this.stopDrag(event);
     });
 
-    $(document).on('mousemove touchmove', (event) => {
+    $document.on('mousemove.drag.captcha touchmove.drag.captcha', (event) => {
       this.dragMove(event);
     });
+  }
+
+  unbindEvent() {
+    this.$element.unbind('mousedown.drag.captcha touchstart.drag.captcha');
+    $(document).unbind('mousemove.drag.captcha touchmove.drag.captcha mouseup.drag.captcha touchend.drag.captcha');
   }
 
   startDrag(e) {
@@ -82,7 +91,6 @@ export default class Drag extends Emitter{
       return;
     }
 
-    this.setCss($element[0], 'cursor', 'pointer');
     params.flag = false;
     this.getLocation($element[0]);
 
@@ -95,7 +103,6 @@ export default class Drag extends Emitter{
       Api.dragCaptcha.validate({ params: data }).then((res) => {
         self.validateSuccess($element[0], token);
       }).catch(function() {
-        self.resetLocation($element[0], $target[0]);
         self.initDragCaptcha();
         self.emit('error');
       });
@@ -146,8 +153,7 @@ export default class Drag extends Emitter{
     const $dargForm = $tokenDom.closest('.form-group');
     $dargForm.removeClass('has-error');
     $dargForm.find('.jq-validate-error').remove();
-    $(document).unbind('mousemove touchmove');
-    $(document).unbind('mouseup touchend');
+    this.unbindEvent();
     this.setCss(target, 'cursor', 'not-allowed');
     this.emit('success',{ token: token });
   }
