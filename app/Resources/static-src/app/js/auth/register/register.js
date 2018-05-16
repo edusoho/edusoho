@@ -109,7 +109,9 @@ export default class Register {
           if (ackResponse == 'captchaRequired') {
             $smsSendBtn.attr('disabled', true);
             $('.js-drag-jigsaw').removeClass('hidden');
-            self.drag.initDragCaptcha();
+            if(self.drag) {
+              self.drag.initDragCaptcha();
+            }
             return true;
           }
           return false;
@@ -204,7 +206,6 @@ export default class Register {
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
       this.initSmsCodeRule();
-      this.drag.initDragCaptcha();
       $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();
