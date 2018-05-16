@@ -128,7 +128,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
         $itemConditions = array(
             'item.title LIKE :order_item_title',
-            'item.target_id in :order_item_target_ids',
+            'item.target_id in (:order_item_target_ids)',
             'item.target_type LIKE :order_item_target_type',
         );
 
