@@ -64,6 +64,7 @@ export default class CustomFullCalendar {
 
   _init() {
     let calendarOptions = {
+      calendarContainer: this.options['calendarContainer'],
       header: {
         left: '',
         center: 'title',

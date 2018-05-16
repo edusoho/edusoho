@@ -13,8 +13,7 @@ export default class SelectComp extends Comp {
       // 选中后触发组件
       self._createEvent(startDate, endDate);
       console.log(self.events);
-      options['events'] = self.events;
-      $(options['calendarContainer']).fullCalendar(options);
+      $(options['calendarContainer']).fullCalendar('renderEvent', self.events);
     };
 
     return options;
@@ -42,11 +41,10 @@ export default class SelectComp extends Comp {
     $('.arrangement-popover').prevAll('.arrangement-popover').remove();
 
     this._initEvent();
-    const event = {
+    this.events = {
       start: startDate.format(),
-      end: endDate.format()
+      end: endDate.format(),
     };
-    this.events.push(event);
   }
 
   _initEvent() {
