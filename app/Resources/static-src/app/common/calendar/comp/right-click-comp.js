@@ -1,61 +1,33 @@
-import Comp from './comp';
+export default class Test {
 
-export default class ClickComp extends Comp {
-
-  constructor(url) {
-    super();
-    this.url = url;
-    this._generateParamNamesPerUrl();
+  constructor(event, element) {
+    this.init(event, element);
+    this.delete();
   }
 
-  registerAction(options) {
-    let current = this;
-    options['eventClick'] = function(event, jsEvent, view) {
-      console.log(event.button);
-      current._generateClickUrl(event);
-      window.open(current._generateClickUrl(event));
-    };
-    return options;
+  init(event, element) {
+    element.bind('contextmenu', function(event) {
+      const $target = $(event.currentTarget);
+      $target.popover({
+        container: 'body',
+        html: true,
+        content: '<div class="delete-item js-delete-item"><i class="es-icon es-icon-delete"></i><span class="schedule-popover-content__time cd-dark-major cd-ml8">删除</span></div>',
+        template: `<div class="popover schedule-popover delete-popover" role="tooltip">
+                  <div class="schedule-popover-content delete-popover-content popover-content">
+                  </div>
+                </div>`,
+        trigger: 'click'
+      });
+      $target.popover('toggle');
+      return false;
+    });
   }
 
-  _appendAdditionalAttr(event) {
-    event['className'] = ['calendar_clickable'];
-    return event;
+  delete() {
+    $('.js-delete-item').click(()=> {
+      localStorage.removeItem('start');
+      localStorage.removeItem('end');
+    });
   }
 
-  _getParamNames() {
-    return this.paramNames;
-  }
-
-  _getParamPrefix() {
-    return 'click';
-  }
-
-  _generateParamNamesPerUrl() {
-    if (typeof this.paramNames == 'undefined') {
-      let segs = this.url.split('{');
-      this.paramNames = [];
-      for (let i = 0; i < segs.length; i++) {
-        let seg = segs[i];
-        if (seg.indexOf('}') != -1) {
-          this.paramNames.push(seg.split('}')[0]);
-        }
-      }
-    }
-
-    return this.paramNames;
-  }
-
-  _generateClickUrl(event) {
-    let paramNames = this._generateParamNamesPerUrl();
-    let generatedUrl = this.url;
-    for (let i = 0; i < paramNames.length; i++) {
-      let paramName = paramNames[i];
-      generatedUrl = generatedUrl.replace(
-        '{' + paramName + '}',
-        event[this._getFormatedParamName(paramName)]
-      );
-    }
-    return generatedUrl;
-  }
 }
