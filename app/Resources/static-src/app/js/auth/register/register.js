@@ -185,7 +185,7 @@ export default class Register {
 
   initDragCaptchaCodeRule() {
     if ($('.js-drag-img').length) {
-      $('[name="drag_captcha_token"]').rules('add', {
+      $('[name="dragCaptchaToken"]').rules('add', {
         required: true,
         messages: {
           required: Translator.trans('auth.register.drag_captcha_tips')
@@ -240,7 +240,7 @@ export default class Register {
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
       this.initSmsCodeRule();
-      $('[name="captcha_code"], [name="drag_captcha_token"]').rules('remove');
+      $('[name="captcha_code"], [name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initCaptchaCodeRule();
       this.initDragCaptchaCodeRule();

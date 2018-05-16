@@ -1,8 +1,10 @@
 import Api from 'common/api';
 import { strToBase64 } from 'common/utils';
+import Emitter from 'component-emitter';
 
-export default class Drag {
+export default class Drag extends Emitter{
   constructor(bar, target) {
+    super();
     this.$element = bar;
     this.$target = target;
     this.params = {
@@ -95,6 +97,7 @@ export default class Drag {
       }).catch(function() {
         self.resetLocation($element[0], $target[0]);
         self.initDragCaptcha();
+        self.emit('error');
       });
     }
   }
@@ -138,7 +141,7 @@ export default class Drag {
       type: 'success',
       message: Translator.trans('validate.success')
     });
-    const $tokenDom = $('[name="drag_captcha_token"]');
+    const $tokenDom = $('[name="dragCaptchaToken"]');
     $tokenDom.val(token);
     const $dargForm = $tokenDom.closest('.form-group');
     $dargForm.removeClass('has-error');
@@ -146,6 +149,8 @@ export default class Drag {
     $(document).unbind('mousemove touchmove');
     $(document).unbind('mouseup touchend');
     this.setCss(target, 'cursor', 'not-allowed');
+
+    this.emit('success',{ token: token });
   }
 
   getLocation(target) {

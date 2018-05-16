@@ -52,7 +52,7 @@ class LoginController extends LoginBindController
         $user = $this->getUserByTypeAndAccount($type, $account);
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
-        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType || $oauthUser->captchaEnabled;
+        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType ? false : true;
         $oauthUser->isNewAccount = $user ? false : true;
 
         if ($oauthUser->isNewAccount) {
@@ -169,16 +169,11 @@ class LoginController extends LoginBindController
 
             return $response;
         } else {
-            $oauthUser->captchaEnabled = true;
-            if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
-                $oauthUser->captchaEnabled =
-                    'captchaRequired' == $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
-            }
-
             $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
 
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
+                'captchaRequired' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp())
             ));
         }
     }

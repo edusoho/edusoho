@@ -1866,7 +1866,10 @@ class UserServiceImpl extends BaseService implements UserService
                 in_array($registerSetting['register_mode'], array('mobile', 'email_or_mobile'))) {
             $registerProtective = empty($registerSetting['register_protective']) ?
                     'none' : $registerSetting['register_protective'];
-
+            
+            if ('none' ==  $registerProtective) {
+                return 'captchaIgnored';
+            }
             if (in_array($registerProtective, array('middle', 'low'))) {
                 $factory = $this->biz->offsetGet('ratelimiter.factory');
                 $rateLimiter = $factory('sms_registration_captcha_code', 1, 3600);
