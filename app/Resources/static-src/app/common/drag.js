@@ -149,7 +149,6 @@ export default class Drag extends Emitter{
     $(document).unbind('mousemove touchmove');
     $(document).unbind('mouseup touchend');
     this.setCss(target, 'cursor', 'not-allowed');
-
     this.emit('success',{ token: token });
   }
 

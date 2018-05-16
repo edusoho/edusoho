@@ -30,7 +30,7 @@ class EduCloudController extends BaseController
             $captchaNum = $request->request->get('captcha_num');
             if (empty($captchaNum)) {
                 return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
-            } elseif (!$this->validateCaptcha($request)) {
+            } elseif (!$this->validateDragCaptcha($request)) {
                 return $this->createJsonResponse(array('error' => '验证码错误'));
             }
         } elseif ('smsUnsendable' == $status) {
@@ -436,6 +436,14 @@ class EduCloudController extends BaseController
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($key);
 
         return array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance);
+    }
+
+    private function validateDragCaptcha(Request $request)
+    {
+        $biz = $this->getBiz();
+        $bizDragCaptcha = $biz['biz_drag_captcha'];
+        $captcha = $request->request->get('dragCaptchaToken', '');
+        $bizDragCaptcha->check($captcha);
     }
 
     private function validateCaptcha(Request $request)

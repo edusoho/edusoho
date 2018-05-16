@@ -9,7 +9,7 @@ export default class Create {
     this.$form = $('#third-party-create-account-form');
     this.$btn = $('.js-submit-btn');
     this.validator = null;
-    this.dragCaptchaToken = null;
+    this.dragCaptchaToken = '';
     this.smsToken = null;
     this.$sendBtn = $('.js-sms-send');
     this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw')) : false;
@@ -18,7 +18,7 @@ export default class Create {
 
   init() {
     this.initValidator();
-    this.sendMessage();
+    this.smsSend();
     this.submitForm();
     this.removeSmsErrorTip();
     this.dragEvent();
@@ -35,16 +35,13 @@ export default class Create {
       });
 
       this.drag.on('success', function(data){
-        self.sendBtn.attr('disabled', false);
+        self.$sendBtn.attr('disabled', false);
         self.dragCaptchaToken = data.token;
       });
     }
   }
 
   initValidator() {
-    const self = this;
-    const $smsCode = $('.js-sms-send');
-
     this.rules = {
       username: {
         required: true,
@@ -72,10 +69,6 @@ export default class Create {
       },
     };
 
-    if (!$('.js-drag-jigsaw').hasClass('hidden')) {
-      this.rules['dragCaptchaToken'] = this.getCaptchaCodeRule();
-    }
-
     this.validator = this.$form.validate({
       rules: this.rules,
       messages: {
@@ -87,17 +80,17 @@ export default class Create {
     });
   }
 
-  sendMessage() {
-    const $smsCode = $('.js-sms-send');
+  smsSend() {
     const $captchaCode = $('#captcha_code');
-    if (!$smsCode.length) {
+    if (!this.$sendBtn.length) {
       return;
     }
-    $smsCode.click((event) => {
+    this.$sendBtn.click((event) => {
       const $target = $(event.target);
+      $target.attr('disabled', true);
       let data = {
         type: 'register',
-        mobile: $('.js-account').html(),
+        mobile: $('.js-account').text(),
         dragCaptchaToken: this.dragCaptchaToken,
         phrase: $captchaCode.val()
       };
@@ -110,12 +103,7 @@ export default class Create {
         const code = res.responseJSON.error.code;
         switch (code) {
         case 5000601:
-          if ($('.js-captcha').hasClass('hidden')) {
-            $('.js-captcha').removeClass('hidden');
-            $('[name=\'dragCaptchaToken\']').rules('add', this.getCaptchaCodeRule());
-          } else {
-            console.log(123);
-          }
+          $('.js-captcha').removeClass('hidden');
           $target.attr('disabled', true);
           break;
         }
@@ -165,11 +153,5 @@ export default class Create {
         $tip.remove();
       }
     });
-  }
-
-  getCaptchaCodeRule() {
-    return{
-      required: true,
-    };
   }
 }
