@@ -23,7 +23,7 @@ class RegisterSmsRateLimiter extends SmsRateLimiter
 
     protected function validateCaptcha($request)
     {
-        $token = $request->request->get('dragCaptchaToken', '');
+        $token = $request->request->get('dragCaptchaToken');
         $this->getDragCaptcha()->check($token);
     }
 
