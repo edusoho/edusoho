@@ -1,33 +1,23 @@
-export default class Test {
+import Comp from './comp';
 
-  constructor(event, element) {
-    this.init(event, element);
-    this.delete();
-  }
+/**
+ * 左键按下，拖动选择
+ * 如 new SelectComp()
+ */
+export default class rightClickComp extends Comp {
 
-  init(event, element) {
-    element.bind('contextmenu', function(event) {
-      const $target = $(event.currentTarget);
-      $target.popover({
-        container: 'body',
-        html: true,
-        content: '<div class="delete-item js-delete-item"><i class="es-icon es-icon-delete"></i><span class="schedule-popover-content__time cd-dark-major cd-ml8">删除</span></div>',
-        template: `<div class="popover schedule-popover delete-popover" role="tooltip">
-                  <div class="schedule-popover-content delete-popover-content popover-content">
-                  </div>
-                </div>`,
-        trigger: 'click'
+  registerAction(options) {
+    let self = this;
+    options['eventRender'] = function(event, element, view) {
+      // 选中后触发组件
+      element.bind('contextmenu', function(event) {
+        const $target = $(event.currentTarget);
+        $('body').append(`<div class="delete-popover" style="top: ${event.pageY}px; left: ${event.pageX}px"><div class="schedule-popover-content delete-popover-content popover-content"><div class="delete-item js-delete-item"><i class="es-icon es-icon-delete"></i><span class="schedule-popover-content__time cd-dark-major cd-ml8">删除</span></div></div></div>`);
+        return false;
       });
-      $target.popover('toggle');
-      return false;
-    });
-  }
+    };
 
-  delete() {
-    $('.js-delete-item').click(()=> {
-      localStorage.removeItem('start');
-      localStorage.removeItem('end');
-    });
+    return options;
   }
 
 }
