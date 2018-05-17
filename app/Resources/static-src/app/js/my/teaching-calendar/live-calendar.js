@@ -1,6 +1,8 @@
-import CustomFullCalendar from 'app/common/calendar/create-event-calendar';
+import CustomFullCalendar from 'app/common/calendar/custom-full-calendar';
 import LiveTooltipComp from 'app/common/calendar/comp/tooltip/live-tooltip-comp';
 import ClickComp from 'app/common/calendar/comp/click-comp';
+import SelectComp from 'app/common/calendar/comp/select-comp';
+import RightClickComp from 'app/common/calendar/comp/right-click-comp';
 import Api from 'common/api';
 
 
@@ -16,17 +18,14 @@ new CustomFullCalendar({
   },
   'dateParams': { 'start': 'startTime_GE', 'end': 'endTime_LT' },
   'currentTime': $('#todayDateStr').html(),
-  // <<<<<<< Updated upstream
-  //   'components': [
-  //     // new SelectComp(),
-  //     // new RightClickComp('{url}'),
-  //     // new LiveTooltipComp(),
-  //     // new ClickComp('{url}') //routing course_show
-  //   ],
-  //   'defaultView': 'agendaWeek', // 'agendaWeek'
-  // });
-  // =======
-  'defaultView': 'agendaWeek',
+  'components': [
+    new SelectComp(),
+    // new RightClickComp(),
+    // new LiveTooltipComp(),
+    // new ClickComp('{url}') //routing course_show
+  ],
+  'defaultView': 'agendaWeek', // 'agendaWeek'
 });
 
-// >>>>>>> Stashed changes
+
+

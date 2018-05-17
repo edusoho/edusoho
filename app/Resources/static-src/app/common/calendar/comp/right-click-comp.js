@@ -1,23 +1,54 @@
 import Comp from './comp';
 
 /**
- * 左键按下，拖动选择
- * 如 new SelectComp()
+ * 右键 点击 删除框 删除
+ * 如 new rightClickComp()
  */
 export default class rightClickComp extends Comp {
 
   registerAction(options) {
-    let self = this;
-    options['eventRender'] = function(event, element, view) {
-      // 选中后触发组件
-      element.bind('contextmenu', function(event) {
-        const $target = $(event.currentTarget);
-        $('body').append(`<div class="delete-popover" style="top: ${event.pageY}px; left: ${event.pageX}px"><div class="schedule-popover-content delete-popover-content popover-content"><div class="delete-item js-delete-item"><i class="es-icon es-icon-delete"></i><span class="schedule-popover-content__time cd-dark-major cd-ml8">删除</span></div></div></div>`);
-        return false;
-      });
+
+    options['eventClick'] = function(event, jsEvent, view) {
+      const $target = $(jsEvent.currentTarget);
+      $target.popover('hide');
     };
 
+    options['eventContextmenu'] = function(event, jsEvent, view) {
+      const $target = $(jsEvent.currentTarget);
+      $target.popover({
+        container: 'body',
+        html: true,
+        content: `<div class="delete-item js-delete-item"><i class="es-icon es-icon-delete"></i><span class="schedule-popover-content__time cd-dark-major cd-ml8">${Translator.trans('site.delete')}</span></div>`,
+        template: `<div class="popover schedule-popover delete-popover" data-id="${ event._id }">
+                      <div class="schedule-popover-content delete-popover-content popover-content">
+                      </div>
+                    </div>`,
+        trigger: 'click'
+      });
+      $target.popover('show');
+      $('.delete-popover').prevAll('.delete-popover').remove();
+      return false;
+    };
+
+    this.deleteEvent(options);
+    this.clickOtherPos();
+
     return options;
+  }
+
+  deleteEvent(options) {
+    // 删除对应id的项
+    $('body').on('click', '.delete-popover', (event) => {
+      const $target = $(event.target);
+      const id = $target.parents('.delete-popover').data('id');
+      $(options['calendarContainer']).fullCalendar('removeEvents', id);
+    });
+  }
+
+  clickOtherPos() {
+    $('body').click(() => {
+      $('.delete-popover').remove();
+    });
   }
 
 }
