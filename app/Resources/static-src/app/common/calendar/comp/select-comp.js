@@ -37,6 +37,8 @@ export default class SelectComp extends Comp {
       self.event = event;
     };
 
+    options['editable'] = true;
+
     self._initEvent(options);
 
     return options;
