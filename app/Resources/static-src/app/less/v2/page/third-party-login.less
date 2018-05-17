@@ -1,7 +1,7 @@
 .third-party-login-section {
   margin: 40px auto;
   width: 476px;
-  @media(max-width: @screen-xs-min) {
+  @media (max-width: @screen-xs-min) {
     width: 100%;
     margin: 20px auto;
   }
@@ -14,8 +14,25 @@
   }
   .third-party-panel__body {
     padding: 32px 24px 40px;
-    @media(max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-min) {
       padding: 32px 4px;
+    }
+  }
+  .drag-section-wrap {
+    & + p {
+      margin-top: 0;
+    }
+  }
+  .alert {
+    @media (min-width: 321px) and (max-width: @screen-xs-min) {
+      margin: 0 20px;
+      padding-right: 12px;
+      padding-left: 12px;
+    }
+    @media (max-width: 320px) {
+      margin: 0 4px;
+      padding-right: 4px;
+      padding-left: 4px;
     }
   }
 }
@@ -23,14 +40,14 @@
 
 .third-party-register-panel {
   .third-party-panel__heading {
-    @media(max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-min) {
       padding-top: 16px;
       padding-bottom: 16px;
     }
   }
   .third-party-panel__body {
     padding: 16px 24px 32px;
-    @media(max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-min) {
       padding: 16px 4px;
     }
   }
@@ -39,7 +56,7 @@
 .third-party-user {
   font-size: 24px;
   line-height: 1;
-  @media(max-width: @screen-xs-min) {
+  @media (max-width: @screen-xs-min) {
     font-size: 18px;
   }
 }
@@ -47,6 +64,9 @@
 
 .third-party-user-section {
   padding: 0 26px;
+  @media (max-width: @screen-xs-min) {
+    padding: 0 20px;
+  }
   .third-party-avatar {
     width: 72px;
     height: 72px;
@@ -70,10 +90,10 @@
     position: absolute;
     top: 24px;
     left: 107px;
-    @media(max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-min) {
       left: 20%;
     }
-    @media(max-width: 320px) {
+    @media (max-width: 320px) {
       left: 12%;
     }
   }
@@ -102,6 +122,9 @@
 
 .third-party-form {
   padding: 0 26px;
+  @media (max-width: @screen-xs-min) {
+    padding: 0 20px;
+  }
   .form-group {
     margin-bottom: 24px;
   }
@@ -128,7 +151,7 @@
 .third-party-sms-form-group {
   position: relative;
   padding-right: 156px;
-  @media(max-width: 320px) {
+  @media (max-width: 320px) {
     padding-right: 136px;
   }
   .third-part-action-button {
@@ -136,7 +159,7 @@
     bottom: 0;
     right: 0;
     width: 140px;
-    @media(max-width: 320px) {
+    @media (max-width: 320px) {
       width: 120px;
       button {
         padding: 9px 4px;
