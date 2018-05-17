@@ -34,7 +34,12 @@
     <div class="score">
       {% if not is_open_course %}
         {{ web_macro.star(course.rating|default(0)) }}
-        <span>{{'cloud_search.course.evaluate'|trans({'%ratingNum%':course.ratingNum|default(0)})}}{{ 'cloud_search.course.learned'|trans({'%studentNum%':course.studentNum|default(0)}) }}</span>
+       <span>
+        {{'cloud_search.course.evaluate'|trans({'%ratingNum%':course.ratingNum|default(0)})}}
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          {{ 'cloud_search.course.learned'|trans({'%studentNum%':course.studentNum|default(0)}) }}
+        {% endif %}
+        </span> 
       {% endif %}
     </div>
     <div class="content editor-text">{{ course.about|cdn|raw }}</div>
