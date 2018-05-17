@@ -143,6 +143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'courseType',
                 'type',
                 'enableAudio',
+                'showServices',
             )
         );
 

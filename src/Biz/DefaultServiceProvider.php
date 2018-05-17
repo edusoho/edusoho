@@ -183,5 +183,9 @@ class DefaultServiceProvider implements ServiceProviderInterface
                 new CourseRenderViewResolver($biz),
             );
         };
+
+        $biz['template_extension.live'] = array(
+            'course/header/header-for-guest' => 'live-course/header/header-for-guest.html.twig',
+        );
     }
 }
