@@ -13,8 +13,8 @@ class OrgDataTagTest extends BaseTestCase
         $this->mockBiz('Org:OrgService', array(
             array(
                 'functionName' => 'getOrg',
-                'returnValue' => $mockData
-            )
+                'returnValue' => $mockData,
+            ),
         ));
         $dataTag = new OrgDataTag();
         $result = $dataTag->getData(array('id' => 1));
@@ -28,8 +28,8 @@ class OrgDataTagTest extends BaseTestCase
         $this->mockBiz('Org:OrgService', array(
             array(
                 'functionName' => 'getOrgByOrgCode',
-                'returnValue' => $mockData
-            )
+                'returnValue' => $mockData,
+            ),
         ));
         $dataTag = new OrgDataTag();
         $result = $dataTag->getData(array('orgCode' => 'codename'));

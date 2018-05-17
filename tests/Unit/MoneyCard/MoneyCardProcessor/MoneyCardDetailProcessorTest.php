@@ -3,7 +3,6 @@
 namespace Tests\Unit\MoneyCard\MoneyCardProcessor;
 
 use Biz\BaseTestCase;
-use AppBundle\Common\ReflectionUtils;
 use Biz\MoneyCard\MoneyCardProcessor\MoneyCardDetailProcessor;
 
 class MoneyCardDetailProcessorTest extends BaseTestCase
@@ -13,12 +12,12 @@ class MoneyCardDetailProcessorTest extends BaseTestCase
         $this->mockBiz('MoneyCard:MoneyCardService', array(
             array(
                 'functionName' => 'getMoneyCard',
-                'returnValue' => array('batchId' => 1)
+                'returnValue' => array('batchId' => 1),
             ),
             array(
                 'functionName' => 'getBatch',
-                'returnValue' => array('coin' => 1000)
-            )
+                'returnValue' => array('coin' => 1000),
+            ),
         ));
         $processor = new MoneyCardDetailProcessor();
         $result = $processor->getDetailById(1);
@@ -32,18 +31,18 @@ class MoneyCardDetailProcessorTest extends BaseTestCase
         $this->mockBiz('MoneyCard:MoneyCardService', array(
             array(
                 'functionName' => 'getMoneyCardByIds',
-                'returnValue' => array(array('id' => 1, 'batchId' => 1), array('id' => 2, 'batchId' => 2))
+                'returnValue' => array(array('id' => 1, 'batchId' => 1), array('id' => 2, 'batchId' => 2)),
             ),
             array(
                 'functionName' => 'getBatch',
                 'withParams' => array(1),
-                'returnValue' => array('coin' => 1000)
+                'returnValue' => array('coin' => 1000),
             ),
             array(
                 'functionName' => 'getBatch',
                 'withParams' => array(2),
-                'returnValue' => array('coin' => 10)
-            )
+                'returnValue' => array('coin' => 10),
+            ),
         ));
         $processor = new MoneyCardDetailProcessor();
         $result = $processor->getCardDetailsByCardIds(array(1, 2));
