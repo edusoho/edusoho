@@ -12,7 +12,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function getBySn($sn, array $options = array())
     {
-        $lock = isset($options['lock']) && $options['lock'] === true;
+        $lock = isset($options['lock']) && true === $options['lock'];
 
         $forUpdate = '';
 
@@ -38,7 +38,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function findByInvoiceSn($invoiceSn)
     {
         return $this->findByFields(array(
-            'invoice_sn' => $invoiceSn
+            'invoice_sn' => $invoiceSn,
         ));
     }
 
@@ -53,7 +53,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function sumPaidAmount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount");
+            ->select('sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount');
 
         return $builder->execute()->fetch();
     }
@@ -96,6 +96,49 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchAll(0) ?: array();
     }
 
+    public function queryWithItemConditions($conditions, $orderBys, $start, $limit)
+    {
+        $builder = $this->createItemQueryBuilder($conditions)
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->select($this->table.'.*');
+
+        $declares = $this->declares();
+
+        foreach ($orderBys ?: array() as $order => $sort) {
+            $this->checkOrderBy($order, $sort, $declares['orderbys']);
+            $builder->addOrderBy($this->table.'.'.$order, $sort);
+        }
+
+        return $builder->execute()->fetchAll();
+    }
+
+    public function queryCountWithItemConditions($conditions)
+    {
+        $builder = $this->createItemQueryBuilder($conditions)
+            ->select('COUNT(*)');
+
+        return (int) $builder->execute()->fetchColumn(0);
+    }
+
+    protected function createItemQueryBuilder($conditions)
+    {
+        $builder = parent::createQueryBuilder($conditions);
+        $builder->innerJoin($this->table, 'biz_order_item', 'item', 'item.order_id = '.$this->table.'.id');
+
+        $itemConditions = array(
+            'item.title LIKE :order_item_title',
+            'item.target_id in (:order_item_target_ids)',
+            'item.target_type LIKE :order_item_target_type',
+        );
+
+        foreach ($itemConditions as $condition) {
+            $builder->andWhere($condition);
+        }
+
+        return $builder;
+    }
+
     private function isDateColumnAllow($column)
     {
         $whiteList = $this->dateColumnWhiteList();
@@ -103,6 +146,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
+
         return false;
     }
 
@@ -113,6 +157,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
+
         return false;
     }
 
@@ -159,25 +204,25 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'created_time',
             ),
             'conditions' => array(
-                'id IN (:ids)',
-                'sn = :sn',
-                'user_id = :user_id',
-                'payment = :payment',
-                'created_time < :created_time_LT',
-                'pay_time < :pay_time_LT',
-                'pay_time > :pay_time_GT',
-                'pay_amount > :pay_amount_GT',
-                'price_amount > :price_amount_GT',
-                'source = :source',
-                'status = :status',
-                'status IN (:statuses)',
-                'seller_id = :seller_id',
-                'created_time >= :start_time',
-                'created_time <= :end_time',
-                'title LIKE :title_like',
-                'updated_time >= :updated_time_GE',
-                'refund_deadline < :refund_deadline_LT',
-                'invoice_sn = :invoice_sn',
+                $this->table.'.id IN (:ids)',
+                $this->table.'.sn = :sn',
+                $this->table.'.user_id = :user_id',
+                $this->table.'.payment = :payment',
+                $this->table.'.created_time < :created_time_LT',
+                $this->table.'.pay_time < :pay_time_LT',
+                $this->table.'.pay_time > :pay_time_GT',
+                $this->table.'.pay_amount > :pay_amount_GT',
+                $this->table.'.price_amount > :price_amount_GT',
+                $this->table.'.source = :source',
+                $this->table.'.status = :status',
+                $this->table.'.status IN (:statuses)',
+                $this->table.'.seller_id = :seller_id',
+                $this->table.'.created_time >= :start_time',
+                $this->table.'.created_time <= :end_time',
+                $this->table.'.title LIKE :title_like',
+                $this->table.'.updated_time >= :updated_time_GE',
+                $this->table.'.refund_deadline < :refund_deadline_LT',
+                $this->table.'.invoice_sn = :invoice_sn',
             ),
         );
     }

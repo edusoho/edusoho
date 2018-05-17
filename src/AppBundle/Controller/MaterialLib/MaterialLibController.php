@@ -7,6 +7,7 @@ use Biz\File\Service\UploadFileShareHistoryService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
 class MaterialLibController extends BaseController
@@ -35,7 +36,7 @@ class MaterialLibController extends BaseController
         }
 
         $queryString = $request->query->get('q');
-        $tags = $this->getTagService()->getTagByLikeName($queryString);
+        $tags = $this->getTagService()->findTagsByLikeName($queryString);
 
         foreach ($tags as $tag) {
             $data[] = array('id' => $tag['id'], 'name' => $tag['name']);
@@ -152,7 +153,7 @@ class MaterialLibController extends BaseController
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
-        if ($file['storage'] == 'cloud') {
+        if ('cloud' == $file['storage']) {
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array(
                 'request' => $request,
                 'globalId' => $file['globalId'],
@@ -178,7 +179,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
-        if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
+        if ('local' == $file['storage'] || $currentUser['id'] != $file['createdUserId']) {
             $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
             $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags, 'tagId'));
             $file['tags'] = ArrayToolkit::column($tags, 'name');
@@ -190,7 +191,7 @@ class MaterialLibController extends BaseController
             ));
         } else {
             try {
-                if ($file['type'] == 'video') {
+                if ('video' == $file['type']) {
                     $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
                 }
             } catch (\RuntimeException $e) {
@@ -528,7 +529,7 @@ class MaterialLibController extends BaseController
     {
         $data = $request->request->all();
 
-        if (isset($data['ids']) && $data['ids'] != '') {
+        if (isset($data['ids']) && '' != $data['ids']) {
             foreach ($data['ids'] as $fileId) {
                 $this->getUploadFileService()->tryManageFile($fileId);
             }
@@ -545,7 +546,7 @@ class MaterialLibController extends BaseController
     {
         $data = $request->request->all();
 
-        if (isset($data['ids']) && $data['ids'] != '') {
+        if (isset($data['ids']) && '' != $data['ids']) {
             foreach ($data['ids'] as $fileId) {
                 $this->getUploadFileService()->tryManageFile($fileId);
             }
@@ -600,6 +601,9 @@ class MaterialLibController extends BaseController
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');

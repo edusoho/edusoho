@@ -83,7 +83,7 @@ class TagController extends BaseController
         $data = array();
         $queryString = $request->query->get('q');
         $callback = $request->query->get('callback');
-        $tags = $this->getTagService()->getTagByLikeName($queryString);
+        $tags = $this->getTagService()->findTagsByLikeName($queryString);
         foreach ($tags as $tag) {
             $data[] = array('id' => $tag['id'], 'name' => $tag['name']);
         }
