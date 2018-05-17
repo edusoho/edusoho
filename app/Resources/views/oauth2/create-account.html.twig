@@ -5,18 +5,22 @@
   {{ 'user.oauth.register_account'|trans }}
 {% endblock %}
 
+
+{% set registerClass = 'third-party-register-panel' %}
+
 {% block panel_body %}
 
   {% if oauthUser.mode != 'closed' %}
 
     {% if oauthUser.accountType == "email" %} {% set accountType = 'user.oauth.login_by_email'|trans %}{% else %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% endif %}
-
-    <div class="text-center cd-mb32">
-      <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
-    </div>
-    <div class="text-center cd-mb32">
-      <div class="third-party-bind-tip">{{ 'user.oauth.register_account_by_ways'|trans({ '%accountType%': accountType }) }}</div>
-      <div class="third-party-user color-primary js-account">{{ oauthUser.account }}</div>
+    <div class="third-party-user-section clearfix">
+        <div class="cd-mb24 pull-left cd-mr16">
+          <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
+        </div>
+        <div class="cd-mt16">
+          <div class="third-party-bind-tip">{{ 'user.oauth.register_account_by_ways'|trans({ '%accountType%': accountType }) }}</div>
+          <div class="third-party-user color-primary js-account">{{ oauthUser.account }}</div>
+        </div>
     </div>
 
     <form class="third-party-form clearfix" id="third-party-create-account-form" method="post">

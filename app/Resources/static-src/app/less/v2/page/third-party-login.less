@@ -20,11 +20,40 @@
   }
 }
 
+
+.third-party-register-panel {
+  .third-party-panel__heading {
+    @media(max-width: @screen-xs-min) {
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+  }
+  .third-party-panel__body {
+    padding: 16px 24px 32px;
+    @media(max-width: @screen-xs-min) {
+      padding: 16px 4px;
+    }
+  }
+}
+
 .third-party-user {
   font-size: 24px;
   line-height: 1;
   @media(max-width: @screen-xs-min) {
     font-size: 18px;
+  }
+}
+
+
+.third-party-user-section {
+  padding: 0 26px;
+  .third-party-avatar {
+    width: 72px;
+    height: 72px;
+    .cd-box-shadow-z(12px)
+  }
+  .third-party-user {
+    font-size: 20px;
   }
 }
 
@@ -73,6 +102,9 @@
 
 .third-party-form {
   padding: 0 26px;
+  .form-group {
+    margin-bottom: 24px;
+  }
   .third-party-form__label {
     position: relative;
     &:after {
