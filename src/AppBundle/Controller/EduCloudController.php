@@ -444,7 +444,7 @@ class EduCloudController extends BaseController
         $bizDragCaptcha = $biz['biz_drag_captcha'];
         $captcha = $request->request->get('captcha_num', '');
         $bizDragCaptcha->check($captcha);
-        
+
         return true;
     }
 
