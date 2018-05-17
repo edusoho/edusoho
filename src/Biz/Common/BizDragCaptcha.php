@@ -77,9 +77,12 @@ class BizDragCaptcha extends BizAware
 
     public function check($dragToken)
     {
+        if(empty($dragToken)) {
+            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_REQUIRED();
+        }
         $data = $this->decodeToken($dragToken);
 
-        if (!ArrayToolkit::requireds($data, array('token', 'captcha'), true)) {
+        if (!is_array($data) || !ArrayToolkit::requireds($data, array('token', 'captcha'), true)) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_REQUIRED();
         }
 

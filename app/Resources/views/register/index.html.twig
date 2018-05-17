@@ -60,9 +60,8 @@
 							<p class="help-block"></p>
 						</div>
 					</div>
-          {# {% include 'register/captcha/normal.html.twig' %} #}
-          {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
-            <div class="form-group cd-mb32 js-drag-jigsaw">
+          {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+            <div class="form-group cd-mb32 js-drag-jigsaw {% if setting('auth.register_mode') == 'mobile' %}hidden{% endif%}">
               {% include 'common/drag.html.twig' %}
             </div>
           {% endif %}
@@ -75,12 +74,12 @@
 									<p class="help-block"> </p>
 								</div>
 								<div class="col-xs-5">
-									<a href="javascript:;" class="btn btn-default btn-lg js-sms-send-btn disabled">
+									<a href="javascript:;" class="btn btn-default btn-lg js-sms-send-btn disabled" data-sms-url="{{ path('edu_cloud_sms_send_registration') }}">
 										<span id="js-time-left"></span>
 										<span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
 									</a>
 
-									<a href="#modal" data-toggle="modal" class="js-sms-send hidden" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send_registration') }}"></a>
+									{# <a href="#modal" data-toggle="modal" class="js-sms-send hidden" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send_registration') }}"></a> #}
 								</div>
 							</div>
 						</div>
