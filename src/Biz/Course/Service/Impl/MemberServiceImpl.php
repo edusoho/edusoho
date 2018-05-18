@@ -579,12 +579,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
-            $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
+            $endTime = strtotime(date('Y-m-d H:i:s', time())); //系统当前时间
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
         } elseif ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
             $deadline = $course['expiryEndDate'];
         }
-
+        
         if (!empty($info['orderId'])) {
             $order = $this->getOrderService()->getOrder($info['orderId']);
 
