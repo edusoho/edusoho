@@ -37,9 +37,10 @@ export default class rightClickComp extends Comp {
 
   deleteEvent(options) {
     // 删除对应id的项
-    $('body').on('click', '.js-delete-item', (event) => {
-      const $target = $(event.target);
-      const id = $target.parents('.js-delete-popover').data('id');
+    $('body').on('click', '.js-delete-popover', (event) => {
+      const $target = $(event.currentTarget);
+      const id = $target.data('id');
+      console.log(id);
       $(options['calendarContainer']).fullCalendar('removeEvents', id);
     });
   }
