@@ -99,13 +99,9 @@ export default class Create {
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
-        // 自定义code 自动捕获
-        const code = res.responseJSON.error.code;
-        switch (code) {
-        case 5000601:
-          $('.js-captcha').removeClass('hidden');
-          self.attr('disabled', true);
-          break;
+        if (self.drag) {
+          self.drag.initDragCaptcha();
+          $('.js-drag-jigsaw').removeClass('hidden');
         }
       });
     });
