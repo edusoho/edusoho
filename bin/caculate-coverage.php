@@ -20,65 +20,6 @@ if (!empty($xmls)) {
 }
 
 /**
- * @param $xmls @see contineXml
- *
- * @return
- *  array(
- *      '{fileName} => array(   // fileName 为 <file name=....> 节点中的 name属性值
- *          'num_{num}' => array(
- *              'type' => 'method',  //类型，只有 method 和 stmt 2种, num, type, count, 对应到 line 中的相应属性
- *              'count' => 1  //所有coverage的count总和
- *              'num' => {num}
- *          )
- *      )
- *  )
- */
-function generateCoverageNodeInfos($xmls)
-{
-    $nodeInfos = array();
-
-    foreach ($xmls as $xml) {
-        foreach ($xml->project->package as $packageNode) {
-            foreach ($packageNode->file as $fileNode) {
-                $fileName = (string) $fileNode->attributes()->name;
-
-                if (empty($nodeInfos[$fileName])) {
-                    $nodeInfos[$fileName] = array();
-                }
-
-                foreach ($fileNode->line as $lineNode) {
-                    $lineNodeAttrs = $lineNode->attributes();
-                    $lineNum = (string) $lineNodeAttrs->num;
-                    $type = (string) $lineNodeAttrs->type;
-                    $count = (int) $lineNodeAttrs->count;
-
-                    if (!isset($nodeInfos[$fileName]['num_'.$lineNum])) {
-                        $info = array(
-                            'type' => $type,
-                            'count' => 0,
-                            'num' => $lineNum,
-                            'existedCount' => 0,
-                        );
-
-                        if ('method' == $type) {
-                            $info['name'] = (string) $lineNodeAttrs->name;
-                            $info['crap'] = (string) $lineNodeAttrs->crap;
-                        }
-
-                        $nodeInfos[$fileName]['num_'.$lineNum] = $info;
-                    }
-
-                    $nodeInfos[$fileName]['num_'.$lineNum]['count'] += $count;
-                    $nodeInfos[$fileName]['num_'.$lineNum]['existedCount'] += 1;
-                }
-            }
-        }
-    }
-
-    return $nodeInfos;
-}
-
-/**
  * @param $xmls xml的格式如下
  *    <?xml version="1.0" encoding="UTF-8"?>
  *    <coverage generated="1525869102">
@@ -156,4 +97,63 @@ function conbineCoverageXml($xmls)
     }
 
     return $result;
+}
+
+/**
+ * @param $xmls @see conbineCoverageXml
+ *
+ * @return
+ *  array(
+ *      '{fileName} => array(   // fileName 为 <file name=....> 节点中的 name属性值
+ *          'num_{num}' => array(
+ *              'type' => 'method',  //类型，只有 method 和 stmt 2种, num, type, count, 对应到 line 中的相应属性
+ *              'count' => 1  //所有coverage的count总和
+ *              'num' => {num}
+ *          )
+ *      )
+ *  )
+ */
+function generateCoverageNodeInfos($xmls)
+{
+    $nodeInfos = array();
+
+    foreach ($xmls as $xml) {
+        foreach ($xml->project->package as $packageNode) {
+            foreach ($packageNode->file as $fileNode) {
+                $fileName = (string) $fileNode->attributes()->name;
+
+                if (empty($nodeInfos[$fileName])) {
+                    $nodeInfos[$fileName] = array();
+                }
+
+                foreach ($fileNode->line as $lineNode) {
+                    $lineNodeAttrs = $lineNode->attributes();
+                    $lineNum = (string) $lineNodeAttrs->num;
+                    $type = (string) $lineNodeAttrs->type;
+                    $count = (int) $lineNodeAttrs->count;
+
+                    if (!isset($nodeInfos[$fileName]['num_'.$lineNum])) {
+                        $info = array(
+                            'type' => $type,
+                            'count' => 0,
+                            'num' => $lineNum,
+                            'existedCount' => 0,
+                        );
+
+                        if ('method' == $type) {
+                            $info['name'] = (string) $lineNodeAttrs->name;
+                            $info['crap'] = (string) $lineNodeAttrs->crap;
+                        }
+
+                        $nodeInfos[$fileName]['num_'.$lineNum] = $info;
+                    }
+
+                    $nodeInfos[$fileName]['num_'.$lineNum]['count'] += $count;
+                    $nodeInfos[$fileName]['num_'.$lineNum]['existedCount'] += 1;
+                }
+            }
+        }
+    }
+
+    return $nodeInfos;
 }

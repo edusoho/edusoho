@@ -90,7 +90,7 @@ function conbineUnitXml($xmls)
 }
 
 /**
- * @param $xmls @see conbineXml
+ * @param $xmls @see conbineUnitXml
  *
  * @return
  *  array(
