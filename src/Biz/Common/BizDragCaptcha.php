@@ -43,8 +43,8 @@ class BizDragCaptcha extends BizAware
         $jigsaw = $this->getJigsaw($options);
 
         $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
-            'times' => 2,
-            'duration' => 60 * 3,
+            'times' => 3,
+            'duration' => 60 * 15,
             'userId' => 0,
             'data' => $options,
         ));
