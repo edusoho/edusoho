@@ -327,6 +327,15 @@ class BaseController extends Controller
         return $this->redirect($url, $status);
     }
 
+    public function render($view, array $parameters = array(), Response $response = null)
+    {
+        foreach ($this->getBiz()['render_view_resolvers'] as $resolver) {
+            $view = $resolver->generateRenderView($view, $parameters);
+        }
+
+        return Parent::render($view, $parameters, $response);
+    }
+
     /**
      * 过滤URL.
      *

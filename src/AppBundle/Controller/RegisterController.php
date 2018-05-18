@@ -46,8 +46,8 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
                 $authSettings = $this->getSettingService()->get('auth', array());
 
-                //验证码校验
-                $this->captchaEnabledValidator($authSettings, $registration, $request);
+                //拖动校验
+                $this->dragCaptchaValidator($registration, $authSettings);
 
                 //手机校验码
                 if ($this->smsCodeValidator($authSettings, $registration)) {
@@ -94,7 +94,11 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+                $response = DistributorCookieToolkit::clearCookieToken(
+                    $request,
+                    $response,
+                    array('checkedType' => DistributorCookieToolkit::USER)
+                );
 
                 return $response;
             } catch (ServiceException $se) {
@@ -548,6 +552,17 @@ class RegisterController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    protected function dragCaptchaValidator($registration, $authSettings)
+    {
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
+            $biz = $this->getBiz();
+            $bizDragCaptcha = $biz['biz_drag_captcha'];
+
+            $dragcaptchaToken = empty($registration['drag_captcha_token']) ? '' : $registration['drag_captcha_token'];
+            $bizDragCaptcha->check($dragcaptchaToken);
+        }
     }
 
     //validate captcha

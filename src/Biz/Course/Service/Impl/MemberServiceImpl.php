@@ -732,6 +732,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));
         $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
+        $this->dispatchEvent('course.batch.join', new Event($newMembers));
 
         return $newMembers;
     }

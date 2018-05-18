@@ -14,14 +14,19 @@ class PurchasedCourseType extends Type
         $pushStatements = array();
 
         $sdk = $this->createXAPIService();
+        $courses = $this->findCourses(
+            array($statements, 'target_id')
+        );
         foreach ($statements as $statement) {
             try {
                 $actor = $this->getActor($statement['user_id']);
                 $data = $statement['context'];
+                $course = $courses[$statement['target_id']];
                 $object = array(
                     'id' => $statement['target_id'],
                     'definitionType' => $this->convertActivityType($statement['target_type']),
                     'name' => $data['title'],
+                    'course' => $course,
                 );
                 $result = array(
                     'amount' => $data['pay_amount'],

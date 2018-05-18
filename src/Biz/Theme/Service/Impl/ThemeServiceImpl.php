@@ -22,6 +22,12 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         try {
             $this->defaultConfig = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_default");
             $this->allConfig = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_all");
+
+            if ($this->getKernel()->hasParameter("theme_{$currentTheme['uri']}_extend")) {
+                $allConfigExtend = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_extend");
+                $this->allConfig = array_merge_recursive($this->allConfig, $allConfigExtend["theme_{$currentTheme['uri']}_all"]);
+            }
+
             $this->themeName = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_name");
         } catch (\Exception $e) {
             $this->setConfigAndNameByThemeConfig($currentTheme);
@@ -139,12 +145,6 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     public function resetConfig()
     {
-        $currentTheme = $this->getSettingService()->get('theme');
-
-        if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = '简墨';
-        }
-
         return $this->saveCurrentThemeConfig($this->defaultConfig);
     }
 
@@ -178,7 +178,6 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         if (empty($theme)) {
             return false;
         }
-
         if (!$this->isThemeSupportEs($theme)) {
             return false;
         }
@@ -193,10 +192,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     private function isThemeSupportEs($theme)
     {
-        $supportVersion = explode('.', $theme['support_version']);
-        $EsVerson = explode('.', System::VERSION);
-
-        if ($theme['protocol'] < 3 || version_compare(array_shift($supportVersion), array_shift($EsVerson), '<')) {
+        if ($theme['protocol'] < 3 || version_compare(rtrim($theme['support_version'], '+'), System::VERSION, '>')) {
             return false;
         }
 

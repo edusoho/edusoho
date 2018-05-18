@@ -10,6 +10,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DynUrlToolkit;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -45,7 +46,15 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
+            new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
+            new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
+            new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
         );
+    }
+
+    public function getDynUrl($baseUrl, $params)
+    {
+        return DynUrlToolkit::getUrl($this->biz, $baseUrl, $params);
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
@@ -138,6 +147,35 @@ class CourseExtension extends \Twig_Extension
         $setting = $this->getSettingService()->get('course');
 
         return !empty($setting['buy_fill_userinfo']);
+    }
+
+    public function getCourseTypes()
+    {
+        $courseTypes = $this->container->get('extension.manager')->getCourseTypes();
+        $visibleCourseTypes = array_filter($courseTypes, function ($type) {
+            return 1 == $type['visible'];
+        });
+
+        uasort($visibleCourseTypes, function ($type1, $type2) {
+            if ($type1['priority'] == $type2['priority']) {
+                return 0;
+            }
+
+            return $type1['priority'] > $type2['priority'] ? -1 : 1;
+        });
+
+        return $visibleCourseTypes;
+    }
+    
+    public function isTaskAvailable($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        if ('published' == $task['status'] and 'published' == $course['status']) {
+            return true;
+        }
+        $result = $this->getCourseService()->canLearnTask($task['id']);
+
+        return 'success' == $result['code'];
     }
 
     /**

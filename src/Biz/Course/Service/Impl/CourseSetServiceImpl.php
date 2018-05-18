@@ -135,6 +135,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $favorite = $this->getFavoriteDao()->create($favorite);
 
+        $this->dispatch('courseSet.favorite', $favorite, array('courseSet' => $courseSet, 'course' => $course));
+
         return !empty($favorite);
     }
 
@@ -1148,10 +1150,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
-        if (!in_array($courseSet['type'], static::courseSetTypes())) {
-            throw $this->createInvalidArgumentException('Invalid Param: type');
-        }
-
         $courseSet = ArrayToolkit::parts(
             $courseSet,
             array(
@@ -1180,8 +1178,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return array(
             CourseSetService::NORMAL_TYPE,
             CourseSetService::LIVE_TYPE,
-            CourseSetService::LIVE_OPEN_TYPE,
-            CourseSetService::OPEN_TYPE,
         );
     }
 

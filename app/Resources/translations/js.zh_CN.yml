@@ -304,6 +304,7 @@ auth.register.email_required_error_hint: 请输入邮箱
 auth.register.mobile_required_error_hint: 请输入手机
 auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
 auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
+auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
@@ -657,6 +658,8 @@ validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
 validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.success: 验证成功
+validate.fail: 验证失败
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录

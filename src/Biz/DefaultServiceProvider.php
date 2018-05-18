@@ -4,6 +4,7 @@ namespace Biz;
 
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
+use Biz\Course\Util\CourseRenderViewResolver;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -35,6 +36,7 @@ use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
+use Biz\Common\BizDragCaptcha;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -158,6 +160,13 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return $bizCaptcha;
         });
 
+        $biz['biz_drag_captcha'] = $biz->factory(function ($biz) {
+            $bizDragCaptcha = new BizDragCaptcha();
+            $bizDragCaptcha->setBiz($biz);
+
+            return $bizDragCaptcha;
+        });
+
         $biz['biz_sms'] = function ($biz) {
             $bizSms = new BizSms();
             $bizSms->setBiz($biz);
@@ -167,6 +176,12 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['register_sms_rate_limiter'] = function ($biz) {
             return new RegisterSmsRateLimiter($biz);
+        };
+
+        $biz['render_view_resolvers'] = function ($biz) {
+            return array(
+                new CourseRenderViewResolver($biz),
+            );
         };
     }
 }

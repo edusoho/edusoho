@@ -27,7 +27,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         $courseSet = $subject['courseSet'];
         $maxRate = $subject['maxRate'];
 
-        return $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
+        $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
     }
 
     public function onCourseSetRecommend(Event $event)

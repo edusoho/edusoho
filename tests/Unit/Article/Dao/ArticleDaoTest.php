@@ -168,7 +168,8 @@ class ArticleDaoTest extends BaseDaoTestCase
                 $this->assertTrue(false);
             }
         }
-        $this->assertEquals($expected, $res[1]);
+
+        $this->assertArrayEquals($expected, $res[1], array(), array('id'));
     }
 
     public function testCountByCategoryIds()

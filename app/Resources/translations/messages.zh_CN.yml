@@ -1685,7 +1685,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  %nickname%<i>问...</i>
+  By 
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
@@ -2740,6 +2740,7 @@ user.register.email_label: 邮箱地址
 user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱
@@ -2805,7 +2806,7 @@ user.settings.security.setup_login_password.failed_tips: 该帐号已经设置�
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
 user.settings.security.get_sms_code_btn: 获取验证码
-user.settings.security.input_sms_code: 填写你的短信验证码
+user.settings.security.input_sms_code: 填写短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
@@ -3266,6 +3267,7 @@ search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
 search.live_courses: 直播课程
+search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
 
@@ -3561,6 +3563,8 @@ thread.status.top: 头条
 thread.status.recommend: 推荐
 thread.status.reward: 奖
 thread.status.question: 问
+thread.status.answer: 答
+thread.status.all.answer: 全部的回答
 thread.hover_tips.question: 问答
 thread.hover_tips.activiy: 活动
 thread.hover_tips.thread: 话题
@@ -5678,8 +5682,9 @@ admin.sensitive_manage.add_sensitive_btn: 添加
 admin.sensitive_manage.error: 错误
 admin.sensitive_manage.prompt: 提示
 admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
+admin.sensitive_manage.existed: '敏感词已存在：%keywords%'
 
-# 咨询管理
+# 资讯管理
 admin.operation_article.category_option: --所属栏目--
 admin.operation_article.property_option: --属性--
 admin.operation_article.status_option: --发布状态--
@@ -6714,13 +6719,13 @@ admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
 admin.user_auth.Protection.Explaination: 方案说明：
-admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
-admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
-admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时须要完成安全验证。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无安全验证。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，须要完成安全验证。
 admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
-admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
                                            
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
@@ -8329,7 +8334,17 @@ admin.datalab.setting.btn_use: 再用用看
 
 exception.common_forbidden: 被禁止的操作
 exception.common_error: 服务器内部错误
-exception.article.notfound: 资讯不存在
-exception.user.unlogin: 未登陆，请登陆后操作
-exception.user.message_forbidden: 不支持向该用户发送私信
+exception.common_drag_captcha_error: 验证码验证失败！
+exception.common_drag_captcha_expired: 验证码失效！
+exception.common_drag_captcha_required: 验证码参数缺失！
+
+exception.article.notfound: 资讯不存在!
+exception.user.unlogin: 未登陆，请登陆后操作!
+exception.user.message_forbidden: 不支持向该用户发送私信!
 exception.form.expire: 页面已过期，请重新提交数据！
+exception.user.register_error: 用户数据异常，注册失败！
+exception.sensitive.words: 您填写的内容中包含敏感词!
+exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_error_captcha: 图形验证码错误!
+exception.sms.setting_enbale: 云短信相关设置未开启!

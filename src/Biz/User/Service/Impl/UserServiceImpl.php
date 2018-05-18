@@ -410,7 +410,9 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
         $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
-        $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
+
+        $mock = isset($options['mock']) ? $options['mock'] : false;
+        $filePath = FileToolkit::downloadImg($imgUrl, $filePath, $mock);
 
         $file = new File($filePath);
 
@@ -1983,7 +1985,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getCardService()
     {
-        return $this->getKernel()->createService('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     /**
@@ -1991,7 +1993,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getCouponService()
     {
-        return $this->getKernel()->createService('Coupon:CouponService');
+        return $this->createService('Coupon:CouponService');
     }
 
     /**
@@ -2068,7 +2070,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getRoleService()
     {
-        return $this->getKernel()->createService('Role:RoleService');
+        return $this->createService('Role:RoleService');
     }
 
     /**
@@ -2076,7 +2078,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getOrgService()
     {
-        return $this->getKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 
     public function getKernel()

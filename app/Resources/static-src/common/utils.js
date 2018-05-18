@@ -1,3 +1,5 @@
+import 'jquery-base64';
+
 const Browser = {};
 let userAgent = navigator.userAgent.toLowerCase();
 let s;
@@ -103,6 +105,11 @@ const arrayToJson = (formArray) => {
   return dataArray;
 };
 
+const strToBase64 = (str) => {
+  return (typeof btoa === 'undefined') ? $.base64.encode(str) : btoa(str);
+};
+
+
 export {
   Browser,
   isLogin,
@@ -113,5 +120,6 @@ export {
   sec2Time,
   time2Sec,
   arrayToJson,
-  isEmpty
+  isEmpty,
+  strToBase64
 };

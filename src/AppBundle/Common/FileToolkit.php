@@ -1127,8 +1127,14 @@ class FileToolkit
         return ServiceKernel::instance();
     }
 
-    public static function downloadImg($url, $savePath)
+    public static function downloadImg($url, $savePath, $mock = false)
     {
+        if ($mock) {
+            $fileSystem = new Filesystem();
+            $fileSystem->copy($url, $savePath);
+
+            return $savePath;
+        }
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $imageData = curl_exec($curl);

@@ -16,7 +16,7 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
      * 分销平台的token编码方式, MockController 才使用
      *   注意，$data 内的参数值必须为字符串
      *
-     * @param $data, key顺序不能错误
+     * @param $data, key 会被ksort重排序
      * array(
      *   'merchant_id' => '123',
      *   'agency_id' => '222',
@@ -30,6 +30,8 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
      */
     public function encodeToken($data, $tokenExpireDateNum = null)
     {
+        $sortedData = $data;
+        ksort($sortedData);
         if (empty($tokenExpireDateNum)) {
             $time = TimeMachine::time().'';
         } else {
@@ -47,7 +49,7 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
             $resultStr .= $value;
         }
 
-        $resultStr .= ":{$time}:{$once}:{$this->sign($once, $time, $data)}";
+        $resultStr .= ":{$time}:{$once}:{$this->sign($once, $time, $sortedData)}";
 
         return $resultStr;
     }
@@ -118,8 +120,10 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
 
     /**
      * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 user
+     *
+     * @param $data distributor_job_data 内的data属性
      */
-    abstract public function getSendType();
+    abstract public function getSendType($data);
 
     /**
      * 保存数据时，转化数据用，转为 distributor_job_data 内的data属性

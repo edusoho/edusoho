@@ -74,6 +74,14 @@ class QiQiuYunSDK
     }
 
     /**
+     * @return \QiQiuYun\SDK\Service\MpService
+     */
+    public function getMpService()
+    {
+        return $this->getService('Mp');
+    }
+
+    /**
      * 创建API请求认证类实例
      *
      * @param string $accessKey

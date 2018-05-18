@@ -307,7 +307,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/44c16d634b3090aa819a303a721e650e7cffd31a.zip",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/44c16d634b3090aa819a303a721e650e7cffd31a",
             "reference": "44c16d634b3090aa819a303a721e650e7cffd31a",
             "shasum": ""
         },
@@ -352,46 +352,6 @@
             "MIT"
         ],
         "description": "A service layer framework."
-    },
-    {
-        "name": "codeages/biz-order-pay",
-        "version": "v0.1.18",
-        "version_normalized": "0.1.18.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/9f343dac2299f78d1506833412e3e3215dc6dc89.zip",
-            "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89",
-            "shasum": ""
-        },
-        "require": {
-            "canuonifeng/omnipay-wechatpay": "^1.1",
-            "codeages/biz-framework": "^0.9",
-            "wenqinruan/omnipay-alipay": "^2.3"
-        },
-        "require-dev": {
-            "mockery/mockery": "^0.9.9",
-            "phpunit/phpunit": "4.8.36"
-        },
-        "time": "2018-04-18T01:23:58+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Order\\": "src/Order/",
-                "Codeages\\Biz\\Pay\\": "src/Pay/",
-                "Codeages\\Biz\\Invoice\\": "src/Invoice/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "order, pay module"
     },
     {
         "name": "codeages/biz-rate-limiter",
@@ -481,17 +441,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.2.10",
-        "version_normalized": "0.2.10.0",
+        "version": "v0.2.24",
+        "version_normalized": "0.2.24.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad"
+            "reference": "c5a9d11da5f94cbc78a4a65a7c41a91828784bf1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/01cf99a47f1fe4a67b2148736d8069f3144930ad",
-            "reference": "01cf99a47f1fe4a67b2148736d8069f3144930ad",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/c5a9d11da5f94cbc78a4a65a7c41a91828784bf1",
+            "reference": "c5a9d11da5f94cbc78a4a65a7c41a91828784bf1",
             "shasum": ""
         },
         "require": {
@@ -503,7 +463,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2018-04-10T03:46:42+00:00",
+        "time": "2018-05-08T03:48:04+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -5638,5 +5598,45 @@
             "security",
             "xxtea"
         ]
+    },
+    {
+        "name": "codeages/biz-order-pay",
+        "version": "v0.1.21",
+        "version_normalized": "0.1.21.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-order-pay.git",
+            "reference": "d6b18635109b8adcbc3dabf475124ad73b28d51d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/d6b18635109b8adcbc3dabf475124ad73b28d51d",
+            "reference": "d6b18635109b8adcbc3dabf475124ad73b28d51d",
+            "shasum": ""
+        },
+        "require": {
+            "canuonifeng/omnipay-wechatpay": "^1.1",
+            "codeages/biz-framework": "^0.9",
+            "wenqinruan/omnipay-alipay": "^2.3"
+        },
+        "require-dev": {
+            "mockery/mockery": "^0.9.9",
+            "phpunit/phpunit": "4.8.36"
+        },
+        "time": "2018-05-15T08:41:10+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Order\\": "src/Order/",
+                "Codeages\\Biz\\Pay\\": "src/Pay/",
+                "Codeages\\Biz\\Invoice\\": "src/Invoice/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "order, pay module"
     }
 ]
