@@ -89,8 +89,6 @@ before_script:
     - /opt/sonar-scanner/bin/sonar-scanner
   only:
     - develop
-    - master
-    - trigger
 
 AT With Java And Selenium:
   stage: automation
