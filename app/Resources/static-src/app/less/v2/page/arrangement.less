@@ -27,3 +27,43 @@
     background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.3);
   }
 }
+
+.delete-popover {
+  position: absolute;
+  width: 121px;
+  min-width: 121px;
+  padding-top: 0 !important;
+  z-index: 1;
+  border: 1px soild @gray-darker;
+}
+
+.delete-popover-content {
+  padding: 12px;
+  .cd-border-radius;
+  .cd-transition;
+  &:hover {
+    cursor: pointer;
+    .cd-transition;
+    background-color: @gray-light;
+  }
+}
+
+.arrangement-popover {
+  height: 80px;
+  min-width: 150px;
+  font-size: 12px;
+  line-height: 1;
+  .cd-box-shadow-z(12px);
+}
+
+.arrangement-popover__time {
+  padding: 0;
+  display: inline;
+  border: none;
+  width: 35px;
+  height: 12px;
+  font-size: 12px;
+  line-height: 1;
+  background-color: lighten(@brand-primary, 35%);
+  .border-radius(0);
+}
