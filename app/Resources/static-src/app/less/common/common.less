@@ -126,6 +126,43 @@ html.nav-active body {
   border-bottom-right-radius: 4px;
 }
 
+// 富文本编辑器blockquote样式
+.cke_editable {
+  font-size: 13px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  img {
+    max-width: 100%;
+  }
+
+  blockquote {
+    padding: 2px 0;
+    font-style: italic;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 13px;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 0;
+    p {
+      margin: 10px 0;
+    }
+  }
+
+  &.cke_contents_ltr blockquote {
+    font-size: 13px;
+    color: #000;
+    padding-left: 20px;
+    padding-right: 8px;
+    border-left-width: 5px;
+  }
+
+  &.cke_contents_rtl blockquote {
+    padding-left: 8px;
+    padding-right: 20px;
+    border-right-width: 5px;
+  }
+}
+
 // 富文本编辑器样式统一处理
 .editor-text {
   img {
