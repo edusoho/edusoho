@@ -1130,7 +1130,8 @@ class FileToolkit
     public static function downloadImg($url, $savePath, $mock = false)
     {
         if ($mock) {
-            copy($url, $savePath);
+            $fileSystem = new Filesystem();
+            $fileSystem->copy($url, $savePath);
 
             return $savePath;
         }

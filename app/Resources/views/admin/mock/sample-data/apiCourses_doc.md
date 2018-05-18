@@ -58,4 +58,5 @@ api-login: false
 'lessonNum > :lessonNumGT',
 'orgCode = :orgCode',
 'orgCode LIKE :likeOrgCode',
+'buyable = :buyable',
 'concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
