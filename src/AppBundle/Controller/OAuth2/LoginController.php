@@ -173,7 +173,7 @@ class LoginController extends LoginBindController
 
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
-                'captchaRequired' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp()),
+                'captchaStatus' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp()),
             ));
         }
     }

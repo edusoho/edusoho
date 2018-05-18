@@ -81,13 +81,13 @@ export default class Create {
   }
 
   smsSend() {
+    let self = this;
     const $captchaCode = $('#captcha_code');
     if (!this.$sendBtn.length) {
       return;
     }
     this.$sendBtn.click((event) => {
-      const $target = $(event.target);
-      $target.attr('disabled', true);
+      self.$sendBtn.attr('disabled', true);
       let data = {
         type: 'register',
         mobile: $('.js-account').text(),
@@ -104,7 +104,7 @@ export default class Create {
         switch (code) {
         case 5000601:
           $('.js-captcha').removeClass('hidden');
-          $target.attr('disabled', true);
+          self.attr('disabled', true);
           break;
         }
       });
