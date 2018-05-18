@@ -1,0 +1,29 @@
+.arrangement-panel__body {
+  .fc-highlight {
+    background-color: @brand-primary;
+  }
+
+  .fc-agenda-view .fc-time-grid-event {
+    .fc-content {
+      padding-left: 8px;
+     }
+  }
+
+  .fc-time-grid-event.fc-short .fc-time {
+    &:before,
+    &:after {
+      content: ''
+    }
+    span {
+      display: block;
+    }
+
+  }
+
+  .fc-event {
+    right: -3% !important;
+    border-left: 2px solid @brand-primary;
+    color: darken(@brand-primary, 10%);
+    background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.3);
+  }
+}
