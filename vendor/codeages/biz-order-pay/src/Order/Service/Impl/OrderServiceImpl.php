@@ -61,14 +61,18 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $orderBy, $start, $limit)
     {
-        $conditions = $this->filterConditions($conditions);
+        if ($this->hasOrderItemConditions($conditions)) {
+            return $this->getOrderDao()->queryWithItemConditions($conditions, $orderBy, $start, $limit);
+        }
 
         return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countOrders($conditions)
     {
-        $conditions = $this->filterConditions($conditions);
+        if ($this->hasOrderItemConditions($conditions)) {
+            return $this->getOrderDao()->queryCountWithItemConditions($conditions);
+        }
 
         return $this->getOrderDao()->count($conditions);
     }
@@ -148,8 +152,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function addOrderItemDeduct($deduct)
     {
-        if (!ArrayToolkit::requireds($deduct, array(
-            'order_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', ))) {
+        if (!ArrayToolkit::requireds($deduct, array('order_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id'))) {
             throw new InvalidArgumentException('Invalid argument.');
         }
 
@@ -209,6 +212,23 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $payAmount = CreatedOrderStatus::countOrderPayAmount($order['price_amount'], $orderItemDeducts, $orderItems);
         $this->getOrderDao()->update($order['id'], array('pay_amount' => $payAmount));
+    }
+
+    private function hasOrderItemConditions($conditions)
+    {
+        $orderItemQueryFields = array(
+            'order_item_title',
+            'order_item_target_ids',
+            'order_item_target_type',
+        );
+
+        foreach ($orderItemQueryFields as $field) {
+            if (isset($conditions[$field])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function filterConditions($conditions)

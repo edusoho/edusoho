@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7243ed2e343161129a3f213b865f1fb3",
+    "content-hash": "4db165ffed64d04cbbdff3012d51d27b",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -348,16 +348,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.18",
+            "version": "v0.1.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89"
+                "reference": "d6b18635109b8adcbc3dabf475124ad73b28d51d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/9f343dac2299f78d1506833412e3e3215dc6dc89",
-                "reference": "9f343dac2299f78d1506833412e3e3215dc6dc89",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/d6b18635109b8adcbc3dabf475124ad73b28d51d",
+                "reference": "d6b18635109b8adcbc3dabf475124ad73b28d51d",
                 "shasum": ""
             },
             "require": {
@@ -382,7 +382,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-04-18T01:23:58+00:00"
+            "time": "2018-05-15T08:41:10+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",

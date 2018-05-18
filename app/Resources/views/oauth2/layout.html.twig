@@ -11,7 +11,7 @@
 
 {% block full_content %}
   <div class="third-party-login-section">
-    <div class="cd-panel third-party-panel">
+    <div class="cd-panel third-party-panel {% if registerClass|default('') %}{{ registerClass }}{% endif %}">
       {% block panel %}
         <div class="cd-panel-heading third-party-panel__heading">
           {% block panel_heading %}

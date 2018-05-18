@@ -169,7 +169,7 @@ export default class Drag extends Emitter{
     this.setCss(target, 'left', '0px');
     this.getLocation(element);
     $('.js-drag-bar-mask').css('width', '0px');
-    $('.js-drag-bar-tip').toggleClass('hidden');
+    $('.js-drag-bar-tip').removeClass('hidden');
   }
 
   getCss(o, key) {

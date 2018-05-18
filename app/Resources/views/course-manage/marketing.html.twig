@@ -130,6 +130,7 @@
 
                   {% if coursePublished or courseClosed %}
                     <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
+                    <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
                   {% endif %}
 
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
