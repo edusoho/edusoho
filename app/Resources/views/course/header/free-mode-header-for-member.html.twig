@@ -46,17 +46,9 @@
         </ul>
       {% endif %}
     </div>
-    <div class="col-md-2 hidden-xs hidden-sm">
-      {% for toLearnTask in toLearnTasks %}
-        <a class="btn btn-primary btn-lg mt10"
-          href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
-          {% if taskResultCount < 1 %}
-            {{ 'course.btn.start_learning'|trans }}
-          {% else %}
-            {{ 'course.btn.continue_learning_btn'|trans }}
-          {% endif %}
-        </a>
-      {% endfor %}
+    <div class="col-md-2 hidden-xs hidden-sm pt10">
+      {% set learnBtnTwig = dyn_url('course/header/free-mode-member-learn-btn.html.twig', {type:course.type}) %}
+      {% include learnBtnTwig %}
     </div>
   </div>
   {% include 'course/header/header-for-member-responsive.html.twig' %}

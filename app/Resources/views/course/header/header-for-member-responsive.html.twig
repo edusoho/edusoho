@@ -34,16 +34,7 @@
 </div>
 <div class="text-right buy-btn-group visible-xs visible-sm">
   <span class="mr20">{{ 'my.course.free_mode_plan.task_progress'|trans }}{{ taskResultCount }} / {{ taskCount }}</span>
-  {% for toLearnTask in toLearnTasks %}
-    {% if loop.index == 1%}
-      <a class="btn btn-primary btn-lg "
-        href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
-        {% if taskResultCount < 1 %}
-          {{ 'course.btn.start_learning'|trans }}
-        {% else %}
-          {{ 'course.btn.continue_learning_btn'|trans }}
-        {% endif %}
-      </a>
-    {% endif %}
-  {% endfor %}
+
+  {% set learnBtnTwig = dyn_url('course/header/free-mode-member-learn-btn.html.twig', {type:course.type}) %}
+  {% include learnBtnTwig %}
 </div>
