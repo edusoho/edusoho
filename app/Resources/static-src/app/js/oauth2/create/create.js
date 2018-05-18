@@ -81,13 +81,13 @@ export default class Create {
   }
 
   smsSend() {
+    let self = this;
     const $captchaCode = $('#captcha_code');
     if (!this.$sendBtn.length) {
       return;
     }
     this.$sendBtn.click((event) => {
-      const $target = $(event.target);
-      $target.attr('disabled', true);
+      self.$sendBtn.attr('disabled', true);
       let data = {
         type: 'register',
         mobile: $('.js-account').text(),
@@ -99,13 +99,9 @@ export default class Create {
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
-        // 自定义code 自动捕获
-        const code = res.responseJSON.error.code;
-        switch (code) {
-        case 5000601:
-          $('.js-captcha').removeClass('hidden');
-          $target.attr('disabled', true);
-          break;
+        if (self.drag) {
+          self.drag.initDragCaptcha();
+          $('.js-drag-jigsaw').removeClass('hidden');
         }
       });
     });
