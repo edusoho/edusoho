@@ -584,7 +584,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         } elseif ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
             $deadline = $course['expiryEndDate'];
         }
-        
+
         if (!empty($info['orderId'])) {
             $order = $this->getOrderService()->getOrder($info['orderId']);
 
