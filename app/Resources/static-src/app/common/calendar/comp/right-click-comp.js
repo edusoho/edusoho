@@ -18,14 +18,14 @@ export default class rightClickComp extends Comp {
         container: 'body',
         html: true,
         content: `<div class="delete-item js-delete-item"><i class="es-icon es-icon-delete"></i><span class="schedule-popover-content__time cd-dark-major cd-ml8">${Translator.trans('site.delete')}</span></div>`,
-        template: `<div class="popover schedule-popover delete-popover js-delete-item" data-id="${ event._id }">
+        template: `<div class="popover schedule-popover delete-popover js-delete-popover" data-id="${ event._id }">
                       <div class="schedule-popover-content delete-popover-content popover-content">
                       </div>
                     </div>`,
         trigger: 'click'
       });
       $target.popover('show');
-      $('.js-delete-item').prevAll('.js-delete-item').remove();
+      $('.js-delete-popover').prevAll('.js-delete-popover').remove();
       return false;
     };
 
@@ -39,14 +39,14 @@ export default class rightClickComp extends Comp {
     // 删除对应id的项
     $('body').on('click', '.js-delete-item', (event) => {
       const $target = $(event.target);
-      const id = $target.parents('.js-delete-item').data('id');
+      const id = $target.parents('.js-delete-popover').data('id');
       $(options['calendarContainer']).fullCalendar('removeEvents', id);
     });
   }
 
   clickOtherPos() {
     $('body').click(() => {
-      $('.js-delete-item').remove();
+      $('.js-delete-popover').remove();
     });
   }
 
