@@ -1,4 +1,4 @@
-<label class="control-label required {% if oauth2|default(null) %}cd-mb8{% endif %}">{{ 'user.register.account_with_sms_code_label'|trans }}</label>
+<label class="{% if auth|default(null) %} control-label {% endif %} required {% if oauth2|default(null) %}cd-mb8{% endif %}">{{ 'user.register.account_with_sms_code_label'|trans }}</label>
 <input type="hidden" name="dragCaptchaToken" value="" />
 <div class="drag-section-wrap">
   <div class="drag-section">
