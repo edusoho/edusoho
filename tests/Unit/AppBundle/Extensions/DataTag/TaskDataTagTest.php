@@ -22,8 +22,8 @@ class TaskDataTagTest extends BaseTestCase
         $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'getTask',
-                'returnValue' => $mockData
-            )
+                'returnValue' => $mockData,
+            ),
         ));
         $dataTag = new TaskDataTag();
         $result = $dataTag->getData(array('taskId' => 1));

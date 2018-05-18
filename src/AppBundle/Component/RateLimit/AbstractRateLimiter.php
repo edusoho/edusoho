@@ -56,4 +56,9 @@ class AbstractRateLimiter
     {
         return $this->biz['biz_captcha'];
     }
+
+    public function getDragCaptcha()
+    {
+        return $this->biz['biz_drag_captcha'];
+    }
 }

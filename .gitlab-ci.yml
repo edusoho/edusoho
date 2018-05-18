@@ -25,11 +25,7 @@ before_script:
   services:
     - mysql:5.5
   script:
-    - bin/phpunit -c app/ --testsuite UnitA2B
-    - bin/phpunit -c app/ --testsuite UnitC2D
-    - bin/phpunit -c app/ --testsuite UnitE2P
-    - bin/phpunit -c app/ --testsuite UnitQ2T
-    - bin/phpunit -c app/ --testsuite UnitU2Z
+    - bin/phpunit-diff
   only:
     - develop
     - master
@@ -42,11 +38,7 @@ before_script:
     - mysql:5.5
     - redis:latest
   script:
-    - bin/phpunit -c app/ --testsuite UnitA2B
-    - bin/phpunit -c app/ --testsuite UnitC2D
-    - bin/phpunit -c app/ --testsuite UnitE2P
-    - bin/phpunit -c app/ --testsuite UnitQ2T
-    - bin/phpunit -c app/ --testsuite UnitU2Z
+    - bin/phpunit-diff
   only:
     - develop
     - master
@@ -60,14 +52,10 @@ before_script:
     - redis:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - bin/phpunit -c app/ --testsuite UnitA2B
-    - bin/phpunit -c app/ --testsuite UnitC2D
-    - bin/phpunit -c app/ --testsuite UnitE2P
-    - bin/phpunit -c app/ --testsuite UnitQ2T
-    - bin/phpunit -c app/ --testsuite UnitU2Z
+    - bin/phpunit-diff
   only:
+    - develop
     - master
-    - release
     - trigger
 
 7.0 For Non-Develop:
@@ -77,12 +65,7 @@ before_script:
     - mysql:5.5
     - redis:latest
   script:
-    - bin/phpunit -c app/ --testsuite UnitA2B
-    - bin/phpunit -c app/ --testsuite UnitC2D
-    - bin/phpunit -c app/ --testsuite UnitE2P
-    - bin/phpunit -c app/ --testsuite UnitQ2T
-    - bin/phpunit -c app/ --testsuite UnitU2Z
-
+    - bin/phpunit-diff
   only:
     - master
     - release
@@ -101,6 +84,7 @@ before_script:
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
+    - mkdir reports
     - bin/caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
     - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties

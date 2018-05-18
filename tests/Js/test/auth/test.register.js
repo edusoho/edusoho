@@ -109,6 +109,30 @@ describe('register:initCaptchaCode', function() {
   });
 });
 
+describe('register:initDragCaptchaCodeRule', function() {
+  beforeEach(function() {
+    utilInit.init(`
+      <div class="js-drag-img"></div>
+      <input type="hidden" name="drag_captcha_token" value="test" />
+    `);
+  });
+  it('register:initDragCaptchaCodeRule', function() {
+    $.fn.rules = function(){};
+    let stub = sinon.stub($.fn, 'rules');
+    let initDragCaptchaCodeRule = Register.prototype.initDragCaptchaCodeRule;
+    initDragCaptchaCodeRule();
+    stub.restore();
+    sinon.assert.calledOnce(stub);
+    sinon.assert.calledWith(stub, 'add', {
+      required: true,
+      messages: {
+        required: 'auth.register.drag_captcha_tips'
+      }
+    });
+  });
+});
+
+
 describe('register:emSmsCodeValidate', function() {
   beforeEach(function() {
     utilInit.init(`
@@ -133,12 +157,16 @@ describe('register:emSmsCodeValidate', function() {
     let emSmsCodeValidate = Register.prototype.emSmsCodeValidate;
     let mockObject = {
       initSmsCodeRule: function(){},
-      initCaptchaCodeRule: function(){}
+      initCaptchaCodeRule: function(){},
+      initDragCaptchaCodeRule: function(){},
     };
     let initCaptchaCodeRuleStub = sinon.stub(mockObject, 'initCaptchaCodeRule');
+    let initDragCaptchaCodeRuleStub = sinon.stub(mockObject, 'initDragCaptchaCodeRule');
     emSmsCodeValidate.apply(mockObject, [12341]);
     sinon.assert.calledOnce(initCaptchaCodeRuleStub);
+    sinon.assert.calledOnce(initDragCaptchaCodeRuleStub);
     initCaptchaCodeRuleStub.restore();
+    initDragCaptchaCodeRuleStub.restore();
   });
 });
 
