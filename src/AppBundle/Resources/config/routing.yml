@@ -1884,10 +1884,6 @@ course_set_manage_course_orders:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders
   defaults: {_controller: AppBundle:Course/CourseManage:orders}
 
-course_set_manage_course_orders_export_csv:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
-  defaults: { _controller: AppBundle:Course/CourseManage:ordersExportCsv }
-
 course_manage_question_marker:
     path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
     defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerStats }

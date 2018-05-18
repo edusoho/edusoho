@@ -82,7 +82,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'drag_captcha_token' => 'kuozhi',
+                'dragCaptchaToken' => 'kuozhi',
             )
         );
 
@@ -179,7 +179,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'drag_captcha_token' => 'kuozhi',
+                'dragCaptchaToken' => 'kuozhi',
             ),
             array(),
             array(),
@@ -243,7 +243,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'drag_captcha_token' => 'kuozhi',
+                'dragCaptchaToken' => 'kuozhi',
                 'jigsaw' => '12',
             ),
             array(),

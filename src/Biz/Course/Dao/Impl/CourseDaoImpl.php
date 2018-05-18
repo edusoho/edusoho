@@ -191,6 +191,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'lessonNum > :lessonNumGT',
                 'orgCode = :orgCode',
                 'orgCode LIKE :likeOrgCode',
+                'buyable = :buyable',
                 'concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
             ),
             'wave_cahceable_fields' => array('hitNum'),

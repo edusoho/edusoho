@@ -2830,7 +2830,7 @@ user.settings.security.setup_login_password.failed_tips: 该帐号已经设置�
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
 user.settings.security.get_sms_code_btn: 获取验证码
-user.settings.security.input_sms_code: 填写你的短信验证码
+user.settings.security.input_sms_code: 填写短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
@@ -5707,7 +5707,7 @@ admin.sensitive_manage.prompt: 提示
 admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
 admin.sensitive_manage.existed: '敏感词已存在：%keywords%'
 
-# 咨询管理
+# 资讯管理
 admin.operation_article.category_option: --所属栏目--
 admin.operation_article.property_option: --属性--
 admin.operation_article.status_option: --发布状态--

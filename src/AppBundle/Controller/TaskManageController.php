@@ -167,7 +167,11 @@ class TaskManageController extends BaseController
                 $task['isOptional'] = 0;
             }
 
-            $task = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
+            if (!isset($task['fromCourseSetId'])) {
+                $task['fromCourseSetId'] = $course['courseSetId'];
+            }
+
+            $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
 
             return $this->getTaskJsonView($task);
         }

@@ -168,12 +168,8 @@ class CourseSetController extends BaseController
         }
 
         $this->getCourseSetService()->publishCourseSet($id);
-        $html = $this->renderCourseTr($id, $request)->getContent();
 
-        return $this->createJsonResponse(array(
-            'success' => true,
-            'message' => $html,
-        ));
+        return $this->renderCourseTr($id, $request);
     }
 
     public function recommendAction(Request $request, $id)

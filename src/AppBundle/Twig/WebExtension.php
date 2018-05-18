@@ -1040,7 +1040,7 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($uri, $absolute);
     }
 
-    public function avatarPath($user, $type = 'middle', $package = 'user')
+    public function avatarPath($user, $type = 'medium', $package = 'user')
     {
         $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
 
