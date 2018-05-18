@@ -25,7 +25,7 @@ export default class SelectComp extends Comp {
       $target.popover({
         container: 'body',
         html: true,
-        content: `<div class="cd-text-medium cd-mb8">排课时间：</div>
+        content: `<div class="cd-text-medium cd-mb8">${Translator.trans('arrangement.course_time')}</div>
                 <div class="cd-dark-minor cd-mb8">${event.start.format('l')}</div>
                 <div class="cd-mb8" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
         template: `<div class="popover arrangement-popover js-arrangement-popover"><div class="arrow"></div>
@@ -55,7 +55,7 @@ export default class SelectComp extends Comp {
     $target.popover({
       container: 'body',
       html: true,
-      content: `<div class="cd-text-medium cd-mb8">排课时间：</div>
+      content: `<div class="cd-text-medium cd-mb8">${Translator.trans('arrangement.course_time')}</div>
                 <div class="cd-dark-minor cd-mb8">${startDate.format('l')}</div>
                 <div class="cd-mb8" data-time="${startDate.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${startDate.format('HH:mm')} maxlength='5' data-time="${startDate.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${startDate.format()}" value=${startDate.format('HH:mm')}></div>`,
       template: `<div class="popover arrangement-popover js-arrangement-popover">

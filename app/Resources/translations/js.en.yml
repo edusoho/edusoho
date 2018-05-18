@@ -870,3 +870,5 @@ User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
 message.send.not_allowed: 不允许发送私信
+
+arrangement.course_time: 排课时间：
