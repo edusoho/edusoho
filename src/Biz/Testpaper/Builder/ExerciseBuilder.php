@@ -3,6 +3,7 @@
 namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TimeMachine;
 use Codeages\Biz\Framework\Context\Biz;
 
 class ExerciseBuilder implements TestpaperBuilderInterface
@@ -171,8 +172,8 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
         $fields['usedTime'] = $usedTime;
-        $fields['endTime'] = time();
-        $fields['checkedTime'] = time();
+        $fields['endTime'] = TimeMachine::time();
+        $fields['checkedTime'] = TimeMachine::time();
 
         return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
     }

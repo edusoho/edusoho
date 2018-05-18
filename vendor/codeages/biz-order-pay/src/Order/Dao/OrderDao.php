@@ -19,4 +19,8 @@ interface OrderDao extends GeneralDaoInterface
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time');
 
     public function sumPaidAmount($conditions);
+
+    public function queryWithItemConditions($conditions, $orderBys, $start, $limit);
+
+    public function queryCountWithItemConditions($conditions);
 }

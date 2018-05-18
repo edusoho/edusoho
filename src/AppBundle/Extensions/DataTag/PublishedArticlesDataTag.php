@@ -28,6 +28,10 @@ class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag
         $sort = isset($arguments['sort']) ? $arguments['sort'] : 'published';
         $articles = $this->getArticleService()->searchArticles($conditions, $sort, 0, $arguments['count']);
 
+        if (empty($articles)) {
+            return array();
+        }
+
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
 
         foreach ($articles as $key => $article) {
@@ -48,11 +52,11 @@ class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag
      */
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->createService('Article:ArticleService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article:CategoryService');
+        return $this->createService('Article:CategoryService');
     }
 }

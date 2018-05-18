@@ -67,6 +67,8 @@ class UserLoginTokenListener
             $response = new RedirectResponse($goto, '302');
             $response->headers->setCookie(new Cookie('REMEMBERME', ''));
             $event->setResponse($response);
+
+            return;
         }
 
         $loginBind = $this->getSettingService()->get('login_bind');
