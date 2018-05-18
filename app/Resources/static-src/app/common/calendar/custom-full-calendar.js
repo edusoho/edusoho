@@ -108,6 +108,8 @@ export default class CustomFullCalendar {
     calendarOptions = this._registerCompActions(calendarOptions);
     this.calendarOptions = calendarOptions;
 
+    calendarOptions = Object.assign(calendarOptions, this.options);
+
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
   }
 
