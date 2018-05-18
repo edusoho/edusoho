@@ -46,10 +46,11 @@
         </ul>
       {% endif %}
     </div>
-    <div class="col-md-2 hidden-xs hidden-sm pt10">
-      {% set learnBtnTwig = dyn_url('course/header/free-mode-member-learn-btn.html.twig', {type:course.type}) %}
-      {% include learnBtnTwig %}
-    </div>
+    {% if showLearnBtn|default(1) %}
+      <div class="col-md-2 hidden-xs hidden-sm pt10">
+        {% include 'course/header/free-mode-member-learn-btn.html.twig' %}
+      </div>
+    {% endif %}
   </div>
   {% include 'course/header/header-for-member-responsive.html.twig' %}
 </section>

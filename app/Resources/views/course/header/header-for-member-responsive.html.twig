@@ -35,6 +35,7 @@
 <div class="text-right buy-btn-group visible-xs visible-sm">
   <span class="mr20">{{ 'my.course.free_mode_plan.task_progress'|trans }}{{ taskResultCount }} / {{ taskCount }}</span>
 
-  {% set learnBtnTwig = dyn_url('course/header/free-mode-member-learn-btn.html.twig', {type:course.type}) %}
-  {% include learnBtnTwig %}
+  {% if showLearnBtn|default(1) %}
+    {% include 'course/header/free-mode-member-learn-btn.html.twig' %}
+  {% endif %}
 </div>
