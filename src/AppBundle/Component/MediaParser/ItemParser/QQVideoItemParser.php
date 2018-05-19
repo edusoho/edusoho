@@ -28,11 +28,11 @@ class QQVideoItemParser extends AbstractItemParser
             $vid = $matches[1];
         } else {
             $response = $this->fetchUrl($url);
-
-            if ($response['code'] != 200) {
+            if (200 != $response['code']) {
                 throw new ParseException('获取QQ视频页面信息失败');
             }
 
+            file_put_contents('/tmp/QQVideoResponse4.md', $response['content']);
             $matched = preg_match('/VIDEO_INFO.*?[\"]?vid[\"]?\s*:\s*"(\w+?)"/s', $response['content'], $matches);
 
             if (empty($matched)) {
@@ -50,7 +50,8 @@ class QQVideoItemParser extends AbstractItemParser
 
             $response = $this->fetchUrl($videoUrl);
 
-            if ($response['code'] != 200) {
+            file_put_contents('/tmp/QQVideoResponse4_sns.md', $response['content']);
+            if (200 != $response['code']) {
                 throw new ParseException('获取QQ视频信息失败');
             }
 
