@@ -31,8 +31,6 @@ class QQVideoItemParser extends AbstractItemParser
             if (200 != $response['code']) {
                 throw new ParseException('获取QQ视频页面信息失败');
             }
-
-            file_put_contents('/tmp/QQVideoResponse4.md', $response['content']);
             $matched = preg_match('/VIDEO_INFO.*?[\"]?vid[\"]?\s*:\s*"(\w+?)"/s', $response['content'], $matches);
 
             if (empty($matched)) {
@@ -49,8 +47,6 @@ class QQVideoItemParser extends AbstractItemParser
             $videoUrl = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
 
             $response = $this->fetchUrl($videoUrl);
-
-            file_put_contents('/tmp/QQVideoResponse4_sns.md', $response['content']);
             if (200 != $response['code']) {
                 throw new ParseException('获取QQ视频信息失败');
             }
