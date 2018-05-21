@@ -26,6 +26,6 @@ class TagMarksDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 }

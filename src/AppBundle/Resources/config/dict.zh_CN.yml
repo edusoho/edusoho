@@ -81,7 +81,7 @@ orderLogStatus:
     order.paid: 已付款
     order.refunding: 退款中
     order.refunded: 已退款
-    order.success: 交易成功
+    order.finished: 交易成功
     order.fail: 交易失败
     order.closed: 已关闭
     order_refund.auditing: 退款审核中
