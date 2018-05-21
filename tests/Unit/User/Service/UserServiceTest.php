@@ -2869,6 +2869,20 @@ class UserServiceTest extends BaseTestCase
         $settingService->shouldHaveReceived('get')->times(2);
     }
 
+    public function testInitPassword()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+
+        $user = $this->getUserService()->initPassword($registeredUser['id'], 'newPassword');
+
+        $this->assertEquals('1', $user['passwordInit']);
+    }
+
     protected function createUser($user)
     {
         $userInfo = array();

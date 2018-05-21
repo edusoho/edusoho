@@ -14,6 +14,7 @@ use AppBundle\Common\FileToolkit;
 use Biz\Card\Service\CardService;
 use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserApprovalDao;
+use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -410,7 +411,6 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
         $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
-
         $mock = isset($options['mock']) ? $options['mock'] : false;
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath, $mock);
 
@@ -1891,6 +1891,27 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getSmsRegisterCaptchaStatus($clientIp, true);
     }
 
+    public function initPassword($id, $newPassword)
+    {
+        $this->beginTransaction();
+
+        try {
+            $fields = array(
+                'passwordInit' => 1,
+            );
+
+            $this->getAuthService()->changePassword($id, null, $newPassword);
+            $this->getUserDao()->update($id, $fields);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $this->getUserDao()->update($id, $fields);
+    }
+
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && 'truename' == $conditions['keywordType']) {
@@ -1905,6 +1926,14 @@ class UserServiceImpl extends BaseService implements UserService
         unset($conditions['keyword']);
 
         return $conditions;
+    }
+
+    /**
+     * @return AuthService
+     */
+    protected function getAuthService()
+    {
+        return $this->createService('User:AuthService');
     }
 
     /**

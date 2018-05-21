@@ -166,6 +166,7 @@ class UserController extends BaseController
         if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
             $formData['type'] = 'import';
+            $formData['passwordInit'] = 0;
             $registration = $this->getRegisterData($formData, $request->getClientIp());
             $user = $this->getAuthService()->register($registration);
 
