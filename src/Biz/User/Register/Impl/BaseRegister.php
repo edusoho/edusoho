@@ -94,7 +94,7 @@ abstract class BaseRegister
         $registration = $this->generatePartnerAuthUser($registration);
 
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
-            if (!isset($registration[$attr])) {
+            if (isset($registration[$attr])) {
                 $user[$attr] = $registration[$attr];
             } elseif (isset($defaultValue)) {
                 $user[$attr] = $defaultValue;
