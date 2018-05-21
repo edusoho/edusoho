@@ -411,6 +411,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
         $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
+
         $mock = isset($options['mock']) ? $options['mock'] : false;
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath, $mock);
 
