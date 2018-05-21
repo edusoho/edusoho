@@ -19,7 +19,8 @@
     {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
 
   {% set previewAs = app.request.query.get('previewAs') %}
-  {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+  {% set defaultMetas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+  {% set metas = metas|default(defaultMetas) %}
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
