@@ -130,6 +130,9 @@
 
                   {% if coursePublished or courseClosed %}
                     <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
+                  {% endif %}
+
+                  {% if not coursePublished or not courseSetPublished %}
                     <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
                   {% endif %}
 
