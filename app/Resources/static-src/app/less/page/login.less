@@ -177,9 +177,14 @@
   position: absolute;
   top: 0;
   width: 100%;
-  .drag-img__bg {
-    width: 100%;
-    height: 100%;
+  @media (min-width: @screen-xs-min) {
+    height: 144px;
+  }
+  @media (min-width: 321px) and (max-width: @screen-xs-min){
+    height: 74%;
+  }
+  @media (max-width: 320px) {
+    height: 70%;
   }
   .drag-img__jigsaw {
     position: absolute;
