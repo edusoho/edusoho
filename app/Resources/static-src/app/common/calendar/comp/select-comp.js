@@ -7,20 +7,23 @@ import Comp from './comp';
 export default class SelectComp extends Comp {
 
   registerAction(options) {
-    let self = this;
+    const self = this;
     options['selectable'] = true;
     // 禁止预约时间重复（创建后）
     options['eventOverlap'] = false;
     // 禁止选择预约时间重复（创建过程中）
     options['selectOverlap'] = false;
-    options['select'] = function(startDate, endDate, jsEvent, view, resource) {
+    options['select'] = (startDate, endDate, jsEvent, view, resource) => {
       // 选中后触发组件
       $('.js-arrangement-popover').remove();
-      self._createEvent(startDate, endDate, options, jsEvent);
+      self.events = {
+        start: startDate.format(),
+        end: endDate.format(),
+      };
       $(options['calendarContainer']).fullCalendar('renderEvent', self.events);
     };
 
-    options['eventClick'] = function(event, jsEvent, view) {
+    options['eventClick'] = (event, jsEvent, view) => {
       const $target = $(jsEvent.target);
       $target.popover({
         container: 'body',
@@ -42,36 +45,18 @@ export default class SelectComp extends Comp {
     };
     // 预约时间可拖拽
     options['editable'] = true;
+    // 缩放调整时间
+    options['eventResize'] = (event, jsEvent, ui, view) => {
+      $('.js-arrangement-popover').remove();
+    };
+    // 拖拽位置调整时间
+    options['eventDragStart'] = (event, jsEvent, ui, view) => {
+      $('.js-arrangement-popover').remove();
+    };
 
     self._initEvent(options);
 
     return options;
-
-  }
-
-  // 如何在select选中阶段修改时间区间
-  _createEvent(startDate, endDate, options, jsEvent) {
-    const $target = $(jsEvent.target);
-    $target.popover({
-      container: 'body',
-      html: true,
-      content: `<div class="cd-text-medium cd-mb8">${Translator.trans('arrangement.course_time')}</div>
-                <div class="cd-dark-minor cd-mb8">${startDate.format('l')}</div>
-                <div class="cd-mb8" data-time="${startDate.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${startDate.format('HH:mm')} maxlength='5' data-time="${startDate.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${startDate.format()}" value=${startDate.format('HH:mm')}></div>`,
-      template: `<div class="popover arrangement-popover js-arrangement-popover">
-                  <div class="arrangement-popover-content popover-content">
-                  </div>
-                </div>`,
-      trigger: 'toggle'
-    });
-    // $target.popover('show');
-
-    $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
-    this.events = {
-      start: startDate.format(),
-      end: endDate.format(),
-    };
-
   }
 
   _initEvent(options) {

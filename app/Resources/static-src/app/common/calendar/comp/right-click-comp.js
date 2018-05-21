@@ -8,7 +8,7 @@ export default class rightClickComp extends Comp {
 
   registerAction(options) {
 
-    options['eventContextmenu'] = function(event, jsEvent, view) {
+    options['eventContextmenu'] = (event, jsEvent, view) => {
       const $target = $(jsEvent.currentTarget);
       const $popover = $('.js-arrangement-popover');
       if ($popover.length) {
