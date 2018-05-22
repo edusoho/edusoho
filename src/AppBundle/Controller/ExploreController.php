@@ -118,6 +118,7 @@ class ExploreController extends BaseController
         });
 
         $request->query->set('orderBy', $orderBy);
+
         return $this->render(
             'course-set/explore.html.twig',
             array(
@@ -251,6 +252,7 @@ class ExploreController extends BaseController
         );
 
         $request->query->set('orderBy', $orderBy);
+
         return $this->render(
             'classroom/explore.html.twig',
             array(
