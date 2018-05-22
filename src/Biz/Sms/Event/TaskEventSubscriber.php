@@ -76,7 +76,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     }
 
     protected function registerJob($task)
-    {   
+    {
         $dayIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_day');
         $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
 
@@ -93,7 +93,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 ),
             );
             $job = $this->getSchedulerService()->getJobByName('SmsSendOneDayJob_task_'.$task['id']);
-            if(!isset($job)){
+            if (!isset($job)) {
                 $this->getSchedulerService()->register($startJob);
             }
         }
@@ -111,7 +111,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 ),
             );
             $job = $this->getSchedulerService()->getJobByName('SmsSendOneHourJob_task_'.$task['id']);
-            if(!isset($job)){
+            if (!isset($job)) {
                 $this->getSchedulerService()->register($startJob);
             }
         }
