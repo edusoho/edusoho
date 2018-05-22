@@ -43,7 +43,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
-            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum', 'id', 'updatedTime', 'recommendedTime', 'hitNum', 'hotSeq'),
+            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum', 'id', 'updatedTime', 'recommendedTime', 'hitNum', 'hotSeq', 'price'),
             'conditions' => array(
                 'title = :title',
                 'status = :status',
