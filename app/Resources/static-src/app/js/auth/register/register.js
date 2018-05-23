@@ -105,6 +105,9 @@ export default class Register {
         preSmsSend: function() {
           return true;
         },
+        error: function(error) {
+          self.drag.initDragCaptcha();
+        },
         additionalAction: function(ackResponse) {
           if (ackResponse == 'captchaRequired') {
             $smsSendBtn.attr('disabled', true);
