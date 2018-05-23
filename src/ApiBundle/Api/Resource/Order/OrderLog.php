@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\OrderUtil;
 
 class OrderLog extends AbstractResource
 {
@@ -15,11 +16,7 @@ class OrderLog extends AbstractResource
     {
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($orderId);
 
-        foreach ($orderLogs as $key => $value) {
-            if ('order.success' == $value['status']) {
-                unset($orderLogs[$key]);
-            }
-        }
+        $orderLogs = OrderUtil::orderLogsUtil($orderLogs);
 
         $total = count($orderLogs);
         $offset = 0;

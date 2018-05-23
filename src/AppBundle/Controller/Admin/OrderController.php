@@ -9,6 +9,7 @@ use Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
+use ApiBundle\Api\Util\OrderUtil;
 
 class OrderController extends BaseController
 {
@@ -104,11 +105,7 @@ class OrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
 
-        foreach ($orderLogs as $key => $value) {
-            if ('order.success' == $value['status']) {
-                unset($orderLogs[$key]);
-            }
-        }
+        $orderLogs = OrderUtil::orderLogsUtil($orderLogs);
 
         return $this->render('admin/order/detail.html.twig', array(
             'order' => $order,
