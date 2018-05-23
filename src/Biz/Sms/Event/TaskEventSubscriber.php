@@ -107,7 +107,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                     'targetId' => $task['id'],
                 ),
             );
-           $this->createJob($startJob);
+            $this->createJob($startJob);
         }
     }
 
