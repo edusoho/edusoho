@@ -15,5 +15,7 @@ class TargetlogServiceProvider implements ServiceProviderInterface
         $biz['console.commands'][] = function () use ($biz) {
             return new TableCommand($biz);
         };
+
+        $biz['interceptors']['target_log'] = '\Codeages\Biz\Framework\Targetlog\Interceptor\AnnotationInterceptor';
     }
 }

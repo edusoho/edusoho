@@ -2,12 +2,13 @@
 
 namespace Codeages\Biz\Framework\Targetlog\Interceptor;
 
+use Codeages\Biz\Framework\Context\AbstractInterceptor;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Targetlog\Annotation\Log;
 use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-class AnnotationInterceptor
+class AnnotationInterceptor extends AbstractInterceptor
 {
     /**
      * @var Biz
@@ -27,19 +28,8 @@ class AnnotationInterceptor
     public function __construct(Biz $biz, $className, &$interceptorData)
     {
         $this->biz = $biz;
-        $annotationReader = new AnnotationReader();
-        $annotationReader::addGlobalIgnoredName('before');
-        $reflectClass = new \ReflectionClass($className);
-        $interfaces = $reflectClass->getInterfaces();
-
-        foreach ($interfaces as $interfaceName => $interfaceObj) {
-            $reflectInterface = new \ReflectionClass($interfaceName);
-            $methods = $reflectInterface->getMethods();
-            foreach ($methods as $method) {
-                $annotation = $annotationReader->getMethodAnnotation($method, 'Codeages\Biz\Framework\TargetLog\Annotation\Log');
-                $interceptorData[$method->getName()]['target_log'] = $annotation;
-            }
-        }
+        $this->interceptorData = $biz['service.annotation_reader']->read($className);
+        $interceptorData = $this->interceptorData;
     }
 
     /**

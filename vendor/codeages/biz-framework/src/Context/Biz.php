@@ -6,12 +6,14 @@ use Codeages\Biz\Framework\Dao\Annotation\MetadataReader;
 use Codeages\Biz\Framework\Dao\DaoProxy;
 use Codeages\Biz\Framework\Dao\FieldSerializer;
 use Codeages\Biz\Framework\Dao\RedisCache;
+use Codeages\Biz\Framework\Targetlog\Annotation\LogReader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Dao\CacheStrategy;
 use Codeages\Biz\Framework\Dao\ArrayStorage;
+use Codeages\Biz\Framework\Service\ServiceProxy;
 
 class Biz extends Container
 {
@@ -26,6 +28,7 @@ class Biz extends Container
 
         $biz['debug'] = false;
         $biz['logger'] = null;
+        $biz['interceptors'] = new \ArrayObject();
         $biz['migration.directories'] = new \ArrayObject();
         $biz['console.commands'] = new \ArrayObject();
 
@@ -58,7 +61,7 @@ class Biz extends Container
             return function ($namespace, $name) use ($biz) {
                 $className = "{$namespace}\\Service\\Impl\\{$name}Impl";
 
-                return new Map($biz, $className);
+                return new ServiceProxy($biz, $className);
             };
         };
 
@@ -72,6 +75,16 @@ class Biz extends Container
 
         $biz['array_storage'] = function () {
             return new ArrayStorage();
+        };
+
+        $biz['service.annotation_reader'] = function ($biz) {
+            if ($biz['debug']) {
+                $cacheDirectory = null;
+            } else {
+                $cacheDirectory = $biz['cache_directory'].DIRECTORY_SEPARATOR.'service_interceptor_data';
+            }
+
+            return new LogReader($cacheDirectory);
         };
 
         $biz['dao.metadata_reader'] = function ($biz) {

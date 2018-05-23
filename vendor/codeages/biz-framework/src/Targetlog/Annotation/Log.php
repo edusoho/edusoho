@@ -8,6 +8,15 @@ namespace Codeages\Biz\Framework\Targetlog\Annotation;
  */
 class Log
 {
+    const DEBUG = 'debug'; //1
+    const INFO = 'info'; //2
+    const NOTICE = 'notice'; //3
+    const WARNING = 'warning'; //4
+    const ERROR = 'error'; //5
+    const CRITICAL = 'critical'; //6
+    const ALERT = 'alter'; //7
+    const EMERGENCY = 'emergency'; //8
+
     /**
      * @var
      * LOG INFO
@@ -37,6 +46,38 @@ class Log
         }
     }
 
+    private function getLevelId($level)
+    {
+        switch ($level) {
+            case self::DEBUG:
+                return 1;
+                break;
+            case self::INFO:
+                return 2;
+                break;
+            case self::NOTICE:
+                return 3;
+                break;
+            case self::WARNING:
+                return 4;
+                break;
+            case self::ERROR:
+                return 5;
+                break;
+            case self::CRITICAL:
+                return 6;
+                break;
+            case self::ALERT:
+                return 7;
+                break;
+            case self::EMERGENCY:
+                return 8;
+                break;
+            default:
+                return 1;
+        }
+    }
+
     public function getMessage()
     {
         return $this->message;
@@ -44,7 +85,7 @@ class Log
 
     public function getLevel()
     {
-        return $this->level;
+        return $this->getLevelId($this->level);
     }
 
     public function getAction()

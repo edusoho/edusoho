@@ -39,7 +39,7 @@ interface CourseService
      * @param $course
      *
      * @return mixed
-     * @Log(level=1,action="create",targetType="course",message="创建课程")
+     * @Log(level="info",action="create",targetType="course",message="创建课程")
      */
     public function createCourse($course);
 
