@@ -15,6 +15,12 @@ class OrderLog extends AbstractResource
     {
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($orderId);
 
+        foreach ($orderLogs as $key => $value) {
+            if ('order.success' == $value['status']) {
+                unset($orderLogs[$key]);
+            }
+        }
+
         $total = count($orderLogs);
         $offset = 0;
         $limit = $total;

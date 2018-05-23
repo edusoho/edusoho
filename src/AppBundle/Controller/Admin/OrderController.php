@@ -104,6 +104,12 @@ class OrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
 
+        foreach ($orderLogs as $key => $value) {
+            if ('order.success' == $value['status']) {
+                unset($orderLogs[$key]);
+            }
+        }
+
         return $this->render('admin/order/detail.html.twig', array(
             'order' => $order,
             'user' => $user,
