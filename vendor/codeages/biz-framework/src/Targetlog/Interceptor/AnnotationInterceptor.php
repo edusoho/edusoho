@@ -45,7 +45,7 @@ class AnnotationInterceptor extends AbstractInterceptor
             $level = $log['level'];
             $targetType = $log['targetType'];
             $targetId = $log['targetId'];
-            $context['funcName'] = $funcName;
+            $context['@funcName'] = $funcName;
             $context['@action'] = $log['action'];
             $context['@args'] = $args;
             $context['@user_id'] = empty($currentUser['id']) ? 0 : $currentUser['id'];
