@@ -6,7 +6,6 @@ use Codeages\Biz\Framework\Dao\Annotation\MetadataReader;
 use Codeages\Biz\Framework\Dao\DaoProxy;
 use Codeages\Biz\Framework\Dao\FieldSerializer;
 use Codeages\Biz\Framework\Dao\RedisCache;
-use Codeages\Biz\Framework\Targetlog\Annotation\LogReader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -75,16 +74,6 @@ class Biz extends Container
 
         $biz['array_storage'] = function () {
             return new ArrayStorage();
-        };
-
-        $biz['service.annotation_reader'] = function ($biz) {
-            if ($biz['debug']) {
-                $cacheDirectory = null;
-            } else {
-                $cacheDirectory = $biz['cache_directory'].DIRECTORY_SEPARATOR.'service_interceptor_data';
-            }
-
-            return new LogReader($cacheDirectory);
         };
 
         $biz['dao.metadata_reader'] = function ($biz) {

@@ -31,7 +31,7 @@ class AnnotationInterceptor extends AbstractInterceptor
     public function __construct(Biz $biz, $className)
     {
         $this->biz = $biz;
-        $this->interceptorData = $biz['service.annotation_reader']->read($className);
+        $this->interceptorData = $biz['service_targetlog.annotation_reader']->read($className);
     }
 
     /**
