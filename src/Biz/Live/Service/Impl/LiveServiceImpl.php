@@ -28,6 +28,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
         try {
             $live = $this->getLiveClient()->updateLive($liveParams);
+
             return $live;
         } catch (\Exception $e) {
             throw $e;
@@ -84,7 +85,7 @@ class LiveServiceImpl extends BaseService implements LiveService
             'summary',
             'title',
         ));
-        
+
         if (!empty($params['startTime']) && $params['startTime'] > time()) {
             $liveParams['startTime'] = $params['startTime'];
             $liveParams['endTime'] = $params['endTime'];

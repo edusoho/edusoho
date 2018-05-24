@@ -12,4 +12,3 @@ interface LiveService
 
     public function canUpdateRoomType($liveStartTime);
 }
-

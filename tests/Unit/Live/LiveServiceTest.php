@@ -217,8 +217,8 @@ class LiveServiceTest extends BaseTestCase
         $this->mockBiz('User:TokenService', array(
             array(
                 'functionName' => 'makeToken',
-                'returnValue' => array('token' => '123456')
-            )
+                'returnValue' => array('token' => '123456'),
+            ),
         ));
         $params = array(
             time() + 3600,
@@ -236,8 +236,8 @@ class LiveServiceTest extends BaseTestCase
         $this->mockBiz('User:UserService', array(
             array(
                 'functionName' => 'getUser',
-                'returnValue' => array('id' => 1, 'nickname' => $nickname)
-            )
+                'returnValue' => array('id' => 1, 'nickname' => $nickname),
+            ),
         ));
         $result = ReflectionUtils::invokeMethod($this->getLiveService(), 'getSpeakerName', array(1));
 
