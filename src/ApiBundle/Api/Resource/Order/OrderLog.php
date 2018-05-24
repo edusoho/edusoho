@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Util\OrderUtil;
+use AppBundle\Common\OrderToolkit;
 
 class OrderLog extends AbstractResource
 {
@@ -16,7 +16,7 @@ class OrderLog extends AbstractResource
     {
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($orderId);
 
-        $orderLogs = OrderUtil::orderLogsUtil($orderLogs);
+        $orderLogs = OrderToolkit::reomveUnneededLogs($orderLogs);
 
         $total = count($orderLogs);
         $offset = 0;

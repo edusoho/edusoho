@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Util;
 
 class OrderUtil
 {
-    public function orderLogsUtil($orderLogs)
+    public function reomveUnneededLogs($orderLogs)
     {
         foreach ($orderLogs as $key => $value) {
             if ('order.success' == $value['status']) {
