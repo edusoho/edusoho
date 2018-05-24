@@ -6,7 +6,6 @@ use Codeages\Biz\Framework\Context\AbstractInterceptor;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Targetlog\Annotation\Log;
 use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
-use Doctrine\Common\Annotations\AnnotationReader;
 
 class AnnotationInterceptor extends AbstractInterceptor
 {
@@ -16,40 +15,49 @@ class AnnotationInterceptor extends AbstractInterceptor
     protected $biz;
 
     /**
+     * @var log
+     */
+    protected $log;
+
+    /**
      * AnnotationInterceptor constructor.
      *
      * @param Biz $biz
      * @param $className
-     * @param $interceptorData
      *
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    public function __construct(Biz $biz, $className, &$interceptorData)
+    public function __construct(Biz $biz, $className)
     {
         $this->biz = $biz;
         $this->interceptorData = $biz['service.annotation_reader']->read($className);
-        $interceptorData = $this->interceptorData;
     }
 
     /**
-     * @param $annotation Log
      * @param $args
      */
-    public function exec($annotation, $args)
+    public function exec($funcName, $args)
     {
-        if (!empty($annotation)) {
+        if (!empty($this->interceptorData[$funcName])) {
+            $log = $this->interceptorData[$funcName];
             $currentUser = $this->biz['user'];
-            $level = $annotation->getLevel();
-            $targetType = $annotation->getTargetType();
-            $targetId = $annotation->getTargetId();
-            $context['@action'] = $annotation->getAction();
+            $level = $log['level'];
+            $targetType = $log['targetType'];
+            $targetId = $log['targetId'];
+            $context['funcName'] = $funcName;
+            $context['@action'] = $log['action'];
             $context['@args'] = $args;
             $context['@user_id'] = empty($currentUser['id']) ? 0 : $currentUser['id'];
             $context['@ip'] = empty($currentUser['currentIp']) ? '' : $currentUser['currentIp'];
-            $message = $annotation->getMessage();
+            $message = $log['message'];
             $this->getTargetlogService()->log($level, $targetType, $targetId, $message, $context);
         }
+    }
+
+    public function getInterceptorData()
+    {
+        return $this->interceptorData;
     }
 
     /**

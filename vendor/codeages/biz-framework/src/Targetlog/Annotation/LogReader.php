@@ -32,7 +32,17 @@ class LogReader
             $methods = $reflectInterface->getMethods();
             foreach ($methods as $method) {
                 $annotation = $annotationReader->getMethodAnnotation($method, 'Codeages\Biz\Framework\TargetLog\Annotation\Log');
-                $interceptorData[$method->getName()]['target_log'] = $annotation;
+                if (empty($annotation)) {
+                    $interceptorData[$method->getName()] = array();
+                    continue;
+                }
+                $log = array();
+                $log['level'] = $annotation->getLevel();
+                $log['targetType'] = $annotation->getTargetType();
+                $log['targetId'] = $annotation->getTargetId();
+                $log['action'] = $annotation->getAction();
+                $log['message'] = $annotation->getMessage();
+                $interceptorData[$method->getName()] = $log;
             }
         }
 

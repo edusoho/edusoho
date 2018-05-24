@@ -4,13 +4,13 @@ namespace Codeages\Biz\Framework\Context;
 
 abstract class AbstractInterceptor
 {
-    public function __construct(Biz $biz, $className, &$interceptorData)
+    public function __construct(Biz $biz, $className)
     {
         $this->biz = $biz;
         $this->className = $className;
-        $this->interceptorData = $interceptorData;
     }
 
-    abstract public function exec($value, $args);
+    abstract public function exec($funcName, $args);
 
+    abstract public function getInterceptorData();
 }
