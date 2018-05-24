@@ -14,6 +14,7 @@ use AppBundle\Common\FileToolkit;
 use Biz\Card\Service\CardService;
 use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserApprovalDao;
+use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -1866,7 +1867,6 @@ class UserServiceImpl extends BaseService implements UserService
                 in_array($registerSetting['register_mode'], array('mobile', 'email_or_mobile'))) {
             $registerProtective = empty($registerSetting['register_protective']) ?
                     'none' : $registerSetting['register_protective'];
-
             if (in_array($registerProtective, array('middle', 'low'))) {
                 $factory = $this->biz->offsetGet('ratelimiter.factory');
                 $rateLimiter = $factory('sms_registration_captcha_code', 1, 3600);
@@ -1892,6 +1892,27 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getSmsRegisterCaptchaStatus($clientIp, true);
     }
 
+    public function initPassword($id, $newPassword)
+    {
+        $this->beginTransaction();
+
+        try {
+            $fields = array(
+                'passwordInit' => 1,
+            );
+
+            $this->getAuthService()->changePassword($id, null, $newPassword);
+            $this->getUserDao()->update($id, $fields);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $this->getUserDao()->update($id, $fields);
+    }
+
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && 'truename' == $conditions['keywordType']) {
@@ -1906,6 +1927,14 @@ class UserServiceImpl extends BaseService implements UserService
         unset($conditions['keyword']);
 
         return $conditions;
+    }
+
+    /**
+     * @return AuthService
+     */
+    protected function getAuthService()
+    {
+        return $this->createService('User:AuthService');
     }
 
     /**

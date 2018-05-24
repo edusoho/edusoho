@@ -15,7 +15,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     {
         $forbidden = AuthenticationHelper::checkLoginForbidden($request);
 
-        if ($forbidden['status'] == 'error') {
+        if ('error' == $forbidden['status']) {
             $exception = new AuthenticationException($forbidden['message']);
             throw $exception;
         }
@@ -26,6 +26,18 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             );
 
             return new JsonResponse($content, 200);
+        }
+
+        $currentUser = $this->getServiceKernel()->getCurrentUser();
+
+        if (false) {
+            //暂时隐藏初始化密码功能
+            // if (!$currentUser['passwordInit']) {
+            $url = $this->httpUtils->generateUri($request, 'password_init');
+            $queries = array('goto' => $this->determineTargetUrl($request));
+            $url = $url.'?'.http_build_query($queries);
+
+            return $this->httpUtils->createRedirectResponse($request, $url);
         }
 
         if ($this->getAuthService()->hasPartnerAuth()) {
