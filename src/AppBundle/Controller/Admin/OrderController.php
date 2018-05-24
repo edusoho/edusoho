@@ -9,6 +9,7 @@ use Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\OrderToolkit;
 
 class OrderController extends BaseController
 {
@@ -103,6 +104,8 @@ class OrderController extends BaseController
         $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
+
+        $orderLogs = OrderToolkit::removeUnneededLogs($orderLogs);
 
         return $this->render('admin/order/detail.html.twig', array(
             'order' => $order,

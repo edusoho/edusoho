@@ -13,7 +13,7 @@ class CourseThreadController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
+        if (isset($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             $conditions['courseSetIds'] = empty($conditions['courseSetIds']) ? array(-1) : $conditions['courseSetIds'];
@@ -33,6 +33,7 @@ class CourseThreadController extends BaseController
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($threads, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
+        $tasks = ArrayToolkit::index($tasks, 'id');
 
         return $this->render('admin/course-thread/index.html.twig', array(
             'paginator' => $paginator,

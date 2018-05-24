@@ -262,6 +262,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'categoryId = :categoryId',
                 'activityId = :activityId',
                 'mode = :mode',
+                'mode IN ( :modes )',
                 'isOptional = :isOptional',
                 'copyId = :copyId',
                 'copyId IN (:copyIds)',
