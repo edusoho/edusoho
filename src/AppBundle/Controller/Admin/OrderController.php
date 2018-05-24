@@ -105,7 +105,7 @@ class OrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
 
-        $orderLogs = OrderToolkit::reomveUnneededLogs($orderLogs);
+        $orderLogs = OrderToolkit::removeUnneededLogs($orderLogs);
 
         return $this->render('admin/order/detail.html.twig', array(
             'order' => $order,

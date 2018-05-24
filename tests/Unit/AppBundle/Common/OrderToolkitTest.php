@@ -7,7 +7,7 @@ use AppBundle\Common\OrderToolkit;
 
 class OrderToolkitTest extends BaseTestCase
 {
-    public function testReomveUnneededLogs()
+    public function testRemoveUnneededLogs()
     {
         $orderLogs = array(
             array(
@@ -21,7 +21,7 @@ class OrderToolkitTest extends BaseTestCase
             ),
         );
 
-        $result = OrderToolkit::reomveUnneededLogs($orderLogs);
+        $result = OrderToolkit::removeUnneededLogs($orderLogs);
 
         $this->assertEquals(2, count($result));
         $this->assertEquals('order.finished', $result[0]['status']);

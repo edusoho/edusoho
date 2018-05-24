@@ -4,7 +4,7 @@ namespace AppBundle\Common;
 
 class OrderToolkit
 {
-    public function reomveUnneededLogs($orderLogs)
+    public function removeUnneededLogs($orderLogs)
     {
         $result = array();
         foreach ($orderLogs as $key => $value) {

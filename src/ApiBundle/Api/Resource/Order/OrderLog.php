@@ -16,7 +16,7 @@ class OrderLog extends AbstractResource
     {
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($orderId);
 
-        $orderLogs = OrderToolkit::reomveUnneededLogs($orderLogs);
+        $orderLogs = OrderToolkit::removeUnneededLogs($orderLogs);
 
         $total = count($orderLogs);
         $offset = 0;
