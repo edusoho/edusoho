@@ -37,6 +37,7 @@ use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 use Biz\Common\BizDragCaptcha;
+use Biz\Util\EdusohoLiveClient;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -187,5 +188,11 @@ class DefaultServiceProvider implements ServiceProviderInterface
         $biz['template_extension.live'] = array(
             'course/header/header-for-guest' => 'live-course/header/header-for-guest.html.twig',
         );
+
+        $biz['educloud.live_client'] = function ($biz) {
+            return array(
+                new EdusohoLiveClient($biz),
+            );
+        };
     }
 }

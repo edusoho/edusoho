@@ -49,11 +49,10 @@ class EdusohoLiveClient
         return $this->createCloudApi($server)->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
-    public function deleteLive($liveId, $provider)
+    public function deleteLive($liveId)
     {
         $args = array(
             'liveId' => $liveId,
-            'provider' => $provider,
         );
 
         return $this->createCloudApi('root')->delete('/lives/'.$liveId, $args);
