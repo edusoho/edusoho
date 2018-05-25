@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Live;
+namespace Tests\Unit\Live\Service;
 
 use Biz\BaseTestCase;
 use Biz\Util\EdusohoLiveClient;
