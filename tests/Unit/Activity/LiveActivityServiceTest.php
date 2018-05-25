@@ -246,11 +246,10 @@ class MockEdusohoLiveClient
         return $live;
     }
 
-    public function deleteLive($id, $provider)
+    public function deleteLive($id)
     {
         return array(
             'id' => $id,
-            'provider' => $provider,
         );
     }
 }
