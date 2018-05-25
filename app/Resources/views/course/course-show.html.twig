@@ -4,7 +4,7 @@
 
 {% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}
 {% set bodyClass = 'course-dashboard-page' %}
-
+{% set description = course.summary ? course.summary : course_set.summary %}
 
 {% block title %}{{ course_set.title }} - {{ parent() }}{% endblock %}
 
@@ -12,7 +12,7 @@
   {% for tag in course_set.tags %}{{ tag.name }}{% if not loop.last %},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
-{% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
+{% block description %}{{ description|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
 
 {% block full_content %}
     {% set eventReportParams = {'user-id': app.user.id|default(0)} %}

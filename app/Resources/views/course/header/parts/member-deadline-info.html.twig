@@ -11,11 +11,11 @@
     {% if course.expiryMode == 'forever' or member.deadline == 0 %}
       {{ 'course.expiry_date.forever_mode'|trans }}
     {% elseif course.expiryMode in ['end_date', 'date'] %}
-      {{ course.expiryEndDate|date('Y-m-d') }}
+      {{member.deadline|date('Y-m-d') }}
       {% if date('now').timestamp > member.deadline %}
         <span class="color-danger text-12">{{ 'course.expiry_date.overdue'|trans }}</span>
       {% else %}
-        {% set lastDays = course.expiryEndDate|time_diff %}
+        {% set lastDays = member.deadline|time_diff %}
         {% if lastDays == 0 %}
           <span class="color-warning text-12">{{ 'course.expiry_date.today_will_overdue'|trans }}</span>
         {% elseif lastDays == 1 %}

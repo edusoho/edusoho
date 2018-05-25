@@ -102,6 +102,10 @@
       padding: 20px 0 0 0;
     }
   }
+  .sms-send-btn {
+    padding: 9px 10px;
+    width: 100%;
+  }
 }
 
 .drag-section-wrap {
@@ -115,13 +119,13 @@
 }
 .drag-section {
   position: relative;
-  padding-top: 66%;
+  padding-top: 47%;
 }
 
 .drag-bar {
   position: relative;
   margin-top: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   height: 34px;
   background-color: #f1f1f1;
   .border-radius(20px);
@@ -173,6 +177,15 @@
   position: absolute;
   top: 0;
   width: 100%;
+  @media (min-width: @screen-xs-min) {
+    height: 144px;
+  }
+  @media (min-width: 321px) and (max-width: @screen-xs-min){
+    height: 74%;
+  }
+  @media (max-width: 320px) {
+    height: 70%;
+  }
   .drag-img__bg {
     width: 100%;
     height: 100%;
@@ -192,7 +205,7 @@
     background-color: @gray-light;
     opacity: 0.7;
     &:after {
-      margin-top: 25%;
+      margin-top: 17%;
       font-size: 48px;
       color: #fff;
     }

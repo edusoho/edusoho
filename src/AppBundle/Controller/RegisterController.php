@@ -560,7 +560,7 @@ class RegisterController extends BaseController
             $biz = $this->getBiz();
             $bizDragCaptcha = $biz['biz_drag_captcha'];
 
-            $dragcaptchaToken = empty($registration['drag_captcha_token']) ? '' : $registration['drag_captcha_token'];
+            $dragcaptchaToken = empty($registration['dragCaptchaToken']) ? '' : $registration['dragCaptchaToken'];
             $bizDragCaptcha->check($dragcaptchaToken);
         }
     }

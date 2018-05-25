@@ -329,7 +329,8 @@ class BaseController extends Controller
 
     public function render($view, array $parameters = array(), Response $response = null)
     {
-        foreach ($this->getBiz()['render_view_resolvers'] as $resolver) {
+        $biz = $this->getBiz();
+        foreach ($biz['render_view_resolvers'] as $resolver) {
             $view = $resolver->generateRenderView($view, $parameters);
         }
 

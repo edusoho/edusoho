@@ -50,6 +50,6 @@ class PublishedTasksDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 }

@@ -5,7 +5,6 @@ namespace Biz\Xapi\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementArchiveDao;
@@ -260,13 +259,5 @@ class XapiServiceImpl extends BaseService implements XapiService
     protected function getStatementArchiveDao()
     {
         return $this->createDao('Xapi:StatementArchiveDao');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
     }
 }

@@ -169,15 +169,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $created = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
-            $this->getMemberService()->setCourseTeachers(
-                $created['id'],
-                array(
-                    array(
-                        'id' => $currentUser['id'],
-                        'isVisible' => 1,
-                    ),
-                )
-            );
+            $this->getMemberService()->setDefaultTeacher($created['id']);
             $this->commit();
             $this->dispatchEvent('course.create', new Event($created));
 
