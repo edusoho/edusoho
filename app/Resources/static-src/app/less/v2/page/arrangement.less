@@ -5,8 +5,8 @@
 
   .fc-agenda-view .fc-time-grid-event {
     .fc-content {
-      padding-left: 8px;
-     }
+      padding-left: 4px;
+    }
   }
 
   .fc-time-grid-event.fc-short .fc-time {
@@ -25,6 +25,22 @@
     border-left: 2px solid @brand-primary;
     color: darken(@brand-primary, 10%);
     background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.3);
+  }
+
+  .fc-cancel-event {
+    .fc-status-event(@gray-medium);
+  }
+  .fc-done-event {
+    .fc-status-event(#4caf6b);
+  }
+  .fc-ordered-event {
+    .fc-status-event(#ffaa00);
+  }
+
+  .fc-status-event(@bg-color) {
+    background-color: @bg-color !important;
+    color: #fff !important;
+    border: none !important;
   }
 }
 
@@ -49,11 +65,14 @@
 }
 
 .arrangement-popover {
-  height: 80px;
   min-width: 150px;
   font-size: 12px;
   line-height: 1;
   .cd-box-shadow-z(12px);
+}
+
+.arrangement-popover--long {
+  width: 278px;
 }
 
 .arrangement-popover__time {
@@ -65,6 +84,31 @@
   font-size: 12px;
   line-height: 1;
   background-color: @gray-lighter;
-  // background-color: lighten(@brand-primary, 35%);
   .border-radius(0);
+}
+
+.arrangement-popover__operate {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  span {
+    line-height: 28px;
+  }
+}
+
+.arrange-modal {
+  .arrange-modal__dialog {
+    @media (min-width: @screen-sm-min) {
+      width: 600px !important;
+    }
+  }
+  .arrange-modal__title {
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+  .arrange-radio-item {
+    line-height: 27px;
+    label {
+      font-weight: 400;
+    }
+  }
 }
