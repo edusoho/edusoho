@@ -142,25 +142,54 @@ export default class SelectComp extends Comp {
   changeTime(event, options, flag) {
     const $target = $(event.target);
     const date = $target.parent().data('time').substr(0, 11);
-    const $targetVal = date + $target.val();
-    const $siblingsVal = date + $target.siblings().val();
+    const targetVal = date + $target.val();
+    const siblingsVal = date + $target.siblings().val();
+    const targetTimeStamp = Date.parse(targetVal);
+    const siblingsTimeStamp = Date.parse(siblingsVal);
+
+    // 输入格式错误
     this.regRule($target, $target.val());
+
+    const minTime = date + options.minTime;
+    const maxTime = date + options.maxTime;
+
+    // 设置日历显示时间
+    if (targetTimeStamp < Date.parse(minTime) || targetTimeStamp > Date.parse(maxTime)) {
+      cd.message({ type: 'danger', message: Translator.trans('请输入有效时间') });
+      $target.val('');
+      return;
+    }
+
+    // 单节课最小时间
+    const timeRange = options.snapDuration;
+    const timeArray = timeRange.split(':');
+    const milliSeconds = (3600 * Number(timeArray[0]) + 60 * Number(timeArray[1])) * 1000;
+    const minutes = Number(timeArray[0]) * 60 + Number(timeArray[1]);
+
+    // 最少预约时间
+    if (Math.abs(siblingsTimeStamp - targetTimeStamp) < milliSeconds) {
+      cd.message({ type: 'danger', message: Translator.trans(`最少预约时间段为${minutes}分钟`) });
+      $target.val('');
+      return;
+    }
+
+    // 开始时间和结束时间的判断
     if (flag) {
-      if (Date.parse($targetVal) >= Date.parse($siblingsVal)) {
+      if (targetTimeStamp >= siblingsTimeStamp) {
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_check.message') });
         $target.val('');
         return;
       }
-      this.event.start = $targetVal;
-      this.event.end = $siblingsVal;
+      this.event.start = targetVal;
+      this.event.end = siblingsVal;
     } else {
-      if (Date.parse($targetVal) <= Date.parse($siblingsVal)) {
+      if (targetTimeStamp <= siblingsTimeStamp) {
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_and_time_check.message') });
         $target.val('');
         return;
       }
-      this.event.end = $targetVal;
-      this.event.start = $siblingsVal;
+      this.event.end = targetVal;
+      this.event.start = siblingsVal;
     }
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
   }
