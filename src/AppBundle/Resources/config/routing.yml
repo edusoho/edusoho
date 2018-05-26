@@ -81,6 +81,10 @@ login_check_email:
     path:  /login/check/email
     defaults: { _controller: AppBundle:Login:checkEmail }
 
+password_init:
+    path: /password/init
+    defaults: { _controller: AppBundle:PasswordInit:initPassword }
+
 common_qrcode:
     path:  /common/qrcode
     defaults: { _controller: AppBundle:Common:qrcode }

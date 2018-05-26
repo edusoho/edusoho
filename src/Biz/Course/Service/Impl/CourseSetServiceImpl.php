@@ -1118,6 +1118,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'serializeMode' => $created['serializeMode'],
             'status' => 'draft',
             'type' => $created['type'],
+            'showServices' => isset($created['showServices']) ? $created['showServices'] : 1,
         );
 
         return $defaultCourse;

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\OrderToolkit;
 
 class OrderLog extends AbstractResource
 {
@@ -14,6 +15,8 @@ class OrderLog extends AbstractResource
     public function search(ApiRequest $request, $orderId)
     {
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($orderId);
+
+        $orderLogs = OrderToolkit::removeUnneededLogs($orderLogs);
 
         $total = count($orderLogs);
         $offset = 0;

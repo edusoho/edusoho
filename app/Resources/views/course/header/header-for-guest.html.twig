@@ -6,6 +6,8 @@
 {% endif %}
 
 {% set page_type = 'guest' %}
+{# showCourses 该参数直播课及插件约排课不展示计划 #}
+{% set showCourses = showCourses|default(1) %}
 
 {% block course_header_subtitle %}
   <p class="text-overflow subtitle" data-toggle="popover" data-placement="bottom"
@@ -69,7 +71,7 @@
         </div>
 			{% endif %}
       <div class="course-detail-gray {% if not onDiscount %} not-activity {% endif %}">
-				{% if courseSet.type != 'live' %}
+				{% if showCourses %}
           <div class="course-detail-content">
             <span class="course-detail-title vertical-middle mb10">{{ 'course.teaching_plan'|trans }}</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">

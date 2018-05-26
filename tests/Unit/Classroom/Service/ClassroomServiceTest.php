@@ -2513,8 +2513,9 @@ class ClassroomServiceTest extends BaseTestCase
         $user['email'] = $user['nickname'].'@user.com';
         $user['password'] = 'user';
         $user['roles'] = array('ROLE_USER', 'ROLE_TEACHER');
+        $user = $this->getUserService()->register($user);
 
-        return $this->getUserService()->register($user);
+        return $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER'));
     }
 
     /**

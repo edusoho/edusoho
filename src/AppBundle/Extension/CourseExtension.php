@@ -67,7 +67,6 @@ class CourseExtension extends Extension implements ServiceProviderInterface
             //推荐班级
             'recommendClassroom' => array(
                 'uri' => 'course/widgets/recommend-classroom.html.twig',
-                // 'uri'        => 'default/recommend-classroom.html.twig',
                 'renderType' => 'include',
                 'showMode' => 'course', //普通课程才会显示
             ),

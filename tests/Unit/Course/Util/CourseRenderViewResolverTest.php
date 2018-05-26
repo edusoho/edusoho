@@ -11,29 +11,29 @@ class CourseRenderViewResolverTest extends BaseTestCase
     {
         $resolver = new CourseRenderViewResolver($this->biz);
 
-        $this->biz['course-manage/create-modal'] = array(
-            'one-to-one' => 'plugins/course-manage/create-modal/one-to-one.html.twig',
+        $this->biz['template_extension.live'] = array(
+            'course-manage/create-modal' => 'course-manage/create-modal/one-to-one.html.twig',
         );
 
         $result = $resolver->generateRenderView(
             'course-manage/create-modal.html.twig',
-            array('course' => array('type' => 'one-to-one'))
+            array('course' => array('type' => 'live'))
         );
 
-        $this->assertEquals('plugins/course-manage/create-modal/one-to-one.html.twig', $result);
+        $this->assertEquals('course-manage/create-modal/one-to-one.html.twig', $result);
     }
 
     public function testGenerateRenderViewWithCourseSetType()
     {
         $resolver = new CourseRenderViewResolver($this->biz);
 
-        $this->biz['course-manage/create-modal'] = array(
-            'one-to-one' => 'plugins/course-manage/create-modal/one-to-one.html.twig',
+        $this->biz['template_extension.reservation'] = array(
+            'course-manage/create-modal' => 'plugins/course-manage/create-modal/one-to-one.html.twig',
         );
 
         $result = $resolver->generateRenderView(
             'course-manage/create-modal.html.twig',
-            array('courseSet' => array('type' => 'one-to-one'))
+            array('courseSet' => array('type' => 'reservation'))
         );
 
         $this->assertEquals('plugins/course-manage/create-modal/one-to-one.html.twig', $result);
@@ -43,8 +43,8 @@ class CourseRenderViewResolverTest extends BaseTestCase
     {
         $resolver = new CourseRenderViewResolver($this->biz);
 
-        $this->biz['course-manage/create-modal'] = array(
-            'one-to-one' => 'plugins/course-manage/create-modal/one-to-one.html.twig',
+        $this->biz['template_extension.reservation'] = array(
+            'course-manage/create-modal' => 'plugins/course-manage/create-modal/one-to-one.html.twig',
         );
 
         $result = $resolver->generateRenderView(
