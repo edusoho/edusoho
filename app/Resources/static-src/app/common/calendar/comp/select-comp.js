@@ -117,7 +117,7 @@ export default class SelectComp extends Comp {
     $target.popover({
       container: 'body',
       html: true,
-      content: `<div class="cd-text-medium cd-mb8">${Translator.trans('arrangement.course_time')}</div>
+      content: `<div class="cd-text-medium cd-mv8">${Translator.trans('arrangement.course_time')}</div>
                 <div class="cd-dark-minor cd-mb8">${event.start.format('l')}</div>
                 <div class="cd-mb8" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
       template: `<div class="popover arrangement-popover js-arrangement-popover"><div class="arrow"></div>
@@ -147,16 +147,16 @@ export default class SelectComp extends Comp {
     this.regRule($target, $target.val());
     if (flag) {
       if (Date.parse($targetVal) >= Date.parse($siblingsVal)) {
-        $target.val('');
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_check.message') });
+        $target.val('');
         return;
       }
       this.event.start = $targetVal;
       this.event.end = $siblingsVal;
     } else {
       if (Date.parse($targetVal) <= Date.parse($siblingsVal)) {
-        $target.val('');
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_and_time_check.message') });
+        $target.val('');
         return;
       }
       this.event.end = $targetVal;
@@ -177,8 +177,8 @@ export default class SelectComp extends Comp {
     const reg = /^((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])$/;
     const regExp = new RegExp(reg);
     if(!regExp.test(value)) {
-      $target.val('');
       cd.message({ type: 'danger', message: Translator.trans('validate_old.right_time_tip') });
+      $target.val('');
       return;
     }
   }
