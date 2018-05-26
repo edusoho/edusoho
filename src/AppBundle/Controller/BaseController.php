@@ -334,7 +334,7 @@ class BaseController extends Controller
             $view = $resolver->generateRenderView($view, $parameters);
         }
 
-        return Parent::render($view, $parameters, $response);
+        return parent::render($view, $parameters, $response);
     }
 
     /**
