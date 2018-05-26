@@ -418,7 +418,12 @@ $.validator.addMethod('es_remote', function(value, element, params) {
 
   if (cacheKey in this.valueCache) {
     $.validator.messages.es_remote = this.valueCache[cacheKey].message;
-    return this.optional(element) || this.valueCache[cacheKey].isSuccess;
+    
+    let result = this.optional(element) || this.valueCache[cacheKey].isSuccess;
+    if (typeof callback === 'function') {
+      callback(result);
+    }
+    return result;
   }
 
   $.ajax({
