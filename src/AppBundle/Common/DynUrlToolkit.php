@@ -21,8 +21,10 @@ class DynUrlToolkit
     {
         $twigSegs = explode('.html.twig', $baseUrl);
         $bizPrefix = $twigSegs[0];
-        if (!empty($biz[$bizPrefix]) && !empty($biz[$bizPrefix][$params['type']])) {
-            return $biz[$bizPrefix][$params['type']];
+        $type = $params['type'];
+
+        if (!empty($biz["template_extension.{$type}"]) && !empty($biz["template_extension.{$type}"][$bizPrefix])) {
+            return $biz["template_extension.{$type}"][$bizPrefix];
         }
 
         return $baseUrl;

@@ -78,7 +78,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
-        $result = $client->deleteLive(123, 6);
+        $result = $client->deleteLive(123);
         $this->assertTrue($result['success']);
     }
 

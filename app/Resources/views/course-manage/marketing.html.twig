@@ -118,6 +118,7 @@
                 {% set coursePublished = course.status|default('draft') == 'published' %}
                 {% set courseClosed = course.status|default('draft') == 'closed' %}
                 {% set courseSetPublished = courseSet.status|default('draft') == 'published' %}
+                {% set courseSetClosed = courseSet.status|default('draft') == 'closed' %}
                 {{ radios('expiryMode',
                 { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
                 course.expiryMode|default('days'), coursePublished or courseClosed ? 'disabled' : '') }}
@@ -130,6 +131,9 @@
 
                   {% if coursePublished or courseClosed %}
                     <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
+                  {% endif %}
+
+                  {% if courseClosed or courseSetClosed %}
                     <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
                   {% endif %}
 

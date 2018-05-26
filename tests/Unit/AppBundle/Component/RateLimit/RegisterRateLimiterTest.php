@@ -54,7 +54,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             )
         );
 
-        $this->setOauthUser($request, true);
+        $this->setOauthUser($request, false);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -82,11 +82,11 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'drag_captcha_token' => 'kuozhi',
+                'dragCaptchaToken' => 'kuozhi',
             )
         );
 
-        $this->setOauthUser($request, false);
+        $this->setOauthUser($request, true);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -152,7 +152,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             array('REMOTE_ADDR' => '128.2.2.1')
         );
 
-        $this->setOauthUser($request, true);
+        $this->setOauthUser($request, false);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -179,7 +179,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'drag_captcha_token' => 'kuozhi',
+                'dragCaptchaToken' => 'kuozhi',
             ),
             array(),
             array(),
@@ -187,7 +187,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             array('REMOTE_ADDR' => '128.2.2.1')
         );
 
-        $this->setOauthUser($request, false);
+        $this->setOauthUser($request, true);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -243,7 +243,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'drag_captcha_token' => 'kuozhi',
+                'dragCaptchaToken' => 'kuozhi',
                 'jigsaw' => '12',
             ),
             array(),
@@ -298,10 +298,10 @@ class RegisterRateLimiterTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    private function setOauthUser($request, $isFirst)
+    private function setOauthUser($request, $captchaEnabled)
     {
         $oauthUser = new OAuthUser();
-        $oauthUser->captchaEnabled = !(true == $isFirst);
+        $oauthUser->captchaEnabled = $captchaEnabled;
         $session = new Session(new MockArraySessionStorage());
         $request->setSession($session);
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
