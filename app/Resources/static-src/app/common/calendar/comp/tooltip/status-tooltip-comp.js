@@ -24,7 +24,7 @@ export default class StatusTooltipComp extends BaseTooltipComp {
   }
 
   _getParamNames() {
-    return ['event', 'startTime', 'endTime', 'member', 'type'];
+    return ['title', 'startTime', 'endTime', 'member', 'type'];
   }
 
   _showTip(params, event, jsEvent) {
@@ -43,7 +43,7 @@ export default class StatusTooltipComp extends BaseTooltipComp {
       container: 'body',
       html: true,
       content: `<div class="cd-mv8">
-                  <div class="cd-dark-minor text-overflow cd-mb8"><span class="cd-dark-major">任务：</span>${params.event}</div>
+                  <div class="cd-dark-minor text-overflow cd-mb8"><span class="cd-dark-major">任务：</span>${params.title}</div>
                   <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">时间：</span>${date} ${startTime} - ${endTime}</div>
                   <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">学员：</span>${params.member}</div>
                   <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>${params.type}</div>
