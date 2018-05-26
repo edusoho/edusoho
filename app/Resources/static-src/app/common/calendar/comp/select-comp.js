@@ -24,24 +24,22 @@ export default class SelectComp extends Comp {
     };
 
     options['eventClick'] = (event, jsEvent, view) => {
-      const $target = $(jsEvent.target);
-      $target.popover({
-        container: 'body',
-        html: true,
-        content: `<div class="cd-text-medium cd-mb8">${Translator.trans('arrangement.course_time')}</div>
-                <div class="cd-dark-minor cd-mb8">${event.start.format('l')}</div>
-                <div class="cd-mb8" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
-        template: `<div class="popover arrangement-popover js-arrangement-popover"><div class="arrow"></div>
-                  <div class="arrangement-popover-content popover-content">
-                  </div>
-                </div>`,
-        trigger: 'toggle'
-      });
-      $target.popover('show');
-      $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
-      event.start = self.events.start;
-      event.end = self.events.end;
-      self.event = event;
+      const $target = $(jsEvent.currentTarget);
+      const $clickTarget = $target.find('.fc-bg');
+      if ($target.hasClass('fc-tooltip')) {
+        return;
+      }
+      if ($target.hasClass('fc-ordered-event')) {
+        self.cancelPopover($clickTarget, event);
+      }
+
+      if(!event.type) {
+        self.clickPopover($clickTarget, event);
+        event.start = self.events.start;
+        event.end = self.events.end;
+        self.event = event;
+      }
+
     };
     // 预约时间可拖拽
     options['editable'] = true;
@@ -62,6 +60,68 @@ export default class SelectComp extends Comp {
   _initEvent(options) {
     $('body').on('change', '.js-time-start', event => this.changeStartTime(event, options));
     $('body').on('change', '.js-time-end', event => this.changeEndTime(event, options));
+    $('body').on('click', '.js-cancel-btn', event => this.cancelReservation(event));
+  }
+
+  cancelPopover($target, event) {
+    let cancelTemplate = '';
+    let disabledStatus = '';
+    if (event.cancelTime) {
+      cancelTemplate = `<span class="color-danger js-cancel-tip">开始前${event.cancelTime}分钟，不可取消</span>`;
+      disabledStatus = 'disabled';
+    }
+
+    $target.popover({
+      container: 'body',
+      html: true,
+      content: `<div class="cd-mv8">
+                  <div class="cd-dark-minor text-overflow cd-mb8"><span class="cd-dark-major">任务：</span>${event.event}</div>
+                  <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">时间：</span>${event.start.format('Y年M月D日')} ${event.start.format('HH:mm')}  - ${event.end.format('HH:mm')} </div>
+                  <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">学员：</span>${event.member}</div>
+                  <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>${event.type}</div>
+                </div>
+                <div class="arrangement-popover__operate clearfix">${cancelTemplate}<button class="pull-right cd-btn cd-btn-sm cd-btn-primary js-cancel-btn" type="button" ${disabledStatus}>取消预约</button></div>`,
+      template: `<div class="popover arrangement-popover arrangement-popover--long js-arrangement-popover"><div class="arrow"></div>
+                <div class="arrangement-popover-content popover-content">
+                </div>
+              </div>`,
+      trigger: 'click'
+    });
+    $target.popover('show');
+    $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
+  }
+
+
+  cancelReservation(event) {
+    $('.js-arrangement-popover').remove();
+    cd.modal({
+      el: '#cd-modal',
+      ajax: false,
+      url: '',
+      maskClosable: false,
+    }).on('ok', ($modal, modal) => {
+      console.log('确定后的回调');
+      modal.trigger('close');
+    }).on('cancel', ($modal, modal) => {
+      console.log('关闭后的回调');
+    });
+  }
+
+  clickPopover($target, event) {
+    $target.popover({
+      container: 'body',
+      html: true,
+      content: `<div class="cd-text-medium cd-mb8">${Translator.trans('arrangement.course_time')}</div>
+                <div class="cd-dark-minor cd-mb8">${event.start.format('l')}</div>
+                <div class="cd-mb8" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
+      template: `<div class="popover arrangement-popover js-arrangement-popover"><div class="arrow"></div>
+                  <div class="arrangement-popover-content popover-content">
+                  </div>
+                </div>`,
+      trigger: 'click'
+    });
+    $target.popover('show');
+    $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
   }
 
   changeStartTime(event, options) {
@@ -95,6 +155,14 @@ export default class SelectComp extends Comp {
       this.event.start = $siblingsVal;
     }
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
+  }
+
+  _getParamNames() {
+    return ['event', 'startTime', 'endTime', 'date'];
+  }
+
+  _getParamPrefix() {
+    return 'click';
   }
 
   regRule(value) {

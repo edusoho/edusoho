@@ -10,9 +10,14 @@ export default class rightClickComp extends Comp {
 
     options['eventContextmenu'] = (event, jsEvent, view) => {
       const $target = $(jsEvent.currentTarget);
+
       const $popover = $('.js-arrangement-popover');
       if ($popover.length) {
         $popover.remove();
+      }
+
+      if (event.type) {
+        return;
       }
       $target.popover({
         container: 'body',
@@ -49,6 +54,14 @@ export default class rightClickComp extends Comp {
     $('body').click(() => {
       $('.js-delete-popover').remove();
     });
+  }
+
+  _getParamNames() {
+    return ['event', 'startTime', 'endTime', 'date'];
+  }
+
+  _getParamPrefix() {
+    return 'contextmenu';
   }
 
 }
