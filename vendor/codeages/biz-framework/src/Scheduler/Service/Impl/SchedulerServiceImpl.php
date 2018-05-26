@@ -151,6 +151,11 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         }
     }
 
+    public function getJobByName($name)
+    {
+        return $this->getJobDao()->getByName($name);
+    }
+
     public function createErrorLog($jobFired, $message, $trace)
     {
         $jobFired['job_detail']['message'] = $message;

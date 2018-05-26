@@ -117,6 +117,8 @@ class ExploreController extends BaseController
             }
         });
 
+        $request->query->set('orderBy', $orderBy);
+
         return $this->render(
             'course-set/explore.html.twig',
             array(
@@ -249,6 +251,8 @@ class ExploreController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $request->query->set('orderBy', $orderBy);
+
         return $this->render(
             'classroom/explore.html.twig',
             array(
@@ -351,7 +355,7 @@ class ExploreController extends BaseController
 
     protected function getCourseSetSearchOrderBy($conditions)
     {
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $setting = $this->getSettingService()->get('course', array());
 
         $orderBy = empty($setting['explore_default_orderBy']) ? 'latest' : $setting['explore_default_orderBy'];
 

@@ -306,4 +306,9 @@ interface UserService
     public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
 
     public function updateSmsRegisterCaptchaStatus($clientIp);
+
+    /**
+     * 用户首次登录修改密码.
+     */
+    public function initPassword($id, $newPassword);
 }

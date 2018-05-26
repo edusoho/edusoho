@@ -30,7 +30,9 @@ export default class Register {
       var isMobile = reg_mobile.test(value);
       if (isMobile) {
         $('.email_mobile_msg').removeClass('hidden');
-        $('.js-drag-jigsaw').addClass('hidden');
+        if (!self.captchEnable) {
+          $('.js-drag-jigsaw').addClass('hidden');
+        }
       } else {
         $('.email_mobile_msg').addClass('hidden');
         $('.js-drag-jigsaw').removeClass('hidden');
@@ -105,10 +107,14 @@ export default class Register {
         preSmsSend: function() {
           return true;
         },
+        error: function(error) {
+          self.drag.initDragCaptcha();
+        },
         additionalAction: function(ackResponse) {
           if (ackResponse == 'captchaRequired') {
             $smsSendBtn.attr('disabled', true);
             $('.js-drag-jigsaw').removeClass('hidden');
+            self.captchEnable = true;
             if(self.drag) {
               self.drag.initDragCaptcha();
             }
