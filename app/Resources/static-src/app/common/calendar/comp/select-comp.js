@@ -52,6 +52,12 @@ export default class SelectComp extends Comp {
       $('.js-arrangement-popover').remove();
     };
 
+    // 拖拽创建时间不得超过一天
+    options['selectConstraint'] = {
+      start: '00:01',
+      end: '23:59'
+    };
+
     self._initEvent(options);
 
     return options;
@@ -138,9 +144,10 @@ export default class SelectComp extends Comp {
     const date = $target.parent().data('time').substr(0, 11);
     const $targetVal = date + $target.val();
     const $siblingsVal = date + $target.siblings().val();
-    this.regRule($target.val());
+    this.regRule($target, $target.val());
     if (flag) {
       if (Date.parse($targetVal) >= Date.parse($siblingsVal)) {
+        $target.val('');
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_check.message') });
         return;
       }
@@ -148,6 +155,7 @@ export default class SelectComp extends Comp {
       this.event.end = $siblingsVal;
     } else {
       if (Date.parse($targetVal) <= Date.parse($siblingsVal)) {
+        $target.val('');
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_and_time_check.message') });
         return;
       }
@@ -165,10 +173,11 @@ export default class SelectComp extends Comp {
     return 'click';
   }
 
-  regRule(value) {
+  regRule($target, value) {
     const reg = /^((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])$/;
     const regExp = new RegExp(reg);
     if(!regExp.test(value)) {
+      $target.val('');
       cd.message({ type: 'danger', message: Translator.trans('validate_old.right_time_tip') });
       return;
     }
