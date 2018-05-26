@@ -225,9 +225,11 @@ class LiveServiceTest extends BaseTestCase
             1,
             'course',
         );
-        $result = ReflectionUtils::invokeMethod($this->getLiveService(), 'buildCallbackUrl', $params);
+        $results = ReflectionUtils::invokeMethod($this->getLiveService(), 'buildCallbackUrl', $params);
 
-        $this->assertNotNull($result);
+        $this->assertEquals(3, count($results));
+        $this->assertArrayHasKey('type', $results[0]);
+        $this->assertArrayHasKey('url', $results[0]);
     }
 
     public function testGetSpeakerName()
