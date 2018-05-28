@@ -19,6 +19,3 @@ new CustomFullCalendar({
   ],
   'defaultView': 'agendaWeek' // 'agendaWeek'
 });
-
-
-
