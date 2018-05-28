@@ -64,6 +64,7 @@ export default class CustomFullCalendar {
 
   _init() {
     let calendarOptions = {
+      calendarContainer: this.options['calendarContainer'],
       header: {
         left: '',
         center: 'title',
@@ -106,6 +107,8 @@ export default class CustomFullCalendar {
 
     calendarOptions = this._registerCompActions(calendarOptions);
     this.calendarOptions = calendarOptions;
+
+    calendarOptions = Object.assign(calendarOptions, this.options);
 
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
   }
@@ -166,7 +169,7 @@ export default class CustomFullCalendar {
       event['className'].push('calendar-before');
     } else if (currentUnixTime < startUnixTime) {
       event['className'].push('calendar-future');
-    } else  {
+    } else {
       event['className'].push('calendar-today');
     }
     return event;
