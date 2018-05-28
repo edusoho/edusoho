@@ -125,7 +125,7 @@ export default class CustomFullCalendar {
     options['data'] = params;
 
     if (typeof current.options['params'] != 'undefined') {
-      options['params'] = current.options['params'];
+      options['params'] = current.options['params']();
     }
     current.options['dataApi'](options).then((result) => {
       let calEvents = [];
