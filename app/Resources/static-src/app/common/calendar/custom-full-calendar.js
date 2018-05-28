@@ -118,17 +118,21 @@ export default class CustomFullCalendar {
     let startTimeAttr = current.options['dateParams']['start'];
     let endTimeAttr = current.options['dateParams']['end'];
     let params = {};
+    let options = {};
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
     params['limit'] = 1000;
-    current.options['dataApi']({
-      data: params
-    }).then((result) => {
+    options['data'] = params;
+
+    if (typeof current.options['params'] != 'undefined') {
+      options['params'] = current.options['params'];
+    }
+    current.options['dataApi'](options).then((result) => {
       let calEvents = [];
-      for (let i = 0; i < result['data'].length; i++) {
-        calEvents.push(current._generateEventInitValues(result['data'][i]));
+      for (let i = 0; i < result.length; i++) {
+        calEvents.push(current._generateEventInitValues(result[i]));
       }
-      calEvents = current._generateEventOtherAttrs(calEvents, result['data']);
+      calEvents = current._generateEventOtherAttrs(calEvents, result);
       callback(calEvents);
     }).catch((res) => {
       console.log('error callback');
