@@ -6,6 +6,9 @@
   .fc-agenda-view .fc-time-grid-event {
     .fc-content {
       padding-left: 4px;
+      .fc-time {
+        padding-top: 4px;
+      }
     }
   }
 
@@ -25,6 +28,9 @@
     border-left: 2px solid @brand-primary;
     color: darken(@brand-primary, 10%);
     background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.3);
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .fc-cancel-event {
@@ -55,11 +61,11 @@
 
 .delete-popover-content {
   padding: 12px;
-  .cd-border-radius;
-  .cd-transition;
+  .border-radius;
+  .es-transition;
   &:hover {
     cursor: pointer;
-    .cd-transition;
+    .es-transition;
     background-color: @gray-light;
   }
 }

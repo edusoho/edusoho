@@ -80,10 +80,10 @@ export default class SelectComp extends Comp {
     $target.popover({
       container: 'body',
       html: true,
-      content: `<div class="cd-mv8">
-                  <div class="cd-dark-minor text-overflow cd-mb8"><span class="cd-dark-major">任务：</span>${event.title}</div>
-                  <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">时间：</span>${event.start.format('Y年M月D日')} ${event.start.format('HH:mm')}  - ${event.end.format('HH:mm')} </div>
-                  <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">学员：</span>${event.member}</div>
+      content: `<div class="mvm">
+                  <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${event.title}</div>
+                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${event.start.format('Y年M月D日')} ${event.start.format('HH:mm')}  - ${event.end.format('HH:mm')} </div>
+                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${event.member}</div>
                   <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>${event.type}</div>
                 </div>
                 <div class="arrangement-popover__operate clearfix">${cancelTemplate}<button class="pull-right cd-btn cd-btn-sm cd-btn-primary js-cancel-btn" type="button" ${disabledStatus}>取消预约</button></div>`,
@@ -117,9 +117,9 @@ export default class SelectComp extends Comp {
     $target.popover({
       container: 'body',
       html: true,
-      content: `<div class="cd-text-medium cd-mv8">${Translator.trans('arrangement.course_time')}</div>
-                <div class="cd-dark-minor cd-mb8">${event.start.format('l')}</div>
-                <div class="cd-mb8" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
+      content: `<div class="cd-text-medium mvm">${Translator.trans('arrangement.course_time')}</div>
+                <div class="cd-dark-minor mbm">${event.start.format('l')}</div>
+                <div class="mbm" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
       template: `<div class="popover arrangement-popover js-arrangement-popover"><div class="arrow"></div>
                   <div class="arrangement-popover-content popover-content">
                   </div>

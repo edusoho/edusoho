@@ -42,10 +42,10 @@ export default class StatusTooltipComp extends BaseTooltipComp {
     $target.popover({
       container: 'body',
       html: true,
-      content: `<div class="cd-mv8">
-                  <div class="cd-dark-minor text-overflow cd-mb8"><span class="cd-dark-major">任务：</span>${params.title}</div>
-                  <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">时间：</span>${date} ${startTime} - ${endTime}</div>
-                  <div class="cd-dark-minor cd-mb8"><span class="cd-dark-major">学员：</span>${params.member}</div>
+      content: `<div class="mvm">
+                  <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${params.title}</div>
+                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${date} ${startTime} - ${endTime}</div>
+                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${params.member}</div>
                   <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>${params.type}</div>
                 </div>`,
       template: `<div class="popover arrangement-popover arrangement-popover--long"><div class="arrow"></div>
