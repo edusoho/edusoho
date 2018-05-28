@@ -55,6 +55,7 @@ site.form.submit_error: Form submit error
 site.cancel: Cancel
 site.confirm: Confirm
 site.close: Close
+site.delete: 删除
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -786,6 +787,7 @@ validate_old.date_and_time_check.message: The end time can not be earlier than o
 validate_old.date_and_time.message: Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: The start time must be less than or equal to the end time
 validate_old.not_all_digital.message: %display% can not be all numbers
+validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: Please input correct es version，correct is XX.XX.XX
 validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
@@ -870,3 +872,5 @@ User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
 message.send.not_allowed: 不允许发送私信
+
+arrangement.course_time: 排课时间：
