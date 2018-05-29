@@ -6,6 +6,19 @@ import Comp from './comp';
  */
 export default class rightClickComp extends Comp {
 
+  generateEventValues(singleResult) {
+    let compParamNames = this._getParamNames();
+    console.log(compParamNames);
+    let event = {};
+    for (let i = 0; i < compParamNames.length; i++) {
+      let fieldName = compParamNames[i];
+      event[fieldName] = singleResult[fieldName];
+      console.log(event[fieldName]);
+    }
+
+    return this._appendAdditionalAttr(event);
+  }
+
   registerAction(options) {
 
     options['eventContextmenu'] = (event, jsEvent, view) => {
@@ -15,8 +28,9 @@ export default class rightClickComp extends Comp {
       if ($popover.length) {
         $popover.remove();
       }
-
-      if (event.type) {
+      console.log(event);
+      console.log(event.status);
+      if (event.status !== 'created') {
         return;
       }
       $target.popover({
@@ -57,7 +71,7 @@ export default class rightClickComp extends Comp {
   }
 
   _getParamNames() {
-    return ['event', 'startTime', 'endTime', 'date'];
+    return ['status'];
   }
 
   _getParamPrefix() {

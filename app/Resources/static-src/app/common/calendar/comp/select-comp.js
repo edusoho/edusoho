@@ -17,6 +17,7 @@ export default class SelectComp extends Comp {
       // 选中后触发组件
       $('.js-arrangement-popover').remove();
       self.events = {
+        status: 'created',
         start: startDate.format(),
         end: endDate.format(),
       };
