@@ -79,11 +79,13 @@ export default class Create {
 
   smsSend() {
     let self = this;
+    $.ajaxSetup({global:false});
     const $captchaCode = $('#captcha_code');
     if (!this.$sendBtn.length) {
       return;
     }
     this.$sendBtn.click((event) => {
+      //第一次不进行错误提示
       self.$sendBtn.attr('disabled', true);
       let data = {
         type: 'register',
@@ -97,6 +99,7 @@ export default class Create {
         countDown(120);
       }).catch((res) => {
         if (self.drag) {
+          $.ajaxSetup({global: true});
           self.addDragCaptchaRules();
           self.drag.initDragCaptcha();
           $('.js-drag-jigsaw').removeClass('hidden');
