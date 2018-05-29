@@ -7,11 +7,16 @@
                 start: '2017-11-12 10:30:00',
                 end: '2017-11-12 12:30:00'
             }
-        ],
+        ], 
 
         dataApi: Api.course.search, 
             //与data有一个必填, 用于获取数据，每次获取数据时，会带上开始和结束时间，见 dateParams
             // 需要使用 common/api/index.js 指定的路由
+
+        apiOptions: function, 
+            // 有dataApi时有效，返回一个json, 该json会作为api的参数传递，同时生成的event会根据apiOptions内生成相应的属性
+            // 如 {params = {planId: 1}, data: {studentId: 1}}
+            // 一般 params 用于处理路由本身的参数，data则是每次获取数据的额外传参
 
         calendarContainer: '#calendar',  
             //必填，日历控件容器
@@ -30,6 +35,9 @@
             // end 是当前页日历结束时间， 例子中使用 createdTime_LT 属性
             // 后台搜索的数据需符合 start <= 时间 < end
             // 不填时，使用例子中的默认值
+
+        dateConvert: false, //默认为false
+            // 如果后台返回的是 时间戳，需要转化时间
 
         currentTime: '2017-11-12',
             //必填，用于计算json中的时间是否为过去，今天还是未来
@@ -126,7 +134,8 @@ export default class CustomFullCalendar {
 
     if (typeof current.options['apiOptions'] != 'undefined') {
       let ajaxOptions = current.options['apiOptions']()
-      options = Object.assign(ajaxOptions, options);
+      options['data'] = Object.assign(ajaxOptions['data'], options['data']);
+      options['params'] = ajaxOptions['params'];
     }
     current.options['dataApi'](options).then((result) => {
       let calEvents = [];
@@ -212,6 +221,7 @@ export default class CustomFullCalendar {
         'start': 'createdTime_GE',
         'end': 'createdTime_LT'
       },
+      'dateConvert': false,
       'components': []
     });
   }
@@ -246,6 +256,11 @@ export default class CustomFullCalendar {
     for (let i = 0; i < copiedFields.length; i++) {
       let fieldName = copiedFields[i];
       singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
+      if (this.options['dateConvert']) {
+        if ('start' == fieldName || 'end' == fieldName) {
+          singleEvent[fieldName] = moment(parseInt(singleEvent[fieldName], 10) * 1000).format('YYYY-MM-DD hh:mm:ss');
+        }
+      }
     }
     singleEvent['className'] = [];
     return singleEvent;
