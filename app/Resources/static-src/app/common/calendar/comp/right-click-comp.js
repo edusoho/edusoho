@@ -8,12 +8,10 @@ export default class rightClickComp extends Comp {
 
   generateEventValues(singleResult) {
     let compParamNames = this._getParamNames();
-    console.log(compParamNames);
     let event = {};
     for (let i = 0; i < compParamNames.length; i++) {
       let fieldName = compParamNames[i];
       event[fieldName] = singleResult[fieldName];
-      console.log(event[fieldName]);
     }
 
     return this._appendAdditionalAttr(event);
@@ -28,8 +26,6 @@ export default class rightClickComp extends Comp {
       if ($popover.length) {
         $popover.remove();
       }
-      console.log(event);
-      console.log(event.status);
       if (event.status !== 'created') {
         return;
       }
@@ -59,7 +55,6 @@ export default class rightClickComp extends Comp {
     $('body').on('click', '.js-delete-popover', (event) => {
       const $target = $(event.currentTarget);
       const id = $target.data('id');
-      console.log(id);
       $(options['calendarContainer']).fullCalendar('removeEvents', id);
     });
   }

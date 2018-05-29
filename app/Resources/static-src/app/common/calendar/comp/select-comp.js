@@ -14,17 +14,26 @@ export default class SelectComp extends Comp {
     // 禁止选择预约时间重复（创建过程中）
     options['selectOverlap'] = false;
     options['select'] = (startDate, endDate, jsEvent, view, resource) => {
+
+      // 两种形式选中的时候，我可以有属性。 状态值， 开始时间和结束时间
       // 选中后触发组件
       $('.js-arrangement-popover').remove();
+      console.log(startDate + 'startDate');
+      console.log(startDate.format());
       self.events = {
         status: 'created',
         start: startDate.format(),
+        date: startDate.format('l'),
         end: endDate.format(),
+        startTime: startDate.format('HH:mm'),
+        endTime: endDate.format('HH:mm'),
       };
       $(options['calendarContainer']).fullCalendar('renderEvent', self.events);
     };
 
     options['eventClick'] = (event, jsEvent, view) => {
+      const current = this;
+      console.log(event);
       const $target = $(jsEvent.currentTarget);
       const $clickTarget = $target.find('.fc-bg');
       if ($target.hasClass('fc-tooltip')) {
@@ -34,10 +43,30 @@ export default class SelectComp extends Comp {
         self.cancelPopover($clickTarget, event);
       }
 
-      if(!event.type) {
-        self.clickPopover($clickTarget, event);
-        event.start = self.events.start;
-        event.end = self.events.end;
+      const allType = current.getParams(event);
+
+      const date = moment(allType.start_time*1000).format('l');
+      console.log(allType.start_time);
+      const c = moment(allType.start_time*1000).format('HH:mm');
+      const d = moment(allType.end_time*1000).format('HH:mm');
+      const a = allType.start_time ? c: self.events.startTime;
+      const b = allType.end_time ? d: self.events.endTime;
+      const e = allType.start_time ? date: self.events.date;
+      const h = allType.start_time ? moment(allType.start_time*1000).format(): self.events.start;
+      console.log(a);
+      const data = {
+        time: h,
+        date: e,
+        startTime: a,
+        endTime: b,
+        status: allType.status ? allType.status : self.events.status
+      };
+
+      console.log(data);
+      if (allType.status === 'created' || event.status) {
+        self.clickPopover($clickTarget, data);
+        event.start = data.startTime;
+        event.end = data.endTime;
         self.event = event;
       }
 
@@ -71,6 +100,7 @@ export default class SelectComp extends Comp {
   }
 
   cancelPopover($target, event) {
+    console.log(event);
     let cancelTemplate = '';
     let disabledStatus = '';
     if (event.cancelTime) {
@@ -114,13 +144,20 @@ export default class SelectComp extends Comp {
     });
   }
 
-  clickPopover($target, event) {
+  getParams(event) {
+    const currentEvent = this._generateParams(event);
+    return currentEvent;
+  }
+
+  clickPopover($target, data) {
+    console.log(data);
+    const current = this;
     $target.popover({
       container: 'body',
       html: true,
-      content: `<div class="cd-text-medium mvm">${Translator.trans('arrangement.course_time')}</div>
-                <div class="cd-dark-minor mbm">${event.start.format('l')}</div>
-                <div class="mbm" data-time="${event.start.format()}"><input class="arrangement-popover__time js-time-start form-control" value=${event.start.format('HH:mm')} maxlength='5' data-time="${event.start.format()}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${event.end.format()}" value=${event.end.format('HH:mm')}></div>`,
+      content: `<div class="cd-text-medium mvm">排课时间：</div>
+                <div class="cd-dark-minor mbm">${data.date}</div>
+                <div class="mbm" data-time="${data.time}"><input class="arrangement-popover__time js-time-start form-control" value="${data.startTime}" maxlength='5' data-time="${data.startTime}" name="startTime"> — <input class="arrangement-popover__time js-time-end form-control" name="endTime" maxlength='5' data-time="${data.endTime}" value="${data.endTime}"></div>`,
       template: `<div class="popover arrangement-popover js-arrangement-popover"><div class="arrow"></div>
                   <div class="arrangement-popover-content popover-content">
                   </div>
@@ -131,7 +168,7 @@ export default class SelectComp extends Comp {
     $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
   }
 
-  changeStartTime(event, options) {
+  changeStartTime(data, options) {
     this.changeTime(event, options, true);
   }
 
@@ -144,9 +181,13 @@ export default class SelectComp extends Comp {
     const $target = $(event.target);
     const date = $target.parent().data('time').substr(0, 11);
     const targetVal = date + $target.val();
+    console.log(targetVal);
     const siblingsVal = date + $target.siblings().val();
     const targetTimeStamp = Date.parse(targetVal);
     const siblingsTimeStamp = Date.parse(siblingsVal);
+    console.log(siblingsTimeStamp);
+    const changeTargetTime = moment(targetTimeStamp).format();
+    const changesiblingsTargetTime = moment(siblingsTimeStamp).format();
 
     // 输入格式错误
     this.regRule($target, $target.val());
@@ -181,22 +222,25 @@ export default class SelectComp extends Comp {
         $target.val('');
         return;
       }
-      this.event.start = targetVal;
-      this.event.end = siblingsVal;
+      this.event.start = changeTargetTime;
+      this.event.end = changesiblingsTargetTime;
     } else {
       if (targetTimeStamp <= siblingsTimeStamp) {
         cd.message({ type: 'danger', message: Translator.trans('validate_old.date_and_time_check.message') });
         $target.val('');
         return;
       }
-      this.event.end = targetVal;
-      this.event.start = siblingsVal;
+      this.event.end = changeTargetTime;
+      this.event.start = changesiblingsTargetTime;
+      console.log(this.event.end + 'end');
+      console.log(this.event.start + 'start');
     }
+    console.log(this.event);
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
   }
 
   _getParamNames() {
-    return ['event', 'startTime', 'endTime', 'date'];
+    return ['start_time', 'end_time', 'status'];
   }
 
   _getParamPrefix() {
