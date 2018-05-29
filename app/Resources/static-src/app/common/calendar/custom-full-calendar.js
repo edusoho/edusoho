@@ -134,7 +134,8 @@ export default class CustomFullCalendar {
 
     if (typeof current.options['apiOptions'] != 'undefined') {
       let ajaxOptions = current.options['apiOptions']()
-      options = Object.assign(ajaxOptions, options);
+      options['data'] = Object.assign(ajaxOptions['data'], options['data']);
+      options['params'] = ajaxOptions['params'];
     }
     current.options['dataApi'](options).then((result) => {
       let calEvents = [];
