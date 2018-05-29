@@ -84,9 +84,13 @@ export default class Create {
       return;
     }
     
-    $.ajaxSetup({global:false});
     this.$sendBtn.click((event) => {
-      //第一次不进行错误提示
+      if (!self.smsSended) {
+        //手机发送验证码，第一次时，需要验证码时，不需要提示
+        $.ajaxSetup({global: false});
+        self.smsSended = true;
+      }
+      
       self.$sendBtn.attr('disabled', true);
       let data = {
         type: 'register',
@@ -96,6 +100,7 @@ export default class Create {
       };
 
       Api.sms.send({ data: data }).then((res) => {
+        $.ajaxSetup({global: true});
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
