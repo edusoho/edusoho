@@ -39,6 +39,7 @@ class ExploreController extends BaseController
         }
 
         list($conditions, $orderBy) = $this->getCourseSetSearchOrderBy($conditions);
+        $conditions = $this->getCourseSetFilterType($conditions);
 
         $conditions['parentId'] = 0;
         $conditions['status'] = 'published';
@@ -374,6 +375,15 @@ class ExploreController extends BaseController
         unset($conditions['orderBy']);
 
         return array($conditions, $orderBy);
+    }
+
+    protected function getCourseSetFilterType($conditions)
+    {
+        if (!$this->isPluginInstalled('Reservation')) {
+            $conditions['excludeTypes'] = array('reservation');
+        }
+
+        return $conditions;
     }
 
     protected function getTokenService()
