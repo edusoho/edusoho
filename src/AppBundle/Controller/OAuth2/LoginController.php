@@ -52,7 +52,6 @@ class LoginController extends LoginBindController
         $user = $this->getUserByTypeAndAccount($type, $account);
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
-        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType ? false : true;
         $oauthUser->isNewAccount = $user ? false : true;
 
         if ($oauthUser->isNewAccount) {
