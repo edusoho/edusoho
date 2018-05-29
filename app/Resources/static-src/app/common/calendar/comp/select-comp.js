@@ -18,12 +18,10 @@ export default class SelectComp extends Comp {
       // 两种形式选中的时候，我可以有属性。 状态值， 开始时间和结束时间
       // 选中后触发组件
       $('.js-arrangement-popover').remove();
-      console.log(startDate + 'startDate');
-      console.log(startDate.format());
       self.events = {
         start: startDate.format(),
-        date: startDate.format('l'),
         end: endDate.format(),
+        date: startDate.format('l'),
         startTime: startDate.format('HH:mm'),
         endTime: endDate.format('HH:mm'),
         status: 'created',
@@ -35,35 +33,20 @@ export default class SelectComp extends Comp {
       const current = this;
       console.log(event);
       const $target = $(jsEvent.currentTarget);
+      const currentEvent = current.getParams(event);
       const $clickTarget = $target.find('.fc-bg');
       if ($target.hasClass('fc-tooltip')) {
         return;
       }
-      if ($target.hasClass('fc-ordered-event')) {
-        self.cancelPopover($clickTarget, event);
+
+      const data = self.convertTime(currentEvent);
+
+      if (currentEvent.status === 'reserved') {
+        data.member = currentEvent.member;
+        self.cancelPopover($clickTarget, event, data);
       }
 
-      const allType = current.getParams(event);
-
-      const date = moment(allType.start_time*1000).format('l');
-      console.log(allType.start_time);
-      const c = moment(allType.start_time*1000).format('HH:mm');
-      const d = moment(allType.end_time*1000).format('HH:mm');
-      const a = allType.start_time ? c: self.events.startTime;
-      const b = allType.end_time ? d: self.events.endTime;
-      const e = allType.start_time ? date: self.events.date;
-      const h = allType.start_time ? moment(allType.start_time*1000).format(): self.events.start;
-      console.log(a);
-      const data = {
-        time: h,
-        date: e,
-        startTime: a,
-        endTime: b,
-        status: allType.status ? allType.status : self.events.status
-      };
-
-      console.log(data);
-      if (allType.status === 'created' || event.status) {
+      if (currentEvent.status === 'created' || event.status === 'created') {
         self.clickPopover($clickTarget, data);
         event.start = data.startTime;
         event.end = data.endTime;
@@ -99,8 +82,9 @@ export default class SelectComp extends Comp {
     $('body').on('click', '.js-cancel-btn', event => this.cancelReservation(event));
   }
 
-  cancelPopover($target, event) {
+  cancelPopover($target, event, data) {
     console.log(event);
+    console.log(data);
     let cancelTemplate = '';
     let disabledStatus = '';
     if (event.cancelTime) {
@@ -113,9 +97,9 @@ export default class SelectComp extends Comp {
       html: true,
       content: `<div class="mvm">
                   <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${event.title}</div>
-                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${event.start.format('Y年M月D日')} ${event.start.format('HH:mm')}  - ${event.end.format('HH:mm')} </div>
+                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${data.date} ${data.startTime}  - ${data.endTime} </div>
                   <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${event.member}</div>
-                  <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>${event.type}</div>
+                  <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>已预约</div>
                 </div>
                 <div class="arrangement-popover__operate clearfix">${cancelTemplate}<button class="pull-right cd-btn cd-btn-sm cd-btn-primary js-cancel-btn" type="button" ${disabledStatus}>取消预约</button></div>`,
       template: `<div class="popover arrangement-popover arrangement-popover--long js-arrangement-popover"><div class="arrow"></div>
@@ -147,6 +131,26 @@ export default class SelectComp extends Comp {
   getParams(event) {
     const currentEvent = this._generateParams(event);
     return currentEvent;
+  }
+
+  convertTime(eventData) {
+    const self = this;
+    const startTimeStamp = eventData.start_time * 1000;
+    const endTimeStamp = eventData.end_time * 1000;
+    const time = eventData.start_time ? moment(startTimeStamp).format(): self.events.start;
+    const date = eventData.start_time ? moment(startTimeStamp).format('l'): self.events.date;
+    const startTime = eventData.start_time ? moment(startTimeStamp).format('HH:mm'): self.events.startTime;
+    const endTime = eventData.end_time ? moment(endTimeStamp).format('HH:mm'): self.events.endTime;
+
+    const data = {
+      time: time,
+      date: date,
+      startTime: startTime,
+      endTime: endTime,
+      status: eventData.status ? eventData.status : self.events.status
+    };
+
+    return data;
   }
 
   clickPopover($target, data) {
@@ -181,7 +185,6 @@ export default class SelectComp extends Comp {
     const $target = $(event.target);
     const date = $target.parent().data('time').substr(0, 11);
     const targetVal = date + $target.val();
-    console.log(targetVal);
     const siblingsVal = date + $target.siblings().val();
     const targetTimeStamp = Date.parse(targetVal);
     const siblingsTimeStamp = Date.parse(siblingsVal);
@@ -240,7 +243,7 @@ export default class SelectComp extends Comp {
   }
 
   _getParamNames() {
-    return ['start_time', 'end_time', 'status'];
+    return ['start_time', 'end_time', 'status', 'member'];
   }
 
   _getParamPrefix() {
