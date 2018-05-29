@@ -79,11 +79,12 @@ export default class Create {
 
   smsSend() {
     let self = this;
-    $.ajaxSetup({global:false});
     const $captchaCode = $('#captcha_code');
     if (!this.$sendBtn.length) {
       return;
     }
+    
+    $.ajaxSetup({global:false});
     this.$sendBtn.click((event) => {
       //第一次不进行错误提示
       self.$sendBtn.attr('disabled', true);
