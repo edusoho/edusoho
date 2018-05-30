@@ -420,7 +420,8 @@ class PayServiceImpl extends BaseService implements PayService
         }
 
         if ('money' == $trade['price_type']) {
-            $trade['cash_amount'] = floor((round($trade['amount'] / 100 * $trade['rate'], 2) * 100 - $trade['coin_amount']) / $trade['rate']); // 标价为人民币，可用虚拟币抵扣
+            $amount = round($trade['amount'] * $trade['rate']);
+            $trade['cash_amount'] = floor(($amount - $trade['coin_amount']) / $trade['rate']); // 标价为人民币，可用虚拟币抵扣
         } else {
             $trade['cash_amount'] = floor(($trade['amount'] - $trade['coin_amount']) / $rate); // 标价为虚拟币
         }
