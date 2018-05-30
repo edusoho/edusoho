@@ -5,7 +5,6 @@ import * as getters from './getters';
 import * as actions from './actions';
 import mutations from './mutations';
 // import course from './modules/course';
-// import homepage from './modules/homepage';
 
 Vue.use(Vuex);
 
@@ -22,6 +21,5 @@ export default new Vuex.Store({
   mutations,
   modules: {
     // course,
-    // homepage,
   },
 });

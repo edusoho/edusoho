@@ -1,6 +1,6 @@
-import * as types from '../mutation-types';
 import Api from '@/api';
-
+import * as types from '../mutation-types';
+/* eslint no-shadow: [2, { "hoist": "never" }] */
 const state = {
   single: {},
   courseSet: [],
@@ -23,8 +23,8 @@ const actions = {
     return Api.getCourse({
       query: {
         courseId,
-      }
-    }).then((res) => {
+      },
+    }).then(res => {
       commit(types.UPDATE_LOADING_STATUS, false, { root: true });
       commit(types.GET_COURSE, res);
       return res;
@@ -37,8 +37,8 @@ const actions = {
         limit,
         offset,
         sort,
-      }
-    }).then((res) => {
+      },
+    }).then(res => {
       commit(types.UPDATE_LOADING_STATUS, false, { root: true });
       commit(types.GET_COURSE_LIST, res);
       return res;

@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import Mint from 'mint-ui';
 import App from '@/App';
 import router from '@/router';
 import filters from '@/filters';
@@ -7,10 +6,13 @@ import filters from '@/filters';
 import store from '@/store';
 import plugins from '@/plugins';
 import '@/components';
+import Vant from 'vant';
+import 'vant/lib/vant-css/index.css';
+import '@/assets/styles/main.less';
 
+Vue.use(Vant);
 Vue.use(filters);
 Vue.use(plugins);
-Vue.use(Mint);
 
 Vue.config.productionTip = false;
 
