@@ -18,6 +18,8 @@ class PasswordInitController extends BaseController
             $formData = $request->request->all();
             $this->getUserService()->initPassword($user['id'], $formData['newPassword']);
 
+            $goto = empty($formData['goto']) ? $this->generateUrl('homepage') : $formData['goto'];
+
             return $this->redirect($formData['goto']);
         }
 
