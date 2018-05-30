@@ -8,6 +8,7 @@ Vue.use(Router);
 
 const routes = [{
   path: '/',
+  redirect: '/find',
   name: 'home',
   component: resolve => require(['@/containers/home.vue'], resolve),
   children: [
