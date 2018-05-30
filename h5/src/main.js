@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import App from '@/App';
 import router from '@/router';
 import filters from '@/filters';
 // import utils from '@/utils';
@@ -21,6 +20,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>',
+  template: '<router-view></router-view>',
 });
