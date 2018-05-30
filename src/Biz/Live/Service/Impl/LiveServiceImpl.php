@@ -15,10 +15,16 @@ class LiveServiceImpl extends BaseService implements LiveService
         $liveParams = $this->filterCreateParams($params);
 
         try {
-            return $this->getLiveClient()->createLive($liveParams);
+            $live = $this->getLiveClient()->createLive($liveParams);
         } catch (\Exception $e) {
             throw $e;
         }
+
+        if (!empty($live['error'])) {
+            throw $this->createServiceException($live['error']);
+        }
+
+        return $live;
     }
 
     public function updateLiveRoom($liveId, $params)

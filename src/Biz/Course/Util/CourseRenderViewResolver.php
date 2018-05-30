@@ -18,6 +18,8 @@ class CourseRenderViewResolver implements RenderViewResolver
             $type = $parameters['course']['type'];
         } elseif (isset($parameters['courseSet'])) {
             $type = $parameters['courseSet']['type'];
+        } elseif (isset($parameters['params']['type'])) {
+            $type = $parameters['params']['type'];
         } else {
             return $view;
         }
