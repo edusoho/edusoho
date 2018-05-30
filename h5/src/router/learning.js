@@ -1,5 +1,5 @@
 export default [{
-  path: 'learning',
+  path: '/learning',
   name: 'learning',
   component: resolve => require(['@/containers/learning/index.vue'], resolve),
 }];
