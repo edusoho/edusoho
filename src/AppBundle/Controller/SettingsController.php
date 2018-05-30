@@ -697,7 +697,7 @@ class SettingsController extends BaseController
             if (!$validatePassed) {
                 return $this->createJsonResponse(array('message' => 'user.settings.security.password_modify.incorrect_password'), 403);
             } else {
-                $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
+                $this->getUserService()->initPassword($user['id'], $passwords['newPassword']);
 
                 return $this->createJsonResponse(array('message' => 'site.modify.success'));
             }
