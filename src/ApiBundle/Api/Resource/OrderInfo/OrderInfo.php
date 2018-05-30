@@ -12,7 +12,7 @@ use Biz\OrderFacade\Product\Product;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class zOrderInfo extends AbstractResource
+class OrderInfo extends AbstractResource
 {
     public function add(ApiRequest $request)
     {
