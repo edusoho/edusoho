@@ -8,6 +8,7 @@ Vue.use(Router);
 
 const routes = [{
   path: '/',
+  redirect: '/find',
   name: 'home',
   component: resolve => require(['@/containers/home.vue'], resolve),
   children: [
@@ -21,7 +22,7 @@ const routes = [{
   meta: {
     title: '登录',
   },
-  component: resolve => require(['@/containers/login.vue'], resolve),
+  component: resolve => require(['@/containers/login/index.vue'], resolve),
 }, {
   path: '/register',
   name: 'register',

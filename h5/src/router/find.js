@@ -1,5 +1,5 @@
 export default [{
-  path: '/find',
+  path: 'find',
   name: 'find',
   component: resolve => require(['@/containers/find/index.vue'], resolve),
 }];
