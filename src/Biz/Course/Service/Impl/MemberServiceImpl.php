@@ -407,8 +407,18 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function setCourseTeachers($courseId, $teachers)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
         $userIds = ArrayToolkit::column($teachers, 'id');
+        $existTeacherMembers = $this->findCourseTeachers($courseId);
+        $existTeacherIds = ArrayToolkit::column($existTeacherMembers, 'userId');
+        $deleteTeachers = array_diff($existTeacherIds, $userIds);
+
+        $this->dispatchEvent('course.teachers.update.before', new Event($courseId, array(
+            'teachers' => $teachers,
+            'deleteTeachers' => $deleteTeachers,
+        )));
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
         if (empty($userIds)) {
             throw $this->createServiceException('教师不能为空');
         }
@@ -418,8 +428,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('教师不能为空');
         }
 
-        $existTeacherMembers = $this->findCourseTeachers($courseId);
-        $existTeacherIds = ArrayToolkit::column($existTeacherMembers, 'userId');
         // 删除老师
         $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
         // 删除目前还是学员的成员
@@ -431,7 +439,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->batchCreate($teacherMembers);
         $this->updateCourseTeacherIds($courseId, $teachers);
         $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
-        $deleteTeachers = array_diff($existTeacherIds, $userIds);
         $addTeachers = array_diff($userIds, $existTeacherIds);
         $this->dispatchEvent('course.teachers.update', new Event($course, array(
             'teachers' => $teachers,
