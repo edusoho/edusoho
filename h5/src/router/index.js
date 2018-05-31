@@ -22,7 +22,7 @@ const routes = [{
   meta: {
     title: '登录',
   },
-  component: resolve => require(['@/containers/login.vue'], resolve),
+  component: resolve => require(['@/containers/login/index.vue'], resolve),
 }, {
   path: '/register',
   name: 'register',
