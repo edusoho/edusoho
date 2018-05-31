@@ -31,7 +31,6 @@ export default class SelectComp extends Comp {
 
     options['eventClick'] = (event, jsEvent, view) => {
       const current = this;
-      console.log(event);
       const $target = $(jsEvent.currentTarget);
       const currentEvent = current.getParams(event);
       const $clickTarget = $target.find('.fc-bg');
@@ -43,6 +42,9 @@ export default class SelectComp extends Comp {
 
       if (currentEvent.status === 'reserved') {
         data.member = currentEvent.member;
+        data.cancelUrl = currentEvent.cancelUrl;
+        event.cancelUrl = currentEvent.cancelUrl;
+        self.event = event;
         self.cancelPopover($clickTarget, event, data);
       }
 
@@ -52,7 +54,6 @@ export default class SelectComp extends Comp {
         event.end = data.endTime;
         self.event = event;
       }
-
     };
     // 预约时间可拖拽
     options['editable'] = true;
@@ -79,7 +80,7 @@ export default class SelectComp extends Comp {
   _initEvent(options) {
     $('body').on('change', '.js-time-start', event => this.changeStartTime(event, options));
     $('body').on('change', '.js-time-end', event => this.changeEndTime(event, options));
-    $('body').on('click', '.js-cancel-btn', event => this.cancelReservation(event));
+    $('body').on('click', '.js-cancel-btn', event => this.cancelReservation(event, options));
   }
 
   cancelPopover($target, event, data) {
@@ -98,10 +99,10 @@ export default class SelectComp extends Comp {
       content: `<div class="mvm">
                   <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${event.title}</div>
                   <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${data.date} ${data.startTime}  - ${data.endTime} </div>
-                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${event.member}</div>
+                  <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${data.member}</div>
                   <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>已预约</div>
                 </div>
-                <div class="arrangement-popover__operate clearfix">${cancelTemplate}<button class="pull-right cd-btn cd-btn-sm cd-btn-primary js-cancel-btn" type="button" ${disabledStatus}>取消预约</button></div>`,
+                <div class="arrangement-popover__operate clearfix">${cancelTemplate}<button class="pull-right cd-btn cd-btn-sm cd-btn-primary js-cancel-btn" data-url="${data.cancelUrl}" type="button" ${disabledStatus}>取消预约</button></div>`,
       template: `<div class="popover arrangement-popover arrangement-popover--long js-arrangement-popover"><div class="arrow"></div>
                 <div class="arrangement-popover-content popover-content">
                 </div>
@@ -113,16 +114,30 @@ export default class SelectComp extends Comp {
   }
 
 
-  cancelReservation(event) {
+  cancelReservation(event, options) {
+    console.log(event);
     $('.js-arrangement-popover').remove();
     cd.modal({
       el: '#cd-modal',
-      ajax: false,
-      url: '',
+      ajax: true,
+      url: $(event.target).data('url'),
       maskClosable: false,
     }).on('ok', ($modal, modal) => {
-      console.log('确定后的回调');
-      modal.trigger('close');
+      const mode = $modal.find('.cd-radio.checked').find('[name="title"]').val();
+      const url = $modal.find('.js-cancel-period').data('url');
+      let self = this;
+      $.post(url, {mode:mode}, function (res) {
+        if (mode === 'toCreated') {
+          self.changeStatusToCreated(event, options);
+        }
+
+        if (mode === 'toCancelled') {
+          self.changeStatusToCancelled(event, options);
+        }
+
+
+        modal.trigger('close');
+      });
     }).on('cancel', ($modal, modal) => {
       console.log('关闭后的回调');
     });
@@ -178,6 +193,21 @@ export default class SelectComp extends Comp {
 
   changeEndTime(event, options) {
     this.changeTime(event, options);
+  }
+
+  //取消
+  changeStatusToCreated(event, options) {
+    this.event.status = 'created';
+    this.event.className = [''];
+    console.log(this.event);
+    $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
+  }
+
+  changeStatusToCancelled(event, options) {
+    this.event.status = 'cancelled';
+    this.event.className = ['fc-status-event fc-tooltip fc-cancel-event'];
+    console.log(this.event);
+    $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
   }
 
   // 添加输入时间的验证规则
@@ -243,7 +273,7 @@ export default class SelectComp extends Comp {
   }
 
   _getParamNames() {
-    return ['start_time', 'end_time', 'status', 'member'];
+    return ['start_time', 'end_time', 'status', 'member', 'courseId', 'cancelUrl'];
   }
 
   _getParamPrefix() {
