@@ -30,17 +30,23 @@
   margin: vw(15);
   align-items: center; 
   &-title {
-    font-size: 20px;
+    font-size: vw(20);
     -webkit-text-fill-color: #2b333b;
     font-family: PingFangSC-Regular;
   }
   &-hint {
-
+    font-size: 15px;
+    -webkit-text-fill-color: #bdc2c6;
+    font-family: PingFangSC-Regular;
+    margin-top: 20px;
   }
   &-avatarimg {
 
   }
   &-account {
-    
+    margin-top: 15px;
+    align-self: flex-end;
+    font-size: 13px;
+    font-family: PingFangSC-Regular;
   }
 }
