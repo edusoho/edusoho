@@ -15,6 +15,14 @@ const routes = [{
     ...find,
     ...learning,
     ...my,
+    {
+      path: '/prelogin',
+      name: 'prelogin',
+      meta: {
+        title: '立即登录',
+      },
+      component: resolve => require(['@/containers/login/prelogin.vue'], resolve),
+    },
   ],
 }, {
   path: '/login',
