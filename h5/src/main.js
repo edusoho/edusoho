@@ -7,7 +7,7 @@ import plugins from '@/plugins';
 import '@/components';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
-import '@/assets/styles/main.less';
+import '@/assets/styles/main.scss';
 
 Vue.use(Vant);
 Vue.use(filters);
