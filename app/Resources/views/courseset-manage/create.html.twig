@@ -17,10 +17,10 @@
               method="post">
           {{ web_macro.flash_messages() }}
           <div class="course-piece">{{ 'my.teaching.course_set.select_type'|trans }}</div>
-          <div class="form-group">
+          <div class="form-group cd-row mb0">
             {% set typeCount = courseTypes|length %}
             {% for key,type in courseTypes %}
-              <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2{% endif %}">
+              <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2 course-five-types {% endif %}">
                 {% include type.template with {type: key} %}
               </div>
             {% endfor %}
@@ -28,10 +28,10 @@
           
             {% include 'org/course-create-org-tree-select.html.twig' %}
             <div class="course-title form-group">
-              <div class="col-md-2 controls-label text-lg">
+              <div class="mlm pull-left controls-label text-lg">
                 <div class="course-piece title">{{ 'my.teaching.course_set.select_type.course_title'|trans }}</div>
               </div>
-              <div class="col-md-10 controls">
+              <div class="col-md-10 controls course-title-input">
                 <input type="text" id="course_title" name="title" required="required" class="form-control"
                        data-widget-cid="widget-1" data-explain="">
                 <div class="help-block" style="display:none;"></div>
@@ -44,8 +44,8 @@
             </span>
               {% endif %}
               <button id="courseset-create-btn" data-loading-text="{{ 'form.btn.create.submiting'|trans }}"
-                     class="btn btn-fat btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
-              <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
+                     class="cd-btn cd-btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
+              <a class="btn btn-fat btn-link link-gray course-cancel-btn" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
             </div>
             <input type="hidden" name="type" value="normal"/>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></div>
