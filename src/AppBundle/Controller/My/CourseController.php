@@ -42,7 +42,7 @@ class CourseController extends CourseBaseController
 
         $conditions = array(
             'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE),
-            'ids' => $learningCourseSetIds
+            'ids' => $learningCourseSetIds,
         );
 
         $paginator = new Paginator(
