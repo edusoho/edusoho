@@ -14,6 +14,13 @@
       <div class="cd-panel schedule-panel">
         <div class="cd-panel-body schedule-panel__body">
           <div class="schedule-panel-body__current-num">{{ 'my.teaching.today_courses'|trans }}：<span style="font-size: 24px">{{ courseNumber }}</span><span class="cd-ml8 cd-text-sm">{{ 'my.teaching.hints_block'|trans }}</span></div>
+          <div class="cd-loading">
+            <div class="loading-content">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
           <div id='calendar'></div>
           <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d H:i:s')}}</div>
           <div id="courseNumber" class="hidden">{{ courseNumber }}</div>
