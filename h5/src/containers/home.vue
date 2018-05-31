@@ -1,25 +1,14 @@
 <template>
   <div class="home">
     <van-tabbar v-model="active" @change="onChange">
-      <van-tabbar-item>
-        <span>发现</span>
+      <van-tabbar-item v-for="item in items" :key="item.type">
+        <span>{{ item.type }}</span>
         <template slot="icon" slot-scope="props">
-          <img :src="props.active ? findIcon.active : findIcon.normal" />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item>
-        <span>学习</span>
-        <template slot="icon" slot-scope="props">
-          <img :src="props.active ? learnIcon.active : learnIcon.normal" />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item>
-        <span>我的</span>
-        <template slot="icon" slot-scope="props">
-          <img :src="props.active ? myIcon.active : myIcon.normal" />
+          <img :src="props.active ? item.active : item.normal" />
         </template>
       </van-tabbar-item>
     </van-tabbar>
+
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -30,18 +19,23 @@ export default {
   data() {
     return {
       active: 0,
-      findIcon: {
-        normal: '/static/images/explore.png',
-        active: '/static/images/exploreHL.png'
-      },
-      learnIcon: {
-        normal: '/static/images/learning.png',
-        active: '/static/images/learningHL.png'
-      },
-      myIcon: {
-        normal: '/static/images/me.png',
-        active: '/static/images/meHL.png'
-      },
+      items: [
+        {
+          type: '发现',
+          normal: '/static/images/explore.png',
+          active: '/static/images/exploreHL.png'
+        },
+        {
+          type: '学习',
+          normal: '/static/images/learning.png',
+          active: '/static/images/learningHL.png'
+        },
+        {
+          type: '我的',
+          normal: '/static/images/me.png',
+          active: '/static/images/meHL.png'
+        },
+      ]
     }
   },
   methods: {
