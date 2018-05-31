@@ -144,9 +144,29 @@ export default class CustomFullCalendar {
       }
       calEvents = current._generateEventOtherAttrs(calEvents, result);
       callback(calEvents);
+      if (current.options['hidden']) {
+        const currentEvents = $(current.options['calendarContainer']).fullCalendar('clientEvents');
+        console.log(currentEvents);
+        const data = current._getComparedArray(currentEvents);
+        console.log(JSON.stringify(data));
+        $('.js-hidden-event').val(JSON.stringify(data));
+      }
+
     }).catch((res) => {
       console.log('error callback');
     });
+  }
+
+  _getComparedArray(array) {
+    let allEvents = [];
+    for (let i = 0; i < array.length; i++) {
+     let event =  {};
+     event['_id'] = array[i]['_id'];
+     event['end'] = array[i]['end']['_i'];
+     event['start'] = array[i]['start']['_i'];
+     allEvents.push(event);
+    }
+    return allEvents;
   }
 
   _formatMonthFirstDay(view) {
