@@ -439,7 +439,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->batchCreate($teacherMembers);
         $this->updateCourseTeacherIds($courseId, $teachers);
         $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
-        $addTeachers = array_diff($userIds, $existTeacherIds);
+        $addTeachers = array_values(array_diff($userIds, $existTeacherIds));
         $this->dispatchEvent('course.teachers.update', new Event($course, array(
             'teachers' => $teachers,
             'deleteTeachers' => $deleteTeacherIds,
