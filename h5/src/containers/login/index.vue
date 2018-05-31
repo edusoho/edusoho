@@ -3,6 +3,6 @@
     login
   </div>
 </template>
-<style lang="less">
-
+<style lang="scss">
+  @import '~@/assets/styles/pages/login.scss'
 </style>

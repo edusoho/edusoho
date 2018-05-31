@@ -13,10 +13,3 @@ a {
   text-decoration: none;
 }
 
-@vm_base: 375;
-
-.function {
-  .vw(@px) {
-    return: (@px / @vm_base) * 100vw;
-  }
-}
