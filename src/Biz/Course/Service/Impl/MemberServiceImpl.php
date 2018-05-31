@@ -410,11 +410,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         $userIds = ArrayToolkit::column($teachers, 'id');
         $existTeacherMembers = $this->findCourseTeachers($courseId);
         $existTeacherIds = ArrayToolkit::column($existTeacherMembers, 'userId');
-        $deleteTeachers = array_diff($existTeacherIds, $userIds);
+        $deleteTeacherIds = array_values(array_diff($existTeacherIds, $userIds));
 
         $this->dispatchEvent('course.teachers.update.before', new Event($courseId, array(
             'teachers' => $teachers,
-            'deleteTeachers' => $deleteTeachers,
+            'deleteTeacherIds' => $deleteTeacherIds,
         )));
 
         $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -442,7 +442,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $addTeachers = array_diff($userIds, $existTeacherIds);
         $this->dispatchEvent('course.teachers.update', new Event($course, array(
             'teachers' => $teachers,
-            'deleteTeachers' => $deleteTeachers,
+            'deleteTeachers' => $deleteTeacherIds,
             'addTeachers' => $addTeachers,
         )));
     }
