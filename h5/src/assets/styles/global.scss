@@ -12,3 +12,14 @@ a {
   text-decoration: none;
 }
 
+.primary-btn {
+  margin-top: vw(30);
+  -webkit-text-fill-color: white;
+  font-size: vw(17);
+  align-self: stretch; 
+  margin-right: 0;
+  margin-left: 0;
+  border-radius:vw(2);
+  background: $primary-color;
+  opacity: .6;
+}

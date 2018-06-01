@@ -38,6 +38,13 @@ const routes = [{
     title: '注册',
   },
   component: resolve => require(['@/containers/register.vue'], resolve),
+}, {
+  path: '/my/setting',
+  name: 'my/setting',
+  meta: {
+    title: '设置',
+  },
+  component: resolve => require(['@/containers/my/setting/index.vue'], resolve),
 }];
 
 const router = new Router({

@@ -1,0 +1,22 @@
+.register {
+  display: flex;
+  flex-direction: column;
+  margin: vw(15);
+  align-items: center; 
+
+  &-title {
+    font-size: vw(20);
+    -webkit-text-fill-color: #2b333b;
+    font-family: PingFangSC-Regular;
+  }
+  &-avatarimg {
+    height: vw(90);
+    width: vw(90);
+    border-radius: vw(45);
+    margin-top: vw(30);
+  }
+  >.van-cell {
+    margin-top: vw(30);
+    font-size: vw(15);
+  }
+}

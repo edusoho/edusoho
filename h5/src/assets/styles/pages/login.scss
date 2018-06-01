@@ -27,7 +27,7 @@
 .login {
   display: flex;
   flex-direction: column;
-  margin: vw(15);
+  margin: vw(16);
   align-items: center; 
   &-title {
     font-size: vw(20);
@@ -35,18 +35,31 @@
     font-family: PingFangSC-Regular;
   }
   &-hint {
-    font-size: 15px;
+    font-size: vw(15);
     -webkit-text-fill-color: #bdc2c6;
     font-family: PingFangSC-Regular;
-    margin-top: 20px;
+    margin-top: vw(20);
   }
   &-avatarimg {
 
   }
-  &-account {
-    margin-top: 15px;
-    align-self: flex-end;
-    font-size: 13px;
-    font-family: PingFangSC-Regular;
+  &-input {
+    margin-top: vw(30);
+    left: 0;
+    padding: vw(10) 0;
+    &.van-cell:not(:last-child)::after {
+      left: 0;
+    }
   }
+  &-account {
+    margin-top: vw(15);
+    align-self: flex-end;
+    font-size: vw(13);
+    font-family: PingFangSC-Regular;
+    color: $primary-color;
+  }
+}
+
+.e-input {
+
 }
