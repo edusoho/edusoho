@@ -13,6 +13,10 @@ export default class SelectComp extends Comp {
     options['eventOverlap'] = false;
     // 禁止选择预约时间重复（创建过程中）
     options['selectOverlap'] = false;
+    // 禁止选择过去时间
+    options['selectAllow'] = (selectInfo) => {
+      return moment().diff(selectInfo.start) <= 0;
+    };
     options['select'] = (startDate, endDate, jsEvent, view, resource) => {
 
       // 两种形式选中的时候，我可以有属性。 状态值， 开始时间和结束时间
@@ -187,7 +191,7 @@ export default class SelectComp extends Comp {
     $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
   }
 
-  changeStartTime(data, options) {
+  changeStartTime(event, options) {
     this.changeTime(event, options, true);
   }
 
