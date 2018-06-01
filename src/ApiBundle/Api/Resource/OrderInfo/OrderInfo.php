@@ -85,7 +85,7 @@ class OrderInfo extends AbstractResource
 
         if (!empty($coinSetting['coin_enabled'])) {
             $orderInfo['cashRate'] = $coinSetting['cash_rate'];
-            $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
+            $orderInfo['coinPayAmount'] = round(round($orderInfo['totalPrice'], 2) * $orderInfo['cashRate'], 2);
             $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
         }
 

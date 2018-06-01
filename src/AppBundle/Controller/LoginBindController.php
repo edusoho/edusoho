@@ -93,7 +93,14 @@ class LoginBindController extends BaseController
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));
             } else {
-                $goto = $this->getTargetPath($request);
+                $currentUser = $this->getCurrentUser();
+                if (!$currentUser['passwordInit']) {
+                    $params = array('goto' => $this->getTargetPath($request));
+                    $url = $this->generateUrl('password_init');
+                    $goto = $url.'?'.http_build_query($params);
+                } else {
+                    $goto = $this->getTargetPath($request);
+                }
 
                 return $this->redirect($goto);
             }

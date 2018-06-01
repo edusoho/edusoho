@@ -2741,6 +2741,11 @@ user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自�
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
+user.init.password_tips: 请修改密码
+user.init.password_placeholder: 请输入您的密码
+user.init.password_placeholder_again: 请再输入一遍您的密码
+user.init.password.confirm.password: 确认提交
+user.init.password.submit.password.loading: 提交中...
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱
