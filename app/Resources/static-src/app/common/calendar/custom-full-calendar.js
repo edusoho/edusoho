@@ -49,11 +49,21 @@
         defaultView: 'month',
             //默认显示为月, 范围为 month,agendaWeek,agendaDay,listWeek
 
-        switchers: 'month,agendaWeek',  
+        loading: 加载动画效果
+        需要在相应twig页面中加入
+          <div class="cd-loading">
+            <div class="loading-content">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+
+        switchers: 'month,agendaWeek',
             //显示到日历顶部中间，用于切换
             // 范围为 month,agendaWeek,agendaDay,listWeek
             // 显示分为 月，周，日，日程，如果要显示多个，以逗号分割即可，如month,listweek
-        
+
         components: [new LiveTooltipComp(), new ClickComp('/course/{id}')]
             // 非必填，用于出发事件的组件，如tooltip, 点击跳转事件
  * }
@@ -84,6 +94,7 @@ export default class CustomFullCalendar {
       defaultView: this.options['defaultView'],
       allDaySlot: false,
       scrollTime: '08:00:00', //默认移动到　８点位置
+      loading: this._loading(),
     };
 
     if (calendarOptions['defaultView'] == 'agendaWeek') {
@@ -121,6 +132,12 @@ export default class CustomFullCalendar {
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
   }
 
+  _loading(isLoading, view) {
+    if(!isLoading) {
+      $('.cd-loading').remove();
+    }
+  }
+
   _ajaxLoading(start, end, timezone, callback) {
     $('.fc-day-header span').hide();
     let startTimeAttr = current.options['dateParams']['start'];
@@ -144,9 +161,29 @@ export default class CustomFullCalendar {
       }
       calEvents = current._generateEventOtherAttrs(calEvents, result);
       callback(calEvents);
+      if (current.options['hidden']) {
+        const currentEvents = $(current.options['calendarContainer']).fullCalendar('clientEvents');
+        console.log(currentEvents);
+        const data = current._getComparedArray(currentEvents);
+        console.log(JSON.stringify(data));
+        $('.js-hidden-event').val(JSON.stringify(data));
+      }
+
     }).catch((res) => {
       console.log('error callback');
     });
+  }
+
+  _getComparedArray(array) {
+    let allEvents = [];
+    for (let i = 0; i < array.length; i++) {
+     let event =  {};
+     event['_id'] = array[i]['_id'];
+     event['end'] = array[i]['end']['_i'];
+     event['start'] = array[i]['start']['_i'];
+     allEvents.push(event);
+    }
+    return allEvents;
   }
 
   _formatMonthFirstDay(view) {
