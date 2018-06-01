@@ -1,5 +1,65 @@
-@import '../mixins.scss';
+.prelogin {
+  font-size: vw(12);
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &-img {
+    height: vw(130);
+    width: vw(120);
+    margin-top: 21vh;
+  }
+  &-text {
+    color: #B0BDC9;
+    font-size: vw(14);
+    margin-top: 16px;
+  }
+  &-btn {
+    -webkit-text-fill-color: white;
+    margin-top: vw(32);
+    border-radius: vw(47);
+    min-width: vw(156);
+    background: $primary-color;
+  }
+}
 
 .login {
-  margin: vw(50);
+  display: flex;
+  flex-direction: column;
+  margin: vw(16);
+  align-items: center; 
+  &-title {
+    font-size: vw(20);
+    -webkit-text-fill-color: #2b333b;
+    font-family: PingFangSC-Regular;
+  }
+  &-hint {
+    font-size: vw(15);
+    -webkit-text-fill-color: #bdc2c6;
+    font-family: PingFangSC-Regular;
+    margin-top: vw(20);
+  }
+  &-avatarimg {
+
+  }
+  &-input {
+    margin-top: vw(30);
+    left: 0;
+    padding: vw(10) 0;
+    &.van-cell:not(:last-child)::after {
+      left: 0;
+    }
+  }
+  &-account {
+    margin-top: vw(15);
+    align-self: flex-end;
+    font-size: vw(13);
+    font-family: PingFangSC-Regular;
+    color: $primary-color;
+  }
+}
+
+.e-input {
+
 }
