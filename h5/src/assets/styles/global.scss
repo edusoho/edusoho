@@ -3,7 +3,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;
-  background-color: #f1f1f1;
   overflow-x: hidden;
   margin: 0;
   color: #313131;
@@ -25,4 +24,15 @@ a {
 
 .pull-right {
   float: right;
+}
+.primary-btn {
+  margin-top: vw(30);
+  -webkit-text-fill-color: white;
+  font-size: vw(17);
+  align-self: stretch;
+  margin-right: 0;
+  margin-left: 0;
+  border-radius:vw(2);
+  background: $primary-color;
+  opacity: .6;
 }

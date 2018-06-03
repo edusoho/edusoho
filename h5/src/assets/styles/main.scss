@@ -1,5 +1,9 @@
 @import './variables.scss';
 @import './mixins.scss';
 @import './global.scss';
+
+// pages
 @import './pages/home.scss';
 @import './pages/login.scss';
+@import './pages/register.scss';
+@import './pages/my.scss';

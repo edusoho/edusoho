@@ -15,7 +15,7 @@ module.exports = {
   plugins: [
     'vuefix',
     'vue',
-    'jsfix'
+    // 'jsfix'
   ],
   // check if imports actually resolve
   settings: {

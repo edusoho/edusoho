@@ -15,6 +15,14 @@ const routes = [{
     ...find,
     ...learning,
     ...my,
+    {
+      path: '/prelogin',
+      name: 'prelogin',
+      meta: {
+        title: '立即登录',
+      },
+      component: resolve => require(['@/containers/login/prelogin.vue'], resolve),
+    },
   ],
 }, {
   path: '/login',
@@ -30,6 +38,13 @@ const routes = [{
     title: '注册',
   },
   component: resolve => require(['@/containers/register.vue'], resolve),
+}, {
+  path: '/my/setting',
+  name: 'my/setting',
+  meta: {
+    title: '设置',
+  },
+  component: resolve => require(['@/containers/my/setting/index.vue'], resolve),
 }];
 
 const router = new Router({
