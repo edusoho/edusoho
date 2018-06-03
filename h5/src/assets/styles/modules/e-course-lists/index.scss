@@ -1,0 +1,39 @@
+.e-course-list {
+  margin-bottom: vw(15);
+  background: #ffffff;
+}
+
+.e-course-list__header {
+  padding: vw(20);
+  >div {
+    display: flex;
+  }
+}
+
+.e-course-list__list-title {
+  flex: 1;
+  color: #2B333B;
+  font-size: vw(18);
+  font-family: PingFangSC-Medium;
+}
+
+.e-course-list__more {
+  font-size: vw(14);
+  .more-text {
+    display: block;
+    margin-right: 6px;
+    height: 100%;
+    line-height: vw(25);
+  }
+  &:after {
+    content: '';
+    float: left;
+    margin-top: vw(7);
+    width: vw(7);
+    height: vw(7);
+    border-top: 2px solid #71777D;
+    border-right: 2px solid #71777D;
+    opacity: 0.8;
+    transform: rotate(45deg);
+  }
+}

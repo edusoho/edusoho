@@ -1,0 +1,29 @@
+.e-course-switch-box {
+  display: flex;
+  margin-top: vw(9);
+  flex-direction:row;
+  justify-content:space-between;
+}
+
+.e-course-switch-box__price {
+  font-size: vw(14);
+  p {
+    margin: 0;
+    font-family: Futura-Medium;
+  }
+  .free {
+    color: #408ffb;
+  }
+  .price {
+    color: #FF5353;
+  }
+}
+
+.e-course-switch-box__state {
+  color: #B0BDC9;
+  font-size: vw(12);
+  font-family: Futura-Medium;
+  p {
+    margin: 0;
+  }
+}

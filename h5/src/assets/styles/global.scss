@@ -13,3 +13,16 @@ a {
   text-decoration: none;
 }
 
+.clearfix {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}

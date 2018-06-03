@@ -1,5 +1,4 @@
 @import '../mixins.scss';
-
-.home {
-  margin: vw(50);
-}
+@import '../modules/e-course/index.scss';
+@import '../modules/e-course-lists/index.scss';
+@import '../modules/e-course-switch-box/index.scss';
