@@ -37,10 +37,13 @@ export default class SelectComp extends Comp {
       const current = this;
       const $target = $(jsEvent.currentTarget);
       const currentEvent = current.getParams(event);
+      currentEvent.start = event.start;
+      currentEvent.end = event.end;
       const $clickTarget = $target.find('.fc-bg');
       if ($target.hasClass('fc-tooltip') || $target.hasClass('calendar-before')) {
         return;
       }
+
 
       const data = self.convertTime(currentEvent);
 
@@ -92,8 +95,6 @@ export default class SelectComp extends Comp {
   }
 
   cancelPopover($target, event, data) {
-    console.log(event);
-    console.log(data);
     let cancelTemplate = '';
     let disabledStatus = '';
     if (event.cancelTime) {
@@ -123,7 +124,6 @@ export default class SelectComp extends Comp {
 
 
   cancelReservation(event, options) {
-    console.log(event);
     $('.js-arrangement-popover').remove();
     cd.modal({
       el: '#cd-modal',
@@ -158,13 +158,10 @@ export default class SelectComp extends Comp {
 
   convertTime(eventData) {
     const self = this;
-    const startTimeStamp = eventData.start_time * 1000;
-    const endTimeStamp = eventData.end_time * 1000;
-    const time = eventData.start_time ? moment(startTimeStamp).format(): self.events.start;
-    const date = eventData.start_time ? moment(startTimeStamp).format('l'): self.events.date;
-    const startTime = eventData.start_time ? moment(startTimeStamp).format('HH:mm'): self.events.startTime;
-    const endTime = eventData.end_time ? moment(endTimeStamp).format('HH:mm'): self.events.endTime;
-
+    const time = moment(eventData.start).format();
+    const date = moment(eventData.start).format('l');
+    const startTime = moment(eventData.start).format('HH:mm');
+    const endTime = moment(eventData.end).format('HH:mm');
     const data = {
       time: time,
       date: date,
@@ -177,7 +174,6 @@ export default class SelectComp extends Comp {
   }
 
   clickPopover($target, data) {
-    console.log(data);
     const current = this;
     $target.popover({
       container: 'body',
@@ -207,14 +203,12 @@ export default class SelectComp extends Comp {
   changeStatusToCreated(event, options) {
     this.event.status = 'created';
     this.event.className = [''];
-    console.log(this.event);
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
   }
 
   changeStatusToCancelled(event, options) {
     this.event.status = 'cancelled';
     this.event.className = ['fc-status-event fc-tooltip fc-cancel-event'];
-    console.log(this.event);
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
   }
 
@@ -226,7 +220,6 @@ export default class SelectComp extends Comp {
     const siblingsVal = date + $target.siblings().val();
     const targetTimeStamp = Date.parse(targetVal);
     const siblingsTimeStamp = Date.parse(siblingsVal);
-    console.log(siblingsTimeStamp);
     const changeTargetTime = moment(targetTimeStamp).format();
     const changesiblingsTargetTime = moment(siblingsTimeStamp).format();
 
@@ -273,11 +266,10 @@ export default class SelectComp extends Comp {
       }
       this.event.end = changeTargetTime;
       this.event.start = changesiblingsTargetTime;
-      console.log(this.event.end + 'end');
-      console.log(this.event.start + 'start');
     }
     console.log(this.event);
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
+
   }
 
   _getParamNames() {
