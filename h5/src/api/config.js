@@ -2,18 +2,23 @@ const config = [
   {
     name: 'login',
     url: '/tokens',
-    method: 'POST',
+    method: 'POST'
   },
   {
     name: 'getCourse',
     url: '/course_sets/{courseId}',
-    method: 'GET',
+    method: 'GET'
   },
   {
     name: 'getCourses',
     url: '/course_sets',
-    method: 'GET',
+    method: 'GET'
   },
+  {
+    name: 'setNickname',
+    url: '/settings/nickname',
+    method: 'POST'
+  }
 ];
 
 export default config;

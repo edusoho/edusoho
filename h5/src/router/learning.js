@@ -1,5 +1,8 @@
 export default [{
   path: '/learning',
   name: 'learning',
-  component: resolve => require(['@/containers/learning/index.vue'], resolve),
+  meta: {
+    title: '我的学习'
+  },
+  component: resolve => require(['@/containers/learning/index.vue'], resolve)
 }];

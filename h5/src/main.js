@@ -8,6 +8,7 @@ import '@/components';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
+import App from '@/App';
 
 Vue.use(Vant);
 Vue.use(filters);
@@ -20,5 +21,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  template: '<router-view></router-view>',
+  components: { App },
+  template: '<App/>'
 });
