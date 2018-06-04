@@ -38,7 +38,7 @@ export default class SelectComp extends Comp {
       const $target = $(jsEvent.currentTarget);
       const currentEvent = current.getParams(event);
       const $clickTarget = $target.find('.fc-bg');
-      if ($target.hasClass('fc-tooltip')) {
+      if ($target.hasClass('fc-tooltip') || $target.hasClass('calendar-before')) {
         return;
       }
 
@@ -68,6 +68,10 @@ export default class SelectComp extends Comp {
     // 拖拽位置调整时间
     options['eventDragStart'] = (event, jsEvent, ui, view) => {
       $('.js-arrangement-popover').remove();
+    };
+
+    options['eventAllow'] = (dropInfo) => {
+      return moment().diff(dropInfo.start) <= 0;
     };
 
     // 拖拽创建时间不得超过一天
