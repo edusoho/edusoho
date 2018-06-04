@@ -1,5 +1,8 @@
 export default [{
   path: 'my',
   name: 'my',
-  component: resolve => require(['@/containers/my/index.vue'], resolve),
+  meta: {
+    title: '我的'
+  },
+  component: resolve => require(['@/containers/my/index.vue'], resolve)
 }];

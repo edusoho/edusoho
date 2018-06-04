@@ -8,8 +8,8 @@ export const updateLoading = ({ commit }, { isLoading }) => {
 export const userLogin = ({ commit }, { username, password }) =>
   Api.login({
     headers: {
-      Authorization: `Basic ${btoa(unescape(encodeURIComponent(`${username}:${password}`)))}`,
-    },
+      Authorization: `Basic ${btoa(unescape(encodeURIComponent(`${username}:${password}`)))}`
+    }
   }).then(res => {
     commit(types.USER_LOGIN, res);
     return res;
