@@ -26,6 +26,11 @@
           <span class="tag-live"></span>
         </span>
       {% endif %}
+      {% if courseSet.type|default() == 'reservation' %}
+        <span class="tags">
+          <span class="tag-reservation"></span>
+        </span>
+      {% endif %}
       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
     </a>
   </div>
