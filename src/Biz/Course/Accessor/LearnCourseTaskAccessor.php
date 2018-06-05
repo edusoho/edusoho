@@ -15,9 +15,6 @@ class LearnCourseTaskAccessor extends AccessorAdapter
         if (!$task) {
             return $this->buildResult('course.task.not_found');
         }
-        if ('published' !== $task['status']) {
-            return $this->buildResult('course.task.not_published');
-        }
 
         $learnCourseChain = $this->biz['course.learn_chain'];
         $course = $this->getCourseService()->getCourse($task['courseId']);
