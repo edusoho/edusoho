@@ -19,36 +19,36 @@ const routes = [{
       path: '/prelogin',
       name: 'prelogin',
       meta: {
-        title: '立即登录',
+        title: '立即登录'
       },
-      component: resolve => require(['@/containers/login/prelogin.vue'], resolve),
-    },
-  ],
+      component: resolve => require(['@/containers/login/prelogin.vue'], resolve)
+    }
+  ]
 }, {
   path: '/login',
   name: 'login',
   meta: {
-    title: '登录',
+    title: '登录'
   },
-  component: resolve => require(['@/containers/login/index.vue'], resolve),
+  component: resolve => require(['@/containers/login/index.vue'], resolve)
 }, {
   path: '/register',
   name: 'register',
   meta: {
-    title: '注册',
+    title: '注册'
   },
-  component: resolve => require(['@/containers/register.vue'], resolve),
+  component: resolve => require(['@/containers/register.vue'], resolve)
 }, {
   path: '/my/setting',
   name: 'my/setting',
   meta: {
-    title: '设置',
+    title: '设置'
   },
-  component: resolve => require(['@/containers/my/setting/index.vue'], resolve),
+  component: resolve => require(['@/containers/my/setting/index.vue'], resolve)
 }];
 
 const router = new Router({
-  routes,
+  routes
 });
 
 export default router;

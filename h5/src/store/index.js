@@ -11,7 +11,7 @@ Vue.use(Vuex);
 const state = {
   isLoading: false,
   token: null,
-  user: {},
+  user: {}
 };
 
 export default new Vuex.Store({
@@ -21,5 +21,5 @@ export default new Vuex.Store({
   mutations,
   modules: {
     // course,
-  },
+  }
 });
