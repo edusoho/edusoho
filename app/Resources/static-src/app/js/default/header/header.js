@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie';
 import Api from 'common/api';
-import Notify from 'common/notify';
 
 export default class HeaderNav {
   constructor() {
