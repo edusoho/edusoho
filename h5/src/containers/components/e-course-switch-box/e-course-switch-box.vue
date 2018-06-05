@@ -15,7 +15,7 @@
     <div class="switch-box" v-if="type === 'order'">
       <span class="switch-box__price">
         <p class="free" v-if="isFree">免费</p>
-        <p class="price" v-if="!isFree">¥ {{ course.price }}</p>
+        <p class="price" v-if="!isFree">¥ {{ course.pay_amount | toMoney}}</p>
       </span>
       <span class="switch-box__state">
         <p class="order-close" v-if="orderType === 'close'">交易关闭</p>

@@ -8,15 +8,30 @@
     </div>
    
     <template v-else>
-      
+      <e-course :course="course" type="order"></e-course>
     </template>
   </div>
 </template>
 <script>
+import eCourse from '@/containers/components/e-course/e-course';
+
 export default {
+  components: {
+    eCourse
+  },
   data() {
     return {
-      empty: true
+      empty: false,
+      course: {
+        course: {
+
+        },
+        courseSet: {
+          cover: 'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg',
+          title: '收费课程0412'
+        },
+        pay_amount: '1'
+      }
     }
   }
 }
