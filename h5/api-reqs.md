@@ -72,3 +72,40 @@ Response:
     }
 ]
 ```
+
+## 我的学习页
+
+已有接口：
+```
+GET /me/courses
+```
+参见：
+http://developer.edusoho.com/api/user.html
+
+
+## 我的订单
+
+```
+GET /me/orders?type=course
+```
+
+只获取我的课程的订单。
+
+Response:
+
+```json
+{
+    "data": [
+        {...OrderInfo...},
+        {...OrderInfo...},
+        {...OrderInfo...},
+    ],
+    "paging": {
+        "total": 100,
+        "offset": 50,
+        "limit": 10
+    }
+}
+```
+OrderInfo结构体，参见： http://developer.edusoho.com/api/order.html
+
