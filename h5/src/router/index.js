@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import store from '@/store';
+import * as types from '@/store/mutation-types';
 import Router from 'vue-router';
 import find from './find';
 import learning from './learning';
@@ -45,7 +47,22 @@ const routes = [{
     title: '设置'
   },
   component: resolve => require(['@/containers/my/setting/index.vue'], resolve)
+}, {
+  path: '/setting/nickname',
+  name: 'setting/nickname',
+  meta: {
+    title: '昵称设置'
+  },
+  component: resolve => require(['@/containers/my/setting/nickname.vue'], resolve)
 }];
+
+// 页面刷新，store数据会被清掉，需对token、user重新赋值
+if (localStorage.getItem('token')) {
+  store.commit(types.USER_LOGIN, {
+    token: localStorage.getItem('token'),
+    user: JSON.parse(localStorage.getItem('user'))
+  });
+}
 
 const router = new Router({
   routes

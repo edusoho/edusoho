@@ -13,6 +13,11 @@ const config = [
     name: 'getCourses',
     url: '/course_sets',
     method: 'GET'
+  },
+  {
+    name: 'setNickname',
+    url: '/settings/nickname',
+    method: 'POST'
   }
 ];
 
