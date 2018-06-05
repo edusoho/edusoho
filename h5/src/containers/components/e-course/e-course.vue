@@ -1,6 +1,6 @@
 <template>
   <div class="e-course">
-    <a class="clearfix" href="">
+    <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
         <img v-bind:src="course.courseSet.cover.large">
       </div>
@@ -11,15 +11,19 @@
         </div>
         <switchBox :course="course"></switchBox>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
 <script>
-  import switchBox from '../e-course-switch-box/e-course-switch-box.vue';
+  import switchBox from './e-course-switch-box.vue';
 
   export default {
     props: {
+      type: {
+        type: String,
+        default: ''
+      },
       course: {
         type: Object,
         default: {},
@@ -27,10 +31,21 @@
     },
     data () {
       return {
+
       };
     },
     components: {
       switchBox,
+    },
+    methods: {
+      onClick() {
+        this.$router.push({
+          name: 'course',
+          query: {
+            id: this.course.id
+          }
+        });
+      }
     }
   }
 </script>
