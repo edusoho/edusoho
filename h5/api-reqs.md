@@ -1,6 +1,6 @@
 # 微网校接口需求
 
-## 获取发现页信息
+## 获取发现页信息 [New]
 
 发现页的信息是后台可配置的，目前有3个模块，小程序端/H5端，可独立配置。
 
@@ -83,7 +83,7 @@ GET /me/courses
 http://developer.edusoho.com/api/user.html
 
 
-## 我的订单
+## 我的订单 [New]
 
 ```
 GET /me/orders?type=course
@@ -108,4 +108,26 @@ Response:
 }
 ```
 OrderInfo结构体，参见： http://developer.edusoho.com/api/order.html
+
+## 获取我的个人信息
+
+```
+GET /me
+```
+
+参见：
+http://developer.edusoho.com/api/user.html
+
+
+## 修改头像  [New]
+
+```
+POST /me/avatar
+```
+
+{
+  "image": "base64之后的数据"
+}
+
+头像上传之前，先本地缩小到xx*xx像素，jpg格式。具体指标，产品经理给出。
 
