@@ -14,7 +14,6 @@ a {
 
 .clearfix {
   display: block;
-  overflow: hidden;
   clear: both;
 }
 
@@ -25,6 +24,13 @@ a {
 .pull-right {
   float: right;
 }
+
+.text-overflow {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .primary-btn {
   margin-top: vw(30);
   -webkit-text-fill-color: white;

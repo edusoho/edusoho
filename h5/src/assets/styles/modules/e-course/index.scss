@@ -16,6 +16,7 @@
 .e-course__right {
   margin-left: 10px;
   flex: 1;
+  width: 48%;
 }
 
 .e-course__title {
@@ -27,6 +28,7 @@
 .e-course__project {
   margin-top: vw(6.5);
   margin-bottom: vw(4);
+  min-height: vw(19);
   span {
     padding: vw(4) vw(10);
     border-radius: 2px;

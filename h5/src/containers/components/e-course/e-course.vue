@@ -2,14 +2,14 @@
   <div class="e-course">
     <a class="clearfix" href="">
       <div class="e-course__left pull-left">
-        <img src="">
+        <img v-bind:src="course.courseSet.cover.large">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title">Photoshop基础入门教程</div>
-        <div class="e-course__project">
-          <span>三月班</span>
+        <div class="e-course__title text-overflow">{{ course.courseSetTitle || course.courseSet.subtitle }}</div>
+        <div class="e-course__project text-overflow">
+          <span v-if="course.title === '默认教学课程'">{{ course.title }}</span>
         </div>
-        <switchBox></switchBox>
+        <switchBox :course="course"></switchBox>
       </div>
     </a>
   </div>
@@ -19,6 +19,12 @@
   import switchBox from '../e-course-switch-box/e-course-switch-box.vue';
 
   export default {
+    props: {
+      course: {
+        type: Object,
+        default: {},
+      },
+    },
     data () {
       return {
       };

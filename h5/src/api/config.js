@@ -14,6 +14,11 @@ const config = [
     url: '/course_sets',
     method: 'GET',
   },
+  {
+    name: 'course',
+    url: '/course?limit=4&sort=-studentNum',
+    method: 'GET',
+  },
 ];
 
 export default config;

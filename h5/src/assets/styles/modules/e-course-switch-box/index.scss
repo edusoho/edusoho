@@ -1,11 +1,14 @@
 .e-course-switch-box {
+  margin-top: vw(15);
+}
+
+.switch-box {
   display: flex;
-  margin-top: vw(9);
   flex-direction:row;
   justify-content:space-between;
 }
 
-.e-course-switch-box__price {
+.switch-box__price {
   font-size: vw(14);
   p {
     margin: 0;
@@ -19,11 +22,48 @@
   }
 }
 
-.e-course-switch-box__state {
+.switch-box__state {
   color: #B0BDC9;
   font-size: vw(12);
   font-family: Futura-Medium;
   p {
     margin: 0;
+  }
+  .order-close {
+    color: #B0BDC9;
+  }
+  .order-success {
+    color: #408FFB;
+  }
+  .order-pay {
+    border-radius: 42px;
+    padding: 8px 12px;
+    background: #408ffb;
+    font-size: 12px;
+    color: #ffffff;
+  }
+}
+
+.rank-box {
+  flex: 1;
+  .progress {
+    width: vw(150);
+    background: #ddd;
+  }
+  .curRate {
+    background: #408FFB;
+  }
+  .round-conner {
+    height: vw(14);
+    border-radius: 42px;
+  }
+  span {
+    display: block;
+    margin-left: vw(4);
+    font-family: Futura-Medium;
+    font-size: 14px;
+    color: #408FFB;
+    letter-spacing: 0;
+    line-height: 14px;
   }
 }
