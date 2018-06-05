@@ -39,11 +39,13 @@ export default class SelectComp extends Comp {
       const currentEvent = current.getParams(event);
       currentEvent.start = event.start;
       currentEvent.end = event.end;
+      if (event.status) {
+        currentEvent.status = event.status;
+      }
       const $clickTarget = $target.find('.fc-bg');
       if ($target.hasClass('fc-tooltip') || $target.hasClass('calendar-before')) {
         return;
       }
-
 
       const data = self.convertTime(currentEvent);
 
@@ -93,7 +95,6 @@ export default class SelectComp extends Comp {
     $('body').on('change', '.js-time-end', event => this.changeEndTime(event, options));
     $('body').on('click', '.js-cancel-btn', event => this.cancelReservation(event, options));
     $('body').on('click', '.js-button-group', event => this.clickOtherPos(event));
-    this.clickOtherPos();
   }
 
   cancelPopover($target, event, data) {
@@ -133,10 +134,13 @@ export default class SelectComp extends Comp {
       url: $(event.target).data('url'),
       maskClosable: false,
     }).on('ok', ($modal, modal) => {
+      const $cancelBtn = $('.js-cancel-period');
+      $cancelBtn.button('loading');
       const mode = $modal.find('.cd-radio.checked').find('[name="title"]').val();
       const url = $modal.find('.js-cancel-period').data('url');
       let self = this;
       $.post(url, {mode:mode}, function (res) {
+        $cancelBtn.button('reset');
         if (mode === 'toCreated') {
           self.changeStatusToCreated(event, options);
         }
