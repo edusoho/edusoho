@@ -43,11 +43,15 @@ class ExceptionListener
                 // 出现异常跳回原页面
                 $response = new RedirectResponse($request->server->get('HTTP_REFERER'));
                 $flashBag = $request->getSession()->getFlashBag();
-
-                $flashBag->add('currentExceptionCode', $exception->getCode());
-                $flashBag->add('currentExceptionMessage', $exception->getMessage());
-                $flashBag->add('currentExceptionTrace', $exception->getTraceAsString());
-                $flashBag->add('currentExceptionStatusCode', $exception->getStatusCode());
+                $flashBag->add(
+                    'currentThrowedException',
+                    array(
+                        'code' => $exception->getCode(),
+                        'message' => $exception->getMessage(),
+                        'trace' => $exception->getTraceAsString(),
+                        'statusCode' => $exception->getStatusCode(),
+                    )
+                );
                 $event->setResponse($response);
             }
 

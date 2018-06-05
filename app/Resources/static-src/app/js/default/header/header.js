@@ -12,7 +12,6 @@ export default class HeaderNav {
     this.initEvent();
     this.initNotification();
     this.bindEvent();
-    this.showException();
   }
 
   initEvent() {
@@ -116,18 +115,6 @@ export default class HeaderNav {
       history.go(-1);
     } else {
       location.href = '/';
-    }
-  }
-
-  showException() {
-    if ($('.js-hidden-exception').length > 0) {
-      let replacedExceptionHtml = $('.js-hidden-exception').html().replace(/\r?\n/g, '');
-      let exception = $.parseJSON(replacedExceptionHtml);
-      Notify('danger', exception.code + ': ' + exception.message);
-      if ($('.js-hidden-exception-trace').length > 0) {
-        exception.trace = $('.js-hidden-exception-trace').html();
-      }
-      console.log('exception', exception);
     }
   }
 }

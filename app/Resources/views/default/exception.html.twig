@@ -1,15 +1,16 @@
-{% if app.session.flashBag.has('currentExceptionCode') %}
+{% if app.session.flashBag.has('currentThrowedException') %}
   <div class="js-hidden-exception hidden">
+    {% set currentThrowedException = app.session.flashBag.peek('currentThrowedException')[0] %}
     {
-      "statusCode": "{{ app.session.flashBag.get('currentExceptionStatusCode')[0] }}",
-      "code": "{{ app.session.flashBag.get('currentExceptionCode')[0] }}",
-      "message": "{{ app.session.flashBag.get('currentExceptionMessage')[0]|trans }}"
+      "statusCode": "{{ currentThrowedException['statusCode'] }}",
+      "code": "{{ currentThrowedException['code'] }}",
+      "message": "{{ currentThrowedException['message']|trans }}"
     }
   </div>
 
   {% if 'dev' == app.environment %}
     <div class="js-hidden-exception-trace hidden">
-        {{ app.session.flashBag.get('currentExceptionTrace')[0] }}
+        {{ currentThrowedException['trace'] }}
     </div>
   {% endif %}
 {% endif %}
