@@ -92,6 +92,8 @@ export default class SelectComp extends Comp {
     $('body').on('change', '.js-time-start', event => this.changeStartTime(event, options));
     $('body').on('change', '.js-time-end', event => this.changeEndTime(event, options));
     $('body').on('click', '.js-cancel-btn', event => this.cancelReservation(event, options));
+    $('body').on('click', '.js-button-group', event => this.clickOtherPos(event));
+    this.clickOtherPos();
   }
 
   cancelPopover($target, event, data) {
@@ -191,6 +193,10 @@ export default class SelectComp extends Comp {
     $('.js-arrangement-popover').prevAll('.js-arrangement-popover').remove();
   }
 
+  clickOtherPos(event) {
+    $('.js-arrangement-popover').remove();
+  }
+
   changeStartTime(event, options) {
     this.changeTime(event, options, true);
   }
@@ -269,7 +275,6 @@ export default class SelectComp extends Comp {
     }
     console.log(this.event);
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
-
   }
 
   _getParamNames() {
