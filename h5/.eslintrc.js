@@ -15,7 +15,7 @@ module.exports = {
   plugins: [
     'vuefix',
     'vue',
-    // 'jsfix'
+    'jsfix'
   ],
   // check if imports actually resolve
   settings: {
@@ -53,6 +53,13 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     'no-case-declarations': 'off',
     'import/no-dynamic-require': 'off',
-    "no-shadow": [2, {"builtinGlobals": false, "hoist": "functions", "allow": []}]
+    "no-shadow": [2, {"builtinGlobals": false, "hoist": "functions", "allow": []}],
+    "comma-dangle": ["error", {
+      "arrays": "never",
+      "objects": "never",
+      "imports": "never",
+      "exports": "never",
+      "functions": "ignore"
+    }]
   }
 }
