@@ -8,53 +8,59 @@ import my from './my';
 
 Vue.use(Router);
 
-const routes = [{
-  path: '/',
-  redirect: '/find',
-  name: 'home',
-  component: resolve => require(['@/containers/home.vue'], resolve),
-  children: [
-    ...find,
-    ...learning,
-    ...my,
-    {
-      path: '/prelogin',
-      name: 'prelogin',
-      meta: {
-        title: '立即登录'
-      },
-      component: resolve => require(['@/containers/login/prelogin.vue'], resolve)
-    }
-  ]
-}, {
-  path: '/login',
-  name: 'login',
-  meta: {
-    title: '登录'
-  },
-  component: resolve => require(['@/containers/login/index.vue'], resolve)
-}, {
-  path: '/register',
-  name: 'register',
-  meta: {
-    title: '注册'
-  },
-  component: resolve => require(['@/containers/register.vue'], resolve)
-}, {
-  path: '/my/setting',
-  name: 'my/setting',
-  meta: {
-    title: '设置'
-  },
-  component: resolve => require(['@/containers/my/setting/index.vue'], resolve)
-}, {
-  path: '/setting/nickname',
-  name: 'setting/nickname',
-  meta: {
-    title: '昵称设置'
-  },
-  component: resolve => require(['@/containers/my/setting/nickname.vue'], resolve)
-}];
+const routes = [
+  {
+    path: '/',
+    redirect: '/find',
+    name: 'home',
+    component: resolve => require(['@/containers/home.vue'], resolve),
+    children: [
+      ...find,
+      ...learning,
+      ...my,
+      {
+        path: '/prelogin',
+        name: 'prelogin',
+        meta: {
+          title: '立即登录'
+        },
+        component: resolve => require(['@/containers/login/prelogin.vue'], resolve)
+      }
+    ]
+  }, {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: '登录'
+    },
+    component: resolve => require(['@/containers/login/index.vue'], resolve)
+  }, {
+    path: '/register',
+    name: 'register',
+    meta: {
+      title: '注册'
+    },
+    component: resolve => require(['@/containers/register.vue'], resolve)
+  }, {
+    path: '/my/setting',
+    name: 'my/setting',
+    meta: {
+      title: '设置'
+    },
+    component: resolve => require(['@/containers/my/setting/index.vue'], resolve)
+  }, {
+    path: '/setting/nickname',
+    name: 'setting/nickname',
+    meta: {
+      title: '昵称设置'
+    },
+    component: resolve => require(['@/containers/my/setting/nickname.vue'], resolve)
+  }, {
+    path: '/course/:id',
+    name: 'course',
+    component: resolve => require(['@/containers/course/index.vue'], resolve)
+  }
+];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
 if (localStorage.getItem('token')) {
