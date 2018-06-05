@@ -15,6 +15,11 @@ const config = [
     method: 'GET'
   },
   {
+    name: 'course',
+    url: '/course?limit=4&sort=-studentNum',
+    method: 'GET',
+  },
+  {
     name: 'setNickname',
     url: '/settings/nickname',
     method: 'POST'

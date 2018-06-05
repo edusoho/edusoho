@@ -12,11 +12,30 @@ a {
   text-decoration: none;
 }
 
+.clearfix {
+  display: block;
+  clear: both;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.text-overflow {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .primary-btn {
   margin-top: vw(30);
   -webkit-text-fill-color: white;
   font-size: vw(17);
-  align-self: stretch; 
+  align-self: stretch;
   margin-right: 0;
   margin-left: 0;
   border-radius:vw(2);
