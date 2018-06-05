@@ -17,7 +17,7 @@ const config = [
   {
     name: 'course',
     url: '/course?limit=4&sort=-studentNum',
-    method: 'GET',
+    method: 'GET'
   },
   {
     name: 'setNickname',
