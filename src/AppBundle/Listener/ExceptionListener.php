@@ -39,7 +39,22 @@ class ExceptionListener
             if (Response::HTTP_FORBIDDEN === $statusCode && empty($user)) {
                 $response = new RedirectResponse($this->container->get('router')->generate('login'));
                 $event->setResponse($response);
+            } elseif (false !== strpos(get_parent_class($exception), 'AbstractException')) {
+                // 出现异常跳回原页面
+                $response = new RedirectResponse($request->server->get('HTTP_REFERER'));
+                $flashBag = $request->getSession()->getFlashBag();
+                $flashBag->add(
+                    'currentThrowedException',
+                    array(
+                        'code' => $exception->getCode(),
+                        'message' => $exception->getMessage(),
+                        'trace' => $exception->getTraceAsString(),
+                        'statusCode' => $exception->getStatusCode(),
+                    )
+                );
+                $event->setResponse($response);
             }
+
             $event->setException($exception);
 
             return;
