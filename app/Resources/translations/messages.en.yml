@@ -5689,6 +5689,7 @@ admin.magic_setting.buy_before_approval: 'ID verification before course purchase
 admin.magic_setting.disable_web_crontab: 'Turn on web scheduled task or not'
 admin.magic_setting.cloud_search: 'Turn on cloud search service'
 admin.magic_setting.ios_buy_disable: 'Close iOS payment or not'
+admin.magic_setting.ios_vip_close: '是否关闭iOS会员模块'
 admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'
