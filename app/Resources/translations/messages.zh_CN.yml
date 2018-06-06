@@ -6983,6 +6983,7 @@ admin.magic_setting.buy_before_approval: 购买课程前实名认证
 admin.magic_setting.disable_web_crontab: 是否开启web定时任务
 admin.magic_setting.cloud_search: 是否开启云搜索业务
 admin.magic_setting.ios_buy_disable: 是否关闭iOS购买功能
+admin.magic_setting.ios_vip_close: 是否关闭iOS会员模块
 admin.magic_setting.export_limit: 订单单次导出数量
 admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
