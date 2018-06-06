@@ -2084,16 +2084,16 @@ classroom.buy_classroom.vip_free: 会员免费
 classroom.block_content_title: 所属%name%
 classroom.expiryDays: 班级有效期
 classroom.vip_checked_fail_tips: >
-  该 ~ %classroomName% ~ 已不支持会员免费学，
+  该%classroomName%已不支持会员免费学，
 classroom.not_vip_member_tips: >
-  您已经不是会员，不能学习此 ~ %classroomName% ~ ！
+  您已经不是会员，不能学习此%classroomName%！
 classroom.exit: 退出
 classroom.not_vip_member_and_become_vip_tips: >
   请重新<a class="alert-link" href="%vipUrl%" target="_blank">开通会员</a>
 classroom.vip_member_expired_tips: >
-  您的会员已过期，不能学习此 ~ %classroomName% ~ ，请先<a class="alert-link" href="%vipRenewUrl%" target="_blank">续费</a>。
+  您的会员已过期，不能学习此%classroomName%，请先<a class="alert-link" href="%vipRenewUrl%" target="_blank">续费</a>。
 classroom.vip_member_level_low_tips: >
-  会员等级不够，不能学习此' ~ %classroomName% ~ '。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
+  会员等级不够，不能学习此%classroomName%。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
 classroom.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 classroom.cancle_refund_btn: 取消退款，继续学习！
 classroom.courses_count: 共%courseNum%课
