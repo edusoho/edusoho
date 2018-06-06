@@ -2,7 +2,7 @@
   <div class="e-course-list">
     <div class="e-course-list__header">
       <div class="clearfix">
-        <span class="e-course-list__list-title">推荐课程</span>
+        <span class="e-course-list__list-title">{{ title }}</span>
         <span class="e-course-list__more">
           <a class="more-text pull-left">更多</a>
         </span>
@@ -31,6 +31,7 @@
     data() {
       return {
         courses: [],
+        title: '更多课程'
       };
     },
     components: {

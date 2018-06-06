@@ -37,9 +37,9 @@
   }
   .order-pay {
     border-radius: 42px;
-    padding: 8px 12px;
+    padding: vw(8) vw(12);
     background: #408ffb;
-    font-size: 12px;
+    font-size: vw(12);
     color: #ffffff;
   }
 }
@@ -61,9 +61,9 @@
     display: block;
     margin-left: vw(4);
     font-family: Futura-Medium;
-    font-size: 14px;
+    font-size: vw(14);
     color: #408FFB;
     letter-spacing: 0;
-    line-height: 14px;
+    line-height: vw(14);
   }
 }
