@@ -4383,7 +4383,7 @@ course.header.become_a_VIP: <a href="%href%" target="_blank">加入会员</a>
 course.member.tips.title: 提示
 course.member.classroom.tips: 您购买的班级已到期，无法学习任务、提问等。如有疑问请联系老师。
 course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
-course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。
+course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或退出并重新加入 。
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
