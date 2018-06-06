@@ -46,7 +46,16 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
+            new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
         );
+    }
+
+    public function isDiscount($course)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $discountPlugin = $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Discount');
+
+        return $discountPlugin && $courseSet['discountId'] > 0 && ($course['price'] < $course['originPrice']) && $course['parentId'] == 0;
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
@@ -174,6 +183,11 @@ class CourseExtension extends \Twig_Extension
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 
     /**

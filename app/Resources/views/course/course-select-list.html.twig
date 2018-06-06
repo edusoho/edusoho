@@ -79,7 +79,7 @@
       </td>
       <td>
           <span class="course-price js-price-{{courseSet.id}}" style="display:inline">
-          {% include 'course/widgets/classroom-course-price.html.twig' with { price : courseSet.courses[0].price } %}
+          {% include 'course/widgets/classroom-course-price.html.twig' with { price : courseSet.courses[0].originPrice } %}
           </span>
       </td>
     </tr>

@@ -45,13 +45,7 @@
       </div>
     </div>
     <div class="course-detail-info">
-			
-			{#确认下判断是否有误#}
-			{% if courseSet.discountId > 0  and course.price < course.originPrice  and is_plugin_installed('Discount') %}
-				{% set onDiscount =  true %}
-			{% else %}
-				{% set onDiscount =  false %}
-			{% endif %}
+			{% set onDiscount =  is_discount(course) %}
       
       <div class="{% if onDiscount %} mb10  {% else %} mb15 {% endif %}">
 				{% include 'course/header/header-for-price.html.twig' %}
