@@ -82,7 +82,6 @@ GET /me/courses
 参见：
 http://developer.edusoho.com/api/user.html
 
-
 ## 我的订单 [New]
 
 ```
@@ -118,8 +117,7 @@ GET /me
 参见：
 http://developer.edusoho.com/api/user.html
 
-
-## 修改头像  [New]
+## 修改头像 [New]
 
 ```
 POST /me/avatar
@@ -129,5 +127,24 @@ POST /me/avatar
   "image": "base64之后的数据"
 }
 
-头像上传之前，先本地缩小到xx*xx像素，jpg格式。具体指标，产品经理给出。
+头像上传之前，先本地缩小到xx*xx像素，jpg 格式。具体指标，产品经理给出。
+
+## 课程页
+
+```
+GET /pages/course?id=xxx
+```
+
+## 登陆页
+
+```
+GET /pages/login
+```
+
+### 注册页
+
+```
+GET
+```
+
 
