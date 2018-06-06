@@ -109,7 +109,7 @@ export default class SelectComp extends Comp {
       container: 'body',
       html: true,
       content: `<div class="mvm">
-                  <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${event.title}</div>
+                  <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${event.target_name}</div>
                   <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${data.date} ${data.startTime}  - ${data.endTime} </div>
                   <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${data.member}</div>
                   <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>已预约</div>
