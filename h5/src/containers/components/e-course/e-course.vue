@@ -2,14 +2,14 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img v-bind:src="course.courseSet.cover.large">
+        <img v-bind:src="course.image">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ course.courseSetTitle || course.courseSet.subtitle }}</div>
+        <div class="e-course__title text-overflow">{{ course.courseSetTitil }}</div>
         <div class="e-course__project text-overflow">
-          <span v-if="course.title === '默认教学课程'">{{ course.title }}</span>
+          <span v-if="course.title !== '默认教学课程'">{{ course.title }}</span>
         </div>
-        <switchBox :course="course"></switchBox>
+        <switchBox :type="'price'" :course="course"></switchBox>
       </div>
     </div>
   </div>
