@@ -82,6 +82,10 @@ export default class SelectComp extends Comp {
       end: '23:59'
     };
 
+    options['eventAllow'] = (dropInfo, draggedEvent) => {
+      return moment().diff(dropInfo.start) <= 0;
+    };
+
     self._initEvent(options);
 
     return options;
