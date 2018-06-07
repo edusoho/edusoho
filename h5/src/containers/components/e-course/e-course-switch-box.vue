@@ -24,6 +24,13 @@
       </span>
     </div>
 
+     <!-- confirm order -->
+    <div class="switch-box" v-if="type === 'confirmOrder'">
+      <span class="switch-box__price">
+        <p class="price">¥ {{ course.totalPrice | toMoney}}</p>
+      </span>
+    </div>
+
     <!-- rank -->
     <div class="rank-box clearfix" v-if="type === 'rank'">
       <div>
