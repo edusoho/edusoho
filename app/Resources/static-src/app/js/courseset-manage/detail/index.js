@@ -16,11 +16,17 @@ class detail {
   }
 
   initCkeditor() {
-    CKEDITOR.replace('summary', {
+    let self = this;
+    self.editor = CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+    });
+
+    self.editor.on('blur', () => {
+      $('#courseset-summary-field').val(self.editor.getData());
+      self.validator.form();
     });
   }
 
@@ -37,10 +43,12 @@ class detail {
   }
 
   submitForm() {
-    $('#courseset-submit').click((event) => {
-      this.publishAddMessage();
-      $(event.currentTarget).button('loading');
-      $('#courseset-detail-form').submit();
+    this.validator = $('#courseset-detail-form').validate({
+      rules: {
+        summary: {
+          ckeditor_maxlength: 10000,
+        },
+      }
     });
   }
 
