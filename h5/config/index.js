@@ -12,8 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://mp1.cg-dev.cn/',
-        changeOrigin: true
+        target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
+        changeOrigin: true,
+        secure: false,
       }
     },
 
