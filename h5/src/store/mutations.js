@@ -15,5 +15,9 @@ export default {
     state.user = {};
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+  },
+  [types.USER_INFO](state, user) {
+    state.user = user;
+    localStorage.setItem('user', JSON.stringify(user));
   }
 };

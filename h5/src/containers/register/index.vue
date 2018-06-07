@@ -29,7 +29,7 @@
       <van-button type="default" class="primary-btn mb20">同意服务协议并注册</van-button>
       
       <div class="login-bottom ">
-        请详细阅读 <router-link to="/register">《用户服务协议》</router-link> 
+        请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link> 
       </div>
       <div class="register-social">
         <span>
@@ -37,7 +37,6 @@
           <i class="iconfont icon-weixin1"></i>
           <i class="iconfont icon-weibo"></i>
         </span>
-        
         <div class="line"></div>
       </div>
   </div>

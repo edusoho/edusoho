@@ -3,7 +3,7 @@
     <div class="my_setting-item" v-for="(item, index) in settings" @click="handleSetting(index)">
       <span class="my_setting-title title-18">{{item.name}}</span>
       <div class="my_setting-content">
-        <img :src="user.avatar.small" alt="" v-if="!index" class="my_setting-avatar">
+        <img :src="item.info" alt="" v-if="!index" class="my_setting-avatar">
         <span  v-if="index">{{item.info}}</span>
         <img src="/static/images/more.png" alt="" class="my_setting-more">
       </div>
@@ -14,6 +14,7 @@
 <script>
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
+import Api from '@/api';
 
 export default {
   data() {
@@ -36,10 +37,9 @@ export default {
     })
   },
   created() {
-    console.log(this.user);
     this.$set(this.settings[0], 'info', this.user.avatar.small);
     this.$set(this.settings[1], 'info', this.user.nickname);
-     this.$set(this.settings[2], 'info', this.user.school);
+    this.$set(this.settings[2], 'info', this.user.school);
   },
   methods: {
     handleSetting(index) {
@@ -58,6 +58,11 @@ export default {
     },
     onRead(file) {
       console.log(file)
+      Api.setAvatar({
+        "images": file.content
+      }).then(res => {
+        this.$set(this.settings[0], 'info', file.content);
+      })
     }
   }
 }

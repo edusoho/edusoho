@@ -30,8 +30,20 @@ const config = [
     method: 'GET'
   },
   {
+    // 获取我的个人信息
     name: 'getUserInfo',
     url: '/me',
+    method: 'GET'
+  },
+  {
+    // 修改头像
+    name: 'setAvatar',
+    url: '/me/avatar',
+    method: 'POST'
+  }, {
+    // 我的订单
+    name: 'getMyOrder',
+    url: '/me/orders?type=course',
     method: 'GET'
   }
 ];

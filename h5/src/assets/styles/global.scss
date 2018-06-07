@@ -54,11 +54,16 @@ a {
   color: #2b333b;
 }
 
+.mb20 {
+  margin-bottom: vw(20) !important;
+}
+
 .van-button--disabled {
   opacity: .6;
   cursor: not-allowed;
 }
 
+// 导航栏
 .nav {
   background-color: $bg-black;
   color: #fff;
@@ -66,6 +71,11 @@ a {
     color: #fff;
   }
 }
-.mb20 {
-  margin-bottom: vw(20) !important;
+
+.e-section {
+  background: #fff;
+  padding: vw(15);
+  border-radius: vw(4);
+  border: 1px solid #e4ecf3;
 }
+

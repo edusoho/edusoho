@@ -10,8 +10,9 @@
     <van-field v-model="password" 
       type="password"
       class="login-input e-input"
+      :error-message="errorMessage.password"
       placeholder="请输入密码" />
-    <van-button type="default" class="primary-btn mb20" @click="onSubmit">登录</van-button>
+    <van-button type="default" class="primary-btn mb20" @click="onSubmit" :disabled="btnDisable">登录</van-button>
     <div class="login-bottom">
       <router-link to="/register" class='login-account'>找回密码</router-link>
       还没有注册帐号？
@@ -27,7 +28,15 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      errorMessage: {
+        password: ''
+      }
+    }
+  },
+  computed: {
+    btnDisable() {
+      return !(this.username && this.password);
     }
   },
   methods: {
@@ -40,6 +49,7 @@ export default {
         password: this.password
       }).then(res => {
         Toast.success('登录成功');
+        this.$router.go(-1);
       }).catch(err => {
         Toast.fail('登录异常');
       })
