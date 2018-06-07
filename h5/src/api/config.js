@@ -15,8 +15,8 @@ const config = [
     method: 'GET'
   },
   {
-    name: 'course',
-    url: '/course?limit=4&sort=-studentNum',
+    name: 'discoveries',
+    url: '/discoveries/h5',
     method: 'GET'
   },
   {
