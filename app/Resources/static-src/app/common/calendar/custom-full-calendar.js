@@ -127,6 +127,15 @@ export default class CustomFullCalendar {
     calendarOptions = this._registerCompActions(calendarOptions);
     this.calendarOptions = calendarOptions;
 
+    calendarOptions['loading'] = function(isLoading, view) {
+      if (isLoading) {
+        const loading = cd.loading();
+        $('.js-arrangement-panel').prepend(loading).find('.cd-loading').addClass('calendar-loading');
+      } else {
+        $('.cd-loading').remove();
+      }
+    }
+
     calendarOptions = Object.assign(calendarOptions, this.options);
 
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
