@@ -23,6 +23,5 @@ class ArticleContentBodyType extends Migration
      */
     public function down()
     {
-
     }
 }
