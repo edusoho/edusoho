@@ -59,7 +59,13 @@ a {
   cursor: not-allowed;
 }
 
-.blue-nav {
-  background-color: $primary-color;
+.nav {
+  background-color: $bg-black;
   color: #fff;
+  .van-icon {
+    color: #fff;
+  }
+}
+.mb20 {
+  margin-bottom: vw(20) !important;
 }

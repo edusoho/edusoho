@@ -20,9 +20,19 @@ const config = [
     method: 'GET'
   },
   {
-    name: 'setNickname',
-    url: '/settings/nickname',
+    name: 'dragCaptcha',
+    url: '/drag_captcha',
     method: 'POST'
+  },
+  {
+    name: 'dragValidate',
+    url: '/drag_captcha/{token}',
+    method: 'GET'
+  },
+  {
+    name: 'getUserInfo',
+    url: '/me',
+    method: 'GET'
   }
 ];
 

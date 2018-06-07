@@ -8,7 +8,8 @@
     </div>
    
     <template v-else>
-      <e-course :course="course" type="order"></e-course>
+      <e-course v-for="course in courses" :key="course.id" :course="course"
+       type="order"></e-course>
     </template>
   </div>
 </template>
@@ -22,17 +23,27 @@ export default {
   data() {
     return {
       empty: false,
-      course: {
-        course: {
-
-        },
+      courses: [{
         courseSet: {
-          cover: 'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg',
+          cover: {
+            large:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
+          },
           title: '收费课程0412'
         },
         pay_amount: '1'
-      }
+      }, {
+        courseSet: {
+          cover: {
+            large:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
+          },
+          title: '收费课程0412'
+        },
+        pay_amount: '1'
+      }]
     }
+  },
+  created() {
+    this.courses.length > 0 ? this.empty = false : this.empty = true;
   }
 }
 </script>
