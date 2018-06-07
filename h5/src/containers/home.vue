@@ -49,23 +49,9 @@ export default {
   },
   methods: {
     onChange(index) {
-      switch (index) {
-        case 0:
-          this.$router.push({
-            name: 'find',
-          });
-          break;
-        case 1:
-          this.$router.push({
-            name: 'learning',
-          });
-          break;
-        case 2:
-          this.$router.push({
-            name: 'my',
-          });
-          break;
-      }
+      this.$router.push({
+        name: this.items[index].name
+      })
     }
   },
 }

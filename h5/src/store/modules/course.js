@@ -4,7 +4,7 @@ import * as types from '../mutation-types';
 const state = {
   single: {},
   courseSet: [],
-  paging: {},
+  paging: {}
 };
 
 const mutations = {
@@ -14,7 +14,7 @@ const mutations = {
   [types.GET_COURSE_LIST](state, payload) {
     state.courseSet = payload.data;
     state.paging = payload.paging;
-  },
+  }
 };
 
 const actions = {
@@ -22,8 +22,8 @@ const actions = {
     commit(types.UPDATE_LOADING_STATUS, true, { root: true });
     return Api.getCourse({
       query: {
-        courseId,
-      },
+        courseId
+      }
     }).then(res => {
       commit(types.UPDATE_LOADING_STATUS, false, { root: true });
       commit(types.GET_COURSE, res);
@@ -36,19 +36,19 @@ const actions = {
       params: {
         limit,
         offset,
-        sort,
-      },
+        sort
+      }
     }).then(res => {
       commit(types.UPDATE_LOADING_STATUS, false, { root: true });
       commit(types.GET_COURSE_LIST, res);
       return res;
     });
-  },
+  }
 };
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions,
+  actions
 };

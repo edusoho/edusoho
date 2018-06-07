@@ -1,0 +1,32 @@
+.order {
+  height: 90vh;
+  > .e-course {
+    padding-top: vw(20);
+    background: #fff;
+  }
+  background: #F6F6F6;
+
+  &-submit-bar {
+    width: 100vw;
+    height: vw(50);
+    position: fixed;
+    bottom: 0;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: Futura-Medium;
+    >.submit-btn {
+      height: vw(35);
+      margin: auto vw(20);
+      font-size: vw(14);
+      color: white;
+      padding:0  vw(10);
+      font-weight: bold;
+    }
+    >span {
+      font-size: vw(14);
+      font-weight: 500;
+    }
+  }
+}

@@ -31,16 +31,23 @@ const routes = [
     path: '/login',
     name: 'login',
     meta: {
-      title: '登录'
+      title: 'EduSoho 微网校'
     },
     component: resolve => require(['@/containers/login/index.vue'], resolve)
   }, {
     path: '/register',
     name: 'register',
     meta: {
-      title: '注册'
+      title: 'EduSoho 微网校'
     },
-    component: resolve => require(['@/containers/register.vue'], resolve)
+    component: resolve => require(['@/containers/register/index.vue'], resolve)
+  }, {
+    path: '/protocol',
+    name: 'protocol',
+    meta: {
+      title: 'EduSoho 微网校'
+    },
+    component: resolve => require(['@/containers/register/protocol/index.vue'], resolve)
   }, {
     path: '/my/setting',
     name: 'my/setting',
@@ -59,6 +66,13 @@ const routes = [
     path: '/course/:id',
     name: 'course',
     component: resolve => require(['@/containers/course/index.vue'], resolve)
+  }, {
+    path: '/order/:id',
+    name: 'order',
+    meta: {
+      title: '确认订单'
+    },
+    component: resolve => require(['@/containers/order/index.vue'], resolve)
   }
 ];
 
