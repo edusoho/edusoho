@@ -27,9 +27,9 @@
 
 .e-course__project {
   margin-top: vw(6.5);
-  margin-bottom: vw(4);
-  min-height: vw(19);
+  margin-bottom: vw(5);
   span {
+    display: inline-block;
     padding: vw(4) vw(10);
     border-radius: 2px;
     font-size: vw(10);
