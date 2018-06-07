@@ -512,7 +512,7 @@ $.validator.addMethod('email_or_mobile_check', function (value, element, params)
 }, Translator.trans('validate.email_or_mobile_check.message'));
 
 $.validator.addMethod('ckeditor_maxlength', function (value, element, params) {
-  $.validator.messages.ckeditor_maxlength = Translator.trans(`简介字数不能超过${params}字！`);
+  $.validator.messages.ckeditor_maxlength = Translator.trans('validate.character_maxlength', {max: params});
 
   return value.replace(/<\/?[^>]+(>|$)/g, '').replace(/[\r\n]/g,'').length > params ? false : true;
 });
