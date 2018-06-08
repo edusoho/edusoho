@@ -4,7 +4,7 @@ import filters from '@/filters';
 import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
-import '@/components';
+import EdusohoUI from '@/components';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
@@ -14,6 +14,7 @@ Vue.use(Vant);
 Vue.use(filters);
 Vue.use(plugins);
 Vue.use(utils);
+Vue.use(EdusohoUI);
 
 Vue.config.productionTip = false;
 

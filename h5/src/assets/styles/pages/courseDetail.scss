@@ -1,0 +1,20 @@
+.course-detail {
+  transition: all 1s;
+  // teacher component
+  .teacher-cell {
+    display: flex;
+    flex-direction: column;
+    margin-left: vw(10);
+    
+    > span:last-child {
+      color: #71777d;
+      line-height: vw(24);
+      letter-spacing: 0;
+    }
+  }
+  .van-tabs--fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+}

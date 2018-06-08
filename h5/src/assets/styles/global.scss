@@ -42,6 +42,7 @@ a {
   background: $primary-color;
 }
 
+// title
 .title-18 {
   font-family: PingFangSC-Medium;
   font-size: vw(18);
@@ -58,15 +59,24 @@ a {
   margin-bottom: vw(20) !important;
 }
 
+// color
 .red {
   color: #ff5353;
+}
+.dark {
+  color: #2b333b;
+}
+
+// font-family 
+.font-family-PFM {
+  font-family: PingFangSC-Medium;
 }
 .van-button--disabled {
   opacity: .6;
   cursor: not-allowed;
 }
 
-// 导航栏
+// nav
 .nav {
   background-color: $bg-black;
   color: #fff;
@@ -82,3 +92,12 @@ a {
   border: 1px solid #e4ecf3;
 }
 
+.teacher-avatar-img {
+  max-width: vw(42);
+  max-height: vw(42);
+  border-radius: 50%;
+}
+.segmentation {
+  height: vw(15);
+  background: #f7f7f7;
+}

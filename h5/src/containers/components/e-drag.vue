@@ -1,6 +1,5 @@
 <template>
   <div class="e-drag">
-    <!-- <van-loading color="white" type="spinner"/> -->
     <div class="e-drag-section">
       <div class="e-drag-img">
         <img :src="imgInfo.url" alt="" ref="dragImgBg">
@@ -21,7 +20,7 @@
           <img src="/static/images/drag.png" alt="">
         </div>
       </div>
-
+      
     </div>
   </div>
 </template>

@@ -1,0 +1,17 @@
+.e-panel {
+  display: flex;
+  flex-direction: column;
+  margin: 0 vw(20);
+  background-color: white;
+
+  &-heading {
+    padding: vw(25) 0 vw(15);
+  }
+
+  &-body {
+    display: flex;
+    font-size: vw(14);
+    margin-bottom: vw(25);
+    flex-direction: column;
+  }
+}
