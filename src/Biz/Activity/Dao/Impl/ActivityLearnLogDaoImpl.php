@@ -94,8 +94,6 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     public function sumLearnTimeGroupByUserId($conditions)
     {
-        $conditions['learnedTime_GE'] = 0;
-        $conditions['learnedTime_LE'] = 24 * 60 * 60;
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(`learnedTime`) as learnedTime, `userId`')
             ->groupBy('userId');
