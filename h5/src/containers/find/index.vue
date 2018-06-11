@@ -1,23 +1,25 @@
 <template>
   <div class="find-page">
     <div class="find-page__part" v-for="part in parts">
-      <e-swiper v-if="part.class == 'slideshow'"></e-swiper>
+      <e-swipe v-if="part.class == 'slideshow'" :slides="part.data"></e-swipe>
       <e-course-list v-if="part.class == 'courselist'" :courseList="part.data"></e-course-list>
-      <e-promotion v-if="part.class == 'image'"></e-promotion>
+      <e-promotion v-if="part.class == 'image'" :promotion="part.data"></e-promotion>
     </div>
+    <!-- 垫底的 -->
+    <div style="margin-top: 50px"></div>
   </div>
 </template>
 
 <script>
   import courseList from '../components/e-course-list/e-course-list.vue';
   import promotion from '../components/e-promotion/e-promotion.vue'
-  import swiper from '../components/e-swiper/e-swiper.vue'
+  import swipe from '../components/e-swipe/e-swipe.vue'
   import Api from '@/api';
 
   export default {
     components: {
       'e-course-list': courseList,
-      'e-swiper': swiper,
+      'e-swipe': swipe,
       'e-promotion': promotion,
     },
     data () {
@@ -25,13 +27,6 @@
         parts: [],
         coursesList: [],
       };
-    },
-    methods: {
-      dataFilter(data) {
-        data.array.forEach(element => {
-          if (element.class !== 'courselist') return;
-        });
-      }
     },
     created() {
       Api.discoveries()
