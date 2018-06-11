@@ -14,26 +14,26 @@ const routes = [{
   children: [
     ...find,
     ...learning,
-    ...my,
-  ],
+    ...my
+  ]
 }, {
   path: '/login',
   name: 'login',
   meta: {
-    title: '登录',
+    title: '登录'
   },
-  component: resolve => require(['@/containers/login.vue'], resolve),
+  component: resolve => require(['@/containers/login.vue'], resolve)
 }, {
   path: '/register',
   name: 'register',
   meta: {
-    title: '注册',
+    title: '注册'
   },
-  component: resolve => require(['@/containers/register.vue'], resolve),
+  component: resolve => require(['@/containers/register.vue'], resolve)
 }];
 
 const router = new Router({
-  routes,
+  routes
 });
 
 export default router;
