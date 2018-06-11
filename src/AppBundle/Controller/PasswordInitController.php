@@ -18,7 +18,9 @@ class PasswordInitController extends BaseController
             $formData = $request->request->all();
             $this->getUserService()->initPassword($user['id'], $formData['newPassword']);
 
-            return $this->redirect($this->generateUrl('homepage'));
+            $goto = empty($formData['goto']) ? $this->generateUrl('homepage') : $formData['goto'];
+
+            return $this->redirect($formData['goto']);
         }
 
         return $this->render('init-password/init-password.html.twig');

@@ -67,9 +67,17 @@
   width: 460px;
   min-height: 400px;
   .border-radius(0);
-  @media(max-width: @screen-xs-max) {
+  @media (max-width: @screen-xs-max) {
     width: 100%;
     margin: 20px auto;
+  }
+
+  &.login-init-section {
+    .login-init-section__title {
+      margin-bottom: 32px;
+      font-size: 20px;
+      text-align: center;
+    }
   }
   &.login-section-weixin {
     min-height: 315px;

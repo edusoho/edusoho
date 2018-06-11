@@ -43,7 +43,7 @@ class Currency
     {
         $coinSetting = $biz->service('System:SettingService')->get('coin', array());
 
-        if ($coinSetting['coin_enabled'] && $coinSetting['cash_model'] == 'currency') {
+        if ($coinSetting['coin_enabled'] && 'currency' == $coinSetting['cash_model']) {
             $this->isoCode = 'COIN';
             $this->symbol = $coinSetting['coin_name'];
             $this->prefix = '';
@@ -74,7 +74,7 @@ class Currency
             $parts['decimalDelimiter'] = $this->decimalDelimiter;
             $parts['decimal'] = str_pad(
                 substr(
-                    strval(abs($value != 0 ? $value : 1) * pow(10, $this->precision)),
+                    strval(abs(0 != $value ? $value : 1) * pow(10, $this->precision)),
                     -1 * $this->precision
                 ),
                 $this->precision,
@@ -108,7 +108,7 @@ class Currency
             $parts['decimalDelimiter'] = CoinCurrency::DECIMAL_DELIMITER;
             $parts['decimal'] = str_pad(
                 substr(
-                    strval(abs($value != 0 ? $value : 1) * pow(10, CoinCurrency::PRECISION)),
+                    strval(abs(0 != $value ? $value : 1) * pow(10, CoinCurrency::PRECISION)),
                     -1 * CoinCurrency::PRECISION
                 ),
                 CoinCurrency::PRECISION,
@@ -142,7 +142,7 @@ class Currency
             $parts['decimalDelimiter'] = MoneyCurrency::DECIMAL_DELIMITER;
             $parts['decimal'] = str_pad(
                 substr(
-                    strval(abs($value != 0 ? $value : 1) * pow(10, MoneyCurrency::PRECISION)),
+                    strval(abs(0 != $value ? $value : 1) * pow(10, MoneyCurrency::PRECISION)),
                     -1 * MoneyCurrency::PRECISION
                 ),
                 MoneyCurrency::PRECISION,
@@ -178,7 +178,7 @@ class Currency
             $parts['decimalDelimiter'] = MajorCurrency::DECIMAL_DELIMITER;
             $parts['decimal'] = str_pad(
                 substr(
-                    strval(abs($value != 0 ? $value : 1) * pow(10, MajorCurrency::PRECISION)),
+                    strval(abs(0 != $value ? $value : 1) * pow(10, MajorCurrency::PRECISION)),
                     -1 * MajorCurrency::PRECISION
                 ),
                 MajorCurrency::PRECISION,
@@ -197,7 +197,7 @@ class Currency
     public function convertToCoin($value)
     {
         if ($this->coinSetting['coin_enabled']) {
-            return round($value * $this->coinSetting['cash_rate'], 2);
+            return round(round($value, 2) * $this->coinSetting['cash_rate'], 2);
         }
 
         return $value;

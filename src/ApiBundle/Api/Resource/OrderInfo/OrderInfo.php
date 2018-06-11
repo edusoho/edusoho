@@ -85,7 +85,7 @@ class OrderInfo extends AbstractResource
 
         if (!empty($coinSetting['coin_enabled'])) {
             $orderInfo['cashRate'] = $coinSetting['cash_rate'];
-            $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
+            $orderInfo['coinPayAmount'] = round(round($orderInfo['totalPrice'], 2) * $orderInfo['cashRate'], 2);
             $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
         }
 
@@ -109,11 +109,11 @@ class OrderInfo extends AbstractResource
                 //按年月
                 if ('10' == $vipSetting['buyType']) {
                     $defaultDuration = $vipSetting['default_buy_months10'];
-                //按年
+                    //按年
                 } elseif ('20' == $vipSetting['buyType']) {
                     $defaultUnitType = 'year';
                     $defaultDuration = $vipSetting['default_buy_years'];
-                //按月
+                    //按月
                 } else {
                     $defaultDuration = $vipSetting['default_buy_months'];
                 }

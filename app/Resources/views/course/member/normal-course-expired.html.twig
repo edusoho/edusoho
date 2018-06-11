@@ -7,7 +7,7 @@
       course: course,
       member: member
     }) %}
-    {% if  member.deadline < timestamp() %}
+    {% if member.deadline < timestamp() and member.deadline != 0 %}
       {% if course.expiryMode == 'date' %}
         {{ 'course.member.course.tips'|trans }}
       {% else %}

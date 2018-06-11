@@ -4,9 +4,15 @@
   </div>
   <div class="media-body">
     <div class="content">
-      {{ note.content|raw }}
+      <div class="editor-text">
+        {{ note.content|raw }}
+      </div>
     </div>
-    <a href="javascript:;" class="more more-show">[{{'classroom.expand_note'|trans}}]</a>
+
+    <a href="javascript:;" class="more js-more-show">
+      <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+      <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+    </a>
     <div class="metas clearfix">
       {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span>
       {% include 'classroom/note/note-mates.html.twig' %}
