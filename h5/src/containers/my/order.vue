@@ -25,23 +25,23 @@ export default {
     return {
       empty: false,
       courses: [{
-        courseSet: {
-          cover: {
-            large:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
-          },
+        items: {
+          image:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
         },
         title: '收费课程0412',
         pay_amount: '1',
         targetId: 1,
+        courseSetTitil: '四月班'
       }, {
         courseSet: {
           cover: {
             large:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
           },
-          title: '收费课程0412'
         },
         pay_amount: '1',
         targetId: 2,
+        title: '收费课程0412',
+        courseSetTitil: '四月班'
       }]
     }
   },

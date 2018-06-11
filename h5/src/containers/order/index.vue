@@ -24,6 +24,7 @@ export default {
         },
         totalPrice: '1',
         title: '收费课程0412',
+        courseSetTitil: "四月班",
         targetId: 1
       }]
     }

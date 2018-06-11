@@ -1,0 +1,50 @@
+.course-detail {
+  transition: all 1s;
+
+  // teacher component
+  .teacher-cell {
+    display: flex;
+    flex-direction: column;
+    margin-left: vw(10);
+    
+    > span:last-child {
+      color: #71777d;
+      line-height: vw(24);
+      letter-spacing: 0;
+    }
+  }
+
+  // tabs
+  .van-tabs {
+    margin-bottom: -44px;
+    .van-tab {
+      color: #2b333b;
+      font-family: PingFangSC-Medium;
+      &--active {
+        color: #2b333b;
+      }
+    }
+    &__line {
+      background-color: $primary-color;
+    }
+    &--fixed {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  .about {
+    margin-top: 44px;
+  }
+
+  .layout-col {
+    .e-panel-body {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .directory {
+    margin-bottom: vw(50);
+  }
+}
