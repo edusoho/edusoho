@@ -1,5 +1,7 @@
 <template>
-  <div>e-promotion</div>
+  <div class="e-promotion">
+
+  </div>
 </template>
 
 <script>
