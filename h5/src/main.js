@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import router from '@/router';
 import filters from '@/filters';
-// import utils from '@/utils';
+import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
 import '@/components';
@@ -13,6 +13,7 @@ import App from '@/App';
 Vue.use(Vant);
 Vue.use(filters);
 Vue.use(plugins);
+Vue.use(utils);
 
 Vue.config.productionTip = false;
 

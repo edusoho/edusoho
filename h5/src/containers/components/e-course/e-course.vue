@@ -20,14 +20,14 @@
 
   export default {
     props: {
-      type: {
-        type: String,
-        default: ''
-      },
       course: {
         type: Object,
         default: {},
       },
+      type: {
+        type: String,
+        default: 'price'
+      }
     },
     data () {
       return {
@@ -37,13 +37,19 @@
     components: {
       switchBox,
     },
+    created(){
+      console.log('course', this.course);
+    },
     methods: {
       onClick() {
+        const name = this.type === 'order'? 'order' : 'course';
+        const id = this.course.id || this.course.targetId;
+
         this.$router.push({
-          name: 'course',
-          query: {
-            id: this.course.id
-          }
+          path: `${name}/${id}`,
+          // params: {
+          //   id: this.course.id || this.course.targetId
+          // }
         });
       }
     }
