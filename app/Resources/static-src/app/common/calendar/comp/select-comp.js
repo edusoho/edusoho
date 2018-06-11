@@ -52,6 +52,7 @@ export default class SelectComp extends Comp {
       if (currentEvent.status === 'reserved') {
         data.member = currentEvent.member;
         data.cancelUrl = currentEvent.cancelUrl;
+        data.target_name = currentEvent.target_name;
         event.cancelUrl = currentEvent.cancelUrl;
         self.event = event;
         self.cancelPopover($clickTarget, event, data);
@@ -75,14 +76,14 @@ export default class SelectComp extends Comp {
       $('.js-arrangement-popover').remove();
     };
 
-    options['eventAllow'] = (dropInfo) => {
-      return moment().diff(dropInfo.start) <= 0;
-    };
-
     // 拖拽创建时间不得超过一天
     options['selectConstraint'] = {
       start: '00:01',
       end: '23:59'
+    };
+
+    options['eventAllow'] = (dropInfo, draggedEvent) => {
+      return moment().diff(dropInfo.start) <= 0;
     };
 
     self._initEvent(options);
@@ -109,7 +110,7 @@ export default class SelectComp extends Comp {
       container: 'body',
       html: true,
       content: `<div class="mvm">
-                  <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${event.target_name}</div>
+                  <div class="cd-dark-minor text-overflow mbm"><span class="cd-dark-major">任务：</span>${data.target_name}</div>
                   <div class="cd-dark-minor mbm"><span class="cd-dark-major">时间：</span>${data.date} ${data.startTime}  - ${data.endTime} </div>
                   <div class="cd-dark-minor mbm"><span class="cd-dark-major">学员：</span>${data.member}</div>
                   <div class="cd-dark-minor"><span class="cd-dark-major">状态：</span>已预约</div>
@@ -282,7 +283,7 @@ export default class SelectComp extends Comp {
   }
 
   _getParamNames() {
-    return ['start_time', 'end_time', 'status', 'member', 'courseId', 'cancelUrl'];
+    return ['start_time', 'end_time', 'status', 'member', 'courseId', 'cancelUrl', 'target_name'];
   }
 
   _getParamPrefix() {
