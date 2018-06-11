@@ -1,10 +1,12 @@
 <template>
   <div class="join-before">
     <img src="/static/images/orderEmpty.png" alt="">
-    <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
-      <van-tab v-for="item in tabs" :title="item" :key="item">
-      </van-tab>
-    </van-tabs>
+    <div ref="tabs">
+      <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" >
+        <van-tab v-for="item in tabs" :title="item" :key="item">
+        </van-tab>
+      </van-tabs>
+    </div>
 
     <e-panel title="课程介绍" ref="about"></e-panel>
     <div class="segmentation"></div>
@@ -47,8 +49,12 @@
       Teacher
     },
     mounted() {
+      window.scrollTo(0, 0);
       window.addEventListener('scroll', this.handleScroll);
-      this.tabsTop = this.$refs.tabs.$el.getBoundingClientRect().top;
+
+      this.tabsTop = this.$refs.tabs.getBoundingClientRect().top;
+
+      console.log('tabsTop', this.tabsTop);
     },
     methods: {
       onTabClick(index, title) {

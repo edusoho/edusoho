@@ -65,6 +65,9 @@ const routes = [
   }, {
     path: '/course/:id',
     name: 'course',
+    meta: {
+      title: '课程详情'
+    },
     component: resolve => require(['@/containers/course/index.vue'], resolve)
   }, {
     path: '/order/:id',
