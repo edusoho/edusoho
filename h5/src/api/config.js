@@ -13,6 +13,38 @@ const config = [
     name: 'getCourses',
     url: '/course_sets',
     method: 'GET'
+  },
+  {
+    name: 'discoveries',
+    url: '/discoveries/h5',
+    method: 'GET'
+  },
+  {
+    name: 'dragCaptcha',
+    url: '/drag_captcha',
+    method: 'POST'
+  },
+  {
+    name: 'dragValidate',
+    url: '/drag_captcha/{token}',
+    method: 'GET'
+  },
+  {
+    // 获取我的个人信息
+    name: 'getUserInfo',
+    url: '/me',
+    method: 'GET'
+  },
+  {
+    // 修改头像
+    name: 'setAvatar',
+    url: '/me/avatar',
+    method: 'POST'
+  }, {
+    // 我的订单
+    name: 'getMyOrder',
+    url: '/me/orders?type=course',
+    method: 'GET'
   }
 ];
 

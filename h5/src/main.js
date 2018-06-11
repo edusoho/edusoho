@@ -1,17 +1,19 @@
 import Vue from 'vue';
 import router from '@/router';
 import filters from '@/filters';
-// import utils from '@/utils';
+import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
 import '@/components';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
-import '@/assets/styles/main.less';
+import '@/assets/styles/main.scss';
+import App from '@/App';
 
 Vue.use(Vant);
 Vue.use(filters);
 Vue.use(plugins);
+Vue.use(utils);
 
 Vue.config.productionTip = false;
 
@@ -20,5 +22,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  template: '<router-view></router-view>'
+  components: { App },
+  template: '<App/>'
 });

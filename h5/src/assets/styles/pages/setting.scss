@@ -1,0 +1,49 @@
+.my_setting {
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+  }
+  &-title {
+    margin-left: vw(30);
+  }
+  &-content {
+
+  }
+  &-more {
+    height: vw(14);
+    width: vw(14);
+    margin: 0 vw(24) 0 vw(18);
+  }
+  &-avatar {
+    height: vw(50);
+    width: vw(50);
+    border-radius: 50%;
+    vertical-align: middle;
+  }
+  .van-uploader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  // 修改昵称
+  &-nickname {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 vw(20);
+    &--input {
+      margin-top: vw(30);
+    }
+    &--btn {
+      margin-top: vw(40);
+    }
+  }
+}

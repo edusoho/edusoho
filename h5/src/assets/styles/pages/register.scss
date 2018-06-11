@@ -1,0 +1,53 @@
+.register {
+  display: flex;
+  flex-direction: column;
+  margin: vw(50) vw(15);
+  align-items: center; 
+
+  &-title {
+    font-size: vw(20);
+    color: #313131;
+    font-family: PingFangSC-Regular;
+  }
+  &-avatarimg {
+    height: vw(90);
+    width: vw(90);
+    border-radius: vw(45);
+    margin-top: vw(30);
+  }
+  >.van-cell {
+    margin-top: vw(30);
+    font-size: vw(15);
+  }
+  > .login-bottom {
+    > a {
+      color: $primary-color;
+      cursor: pointer;
+    }
+  }
+  &-social {
+    width: 100%;
+    position: relative;
+    color: #C1C1C1;
+    margin-top: vw(30);
+    text-align: center;
+    >span {
+      background: #fff;
+      padding: 0 vw(10);
+      
+      i {
+        font-size: vw(40);
+        margin: 0 vw(10);
+      }
+    }
+   
+    > .line {
+      position: absolute;
+      top: 50%;
+      background: #E1E1E1;
+      height: 1px;
+      width: 100%;
+      z-index: -1;
+    }
+  }
+}

@@ -1,0 +1,84 @@
+body {
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  color: #313131;
+}
+
+a {
+  text-decoration: none;
+}
+
+.clearfix {
+  display: block;
+  clear: both;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.text-overflow {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.primary-btn {
+  margin-top: vw(30);
+  -webkit-text-fill-color: white;
+  font-size: vw(17);
+  align-self: stretch;
+  margin-right: 0;
+  margin-left: 0;
+  border-radius:vw(2);
+  background: $primary-color;
+}
+
+.title-18 {
+  font-family: PingFangSC-Medium;
+  font-size: vw(18);
+  color: #2b333b;
+}
+
+.title-16 {
+  font-family: PingFangSC-Medium;
+  font-size: vw(16);
+  color: #2b333b;
+}
+
+.mb20 {
+  margin-bottom: vw(20) !important;
+}
+
+.red {
+  color: #ff5353;
+}
+.van-button--disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+// 导航栏
+.nav {
+  background-color: $bg-black;
+  color: #fff;
+  .van-icon {
+    color: #fff;
+  }
+}
+
+.e-section {
+  background: #fff;
+  padding: vw(15);
+  border-radius: vw(4);
+  border: 1px solid #e4ecf3;
+}
+

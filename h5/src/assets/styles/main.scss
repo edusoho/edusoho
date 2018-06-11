@@ -1,0 +1,15 @@
+@import './variables.scss';
+@import './mixins.scss';
+@import './global.scss';
+@import '../fonts/iconfont.css';
+
+// pages
+@import './pages/home.scss';
+@import './pages/login.scss';
+@import './pages/register.scss';
+@import './pages/my.scss';
+@import './pages/setting.scss';
+@import './pages/order.scss';
+
+// modeles
+@import './modules/e-drag.scss';
