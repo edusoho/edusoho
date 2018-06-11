@@ -130,7 +130,7 @@ export default class CustomFullCalendar {
     calendarOptions['loading'] = function(isLoading, view) {
       if (isLoading) {
         const loading = cd.loading();
-        $('.js-arrangement-panel').prepend(loading).find('.cd-loading').addClass('calendar-loading');
+        $('.js-calendar').prepend(loading).find('.cd-loading').addClass('calendar-loading');
       } else {
         $('.cd-loading').remove();
       }
