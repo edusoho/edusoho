@@ -49,12 +49,21 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
             new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
+            new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
         );
     }
 
     public function getDynUrl($baseUrl, $params)
     {
         return DynUrlToolkit::getUrl($this->biz, $baseUrl, $params);
+    }
+
+    public function isDiscount($course)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $discountPlugin = $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Discount');
+
+        return $discountPlugin && $courseSet['discountId'] > 0 && ($course['price'] < $course['originPrice']) && 0 == $course['parentId'];
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
@@ -166,7 +175,7 @@ class CourseExtension extends \Twig_Extension
 
         return $visibleCourseTypes;
     }
-    
+
     public function isTaskAvailable($task)
     {
         $course = $this->getCourseService()->getCourse($task['courseId']);
@@ -200,6 +209,11 @@ class CourseExtension extends \Twig_Extension
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 
     /**

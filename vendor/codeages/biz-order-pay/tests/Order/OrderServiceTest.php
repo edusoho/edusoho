@@ -13,27 +13,27 @@ class OrderServiceTest extends IntegrationTestCase
     {
         parent::setUp();
         $currentUser = array(
-            'id' => 1
+            'id' => 1,
         );
         $this->biz['user'] = $currentUser;
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testCreateOrderWithoutLogin()
     {
         $orderItems = $this->mockOrderItems();
         $order = $this->mockOrder();
         $currentUser = array(
-            'id' => ''
+            'id' => '',
         );
         $this->biz['user'] = $currentUser;
         $this->getWorkflowService()->start($order, $orderItems);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateOrderWithoutTitle()
     {
@@ -43,7 +43,7 @@ class OrderServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateOrderWithoutPriceAmount()
     {
@@ -53,7 +53,7 @@ class OrderServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateOrderWithoutTargetType()
     {
@@ -63,7 +63,7 @@ class OrderServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateOrderWithoutTargetId()
     {
@@ -73,7 +73,7 @@ class OrderServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateOrderWithoutUserId()
     {
@@ -82,7 +82,6 @@ class OrderServiceTest extends IntegrationTestCase
         unset($order['user_id']);
         $this->getWorkflowService()->start($order, $orderItems);
     }
-
 
     public function testCreateOrder()
     {
@@ -106,16 +105,16 @@ class OrderServiceTest extends IntegrationTestCase
                         'deduct_id' => 1,
                         'deduct_type' => 'discount',
                         'deduct_amount' => 20,
-                        'detail' => '打折活动扣除10元'
+                        'detail' => '打折活动扣除10元',
                     ),
                     array(
                         'deduct_id' => 2,
                         'deduct_type' => 'coupon',
                         'deduct_amount' => 80,
-                        'detail' => '使用优惠码扣除8元'
-                    )
-                )
-            )
+                        'detail' => '使用优惠码扣除8元',
+                    ),
+                ),
+            ),
         );
         $mockOrder = $this->mockOrder();
         $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
@@ -130,7 +129,7 @@ class OrderServiceTest extends IntegrationTestCase
             'order_sn' => $order['sn'],
             'trade_sn' => '1234567',
             'pay_time' => time(),
-            'payment_platform' => 'wechat'
+            'payment_platform' => 'wechat',
         );
         $this->getWorkflowService()->paying($order['id']);
         $this->getWorkflowService()->paid($data);
@@ -139,7 +138,7 @@ class OrderServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testCloseOrderWhenPaidStatus()
     {
@@ -148,14 +147,13 @@ class OrderServiceTest extends IntegrationTestCase
         $data = array(
             'order_sn' => $order['sn'],
             'trade_sn' => '1234567',
-            'pay_time' => time()
+            'pay_time' => time(),
         );
         $this->getWorkflowService()->paying($order['id']);
         $this->getWorkflowService()->paid($data);
 
         $this->getWorkflowService()->close($order['id']);
     }
-
 
     public function testCloseOrder()
     {
@@ -183,7 +181,7 @@ class OrderServiceTest extends IntegrationTestCase
                         array('order_item_title' => 'item_title'),
                         array('created_time' => 'DESC'),
                         0,
-                        10
+                        10,
                     ),
                     'returnValue' => array('sn' => 'order-sn'),
                 ),
@@ -212,7 +210,7 @@ class OrderServiceTest extends IntegrationTestCase
                         array('title_like' => 'order_title'),
                         array('created_time' => 'DESC'),
                         0,
-                        10
+                        10,
                     ),
                     'returnValue' => array('sn' => 'order-sn'),
                 ),
@@ -313,7 +311,7 @@ class OrderServiceTest extends IntegrationTestCase
         $this->assertNotEmpty($orderItems);
         $this->assertEquals(count($mockedOrderItems), count($orderItems));
 
-        for ($i = 0; $i < count($mockedOrderItems); $i++) {
+        for ($i = 0; $i < count($mockedOrderItems); ++$i) {
             $item = $orderItems[$i];
             $mockedItem = $mockedOrderItems[$i];
 
@@ -333,7 +331,7 @@ class OrderServiceTest extends IntegrationTestCase
             $deducts = $this->getOrderService()->findOrderItemDeductsByItemId($item['id']);
             $this->assertEquals(count($mockedItem['deducts']), count($deducts));
 
-            for ($j = 0; $j < count($deducts); $j++) {
+            for ($j = 0; $j < count($deducts); ++$j) {
                 $deduct = $deducts[$j];
                 $mockedDeduct = $mockedItem['deducts'][$j];
 
@@ -356,7 +354,7 @@ class OrderServiceTest extends IntegrationTestCase
         $this->assertNotEmpty($order['trade_sn']);
         $this->assertEquals($notifyData['trade_sn'], $order['trade_sn']);
         $this->assertEquals($notifyData['pay_time'], $order['pay_time']);
-        $this->assertEquals($order['pay_time'] + $order['expired_refund_days']*86400, $order['refund_deadline']);
+        $this->assertEquals($order['pay_time'] + $order['expired_refund_days'] * 86400, $order['refund_deadline']);
 
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
         foreach ($orderItems as $orderItem) {
@@ -375,22 +373,22 @@ class OrderServiceTest extends IntegrationTestCase
                 'target_id' => 1,
                 'target_type' => 'course',
                 'create_extra' => array(
-                    'xxx' => 'xxx'
+                    'xxx' => 'xxx',
                 ),
                 'deducts' => array(
                     array(
                         'deduct_id' => 1,
                         'deduct_type' => 'discount',
                         'deduct_amount' => 10,
-                        'detail' => '打折活动扣除10元'
+                        'detail' => '打折活动扣除10元',
                     ),
                     array(
                         'deduct_id' => 2,
                         'deduct_type' => 'coupon',
                         'deduct_amount' => 8,
-                        'detail' => '使用优惠码扣除8元'
-                    )
-                )
+                        'detail' => '使用优惠码扣除8元',
+                    ),
+                ),
             ),
             array(
                 'title' => 'F1驾驶技术',
@@ -399,23 +397,23 @@ class OrderServiceTest extends IntegrationTestCase
                 'target_id' => 2,
                 'target_type' => 'course',
                 'create_extra' => array(
-                    'xxx' => 'xxx'
+                    'xxx' => 'xxx',
                 ),
                 'deducts' => array(
                     array(
                         'deduct_id' => 3,
                         'deduct_type' => 'discount',
                         'deduct_amount' => 10,
-                        'detail' => '打折活动扣除10元'
+                        'detail' => '打折活动扣除10元',
                     ),
                     array(
                         'deduct_id' => 5,
                         'deduct_type' => 'coupon',
                         'deduct_amount' => 4,
-                        'detail' => '使用优惠码扣除4元'
-                    )
-                )
-            )
+                        'detail' => '使用优惠码扣除4元',
+                    ),
+                ),
+            ),
         );
     }
 
@@ -535,6 +533,7 @@ class OrderServiceTest extends IntegrationTestCase
         foreach ($item['deducts'] as $deduct) {
             $priceAmount = $priceAmount - $deduct['deduct_amount'];
         }
+
         return $priceAmount;
     }
 
@@ -542,16 +541,16 @@ class OrderServiceTest extends IntegrationTestCase
     {
         return array(
             'title' => '购买商品',
-            'callback' => array('url'=>'http://try6.edusoho.cn/'),
+            'callback' => array('url' => 'http://try6.edusoho.cn/'),
             'source' => 'custom',
             'price_type' => 'coin',
             'user_id' => $this->biz['user']['id'],
             'created_reason' => '购买',
             'create_extra' => array(
-                'xxx' => 'xxx'
+                'xxx' => 'xxx',
             ),
             'device' => 'wap',
-            'expired_refund_days' => 5
+            'expired_refund_days' => 5,
         );
     }
 
@@ -561,6 +560,7 @@ class OrderServiceTest extends IntegrationTestCase
         foreach ($items as $item) {
             $price = $price + $item['price_amount'];
         }
+
         return $price;
     }
 
@@ -575,6 +575,7 @@ class OrderServiceTest extends IntegrationTestCase
         if ($priceAmount < 0) {
             $priceAmount = 0;
         }
+
         return $priceAmount;
     }
 

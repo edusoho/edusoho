@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Dao\Impl\ActivityLearnLogDaoImpl;
@@ -89,22 +90,10 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
 
     public function sumLearnTimeGroupByUserId($conditions)
     {
-        $result = $this->getActivityLearnLogDao()->search($conditions, array(), 0, PHP_INT_MAX);
-        if (empty($result)) {
-            return array();
-        }
+        $results = $this->getActivityLearnLogDao()->sumLearnTimeGroupByUserId($conditions);
+        $results = ArrayToolkit::index($results, 'userId');
 
-        $users = array();
-        foreach ($result as $value) {
-            $userId = $value['userId'];
-            if (isset($users[$userId])) {
-                $users[$userId]['learnedTime'] += $value['learnedTime'];
-            } else {
-                $users[$userId]['learnedTime'] = $value['learnedTime'];
-            }
-        }
-
-        return $users;
+        return $results;
     }
 
     public function search($conditions, $orderBy, $start, $limit)
