@@ -47,9 +47,6 @@
       Teacher,
       Directory
     },
-    created() {
-
-    },
     mounted() {
       const refs = this.$refs;
 
@@ -77,6 +74,7 @@
         const scrollTop = window.pageYOffset ||
           document.documentElement.scrollTop || document.body.scrollTop;
 
+
         this.active = this.activeCurrentTab(scrollTop);
 
         scrollTop >= this.tops.tabsTop
@@ -84,6 +82,7 @@
           : this.tabsClass = '';
       },
       activeCurrentTab(scrollTop) {
+        console.log(scrollTop)
         const tops = this.tops;
 
         scrollTop  = scrollTop + 44;
