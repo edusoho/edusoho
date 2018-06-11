@@ -1,9 +1,9 @@
-import Course from './course';
 import EPanel from './panel';
+import EFooter from './footer';
 
 export default {
   install(Vue) {
-    Vue.component('e-course', Course);
     Vue.component('e-panel', EPanel);
+    Vue.component('e-footer', EFooter);
   }
 };

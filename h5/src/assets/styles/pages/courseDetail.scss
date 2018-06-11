@@ -1,5 +1,6 @@
 .course-detail {
   transition: all 1s;
+
   // teacher component
   .teacher-cell {
     display: flex;
@@ -12,9 +13,35 @@
       letter-spacing: 0;
     }
   }
-  .van-tabs--fixed {
-    position: fixed;
-    top: 0;
-    width: 100%;
+
+  // tabs
+  .van-tabs {
+    margin-bottom: -44px;
+    .van-tab {
+      color: #2b333b;
+      font-family: PingFangSC-Medium;
+      &--active {
+        color: #2b333b;
+      }
+    }
+    &__line {
+      background-color: $primary-color;
+    }
+    &--fixed {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  .about {
+    margin-top: 44px;
+  }
+
+  .layout-col {
+    .e-panel-body {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }

@@ -1,35 +1,29 @@
 <template>
   <div class="join-before">
-    <img src="/static/images/orderEmpty.png" alt="">
-    <div ref="tabs">
-      <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" >
-        <van-tab v-for="item in tabs" :title="item" :key="item">
-        </van-tab>
-      </van-tabs>
+    <div>
+      <img src="/static/images/noLoginEmpty.png" alt="">
     </div>
+    <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
+      <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
+    </van-tabs>
 
-    <e-panel title="课程介绍" ref="about"></e-panel>
+    <!-- 课程介绍 -->
+    <e-panel title="课程介绍" ref="about" class="about"></e-panel>
     <div class="segmentation"></div>
+
+    <!-- 教师介绍 -->
     <teacher :teacherInfo="teacherInfo" ref="teacher"></teacher>
     <div class="segmentation"></div>
-    <e-panel title="课程目录" ref="directory">
-      暂无学习任务
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-      <p> 暂无学习任务</p>
-    </e-panel>
+
+    <!-- 课程目录 -->
+    <directory ref="directory"></directory>
+    
+    <e-footer @click.native="handleJoin">加入学习</e-footer>
   </div>
 </template>
 <script>
   import Teacher from './detail/teacher';
+  import Directory from './detail/directory';
 
   export default {
     name: 'joinBefore',
@@ -42,24 +36,39 @@
         tabs: ['课程介绍', '教师介绍', '目录'],
         active: 0,
         tabsClass: '',
-        tabsTop: 0
+        tops: {
+          tabsTop: 0,
+          teacherTop: 0,
+          aboutTop: 0,
+        }
       }
     },
     components: {
-      Teacher
+      Teacher,
+      Directory
+    },
+    created() {
+
     },
     mounted() {
-      window.scrollTo(0, 0);
+      const refs = this.$refs;
+
       window.addEventListener('scroll', this.handleScroll);
 
-      this.tabsTop = this.$refs.tabs.getBoundingClientRect().top;
+      setTimeout(() => {
+        window.scrollTo(0,0);
 
-      console.log('tabsTop', this.tabsTop);
+        Object.keys(refs).forEach(item => {
+          this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
+        })
+        console.log(this.tops);
+      }, 100)
     },
     methods: {
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
-        window.scrollTo(0, ref.$el.offsetTop - 46);
+
+        window.scrollTo(0, ref.$el.offsetTop - 44);
       },
       transIndex2Tab(index) {
         return index ? (index > 1 ? 'directory' : 'teacher') : 'about';
@@ -68,12 +77,26 @@
         const scrollTop = window.pageYOffset ||
           document.documentElement.scrollTop || document.body.scrollTop;
 
-        if(scrollTop >= this.tabsTop) {
-          this.tabsClass = 'van-tabs--fixed';
-        }else {
-          this.tabsClass = '';
-        }
+        this.active = this.activeCurrentTab(scrollTop);
+
+        scrollTop >= this.tops.tabsTop
+          ? this.tabsClass = 'van-tabs--fixed'
+          : this.tabsClass = '';
+      },
+      activeCurrentTab(scrollTop) {
+        const tops = this.tops;
+
+        scrollTop  = scrollTop + 44;
+
+        return (scrollTop < tops.teacherTop) ? 0
+          :(scrollTop >= tops.directoryTop ? 2 : 1);
+      },
+      handleJoin(){
+        console.log('join');
       }
-    }
+    },
+    destroyed () {
+      window.removeEventListener('scroll', this.handleScroll);
+    },
   }
 </script>

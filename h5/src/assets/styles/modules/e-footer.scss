@@ -1,0 +1,17 @@
+footer {
+  &.footer-bar  {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: vw(50);
+    line-height: vw(50);
+    background-color: $primary-color;
+    color: white;
+    font-family: PingFangSC-Medium;
+    text-align: center;
+    font-size: vw(16);
+    // >div {
+    //   height: 100%;
+    // }
+  }
+}
