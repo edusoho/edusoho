@@ -9,7 +9,7 @@
         <div class="e-course__project text-overflow">
           <span v-if="course.title !== '默认教学课程'">{{ course.title }}</span>
         </div>
-        <switchBox :type="'price'" :course="course"></switchBox>
+        <switchBox :type="type" :course="course"></switchBox>
       </div>
     </div>
   </div>

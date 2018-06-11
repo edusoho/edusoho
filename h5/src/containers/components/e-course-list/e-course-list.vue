@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-course v-for="item in courseList.items" :key="item.id" :course="item"></e-course>
+      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type"></e-course>
     </div>
   </div>
 </template>
@@ -32,7 +32,8 @@
     },
     data() {
       return {
-        title: '更多课程'
+        title: '更多课程',
+        type: 'price'
       };
     },
   }

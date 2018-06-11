@@ -26,13 +26,6 @@
         coursesList: [],
       };
     },
-    methods: {
-      dataFilter(data) {
-        data.array.forEach(element => {
-          if (element.class !== 'courselist') return;
-        });
-      }
-    },
     created() {
       Api.discoveries()
         .then((data) => {
