@@ -40,7 +40,7 @@
     "echarts": "3.1.10",
     "echo-js": "1.7.3",
     "es-ckeditor": "4.7.2-patch6",
-    "es-fullcalendar": "git+https://github.com/cd-fez/es-fullcalendar.git#fa057b2eec1ed9ad003a2c3c486589d0dc01f7f6",
+    "es-fullcalendar": "3.7.0-patch5",
     "es-jcrop": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
