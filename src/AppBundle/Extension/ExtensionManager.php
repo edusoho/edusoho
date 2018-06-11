@@ -16,6 +16,8 @@ class ExtensionManager
 
     protected $taskToolbars = array();
 
+    protected $courseTypes = array();
+
     public function addExtension(ExtensionInterface $extension)
     {
         $this->extensions[] = $extension;
@@ -25,6 +27,7 @@ class ExtensionManager
         $this->activities = array_merge($this->activities, $extension->getActivities());
         $this->taskToolbars = array_merge($this->taskToolbars, $extension->getTaskToolbars());
         $this->callbacks = array_merge($this->callbacks, $extension->getCallbacks());
+        $this->courseTypes = array_merge($this->courseTypes, $extension->getCourseTypes());
     }
 
     public function getQuestionTypes()
@@ -50,5 +53,10 @@ class ExtensionManager
     public function getTaskToolbars()
     {
         return $this->taskToolbars;
+    }
+
+    public function getCourseTypes()
+    {
+        return $this->courseTypes;
     }
 }

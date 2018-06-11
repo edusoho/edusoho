@@ -388,65 +388,95 @@ class MemberServiceImpl extends BaseService implements MemberService
         return empty($member) ? false : true;
     }
 
+    public function setDefaultTeacher($courseId)
+    {
+        $user = $this->getCurrentUser();
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $teacher = array(
+            'courseId' => $courseId,
+            'courseSetId' => $course['courseSetId'],
+            'userId' => $user['id'],
+            'role' => 'teacher',
+            'isVisible' => 1,
+        );
+
+        $teacher = $this->addMember($teacher);
+        $this->dispatchEvent('course.teacher.create', new Event($course, array('teacher' => $teacher)));
+    }
+
     public function setCourseTeachers($courseId, $teachers)
     {
-        // 过滤数据
-        $teacherMembers = array();
-        $course = $this->getCourseService()->getCourse($courseId);
-        foreach (array_values($teachers) as $index => $teacher) {
-            if (empty($teacher['id'])) {
-                throw $this->createServiceException("教师ID不能为空，设置教学计划(#{$courseId})教师失败");
-            }
-
-            $user = $this->getUserService()->getUser($teacher['id']);
-
-            if (empty($user)) {
-                throw $this->createServiceException("用户不存在或没有教师角色，设置教学计划(#{$courseId})教师失败");
-            }
-
-            $teacherMembers[] = array(
-                'courseId' => $courseId,
-                'courseSetId' => $course['courseSetId'],
-                'userId' => $user['id'],
-                'role' => 'teacher',
-                'seq' => $index,
-                'isVisible' => empty($teacher['isVisible']) ? 0 : 1,
-                'createdTime' => time(),
-            );
-        }
-
-        // 先清除所有的已存在的教师学员
+        $userIds = ArrayToolkit::column($teachers, 'id');
         $existTeacherMembers = $this->findCourseTeachers($courseId);
+        $existTeacherIds = ArrayToolkit::column($existTeacherMembers, 'userId');
+        $deleteTeacherIds = array_values(array_diff($existTeacherIds, $userIds));
 
-        foreach ($existTeacherMembers as $member) {
-            $this->removeMember($member);
+        $this->dispatchEvent('course.teachers.update.before', new Event($courseId, array(
+            'teachers' => $teachers,
+            'deleteTeacherIds' => $deleteTeacherIds,
+        )));
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        if (empty($userIds)) {
+            throw $this->createServiceException('教师不能为空');
         }
 
-        // 逐个插入新的教师的学员数据
-        $visibleTeacherIds = array();
-
-        foreach ($teacherMembers as $member) {
-            // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
-            $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
-
-            if ($existMember) {
-                $this->removeMember($existMember);
-            }
-
-            $member = $this->addMember($member);
-
-            if ($member['isVisible']) {
-                $visibleTeacherIds[] = $member['userId'];
-            }
+        $teacherMembers = $this->buildTeachers($course, $teachers);
+        if (empty($teacherMembers)) {
+            throw $this->createServiceException('教师不能为空');
         }
 
+        // 删除老师
+        $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        // 删除目前还是学员的成员
+        $this->getMemberDao()->batchDelete(array(
+            'courseId' => $courseId,
+            'ids' => $userIds,
+        ));
+
+        $this->getMemberDao()->batchCreate($teacherMembers);
+        $this->updateCourseTeacherIds($courseId, $teachers);
         $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
+        $addTeachers = array_values(array_diff($userIds, $existTeacherIds));
+        $this->dispatchEvent('course.teachers.update', new Event($course, array(
+            'teachers' => $teachers,
+            'deleteTeachers' => $deleteTeacherIds,
+            'addTeachers' => $addTeachers,
+        )));
+    }
 
-        // 更新教学计划的teacherIds，该字段为教学计划可见教师的ID列表
+    private function updateCourseTeacherIds($courseId, $teachers)
+    {
+        $teachers = ArrayToolkit::group($teachers, 'isVisible');
+
+        $visibleTeacherIds = empty($teachers[1]) ? array() : ArrayToolkit::column($teachers[1], 'id');
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->getCourseDao()->update($courseId, $fields);
+    }
 
-        $this->dispatchEvent('course.teachers.update', new Event($course, array('teachers' => $teachers)));
+    private function buildTeachers($course, $teachers)
+    {
+        $teacherMembers = array();
+        $teachers = ArrayToolkit::index($teachers, 'id');
+        $users = $this->getUserService()->findUsersByIds(array_keys($teachers));
+        $seq = 0;
+        foreach ($teachers as $index => $teacher) {
+            $user = $users[$teacher['id']];
+            if (in_array('ROLE_TEACHER', $user['roles']) || $course['creator'] == $user['id']) {
+                $teacherMembers[] = array(
+                    'courseId' => $course['id'],
+                    'courseSetId' => $course['courseSetId'],
+                    'userId' => $teacher['id'],
+                    'role' => 'teacher',
+                    'seq' => $seq++,
+                    'isVisible' => empty($teacher['isVisible']) ? 0 : 1,
+                );
+            }
+        }
+
+        return $teacherMembers;
     }
 
     /**
@@ -732,6 +762,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));
         $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
+        $this->dispatchEvent('course.batch.join', new Event($newMembers));
 
         return $newMembers;
     }

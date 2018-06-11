@@ -13,4 +13,6 @@ interface ExtensionInterface
     public function getCallbacks();
 
     public function getTaskToolbars();
+
+    public function getCourseTypes();
 }

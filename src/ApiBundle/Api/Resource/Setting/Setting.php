@@ -92,9 +92,10 @@ class Setting extends AbstractResource
         $magicSetting = $this->getSettingService()->get('magic', array());
         $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
         $iosVipClose = isset($magicSetting['ios_vip_close']) ? $magicSetting['ios_vip_close'] : 0;
+
         return array(
             'iosBuyDisable' => $iosBuyDisable,
-            'iosVipClose' => $iosVipClose
+            'iosVipClose' => $iosVipClose,
         );
     }
 

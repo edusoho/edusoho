@@ -12,6 +12,7 @@ class TeacherLiveCourse extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
+     * @Access(roles="ROLE_TEACHER")
      */
     public function search(ApiRequest $request)
     {

@@ -13,6 +13,7 @@ class WeChatAppGateway extends WechatGateway
     protected function getSetting()
     {
         $config = $this->biz['payment.platforms']['wechat_app'];
+
         return array(
             'appid' => $config['appid'],
             'mch_id' => $config['mch_id'],

@@ -78,7 +78,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
-        $result = $client->deleteLive(123, 6);
+        $result = $client->deleteLive(123);
         $this->assertTrue($result['success']);
     }
 
@@ -195,6 +195,20 @@ class EdusohoLiveClientlTest extends BaseTestCase
         $client->setCloudApi($mockObject, 'root');
 
         $result = $client->getLiveAccount();
+
+        $this->assertArrayEquals($return, $result);
+    }
+
+    public function testGetLiveOverview()
+    {
+        $return = array('account' => array('status' => 'activate', 'capacity' => 20), 'data' => array());
+        $cloudApi = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($cloudApi);
+        $mockObject->shouldReceive('get')->times(1)->andReturn($return);
+        $client = new EdusohoLiveClient();
+        $client->setCloudApi($mockObject, 'root');
+
+        $result = $client->getLiveOverview();
 
         $this->assertArrayEquals($return, $result);
     }
