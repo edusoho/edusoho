@@ -24,6 +24,7 @@ class CourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
+            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE)
         );
 
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);

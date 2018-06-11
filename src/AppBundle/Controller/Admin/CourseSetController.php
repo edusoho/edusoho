@@ -265,6 +265,7 @@ class CourseSetController extends BaseController
 
         if ('normal' == $filter) {
             $conditions['parentId'] = 0;
+            $conditions = $this->filterCourseSetType($conditions);
         }
 
         if ('classroom' == $filter) {
@@ -608,6 +609,7 @@ class CourseSetController extends BaseController
             $conditions['parentId'] = 0;
         } else {
             $conditions['parentId'] = 0;
+            $conditions = $this->filterCourseSetType($conditions);
         }
 
         $conditions = $this->fillOrgCode($conditions);
@@ -665,6 +667,15 @@ class CourseSetController extends BaseController
         }
 
         return $courseSets;
+    }
+
+    protected function filterCourseSetType($conditions)
+    {
+        if (!$this->getWebExtension()->isPluginInstalled('Reservation')) {
+            $conditions['excludeTypes'] = array('reservation');
+        }
+
+        return $conditions;
     }
 
     /**
@@ -785,5 +796,10 @@ class CourseSetController extends BaseController
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->get('web.twig.extension');
     }
 }
