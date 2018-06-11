@@ -2279,6 +2279,11 @@ user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload you
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
 user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
+user.init.password_tips: Please change your password
+user.init.password_placeholder: 请输入您的密码
+user.init.password_placeholder_again: 请再输入一遍您的密码
+user.init.password.confirm.password: 确认提交
+user.init.password.submit.password.loading: 提交中...
 
 user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
@@ -5685,6 +5690,7 @@ admin.magic_setting.buy_before_approval: 'ID verification before course purchase
 admin.magic_setting.disable_web_crontab: 'Turn on web scheduled task or not'
 admin.magic_setting.cloud_search: 'Turn on cloud search service'
 admin.magic_setting.ios_buy_disable: 'Close iOS payment or not'
+admin.magic_setting.ios_vip_close: '是否关闭iOS会员模块'
 admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'

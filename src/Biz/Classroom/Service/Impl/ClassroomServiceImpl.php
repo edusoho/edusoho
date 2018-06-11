@@ -1902,7 +1902,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroom($classroomId);
 
-        if (0 == $classroom['price']) {
+        if (0 == $classroom['price'] && $classroom['buyable']) {
             $this->becomeStudent($classroom['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
         }
 

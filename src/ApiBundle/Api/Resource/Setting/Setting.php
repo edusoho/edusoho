@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('register', 'payment', 'vip'))) {
+        if (!in_array($type, array('register', 'payment', 'vip', 'magic'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -84,6 +84,17 @@ class Setting extends AbstractResource
             'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
             'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],
             'defaultBuyMonths' => empty($vipSetting['default_buy_months']) ? '30' : $vipSetting['default_buy_months'],
+        );
+    }
+
+    public function getMagic()
+    {
+        $magicSetting = $this->getSettingService()->get('magic', array());
+        $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
+        $iosVipClose = isset($magicSetting['ios_vip_close']) ? $magicSetting['ios_vip_close'] : 0;
+        return array(
+            'iosBuyDisable' => $iosBuyDisable,
+            'iosVipClose' => $iosVipClose
         );
     }
 
