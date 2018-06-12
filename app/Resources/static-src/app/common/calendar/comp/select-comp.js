@@ -76,12 +76,6 @@ export default class SelectComp extends Comp {
       end: '23:59'
     };
 
-    // 拖拽时间不得超过一天
-    options['eventConstraint'] = {
-      start: '00:01',
-      end: '23:59'
-    };
-
     // 禁止选择过去时间
     options['selectAllow'] = (selectInfo) => {
       return moment().diff(selectInfo.start) <= 0;
