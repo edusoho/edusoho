@@ -21,7 +21,7 @@ class VideoMediaStatusUpdateJob extends AbstractJob
                 ++$successNum;
             }
 
-            $this->getJobDao()->update($this->id, array('args' => $results['next']));
+            $this->getSchedulerService()->updateJob($this->id, array('args' => $results['next']));
             $this->getLogService()->info(
                 'upload_file',
                 'update',
@@ -56,13 +56,13 @@ class VideoMediaStatusUpdateJob extends AbstractJob
         return $this->biz->service('File:UploadFileService');
     }
 
-    protected function getJobDao()
-    {
-        return $this->biz->dao('Scheduler:JobDao');
-    }
-
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->biz->service('Scheduler:SchedulerService');
     }
 }
