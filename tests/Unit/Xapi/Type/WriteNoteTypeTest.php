@@ -110,6 +110,42 @@ class WriteNoteTypeTest extends BaseTestCase
             )
         );
 
+        $activityDao = $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 1000,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 123,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $videoActivityDao = $this->mockBiz(
+            'Activity:VideoActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 123,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 333333,
+                        ),
+                    ),
+                ),
+            )
+        );
+
         $activityService = $this->mockBiz(
             'Activity:ActivityService',
             array(
@@ -180,7 +216,6 @@ class WriteNoteTypeTest extends BaseTestCase
         $taskService->shouldHaveReceived('search');
         $courseService->shouldHaveReceived('search');
         $courseSetService->shouldHaveReceived('search');
-        $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
         $tagService->shouldHaveReceived('findTagsByIds');
 
