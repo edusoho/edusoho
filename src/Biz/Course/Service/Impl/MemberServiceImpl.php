@@ -433,7 +433,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         // 删除目前还是学员的成员
         $this->getMemberDao()->batchDelete(array(
             'courseId' => $courseId,
-            'ids' => $userIds,
+            'userIds' => $userIds,
         ));
 
         $this->getMemberDao()->batchCreate($teacherMembers);

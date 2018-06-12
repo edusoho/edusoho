@@ -24,7 +24,7 @@ class CourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE)
+            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE),
         );
 
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
@@ -221,7 +221,7 @@ class CourseController extends BaseController
         $user = $this->getCurrentUser();
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'), true)) {
-            if ($previewAs === 'guest') {
+            if ('guest' === $previewAs) {
                 return array();
             }
 
@@ -245,7 +245,7 @@ class CourseController extends BaseController
                 'deadline' => $deadline,
             );
 
-            if ($previewAs === 'member') {
+            if ('member' === $previewAs) {
                 $member['role'] = array('member');
             }
         }
@@ -265,7 +265,7 @@ class CourseController extends BaseController
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
         if (!empty($courses)) {
             foreach ($courses as $course) {
-                if ($course['status'] != 'published') {
+                if ('published' != $course['status']) {
                     continue;
                 }
 

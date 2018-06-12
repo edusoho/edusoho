@@ -79,7 +79,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'minCoursePrice = :price',
                 'orgCode PRE_LIKE :likeOrgCode',
                 'type NOT IN (:excludeTypes)',
-                'type IN (:types)'
+                'type IN (:types)',
             ),
             'serializes' => array(
                 'goals' => 'delimiter',
