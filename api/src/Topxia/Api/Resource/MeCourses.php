@@ -18,7 +18,7 @@ class MeCourses extends BaseResource
         $type = $request->query->get('type', '');
         $relation = $request->query->get('relation', '');
         $user = getCurrentUser();
-        if ($relation == 'learning') {
+        if ('learning' == $relation) {
             $total = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearningCoursesNotInClassroom(
                 $user['id'],
@@ -26,7 +26,7 @@ class MeCourses extends BaseResource
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
-        } elseif ($relation == 'learned') {
+        } elseif ('learned' == $relation) {
             $total = $this->getCourseService()->findUserLeanedCourseCount($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(
                 $user['id'],
@@ -34,7 +34,7 @@ class MeCourses extends BaseResource
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
-        } elseif ($relation == 'learn') {
+        } elseif ('learn' == $relation) {
             $total = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id'], true);
             if (empty($type)) {
                 $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
@@ -51,15 +51,18 @@ class MeCourses extends BaseResource
                 );
             }
             $courses = array_values($coursesAfterColumn);
-        } elseif ($relation == 'teaching') {
+        } elseif ('teaching' == $relation) {
             $total = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
             $courses = $this->getCourseService()->findUserTeachCoursesNotInClassroom(
-                array('userId' => $user['id']),
+                array(
+                    'userId' => $user['id'],
+                    'excludeTypes' => array('reservation'),
+                ),
                 $start,
                 $limit,
                 false
             );
-        } elseif ($relation == 'favorited') {
+        } elseif ('favorited' == $relation) {
             $total = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
             $courses = $this->getCourseService()->findUserFavoritedCoursesNotInClassroom(
                 $user['id'],
@@ -71,6 +74,7 @@ class MeCourses extends BaseResource
         }
 
         $courses = $this->filter($courses);
+
         return $this->wrap($courses, count($courses));
     }
 

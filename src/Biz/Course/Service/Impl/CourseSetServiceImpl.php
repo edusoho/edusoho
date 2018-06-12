@@ -276,10 +276,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return 0;
         }
 
+        //屏蔽预约课程
         $count = $this->countCourseSets(
             array(
                 'ids' => $ids,
                 'status' => 'published',
+                'excludeTypes' => array('reservation'),
                 'parentId' => 0,
             )
         );
@@ -297,10 +299,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return array();
         }
 
+        //屏蔽预约课程
         return $this->searchCourseSets(
             array(
                 'ids' => $ids,
                 'status' => 'published',
+                'excludeTypes' => array('reservation'),
                 'parentId' => 0,
             ),
             array(
@@ -322,6 +326,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $conditions = array_merge($conditions, array('ids' => $ids));
+        //屏蔽预约课程
+        $conditions['excludeTypes'] = array('reservation');
 
         return $this->countCourseSets($conditions);
     }
@@ -337,6 +343,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $conditions = array_merge($conditions, array('ids' => $ids));
+        //屏蔽预约课程
+        $conditions['excludeTypes'] = array('reservation');
 
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
