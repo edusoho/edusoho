@@ -181,7 +181,6 @@ class DoQuestionTypeTest extends BaseTestCase
         $taskService->shouldHaveReceived('search');
         $courseService->shouldHaveReceived('search');
         $courseSetService->shouldHaveReceived('search');
-        $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
 
         $packageInfo = reset($packageInfo);

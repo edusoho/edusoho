@@ -180,7 +180,6 @@ class WriteNoteTypeTest extends BaseTestCase
         $taskService->shouldHaveReceived('search');
         $courseService->shouldHaveReceived('search');
         $courseSetService->shouldHaveReceived('search');
-        $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
         $tagService->shouldHaveReceived('findTagsByIds');
 

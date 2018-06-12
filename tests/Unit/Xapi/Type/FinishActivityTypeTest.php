@@ -158,7 +158,6 @@ class FinishActivityTypeTest extends BaseTestCase
         $taskService->shouldHaveReceived('search');
         $courseService->shouldHaveReceived('search');
         $courseSetService->shouldHaveReceived('search');
-        $activityService->shouldHaveReceived('findActivities');
 
         $packageInfo = reset($packageInfo);
 
