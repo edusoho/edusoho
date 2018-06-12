@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddUploadFilesMp4convertstatusField extends Migration
+class AddUploadFilesMp4ConvertStatusField extends Migration
 {
     /**
      * Do the migration
