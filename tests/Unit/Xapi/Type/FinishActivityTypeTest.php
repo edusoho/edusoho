@@ -143,6 +143,42 @@ class FinishActivityTypeTest extends BaseTestCase
             )
         );
 
+        $activityDao = $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(array(2)),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 2,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 123,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $videoActivityDao = $this->mockBiz(
+            'Activity:VideoActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 123,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 333333,
+                        ),
+                    ),
+                ),
+            )
+        );
+
         $type = new FinishActivityType();
         $type->setBiz($this->biz);
         $packageInfo = $type->packages(array(

@@ -147,6 +147,42 @@ class AudioListenTypeTest extends BaseTestCase
             )
         );
 
+        $activityDao = $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(array(2224)),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 2224,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 123,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $videoActivityDao = $this->mockBiz(
+            'Activity:VideoActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 123,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 333333,
+                        ),
+                    ),
+                ),
+            )
+        );
+
         $type = new AudioListen();
         $type->setBiz($this->biz);
         $packageInfo = $type->packages(array(
