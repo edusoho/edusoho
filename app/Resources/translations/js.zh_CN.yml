@@ -647,7 +647,7 @@ validate.es_remote.message: 验证错误
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
-
+validate.character_maxlength: 字数不能超过%max%字！
 validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
 

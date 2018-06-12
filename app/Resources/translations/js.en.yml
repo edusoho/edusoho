@@ -813,7 +813,7 @@ validate_old.unsigned_integer.message: %display% must be a non-negative integer
 validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
-
+validate.character_maxlength: 字数不能超过%max%字！
 
 export.not_allowed: you are not allowed to download
 export.empty: Export the result is empty
