@@ -304,7 +304,7 @@ export default class CustomFullCalendar {
       singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
       if (this.options['dateConvert']) {
         if ('start' == fieldName || 'end' == fieldName) {
-          singleEvent[fieldName] = moment(parseInt(singleEvent[fieldName], 10) * 1000).format('YYYY-MM-DD hh:mm:ss');
+          singleEvent[fieldName] = moment(parseInt(singleEvent[fieldName], 10) * 1000).format('YYYY-MM-DD HH:mm:ss');
         }
       }
     }

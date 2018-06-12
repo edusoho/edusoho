@@ -52,7 +52,7 @@ export default class SelectComp extends Comp {
         data.target_name = currentEvent.target_name;
         event.cancelUrl = currentEvent.cancelUrl;
         self.event = event;
-        self.cancelPopover($clickTarget, event, data);
+        self.cancelPopover($clickTarget, event, data, options);
       }
 
       if (currentEvent.status === 'created' || event.status === 'created') {
@@ -112,11 +112,15 @@ export default class SelectComp extends Comp {
     $('body').on('click', '.js-button-group', event => this.clickOtherPos(event));
   }
 
-  cancelPopover($target, event, data) {
+  cancelPopover($target, event, data, options) {
     let cancelTemplate = '';
     let disabledStatus = '';
-    if (event.cancelTime) {
-      cancelTemplate = `<span class="color-danger js-cancel-tip">开始前${event.cancelTime}分钟，不可取消</span>`;
+    const currentTime = moment(options.currentTime).format('X');
+    const startTime = moment(event.start._i).format('X');
+    const deltaTime = options.cancelLimitTime * 60;
+    const delta = startTime - currentTime;
+    if (delta < deltaTime) {
+      cancelTemplate = `<span class="color-danger js-cancel-tip">开始前${options.cancelLimitTime}分钟，不可取消</span>`;
       disabledStatus = 'disabled';
     }
 
