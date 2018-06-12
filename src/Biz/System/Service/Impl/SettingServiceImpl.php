@@ -77,6 +77,13 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
+    public function isReservationOpen()
+    {
+        $setting = $this->get('plugin_reservation', array());
+
+        return !empty($setting['reservation_enabled']) && 1 == $setting['reservation_enabled'];
+    }
+
     protected function clearCache()
     {
         $this->getCacheService()->clear(self::CACHE_NAME);
@@ -97,7 +104,7 @@ class SettingServiceImpl extends BaseService implements SettingService
     {
         try {
             $user = $this->getCurrentUser()->toArray();
-            if (empty($user['selectedOrgId']) || $user['selectedOrgId'] === 1) {
+            if (empty($user['selectedOrgId']) || 1 === $user['selectedOrgId']) {
                 return 'default';
             }
 
