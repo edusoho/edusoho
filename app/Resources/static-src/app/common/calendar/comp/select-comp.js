@@ -259,7 +259,8 @@ export default class SelectComp extends Comp {
     const maxTime = date + options.maxTime;
 
     // 设置日历显示时间
-    if (targetTimeStamp < Date.parse(minTime) || targetTimeStamp > Date.parse(maxTime)) {
+    const currentTimeStamp = moment(options.currentTime).format('X') * 1000;
+    if (targetTimeStamp < Date.parse(minTime) || targetTimeStamp > Date.parse(maxTime) || targetTimeStamp < currentTimeStamp) {
       cd.message({ type: 'danger', message: Translator.trans('请输入有效时间') });
       $target.val('');
       return;
