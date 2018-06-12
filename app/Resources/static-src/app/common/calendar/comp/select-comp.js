@@ -13,10 +13,7 @@ export default class SelectComp extends Comp {
     options['eventOverlap'] = false;
     // 禁止选择预约时间重复（创建过程中）
     options['selectOverlap'] = false;
-    // 禁止选择过去时间
-    options['selectAllow'] = (selectInfo) => {
-      return moment().diff(selectInfo.start) <= 0;
-    };
+
     options['select'] = (startDate, endDate, jsEvent, view, resource) => {
 
       // 两种形式选中的时候，我可以有属性。 状态值， 开始时间和结束时间
@@ -67,23 +64,46 @@ export default class SelectComp extends Comp {
     };
     // 预约时间可拖拽
     options['editable'] = true;
-    // 缩放调整时间
-    options['eventResize'] = (event, jsEvent, ui, view) => {
-      $('.js-arrangement-popover').remove();
-    };
+
     // 拖拽位置调整时间
     options['eventDragStart'] = (event, jsEvent, ui, view) => {
       $('.js-arrangement-popover').remove();
     };
 
-    // 拖拽创建时间不得超过一天
+    // 创建时间不得超过一天
     options['selectConstraint'] = {
       start: '00:01',
       end: '23:59'
     };
 
+    // 拖拽时间不得超过一天
+    options['eventConstraint'] = {
+      start: '00:01',
+      end: '23:59'
+    };
+
+    // 禁止选择过去时间
+    options['selectAllow'] = (selectInfo) => {
+      return moment().diff(selectInfo.start) <= 0;
+    };
+
+    // 禁止将时间拖拽到过去
     options['eventAllow'] = (dropInfo, draggedEvent) => {
       return moment().diff(dropInfo.start) <= 0;
+    };
+
+    // 拖拽最小时间段的设置
+    options['eventResize'] = (event, delta, revertFunc) => {
+      $('.js-arrangement-popover').remove();
+      const start = moment(event.start._i).format('X');
+      const end = moment(event.end._i).format('X');
+      const timeRange = end - start;
+      const minTime = moment.duration(options.snapDuration) / 1000;
+      const minMinutes = minTime / 60;
+      if (timeRange < minTime) {
+        cd.message({ type: 'danger', message: Translator.trans(`最少预约时间段为${minMinutes}分钟`) });
+        revertFunc();
+      }
     };
 
     self._initEvent(options);
