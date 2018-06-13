@@ -235,7 +235,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         }
 
         if ($filterReservation) {
-            $sql .= " AND c.type != 'reservation' ";
+            $sql .= " AND c.type != 'reservation'";
         }
 
         $sql .= ' ORDER BY createdTime DESC';
