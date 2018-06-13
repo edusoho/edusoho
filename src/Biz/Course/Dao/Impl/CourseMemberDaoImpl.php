@@ -370,7 +370,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
     public function countMemberByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $filterReservation = false)
     {
-//        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
+        //    $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql .= ' JOIN '.CourseDao::TABLE_NAME.' AS c ON m.courseId = c.id AND m.userId = ? AND m.role = ? AND m.isLearned = ?';
         if ($filterReservation) {
