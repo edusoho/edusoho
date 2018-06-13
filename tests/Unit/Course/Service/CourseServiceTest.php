@@ -810,7 +810,7 @@ class CourseServiceTest extends BaseTestCase
         $conditions = $this->getCourseService()->appendReservationConditions($conditions);
 
         $this->getSettingService()->shouldHaveReceived('isReservationOpen');
-        $this->assertNull($conditions['excludeTypes'][0]);
+        $this->assertTrue(empty($conditions['excludeTypes']));
     }
 
     protected function createNewCourseSet()
