@@ -67,7 +67,7 @@ a {
   color: #2b333b;
 }
 
-// font-family 
+// font-family
 .font-family-PFM {
   font-family: PingFangSC-Medium;
 }
@@ -83,6 +83,10 @@ a {
   .van-icon {
     color: #fff;
   }
+}
+.blue-nav {
+  background-color: $primary-color;
+  color: white;
 }
 
 .e-section {

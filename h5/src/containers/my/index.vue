@@ -1,16 +1,16 @@
 <template>
   <div>
     <user></user>
-    <order></order>
+    <orders></orders>
   </div>
 </template>
 <script>
-import Order from './order.vue';
+import Orders from '../order/orders.vue';
 import User from './user.vue';
 
 export default {
   components: {
-    Order,
+    Orders,
     User
   }
 }
