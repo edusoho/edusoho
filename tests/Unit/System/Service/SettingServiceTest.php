@@ -32,6 +32,13 @@ class SettingServiceTest extends BaseTestCase
         $this->assertEquals(0, count($foundSetting));
     }
 
+    public function testIsReservationOpen()
+    {
+        $this->assertFalse($this->getSettingService()->isReservationOpen());
+        $this->getSettingService()->set('plugin_reservation', array('reservation_enabled' => 1));
+        $this->assertTrue($this->getSettingService()->isReservationOpen());
+    }
+
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
