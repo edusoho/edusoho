@@ -151,10 +151,13 @@ class CourseController extends BaseController
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
 
-        $conditions = array('title' => "%{$key}%");
-        $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
-        $conditions['excludeIds'] = $excludeIds;
+        $conditions = array(
+            'title' => "%{$key}%",
+            'status' => 'published',
+            'parentId' => 0,
+            'excludeIds' => $excludeIds,
+            'excludeTypes' => array('reservation'),
+        );
 
         $user = $this->getCurrentUser();
         if (!$user->isAdmin() && !$user->isSuperAdmin()) {
