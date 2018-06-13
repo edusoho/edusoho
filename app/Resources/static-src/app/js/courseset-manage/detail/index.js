@@ -5,6 +5,7 @@ import postal from 'postal';
 
 class detail {
   constructor() {
+    this.$from = $('#courseset-detail-form');
     this.init();
   }
 
@@ -43,7 +44,7 @@ class detail {
   }
 
   submitForm() {
-    this.validator = $('#courseset-detail-form').validate({
+    this.validator = this.$from.validate({
       rules: {
         summary: {
           ckeditor_maxlength: 10000,
@@ -53,6 +54,10 @@ class detail {
 
     $('#detail-submit').click(() => {
       this.publishAddMessage();
+      $('#courseset-summary-field').val(this.editor.getData());
+      if (this.validator.form()) {
+        this.$from.submit();
+      }
     });
   }
 
