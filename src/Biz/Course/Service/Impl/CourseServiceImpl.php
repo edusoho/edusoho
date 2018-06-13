@@ -1764,6 +1764,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
+    public function appendReservationConditions($conditions)
+    {
+        if (!$this->getSettingService()->isReservationOpen()) {
+            if (empty($conditions['excludeTypes'])) {
+                $conditions['excludeTypes'] = array();
+            }
+            $conditions['excludeTypes'][] = 'reservation';
+        }
+
+        return $conditions;
+    }
+
     /**
      * @param $course
      *

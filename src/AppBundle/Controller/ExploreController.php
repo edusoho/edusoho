@@ -51,7 +51,7 @@ class ExploreController extends BaseController
         );
 
         $courseSets = array();
-        if ($orderBy !== 'recommendedSeq') {
+        if ('recommendedSeq' !== $orderBy) {
             $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
                 $orderBy,
@@ -60,7 +60,7 @@ class ExploreController extends BaseController
             );
         }
 
-        if ($orderBy === 'recommendedSeq') {
+        if ('recommendedSeq' === $orderBy) {
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
             $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
@@ -211,7 +211,7 @@ class ExploreController extends BaseController
 
     protected function getConditionsByVip($conditions, $currentLevelId)
     {
-        if (!$this->isPluginInstalled('Vip') || $currentLevelId == 'all') {
+        if (!$this->isPluginInstalled('Vip') || 'all' == $currentLevelId) {
             return $conditions;
         }
 
@@ -272,17 +272,17 @@ class ExploreController extends BaseController
     protected function getFilter($conditions, $type)
     {
         $default = array('price' => 'all', 'currentLevelId' => 'all');
-        if ($type == 'course') {
+        if ('course' == $type) {
             $default['type'] = 'all';
         }
 
         $filter = !isset($conditions['filter']) ? $default : $conditions['filter'];
 
-        if (isset($filter['price']) && $filter['price'] === 'free') {
+        if (isset($filter['price']) && 'free' === $filter['price']) {
             $conditions['price'] = '0.00';
         }
 
-        if (isset($filter['type']) && $filter['type'] != 'all') {
+        if (isset($filter['type']) && 'all' != $filter['type']) {
             $conditions['type'] = strip_tags($filter['type']);
         }
 
@@ -328,6 +328,8 @@ class ExploreController extends BaseController
 
     protected function getCourseConditionsByTags($conditions)
     {
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
         if (empty($conditions['tagIds'])) {
             return $conditions;
         }
@@ -505,7 +507,7 @@ class ExploreController extends BaseController
     {
         if (!empty($courses)) {
             $tryLookAbleCourses = array_filter($courses, function ($course) {
-                return !empty($course['tryLookable']) && $course['status'] === 'published';
+                return !empty($course['tryLookable']) && 'published' === $course['status'];
             });
             $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
             $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
