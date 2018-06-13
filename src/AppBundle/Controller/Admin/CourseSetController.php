@@ -266,6 +266,7 @@ class CourseSetController extends BaseController
 
         if ('normal' == $filter) {
             $conditions['parentId'] = 0;
+            $conditions['excludeTypes'] = array('reservation');
             $conditions = $this->filterCourseSetType($conditions);
         }
 
