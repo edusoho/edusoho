@@ -48,7 +48,12 @@ class TeacherCoursesDataTagTest extends BaseTestCase
         $user = $this->getCurrentUser();
         $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
         $course = $this->getCourseService()->createCourse(array('title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'default'));
-        $this->getCourseMemberService()->setCourseTeachers($course['id'], array(array('id' => $user1['id'])));
+        $this->getCourseMemberService()->setCourseTeachers($course['id'], array(
+            array(
+                'id' => $user1['id'],
+                'isVisible' => 1,
+            ),
+        ));
         $this->getCourseService()->publishCourse($course['id']);
 
         $datatag = new TeacherCoursesDataTag();

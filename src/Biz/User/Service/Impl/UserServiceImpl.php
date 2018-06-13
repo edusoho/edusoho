@@ -55,13 +55,13 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->count($conditions);
     }
 
-    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = array())
     {
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = strtoupper($conditions['nickname']);
         }
 
-        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
+        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit, $columns = array());
 
         return UserSerialize::unserializes($users);
     }

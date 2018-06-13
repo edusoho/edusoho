@@ -10,18 +10,25 @@
         {% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
             {% set code = 'recommend-course' %}
         {% endif %}
+        {% set isPlugin = config.isPlugin|default(0) %}
 
         {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
-        {% if code == 'friend-link' %}
-            {% include 'default/' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
-        {% elseif code != 'footer-link' %}
-            {% if code != 'course-grid-with-condition-index' %}
-                {% cache 'jianmo/default/' ~ code 600 %}
-                {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
-                {% endcache %}
-            {% else %}
-                {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
-            {% endif %}
+
+        {% if isPlugin and is_plugin_installed(config.pluginName) %}
+          {% include config.show with {config:config, category: category} %}
+        {% elseif not isPlugin %}
+          {% if code == 'friend-link' %}
+              {% include 'default/' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
+          {% elseif code != 'footer-link' %}
+              {% if code != 'course-grid-with-condition-index' %}
+                  {% cache 'jianmo/default/' ~ code 600 %}
+                  {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
+                  {% endcache %}
+              {% else %}
+                  {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
+              {% endif %}
+          {% endif %}
         {% endif %}
+        
     {% endfor %}
 {% endblock %}

@@ -10,6 +10,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DynUrlToolkit;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -45,9 +46,16 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
+            new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
+            new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
             new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
         );
+    }
+
+    public function getDynUrl($baseUrl, $params)
+    {
+        return DynUrlToolkit::getUrl($this->biz, $baseUrl, $params);
     }
 
     public function isDiscount($course)
@@ -55,7 +63,7 @@ class CourseExtension extends \Twig_Extension
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $discountPlugin = $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Discount');
 
-        return $discountPlugin && $courseSet['discountId'] > 0 && ($course['price'] < $course['originPrice']) && $course['parentId'] == 0;
+        return $discountPlugin && $courseSet['discountId'] > 0 && ($course['price'] < $course['originPrice']) && 0 == $course['parentId'];
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
@@ -148,6 +156,24 @@ class CourseExtension extends \Twig_Extension
         $setting = $this->getSettingService()->get('course');
 
         return !empty($setting['buy_fill_userinfo']);
+    }
+
+    public function getCourseTypes()
+    {
+        $courseTypes = $this->container->get('extension.manager')->getCourseTypes();
+        $visibleCourseTypes = array_filter($courseTypes, function ($type) {
+            return 1 == $type['visible'];
+        });
+
+        uasort($visibleCourseTypes, function ($type1, $type2) {
+            if ($type1['priority'] == $type2['priority']) {
+                return 0;
+            }
+
+            return $type1['priority'] > $type2['priority'] ? -1 : 1;
+        });
+
+        return $visibleCourseTypes;
     }
 
     public function isTaskAvailable($task)

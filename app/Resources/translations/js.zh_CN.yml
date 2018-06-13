@@ -41,6 +41,7 @@ site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
 site.close: 关闭
+site.delete: 删除
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -731,6 +732,7 @@ validate_old.date_and_time_check.message: 结束时间不能早于或等于开�
 validate_old.date_and_time.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
+validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
 validate_old.visible_character.message: %display%请输入可见性字符
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
@@ -812,3 +814,4 @@ User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
 message.send.not_allowed: 不允许发送私信
+

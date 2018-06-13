@@ -50,6 +50,20 @@ class OpenCourseManageController extends BaseController
         );
     }
 
+    public function saveCourseAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        $openCourse = $this->getOpenCourseService()->createCourse($data);
+
+        return $this->redirectToRoute(
+            'open_course_manage',
+            array(
+                'id' => $openCourse['id'],
+            )
+        );
+    }
+
     /**
      * @return OpenCourseService
      */

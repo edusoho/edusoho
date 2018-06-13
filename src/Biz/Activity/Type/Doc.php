@@ -147,6 +147,11 @@ class Doc extends Activity
         return $docActivities;
     }
 
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getDocActivityDao()->findByIds($targetIds);
+    }
+
     public function materialSupported()
     {
         return true;

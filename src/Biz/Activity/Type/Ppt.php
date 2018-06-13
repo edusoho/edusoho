@@ -120,6 +120,11 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->findByIds($targetIds);
     }
 
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getPptActivityDao()->findByIds($targetIds);
+    }
+
     public function materialSupported()
     {
         return true;
