@@ -332,14 +332,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role));
     }
 
-    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned(
-        $userId,
-        $role,
-        $type,
-        $isLearned,
-        $start,
-        $limit
-    ) {
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
+    {
         $sql = "SELECT m.* FROM {$this->table} m";
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
