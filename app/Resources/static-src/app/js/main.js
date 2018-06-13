@@ -96,7 +96,7 @@ $('.modal').on('hidden.bs.modal', function() {
 if ($('.js-hidden-exception').length > 0) {
   let replacedExceptionHtml = $('.js-hidden-exception').html().replace(/\r?\n/g, '');
   let exception = $.parseJSON(replacedExceptionHtml);
-  notify('danger', exception.code + ': ' + exception.message);
+  notify('danger', exception.message);
   if ($('.js-hidden-exception-trace').length > 0) {
     exception.trace = $('.js-hidden-exception-trace').html();
   }
