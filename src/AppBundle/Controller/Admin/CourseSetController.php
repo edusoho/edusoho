@@ -31,6 +31,7 @@ class CourseSetController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        $conditions['excludeTypes'] = array('reservation');
         $conditions = $this->filterCourseSetConditions($filter, $conditions);
 
         $paginator = new Paginator(
