@@ -22,7 +22,7 @@ class RecommendCourseSetsDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        $conditions = array('status' => 'published', 'recommended' => 1, 'parentId' => 0);
+        $conditions = array('status' => 'published', 'recommended' => 1, 'parentId' => 0, 'excludeTypes' => array('reservation'));
         $orderBy = 'recommendedSeq';
 
         if (!empty($arguments['categoryId'])) {

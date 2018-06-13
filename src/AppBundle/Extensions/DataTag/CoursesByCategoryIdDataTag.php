@@ -23,7 +23,9 @@ class CoursesByCategoryIdDataTag extends CourseBaseDataTag implements DataTag
         $conditions = array(
             'status' => 'published',
             'categoryId' => $arguments['categoryId'],
+            'excludeTypes' => array('reservation'),
         );
+
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $arguments['count']);
 
         return $this->getCourseTeachersAndCategories($courses);

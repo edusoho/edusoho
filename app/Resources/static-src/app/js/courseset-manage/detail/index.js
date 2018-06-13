@@ -50,7 +50,13 @@ class detail {
         },
       }
     });
+
+    $('#detail-submit').click(() => {
+      this.publishAddMessage();
+    });
   }
+
+  
 
   publishAddMessage() {
     postal.publish({
