@@ -197,9 +197,9 @@ interface CourseService
 
     public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array());
 
-    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true);
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true, $filterReservation = false);
 
-    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true);
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true, $filterReservation = false);
 
     public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true);
 

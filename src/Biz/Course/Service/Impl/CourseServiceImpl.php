@@ -1472,9 +1472,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
 
-        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0);
+        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0, true);
     }
 
+    //过滤约排课
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
@@ -1492,7 +1493,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'student',
                 0,
                 $start,
-                $limit
+                $limit,
+                true
             );
         }
 
@@ -1545,7 +1547,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'student',
                 1,
                 $start,
-                $limit
+                $limit,
+                true
             );
         }
 
@@ -1567,19 +1570,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
-    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true, $filterReservation = false)
     {
-        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
+        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished, $filterReservation);
     }
 
-    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true, $filterReservation = false)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole(
             $userId,
             'student',
             $start,
             $limit,
-            $onlyPublished
+            $onlyPublished,
+            $filterReservation
         );
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));

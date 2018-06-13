@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
@@ -23,15 +24,25 @@ class MeCourse extends AbstractResource
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
             array('lastLearnTime' => 'DESC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        $courseConditions = array(
+            'ids' => ArrayToolkit::column($members, 'courseId'),
+            'excludeTypes' => array('reservation'),
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $courseConditions,
+            array(),
             $offset,
             $limit
         );
 
-        $courses = $this->getCourseService()->findCoursesByIds(array_column($members, 'courseId'));
-
         $courses = $this->appendAttrAndOrder($courses, $members);
 
-        $total = $this->getCourseMemberService()->countMembers($conditions);
+        $total = $this->getCourseService()->countCourses($courseConditions);
 
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
@@ -41,19 +52,33 @@ class MeCourse extends AbstractResource
     private function appendAttrAndOrder($courses, $members)
     {
         $orderedCourses = array();
-        foreach ($members as $member) {
-            $courseId = $member['courseId'];
-            if (!empty($courses[$courseId])) {
-                $course = $courses[$courseId];
-                $course['learnedNum'] = $member['learnedNum'];
-                $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
-                /*
-                 * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
-                 */
-                $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
-                $orderedCourses[] = $course;
+        $members = ArrayToolkit::index($members, 'courseId');
+        foreach ($courses as $course) {
+            if (empty($members[$course['id']])) {
+                continue;
             }
+            $member = $members[$course['id']];
+            $course['learnedNum'] = $member['learnedNum'];
+            /*
+             * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
+             */
+            $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
+            $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
+            $orderedCourses[] = $course;
         }
+//        foreach ($members as $member) {
+//            $courseId = $member['courseId'];
+//            if (!empty($courses[$courseId])) {
+//                $course = $courses[$courseId];
+//                $course['learnedNum'] = $member['learnedNum'];
+//                $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
+//                /*
+//                 * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
+//                 */
+//                $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
+//                $orderedCourses[] = $course;
+//            }
+//        }
 
         return $orderedCourses;
     }
