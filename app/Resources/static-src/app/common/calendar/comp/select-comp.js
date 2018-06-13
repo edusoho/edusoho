@@ -247,20 +247,26 @@ export default class SelectComp extends Comp {
     const date = $target.parent().data('time').substr(0, 11);
     const targetVal = date + $target.val();
     const siblingsVal = date + $target.siblings().val();
-    const targetTimeStamp = Date.parse(targetVal);
-    const siblingsTimeStamp = Date.parse(siblingsVal);
-    const changeTargetTime = moment(targetTimeStamp).format();
-    const changesiblingsTargetTime = moment(siblingsTimeStamp).format();
-
     // 输入格式错误
-    this.regRule($target, $target.val());
+    const reg = /^((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])$/;
+    const regExp = new RegExp(reg);
+    if(!regExp.test($target.val())) {
+      cd.message({ type: 'danger', message: Translator.trans('validate_old.right_time_tip') });
+      $target.val('');
+      return;
+    }
+
+    const targetTimeStamp = moment(targetVal).format('X');
+    const siblingsTimeStamp = moment(siblingsVal).format('X');
+    const changeTargetTime = moment(targetTimeStamp * 1000).format();
+    const changesiblingsTargetTime = moment(siblingsTimeStamp * 1000).format();
 
     const minTime = date + options.minTime;
     const maxTime = date + options.maxTime;
 
     // 设置日历显示时间
-    const currentTimeStamp = moment(options.currentTime).format('X') * 1000;
-    if (targetTimeStamp < Date.parse(minTime) || targetTimeStamp > Date.parse(maxTime) || targetTimeStamp < currentTimeStamp) {
+    const currentTimeStamp = moment(options.currentTime).format('X');
+    if (targetTimeStamp < moment(minTime).format('X') || targetTimeStamp > moment(maxTime).format('X') || targetTimeStamp < currentTimeStamp) {
       cd.message({ type: 'danger', message: Translator.trans('请输入有效时间') });
       $target.val('');
       return;
@@ -269,7 +275,7 @@ export default class SelectComp extends Comp {
     // 单节课最小时间
     const timeRange = options.snapDuration;
     const timeArray = timeRange.split(':');
-    const milliSeconds = (3600 * Number(timeArray[0]) + 60 * Number(timeArray[1])) * 1000;
+    const milliSeconds = 3600 * Number(timeArray[0]) + 60 * Number(timeArray[1]);
     const minutes = Number(timeArray[0]) * 60 + Number(timeArray[1]);
 
     // 最少预约时间
@@ -297,7 +303,6 @@ export default class SelectComp extends Comp {
       this.event.end = changeTargetTime;
       this.event.start = changesiblingsTargetTime;
     }
-    console.log(this.event);
     $(options['calendarContainer']).fullCalendar('updateEvent', this.event);
   }
 
@@ -307,15 +312,5 @@ export default class SelectComp extends Comp {
 
   _getParamPrefix() {
     return 'click';
-  }
-
-  regRule($target, value) {
-    const reg = /^((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])$/;
-    const regExp = new RegExp(reg);
-    if(!regExp.test(value)) {
-      cd.message({ type: 'danger', message: Translator.trans('validate_old.right_time_tip') });
-      $target.val('');
-      return;
-    }
   }
 }
