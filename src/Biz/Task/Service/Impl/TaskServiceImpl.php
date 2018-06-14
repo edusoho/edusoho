@@ -299,6 +299,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException('无权删除任务');
         }
 
+        $this->dispatchEvent('course.task.delete.before', new Event($task));
+
         $this->beginTransaction();
         try {
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
