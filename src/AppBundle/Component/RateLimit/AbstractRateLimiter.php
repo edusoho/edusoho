@@ -25,7 +25,7 @@ class AbstractRateLimiter
 
     protected function createMaxRequestOccurException()
     {
-        return new TooManyRequestsHttpException(null, RateLimiterInterface::MAX_REQUEST_MSG_KEY, null, RateLimiterInterface::MAX_REQUEST_OCCUR);
+        return RateLimitException::FORBIDDEN_MAX_REQUEST();
     }
 
     protected function createCaptchaOccurException()
@@ -39,13 +39,13 @@ class AbstractRateLimiter
         $phrase = $request->request->get('phrase');
 
         if (!$token || !$phrase) {
-            throw $this->createCaptchaOccurException();
+            throw RateLimitException::ERROR_CAPTCHA();
         }
 
         $status = $this->getBizCaptcha()->check($token, $phrase);
 
         if (BizCaptcha::STATUS_SUCCESS != $status) {
-            throw $this->createCaptchaOccurException();
+            throw RateLimitException::ERROR_CAPTCHA();
         }
     }
 
@@ -55,5 +55,10 @@ class AbstractRateLimiter
     private function getBizCaptcha()
     {
         return $this->biz['biz_captcha'];
+    }
+
+    public function getDragCaptcha()
+    {
+        return $this->biz['biz_drag_captcha'];
     }
 }

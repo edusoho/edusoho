@@ -10,9 +10,10 @@ class TextActivityDaoTest extends BaseDaoTestCase
     {
         $activity1 = $this->mockDataObject();
         $activity2 = $this->mockDataObject();
-        $results = $this->getDao()->findByIds(array(1, 2));
+        $results = $this->getDao()->findByIds(array($activity1['id'], $activity2['id']));
 
-        $this->assertEquals(2, $results[1]['id']);
+        $this->assertContains($activity1, $results);
+        $this->assertContains($activity2, $results);
     }
 
     protected function getDefaultMockFields()

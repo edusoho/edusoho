@@ -30,6 +30,6 @@ class MoneyCardDetailProcessor implements DetailProcessor
 
     protected function getMoneyCardService()
     {
-        return ServiceKernel::instance()->createService('MoneyCard:MoneyCardService');
+        return ServiceKernel::instance()->getBiz()->service('MoneyCard:MoneyCardService');
     }
 }

@@ -142,13 +142,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'courseId' => $fields['courseId'],
                 'courseSetId' => $course['courseSetId'],
                 'rating' => $fields['rating'],
-                'private' => $course['status'] == 'published' ? 0 : 1,
+                'private' => 'published' == $course['status'] ? 0 : 1,
                 'parentId' => $fields['parentId'],
                 'content' => !isset($fields['content']) ? '' : $fields['content'],
                 'createdTime' => time(),
                 'meta' => $meta,
             ));
-            $this->dispatchEvent('course.review.add', new Event($review));
+            $this->dispatchEvent('course.review.add', new Event($review, array('course' => $course)));
         } else {
             $review = $this->getReviewDao()->update($review['id'], array(
                 'rating' => $fields['rating'],
@@ -235,7 +235,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     {
         if (is_array($sort)) {
             $orderBy = $sort;
-        } elseif ($sort == 'latest') {
+        } elseif ('latest' == $sort) {
             $orderBy = array('createdTime' => 'DESC');
         } else {
             $orderBy = array('rating' => 'DESC');

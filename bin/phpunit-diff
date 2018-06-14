@@ -1,0 +1,128 @@
+#!/bin/bash
+# global var
+
+phpunitArray=()
+sourceArray=()
+phpunitStr=''
+sourceStr=''
+index=1
+currentPath=`pwd`
+xml=''
+
+function inArray() {
+	value=$1
+	arr=$2
+	flag=0 #not in
+
+	for i in ${arr[@]}
+	do
+		[ "$i" == "$value" ] && flag=1 #in
+	done
+
+}
+
+# classname
+function filterClassName() {
+	className=$1
+	if [[ $className = *\.php* && $className != *vendor\/*\.php* && $className != *api\/*\.php* ]]; then
+		if [[  $className = *src\/Biz\/*Impl\.php*  ]]; then
+			sourceClassName=$className
+			flag=0
+			for value in ${sourceArray[@]}
+			do
+				[ "$sourceClassName" == "$value" ] && flag=1
+			done
+			if [[  $flag = 0  ]]; then
+				sourceArray[$index]=$sourceClassName
+			fi
+			testClassName=${className//src\/Biz/tests\/Unit}
+			testClassName=${testClassName//\/Impl/}
+			testClassName=${testClassName//Impl\.php/Test\.php}
+			flag=0
+			for value in ${phpunitArray[@]}
+			do
+				[ "$testClassName" == "$value" ] && flag=1 #in
+			done
+			if [[  $flag = 0  ]]; then
+				phpunitArray[$index]=$testClassName
+			fi
+		elif [[  $className = *Test\.php* ]]; then
+			phpunitArray[$index]=$className
+		fi
+	fi
+}
+
+echo '检查raw-master是否存在'
+branch=`git branch -r --list origin/raw-master`
+branchResult='origin/raw-master'
+contain=$(echo $branch | grep "${branchResult}")
+
+if [[  "$contain" != '' ]]; then
+    echo "分支${contain}存在"
+    echo '创建app/data目录'
+    mkdir -p app/data
+    echo '开始比对差异文件'
+    git diff origin/master --name-only --diff-filter=ACMRTUXB >> app/data/phpunit-dif-files
+    echo '显示差异文件'
+    cat app/data/phpunit-dif-files
+    while read line
+    do
+    	filterClassName $line
+    	((index++))
+    done < app/data/phpunit-dif-files
+
+    echo "======================================="
+    echo "下面是测试文件列表："
+    for class in ${phpunitArray[@]}
+    do
+        echo $class
+    done
+
+    echo "========================================"
+    echo '开始跑单元测试'
+
+    suite=1
+    for class in ${phpunitArray[@]}
+    do
+    	fileName=${currentPath}/${class}
+    	zfileName=${fileName//\//\\\/}
+    	echo $fileName
+    	xml="<testsuite name=\"suite$suite\"><file>$zfileName<\/file><\/testsuite><\/testsuites>"
+
+    	if [  -f "$fileName" ]; then
+    		echo "------------------------------------"
+    		echo "测试文件 $fileName"
+    		line=`sed -n '/<\/testsuites>/=' app/phpunit.xml.dist | tail -n1`
+            sed -i "${line}s/.*/$xml/" app/phpunit.xml.dist
+    		bin/phpunit -c app/ --testsuite suite$suite
+    		if [ $? -eq 0 ];then
+              ((suite++))
+            else
+              exit 1
+            fi
+
+    	else
+    		echo "测试文件#$fileName不存在"
+    	fi
+    done
+    rm app/data/phpunit-dif-files
+    echo '结束'
+else
+    echo '分支不存在，开始全局单元测试'
+    phpunitAll=("bin/phpunit -c app/ --testsuite UnitA2B"
+                "bin/phpunit -c app/ --testsuite UnitC2D"
+                "bin/phpunit -c app/ --testsuite UnitE2P"
+                "bin/phpunit -c app/ --testsuite UnitQ2T"
+                "bin/phpunit -c app/ --testsuite UnitU2Z")
+
+    for ((i = 0; i < ${#phpunitAll[@]}; i++))
+    do
+        echo "执行${phpunitAll[$i]}"
+            ${phpunitAll[$i]}
+        if [ $? -eq 0 ];then
+            echo "第${i}组单元测试：${phpunitAll[$i]} 执行完毕"
+        else
+            exit 1
+        fi
+    done
+fi

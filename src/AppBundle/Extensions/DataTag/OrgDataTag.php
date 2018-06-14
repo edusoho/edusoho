@@ -22,6 +22,6 @@ class OrgDataTag extends BaseDataTag implements DataTag
 
     public function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 }
