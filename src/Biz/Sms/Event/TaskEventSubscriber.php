@@ -92,7 +92,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                     'targetId' => $task['id'],
                 ),
             );
-            $this->getSchedulerService()->register($startJob);
+            $this->createJob($startJob);
         }
 
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
@@ -107,7 +107,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                     'targetId' => $task['id'],
                 ),
             );
-            $this->getSchedulerService()->register($startJob);
+            $this->createJob($startJob);
         }
     }
 
@@ -140,5 +140,13 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    private function createJob($startJob)
+    {
+        $job = $this->getSchedulerService()->getJobByName($startJob['name']);
+        if (!isset($job)) {
+            $this->getSchedulerService()->register($startJob);
+        }
     }
 }

@@ -26,7 +26,7 @@ class YoukuVideoItemParser extends AbstractItemParser
         $videoId = $matches[1];
 
         $response = $this->fetchUrl($url);
-        if ($response['code'] != 200) {
+        if (200 != $response['code']) {
             throw new ParseException('获取优酷视频页面信息失败');
         }
 
@@ -35,7 +35,8 @@ class YoukuVideoItemParser extends AbstractItemParser
         $item['source'] = 'youku';
         $item['uuid'] = 'youku:'.$videoId;
 
-        $matched = preg_match('/id="s_baidu1"\s+href="(.*?)"/s', $response['content'], $matches);
+        $response['content'] = htmlspecialchars_decode(urldecode($response['content']));
+        $matched = preg_match('/id=[\\\\]{0,1}"s_baidu1[\\\\]{0,1}"\s+href=[\\\\]{0,1}"(.*?)[\\\\]{0,1}"/s', $response['content'], $matches);
         if (empty($matched)) {
             throw new ParseException('解析优酷视频页面信息失败');
         }

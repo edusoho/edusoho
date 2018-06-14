@@ -36,20 +36,28 @@ class DistributorSyncJob extends AbstractJob
         $resultJson = null;
         if (!empty($jobData)) {
             try {
+                $typeOrders = array();
+
                 $sendedData = array();
                 foreach ($jobData as $data) {
-                    $sendedData[] = $data['data'];
+                    $sendType = $service->getSendType($data['data']);
+                    if (empty($typeOrders[$sendType])) {
+                        $typeOrders[$sendType] = array();
+                    }
+                    $typeOrders[$sendType][] = $data['data'];
                 }
 
-                $resultJson = $drpService->postData($service->getSendType(), $sendedData);
+                foreach ($typeOrders as $sendType => $sendedData) {
+                    $resultJson = $drpService->postData($sendType, $sendedData);
 
-                if ($resultJson['success']) {
-                    $status = DistributorJobStatus::FINISHED;
+                    if ($resultJson['success']) {
+                        $status = DistributorJobStatus::FINISHED;
+                    }
+                    $this->biz['logger']->info(
+                        'distributor send job DistributorSyncJob::execute ',
+                        array('jobData' => $jobData, 'result' => $resultJson)
+                    );
                 }
-                $this->biz['logger']->info(
-                    'distributor send job DistributorSyncJob::execute ',
-                    array('jobData' => $jobData, 'result' => $resultJson)
-                );
             } catch (\Exception $e) {
                 $this->biz['logger']->error(
                     'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),

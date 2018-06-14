@@ -196,12 +196,6 @@ class ThreadShowWidget {
       },
       submitError: function (data) {
         $btn.button('reset');
-        data = $.parseJSON(data.responseText);
-        if (data.error) {
-          notify('danger', data.error.message);
-        } else {
-          notify('danger', Translator.trans('thread.post.reply_error_hint'));
-        }
       }
     });
   }

@@ -8,6 +8,7 @@ namespace QiQiuYun\SDK\Service;
 class SmsService extends BaseService
 {
     protected $host = 'sms-service.qiqiuyun.net';
+    protected $leafHost = array('sms-service-leaf1.qiqiuyun.net', 'sms-service-leaf2.qiqiuyun.net');
 
     /**
      * 单发文本短信
@@ -18,7 +19,7 @@ class SmsService extends BaseService
      */
     public function sendToOne(array $params)
     {
-        return $this->request('POST', '/messages', $params);
+        return $this->request('POST', '/messages', $params, array(), 'leaf');
     }
 
     /**
@@ -30,7 +31,7 @@ class SmsService extends BaseService
      */
     public function sendToMany(array $params)
     {
-        return $this->request('POST', '/messages/batch_messages', $params);
+        return $this->request('POST', '/messages/batch_messages', $params, array(), 'leaf');
     }
 
     /**
@@ -42,7 +43,7 @@ class SmsService extends BaseService
      */
     public function addSign(array $params)
     {
-        return $this->request('POST', '/signs', $params);
+        return $this->request('POST', '/signs', $params, array(), 'root');
     }
 
     /**
@@ -54,6 +55,6 @@ class SmsService extends BaseService
      */
     public function addTemplate(array $params)
     {
-        return $this->request('POST', '/templates', $params);
+        return $this->request('POST', '/templates', $params, array(), 'root');
     }
 }

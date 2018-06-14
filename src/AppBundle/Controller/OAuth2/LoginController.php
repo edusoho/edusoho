@@ -52,8 +52,8 @@ class LoginController extends LoginBindController
         $user = $this->getUserByTypeAndAccount($type, $account);
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
-        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType || $oauthUser->captchaEnabled;
         $oauthUser->isNewAccount = $user ? false : true;
+        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType ? false : true;
 
         if ($oauthUser->isNewAccount) {
             $redirectUrl = $this->generateUrl('oauth2_login_create');
@@ -161,20 +161,19 @@ class LoginController extends LoginBindController
             $this->authenticatedOauthUser();
 
             $response = $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
-            $response = DistributorCookieToolkit::clearCookieToken($request, $response);
+            $response = DistributorCookieToolkit::clearCookieToken(
+                $request,
+                $response,
+                array('checkedType' => DistributorCookieToolkit::USER)
+            );
 
             return $response;
         } else {
-            $oauthUser->captchaEnabled = true;
-            if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
-                $oauthUser->captchaEnabled =
-                    'captchaRequired' == $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
-            }
-
             $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
 
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
+                'captchaStatus' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp()),
             ));
         }
     }

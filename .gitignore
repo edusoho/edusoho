@@ -59,3 +59,5 @@ deployment-config.json
 yarn-error.log
 /mochawesome-report/*
 /coverage/*
+/reports
+/reports_tmp
