@@ -3,14 +3,14 @@
 @import './global.scss';
 @import '../fonts/iconfont.css';
 
-// pages
-@import './pages/home.scss';
-@import './pages/login.scss';
-@import './pages/register.scss';
-@import './pages/my.scss';
-@import './pages/setting.scss';
-@import './pages/order.scss';
-@import './pages/courseDetail.scss';
+// containers
+@import './containers/home.scss';
+@import './containers/login/index.scss';
+@import './containers/register/index.scss';
+@import './containers/my/index.scss';
+@import './containers/my/setting/index.scss';
+@import './containers/order/index.scss';
+@import './containers/course/courseDetail.scss';
 
 // modeles
 @import './modules/e-drag.scss';

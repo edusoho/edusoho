@@ -1,7 +1,6 @@
 <template>
   <div class="login">
     <span class='login-title'>登录账号</span>
-    <!-- <span class='login-hint'>为获取更优质的服务，请绑定您的手机或邮箱账号!</span> -->
     <img class='login-avatarimg' src="" />
     <van-field v-model="username" 
       class="login-input e-input"
@@ -49,9 +48,11 @@ export default {
         password: this.password
       }).then(res => {
         Toast.success('登录成功');
-        this.$router.go(-1);
+        const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
+
+        this.$router.push({name: redirect});
       }).catch(err => {
-        Toast.fail('登录异常');
+        Toast.fail(err.message);
       })
     }
   }

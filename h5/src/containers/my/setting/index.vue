@@ -37,7 +37,7 @@ export default {
     })
   },
   created() {
-    this.$set(this.settings[0], 'info', this.user.avatar.small);
+    this.$set(this.settings[0], 'info', this.user.avatar.large);
     this.$set(this.settings[1], 'info', this.user.nickname);
     this.$set(this.settings[2], 'info', this.user.school);
   },
@@ -57,7 +57,6 @@ export default {
       }
     },
     onRead(file) {
-      console.log(file)
       Api.setAvatar({
         "images": file.content
       }).then(res => {

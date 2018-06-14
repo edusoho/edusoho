@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="user-section">
-      <!-- <img class='user-img' :src="user.avatar.large" /> -->
+      <img class='user-img' :src="user.avatar.large" />
       <span class='user-name'>{{user.nickname}}</span>
       <router-link to="/my/setting">
         <img class='user-setting' src='/static/images/setting.png'>
