@@ -34,7 +34,7 @@ class TeacherLiveCourse extends AbstractResource
             ));
         }
 
-        return array('data' => array_merge($liveCourses, $openLiveCourses));
+        return array_merge($liveCourses, $openLiveCourses);
     }
 
     /**
