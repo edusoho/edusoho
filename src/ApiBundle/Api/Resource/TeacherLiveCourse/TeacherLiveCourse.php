@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class TeacherLiveCourse extends AbstractResource
 {
     /**
-     * @Access(roles="ROLE_TEACHER")
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request)
     {
