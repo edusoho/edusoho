@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\TeacherLiveCourse;
 
-use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Exception\ErrorCode;
@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class TeacherLiveCourse extends AbstractResource
 {
     /**
-     * @ApiConf(isRequiredAuth=false)
      * @Access(roles="ROLE_TEACHER")
      */
     public function search(ApiRequest $request)
