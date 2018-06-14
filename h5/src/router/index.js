@@ -22,7 +22,7 @@ const routes = [
         path: '/prelogin',
         name: 'prelogin',
         meta: {
-          title: '立即登录'
+          title: '我的学习'
         },
         component: resolve => require(['@/containers/login/prelogin.vue'], resolve)
       }
