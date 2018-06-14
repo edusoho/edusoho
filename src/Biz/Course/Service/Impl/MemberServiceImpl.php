@@ -405,8 +405,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $fields = array('teacherIds' => array($user['id']));
         $this->getCourseDao()->update($courseId, $fields);
-        $this->getCourseSetDao()->update($course['courseSetId'], $fields);
-
         $this->dispatchEvent('course.teacher.create', new Event($course, array('teacher' => $teacher)));
     }
 
@@ -1360,11 +1358,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     private function getNotificationService()
     {
         return $this->createService('User:NotificationService');
-    }
-
-    protected function getCourseSetDao()
-    {
-        return $this->createDao('Course:CourseSetDao');
     }
 
     /**
