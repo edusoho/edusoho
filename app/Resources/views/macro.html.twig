@@ -65,13 +65,15 @@
 
 {% macro flash_messages(isUseNew = false) %}
   {% for type, flashMessages in app.session.flashbag.all() %}
-    {% for flashMessage in flashMessages %}
-      {% if isUseNew %}
-        <div class="alert cd-alert cd-alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
-      {% else %}
-        <div class="alert alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
-      {% endif %}
-    {% endfor %}
+    {% if 'currentThrowedException' != type %}
+      {% for flashMessage in flashMessages %}
+        {% if isUseNew %}
+          <div class="alert cd-alert cd-alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
+        {% else %}
+          <div class="alert alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   {% endfor %}
 {% endmacro %}
 

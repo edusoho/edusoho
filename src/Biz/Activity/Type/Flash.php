@@ -133,6 +133,11 @@ class Flash extends Activity
         return $flashActivities;
     }
 
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getFlashActivityDao()->findByIds($targetIds);
+    }
+
     public function materialSupported()
     {
         return true;

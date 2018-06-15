@@ -28,7 +28,7 @@ class StudentLiveCourse extends AbstractResource
             ));
         }
 
-        return array('data' => $liveCourses);
+        return $liveCourses;
     }
 
     /**

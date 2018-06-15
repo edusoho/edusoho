@@ -461,6 +461,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         return $this->getJobProcessDao()->update($id, $process);
     }
 
+    public function updateJob($id, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('args', 'priority', 'pre_fire_time', 'next_fire_time', ' misfire_threshold', 'misfire_policy', 'enabled'));
+        return $this->getJobDao()->update($id, $fields);
+    }
+
     protected function getMillisecond()
     {
         list($t1, $t2) = explode(' ', microtime());

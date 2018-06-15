@@ -12,8 +12,7 @@ define(function(require, exports, module) {
 
   exports.run = function() {
     var $form = $('#article-form');
-    $modal = $form.parents('.modal');
-
+    var $modal = $form.parents('.modal');
     var validator = _initValidator($form, $modal);
     var ckeditor = _initEditorFields($form, validator);
 
@@ -147,6 +146,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '[name=body]',
       required: true,
+      rule: 'editor_maxlength{max:20000}',
     });
 
     validator.addItem({

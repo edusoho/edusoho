@@ -147,6 +147,8 @@ class SearchController extends BaseController
             $conditions['minCoursePrice'] = '0.00';
         }
 
+        $conditions = $this->filterCourseConditions($conditions);
+
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator(
             $this->get('request'),
@@ -288,6 +290,15 @@ class SearchController extends BaseController
             'type' => $type,
             'uri' => urldecode($this->get('request')->getRequestUri()),
         )));
+    }
+
+    protected function filterCourseConditions($conditions)
+    {
+        if (!$this->isPluginInstalled('Reservation')) {
+            $conditions['excludeTypes'] = array('reservation');
+        }
+
+        return $conditions;
     }
 
     /**

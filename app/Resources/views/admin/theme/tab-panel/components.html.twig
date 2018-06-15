@@ -22,7 +22,9 @@
       <!-- List group -->
       <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
         {% for key, pendant in blockConfig %}
-          {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: true} %}
+          {% if orginAllConfig[key]|default() %}
+            {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: true} %}
+          {% endif %}
         {% endfor %}
         
         {% for key, pendant in allBlockConfig %}

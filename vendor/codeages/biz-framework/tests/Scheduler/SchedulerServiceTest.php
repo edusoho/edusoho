@@ -39,6 +39,23 @@ class SchedulerServiceTest extends IntegrationTestCase
         $this->assertEquals(12345, $result1['pid']);
     }
 
+    public function testUpdateJob()
+    {
+        $job = $this->getSchedulerService()->register(array(
+            'name' => 'testJob',
+            'source' => 'MAIN',
+            'expression' => intval(time() + 10),
+            'class' => 'Biz\Test\Job\TestJob',//无实体文件
+            'args' => array('cursor' => 0),
+            'misfire_threshold' => 60 * 60,
+        ));
+        $newJob = $this->getSchedulerService()->updateJob($job['id'], array('args' => array('cursor' => 10000)));
+        $this->assertEquals(10000, $newJob['args']['cursor']);
+
+        $newJob = $this->getSchedulerService()->updateJob($job['id'], array('name' => 'newName'));
+        $this->assertEquals('testJob', $newJob['name']);
+    }
+
     /**
      * @return SchedulerService
      */

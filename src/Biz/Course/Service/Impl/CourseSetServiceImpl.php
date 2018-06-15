@@ -276,10 +276,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return 0;
         }
 
+        //屏蔽预约课程
         $count = $this->countCourseSets(
             array(
                 'ids' => $ids,
                 'status' => 'published',
+                'excludeTypes' => array('reservation'),
                 'parentId' => 0,
             )
         );
@@ -297,10 +299,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return array();
         }
 
+        //屏蔽预约课程
         return $this->searchCourseSets(
             array(
                 'ids' => $ids,
                 'status' => 'published',
+                'excludeTypes' => array('reservation'),
                 'parentId' => 0,
             ),
             array(
@@ -322,6 +326,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $conditions = array_merge($conditions, array('ids' => $ids));
+        //屏蔽预约课程
+        $conditions['excludeTypes'] = array('reservation');
 
         return $this->countCourseSets($conditions);
     }
@@ -337,6 +343,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $conditions = array_merge($conditions, array('ids' => $ids));
+        //屏蔽预约课程
+        $conditions['excludeTypes'] = array('reservation');
 
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
@@ -378,7 +386,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->addDefaultCourse($courseSet, $created);
 
         //update courseSet defaultId
-        $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
+        $created = $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
         $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;
@@ -1118,6 +1126,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'serializeMode' => $created['serializeMode'],
             'status' => 'draft',
             'type' => $created['type'],
+            'showServices' => isset($created['showServices']) ? $created['showServices'] : 1,
         );
 
         return $defaultCourse;
@@ -1150,10 +1159,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
-        if (!in_array($courseSet['type'], static::courseSetTypes())) {
-            throw $this->createInvalidArgumentException('Invalid Param: type');
-        }
-
         $courseSet = ArrayToolkit::parts(
             $courseSet,
             array(
@@ -1182,8 +1187,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return array(
             CourseSetService::NORMAL_TYPE,
             CourseSetService::LIVE_TYPE,
-            CourseSetService::LIVE_OPEN_TYPE,
-            CourseSetService::OPEN_TYPE,
         );
     }
 

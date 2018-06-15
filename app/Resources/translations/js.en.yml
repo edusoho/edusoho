@@ -55,6 +55,7 @@ site.form.submit_error: Form submit error
 site.cancel: Cancel
 site.confirm: Confirm
 site.close: Close
+site.delete: 删除
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -428,7 +429,7 @@ course_set.live_room.entry_error_hint: >
 course_set.live_room.entry_error_with_message: >
   Enter live classroom error,% message%, <a href='javascript:window.location.reload()'> Retry </a> or <a href = 'javascript: window.close () ; '> Off </a>;
 course_set.refund_cancel_hint: Do you really want to cancel your refund application?
-course_set.refund_cancel_success: Refund application canceled!
+course_set.refund_cancel_success: Refund application cancelled!
 course_set.title_required_error_hint: Please enter a title
 course_set.learn_progress: Learning progress
 course_set.manage.tag_required_hint: Please enter a label
@@ -562,9 +563,9 @@ user.account.refund_cancel_title: Cancel refund application
 user.account.refund_cancel_hint: Do you really want to cancel your refund application?
 user.account.cancel_order_title: Cancel order
 user.account.cancel_order_hint: Do you want to cancel the order?
-user.account.refund_cancel_success_hint: The refund application has been canceled!
+user.account.refund_cancel_success_hint: The refund application has been cancelled!
 user.account.cancel_order_fail_hint: Order Cancel Failed!
-user.account.cancel_order_success_hint: Order canceled!
+user.account.cancel_order_success_hint: Order cancelled!
 
 user.fields.idcard_front_placeholder: Please upload Id crad front
 user.fields.idcard_back_placeholder: Please upload Id crad back
@@ -744,7 +745,7 @@ notify.lesson_exercise_deleted.message: Exercise has been deleted！
 confirm.delete_lesson_homework.message: Do you really want to delete the lesson homework?
 notify.lesson_homework_deleted.message: Homework has been deleted！
 notify.order_cancel_failed.message: Order Cancel failed！
-notify.order_cancel_succeed.message: The order has been canceled successfully
+notify.order_cancel_succeed.message: The order has been cancelled successfully
 confirm.bind_pay_bank.message: Are you sure you want to unbind the bank card?
 notify.copy_succeed.message: Copy successful！
 notify.pay_failed.message: Payment failed！
@@ -786,6 +787,7 @@ validate_old.date_and_time_check.message: The end time can not be earlier than o
 validate_old.date_and_time.message: Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: The start time must be less than or equal to the end time
 validate_old.not_all_digital.message: %display% can not be all numbers
+validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: Please input correct es version，correct is XX.XX.XX
 validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
@@ -813,7 +815,7 @@ validate_old.unsigned_integer.message: %display% must be a non-negative integer
 validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
-
+validate.character_maxlength: 字数不能超过%max%字！
 
 export.not_allowed: you are not allowed to download
 export.empty: Export the result is empty

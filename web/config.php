@@ -372,8 +372,8 @@ $hasMinorProblems = (bool) count($minorProblems);
                             <p>Major problems have been detected and <strong>must</strong> be fixed before continuing:</p>
                             <ol>
                                 <?php foreach ($majorProblems as $problem): ?>
-                                    <li><?php echo $problem->getTestMessage() ?>
-                                        <p class="help"><em><?php echo $problem->getHelpHtml() ?></em></p>
+                                    <li><?php echo $problem->getTestMessage(); ?>
+                                        <p class="help"><em><?php echo $problem->getHelpHtml(); ?></em></p>
                                     </li>
                                 <?php endforeach; ?>
                             </ol>
@@ -387,8 +387,8 @@ $hasMinorProblems = (bool) count($minorProblems);
                             </p>
                             <ol>
                                 <?php foreach ($minorProblems as $problem): ?>
-                                    <li><?php echo $problem->getTestMessage() ?>
-                                        <p class="help"><em><?php echo $problem->getHelpHtml() ?></em></p>
+                                    <li><?php echo $problem->getTestMessage(); ?>
+                                        <p class="help"><em><?php echo $problem->getHelpHtml(); ?></em></p>
                                     </li>
                                 <?php endforeach; ?>
                             </ol>
@@ -397,7 +397,7 @@ $hasMinorProblems = (bool) count($minorProblems);
                         <?php if ($symfonyRequirements->hasPhpIniConfigIssue()): ?>
                             <p id="phpini">*
                                 <?php if ($symfonyRequirements->getPhpIniConfigPath()): ?>
-                                    Changes to the <strong>php.ini</strong> file must be done in "<strong><?php echo $symfonyRequirements->getPhpIniConfigPath() ?></strong>".
+                                    Changes to the <strong>php.ini</strong> file must be done in "<strong><?php echo $symfonyRequirements->getPhpIniConfigPath(); ?></strong>".
                                 <?php else: ?>
                                     To change settings, create a "<strong>php.ini</strong>".
                                 <?php endif; ?>
