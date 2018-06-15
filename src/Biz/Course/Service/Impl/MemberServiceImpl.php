@@ -402,6 +402,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $teacher = $this->addMember($teacher);
+
+        $fields = array('teacherIds' => array($user['id']));
+        $this->getCourseDao()->update($courseId, $fields);
         $this->dispatchEvent('course.teacher.create', new Event($course, array('teacher' => $teacher)));
     }
 

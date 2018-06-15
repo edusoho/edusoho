@@ -1,4 +1,4 @@
-{% if app.session.flashBag.has('currentThrowedException') %}
+{% if app.session.flashBag.has('currentThrowedException')|default() %}
   <div class="js-hidden-exception hidden">
     {% set currentThrowedException = app.session.flashBag.peek('currentThrowedException')[0] %}
     {

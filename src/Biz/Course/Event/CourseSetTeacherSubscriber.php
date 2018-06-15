@@ -22,6 +22,7 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
             'course.create' => 'calculateCourseTeacher',
             'course.delete' => 'onCourseDelete',
             'course.teachers.update' => 'calculateCourseTeacher',
+            'course.teacher.create' => 'calculateCourseTeacher',
         );
     }
 

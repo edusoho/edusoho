@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\TeacherLiveCourse;
 
-use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Exception\ErrorCode;
@@ -11,8 +11,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class TeacherLiveCourse extends AbstractResource
 {
     /**
-     * @ApiConf(isRequiredAuth=false)
-     * @Access(roles="ROLE_TEACHER")
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request)
     {
@@ -35,7 +34,7 @@ class TeacherLiveCourse extends AbstractResource
             ));
         }
 
-        return array('data' => array_merge($liveCourses, $openLiveCourses));
+        return array_merge($liveCourses, $openLiveCourses);
     }
 
     /**
