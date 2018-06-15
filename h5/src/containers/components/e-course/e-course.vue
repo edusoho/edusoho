@@ -37,9 +37,6 @@
     components: {
       switchBox,
     },
-    created(){
-      console.log('course', this.course);
-    },
     methods: {
       onClick() {
         const name = this.type === 'order'? 'order' : 'course';

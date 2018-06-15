@@ -4,8 +4,7 @@
       <div class="clearfix">
         <span class="e-course-list__list-title">{{ courseList.title }}</span>
         <span class="e-course-list__more">
-          <!-- 修改为路由形式 -->
-          <a class="more-text pull-left">更多</a>
+          <span class="more-text pull-left" @click="jumpTo(courseList.source)">更多</span>
         </span>
       </div>
     </div>
@@ -32,9 +31,20 @@
     },
     data() {
       return {
-        title: '更多课程',
         type: 'price'
       };
     },
+    methods: {
+      jumpTo(source) {
+        this.$router.push({
+          path: '/more',
+          // query: {
+          //   type: source.type,
+          //   targetId: source.targetId,
+          //   sort: source.sort
+          // }
+        });
+      }
+    }
   }
 </script>
