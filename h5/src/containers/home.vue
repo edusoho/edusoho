@@ -44,7 +44,9 @@ export default {
   },
   created() {
     this.items.some((item, index) => {
-      item.name === this.$route.name && (this.active = index);
+      const redirect = this.$route.query.redirect || '';
+
+      item.name === ( redirect || this.$route.name ) && ( this.active = index );
     })
   },
   methods: {

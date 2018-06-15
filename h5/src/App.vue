@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <van-nav-bar :title="title" 
-      class="nav"
-      :left-arrow="showLeftArrow" 
+    <van-nav-bar :title="title"
+      :class="{'blue-nav': navClass}"
+      :left-arrow="showLeftArrow"
       @click-left="$router.go(-1)"/>
     <router-view></router-view>
   </div>
@@ -15,16 +15,26 @@ export default {
       showLeftArrow: false
     }
   },
+  computed: {
+    navClass() {
+      return ['learning', 'find', 'prelogin'].includes(this.$route.name)
+    }
+  },
   watch: {
     '$route': {
-      handler(from) {
-        ['my', 'find', 'learning'].includes(from.name)
-          ? this.showLeftArrow = false
-          : this.showLeftArrow = true;
+      handler(to) {
+        const redirect = to.query.redirect || '';
 
-        this.title = from.meta.title;
+        this.showLeftArrow = !['my', 'find', 'learning', 'prelogin'].includes(to.name);
+
+        if(redirect === 'learning') {
+          this.title = '我的学习';
+          return;
+        }
+
+        this.title = to.meta.title;
       }
     }
-  }
+  },
 }
 </script>

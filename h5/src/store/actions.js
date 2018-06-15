@@ -8,7 +8,7 @@ export const updateLoading = ({ commit }, { isLoading }) => {
 export const userLogin = ({ commit }, { username, password }) => {
   localStorage.setItem('Authorization', btoa(unescape(encodeURIComponent(`${username}:${password}`))));
 
-  Api.login({
+  return Api.login({
     headers: {
       Authorization: `Basic ${localStorage.getItem('Authorization')}`
     }
@@ -19,14 +19,12 @@ export const userLogin = ({ commit }, { username, password }) => {
 };
 
 
-export const getUserInfo = ({ commit }) => {
-  Api.getUserInfo({
-    headers: {
-      Authorization: `Basic ${localStorage.getItem('Authorization')}`
-    }
-  }).then(res => {
-    commit(types.USER_INFO, res);
-    return res;
-  });
-};
+export const getUserInfo = ({ commit }) => Api.getUserInfo({
+  headers: {
+    Authorization: `Basic ${localStorage.getItem('Authorization')}`
+  }
+}).then(res => {
+  commit(types.USER_INFO, res);
+  return res;
+});
 

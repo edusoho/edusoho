@@ -1,17 +1,24 @@
 <template>
   <div>
     <user></user>
-    <order></order>
+    <orders></orders>
   </div>
 </template>
 <script>
-import Order from './order.vue';
+import Orders from '../order/orders.vue';
 import User from './user.vue';
+import store from '@/store';
 
 export default {
   components: {
-    Order,
+    Orders,
     User
+  },
+  beforeRouteEnter(to, from, next) {
+    // 判断是否登录
+    const isLogin = !!store.state.token;
+
+    !isLogin ? next({name: 'prelogin', query: { redirect: to.name }}) : next();
   }
 }
 </script>
