@@ -4,6 +4,12 @@ const filters = [
     handler(value) {
       return isNaN(Number(value)) ? '0.00' : (Number(value) / 100).toFixed(2);
     }
+  },
+  {
+    name: 'isFree',
+    handler(value) {
+      return value;
+    }
   }
 ];
 

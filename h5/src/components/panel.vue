@@ -1,6 +1,6 @@
 <template>
   <div class="e-panel">
-    <div class="e-panel-heading title-18">{{title}}</div>
+    <div class="e-panel-heading">{{title}}</div>
     <div class="e-panel-body">
       <slot>
         暂无简介

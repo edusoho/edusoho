@@ -47,4 +47,49 @@
   .directory {
     margin-bottom: vw(50);
   }
+
+  // head
+  &__head {
+    >img {
+      height: 31.5vh;
+      vertical-align: middle;
+    }
+    &-price {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: vw(-10);
+      >span {
+        @extend .title-18;
+        @extend .red;
+        &:last-child {
+          @extend .grey;
+          font-size: vw(14);
+        }
+      }
+    }
+  }
+  // 计划
+  &__plan {
+    padding: vw(20) 0;
+    border-top: 1px solid $border-grey;
+    margin: 0 vw(20);
+    display: flex;
+    justify-content: flex-start;
+    > li {
+      width: vw(66);
+      height: 30px;
+      border: 1px solid $border-grey;
+      text-align: center;
+      line-height: 30px;
+      font-size: vw(14);
+      color: #71777d;
+      margin-right: vw(20);
+      border-radius: 2px;
+      &.active {
+        color: white;
+        background: $primary-color;
+      }
+    }
+  }
 }
