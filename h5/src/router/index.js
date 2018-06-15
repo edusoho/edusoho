@@ -76,6 +76,13 @@ const routes = [
       title: '确认订单'
     },
     component: resolve => require(['@/containers/order/index.vue'], resolve)
+  }, {
+    path: '/more',
+    name: 'more',
+    meta: {
+      title: '所有课程'
+    },
+    component: resolve => require(['@/containers/more/index.vue'], resolve)
   }
 ];
 

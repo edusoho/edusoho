@@ -12,7 +12,7 @@
         default: {}
       }
     },
-    data () {
+    data() {
       return {
         link: this.promotion.link
       };
