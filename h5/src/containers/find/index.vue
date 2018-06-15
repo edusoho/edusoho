@@ -1,9 +1,9 @@
 <template>
   <div class="find-page">
     <div class="find-page__part" v-for="part in parts">
-      <e-swipe v-if="part.class == 'slideshow'" :slides="part.data"></e-swipe>
-      <e-course-list v-if="part.class == 'courselist'" :courseList="part.data"></e-course-list>
-      <e-promotion v-if="part.class == 'image'" :promotion="part.data"></e-promotion>
+      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
+      <e-course-list v-if="part.type == 'course_list'" :courseList="part.data"></e-course-list>
+      <e-promotion v-if="part.type == 'image'" :promotion="part.data"></e-promotion>
     </div>
     <!-- 垫底的 -->
     <div style="margin-top: 50px"></div>
