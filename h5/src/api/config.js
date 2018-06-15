@@ -45,6 +45,11 @@ const config = [
     name: 'getMyOrder',
     url: '/me/orders?type=course',
     method: 'GET'
+  }, {
+    // 课程详情页
+    name: 'getCourseDetail',
+    url: '/pages/course?id={id}',
+    method: 'GET'
   }
 ];
 

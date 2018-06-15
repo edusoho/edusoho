@@ -8,6 +8,7 @@
 <script>
   import joinAfter from './joinAfter.vue';
   import joinBefore from './joinBefore.vue';
+  import Api from '@/api';
 
   export default {
     components: {
@@ -19,5 +20,12 @@
         joinStatus: false, // joinAfter = true
       };
     },
+    created(){
+      Api.getCourseDetail({
+        query: {
+          id: 1
+        }
+      })
+    }
   }
 </script>

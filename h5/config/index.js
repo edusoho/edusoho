@@ -13,6 +13,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
+        // target: 'http://try6.edusoho.cn/',
         changeOrigin: true,
         secure: false,
       }
