@@ -1,17 +1,24 @@
 <template>
   <e-panel title="教师介绍">
-    <img src="https://mp1.cg-dev.cn/files/default/2018/02-09/121922a8077c938304.jpg" 
-      class="teacher-avatar-img">
-    <div class="teacher-cell">
-      <span class="dark font-family-PFM">{{teacherInfo.nickname}}</span>
-      <span class="text-content">{{teacherInfo.title || '暂无简介'}}</span>
-    </div>
+    <template v-for="item in teacherInfo">
+      <div class="teacher-content">
+        <img :src="item.avatar.large" 
+        class="teacher-avatar-img">
+        <div class="teacher-cell">
+          <span class="dark font-family-PFM">{{item.nickname}}</span>
+          <span class="text-content">{{item.title || '暂无简介'}}</span>
+        </div>
+      </div>
+    </template>
   </e-panel>
 </template>
 <script>
 export default {
   name: 'teacher',
-  props: ['teacherInfo']
+  props: ['teacherInfo'],
+  created() {
+    console.log('teacherInfo', this.teacherInfo)
+  }
 }
 </script>
 

@@ -1,7 +1,44 @@
 .course-detail {
   transition: all 1s;
 
+  .layout-col {
+    .e-panel-body {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .flex-row {
+    display: flex;
+  }
+
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty-block {
+    height: vw(20);
+    background: white;
+    width: 100%;
+  }
+
   // teacher component
+  .teacher {
+    .e-panel-body {
+      flex-direction: column;
+      .teacher-content {
+        display: flex;
+        margin-bottom: 15px;
+        + .teacher-content {
+          padding-top: 15px;
+          border-top: 1px solid #eee;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
   .teacher-cell {
     display: flex;
     flex-direction: column;
@@ -37,15 +74,84 @@
   .about {
     margin-top: 44px;
   }
+  .box {
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: all 0.3s;
+    position: relative;
 
-  .layout-col {
-    .e-panel-body {
-      display: flex;
-      flex-direction: column;
+    &.show-box {
+      transform: translateY(0);
+      opacity: 1;
     }
   }
+  // 课程目录
   .directory {
-    margin-bottom: vw(50);
+    .e-panel-body {
+      margin:0 vw(-10) vw(50);
+    }
+    .directory-list {
+      &__item {
+        &-chapter {
+          display: flex;
+          justify-content: space-between;
+          @extend .title-16;     
+          height: vw(52);
+          line-height:vw(52);
+          background: #F7F7F7;
+          border-radius: 5px;    
+          padding-left: vw(10);
+          padding-right: vw(15); 
+          box-sizing: border-box;
+          i {
+            margin-top: vw(20);
+          }
+          margin-bottom: vw(20);
+        }
+        &-unit {
+          height: 0;
+          overflow: hidden;
+          &.unit-show {
+            height: auto;
+          }
+        }
+        .lesson-cell {
+          @extend .flex-row;
+          @extend .font-family-PFM;
+          margin:0 vw(10);
+          font-size: vw(14);
+          &__unit {
+            margin-bottom: vw(12);
+            margin-left: vw(10);
+            @extend .title-16;
+          }
+          &__content {
+            @extend .flex-column;
+            margin-left: vw(10);
+            margin-bottom: vw(15);
+            flex: 1;
+            span {
+              color: #2B333B;
+              &:last-child {
+                color: #b0bdc9;
+                margin-top: vw(15);
+              }
+            }
+          }
+          &__number {
+            color: #b0bdc9;
+          }
+          &__status {
+            background: #FF9E6D;
+            border-radius: 2px;
+            height: vw(18);
+            color: white;
+            font-size: vw(12);
+            padding: vw(4) vw(10);
+          }
+        }
+      }
+    }
   }
 
   // head
@@ -53,13 +159,14 @@
     >img {
       height: 31.5vh;
       vertical-align: middle;
+      width: 100%;
     }
     &-price {
       width: 100%;
       display: flex;
       justify-content: space-between;
       margin-bottom: vw(-10);
-      >span {
+      > span {
         @extend .title-18;
         @extend .red;
         &:last-child {

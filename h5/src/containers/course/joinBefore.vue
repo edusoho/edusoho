@@ -10,17 +10,17 @@
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
-\
+
     <!-- 课程介绍 -->
     <e-panel title="课程介绍" ref="about" class="about"></e-panel>
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
-    <teacher :teacherInfo="teacherInfo" ref="teacher"></teacher>
+    <teacher :teacherInfo="details[selectPlanIndex].teachers" ref="teacher" class="teacher"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
-    <directory ref="directory"></directory>
+    <directory ref="directory" :courseItem="details[selectPlanIndex].courseItem"></directory>
     
     <e-footer @click.native="handleJoin">加入学习</e-footer>
   </div>
@@ -36,10 +36,7 @@
     props: ['details'],
     data() {
       return {
-        teacherInfo: {
-          nickname: 'gaot',
-          title: 'IMC国际数学竞赛优秀教练员，两届“希望杯”数学竞赛优秀教练员，两届北京市迎春杯（数学解题能力展示）命题组组长。'
-        },
+        teacherInfo: {},
         tabs: ['课程介绍', '教师介绍', '目录'],
         active: 0,
         tabsClass: '',
@@ -84,7 +81,6 @@
       handleScroll() {
         const scrollTop = window.pageYOffset ||
           document.documentElement.scrollTop || document.body.scrollTop;
-
 
         this.active = this.activeCurrentTab(scrollTop);
 
