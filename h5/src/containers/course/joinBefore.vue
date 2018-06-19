@@ -1,12 +1,16 @@
 <template>
   <div class="join-before">
-    <div>
-      <img src="/static/images/noLoginEmpty.png" alt="">
-    </div>
+    <detail-head 
+      :price="details[selectPlanIndex].price"
+      :courseSet="details[selectPlanIndex].courseSet">
+    </detail-head>
+
+    <detail-plan></detail-plan>
+    <div class="segmentation"></div>
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
-
+\
     <!-- 课程介绍 -->
     <e-panel title="课程介绍" ref="about" class="about"></e-panel>
     <div class="segmentation"></div>
@@ -24,9 +28,12 @@
 <script>
   import Teacher from './detail/teacher';
   import Directory from './detail/directory';
+  import DetailHead from './detail/head';
+  import DetailPlan from './detail/plan';
 
   export default {
     name: 'joinBefore',
+    props: ['details'],
     data() {
       return {
         teacherInfo: {
@@ -40,14 +47,18 @@
           tabsTop: 0,
           teacherTop: 0,
           aboutTop: 0,
-        }
+        },
+        selectPlanIndex: 0 //当前选中计划下标
       }
     },
     components: {
       Teacher,
-      Directory
+      Directory,
+      DetailHead,
+      DetailPlan
     },
     mounted() {
+      console.log('bfore', this.details)
       const refs = this.$refs;
 
       window.addEventListener('scroll', this.handleScroll);

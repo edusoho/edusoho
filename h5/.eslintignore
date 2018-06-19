@@ -3,3 +3,5 @@
 /dist/
 /*.js
 /test/unit/coverage/
+/src/assets/
+/node_modules/

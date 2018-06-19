@@ -5,6 +5,7 @@
   background-color: white;
 
   &-heading {
+    @extend .title-18;
     padding: vw(25) 0 vw(15);
   }
 
