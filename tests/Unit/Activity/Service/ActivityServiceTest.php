@@ -229,6 +229,37 @@ class ActivityServiceTest extends BaseTestCase
                 'finish' => array('data' => array('stop' => true)),
             ),
         );
+        $this->mockBiz(
+            'Task:TaskResultService',
+            array(
+                array(
+                    'functionName' => 'getUserTaskResultByTaskId',
+                    'returnValue' => array('id' => 1, 'status' => 'start'),
+                ),
+                array(
+                    'functionName' => 'updateTaskResult',
+                    'returnValue' => array(),
+                ),
+                array(
+                    'functionName' => 'getMyLearnedTimeByActivityId',
+                    'returnValue' => array(),
+                ),
+            )
+        );
+
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'recountLearningData',
+                    'returnValue' => array(),
+                ),
+                array(
+                    'functionName' => 'getCourse',
+                    'returnValue' => array('id' => 1, 'compulsoryTaskNum' => 1),
+                ),
+            )
+        );
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
