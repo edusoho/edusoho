@@ -243,4 +243,46 @@ class ArrayToolkitTest extends BaseTestCase
             $result
         );
     }
+
+    public function testOrderByArrayWhenSuccessed()
+    {
+        // happy pass
+        $array = array(1 => array('a', 'b', 'c'), 2 => array('d', 'e', 'f'), 3 => array('g', 'h', 'i'));
+        $orderArray = array(3, 1, 2);
+        $result = ArrayToolkit::orderByArray($array, $orderArray);
+        $this->assertArrayEquals(
+            array('g', 'h', 'i'),
+            array_shift($result)
+        );
+    }
+
+    public function testOrderByArrayWhenFailed()
+    {
+        // 长度不同
+        $array = array(1 => array('a', 'b', 'c'), 2 => array('d', 'e', 'f'), 3 => array('g', 'h', 'i'));
+        $orderArray = array(3, 1, 2, 3);
+        $result = ArrayToolkit::orderByArray($array, $orderArray);
+        $this->assertArrayEquals(
+            array('a', 'b', 'c'),
+            array_shift($result)
+        );
+
+        // 含有不同的数值
+        $array = array(1 => array('a', 'b', 'c'), 2 => array('d', 'e', 'f'), 3 => array('g', 'h', 'i'));
+        $orderArray = array(3, 1, 6);
+        $result = ArrayToolkit::orderByArray($array, $orderArray);
+        $this->assertArrayEquals(
+            array('a', 'b', 'c'),
+            array_shift($result)
+        );
+
+        // 含有相同重复的数值
+        $array = array(1 => array('a', 'b', 'c'), 2 => array('d', 'e', 'f'), 3 => array('g', 'h', 'i'));
+        $orderArray = array(3, 1, 3);
+        $result = ArrayToolkit::orderByArray($array, $orderArray);
+        $this->assertArrayEquals(
+            array('a', 'b', 'c'),
+            array_shift($result)
+        );
+    }
 }
