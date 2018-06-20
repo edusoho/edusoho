@@ -55,13 +55,13 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->count($conditions);
     }
 
-    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = array())
     {
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = strtoupper($conditions['nickname']);
         }
 
-        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
+        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit, $columns = array());
 
         return UserSerialize::unserializes($users);
     }
@@ -830,7 +830,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function updateUserProfile($id, $fields)
+    public function updateUserProfile($id, $fields, $strict = true)
     {
         $user = $this->getUser($id);
 
@@ -958,16 +958,17 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['isQQPublic'] = 1;
         }
 
-        $fields = array_filter($fields, function ($value) {
-            if (0 === $value) {
-                return true;
-            }
+        if ($strict) {
+            $fields = array_filter($fields, function ($value) {
+                if (0 === $value) {
+                    return true;
+                }
 
-            return !empty($value);
-        });
+                return !empty($value);
+            });
+        }
 
         $userProfile = $this->getProfileDao()->update($id, $fields);
-
         $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
 
         return $userProfile;

@@ -862,7 +862,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return array();
         }
 
-        $courses = $this->controller->getCourseService()->findUserTeachCourses(array('userId' => $userId), 0, 10);
+        $courses = $this->controller->getCourseService()->findUserTeachCourses(array('userId' => $userId, 'excludeTypes' => array('reservation')), 0, 10);
         $courses = $this->controller->filterCourses($courses);
 
         return $courses;
@@ -1094,7 +1094,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['categoryId'] = $categoryId;
         }
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), 0, PHP_INT_MAX);
+        //过滤掉约排课
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search, 'excludeTypes' => array('reservation')), array(), 0, PHP_INT_MAX);
 
         $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
 
@@ -1130,6 +1131,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $conditions['status'] = 'published';
         $conditions['parentId'] = '0';
+        //过滤约排课
+        $conditions['excludeTypes'] = array('reservation');
 
         if (empty($type)) {
             unset($conditions['type']);

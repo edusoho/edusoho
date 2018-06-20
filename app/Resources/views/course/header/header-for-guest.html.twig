@@ -6,6 +6,8 @@
 {% endif %}
 
 {% set page_type = 'guest' %}
+{# showCourses 该参数直播课及插件约排课不展示计划 #}
+{% set showCourses = showCourses|default(1) %}
 
 {% block course_header_subtitle %}
   <p class="text-overflow subtitle" data-toggle="popover" data-placement="bottom"
@@ -45,13 +47,7 @@
       </div>
     </div>
     <div class="course-detail-info">
-			
-			{#确认下判断是否有误#}
-			{% if courseSet.discountId > 0  and course.price < course.originPrice  and is_plugin_installed('Discount') %}
-				{% set onDiscount =  true %}
-			{% else %}
-				{% set onDiscount =  false %}
-			{% endif %}
+			{% set onDiscount =  is_discount(course) %}
       
       <div class="{% if onDiscount %} mb10  {% else %} mb15 {% endif %}">
 				{% include 'course/header/header-for-price.html.twig' %}
@@ -69,7 +65,7 @@
         </div>
 			{% endif %}
       <div class="course-detail-gray {% if not onDiscount %} not-activity {% endif %}">
-				{% if courseSet.type != 'live' %}
+				{% if showCourses %}
           <div class="course-detail-content">
             <span class="course-detail-title vertical-middle mb10">{{ 'course.teaching_plan'|trans }}</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">

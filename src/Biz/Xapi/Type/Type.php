@@ -141,10 +141,10 @@ abstract class Type extends BizAware
     protected function findActivities($subject)
     {
         $activityIds = ArrayToolkit::column($subject[0], $subject[1]);
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
-        $activities = ArrayToolkit::index($activities, 'id');
+        $activities = $this->getActivityMedia($activityIds);
 
         $resourceIds = array();
+
         foreach ($activities as $activity) {
             if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
                 if (!empty($activity['ext']['mediaId'])) {
@@ -152,10 +152,33 @@ abstract class Type extends BizAware
                 }
             }
         }
+
         $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
         $resources = ArrayToolkit::index($resources, 'id');
 
         return array($activities, $resources);
+    }
+
+    private function getActivityMedia($activityIds)
+    {
+        $activities = $this->getActivityDao()->findByIds($activityIds);
+        $activityGroups = ArrayToolkit::group($activities, 'mediaType');
+
+        foreach ($activityGroups as $mediaType => $activityGroup) {
+            $activityConfig = $this->getActivityConfig($mediaType);
+            $mediaIds = ArrayToolkit::column($activityGroup, 'mediaId');
+            $medias = $activityConfig->findWithoutCloudFiles($mediaIds);
+            $medias = ArrayToolkit::index($medias, 'id');
+
+            array_walk(
+                $activities,
+                function (&$activity) use ($medias) {
+                    $activity['ext'] = empty($medias[$activity['mediaId']]) ? array() : $medias[$activity['mediaId']];
+                }
+            );
+        }
+
+        return ArrayToolkit::index($activities, 'id');
     }
 
     protected function createService($alias)
@@ -295,12 +318,22 @@ abstract class Type extends BizAware
         return $this->createService('Course:ThreadService');
     }
 
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
+    }
+
     /**
      * @return \Biz\Taxonomy\Service\TagService
      */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    protected function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
     }
 
     protected function getActor($userId)

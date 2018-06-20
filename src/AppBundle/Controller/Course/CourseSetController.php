@@ -76,6 +76,7 @@ class CourseSetController extends BaseController
             'parentId' => '0',
         );
 
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -143,7 +144,7 @@ class CourseSetController extends BaseController
         $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-        if ($taskId == '' && $tasks != null) {
+        if ('' == $taskId && null != $tasks) {
             $currentTask = current($tasks);
         } else {
             $currentTask = $this->getTaskService()->getTask($taskId);

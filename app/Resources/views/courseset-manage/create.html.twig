@@ -17,68 +17,23 @@
               method="post">
           {{ web_macro.flash_messages() }}
           <div class="course-piece">{{ 'my.teaching.course_set.select_type'|trans }}</div>
-          <div class="form-group">
-            <div class="col-md-3">
-              <div class="course-select js-courseSetType active" data-type="normal"><i
-                    class="es-icon es-icon-putongkecheng "></i>
-                <div class="course-type">{{ 'my.teaching.course_set.select_type.course'|trans }}</div>
-                <div class="course-intro">{{ 'my.teaching.course_set.select_type.course.tips'|trans }}</div>
+          <div class="form-group cd-row mb0">
+            {% set typeCount = courseTypes|length %}
+            {% for key,type in courseTypes %}
+              <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2 course-five-types {% endif %}">
+                {% include type.template with {type: key} %}
               </div>
-            </div>
-            <div class="col-md-3">
-              {% if not liveStatus.isBuy %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                   title="{{'my.teaching.course_set.select_type.live_open_course.not_purchase_live'|trans}}" data-type="live">
-              {% elseif not setting('live-course.live_course_enabled') %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                  title="{{'my.teaching.course_set.select_type.live_open_course.available_after_open'|trans}}" data-type="live">
-              {% elseif liveStatus.isExpired is defined and liveStatus.isExpired == true %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="live">
-              {% else %}
-                <div class="course-select js-courseSetType" data-type="live">
-              {% endif %}
-                  <i class="es-icon es-icon-zhibokecheng "></i>
-                  <div class="course-type">{{ 'my.teaching.course_set.select_type.live_course'|trans }}</div>
-                  <div class="course-intro">{{ 'my.teaching.course_set.select_type.live_course.tips'|trans }}</div>
-                </div>
-            </div>
-
-              <div class="col-md-3">
-                <div class="course-select js-courseSetType" data-type="open">
-                  <i class="es-icon es-icon-lubogongkaike"></i>
-                  <div class="course-type">{{ 'my.teaching.course_set.select_type.record_open_course'|trans }}</div>
-                  <div class="course-intro">{{ 'my.teaching.course_set.select_type.record_open_course.tips'|trans }}</div>
-                </div>
-              </div>
-
-            <div class="col-md-3">
-              {% if not liveStatus.isBuy %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.not_purchase_live'|trans}}" data-type="liveOpen">
-              {% elseif not setting('live-course.live_course_enabled') %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.available_after_open'|trans}}" data-type="liveOpen">
-              {% elseif liveStatus.isExpired is defined and liveStatus.isExpired == true %}
-                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="liveOpen">
-              {% else %}
-                <div class="course-select js-courseSetType" data-type="liveOpen">
-              {% endif %}
-                  <i class="es-icon es-icon-zhibokecheng2"></i>
-                  <div class="course-type">{{ 'my.teaching.course_set.select_type.live_open_course'|trans }}</div>
-                  <div class="course-intro">{{ 'my.teaching.course_set.select_type.live_open_course.tips'|trans }}</div>
-                </div>
-            </div>
+            {% endfor %}
+          </div>
+          
             {% include 'org/course-create-org-tree-select.html.twig' %}
             <div class="course-title form-group">
-              <div class="col-md-2 controls-label text-lg">
+              <div class="mlm pull-left controls-label text-lg">
                 <div class="course-piece title">{{ 'my.teaching.course_set.select_type.course_title'|trans }}</div>
               </div>
-              <div class="col-md-10 controls">
+              <div class="col-md-10 controls course-title-input">
                 <input type="text" id="course_title" name="title" required="required" class="form-control"
                        data-widget-cid="widget-1" data-explain="">
-                <div class="help-block" style="display:none;"></div>
               </div>
             </div>
             <div class="text-center">
@@ -88,8 +43,8 @@
             </span>
               {% endif %}
               <button id="courseset-create-btn" data-loading-text="{{ 'form.btn.create.submiting'|trans }}"
-                     class="btn btn-fat btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
-              <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
+                     class="cd-btn cd-btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
+              <a class="btn btn-fat btn-link link-gray course-cancel-btn" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
             </div>
             <input type="hidden" name="type" value="normal"/>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></div>

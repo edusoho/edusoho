@@ -18,7 +18,10 @@ class CourseRankByRatingDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        $conditions = array('status' => 'published');
+        $conditions = array(
+            'status' => 'published',
+            'excludeTypes' => array('reservation'),
+        );
 
         $courses = $this->getCourseService()->searchCourses($conditions, 'rating', 0, $arguments['count']);
 

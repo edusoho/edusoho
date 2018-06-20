@@ -862,8 +862,8 @@ class ClassroomManageController extends BaseController
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
 
-            $coinPrice += $course['price'] * $cashRate;
-            $price += $course['price'];
+            $coinPrice += $course['originPrice'] * $cashRate;
+            $price += $course['originPrice'];
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -1099,7 +1099,7 @@ class ClassroomManageController extends BaseController
             return $this->createMessageResponse('error', 'Activity not found');
         }
 
-        if ($activity['mediaType'] == 'homework') {
+        if ('homework' == $activity['mediaType']) {
             $controller = 'AppBundle:HomeworkManage:resultGraph';
         } else {
             $controller = 'AppBundle:Testpaper/Manage:resultGraph';

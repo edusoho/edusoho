@@ -113,6 +113,7 @@ class CourseCopyTest extends BaseTestCase
         $user['nickname'] = 'name_'.$name;
         $user['password'] = 'user';
         $user = $this->getUserService()->register($user);
+        $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER'));
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER', 'ROLE_TEACHER');
 

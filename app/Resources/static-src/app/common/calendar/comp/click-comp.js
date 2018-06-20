@@ -1,5 +1,9 @@
 import Comp from './comp';
 
+/**
+ * 左键点击，跳转
+ * 如 new ClickComp('{url}')
+ */
 export default class ClickComp extends Comp {
 
   constructor(url) {

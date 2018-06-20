@@ -159,8 +159,15 @@ class ThemeController extends BaseController
 
     private function edit($code, $config)
     {
+        if (!empty($config['isPlugin']) && $this->getWebExtension()->isPluginInstalled($config[
+            'pluginName'])) {
+            $template = $config['edit'];
+        } elseif (empty($config['isPlugin'])) {
+            $template = 'admin/theme/edit-modal/edit-'.$code.'-modal.html.twig';
+        }
+
         return $this->render(
-            'admin/theme/edit-modal/edit-'.$code.'-modal.html.twig',
+            $template,
             array(
                 'config' => $config,
             )
@@ -183,5 +190,10 @@ class ThemeController extends BaseController
     protected function getNavigationService()
     {
         return $this->createService('Content:NavigationService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->get('web.twig.extension');
     }
 }
