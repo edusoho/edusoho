@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import joinAfter from './joinAfter.vue';
-  import joinBefore from './joinBefore.vue';
+  import joinAfter from './join-after.vue';
+  import joinBefore from './join-before.vue';
   import Api from '@/api';
 
   export default {

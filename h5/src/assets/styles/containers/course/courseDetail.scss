@@ -148,6 +148,9 @@
             color: white;
             font-size: vw(12);
             padding: vw(4) vw(10);
+            &.is-free {
+              background: $primary-color;
+            }
           }
         }
       }

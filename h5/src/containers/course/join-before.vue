@@ -55,7 +55,6 @@
       DetailPlan
     },
     mounted() {
-      console.log('bfore', this.details)
       const refs = this.$refs;
 
       window.addEventListener('scroll', this.handleScroll);

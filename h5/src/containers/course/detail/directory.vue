@@ -3,47 +3,86 @@
     <!-- 暂无学习任务 -->
 
     <div class="directory-list">
-      <div class="directory-list__item">
-        <div class="directory-list__item-chapter" @click="show = !show">
-          <span>音视频</span> 
-          <i :class="[ show ? 'icon-packup': 'icon-unfold']"></i>
+      <div class="directory-list__item" v-for="(item, index) in chapters">
+
+        <div class="directory-list__item-chapter" 
+          @click="item.show = !item.show" 
+          v-if="item.type === 'chapter'">
+          <span>第{{ item.number }}章：{{ item.title }}</span> 
+          <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"></i>
         </div>
-        <div :class="['directory-list__item-unit', {'unit-show': show}]">
-          <div class="lesson-cell__unit">
-            第1节：云音视频
+
+        <div :class="['directory-list__item-unit', 
+          {'unit-show': item.show}]"
+          v-for="task in tasks[index]">
+
+          <div class="lesson-cell__unit" v-if="task.type === 'unit'">
+            第{{ task.number }}节：{{ task.title }}
           </div>
-          <div :class="['box', {'show-box': show}]">
+
+          <div :class="['box', {'show-box': item.show}]" 
+            v-if="task.type === 'task'">
             <div class="lesson-cell">
-            <span class="lesson-cell__number">01</span>
-            <div class="lesson-cell__content">
-              <span>《哈士奇》MP4《哈士奇》MP4</span>
-              <span>视频 | 时长: 01:49</span>
+              <span class="lesson-cell__number">{{ task | filterNumber }}</span>
+              <div class="lesson-cell__content">
+                <span>{{ task.title }}</span>
+                <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
+              </div>
+              <!-- TODO 试看、免费状态修改 -->
+              <div :class="['lesson-cell__status', {'is-free': task.task.isFree}]">试看</div>
             </div>
-            <div class="lesson-cell__status">试看</div>
           </div>
-          </div>
-          
         </div>
       </div>
     </div>
   </e-panel>
 </template>
 <script>
-  import { Collapse, CollapseItem } from 'vant';
-
   export default {
     props: ['courseItem'],
     data() {
       return {
-        show: false
+        directoryArray: this.courseItem,
+        chapters: [],
+        tasks: []
+      }
+    },
+    filters:{
+      filterNumber(task) {
+        return Number(task.seq) ? `${task.number}-${task.seq}` : `${task.number}`
       }
     },
     created() {
-      console.log('courseItem', this.courseItem);
+      this.directoryArray.map(item => {
+        this.$set(item, 'show', true);
+      })
+      this.getTasks(this.directoryArray);
     },
     methods: {
-      lessonTitleClick() {
+      getTasks(data) {
+        let temp = [];
 
+        data.forEach(item => {
+          if (item.type !== 'chapter') {
+            temp.push(item);
+          } else {
+            if(temp.length > 0) {
+              this.tasks.push([].concat(temp));
+              temp = [];
+            }else if(this.chapters.length > 0) {
+              this.tasks.push([]);
+            }
+
+            this.chapters.push(item);
+          }
+        })
+
+        const last = data.length - 1;
+
+        if (data[last].type !== 'chapter') {
+          this.tasks.push(temp);
+        }
+        console.log('chapters', this.chapters, 'tasks', this.tasks);
       }
     }
   }
