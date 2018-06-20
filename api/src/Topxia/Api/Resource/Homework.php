@@ -16,7 +16,7 @@ class Homework extends BaseResource
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
+            if (CourseService::DEFAULT_COURSE_TYPE != $course['courseType']) {
                 return $this->error('404', '该作业不存在!');
             }
 
@@ -56,6 +56,7 @@ class Homework extends BaseResource
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
+            $questions = array_replace(array_flip($indexdItems), $questions);
             $homework['items'] = $this->filterItem($questions, null, 0, 0);
         }
 
@@ -103,6 +104,7 @@ class Homework extends BaseResource
         $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
         $indexdItems = ArrayToolkit::column($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
+        $questions = array_replace(array_flip($indexdItems), $questions);
 
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
@@ -166,7 +168,7 @@ class Homework extends BaseResource
             }
 
             $item['stem'] = $this->coverDescription($item['stem']);
-            if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
+            if (0 != $item['parentId'] && isset($materialMap[$item['parentId']])) {
                 $materialMap[$item['parentId']][] = $item;
                 continue;
             }
