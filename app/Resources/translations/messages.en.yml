@@ -2718,6 +2718,7 @@ search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
 search.live_courses: 'Live courses'
+search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
 cloud_file.preview: 'File preview'
@@ -5689,6 +5690,7 @@ admin.magic_setting.buy_before_approval: 'ID verification before course purchase
 admin.magic_setting.disable_web_crontab: 'Turn on web scheduled task or not'
 admin.magic_setting.cloud_search: 'Turn on cloud search service'
 admin.magic_setting.ios_buy_disable: 'Close iOS payment or not'
+admin.magic_setting.ios_vip_close: '是否关闭iOS会员模块'
 admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'
@@ -6478,7 +6480,7 @@ notification.comment-post.course_review_reply: Your rating in Course %course% ha
 notification.student-create: You have been added to course %course% by admin, hurry to learn.
 notification.student-remove: You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.
 notification.user-follow.follow: %who% has been following you!
-notification.user-follow.unfollow: %who% has canceled following you!
+notification.user-follow.unfollow: %who% has cancelled following you!
 notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
 notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on discussion %thread%.
@@ -6495,7 +6497,7 @@ notification.group-profile.setAdmin: You are appointed as deputy head of the gro
 notification.group-profile.removeAdmin: You are the group leader in the %group%.
 notification.group-thread.delete: Your discussion %thread% was deleted by %who%.
 notification.group-thread.elite: Your discussion %thread% is set to be highlight.
-notification.group-thread.unelite: Your discussion %thread% was canceled highlight.
+notification.group-thread.unelite: Your discussion %thread% was cancelled highlight.
 notification.group-thread.top: Your discussion %thread% is bumped up.
 notification.group-thread.untop: Your discussion %thread% was bumped down.
 notification.group-thread.close: Your discussion %thread% is closed.
@@ -6521,9 +6523,9 @@ notification.course-thread.delete: Your %thread% was removed by administrator.
 notification.course-thread.delete-post: Your %thread% was removed by administrator.
 notification.course-thread.modify: Your %thread% was edited by administrator.
 notification.course-thread.top: Your %thread% is highlight by administrator.
-notification.course-thread.untop: Your %thread% is canceled to be highlight by administrator.
+notification.course-thread.untop: Your %thread% is cancelled to be highlight by administrator.
 notification.course-thread.elite: Your %thread% is elite by administrator.
-notification.course-thread.unelite: Your %thread% is canceled to be elite by administrator.
+notification.course-thread.unelite: Your %thread% is cancelled to be elite by administrator.
 notification.test-paper.perusal: 【Complete】%who% was finished %what%, %do%.
 notification.test-paper.read: 【Review】%who% was reviewed completely %what%, %do%.
 notification.test-paper.perusal.do: please click to review
@@ -6533,7 +6535,7 @@ notification.order_refund.audit_reject: 'Your refund request has not been approv
 notification.coupon.receive_minus: You have a coupon worth %rate%.
 notification.coupon.receive_discount: You have a coupon with a discount of %rate%.
 notification.vip.add_by_admin: You have been added as a %vipName% member by the administrator.
-notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
+notification.vip.remove_by_admin: You have been cancelled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
 #TODO trans

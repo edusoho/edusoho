@@ -7,11 +7,16 @@
                 start: '2017-11-12 10:30:00',
                 end: '2017-11-12 12:30:00'
             }
-        ],
+        ], 
 
         dataApi: Api.course.search, 
             //与data有一个必填, 用于获取数据，每次获取数据时，会带上开始和结束时间，见 dateParams
             // 需要使用 common/api/index.js 指定的路由
+
+        apiOptions: function, 
+            // 有dataApi时有效，返回一个json, 该json会作为api的参数传递，同时生成的event会根据apiOptions内生成相应的属性
+            // 如 {params = {planId: 1}, data: {studentId: 1}}
+            // 一般 params 用于处理路由本身的参数，data则是每次获取数据的额外传参
 
         calendarContainer: '#calendar',  
             //必填，日历控件容器
@@ -31,6 +36,9 @@
             // 后台搜索的数据需符合 start <= 时间 < end
             // 不填时，使用例子中的默认值
 
+        dateConvert: false, //默认为false
+            // 如果后台返回的是 时间戳，需要转化时间
+
         currentTime: '2017-11-12',
             //必填，用于计算json中的时间是否为过去，今天还是未来
             // 各种时间会加上相应的class
@@ -41,11 +49,21 @@
         defaultView: 'month',
             //默认显示为月, 范围为 month,agendaWeek,agendaDay,listWeek
 
-        switchers: 'month,agendaWeek',  
+        loading: 加载动画效果
+        需要在相应twig页面中加入
+          <div class="cd-loading">
+            <div class="loading-content">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+
+        switchers: 'month,agendaWeek',
             //显示到日历顶部中间，用于切换
             // 范围为 month,agendaWeek,agendaDay,listWeek
             // 显示分为 月，周，日，日程，如果要显示多个，以逗号分割即可，如month,listweek
-        
+
         components: [new LiveTooltipComp(), new ClickComp('/course/{id}')]
             // 非必填，用于出发事件的组件，如tooltip, 点击跳转事件
  * }
@@ -64,6 +82,7 @@ export default class CustomFullCalendar {
 
   _init() {
     let calendarOptions = {
+      calendarContainer: this.options['calendarContainer'],
       header: {
         left: '',
         center: 'title',
@@ -75,6 +94,7 @@ export default class CustomFullCalendar {
       defaultView: this.options['defaultView'],
       allDaySlot: false,
       scrollTime: '08:00:00', //默认移动到　８点位置
+      loading: this._loading(),
     };
 
     if (calendarOptions['defaultView'] == 'agendaWeek') {
@@ -107,7 +127,24 @@ export default class CustomFullCalendar {
     calendarOptions = this._registerCompActions(calendarOptions);
     this.calendarOptions = calendarOptions;
 
+    calendarOptions['loading'] = function(isLoading, view) {
+      if (isLoading) {
+        const loading = cd.loading();
+        $('.js-calendar').prepend(loading).find('.cd-loading').addClass('calendar-loading');
+      } else {
+        $('.cd-loading').remove();
+      }
+    }
+
+    calendarOptions = Object.assign(calendarOptions, this.options);
+
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
+  }
+
+  _loading(isLoading, view) {
+    if(!isLoading) {
+      $('.cd-loading').remove();
+    }
   }
 
   _ajaxLoading(start, end, timezone, callback) {
@@ -115,21 +152,47 @@ export default class CustomFullCalendar {
     let startTimeAttr = current.options['dateParams']['start'];
     let endTimeAttr = current.options['dateParams']['end'];
     let params = {};
+    let options = {};
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
     params['limit'] = 1000;
-    current.options['dataApi']({
-      data: params
-    }).then((result) => {
+    options['data'] = params;
+
+    if (typeof current.options['apiOptions'] != 'undefined') {
+      let ajaxOptions = current.options['apiOptions']()
+      options['data'] = Object.assign(ajaxOptions['data'], options['data']);
+      options['params'] = ajaxOptions['params'];
+    }
+    current.options['dataApi'](options).then((result) => {
       let calEvents = [];
-      for (let i = 0; i < result['data'].length; i++) {
-        calEvents.push(current._generateEventInitValues(result['data'][i]));
+      for (let i = 0; i < result.length; i++) {
+        calEvents.push(current._generateEventInitValues(result[i]));
       }
-      calEvents = current._generateEventOtherAttrs(calEvents, result['data']);
+      calEvents = current._generateEventOtherAttrs(calEvents, result);
       callback(calEvents);
+      if (current.options['hidden']) {
+        const currentEvents = $(current.options['calendarContainer']).fullCalendar('clientEvents');
+        console.log(currentEvents);
+        const data = current._getComparedArray(currentEvents);
+        console.log(JSON.stringify(data));
+        $('.js-hidden-event').val(JSON.stringify(data));
+      }
+
     }).catch((res) => {
       console.log('error callback');
     });
+  }
+
+  _getComparedArray(array) {
+    let allEvents = [];
+    for (let i = 0; i < array.length; i++) {
+     let event =  {};
+     event['_id'] = array[i]['_id'];
+     event['end'] = array[i]['end']['_i'];
+     event['start'] = array[i]['start']['_i'];
+     allEvents.push(event);
+    }
+    return allEvents;
   }
 
   _formatMonthFirstDay(view) {
@@ -166,7 +229,7 @@ export default class CustomFullCalendar {
       event['className'].push('calendar-before');
     } else if (currentUnixTime < startUnixTime) {
       event['className'].push('calendar-future');
-    } else  {
+    } else {
       event['className'].push('calendar-today');
     }
     return event;
@@ -204,6 +267,7 @@ export default class CustomFullCalendar {
         'start': 'createdTime_GE',
         'end': 'createdTime_LT'
       },
+      'dateConvert': false,
       'components': []
     });
   }
@@ -238,6 +302,11 @@ export default class CustomFullCalendar {
     for (let i = 0; i < copiedFields.length; i++) {
       let fieldName = copiedFields[i];
       singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
+      if (this.options['dateConvert']) {
+        if ('start' == fieldName || 'end' == fieldName) {
+          singleEvent[fieldName] = moment(parseInt(singleEvent[fieldName], 10) * 1000).format('YYYY-MM-DD HH:mm:ss');
+        }
+      }
     }
     singleEvent['className'] = [];
     return singleEvent;

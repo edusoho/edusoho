@@ -19,11 +19,12 @@ class FreeCourseSetsDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkCount($arguments);
-
-        $conditions = array();
-        $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
-        $conditions['minCoursePrice'] = 0;
+        $conditions = array(
+            'status' => 'published',
+            'parentId' => 0,
+            'minCoursePrice' => 0,
+            'excludeTypes' => array('reservation'),
+        );
 
         if (!empty($arguments['categoryId'])) {
             $conditions['categoryId'] = $arguments['categoryId'];

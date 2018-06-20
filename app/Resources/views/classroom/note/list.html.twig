@@ -1,6 +1,5 @@
 {% import "macro.html.twig" as web_macro %}
-{% do load_script('course/note/like')%}
-{% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
+{% do script(['app/js/courseset/show/notes/index.js']) %}
 
 {% if notes %}
 <div class="note-list" id="note-list">

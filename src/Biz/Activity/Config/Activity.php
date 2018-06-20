@@ -99,6 +99,11 @@ abstract class Activity
         return array();
     }
 
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return array();
+    }
+
     public function allowEventAutoTrigger()
     {
         return true;

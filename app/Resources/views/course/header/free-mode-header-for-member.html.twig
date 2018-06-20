@@ -46,18 +46,11 @@
         </ul>
       {% endif %}
     </div>
-    <div class="col-md-2 hidden-xs hidden-sm">
-      {% for toLearnTask in toLearnTasks %}
-        <a class="btn btn-primary btn-lg mt10"
-          href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
-          {% if taskResultCount < 1 %}
-            {{ 'course.btn.start_learning'|trans }}
-          {% else %}
-            {{ 'course.btn.continue_learning_btn'|trans }}
-          {% endif %}
-        </a>
-      {% endfor %}
-    </div>
+    {% if showLearnBtn|default(1) %}
+      <div class="col-md-2 hidden-xs hidden-sm pt10">
+        {% include 'course/header/free-mode-member-learn-btn.html.twig' %}
+      </div>
+    {% endif %}
   </div>
   {% include 'course/header/header-for-member-responsive.html.twig' %}
 </section>

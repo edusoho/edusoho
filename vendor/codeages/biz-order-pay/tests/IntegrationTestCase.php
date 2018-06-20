@@ -20,7 +20,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Order\Subscriber\OrderSubscriber;
 use Monolog\Logger;
 use Monolog\Handler\TestHandler;
-use \Mockery;
+use Mockery;
 
 class IntegrationTestCase extends TestCase
 {
@@ -102,13 +102,13 @@ class IntegrationTestCase extends TestCase
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
-        if (getenv('CACHE_ENABLED') === 'true') {
+        if ('true' === getenv('CACHE_ENABLED')) {
             $biz['dao.cache.enabled'] = true;
             $biz['dao.cache.annotation'] = true;
         }
 
         if (getenv('CACHE_STRATEGY_DEFAULT')) {
-            if (getenv('CACHE_STRATEGY_DEFAULT') == 'null') {
+            if ('null' == getenv('CACHE_STRATEGY_DEFAULT')) {
                 $biz['dao.cache.strategy.default'] = null;
             } else {
                 $biz['dao.cache.strategy.default'] = getenv('CACHE_STRATEGY_DEFAULT');

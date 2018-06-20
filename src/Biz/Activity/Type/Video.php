@@ -139,6 +139,11 @@ class Video extends Activity
         return $videoActivities;
     }
 
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getVideoActivityDao()->findByIds($targetIds);
+    }
+
     public function delete($id)
     {
         return $this->getVideoActivityDao()->delete($id);

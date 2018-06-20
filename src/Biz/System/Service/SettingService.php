@@ -13,4 +13,6 @@ interface SettingService
     public function delete($name);
 
     public function deleteByNamespaceAndName($namespace, $name);
+
+    public function isReservationOpen();
 }
