@@ -23,6 +23,8 @@ class RecommendCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         $conditions = array('status' => 'published', 'recommended' => 1, 'parentId' => 0);
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
         $orderBy = 'recommendedSeq';
 
         if (!empty($arguments['categoryId'])) {
@@ -41,6 +43,7 @@ class RecommendCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         if (!empty($arguments['orderBy'])) {
             $orderBy = $arguments['orderBy'];
         }
+
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, $arguments['count']);
         $fillCoursesCount = $arguments['count'] - count($courseSets);
         if ($fillCoursesCount > 0 && empty($arguments['notFill'])) {

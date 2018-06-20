@@ -34,11 +34,12 @@ class ExploreController extends BaseController
 
         unset($conditions['code']);
 
-        if (isset($conditions['ids']) && self::EMPTY_COURSE_SET_IDS === $conditions['ids']) {
-            $conditions['ids'] = array(0);
+        if (isset($conditions['ids']) && empty($conditions['ids'])) {
+            $conditions['ids'] = array(-1);
         }
 
         list($conditions, $orderBy) = $this->getCourseSetSearchOrderBy($conditions);
+        $conditions = $this->getCourseSetFilterType($conditions);
 
         $conditions['parentId'] = 0;
         $conditions['status'] = 'published';
@@ -281,9 +282,10 @@ class ExploreController extends BaseController
             $conditions['price'] = '0.00';
         }
 
-        if (isset($filter['type']) && 'live' === $filter['type']) {
-            $conditions['type'] = 'live';
+        if (isset($filter['type']) && 'all' != $filter['type']) {
+            $conditions['type'] = strip_tags($filter['type']);
         }
+
         unset($conditions['filter']);
 
         return array($conditions, $filter);
@@ -326,6 +328,8 @@ class ExploreController extends BaseController
 
     protected function getCourseConditionsByTags($conditions)
     {
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
         if (empty($conditions['tagIds'])) {
             return $conditions;
         }
@@ -373,6 +377,15 @@ class ExploreController extends BaseController
         unset($conditions['orderBy']);
 
         return array($conditions, $orderBy);
+    }
+
+    protected function getCourseSetFilterType($conditions)
+    {
+        if (!$this->isPluginInstalled('Reservation')) {
+            $conditions['excludeTypes'] = array('reservation');
+        }
+
+        return $conditions;
     }
 
     protected function getTokenService()

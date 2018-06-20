@@ -3269,6 +3269,7 @@ search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
 search.live_courses: 直播课程
+search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
 

@@ -171,10 +171,10 @@ class ReportServiceTest extends BaseTestCase
         $result3 = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword(1, 'unFinished', 'CompletionRateDAsc', 0, PHP_INT_MAX);
         $result4 = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword(1, 'unFinished', 'CompletionRateDesc', 0, PHP_INT_MAX);
 
-        $this->assertEquals(array(1, 2, 3), $result1);
-        $this->assertEquals(array(2, 3), $result2);
-        $this->assertEquals(array(2, 3), $result3);
-        $this->assertEquals(array(3, 2), $result4);
+        $this->assertArrayValueEquals(array(1, 2, 3), $result1);
+        $this->assertArrayValueEquals(array(2, 3), $result2);
+        $this->assertArrayValueEquals(array(2, 3), $result3);
+        $this->assertArrayValueEquals(array(3, 2), $result4);
     }
 
     public function testGetCourseTaskLearnData()

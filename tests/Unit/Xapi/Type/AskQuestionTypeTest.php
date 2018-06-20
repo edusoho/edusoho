@@ -154,7 +154,6 @@ class AskQuestionTypeTest extends BaseTestCase
         $taskService->shouldHaveReceived('search');
         $courseService->shouldHaveReceived('search');
         $courseSetService->shouldHaveReceived('search');
-        $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
         $packageInfo = reset($packageInfo);
 
@@ -176,67 +175,67 @@ class AskQuestionTypeTest extends BaseTestCase
         $this->assertEmpty($packageInfo);
     }
 
-//    public function testPackageWithDiscussType()
-//    {
-//        $biz = $this->getBiz();
-//        $obj = $biz['xapi.push.asked_question'];
-//
-//        $this->mockBiz(
-//            'System:SettingService',
-//            array(
-//                array(
-//                    'functionName' => 'get',
-//                    'withParams' => array('storage', array()),
-//                    'returnValue' => array(
-//                        'cloud_access_key' => 'abc',
-//                        'cloud_secret_key' => 'efg',
-//                    ),
-//                ),
-//                array(
-//                    'functionName' => 'get',
-//                    'withParams' => array('site', array()),
-//                    'returnValue' => array(
-//                        'siteName' => 'abc',
-//                    ),
-//                ),
-//                array(
-//                    'functionName' => 'get',
-//                    'withParams' => array('xapi', array()),
-//                    'returnValue' => array(
-//                        'pushUrl' => '',
-//                    ),
-//                ),
-//            )
-//        );
-//
-//        $this->mockBiz('Course:ThreadService', array(
-//            array('functionName' => 'getThread', 'returnValue' => array('id' => 1, 'type' => 'discussion', 'title' => 'thread title', 'content' => 'thread content',  'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1)),
-//        ));
-//
-//        $this->mockBiz('Task:TaskService', array(
-//            array('functionName' => 'getTask', 'returnValue' => array('id' => 1, 'type' => 'video', 'activityId' => 1)),
-//        ));
-//
-//        $this->mockBiz('Course:CourseService', array(
-//            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'test course')),
-//        ));
-//
-//        $this->mockBiz('Course:CourseSetService', array(
-//            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'test courseSet', 'subtitle' => 'test subtitle')),
-//        ));
-//
-//        $this->mockBiz('Activity:ActivityService', array(
-//            array('functionName' => 'getActivity', 'returnValue' => array('id' => 1, 'mediaType' => 'video', 'ext' => array('mediaId' => 0))),
-//        ));
-//
-//        $this->mockBiz('File:UploadFileService', array(
-//            array('functionName' => 'getFile', 'returnValue' => array()),
-//        ));
-//
-//        $result = $obj->package(array('target_id' => 1, 'uuid' => '23b0ceaa-7948-4f4a-b240-4232a9f4c90a', 'occur_time' => time(), 'user_id' => 1));
-//
-//        $this->assertEmpty($result);
-//    }
+    //    public function testPackageWithDiscussType()
+    //    {
+    //        $biz = $this->getBiz();
+    //        $obj = $biz['xapi.push.asked_question'];
+    //
+    //        $this->mockBiz(
+    //            'System:SettingService',
+    //            array(
+    //                array(
+    //                    'functionName' => 'get',
+    //                    'withParams' => array('storage', array()),
+    //                    'returnValue' => array(
+    //                        'cloud_access_key' => 'abc',
+    //                        'cloud_secret_key' => 'efg',
+    //                    ),
+    //                ),
+    //                array(
+    //                    'functionName' => 'get',
+    //                    'withParams' => array('site', array()),
+    //                    'returnValue' => array(
+    //                        'siteName' => 'abc',
+    //                    ),
+    //                ),
+    //                array(
+    //                    'functionName' => 'get',
+    //                    'withParams' => array('xapi', array()),
+    //                    'returnValue' => array(
+    //                        'pushUrl' => '',
+    //                    ),
+    //                ),
+    //            )
+    //        );
+    //
+    //        $this->mockBiz('Course:ThreadService', array(
+    //            array('functionName' => 'getThread', 'returnValue' => array('id' => 1, 'type' => 'discussion', 'title' => 'thread title', 'content' => 'thread content',  'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1)),
+    //        ));
+    //
+    //        $this->mockBiz('Task:TaskService', array(
+    //            array('functionName' => 'getTask', 'returnValue' => array('id' => 1, 'type' => 'video', 'activityId' => 1)),
+    //        ));
+    //
+    //        $this->mockBiz('Course:CourseService', array(
+    //            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'test course')),
+    //        ));
+    //
+    //        $this->mockBiz('Course:CourseSetService', array(
+    //            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'test courseSet', 'subtitle' => 'test subtitle')),
+    //        ));
+    //
+    //        $this->mockBiz('Activity:ActivityService', array(
+    //            array('functionName' => 'getActivity', 'returnValue' => array('id' => 1, 'mediaType' => 'video', 'ext' => array('mediaId' => 0))),
+    //        ));
+    //
+    //        $this->mockBiz('File:UploadFileService', array(
+    //            array('functionName' => 'getFile', 'returnValue' => array()),
+    //        ));
+    //
+    //        $result = $obj->package(array('target_id' => 1, 'uuid' => '23b0ceaa-7948-4f4a-b240-4232a9f4c90a', 'occur_time' => time(), 'user_id' => 1));
+    //
+    //        $this->assertEmpty($result);
+    //    }
 
     public function createXAPIService()
     {

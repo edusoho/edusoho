@@ -544,6 +544,8 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
     public function testCountMemberByUserIdAndRoleAndIsLearned()
     {
+        $this->mockCourse(array('id' => 1, 'type' => 'normal', 'parentId' => 0, 'status' => 'published'));
+        $this->mockCourse(array('id' => 2, 'type' => 'normal', 'parentId' => 0, 'status' => 'published'));
         $this->mockDataObject(array('userId' => 1, 'role' => 'student', 'courseId' => 1, 'isLearned' => 1));
         $this->mockDataObject(array('userId' => 1, 'role' => 'student', 'courseId' => 2, 'isLearned' => 1));
         $res = $this->getDao()->countMemberByUserIdAndRoleAndIsLearned(1, 'student', 1);

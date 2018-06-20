@@ -197,9 +197,9 @@ interface CourseService
 
     public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array());
 
-    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true);
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true, $filterReservation = false);
 
-    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true);
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true, $filterReservation = false);
 
     public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true);
 
@@ -242,4 +242,11 @@ interface CourseService
     public function tryFreeJoin($courseId);
 
     public function findLiveCourse($conditions, $userId, $role);
+
+    /**
+     * 如果 约排课已开启，不额外添加查询条件，
+     * 如果 未开启，添加 excludeTypes = 'reservation' 的查询条件
+     *    （如果已经存在 excludeTypes 属性，则额外新增，非替换）
+     */
+    public function appendReservationConditions($conditions);
 }

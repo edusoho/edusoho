@@ -37,9 +37,9 @@
                   <div class="course-body">
                    <div style="float:right;" class="color-gray mrm mls">
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                          <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.price * setting('coin.cash_rate')}}">
-                            {% if course.price > 0 %}
-                              {{ course.price * setting('coin.cash_rate')}}
+                          <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.originPrice * setting('coin.cash_rate')}}">
+                            {% if course.originPrice > 0 %}
+                              {{ course.originPrice * setting('coin.cash_rate')}}
                               {{setting('coin.coin_name')}}
                             {% else %}
                               {{'classroom.free_course'|trans}}
@@ -47,9 +47,9 @@
                           </span>
 
                       {% else %}
-                        <span class="course-price course-price-{{course.id}}" data-price="{{ course.price }}">
-                          {% if course.price > 0 %}
-                            {{ course.price }} {{'site.currency.CNY'|trans}}
+                        <span class="course-price course-price-{{course.id}}" data-price="{{ course.originPrice }}">
+                          {% if course.originPrice > 0 %}
+                            {{ course.originPrice }} {{'site.currency.CNY'|trans}}
                           {% else %}
                             {{'classroom.free_course'|trans}}
                           {% endif %}
