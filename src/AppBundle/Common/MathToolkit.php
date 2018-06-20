@@ -24,4 +24,9 @@ class MathToolkit
     {
         return abs($number1 - $number2) < 0.00001;
     }
+
+    public static function uniqid($prefix = 'ES')
+    {
+        return md5(uniqid($prefix, rand(0, 10000)));
+    }
 }

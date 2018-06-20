@@ -8347,3 +8347,6 @@ exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: 云短信相关设置未开启!
+
+exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
+exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员

@@ -48,4 +48,22 @@ class DeviceToolkit
 
         return false;
     }
+
+    public static function getMobileDeviceType($userAgent)
+    {
+        $userAgent = strtolower($userAgent);
+
+        $ios = array('iphone', 'ipad', 'ipod');
+        foreach ($ios as $keyword) {
+            if (strpos($userAgent, $keyword) > -1) {
+                return 'ios';
+            }
+        }
+
+        if (strpos($userAgent, 'Android') > -1) {
+            return 'android';
+        }
+
+        return 'unknown';
+    }
 }
