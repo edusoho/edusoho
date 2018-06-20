@@ -144,8 +144,7 @@ Api Test With 5.5:
     - app/console server:start
 
     # install plugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
-    - cat plugins/VipPlugin/Api/Resource/VipCourse/VipCourse.php
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
