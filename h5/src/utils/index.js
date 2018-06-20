@@ -1,5 +1,5 @@
 import RULES from './rule-config';
-import DateToolkit from './date-toolkit';
+import * as DateToolkit from './date-toolkit';
 
 export default{
   RULES,

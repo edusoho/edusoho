@@ -113,6 +113,9 @@
           overflow: hidden;
           &.unit-show {
             height: auto;
+            // + .unit-show {
+            //   border-bottom: 1px solid #EEE;
+            // }
           }
         }
         .lesson-cell {
