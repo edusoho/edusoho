@@ -10,7 +10,7 @@
         {{'user.settings.security.password_reset.email.step_two.goto'|trans}} <span class="color-success">{{ user.email }}</span> {{'user.settings.security.password_reset.email.step_two.email_tips'|trans({'%site.name%': setting('site.name')})}}
       </p>
       <p>
-        <a class="btn btn-primary" href="{{ emailLoginUrl }}" target="_blank">{{'user.settings.security.password_reset.email.step_two.check_email_btn'|trans}}</a>
+        <a class="btn btn-primary" href="{{ get_login_email_address(user.email) }}" target="_blank">{{'user.settings.security.password_reset.email.step_two.check_email_btn'|trans}}</a>
       </p>
     </div>
   </div>

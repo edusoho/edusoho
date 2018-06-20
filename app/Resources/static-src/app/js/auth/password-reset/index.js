@@ -1,70 +1,87 @@
 import SmsSender from 'app/common/widget/sms-sender';
-let validator = null;
-let $form = null;
-let smsSend = '.js-sms-send';
-let $smsCode = $(smsSend);
+import Drag from 'app/common/drag';
+import Api from 'common/api';
+import notify from 'common/notify';
 
-if ($('.js-find-password li').length > 1) {
-  $('.js-find-by-email').click(function () {
-    if (!$('.js-find-by-email').hasClass('active')) {
-      $('#alertxx').hide();
-    }
-  });
-  $('.js-find-by-mobile').click(function () {
-    if (!$('.js-find-by-mobile').hasClass('active')) {
-      $('#alertxx').hide();
-    }
-  });
-}
+class Reset {
+  constructor() {
+    this.event();
+    this.dragHtml = $('.js-drag-container').html();
+    $('.js-drag-container').remove();
+    $('#password-reset-form').prepend(this.dragHtml);
+    this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'));
+    this.smsEvnet();
+    this.validator();
+  }
 
-makeValidator('email');
+  event() {
+    let self = this;
+    $('.js-find-password li').click(function(){
+      let $this = $(this);
+      if ($this.hasClass('active')) {
+        return;
+      }
 
-$('.js-find-by-email').click(function () {
-  validator = null;
-  $('.js-find-by-email').addClass('active');
-  $('.js-find-by-mobile').removeClass('active');
-  makeValidator('email');
-  $('#password-reset-by-mobile-form').hide();
-  $('#password-reset-form').show();
-});
+      $this.addClass('active').siblings().removeClass('active');
 
-$('.js-find-by-mobile').click(function () {
-  validator = null;
-  $('.js-find-by-email').removeClass('active');
-  $('.js-find-by-mobile').addClass('active');
-  makeValidator('mobile');
-  $('#password-reset-form').hide();
-  $('#password-reset-by-mobile-form').show();
-
-});
-
-$smsCode.click(() => {
-  const smsSender = new SmsSender({
-    element: smsSend,
-    url: $smsCode.data('smsUrl'),
-    smsType: $smsCode.data('smsType'),
-    preSmsSend: () => {
-      return true;
-    }
-  });
-});
-
-function makeValidator(type) {
-  if ('email' == type) {
-    $form = $('#password-reset-form');
-    validator = $form.validate({
-      rules: {
-        '[name="form[email]"]': {
-          required: true,
-          email: true,
-        }
+      let $target = $($this.data('target'));
+      if ($target.length > 0 ) {
+        self.drag.unbindEvent();
+        delete self.drag;
+        $('.js-drag').remove();
+        $('form').hide();
+        $target.show();
+        $target.prepend(self.dragHtml);
+        self.drag = new Drag($('#drag-btn'), $('.js-jigsaw'));
       }
     });
   }
 
-  if ('mobile' == type) {
-    $form = $('#password-reset-by-mobile-form');
-    validator = $form.validate({
+  smsEvnet() {
+    let $smsCode = $('.js-sms-send');
+    $('.js-sms-send').click(() => {
+      const smsSender = new SmsSender({
+        element: '.js-sms-send',
+        url: $smsCode.data('smsUrl'),
+        smsType: $smsCode.data('smsType'),
+        preSmsSend: () => {
+          return true;
+        }
+      });
+    });
+  }
+
+  validator() {
+    $('#password-reset-form').validate({
+      rules: {
+        email: {
+          required: true,
+          email: true,
+        },
+        dragCaptchaToken: {
+          required: true,
+        }
+      },
+      messages: {
+        dragCaptchaToken: {
+          required: Translator.trans('site.captcha_code.required'),
+        }
+      },
+      submitHandler: function(form) {
+        let email = $('#password-reset-form').find('[name="email"]').val();
+        let token = $('#password-reset-form').find('[name="dragCaptchaToken"]').val();
+        
+        Api.resetPasswordEmail.patch({
+          token: token,
+          email: email,
+        }).then((res) => {
+          notify('success', '重置密码邮件已发送');
+          window.location.href = $('#password-reset-form').data('success') + '?email='+ email;
+        });
+      }
+    });
+
+    $('#password-reset-by-mobile-form').validate({
       rules: {
         'mobile': {
           required: true,
@@ -88,13 +105,21 @@ function makeValidator(type) {
             type: 'get'
           },
         },
+        dragCaptchaToken: {
+          required: true,
+        }
       },
       messages: {
         sms_code: {
           required: Translator.trans('auth.password_reset.sms_code_required_hint'),
           rangelength: Translator.trans('auth.password_reset.sms_code_validate_hint'),
+        },
+        dragCaptchaToken: {
+          required: Translator.trans('site.captcha_code.required'),
         }
       }
     });
   }
 }
+
+new Reset();

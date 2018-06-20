@@ -89,6 +89,16 @@ class PasswordResetController extends BaseController
         ));
     }
 
+    public function emailResetSuccessAction(Request $request) 
+    {
+        $email = $request->query->get('email');
+        $user = $this->getUserService()->getUserByEmail($email);
+
+        return $this->render('password-reset/sent.html.twig', array(
+            'user' => $user,
+        ));    
+    }
+
     public function updateAction(Request $request)
     {
         $token = $this->getUserService()->getToken('password-reset', $request->query->get('token') ?: $request->request->get('token'));
@@ -158,21 +168,6 @@ class PasswordResetController extends BaseController
         }
 
         return $this->createJsonResponse('GET method');
-    }
-
-    public function getEmailLoginUrl($email)
-    {
-        $host = substr($email, strpos($email, '@') + 1);
-
-        if ('hotmail.com' === $host) {
-            return 'http://www.'.$host;
-        }
-
-        if ('gmail.com' === $host) {
-            return 'http://mail.google.com';
-        }
-
-        return 'http://mail.'.$host;
     }
 
     public function checkMobileExistsAction(Request $request)
