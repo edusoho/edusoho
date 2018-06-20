@@ -276,4 +276,24 @@ class ArrayToolkit
 
         return $result;
     }
+
+    /**
+     * @param
+     * $array = array(1 => array(a,b,c), 2 => array(d,e,f), 3 => array(g,h,i))
+     * $orderArray = array(3,1,2)
+     *
+     * @return
+     * array(3 => array(g,h,i), 1 => array(a,b,c), 3 => array(d,e,f))
+     */
+    public static function orderByArray($array, $orderArray)
+    {
+        $keys = array_keys($array);
+        $diffs1 = array_diff($orderArray, $keys);
+        $diffs2 = array_diff($keys, $orderArray);
+        if (count($keys) != count($orderArray) || count($diffs1) > 0 || count($diffs2) > 0) {
+            return $array;
+        }
+
+        return array_replace(array_flip($orderArray), $array);
+    }
 }

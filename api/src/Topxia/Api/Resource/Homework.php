@@ -56,7 +56,7 @@ class Homework extends BaseResource
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
-            $questions = array_replace(array_flip($indexdItems), $questions);
+            $questions = ArrayToolkit::orderByArray($questions, $indexdItems);
             $homework['items'] = $this->filterItem($questions, null, 0, 0);
         }
 
@@ -104,7 +104,7 @@ class Homework extends BaseResource
         $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
         $indexdItems = ArrayToolkit::column($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
-        $questions = array_replace(array_flip($indexdItems), $questions);
+        $questions = ArrayToolkit::orderByArray($questions, $indexdItems);
 
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
