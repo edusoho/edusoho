@@ -29,7 +29,7 @@ class UserPassword extends AbstractResource
         $token = $request->query->get('token');
         $biz = $this->getBiz();
         $dragCaptcha = $biz['biz_drag_captcha'];
-        //$dragCaptcha->check($token);
+        $dragCaptcha->check($token);
 
         $function = 'resetPasswordBy'.ucfirst($type);
         return \call_user_func(array($this, $function),  $identify);
@@ -87,7 +87,6 @@ class UserPassword extends AbstractResource
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
             $mail->send();
-
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
             throw $e;

@@ -19,7 +19,7 @@
       </ul>
       <form id="password-reset-form" class="form-vertical" method="post" data-success="{{ path('password_reset_by_email_success') }}">
         <div class="form-group mtl ptm">
-          {{ form_label(form.email, 'user.settings.security.password_reset.email'|trans, {label_attr:{class:'control-label'}}) }}
+          <label class="control-label required" for="form_email" aria-required="true">{{ 'user.settings.security.password_reset.email'|trans }}</label>
           <div class="controls">
             <input type="email" id="form_email" name="email" required="required" class="form-control" aria-required="true">
             <p class="help-block">{{'user.settings.security.password_reset.email.step_one.email_tips'|trans({'%name%': setting('site.name')})}}</p>
@@ -35,7 +35,7 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
       </form>
-      <form id="password-reset-by-mobile-form" class="form-vertical" action="{{ path('password_reset_by_sms') }}" method="post" style="display: none;">
+      {# <form id="password-reset-by-mobile-form" class="form-vertical" action="{{ path('password_reset_by_sms') }}" method="post" style="display: none;">
         <div class="form-group mtl">
           <label class="control-label required" for="mobile">{{'user.settings.security.mobile'|trans}}</label>
           <div class="controls">
@@ -65,7 +65,7 @@
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      </form>
+      </form> #}
 
     </div><!-- /panel -->
     <div class="hidden js-drag-container">
