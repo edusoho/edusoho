@@ -140,9 +140,6 @@ Api Test With 5.5:
     - composer config repo.packagist composer https://packagist.phpcomposer.com
     - composer require "codeception/codeception:*" --ignore-platform-reqs
 
-    # 启动web服务
-    - app/console server:start
-
     # install plugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin &&  app/console plugin:register ChargeCoin
@@ -154,11 +151,14 @@ Api Test With 5.5:
 #    - wget -O app/config/plugin.php http://download-devtest.codeages.net/api-test-data/20180620/plugin.php
 #    - wget -O app/config/routing_plugins.yml http://download-devtest.codeages.net/api-test-data/20180620/routing_plugins.yml
 
+    # 启动web服务
+    - app/console server:start
     # 执行codeception的A PI 单元测试
     - bin/codecept run api
 
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
+    - cat app/cache/dev/Jianmo/event_map.php
 #  only:
 #    - develop
 #

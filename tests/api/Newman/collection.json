@@ -321,11 +321,6 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "token",
-								"value": "de4lu85ljw0s440wssc8cccs4cws48g",
-								"disabled": true
-							}
 						],
 						"body": {
 							"mode": "formdata",
@@ -1321,11 +1316,6 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"disabled": true
-							}
 						],
 						"body": {},
 						"url": {
@@ -1456,12 +1446,6 @@
 									"key": "img_code",
 									"type": "text",
 									"value": "ukwzv"
-								},
-								{
-									"key": "verified_token",
-									"type": "text",
-									"value": "1yElWHyObeljadBrQxKvKD402WXAxctE1",
-									"disabled": true
 								}
 							]
 						},
@@ -1616,12 +1600,6 @@
 											"key": "img_code",
 											"value": "ukwzv",
 											"type": "text"
-										},
-										{
-											"key": "verified_token",
-											"value": "1yElWHyObeljadBrQxKvKD402WXAxctE1",
-											"type": "text",
-											"disabled": true
 										}
 									]
 								},
@@ -3039,13 +3017,6 @@
 									"description": ""
 								},
 								{
-									"key": "couponCode",
-									"value": "",
-									"type": "text",
-									"description": "",
-									"disabled": true
-								},
-								{
 									"key": "coinPayAmount",
 									"value": "{{courseCoinPrice}}",
 									"type": "text",
@@ -3101,13 +3072,6 @@
 											"value": "{{paidCourseId}}",
 											"type": "text",
 											"description": ""
-										},
-										{
-											"key": "couponCode",
-											"value": "",
-											"type": "text",
-											"description": "",
-											"disabled": true
 										},
 										{
 											"key": "coinPayAmount",
@@ -3244,13 +3208,6 @@
 											"description": ""
 										},
 										{
-											"key": "couponCode",
-											"value": "",
-											"type": "text",
-											"description": "",
-											"disabled": true
-										},
-										{
 											"key": "coinPayAmount",
 											"value": "{{courseCoinPrice}}",
 											"type": "text",
@@ -3376,12 +3333,6 @@
 									"type": "text"
 								},
 								{
-									"key": "couponCode",
-									"value": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"key": "coinPayAmount",
 									"value": "{{courseCoinPrice}}",
 									"type": "text"
@@ -3433,12 +3384,6 @@
 											"key": "targetId",
 											"value": "{{paidCourseId}}",
 											"type": "text"
-										},
-										{
-											"key": "couponCode",
-											"value": "",
-											"type": "text",
-											"disabled": true
 										},
 										{
 											"key": "coinPayAmount",
@@ -3569,12 +3514,6 @@
 											"key": "targetId",
 											"value": "{{paidCourseId}}",
 											"type": "text"
-										},
-										{
-											"key": "couponCode",
-											"value": "",
-											"type": "text",
-											"disabled": true
 										},
 										{
 											"key": "coinPayAmount",
@@ -4512,20 +4451,6 @@
 									"key": "orderId",
 									"type": "text",
 									"value": "{{orderId}}"
-								},
-								{
-									"key": "targetType",
-									"type": "text",
-									"value": "course",
-									"description": "不需要",
-									"disabled": true
-								},
-								{
-									"key": "payment",
-									"type": "text",
-									"value": "wechat",
-									"description": "不需要",
-									"disabled": true
 								}
 							]
 						},
@@ -4564,20 +4489,6 @@
 											"key": "orderId",
 											"type": "text",
 											"value": "{{orderId}}"
-										},
-										{
-											"key": "targetType",
-											"type": "text",
-											"value": "course",
-											"description": "不需要",
-											"disabled": true
-										},
-										{
-											"key": "payment",
-											"type": "text",
-											"value": "wechat",
-											"description": "不需要",
-											"disabled": true
 										}
 									]
 								},
@@ -4927,13 +4838,6 @@
 									"description": "vip id"
 								},
 								{
-									"key": "couponCode",
-									"value": "",
-									"type": "text",
-									"description": "优惠码，可选",
-									"disabled": true
-								},
-								{
 									"key": "coinPayAmount",
 									"value": "{{vipCoinPrice}}",
 									"type": "text"
@@ -5279,13 +5183,6 @@
 									"description": "vip id"
 								},
 								{
-									"key": "couponCode",
-									"value": "",
-									"type": "text",
-									"description": "优惠码，可选",
-									"disabled": true
-								},
-								{
 									"key": "coinPayAmount",
 									"value": "{{vipCoinPrice}}",
 									"type": "text"
@@ -5350,13 +5247,6 @@
 											"value": "{{vipId}}",
 											"type": "text",
 											"description": "vip id"
-										},
-										{
-											"key": "couponCode",
-											"value": "",
-											"type": "text",
-											"description": "优惠码，可选",
-											"disabled": true
 										},
 										{
 											"key": "coinPayAmount",
@@ -5476,13 +5366,6 @@
 											"value": "{{vipId}}",
 											"type": "text",
 											"description": "vip id"
-										},
-										{
-											"key": "couponCode",
-											"value": "",
-											"type": "text",
-											"description": "优惠码，可选",
-											"disabled": true
 										},
 										{
 											"key": "coinPayAmount",
@@ -5853,13 +5736,6 @@
 									"value": "{{vipUpgradeId}}",
 									"type": "text",
 									"description": "vip id"
-								},
-								{
-									"key": "couponCode",
-									"value": "",
-									"type": "text",
-									"description": "优惠码，可选",
-									"disabled": true
 								},
 								{
 									"key": "coinPayAmount",
@@ -6447,11 +6323,6 @@
 								{
 									"key": "type",
 									"value": "normal"
-								},
-								{
-									"key": "categoryId",
-									"value": "0",
-									"disabled": true
 								},
 								{
 									"key": "sort",
@@ -8274,6 +8145,7 @@
 								"type": "text/javascript",
 								"exec": [
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"console.log(responseBody);",
 									"var jsonData = JSON.parse(responseBody);",
 									"tests[\"join classroom success !\"] = (jsonData.courseId === data.vipCourseId)&(jsonData.user.id === data.userId);"
 								]
@@ -17807,18 +17679,6 @@
 									"key": "type",
 									"type": "text",
 									"value": "sms_bind"
-								},
-								{
-									"key": "img_code",
-									"type": "text",
-									"value": "rt85s",
-									"disabled": true
-								},
-								{
-									"key": "verified_token",
-									"type": "text",
-									"value": "gLrjDZ6mVF5doUH3rDp3dKfBqpdPnXKB",
-									"disabled": true
 								}
 							]
 						},
@@ -17903,18 +17763,6 @@
 									"key": "type",
 									"type": "text",
 									"value": "sms_bind"
-								},
-								{
-									"key": "img_code",
-									"type": "text",
-									"value": "rt85s",
-									"disabled": true
-								},
-								{
-									"key": "verified_token",
-									"type": "text",
-									"value": "gLrjDZ6mVF5doUH3rDp3dKfBqpdPnXKB",
-									"disabled": true
 								}
 							]
 						},
@@ -20698,6 +20546,7 @@
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
+									"console.log(responseBody);",
 									"var jsonData = JSON.parse(responseBody);",
 									"if(jsonData.data.length>1){",
 									"    var flag1 =false;",
@@ -20750,16 +20599,6 @@
 								"vip_courses"
 							],
 							"query": [
-								{
-									"key": "levelId",
-									"value": "9",
-									"disabled": true
-								},
-								{
-									"key": "type",
-									"value": "normal",
-									"disabled": true
-								},
 								{
 									"key": "sort",
 									"value": "-price"
@@ -20838,16 +20677,6 @@
 							],
 							"query": [
 								{
-									"key": "levelId",
-									"value": "9",
-									"disabled": true
-								},
-								{
-									"key": "type",
-									"value": "normal",
-									"disabled": true
-								},
-								{
 									"key": "limit",
 									"value": "100"
 								},
@@ -20925,16 +20754,6 @@
 							],
 							"query": [
 								{
-									"key": "levelId",
-									"value": "9",
-									"disabled": true
-								},
-								{
-									"key": "type",
-									"value": "normal",
-									"disabled": true
-								},
-								{
 									"key": "sort",
 									"value": "-price"
 								},
@@ -21010,11 +20829,6 @@
 								"vip_course_sets"
 							],
 							"query": [
-								{
-									"key": "levelId",
-									"value": "9",
-									"disabled": true
-								},
 								{
 									"key": "type",
 									"value": "normal"
