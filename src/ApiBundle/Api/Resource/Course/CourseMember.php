@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -56,9 +57,10 @@ class CourseMember extends AbstractResource
         if (!$course) {
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
+        $this->dispatchEvent('test', new Event());
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
-        var_dump($member);
+
 
         if (!$member) {
             $member = $this->tryJoin($course);
