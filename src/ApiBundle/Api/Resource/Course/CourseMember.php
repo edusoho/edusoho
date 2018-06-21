@@ -57,7 +57,6 @@ class CourseMember extends AbstractResource
         if (!$course) {
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
-        $this->dispatchEvent('test', new Event());
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
 
@@ -65,6 +64,8 @@ class CourseMember extends AbstractResource
         if (!$member) {
             $member = $this->tryJoin($course);
         }
+        $file = file_get_contents('../app/cache/dev/Jianmo/event_map.php');
+        var_dump($file);
 
         if ($member) {
             $this->getOCUtil()->single($member, array('userId'));
