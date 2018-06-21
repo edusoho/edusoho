@@ -131,7 +131,7 @@ class Homework extends Activity
             'copyId',
         ));
 
-        if (!empty($filterFields['finishCondition'])) {
+        if (!empty($filterFields['finishCondition']) && !empty($filterFields['passedCondition'])) {
             $filterFields['passedCondition']['type'] = $filterFields['finishCondition'];
         }
 
