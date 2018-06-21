@@ -58,6 +58,7 @@ class CourseMember extends AbstractResource
         }
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        var_dump($member);
 
         if (!$member) {
             $member = $this->tryJoin($course);
