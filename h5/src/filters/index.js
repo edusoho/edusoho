@@ -74,7 +74,12 @@ const filters = [
   {
     name: 'filterTaskStatus',
     handler(task) {
-      return task.tryLookable ? '试看' : (task.isFree ? '免费' : '');
+      if (task.tryLookable) {
+        return '试看';
+      } else if (task.isFree) {
+        return '免费';
+      }
+      return '';
     }
   }
 ];
