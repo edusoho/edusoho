@@ -155,10 +155,10 @@ Api Test With 5.5:
     - app/console server:start
     # 执行codeception的A PI 单元测试
     - bin/codecept run api
-
+    - cat app/cache/dev/Jianmo/event_map.php
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
-    - cat app/cache/dev/Jianmo/event_map.php
+
 #  only:
 #    - develop
 #
