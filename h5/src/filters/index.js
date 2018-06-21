@@ -33,7 +33,7 @@ const filters = [
           type = '文档';
           break;
         default:
-          type = '其他类型';
+          type = '暂不支持此类型';
       }
       return type;
     }
@@ -45,9 +45,9 @@ const filters = [
         case 'video':
         case 'audio':
           if (task.mediaSource !== 'self' && task.type !== 'audio') {
-            return '暂不支持此类型';
+            return '';
           }
-          return `| 时长:  ${formatTimeByNumber(task.length)}`;
+          return ` | 时长:  ${formatTimeByNumber(task.length)}`;
         case 'live':
           // var endDate = getDate(task.endTime * 1000);
           // var startDate = getDate(task.startTime * 1000);
@@ -67,8 +67,14 @@ const filters = [
         case 'doc':
           return '';
         default:
-          return '暂不支持此类型';
+          return '';
       }
+    }
+  },
+  {
+    name: 'filterTaskStatus',
+    handler(task) {
+      return task.tryLookable ? '试看' : (task.isFree ? '免费' : '');
     }
   }
 ];

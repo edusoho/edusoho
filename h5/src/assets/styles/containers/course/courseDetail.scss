@@ -113,19 +113,20 @@
           overflow: hidden;
           &.unit-show {
             height: auto;
-            // + .unit-show {
-            //   border-bottom: 1px solid #EEE;
-            // }
+            margin:0 vw(10);            
+            + .unit-show:not(:last-child) {
+              border-bottom: 1px solid #EEE;
+              margin-bottom: 10px;
+            }
           }
         }
         .lesson-cell {
           @extend .flex-row;
           @extend .font-family-PFM;
-          margin:0 vw(10);
+          
           font-size: vw(14);
           &__unit {
             margin-bottom: vw(12);
-            margin-left: vw(10);
             @extend .title-16;
           }
           &__content {
@@ -145,14 +146,17 @@
             color: #b0bdc9;
           }
           &__status {
-            background: #FF9E6D;
+            
             border-radius: 2px;
             height: vw(18);
             color: white;
             font-size: vw(12);
-            padding: vw(4) vw(10);
+            padding: vw(2) vw(10);
             &.is-free {
               background: $primary-color;
+            }
+            &.is-tryLook{
+              background:#FF9E6D;
             }
           }
         }

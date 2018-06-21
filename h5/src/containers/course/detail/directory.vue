@@ -28,8 +28,10 @@
                 <span>{{ task.title }}</span>
                 <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
               </div>
-              <!-- TODO 试看、免费状态修改 -->
-              <div :class="['lesson-cell__status', {'is-free': task.task.isFree}]">试看</div>
+              
+              <div :class="['lesson-cell__status', 
+                {'is-free': task.task.isFree},
+                {'is-tryLook': task.task.tryLookable}]">{{ task.task | filterTaskStatus}}</div>
             </div>
           </div>
         </div>
