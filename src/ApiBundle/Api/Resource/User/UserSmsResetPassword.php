@@ -8,6 +8,8 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 
 class UserSmsResetPassword extends AbstractResource
 {
@@ -16,12 +18,27 @@ class UserSmsResetPassword extends AbstractResource
      */
     public function add(ApiRequest $request, $mobile)
     {
-        // $fields = $request->request->all();
-        // $smsToken = $this->getBizSms()->send(BizSms::SMS_FORGET_PASSWORD);
+        $fields = $request->request->all();
+        $smsToken = $this->getBizSms()->send(BizSms::SMS_FORGET_PASSWORD, $mobile);
 
-        // return array(
-        //     'smsToken' => $smsToken['token'],
-        // );
+        return array(
+            'smsToken' => $smsToken['token'],
+        );
+    }
+
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $mobile, $code)
+    {
+        $fields = $request->query->all();
+        if (!ArrayToolkit::requireds($fields, array(
+            'smsToken',
+        ))) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $code);
     }
 
     /**

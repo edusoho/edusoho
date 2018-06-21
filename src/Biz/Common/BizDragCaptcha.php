@@ -28,8 +28,12 @@ class BizDragCaptcha extends BizAware
         '6.jpg',
     );
 
-    public function generate()
+    public function generate($params)
     {
+        $params = array_merge(array(
+            'times' => 2,
+        ), $params);
+
         $bg = $this->backgroundImages[rand(0, 5)];
         $imagePath = $this->getImagePath($bg);
         $size = getimagesize($imagePath);
@@ -43,7 +47,7 @@ class BizDragCaptcha extends BizAware
         $jigsaw = $this->getJigsaw($options);
 
         $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
-            'times' => 2,
+            'times' => $params['times'],
             'duration' => 60 * 15,
             'userId' => 0,
             'data' => $options,

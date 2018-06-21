@@ -17,6 +17,7 @@ use AppBundle\Common\DeviceToolkit;
 use Biz\System\SettingException;
 use AppBundle\Common\SmsToolkit;
 use ApiBundle\Api\Util\AssetHelper;
+use Biz\Common\CommonException;
 
 class User extends AbstractResource
 {
@@ -77,13 +78,13 @@ class User extends AbstractResource
             'smsCode',
             'encrypt_password',
         ), true)) {
-            throw new BadRequestHttpException('Incorrect indicator', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         //校验验证码,基于token，默认10次机会
         $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
         if ($status != BizSms::STATUS_SUCCESS) {
-            throw UserException::FORBIDDEN_SEND_MESSAGE();
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $nickname = MathToolkit::uniqid();

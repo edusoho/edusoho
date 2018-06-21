@@ -5,8 +5,8 @@ const resetEmail = (api) => {
     patch(options) {
       console.log(options);
       return ajax(Object.assign({
-        url: `${api}/user/${options.email}/password/email?token=${options.token}`,
-        type: 'patch',
+        url: `${api}/user/${options.params.email}/password/email`,
+        type: 'PATCH',
       }, options));
     },
   };

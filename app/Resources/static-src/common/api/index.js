@@ -26,6 +26,8 @@ import studentLiveCourseModule from './modules/studentLiveCourse';
 import conversationModule from './modules/conversation';
 import newNotificationModule from './modules/newNotification';
 import resetPasswordEmail from './modules/reset-password/email.js';
+import resetPasswordMobile from './modules/reset-password/mobile.js';
+import resetPasswordSms from './modules/reset-password/sms.js';
 
 const API_URL_PREFIX = '/api';
 
@@ -43,6 +45,8 @@ const Api = {
   conversation: conversationModule(API_URL_PREFIX),
   newNotification: newNotificationModule(API_URL_PREFIX),
   resetPasswordEmail: resetPasswordEmail(API_URL_PREFIX),
+  resetPasswordMobile: resetPasswordMobile(API_URL_PREFIX),
+  resetPasswordSms: resetPasswordSms(API_URL_PREFIX),
 };
 
 export default Api;

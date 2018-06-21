@@ -28,6 +28,7 @@ class UserException extends AbstractException
         4030103 => 'exception.user.register_error',
         4040104 => 'exception.user.not_found',
         5000105 => 'exception.user.reset_password_email_send',
+        4030106 => 'exception.user.discuz_user_reset_password',
         4030110 => 'exception.user.message_forbidden',
     );
 }

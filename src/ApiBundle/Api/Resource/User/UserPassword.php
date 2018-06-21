@@ -17,6 +17,8 @@ use AppBundle\Common\DeviceToolkit;
 use Biz\System\SettingException;
 use AppBundle\Common\SmsToolkit;
 use ApiBundle\Api\Util\AssetHelper;
+use Biz\Common\CommonException; 
+use AppBundle\Common\SimpleValidator;
 
 class UserPassword extends AbstractResource
 {
@@ -26,39 +28,49 @@ class UserPassword extends AbstractResource
      */
     public function update(ApiRequest $request, $identify, $type)
     {
-        $token = $request->query->get('token');
         $biz = $this->getBiz();
         $dragCaptcha = $biz['biz_drag_captcha'];
-        $dragCaptcha->check($token);
+        $dragCaptcha->check($request->request->get('dragCaptchaToken'));
 
         $function = 'resetPasswordBy'.ucfirst($type);
-        return \call_user_func(array($this, $function),  $identify);
+        return \call_user_func(array($this, $function),  $identify, $request);
     }
 
-    private function resetPasswordByMobile($mobile)
+    private function resetPasswordByMobile($mobile, $request)
     {
+        $fields = $request->request->all();
+        if (!ArrayToolkit::requireds($fields, array(
+            'smsToken',
+            'smsCode',
+            'password',
+        ))) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         if (!$user) {
             throw UserException::NOTFOUND_USER();
         }
+
+        $password = $fields['password'];
+
+        if (!SimpleValidator::password($password)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);
         
+        if (BizSms::STATUS_SUCCESS != $result) {
+            throw UserException::FORBIDDEN_REGISTER();
+        }
 
-        //list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
+        $this->getUserService()->changePassword($user['id'], $password);
+        $this->getTokenService()->destoryToken($fields['smsToken']);
 
-        // if ($result) {
-
-        //     $token = $this->getUserService()->makeToken('password-reset', $targetUser['id'], strtotime('+1 day'));
-        //     $request->request->set('token', $token);
-
-        //     return $this->redirect($this->generateUrl('password_reset_update', array(
-        //         'token' => $token,
-        //     )));
-        // }
-
-        // return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
+        return $user;
     }
 
-    private function resetPasswordByEmail($email)
+    private function resetPasswordByEmail($email, $request)
     {
         $user = $this->getUserService()->getUserByEmail($email);
         if (!$user) {
@@ -96,6 +108,11 @@ class UserPassword extends AbstractResource
         return $user;
     }
 
+    private function getBizSms()
+    {
+        return $this->biz['biz_sms'];
+    }
+
     /**
      * @return \Biz\User\Service\UserService
      */
@@ -112,5 +129,10 @@ class UserPassword extends AbstractResource
     private function getLogService()
     {
         return $this->service('System:LogService');
+    }
+
+    private function getTokenService()
+    {
+        return $this->service('User:TokenService');
     }
 }

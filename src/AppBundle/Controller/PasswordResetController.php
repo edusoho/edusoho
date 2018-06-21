@@ -20,10 +20,17 @@ class PasswordResetController extends BaseController
     public function emailResetSuccessAction(Request $request) 
     {
         $email = $request->query->get('email');
-        $user = $this->getUserService()->getUserByEmail($email);
-
+        $mobile = $request->query->get('mobile');
+        if (!empty($email)) {
+            $user = $this->getUserService()->getUserByEmail($email);
+        } else {
+            $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
+        }
+        
         return $this->render('password-reset/sent.html.twig', array(
             'user' => $user,
+            'email' => $email,
+            'mobile' => $mobile,
         ));    
     }
 
