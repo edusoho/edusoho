@@ -20,7 +20,9 @@
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
-    <directory ref="directory" :courseItem="details[selectPlanIndex].courseItem"></directory>
+    <directory ref="directory" 
+      :tryLookable="details[selectPlanIndex].tryLookable"
+      :courseItem="details[selectPlanIndex].courseItem"></directory>
     
     <e-footer @click.native="handleJoin">加入学习</e-footer>
   </div>

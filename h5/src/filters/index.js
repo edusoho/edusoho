@@ -70,17 +70,6 @@ const filters = [
           return '';
       }
     }
-  },
-  {
-    name: 'filterTaskStatus',
-    handler(task) {
-      if (task.tryLookable) {
-        return '试看';
-      } else if (task.isFree) {
-        return '免费';
-      }
-      return '';
-    }
   }
 ];
 

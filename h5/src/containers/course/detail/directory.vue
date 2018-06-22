@@ -28,10 +28,9 @@
                 <span>{{ task.title }}</span>
                 <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
               </div>
-              
-              <div :class="['lesson-cell__status', 
-                {'is-free': task.task.isFree},
-                {'is-tryLook': task.task.tryLookable}]">{{ task.task | filterTaskStatus}}</div>
+              <div :class="['lesson-cell__status', task.status]">
+                {{ filterTaskStatus(task) }}
+              </div>
             </div>
           </div>
         </div>
@@ -41,7 +40,7 @@
 </template>
 <script>
   export default {
-    props: ['courseItem'],
+    props: ['courseItem', 'tryLookable', 'joinStatus'],
     data() {
       return {
         directoryArray: this.courseItem,
@@ -57,8 +56,12 @@
     created() {
       this.directoryArray.map(item => {
         this.$set(item, 'show', true);
+        if (item.type == 'task') {
+          item['status'] = this.getCurrentStatus(item.task);
+        }
       })
       this.getTasks(this.directoryArray);
+      console.log('directoryArray', this.directoryArray)
     },
     methods: {
       getTasks(data) {
@@ -85,7 +88,25 @@
           this.tasks.push(temp);
         }
         console.log('chapters', this.chapters, 'tasks', this.tasks);
-      }
+      },
+      getCurrentStatus(task) {
+        if (this.tryLookable
+          && task.type === 'video'
+          && task.activity.mediaStorage) {
+          return 'is-tryLook';
+        } else if (task.isFree) {
+          return 'is-free';
+        }
+        return '';
+      },
+      filterTaskStatus(task){
+        if (task.status === 'is-tryLook') {
+          return '试看';
+        } else if (task.status === 'is-free') {
+          return '免费';
+        }
+          return '';
+        }
     }
   }
 </script>
