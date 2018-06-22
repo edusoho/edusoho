@@ -28,12 +28,6 @@
     },
     {
       "enabled": true,
-      "key": "myVipId",
-      "type": "text",
-      "value": "2"
-    },
-    {
-      "enabled": true,
       "key": "live_ticket",
       "type": "text",
       "value": "599523549c802406151639"
