@@ -42,7 +42,7 @@ class UserPassword extends AbstractResource
         if (!ArrayToolkit::requireds($fields, array(
             'smsToken',
             'smsCode',
-            'password',
+            'encrypt_password'
         ))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
@@ -52,8 +52,7 @@ class UserPassword extends AbstractResource
             throw UserException::NOTFOUND_USER();
         }
 
-        $password = $fields['password'];
-
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
         if (!SimpleValidator::password($password)) {
             throw CommonException::ERROR_PARAMETER();
         }

@@ -3,6 +3,7 @@ import Drag from 'app/common/drag';
 import Api from 'common/api';
 import notify from 'common/notify';
 import { countDown } from 'app/common/new-count-down.js';
+require('app/common/xxtea.js');
 
 class Reset {
   constructor() {
@@ -41,7 +42,7 @@ class Reset {
   smsEvent() {
     let $smsCode = $('.js-sms-send');
     let self = this;
-    $('.js-sms-send').click(() => {
+    $smsCode.click(() => {
       if(this.mobileValidator.element($('[name="dragCaptchaToken"]'))) {
         Api.resetPasswordSms.get({
           params: {
@@ -57,6 +58,7 @@ class Reset {
           });
           self.smsToken = res.smsToken;
         });
+
       }
     });
   }
@@ -157,7 +159,7 @@ class Reset {
           data: {
             smsToken: self.smsToken,
             smsCode: $('#sms-code').val(),
-            password: $('#reset_password').val(),
+            encrypt_password: window.XXTEA.encryptToBase64($('#reset_password').val(), window.location.host),
             dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
           }
         }).then((res) => {

@@ -96,7 +96,7 @@ class User extends AbstractResource
         $user = $this->controller->getAuthService()->register(array(
             'mobile' => $fields['mobile'],
             'nickname' => $nickname,
-            'password' => $this->getPassword($request),
+            'password' => $this->getPassword($fields['encrypt_password'], $request->getHost()),
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getClientIp(),
         ));
@@ -134,9 +134,9 @@ class User extends AbstractResource
         return $user;
     }
 
-    private function getPassword($request)
+    private function getPassword($password, $host)
     {
-        return EncryptionToolkit::XXTEADecrypt(base64_decode($request->request->get('password')), $request->getHost());
+        return EncryptionToolkit::XXTEADecrypt(base64_decode($password), $host);
     }
 
     /**
