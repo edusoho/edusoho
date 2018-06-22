@@ -8137,51 +8137,6 @@
 					"response": []
 				},
 				{
-					"name": "joinVipCourse",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"console.log(responseBody);",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"join classroom success !\"] = (jsonData.courseId === data.vipCourseId)&(jsonData.user.id === data.userId);"
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/vnd.edusoho.v2+json"
-							},
-							{
-								"key": "X-AUTH-TOKEN",
-								"value": "{{token}}"
-							}
-						],
-						"body": {},
-						"url": {
-							"raw": "{{url}}/api/courses/{{vipCourseId}}/members",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"courses",
-								"{{vipCourseId}}",
-								"members"
-							]
-						},
-						"description": " 免费加入 VIP 会员  计划 "
-					},
-					"response": []
-				},
-				{
 					"name": "unlearnCourse_free",
 					"event": [
 						{
@@ -8469,60 +8424,6 @@
 							"body": "{\"error\":{\"message\":\"\\u60a8\\u4e0d\\u662f\\u5b66\\u5458\\u6216\\u5c1a\\u672a\\u8d2d\\u4e70\\uff0c\\u4e0d\\u80fd\\u9000\\u5b66\\u3002\",\"code\":7,\"type\":\"INTERNAL_SERVER_ERROR\",\"previous\":[{\"message\":\"1\\/1 ApiBundle\\\\Api\\\\Exception\\\\ApiException: \\u60a8\\u4e0d\\u662f\\u5b66\\u5458\\u6216\\u5c1a\\u672a\\u8d2d\\u4e70\\uff0c\\u4e0d\\u80fd\\u9000\\u5b66\\u3002\",\"trace\":[\"1.  in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Api\\/Resource\\/Me\\/MeCourseMember.php line 22\",\"2. at ApiBundle\\\\Api\\\\Resource\\\\Me\\\\MeCourseMember-\\u003Eremove(...args...)\",\"3. at call_user_func_array(...args...) in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Api\\/Resource\\/ResourceProxy.php line 18\",\"4. at ApiBundle\\\\Api\\\\Resource\\\\ResourceProxy-\\u003E__call(...args...)\",\"5. at call_user_func_array(...args...) in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Api\\/ResourceKernel.php line 205\",\"6. at ApiBundle\\\\Api\\\\ResourceKernel-\\u003Einvoke(...args...) in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Api\\/ResourceKernel.php line 173\",\"7. at ApiBundle\\\\Api\\\\ResourceKernel-\\u003EhandleApiRequest(...args...) in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Api\\/ResourceKernel.php line 163\",\"8. at ApiBundle\\\\Api\\\\ResourceKernel-\\u003EsingleRequest(...args...) in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Api\\/ResourceKernel.php line 64\",\"9. at ApiBundle\\\\Api\\\\ResourceKernel-\\u003Ehandle(...args...) in \\/var\\/www\\/edusoho\\/src\\/ApiBundle\\/Controller\\/EntryPointController.php line 27\",\"10. at ApiBundle\\\\Controller\\\\EntryPointController-\\u003EstartAction(...args...)\",\"11. at call_user_func_array(...args...) in \\/var\\/www\\/edusoho\\/vendor\\/symfony\\/symfony\\/src\\/Symfony\\/Component\\/HttpKernel\\/HttpKernel.php line 144\",\"12. at Symfony\\\\Component\\\\HttpKernel\\\\HttpKernel-\\u003EhandleRaw(...args...) in \\/var\\/www\\/edusoho\\/vendor\\/symfony\\/symfony\\/src\\/Symfony\\/Component\\/HttpKernel\\/HttpKernel.php line 64\",\"13. at Symfony\\\\Component\\\\HttpKernel\\\\HttpKernel-\\u003Ehandle(...args...) in \\/var\\/www\\/edusoho\\/vendor\\/symfony\\/symfony\\/src\\/Symfony\\/Component\\/HttpKernel\\/DependencyInjection\\/ContainerAwareHttpKernel.php line 69\",\"14. at Symfony\\\\Component\\\\HttpKernel\\\\DependencyInjection\\\\ContainerAwareHttpKernel-\\u003Ehandle(...args...) in \\/var\\/www\\/edusoho\\/vendor\\/symfony\\/symfony\\/src\\/Symfony\\/Component\\/HttpKernel\\/Kernel.php line 185\",\"15. at Symfony\\\\Component\\\\HttpKernel\\\\Kernel-\\u003Ehandle(...args...) in \\/var\\/www\\/edusoho\\/web\\/app_dev.php line 39\"]}]}}"
 						}
 					]
-				},
-				{
-					"name": "unlearnCourse_vip",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"unlearn vip course success !\"] = jsonData.success === true;"
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/vnd.edusoho.v2+json"
-							},
-							{
-								"key": "X-AUTH-TOKEN",
-								"value": "{{token}}"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "reason",
-									"value": "我不想买了",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/api/me/course_members/{{vipCourseId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"me",
-								"course_members",
-								"{{vipCourseId}}"
-							]
-						},
-						"description": "退出vip学习计划"
-					},
-					"response": []
 				},
 				{
 					"name": "viewCourse",
@@ -9781,51 +9682,6 @@
 					"response": []
 				},
 				{
-					"name": "joinVipClassroom",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"join classroom success !\"] = jsonData.classroomId === data.vipClassroomId;"
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/vnd.edusoho.v2+json"
-							},
-							{
-								"key": "X-AUTH-TOKEN",
-								"value": "{{token}}"
-							}
-						],
-						"body": {},
-						"url": {
-							"raw": "{{url}}/api/classrooms/{{vipClassroomId}}/members",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"classrooms",
-								"{{vipClassroomId}}",
-								"members"
-							]
-						},
-						"description": "免费加入会员班级"
-					},
-					"response": []
-				},
-				{
 					"name": "joinFreeClassroom_error_repeat",
 					"event": [
 						{
@@ -9926,64 +9782,6 @@
 							]
 						},
 						"description": "退出免费 班级"
-					},
-					"response": []
-				},
-				{
-					"name": "unlearnClassroom_vip",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"unlearn classroom success !\"] = jsonData === true;",
-									"",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "classRoomId",
-									"value": "{{vipClassroomId}}",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "targetType",
-									"value": "classroom",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/mapi_v2/ClassRoom/unlearn",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"mapi_v2",
-								"ClassRoom",
-								"unlearn"
-							]
-						},
-						"description": "退出VIP班级"
 					},
 					"response": []
 				},
@@ -20546,7 +20344,6 @@
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"console.log(responseBody);",
 									"var jsonData = JSON.parse(responseBody);",
 									"if(jsonData.data.length>1){",
 									"    var flag1 =false;",

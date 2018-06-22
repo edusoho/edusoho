@@ -9,7 +9,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
-use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -60,12 +59,9 @@ class CourseMember extends AbstractResource
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
 
-
         if (!$member) {
             $member = $this->tryJoin($course);
         }
-        $file = file_get_contents('../app/cache/dev/Jianmo/event_map.php');
-        var_dump($file);
 
         if ($member) {
             $this->getOCUtil()->single($member, array('userId'));

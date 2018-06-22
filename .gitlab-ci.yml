@@ -141,7 +141,7 @@ Api Test With 5.5:
     - composer require "codeception/codeception:*" --ignore-platform-reqs
 
     # install plugin
-    - git clone -b vipjoin --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin &&  app/console plugin:register ChargeCoin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin &&  app/console plugin:register Coupon
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin &&  app/console plugin:register Discount
@@ -157,7 +157,7 @@ Api Test With 5.5:
     - bin/codecept run api
     - ls app/cache/dev/Jianmo/
     # 执行newman的 API 单元测试
-    - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json && cat app/cache/dev/Jianmo/event_map.php
+    - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
 
 #  only:
 #    - develop
