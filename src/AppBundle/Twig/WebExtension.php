@@ -162,8 +162,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
             new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
-            new \Twig_SimpleFunction('canSendMessage', array($this, 'canSendMessage')),
-            new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
@@ -1758,51 +1756,7 @@ class WebExtension extends \Twig_Extension
         return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
     }
 
-    public function canSendMessage($userId)
-    {
-        $user = $this->biz['user'];
-        if (!$user->isLogin()) {
-            return false;
-        }
-
-        if ($user->isAdmin() || $user->isSuperAdmin()) {
-            return true;
-        }
-
-        $toUser = $this->getUserService()->getUser($userId);
-        if ($user['id'] == $toUser['id']) {
-            return false;
-        }
-
-        $messageSetting = $this->getSetting('message', array());
-        
-        if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
-            return false;
-        }
-
-        if (empty($messageSetting['studentToStudent']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
-            return false;
-        }
-
-        if (empty($messageSetting['studentToTeacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isHiddenVideoHeader($isHidden = false)
-    {
-        $storage = $this->getSetting('storage');
-        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
-            return false;
-        }
-
-        return true;
-    }
-
-<<<<<<< HEAD
-=======
+    
     public function canSendMessage($userId)
     {
         $user = $this->biz['user'];
@@ -1840,7 +1794,6 @@ class WebExtension extends \Twig_Extension
         return true;
     }
 
->>>>>>> e2f2272ccaa0399fbd3db324ec8f139e62641ae8
     private function isTeacher($roles)
     {
         return in_array('ROLE_TEACHER', $roles);
@@ -1848,9 +1801,6 @@ class WebExtension extends \Twig_Extension
 
     private function isOnlyStudent($roles)
     {
-<<<<<<< HEAD
-        return in_array('ROLE_USER', $roles) && count($roles) == 1;
-=======
         return in_array('ROLE_USER', $roles) && !in_array('ROLE_TEACHER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles);
     }
 
@@ -1864,6 +1814,5 @@ class WebExtension extends \Twig_Extension
         }
 
         return $arrays;
->>>>>>> e2f2272ccaa0399fbd3db324ec8f139e62641ae8
     }
 }
