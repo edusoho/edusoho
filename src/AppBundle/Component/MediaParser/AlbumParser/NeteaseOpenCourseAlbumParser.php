@@ -7,13 +7,13 @@ use AppBundle\Component\MediaParser\ParseException;
 class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 {
     private $patterns = array(
-        'p1' => '/^http:\/\/v\.163\.com\/special\/(.*?)[\/|(\.html)]$/s',
+        'p1' => '/^(http|https):\/\/v\.163\.com\/special\/(.*?)[\/|(\.html)]$/s',
     );
 
     public function parse($url)
     {
         $response = $this->fetchUrl($url);
-        if ($response['code'] != 200) {
+        if (200 != $response['code']) {
             throw new ParseException(array('获取网易公开课专辑(%url%)页面内容失败', array('%url%' => $url)));
         }
 
