@@ -40,7 +40,20 @@
 </template>
 <script>
   export default {
-    props: ['courseItem', 'tryLookable', 'joinStatus'],
+    props: {
+      courseItem: {
+        type: Array,
+        default: () => ([])
+      },
+      tryLookable: {
+        type: String,
+        default: ''
+      },
+      joinStatus: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         directoryArray: this.courseItem,
@@ -54,14 +67,15 @@
       }
     },
     created() {
-      this.directoryArray.map(item => {
-        this.$set(item, 'show', true);
-        if (item.type == 'task') {
-          item['status'] = this.getCurrentStatus(item.task);
-        }
+      if (this.directoryArray.length > 0) {
+        this.directoryArray.map(item => {
+          this.$set(item, 'show', true);
+          if (item.type == 'task') {
+            item['status'] = this.getCurrentStatus(item.task);
+          }
       })
-      this.getTasks(this.directoryArray);
-      console.log('directoryArray', this.directoryArray)
+        this.getTasks(this.directoryArray);
+      }
     },
     methods: {
       getTasks(data) {
@@ -71,10 +85,10 @@
           if (item.type !== 'chapter') {
             temp.push(item);
           } else {
-            if(temp.length > 0) {
+            if (temp.length > 0) {
               this.tasks.push([].concat(temp));
               temp = [];
-            }else if(this.chapters.length > 0) {
+            }else if (this.chapters.length > 0) {
               this.tasks.push([]);
             }
 

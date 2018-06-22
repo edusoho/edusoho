@@ -1,6 +1,8 @@
 <template>
   <ul class="course-detail__plan">
-    <li v-for="item in items" @click="handleClick(item)" :class="{active: item.active}">三月班</li>
+    <li v-for="item in items" 
+      @click="handleClick(item)" 
+      :class="{active: item.active}">三月班</li>
   </ul>
 </template>
 <script>

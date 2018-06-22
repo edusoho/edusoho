@@ -54,6 +54,9 @@
   // tabs
   .van-tabs {
     margin-bottom: -44px;
+    &.after-tabs {
+      margin-bottom: 0;
+    }
     .van-tab {
       color: #2b333b;
       font-family: PingFangSC-Medium;

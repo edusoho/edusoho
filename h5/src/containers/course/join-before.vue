@@ -35,7 +35,12 @@
 
   export default {
     name: 'joinBefore',
-    props: ['details'],
+    props: {
+      details: {
+        type: Array,
+        default: () => ([])
+      }
+    },
     data() {
       return {
         teacherInfo: {},
