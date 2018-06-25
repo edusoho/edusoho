@@ -224,7 +224,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($this->sql($sql, $orderBy, $offset, $limit), array_values($conditions));
     }
 
-    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true, $filterReservation = false)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
         $sql .= ' JOIN  course_v8 AS c ON m.userId = ? ';
@@ -232,6 +232,10 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
         if ($onlyPublished) {
             $sql .= " AND c.status = 'published' ";
+        }
+
+        if ($filterReservation) {
+            $sql .= " AND c.type != 'reservation'";
         }
 
         $sql .= ' ORDER BY createdTime DESC';
@@ -303,11 +307,14 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role, $type, $isLearned));
     }
 
-    public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $filterReservation = false)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= ' AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0';
+        if ($filterReservation) {
+            $sql .= " AND c.type != 'reservation'";
+        }
 
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
     }
@@ -325,14 +332,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role));
     }
 
-    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned(
-        $userId,
-        $role,
-        $type,
-        $isLearned,
-        $start,
-        $limit
-    ) {
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
+    {
         $sql = "SELECT m.* FROM {$this->table} m";
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
@@ -341,11 +342,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role, $type, $isLearned));
     }
 
-    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
+    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit, $filterReservation = false)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
+
+        if ($filterReservation) {
+            $sql .= " AND c.type != 'reservation'";
+        }
 
         $sql .= ' ORDER BY createdTime DESC';
 
@@ -363,9 +368,14 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $type, $isLearned, $role));
     }
 
-    public function countMemberByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    public function countMemberByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $filterReservation = false)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
+        //        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql .= ' JOIN '.CourseDao::TABLE_NAME.' AS c ON m.courseId = c.id AND m.userId = ? AND m.role = ? AND m.isLearned = ?';
+        if ($filterReservation) {
+            $sql .= " AND c.type != 'reservation'";
+        }
 
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
     }

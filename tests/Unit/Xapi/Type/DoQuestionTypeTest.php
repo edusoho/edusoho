@@ -132,20 +132,36 @@ class DoQuestionTypeTest extends BaseTestCase
             )
         );
 
-        $activityService = $this->mockBiz(
-            'Activity:ActivityService',
+        $videoActivityDao = $this->mockBiz(
+            'Activity:VideoActivityDao',
             array(
                 array(
-                    'functionName' => 'findActivities',
-                    'withParams' => array(array(2), true),
+                    'functionName' => 'findByIds',
+                    'withParams' => array(),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 123,
+                            'mediaType' => 'video',
+                            'title' => 'test activity',
+                            'mediaId' => 333333,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $activityDao = $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(array(2)),
                     'returnValue' => array(
                         0 => array(
                             'id' => 2,
                             'mediaType' => 'video',
                             'title' => 'test activity',
-                            'ext' => array(
-                                'mediaId' => 333333,
-                            ),
+                            'mediaId' => 123,
                         ),
                     ),
                 ),
@@ -181,7 +197,6 @@ class DoQuestionTypeTest extends BaseTestCase
         $taskService->shouldHaveReceived('search');
         $courseService->shouldHaveReceived('search');
         $courseSetService->shouldHaveReceived('search');
-        $activityService->shouldHaveReceived('findActivities');
         $uploadFileService->shouldHaveReceived('findFilesByIds');
 
         $packageInfo = reset($packageInfo);

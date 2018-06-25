@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Course\Service\CourseSetService;
 
 class CourseController extends CourseBaseController
 {
@@ -39,7 +40,10 @@ class CourseController extends CourseBaseController
 
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
 
-        $conditions = array('ids' => $learningCourseSetIds);
+        $conditions = array(
+            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE),
+            'ids' => $learningCourseSetIds,
+        );
 
         $paginator = new Paginator(
             $request,

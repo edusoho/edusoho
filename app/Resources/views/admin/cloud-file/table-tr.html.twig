@@ -44,7 +44,7 @@
 
     <td class="text-center">
       <div class="mbs">{{ dict_text('fileType', cloudFile.type) }}</div>
-      {% if cloudFile.mcStatus|default('no') == 'yes' %}
+      {% if cloudFile.mp4ConvertStatus|default('none') == 'success' %}
         <div class="label label-info mtm">{{ 'cloud_file.mc_yes_status_tips'|trans }}</div>
       {% endif %}
     </td>

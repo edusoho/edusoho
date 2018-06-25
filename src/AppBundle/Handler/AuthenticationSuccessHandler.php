@@ -30,9 +30,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
         $currentUser = $this->getServiceKernel()->getCurrentUser();
 
-        if (false) {
-            //暂时隐藏初始化密码功能
-            // if (!$currentUser['passwordInit']) {
+        if (!$currentUser['passwordInit']) {
             $url = $this->httpUtils->generateUri($request, 'password_init');
             $queries = array('goto' => $this->determineTargetUrl($request));
             $url = $url.'?'.http_build_query($queries);

@@ -2144,9 +2144,9 @@ es-commit-msg-validator@1.0.2:
     findup "0.1.5"
     semver-regex "1.0.0"
 
-es-fullcalendar@3.7.0-patch4:
-  version "3.7.0-patch4"
-  resolved "http://registry.npm.taobao.org/es-fullcalendar/download/es-fullcalendar-3.7.0-patch4.tgz#a56f9f8d8ff8a918775b0e6777cdb4cde55d2c44"
+es-fullcalendar@3.7.0-patch5:
+  version "3.7.0-patch5"
+  resolved "https://registry.yarnpkg.com/es-fullcalendar/-/es-fullcalendar-3.7.0-patch5.tgz#fe820fb9c11bb35a6c7122c3e32476b8dd078a36"
   dependencies:
     jquery "2 - 3"
     moment "^2.9.0"
@@ -3564,6 +3564,10 @@ jquery-form@3.50.0:
   dependencies:
     jquery ">=1.5"
 
+jquery-migrate@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/jquery-migrate/-/jquery-migrate-3.0.0.tgz#03f320596fe1a1db09cdcfb74b14571994aad7bb"
+
 jquery-sortable@0.9.13:
   version "0.9.13"
   resolved "http://registry.npm.taobao.org/jquery-sortable/download/jquery-sortable-0.9.13.tgz#1cbfb655013a0747370571f06e22f524a00ffba2"
@@ -3590,11 +3594,7 @@ jquery.cycle2@2.1.7:
   dependencies:
     jquery ">=1.7"
 
-jquery@1.12.4:
-  version "1.12.4"
-  resolved "http://registry.npm.taobao.org/jquery/download/jquery-1.12.4.tgz#01e1dfba290fe73deba77ceeacb0f9ba2fec9e0c"
-
-"jquery@2 - 3", jquery@>=1.10, jquery@>=1.5, jquery@>=1.7:
+"jquery@2 - 3", jquery@3.2.1, jquery@>=1.10, jquery@>=1.5, jquery@>=1.7:
   version "3.2.1"
   resolved "http://registry.npm.taobao.org/jquery/download/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -4201,9 +4201,9 @@ mochawesome@^3.0.2:
     strip-ansi "^4.0.0"
     uuid "^3.0.1"
 
-moment@2.16.0:
-  version "2.16.0"
-  resolved "http://registry.npm.taobao.org/moment/download/moment-2.16.0.tgz#f38f2c97c9889b0ee18fc6cc392e1e443ad2da8e"
+moment@2.19.4:
+  version "2.19.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.4.tgz#17e5e2c6ead8819c8ecfad83a0acccb312e94682"
 
 moment@^2.9.0:
   version "2.20.1"

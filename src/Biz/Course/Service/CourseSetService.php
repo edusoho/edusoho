@@ -16,8 +16,6 @@ interface CourseSetService
 
     const NORMAL_TYPE = 'normal';
     const LIVE_TYPE = 'live';
-    const LIVE_OPEN_TYPE = 'liveOpen';
-    const OPEN_TYPE = 'open';
 
     /**
      * collect course set.

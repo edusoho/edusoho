@@ -39,6 +39,8 @@ class CourseSet extends AbstractResource
         $conditions['status'] = 'published';
         $conditions['showable'] = 1;
         $conditions['parentId'] = 0;
+        //过滤约排课
+        $conditions['excludeTypes'] = array('reservation');
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
@@ -114,7 +116,7 @@ class CourseSet extends AbstractResource
         $maxOriginPrice = 0;
         $minOriginPrice = 0;
         foreach ($courses as $course) {
-            if ($course['status'] != 'published') {
+            if ('published' != $course['status']) {
                 continue;
             }
 

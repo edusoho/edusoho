@@ -289,6 +289,13 @@ class BaseTestCase extends TestCase
         }
     }
 
+    protected function assertArrayValueEquals(array $arr1, array $arr2)
+    {
+        foreach ($arr1 as $value) {
+            $this->assertTrue(in_array($value, $arr2));
+        }
+    }
+
     protected function assertArraySternEquals(array $ary1, array $ary2)
     {
         foreach ($ary1 as $key => $item) {

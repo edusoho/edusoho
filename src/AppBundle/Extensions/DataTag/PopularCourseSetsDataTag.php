@@ -49,6 +49,8 @@ class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             $conditions['recommended'] = 1;
         }
 
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, $arguments['count']);
 
         return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);

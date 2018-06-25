@@ -2084,16 +2084,16 @@ classroom.buy_classroom.vip_free: 会员免费
 classroom.block_content_title: 所属%name%
 classroom.expiryDays: 班级有效期
 classroom.vip_checked_fail_tips: >
-  该 ~ %classroomName% ~ 已不支持会员免费学，
+  该%classroomName%已不支持会员免费学，
 classroom.not_vip_member_tips: >
-  您已经不是会员，不能学习此 ~ %classroomName% ~ ！
+  您已经不是会员，不能学习此%classroomName%！
 classroom.exit: 退出
 classroom.not_vip_member_and_become_vip_tips: >
   请重新<a class="alert-link" href="%vipUrl%" target="_blank">开通会员</a>
 classroom.vip_member_expired_tips: >
-  您的会员已过期，不能学习此 ~ %classroomName% ~ ，请先<a class="alert-link" href="%vipRenewUrl%" target="_blank">续费</a>。
+  您的会员已过期，不能学习此%classroomName%，请先<a class="alert-link" href="%vipRenewUrl%" target="_blank">续费</a>。
 classroom.vip_member_level_low_tips: >
-  会员等级不够，不能学习此' ~ %classroomName% ~ '。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
+  会员等级不够，不能学习此%classroomName%。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
 classroom.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 classroom.cancle_refund_btn: 取消退款，继续学习！
 classroom.courses_count: 共%courseNum%课
@@ -2741,6 +2741,11 @@ user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自�
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
+user.init.password_tips: 请修改密码
+user.init.password_placeholder: 请输入您的密码
+user.init.password_placeholder_again: 请再输入一遍您的密码
+user.init.password.confirm.password: 确认提交
+user.init.password.submit.password.loading: 提交中...
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱
@@ -3267,6 +3272,7 @@ search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
 search.live_courses: 直播课程
+search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
 
@@ -4383,7 +4389,7 @@ course.header.become_a_VIP: <a href="%href%" target="_blank">加入会员</a>
 course.member.tips.title: 提示
 course.member.classroom.tips: 您购买的班级已到期，无法学习任务、提问等。如有疑问请联系老师。
 course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
-course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。
+course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或退出并重新加入 。
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
@@ -6978,6 +6984,7 @@ admin.magic_setting.buy_before_approval: 购买课程前实名认证
 admin.magic_setting.disable_web_crontab: 是否开启web定时任务
 admin.magic_setting.cloud_search: 是否开启云搜索业务
 admin.magic_setting.ios_buy_disable: 是否关闭iOS购买功能
+admin.magic_setting.ios_vip_close: 是否关闭iOS会员模块
 admin.magic_setting.export_limit: 订单单次导出数量
 admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构

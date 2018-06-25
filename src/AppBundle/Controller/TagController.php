@@ -58,6 +58,8 @@ class TagController extends BaseController
                 'parentId' => 0,
             );
 
+            $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
             $paginator = new Paginator(
                 $this->get('request'),
                 $this->getCourseSetService()->countCourseSets($conditions), 12

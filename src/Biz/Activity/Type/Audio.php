@@ -122,6 +122,11 @@ class Audio extends Activity
         return $audioActivities;
     }
 
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getAudioActivityDao()->findByIds($targetIds);
+    }
+
     public function materialSupported()
     {
         return true;

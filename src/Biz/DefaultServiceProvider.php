@@ -4,6 +4,7 @@ namespace Biz;
 
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
+use Biz\Course\Util\CourseRenderViewResolver;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -37,6 +38,7 @@ use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 use Biz\Common\BizDragCaptcha;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
+use Biz\Util\EdusohoLiveClient;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -180,6 +182,20 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['sms_rate_limiter'] = function ($biz) {
             return new SmsRateLimiter($biz);
+        };
+
+        $biz['render_view_resolvers'] = function ($biz) {
+            return array(
+                new CourseRenderViewResolver($biz),
+            );
+        };
+
+        $biz['template_extension.live'] = array(
+            'course/header/header-for-guest' => 'live-course/header/header-for-guest.html.twig',
+        );
+
+        $biz['educloud.live_client'] = function ($biz) {
+            return new EdusohoLiveClient($biz);
         };
     }
 }
