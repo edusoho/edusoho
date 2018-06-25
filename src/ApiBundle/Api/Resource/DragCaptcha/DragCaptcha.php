@@ -21,7 +21,10 @@ class DragCaptcha extends AbstractResource
             'times'
         ));
 
-        $result = $this->getBizDragCaptcha()->generate($fields);
+        $limitType = $request->request->get('limitType', 'default');
+        $limitKey = $limitType.'_'.$request->getHttpRequest()->getClientIp();
+
+        $result = $this->getBizDragCaptcha()->generate($fields, $limitKey);
         $result['url'] = $this->generateUrl('drag_captcha', array('token' => $result['token']), true);
 
         return $result;

@@ -20,6 +20,8 @@ class CommonException extends AbstractException
 
     const ERROR_PARAMETER = 5000306;
 
+    const FORBIDDEN_DRAG_CAPTCHA_FREQUENT = 5000307;
+
     public $messages = array(
         4030301 => 'exception.common_drag_captcha_error',
         4030302 => 'exception.common_drag_captcha_expired',
@@ -27,5 +29,6 @@ class CommonException extends AbstractException
         4030304 => 'exception.common_frequent_operation',
         5000305 => 'exception.common_parameter_missing',
         5000306 => 'exception.common_parameter_error',
+        5000307 => 'exception.common_drag_captcha_frequent',
     );
 }

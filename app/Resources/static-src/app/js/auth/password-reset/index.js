@@ -11,7 +11,9 @@ class Reset {
     this.dragHtml = $('.js-drag-box').html();
     $('.js-drag-box').remove();
     $('#password-reset-form').prepend(this.dragHtml);
-    this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'));
+    this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'), {
+      limitType: 'reset_password',
+    });
     this.smsEvent();
     this.validator();
     this.smsToken = '';

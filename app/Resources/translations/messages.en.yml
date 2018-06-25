@@ -7022,6 +7022,7 @@ exception.common_drag_captcha_expired: 验证码失效！
 exception.common_drag_captcha_required: 验证码参数缺失！
 exception.common_frequent_operation: 操作过于频繁，请稍后再试！
 exception.common_parameter_missing: 参数缺失，请重试！
+exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
 
 exception.article.notfound: 资讯不存在
 exception.user.unlogin: 未登陆，请登陆后操作
