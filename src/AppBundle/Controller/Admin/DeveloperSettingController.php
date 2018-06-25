@@ -110,8 +110,13 @@ class DeveloperSettingController extends BaseController
         try {
             $fileSystem = new Filesystem();
             $devLockFile = $this->container->getParameter('kernel.root_dir').'/data/dev.lock';
+            $ignoreDeleteDevLockFile = $this->container->getParameter('kernel.root_dir').'/data/ignoreDeleteDevLock';
             if ($developerSetting['debug']) {
                 $fileSystem->touch($devLockFile);
+            } else {
+                if (!$fileSystem->exists($ignoreDeleteDevLockFile)) {
+                    $fileSystem->remove($devLockFile);
+                }
             }
         } catch (\Exception $e) {
             //可能线上环境的dev.lock被人加过，导致权限问题无法删除
