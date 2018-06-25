@@ -4,7 +4,6 @@ namespace Tests\Unit\AppBundle\Component\RateLimit;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
-use Biz\Common\BizCaptcha;
 use AppBundle\Common\ReflectionUtils;
 
 class SmsRateLimiterTest extends BaseTestCase
@@ -12,28 +11,28 @@ class SmsRateLimiterTest extends BaseTestCase
     public function testHandle()
     {
         $limiter = new SmsRateLimiter($this->biz);
+
         $request = $this->mockRequest(
             array(
                 'request' => array(
-                    'captchaToken' => 'kuozhi',
-                    'phrase' => 'password',
+                    'dragCaptchaToken' => 'kuozhi',
                 ),
                 'getClientIp' => '128.2.2.1',
             )
         );
 
         $captcha = $this->mockBiz(
-            'biz_captcha',
+            'biz_drag_captcha',
             array(
                 array(
                     'functionName' => 'check',
-                    'withParams' => array('kuozhi', 'password'),
-                    'returnValue' => BizCaptcha::STATUS_SUCCESS,
+                    'withParams' => array('kuozhi'),
+                    'returnValue' => true,
                 ),
             )
         );
 
-        $this->biz['biz_captcha'] = $captcha;
+        $this->biz['biz_drag_captcha'] = $captcha;
 
         $result = $limiter->handle($request);
 
