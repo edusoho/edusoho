@@ -5,7 +5,9 @@
       :courseSet="details[selectPlanIndex].courseSet">
     </detail-head>
 
-    <detail-plan></detail-plan>
+    <detail-plan
+      :price="details[selectPlanIndex].price"
+      :courseSet="details[selectPlanIndex].courseSet"></detail-plan>
     <div class="segmentation"></div>
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>

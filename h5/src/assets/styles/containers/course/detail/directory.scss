@@ -1,0 +1,83 @@
+  // 课程目录
+  .directory {
+    .e-panel-body {
+      @extend .flex-column;
+      margin:0 vw(-10) vw(50);
+    }
+    &.join-after-dirctory {
+      .e-panel-body {
+        margin:0 vw(-10);
+      }
+    }
+    .directory-list {
+      &__item {
+        &-chapter {
+          display: flex;
+          justify-content: space-between;
+          @extend .title-16;     
+          height: vw(52);
+          line-height:vw(52);
+          background: #F7F7F7;
+          border-radius: 5px;    
+          padding-left: vw(10);
+          padding-right: vw(15); 
+          box-sizing: border-box;
+          i {
+            margin-top: vw(20);
+          }
+          margin-bottom: vw(20);
+        }
+        &-unit {
+          height: 0;
+          overflow: hidden;
+          &.unit-show {
+            height: auto;
+            margin:0 vw(10);            
+            + .unit-show:not(:last-child) {
+              border-bottom: 1px solid #EEE;
+              margin-bottom: 10px;
+            }
+          }
+        }
+        .lesson-cell {
+          @extend .flex-row;
+          @extend .font-family-PFM;
+          
+          font-size: vw(14);
+          &__unit {
+            margin-bottom: vw(12);
+            @extend .title-16;
+          }
+          &__content {
+            @extend .flex-column;
+            margin-left: vw(10);
+            margin-bottom: vw(15);
+            flex: 1;
+            span {
+              color: #2B333B;
+              &:last-child {
+                color: #b0bdc9;
+                margin-top: vw(15);
+              }
+            }
+          }
+          &__number {
+            color: #b0bdc9;
+          }
+          &__status {
+            border-radius: 2px;
+            height: vw(18);
+            color: white;
+            font-size: vw(12);
+            padding: vw(2) vw(10);
+            &.is-free {
+              background: $primary-color;
+            }
+            &.is-tryLook{
+              background:#FF9E6D;
+            }
+          }
+        }
+      }
+    }
+  }

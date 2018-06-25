@@ -1,5 +1,5 @@
 <template>
-  <e-panel title="课程目录" class="directory layout-col">
+  <e-panel title="课程目录" class="directory" :hidde-title="hiddeTitle">
     <!-- 暂无学习任务 -->
 
     <div class="directory-list">
@@ -52,6 +52,10 @@
       joinStatus: {
         type: String,
         default: ''
+      },
+      hiddeTitle: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

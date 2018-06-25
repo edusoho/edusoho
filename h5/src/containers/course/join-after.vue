@@ -1,26 +1,61 @@
 <template>
-  <div>
+  <div class="join-after">
     <detail-head 
       status="after"
       :courseSet="details.courseSet">
     </detail-head>
-
-    <van-tabs v-model="active" 
+    
+    <van-tabs 
+      v-model="active" 
       class="after-tabs"
-      @click="onTabClick" ref="tabs">
-      <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
+      @click="onTabClick">
+      <van-tab v-for="item in tabs" 
+        :title="item" :key="item"></van-tab>
     </van-tabs>
 
      <!-- 课程目录 -->
-    <directory ref="directory" 
-      v-if="!active"
-      :tryLookable="details.tryLookable"
-      :courseItem="details.courseItem"></directory>
+    <div class="join-after__content">
+      <div v-if="!active">
+        <div class="progress-bar">
+          <div class="progress-bar__content">
+            <div class="progress-bar__rate" :style="{'width': progress}"></div>
+          </div>
+          <div class="progress-bar__text">{{progress}}</div>
+        </div>
+
+        <directory
+          :hiddeTitle=true
+          class="join-after-dirctory"
+          :tryLookable="details.tryLookable"
+          :courseItem="details.courseItem"></directory>
+      </div>
+      
+      <div v-else>
+        <detail-plan
+          :price="details.price"
+          :courseSet="details.courseSet"
+          ></detail-plan>
+
+        <div class="segmentation"></div>
+        <!-- 课程介绍 -->
+        <e-panel title="课程介绍"></e-panel>
+        <div class="segmentation"></div>
+
+        <!-- 教师介绍 -->
+        <teacher 
+          :teacherInfo="details.teachers" 
+          class="teacher"></teacher>
+      </div>
+    </div>
+
+
   </div>
 </template>
 <script>
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
+import DetailPlan from './detail/plan';
+import Teacher from './detail/teacher';
 
 export default {
   props: ['details'],
@@ -28,11 +63,14 @@ export default {
     return {
       active: 0,
       tabs: ['课程目录', '课程简介'],
+      progress: '20%'
     }
   },
   components: {
     Directory,
-    DetailHead
+    DetailHead,
+    DetailPlan,
+    Teacher
   },
   created(){
     console.log('after', this.details)
