@@ -37,7 +37,7 @@
             left-menu"></i>
           {% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
 
-          {% if is_task_available(task) %}
+          {% if 'published' == task.status|default() %}
             {% if member %}
               <a class="title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}

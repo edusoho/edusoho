@@ -144,6 +144,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'courseType',
                 'type',
                 'enableAudio',
+                'showServices',
             )
         );
 
@@ -169,15 +170,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $created = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
-            $this->getMemberService()->setCourseTeachers(
-                $created['id'],
-                array(
-                    array(
-                        'id' => $currentUser['id'],
-                        'isVisible' => 1,
-                    ),
-                )
-            );
+            $this->getMemberService()->setDefaultTeacher($created['id']);
             $this->commit();
             $this->dispatchEvent('course.create', new Event($created));
 
@@ -1495,9 +1488,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
 
-        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0);
+        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0, true);
     }
 
+    //过滤约排课
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
@@ -1515,7 +1509,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'student',
                 0,
                 $start,
-                $limit
+                $limit,
+                true
             );
         }
 
@@ -1568,7 +1563,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'student',
                 1,
                 $start,
-                $limit
+                $limit,
+                true
             );
         }
 
@@ -1590,19 +1586,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
-    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true, $filterReservation = false)
     {
-        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
+        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished, $filterReservation);
     }
 
-    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true, $filterReservation = false)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole(
             $userId,
             'student',
             $start,
             $limit,
-            $onlyPublished
+            $onlyPublished,
+            $filterReservation
         );
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -1685,7 +1682,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
         $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
-        $conditions = array('courseIds' => $courseIds);
+        $conditions = array('courseIds' => $courseIds, 'excludeTypes' => array('reservation'));
 
         if (0 == count($courseIds)) {
             return 0;
@@ -1700,7 +1697,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+        $favoriteCourses = $this->getCourseDao()->search(
+            array(
+                'ids' => ArrayToolkit::column($courseFavorites, 'courseId'),
+                'excludeTypes' => array('reservation'),
+            ),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
 
         return $favoriteCourses;
     }
@@ -1794,6 +1799,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId)
     {
         return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
+    }
+
+    public function appendReservationConditions($conditions)
+    {
+        if (!$this->getSettingService()->isReservationOpen()) {
+            if (empty($conditions['excludeTypes'])) {
+                $conditions['excludeTypes'] = array();
+            }
+            $conditions['excludeTypes'][] = 'reservation';
+        }
+
+        return $conditions;
     }
 
     /**
@@ -1916,7 +1933,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourse($courseId);
 
-        if (1 == $course['isFree'] || 0 == $course['originPrice']) {
+        if ((1 == $course['isFree'] || 0 == $course['originPrice']) && $course['buyable']) {
             $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId());
         }
 

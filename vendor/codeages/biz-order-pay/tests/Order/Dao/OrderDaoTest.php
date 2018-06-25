@@ -42,7 +42,11 @@ class OrderDaoTest extends IntegrationTestCase
         );
 
         $orderCount = $this->getOrderDao()->queryCountWithItemConditions(
-            array('order_item_title' => 'rder_item_n')
+            array(
+                'order_item_title' => 'rder_item_n',
+                'order_item_target_ids' => array(1),
+                'order_item_target_type' => 'course',
+            )
         );
 
         $this->assertEquals('order_title', $orderInfos[0]['title']);

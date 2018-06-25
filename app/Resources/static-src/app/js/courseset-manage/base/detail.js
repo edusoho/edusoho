@@ -5,6 +5,7 @@ import postal from 'postal';
 
 export default class detail {
   constructor() {
+    this.$from = $('#courseset-detail-form');
     this.init();
   }
 
@@ -15,11 +16,17 @@ export default class detail {
   }
 
   initCkeditor() {
-    CKEDITOR.replace('summary', {
+    let self = this;
+    self.editor = CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('input[name="summary"]').data('imageUploadUrl')
+    });
+
+    self.editor.on('blur', () => {
+      $('#courseset-summary-field').val(self.editor.getData());
+      self.validator.form();
     });
   }
 
@@ -33,6 +40,24 @@ export default class detail {
       outputDataElement={name} />,
     document.getElementById(elementId)
     );
+  }
+
+  submitForm() {
+    this.validator = this.$from.validate({
+      rules: {
+        summary: {
+          ckeditor_maxlength: 10000,
+        },
+      }
+    });
+
+    $('#detail-submit').click(() => {
+      this.publishAddMessage();
+      $('#courseset-summary-field').val(this.editor.getData());
+      if (this.validator.form()) {
+        this.$from.submit();
+      }
+    });
   }
 
   publishAddMessage() {

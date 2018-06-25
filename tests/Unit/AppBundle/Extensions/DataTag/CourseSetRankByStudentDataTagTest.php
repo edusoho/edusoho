@@ -33,6 +33,10 @@ class CourseSetRankByStudentDataTagTest extends BaseTestCase
                 'returnValue' => true,
             ),
             array(
+                'functionName' => 'setDefaultTeacher',
+                'returnValue' => true,
+            ),
+            array(
                 'functionName' => 'findCourseTeachers',
                 'returnValue' => array(),
             ),

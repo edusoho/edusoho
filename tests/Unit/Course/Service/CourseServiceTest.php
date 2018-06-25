@@ -840,6 +840,29 @@ class CourseServiceTest extends BaseTestCase
 
         $this->assertEquals(5, $result);
     }
+    public function testAppendReservationConditionsWithClosed()
+    {
+        $this->mockBiz('System:SettingService');
+        $this->getSettingService()->shouldReceive('isReservationOpen')->andReturn(false);
+
+        $conditions = array();
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
+        $this->getSettingService()->shouldHaveReceived('isReservationOpen');
+        $this->assertEquals('reservation', $conditions['excludeTypes'][0]);
+    }
+
+    public function testAppendReservationConditionsWithOpen()
+    {
+        $this->mockBiz('System:SettingService');
+        $this->getSettingService()->shouldReceive('isReservationOpen')->andReturn(true);
+
+        $conditions = array();
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+
+        $this->getSettingService()->shouldHaveReceived('isReservationOpen');
+        $this->assertTrue(empty($conditions['excludeTypes']));
+    }
 
     protected function createNewCourseSet()
     {

@@ -10,7 +10,7 @@ export default class SmsSender {
     if (option.additionalAction) {
       this.additionalAction = option.additionalAction;
     }
-
+    this.error = option.error ? option.error : this.error;
     this.smsType = option.smsType ? option.smsType : '';
     this.captchaNum = option.captchaNum ? option.captchaNum : 'captcha_num';
     this.captcha = option.captcha ? option.captcha : false;
@@ -21,6 +21,9 @@ export default class SmsSender {
 
   preSmsSend() {
     return true;
+  }
+
+  error() {
   }
 
   additionalAction(ackResponse) {
@@ -35,16 +38,14 @@ export default class SmsSender {
     var self = this;
     console.log(this.$element);
     var refreshTimeLeft = function() {
-      var leftTime = $('#js-time-left').html();
-      $('#js-time-left').html(leftTime - 1);
+      var leftTime = $('#js-time-left').text();
+      $('#js-time-left').text(leftTime - 1);
       if (leftTime - 1 > 0) {
-        self.$element.removeClass('disabled');
-        self.$element.addClass('disabled');
         setTimeout(refreshTimeLeft, 1000);
       } else {
-        $('#js-time-left').html('');
-        $('#js-fetch-btn-text').html(Translator.trans('site.data.get_sms_code_btn'));
-        self.$element.removeClass('disabled');
+        $('#js-time-left').text('');
+        $('#js-fetch-btn-text').text(Translator.trans('site.data.get_sms_code_btn'));
+        self.$element.removeClass('disabled').attr('disabled', false);
       }
     };
     self.$element.addClass('disabled');
@@ -53,8 +54,8 @@ export default class SmsSender {
       if (self.additionalAction(ackResponse)) {
         // 已在条件中自动处理，不需要额外处理
       } else if (ackResponse == 'ok') {
-        $('#js-time-left').html('120');
-        $('#js-fetch-btn-text').html(Translator.trans('site.data.get_sms_code_again_btn'));
+        $('#js-time-left').text('120');
+        $('#js-fetch-btn-text').text(Translator.trans('site.data.get_sms_code_again_btn'));
         if (response.allowance) {
           notify('success', Translator.trans('site.data.get_sms_code_allowance_success_hint', { 'allowance': response.allowance }));
         } else {
@@ -68,14 +69,17 @@ export default class SmsSender {
         } else {
           notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
         }
+        self.$element.removeClass('disabled').attr('disabled', false);
       }
+    }).error(function(error){
+      self.error(error);
     });
     return this;
   }
 
   smsSend() {
     console.log('smsSend...');
-    var leftTime = $('#js-time-left').html();
+    var leftTime = $('#js-time-left').text();
     if (leftTime.length > 0) {
       return false;
     }

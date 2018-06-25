@@ -21,6 +21,22 @@ class courseInfo {
     this.changeAudioMode();
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
+    this.renderMultiGroupComponent('course-goals', 'goals');
+    this.renderMultiGroupComponent('intended-students', 'audiences');
+  }
+
+  initCkeidtor() {
+    this.editor = CKEDITOR.replace('summary', {
+      allowedContent: true,
+      toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
+    });
+
+    this.editor.on('blur', () => {
+      $('#summary').val(this.editor.getData());
+      this.validator.form();
+    });
   }
 
   changeAudioMode() {
@@ -36,12 +52,24 @@ class courseInfo {
 
   initValidator() {
     let $form = $('#course-info-form');
-    let validator = $form.validate({
+    this.validator = $form.validate({
       currentDom: '#course-submit',
       groups: {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
+        summary: {
+          ckeditor_maxlength: 10000,
+        },
+        title: {
+          maxlength: 100,
+          required: {
+            depends: function () {
+              $(this).val($.trim($(this).val()));
+              return true;
+            }
+          }
+        },
         maxStudentNum: {
           required: true,
           live_capacity: true,
@@ -110,7 +138,9 @@ class courseInfo {
     );
 
     $('#course-submit').click(() => {
-      if (validator.form()) {
+      $('#summary').val(this.editor.getData());
+      if (this.validator.form()) {
+        this.publishAddMessage();
         $form.submit();
       }
     });

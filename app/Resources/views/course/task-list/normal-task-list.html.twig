@@ -47,7 +47,7 @@
             {% if  task_lock %}
               data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans }}"
             {% endif %} ></i>
-          {% if is_task_available(task) %}
+          {% if 'published' == task.status|default() %}
             {% if member %}
               {% if not task_lock %}
                 <a class="title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">

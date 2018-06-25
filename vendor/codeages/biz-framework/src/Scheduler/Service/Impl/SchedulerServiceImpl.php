@@ -151,6 +151,11 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         }
     }
 
+    public function getJobByName($name)
+    {
+        return $this->getJobDao()->getByName($name);
+    }
+
     public function createErrorLog($jobFired, $message, $trace)
     {
         $jobFired['job_detail']['message'] = $message;
@@ -454,6 +459,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     public function updateJobProcess($id, $process)
     {
         return $this->getJobProcessDao()->update($id, $process);
+    }
+
+    public function updateJob($id, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('args', 'priority', 'pre_fire_time', 'next_fire_time', ' misfire_threshold', 'misfire_policy', 'enabled'));
+        return $this->getJobDao()->update($id, $fields);
     }
 
     protected function getMillisecond()

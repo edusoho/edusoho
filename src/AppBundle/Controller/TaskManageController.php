@@ -147,7 +147,6 @@ class TaskManageController extends BaseController
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
-
         return $this->getTaskJsonView($task);
     }
 

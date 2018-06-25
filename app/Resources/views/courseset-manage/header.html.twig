@@ -10,6 +10,8 @@
     <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
   </a>
 
+  {% set publishUrl = publishUrl|default(path('course_set_manage_publish', {id:courseSet.id})) %}
+
   {# 课程发布状态 #}
   {% if courseSet.status=='closed' %}
     <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
@@ -53,7 +55,6 @@
 
       {% if courseSet.status != 'published' %}
         <button class="btn cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
-
         <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
           <button class="cd-btn cd-btn-primary course-manage-header-more">
             <i class="es-icon es-icon-morehoriz"></i>
@@ -72,6 +73,14 @@
   <div class="courseset-manage-header-data">
     <span>{{ 'course.student_member'|trans }}</span>
     <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
+    {% if courseSet.status != 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{'course.btn.preview'|trans}}</a>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-sm course-publish-btn" data-url="{{ publishUrl }}">{{'course.btn.publish'|trans}}</button>
+      </div>
+    {% endif %}
   </div>
 
   <div class="courseset-manage-header-data">

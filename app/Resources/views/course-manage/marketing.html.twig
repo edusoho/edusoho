@@ -17,16 +17,13 @@
       {% include 'course-manage/marketing/set-base-info.html.twig' %}
 
       {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
-
         {% include 'course-manage/marketing/set-join.html.twig' %}
         <hr class="mb30  bg-border-color">
-
         {% include 'course-manage/marketing/set-reward-point.html.twig' %}
         {% if coursePublished or courseClosed %}
           <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
           <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
         {% endif %}
-
         {% include 'course-manage/marketing/set-rule.html.twig' %}
         <hr class="mb30  bg-border-color">
 

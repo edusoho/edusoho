@@ -35,6 +35,7 @@ const init = function(html = '', options)
   };
 
   global.$ = $;
+  global.jQuery = $;
   global.store = store;
   global.Translator = Translator;
   global.navigator = window.navigator;

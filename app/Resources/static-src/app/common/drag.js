@@ -29,7 +29,7 @@ export default class Drag extends Emitter{
     let self = this;
     Api.dragCaptcha.get({
       before() {
-        $('.js-jigsaw-placeholder,.js-drag-img-mask').removeClass('hidden');
+        $('.js-drag-img-mask').removeClass('hidden');
         $('.js-jigsaw-bg').remove();
         $('.js-jigsaw').attr('src', '');
         self.setCss(self.$element[0], 'cursor', 'pointer');
@@ -48,7 +48,7 @@ export default class Drag extends Emitter{
     img.className = 'js-jigsaw-bg drag-img__bg';
     img.onload = () => {
       $(img).prependTo('.js-drag-img');
-      $('.js-drag-img-mask,.js-jigsaw-placeholder').addClass('hidden');
+      $('.js-drag-img-mask').addClass('hidden');
       $('.js-jigsaw').attr('src', src);
     };
   }

@@ -406,7 +406,7 @@ course_set.manage.upgrade_step3_hint:  >
 course_set.manage.upgrade_step5_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 
-course.manage.title_required_error_hint: 请输入教学计划课程标题
+course.manage.title_required_error_hint: 请输入教学计划标题
 course.manage.expiry_end_date_error_hint: 请输入结束日期
 course.manage.expiry_start_date_error_hint: 请输入开始日期
 course.manage.expiry_days_error_hint: 请输入有效期天数
@@ -655,7 +655,7 @@ validate.es_remote.message: 验证错误
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
-
+validate.character_maxlength: 字数不能超过%max%字！
 validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
 
@@ -739,6 +739,7 @@ validate_old.date_and_time_check.message: 结束时间不能早于或等于开�
 validate_old.date_and_time.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
+validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
 validate_old.visible_character.message: %display%请输入可见性字符
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
@@ -823,3 +824,4 @@ User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
 message.send.not_allowed: 不允许发送私信
+

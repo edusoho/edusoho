@@ -149,6 +149,8 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'updatedTime',
                 'id',
                 'seq',
+                'price',
+                'parentId',
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
@@ -193,6 +195,8 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'orgCode LIKE :likeOrgCode',
                 'buyable = :buyable',
                 'concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
+                'type NOT IN (:excludeTypes)',
+                'type IN (:types)',
             ),
             'wave_cahceable_fields' => array('hitNum'),
         );

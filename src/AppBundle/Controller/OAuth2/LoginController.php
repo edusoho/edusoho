@@ -52,8 +52,8 @@ class LoginController extends LoginBindController
         $user = $this->getUserByTypeAndAccount($type, $account);
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
-        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType ? false : true;
         $oauthUser->isNewAccount = $user ? false : true;
+        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType ? false : true;
 
         if ($oauthUser->isNewAccount) {
             $redirectUrl = $this->generateUrl('oauth2_login_create');
@@ -173,7 +173,7 @@ class LoginController extends LoginBindController
 
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
-                'captchaRequired' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp()),
+                'captchaStatus' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp()),
             ));
         }
     }

@@ -39,4 +39,6 @@ interface SchedulerService
     public function createJobProcess($process);
 
     public function updateJobProcess($id, $process);
+
+    public function updateJob($id, $fields);
 }

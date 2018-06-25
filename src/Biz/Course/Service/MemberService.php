@@ -55,6 +55,8 @@ interface MemberService
 
     public function isCourseMember($courseId, $userId);
 
+    public function setDefaultTeacher($courseId);
+
     public function setCourseTeachers($courseId, $teachers);
 
     public function cancelTeacherInAllCourses($userId);

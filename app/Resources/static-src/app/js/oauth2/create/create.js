@@ -27,17 +27,14 @@ export default class Create {
   dragEvent() {
     let self = this;
     if (this.drag) {
-      $('[name="dragCaptchaToken"]').rules('add', {
-        required: true,
-        messages: {
-          required: Translator.trans('auth.register.drag_captcha_tips')
-        }
-      });
-
       this.drag.on('success', function(data){
         self.$sendBtn.attr('disabled', false);
         self.dragCaptchaToken = data.token;
       });
+    }
+    
+    if (!$('.js-drag-jigsaw').hasClass('hidden')) {
+      this.addDragCaptchaRules();
     }
   }
 
@@ -81,13 +78,20 @@ export default class Create {
   }
 
   smsSend() {
+    let self = this;
     const $captchaCode = $('#captcha_code');
     if (!this.$sendBtn.length) {
       return;
     }
+    
     this.$sendBtn.click((event) => {
-      const $target = $(event.target);
-      $target.attr('disabled', true);
+      if (!self.smsSended) {
+        //手机发送验证码，第一次时，需要验证码时，不需要提示
+        $.ajaxSetup({global: false});
+        self.smsSended = true;
+      }
+      
+      self.$sendBtn.attr('disabled', true);
       let data = {
         type: 'register',
         mobile: $('.js-account').text(),
@@ -96,16 +100,15 @@ export default class Create {
       };
 
       Api.sms.send({ data: data }).then((res) => {
+        $.ajaxSetup({global: true});
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
-        // 自定义code 自动捕获
-        const code = res.responseJSON.error.code;
-        switch (code) {
-        case 5000601:
-          $('.js-captcha').removeClass('hidden');
-          $target.attr('disabled', true);
-          break;
+        if (self.drag) {
+          $.ajaxSetup({global: true});
+          self.addDragCaptchaRules();
+          self.drag.initDragCaptcha();
+          $('.js-drag-jigsaw').removeClass('hidden');
         }
       });
     });
@@ -144,6 +147,15 @@ export default class Create {
     });
 
     enterSubmit(this.$form, this.$btn);
+  }
+
+  addDragCaptchaRules() {
+    $('[name="dragCaptchaToken"]').rules('add', {
+      required: true,
+      messages: {
+        required: Translator.trans('auth.register.drag_captcha_tips')
+      }
+    });
   }
 
   removeSmsErrorTip() {

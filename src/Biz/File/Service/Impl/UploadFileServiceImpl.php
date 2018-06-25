@@ -903,11 +903,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fields = array(
             'convertStatus' => $statusMap[$result['status']],
             'audioConvertStatus' => 'none',
+            'mp4ConvertStatus' => 'none',
             'updatedTime' => time(),
         );
 
         if ($result['audio']) {
             $fields['audioConvertStatus'] = $statusMap[$result['status']];
+        }
+
+        if ($result['mp4']) {
+            $fields['mp4ConvertStatus'] = $statusMap[$result['status']];
         }
 
         return $this->getUploadFileDao()->update($file['id'], $fields);

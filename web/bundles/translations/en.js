@@ -54,6 +54,7 @@ t.add("site.form.submit_error", "Form submit error", "js", "en");
 t.add("site.cancel", "Cancel", "js", "en");
 t.add("site.confirm", "Confirm", "js", "en");
 t.add("site.close", "Close", "js", "en");
+t.add("site.delete", "\u5220\u9664", "js", "en");
 t.add("site.response_error", "Response error", "js", "en");
 t.add("site.loading", "loading...", "js", "en");
 t.add("site.loading_error", "loading error...", "js", "en");
@@ -354,7 +355,7 @@ t.add("course_set.show.time_finish_hint", "Activity times up. Refreshing page, p
 t.add("course_set.live_room.entry_error_hint", "Enter the live classroom error, please contact the administrator, <a href='javascript:window.location.reload()'> retry <\/a> or <a href = 'javascript: window.close ( ); '> Off <\/a>;\n", "js", "en");
 t.add("course_set.live_room.entry_error_with_message", "Enter live classroom error,% message%, <a href='javascript:window.location.reload()'> Retry <\/a> or <a href = 'javascript: window.close () ; '> Off <\/a>;\n", "js", "en");
 t.add("course_set.refund_cancel_hint", "Do you really want to cancel your refund application?", "js", "en");
-t.add("course_set.refund_cancel_success", "Refund application canceled!", "js", "en");
+t.add("course_set.refund_cancel_success", "Refund application cancelled!", "js", "en");
 t.add("course_set.title_required_error_hint", "Please enter a title", "js", "en");
 t.add("course_set.learn_progress", "Learning progress", "js", "en");
 t.add("course_set.manage.tag_required_hint", "Please enter a label", "js", "en");
@@ -464,9 +465,9 @@ t.add("user.account.refund_cancel_title", "Cancel refund application", "js", "en
 t.add("user.account.refund_cancel_hint", "Do you really want to cancel your refund application?", "js", "en");
 t.add("user.account.cancel_order_title", "Cancel order", "js", "en");
 t.add("user.account.cancel_order_hint", "Do you want to cancel the order?", "js", "en");
-t.add("user.account.refund_cancel_success_hint", "The refund application has been canceled!", "js", "en");
+t.add("user.account.refund_cancel_success_hint", "The refund application has been cancelled!", "js", "en");
 t.add("user.account.cancel_order_fail_hint", "Order Cancel Failed!", "js", "en");
-t.add("user.account.cancel_order_success_hint", "Order canceled!", "js", "en");
+t.add("user.account.cancel_order_success_hint", "Order cancelled!", "js", "en");
 t.add("user.fields.idcard_front_placeholder", "Please upload Id crad front", "js", "en");
 t.add("user.fields.idcard_back_placeholder", "Please upload Id crad back", "js", "en");
 t.add("open_course.lesson.create_error", "Lesson create error", "js", "en");
@@ -622,7 +623,7 @@ t.add("notify.lesson_exercise_deleted.message", "Exercise has been deleted\uff01
 t.add("confirm.delete_lesson_homework.message", "Do you really want to delete the lesson homework?", "js", "en");
 t.add("notify.lesson_homework_deleted.message", "Homework has been deleted\uff01", "js", "en");
 t.add("notify.order_cancel_failed.message", "Order Cancel failed\uff01", "js", "en");
-t.add("notify.order_cancel_succeed.message", "The order has been canceled successfully", "js", "en");
+t.add("notify.order_cancel_succeed.message", "The order has been cancelled successfully", "js", "en");
 t.add("confirm.bind_pay_bank.message", "Are you sure you want to unbind the bank card?", "js", "en");
 t.add("notify.copy_succeed.message", "Copy successful\uff01", "js", "en");
 t.add("notify.pay_failed.message", "Payment failed\uff01", "js", "en");
@@ -662,6 +663,7 @@ t.add("validate_old.date_and_time_check.message", "The end time can not be earli
 t.add("validate_old.date_and_time.message", "Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss", "js", "en");
 t.add("validate_old.date_check.message", "The start time must be less than or equal to the end time", "js", "en");
 t.add("validate_old.not_all_digital.message", "%display% can not be all numbers", "js", "en");
+t.add("validate_old.right_time_tip", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u65f6\u95f4\u683c\u5f0f", "js", "en");
 t.add("validate_old.es_version.message", "Please input correct es version\uff0ccorrect is XX.XX.XX", "js", "en");
 t.add("validate_old.visible_character.message", "%display% Enter the visibility character", "js", "en");
 t.add("validate_old.chinese_limit.message", "%display% must be less than or equal to% max% and 2 characters in Chinese", "js", "en");
@@ -688,6 +690,7 @@ t.add("validate_old.unsigned_integer.message", "%display% must be a non-negative
 t.add("validate_old.arithmetic_number.message", "%display% must be positive", "js", "en");
 t.add("validate_old.percent_number.message", "Must be between 0 and 100", "js", "en");
 t.add("validate_old.maxsize_image.message", "%display% must be less than 2M", "js", "en");
+t.add("validate.character_maxlength", "\u5b57\u6570\u4e0d\u80fd\u8d85\u8fc7%max%\u5b57\uff01", "js", "en");
 t.add("export.not_allowed", "you are not allowed to download", "js", "en");
 t.add("export.empty", "Export the result is empty", "js", "en");
 t.add("export.over.limit", "the result is too large, you can limit the result then export", "js", "en");
