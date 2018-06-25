@@ -5,7 +5,7 @@ const info = {
   hint: 'course_set.manage.publish_hint',
   success: 'course_set.manage.publish_success_hint',
   fail: 'course_set.manage.publish_fail_hint'
-}
+};
 export const publishCourseSet = () => {
   $('body').on('click', '.course-publish-btn', function(evt) {
     if (!confirm(Translator.trans('course_set.manage.publish_hint'))) {
