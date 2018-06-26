@@ -35,6 +35,7 @@ export default class Drag extends Emitter{
         $('.js-jigsaw').attr('src', '');
         self.setCss(self.$element[0], 'cursor', 'pointer');
         self.resetLocation(self.$element[0], self.$target[0]);
+        $('[name="dragCaptchaToken"]').val('');
         self.initEvent();
       },
       data: this.data
