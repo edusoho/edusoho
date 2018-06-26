@@ -2,11 +2,13 @@
   <div class="join-before">
     <detail-head 
       :price="details[selectPlanIndex].price"
-      :courseSet="details[selectPlanIndex].courseSet">
-    </detail-head>
+      :courseSet="details[selectPlanIndex].courseSet"></detail-head>
 
-    <detail-plan></detail-plan>
+    <detail-plan
+      :price="details[selectPlanIndex].price"
+      :courseSet="details[selectPlanIndex].courseSet"></detail-plan>
     <div class="segmentation"></div>
+
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
@@ -16,11 +18,16 @@
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
-    <teacher :teacherInfo="details[selectPlanIndex].teachers" ref="teacher" class="teacher"></teacher>
+    <teacher 
+      ref="teacher"
+      class="teacher"
+      :teacherInfo="details[selectPlanIndex].teachers"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
-    <directory ref="directory" :courseItem="details[selectPlanIndex].courseItem"></directory>
+    <directory ref="directory" 
+      :tryLookable="details[selectPlanIndex].tryLookable"
+      :courseItem="details[selectPlanIndex].courseItem"></directory>
     
     <e-footer @click.native="handleJoin">加入学习</e-footer>
   </div>
@@ -33,7 +40,12 @@
 
   export default {
     name: 'joinBefore',
-    props: ['details'],
+    props: {
+      details: {
+        type: Array,
+        default: () => ([])
+      }
+    },
     data() {
       return {
         teacherInfo: {},

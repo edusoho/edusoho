@@ -1,5 +1,5 @@
 <template>
-  <e-panel title="课程目录" class="directory layout-col">
+  <e-panel title="课程目录" class="directory" :hidde-title="hiddeTitle">
     <!-- 暂无学习任务 -->
 
     <div class="directory-list">
@@ -28,8 +28,9 @@
                 <span>{{ task.title }}</span>
                 <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
               </div>
-              <!-- TODO 试看、免费状态修改 -->
-              <div :class="['lesson-cell__status', {'is-free': task.task.isFree}]">试看</div>
+              <div :class="['lesson-cell__status', task.status]">
+                {{ filterTaskStatus(task) }}
+              </div>
             </div>
           </div>
         </div>
@@ -39,7 +40,24 @@
 </template>
 <script>
   export default {
-    props: ['courseItem'],
+    props: {
+      courseItem: {
+        type: Array,
+        default: () => ([])
+      },
+      tryLookable: {
+        type: String,
+        default: ''
+      },
+      joinStatus: {
+        type: String,
+        default: ''
+      },
+      hiddeTitle: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         directoryArray: this.courseItem,
@@ -53,10 +71,15 @@
       }
     },
     created() {
-      this.directoryArray.map(item => {
-        this.$set(item, 'show', true);
+      if (this.directoryArray.length > 0) {
+        this.directoryArray.map(item => {
+          this.$set(item, 'show', true);
+          if (item.type == 'task') {
+            item['status'] = this.getCurrentStatus(item.task);
+          }
       })
-      this.getTasks(this.directoryArray);
+        this.getTasks(this.directoryArray);
+      }
     },
     methods: {
       getTasks(data) {
@@ -66,10 +89,10 @@
           if (item.type !== 'chapter') {
             temp.push(item);
           } else {
-            if(temp.length > 0) {
+            if (temp.length > 0) {
               this.tasks.push([].concat(temp));
               temp = [];
-            }else if(this.chapters.length > 0) {
+            }else if (this.chapters.length > 0) {
               this.tasks.push([]);
             }
 
@@ -83,7 +106,25 @@
           this.tasks.push(temp);
         }
         console.log('chapters', this.chapters, 'tasks', this.tasks);
-      }
+      },
+      getCurrentStatus(task) {
+        if (this.tryLookable
+          && task.type === 'video'
+          && task.activity.mediaStorage) {
+          return 'is-tryLook';
+        } else if (task.isFree) {
+          return 'is-free';
+        }
+        return '';
+      },
+      filterTaskStatus(task){
+        if (task.status === 'is-tryLook') {
+          return '试看';
+        } else if (task.status === 'is-free') {
+          return '免费';
+        }
+          return '';
+        }
     }
   }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="course-detail">
-    <join-before v-if="!joinStatus" :details="details"></join-before>    
-    <join-after :details="details" v-else></join-after>
+    <join-before v-if="!joinStatus && details.length" :details="details"></join-before>    
+    <join-after :details="details[0]" v-if="joinStatus && details.length"></join-after>
   </div>
 </template>
 
@@ -28,7 +28,7 @@
         }
       }).then(res => {
         this.details = res;
-        this.joinStatus = false;
+        this.joinStatus = true;
       })
     }
   }
