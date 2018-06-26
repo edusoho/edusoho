@@ -6,6 +6,18 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\BizSms;
+use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use ApiBundle\Api\Exception\ErrorCode;
+use Biz\User\UserException;
+use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Common\MathToolkit;
+use AppBundle\Common\DeviceToolkit;
+use Biz\System\SettingException;
+use AppBundle\Common\SmsToolkit;
+use ApiBundle\Api\Util\AssetHelper;
+use Biz\Common\CommonException;
 
 class User extends AbstractResource
 {
@@ -42,10 +54,108 @@ class User extends AbstractResource
     }
 
     /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function add(ApiRequest $request)
+    {
+        // 目前只支持手机注册
+        $auth = $this->getSettingService()->get('auth', array());
+        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+            throw SettingException::FORBIDDEN_MOBILE_REGISTER();
+        }
+
+        //校验云短信开启
+        $smsSetting = $this->getSettingService()->get('cloud_sms', array());
+        if (empty($smsSetting['sms_enabled'])) {
+            throw SettingException::FORBIDDEN_SMS_SEND();
+        }
+
+        //校验字段缺失
+        $fields = $request->request->all();
+        if (!ArrayToolkit::requireds($fields, array(
+            'mobile',
+            'smsToken',
+            'smsCode',
+            'encrypt_password',
+        ), true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        //校验验证码,基于token，默认10次机会
+        $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
+        if ($status != BizSms::STATUS_SUCCESS) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $nickname = MathToolkit::uniqid();
+        while (!$this->getUserService()->isNicknameAvaliable($nickname)) {
+            $nickname =  MathToolkit::uniqid();
+        }
+
+        $registeredWay =  DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent'));
+        $user = $this->controller->getAuthService()->register(array(
+            'mobile' => $fields['mobile'],
+            'nickname' => $nickname,
+            'password' => $this->getPassword($fields['encrypt_password'], $request->getHost()),
+            'registeredWay' => $registeredWay,
+            'createdIp' => $request->getClientIp(),
+        ));
+
+        $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
+        $user = $this->filterUser($user);
+
+        return array(
+            'user' => $user,
+            'token' => $token,
+        );
+    }
+
+    private function filterUser($user)
+    {
+        return ArrayToolkit::parts($user, array(
+            'id',
+            'email',
+            'locale',
+            'uri',
+            'nickname',
+            'title',
+            'type',
+            'smallAvatar',
+            'mediumAvatar',
+            'largeAvatar',
+            'roles',
+            'locked',
+        ));
+
+        $user['smallAvatar'] = AssetHelper::getFurl($user['smallAvatar'], 'avatar.png');
+        $user['mediumAvatar'] = AssetHelper::getFurl($user['mediumAvatar'], 'avatar.png');
+        $user['largeAvatar'] = AssetHelper::getFurl($user['largeAvatar'], 'avatar.png');
+
+        return $user;
+    }
+
+    private function getPassword($password, $host)
+    {
+        return EncryptionToolkit::XXTEADecrypt(base64_decode($password), $host);
+    }
+
+    /**
      * @return \Biz\User\Service\UserService
      */
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
+    }
+
+    protected function getBizSms()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['biz_sms'];
     }
 }

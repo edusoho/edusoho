@@ -7,6 +7,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use AppBundle\Common\ArrayToolkit;
 
 class DragCaptcha extends AbstractResource
 {
@@ -15,7 +16,15 @@ class DragCaptcha extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        $result = $this->getBizDragCaptcha()->generate();
+        $fields = $request->request->all();
+        $fields = ArrayToolkit::parts($fields, array(
+            'times'
+        ));
+
+        $limitType = $request->request->get('limitType', 'default');
+        $limitKey = $limitType.'_'.$request->getHttpRequest()->getClientIp();
+
+        $result = $this->getBizDragCaptcha()->generate($fields, $limitKey);
         $result['url'] = $this->generateUrl('drag_captcha', array('token' => $result['token']), true);
 
         return $result;
