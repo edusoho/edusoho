@@ -101,8 +101,8 @@ class QQVideoItemParser extends AbstractItemParser
                 array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400"),
             ),
             'files' => array(
-                array('type' => 'swf', 'url' => "http://static.video.qq.com/TPout.swf?vid={$vid}&auto=1"),
-                array('type' => 'mp4', 'url' => "http://video.store.qq.com/{$vid}.mp4"),
+                array('type' => 'swf', 'url' => "//static.video.qq.com/TPout.swf?vid={$vid}&auto=1"),
+                array('type' => 'mp4', 'url' => "//video.store.qq.com/{$vid}.mp4"),
             ),
         );
 
