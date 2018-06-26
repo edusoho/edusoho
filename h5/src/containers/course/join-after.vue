@@ -1,7 +1,6 @@
 <template>
   <div class="join-after">
     <detail-head 
-      type="video"
       :courseSet="details.courseSet"></detail-head>
     
     <van-tabs 
