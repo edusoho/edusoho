@@ -1,9 +1,8 @@
 <template>
   <div class="join-after">
     <detail-head 
-      status="after"
-      :courseSet="details.courseSet">
-    </detail-head>
+      type="video"
+      :courseSet="details.courseSet"></detail-head>
     
     <van-tabs 
       v-model="active" 
@@ -15,12 +14,12 @@
 
      <!-- 课程目录 -->
     <div class="join-after__content">
-      <div v-if="!active">
+      <template v-if="!active">
         <div class="progress-bar">
           <div class="progress-bar__content">
             <div class="progress-bar__rate" :style="{'width': progress}"></div>
           </div>
-          <div class="progress-bar__text">{{progress}}</div>
+          <div class="progress-bar__text">{{ progress }}</div>
         </div>
 
         <directory
@@ -28,9 +27,10 @@
           class="join-after-dirctory"
           :tryLookable="details.tryLookable"
           :courseItem="details.courseItem"></directory>
-      </div>
-      
-      <div v-else>
+      </template>
+
+      <template v-else>
+        <!-- 课程计划 -->
         <detail-plan
           :price="details.price"
           :courseSet="details.courseSet"
@@ -43,9 +43,9 @@
 
         <!-- 教师介绍 -->
         <teacher 
-          :teacherInfo="details.teachers" 
-          class="teacher"></teacher>
-      </div>
+          class="teacher"
+          :teacherInfo="details.teachers"></teacher>
+      </template>
     </div>
 
 

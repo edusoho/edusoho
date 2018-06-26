@@ -45,7 +45,7 @@
     }
   }
 
-  // tabs
+  // tabs component
   .van-tabs {
     margin-bottom: -44px;
     &.after-tabs {
@@ -53,7 +53,7 @@
     }
     .van-tab {
       color: #2b333b;
-      font-family: PingFangSC-Medium;
+      @extend .font-family-PFM;
       &--active {
         color: #2b333b;
       }
@@ -84,16 +84,20 @@
   }
 
 
-  // head
+  // head component
   &__head {
-    >img {
-      height: 31.5vh;
-      vertical-align: middle;
-      width: 100%;
+    &--img {
+      >img {
+        height: 31.5vh;
+        vertical-align: middle;
+        width: 100%;
+      }
     }
-    
+    #course-detail__head--video {
+      height: 31.5vh;
+    }
   }
-  // plan
+  // plan component
   &__plan {
     padding: vw(20) 0;
     border-top: 1px solid $border-grey;
@@ -131,7 +135,7 @@
     }
   }
 
-  // join-after
+  // join-after component
   .join-after {
     &__content {
       position: absolute;

@@ -2,13 +2,13 @@
   <div class="join-before">
     <detail-head 
       :price="details[selectPlanIndex].price"
-      :courseSet="details[selectPlanIndex].courseSet">
-    </detail-head>
+      :courseSet="details[selectPlanIndex].courseSet"></detail-head>
 
     <detail-plan
       :price="details[selectPlanIndex].price"
       :courseSet="details[selectPlanIndex].courseSet"></detail-plan>
     <div class="segmentation"></div>
+
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
@@ -18,7 +18,10 @@
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
-    <teacher :teacherInfo="details[selectPlanIndex].teachers" ref="teacher" class="teacher"></teacher>
+    <teacher 
+      ref="teacher"
+      class="teacher"
+      :teacherInfo="details[selectPlanIndex].teachers"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
