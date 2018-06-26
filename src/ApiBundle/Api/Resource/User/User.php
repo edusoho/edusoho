@@ -98,7 +98,7 @@ class User extends AbstractResource
             'nickname' => $nickname,
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHost()),
             'registeredWay' => $registeredWay,
-            'createdIp' => $request->getClientIp(),
+            'createdIp' => $request->getHttpRequest->getClientIp(),
         ));
 
         $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
