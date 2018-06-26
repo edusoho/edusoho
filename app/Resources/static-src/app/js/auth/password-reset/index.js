@@ -94,6 +94,11 @@ class Reset {
         }).then((res) => {
           notify('success', '重置密码邮件已发送');
           window.location.href = $('#password-reset-form').data('success') + '?email='+ email;
+        }).catch((res) => {
+          let code = res.responseJSON.error.code||0;
+          if (4040104 == code) {
+            self.drag.initDragCaptcha();
+          }
         });
       }
     });
