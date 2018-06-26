@@ -181,7 +181,13 @@ class VideoController extends BaseActivityController implements ActivityActionIn
                     $video['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                     $video['mediaSource'] = 'iframe';
                 }
-            } elseif (in_array($video['mediaSource'], array('qqvideo', 'NeteaseOpenCourse'))) {
+            } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
+                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = $matches[2];
+                }
+            } elseif ('qqvideo' == $video['mediaSource']) {
+                $video['mediaUri'] = str_replace('static.video.qq.com', 'imgcache.qq.com/tencentvideo_v1/playerv3', $video['mediaUri']);
                 $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
                 if ($matched) {
                     $video['mediaUri'] = $matches[2];
