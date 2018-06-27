@@ -8,16 +8,9 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\BizSms;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use ApiBundle\Api\Exception\ErrorCode;
 use Biz\User\UserException;
 use AppBundle\Common\EncryptionToolkit;
-use AppBundle\Common\MathToolkit;
-use AppBundle\Common\DeviceToolkit;
-use Biz\System\SettingException;
-use AppBundle\Common\SmsToolkit;
-use ApiBundle\Api\Util\AssetHelper;
-use Biz\Common\CommonException; 
+use Biz\Common\CommonException;
 use AppBundle\Common\SimpleValidator;
 
 class UserPassword extends AbstractResource
@@ -28,12 +21,9 @@ class UserPassword extends AbstractResource
      */
     public function update(ApiRequest $request, $identify, $type)
     {
-        $biz = $this->getBiz();
-        $dragCaptcha = $biz['biz_drag_captcha'];
-        $dragCaptcha->check($request->request->get('dragCaptchaToken'));
-
         $function = 'resetPasswordBy'.ucfirst($type);
-        return \call_user_func(array($this, $function),  $identify, $request);
+
+        return \call_user_func(array($this, $function), $identify, $request);
     }
 
     private function resetPasswordByMobile($mobile, $request)
@@ -42,7 +32,7 @@ class UserPassword extends AbstractResource
         if (!ArrayToolkit::requireds($fields, array(
             'smsToken',
             'smsCode',
-            'encrypt_password'
+            'encrypt_password',
         ))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
@@ -58,7 +48,7 @@ class UserPassword extends AbstractResource
         }
 
         $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);
-        
+
         if (BizSms::STATUS_SUCCESS != $result) {
             throw UserException::FORBIDDEN_REGISTER();
         }
@@ -71,11 +61,15 @@ class UserPassword extends AbstractResource
 
     private function resetPasswordByEmail($email, $request)
     {
+        $biz = $this->getBiz();
+        $dragCaptcha = $biz['biz_drag_captcha'];
+        $dragCaptcha->check($request->request->get('dragCaptchaToken'));
+
         $user = $this->getUserService()->getUserByEmail($email);
         if (!$user) {
             throw UserException::NOTFOUND_USER();
         }
-        
+
         if ('discuz' == $user['type']) {
             throw UserException::FORBIDDEN_DISCUZ_USER_RESET_PASSWORD();
         }
