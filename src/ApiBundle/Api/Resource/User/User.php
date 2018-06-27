@@ -83,7 +83,7 @@ class User extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $nickname = MathToolkit::uniqid();
+        $nickname = substr(MathToolkit::uniqid(), 8, 16);
         while (!$this->getUserService()->isNicknameAvaliable($nickname)) {
             $nickname = MathToolkit::uniqid();
         }
