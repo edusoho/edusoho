@@ -106,7 +106,7 @@ class Live extends Activity
     public function delete($targetId)
     {
         $target = $this->get($targetId);
-        $conditions['mediaId'] =  $target['mediaId'];
+        $conditions['mediaId'] = $target['mediaId'];
         $count = $this->getActivityService()->count($conditions);
         if ($count==1) {
             return $this->getLiveActivityService()->deleteLiveActivity($targetId);
