@@ -63,6 +63,7 @@ export default class QuestionPicker {
       this._refreshSeqs();
       questionSubjectiveRemask(this.$questionAppendForm);
       this.$questionPickerModal.modal('hide');
+      $('.js-close-modal').trigger('click');
     });
   }
 
