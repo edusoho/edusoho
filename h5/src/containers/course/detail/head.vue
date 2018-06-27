@@ -23,18 +23,21 @@ export default {
     }
   },
   mounted() {
-    const options = {
-      id: 'course-detail__head--video',
-      playlist: 'https://ghub.club/playlist/playlist.m3u8',
-      autoplay: true,
-      poster: 'https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg'
-    };
-
-    this.loadPlayerSDK().then(SDK => {
-      const player = new SDK(options);
-    })
+    this.type === 'video' && this.initPlayer();
   },
   methods: {
+    initPlayer(){
+      const options = {
+        id: 'course-detail__head--video',
+        playlist: 'https://ghub.club/playlist/playlist.m3u8',
+        autoplay: true,
+        poster: 'https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg'
+      };
+
+      this.loadPlayerSDK().then(SDK => {
+        const player = new SDK(options);
+      })
+    },
     loadPlayerSDK() {
       if (!window.VideoPlayerSDK) {
 

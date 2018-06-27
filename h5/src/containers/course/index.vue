@@ -28,7 +28,7 @@
         }
       }).then(res => {
         this.details = res;
-        this.joinStatus = true;
+        this.joinStatus = false;
       })
     }
   }
