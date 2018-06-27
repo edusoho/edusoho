@@ -19,7 +19,7 @@ class BizDragCaptcha extends BizAware
 
     const TOKENTYPE = 'drag_captcha';
 
-    const TIMES_LIMIT = 20;
+    const TIMES_LIMIT = 2;
 
     private $backgroundImages = array(
         '1.jpg',
@@ -129,7 +129,7 @@ class BizDragCaptcha extends BizAware
 
         if (0 == $remain) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_FREQUENT();
-        }  
+        }
     }
 
     private function decodeToken($toke)

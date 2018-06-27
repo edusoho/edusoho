@@ -34,8 +34,8 @@ class Reset {
         self.drag.unbindEvent();
         $('.js-drag').remove();
         $target.prepend(self.dragHtml);
-        let data = $target.attr('id') == 'password-reset-by-mobile-form' ? {times: 3, limitType: 'reset_password'} : {limitType: 'reset_password'};
-        this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'), data);
+
+        self.drag = new Drag($('#drag-btn'), $('.js-jigsaw'), {limitType: 'reset_password'});
         $target.show();
       }
     });
@@ -46,6 +46,11 @@ class Reset {
     let self = this;
     $smsCode.click(() => {
       if(this.mobileValidator.element($('[name="dragCaptchaToken"]'))) {
+        if($smsCode.hasClass('disabled')) {
+          return ;
+        }
+        $smsCode.addClass('disabled');
+
         Api.resetPasswordSms.get({
           params: {
             mobile: $('#mobile').val(),
@@ -55,12 +60,13 @@ class Reset {
           }
         }).then((res) => {
           notify('success', '短信发送成功');
-          countDown($('.js-sms-send'), $('#js-fetch-btn-text'), 120, function(){
-            self.drag.initDragCaptcha();
-          });
+          $smsCode.removeClass('disabled');
+          countDown($('.js-sms-send'), $('#js-fetch-btn-text'), 120);
           self.smsToken = res.smsToken;
+        }).catch(()=> {
+          $smsCode.removeClass('disabled');
+          self.drag.initDragCaptcha();
         });
-
       }
     });
   }
@@ -147,6 +153,11 @@ class Reset {
         },
         dragCaptchaToken: {
           required: true,
+        },
+        'reset_password': {
+          required: true,
+          minlength: 5,
+          maxlength: 20,
         }
       },
       messages: {
