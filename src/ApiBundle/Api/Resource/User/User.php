@@ -122,10 +122,10 @@ class User extends AbstractResource
             'roles',
             'locked',
         ));
-
-        $user['smallAvatar'] = AssetHelper::getFurl($user['smallAvatar'], 'avatar.png');
-        $user['mediumAvatar'] = AssetHelper::getFurl($user['mediumAvatar'], 'avatar.png');
-        $user['largeAvatar'] = AssetHelper::getFurl($user['largeAvatar'], 'avatar.png');
+        $avatar = AssetHelper::getFurl('', 'avatar.png');
+        $user['smallAvatar'] = $avatar;
+        $user['mediumAvatar'] = $avatar;
+        $user['largeAvatar'] = $avatar;
 
         return $user;
     }
