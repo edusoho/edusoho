@@ -91,6 +91,7 @@ class User extends AbstractResource
         $registeredWay = DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent'));
         $user = $this->getAuthService()->register(array(
             'mobile' => $fields['mobile'],
+            'emailOrMobile' => $fields['mobile'],
             'nickname' => $nickname,
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHttpRequest()->getHost()),
             'registeredWay' => $registeredWay,
