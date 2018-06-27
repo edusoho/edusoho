@@ -12,7 +12,6 @@ use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Common\DeviceToolkit;
 use Biz\System\SettingException;
-use ApiBundle\Api\Util\AssetHelper;
 use Biz\Common\CommonException;
 
 class User extends AbstractResource
@@ -51,6 +50,7 @@ class User extends AbstractResource
 
     /**
      * @ApiConf(isRequiredAuth=false)
+     * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter", mode="authenticated")
      */
     public function add(ApiRequest $request)
     {
