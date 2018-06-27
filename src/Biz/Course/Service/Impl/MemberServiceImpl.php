@@ -1126,6 +1126,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
     }
 
+    public function batchUpdateMemberExpiryDays($courseId, $userIds, $day)
+    {
+        foreach ($userIds as $userId) {
+            $this->addMemberExpiryDays($courseId, $userId, $day);
+        }
+    }
+
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
     {
         if (empty($classroomId) || empty($userId)) {

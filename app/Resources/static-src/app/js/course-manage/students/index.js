@@ -1,11 +1,12 @@
 import notify from 'common/notify';
-
+import BatchSelect from 'app/common/widget/batch-select';
+new BatchSelect($('#student-table-container'));
 class Students {
   constructor() {
     this.initTooltips();
     this.initDeleteActions();
     this.initFollowActions();
-    this.initExpiryDayActions();
+    this.initBatchUpdateActions();
   }
 
   initTooltips() {
@@ -50,9 +51,21 @@ class Students {
     });
   }
 
-  initExpiryDayActions() {
-    $('.js-expiry-days').on('click', () => {
-      notify('danger', '只有按天数设置的学习有效期，才可手动增加有效期。');
+  initBatchUpdateActions() {
+    $('#student-table-container').on('click', '#batch-update-expiry-day', function () {
+      let ids = [];
+      $('#course-student-list').find('[data-role="batch-item"]:checked').each(function(){
+        ids.push(this.value);
+      });
+      console.log(ids);
+      if (ids.length == 0) {
+        notify('danger', Translator.trans('course.manage.student.add_expiry_day.select_tips'));
+        return ;
+      }
+      $.get($(this).data('url'), {ids:ids}, function(html) {
+        console.log(html);
+        $('#modal').html(html).modal('show');
+      });
     });
   }
 }

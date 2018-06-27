@@ -441,7 +441,7 @@ course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
 course.manage.sort_cancel: 取消当前排序
-
+course.manage.student.add_expiry_day.select_tips: 请至少选中一项后进行修改
 material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
 material_lib.have_no_permission_hint: 抱歉，您无权操作此文件

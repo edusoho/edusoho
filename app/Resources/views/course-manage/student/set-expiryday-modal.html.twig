@@ -4,7 +4,7 @@
 {% do script(['libs/jquery-validation.js','app/js/course-manage/student-expiryday/index.js'])%}
 
 {% block body %}
-<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_expiryday', { courseSetId: course.courseSetId, courseId:course.id, userId:user.id }) }}">
+<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_expiryday_batch', { courseSetId: course.courseSetId, courseId:course.id, ids:ids }) }}">
   {% if course.status == 'published' %}
     <div class="row form-group">
       <div class="col-md-2 control-label">
@@ -13,17 +13,19 @@
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
           {{ course.title }}
-          </div>
+        </div>
       </div>
     </div>
   	<div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{{ 'site.default.student'|trans }} {{'course.members_manage.official_student.add_expiry_day.username'|trans}}</label>
+        <label for="student-nickname">{{ 'site.default.student'|trans }}{{'course.members_manage.official_student.add_expiry_day.username'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
-          {{ user.nickname }}
-          </div>
+          {% for user in users %}
+            {{ user.nickname }}&nbsp;
+          {% endfor %}
+        </div>
     	</div>
     </div>
     <div class="row form-group">

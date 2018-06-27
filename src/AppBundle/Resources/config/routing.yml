@@ -1868,6 +1868,17 @@ course_set_manage_course_students_expiryday:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
   defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
 
+
+course_set_manage_course_students_expiryday_batch:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/expiryday
+  defaults: { _controller: AppBundle:Course/StudentManage:batchUpdateMemberExpiryDays }
+
+
+
+
+
+
+
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
   defaults: {_controller: AppBundle:Course/StudentManage:studyProcess}

@@ -173,7 +173,7 @@ class StudentManageController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
         $course = $this->getCourseService()->getCourse($courseId);
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
             $this->getCourseMemberService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
 
@@ -186,6 +186,31 @@ class StudentManageController extends BaseController
             array(
                 'course' => $course,
                 'user' => $user,
+                'default' => $default,
+            )
+        );
+    }
+
+    public function batchUpdateMemberExpiryDaysAction(Request $request, $courseId)
+    {
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ('POST' === $request->getMethod()) {
+            $fields = $request->request->all();
+            $this->getCourseMemberService()->batchUpdateMemberExpiryDays($courseId, $ids, $fields['expiryDay']);
+
+            return $this->createJsonResponse(true);
+        }
+        $users = $this->getUserService()->findUsersByIds($ids);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $default = $this->getSettingService()->get('default', array());
+
+        return $this->render(
+            'course-manage/student/set-expiryday-modal.html.twig',
+            array(
+                'course' => $course,
+                'users' => $users,
+                'ids' => implode(',', ArrayToolkit::column($users, 'id')),
                 'default' => $default,
             )
         );
@@ -333,14 +358,14 @@ class StudentManageController extends BaseController
         $activitiesWithMeta = $this->getActivityService()->findActivities($activitiyIds, true);
 
         foreach ($activitiesWithMeta as $activity) {
-            if ($activity['mediaType'] === 'homework') {
+            if ('homework' === $activity['mediaType']) {
                 $homeworksCount += 1;
                 $activities[] = array(
                     'id' => $activity['id'],
                     'mediaId' => $activity['mediaId'],
                     'name' => $activity['title'],
                 );
-            } elseif ($activity['mediaType'] === 'testpaper') {
+            } elseif ('testpaper' === $activity['mediaType']) {
                 $testpapersCount += 1;
                 $activities[] = array(
                     'id' => $activity['id'],
@@ -391,10 +416,10 @@ class StudentManageController extends BaseController
         if (!empty($finishedTargets)) {
             $currentActivityId = 0;
             foreach ($finishedTargets as $target) {
-                if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
+                if (0 == $currentActivityId || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
                 }
-                if ($target['type'] === 'homework') {
+                if ('homework' === $target['type']) {
                     $finishedHomeworksCount += 1;
                 } else {
                     $finishedTestpapersCount += 1;
@@ -417,7 +442,7 @@ class StudentManageController extends BaseController
         if (!empty($reviewingTargets)) {
             $currentActivityId = 0;
             foreach ($reviewingTargets as $target) {
-                if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
+                if (0 == $currentActivityId || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
                 }
                 if (empty($reviewingTests[$currentActivityId])) {

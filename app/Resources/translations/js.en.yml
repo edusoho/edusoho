@@ -498,6 +498,7 @@ course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
 course.manage.sort_cancel: 取消当前排序
+course.manage.student.add_expiry_day.select_tips: Please select at least one item
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail

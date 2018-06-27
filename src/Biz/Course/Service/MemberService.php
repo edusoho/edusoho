@@ -135,6 +135,8 @@ interface MemberService
 
     public function addMemberExpiryDays($courseId, $userId, $day);
 
+    public function batchUpdateMemberExpiryDays($courseId, $userIds, $day);
+
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
