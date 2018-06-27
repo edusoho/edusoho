@@ -96,36 +96,7 @@ class User extends AbstractResource
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getHttpRequest()->getClientIp(),
         ));
-
-        $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
-        $user = $this->filterUser($user);
-
-        return array(
-            'user' => $user,
-            'token' => $token,
-        );
-    }
-
-    private function filterUser($user)
-    {
-        return ArrayToolkit::parts($user, array(
-            'id',
-            'email',
-            'locale',
-            'uri',
-            'nickname',
-            'title',
-            'type',
-            'smallAvatar',
-            'mediumAvatar',
-            'largeAvatar',
-            'roles',
-            'locked',
-        ));
-        $avatar = AssetHelper::getFurl('', 'avatar.png');
-        $user['smallAvatar'] = $avatar;
-        $user['mediumAvatar'] = $avatar;
-        $user['largeAvatar'] = $avatar;
+        $user['token'] = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
         return $user;
     }

@@ -8355,6 +8355,7 @@ exception.user.discuz_user_reset_password: 请通过论坛找回密码！
 exception.user.not_found: 找不到该用户！
 exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
+exception.user.mobile_registered: 该手机号码已被注册！
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
