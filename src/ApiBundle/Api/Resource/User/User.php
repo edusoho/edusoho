@@ -8,14 +8,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\BizSms;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use ApiBundle\Api\Exception\ErrorCode;
-use Biz\User\UserException;
 use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Common\DeviceToolkit;
 use Biz\System\SettingException;
-use AppBundle\Common\SmsToolkit;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Common\CommonException;
 
@@ -89,11 +85,11 @@ class User extends AbstractResource
 
         $nickname = MathToolkit::uniqid();
         while (!$this->getUserService()->isNicknameAvaliable($nickname)) {
-            $nickname =  MathToolkit::uniqid();
+            $nickname = MathToolkit::uniqid();
         }
 
-        $registeredWay =  DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent'));
-        $user = $this->controller->getAuthService()->register(array(
+        $registeredWay = DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent'));
+        $user = $this->getAuthService()->register(array(
             'mobile' => $fields['mobile'],
             'nickname' => $nickname,
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHost()),
@@ -150,6 +146,11 @@ class User extends AbstractResource
     private function getSettingService()
     {
         return $this->service('System:SettingService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->service('User:AuthService');
     }
 
     protected function getBizSms()
