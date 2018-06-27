@@ -1864,14 +1864,9 @@ course_set_manage_course_students_remark:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/remark
   defaults: { _controller: AppBundle:Course/StudentManage:remark }
 
-course_set_manage_course_students_expiryday:
-  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
-  defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
-
-
-course_set_manage_course_students_expiryday_batch:
-  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/expiryday
-  defaults: { _controller: AppBundle:Course/StudentManage:batchUpdateMemberExpiryDays }
+course_set_manage_course_students_deadline_batch:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline
+  defaults: { _controller: AppBundle:Course/StudentManage:batchUpdateMemberDeadlines }
 
 
 

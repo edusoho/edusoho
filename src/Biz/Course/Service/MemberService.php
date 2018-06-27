@@ -133,9 +133,9 @@ interface MemberService
 
     public function countPostsByCourseIdAndUserId($courseId, $userId);
 
-    public function addMemberExpiryDays($courseId, $userId, $day);
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus');
 
-    public function batchUpdateMemberExpiryDays($courseId, $userIds, $day);
+    public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date);
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
 

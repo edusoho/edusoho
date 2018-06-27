@@ -450,3 +450,7 @@ exchangeStatus:
 rewardPointUserType:
     nickname: Nickname
     truename: Truename
+
+waveType:
+    plus: Plus
+    minus: Minus

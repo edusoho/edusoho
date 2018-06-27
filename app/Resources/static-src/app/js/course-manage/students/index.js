@@ -63,7 +63,6 @@ class Students {
         return ;
       }
       $.get($(this).data('url'), {ids:ids}, function(html) {
-        console.log(html);
         $('#modal').html(html).modal('show');
       });
     });

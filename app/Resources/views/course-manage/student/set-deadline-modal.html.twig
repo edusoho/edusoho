@@ -1,10 +1,10 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'course.members_manage.official_student.add_expiry_day.add'|trans}}{{'site.default.student'|trans}} {{'course.members_manage.official_student.add_expiry_day.course_expiry_date'|trans}}{% endblock %}
-{% do script(['libs/jquery-validation.js','app/js/course-manage/student-expiryday/index.js'])%}
+{% do script(['libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/student-expiryday/index.js'])%}
 
 {% block body %}
-<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_expiryday_batch', { courseSetId: course.courseSetId, courseId:course.id, ids:ids }) }}">
+<form id="deadline-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_deadline_batch', { courseSetId: course.courseSetId, courseId:course.id, ids:ids }) }}">
   {% if course.status == 'published' %}
     <div class="row form-group">
       <div class="col-md-2 control-label">
@@ -30,10 +30,27 @@
     </div>
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="set-more-expiryday">{{'course.members_manage.official_student.add_expiry_day.days'|trans}}</label>
+        <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
       </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="set-more-expiryday" name="expiryDay" value="0" class="form-control width-input">
+      <div class="col-md-2 control-label">
+        <label><input type="radio" name="updateType" value="day" checked="checked"> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
+      </div>
+      <div class="col-md-2 controls">
+        <select class="form-control" name="waveType">
+          {{ select_options(dict('waveType'), app.request.query.get('waveType')) }}
+        </select>
+      </div>
+      <div class="col-md-6 controls">
+        <input type="text" id="day" name="day" value="0" class="form-control width-input">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-offset-2 col-md-2 control-label">
+        <label><input type="radio" name="updateType" value="date"> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
+      </div>
+      <div class="col-md-6 controls">
+        <input type="text" id="deadline" name="deadline" class="form-control width-input">
       </div>
     </div>
   {% else %}
@@ -45,7 +62,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="button" id="submit" class="btn btn-primary pull-right js-save-expiryday-set-form" data-target="#expiryday-set-form" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+    <button type="button" id="submit" class="btn btn-primary pull-right js-save-deadline-set-form" data-target="#deadline-set-form" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 {% endblock %}

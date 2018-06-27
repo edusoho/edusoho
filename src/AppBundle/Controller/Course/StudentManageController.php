@@ -169,35 +169,18 @@ class StudentManageController extends BaseController
         );
     }
 
-    public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $course = $this->getCourseService()->getCourse($courseId);
-        if ('POST' === $request->getMethod()) {
-            $fields = $request->request->all();
-            $this->getCourseMemberService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
-
-            return $this->createJsonResponse(true);
-        }
-        $default = $this->getSettingService()->get('default', array());
-
-        return $this->render(
-            'course-manage/student/set-expiryday-modal.html.twig',
-            array(
-                'course' => $course,
-                'user' => $user,
-                'default' => $default,
-            )
-        );
-    }
-
-    public function batchUpdateMemberExpiryDaysAction(Request $request, $courseId)
+    public function batchUpdateMemberDeadlinesAction(Request $request, $courseId)
     {
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            $this->getCourseMemberService()->batchUpdateMemberExpiryDays($courseId, $ids, $fields['expiryDay']);
+            if ('day' == $fields['updateType']) {
+                $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $fields['day'], $fields['waveType']);
+
+                return $this->createJsonResponse(true);
+            }
+            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($courseId, $ids, $fields['deadline']);
 
             return $this->createJsonResponse(true);
         }
@@ -206,7 +189,7 @@ class StudentManageController extends BaseController
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render(
-            'course-manage/student/set-expiryday-modal.html.twig',
+            'course-manage/student/set-deadline-modal.html.twig',
             array(
                 'course' => $course,
                 'users' => $users,

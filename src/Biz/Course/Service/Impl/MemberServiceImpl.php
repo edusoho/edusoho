@@ -22,6 +22,7 @@ use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
+use AppBundle\Common\TimeMachine;
 
 /**
  * Class MemberServiceImpl
@@ -1108,28 +1109,34 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
-    public function addMemberExpiryDays($courseId, $userId, $day)
-    {
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-
-        if ($member['deadline'] > 0) {
-            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
-        } else {
-            $deadline = $day * 24 * 60 * 60 + time();
-        }
-
-        return $this->getMemberDao()->update(
-            $member['id'],
-            array(
-                'deadline' => $deadline,
-            )
-        );
-    }
-
-    public function batchUpdateMemberExpiryDays($courseId, $userIds, $day)
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
         foreach ($userIds as $userId) {
-            $this->addMemberExpiryDays($courseId, $userId, $day);
+            $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+            $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
+            $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+
+            $this->getMemberDao()->update(
+                $member['id'],
+                array(
+                    'deadline' => $deadline,
+                )
+            );
+        }
+    }
+
+    public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
+    {
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        foreach ($userIds as $userId) {
+            $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+            $this->getMemberDao()->update(
+                $member['id'],
+                array(
+                    'deadline' => $date,
+                )
+            );
         }
     }
 
