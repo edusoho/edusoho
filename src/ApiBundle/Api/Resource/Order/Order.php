@@ -9,6 +9,7 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Order extends AbstractResource
 {
@@ -50,6 +51,22 @@ class Order extends AbstractResource
         }
     }
 
+    public function get(ApiRequest $request, $sn)
+    {
+        $userId = $this->getCurrentUser()->getId();
+        $orders = $this->getOrderService()->getOrderBySn($sn);
+        if (!$orders) {
+            throw new NotFoundHttpException('订单信息不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+        }
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($orders['trade_sn']);
+        $orders['platform_sn'] = $paymentTrade['platform_sn'];
+        if ($this->getCurrentUser()->isAdmin()) {
+            return $orders;
+        } elseif ($userId == $orders['user_id']) {
+            return $orders;
+        }
+    }
+
     public function filterParams(&$params)
     {
         if (isset($params['coinPayAmount'])) {
@@ -68,11 +85,11 @@ class Order extends AbstractResource
 
     public function handleParams(&$params, $order)
     {
-        $params['gateway'] = (!empty($params['payment']) && $params['payment'] == 'wechat') ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
+        $params['gateway'] = (!empty($params['payment']) && 'wechat' == $params['payment']) ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
         $params['type'] = 'purchase';
         $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
         $params['orderSn'] = $order['sn'];
-        if ($params['gateway'] == 'Alipay_LegacyWap') {
+        if ('Alipay_LegacyWap' == $params['gateway']) {
             $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }
@@ -84,10 +101,26 @@ class Order extends AbstractResource
     }
 
     /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
      * @return OrderFacadeService
      */
     private function getOrderFacadeService()
     {
         return $this->service('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->service('Pay:PayService');
     }
 }
