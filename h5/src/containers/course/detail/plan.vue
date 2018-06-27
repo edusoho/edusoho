@@ -1,10 +1,22 @@
 <template>
-  <ul class="course-detail__plan">
-    <li v-for="item in items" @click="handleClick(item)" :class="{active: item.active}">三月班</li>
-  </ul>
+  <div>
+    <e-panel :title="courseSet.title">
+      <div class="course-detail__plan-price">
+        <span>¥{{ price }}</span>
+        <span>{{ courseSet.studentNum }}人在学</span>
+      </div>
+    </e-panel>
+
+    <ul class="course-detail__plan">
+      <li v-for="item in items" 
+        @click="handleClick(item)" 
+        :class="{ active: item.active }">三月班</li>
+    </ul>
+  </div>
 </template>
 <script>
 export default {
+  props: ['courseSet', 'price'],
   data() {
     return {
       items: [{
