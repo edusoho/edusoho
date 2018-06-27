@@ -34,7 +34,7 @@ class Reset {
         self.drag.unbindEvent();
         $('.js-drag').remove();
         $target.prepend(self.dragHtml);
-        let data = $target.attr('id') == 'password-reset-by-mobile-form' ? {times: 3} : {};
+        let data = $target.attr('id') == 'password-reset-by-mobile-form' ? {times: 3, limitType: 'reset_password'} : {limitType: 'reset_password'};
         this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'), data);
         $target.show();
       }
@@ -94,6 +94,11 @@ class Reset {
         }).then((res) => {
           notify('success', '重置密码邮件已发送');
           window.location.href = $('#password-reset-form').data('success') + '?email='+ email;
+        }).catch((res) => {
+          let code = res.responseJSON.error.code||0;
+          if (4040104 == code) {
+            self.drag.initDragCaptcha();
+          }
         });
       }
     });
