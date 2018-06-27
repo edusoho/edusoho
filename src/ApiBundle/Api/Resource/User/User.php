@@ -92,7 +92,7 @@ class User extends AbstractResource
         $user = $this->getAuthService()->register(array(
             'mobile' => $fields['mobile'],
             'nickname' => $nickname,
-            'password' => $this->getPassword($fields['encrypt_password'], $request->getHost()),
+            'password' => $this->getPassword($fields['encrypt_password'], $request->getHttpRequest->getHost()),
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getHttpRequest->getClientIp(),
         ));
