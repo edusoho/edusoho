@@ -47,7 +47,7 @@ class SmsServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Biz\User\UserException
+     * @expectedException \Biz\User\UserException
      */
     public function testSendVerifySms()
     {
