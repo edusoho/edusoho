@@ -27,4 +27,3 @@ export const getUserInfo = ({ commit }) => Api.getUserInfo({
   commit(types.USER_INFO, res);
   return res;
 });
-

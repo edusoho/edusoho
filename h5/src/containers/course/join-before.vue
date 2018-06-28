@@ -29,7 +29,8 @@
       :tryLookable="details[selectPlanIndex].tryLookable"
       :courseItem="details[selectPlanIndex].courseItem"></directory>
     
-    <e-footer @click.native="handleJoin">加入学习</e-footer>
+    <e-footer @click.native="handleJoin">
+      {{details[selectPlanIndex].access.code | filterJoinStatus}}</e-footer>
   </div>
 </template>
 <script>

@@ -24,7 +24,7 @@
             v-if="task.type === 'task'">
             <div class="lesson-cell">
               <span class="lesson-cell__number">{{ task | filterNumber }}</span>
-              <div class="lesson-cell__content">
+              <div class="lesson-cell__content" @click="lessonCellClick">
                 <span>{{ task.title }}</span>
                 <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
               </div>
@@ -123,8 +123,12 @@
         } else if (task.status === 'is-free') {
           return '免费';
         }
-          return '';
-        }
+
+        return '';
+      },
+      lessonCellClick(e) {
+        console.log(e);
+      }
     }
   }
 </script>
