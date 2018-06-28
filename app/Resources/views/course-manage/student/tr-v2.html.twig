@@ -39,7 +39,7 @@
         </li>
         {% if (app.user.isAdmin() or  app.user.isTeacher()) and 'forever' != course.expiryMode %}
           <li>
-            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id, ids: student.userId})}}">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
+            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id, ids: student.userId})}}">{{'course.members_manage.official_student.update_expiry_day_btn'|trans}}</a>
           </li>
         {% endif %}
         {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}

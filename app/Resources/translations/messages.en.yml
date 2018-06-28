@@ -902,6 +902,7 @@ course.members_manage.official_student.remark: Note
 course.members_manage.official_student.follow_btn: Follow
 course.members_manage.official_student.cancel_follow_btn: Unfollow
 course.members_manage.official_student.add_expiry_day_btn: 'Extend expiry date'
+course.members_manage.official_student.update_expiry_day_btn: 'Update expiry date'
 course.members_manage.official_student.remove_btn: Remove
 course.members_manage.official_student.join_time: 'Enroll time：%createdTime%'
 course.members_manage.official_student.expiry_date: 'Expiry date：%deadline%'

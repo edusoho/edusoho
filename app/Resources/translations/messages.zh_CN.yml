@@ -1030,6 +1030,7 @@ course.members_manage.official_student.remark: 备注
 course.members_manage.official_student.follow_btn: 关注
 course.members_manage.official_student.cancel_follow_btn: 取消关注
 course.members_manage.official_student.add_expiry_day_btn: 增加有效期
+course.members_manage.official_student.update_expiry_day_btn: 修改有效期
 course.members_manage.official_student.remove_btn: 移除
 course.members_manage.official_student.join_time: 加入时间：%createdTime%
 course.members_manage.official_student.expiry_date: 有效期至：%deadline%
