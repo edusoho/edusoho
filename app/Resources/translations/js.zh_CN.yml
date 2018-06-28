@@ -364,6 +364,8 @@ course_manage.course_overview.try_view_increase_num: 免费试看数
 
 course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
 course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
+course_manage.student_expiryday_extend_error_hint_day: 减少天数超出最大可减少数
+course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间或任何一个学员的有效期截止日
 
 course_manage.student_remark_validate_error_hint: 备注字数不超过80
 course_manage.student_remark_success_hint: 备注%username%成功

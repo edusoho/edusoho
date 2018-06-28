@@ -419,6 +419,10 @@ course_manage.course_overview.try_view_increase_num: Number of try view increase
 
 course_manage.student_expiryday_extend_success_hint: Extend %name% expiration time successful!
 course_manage.student_expiryday_extend_failed_hint: Extend %name% expiration time failed!
+course_manage.student_expiryday_extend_error_hint_day: 减少天数超出最大可减少数
+course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间或任何一个学员的有效期截止日
+
+
 
 course_manage.student_remark_validate_error_hint: Remarks words does not exceed 80
 course_manage.student_remark_success_hint: Remarks %username% succeed

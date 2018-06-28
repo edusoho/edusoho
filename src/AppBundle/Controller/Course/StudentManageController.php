@@ -21,6 +21,7 @@ use Biz\User\Service\UserService;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\TimeMachine;
 
 class StudentManageController extends BaseController
 {
@@ -197,6 +198,49 @@ class StudentManageController extends BaseController
                 'default' => $default,
             )
         );
+    }
+
+    public function checkDayAction(Request $request, $courseId)
+    {
+        $waveType = $request->query->get('waveType');
+        $day = $request->query->get('day');
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        $members = $this->getCourseMemberService()->searchMembers(
+            array('userIds' => $ids, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        if ('minus' == $waveType) {
+            $member = array_shift($members);
+            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
+            if ($day > $maxAllowMinusDay) {
+                return $this->createJsonResponse(false);
+            }
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function checkDeadlineAction(Request $request, $courseId)
+    {
+        $deadline = $request->query->get('deadline');
+        $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        $members = $this->getCourseMemberService()->searchMembers(
+            array('userIds' => $ids, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        $member = array_shift($members);
+        if ($deadline < $member['deadline'] || time() < $member['deadline']) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     public function checkStudentAction(Request $request, $courseSetId, $courseId)

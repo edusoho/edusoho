@@ -33,7 +33,7 @@
         <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
       </div>
       <div class="col-md-2 control-label">
-        <label><input type="radio" name="updateType" value="day" checked="checked"> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
+        <label for="day"><input type="radio" name="updateType" value="day" checked="checked"> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
       </div>
       <div class="col-md-2 controls">
         <select class="form-control" name="waveType">
@@ -41,16 +41,16 @@
         </select>
       </div>
       <div class="col-md-6 controls">
-        <input type="text" id="day" name="day" value="0" class="form-control width-input">
+        <input type="text" id="day" name="day" value="0" data-url="{{path('course_set_manage_course_students_deadline_batch_day_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-offset-2 col-md-2 control-label">
-        <label><input type="radio" name="updateType" value="date"> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
+        <label for="deadline"><input type="radio" name="updateType" value="date"> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
       </div>
       <div class="col-md-6 controls">
-        <input type="text" id="deadline" name="deadline" class="form-control width-input">
+        <input type="text" id="deadline" name="deadline" data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
   {% else %}

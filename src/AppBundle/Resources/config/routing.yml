@@ -1868,8 +1868,13 @@ course_set_manage_course_students_deadline_batch:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline
   defaults: { _controller: AppBundle:Course/StudentManage:batchUpdateMemberDeadlines }
 
+course_set_manage_course_students_deadline_batch_day_check:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/day/check
+  defaults: { _controller: AppBundle:Course/StudentManage:checkDay }
 
-
+course_set_manage_course_students_deadline_batch_deadline_check:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline/check
+  defaults: { _controller: AppBundle:Course/StudentManage:checkDeadline }
 
 
 

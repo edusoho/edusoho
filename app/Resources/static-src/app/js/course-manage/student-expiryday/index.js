@@ -6,10 +6,9 @@ class Deadline {
     this.init();
   }
   init() {
-    this.initValidator();
     this.initDatePicker('#deadline');
-    this.initUpdateType();
     this.initRadioChange();
+    this.initValidator();
   }
 
   initDatePicker($id) {
@@ -33,7 +32,25 @@ class Deadline {
     this.validator = $form.validate({
       rules: {
         day: {
+          required: true,
           positive_integer: true,
+          remote: {
+            url: $('[name=day]').data('url'),
+            type: 'get',
+            data: {
+              waveType: function () {
+                return $('[name=waveType]').val();
+              },
+              day: function () {
+                return $('[name=day]').val();
+              },
+            }
+          }
+        }
+      },
+      messages: {
+        day: {
+          remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
         }
       }
     });
@@ -61,10 +78,13 @@ class Deadline {
     this.elementRemoveRules($day);
     switch (updateType) {
     case 'day':
+      $deadline.val('');
       this.elementAddRules($day, this.getDayRules());
       this.validator.form();
       break;
     case 'date':
+      $day.val(0);
+      $('[name="waveType"]').val('plus');
       this.elementAddRules($deadline, this.getDateRules());
       this.validator.form();
       break;
@@ -86,11 +106,31 @@ class Deadline {
 
   elementRemoveRules($element) {
     $element.rules('remove');
+    $element.removeClass('form-control-error');
+    const $formGroup = $element.closest('.form-group');
+    $formGroup.removeClass('has-error');
+    $formGroup.find('.jq-validate-error').remove();
   }
 
   getDayRules() {
     return {
+      required: true,
       positive_integer: true,
+      remote: {
+        url: $('[name=day]').data('url'),
+        type: 'get',
+        data: {
+          waveType: function () {
+            return $('[name=waveType]').val();
+          },
+          day: function () {
+            return $('[name=day]').val();
+          },
+        }
+      },
+      messages: {
+        remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
+      }
     };
   }
 
@@ -98,6 +138,18 @@ class Deadline {
     return {
       required: true,
       date: true,
+      remote: {
+        url: $('[name=deadline]').data('url'),
+        type: 'get',
+        data: {
+          deadline: function () {
+            return $('[name=deadline]').val();
+          }
+        }
+      },
+      messages: {
+        remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_date'),
+      }
     };
   }
 }
