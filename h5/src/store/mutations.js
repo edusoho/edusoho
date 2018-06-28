@@ -17,7 +17,7 @@ export default {
     localStorage.removeItem('user');
   },
   [types.USER_INFO](state, payload) {
-    state.user = payload.user;
-    localStorage.setItem('user', JSON.stringify(payload.user));
+    state.user = payload;
+    localStorage.setItem('user', JSON.stringify(payload));
   }
 };

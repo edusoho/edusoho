@@ -70,6 +70,40 @@ const filters = [
           return '';
       }
     }
+  },
+  {
+    name: 'filterJoinStatus',
+    handler(code) {
+      switch (code) {
+        case 'success':
+        case 'user.not_login':
+          code = '加入学习';
+          break;
+        case 'user.locked':
+          code = '用户被锁';
+          break;
+        case 'course.unpublished':
+          code = '课程未发布';
+          break;
+        case 'course.closed':
+          code = '课程已关闭';
+          break;
+        case 'course.not_buyable':
+          code = '课程不可加入';
+          break;
+        case 'course.buy_expired':
+          code = '购买有效期已过 ';
+          break;
+        case 'course.expired':
+          code = '学习有效期已过';
+          break;
+        case 'course.only_vip_join_way':
+          code = '只能通过VIP加入';
+          break;
+        default:
+      }
+      return code;
+    }
   }
 ];
 

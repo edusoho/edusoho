@@ -8,13 +8,17 @@
     </e-panel>
 
     <ul class="course-detail__plan">
-      <li v-for="item in items" 
-        @click="handleClick(item)" 
+      <li v-for="(item, index) in items" 
+        @click="handleClick(item, index)" 
         :class="{ active: item.active }">三月班</li>
     </ul>
   </div>
 </template>
 <script>
+import store from '@/store';
+import * as types from '@/store/mutation-types';
+import { mapMutations } from 'vuex';
+
 export default {
   props: ['courseSet', 'price'],
   data() {
@@ -35,9 +39,14 @@ export default {
     }
   },
   methods: {
-    handleClick(item){
+    ...mapMutations('course',{
+      setPlanIndex: types.SET_PLAN_INDEX
+    }),
+    handleClick(item, index){
       this.items.map(item => item.active = false);
       item.active = true;
+
+      this.setPlanIndex(index);
     }
   }
 }
