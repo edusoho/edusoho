@@ -155,7 +155,7 @@ Api Test With 5.5:
     - app/console server:start
     # 执行codeception的A PI 单元测试
     - bin/codecept run api
-     执行newman的 API 单元测试
+    # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
     - develop
