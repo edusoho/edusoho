@@ -67,6 +67,10 @@ const routes = [
     name: 'course_try',
     component: resolve => require(['@/containers/course/try.vue'], resolve)
   }, {
+    path: '/course/web',
+    name: 'course_web',
+    component: resolve => require(['@/containers/course/detail/web-view.vue'], resolve)
+  }, {
     path: '/course/:id',
     name: 'course',
     meta: {
