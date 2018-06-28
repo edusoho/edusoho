@@ -14,6 +14,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
         $request = $this->mockRequest(
             array(
                 'request' => array(
+                    'mobile' => '13967340627',
                     'dragCaptchaToken' => 'kuozhi',
                     'phrase' => 'password',
                 ),
@@ -40,6 +41,11 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'withParams' => array('128.2.2.1'),
                     'returnValue' => 'captchaRequired',
                 ),
+                array(
+                    'functionName' => 'isMobileUnique',
+                    'withParams' => '',
+                    'returnValue' => true,
+                ),
             )
         );
 
@@ -61,6 +67,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                 'request' => array(
                     'captchaToken' => 'kuozhi',
                     'phrase' => 'password',
+                    'mobile' => '13967340627',
                 ),
                 'getClientIp' => '128.2.2.1',
             )
@@ -84,6 +91,11 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'functionName' => 'getSmsRegisterCaptchaStatus',
                     'withParams' => array('128.2.2.1'),
                     'returnValue' => 'captchaIgnore',
+                ),
+                array(
+                    'functionName' => 'isMobileUnique',
+                    'withParams' => '',
+                    'returnValue' => true,
                 ),
             )
         );
