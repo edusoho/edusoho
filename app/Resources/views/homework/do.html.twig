@@ -9,6 +9,13 @@
   {% set showHeader = 0 %}
 {% endif %}
 
+{% block divWrap %}
+  <div class="iframe-parent-content">
+{% endblock %}
+
+{% block divCloseWrap %}
+  </div>
+{% endblock %}
 {% block paper_description %}
   <div class="testpaper-description cke_editable cke_contents_ltr">{{ paper.description|bbCode2Html|raw }}</div>
 {% endblock %}
