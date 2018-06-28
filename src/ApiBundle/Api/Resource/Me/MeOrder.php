@@ -6,7 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeOrder extends AbstractResource
 {
@@ -25,10 +24,6 @@ class MeOrder extends AbstractResource
             $offset,
             $limit
         );
-
-        if (!$orders) {
-            throw new NotFoundHttpException('订单信息不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
-        }
 
         return $orders;
     }

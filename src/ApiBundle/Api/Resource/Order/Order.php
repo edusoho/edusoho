@@ -9,7 +9,6 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Order extends AbstractResource
 {
@@ -53,17 +52,17 @@ class Order extends AbstractResource
 
     public function get(ApiRequest $request, $sn)
     {
-        $userId = $this->getCurrentUser()->getId();
-        $orders = $this->getOrderService()->getOrderBySn($sn);
-        if (!$orders) {
-            throw new NotFoundHttpException('订单信息不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        if (!$order) {
+            return null;
         }
-        $paymentTrade = $this->getPayService()->getTradeByTradeSn($orders['trade_sn']);
-        $orders['platform_sn'] = $paymentTrade['platform_sn'];
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+        $order['platform_sn'] = $paymentTrade['platform_sn'];
+        $userId = $this->getCurrentUser()->getId();
         if ($this->getCurrentUser()->isAdmin()) {
-            return $orders;
-        } elseif ($userId == $orders['user_id']) {
-            return $orders;
+            return $order;
+        } elseif ($userId == $order['user_id']) {
+            return $order;
         }
     }
 
