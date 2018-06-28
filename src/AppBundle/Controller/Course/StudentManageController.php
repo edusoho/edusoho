@@ -206,21 +206,11 @@ class StudentManageController extends BaseController
         $day = $request->query->get('day');
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
-        $members = $this->getCourseMemberService()->searchMembers(
-            array('userIds' => $ids, 'courseId' => $courseId),
-            array('deadline' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
-        if ('minus' == $waveType) {
-            $member = array_shift($members);
-            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
-            if ($day > $maxAllowMinusDay) {
-                return $this->createJsonResponse(false);
-            }
+        if ($this->getCourseMemberService()->checkDayAndWaveTypeForUpdateDeadline($courseId, $ids, $day, $waveType)) {
+            return $this->createJsonResponse(true);
         }
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(false);
     }
 
     public function checkDeadlineAction(Request $request, $courseId)
@@ -229,18 +219,11 @@ class StudentManageController extends BaseController
         $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
-        $members = $this->getCourseMemberService()->searchMembers(
-            array('userIds' => $ids, 'courseId' => $courseId),
-            array('deadline' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
-        $member = array_shift($members);
-        if ($deadline < $member['deadline'] || time() > $deadline) {
-            return $this->createJsonResponse(false);
+        if ($this->getCourseMemberService()->checkDeadlineForUpdateDeadline($courseId, $ids, $deadline)) {
+            return $this->createJsonResponse(true);
         }
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(false);
     }
 
     public function checkStudentAction(Request $request, $courseSetId, $courseId)

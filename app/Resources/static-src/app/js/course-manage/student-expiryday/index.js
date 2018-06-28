@@ -63,9 +63,6 @@ class Deadline {
           notify('success',Translator.trans('course_manage.student_expiryday_extend_success_hint', { name: user_name }));
           $modal.modal('hide');
           window.location.reload();
-        }).error(function () {
-          let user_name = $('#submit').data('user');
-          notify('danger',Translator.trans('course_manage.student_expiryday_extend_failed_hint', { name: user_name }));
         });
       }
     });

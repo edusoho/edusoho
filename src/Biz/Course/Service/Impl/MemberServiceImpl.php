@@ -1111,33 +1111,72 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
-        foreach ($userIds as $userId) {
-            $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
+            foreach ($userIds as $userId) {
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
-            $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
-            $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+                $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
+                $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
 
-            $this->getMemberDao()->update(
-                $member['id'],
-                array(
-                    'deadline' => $deadline,
-                )
-            );
+                $this->getMemberDao()->update(
+                    $member['id'],
+                    array(
+                        'deadline' => $deadline,
+                    )
+                );
+            }
         }
+    }
+
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
+    {
+        $members = $this->searchMembers(
+            array('userIds' => $userIds, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        if ('minus' == $waveType) {
+            $member = array_shift($members);
+            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
+            if ($day > $maxAllowMinusDay) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
     {
         $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
-        foreach ($userIds as $userId) {
-            $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-            $this->getMemberDao()->update(
-                $member['id'],
-                array(
-                    'deadline' => $date,
-                )
-            );
+        if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date)) {
+            foreach ($userIds as $userId) {
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+                $this->getMemberDao()->update(
+                    $member['id'],
+                    array(
+                        'deadline' => $date,
+                    )
+                );
+            }
         }
+    }
+
+    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
+    {
+        $members = $this->searchMembers(
+            array('userIds' => $userIds, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        $member = array_shift($members);
+        if ($date < $member['deadline'] || time() > $date) {
+            return false;
+        }
+
+        return true;
     }
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)

@@ -134,8 +134,12 @@ interface MemberService
     public function countPostsByCourseIdAndUserId($courseId, $userId);
 
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus');
+    
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus');
 
     public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date);
+
+    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
 
