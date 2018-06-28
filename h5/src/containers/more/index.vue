@@ -1,6 +1,6 @@
 <template>
   <div class="more">
-    <treeSelect></treeSelect>
+    <treeSelect :selectType="selectType"></treeSelect>
     <lazyLoading></lazyLoading>
   </div>
 </template>
@@ -16,6 +16,57 @@
     },
     data() {
       return {
+        selectType: [
+          {
+            type: 'tree',
+            text: '分类',
+            children: [
+              {
+                text: '一',
+                children: [
+                  {
+                    text: '一一',
+                    children: [
+                      {
+                        text: '一一一',
+                      }
+                    ]
+                  }
+                ]
+              },
+            ]
+          },
+          {
+            type: 'normal',
+            text: '热门',
+            children: [
+              {
+                text: '233'
+              },
+              {
+                text: '233'
+              },
+              {
+                text: '233'
+              }
+            ]
+          },
+          {
+            type: 'normal',
+            text: '最新',
+            children: [
+              {
+                text: '233'
+              },
+              {
+                text: '233'
+              },
+              {
+                text: '233'
+              }
+            ]
+          }
+        ]
       };
     },
   }
