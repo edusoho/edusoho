@@ -50,18 +50,22 @@ const routes = [
     component: resolve => require(['@/containers/register/protocol/index.vue'], resolve)
   }, {
     path: '/my/setting',
-    name: 'my/setting',
+    name: 'my_setting',
     meta: {
       title: '设置'
     },
     component: resolve => require(['@/containers/my/setting/index.vue'], resolve)
   }, {
     path: '/setting/nickname',
-    name: 'setting/nickname',
+    name: 'setting_nickname',
     meta: {
       title: '昵称设置'
     },
     component: resolve => require(['@/containers/my/setting/nickname.vue'], resolve)
+  }, {
+    path: '/course/try',
+    name: 'course_try',
+    component: resolve => require(['@/containers/course/try.vue'], resolve)
   }, {
     path: '/course/:id',
     name: 'course',
