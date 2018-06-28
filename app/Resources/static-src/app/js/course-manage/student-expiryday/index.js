@@ -8,6 +8,7 @@ class Deadline {
   init() {
     this.initDatePicker('#deadline');
     this.initRadioChange();
+    this.initSelectChange();
     this.initValidator();
   }
 
@@ -56,7 +57,7 @@ class Deadline {
     });
 
     $('.js-save-deadline-set-form').click(() => {
-      if (this.validator.form()) {
+      if (this.validator && this.validator.form()) {
         $.post($form.attr('action'), $form.serialize(), function () {
           let user_name = $('#submit').data('user');
           notify('success',Translator.trans('course_manage.student_expiryday_extend_success_hint', { name: user_name }));
@@ -97,6 +98,12 @@ class Deadline {
   initRadioChange() {
     $('input[name="updateType"]').on('change', (event) => {
       this.initUpdateType();
+    });
+  }
+
+  initSelectChange() {
+    $('[name="waveType"]').on('change', (event) => {
+      $('[name="day"]').valid();
     });
   }
 

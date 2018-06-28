@@ -45,7 +45,7 @@ class StudentManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getCourseMemberService()->countMembers($conditions),
-            20
+            50
         );
 
         $members = $this->getCourseMemberService()->searchMembers(
@@ -236,7 +236,7 @@ class StudentManageController extends BaseController
             PHP_INT_MAX
         );
         $member = array_shift($members);
-        if ($deadline < $member['deadline'] || time() < $member['deadline']) {
+        if ($deadline < $member['deadline'] || time() > $deadline) {
             return $this->createJsonResponse(false);
         }
 
