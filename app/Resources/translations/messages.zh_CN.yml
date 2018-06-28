@@ -1018,6 +1018,7 @@ course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用�
 course.members_manage: 学员管理
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
+course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
 course.members_manage.official_student.progress: 学习进度
 course.members_manage.official_student.operation: 操作

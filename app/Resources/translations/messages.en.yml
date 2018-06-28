@@ -890,6 +890,7 @@ course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teache
 course.members_manage: 'Students'
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
+course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action

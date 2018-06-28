@@ -20,7 +20,9 @@
         </div>
         <div class="clearfix"></div>
       </form>
-      <button id="batch-update-expiry-day" type="button" class="btn btn-primary" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id})}}">批量修改有效期</button>
+      {% if 'forever' != course.expiryMode %}
+        <button id="batch-update-expiry-day" type="button" class="btn btn-primary" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id})}}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+      {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>
           <tr>

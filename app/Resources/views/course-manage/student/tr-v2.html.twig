@@ -18,7 +18,7 @@
     {{ student.learningProgressPercent }}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.detail'|trans}}</a>
   </td>
   <td style="vertical-align: middle;">{{student.createdTime|date('Y-n-d H:i')}}</td>
-  <td style="vertical-align: middle;">{{student.deadline|date('Y-n-d H:i')}}</td>
+  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
   <td style="vertical-align: middle;">
     <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
     {% if app.user.isAdmin() %}
@@ -37,7 +37,7 @@
           <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" {% if not followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.cancel_follow_btn'|trans}}</a>
           <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}" {% if followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.follow_btn'|trans}}</a>
         </li>
-        {% if app.user.isAdmin() or  app.user.isTeacher() %}
+        {% if (app.user.isAdmin() or  app.user.isTeacher()) and 'forever' != course.expiryMode %}
           <li>
             <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id, ids: student.userId})}}">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
           </li>
