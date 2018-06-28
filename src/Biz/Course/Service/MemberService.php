@@ -139,7 +139,7 @@ interface MemberService
 
     public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date);
 
-    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
+    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date);
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
 
