@@ -45,7 +45,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'functionName' => 'isMobileUnique',
                     'withParams' => '',
                     'returnValue' => true,
-                )
+                ),
             )
         );
 
@@ -96,7 +96,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'functionName' => 'isMobileUnique',
                     'withParams' => '',
                     'returnValue' => true,
-                )
+                ),
             )
         );
 
