@@ -1,0 +1,24 @@
+.empty-course {
+  margin-top: vw(137);
+  text-align: center;
+  .empty-course__img {
+    width: vw(100);
+    height: vw(120);
+  }
+  .empty-course__text {
+    margin-top: vw(30);
+    margin-bottom: vw(30);
+    font-family: PingFangSC-Medium;
+    font-size: vw(14);
+    color: #B0BDC9;
+  }
+  .empty-course__btn {
+    display: inline-block;
+    border-radius: 2px;
+    padding: vw(13) vw(18);
+    background: #408FFB;
+    font-family: PingFangSC-Medium;
+    font-size: vw(14);
+    color: #FFFFFF;
+  }
+}
