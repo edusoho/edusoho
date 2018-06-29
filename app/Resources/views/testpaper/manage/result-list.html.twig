@@ -28,7 +28,8 @@
             {% elseif paperResult.type == 'homework' %}
               {{ dict_text('passedStatus',paperResult.passedStatus) }}
             {% endif %}
-          {% else %} -- {% endif %}</td>
+          {% else %} -- {% endif %}
+        </td>
         <td>{% if paperResult.status != 'doing' %}{{ paperResult.endTime|date('Y-m-d H:i:s') }}{% else %}{% endif %}</td>
         <td>
           {% if paperResult.status == 'doing' %}

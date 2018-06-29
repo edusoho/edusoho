@@ -13,80 +13,25 @@ class PasswordResetController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        
+        return $this->render('password-reset/index.html.twig');
+    }
 
-        $data = array('email' => '');
-
-        if ($user->isLogin()) {
-            $data['email'] = $user['email'];
+    public function emailResetSuccessAction(Request $request) 
+    {
+        $email = $request->query->get('email');
+        $mobile = $request->query->get('mobile');
+        if (!empty($email)) {
+            $user = $this->getUserService()->getUserByEmail($email);
+        } else {
+            $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         }
-
-        $form = $this->createFormBuilder($data)
-            ->add('email', 'email')
-            ->getForm();
-
-        $error = null;
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $user = $this->getUserService()->getUserByEmail($data['email']);
-
-                if (empty($user)) {
-                    list($result, $message) = $this->getAuthService()->checkEmail($data['email']);
-
-                    if ('error_duplicate' === $result) {
-                        $error = '请通过论坛找回密码';
-
-                        return $this->render('password-reset/index.html.twig', array(
-                            'form' => $form->createView(),
-                            'error' => $error,
-                        ));
-                    }
-                }
-
-                if ($user) {
-                    $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-                    try {
-                        $site = $this->setting('site', array());
-                        $mailOptions = array(
-                            'to' => $user['email'],
-                            'template' => 'email_reset_password',
-                            'format' => 'html',
-                            'params' => array(
-                                'nickname' => $user['nickname'],
-                                'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                                'sitename' => $site['name'],
-                                'siteurl' => $site['url'],
-                            ),
-                        );
-
-                        $mailFactory = $this->getBiz()->offsetGet('mail_factory');
-                        $mail = $mailFactory($mailOptions);
-                        $mail->send();
-                    } catch (\Exception $e) {
-                        $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
-
-                        return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');
-                    }
-
-                    $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
-
-                    return $this->render('password-reset/sent.html.twig', array(
-                        'user' => $user,
-                        'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-                    ));
-                } else {
-                    $error = '该邮箱地址没有注册过帐号';
-                }
-            }
-        }
-
-        return $this->render('password-reset/index.html.twig', array(
-            'form' => $form->createView(),
-            'error' => $error,
-        ));
+        
+        return $this->render('password-reset/sent.html.twig', array(
+            'user' => $user,
+            'email' => $email,
+            'mobile' => $mobile,
+        ));    
     }
 
     public function updateAction(Request $request)
@@ -158,21 +103,6 @@ class PasswordResetController extends BaseController
         }
 
         return $this->createJsonResponse('GET method');
-    }
-
-    public function getEmailLoginUrl($email)
-    {
-        $host = substr($email, strpos($email, '@') + 1);
-
-        if ('hotmail.com' === $host) {
-            return 'http://www.'.$host;
-        }
-
-        if ('gmail.com' === $host) {
-            return 'http://mail.google.com';
-        }
-
-        return 'http://mail.'.$host;
     }
 
     public function checkMobileExistsAction(Request $request)

@@ -16,6 +16,7 @@ class BizRateLimitListener
 
     private $ruleMap = array(
         array('SmsCenter', 'post', 'register_sms_rate_limiter'),
+        array('UserSmsResetPassword', 'post', 'sms_rate_limiter'),
     );
 
     public function handle(ResourceEvent $event)

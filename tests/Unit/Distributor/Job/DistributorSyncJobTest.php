@@ -70,4 +70,12 @@ class DistributorSyncJobTest extends BaseTestCase
         $distributorUserService->shouldHaveReceived('getSendType')->times(2);
         $distributorUserService->shouldHaveReceived('batchUpdateStatus')->times(1);
     }
+
+    public function testGetAvailableSendTypes()
+    {
+        $job = new DistributorSyncJob(array(), $this->biz);
+        $result = ReflectionUtils::invokeMethod($job, 'getAvailableSendTypes');
+
+        $this->assertArrayEquals(array('User', 'Order', 'CourseOrder'), $result);
+    }
 }

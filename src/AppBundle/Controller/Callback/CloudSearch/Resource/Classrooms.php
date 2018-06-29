@@ -37,6 +37,32 @@ class Classrooms extends BaseProvider
     public function build($classrooms)
     {
         $classrooms = $this->buildCategories($classrooms);
+        $classrooms = $this->buildTags($classrooms);
+
+        return $classrooms;
+    }
+
+    protected function buildTags($classrooms)
+    {
+        $tagRelationsGroupByClassroomId = $this->getTagService()->findGroupTagIdsByOwnerTypeAndOwnerIds('classroom', array_column($classrooms, 'id'));
+
+        $tagIds = array_reduce($tagRelationsGroupByClassroomId, function ($carry, $tagIds) {
+            return array_merge($carry, $tagIds);
+        }, array());
+        $tagIds = array_unique($tagIds);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
+        foreach ($classrooms as &$classroom) {
+            $classroom['tags'] = array();
+            if (!empty($tagRelationsGroupByClassroomId[$classroom['id']])) {
+                $classroomCorreTagIds = $tagRelationsGroupByClassroomId[$classroom['id']];
+                foreach ($classroomCorreTagIds as $tagId) {
+                    if (!empty($tags[$tagId])) {
+                        $tag = $tags[$tagId];
+                        $classroom['tags'][] = $tag['name'];
+                    }
+                }
+            }
+        }
 
         return $classrooms;
     }
@@ -82,5 +108,13 @@ class Classrooms extends BaseProvider
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return Biz\Taxonomy\Service\TagService
+     */
+    protected function getTagService()
+    {
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 }

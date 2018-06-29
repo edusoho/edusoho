@@ -43,4 +43,10 @@ class SmsRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
             throw $this->createMaxRequestOccurException();
         }
     }
+
+    protected function validateCaptcha($request)
+    {
+        $token = $request->request->get('dragCaptchaToken');
+        $this->getDragCaptcha()->check($token);
+    }
 }

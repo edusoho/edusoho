@@ -28,6 +28,7 @@ class Classroom extends BaseProvider
                 'postNum',
                 'rating',
                 'ratingNum',
+                'tags',
             )
         );
 

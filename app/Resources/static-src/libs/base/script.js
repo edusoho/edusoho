@@ -24,5 +24,5 @@ const loadJs = (path, fn, target) => {
   target.appendChild(elem);
 };
 
-window.script = script;
+window.esScript = script;
 /* eslint-enable */
