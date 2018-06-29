@@ -1,5 +1,6 @@
 import Base from './base';
 import EsWebUploader from 'common/es-webuploader.js';
+import 'app/common/local-image/upload';
 
 new Base();
 
