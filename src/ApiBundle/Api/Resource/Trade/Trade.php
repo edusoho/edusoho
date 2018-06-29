@@ -20,7 +20,7 @@ class Trade extends AbstractResource
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
         return array(
-            'isPaid' => $trade['status'] === 'paid',
+            'isPaid' => 'paid' === $trade['status'],
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
         );
     }
@@ -40,8 +40,7 @@ class Trade extends AbstractResource
     {
         $params = $request->request->all();
 
-        if (empty($params['gateway'])
-            || empty($params['type'])) {
+        if (empty($params['gateway']) || empty($params['type'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -51,10 +50,10 @@ class Trade extends AbstractResource
             if (!empty($params['orderSn']) && $order = $this->getOrderService()->getOrderBySn($params['orderSn'])) {
                 if ($this->isOrderPaid($order)) {
                     return array(
-                            'tradeSn' => $order['trade_sn'],
-                            'isPaid' => true,
-                            'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
-                        );
+                        'tradeSn' => $order['trade_sn'],
+                        'isPaid' => true,
+                        'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
+                    );
                 } else {
                     $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
                 }
@@ -62,7 +61,7 @@ class Trade extends AbstractResource
             $tradeIns = $this->getTradeIns($params['gateway']);
             $trade = $tradeIns->create($params);
 
-            if ($trade['cash_amount'] == 0) {
+            if (0 == $trade['cash_amount']) {
                 $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
             }
         } catch (PayGetwayException $e) {
@@ -82,7 +81,7 @@ class Trade extends AbstractResource
         if ($order['trade_sn']) {
             $trade = $this->getPayService()->queryTradeFromPlatform($order['trade_sn']);
 
-            return $trade['status'] === 'paid';
+            return 'paid' === $trade['status'];
         }
 
         return false;
