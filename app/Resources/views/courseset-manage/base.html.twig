@@ -63,7 +63,7 @@
           <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
           <div class="col-md-8 controls">
             <div class="cd-image-upload">
-              <img style="width: 150px;" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
+              <img style="width: 150px;" id="course-cover" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
               <div class="image-upload-mask">
                 <div class="image-upload-content">
                   <i class="cd-icon cd-icon-camera"></i>
@@ -71,12 +71,21 @@
                 </div>
               </div>
               {% include 'common/local-crop-image.html.twig' with {
-                saveUrl: 'settings_profile_avatar_crop_modal',
-                targetImg: '#profile-avatar',
-                cropWidth: '270',
-                cropHeight: '270'
+                saveUrl: path('course_set_manage_cover_crop', {id: courseSet.id}),
+                targetImg: '#course-cover',
+                cropWidth: '480',
+                cropHeight: '270',
+                uploadToken: 'tmp',
               } %}
             </div>  
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+          </div>
+          <div class="col-md-8 controls">
+            {{ 'course.cover_image.upload_tips'|trans|raw }}
           </div>
         </div>
 
