@@ -8366,7 +8366,7 @@ exception.setting.forbidden_mobile_register: 系统未开启手机注册，请�
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
 
-exception.order.not_found:没有找到相应订单！
+exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
