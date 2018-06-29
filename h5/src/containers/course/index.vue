@@ -3,7 +3,6 @@
     <!-- <span>selectedPlanIndex {{selectedPlanIndex}}</span> -->
     <join-before v-if="!joinStatus && details.length" :details="details"></join-before>    
     <join-after :details="details[selectedPlanIndex]" v-if="joinStatus && details.length"></join-after>
-  
   </div>
 </template>
 
@@ -20,13 +19,14 @@
     },
     data() {
       return {
-        joinStatus: true, // joinAfter = true
+        // joinStatus: true, // joinAfter = true
         details: []
       };
     },
     computed: {
       ...mapState('course', {
-        selectedPlanIndex: state => state.selectedPlanIndex
+        selectedPlanIndex: state => state.selectedPlanIndex,
+        joinStatus: state => state.joinStatus
       })
     },
     created(){
@@ -34,7 +34,7 @@
         id: this.$route.params.id
       }).then(res => {
         this.details = res;
-        this.joinStatus = false;
+        // this.joinStatus = false;
       })
     },
     methods: {

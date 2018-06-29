@@ -88,13 +88,13 @@
   &__head {
     &--img {
       >img {
-        height: 31.5vh;
+        height: vw(210);
         vertical-align: middle;
         width: 100%;
       }
     }
     #course-detail__head--video {
-      height: 31.5vh;
+      height: vw(210);
     }
   }
   // plan component
@@ -142,7 +142,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      top: 45vh;
+      top: vw(300);
       overflow: auto;
     }
   }

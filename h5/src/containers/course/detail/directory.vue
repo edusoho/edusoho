@@ -24,7 +24,7 @@
             v-if="task.type === 'task'">
             <div class="lesson-cell">
               <span class="lesson-cell__number">{{ task | filterNumber }}</span>
-              <div class="lesson-cell__content" @click="lessonCellClick">
+              <div class="lesson-cell__content" @click="lessonCellClick(task)">
                 <span>{{ task.title }}</span>
                 <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
               </div>
@@ -39,6 +39,9 @@
   </e-panel>
 </template>
 <script>
+  import { mapState } from 'vuex';
+  import { Toast } from 'vant';
+
   export default {
     props: {
       courseItem: {
@@ -49,14 +52,19 @@
         type: String,
         default: ''
       },
-      joinStatus: {
-        type: String,
-        default: ''
-      },
+      // joinStatus: {
+      //   type: String,
+      //   default: ''
+      // },
       hiddeTitle: {
         type: Boolean,
         default: false
       }
+    },
+    computed: {
+      ...mapState('course', {
+        joinStatus: state => state.joinStatus
+      })
     },
     data() {
       return {
@@ -126,8 +134,10 @@
 
         return '';
       },
-      lessonCellClick(e) {
-        console.log(e);
+      lessonCellClick(task) {
+        if (!this.tryLookable && !this.joinStatus) {
+          Toast('请先加入课程');
+        }
       }
     }
   }

@@ -38,6 +38,8 @@
   import Directory from './detail/directory';
   import DetailHead from './detail/head';
   import DetailPlan from './detail/plan';
+  import { mapMutations } from 'vuex';
+  import * as types from '@/store/mutation-types';
 
   export default {
     name: 'joinBefore',
@@ -82,6 +84,9 @@
       }, 100)
     },
     methods: {
+       ...mapMutations('course',{
+        joinCourse: types.JOIN_COURSE
+      }),
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
 
@@ -111,6 +116,7 @@
       },
       handleJoin(){
         console.log('join');
+        this.joinCourse();
       }
     },
     destroyed () {

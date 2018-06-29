@@ -61,6 +61,7 @@ module.exports = {
       "exports": "never",
       "functions": "ignore"
     }],
-    "no-useless-escape": "off" 
+    "no-useless-escape": "off",
+    "no-console": process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

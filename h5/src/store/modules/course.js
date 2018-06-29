@@ -13,6 +13,10 @@ const mutations = {
   },
   [types.GET_COURSE_DETAIL](currentState, payload) {
     currentState.details = payload;
+  },
+  [types.JOIN_COURSE](currentState, payload) {
+    currentState.joinStatus = true;
+    console.log(payload);
   }
 };
 
