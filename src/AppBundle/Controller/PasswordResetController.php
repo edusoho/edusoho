@@ -13,11 +13,11 @@ class PasswordResetController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        
+
         return $this->render('password-reset/index.html.twig');
     }
 
-    public function emailResetSuccessAction(Request $request) 
+    public function emailResetSuccessAction(Request $request)
     {
         $email = $request->query->get('email');
         $mobile = $request->query->get('mobile');
@@ -26,12 +26,12 @@ class PasswordResetController extends BaseController
         } else {
             $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         }
-        
+
         return $this->render('password-reset/sent.html.twig', array(
             'user' => $user,
             'email' => $email,
             'mobile' => $mobile,
-        ));    
+        ));
     }
 
     public function updateAction(Request $request)
