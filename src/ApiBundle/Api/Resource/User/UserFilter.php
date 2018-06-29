@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class UserFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar','uuid',
+        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid',
     );
 
     protected $publicFields = array(
@@ -17,7 +17,7 @@ class UserFilter extends Filter
 
     protected $authenticatedFields = array(
         'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
-        'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip',
+        'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token',
     );
 
     protected $mode = self::SIMPLE_MODE;
@@ -29,6 +29,9 @@ class UserFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        if (!isset($data['about'])) {
+            return;
+        }
         $data['about'] = $this->convertAbsoluteUrl($data['about']);
     }
 

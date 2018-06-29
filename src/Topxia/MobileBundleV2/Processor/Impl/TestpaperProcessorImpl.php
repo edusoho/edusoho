@@ -461,7 +461,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         foreach ($result as $key => $value) {
             if (empty($value)) {
-                unset($result[$key]);
+                $result[$key] = array();
             }
 
             foreach ($result[$key] as $k => $v) {

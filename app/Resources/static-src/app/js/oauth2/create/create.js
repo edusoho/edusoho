@@ -12,7 +12,9 @@ export default class Create {
     this.dragCaptchaToken = '';
     this.smsToken = null;
     this.$sendBtn = $('.js-sms-send');
-    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw')) : false;
+    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+      limitType: 'bind_register'
+    }) : false;
     this.init();
   }
 
