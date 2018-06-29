@@ -1,13 +1,14 @@
 <?php
 
 namespace ApiBundle\Api\Resource\Order\Factory;
+
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
+
 abstract class BaseOrder
 {
-
     /**
      * @var Biz
      */

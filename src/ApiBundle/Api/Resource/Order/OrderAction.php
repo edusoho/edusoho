@@ -13,6 +13,7 @@ class OrderAction extends AbstractResource
         $factory = new OrderFactory();
         $orderAction = $factory->create($action);
         $orderAction->setBiz($this->biz);
+
         return $orderAction->setOrderCanceled($sn);
     }
 }

@@ -20,6 +20,6 @@ class OrderException extends AbstractException
         4040901 => 'exception.order.not_found',
         4030902 => 'exception.order.beyond_authority',
         5000903 => 'exception.order.closed_order',
-        5000904 => 'exception.order.unknown_action'
+        5000904 => 'exception.order.unknown_action',
     );
 }
