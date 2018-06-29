@@ -4,7 +4,6 @@ namespace Biz\Mail;
 
 use AppBundle\Common\SettingToolkit;
 use Codeages\Biz\Framework\Context\BizAware;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Biz\Common\CommonException;
 
 abstract class Mail extends BizAware
