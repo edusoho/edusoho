@@ -213,6 +213,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'locked = :locked',
                 'level >= :greatLevel',
                 'UPPER(verifiedMobile) LIKE :verifiedMobile',
+                'verifiedMobile = :wholeVerifiedMobile',
                 'type LIKE :type',
                 'id IN ( :userIds)',
                 'inviteCode = :inviteCode',
