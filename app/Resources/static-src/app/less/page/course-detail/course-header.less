@@ -1,7 +1,10 @@
 //加入前头部
 .course-detail-section {
   position: relative;
-  padding: 15px ;
+  padding: 32px 0 32px 24px;
+  @media(max-width:@screen-sm-max) {
+    padding: 16px;
+  }
   .course-detail-top {
     padding-right: 130px;
     @media(max-width:@screen-sm-max) {
@@ -50,8 +53,9 @@
   .course-operation {
     position: absolute;
     list-style-type: none;
-    right: 10px;
-    top: 20px;
+    left: 24px;
+    bottom: 0;
+    padding-left: 0;
     li {
       float: left;
       margin-right: 10px;
@@ -114,8 +118,11 @@
       }
     }
     .course-detail-info {
-      padding-left: 60px;
+      position: relative;
+      padding-left: 24px;
+      padding-top: 8px;
       margin-left: 480px;
+      height: 270px;
       font-size: 12px;
       color: @gray;
       @media(max-width:@screen-sm-max){
@@ -123,18 +130,20 @@
        padding: 0;
       }
       .course-detail-title {
-        width: 80px;
+        width: 64px;
         display: inline-block;
         @media(max-width:@screen-xs-max) {
           display: none;
         }
       }
       .course-detail-gray {
-        padding-left: 60px;
-        margin: 0px -15px 15px -60px;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding-left: 24px;
+        margin-left: -24px;
+        padding-bottom: 16px;
         background-color: @bg-color;
+        .course-detail-expiry {
+          font-weight: 500;
+        }
         @media(max-width:@screen-sm-max){
           padding-left: 15px;
           min-height: auto;
@@ -143,19 +152,29 @@
           background-color: transparent;
         }
         &.not-activity {
-          min-height: 158px;
+          // min-height: 158px;
           @media(max-width:@screen-sm-max){
             min-height: auto;
           }
         }
         .course-detail-content {
           position: relative;
-          padding-left: 80px;
+          height: 22px;
+          padding-left: 68px;
           @media(max-width: @screen-xs-max){
             padding-left: 0;
             padding-right: 15px;
           }
           .course-detail-nav {
+            a {
+              .border-radius(2px);
+              font-size: 12px !important;
+              line-height: 1 !important;
+              padding: 4px 8px !important;
+              &:after {
+                border-width: 0 0 8px 8px !important;
+              }
+            }
             display: inline-block;
              @media(max-width: @screen-xs-max){
                display: block;
@@ -170,7 +189,6 @@
           .course-detail-title {
             position: absolute;
             left: 0;
-            top: 6px;
           }
         }
       }
@@ -212,6 +230,55 @@
       } 
     }
     
+  }
+}
+
+.course-detail-info__title {
+  margin-bottom: 16px;
+  color: @gray-darker;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.course-detail-info__subtitle {
+  line-height: 1;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.course-detail-price-label {
+  width: 48px;
+  color: @gray;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.course-detail-price-money {
+  vertical-align: sub;
+  font-size: 24px;
+  line-height: 1;
+  color: #ff0000;
+}
+
+.course-detail-expiry-wrap {
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.course-detail-btn {
+  position: absolute;
+  bottom: 0;
+  right: 48px;
+}
+
+.course-detail-service {
+  .lump-sm {
+    color: @gray-dark;
+    &.bg-primary {
+      color: #fff;
+    }
   }
 }
 
@@ -394,7 +461,6 @@
     line-height: 33px;
     position:absolute;
     right: 10px;
-    bottom: 15px;
   }
   .btn-lg {
     padding: 10px 35px;

@@ -2,20 +2,18 @@
 {% set coinEnabled = coinSetting.coin_enabled|default(false) and coinSetting.price_type == 'Coin'  %}
 {% set onDiscount =  is_discount(course) %}
 {% set showPrice =  course.parentId == 0 ? course.price : course.originPrice %}
-<span class="course-detail-title">{{'course.price'|trans}}</span>
+<span class="cd-pt16 course-detail-price-label">{{'course.price'|trans}}</span>
 {% if course.price == 0 and  courseSet.discountId <= 0 %}
   <span class="gray-darker mrm vertical-middle inline-block"><b class="pirce-num">{{'course.price.free'|trans}}</b></span>
 {% else %}
-	<span class="gray-darker mrm">
+	<span class="course-detail-price-money mrm">
 		{% if coinEnabled %}
 			<b class="pirce-num">
 				{{ course.price * coinSetting.cash_rate }}
 				{{ coinSetting.coin_name|default('finance.coin'|trans) }}
 			</b>
 		{% else %}
-			¥<b class="pirce-num">
-        {{ showPrice }}
-      </b>
+			<b class="pirce-num">¥{{ showPrice }}</b>
 		{% endif %}
 	</span>
 
