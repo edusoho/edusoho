@@ -14,6 +14,7 @@ class CurlToolkit
         'dwz.cn', //百度短链
         'qqurl.com', //qq短链
         'api.edusoho.net', //云平台接口
+        'mp-platform-dev.cn'
     );
 
     public static function request($method, $url, $params = array(), $conditions = array())
