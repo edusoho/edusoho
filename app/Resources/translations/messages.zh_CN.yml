@@ -199,8 +199,8 @@ es_bar.mobile: 手机端
 es_bar.go_top: 回到顶端
 es_bar.study_place.content_title: 我的课程/%name%
 es_bar.study_center.content_title: 学习中心
-es_bar.study_center.study_mission: 学习任务
-es_bar.study_center.mission_number_and_title: 任务%number%-%title%
+es_bar.study_center.study_mission: 学习%taskName%
+es_bar.study_center.mission_number_and_title: %taskName%%number%-%title%
 es_bar.study_center.course_title: 课程:%title%
 es_bar.study_center.mission_empty_tips: >
   暂未发现还有未学习任务。<a href="%courseSetExplore%">去逛逛
@@ -927,7 +927,7 @@ course.teaching_plan.create.mode.free: >
   <li class='mb10'><b>自由式学习：</b>学员自由安排学习过程</li>
 course.teaching_plan.create.mode.limit: >
   <li><b>解锁式学习：</b>学员根据既定顺序逐个解锁学习</li>
-course.teaching_plan.create.task_numbers: 任务数
+course.teaching_plan.create.task_numbers: %taskName%数
 course.teaching_plan.create.student: 学员
 course.teaching_plan.create.price: 价格（元）
 course.teaching_plan.create.status: 状态
@@ -996,8 +996,7 @@ course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
 course.marketing_setup.preview: 预览试看
 course.marketing_setup.preview.set_task: 设置免费学习活动
-course.marketing_setup.preview.set_task.task: 任务
-course.marketing_setup.preview.set_task.task_name: %name%任务
+course.marketing_setup.preview.set_task.task_name: %name%%taskName%
 course.marketing_setup.preview.set_task.free: 免费
 course.marketing_setup.preview.set_task.free_tips: 免费活动仅支持
 course.marketing_setup.preview.try_watch: 视频试看
@@ -1059,7 +1058,7 @@ course.members_manage.official_student.detail.status.unfinished: 未完成
 course.members_manage.official_student.detail.status.finished: 准时完成
 course.members_manage.official_student.detail.status.overdue: 逾期
 course.members_manage.official_student.detail.status.serious_overdue: 严重逾期
-course.members_manage.official_student.detail.task_sleep: 任务 :都睡觉
+course.members_manage.official_student.detail.task_sleep: %taskName% :都睡觉
 course.members_manage.official_student.send_message.receiver: 收件人
 course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
@@ -1294,8 +1293,7 @@ course.catalogue.task.preview_btn: 预览
 course.catalogue.task.try_look_btn: 试看
 course.catalogue.task.join_btn: 加入
 course.catalogue.task.buy_btn: 购买
-course.catalogue.task.name: %name%任务
-course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
 course.catalogue.task_status.free: 免费
 course.catalogue.task_status.try_lookable: 试看
 course.catalogue.task_status.is_optional: 选修
@@ -1318,29 +1316,28 @@ course.reviews.success_tips: 评价已保存！
 course.reviews.empty: 暂无评价
 course.teacher: 教师：
 course.reward_point.award: 积分奖励
-course.reward_point.task_award: 完成单个任务奖励
 course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
 course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.mission_delete_tips: · 该任务已被删除
+course.note.mission_delete_tips: · 该%taskName%已被删除
 course.note.empty: 暂无笔记
-course.note.all_task: 全部任务
+course.note.all_task: 全部%taskName%
 course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
-course.task: 任务
+course.task: %taskName%
 course.task.progress: 活动进度
 course.task.rate.finish: 完成率
-course.task.lock_tips: 需要解锁上一个任务才能学习
-course.task.learning: 任务学习
+course.task.lock_tips: 需要解锁上一个%taskName%才能学习
+course.task.learning: %taskName%学习
 course.task.learning.back_course_btn: 返回课程
-course.task.learning.finish_condition: 任务完成条件
-course.task.learning.finish_btn: 任务完成
+course.task.learning.finish_condition: %taskName%完成条件
+course.task.learning.finish_btn: %taskName%完成
 course.task.learning.learned_btn: 学过了
-course.task.preview.content_title: 任务预览
+course.task.preview.content_title: %taskName%预览
 course.task.preview.login_and_learn_tips: 登录后加入学习
 course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
@@ -1351,7 +1348,7 @@ course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_number: 任务%number%
+course.thread.mission_number: %taskName%%number%
 course.thread.teacher_answer: 教师的答案
 course.thread.form.edit: 编辑话题
 course.thread.form.create: 发表话题
@@ -1374,7 +1371,7 @@ course.thread.nav.posted: 最后回复
 course.thread.nav.created: 最新发帖
 course.thread.post_form.create_btn: 发表
 course.thread.post_form.create_tips: 正在提交...
-course.material.unpublished_tips: 任务未发布，不能下载该资料
+course.material.unpublished_tips: %taskName%未发布，不能下载该资料
 course.material.links: 网络链接资料
 course.material.upload_time: 上传于%createdTime%
 course.material.empty: 课程暂无资料
@@ -1647,8 +1644,8 @@ course.plan_task.manage_btn: 管理
 course.plan_task.publish_btn: 发布
 course.plan_task.manage: 教训计划管理
 course.plan_task.content_title: 课时管理
-course.plan_task.locked.task_locked: 任务未解锁
-course.plan_task.task: 任务学习
+course.plan_task.locked.task_locked: %taskName%未解锁
+course.plan_task.task: %taskName%学习
 course.plan_task.practice: 练习
 course.plan_task.practice_tips: 练习的设置包括做题在内的多种形式。
 course.plan_task.homework: 作业
@@ -1663,7 +1660,6 @@ course.plan_task.unpublished_lessons: 未发布课时数：
 course.plan_task.everyday_finish_tasks: >
   日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
 course.plan_lesson.hidden: 前台隐藏未发布课时
-course.plan_task.create_btn: 任务
 course.plan_task.batch_create_btn: 批量添加
 course.plan_task.add_chapter_btn: 添加%chapter_name%
 course.plan_task.edit_chapter_btn: 编辑%chapter_name%
@@ -1676,11 +1672,10 @@ course.plan_task.lesson-marker_btn: 弹题管理
 course.plan_task.copy_btn: 复制为
 course.plan_task.unpublish_btn: 取消发布
 course.plan_task.delete_btn: 删除
-course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习任务，导入学习。
+course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习%taskName%，导入学习。
 course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
 course.plan_task.empty: 什么都没有，快去添加一个课时
-course.plan_task.add_task_btn: 任务
 course.plan_task.task_unpublished: 未发布
 course.plan_task.is_optional_task: 选修
 course.plan_task.edit_tips: 编辑以创建直播教室
@@ -1694,8 +1689,6 @@ course.plan_task.which_lesson: >
 course.plan_task.create_btn: 添加
 course.plan_task.create_part: >
   添加%partName%
-course.plan_task.create_task: >
-  添加任务
 course.plan_task.question_placeholder: 我要提问
 course.plan_task.question_title: 标题
 course.plan_task.question_describe: 详细描述你的问题
@@ -1709,21 +1702,21 @@ course.plan_task.question_author: >
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
-course.plan_task.finish_task_title: 完成任务
+course.plan_task.finish_task_title: 完成%taskName%
 course.plan_task.congratulation_finish: 恭喜完成
 course.plan_task.finish_all_course: 已学完整个课程，给你点赞！
 course.plan_task.finish_rate_course: 已完成了整个课程的%finishedRate%%，加油吧！
 course.plan_task.share: 分享
-course.plan_task.next_task: 下一任务
-course.plan_task.task_edit_tips: 当前任务正在编辑中，暂时无法观看。
-course.plan_task.task_title: 《 任务：%taskTitle% 》
+course.plan_task.next_task: 下一%taskName%
+course.plan_task.task_edit_tips: 当前%taskName%正在编辑中，暂时无法观看。
+course.plan_task.task_title: 《 %taskName%：%taskTitle% 》
 course.plan_task.study_rate: 学习进度
 course.plan_task.new_task_name: 新计划名称
 course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不存在，暂时无法学习。
-course.plan_task.activity_manage.preview_failed_tips: 当前任务不支持预览，请加入教学计划进行学习。
+course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.setup_is_option: 设为选修
-course.plan_task.activity_manage.setup_is_option_tips: 选修任务是否学习，不会影响下一任务的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修任务。
+course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
   选择教学手段
@@ -2236,7 +2229,6 @@ classroom.manage.picture: 图片
 classroom.manage.price: 价格
 classroom.manage.course: 课程
 classroom.manage.courses_count: 课程
-classroom.manage.tasks_count: 任务数
 classroom.manage.student: 学员
 classroom.manage.student_number: 学员数
 classroom.manage.auditor_num: 旁听生数
@@ -2245,7 +2237,6 @@ classroom.manage.Yesterday: 昨日
 classroom.manage.today: 今日
 classroom.manage.all_student_number: 全部学员数
 classroom.manage.full_student_number: 正式学员数
-classroom.manage.finished_task_number: 任务完成学习数
 classroom.manage.thread_count: 新增话题数
 classroom.manage.latest_reviews: 最新评价
 classroom.manage.reviews.empty: 该%name%尚无评价
@@ -2337,12 +2328,12 @@ classroom.about: 简介
 classroom.small_picture: 图片
 classroom.price: 价格
 classroom.course: 课程
-classroom.tash_num: 任务数
+classroom.tash_num: %taskName%数
 classroom.student: 学员
 classroom.student_num: 学员数
 classroom.total_student_num: 全部学员数
 classroom.formal_student_num: 正式学员数
-classroom.task_finish_num: 任务完成学习数
+classroom.task_finish_num: %taskName%完成学习数
 classroom.add_thread_num: 新增话题数
 classroom.latest_review: 最新评价
 classroom.auditor_num: 旁听生数
@@ -2493,9 +2484,9 @@ classroom.teach_plan: 教学计划
 classroom.live_course_playing: 正在直播中
 classroom.live: 直播
 classroom.task_num: >
-  第%number%任务
+  第%number%%taskName%
 classroom.total_task_count: >
-  %taskNum%个任务
+  %taskNum%个%takName%
 classroom.expiry_mode: 有效期
 classroom.forever: 永久
 classroom.course_tips: >
@@ -3770,7 +3761,7 @@ my.teaching.classroom.today_data_title: 今日新增
 my.teaching.classroom.today_data: >
   学员%allCount%  &nbsp;&nbsp;
   话题%threadCount%  &nbsp;&nbsp;
-  任务完成学习%todayFinishedTaskNum%
+  %taskName%完成学习%todayFinishedTaskNum%
 my.teaching.page_title: 在教课程
 my.teaching.course_set.create: 创建课程
 my.teaching.course_set.content_title: 在教课程
@@ -3996,7 +3987,7 @@ my.teaching.open_course.recommend_setting.serializeMode.live: 更新中
 my.teaching.open_course.recommend_setting.serializeMode.finished: 已完结
 my.teaching.open_course.recommend_setting.onlive: 正在直播中
 my.teaching.open_course.recommend_setting.live: 直播
-my.teaching.open_course.recommend_setting.task_number: 第%task_number%任务
+my.teaching.open_course.recommend_setting.task_number: 第%task_number%%taskName%
 my.teaching.open_course.recommend_setting.save_btn: 保存修改
 my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
 my.teaching.open_course.teachers_setting.title: 教师设置
@@ -4099,16 +4090,16 @@ my.learning.group_menu: 我的小组
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！
 my.course.free_mode_plan.task_finished: 已完成
-my.course.free_mode_plan.task_empty: 暂无学习任务
-my.course.free_mode_plan.next_task: 下一学习任务
-my.course.free_mode_plan.task_progress: 完成任务：
-my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
+my.course.free_mode_plan.task_empty: 暂无学习%taskName%
+my.course.free_mode_plan.next_task: 下一学习%taskName%
+my.course.free_mode_plan.task_progress: 完成%taskName%：
+my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个%taskName%
 my.course.lock_mode_plan.behind_plan: 落后计划
 my.course.lock_mode_plan.expiry_date: 学习有效期：
 my.course.more: 更多
 
-my.task.title: 我的任务
-my.task.calendar: 我的任务日历
+#my.task.title: 我的任务
+#my.task.calendar: 我的任务日历
 
 # 我的作业
 my.learning.homework: 我的作业
@@ -4172,7 +4163,7 @@ my.learning.course.favorite: 收藏
 my.learning.course.favorited: 已收藏
 my.learning.course.favorite_empty: 暂无已收藏的课程
 my.learning.course.learned_empty: 暂无已学完的课程
-my.learning.course.finish_task: 完成任务
+my.learning.course.finish_task: 完成%taskName%
 my.learning.course.contiune_study: 继续学习
 my.learning.course.learning_empty: 暂无学习中的课程
 my.learning.course.lesson_num: 第%num%课时
@@ -4207,8 +4198,8 @@ my.learning.note.watch_link: 查看笔记
 my.learning.note.empty: 你还没有写过笔记
 my.learning.note.go_back: 返回
 my.learning.note.target_course: 《%title%》的笔记
-my.learning.note.course_task_number: 任务%number%
-my.learning.note.course_task_empty: 该任务已删除
+my.learning.note.course_task_number: %taskName%%number%
+my.learning.note.course_task_empty: 该%taskName%已删除
 my.learning.note.total_length: 共%length%字
 my.learning.note.delete: 删除笔记
 
@@ -4392,7 +4383,7 @@ course.block_grid.FINISH_SERIALIZE_MODE: 已完结
 course.block_grid.live: 直播
 course.block_grid.onlive: 正在直播中
 course.block_grid.date_format: n月j日 H:i
-course.block_grid.taskNumber: 第%number%任务
+course.block_grid.taskNumber: 第%number%%taskName%
 course.block_grid.price: 价格
 course.block_grid.price_free: 免费
 course.block_grid.review: 评价
@@ -4411,9 +4402,9 @@ course.header.become_a_VIP: <a href="%href%" target="_blank">加入会员</a>
 
 # course/member
 course.member.tips.title: 提示
-course.member.classroom.tips: 您购买的班级已到期，无法学习任务、提问等。如有疑问请联系老师。
-course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
-course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或退出并重新加入 。
+course.member.classroom.tips: 您购买的班级已到期，无法学习%taskName%、提问等。如有疑问请联系老师。
+course.member.course.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师。
+course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
@@ -4432,7 +4423,7 @@ course.widgets.course_order.order_sn: 订单号：%sn%
 course.widgets.course_order.order_price: 订单价格：
 course.widgets.recommend_classroom.tips: 共有%courseNum%门课程
 # course-manage
-course_manage.batch_create.title: 批量添加任务
+course_manage.batch_create.title: 批量添加%taskName%
 course_manage.batch_create.upload_btn: 上传文件
 course_manage.batch_create.balloon-nofile.tips: 请将文件拖到这里，或点击添加文件按钮
 course_manage.batch_create.file_name: 文件名
@@ -4495,9 +4486,9 @@ testpaper.course.rule.tips: >
   【普通课程规则】
     <br>
     1.免费课程：即免费的课程，必须要登录才能加入学习。<br>
-    2.免费任务：即勾选了任务标题旁【免费任务】的任务，任务标题前，有“免费”标签。<br>
-    3.免费试看：即设置了试看时长并且有“试看”标签的任务，目前只有云视频支持试看。<br>
-    4.管理员可在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费任务允许未登录用户观看】。<br>
+    2.免费%taskName%：即勾选了%taskName%标题旁【免费%taskName%】的%taskName%，%taskName%标题前，有“免费”标签。<br>
+    3.免费试看：即设置了试看时长并且有“试看”标签的%taskName%，目前只有云视频支持试看。<br>
+    4.管理员可在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费%taskName%允许未登录用户观看】。<br>
     <br>
     【直播课程规则】<br>
     1.直播课程，必须设置课程人数才能发布，否则用户无法加入/购买课程。<br>
@@ -4511,12 +4502,12 @@ course_set.course.goals: 课程目标
 course_set.course.audiences: 适合人群
 course_set.course.tags: 课程标签：
 course_set.course.show_btn: 查看课程
-course_set.course.task_list: 任务列表
+course_set.course.task_list: %taskName%列表
 course_set.course.empty: 课程暂无相关课时
 course_set.course.taskNumber: >
-  第%number%任务: %title%
-course_set.task.taskNumber: 第%taskNumber%任务： %taskTitle%
-course_set.task.empty: 课程暂无任务
+  第%number%%taskName%: %title%
+course_set.task.taskNumber: 第%taskNumber%%taskName%： %taskTitle%
+course_set.task.empty: 课程暂无%taskName%
 course_set.live.category: 课程分类
 course_set.live.vip_category: 会员课程
 course_set.live.on_live_today: 正在直播 今天
@@ -4536,7 +4527,7 @@ course_set.live.status.onlive: 正在直播
 course_set.live.status.live_soon: 即将直播
 
 #courseset-manage
-courseset_manage.batch_upload.upload_courseLesson_file: 上传任务文件
+courseset_manage.batch_upload.upload_courseLesson_file: 上传%taskName%文件
 courseset_manage.batch_upload.upload_material_file: 上传资料文件
 courseset_manage.batch_upload.upload_materiallib_file: 上传文件到教学资料库
 courseset_manage.batch_upload.add_wait_upload_file_btn: 添加待上传文件
@@ -4549,7 +4540,7 @@ courseset_manage.batch_upload.tips: >
   <li>视频将上传到<strong>网站服务器</strong>，如需使用%EduSoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
 courseset_manage.batch_upload.cloud.tips: >
   <li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
-  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频任务备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频%taskName%备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
   <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
 courseset_manage.batch_upload.cloud.video_transcoding_type: 视频转码类型
 courseset_manage.batch_upload.cloud.setting_btn: 设置
@@ -4682,7 +4673,7 @@ admin.course_manage.file.create_time: 创建时间
 admin.course_manage.file.remove: 文件移除
 admin.course_manage.file.remove_course_contact: 文件将从该课程中移除关联
 admin.course_manage.file.remove_material_lib: 同时在我的教学资料中删除相关文件
-admin.course_manage.file.remove_tips: 文件若被引用，移除或删除会引起引用任务无法正常使用
+admin.course_manage.file.remove_tips: 文件若被引用，移除或删除会引起引用%taskName%无法正常使用
 admin.course_manage.file.remove_confirm: 确认
 admin.course_manage.file.use: 文件：%filename% 被引用
 
@@ -4733,19 +4724,19 @@ admin.course_manage.recommend.set_seq.seq_tips: 请输入0-10000的整数
 admin.course_manage.statistics.name: 课程名
 admin.course_manage.statistics.classroom: 所在%classroom%
 admin.course_manage.statistics.teach_plan_count: 教学计划数量
-admin.course_manage.statistics.task_count: 任务数量
+admin.course_manage.statistics.task_count: %taskName%数量
 admin.course_manage.statistics.student: 学员
 admin.course_manage.statistics.student_number: 学员总数
 admin.course_manage.statistics.finished_number: 完成课程人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
 admin.course_manage.statistics.income_RMB: 课程收入(元)
 admin.course_manage.statistics.no_introduce: 未引入
-admin.course_manage.statistics.watch_task: 查看任务
+admin.course_manage.statistics.watch_task: 查看%taskName%
 admin.course_manage.statistics.watch_course_data: 查看课时数据
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
-admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.name: %taskName%名
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
 admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
@@ -4767,7 +4758,7 @@ admin.user.statistics.data_detail.note_number: 笔记数
 admin.user.statistics.data_detail.learning_course_sets: 在学课程
 admin.user.statistics.data_detail.learning_courses: 在学计划
 admin.user.statistics.data_detail.average_process: 平均计划进度
-admin.user.statistics.data_detail.task_rate: 任务完成比
+admin.user.statistics.data_detail.task_rate: %taskName%完成比
 admin.user.statistics.data_detail.thread_number: 参与话题
 admin.user.statistics.data_detail.review_number: 评价数
 admin.user.statistics.data_detail.active_chart: 活跃度
@@ -4775,7 +4766,7 @@ admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
-admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.task_progress_tip: %taskName%完成比为已完成%taskName%数比总%taskName%数
 admin.user.statistics.data_detail.from_classroom: 来自班级
 
 ## 评论管理
@@ -4925,12 +4916,11 @@ admin.live_manage.coming_live: 即将开始的
 admin.live_manage.underway_live: 当前进行中
 admin.live_manage.end_live: 已结束的
 admin.live_manage.name_option: 课程名
-admin.live_manage.task_option: 任务名
+admin.live_manage.task_option: %taskName%名
 admin.live_manage.keyword_placeholder: 关键词
 admin.live_manage.live_start_time_label: 直播开始时间
 admin.live_manage.live_start_time_placeholder: 开始时间
 admin.live_manage.live_end_time_placeholder: 结束时间
-admin.live_manage.task_th: 任务
 admin.live_manage.live_start_time_th: 直播开始时间
 admin.live_manage.live_time_long_th: 直播时长(分)
 admin.live_manage.max_participate_count_th: 最大参与人数
@@ -5193,8 +5183,8 @@ admin.homepage.order_statistic.tips: >
     </div>
   </div>
 admin.homepage.pay_order_statistic_title: 付费订单统计
-admin.homepage.task_finish_statistic_title: 任务完成数
-admin.homepage.task_finish_statistic.tips: 点击"学过了"的任务数量
+admin.homepage.task_finish_statistic_title: %taskName%完成数
+admin.homepage.task_finish_statistic.tips: 点击"学过了"的%taskName%数量
 admin.homepage.course_ranking_title: 课程排行榜
 admin.homepage.latest_question_title: 最新问答
 admin.homepage.latest_question.tr.question_th: 问题
@@ -5627,9 +5617,8 @@ admin.operation_analysis.course.creator: 创建者
 admin.operation_analysis.course.student_unit: 数
 admin.operation_analysis.course.category: 分类
 admin.operation_analysis.course.empty: 暂无课程明细
-admin.operation_analysis.task: 任务
-admin.operation_analysis.task.study_task: 学习任务
-admin.operation_analysis.task.type: 任务类型
+admin.operation_analysis.task.study_task: 学习%taskName%
+admin.operation_analysis.task.type: %taskName%类型
 admin.operation_analysis.task.creator: 创建者
 admin.operation_analysis.task.belong_to_course: >
   属于课程：%courseTitle%
@@ -5641,7 +5630,7 @@ admin.operation_analysis.task.testpaper: 试卷
 admin.operation_analysis.task.live: 直播
 admin.operation_analysis.task.flash: Flash
 admin.operation_analysis.task.doc: 文档
-admin.operation_analysis.task.empty: 此任务已删除
+admin.operation_analysis.task.empty: 此%taskName%已删除
 admin.operation_analysis.join_lesson: 加入课程
 admin.operation_analysis.join_lesson.username: 用户名
 admin.operation_analysis.join_lesson.time: 加入时间
@@ -5657,7 +5646,6 @@ admin.operation_analysis.paid_course.paid_time: 下单&付款时间
 admin.operation_analysis.paid_course.empty: 此课程已不存在
 admin.operation_analysis.paid_course.order: 订单号
 admin.operation_analysis.video.username: 用户名
-admin.operation_analysis.video.task: 任务
 admin.operation_analysis.video.watch_time: 观看时间
 admin.operation_analysis.video.type: 视频类型
 admin.operation_analysis.income.course: 课程
@@ -6040,7 +6028,6 @@ admin.course_thread.course_thread_manage_tab.form.type_option: 帖子类型
 admin.course_thread.course_thread_manage_tab.form.thread_type_option: 属性
 admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: 置顶
 admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: 加精
-admin.course_thread.course_thread_manage_tab.task_btn: 任务
 admin.course_thread.course_thread_manage_tab.isElite_btn: 精
 admin.course_thread.course_thread_manage_tab.isStick_btn: 顶
 
@@ -6049,7 +6036,6 @@ admin.course_question.question_th: 问答
 admin.course_question.view_th: 查看
 admin.course_question.createdTime_th: 创建时间
 admin.course_question.replay_or_review_th: 回复/查看
-admin.course_question.task_btn: 任务
 
 # 问答管理
 admin.course_question.td_operations.remind_teachers_btn: 提醒教师
@@ -6962,6 +6948,7 @@ admin.setting_course.task_chapter_name: 任务章名称
 admin.setting_course.chapter: 章
 admin.setting_course.task_section_name: 任务节名称
 admin.setting_course.section: 节
+admin.setting_course.task: 任务
 admin.setting_course.questions_setting: 交卷后答案以及解析的显示
 admin.setting_course.questions_setting.hide: 不显示
 admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显示

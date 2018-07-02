@@ -81,7 +81,7 @@
                       {% if lesson %}
                         <div class="live-course-lesson mbm">
                           <span class="color-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                          <span class="color-gray fsm mrm">{{'classroom.task_num'|trans({'%number%':lesson.number})}}</span>
+                          <span class="color-gray fsm mrm">{{'classroom.task_num'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%':lesson.number})}}</span>
                         </div>
                       {% endif %}
                     {% else %}
@@ -106,7 +106,7 @@
                         {% endif %}  
 
                           <span class="color-gray text-sm">
-                              {{'classroom.total_task_count'|trans({'%taskNum%':course.taskNum})}}
+                              {{'classroom.total_task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNum%':course.taskNum})}}
                           </span>
                           <span class="divider"></span>
                           <span class="color-gray text-sm">

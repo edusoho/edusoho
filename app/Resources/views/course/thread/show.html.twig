@@ -28,7 +28,7 @@
         {{'course.thread.hit_times'|trans({'%hitNum%': thread.hitNum})}}
         {% if task|default(null) %}
           <span class="bullet mhs">•</span>
-          <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'course.thread.mission_number'|trans({'%number%': task.number})}}</a>
+          <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'course.thread.mission_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number})}}</a>
         {% endif %}
 
       </div>

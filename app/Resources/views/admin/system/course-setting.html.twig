@@ -158,7 +158,7 @@
           <label for="chapter_name">{{'admin.setting_course.task_chapter_name'|trans}}</label>
       </div>
       <div class="controls col-md-4">
-        <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter') }}">
+        <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}">
       </div>
     </div>
 
@@ -167,7 +167,7 @@
           <label for="part_name">{{'admin.setting_course.task_section_name'|trans}}</label>
       </div>
       <div class="controls col-md-4">
-        <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('admin.setting_course.section') }}">
+        <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}">
       </div>
     </div>
     <div class="alert alert-info deduction text-center">
@@ -185,7 +185,7 @@
         <label for="part_name">{{'设置"任务"名称'|trans}}</label>
       </div>
       <div class="controls col-md-4">
-        <input type="text" id="task_name" name="task_name" class="form-control" value="{{ defaultSetting.default_name|default('admin.setting_course.task') }}">
+        <input type="text" id="task_name" name="task_name" class="form-control" value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}">
       </div>
     </div>
   </fieldset>

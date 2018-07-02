@@ -138,8 +138,8 @@ es_bar.mobile: Mobile
 es_bar.go_top: 'Top'
 es_bar.study_place.content_title: 'My Courses/%name%'
 es_bar.study_center.content_title: 'Learning'
-es_bar.study_center.study_mission: 'Learning Tasks'
-es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
+es_bar.study_center.study_mission: 'Learning %taskName%'
+es_bar.study_center.mission_number_and_title: '%taskName% No. %number%-%title%'
 es_bar.study_center.course_title: 'Course: %title%'
 es_bar.study_center.mission_empty_tips: 'No data found. <a href="%courseSetExplore%">Explore now.'
 es_bar.study_center.recent_live_tasks: 'Comming Lives'
@@ -806,7 +806,7 @@ course.teaching_plan.create.name: Name
 course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
 course.teaching_plan.create.mode.limit: "<li><b>lock mode：</b> Unlock lessons step by step.</li>\n"
-course.teaching_plan.create.task_numbers: Tasks
+course.teaching_plan.create.task_numbers: %taskName%s
 course.teaching_plan.create.student: Students
 course.teaching_plan.create.price: 'Price (CNY)'
 course.teaching_plan.create.status: Status
@@ -869,8 +869,7 @@ course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video 
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 course.marketing_setup.preview: Preview
 course.marketing_setup.preview.set_task: 'Free tasks'
-course.marketing_setup.preview.set_task.task: Task
-course.marketing_setup.preview.set_task.task_name: 'Task %name%'
+course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
 course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
@@ -931,7 +930,7 @@ course.members_manage.official_student.detail.status.unfinished: Unfinished
 course.members_manage.official_student.detail.status.finished: 'Finished on time'
 course.members_manage.official_student.detail.status.overdue: Overdue
 course.members_manage.official_student.detail.status.serious_overdue: 'Serious overdue'
-course.members_manage.official_student.detail.task_sleep: 'Task: Sleep'
+course.members_manage.official_student.detail.task_sleep: '%taskName%: Sleep'
 course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
@@ -1136,8 +1135,7 @@ course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Preview
 course.catalogue.task.join_btn: Enroll
 course.catalogue.task.buy_btn: Buy
-course.catalogue.task.name: 'Task %name%'
-course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
+course.catalogue.task_status.task: '%taskName% No.%taskNumber%:%taskTitle%'
 course.catalogue.task_status.free: Free
 course.catalogue.task_status.try_lookable: Preview
 course.catalogue.task_status.is_optional: Optional
@@ -1160,7 +1158,6 @@ course.reviews.success_tips: 'Your review has been saved'
 course.reviews.empty: 'No comment found'
 course.teacher: Tearcher：
 course.reward_point.award: Reward Point Award
-course.reward_point.task_award: Task Award
 course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
 course.characteristic.content_title: 'Course features'
@@ -1169,22 +1166,22 @@ course.students_dynamic.content_title: 'Latest updates'
 course.students_dynamic.empty: 'No updates found'
 course.note.expand_btn: '[Full Article]'
 course.note.collapse_btn: '[Short Article]'
-course.note.mission_delete_tips: '· The task has been deleted'
+course.note.mission_delete_tips: '· The %taskName% has been deleted'
 course.note.empty: 'No note found'
-course.note.all_task: 'All Tasks'
+course.note.all_task: 'All %taskName%s'
 course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
-course.task: Task
+course.task: %taskName%
 course.task.progress: 'task progress'
 course.task.rate.finish: 'rate of finish'
-course.task.lock_tips: 'Unlock the prior task to continue.'
-course.task.learning: 'Task learning'
+course.task.lock_tips: 'Unlock the prior %taskName% to continue.'
+course.task.learning: '%taskName% learning'
 course.task.learning.back_course_btn: 'Back'
-course.task.learning.finish_condition: 'Task completion condition'
-course.task.learning.finish_btn: 'Task completed'
+course.task.learning.finish_condition: '%taskName% completion condition'
+course.task.learning.finish_btn: '%taskName% completed'
 course.task.learning.learned_btn: Learned
-course.task.preview.content_title: 'Task review'
+course.task.preview.content_title: '%taskName% review'
 course.task.preview.login_and_learn_tips: 'Login to learn'
 course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to enroll the course'
@@ -1197,7 +1194,7 @@ course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
-course.thread.mission_number: Task%number%
+course.thread.mission_number: %taskName%%number%
 course.thread.teacher_answer: 'Tearcher''s answer'
 course.thread.form.edit: 'Edit'
 course.thread.form.create: 'Publish'
@@ -1220,7 +1217,7 @@ course.thread.nav.posted: 'Last reply'
 course.thread.nav.created: 'Newest post'
 course.thread.post_form.create_btn: Publish
 course.thread.post_form.create_tips: Publishing
-course.material.unpublished_tips: 'Could not download the materail before the task published.'
+course.material.unpublished_tips: 'Could not download the materail before the %taskName% published.'
 course.material.links: 'Internet refrence links'
 course.material.upload_time: 'Upload at %createdTime%'
 course.material.empty: 'No files for the course'
@@ -1468,8 +1465,8 @@ course.plan_task.manage_btn: Config
 course.plan_task.publish_btn: Publish
 course.plan_task.manage: 'Programs'
 course.plan_task.content_title: Lessons
-course.plan_task.locked.task_locked: 'Task locked'
-course.plan_task.task: Task
+course.plan_task.locked.task_locked: '%taskName% locked'
+course.plan_task.task: %taskName% learn
 course.plan_task.practice: Exercise
 course.plan_task.practice_tips: 'Setting include all kinds of type such as exercise.'
 course.plan_task.homework: Homework
@@ -1497,7 +1494,7 @@ course.plan_task.lesson-marker_btn: 'Popups'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
-course.plan_task.preparation_tips: 'Students can learn to learn by looking at tasks such as video and reading materials.'
+course.plan_task.preparation_tips: 'Students can learn to learn by looking at %taskName% such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
 course.plan_task.empty: 'It's empty, add a lesson now'
 course.plan_task.task_unpublished: （unpublish）
@@ -1509,7 +1506,6 @@ course.plan_task.convert_failed: 'Transcode Failed'
 course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n"
 course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
-course.plan_task.create_task: 'Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
 course.plan_task.question_title: Title
 course.plan_task.question_describe: Description
@@ -1522,21 +1518,21 @@ course.plan_task.question_author: By
 course.plan_task.question_answer: Answer
 course.plan_task.question_content: Content
 course.plan_task.add_answer_btn: 'Add answer'
-course.plan_task.finish_task_title: 'Complete Task'
+course.plan_task.finish_task_title: 'Complete %taskName%'
 course.plan_task.congratulation_finish: Congrats
 course.plan_task.finish_all_course: 'Greeting, You have already completed the course！'
 course.plan_task.finish_rate_course: 'You have finished %finishedRate%%，keep going！'
 course.plan_task.share: Share
-course.plan_task.next_task: 'Next'
-course.plan_task.task_edit_tips: 'The current task is in editing, please try later.'
-course.plan_task.task_title: '《 Task：%taskTitle% 》'
+course.plan_task.next_task: 'Next %taskName%'
+course.plan_task.task_edit_tips: 'The current %taskName% is in editing, please try later.'
+course.plan_task.task_title: '《 %taskName%：%taskTitle% 》'
 course.plan_task.study_rate: 'Learn progress'
 course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
-course.plan_task.activity_manage.preview_failed_tips: 'Please enroll to start.'
+course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
-course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next task to unlock.'
+course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
 course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Please setup content'
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
@@ -1951,7 +1947,6 @@ classroom.manage.picture: Picture
 classroom.manage.price: Price
 classroom.manage.course: Course
 classroom.manage.courses_count: 'Courses'
-classroom.manage.tasks_count: 'Tasks'
 classroom.manage.student: Student
 classroom.manage.student_number: 'Students'
 classroom.manage.auditor_num: 'Auditors'
@@ -1960,7 +1955,6 @@ classroom.manage.Yesterday: Yesterday
 classroom.manage.today: Today
 classroom.manage.all_student_number: 'Total'
 classroom.manage.full_student_number: 'Number of formal students'
-classroom.manage.finished_task_number: 'Number of completed tasks'
 classroom.manage.thread_count: 'New Discussions'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
@@ -2042,12 +2036,12 @@ classroom.manage: Manage
 classroom.about: About
 classroom.small_picture: Picture
 classroom.course: Course
-classroom.tash_num: 'Task number'
+classroom.tash_num: '%taskName% number'
 classroom.student: Student
 classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
 classroom.formal_student_num: 'Students'
-classroom.task_finish_num: 'Number of completed tasks'
+classroom.task_finish_num: 'Number of completed %taskName%s'
 classroom.add_thread_num: 'Number of new discussions'
 classroom.latest_review: 'Latest reviews'
 classroom.auditor_num: 'Number of auditors'
@@ -2150,8 +2144,8 @@ classroom.free_course: Free
 classroom.teach_plan: 'Program'
 classroom.live_course_playing: 'On live'
 classroom.live: Live
-classroom.task_num: "Task number: %number%\n"
-classroom.total_task_count: "%taskNum% Tasks\n"
+classroom.task_num: "%taskName% number: %number%\n"
+classroom.total_task_count: "%taskNum% %taskName%s\n"
 classroom.forever: Forever
 classroom.course_tips: "All learning data of this course will be erased if delete this course.\n"
 classroom.total_price: Total
@@ -3305,7 +3299,7 @@ my.teaching.open_course.recommend_setting.serializeMode.live: Serialize
 my.teaching.open_course.recommend_setting.serializeMode.finished: Finished
 my.teaching.open_course.recommend_setting.onlive: 'On live'
 my.teaching.open_course.recommend_setting.live: Live
-my.teaching.open_course.recommend_setting.task_number: 'Task %task_number%'
+my.teaching.open_course.recommend_setting.task_number: '%taskName% %task_number%'
 my.teaching.open_course.recommend_setting.save_btn: Save
 my.teaching.open_course.recommend_setting.course_empty: 'Add a course firstly'
 my.teaching.open_course.teachers_setting.title: 'Teachers Settings'
@@ -3404,11 +3398,11 @@ my.course.free_mode_plan.task_finished: Finished
 my.course.free_mode_plan.task_empty: 'No record'
 my.course.free_mode_plan.next_task: Next
 my.course.free_mode_plan.task_progress: Finished
-my.course.lock_mode_plan.task_progress: 'Finished %spanHtml% task'
+my.course.lock_mode_plan.task_progress: 'Finished %spanHtml% %taskName%'
 my.course.lock_mode_plan.behind_plan: 'Behind Schedule'
 my.course.lock_mode_plan.expiry_date: 'Expiry Date'
-my.task.title: 'My Task'
-my.task.calendar: 'My Task Calendar'
+#my.task.title: 'My Task'
+#my.task.calendar: 'My Task Calendar'
 my.learning.homework: 'My Assignment'
 my.learning.homework.check_title: 'Assignment Review'
 my.learning.homework.uncheck: Unreviewed
@@ -3461,7 +3455,7 @@ my.learning.course.favorite: Favorite
 my.learning.course.favorited: Favorited
 my.learning.course.favorite_empty: 'No record'
 my.learning.course.learned_empty: 'No record'
-my.learning.course.finish_task: 'Finish Task'
+my.learning.course.finish_task: 'Finish %taskName%'
 my.learning.course.contiune_study: Continue
 my.learning.course.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
@@ -3489,8 +3483,8 @@ my.learning.note.watch_link: View
 my.learning.note.empty: 'No record'
 my.learning.note.go_back: Back
 my.learning.note.target_course: 《%title%》notes
-my.learning.note.course_task_number: 'Task %number%'
-my.learning.note.course_task_empty: 'This task has been deleted'
+my.learning.note.course_task_number: '%taskName% %number%'
+my.learning.note.course_task_empty: 'This %taskName% has been deleted'
 my.learning.note.total_length: '%length% words in total'
 my.learning.note.delete: 'Delete Notes'
 my.learning.question: 'My Q&A'
@@ -3725,17 +3719,17 @@ testpaper.check.testpaper: Testpaper
 testpaper.check.course.publish_btn: Publish
 testpaper.check.not_isTeacher.tips: 'You are not teacher of current course, you have no permission to review %typeName%'
 testpaper.course.rule: 'Course Rule'
-testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1. Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
+testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1. Free Course：User should login site and the course is free to learn.<br>\n  2.Free %taskName%：The %taskName% selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The %taskName% configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
 course_set.course.about: About
 course_set.course.category: Category
 course_set.course.goals: Target
 course_set.course.audiences: Audiences
 course_set.course.tags: 'Course Tags：'
 course_set.course.show_btn: 'View Courses'
-course_set.course.task_list: 'Task List'
+course_set.course.task_list: '%taskName% List'
 course_set.course.empty: 'No record'
-course_set.course.taskNumber: "Task %number%: %title% \n"
-course_set.task.taskNumber: 'Task %taskNumber%：%taskTitle%'
+course_set.course.taskNumber: "%taskName% %number%: %title% \n"
+course_set.task.taskNumber: '%taskName% %taskNumber%：%taskTitle%'
 course_set.task.empty: 'No record'
 course_set.live.category: 'Course Category'
 course_set.live.vip_category: 'VIP Course'
@@ -3754,7 +3748,7 @@ course_set.live.today_live: 'Live Today'
 course_set.live.today_live.empty: 'No record'
 course_set.live.status.onlive: 'On live'
 course_set.live.status.live_soon: 'Live soon'
-courseset_manage.batch_upload.upload_courseLesson_file: 'Upload lesson file'
+courseset_manage.batch_upload.upload_courseLesson_file: 'Upload %taskName% file'
 courseset_manage.batch_upload.upload_material_file: 'Upload material'
 courseset_manage.batch_upload.upload_materiallib_file: 'Upload file to material lib'
 courseset_manage.batch_upload.add_wait_upload_file_btn: 'Add file to upload'
@@ -3763,7 +3757,7 @@ courseset_manage.batch_upload.file_name: 'File Name'
 courseset_manage.batch_upload.file_size: 'File Size'
 courseset_manage.batch_upload.status: Progress
 courseset_manage.batch_upload.tips: "<li>Support to upload <strong>mp4, mp3</strong>, and file size shouldn't larger than <strong>%upload_max_filesize%</strong>. <br>Please use AVC(H264) for MP4 encoding format, otherwise the browser can't play the video </li><li>Video will be uploaded to <strong>site server</strong>, if you want to use %EduSoho% cloud video service, click <a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">here </a>to learn more.</li> \n"
-courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video task, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
+courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video %taskName%, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
 courseset_manage.batch_upload.cloud.video_transcoding_type: 'Video Conversion Type'
 courseset_manage.batch_upload.cloud.setting_btn: Setting
 courseset_manage.batch_upload.cloud.video-quality: 'Video'
@@ -3892,17 +3886,17 @@ admin.course_manage.recommend.set_seq.seq_tips: 'Please input integer number bet
 admin.course_manage.statistics.name: 'Course Name'
 admin.course_manage.statistics.classroom: Class
 admin.course_manage.statistics.teach_plan_count: 'Program count'
-admin.course_manage.statistics.task_count: 'Task count'
+admin.course_manage.statistics.task_count: '%taskName% count'
 admin.course_manage.statistics.student: Student
 admin.course_manage.statistics.student_number: 'Student count'
 admin.course_manage.statistics.finished_number: 'Finished Num(Person)'
 admin.course_manage.statistics.study_time_minute: 'Study Duration(mins)'
 admin.course_manage.statistics.income_CNY: Income(CNY)
 admin.course_manage.statistics.no_introduce: 'Without introducing'
-admin.course_manage.statistics.watch_task: 'View Task'
+admin.course_manage.statistics.watch_task: 'View %taskName%'
 admin.course_manage.statistics.watch_course_data: 'View Course Data'
 admin.course_manage.statistics.modal_title: '%title% Course Data'
-admin.course_manage.statistics.data.name: 'Task Name'
+admin.course_manage.statistics.data.name: '%taskName% Name'
 admin.course_manage.statistics.data.study_number: 'Study Num(Person)'
 admin.course_manage.statistics.data.finished_number: 'Finish Num(Person)'
 admin.course_manage.statistics.data.average_study_time: 'Avg Study Duration(mins)'
@@ -3922,7 +3916,7 @@ admin.user.statistics.data_detail.note_number: Note Number
 admin.user.statistics.data_detail.learning_course_sets: Learning CourseSet
 admin.user.statistics.data_detail.learning_courses: Learning Course
 admin.user.statistics.data_detail.average_process: Average Process
-admin.user.statistics.data_detail.task_rate: TaskRate
+admin.user.statistics.data_detail.task_rate: %taskName%Rate
 admin.user.statistics.data_detail.thread_number: Thread Number
 admin.user.statistics.data_detail.review_number: Review Number
 admin.user.statistics.data_detail.active_chart: Active
@@ -4041,12 +4035,11 @@ admin.live_manage.coming_live: 'Coming Soon'
 admin.live_manage.underway_live: Ongoing
 admin.live_manage.end_live: Ended
 admin.live_manage.name_option: 'Course Title'
-admin.live_manage.task_option: 'Task Title'
+admin.live_manage.task_option: '%taskName% Title'
 admin.live_manage.keyword_placeholder: Keyword
 admin.live_manage.live_start_time_label: 'Start Time'
 admin.live_manage.live_start_time_placeholder: 'Start Time'
 admin.live_manage.live_end_time_placeholder: 'End Time'
-admin.live_manage.task_th: Task
 admin.live_manage.live_start_time_th: 'Start Time'
 admin.live_manage.live_time_long_th: 'Duration(min)'
 admin.live_manage.max_participate_count_th: 'Max Participant Number'
@@ -4250,8 +4243,8 @@ admin.homepage.todays_data.thread_un_answer: 'Not Answered'
 admin.homepage.order_statistic_title: 'Order Statistic'
 admin.homepage.order_statistic.tips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">`\n    <div class=\"title\">New Orders</div>\n    <div class=\"content\">New created orders include free or paid orders.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Paid Orders</div>\n    <div class=\"content\">New created paid order numbers</div>\n  </div>\n</div>\n"
 admin.homepage.pay_order_statistic_title: 'Paid Orders Statistic'
-admin.homepage.task_finish_statistic_title: 'Completed Tasks'
-admin.homepage.task_finish_statistic.tips: 'Learned Tasks'
+admin.homepage.task_finish_statistic_title: 'Completed %taskName%s'
+admin.homepage.task_finish_statistic.tips: 'Learned %taskName%s'
 admin.homepage.course_ranking_title: 'Course Rank List'
 admin.homepage.latest_question_title: 'Latest Answer'
 admin.homepage.latest_question.tr.question_th: Question
@@ -4614,9 +4607,8 @@ admin.operation_analysis.course.creator: Creator
 admin.operation_analysis.course.student_unit: Numbers
 admin.operation_analysis.course.category: Category
 admin.operation_analysis.course.empty: 'No Course Detail'
-admin.operation_analysis.task: Task
-admin.operation_analysis.task.study_task: 'Study Task'
-admin.operation_analysis.task.type: 'Task Type'
+admin.operation_analysis.task.study_task: 'Study %taskName%'
+admin.operation_analysis.task.type: '%taskName% Type'
 admin.operation_analysis.task.creator: Creator
 admin.operation_analysis.task.belong_to_course: "Belong to：%courseTitle%\n"
 admin.operation_analysis.task.text: 'Rich Text'
@@ -4627,7 +4619,7 @@ admin.operation_analysis.task.testpaper: Testpaper
 admin.operation_analysis.task.live: Live
 admin.operation_analysis.task.flash: Flash
 admin.operation_analysis.task.doc: Document
-admin.operation_analysis.task.empty: 'The task has been deleted'
+admin.operation_analysis.task.empty: 'The %taskName% has been deleted'
 admin.operation_analysis.join_lesson: 'Enroll Course'
 admin.operation_analysis.join_lesson.username: Username
 admin.operation_analysis.join_lesson.time: 'Enrolled Date'
@@ -4643,7 +4635,6 @@ admin.operation_analysis.paid_course.paid_time: 'Order Payment Time'
 admin.operation_analysis.paid_course.empty: 'Course Not Exist'
 admin.operation_analysis.paid_course.order: 'Order Number'
 admin.operation_analysis.video.username: Username
-admin.operation_analysis.video.task: Task
 admin.operation_analysis.video.watch_time: 'Watch Time'
 admin.operation_analysis.video.type: 'Video Type'
 admin.operation_analysis.income.course: Course
@@ -4985,14 +4976,12 @@ admin.course_thread.course_thread_manage_tab.form.type_option: 'Post Type'
 admin.course_thread.course_thread_manage_tab.form.thread_type_option: Attributes
 admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: Sticky
 admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: Featured
-admin.course_thread.course_thread_manage_tab.task_btn: Task
 admin.course_thread.course_thread_manage_tab.isElite_btn: Featured
 admin.course_thread.course_thread_manage_tab.isStick_btn: Top
 admin.course_question.question_th: Question
 admin.course_question.view_th: View
 admin.course_question.createdTime_th: 'Create Time'
 admin.course_question.replay_or_review_th: Reply/View
-admin.course_question.task_btn: Task
 admin.course_question.td_operations.remind_teachers_btn: 'Remind Teacher'
 admin.course_question.td_operations.dropdown.delete_question_btn: 'Delete Question'
 admin.course_note.content_th: Content
@@ -5683,6 +5672,7 @@ admin.setting_course.task_chapter_name: 'Task chapter name'
 admin.setting_course.chapter: Chapter
 admin.setting_course.task_section_name: 'Task part name'
 admin.setting_course.section: Part
+admin.setting_course.task: Task
 admin.setting_course.questions_setting: 'Display answer and resolution after handing in the testpaper'
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
@@ -6447,7 +6437,7 @@ course.block_grid.live_back: Playback
 admin.course_manage.file.remove: 'File removal'
 admin.course_manage.file.remove_course_contact: 'The file will be removed from the course'
 admin.course_manage.file.remove_material_lib: 'At the same time in my teaching materials to delete the relevant documents'
-admin.course_manage.file.remove_tips: 'Removal or deletion causes the referenced task to not work properly'
+admin.course_manage.file.remove_tips: 'Removal or deletion causes the referenced %taskName% to not work properly'
 admin.course_manage.file.remove_confirm: Confirm
 admin.course_manage.file.use: 'File %filename% referenced'
 admin.classroom_manage.manage.coin_price: 'Origin Price %coinPriceAll% %coinname%'

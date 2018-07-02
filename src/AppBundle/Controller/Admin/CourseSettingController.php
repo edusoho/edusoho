@@ -37,13 +37,14 @@ class CourseSettingController extends BaseController
         $this->getSettingService()->set('live-course', $liveCourseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
 
             $courseDefaultSetting = array(
                 'custom_chapter_enabled' => 0,
                 'chapter_name' => '章',
                 'part_name' => '节',
+                'task_name' => '任务',
             );
 
             $courseDefaultSetting = array_merge($courseDefaultSetting, $defaultSetting);
@@ -74,7 +75,7 @@ class CourseSettingController extends BaseController
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $courseDefaultSetting = $request->request->get('defaultCoursePicture', 0);
             $defaultSetting = array_merge($defaultSetting, array('defaultCoursePicture' => $courseDefaultSetting));
 
@@ -106,7 +107,7 @@ class CourseSettingController extends BaseController
         $this->getSettingService()->set('live-course', $liveCourseSetting);
         $setting = array_merge($default, $liveCourseSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
             $setting = array_merge($courseSetting, $liveCourseSetting);
@@ -148,7 +149,7 @@ class CourseSettingController extends BaseController
             $questionsSetting = $default;
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
             $this->getLogService()->info('admin/system/', 'questions_settings', '更新题库设置', $questionsSetting);

@@ -8,9 +8,9 @@
   {% endif %}
 
 {% if task.isOptional == 0 %}
-  任务{{ task.number }}:
+  {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }}:
 {% else %}
-  选修任务:
+  选修{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}:
 {% endif %}
   {{ task.title }}{% block taskType %}{% endblock %}
   {% include 'export/export-btn.html.twig' with
