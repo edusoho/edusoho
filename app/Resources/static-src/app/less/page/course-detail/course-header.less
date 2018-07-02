@@ -5,8 +5,31 @@
   @media(max-width:@screen-sm-max) {
     padding: 16px;
   }
+  .tags {
+    .tag-serialing,
+    .tag-finished {
+      display: inline-block;
+      width: 40px;
+      height: 50px;
+    }
+    .tag-live {
+      background: url("@{img-src}tag_live.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
+    }
+    .tag-serialing {
+      background: url("@{img-src}tag_serialing.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}tag_serialing.png") 1x,url("@{img-src}tag_serialing@2x.png") 2x);
+    }
+    .tag-finished {
+      background: url("@{img-src}tag_finished.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}tag_finished.png") 1x,url("@{img-src}tag_finished@2x.png") 2x);
+    }
+  }
   .course-detail-top {
     padding-right: 130px;
+    .tags {
+      float: left;
+    }
     @media(max-width:@screen-sm-max) {
       padding-right: 0;
     }
@@ -28,33 +51,11 @@
         max-width: 100%;
       }
     }
-    .tags {
-      float: left;
-      .tag-serialing,
-      .tag-finished {
-        display: inline-block;
-        width: 40px;
-        height: 50px;
-      }
-      .tag-live {
-        background: url("@{img-src}tag_live.png") no-repeat;
-        background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
-      }
-      .tag-serialing {
-        background: url("@{img-src}tag_serialing.png") no-repeat;
-        background-image: -webkit-image-set(url("@{img-src}tag_serialing.png") 1x,url("@{img-src}tag_serialing@2x.png") 2x);
-      }
-      .tag-finished {
-        background: url("@{img-src}tag_finished.png") no-repeat;
-        background-image: -webkit-image-set(url("@{img-src}tag_finished.png") 1x,url("@{img-src}tag_finished@2x.png") 2x);
-      }
-    }
+   
   }
   .course-operation {
     position: absolute;
     list-style-type: none;
-    left: 24px;
-    bottom: 0;
     padding-left: 0;
     li {
       float: left;
@@ -65,12 +66,26 @@
       }
     }
   }
+
+  .course-operation--market {
+    left: 24px;
+    bottom: 0;
+  }
   
+  .course-operation--normal {
+    right: 10px;
+    top: 20px;
+  }
+
   .course-detail-bottom {
     .course-detail-img {
       position: relative;
       float: left;
       width: 480px;
+      .tags {
+        position: absolute;
+        top: 0;
+      }
       @media(max-width:@screen-sm-max){
        width: 100%;
        float: none;
@@ -233,6 +248,10 @@
   }
 }
 
+.course-detail-section--normal {
+  padding: 15px !important;
+}
+
 .course-detail-info__title {
   margin-bottom: 16px;
   color: @gray-darker;
@@ -312,6 +331,12 @@
      left: 0;
      top: 0;
     }
+  }
+  .buy-btn-group {
+    line-height: 33px;
+    position: absolute;
+    right: 10px;
+    bottom: 15px;
   }
 }
 
@@ -457,10 +482,11 @@
 }
 
 .buy-btn-group  {
-  @media(max-width:@screen-sm-max) {
+  @media(max-width:@screen-xs-max) {
     line-height: 33px;
-    position:absolute;
+    position: absolute;
     right: 10px;
+    bottom: 40px;
   }
   .btn-lg {
     padding: 10px 35px;

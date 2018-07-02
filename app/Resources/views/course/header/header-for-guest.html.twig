@@ -27,6 +27,14 @@
 {% block course_heard_content %}
   <div class="course-detail-bottom">
     <div class="course-detail-img">
+      <span class="tags mrm">
+        <span class="tag-serialing"></span>
+        {% if courseSet.serializeMode == 'serialized' %}
+          <span class="tag-serialing"></span>
+        {% elseif courseSet.serializeMode == 'finished' %}
+          <span class="tag-finished"></span>
+        {% endif %}
+      </span>
       <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" alt="{{ course.title }} ">
       <div class="image-overlay"></div>
 			{% if previewTask | default(null) %}
@@ -59,6 +67,7 @@
         data-trigger="hover"  data-content="{{courseSet.subtitle}}">
         <span>{{ courseSet.subtitle }}</span>
       </p>
+      {{ dump(onDiscount) }}
       <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
 				{% include 'course/header/header-for-price.html.twig' %}
       </div>
@@ -91,7 +100,7 @@
             </ul>
           </div>
 				{% endif %}
-        
+
         <div class="hidden-xs course-detail-expiry-wrap">
           <span class="course-detail-title">{{ 'course.expiry_date'|trans }}</span>
 					{% if course.expiryMode == 'days'  %}
@@ -182,7 +191,7 @@
 
         </ul>
       </div>
-      <ul class="course-operation hidden-xs hidden-sm clearfix mb0">
+      <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
         <li class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
           <a class="btn btn-default btn-xs"><i class="es-icon es-icon-bookmark color-primary"></i>
           <span class="qrcode-popover"><img class="mb0" src="" alt=""></span></a>
@@ -254,4 +263,7 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block course_header_top %}
 {% endblock %}
