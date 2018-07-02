@@ -10,11 +10,12 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
     {
         $response = $this->fetchUrl($url);
 
-        if ($response['code'] != 200) {
+        if (200 != $response['code']) {
             throw new ParseException('获取网易公开课视频信息失败');
         }
 
         $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'\s*\+\s*\'(.*?)\'\s*\+\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?appsrc\s*:\s*\'(.*?)\'.*?src\s*:\s*\'(.*?)\'/s', $response['content'], $matches);
+
         if (!$matched) {
             throw new ParseException('解析网易公开课视频信息失败');
         }
@@ -40,9 +41,9 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
     public function detect($url)
     {
-        $matched = preg_match('/^http\:\/\/v\.163\.com\/movie\/.+?\.html/s', $url);
+        $matched = preg_match('/^(http|https)\:\/\/v\.163\.com\/movie\/.+?\.html/s', $url);
         if (!$matched) {
-            $matched = preg_match('/^http\:\/\/open\.163\.com\/movie\/.+?\.html/s', $url);
+            $matched = preg_match('/^(http|https)\:\/\/open\.163\.com\/movie\/.+?\.html/s', $url);
         }
 
         return $matched;

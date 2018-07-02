@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\System\SettingException;
 
 class SmsCenter extends AbstractResource
 {
@@ -20,6 +21,14 @@ class SmsCenter extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
+        $type = $request->request->get('type');
+        if ('register' == $type) {
+            $auth = $this->getSettingService()->get('auth', array());
+            if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+                throw SettingException::FORBIDDEN_MOBILE_REGISTER();
+            }
+        }
+
         if (!($type = $request->request->get('type'))
             || !($mobile = $request->request->get('mobile'))) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
@@ -55,5 +64,10 @@ class SmsCenter extends AbstractResource
     private function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

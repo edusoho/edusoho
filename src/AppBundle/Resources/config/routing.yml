@@ -1220,6 +1220,10 @@ settings_find_pay_password_by_sms:
     path:  /settings/find_pay_password_by_sms
     defaults: { _controller: AppBundle:Settings:findPayPasswordBySms }
 
+password_reset_by_email_success:
+    path:  /password/reset/email/success
+    defaults: { _controller:  AppBundle:PasswordReset:emailResetSuccess }
+
 settings_find_pay_password_by_question:
     path:  /settings/find_pay_password_by_question
     defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
