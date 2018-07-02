@@ -558,7 +558,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function isMobileUnique($mobile)
     {
-        $count = $this->countUsers(array('verifiedMobile' => $mobile));
+        $count = $this->countUsers(array('wholeVerifiedMobile' => $mobile));
 
         if ($count > 0) {
             return false;
