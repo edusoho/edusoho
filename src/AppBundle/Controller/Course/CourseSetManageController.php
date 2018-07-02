@@ -224,7 +224,7 @@ class CourseSetManageController extends BaseController
             $courseSet = $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
             $cover = $this->getWebExtension()->getFpath($courseSet['cover']['large']);
 
-            return $this->createJsonResponse(array('code' => true, 'cover' => $cover));
+            return $this->createJsonResponse(array('image' => $cover));
         }
 
         return $this->render('courseset-manage/cover-crop-modal.html.twig');
