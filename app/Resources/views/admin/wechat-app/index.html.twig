@@ -3,68 +3,54 @@
 {% set menu = 'admin_wechat_app' %}
 
 {% block main %}
-    {% if isNoneLevel %}
-        <div class="alert alert-warning">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            您的网校为<strong>免费版</strong>，请联系官方购买<strong>SaaS套餐</strong>才能申请小程序。
-        </div>
-    {% endif %}
-    <div class="wechat-app-banner">
-        <div class="banner-content">
-            <h3 class="banner-title">
-                网校小程序，招生学习更便捷
-            </h3>
-            <p class="banner-introduce">
-                网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
-            </p>
-                {% if isNoneLevel %}
-                    <a class="btn btn-primary "
-                        href="javascript:;"
-                        data-toggle="tooltip" title="您的网校为免费版，请先升级为SaaS套餐才能申请小程序"
-                    >立即开通</a>
-                {% else %}
-                    <a class="btn btn-primary "
-                        href="{{ path('admin_wechat_app_request') }}"
-                    >立即开通</a>
-                {% endif %}
-        </div>
+  <div class="wechat-app-banner">
+    <div class="banner-content">
+      <h3 class="banner-title">
+        网校小程序，招生学习更便捷
+      </h3>
+      <p class="banner-introduce">
+        网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
+      </p>
+
+      {% if not purchased %}
+        <a class="btn btn-primary" href="javascript: window.open('http://www.baidu.com')">立即开通</a>
+      {% elseif purchased and not installed %}
+        <a href="#" data-toggle="modal" data-target="#modal" data-url="/admin/app/package_update/1349/modal?type=install" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">立即安装</a>
+      {% endif %}
     </div>
-    <div class="wechat-app-introduction row">
-        <div class="col-md-3 col-sm-4 col-xs-6">
-            <div class="introduction-box">
-                <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/fast-access.png') }}"
-                     srcset="{{ asset('static-dist/app/img/admin/wechat-app/fast-access.png') }} 1x,
-                        {{ asset('static-dist/app/img/admin/wechat-app/fast-access@2x.png') }} 2x"/>
-                <h4 class="introduction-title">快速接入</h4>
-                <p class="introduction-content">只需一键授权，无需任何开发，即可拥有自己的网校小程序</p>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-4 col-xs-6">
-            <div class="introduction-box">
-                <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/data-synchronization.png') }}"
-                     srcset="{{ asset('static-dist/app/img/admin/wechat-app/data-synchronization.png') }} 1x,
-                        {{ asset('static-dist/app/img/admin/wechat-app/data-synchronization@2x.png') }} 2x"/>
-                <h4 class="introduction-title">数据同步</h4>
-                <p class="introduction-content">小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理</p>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-4 col-xs-6">
-            <div class="introduction-box">
-                <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/flow-entrance.png') }}"
-                     srcset="{{ asset('static-dist/app/img/admin/wechat-app/flow-entrance.png') }} 1x,
-                        {{ asset('static-dist/app/img/admin/wechat-app/flow-entrance@2x.png') }} 2x"/>
-                <h4 class="introduction-title">自带流量</h4>
-                <p class="introduction-content">微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户</p>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-4 col-xs-6">
-            <div class="introduction-box">
-                <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/easy-promotion.png') }}"
-                     srcset="{{ asset('static-dist/app/img/admin/wechat-app/easy-promotion.png') }} 1x,
-                        {{ asset('static-dist/app/img/admin/wechat-app/easy-promotion@2x.png') }} 2x"/>
-                <h4 class="introduction-title">超轻推广</h4>
-                <p class="introduction-content">流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化</p>
-            </div>
-        </div>
+  </div>
+  <div class="wechat-app-introduction row">
+    <div class="col-md-3 col-sm-4 col-xs-6">
+      <div class="introduction-box">
+        <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/fast-access.png') }}"
+          srcset="{{ asset('static-dist/app/img/admin/wechat-app/fast-access.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/fast-access@2x.png') }} 2x"/>
+        <h4 class="introduction-title">快速接入</h4>
+        <p class="introduction-content">只需一键授权，无需任何开发，即可拥有自己的网校小程序</p>
+      </div>
     </div>
+    <div class="col-md-3 col-sm-4 col-xs-6">
+      <div class="introduction-box">
+        <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/data-synchronization.png') }}"
+          srcset="{{ asset('static-dist/app/img/admin/wechat-app/data-synchronization.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/data-synchronization@2x.png') }} 2x"/>
+        <h4 class="introduction-title">数据同步</h4>
+        <p class="introduction-content">小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-6">
+      <div class="introduction-box">
+        <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/flow-entrance.png') }}"
+          srcset="{{ asset('static-dist/app/img/admin/wechat-app/flow-entrance.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/flow-entrance@2x.png') }} 2x"/>
+        <h4 class="introduction-title">自带流量</h4>
+        <p class="introduction-content">微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-6">
+      <div class="introduction-box">
+        <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/easy-promotion.png') }}"
+          srcset="{{ asset('static-dist/app/img/admin/wechat-app/easy-promotion.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/easy-promotion@2x.png') }} 2x"/>
+        <h4 class="introduction-title">超轻推广</h4>
+        <p class="introduction-content">流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化</p>
+      </div>
+    </div>
+  </div>
 {% endblock %}
