@@ -172,7 +172,7 @@
     </div>
     <div class="alert alert-info deduction text-center">
     <p><strong>
-    {{'admin.setting_course.customer_chapter_section_name.tips'|trans}}
+    {{'系统中的"章"、"节"会被设置的名称所替代'|trans}}
     </strong></p>
     </div>
 
@@ -187,6 +187,11 @@
       <div class="controls col-md-4">
         <input type="text" id="task_name" name="task_name" class="form-control" value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}">
       </div>
+    </div>
+    <div class="alert alert-info deduction text-center">
+      <p><strong>
+          {{'系统中的"任务"会被设置的名称所替代'|trans}}
+        </strong></p>
     </div>
   </fieldset>
 

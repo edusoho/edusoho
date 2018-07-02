@@ -6943,7 +6943,6 @@ admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任
 admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
 admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示课程人数
 admin.setting_course.customer_chapter_section_name: 章节名称自定义
-admin.setting_course.customer_chapter_section_name.tips: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
 admin.setting_course.task_chapter_name: 任务章名称
 admin.setting_course.chapter: 章
 admin.setting_course.task_section_name: 任务节名称

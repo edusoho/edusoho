@@ -50,6 +50,18 @@ define(function(require, exports, module) {
 
         var $form = $("#course-form");
 
+        var validator = new Validator({
+          element: $form,
+          autoSubmit: true
+        });
+
+        validator.addItem({
+          element: '[name="task_name"]',
+          required: true,
+          rule: 'minlength{min:5} maxlength{max:10}',
+          display: '任务名称'
+        });
+
         if($('#live-course-logo-upload').length>0) {
             var uploader = new WebUploader({
                 element: '#live-course-logo-upload'

@@ -5667,7 +5667,6 @@ admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free t
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
 admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of student allowed to display in the course'
 admin.setting_course.customer_chapter_section_name: 'Custom chapter name'
-admin.setting_course.customer_chapter_section_name.tips: 'Note: After you update the school field, relevant field names will be changed accordingly to the modified name in the site.'
 admin.setting_course.task_chapter_name: 'Task chapter name'
 admin.setting_course.chapter: Chapter
 admin.setting_course.task_section_name: 'Task part name'
