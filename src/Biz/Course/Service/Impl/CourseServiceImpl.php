@@ -203,6 +203,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
+    public function updateBaseInfo($id, $fields)
+    {
+        $oldCourse = $this->canUpdateCourseBaseInfo($id);
+
+        
+    }
+
     public function updateCourse($id, $fields)
     {
         $this->tryManageCourse($id);
@@ -2349,5 +2356,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             static::DEFAULT_COURSE_TYPE,
             static::NORMAL__COURSE_TYPE,
         );
+    }
+
+    public function canUpdateCourseBaseInfo($courseId)
+    {
+        $course = $this->getCourse($courseId);
+        $user = $this->getCurrentUser();
+        $courseSetting = $this->getSettingService()->get('course');
+
+        if (!empty($courseSetting['teacher_manage_marketing']) && in_array($user['id'], $course['teacherIds'])) {
+            return $course;
+        }
+
+        return $this->tryManageCourse($courseId);
     }
 }

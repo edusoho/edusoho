@@ -475,10 +475,10 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $updatedCourse = $this->getCourseService()->updateCourse($courseId, $data);
+            $updatedCourse = $this->getCourseService()->updateBaseInfo($courseId, $data);
             if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
                 $this->getCourseService()->batchConvert($course['id']);
             }
