@@ -3,7 +3,9 @@ import Drag from 'app/common/drag';
 
 export default class Register {
   constructor() {
-    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw')) : null;
+    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+      limitType: 'web_register'
+    }) : null;
     this.dragEvent();
     this.initValidator();
     this.inEventMobile();

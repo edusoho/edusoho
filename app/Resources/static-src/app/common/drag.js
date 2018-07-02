@@ -3,7 +3,7 @@ import { strToBase64 } from 'common/utils';
 import Emitter from 'component-emitter';
 
 export default class Drag extends Emitter{
-  constructor(bar, target) {
+  constructor(bar, target, data) {
     super();
     this.$element = bar;
     this.$target = target;
@@ -16,6 +16,7 @@ export default class Drag extends Emitter{
       currentLeft: 0,
       currentTop: 0
     };
+    this.data = Object.assign({times: 2}, data);
     this.dragCaptchaToken = null;
     this.init();
   }
@@ -34,8 +35,10 @@ export default class Drag extends Emitter{
         $('.js-jigsaw').attr('src', '');
         self.setCss(self.$element[0], 'cursor', 'pointer');
         self.resetLocation(self.$element[0], self.$target[0]);
+        $('[name="dragCaptchaToken"]').val('');
         self.initEvent();
-      }
+      },
+      data: this.data
     }).then((res) => {
       this.loadingImg(res.url, res.jigsaw);
       this.dragCaptchaToken = res.token;
@@ -47,6 +50,10 @@ export default class Drag extends Emitter{
     img.src = url;
     img.className = 'js-jigsaw-bg drag-img__bg';
     img.onload = () => {
+      if ($('.js-jigsaw-bg').length > 0) {
+        return;
+      }
+      
       $(img).prependTo('.js-drag-img');
       $('.js-drag-img-mask').addClass('hidden');
       $('.js-jigsaw').attr('src', src);
