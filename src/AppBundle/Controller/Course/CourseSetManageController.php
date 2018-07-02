@@ -173,38 +173,6 @@ class CourseSetManageController extends BaseController
         );
     }
 
-    public function coverAction(Request $request, $id)
-    {
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            $this->getCourseSetService()->changeCourseSetCover($id, $data);
-
-            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $id)));
-        }
-
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        // if ($courseSet['cover']) {
-        //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
-        // }
-
-        if ($courseSet['locked']) {
-            return $this->redirectToRoute(
-                'course_set_manage_sync',
-                array(
-                    'id' => $id,
-                    'sideNav' => 'cover',
-                )
-            );
-        }
-
-        return $this->render(
-            'courseset-manage/cover.html.twig',
-            array(
-                'courseSet' => $courseSet,
-            )
-        );
-    }
-
     public function coverCropAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
