@@ -13,7 +13,7 @@ class VideoController extends BaseActivityController implements ActivityActionIn
     {
         $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $watchStatus = $this->getWatchStatus($activity);
-        if ($watchStatus['status'] === 'error') {
+        if ('error' === $watchStatus['status']) {
             return $this->render('activity/video/limit.html.twig', array(
                 'watchStatus' => $watchStatus,
             ));
@@ -129,7 +129,7 @@ class VideoController extends BaseActivityController implements ActivityActionIn
         $watchStatus = array('status' => 'ok');
         if ($course['watchLimit'] > 0 && $this->setting('magic.lesson_watch_limit')) {
             //只有视频课程才限制观看时长
-            if (empty($course['watchLimit']) || $activity['mediaType'] !== 'video') {
+            if (empty($course['watchLimit']) || 'video' !== $activity['mediaType']) {
                 return array('status' => 'ignore');
             }
 
@@ -168,18 +168,29 @@ class VideoController extends BaseActivityController implements ActivityActionIn
 
     private function prepareMediaUri($video)
     {
-        if ($video['mediaSource'] != 'self') {
-            if ($video['mediaSource'] == 'youku') {
+        if ('self' != $video['mediaSource']) {
+            if ('youku' == $video['mediaSource']) {
                 $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
                 if ($matched) {
                     $video['mediaUri'] = "//player.youku.com/embed/{$matches[1]}";
                     $video['mediaSource'] = 'iframe';
                 }
-            } elseif ($video['mediaSource'] == 'tudou') {
+            } elseif ('tudou' == $video['mediaSource']) {
                 $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
                 if ($matched) {
                     $video['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                     $video['mediaSource'] = 'iframe';
+                }
+            } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
+                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = $matches[2];
+                }
+            } elseif ('qqvideo' == $video['mediaSource']) {
+                $video['mediaUri'] = str_replace('static.video.qq.com', 'imgcache.qq.com/tencentvideo_v1/playerv3', $video['mediaUri']);
+                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = $matches[2];
                 }
             }
         }
@@ -191,7 +202,7 @@ class VideoController extends BaseActivityController implements ActivityActionIn
     {
         $context = array();
         $file = $activity['ext']['file'];
-        if (empty($task['isFree']) && $activity['ext']['mediaSource'] == 'self' && $file['storage'] == 'cloud') {
+        if (empty($task['isFree']) && $activity['ext']['mediaSource'] == 'self' && 'cloud' == $file['storage']) {
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
 

@@ -7,6 +7,7 @@ use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Biz\Sms\SmsException;
+use Biz\User\UserException;
 
 class SmsServiceImpl extends BaseService implements SmsService
 {
@@ -72,14 +73,8 @@ class SmsServiceImpl extends BaseService implements SmsService
                 $description = '用户注册';
             }
 
-            $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
-
-            if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])) {
-                throw new ServiceException('您已经绑定了该手机号码');
-            }
-
             if (!$this->getUserService()->isMobileUnique($to)) {
-                throw new ServiceException('该手机号码已被其他用户绑定');
+                $this->createNewException(UserException::ERROR_MOBILE_REGISTERED());
             }
         }
 

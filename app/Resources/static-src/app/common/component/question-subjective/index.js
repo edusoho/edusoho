@@ -1,7 +1,7 @@
 export let questionSubjectiveRemask = ($element) => {
   let hasSubjective = false;
   let html = '';
-  let $subjectiveRemask = $('.js-subjective-remask');
+  const $subjectiveRemask = $('#task-create-content-iframe').contents().find('.js-subjective-remask');
 
   $element.find('tbody tr').each(function() {
     let type = $(this).data('type');

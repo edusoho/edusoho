@@ -92,6 +92,6 @@ class DistributorSyncJob extends AbstractJob
             return $this->mockedSendTypes;
         }
 
-        return array('User', 'Order');
+        return array('User', 'Order', 'CourseOrder');
     }
 }

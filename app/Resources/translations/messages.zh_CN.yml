@@ -8343,14 +8343,25 @@ exception.common_error: 服务器内部错误
 exception.common_drag_captcha_error: 验证码验证失败！
 exception.common_drag_captcha_expired: 验证码失效！
 exception.common_drag_captcha_required: 验证码参数缺失！
+exception.common_frequent_operation: 操作过于频繁，请稍后再试！
+exception.common_parameter_missing: 参数缺失，请重试！
+exception.common_parameter_error: 参数错误，请重试！
+exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
 
 exception.article.notfound: 资讯不存在!
 exception.user.unlogin: 未登陆，请登陆后操作!
 exception.user.message_forbidden: 不支持向该用户发送私信!
+exception.user.discuz_user_reset_password: 请通过论坛找回密码！
+exception.user.not_found: 找不到该用户！
 exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
+exception.user.mobile_registered: 该手机号码已被注册！
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: 云短信相关设置未开启!
+
+exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
+exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
+exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。

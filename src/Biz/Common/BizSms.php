@@ -15,6 +15,10 @@ class BizSms extends BizAware
 
     const SMS_BIND_TYPE = 'sms_bind';
 
+    const SMS_REGISTER = 'sms_registration';
+
+    const SMS_FORGET_PASSWORD = 'sms_forget_password';
+
     public function send($smsType, $mobile, $options = array())
     {
         $options = array_merge(array('duration' => TimeMachine::HALF_HOUR, 'times' => 10, 'userId' => 0), $options);

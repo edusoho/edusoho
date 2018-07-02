@@ -7027,7 +7027,11 @@ exception.common_error: 服务器内部错误
 exception.common_drag_captcha_error: 验证码验证失败！
 exception.common_drag_captcha_expired: 验证码失效！
 exception.common_drag_captcha_required: 验证码参数缺失！
+exception.common_frequent_operation: 操作过于频繁，请稍后再试！
+exception.common_parameter_missing: 参数缺失，请重试！
+exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
 
+exception.user.mobile_registered: 该手机号码已被注册！
 exception.article.notfound: 资讯不存在
 exception.user.unlogin: 未登陆，请登陆后操作
 exception.user.message_forbidden: 不支持向该用户发送私信
@@ -7035,3 +7039,5 @@ exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.user.not_found: 找不到该用户！
+exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
