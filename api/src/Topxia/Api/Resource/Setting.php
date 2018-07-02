@@ -58,6 +58,7 @@ class Setting extends BaseResource
         $default = array(
             'chapter_name' => '章',
             'part_name' => '节',
+            'task_name' => '任务',
             'show_student_num_enabled' => '1'
         );
         $res = array_merge($default, $res);
