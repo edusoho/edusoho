@@ -830,6 +830,7 @@ course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Config
 course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
+course.plan_base_info: 基础设置
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'

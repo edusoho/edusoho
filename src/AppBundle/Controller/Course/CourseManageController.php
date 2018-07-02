@@ -514,6 +514,7 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
                 'audioServiceStatus' => $audioServiceStatus,
+                'canFreeTasks' => $this->findCanFreeTasks($course),
             )
         );
     }

@@ -1,121 +1,94 @@
 {% block side %}
-  {% set menuType = 'course' %}
-  {% if course_side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files', 'plan'] %}
-    {% set menuType = 'courseSet' %}
-  {% endif %}
-  {% set coursesLength =  courses|length %}
-  {% set courseListIntroCookie = app.request.cookies.get('COURSE_LIST_INTRO_COOKIE')|default(null)  %}
-  {% set isShowCourseMenu  = (curCourse and (menuType != 'courseSet' or coursesLength <= 1  or courseListIntroCookie)) %}
-  {% set isShowCourseList =  ( courseSet.type != 'live' and courseSet.parentId|default(0) <= 0  and (menuType == 'courseSet' or coursesLength <= 1 or courseListIntroCookie|default(null) )) %}
-  
-  <div class="cd-sidebar locked js-sidenav" data-course-length="{{coursesLength}}">
+  <div class="cd-sidebar locked js-sidenav" data-course-length="{{get_course_count(courseSet.id)}}">
     <ul class="cd-sidebar__list">
-      {% if isShowCourseMenu %}
-        <div class="js-sidenav-course-menu">
-
-          <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}" id="step-1">
-            {% if courseSet.locked %}
-              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
-                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_task'|trans }}
-              </a>
-            {% else %}
-              <a href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                {{ 'course.plan_task'|trans }}
-              </a>
-            {% endif %}
-          </li>
-          <li class="cd-sidebar__item {% if course_side_nav == 'info' %}active{% endif %}">
-            {% if courseSet.locked %}
-              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'info'}) }}">
-                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_setup'|trans }}
-              </a>
-            {% else %}
-              <a href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                {{ 'course.plan_setup'|trans }}
-              </a>
-            {% endif %}
-          </li>
-
-          {# 录播管理 #}
-          {% if hasLiveTasks or courseSet.type == 'live' %}
-            <li class="cd-sidebar__item {% if course_side_nav == 'replay' %}active{% endif %}">
-              {% if courseSet.locked %}
-                <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'replay'}) }}">
-                  <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.replay_manage'|trans }}
-                </a>
-              {% else %}
-                <a href="{{ path('course_set_manage_course_replay', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                  {{ 'course.replay_manage'|trans }}
-                </a>
-              {% endif %}
-            </li>
+      <div class="js-sidenav-course-menu">
+        <li class="cd-sidebar__item {% if course_side_nav == 'info' %}active{% endif %}">
+          {% if courseSet.locked %}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'info'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_base_info'|trans }}
+            </a>
+          {% else %}
+            <a href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              {{ 'course.plan_base_info'|trans }}
+            </a>
           {% endif %}
-
-          <li class="cd-sidebar__item {% if course_side_nav == 'marketing' %}active{% endif %}" id="step-2">
+        </li>
+        <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}" id="step-1">
+          {% if courseSet.locked %}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_task'|trans }}
+            </a>
+          {% else %}
+            <a href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              {{ 'course.plan_task'|trans }}
+            </a>
+          {% endif %}
+        </li>
+        {# 录播管理 #}
+        {% if hasLiveTasks or courseSet.type == 'live' %}
+          <li class="cd-sidebar__item {% if course_side_nav == 'replay' %}active{% endif %}">
             {% if courseSet.locked %}
-              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'marketing'}) }}">
-                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.marketing_setup'|trans }}
+              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'replay'}) }}">
+                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.replay_manage'|trans }}
               </a>
             {% else %}
-              <a href="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                {{ 'course.marketing_setup'|trans }}
+              <a href="{{ path('course_set_manage_course_replay', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+                {{ 'course.replay_manage'|trans }}
               </a>
             {% endif %}
           </li>
+        {% endif %}
+        <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
 
-          <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
-
-          <li class="cd-sidebar__item {% if course_side_nav == 'teachers' %}active{% endif %}">
-            {% if courseSet.locked %}
-              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'teachers'}) }}">
-                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.teacher_setup'|trans }}
-              </a>
-            {% else %}
-              <a href="{{ path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                {{ 'course.teacher_setup'|trans }}
-              </a>
-            {% endif %}
-          </li>
-
-          <li class="cd-sidebar__item {% if course_side_nav == 'students' %}active{% endif %}">
-            <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ 'course.student_manage'|trans }}
+        <li class="cd-sidebar__item {% if course_side_nav == 'teachers' %}active{% endif %}">
+          {% if courseSet.locked %}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'teachers'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.teacher_setup'|trans }}
             </a>
-          </li>
-
-
-          <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
-
-          <li class="cd-sidebar__item {% if course_side_nav == 'testpaper-check' %}active{% endif %}">
-            <a href="{{ path('course_manage_testpaper_check_list', {id: curCourse.id}) }}">{{ 'course.testpaper_check'|trans }}
+          {% else %}
+            <a href="{{ path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              {{ 'course.teacher_setup'|trans }}
             </a>
-          </li>
-          <li class="cd-sidebar__item {% if course_side_nav == 'homework-check' %}active{% endif %}">
-            <a href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ 'course.homework_check'|trans }}
-            </a>
-          </li>
-
-          <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
-          <li class="cd-sidebar__item {% if course_side_nav == 'overview' %}active{% endif %}" id="step-0">
-            <a href="{{ path('course_set_manage_course_overview', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ 'course.plan_overview'|trans }}
-            </a>
-          </li>
-          {% if setting('storage.upload_mode', 'local') == 'cloud' %}
-            <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}">
-              <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                {{ 'course.question_marker_statistics'|trans }}</a>
-            </li>
           {% endif %}
-          {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
-            <li class="cd-sidebar__item {% if course_side_nav == 'orders' %}active{% endif %}">
-              <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }}
-              </a>
-            </li>
-          {% endif %}
-        </div>
-      {% endif %}
+        </li>
+
+        <li class="cd-sidebar__item {% if course_side_nav == 'students' %}active{% endif %}">
+          <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+            {{ 'course.student_manage'|trans }}
+          </a>
+        </li>
+
+
+        <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
+
+        <li class="cd-sidebar__item {% if course_side_nav == 'testpaper-check' %}active{% endif %}">
+          <a href="{{ path('course_manage_testpaper_check_list', {id: curCourse.id}) }}">{{ 'course.testpaper_check'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if course_side_nav == 'homework-check' %}active{% endif %}">
+          <a href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ 'course.homework_check'|trans }}
+          </a>
+        </li>
+
+        <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
+        <li class="cd-sidebar__item {% if course_side_nav == 'overview' %}active{% endif %}" id="step-0">
+          <a href="{{ path('course_set_manage_course_overview', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+            {{ 'course.plan_overview'|trans }}
+          </a>
+        </li>
+        {% if setting('storage.upload_mode', 'local') == 'cloud' %}
+          <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}">
+            <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              {{ 'course.question_marker_statistics'|trans }}</a>
+          </li>
+        {% endif %}
+        {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
+          <li class="cd-sidebar__item {% if course_side_nav == 'orders' %}active{% endif %}">
+            <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }}
+            </a>
+          </li>
+        {% endif %}
+      </div>
     </ul>
   </div>
-
 {% endblock %}

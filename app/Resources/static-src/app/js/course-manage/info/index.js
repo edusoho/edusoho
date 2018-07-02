@@ -5,12 +5,7 @@ import postal from 'postal';
 import notify from 'common/notify';
 
 class courseInfo {
-
   constructor() {
-    this.init();
-  }
-
-  init() {
     if ($('#maxStudentNum-field').length > 0) {
       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
         $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
@@ -21,22 +16,6 @@ class courseInfo {
     this.changeAudioMode();
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
-    this.renderMultiGroupComponent('course-goals', 'goals');
-    this.renderMultiGroupComponent('intended-students', 'audiences');
-  }
-
-  initCkeidtor() {
-    this.editor = CKEDITOR.replace('summary', {
-      allowedContent: true,
-      toolbar: 'Detail',
-      fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
-    });
-
-    this.editor.on('blur', () => {
-      $('#summary').val(this.editor.getData());
-      this.validator.form();
-    });
   }
 
   changeAudioMode() {
@@ -58,18 +37,6 @@ class courseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
-        summary: {
-          ckeditor_maxlength: 10000,
-        },
-        title: {
-          maxlength: 100,
-          required: {
-            depends: function () {
-              $(this).val($.trim($(this).val()));
-              return true;
-            }
-          }
-        },
         maxStudentNum: {
           required: true,
           live_capacity: true,
@@ -136,14 +103,6 @@ class courseInfo {
       },
       Translator.trans('course.manage.expiry_start_date_error_hint')
     );
-
-    $('#course-submit').click(() => {
-      $('#summary').val(this.editor.getData());
-      if (this.validator.form()) {
-        this.publishAddMessage();
-        $form.submit();
-      }
-    });
   }
 
   initDatePicker($id) {
