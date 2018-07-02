@@ -39,7 +39,9 @@ class Trade extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-
+        if ($params['payPassword']) {
+            $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
+        }
         if (empty($params['gateway']) || empty($params['type'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
