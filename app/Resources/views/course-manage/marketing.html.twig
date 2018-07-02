@@ -4,7 +4,7 @@
   {{ 'course.marketing_setup'|trans }} - {{ course.title }} - {{ parent() }}
 {% endblock %}
 
-{% set side_nav = 'marketing' %}
+{% set course_side_nav = 'marketing' %}
 
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/marketing/index.js']) %}
 

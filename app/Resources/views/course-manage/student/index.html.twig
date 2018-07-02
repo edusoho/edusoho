@@ -2,10 +2,10 @@
 
 {% block title %}{{'course.members_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
-{% set side_nav = 'students' %}
+{% set course_side_nav = 'students' %}
 
 {% block main_heading %}
-  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav, btnGroup:1} %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
 {% endblock %}
 
 {% block main_body %}

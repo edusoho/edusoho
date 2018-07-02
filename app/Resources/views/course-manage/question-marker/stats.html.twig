@@ -2,7 +2,7 @@
 
 {% block title %}{{'course.question_marker_statistics'|trans}} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'question_marker' %}
+{% set course_side_nav = 'question_marker' %}
 
 {% do script(['app/js/course-manage/question-marker/index.js'])%}
 
