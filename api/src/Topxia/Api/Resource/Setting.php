@@ -25,7 +25,9 @@ class Setting extends BaseResource
 
     /**
      * 根据设置名称, 验证当前用户是否可获取该设置信息
+     *
      * @param $settingName
+     *
      * @return bool
      */
     protected function verifyPermission($settingName)
@@ -50,7 +52,6 @@ class Setting extends BaseResource
         return $res;
     }
 
-
     protected function filterCourse()
     {
         $res = $this->getSettingService()->get('course');
@@ -59,7 +60,7 @@ class Setting extends BaseResource
             'chapter_name' => '章',
             'part_name' => '节',
             'task_name' => '任务',
-            'show_student_num_enabled' => '1'
+            'show_student_num_enabled' => '1',
         );
         $res = array_merge($default, $res);
 
@@ -72,7 +73,7 @@ class Setting extends BaseResource
 
         $default = array(
             'enabled' => '0',
-            'convNo' => null
+            'convNo' => null,
         );
 
         $res = array_merge($default, $res);
@@ -87,12 +88,12 @@ class Setting extends BaseResource
 
         $default = array(
             'register_mode' => $authSetting['register_mode'],
-            'oauth_enabled' => (string)$loginSetting['enabled'] ?: '0',
+            'oauth_enabled' => (string) $loginSetting['enabled'] ?: '0',
             'weibo_enabled' => $loginSetting['weibo_enabled'] ?: '0',
             'qq_enabled' => $loginSetting['qq_enabled'] ?: '0',
             'renren_enabled' => '0',
             'weixinweb_enabled' => $loginSetting['weixinweb_enabled'] ?: '0',
-            'weixinmob_enabled' => $loginSetting['weixinmob_enabled'] ?: '0'
+            'weixinmob_enabled' => $loginSetting['weixinmob_enabled'] ?: '0',
         );
 
         return $default;
@@ -102,16 +103,16 @@ class Setting extends BaseResource
     {
         $storageSetting = $this->getSettingService()->get('storage');
         $fingerPrintSetting = array(
-            'video_fingerprint' => '0'
+            'video_fingerprint' => '0',
         );
         $watermarkSetting = array(
-            'video_watermark' => '0'
+            'video_watermark' => '0',
         );
 
         if (!empty($storageSetting)) {
             $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
                 'video_fingerprint',
-                'video_fingerprint_time'
+                'video_fingerprint_time',
             ));
 
             $watermarkSetting = ArrayToolkit::parts($storageSetting, array(
