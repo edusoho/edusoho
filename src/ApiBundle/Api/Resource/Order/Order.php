@@ -68,11 +68,14 @@ class Order extends AbstractResource
 
     public function handleParams(&$params, $order)
     {
-        $params['gateway'] = (!empty($params['payment']) && $params['payment'] == 'wechat') ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
+        $params['gateway'] = (!empty($params['payment']) && 'wechat' == $params['payment']) ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
         $params['type'] = 'purchase';
         $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
         $params['orderSn'] = $order['sn'];
-        if ($params['gateway'] == 'Alipay_LegacyWap') {
+        if (isset($params['payPassword'])) {
+            $params['unencryptedPayPassword'] = $params['payPassword'];
+        }
+        if ('Alipay_LegacyWap' == $params['gateway']) {
             $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }

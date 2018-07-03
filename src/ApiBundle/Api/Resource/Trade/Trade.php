@@ -39,9 +39,7 @@ class Trade extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (!empty($params['payPassword'])) {
-            $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
-        }
+        $this->filterParams($params);
         if (empty($params['gateway']) || empty($params['type'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
@@ -71,6 +69,17 @@ class Trade extends AbstractResource
         }
 
         return $tradeIns->createResponse($trade);
+    }
+
+    public function filterParams(&$params)
+    {
+        if (isset($params['payPassword'])) {
+            $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
+        }
+
+        if (isset($params['unencryptedPayPassword'])) {
+            $params['payPassword'] = $params['unencryptedPayPassword'];
+        }
     }
 
     private function isOrderPaid($order)
