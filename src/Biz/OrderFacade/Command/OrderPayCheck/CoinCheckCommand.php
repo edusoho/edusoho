@@ -18,7 +18,7 @@ class CoinCheckCommand extends OrderPayCheckCommand
             throw new OrderPayCheckException('order.pay_check_msg.parameters_error');
         }
 
-        if (empty($params['payPassword'])) {
+        if (!isset($params['payPassword'])) {
             throw new OrderPayCheckException('order.pay_check_msg.missing_pay_password', 2000);
         }
 

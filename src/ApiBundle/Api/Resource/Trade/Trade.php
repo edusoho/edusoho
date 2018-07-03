@@ -11,7 +11,8 @@ use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Codeages\Biz\Pay\Exception\PayGetwayException;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Codeages\Biz\Pay\Exception\PayGatewayException;
 
 class Trade extends AbstractResource
 {
@@ -64,8 +65,10 @@ class Trade extends AbstractResource
             if (0 == $trade['cash_amount']) {
                 $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
             }
-        } catch (PayGetwayException $e) {
+        } catch (PayGatewayException $e) {
             throw new BadRequestHttpException($e->getMessage(), $e, ErrorCode::BAD_REQUEST);
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }
 
         return $tradeIns->createResponse($trade);
