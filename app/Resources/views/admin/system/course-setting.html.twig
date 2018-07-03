@@ -158,7 +158,7 @@
           <label for="chapter_name">{{'admin.setting_course.task_chapter_name'|trans}}</label>
       </div>
       <div class="controls col-md-4">
-        <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}">
+        <input  type="text" id="chapter_name" name="chapter_name" class="form-control" data-before-value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}">
       </div>
     </div>
 
@@ -167,30 +167,30 @@
           <label for="part_name">{{'admin.setting_course.task_section_name'|trans}}</label>
       </div>
       <div class="controls col-md-4">
-        <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}">
+        <input  type="text" id="part_name" name="part_name" class="form-control" data-before-value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}" value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}">
       </div>
     </div>
     <div class="alert alert-info deduction text-center">
     <p><strong>
-    {{'系统中的"章"、"节"会被设置的名称所替代'|trans}}
+    {{'admin.setting_course.customer_chapter_section_name.tips'|trans}}
     </strong></p>
     </div>
 
   </fieldset>
 
   <fieldset>
-    <legend>{{ '任务名称自定义' }}</legend>
+    <legend>{{ 'admin.setting_course.customer_task_name'|trans }}</legend>
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label for="part_name">{{'设置"任务"名称'|trans}}</label>
+        <label for="part_name">{{'admin.setting_course.task_name'|trans}}</label>
       </div>
       <div class="controls col-md-4">
-        <input type="text" id="task_name" name="task_name" class="form-control" value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}">
+        <input type="text" id="task_name" name="task_name" class="form-control" data-before-value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}" value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}">
       </div>
     </div>
     <div class="alert alert-info deduction text-center">
       <p><strong>
-          {{'系统中的"任务"会被设置的名称所替代'|trans}}
+          {{'admin.setting_course.customer_task_name.tips'|trans}}
         </strong></p>
     </div>
   </fieldset>

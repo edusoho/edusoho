@@ -52,14 +52,51 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
           element: $form,
-          autoSubmit: true
+          autoSubmit: false,
+          onFormValidated: function(error, results, $form) {
+            if (error) {
+              return ;
+            }
+
+            if ($('[name="task_name"]').data('beforeValue') !== $('[name="task_name"]').val()) {
+              if (!confirm(Translator.trans("系统后台和用户前台显示处的\"任务\"将会被新的名称覆盖，请确认进行修改。"))) {
+                return ;
+              }
+            }
+            if ($('[name="chapter_name"]').data('beforeValue') !== $('[name="chapter_name"]').val()
+              || $('[name="part_name"]').data('beforeValue') !== $('[name="part_name"]').val()) {
+              if (!confirm(Translator.trans("系统后台和用户前台显示处的\"章节\"将会被新的名称覆盖，请确认进行修改。"))) {
+                return ;
+              }
+            }
+
+            $.post($form.attr('action'), $form.serialize(), function(response){
+              if (response) {
+                window.location.reload();
+              } else {
+                Notify.success(Translator.trans('更新失败!'));
+              }
+            }, 'json');
+          }
         });
 
         validator.addItem({
           element: '[name="task_name"]',
           required: true,
-          rule: 'minlength{min:5} maxlength{max:10}',
-          display: '任务名称'
+          rule: 'maxlength{max:10}',
+          display: '名称'
+        });
+        validator.addItem({
+          element: '[name="chapter_name"]',
+          required: true,
+          rule: 'maxlength{max:10}',
+          display: '名称'
+        });
+        validator.addItem({
+          element: '[name="part_name"]',
+          required: true,
+          rule: 'maxlength{max:10}',
+          display: '名称'
         });
 
         if($('#live-course-logo-upload').length>0) {

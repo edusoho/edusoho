@@ -6943,10 +6943,14 @@ admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任
 admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
 admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示课程人数
 admin.setting_course.customer_chapter_section_name: 章节名称自定义
-admin.setting_course.task_chapter_name: 任务章名称
+admin.setting_course.customer_task_name: 任务名称自定义
+admin.setting_course.customer_chapter_section_name.tips: 系统中的"章"、"节"会被设置的名称所替代
+admin.setting_course.customer_task_name.tips: 系统中的"任务"会被设置的名称所替代
+admin.setting_course.task_chapter_name: 设置"章"名称
 admin.setting_course.chapter: 章
-admin.setting_course.task_section_name: 任务节名称
+admin.setting_course.task_section_name: 设置"节"名称
 admin.setting_course.section: 节
+admin.setting_course.task_name: 设置"任务"名称
 admin.setting_course.task: 任务
 admin.setting_course.questions_setting: 交卷后答案以及解析的显示
 admin.setting_course.questions_setting.hide: 不显示

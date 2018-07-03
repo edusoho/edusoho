@@ -62,6 +62,8 @@ class CourseSettingController extends BaseController
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('admin/system/', 'update_settings', '更新课程设置', $courseSetting);
             $this->setFlashMessage('success', 'site.save.success');
+
+            return $this->createJsonResponse(true);
         }
 
         return $this->render('admin/system/course-setting.html.twig', array(
