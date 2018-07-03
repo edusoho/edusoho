@@ -50,6 +50,22 @@ class Order extends AbstractResource
         }
     }
 
+    public function get(ApiRequest $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        if (!$order) {
+            return null;
+        }
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+        $order['platform_sn'] = $paymentTrade['platform_sn'];
+        $userId = $this->getCurrentUser()->getId();
+        if ($this->getCurrentUser()->isAdmin()) {
+            return $order;
+        } elseif ($userId == $order['user_id']) {
+            return $order;
+        }
+    }
+
     public function filterParams(&$params)
     {
         if (isset($params['coinPayAmount'])) {
@@ -87,10 +103,26 @@ class Order extends AbstractResource
     }
 
     /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
      * @return OrderFacadeService
      */
     private function getOrderFacadeService()
     {
         return $this->service('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->service('Pay:PayService');
     }
 }
