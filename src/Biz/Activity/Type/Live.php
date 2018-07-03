@@ -105,7 +105,11 @@ class Live extends Activity
 
     public function delete($targetId)
     {
-        return $this->getLiveActivityService()->deleteLiveActivity($targetId);
+        $conditions = array('type' => 'live', 'mediaId' => $targetId);
+        $count = $this->getActivityService()->count($conditions);
+        if (1 == $count) {
+            return $this->getLiveActivityService()->deleteLiveActivity($targetId);
+        }
     }
 
     public function allowEventAutoTrigger()
@@ -119,6 +123,14 @@ class Live extends Activity
     protected function getLiveActivityService()
     {
         return $this->getBiz()->service('Activity:LiveActivityService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**
