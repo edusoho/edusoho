@@ -7,6 +7,7 @@ use Biz\User\Service\AuthService;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\TimeMachine;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\User\UserException;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -21,7 +22,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
         //营销平台不需要注册频率限制
         if (!$this->isMarketingType($registration) && $this->registerLimitValidator($registration)) {
-            throw $this->createAccessDeniedException('site.register.time_limit');
+            $this->createNewException(UserException::FORBIDDEN_REGISTER_LIMIT());
         }
 
         //FIXME 应该调用GeneralDaoImpl里的事务

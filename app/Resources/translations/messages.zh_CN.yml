@@ -8356,11 +8356,13 @@ exception.user.not_found: 找不到该用户！
 exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
 exception.user.mobile_registered: 该手机号码已被注册！
+exception.user.register_limit: 注册次数已达最大限制!
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: 云短信相关设置未开启!
+exception.sms.code_invalid: 短信验证码错误
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
