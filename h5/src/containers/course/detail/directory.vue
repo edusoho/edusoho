@@ -140,15 +140,24 @@
       },
       lessonCellClick (task) {
         // trylook and free video click
-        if (!!this.tryLookable && this.joinStatus) {
-          Toast('请先加入课程');
-        } else if(this.$route.name !== 'course_try'){
-          this.$router.push({
-            name: 'course_try'
-          })
+        if (!this.joinStatus && !!this.tryLookable) {
+          if (task.task.type === 'video' || task.task.type === 'audio') {
+            this.$router.push({
+              name: 'course_try'
+            })
+            this.setSourceType('video');
+          } else if (task.task.type === 'doc') {
+            this.$router.push({
+              name: 'course_web'
+            })
+          } else {
+            Toast('请先加入课程');
+          }
+        } else {
+          this.showTypeDetail(task.task);
         }
+        //join after click
 
-        this.showTypeDetail(task.task);
       },
       showTypeDetail (task) {
         switch(task.type) {
@@ -162,6 +171,13 @@
           case 'audio':
             this.setSourceType('audio')
             break;
+          case 'doc':
+            this.$router.push({
+              name: 'course_web'
+            })
+            break;
+          default:
+            Toast('暂不支持此类型');
         }
       }
     }

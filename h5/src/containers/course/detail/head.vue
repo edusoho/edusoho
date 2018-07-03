@@ -3,7 +3,6 @@
   <div class="course-detail__head--img" v-if="sourceType === 'img'">
     <img :src="courseSet.cover.large" alt="">
   </div>
-  {{sourceType}}
  <div id="course-detail__head--video" v-if="sourceType === 'video'"></div>
 </div>
 

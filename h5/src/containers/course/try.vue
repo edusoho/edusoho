@@ -12,7 +12,8 @@
 <script>
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   components: {
@@ -30,6 +31,15 @@ export default {
       details: state => state.details,
       selectedPlanIndex: state => state.selectedPlanIndex
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.setSourceType('img');
+    next();
+  },
+  methods: {
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE
+    }),
   }
 }
 </script>
