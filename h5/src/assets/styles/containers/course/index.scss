@@ -176,6 +176,14 @@
       @extend .font-family-PFM;
     }
   }
+
+  // 试看
+  &.try {
+    .directory .e-panel-body {
+      margin-bottom: 0;
+      margin-top: 10px;
+    }
+  }
 }
 // web-view
 #player {

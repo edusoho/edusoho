@@ -4,6 +4,7 @@ import * as types from '../mutation-types';
 const state = {
   selectedPlanIndex: 0,
   joinStatus: false,
+  sourceType: 'img', //
   details: []
 };
 
@@ -17,6 +18,10 @@ const mutations = {
   [types.JOIN_COURSE](currentState, payload) {
     currentState.joinStatus = true;
     console.log(payload);
+  },
+  [types.SET_SOURCETYPE](currentState, payload) {
+    console.log(payload);
+    currentState.sourceType = payload;
   }
 };
 

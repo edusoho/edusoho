@@ -1,30 +1,35 @@
 <template>
-  <div class="try">
+  <div class="course-detail try">
     <detail-head
-      :courseSet="courseSet"></detail-head>
-
+      :courseSet="details[selectedPlanIndex].courseSet"></detail-head>
+    
     <directory
       :hiddeTitle=true
-      class="join-after-dirctory"
-      ></directory>
+      :courseItem="details[selectedPlanIndex].courseItem"
+    ></directory>
   </div>
 </template>
 <script>
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
+import { mapState } from 'vuex';
 
 export default {
-  data() {
-    return {
-      courseSet: {}
-    }
-  },
   components: {
     Directory,
     DetailHead
   },
-  created(){
-
+  data () {
+    return {
+      courseItem: [],
+      type: ''
+    }
+  },
+  computed: {
+    ...mapState('course', {
+      details: state => state.details,
+      selectedPlanIndex: state => state.selectedPlanIndex
+    })
   }
 }
 </script>

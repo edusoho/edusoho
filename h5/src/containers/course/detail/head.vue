@@ -1,17 +1,18 @@
 <template>
 <div class="course-detail__head">
-  <div class="course-detail__head--img" v-if="type === 'img'">
+  <div class="course-detail__head--img" v-if="sourceType === 'img'">
     <img :src="courseSet.cover.large" alt="">
   </div>
- <div id="course-detail__head--video" v-if="type === 'video'"></div>
+  {{sourceType}}
+ <div id="course-detail__head--video" v-if="sourceType === 'video'"></div>
 </div>
 
 </template>
 <script>
 import loadScript from 'load-script';
+import { mapState } from 'vuex';
 
 export default {
-  props: [''],
   props: {
     courseSet: {
       type: Object,
@@ -22,11 +23,21 @@ export default {
       default: 'img'
     }
   },
+  computed: {
+    ...mapState('course', {
+      sourceType: state => state.sourceType
+    })
+  },
+  watch: {
+    sourceType(v) {
+      v === 'video' && this.initPlayer();
+    }
+  },
   mounted() {
     this.type === 'video' && this.initPlayer();
   },
   methods: {
-    initPlayer(){
+    initPlayer (){
       const options = {
         id: 'course-detail__head--video',
         playlist: 'https://ghub.club/playlist/playlist.m3u8',
@@ -38,7 +49,7 @@ export default {
         const player = new SDK(options);
       })
     },
-    loadPlayerSDK() {
+    loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
 
         const scrptSrc = `//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?

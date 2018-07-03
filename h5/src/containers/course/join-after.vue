@@ -46,8 +46,6 @@
           :teacherInfo="details.teachers"></teacher>
       </template>
     </div>
-
-
   </div>
 </template>
 <script>

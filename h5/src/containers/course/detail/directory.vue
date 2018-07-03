@@ -39,8 +39,9 @@
   </e-panel>
 </template>
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapMutations } from 'vuex';
   import { Toast } from 'vant';
+  import * as types from '@/store/mutation-types';
 
   export default {
     props: {
@@ -90,7 +91,10 @@
       }
     },
     methods: {
-      getTasks(data) {
+      ...mapMutations('course', {
+        setSourceType: types.SET_SOURCETYPE
+      }),
+      getTasks (data) {
         let temp = [];
 
         data.forEach(item => {
@@ -115,7 +119,7 @@
         }
         console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
-      getCurrentStatus(task) {
+      getCurrentStatus (task) {
         if (this.tryLookable
           && task.type === 'video'
           && task.activity.mediaStorage) {
@@ -125,7 +129,7 @@
         }
         return '';
       },
-      filterTaskStatus(task){
+      filterTaskStatus (task){
         if (task.status === 'is-tryLook') {
           return '试看';
         } else if (task.status === 'is-free') {
@@ -134,9 +138,30 @@
 
         return '';
       },
-      lessonCellClick(task) {
-        if (!this.tryLookable && !this.joinStatus) {
+      lessonCellClick (task) {
+        // trylook and free video click
+        if (!!this.tryLookable && this.joinStatus) {
           Toast('请先加入课程');
+        } else if(this.$route.name !== 'course_try'){
+          this.$router.push({
+            name: 'course_try'
+          })
+        }
+
+        this.showTypeDetail(task.task);
+      },
+      showTypeDetail (task) {
+        switch(task.type) {
+          case 'video':
+            if (task.mediaSource == 'self') {
+              this.setSourceType('video')
+            } else {
+              Toast('暂不支持此类型');
+            }
+            break;
+          case 'audio':
+            this.setSourceType('audio')
+            break;
         }
       }
     }
