@@ -108,6 +108,7 @@ class Trade extends AbstractResource
     {
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
+        $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
         if (isset($params['payPassword'])) {
             $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
         }
