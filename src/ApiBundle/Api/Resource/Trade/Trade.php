@@ -40,7 +40,6 @@ class Trade extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        $this->filterParams($params);
         if (empty($params['gateway']) || empty($params['type'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
@@ -74,17 +73,6 @@ class Trade extends AbstractResource
         return $tradeIns->createResponse($trade);
     }
 
-    public function filterParams(&$params)
-    {
-        if (isset($params['payPassword'])) {
-            $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
-        }
-
-        if (isset($params['unencryptedPayPassword'])) {
-            $params['payPassword'] = $params['unencryptedPayPassword'];
-        }
-    }
-
     private function isOrderPaid($order)
     {
         //如果订单已经支付不去查询第三方
@@ -110,7 +98,7 @@ class Trade extends AbstractResource
     {
         $factory = new TradeFactory();
         $tradeIns = $factory->create($gateway);
-        $tradeIns->setRouter($this->container->get('router'));
+        $tradeIns->setContainer($this->container);
         $tradeIns->setBiz($this->biz);
 
         return $tradeIns;
@@ -120,6 +108,13 @@ class Trade extends AbstractResource
     {
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
+        if (isset($params['payPassword'])) {
+            $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
+        }
+
+        if (isset($params['unencryptedPayPassword'])) {
+            $params['payPassword'] = $params['unencryptedPayPassword'];
+        }
     }
 
     /**

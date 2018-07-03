@@ -7,5 +7,5 @@ class CoinTrade extends BaseTrade
 {
     protected $payment = 'coin';
 
-    protected $platformType = 'app';
+    protected $platformType = 'App';
 }

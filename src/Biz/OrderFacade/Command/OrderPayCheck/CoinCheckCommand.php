@@ -15,7 +15,12 @@ class CoinCheckCommand extends OrderPayCheckCommand
         }
 
         if ($params['coinAmount'] < 0) {
-            throw new OrderPayCheckException('order.pay_check_msg.parameters_error');
+            throw new OrderPayCheckException('order.pay_check_msg.coin_amount_error', 2010);
+        }
+
+        $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $params['coinAmount']);
+        if (isset($params['gateway']) && 'Coin' == $params['gateway'] && $cashAmount > 0) {
+            throw new OrderPayCheckException('order.pay_check_msg.coin_amount_error', 2010);
         }
 
         if (!isset($params['payPassword'])) {
@@ -55,5 +60,10 @@ class CoinCheckCommand extends OrderPayCheckCommand
     private function getAccountService()
     {
         return $this->biz->service('Pay:AccountService');
+    }
+
+    private function getOrderFacadeService()
+    {
+        return $this->biz->service('OrderFacade:OrderFacadeService');
     }
 }

@@ -8271,6 +8271,7 @@ admin.cashflow.keyword: 关键字
 admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.parameters_error: 参数错误
+order.pay_check_msg.coin_amount_error: 金额错误
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
 order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
