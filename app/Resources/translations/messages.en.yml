@@ -857,7 +857,6 @@ course.marketing_setup.for_show_tips: 'Show only'
 course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.expiry_date.custom: Custom
 course.marketing_setup.expiry_date.anytime: 'Any time'
-course.marketing_setup.expiry_date_tips: 'Enroll before this date'
 course.marketing_setup.approval: 'Id verification'
 course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrollment.'
 course.marketing_setup.rule: 'Rules'

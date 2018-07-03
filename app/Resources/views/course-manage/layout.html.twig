@@ -2,7 +2,8 @@
 {% block title %}
   {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
 {% endblock %}
-{% set side_nav = 'default-course-info' %}
+
+{% set side_nav =  1 == get_course_count(courseSet.id) ?  'default-course-info' : 'plan' %}
 {# {% block sectionClass %} course-header-section {% endblock %} #}
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">

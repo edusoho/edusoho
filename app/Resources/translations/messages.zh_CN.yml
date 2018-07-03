@@ -982,7 +982,6 @@ course.marketing_setup.for_show_tips: 仅作展示用
 course.marketing_setup.expiry_date: 加入截止日期
 course.marketing_setup.expiry_date.custom: 自定义
 course.marketing_setup.expiry_date.anytime: 不限时间
-course.marketing_setup.expiry_date_tips: 在此日期前，学员可加入。
 course.marketing_setup.approval: 实名认证
 course.marketing_setup.approval_tips: 设置该值后，学员购买课程前，必须先去申请实名认证。
 course.marketing_setup.rule: 学习规则
@@ -6942,7 +6941,7 @@ admin.setting_course.welcome_messages_content.as_course_name: 为课程名称
 admin.setting_course.course_detail_show_relevant_course: 课程详情页显示相关课程
 admin.setting_course.course_detail_show_relevant_course.help_block: 根据课程的标签，显示相关课程
 admin.setting_course.authority_and_copyright: 权限与版权
-admin.setting_course.allow_teacher_manage_course_marketing: 允许教师管理课程营销
+admin.setting_course.allow_teacher_manage_course_marketing: 允许教师管理基础设置
 admin.setting_course.allow_teacher_search_course_order: 允许教师查询课程订单
 admin.setting_course.allow_teacher_add_or_remove: 允许教师添加/移除
 admin.setting_course.allow_teacher_export_material: 允许教师导出学员资料
