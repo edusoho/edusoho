@@ -28,12 +28,12 @@
       </div>
       <div class="col-xs-4 user-data-num-item">
         <div class="user-data-num-item__count">{{ overview.learningProcess.finishedCount|default(0) }}/{{ overview.learningProcess.total|default(0) }}</div>
-        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.task_rate'|trans }}</span>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.task_rate'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</span>
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm mls js-user-data-popover" data-original-title="" title=""></span>
         <div class="popover-content hidden">
           <div class="popover-item">
             <div class="content">
-              {{ 'admin.user.statistics.data_detail.task_progress_tip'|trans }}
+              {{ 'admin.user.statistics.data_detail.task_progress_tip'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
             </div>
           </div>
         </div>

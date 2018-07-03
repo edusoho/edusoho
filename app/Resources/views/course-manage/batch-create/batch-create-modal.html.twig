@@ -3,7 +3,7 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-	{{'course_manage.batch_create.title'|trans}}
+	{{'course_manage.batch_create.title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
 {% endblock %}
 
 {% do script([cloud_sdk_url('uploader'), 'libs/jquery-sortable.js', 'app/js/course-manage/batch-create/index.js']) %}

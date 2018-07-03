@@ -30,7 +30,7 @@
               <input type="checkbox" name="isOptional" value="1" {% if task.isOptional|default(false) or ( task is empty and optionalDefault|default(0)) %} checked {% endif %}>
                {{'course.plan_task.activity_manage.setup_is_option'|trans}}
             </label>
-              <span class="color-gray">{{'course.plan_task.activity_manage.setup_is_option_tips'|trans}}</span>
+              <span class="color-gray">{{'course.plan_task.activity_manage.setup_is_option_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
           </div>
         </div>
         #}
