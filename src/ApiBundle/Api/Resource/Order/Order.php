@@ -50,6 +50,22 @@ class Order extends AbstractResource
         }
     }
 
+    public function get(ApiRequest $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        if (!$order) {
+            return null;
+        }
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+        $order['platform_sn'] = $paymentTrade['platform_sn'];
+        $userId = $this->getCurrentUser()->getId();
+        if ($this->getCurrentUser()->isAdmin()) {
+            return $order;
+        } elseif ($userId == $order['user_id']) {
+            return $order;
+        }
+    }
+
     public function filterParams(&$params)
     {
         if (isset($params['coinPayAmount'])) {
@@ -68,11 +84,11 @@ class Order extends AbstractResource
 
     public function handleParams(&$params, $order)
     {
-        $params['gateway'] = (!empty($params['payment']) && $params['payment'] == 'wechat') ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
+        $params['gateway'] = (!empty($params['payment']) && 'wechat' == $params['payment']) ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
         $params['type'] = 'purchase';
         $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
         $params['orderSn'] = $order['sn'];
-        if ($params['gateway'] == 'Alipay_LegacyWap') {
+        if ('Alipay_LegacyWap' == $params['gateway']) {
             $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }
@@ -84,10 +100,26 @@ class Order extends AbstractResource
     }
 
     /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
      * @return OrderFacadeService
      */
     private function getOrderFacadeService()
     {
         return $this->service('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->service('Pay:PayService');
     }
 }

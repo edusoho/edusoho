@@ -3,11 +3,16 @@
 namespace AppBundle\Component\RateLimit;
 
 use Symfony\Component\HttpFoundation\Request;
+use Biz\User\UserException;
 
 class RegisterSmsRateLimiter extends SmsRateLimiter
 {
     public function handle(Request $request)
     {
+        if (!$this->getUserService()->isMobileUnique($request->request->get('mobile'))) {
+            throw UserException::ERROR_MOBILE_REGISTERED();
+        }
+
         if ('captchaRequired' == $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp())) {
             $this->validateCaptcha($request);
         }
