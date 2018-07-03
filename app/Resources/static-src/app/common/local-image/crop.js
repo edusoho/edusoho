@@ -107,7 +107,7 @@ class LocalImageCrop {
       return new Promise(function(resolve, reject) {
         $.post($input.data('saveUrl'), { images: res }, function(data) {
           if (data.image) {
-            $($input.data('targeImg')).attr('src', data.image);
+            $($input.data('targetImg')).attr('src', data.image);
             notify('success', Translator.trans('site.upload_success_hint'));
           }
         }).error(function() { 
