@@ -21,22 +21,8 @@ class SmsRateLimiterTest extends BaseTestCase
             )
         );
 
-        $captcha = $this->mockBiz(
-            'biz_drag_captcha',
-            array(
-                array(
-                    'functionName' => 'check',
-                    'withParams' => array('kuozhi'),
-                    'returnValue' => true,
-                ),
-            )
-        );
-
-        $this->biz['biz_drag_captcha'] = $captcha;
 
         $result = $limiter->handle($request);
-
-        $captcha->shouldHaveReceived('check')->times(1);
         $request->shouldHaveReceived('getClientIp')->times(1);
         $this->assertNull($result);
     }
