@@ -21,7 +21,6 @@ class SmsRateLimiterTest extends BaseTestCase
             )
         );
 
-
         $result = $limiter->handle($request);
         $request->shouldHaveReceived('getClientIp')->times(1);
         $this->assertNull($result);
