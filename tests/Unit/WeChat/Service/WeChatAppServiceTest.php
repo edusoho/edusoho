@@ -18,6 +18,7 @@ class WeChatAppServiceTest extends BaseTestCase
                         array(
                             'code' => 'wechatapp',
                             'purchased' => true,
+                            'latestPackageId' => 11,
                         ),
                     ),
                 ),
@@ -35,7 +36,7 @@ class WeChatAppServiceTest extends BaseTestCase
 
         $result = $this->getWeChatAppService()->getWeChatAppStatus();
         $this->assertArrayEquals(
-            array('purchased' => true, 'installed' => true),
+            array('purchased' => true, 'installed' => true, 'latestPackageId' => 11),
             $result
         );
 
