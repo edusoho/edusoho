@@ -128,6 +128,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         if (empty($hostUrl)) {
             $hostUrl = '';
         }
+
         return array('mp' => array('host' => $hostUrl));
     }
 }
