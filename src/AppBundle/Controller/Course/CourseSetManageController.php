@@ -400,6 +400,7 @@ class CourseSetManageController extends BaseController
             return $this->createJsonResponse($e->getMessage(), 500);
         }
     }
+
     protected function getCourseTypes()
     {
         return $this->get('web.twig.course_extension')->getCourseTypes();
