@@ -31,6 +31,7 @@ class MpServiceImpl extends BaseService implements MpService
     protected function getToken($params)
     {
         $token = $this->getMpSdk()->getToken($params);
+
         return $token['token'];
     }
 
@@ -44,6 +45,7 @@ class MpServiceImpl extends BaseService implements MpService
                 $hostUrl = $urlSegs[1];
             }
         }
+
         return $schema . '://' . $hostUrl;
     }
 
