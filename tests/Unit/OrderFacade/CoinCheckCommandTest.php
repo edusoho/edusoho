@@ -12,20 +12,23 @@ class CoinCheckCommandTest extends BaseTestCase
     {
         $command = new CoinCheckCommand();
         $command->setBiz($this->getBiz());
-        $result = $command->execute(array(), array());
+        $result = $command->execute(array('pay_amount' => 1), array());
 
         $this->assertEmpty($result);
     }
 
     /**
      * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
-     * @expectedExceptionMessage order.pay_check_msg.parameters_error
+     * @expectedExceptionMessage order.pay_check_msg.coin_amount_error
      */
     public function testExecuteCoinAmountNegative()
     {
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('coin_enabled' => 1, 'coin_name' => 'coin name', 'cash_rate' => 1, 'cash_model' => 'currency')),
+        ));
         $command = new CoinCheckCommand();
         $command->setBiz($this->getBiz());
-        $result = $command->execute(array(), array('coinAmount' => -1));
+        $result = $command->execute(array('pay_amount' => 1), array('coinAmount' => -1));
     }
 
     /**
@@ -34,9 +37,12 @@ class CoinCheckCommandTest extends BaseTestCase
      */
     public function testExecuteEmptyPayPassword()
     {
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('coin_enabled' => 1, 'coin_name' => 'coin name', 'cash_rate' => 1, 'cash_model' => 'currency')),
+        ));
         $command = new CoinCheckCommand();
         $command->setBiz($this->getBiz());
-        $result = $command->execute(array(), array('coinAmount' => 2));
+        $result = $command->execute(array('pay_amount' => 2), array('coinAmount' => 2));
     }
 
     /**
@@ -45,6 +51,9 @@ class CoinCheckCommandTest extends BaseTestCase
      */
     public function testExecuteBalanceAmount()
     {
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('coin_enabled' => 1, 'coin_name' => 'coin name', 'cash_rate' => 1, 'cash_model' => 'currency')),
+        ));
         $command = new CoinCheckCommand();
         $command->setBiz($this->getBiz());
 
@@ -55,7 +64,7 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $command->execute(array(), array('coinAmount' => 10, 'payPassword' => '123456'));
+        $result = $command->execute(array('pay_amount' => 10), array('coinAmount' => 10, 'payPassword' => '123456'));
     }
 
     /**
@@ -64,6 +73,9 @@ class CoinCheckCommandTest extends BaseTestCase
      */
     public function testExecutePayPasswordSetted()
     {
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('coin_enabled' => 1, 'coin_name' => 'coin name', 'cash_rate' => 1, 'cash_model' => 'currency')),
+        ));
         $command = new CoinCheckCommand();
         $command->setBiz($this->getBiz());
 
@@ -78,7 +90,7 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $command->execute(array(), array('coinAmount' => 10, 'payPassword' => '123456'));
+        $result = $command->execute(array('pay_amount' => 10), array('coinAmount' => 10, 'payPassword' => '123456'));
     }
 
     /**
@@ -87,6 +99,9 @@ class CoinCheckCommandTest extends BaseTestCase
      */
     public function testExecuteValidatePayPassword()
     {
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('coin_enabled' => 1, 'coin_name' => 'coin name', 'cash_rate' => 1, 'cash_model' => 'currency')),
+        ));
         $command = new CoinCheckCommand();
         $command->setBiz($this->getBiz());
 
@@ -105,7 +120,7 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $command->execute(array(), array('coinAmount' => 10, 'payPassword' => '123456'));
+        $result = $command->execute(array('pay_amount' => 10), array('coinAmount' => 10, 'payPassword' => '123456'));
     }
 
     public function testExecute()
@@ -142,7 +157,7 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $payChecker->check(array('id' => 123), array('coinAmount' => 10, 'payPassword' => '123456'));
+        $result = $payChecker->check(array('id' => 123, 'pay_amount' => 10), array('coinAmount' => 10, 'payPassword' => '123456'));
 
         $this->assertNull($result);
     }
@@ -185,7 +200,7 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $payChecker->check(array('id' => 123), array('coinAmount' => 1000, 'payPassword' => '123456'));
+        $result = $payChecker->check(array('id' => 123, 'pay_amount' => 1), array('coinAmount' => 1000, 'payPassword' => '123456'));
     }
 
     private function _mockCourseProduct()
