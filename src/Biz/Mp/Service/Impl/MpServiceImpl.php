@@ -20,12 +20,12 @@ class MpServiceImpl extends BaseService implements MpService
 
     public function generateInitUrl($params, $schema = 'http')
     {
-        return $this->getMpServerUrl($schema). '/es/setup?token=' . $this->getToken($params);
+        return $this->getMpServerUrl($schema) . '/es/setup?token=' . $this->getToken($params);
     }
 
     public function generateVersionManagementUrl($params, $schema = 'http')
     {
-        return $this->getMpServerUrl($schema). '/es/mini_program?token=' . $this->getToken($params);
+        return $this->getMpServerUrl($schema) . '/es/mini_program?token=' . $this->getToken($params);
     }
 
     protected function getToken($params)
