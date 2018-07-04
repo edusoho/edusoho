@@ -7,7 +7,7 @@
          data-html="true"
          data-delay="100"
          data-content="
-                    <div><p class='mbs'>任务{{ task.number }} : {{ task.title }}</p>
+                    <div><p class='mbs'>{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }} : {{ task.title }}</p>
                     {% if taskResult.createdTime|default() %}
                         任务开始时间 : {{ taskResult.createdTime|date('Y-m-d H:i:s') }}<br/>
                     {% endif %}

@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('register', 'payment', 'vip', 'magic'))) {
+        if (!in_array($type, array('register', 'payment', 'vip', 'magic', 'course'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -96,6 +96,18 @@ class Setting extends AbstractResource
         return array(
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
+        );
+    }
+
+    public function getCourse()
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        return array(
+            'chapter_name' => empty($courseSetting['chapter_name']) ? '章' : $courseSetting['chapter_name'],
+            'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
+            'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
+            'show_student_num_enabled' => '1',
         );
     }
 

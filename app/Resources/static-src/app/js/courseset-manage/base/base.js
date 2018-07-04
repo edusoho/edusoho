@@ -16,7 +16,7 @@ export default class Base {
     const validator = $form.validate({
       rules: {
         title: {
-          maxlength: 100,
+          maxlength: 30,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -26,6 +26,7 @@ export default class Base {
           course_title: true
         },
         subtitle: {
+          maxlength: 50,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -36,9 +37,9 @@ export default class Base {
         }
       },
     });
+
     $('#courseset-base-submit').click((event) => {
       if (validator.form()) {
-        this.detail.publishAddMessage();
         $(event.currentTarget).button('loading');
         $form.submit();
       }
@@ -82,6 +83,9 @@ export default class Base {
       },
       formatResult (item) {
         return item.name;
+      },
+      formatNoMatches: function() {
+        return '未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。';
       },
       formatSearching: function() {
         return Translator.trans('site.searching_hint');

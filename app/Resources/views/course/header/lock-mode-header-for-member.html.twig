@@ -12,7 +12,7 @@
       <ul class="progress-info hidden-xs hidden-sm">
         <li class="mb10">
           <i class="es-icon es-icon-dot color-primary"></i>
-          {{ 'my.course.lock_mode_plan.task_progress'|trans({'%spanHtml%':"<span class='mhs'><span class='color-primary'>" ~ taskResultCount ~ "</span> / " ~ taskCount ~ "</span>"})|raw }}
+          {{ 'my.course.lock_mode_plan.task_progress'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%spanHtml%':"<span class='mhs'><span class='color-primary'>" ~ taskResultCount ~ "</span> / " ~ taskCount ~ "</span>"})|raw }}
         </li>
         {% if taskPerDay and planProgressProgress - progress  > 0 %}
           <li class="mb10">
@@ -104,7 +104,7 @@
             {% endif %}
             left-menu"
             {% if  task_lock  %}
-              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans }}"
+              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}"
             {% endif %}
             ></i>
             {% if task_lock is empty %}
@@ -117,7 +117,7 @@
               {{ task.activity.length|activity_length_format(task.activity.mediaType) }}
               <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
                 data-toggle="tooltip" data-placement="top"
-                title="{{ meta.name|default(null) }}{{ 'course.task'|trans }}"></i>
+                title="{{ meta.name|default(null) }}{{ 'course.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}"></i>
             </span>
           </li>
         {% endfor %}

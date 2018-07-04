@@ -57,29 +57,36 @@
             {{ radios('serializeMode', {'none':'course.base.serialize_mode.none'|trans, 'serialized':'course.base.serialize_mode.serialized'|trans, 'finished':'course.base.serialize_mode.finished'|trans}, courseSet.serializeMode|default('none') ) }}
           </div>
         </div>
-        
-        <!-- 封面图片 -->
-        {% include 'courseset-manage/course-cover.html.twig' %}
 
-        <div class="empty">{{ 'course.detail.info_tip'|trans }}</div>
+        <!-- 封面图片 -->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
+          <div class="col-md-8 controls">
+            {% include 'common/upload-image.html.twig' with {
+              saveUrl: path('course_set_manage_cover_crop', {id: courseSet.id}),
+              targetImg: 'course-cover',
+              cropWidth: '480',
+              cropHeight: '270',
+              uploadToken: 'tmp',
+              imageClass: 'course-manage-cover',
+              imageText: '修改封面图片'|trans,
+              imageSrc: filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'),
+            } %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+          </div>
+          <div class="col-md-8 controls">
+            {{ 'course.cover_image.upload_tips'|trans|raw }}
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="col-md-2 control-label"><label>{{'course.detail.summary'|trans}}</label></div>
           <div class="col-md-8 controls">
             <textarea name="summary" rows="10" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
-          </div>
-        </div>
-
-        <div class="form-group dynamic-collection" id="courseset-goals-form-group">
-          <div class="col-md-2 control-label"><label>{{'course.detail.target'|trans}}</label></div>
-          <div class="col-md-8 controls">
-            <div id="course-goals" data-field-name="goals" data-init-value="{{courseSet.goals|default([])|json_encode_utf8()}}"></div>
-          </div>
-        </div>
-
-        <div class="form-group" id="courseset-audiences-form-group">
-          <div class="col-md-2 control-label"><label>{{'course.detail.intended-students'|trans}}</label></div>
-          <div class="col-md-8 controls">
-            <div id="intended-students" data-field-name="audiences" data-init-value="{{courseSet.audiences|default([])|json_encode_utf8()}}"></div>
           </div>
         </div>
 
