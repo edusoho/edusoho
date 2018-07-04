@@ -187,7 +187,6 @@ class StudentManageController extends BaseController
             return $this->createJsonResponse(true);
         }
         $users = $this->getUserService()->findUsersByIds($ids);
-        $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render(
