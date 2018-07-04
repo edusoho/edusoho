@@ -1111,6 +1111,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
+        $this->getCourseService()->tryManageCourse($courseId);
         if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
             foreach ($userIds as $userId) {
                 $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -1149,6 +1150,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
     {
+        $this->getCourseService()->tryManageCourse($courseId);
         $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date)) {
             foreach ($userIds as $userId) {
