@@ -442,6 +442,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'lastViewTime',
                 'seq',
                 'learnedCompulsoryTaskNum',
+                'deadline',
             ),
             'conditions' => array(
                 'id NOT IN (:excludeIds)',
