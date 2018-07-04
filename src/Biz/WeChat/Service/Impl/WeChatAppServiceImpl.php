@@ -31,6 +31,7 @@ class WeChatAppServiceImpl extends BaseService implements WeChatAppService
         }
 
         return array(
+            'latestPackageId' => $wechatApp['latestPackageId'],
             'purchased' => $wechatApp['purchased'],
             'installed' => !empty($installedWechatApp),
         );
