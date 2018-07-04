@@ -20,9 +20,8 @@
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  {% if isDone %}
-    <div class="iframe-parent-content">
-  {% endif %}
+
+  <div class="iframe-parent-content">
 
     <div class="js-testpaper-container container {{containerClass|default('')}}">
       {% block paper_content %}
@@ -150,9 +149,8 @@
       {% endblock %}
     </div>
 
-  {% if isDone %}
-    </div>
-  {% endif %}
+  </div>
+
 
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}

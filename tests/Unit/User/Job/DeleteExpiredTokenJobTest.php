@@ -7,7 +7,7 @@ use Biz\User\Job\DeleteExpiredTokenJob;
 
 class DeleteExpiredTokenJobTest extends BaseTestCase
 {
-    public function testExcute()
+    public function testExecute()
     {
         $tokenService = $this->mockBiz(
             'User:TokenService',

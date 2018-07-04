@@ -11,7 +11,8 @@ use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Codeages\Biz\Pay\Exception\PayGetwayException;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Codeages\Biz\Pay\Exception\PayGatewayException;
 
 class Trade extends AbstractResource
 {
@@ -20,7 +21,7 @@ class Trade extends AbstractResource
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
         return array(
-            'isPaid' => $trade['status'] === 'paid',
+            'isPaid' => 'paid' === $trade['status'],
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
         );
     }
@@ -39,9 +40,7 @@ class Trade extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-
-        if (empty($params['gateway'])
-            || empty($params['type'])) {
+        if (empty($params['gateway']) || empty($params['type'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -51,10 +50,10 @@ class Trade extends AbstractResource
             if (!empty($params['orderSn']) && $order = $this->getOrderService()->getOrderBySn($params['orderSn'])) {
                 if ($this->isOrderPaid($order)) {
                     return array(
-                            'tradeSn' => $order['trade_sn'],
-                            'isPaid' => true,
-                            'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
-                        );
+                        'tradeSn' => $order['trade_sn'],
+                        'isPaid' => true,
+                        'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
+                    );
                 } else {
                     $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
                 }
@@ -62,11 +61,13 @@ class Trade extends AbstractResource
             $tradeIns = $this->getTradeIns($params['gateway']);
             $trade = $tradeIns->create($params);
 
-            if ($trade['cash_amount'] == 0) {
+            if (0 == $trade['cash_amount']) {
                 $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
             }
-        } catch (PayGetwayException $e) {
+        } catch (PayGatewayException $e) {
             throw new BadRequestHttpException($e->getMessage(), $e, ErrorCode::BAD_REQUEST);
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }
 
         return $tradeIns->createResponse($trade);
@@ -82,7 +83,7 @@ class Trade extends AbstractResource
         if ($order['trade_sn']) {
             $trade = $this->getPayService()->queryTradeFromPlatform($order['trade_sn']);
 
-            return $trade['status'] === 'paid';
+            return 'paid' === $trade['status'];
         }
 
         return false;
@@ -97,7 +98,7 @@ class Trade extends AbstractResource
     {
         $factory = new TradeFactory();
         $tradeIns = $factory->create($gateway);
-        $tradeIns->setRouter($this->container->get('router'));
+        $tradeIns->setContainer($this->container);
         $tradeIns->setBiz($this->biz);
 
         return $tradeIns;
@@ -107,6 +108,14 @@ class Trade extends AbstractResource
     {
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
+        $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
+        if (isset($params['payPassword'])) {
+            $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
+        }
+
+        if (isset($params['unencryptedPayPassword'])) {
+            $params['payPassword'] = $params['unencryptedPayPassword'];
+        }
     }
 
     /**

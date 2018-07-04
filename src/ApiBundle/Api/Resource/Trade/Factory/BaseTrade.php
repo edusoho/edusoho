@@ -15,9 +15,9 @@ use Symfony\Component\Routing\Router;
 abstract class BaseTrade
 {
     /**
-     * @var Router
+     * @var ContainerInterface
      */
-    protected $router;
+    protected $container;
 
     /**
      * @var Biz
@@ -28,9 +28,9 @@ abstract class BaseTrade
 
     protected $platformType = '';
 
-    public function setRouter(Router $router)
+    public function setContainer($container)
     {
-        $this->router = $router;
+        $this->container = $container;
     }
 
     public function setBiz($biz)
@@ -40,7 +40,12 @@ abstract class BaseTrade
 
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        return $this->router->generate($route, $parameters, $referenceType);
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
+    public function renderView($view, array $parameters = array())
+    {
+        return $this->container->get('templating')->render($view, $parameters);
     }
 
     public function create($params)
@@ -62,7 +67,7 @@ abstract class BaseTrade
             'show_url' => isset($params['show_url']) ? $params['show_url'] : '',
         );
 
-        if ($params['type'] == 'purchase' && !empty($params['orderSn'])) {
+        if ('purchase' == $params['type'] && !empty($params['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
             $tradeFields['amount'] = $order['pay_amount'];
             $tradeFields['order_sn'] = $order['sn'];
@@ -73,7 +78,7 @@ abstract class BaseTrade
             $tradeFields['goods_title'] = $order['title'];
         }
 
-        if ($params['type'] == 'recharge') {
+        if ('recharge' == $params['type']) {
             $tradeFields['goods_title'] = '现金充值';
             $tradeFields['order_sn'] = '';
             $tradeFields['amount'] = MathToolkit::simple($params['amount'], 100);
@@ -104,7 +109,7 @@ abstract class BaseTrade
             'payUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
         );
 
-        if ($trade['status'] == 'paid') {
+        if ('paid' == $trade['status']) {
             $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
 
             return $defaultResponse;
