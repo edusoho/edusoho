@@ -6765,6 +6765,7 @@ cashflow.refund: 网校退款
 admin.cashflow.keyword: keyword
 
 order.pay_check_msg.parameters_error: parameters_error
+order.pay_check_msg.coin_amount_error: coin amount error
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
 order.pay_check_msg.unpurchasable_product: Unpurchasable Product
 order.pay_check_msg.order_not_exist: Order not exist

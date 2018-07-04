@@ -88,6 +88,9 @@ class Order extends AbstractResource
         $params['type'] = 'purchase';
         $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
         $params['orderSn'] = $order['sn'];
+        if (isset($params['payPassword'])) {
+            $params['unencryptedPayPassword'] = $params['payPassword'];
+        }
         if ('Alipay_LegacyWap' == $params['gateway']) {
             $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);

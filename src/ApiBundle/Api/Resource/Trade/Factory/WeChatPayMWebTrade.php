@@ -12,6 +12,9 @@ class WeChatPayMWebTrade extends BaseTrade
     {
         return array(
             'mwebUrl' => $trade['platform_created_result']['mweb_url'],
+            'paymentForm' => array(),
+            'paymentHtml' => '',
+            'paymentUrl' => $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $trade['trade_sn']), true),
         );
     }
 }
