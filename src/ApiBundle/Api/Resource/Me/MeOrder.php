@@ -28,16 +28,16 @@ class MeOrder extends AbstractResource
         $request = $this->container->get('request');
         foreach ($orders as $key => $value) {
             $product = $this->getProduct($orders[$key]['id']);
-            if (substr($product->cover['middle'], 0,6)==="/assets"){
-                $orders[$key]['imgUrl']=$url = $request->getSchemeAndHttpHost().$assets->getUrl($product->cover['middle']);
-            }else{
-                $orders[$key]['imgUrl']=$url = $request->getSchemeAndHttpHost().$this->getWebExtension()->getFpath($product->cover['middle'],$product->targetType);
+            if ('/assets' === substr($product->cover['middle'], 0, 6)) {
+                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$assets->getUrl($product->cover['middle']);
+            } else {
+                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$this->getWebExtension()->getFpath($product->cover['middle'], $product->targetType);
             }
         }
 
         $total = $this->getOrderService()->countOrders($conditions);
-        return $this->makePagingObject($orders, $total, $offset, $limit);
 
+        return $this->makePagingObject($orders, $total, $offset, $limit);
     }
 
     private function getProduct($orderId)
@@ -68,5 +68,4 @@ class MeOrder extends AbstractResource
     {
         return $this->container->get('web.twig.extension');
     }
-
 }

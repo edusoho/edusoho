@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class OrderFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'sn', 'pay_amount', 'created_time', 'status','imgUrl',
+        'id', 'title', 'sn', 'pay_amount', 'created_time', 'status', 'imgUrl',
     );
 
     protected $publicFields = array(
