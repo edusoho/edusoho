@@ -1124,6 +1124,7 @@ course.plan.cell: 个
 course.manage_btn: 管理课程
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
+course.check.plan: 查看计划
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'

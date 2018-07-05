@@ -1277,6 +1277,7 @@ course.plan.cell: 个
 course.manage_btn: 管理课程
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
+course.check.plan: 查看计划
 course.share: 分享
 course.belong_to_classroom_tips: >
   该课程属于
