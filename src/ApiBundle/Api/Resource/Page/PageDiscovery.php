@@ -20,8 +20,8 @@ class PageDiscovery extends AbstractResource
         }
         
         $setting = array('hot_course_list', 'recommended_course_list');
-        $result = $this->getCourseSetService()->findCourseSetsbyOrder();;
-        return 
+        $result = $this->getCourseSetService()->findCourseSetsbyOrder('hotSeq');
+        return $result;
     }
 
     /**

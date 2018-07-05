@@ -981,8 +981,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function findCourseSetsbyOrder($orderBy)
     {
-        $conditions = array('parentId' => 0, 'status' => 'published');
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, 4);
+        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => 'reservation');
+        $courseSets = $this->searchCourseSets($conditions, $orderBy, 0, 4);
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $courses = $this->fillCourseTryLookVideo($courses);
         $tryLookVideoCourses = array_filter($courses, function ($course) {
@@ -1059,6 +1059,22 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getNoteService()
     {
         return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
