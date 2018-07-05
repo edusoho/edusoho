@@ -58,7 +58,6 @@ class HomeworkController extends BaseController
         $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
-
         return $this->render('homework/do.html.twig', array(
             'paper' => $homework,
             'questions' => $questions,
