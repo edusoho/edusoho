@@ -21,7 +21,7 @@
   {% endblock %}
 
 
-  <div class="iframe-parent-content">
+  <div class="{% if isIframeBody|default(1) %} iframe-parent-content {% endif %}">
 
     <div class="js-testpaper-container container {{containerClass|default('')}}">
       {% block paper_content %}
