@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ResponseFilter;
-use Biz\OrderFacade\Service\OrderFacadeService;
 
 class MeOrder extends AbstractResource
 {
@@ -25,7 +24,28 @@ class MeOrder extends AbstractResource
             $limit
         );
 
-        return $orders;
+        $assets = $this->container->get('templating.helper.assets');
+        $request = $this->container->get('request');
+        foreach ($orders as $key => $value) {
+            $product = $this->getProduct($orders[$key]['id']);
+            if (substr($product->cover['middle'], 0,6)==="/assets"){
+                $orders[$key]['imgUrl']=$url = $request->getSchemeAndHttpHost().$assets->getUrl($product->cover['middle']);
+            }else{
+                $orders[$key]['imgUrl']=$url = $request->getSchemeAndHttpHost().$this->getWebExtension()->getFpath($product->cover['middle'],$product->targetType);
+            }
+        }
+
+        $total = $this->getOrderService()->countOrders($conditions);
+        return $this->makePagingObject($orders, $total, $offset, $limit);
+
+    }
+
+    private function getProduct($orderId)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
+        $orderItem = reset($orderItems);
+
+        return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
     /**
@@ -41,6 +61,12 @@ class MeOrder extends AbstractResource
      */
     private function getOrderFacadeService()
     {
-        return $this->service('OrderFacade:OrderFacadeService');
+        return $this->getBiz()->service('OrderFacade:OrderFacadeService');
     }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('web.twig.extension');
+    }
+
 }
