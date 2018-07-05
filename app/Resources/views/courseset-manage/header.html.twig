@@ -37,48 +37,54 @@
       {% endblock %}
     </div>
 
-    <div class="courseset-manage-header-info__price color-danger">
+{#     <div class="courseset-manage-header-info__price color-danger">
       {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
         ¥{{ courseSet.minCoursePrice }}
       {% else %}
         ¥{{ courseSet.minCoursePrice }}～¥{{ courseSet.maxCoursePrice }}
       {% endif %}
-    </div>
+    </div> #}
   </div>
 
   <div class="courseset-manage-header-btn hidden-xs">
     {% block btn %}
       {# 课程发布按钮 #}
       {% if courseSet.status == 'published' %}
-        <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a>
+        {# <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a> #}
       {% endif %}
 
       {% if courseSet.status != 'published' %}
-        <button class="btn cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
-        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-          <button class="cd-btn cd-btn-primary course-manage-header-more">
-            <i class="es-icon es-icon-morehoriz"></i>
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
-            </li>
-          </ul>
-        </div>
+        <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a><button class="cd-btn cd-btn-primary cd-ml16 js-course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
       {% endif %}
     {% endblock %}
 
   </div>
 
   <div class="courseset-manage-header-data">
-    <span>{{ 'course.student_member'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span>{{ 'course.student.cell'|trans }}</div>
+    <span class="cd-text-medium">{{ '课程价格'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major">
+      <span class="courseset-manage-header-data__num color-danger">
+        {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
+          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}
+        {% else %}
+          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}～<span class="cd-text-sm">¥</span>{{ courseSet.maxCoursePrice }}
+        {% endif %}
+      </span>
+    </div>
   </div>
 
   <div class="courseset-manage-header-data">
-    <span>{{ 'course.teaching_plan'|trans }}</span>
-    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span>{{ 'course.plan.cell'|trans }}</div>
+    <span class="cd-text-medium">{{ 'course.student_member'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
   </div>
+
+
+  <div class="courseset-manage-header-data">
+    <span class="cd-text-medium">{{ 'course.plan'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span></div>
+  </div>
+
+
 
 </div>
 
