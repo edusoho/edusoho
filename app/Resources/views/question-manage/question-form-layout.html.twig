@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 
 {% block title %}
   {% if question|default(null) %}{{'course.question_manage.edit'|trans}}{% else %}{{'course.question_manage.manage'|trans}}{% endif %} - {{ parent() }}
