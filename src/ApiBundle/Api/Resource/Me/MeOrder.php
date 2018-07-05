@@ -28,13 +28,13 @@ class MeOrder extends AbstractResource
         $request = $this->container->get('request');
         foreach ($orders as $key => $value) {
             $product = $this->getProduct($orders[$key]['id']);
-            if ('/assets' === substr($product->cover['middle'], 0, 6)) {
-                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$assets->getUrl($product->cover['middle']);
+            $cover = 0 == count($product->cover) ? $cover = '' : $cover = $product->cover['large'];
+            if (0 === strpos($cover, '/assets')) {
+                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$assets->getUrl($cover);
             } else {
-                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$this->getWebExtension()->getFpath($product->cover['middle'], $product->targetType);
+                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$this->getWebExtension()->getFpath($cover, $product->targetType.'.png');
             }
         }
-
         $total = $this->getOrderService()->countOrders($conditions);
 
         return $this->makePagingObject($orders, $total, $offset, $limit);
