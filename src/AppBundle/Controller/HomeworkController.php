@@ -30,7 +30,7 @@ class HomeworkController extends BaseController
 
         $result = $this->getTestpaperService()->startTestpaper($homeworkId, array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
-        if ($result['status'] === 'doing') {
+        if ('doing' === $result['status']) {
             return $this->redirect($this->generateUrl('homework_show', array(
                 'resultId' => $result['id'],
             )));
@@ -58,6 +58,7 @@ class HomeworkController extends BaseController
         $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
+
         return $this->render('homework/do.html.twig', array(
             'paper' => $homework,
             'questions' => $questions,
@@ -118,7 +119,7 @@ class HomeworkController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.homework_has_submitted_cannot_change.message'));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
