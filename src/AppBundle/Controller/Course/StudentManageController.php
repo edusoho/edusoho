@@ -21,6 +21,7 @@ use Biz\User\Service\UserService;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\TimeMachine;
 
 class StudentManageController extends BaseController
 {
@@ -44,7 +45,7 @@ class StudentManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getCourseMemberService()->countMembers($conditions),
-            20
+            50
         );
 
         $members = $this->getCourseMemberService()->searchMembers(
@@ -169,26 +170,60 @@ class StudentManageController extends BaseController
         );
     }
 
-    public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
+    public function batchUpdateMemberDeadlinesAction(Request $request, $courseId)
     {
-        $user = $this->getUserService()->getUser($userId);
-        $course = $this->getCourseService()->getCourse($courseId);
-        if ($request->getMethod() === 'POST') {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            $this->getCourseMemberService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
+            if ('day' == $fields['updateType']) {
+                $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $fields['day'], $fields['waveType']);
+
+                return $this->createJsonResponse(true);
+            }
+            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($courseId, $ids, $fields['deadline']);
 
             return $this->createJsonResponse(true);
         }
+        $users = $this->getUserService()->findUsersByIds($ids);
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render(
-            'course-manage/student/set-expiryday-modal.html.twig',
+            'course-manage/student/set-deadline-modal.html.twig',
             array(
                 'course' => $course,
-                'user' => $user,
+                'users' => $users,
+                'ids' => implode(',', ArrayToolkit::column($users, 'id')),
                 'default' => $default,
             )
         );
+    }
+
+    public function checkDayAction(Request $request, $courseId)
+    {
+        $waveType = $request->query->get('waveType');
+        $day = $request->query->get('day');
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ($this->getCourseMemberService()->checkDayAndWaveTypeForUpdateDeadline($courseId, $ids, $day, $waveType)) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    public function checkDeadlineAction(Request $request, $courseId)
+    {
+        $deadline = $request->query->get('deadline');
+        $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ($this->getCourseMemberService()->checkDeadlineForUpdateDeadline($courseId, $ids, $deadline)) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
     }
 
     public function checkStudentAction(Request $request, $courseSetId, $courseId)
@@ -333,14 +368,14 @@ class StudentManageController extends BaseController
         $activitiesWithMeta = $this->getActivityService()->findActivities($activitiyIds, true);
 
         foreach ($activitiesWithMeta as $activity) {
-            if ($activity['mediaType'] === 'homework') {
+            if ('homework' === $activity['mediaType']) {
                 $homeworksCount += 1;
                 $activities[] = array(
                     'id' => $activity['id'],
                     'mediaId' => $activity['mediaId'],
                     'name' => $activity['title'],
                 );
-            } elseif ($activity['mediaType'] === 'testpaper') {
+            } elseif ('testpaper' === $activity['mediaType']) {
                 $testpapersCount += 1;
                 $activities[] = array(
                     'id' => $activity['id'],
@@ -391,10 +426,10 @@ class StudentManageController extends BaseController
         if (!empty($finishedTargets)) {
             $currentActivityId = 0;
             foreach ($finishedTargets as $target) {
-                if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
+                if (0 == $currentActivityId || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
                 }
-                if ($target['type'] === 'homework') {
+                if ('homework' === $target['type']) {
                     $finishedHomeworksCount += 1;
                 } else {
                     $finishedTestpapersCount += 1;
@@ -417,7 +452,7 @@ class StudentManageController extends BaseController
         if (!empty($reviewingTargets)) {
             $currentActivityId = 0;
             foreach ($reviewingTargets as $target) {
-                if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
+                if (0 == $currentActivityId || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
                 }
                 if (empty($reviewingTests[$currentActivityId])) {

@@ -5,16 +5,15 @@
     <div class="{% block sectionClass %} courseset-header-section {% endblock %}">
       <div class="container cd-container">
         {% block breadcrumb %}
-          <ol class="breadcrumb breadcrumb-o">
-            <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
-            <li class="active cd-dark-major">{{ courseSet.title|plain_text(21) }}</li>
-          </ol>
+          {# 面包屑courseset 和 course 分开 #}
         {% endblock %}
-        {% block course_header %}
+        {% block courseset_header %}
           {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
         {% endblock %}
         {% block navbar %}
           {% include 'courseset-manage/navbar.html.twig' %}
+        {% endblock %}
+        {% block course_header %}
         {% endblock %}
       </div>
     </div>
