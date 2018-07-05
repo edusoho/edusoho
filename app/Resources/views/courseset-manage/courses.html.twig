@@ -9,12 +9,12 @@
   <div role="courseset-manage-courses">
     <div class="cd-mb24 clearfix">
       <div class="pull-right">
-        <div class="js-sort-group">
+        <div class="js-sort-group hidden-xs">
           <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
             data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button>
-          <button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>
+          {% if courses|length > 1 %}<button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
         </div>
-        <div class="js-sort-group hide">
+        <div class="js-sort-group hidden-xs hide">
           <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>
           <button class="cd-btn cd-btn-default js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
         </div>
@@ -36,15 +36,11 @@
         </li>
     {% endfor %}
     </ul>
-    <div class="courses-manage-plan-info">
-      <p class="cd-dark-minor">教学计划使用方式介绍：</p>
-      <p>为了更快捷的组织教学，计划管理可以让单个课程支持多种教学组织模式：</p>
-      <p>1、支持不同时期开设相同内容的课程：三月班、四月班、五月班；</p>
-      <p>2、支持区分学员，开设多个教学班：数学一班、数学二班、数学三班；</p>
-      <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
-      <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
-      <p>欢迎您使用教学计划管理，新的功能将更好的支持您开展教学工作，您的声音是我们前进的动力！</p>
-    </div>
+    {% if courses|length == 1 %}
+      <div class="courses-manage-plan-info">
+        {{ 'course.plan_info'|trans|raw }}
+      </div>
+    {% endif %}
     <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
   </div>
 {% endblock %}

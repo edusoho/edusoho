@@ -18,12 +18,12 @@
     <div class="pull-right hidden-xs courses-operation js-plan-operation">
       {% if courseSet.canManage|default() or course.canManage|default()  %}
         <div class="js-plan-icon">
-          <a class="cd-mr32 cd-dark-major" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">
+          <a class="cd-mr32 cd-link-major" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">
             <i class="es-icon es-icon-setting"></i>
           </a>
 
           <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
-            <a class="cd-dark-major" href="javascript:;">
+            <a class="cd-link-major" href="javascript:;">
               <i class="es-icon es-icon-morehoriz"></i>
             </a>
             <ul class="dropdown-menu courses-operation-dropdown">
