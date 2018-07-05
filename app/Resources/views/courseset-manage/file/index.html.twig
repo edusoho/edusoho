@@ -1,7 +1,7 @@
 {% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
   {% set layout = 'open-course-manage/layout.html.twig' %}
 {% else %}
-  {% set layout = 'courseset-manage/layout.html.twig' %}
+  {% set layout = 'courseset-manage/courseset-layout.html.twig' %}
 {% endif %}
 {% extends layout %}
 {% do script(['app/js/course-manage-file/index/index.js']) %}
