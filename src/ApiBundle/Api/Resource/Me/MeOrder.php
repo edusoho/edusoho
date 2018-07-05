@@ -9,7 +9,7 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 class MeOrder extends AbstractResource
 {
     /**
-     * @ResponseFilter(class="ApiBundle\Api\Resource\Order\OrderFilter", mode="simple")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Me\MeOrderFilter", mode="simple")
      */
     public function search(ApiRequest $request)
     {
