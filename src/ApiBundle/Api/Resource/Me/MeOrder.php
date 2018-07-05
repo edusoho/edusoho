@@ -24,16 +24,14 @@ class MeOrder extends AbstractResource
             $limit
         );
 
-        $assets = $this->container->get('templating.helper.assets');
-        $request = $this->container->get('request');
         foreach ($orders as $key => $value) {
             $product = $this->getProduct($orders[$key]['id']);
-            $cover = 0 == count($product->cover) ? $cover = '' : $cover = $product->cover['large'];
-            if (0 === strpos($cover, '/assets')) {
-                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$assets->getUrl($cover);
-            } else {
-                $orders[$key]['imgUrl'] = $request->getSchemeAndHttpHost().$this->getWebExtension()->getFpath($cover, $product->targetType.'.png');
+            if (count($product->cover)==0){
+                $orders[$key]['cover']['middle']='';
+            }else {
+                $orders[$key]['cover']=$product->cover;
             }
+            $orders[$key]['targetType']=$product->targetType;
         }
         $total = $this->getOrderService()->countOrders($conditions);
 
