@@ -26,12 +26,12 @@ class MeOrder extends AbstractResource
 
         foreach ($orders as $key => $value) {
             $product = $this->getProduct($orders[$key]['id']);
-            if (count($product->cover)==0){
-                $orders[$key]['cover']['middle']='';
-            }else {
-                $orders[$key]['cover']=$product->cover;
+            if (0 == count($product->cover)) {
+                $orders[$key]['cover']['middle'] = '';
+            } else {
+                $orders[$key]['cover'] = $product->cover;
             }
-            $orders[$key]['targetType']=$product->targetType;
+            $orders[$key]['targetType'] = $product->targetType;
         }
         $total = $this->getOrderService()->countOrders($conditions);
 
