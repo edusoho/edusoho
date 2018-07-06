@@ -981,7 +981,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function findCourseSetsbyOrder($orderBy)
     {
-        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => 'reservation');
+        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
         $courseSets = $this->searchCourseSets($conditions, $orderBy, 0, 4);
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $courses = $this->fillCourseTryLookVideo($courses);
@@ -998,6 +998,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $courseSet['course'] = $courses[$courseSet['id']];
             }
         });
+        $homepageCourseSets = array();
+        foreach ($courseSets as $courseSet) {
+            
+        }
         return $courseSets;
     }
 
