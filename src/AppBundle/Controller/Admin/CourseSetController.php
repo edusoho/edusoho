@@ -305,9 +305,11 @@ class CourseSetController extends BaseController
 
         foreach ($courseSets as $key => &$courseSet) {
             $courseSetId = $courseSet['id'];
+            $course = $this->getCourseService()->getCourse($courseSet['id']);
+            $courseTaskNum = $course['taskNum'];
             $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
             $isLearnedNum = $this->getMemberService()->countMembers(
-                array('isLearned' => 1, 'courseSetId' => $courseSetId)
+                array('finishedTime_GT' => 0, 'courseSetId' => $courseSetId, 'learnedNumGreaterThan' => $courseTaskNum)
             );
 
             $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
