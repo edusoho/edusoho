@@ -1,17 +1,17 @@
 <template>
 <div class="course-detail__head">
-  <div class="course-detail__head--img" v-if="type === 'img'">
+  <div class="course-detail__head--img" v-if="sourceType === 'img'">
     <img :src="courseSet.cover.large" alt="">
   </div>
- <div id="course-detail__head--video" v-if="type === 'video'"></div>
+ <div id="course-detail__head--video" v-if="sourceType === 'video'"></div>
 </div>
 
 </template>
 <script>
 import loadScript from 'load-script';
+import { mapState } from 'vuex';
 
 export default {
-  props: [''],
   props: {
     courseSet: {
       type: Object,
@@ -22,14 +22,27 @@ export default {
       default: 'img'
     }
   },
-  mounted() {
-    this.type === 'video' && this.initPlayer();
+  computed: {
+    ...mapState('course', {
+      sourceType: state => state.sourceType
+    })
+  },
+  watch: {
+    sourceType: {
+      immediate: true,
+      handler(v) {
+        ['video', 'radio'].includes(v) && this.initPlayer(v);
+      }
+    }
   },
   methods: {
-    initPlayer(){
+    initPlayer (type){
       const options = {
         id: 'course-detail__head--video',
-        playlist: 'https://ghub.club/playlist/playlist.m3u8',
+        resId: '',
+        user: {},
+        // playlist: 'http://ese2a3b1c3d55k.pri.qiqiuyun.net/course-task-1/20180621030306-7ks1a405yug48kog?e=1530687514&token=ExRD5wolmUnwwITVeSEXDQXizfxTRp7vnaMKJbO-:hMWXT4qoehVwiMUBgR9ketcNvYA=',
+        playlist: 'http://ese2a3b1c3d55k.pri.qiqiuyun.net/course-task-1/20180621030306-7ks1a405yug48kog?e=1530687514&token=ExRD5wolmUnwwITVeSEXDQXizfxTRp7vnaMKJbO-:hMWXT4qoehVwiMUBgR9ketcNvYA=',
         autoplay: true,
         poster: 'https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg'
       };
@@ -38,7 +51,7 @@ export default {
         const player = new SDK(options);
       })
     },
-    loadPlayerSDK() {
+    loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
 
         const scrptSrc = `//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?

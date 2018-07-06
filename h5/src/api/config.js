@@ -1,7 +1,18 @@
 const config = [
   {
+    // 登录
     name: 'login',
     url: '/tokens',
+    method: 'POST'
+  }, {
+    // 新增用户短信验证码
+    name: 'getSmsCenter',
+    url: '/sms_center',
+    method: 'POST'
+  }, {
+    // 新增用户
+    name: 'addUser',
+    url: '/user',
     method: 'POST'
   },
   {
@@ -48,7 +59,7 @@ const config = [
   }, {
     // 课程详情页
     name: 'getCourseDetail',
-    url: '/pages/course?id={id}',
+    url: '/pages/h5/courses/{courseId}',
     method: 'GET'
   }
 ];

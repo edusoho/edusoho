@@ -24,7 +24,7 @@
             v-if="task.type === 'task'">
             <div class="lesson-cell">
               <span class="lesson-cell__number">{{ task | filterNumber }}</span>
-              <div class="lesson-cell__content" @click="lessonCellClick">
+              <div class="lesson-cell__content" @click="lessonCellClick(task)">
                 <span>{{ task.title }}</span>
                 <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
               </div>
@@ -39,6 +39,10 @@
   </e-panel>
 </template>
 <script>
+  import { mapState, mapMutations } from 'vuex';
+  import { Toast } from 'vant';
+  import * as types from '@/store/mutation-types';
+
   export default {
     props: {
       courseItem: {
@@ -49,14 +53,19 @@
         type: String,
         default: ''
       },
-      joinStatus: {
-        type: String,
-        default: ''
-      },
+      // joinStatus: {
+      //   type: String,
+      //   default: ''
+      // },
       hiddeTitle: {
         type: Boolean,
         default: false
       }
+    },
+    computed: {
+      ...mapState('course', {
+        joinStatus: state => state.joinStatus
+      })
     },
     data() {
       return {
@@ -82,7 +91,10 @@
       }
     },
     methods: {
-      getTasks(data) {
+      ...mapMutations('course', {
+        setSourceType: types.SET_SOURCETYPE
+      }),
+      getTasks (data) {
         let temp = [];
 
         data.forEach(item => {
@@ -107,7 +119,7 @@
         }
         console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
-      getCurrentStatus(task) {
+      getCurrentStatus (task) {
         if (this.tryLookable
           && task.type === 'video'
           && task.activity.mediaStorage) {
@@ -117,7 +129,7 @@
         }
         return '';
       },
-      filterTaskStatus(task){
+      filterTaskStatus (task){
         if (task.status === 'is-tryLook') {
           return '试看';
         } else if (task.status === 'is-free') {
@@ -126,8 +138,47 @@
 
         return '';
       },
-      lessonCellClick(e) {
-        console.log(e);
+      lessonCellClick (task) {
+        // trylook and free video click
+        if (!this.joinStatus && !!this.tryLookable) {
+          if (task.task.type === 'video' || task.task.type === 'audio') {
+            this.$router.push({
+              name: 'course_try'
+            })
+            this.setSourceType('video');
+          } else if (task.task.type === 'doc') {
+            this.$router.push({
+              name: 'course_web'
+            })
+          } else {
+            Toast('请先加入课程');
+          }
+        } else {
+          this.showTypeDetail(task.task);
+        }
+        //join after click
+
+      },
+      showTypeDetail (task) {
+        switch(task.type) {
+          case 'video':
+            if (task.mediaSource == 'self') {
+              this.setSourceType('video')
+            } else {
+              Toast('暂不支持此类型');
+            }
+            break;
+          case 'audio':
+            this.setSourceType('audio')
+            break;
+          case 'doc':
+            this.$router.push({
+              name: 'course_web'
+            })
+            break;
+          default:
+            Toast('暂不支持此类型');
+        }
       }
     }
   }

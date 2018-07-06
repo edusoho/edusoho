@@ -33,8 +33,13 @@ export default {
     tips: {
       type: String,
       default: '拖动左边滑块完成上方拼图'
-    }
+    },
+    info: {
+      type: Object,
+      default: () => ({})
+    },
   },
+
   data() {
     return {
       imgInfo: {
@@ -54,7 +59,8 @@ export default {
   },
   created() {
     this.initDragCaptcha();
-    this.$toast('提示文案');
+    // this.$toast('提示文案');
+    console.log('info', this.info)
   },
   mounted() {
     const bar = this.$refs.bar;
@@ -78,6 +84,37 @@ export default {
         })
       })
     },
+    sendSmsCenter() {
+      Api.getSmsCenter({
+        data: {
+          type: 'register',
+          mobile: this.info.mobile
+        }
+      }).then(res => {
+        console.log(res);
+        Toast.success('成功');
+        this.$emit('success', res);
+        this.dragState = {};
+      }).catch(err => {
+        this.$toast(err);
+        this.initDragCaptcha();
+      })
+    },
+    handletTouchEnd() {
+      if(this.dragState.currentLeft) {
+        Api.dragValidate({
+          query: {
+            token: this.getToken()
+          }
+        }).then(res => {
+
+          this.sendSmsCenter();
+        }).catch(err => {
+          Toast.fail(err.message);
+          this.initDragCaptcha();
+        })
+      }
+    },
     handleTouchMove(e) {
       e.preventDefault();
 
@@ -100,21 +137,6 @@ export default {
         currentLeft: currentX,
         maskWidth: (Number(currentX) + dragBtn.offsetWidth / 2).toFixed(2)
       })
-    },
-    handletTouchEnd() {
-      if(this.dragState.currentLeft) {
-        Api.dragValidate({
-          query: {
-            token: this.getToken()
-          }
-        }).then(res => {
-          Toast.success('成功');
-          this.dragState = {};
-        }).catch(err => {
-          Toast.fail(err.message);
-          this.initDragCaptcha();
-        })
-      }
     },
     calPositionX() {
       const bg = this.$refs.dragImgBg;

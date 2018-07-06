@@ -1,9 +1,8 @@
 <template>
   <div class="course-detail">
-    <span>selectedPlanIndex {{selectedPlanIndex}}</span>
+    <!-- <span>selectedPlanIndex {{selectedPlanIndex}}</span> -->
     <join-before v-if="!joinStatus && details.length" :details="details"></join-before>    
-    <join-after :details="details[0]" v-if="joinStatus && details.length"></join-after>
-  
+    <join-after :details="details[selectedPlanIndex]" v-if="joinStatus && details.length"></join-after>
   </div>
 </template>
 
@@ -11,7 +10,7 @@
   import joinAfter from './join-after.vue';
   import joinBefore from './join-before.vue';
   import Api from '@/api';
-  import { mapState } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
 
   export default {
     components: {
@@ -20,24 +19,29 @@
     },
     data() {
       return {
-        joinStatus: true, // joinAfter = true
+        // joinStatus: true, // joinAfter = true
         details: []
       };
     },
     computed: {
       ...mapState('course', {
-        selectedPlanIndex: state => state.selectedPlanIndex
+        selectedPlanIndex: state => state.selectedPlanIndex,
+        joinStatus: state => state.joinStatus
       })
     },
     created(){
-      Api.getCourseDetail({
-        query: {
-          id: this.$route.params.id
-        }
+      this.getCourseDetail({
+        courseId: this.$route.params.id
       }).then(res => {
         this.details = res;
-        this.joinStatus = false;
+        // this.joinStatus = false;
+
       })
+    },
+    methods: {
+      ...mapActions('course', [
+        'getCourseDetail'
+      ])
     }
   }
 </script>
