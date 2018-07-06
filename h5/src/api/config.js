@@ -59,7 +59,7 @@ const config = [
   }, {
     // 课程详情页
     name: 'getCourseDetail',
-    url: '/pages/course?id={id}',
+    url: '/pages/h5/courses/{courseId}',
     method: 'GET'
   }
 ];

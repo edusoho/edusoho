@@ -31,12 +31,11 @@
     },
     created(){
       this.getCourseDetail({
-        params: {
-          id: this.$route.params.id
-        }
+        courseId: this.$route.params.id
       }).then(res => {
         this.details = res;
         // this.joinStatus = false;
+
       })
     },
     methods: {

@@ -8,6 +8,8 @@ const state = {
   details: []
 };
 
+const isJoinedCourse = 'member.member_exist';
+
 const mutations = {
   [types.SET_PLAN_INDEX](currentState, payload) {
     currentState.selectedPlanIndex = payload;
@@ -26,10 +28,10 @@ const mutations = {
 };
 
 const actions = {
-  getCourseDetail({ commit }, { id }) {
+  getCourseDetail({ commit }, { courseId }) {
     return Api.getCourseDetail({
       query: {
-        id
+        courseId
       }
     }).then(res => {
       commit(types.GET_COURSE_DETAIL, res);
