@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Course\CourseBaseController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CourseSetController extends CourseBaseController
 {
@@ -70,11 +71,21 @@ class CourseSetController extends CourseBaseController
         );
 
         $service = $this->getCourseService();
+        $that = $this;
         $courseSets = array_map(
-            function ($set) use ($user, $service) {
-                $set['courseNum'] = $service->countCourses(array(
+            function ($set) use ($user, $service, $that) {
+                $courseNum = $service->countCourses(array(
                     'courseSetId' => $set['id'],
                 ));
+
+                if ($courseNum > 1) {
+                    $set['redirect_path'] = $that->generateUrl('course_set_manage_courses', array('courseSetId' => $set['id']));
+                } else {
+                    $course = $service->findCoursesByCourseSetId($set['id']);
+                    $set['redirect_path'] = $that->generateUrl('course_set_manage_course_tasks', array('courseId' => $course['0']['id'], 'courseSetId' => $set['id']));
+                }
+
+                $set['courseNum'] = $courseNum;
 
                 return $set;
             },
@@ -104,6 +115,11 @@ class CourseSetController extends CourseBaseController
                 'filter' => $filter,
             )
         );
+    }
+
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     public function teachingLivesCalendarAction(Request $request)
