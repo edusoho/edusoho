@@ -38,7 +38,7 @@
   import Directory from './detail/directory';
   import DetailHead from './detail/head';
   import DetailPlan from './detail/plan';
-  import { mapMutations } from 'vuex';
+  import { mapMutations, mapActions } from 'vuex';
   import * as types from '@/store/mutation-types';
 
   export default {
@@ -84,9 +84,9 @@
       }, 100)
     },
     methods: {
-       ...mapMutations('course',{
-        joinCourse: types.JOIN_COURSE
-      }),
+       ...mapActions('course', [
+        'joinCourse'
+       ]),
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
 
@@ -115,8 +115,13 @@
           :(scrollTop >= tops.directoryTop ? 2 : 1);
       },
       handleJoin(){
-        console.log('join');
-        this.joinCourse();
+        if (this.$store.state.token) {
+          this.joinCourse({
+            id: this.$route.params.id
+          });
+        } else {
+          this.$router.push({name: 'login'});
+        }
       }
     },
     destroyed () {

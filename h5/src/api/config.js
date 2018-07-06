@@ -61,6 +61,11 @@ const config = [
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
     method: 'GET'
+  }, {
+    // 加入课程
+    name: 'joinCourse',
+    url: '/courses/{id}/members',
+    method: 'POST'
   }
 ];
 
