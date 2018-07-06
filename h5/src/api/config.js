@@ -27,7 +27,7 @@ const config = [
   },
   {
     name: 'discoveries',
-    url: '/discoveries/h5',
+    url: '/pages/h5/discoveries',
     method: 'GET'
   },
   {

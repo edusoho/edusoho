@@ -31,18 +31,15 @@
     },
     data() {
       return {
-        type: 'price'
+        type: 'price',
+        source: this.courseList.source
       };
     },
     methods: {
       jumpTo(source) {
         this.$router.push({
           path: '/more',
-          // query: {
-          //   type: source.type,
-          //   targetId: source.targetId,
-          //   sort: source.sort
-          // }
+          query: {...this.source}
         });
       }
     }
