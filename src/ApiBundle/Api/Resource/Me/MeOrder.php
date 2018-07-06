@@ -5,12 +5,11 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ResponseFilter;
-use Biz\OrderFacade\Service\OrderFacadeService;
 
 class MeOrder extends AbstractResource
 {
     /**
-     * @ResponseFilter(class="ApiBundle\Api\Resource\Order\OrderFilter", mode="simple")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Me\MeOrderFilter", mode="simple")
      */
     public function search(ApiRequest $request)
     {
@@ -25,7 +24,26 @@ class MeOrder extends AbstractResource
             $limit
         );
 
-        return $orders;
+        foreach ($orders as $key => $value) {
+            $product = $this->getProduct($orders[$key]['id']);
+            if (0 == count($product->cover)) {
+                $orders[$key]['cover']['middle'] = '';
+            } else {
+                $orders[$key]['cover'] = $product->cover;
+            }
+            $orders[$key]['targetType'] = $product->targetType;
+        }
+        $total = $this->getOrderService()->countOrders($conditions);
+
+        return $this->makePagingObject($orders, $total, $offset, $limit);
+    }
+
+    private function getProduct($orderId)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
+        $orderItem = reset($orderItems);
+
+        return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
     /**
@@ -41,6 +59,11 @@ class MeOrder extends AbstractResource
      */
     private function getOrderFacadeService()
     {
-        return $this->service('OrderFacade:OrderFacadeService');
+        return $this->getBiz()->service('OrderFacade:OrderFacadeService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('web.twig.extension');
     }
 }

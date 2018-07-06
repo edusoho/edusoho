@@ -22,6 +22,8 @@ class UserException extends AbstractException
 
     const ERROR_MOBILE_REGISTERED = 4030107;
 
+    const FORBIDDEN_REGISTER_LIMIT = 4030108;
+
     const FORBIDDEN_SEND_MESSAGE = 4030110;
 
     public $messages = array(
@@ -32,6 +34,7 @@ class UserException extends AbstractException
         5000105 => 'exception.user.reset_password_email_send',
         4030106 => 'exception.user.discuz_user_reset_password',
         4030107 => 'exception.user.mobile_registered',
+        4030108 => 'exception.user.register_limit',
         4030110 => 'exception.user.message_forbidden',
     );
 }
