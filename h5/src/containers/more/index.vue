@@ -69,5 +69,8 @@
         ]
       };
     },
+    created() {
+      console.log(this.$route, 'query data');
+    }
   }
 </script>
