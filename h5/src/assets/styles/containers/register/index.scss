@@ -50,4 +50,8 @@
       z-index: -1;
     }
   }
+  .van-button--primary {
+    background-color: $primary-color;
+    border-color: #fff;
+  }
 }

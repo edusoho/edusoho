@@ -28,9 +28,13 @@ export const getUserInfo = ({ commit }) => Api.getUserInfo({
   return res;
 });
 
-export const addUser = ({ commit }, data) => Api.addUser({
-  data
-}).then(res => {
-  commit(types.ADD_USER);
-  return res;
-}).catch(err => err);
+export const addUser = ({ commit }, data) =>
+  new Promise((resolve, reject) => {
+    Api.addUser({
+      data
+    }).then(res => {
+      commit(types.ADD_USER);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
+  });

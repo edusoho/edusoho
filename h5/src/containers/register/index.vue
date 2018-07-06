@@ -8,22 +8,20 @@
         maxLength="11"
       />
 
-      <!-- <van-field
-        v-model="username"
-        placeholder="请输入用户名，最长18个英文或9个汉字"
-      /> -->
-
       <van-field
         v-model="registerInfo.encrypt_password"
         type="password"
         placeholder="请设置密码（5-20位字符）"
       />
       <van-field
-        v-show=""
         v-model="registerInfo.code"
         type="text"
+        center
+        clearable
         placeholder="请输入验证码"
-      />
+        >
+      <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+      </van-field>
       
       <!-- <span class='register-hint'>验证码已发送到：{{ phone }}</span> -->
       <e-drag :info="registerInfo" @success="handleSmsSuccess"></e-drag>
@@ -50,6 +48,7 @@
 import EDrag from '@/containers/components/e-drag';
 import { mapActions } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
+import { Toast } from 'vant';
 
 export default {
   components: {
@@ -91,10 +90,9 @@ export default {
         window.XXTEA.encryptToBase64(password, window.location.host);
 
       this.addUser(this.registerInfo)
-      .then(data => {
-      })
+      .then()
       .catch(err => {
-        console.log(err)
+        Toast.fail(err.message);
       });
     }
   }
