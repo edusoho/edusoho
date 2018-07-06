@@ -1,8 +1,10 @@
 .e-drag {
+  width: 95%;
+  padding: vw(8);
   margin: vw(8);
   border: 1px solid #e1e1e1;
   border-radius: 4px;
-  padding: vw(8);
+
   &-section {
     position: relative;
     // padding: vw(8);
@@ -10,6 +12,7 @@
   &-img {
     position: relative;
     min-height: vw(144);
+    width: 100%;
     img:first-child {
       vertical-align: middle;
       width: 100%;

@@ -1,13 +1,7 @@
-// 解析 url?id=xxx 形式接口
-import parseQuery from './parse-query';
-
 // 解析url
 export const parseUrl = (url, query = {}) => {
   const paths = url.split('/');
-  const parse = parseQuery(url, query);
   let newUrl = '';
-
-  if (parse) return parse;
 
   paths.map(item => {
     if (/^{[^({|})]*}$/.test(item)) {

@@ -4,7 +4,7 @@ function parseQuery(url, query) {
   const aftpart = url.split('?')[1];
   let newUrl = '';
 
-  if (aftpart === '') return '';
+  if (!aftpart) return '';
 
   const params = aftpart.split('&');
 

@@ -19,5 +19,9 @@ export default {
   [types.USER_INFO](state, payload) {
     state.user = payload;
     localStorage.setItem('user', JSON.stringify(payload));
+  },
+  [types.ADD_USER](state, payload) {
+    state.user = payload;
+    localStorage.setItem('user', JSON.stringify(payload));
   }
 };

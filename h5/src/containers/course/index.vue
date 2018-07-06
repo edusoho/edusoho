@@ -31,7 +31,9 @@
     },
     created(){
       this.getCourseDetail({
-        id: this.$route.params.id
+        params: {
+          id: this.$route.params.id
+        }
       }).then(res => {
         this.details = res;
         // this.joinStatus = false;

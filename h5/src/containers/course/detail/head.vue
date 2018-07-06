@@ -28,18 +28,21 @@ export default {
     })
   },
   watch: {
-    sourceType(v) {
-      v === 'video' && this.initPlayer();
+    sourceType: {
+      immediate: true,
+      handler(v) {
+        ['video', 'radio'].includes(v) && this.initPlayer(v);
+      }
     }
   },
-  mounted() {
-    this.type === 'video' && this.initPlayer();
-  },
   methods: {
-    initPlayer (){
+    initPlayer (type){
       const options = {
         id: 'course-detail__head--video',
-        playlist: 'https://ghub.club/playlist/playlist.m3u8',
+        resId: '',
+        user: {},
+        // playlist: 'http://ese2a3b1c3d55k.pri.qiqiuyun.net/course-task-1/20180621030306-7ks1a405yug48kog?e=1530687514&token=ExRD5wolmUnwwITVeSEXDQXizfxTRp7vnaMKJbO-:hMWXT4qoehVwiMUBgR9ketcNvYA=',
+        playlist: 'http://ese2a3b1c3d55k.pri.qiqiuyun.net/course-task-1/20180621030306-7ks1a405yug48kog?e=1530687514&token=ExRD5wolmUnwwITVeSEXDQXizfxTRp7vnaMKJbO-:hMWXT4qoehVwiMUBgR9ketcNvYA=',
         autoplay: true,
         poster: 'https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg'
       };
