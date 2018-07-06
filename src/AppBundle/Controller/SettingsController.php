@@ -96,7 +96,6 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $isNickname = $this->getSettingService()->get('user_partner');
-
         if (0 == $isNickname['nickname_enabled']) {
             return $this->redirect($this->generateUrl('settings'));
         }
