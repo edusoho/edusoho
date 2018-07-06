@@ -6,13 +6,13 @@ class MpService extends BaseService
 {
     protected $host = 'mp-service.qiqiuyun.net';
 
-    public function sendMpRequest(array $params)
+    public function getToken(array $params)
     {
-        return $this->request('POST', '/mpRequests', $params);
+        return $this->request('POST', '/tokens', $params);
     }
 
-    public function getCurrentMpRequest()
+    public function getAuthorization()
     {
-        return $this->request('GET', '/mpRequests/current', array());
+        return $this->request('GET', '/authorizations', array());
     }
 }
