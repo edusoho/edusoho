@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use ApiBundle\Api\Exception\ErrorCode;
 
 class PageSetting extends AbstractResource
 {
