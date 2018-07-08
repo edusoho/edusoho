@@ -8,6 +8,7 @@ use Biz\User\Service\UserService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use AppBundle\Common\FileToolkit;
 use Symfony\Component\HttpFoundation\File\File;
+use Biz\Content\FileException;
 
 class Me extends AbstractResource
 {
@@ -17,7 +18,6 @@ class Me extends AbstractResource
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($profile, $user);
         $this->appendUser($user);
-
         return $user;
     }
 
@@ -38,22 +38,22 @@ class Me extends AbstractResource
     protected function updateAvatar($user, $fileId)
     {
         if (empty($fileId)) {
-            return;
+            throw FileException::FILE_NOT_FOUND();
         }
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         $options = $this->createImgCropOptions($naturalSize, $scaledSize);
         $record = $this->getFileService()->getFile($fileId);
         if (empty($record)) {
-            throw new \RuntimeException('Error file not exists');
+            throw FileException::FILE_NOT_FOUND();
         }
         $parsed = $this->getFileService()->parseFileUri($record['uri']);
 
         $filePaths = FileToolKit::cropImages($parsed['fullpath'], $options);
 
         $fields = array();
-        foreach ($filePaths as $key => $value) {
-            $file = $this->getFileService()->uploadFile('user', new File($value));
+        foreach ($filePaths as $key => $filePath) {
+            $file = $this->getFileService()->uploadFile('user', new File($filePath));
             $fields[] = array(
                 'type' => $key,
                 'id' => $file['id'],
@@ -70,7 +70,7 @@ class Me extends AbstractResource
         }
 
         if (empty($fields)) {
-            throw new \RuntimeException('Error uplaod avatar');
+            throw FileException::FILE_HANDLE_ERROR();
         }
         $this->getUserService()->changeAvatar($user['id'], $fields);
     }

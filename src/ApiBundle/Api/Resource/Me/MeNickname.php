@@ -7,6 +7,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use ApiBundle\Api\Annotation\ResponseFilter;
+use Biz\System\SettingException;
+use Biz\Sensitive\SensitiveException;
+use Biz\User\UserException;
 
 class MeNickname extends AbstractResource
 {
@@ -30,17 +33,29 @@ class MeNickname extends AbstractResource
         $user = $this->getCurrentUser();
         $userSetting = $this->getSettingService()->get('user_partner');
         if (empty($userSetting['nickname_enabled'])) {
-            //不允许修改异常
+            throw SettingException::FORBIDDEN_NICKNAME_UPDATE();
         }
 
         if ($this->getSensitiveService()->scanText($nickname)) {
-            //敏感词昵称不允许修改
+            throw SensitiveException::FORBIDDEN_WORDS();
         }
 
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
         if ('success' !== $result && $user['nickname'] != $nickname) {
-            //根据不同code返回异常
+            switch ($result) {
+                case 'error_db':
+                    throw UserException::UPDATE_NICKNAME_ERROR();
+                    break;
+                case 'error_mismatching':
+                    throw UserException::NICKNAME_INVALID();
+                    break;
+                case 'error_duplicate':
+                    throw UserException::NICKNAME_EXISTED();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
