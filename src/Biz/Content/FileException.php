@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class FileException extends AbstractException
 {
-    const EXCEPTION_MODUAL = '10';
+    const EXCEPTION_MODUAL = 10;
 
     const FILE_NOT_FOUND = 4041001;
     const FILE_GROUP_INVALID = 4031002;
