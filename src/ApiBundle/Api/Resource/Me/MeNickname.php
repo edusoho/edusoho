@@ -6,9 +6,13 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeNickname extends AbstractResource
 {
+    /**
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Me\MeFilter", mode="simple")
+     */
     public function update(ApiRequest $request, $nickname)
     {
         $this->checkNickname($nickname);
