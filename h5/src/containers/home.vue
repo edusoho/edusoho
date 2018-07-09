@@ -39,7 +39,12 @@ export default {
           normal: '/static/images/me.png',
           active: '/static/images/meHL.png'
         },
-      ]
+      ],
+    }
+  },
+  watch: {
+    $route() {
+      this.active = this.judgeIndex(this.$route.name);
     }
   },
   created() {
@@ -54,6 +59,13 @@ export default {
       this.$router.push({
         name: this.items[index].name
       })
+    },
+    judgeIndex(routerName) {
+      const items = this.items;
+      const result = items.map((item, index) => {
+        return item.name == routerName;
+      });
+      return result.indexOf(true)
     }
   },
 }
