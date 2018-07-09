@@ -5,9 +5,9 @@
   </div>
 </template>
 <script>
-  import store from '@/store';
   import emptyCourse from './emptyCourse/emptyCourse.vue';
   import lazyLoading from '../components/e-lazy-loading/e-lazy-loading.vue';
+  import store from '@/store'
 
   export default {
     components: {

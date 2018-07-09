@@ -66,6 +66,11 @@ const config = [
     name: 'myStudyState',
     url: '/me/courses',
     method: 'GET'
+  }, {
+    // 加入课程
+    name: 'joinCourse',
+    url: '/courses/{id}/members',
+    method: 'POST'
   }
 ];
 
