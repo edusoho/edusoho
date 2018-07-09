@@ -57,6 +57,46 @@ class PlayerController extends BaseController
         return $this->render('player/show.html.twig', $params);
     }
 
+    protected function getPlayUrl($file, $context, $ssl)
+    {
+        if ('cloud' == $file['storage']) {
+            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
+                    $context['hideBeginning'] = $this->getWebExtension()->isHiddenVideoHeader($hideBeginning);
+                    $token = $this->makeToken('hls.playlist', $file['id'], $context);
+                    $params = array(
+                        'id' => $file['id'],
+                        'token' => $token['token'],
+                    );
+
+                    return $this->generateUrl('hls_playlist', $params, true);
+                } else {
+                    throw new \RuntimeException('当前视频格式不能被播放！');
+                }
+            } else {
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+
+                if ($key) {
+                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+                }
+            }
+
+            return isset($result['url']) ? $result['url'] : '';
+        } else {
+            $token = $this->makeToken('local.media', $file['id']);
+
+            return $this->generateUrl('player_local_media', array(
+                'id' => $file['id'],
+                'token' => $token['token'],
+            ));
+        }
+    }
+
     public function localMediaAction(Request $request, $id, $token)
     {
         $file = $this->getUploadFileService()->getFile($id);

@@ -39,7 +39,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
 
         $isEncryptionPlus = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
 
-        if (!$this->getWebExtension()->isHiddenVideoHeader()) {
+        if (!$this->isHiddenVideoHeader()) {
             // 加入片头信息
             $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
             if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
@@ -76,28 +76,14 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         );
     }
 
-    public function makeToken($type, $fileId, $context = array())
+    public function isHiddenVideoHeader($isHidden = false)
     {
-        $fields = array(
-            'data' => array(
-                'id' => $fileId,
-            ),
-            'times' => 10,
-            'duration' => 3600,
-            'userId' => $this->getCurrentUser()->getId(),
-        );
-
-        if (isset($context['watchTimeLimit'])) {
-            $fields['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        $storage = $this->getSettingService()->get('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
+            return false;
         }
 
-        if (isset($context['hideBeginning'])) {
-            $fields['data']['hideBeginning'] = $context['hideBeginning'];
-        }
-
-        $token = $this->getTokenService()->makeToken($type, $fields);
-
-        return $token;
+        return true;
     }
 
     private function filterSubtitles(&$subtitles)
@@ -137,10 +123,5 @@ class PlayerServiceImpl extends BaseService implements PlayerService
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
-    }
-
-    protected function getWebExtension()
-    {
-        return $this->biz->offsetGet('web.twig.extension');
     }
 }
