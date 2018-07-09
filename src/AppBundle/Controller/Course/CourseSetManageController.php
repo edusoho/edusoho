@@ -95,7 +95,7 @@ class CourseSetManageController extends BaseController
         );
     }
 
-    public function sidebarAction($courseSetId, $curCourse, $sideNav)
+    public function sidebarAction($courseSetId, $curCourse, $courseSideNav)
     {
         $user = $this->getCurrentUser();
 
@@ -130,7 +130,7 @@ class CourseSetManageController extends BaseController
                 'courseSet' => $courseSet,
                 'curCourse' => $curCourse,
                 'courses' => $courses,
-                'side_nav' => $sideNav,
+                'course_side_nav' => $courseSideNav,
                 'hasLiveTasks' => $hasLiveTasks,
             )
         );
@@ -400,6 +400,7 @@ class CourseSetManageController extends BaseController
             return $this->createJsonResponse($e->getMessage(), 500);
         }
     }
+
     protected function getCourseTypes()
     {
         return $this->get('web.twig.course_extension')->getCourseTypes();

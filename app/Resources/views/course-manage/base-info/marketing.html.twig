@@ -1,0 +1,48 @@
+<div class="es-piece">
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label class="control-label-required" for="course_price">{{ 'site.price'|trans }}</label>
+    </div>
+    <div class="col-sm-8">
+      <input class="form-control width-150 mrs" id="course_price" type="text" name="originPrice" value="{{ course.originPrice|default(0) }}" aria-required="true" aria-describedby="course_price-error" aria-invalid="true">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">
+      {{ 'course.marketing_setup.setup.can_join'|trans }}
+      <a class="es-icon es-icon-help text-normal link-gray" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ 'course.marketing_setup.setup.can_join.tips'|trans }}"></a>
+    </label>
+    <div class="col-sm-8 radios">
+      {{ radios('buyable', { '1': 'site.datagrid.radios.open'|trans, '0': 'site.datagrid.radios.close'|trans }, course.buyable|default(1)) }}
+    </div>
+  </div>
+
+  <div class="js-course-add-open-show {% if course.buyable|default(1) == 0 %} hidden {% endif %}">
+    <div class="form-group ">
+      <div class="col-sm-2 control-label">
+        <label class="control-label-required">{{ 'course.marketing_setup.expiry_date'|trans }}</label>
+      </div>
+      <div class="col-sm-8 radios">
+        {{ radios('enableBuyExpiryTime', {'0': 'course.marketing_setup.expiry_date.anytime'|trans, '1': 'course.marketing_setup.expiry_date.custom'|trans,}, course.buyExpiryTime|default(0) > 0 ? 1 : 0 ) }}
+        <input type="text" class="form-control width-150 mr10" name="buyExpiryTime"
+               value="{% if course.buyExpiryTime > 0 %}{{ course.buyExpiryTime|date_format('Y-m-d') }}{% endif %}">
+      </div>
+    </div>
+    {#缺少学员数限制#}
+    {% if setting('magic.buy_before_approval') %}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{ 'course.marketing_setup.approval'|trans }}
+          <a class="es-icon es-icon-help text-normal link-gray"
+             data-container="body" data-toggle="popover" data-trigger="hover"
+             data-placement="top" data-content="{{ 'course.marketing_setup.approval_tips'|trans }}"></a></label>
+        <div class="col-sm-8 radios">
+          {{ radios('approval', { '1': 'site.datagrid.radios.yes'|trans, '0': 'site.datagrid.radios.no'|trans }, course.approval|default(0)) }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {{ slot('course.marketing.setting', {'course':course}) }}
+</div>
