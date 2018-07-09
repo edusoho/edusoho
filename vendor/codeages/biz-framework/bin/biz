@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 $autoloader = require dirname(__DIR__).'/composer_autoload.php';
-if (!$autoloader()) {
+if (!$autoloader) {
     die('class autoloader not found.');
 }
 

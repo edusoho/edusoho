@@ -20,6 +20,11 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud');
     }
 
+    public function accessWechatAction(Request $request)
+    {
+        return $this->redirectUrl('product_mps_detail', array('type' => 'microprogram'));
+    }
+
     public function rechargeAction(Request $request)
     {
         return $this->redirectUrl('order_recharge');

@@ -33,8 +33,6 @@ class SmsRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
 
     public function handle(Request $request)
     {
-        $this->validateCaptcha($request);
-
         $ihr = $this->ipHourRateLimiter->check($request->getClientIp());
         $sdr = $this->siteDayRateLimiter->check('site');
 
@@ -42,11 +40,5 @@ class SmsRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
         if ($isLimitReach) {
             throw $this->createMaxRequestOccurException();
         }
-    }
-
-    protected function validateCaptcha($request)
-    {
-        $token = $request->request->get('dragCaptchaToken');
-        $this->getDragCaptcha()->check($token);
     }
 }
