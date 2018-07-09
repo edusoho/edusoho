@@ -15,7 +15,6 @@
   </div>
 </template>
 <script>
-import store from '@/store';
 import * as types from '@/store/mutation-types';
 import { mapMutations } from 'vuex';
 
