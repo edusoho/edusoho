@@ -37,7 +37,11 @@
           slot="button" 
           size="small" 
           type="primary"
-          @click="handleSendSms">发送验证码</van-button>
+          :disabled="codeBtnDisable"
+          @click="handleSendSms">
+          发送验证码
+          <span v-show="count.showCount">({{ count.num }})</span>
+          </van-button>
       </van-field>
       
       <van-button type="default" 
@@ -89,6 +93,11 @@ export default {
       errorMessage: {
         mobile: '',
         encrypt_password: ''
+      },
+      count: {
+        showCount: false,
+        num: 120,
+        codeBtnDisable: false
       }
     }
   },
@@ -96,7 +105,8 @@ export default {
     btnDisable() {
       return !(this.registerInfo.mobile
         && this.registerInfo.encrypt_password);
-    }
+    },
+
   },
   methods: {
     ...mapActions([
@@ -134,12 +144,27 @@ export default {
       this.sendSmsCenter(this.registerInfo)
       .then(res => {
         this.registerInfo.smsToken = res.smsToken;
+        this.countDown();
       })
       .catch(err => {
         err.code == 4030303
           ? this.dragEnable = true
           : Toast.fail(err.message);
       });
+    },
+    // 倒计时
+    countDown() {
+      this.count.showCount = true;
+      this.count.codeBtnDisable = true;
+
+      const timer = setInterval(() => {
+        this.count.num--;
+        if(this.count.num <= 0) {
+          this.codeBtnDisable = false;
+          clearInterval(timer);
+          return;
+        }
+      }, 1000);
     }
   }
 }
