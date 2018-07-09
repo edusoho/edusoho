@@ -48,8 +48,8 @@ class Doc extends Activity
             'finishDetail',
         ));
 
-        $biz = $this->getBiz();
-        $doc['createdUserId'] = $biz['user']['id'];
+        $user = $this->getCurrentUser();
+        $doc['createdUserId'] = $user['id'];
         $doc['createdTime'] = time();
 
         $doc = $this->getDocActivityDao()->create($doc);
@@ -59,13 +59,13 @@ class Doc extends Activity
 
     public function copy($activity, $config = array())
     {
-        $biz = $this->getBiz();
+        $user = $this->getCurrentUser();
         $doc = $this->getDocActivityDao()->get($activity['mediaId']);
         $newDoc = array(
             'mediaId' => $doc['mediaId'],
             'finishType' => $doc['finishType'],
             'finishDetail' => $doc['finishDetail'],
-            'createdUserId' => $biz['user']['id'],
+            'createdUserId' => $user['id'],
         );
 
         return $this->getDocActivityDao()->create($newDoc);

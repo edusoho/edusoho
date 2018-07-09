@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\FileToolkit;
-use AppBundle\Common\ArrayToolkit;
+use Biz\Player\Service\PlayerService;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\File\Service\UploadFileService;
@@ -26,43 +26,17 @@ class PlayerController extends BaseController
             throw $this->createAccessDeniedException("player does not support  file type: {$file['type']}");
         }
 
-        $player = $this->getPlayer($file);
+        $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
         if ('video' == $file['type'] && 'cloud' == $file['storage']) {
-            $storageSetting = $this->getSettingService()->get('storage');
-
-            $isEncryptionPlus = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
-
-            if (!$this->getWebExtension()->isHiddenVideoHeader()) {
-                // 加入片头信息
-                $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
-                if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
-                    $context['videoHeaderLength'] = $videoHeaderFile['length'];
-                }
-            }
-
-            if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $file['videoWatermarkEmbedded'] = 1;
-            }
-
-            $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
-
-            if (isset($result['subtitles'])) {
-                $this->filterSubtitles($result['subtitles']);
-                $context['subtitles'] = $result['subtitles'];
-            }
-
-            // 临时修复手机浏览器端视频不能播放的问题
-            if ($agentInWhiteList) {
-                //手机浏览器不弹题
-                $context['hideQuestion'] = 1;
-                if (1 == $this->setting('storage.support_mobile', 0) && isset($file['mcStatus']) && 'yes' == $file['mcStatus']) {
-                    $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
-                    $isEncryptionPlus = false;
-                }
+            $videoPlayer = $this->getPlayerService()->getVideoPlayer($file, $agentInWhiteList, $context, $ssl);
+            $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
+            $context = $videoPlayer['context'];
+            if (!empty($videoPlayer['mp4Url'])) {
+                $mp4Url = $videoPlayer['mp4Url'];
             }
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
@@ -236,46 +210,6 @@ class PlayerController extends BaseController
         return $this->createJsonResponse($playlist);
     }
 
-    protected function getPlayUrl($file, $context, $ssl)
-    {
-        if ('cloud' == $file['storage']) {
-            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
-                    $context['hideBeginning'] = $this->getWebExtension()->isHiddenVideoHeader($hideBeginning);
-                    $token = $this->makeToken('hls.playlist', $file['id'], $context);
-                    $params = array(
-                        'id' => $file['id'],
-                        'token' => $token['token'],
-                    );
-
-                    return $this->generateUrl('hls_playlist', $params, true);
-                } else {
-                    throw new \RuntimeException('当前视频格式不能被播放！');
-                }
-            } else {
-                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                    $key = $file['metas']['hd']['key'];
-                } else {
-                    $key = $file['hashId'];
-                }
-
-                if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
-                }
-            }
-
-            return isset($result['url']) ? $result['url'] : '';
-        } else {
-            $token = $this->makeToken('local.media', $file['id']);
-
-            return $this->generateUrl('player_local_media', array(
-                'id' => $file['id'],
-                'token' => $token['token'],
-            ));
-        }
-    }
-
     protected function makeToken($type, $fileId, $context = array())
     {
         $fields = array(
@@ -298,34 +232,6 @@ class PlayerController extends BaseController
         $token = $this->getTokenService()->makeToken($type, $fields);
 
         return $token;
-    }
-
-    protected function getPlayer($file)
-    {
-        switch ($file['type']) {
-            case 'audio':
-                return 'audio-player';
-            case 'video':
-                return 'local' == $file['storage'] ? 'local-video-player' : 'balloon-cloud-video-player';
-            default:
-                return null;
-        }
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array('iPhone', 'iPad', 'Android', 'HTC');
-
-        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
-            return strpos($userAgent, $agent) > -1;
-        });
-    }
-
-    private function filterSubtitles(&$subtitles)
-    {
-        foreach ($subtitles as &$subtitle) {
-            $subtitle['name'] = rtrim($subtitle['name'], '.srt');
-        }
     }
 
     /**
@@ -358,5 +264,13 @@ class PlayerController extends BaseController
     protected function getTokenService()
     {
         return $this->getBiz()->service('User:TokenService');
+    }
+
+    /**
+     * @return PlayerService
+     */
+    protected function getPlayerService()
+    {
+        return $this->getBiz()->service('Player:PlayerService');
     }
 }

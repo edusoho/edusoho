@@ -49,8 +49,8 @@ class Flash extends Activity
             'finishDetail',
         ));
 
-        $biz = $this->getBiz();
-        $flash['createdUserId'] = $biz['user']['id'];
+        $user = $this->getCurrentUser();
+        $flash['createdUserId'] = $user['id'];
 
         $flash = $this->getFlashActivityDao()->create($flash);
 
@@ -59,13 +59,13 @@ class Flash extends Activity
 
     public function copy($activity, $config = array())
     {
-        $biz = $this->getBiz();
+        $user = $this->getCurrentUser();
         $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
         $newFlash = array(
             'mediaId' => $flash['mediaId'],
             'finishType' => $flash['finishType'],
             'finishDetail' => $flash['finishDetail'],
-            'createdUserId' => $biz['user']['id'],
+            'createdUserId' => $user['id'],
         );
 
         return $this->getFlashActivityDao()->create($newFlash);
