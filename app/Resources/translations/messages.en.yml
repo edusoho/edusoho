@@ -64,6 +64,7 @@ site.default.bar: Bar
 site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
+site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
@@ -832,6 +833,7 @@ course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Config
 course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
+course.plan_base_info: 基础设置
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
@@ -858,7 +860,6 @@ course.marketing_setup.for_show_tips: 'Show only'
 course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.expiry_date.custom: Custom
 course.marketing_setup.expiry_date.anytime: 'Any time'
-course.marketing_setup.expiry_date_tips: 'Enroll before this date'
 course.marketing_setup.approval: 'Id verification'
 course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrollment.'
 course.marketing_setup.rule: 'Rules'

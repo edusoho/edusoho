@@ -203,6 +203,46 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
+    public function updateBaseInfo($id, $fields)
+    {
+        $oldCourse = $this->canUpdateCourseBaseInfo($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+        $this->validatie($id, $fields);
+
+        if (empty($fields['enableBuyExpiryTime'])) {
+            $fields['buyExpiryTime'] = 0;
+        }
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'originPrice',
+                'enableAudio',
+                'tryLookable',
+                'enableFinish',
+                'vipLevelId',
+                'buyExpiryTime',
+                'buyable',
+                'expiryStartDate',
+                'expiryEndDate',
+                'expiryMode',
+                'expiryDays',
+                'maxStudentNum',
+                'services',
+            )
+        );
+        if (!empty($fields['services'])) {
+            $fields['showServices'] = 1;
+        }
+
+        $fields = $this->validateExpiryMode($fields);
+        $fields = $this->processFields($oldCourse, $fields, $courseSet);
+
+        $course = $this->getCourseDao()->update($id, $fields);
+
+        $this->dispatchEvent('course.update', new Event($course));
+        $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
+    }
+
     public function updateCourse($id, $fields)
     {
         $this->tryManageCourse($id);
@@ -2298,8 +2338,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
-        if (1 == $fields['isFree']) {
-            $fields['price'] = 0;
+        if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
+            $fields['isFree'] = 1;
         }
 
         if ('normal' == $courseSet['type'] && 0 == $fields['tryLookable']) {
@@ -2349,5 +2389,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             static::DEFAULT_COURSE_TYPE,
             static::NORMAL__COURSE_TYPE,
         );
+    }
+
+    public function canUpdateCourseBaseInfo($courseId)
+    {
+        $course = $this->getCourse($courseId);
+        $user = $this->getCurrentUser();
+        $courseSetting = $this->getSettingService()->get('course');
+
+        if (!empty($courseSetting['teacher_manage_marketing']) && !empty($course['teacherIds']) && in_array($user['id'], $course['teacherIds'])) {
+            return $course;
+        }
+
+        return $this->tryManageCourse($courseId);
     }
 }

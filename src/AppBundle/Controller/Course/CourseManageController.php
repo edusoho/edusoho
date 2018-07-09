@@ -475,10 +475,15 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $updatedCourse = $this->getCourseService()->updateCourse($courseId, $data);
+            $data = $this->prepareExpiryMode($data);
+            if (!empty($data['services'])) {
+                $data['services'] = json_decode($data['services'], true);
+            }
+
+            $updatedCourse = $this->getCourseService()->updateBaseInfo($courseId, $data);
             if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
                 $this->getCourseService()->batchConvert($course['id']);
             }
@@ -508,12 +513,19 @@ class CourseManageController extends BaseController
 
         $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
 
+        $course = $this->formatCourseDate($course);
+        if ('end_date' == $course['expiryMode']) {
+            $course['deadlineType'] = 'end_date';
+            $course['expiryMode'] = 'days';
+        }
+
         return $this->render(
             'course-manage/info.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'course' => $this->formatCourseDate($course),
+                'course' => $course,
                 'audioServiceStatus' => $audioServiceStatus,
+                'canFreeTasks' => $this->findCanFreeTasks($course),
             )
         );
     }

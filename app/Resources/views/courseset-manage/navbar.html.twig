@@ -9,9 +9,21 @@
     {% endif %}
   </li>
 
-  <li class="nav-header-section__item {% if side_nav == 'plan' or side_nav == 'tasks' %}active{% endif %}">
+{% if get_course_count(courseSet.id) == 1 %}
+  <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}">
     {% if courseSet.locked %}
-      <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ 'course.teach_plan_manage'|trans }}</a>
+      <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ 'site.default.plan_setting'|trans }}</a>
+    {% else %}
+      <a class="nav-header-section__link" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ 'site.default.plan_setting'|trans }}</a>
+    {% endif %}
+  </li>
+{% endif %}
+
+  <li class="nav-header-section__item {% if side_nav == 'plan' %}active{% endif %}">
+    {% if courseSet.locked %}
+      <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">
+        {{ 'course.teach_plan_manage'|trans }}
+      </a>
     {% elseif courseSet.type == 'live' %}
       <a class="nav-header-section__link" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ 'course.teach_plan_manage'|trans }}</a>
     {% else %}
