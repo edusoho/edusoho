@@ -23,5 +23,9 @@ export default {
   [types.ADD_USER](state, payload) {
     state.user = payload;
     localStorage.setItem('user', JSON.stringify(payload));
+  },
+  [types.SMS_CENTER](state, payload) {
+    state.smsToken = payload;
+    console.log('SMS_CENTER', payload);
   }
 };

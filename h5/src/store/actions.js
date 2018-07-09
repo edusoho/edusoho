@@ -38,3 +38,14 @@ export const addUser = ({ commit }, data) =>
       return res;
     }).catch(err => reject(err));
   });
+
+export const sendSmsCenter = ({ commit }, data) =>
+  new Promise((resolve, reject) => {
+    Api.getSmsCenter({
+      data
+    }).then(res => {
+      commit(types.SMS_CENTER);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
+  });
