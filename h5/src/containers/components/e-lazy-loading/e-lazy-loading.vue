@@ -4,7 +4,10 @@
     :finished="finished"
     @load="onLoad"
   >
-    <!-- <courseItem></courseItem> -->
+    <courseItem v-for="course in courseList"
+      :type="courseItemType"
+      :course="course"
+    ></courseItem>
   </van-list>
 </template>
 
@@ -15,11 +18,15 @@
     components: {
       courseItem,
     },
+    props: {
+      courseList: Array,
+    },
     data() {
       return {
         list: [],
         loading: false,
-        finished: false
+        finished: false,
+        courseItemType: 'rank'
       };
     },
 

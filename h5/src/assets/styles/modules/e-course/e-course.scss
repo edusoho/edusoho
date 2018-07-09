@@ -14,8 +14,11 @@
 }
 
 .e-course__right {
-  margin-left: 10px;
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-left: 10px;
   width: 48%;
 }
 

@@ -32,13 +32,11 @@
     </div>
 
     <!-- rank -->
-    <div class="rank-box clearfix" v-if="type === 'rank'">
-      <div>
-        <div class="progress round-conner pull-left">
-          <div class="curRate round-conner" :style="{ width: rate + '%' }"></div>
-        </div>
+    <div class="rank-box" v-if="type === 'rank'">
+      <div class="progress round-conner">
+        <div class="curRate round-conner" :style="{ width: rate + '%' }"></div>
       </div>
-      <span class="pull-right">{{ this.rate }}%</span>
+      <span class="">{{ this.rate }}%</span>
     </div>
   </div>
 </template>
