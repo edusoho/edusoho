@@ -228,6 +228,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'maxStudentNum',
                 'services',
+                'tryLookLength'
             )
         );
         if (!empty($fields['services'])) {
@@ -2342,7 +2343,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['isFree'] = 1;
         }
 
-        if ('normal' == $courseSet['type'] && 0 == $fields['tryLookable']) {
+        if ('normal' == $courseSet['type'] && 0 == $fields['tryLookLength']) {
             $fields['tryLookLength'] = 0;
         }
 
