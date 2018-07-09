@@ -61,6 +61,11 @@ const config = [
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
     method: 'GET'
+  }, {
+    // 我的学习
+    name: 'myStudyState',
+    url: '/me/courses',
+    method: 'GET'
   }
 ];
 
