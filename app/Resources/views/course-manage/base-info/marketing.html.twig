@@ -13,7 +13,7 @@
     <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ 'course.marketing_setup.setup.can_join.tips'|trans }}"></a>
   </label>
   <div class="col-sm-8 cd-radio-group mb0">
-    {{ cd_radios('buyable', { '1': 'site.datagrid.radios.open'|trans, '0': 'site.datagrid.radios.close'|trans }, course.buyable|default(1)) }}
+    {{ cd_radios('buyable', { '1': 'course.marketing_setup.setup.can_join'|trans, '0': 'course.marketing_setup.setup.can_not_join'|trans }, course.buyable|default(1)) }}
   </div>
 </div>
 

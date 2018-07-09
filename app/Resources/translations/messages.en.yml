@@ -835,6 +835,7 @@ course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
 course.plan_base_info: 基础设置
 course.plan_setup.name: 'Program name'
+course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock'
@@ -847,12 +848,16 @@ course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
+course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: Goal
 course.plan_setup.audiences: 'Target users'
+course.base_setup: 基础设置
+course.base_setup.rules: 基础规则
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
+course.marketing_setup.setup.can_not_join: 不可加入
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid

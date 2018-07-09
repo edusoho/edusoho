@@ -959,6 +959,7 @@ course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 计划设置
 course.plan_base_info: 基础设置
 course.plan_setup.name: 计划名称
+course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 学习模式
 course.plan_setup.mode.free: 自由式学习
 course.plan_setup.mode.locked: 解锁式学习
@@ -971,13 +972,16 @@ course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
 course.plan_setup.summary: 计划简介
+course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: 课程目标
 course.plan_setup.audiences: 适应人群
-
+course.base_setup: 基础设置
+course.base_setup.rules: 基础规则
 course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
-course.marketing_setup.setup.can_join: 加入设置
+course.marketing_setup.setup.can_join: 可加入
+course.marketing_setup.setup.can_not_join: 不可加入
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
