@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Activity;
 
-use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Player\Service\PlayerService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\MaterialLib\Service\MaterialLibService;
 
@@ -19,7 +19,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
 
         $ssl = $request->isSecure() ? true : false;
-        list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
+        list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
 
         return $this->render('activity/new-doc/show.html.twig', array(
             'doc' => $doc,
@@ -38,7 +38,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
         $ssl = $request->isSecure() ? true : false;
-        list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
+        list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
 
         return $this->render('activity/new-doc/preview.html.twig', array(
             'doc' => $doc,
@@ -80,43 +80,6 @@ class DocController extends BaseActivityController implements ActivityActionInte
     }
 
     /**
-     * @param  $doc
-     *
-     * @return array result and error tuple
-     */
-    protected function getDocFilePlayer($doc, $ssl)
-    {
-        $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
-
-        if (empty($file) || empty($file['globalId'])) {
-            $error = array('code' => 'error', 'message' => '抱歉，文档文件不存在，暂时无法学习。');
-
-            return array(array(), $error);
-        }
-
-        if ($file['type'] != 'document') {
-            throw $this->createAccessDeniedException('file type error, expect document');
-        }
-
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
-
-        $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != FileImplementor::CONVERT_STATUS_SUCCESS;
-
-        if ($isConvertNotSuccess) {
-            if ($file['convertStatus'] == FileImplementor::CONVERT_STATUS_ERROR) {
-                $message = '文档转换失败，请到课程文件管理中，重新转换。';
-                $error = array('code' => 'error', 'message' => $message);
-            } else {
-                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
-            }
-        } else {
-            $error = array();
-        }
-
-        return array($result, $error);
-    }
-
-    /**
      * @return ActivityService
      */
     protected function getActivityService()
@@ -138,5 +101,13 @@ class DocController extends BaseActivityController implements ActivityActionInte
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    /**
+     * @return PlayerService
+     */
+    protected function getPlayerService()
+    {
+        return $this->createService('Player:PlayerService');
     }
 }

@@ -6,8 +6,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Player\Service\PlayerService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseTaskMedia extends AbstractResource
 {
@@ -31,8 +33,8 @@ class CourseTaskMedia extends AbstractResource
 
     protected function getVideo($course, $task, $activity, $ssl = false)
     {
-        $type = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $video = $type->get($activity['mediaId']);
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $video = $config->get($activity['mediaId']);
         $watchStatus = $type->getWatchStatus($activity);
         if ('error' === $watchStatus['status']) {
             throw new AccessDeniedHttpException('您的视频观看时长已达限制，无法继续观看！');
@@ -51,10 +53,29 @@ class CourseTaskMedia extends AbstractResource
 
     protected function getDoc($course, $task, $activity, $ssl = false)
     {
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $doc = $config->get($activity['mediaId']);
+
+        list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
+        if (!empty($error)) {
+            throw new BadRequestHttpException($error['message']);
+        }
+
+        return $result;
     }
 
     protected function getPpt($course, $task, $activity, $ssl = false)
     {
+        $config = $this->getActivityService()->getActivityConfig('ppt');
+
+        $ppt = $config->get($activity['mediaId']);
+
+        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
+        if (!empty($error)) {
+            throw new BadRequestHttpException($error['message']);
+        }
+
+        return $result;
     }
 
     protected function getLive($course, $task, $activity, $ssl = false)
@@ -67,10 +88,6 @@ class CourseTaskMedia extends AbstractResource
             'title' => $activity['title'],
             'content' => $activity['content'],
         );
-    }
-
-    protected function getVideoAndAudioPlayer()
-    {
     }
 
     /**
@@ -95,5 +112,13 @@ class CourseTaskMedia extends AbstractResource
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return PlayerService
+     */
+    protected function getPlayerService()
+    {
+        return $this->getBiz()->service('Player:PlayerService');
     }
 }

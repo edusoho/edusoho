@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Activity;
 
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Player\Service\PlayerService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\MaterialLib\Service\MaterialLibService;
 
@@ -14,36 +15,10 @@ class PptController extends BaseActivityController implements ActivityActionInte
         $config = $this->getActivityService()->getActivityConfig('ppt');
 
         $ppt = $config->get($activity['mediaId']);
+        $ssl = $request->isSecure() ? true : false;
+        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
 
-        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
-
-        $error = array();
-        if (empty($file) || $file['type'] !== 'ppt') {
-            $error = array('code' => 'error', 'message' => '抱歉，PPT文件不存在，暂时无法学习。');
-        }
-
-        if ($file) {
-            if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
-                if ($file['convertStatus'] == 'error') {
-                    $url = $this->generateUrl('course_set_manage_files', array('id' => $activity['fromCourseId']));
-                    $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
-                    $error['code'] = 'error';
-                    $error['message'] = $message;
-                } else {
-                    $error['code'] = 'processing';
-                    $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
-                }
-            }
-            $ssl = $request->isSecure() ? true : false;
-            $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
-
-            if (isset($result['error'])) {
-                $error['code'] = 'error';
-                $error['message'] = $result['error'];
-            }
-
-            $slides = isset($result['images']) ? $result['images'] : array();
-        }
+        $slides = isset($result['images']) ? $result['images'] : array();
 
         return $this->render('activity/ppt/show.html.twig', array(
             'ppt' => $ppt,
@@ -67,13 +42,13 @@ class PptController extends BaseActivityController implements ActivityActionInte
 
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
-        if (empty($file) || $file['type'] !== 'ppt') {
+        if (empty($file) || 'ppt' !== $file['type']) {
             throw $this->createAccessDeniedException('file type error');
         }
 
         $error = array();
-        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
+        if (isset($file['convertStatus']) && 'success' != $file['convertStatus']) {
+            if ('error' == $file['convertStatus']) {
                 $url = $this->generateUrl('course_set_manage_files', array('id' => $courseId));
                 $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
                 $error['code'] = 'error';
@@ -156,5 +131,13 @@ class PptController extends BaseActivityController implements ActivityActionInte
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    /**
+     * @return PlayerService
+     */
+    protected function getPlayerService()
+    {
+        return $this->createService('Player:PlayerService');
     }
 }

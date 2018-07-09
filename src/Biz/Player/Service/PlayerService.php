@@ -11,4 +11,8 @@ interface PlayerService
     public function getVideoPlayer($file, $agentInWhiteList, $context, $ssl);
 
     public function isHiddenVideoHeader($isHidden = false);
+
+    public function getDocFilePlayer($doc, $ssl);
+
+    public function getPptFilePlayer($ppt, $ssl);
 }

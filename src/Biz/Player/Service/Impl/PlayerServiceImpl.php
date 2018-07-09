@@ -4,6 +4,7 @@ namespace Biz\Player\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Player\Service\PlayerService;
@@ -84,6 +85,75 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         }
 
         return true;
+    }
+
+    /**
+     * @param $doc
+     * @param $ssl
+     *
+     * @return array
+     *
+     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function getDocFilePlayer($doc, $ssl)
+    {
+        $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
+
+        if (empty($file) || empty($file['globalId'])) {
+            $error = array('code' => 'error', 'message' => '抱歉，文档文件不存在，暂时无法学习。');
+
+            return array(array(), $error);
+        }
+
+        if ('document' != $file['type']) {
+            throw $this->createAccessDeniedException('file type error, expect document');
+        }
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+
+        $isConvertNotSuccess = isset($file['convertStatus']) && FileImplementor::CONVERT_STATUS_SUCCESS != $file['convertStatus'];
+
+        if ($isConvertNotSuccess) {
+            if (FileImplementor::CONVERT_STATUS_ERROR == $file['convertStatus']) {
+                $message = '文档转换失败，请到课程文件管理中，重新转换。';
+                $error = array('code' => 'error', 'message' => $message);
+            } else {
+                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
+            }
+        } else {
+            $error = array();
+        }
+
+        return array($result, $error);
+    }
+
+    public function getPptFilePlayer($ppt, $ssl)
+    {
+        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+
+        $error = array();
+        if (empty($file) || 'ppt' !== $file['type']) {
+            $error = array('code' => 'error', 'message' => '抱歉，PPT文件不存在，暂时无法学习。');
+        }
+
+        if (isset($file['convertStatus']) && 'success' != $file['convertStatus']) {
+            if ('error' == $file['convertStatus']) {
+                $message = 'PPT文档转换失败，请到课程文件管理中，重新转换。';
+                $error['code'] = 'error';
+                $error['message'] = $message;
+            } else {
+                $error['code'] = 'processing';
+                $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
+            }
+        }
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+
+        if (isset($result['error'])) {
+            $error['code'] = 'error';
+            $error['message'] = $result['error'];
+        }
+
+        return array($result, $error);
     }
 
     private function filterSubtitles(&$subtitles)
