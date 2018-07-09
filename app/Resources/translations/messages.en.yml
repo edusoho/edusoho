@@ -866,7 +866,7 @@ course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
 course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
 course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
-course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry Mode can not be edited since the program was published, but expiry date can be edited while course or the program was closed.'
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'

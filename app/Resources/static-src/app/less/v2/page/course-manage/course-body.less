@@ -43,6 +43,14 @@
   .form-group {
     margin-bottom: 24px;
   }
+  .cd-radio {
+    min-width: 76px;
+    color: @cd-dark-major;
+    font-weight: normal;
+  }
+  .form-control-static {
+    height: 34px;
+  }
   .width-input-large {
     @media (min-width: @screen-xs-min) {
       width: 298px;
@@ -134,4 +142,83 @@
     color: @cd-dark-assist;
   }
 
+}
+
+.course-manage-subltitle {
+  margin-left: -32px;
+  padding: 9px 0 9px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(0, 0, 0, .8);
+  background-color: rgba(0, 0, 0, .04);
+}
+.course-manage-info {
+  .course-manage-info__title {
+    box-shadow: none;
+    & + div {
+      padding-top: 0;
+    }
+  }
+  .cd-radio-group {
+    label {
+      &:first-child {
+        width: 76px;
+      }
+    }
+  }
+}
+
+.course-mangae-info__tip {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.24);
+}
+
+.course-mangae-info__group {
+  height: 34px;
+  line-height: 34px;
+}
+.course-mangae-info__radio {
+  margin-bottom: 0;
+  padding-top: 7px;
+  width: 204px;
+}
+
+.course-mangae-info__input {
+  width: 128px;
+  display: inline-block;
+}
+
+.course-mangae-info__help {
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.24);
+}
+
+.course-mange-info__select {
+  width: 322px;
+}
+
+.course-mange-space {
+  margin-top: 7px;
+}
+
+.service-item {
+  margin-right: 4px;
+  padding: 4px 8px;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: @cd-dark-assist;
+  font-size: 12px;
+  line-height: 1;
+  .border-radius(4px);
+  &:hover {
+    cursor: pointer;
+  }
+}
+.service-primary-item {
+  color: #fff;
+  background-color: @brand-primary;
 }
