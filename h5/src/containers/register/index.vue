@@ -3,28 +3,47 @@
     <span class='register-title'>注册账号</span>
 
       <van-field
+        ref="mobile"
         v-model="registerInfo.mobile"
         placeholder="请输入手机号"
         maxLength="11"
+        :error-message="errorMessage.mobile"
+        @blur="validateMobileOrPsw('mobile')"
       />
 
       <van-field
         v-model="registerInfo.encrypt_password"
         type="password"
+        maxLength="20"
+        :error-message="errorMessage.encrypt_password"
+        @blur="validateMobileOrPsw('encrypt_password')"
         placeholder="请设置密码（5-20位字符）"
       />
+
+      <e-drag 
+        v-if="dragEnable"
+        :info="registerInfo" 
+        @success="handleSmsSuccess"></e-drag>
+
       <van-field
-        v-model="registerInfo.code"
+        v-model="registerInfo.smsCode"
         type="text"
         center
         clearable
+        maxLength="6"
         placeholder="请输入验证码"
         >
-      <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+        <van-button 
+          slot="button" 
+          size="small" 
+          type="primary"
+          :disabled="codeBtnDisable"
+          @click="handleSendSms">
+          发送验证码
+          <span v-show="count.showCount">({{ count.num }})</span>
+          </van-button>
       </van-field>
       
-      <!-- <span class='register-hint'>验证码已发送到：{{ phone }}</span> -->
-      <e-drag :info="registerInfo" @success="handleSmsSuccess"></e-drag>
       <van-button type="default" 
         class="primary-btn mb20" 
         :disabled="btnDisable"
@@ -33,6 +52,7 @@
       <div class="login-bottom ">
         请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link> 
       </div>
+
       <!-- 一期不做 -->
       <!-- <div class="register-social">
         <span>
@@ -49,7 +69,7 @@ import EDrag from '@/containers/components/e-drag';
 import { mapActions } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
-
+import rulesConfig from '@/utils/rule-config.js'
 export default {
   components: {
     EDrag
@@ -58,30 +78,55 @@ export default {
     return {
       registerInfo: {
         mobile: '',
-        type: 'register',
         dragCaptchaToken: '',
         encrypt_password: '',
-        code: '',
-        smsToken: ''
+        smsCode: '',
+        smsToken: '',
+        type: 'register'
       },
+      dragEnable: false,
       options: [{
         model: 'email'
       }, {
         model: 'mobile'
-      }]
+      }],
+      errorMessage: {
+        mobile: '',
+        encrypt_password: ''
+      },
+      count: {
+        showCount: false,
+        num: 120,
+        codeBtnDisable: false
+      }
     }
   },
   computed: {
     btnDisable() {
-      return !(this.registerInfo.mobile && this.registerInfo.encrypt_password);
-    }
+      return !(this.registerInfo.mobile
+        && this.registerInfo.encrypt_password);
+    },
+
   },
   methods: {
     ...mapActions([
-      'addUser'
+      'addUser',
+      'sendSmsCenter'
     ]),
-    handleSmsSuccess(data) {
-      this.registerInfo.smsToken = data.smsToken;
+    validateMobileOrPsw(type = 'mobile') {
+      const ele = this.registerInfo[type];
+      const rule = rulesConfig[type];
+
+      if (ele.length == 0) {
+        this.errorMessage[type] = '';
+        return false;
+      };
+
+      this.errorMessage[type] = !rule.validator(ele)
+        ? rule.message: '';
+    },
+    handleSmsSuccess(token) {
+      this.registerInfo.dragCaptchaToken = token;
     },
     handleSubmit() {
       const password = this.registerInfo.encrypt_password;
@@ -94,6 +139,32 @@ export default {
       .catch(err => {
         Toast.fail(err.message);
       });
+    },
+    handleSendSms() {
+      this.sendSmsCenter(this.registerInfo)
+      .then(res => {
+        this.registerInfo.smsToken = res.smsToken;
+        this.countDown();
+      })
+      .catch(err => {
+        err.code == 4030303
+          ? this.dragEnable = true
+          : Toast.fail(err.message);
+      });
+    },
+    // 倒计时
+    countDown() {
+      this.count.showCount = true;
+      this.count.codeBtnDisable = true;
+
+      const timer = setInterval(() => {
+        this.count.num--;
+        if(this.count.num <= 0) {
+          this.codeBtnDisable = false;
+          clearInterval(timer);
+          return;
+        }
+      }, 1000);
     }
   }
 }

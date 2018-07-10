@@ -11,7 +11,8 @@ Vue.use(Vuex);
 const state = {
   isLoading: false,
   token: null,
-  user: {}
+  user: {},
+  smsToken: ''
 };
 
 export default new Vuex.Store({
