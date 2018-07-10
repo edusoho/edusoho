@@ -21,7 +21,7 @@
     {% if courseSet.canManage|default() or course.canManage|default()  %}
       <div class="js-plan-icon">
         <a class="cd-mr32 cd-link-major" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}">
-          <i class="es-icon es-icon-setting"></i>
+          <i class="es-icon es-icon-setting" data-toggle="tooltip" data-placement="top" title="{{ 'course.teaching_plan.manage'|trans }}"></i>
         </a>
 
         <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
