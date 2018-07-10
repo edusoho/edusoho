@@ -949,6 +949,7 @@ course.teaching_plan.expiry_date.date_mode: 固定周期
 course.teaching_plan.expiry_date.end_date_mode: 按截止日期
 course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
+course.teaching_plan.manage: 计划管理
 course.teaching_plan.delete_btn: 删除
 course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览

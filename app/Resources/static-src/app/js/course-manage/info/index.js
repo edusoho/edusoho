@@ -83,6 +83,13 @@ class courseInfo {
           live_capacity: true,
           positive_integer: true
         },
+        title: {
+          required: true,
+          maxlength: 10,
+        },
+        intro: {
+          maxlength: 30
+        },
         expiryDays: {
           required: () => {
             return $('input[name="expiryMode"]:checked').val() != 'date';
