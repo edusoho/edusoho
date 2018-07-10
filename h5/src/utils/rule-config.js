@@ -15,10 +15,10 @@ export default {
       return reg.test(str);
     }
   },
-  password: {
-    message: messages.PASSWORD_MESSAGE,
+  encrypt_password: {
+    message: messages.PASSWORD_REGISTER,
     validator(str) {
-      const reg = /^[\S]{4,20}$/i;
+      const reg = /^[\S]{5,20}$/i;
       return reg.test(str);
     }
   },

@@ -12,7 +12,7 @@ axios.interceptors.request.use(config => {
   config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
   if (store.state.token) {
-    config.headers['X-CSRF-Token'] = store.state.token;
+    config.headers['X-Auth-Token'] = store.state.token;
   }
 
   return config;

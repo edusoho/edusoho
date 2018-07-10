@@ -33,11 +33,7 @@ export default {
     tips: {
       type: String,
       default: '拖动左边滑块完成上方拼图'
-    },
-    info: {
-      type: Object,
-      default: () => ({})
-    },
+    }
   },
 
   data() {
@@ -59,8 +55,6 @@ export default {
   },
   created() {
     this.initDragCaptcha();
-    // this.$toast('提示文案');
-    console.log('info', this.info)
   },
   mounted() {
     const bar = this.$refs.bar;
@@ -84,22 +78,22 @@ export default {
         })
       })
     },
-    sendSmsCenter() {
-      Api.getSmsCenter({
-        data: {
-          type: 'register',
-          mobile: this.info.mobile
-        }
-      }).then(res => {
-        console.log(res);
-        Toast.success('成功');
-        this.$emit('success', res);
-        this.dragState = {};
-      }).catch(err => {
-        this.$toast(err);
-        this.initDragCaptcha();
-      })
-    },
+    // sendSmsCenter() {
+    //   Api.getSmsCenter({
+    //     data: {
+    //       type: 'register',
+    //       mobile: this.info.mobile,
+    //       dragCaptchaToken: this.getToken()
+    //     }
+    //   }).then(res => {
+    //     Toast.success('验证码发送成功');
+    //     this.$emit('success', res);
+    //     this.dragState = {};
+    //   }).catch(err => {
+    //     this.$toast(err);
+    //     this.initDragCaptcha();
+    //   })
+    // },
     handletTouchEnd() {
       if(this.dragState.currentLeft) {
         Api.dragValidate({
@@ -107,8 +101,9 @@ export default {
             token: this.getToken()
           }
         }).then(res => {
-
-          this.sendSmsCenter();
+          // this.sendSmsCenter();
+          Toast.success('验证成功');
+          this.$emit('success', this.getToken());
         }).catch(err => {
           Toast.fail(err.message);
           this.initDragCaptcha();

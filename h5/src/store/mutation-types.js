@@ -11,5 +11,5 @@ export const JOIN_COURSE = 'JOIN_COURSE';
 export const SET_SOURCETYPE = 'SET_SOURCETYPE';
 
 // register
-
 export const ADD_USER = 'ADD_USER';
+export const SMS_CENTER = 'SMS_CENTER';
