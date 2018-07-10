@@ -33,12 +33,12 @@
     </label>
     <div class="col-sm-8">
       <select class="form-control course-mange-info__select mh5" id="tryLookLength" name="tryLookLength">
-        <option value="0">{{ '不支持试看'|trans }}</option>
+        <option value="0">{{ 'course.marketing_setup.preview.not.support.try_watch'|trans }}</option>
         {% for i in 1..10 %}
           {% if course.tryLookLength|default(1) == i %}
-            <option value="{{ i }}" selected>{{ i ~ '分钟试看'|trans }}</option>
+            <option value="{{ i }}" selected>{{ i ~ 'course.marketing_setup.preview.minutes.try_watch'|trans }}</option>
           {% else %}
-            <option value="{{ i }}">{{ i ~ '分钟试看'|trans }}</option>
+            <option value="{{ i }}">{{ i ~ 'course.marketing_setup.preview.minutes.try_watch'|trans }}</option>
           {% endif %}
         {% endfor %}
       </select>

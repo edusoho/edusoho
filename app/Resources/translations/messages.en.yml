@@ -881,6 +881,8 @@ course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
 course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
+course.marketing_setup.preview.not.support.try_watch: 不支持试看
+course.marketing_setup.preview.minutes.try_watch: 分钟试看
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
