@@ -1000,9 +1000,38 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         });
         $homepageCourseSets = array();
         foreach ($courseSets as $courseSet) {
-            
+            $items = array(
+                'courseId' => $courseSet['course']['id'],
+                'image' => $this->courseSetCover($courseSet['cover']),
+                'title' => $courseSet['title'],
+                'summary' => $courseSet['summary'],
+                'minPrice' => $courseSet['minCoursePrice'],
+                'maxPrice' => $courseSet['maxCoursePrice'],
+                'memberNum' => $courseSet['studentNum'],
+            );
+            array_push($homepageCourseSets, $items);
         }
-        return $courseSets;
+        return $homepageCourseSets;
+    }
+
+    protected function courseSetCover($cover, $type = 'large')
+    {
+        $coverPath = null;
+
+        if (!empty($cover) && !empty($cover[$type])) {
+            $coverPath = $cover[$type];
+        }
+
+        if (empty($coverPath)) {
+            $settings = $this->getSettingService()->get('default');
+            $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
+        }
+
+        if (empty($coverPath)) {
+            $coverPath = "/assets/img/default/courseSet.png";
+        }
+
+        return $coverPath;
     }
 
     protected function fillCourseTryLookVideo($courses)
