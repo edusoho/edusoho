@@ -78,7 +78,7 @@ class CourseSetManageController extends BaseController
         );
     }
 
-    public function headerAction($courseSet, $course = null)
+    public function headerAction($courseSet, $course = null, $foldType = 0)
     {
         //暂时显示课程的创建者
         $studentNum = $this->getCourseMemberService()->countStudentMemberByCourseSetId($courseSet['id']);
@@ -91,6 +91,7 @@ class CourseSetManageController extends BaseController
                 'course' => $course,
                 'studentNum' => $studentNum,
                 'couserNum' => $couserNum,
+                'foldType' => $foldType
             )
         );
     }

@@ -2,12 +2,12 @@
 
 {% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% set showFold = 1 %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/info/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info{% endblock %}
 {% block main_heading_class %} course-manage-info__title {% endblock %}
+
 {% block main_body %}
 {{ web_macro.flash_messages() }}
 {% set courseTypes = get_course_count(courseSet.id) %}
