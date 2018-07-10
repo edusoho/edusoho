@@ -23,9 +23,9 @@
                 <span class="panel-item-title ellipsis">{{ item.title }}</span>
                 <span class="pull-left">&nbsp;-&nbsp;</span>
                 {% include 'admin/block/label/' ~ item.type ~ '.html.twig' %}
-                <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="{{ '展开'|trans }}"></i>
+                <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="{{ 'admin.block_manage.visual_edit.panel_expand'|trans }}"></i>
                 {% if item.count != 1 %}
-                  <i class="mrs js-remove-btn glyphicon glyphicon-trash pull-right" title="{{ '删除'|trans }}"></i>
+                  <i class="mrs js-remove-btn glyphicon glyphicon-trash pull-right" title="{{ 'admin.block_manage.visual_edit.panel_delete'|trans }}"></i>
                 {% endif %}
               </h4>
 
@@ -42,7 +42,7 @@
       </div>
       {% if item.count != 1 %}
         <div class="btn btn-default text-center js-add-btn"
-             style="width:100%;margin-top:-10px;margin-bottom:20px;">{{ '+新增'|trans }}</div>
+             style="width:100%;margin-top:-10px;margin-bottom:20px;">{{ 'admin.block_manage.visual_edit.add_panel'|trans }}</div>
       {% endif %}
 
     </section>
@@ -68,5 +68,5 @@
   </div>
 </div>
 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-<button id="block-save-btn" data-submiting-text="{{ '正在提交'|trans }}" type="submit" class="btn btn-primary mrm"
-        data-toggle="block-edit-form" data-target="#block-edit-form">{{ '保存设置'|trans }}</button>
+<button id="block-save-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary mrm"
+        data-toggle="block-edit-form" data-target="#block-edit-form">{{ 'admin.block_manage.visual_edit.save'|trans }}</button>

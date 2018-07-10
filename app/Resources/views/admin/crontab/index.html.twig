@@ -8,8 +8,8 @@
   <table id="crontab-table" class="table table-striped table-hover">
     <thead>
     <tr>
-      <th>{{'命令'}}</th>
-      <th>{{'状态'}}</th>
+      <th>{{'admin.crontab_job.command_label'|trans}}</th>
+      <th>{{'admin.crontab_job.status_label'|trans}}</th>
     </tr>
     </thead>
     <tbody>
@@ -22,9 +22,9 @@
 
         <td>
           {% if crontabJob.enabled %}
-            启用
+            {{ 'admin.crontab_job.enabled_label'|trans }}
           {% else %}
-            禁用
+            {{ 'admin.crontab_job.disabled_label'|trans }}
           {% endif %}
         </td>
 
@@ -33,6 +33,6 @@
     </tbody>
 
   </table>
-  <div class="empty"><a href="javascript:" class="js-restore-btn" data-url="{{ path('admin_crontab_resotre') }}">点击重新初始化</a></div>
+  <div class="empty"><a href="javascript:" class="js-restore-btn" data-url="{{ path('admin_crontab_resotre') }}">{{ 'admin.crontab_job.resotre_btn'|trans }}</a></div>
 
 {% endblock %}
