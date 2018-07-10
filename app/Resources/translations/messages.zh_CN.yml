@@ -1159,7 +1159,7 @@ course.question_marker.operation: 操作
 course.question_marker.btn_question_distribution: 答题分布
 course.question_marker.empty_question_marker_hint: 该任务下无驻点弹题
 course.question_marker.total_answer_num: >
-  共计<span class="color-primary text-success pls prs">%totalAnswerNum%</span>
+  共计<span class="color-primary text-success pls prs">%totalAnswerNum%</span>次答题
 course.question_marker.total_user_num: >
   <span class="color-primary pls prs">%totalUserNum%</span>人参与答题
 
@@ -2903,7 +2903,7 @@ user.settings.security.password_reset.success: 重设密码成功
 user.settings.security.password_reset.success.content_title: 重设密码成功
 user.settings.security.password_reset.success.tips: 新密码设置成功，请重新登录。
 user.settings.security.password_reset.success_hint: >
-  你已经通过手机重置密码成功。请前往 <a class="link-primary" href="%loginUrl%">登录
+  你已经通过手机重置密码成功。请前往 <a class="link-primary" href="%loginUrl%">登录</a>
 
 user.settings.security.pay_password_set: 设置支付密码
 user.settings.security.pay_password_set.find_pay_password: 找回支付密码
@@ -7877,7 +7877,7 @@ open_course.upload_form_course_file: 从课程文件中选择
 open_course.link: 网络链接
 open_course.coursematerial.tips: 支持常见文档、图片、音视频、压缩包文件格式。
 open_course.coursematerial.cloud_tips: >
-  <li>文件将上传到<strong>云服务器</stron
+  <li>文件将上传到<strong>云服务器</strong></li>
 open_course.empty_file_hint: 暂无文件，请先上传。
 open_course.material_link: 资料链接地址
 

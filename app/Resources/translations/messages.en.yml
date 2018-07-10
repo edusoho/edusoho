@@ -111,8 +111,8 @@ site.setting.finished: Setting finished
 site.setting.unfinished: Setting unfinished
 site.verify.finished: Verify finished
 site.verify.unfinished: Verify unfinished
-site.bind.finished: 已绑定
-site.bind.unfinished: 未绑定
+site.bind.finished: Binded
+site.bind.unfinished: Not bind
 site.setting.email_finished: Setting email finished
 site.bind.mobile_finished: Binding mobile finished
 
@@ -401,8 +401,8 @@ order.refunded_cash_amount: Refunded cash
 order.use_coupon: Use coupon
 order.refund_feedback: feedback
 order.refund.id: Refund id
-order.refund.equal: 等于
-order.refund.discount: 折
+order.refund.equal: equal
+order.refund.discount: discount
 order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.closed_time: 'Closed time'
@@ -467,7 +467,7 @@ order.confirm.coupon.expiry_date_hint: 'Expire date'
 order.confirm.coupon.select_existed: 'Select existing coupon'
 order.confirm.coupon.used_coupon: 'Used coupons'
 order.confirm.coupon.deduction: 'Deduction'
-order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% CNY
 order.confirm.current_account_cash_simple: Balance %amount% %coin_name%
 order.confirm.current_account_cash: Balance %amount% %coin_name%，deductible %rmb% CNY（1 %coin_name% = %rmb_unit% CNY）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
@@ -629,8 +629,8 @@ question.answer_correct: Correct
 question.answer_wrong: Wrong
 question.fill.content_title: 'Gap filling'
 question.correct_answer_tips: 'Correct answer'
-question.correct_rate: 正确率
-question.selection_rate: 选择率
+question.correct_rate: correct rate
+question.selection_rate: selection rate
 question.fill_correct_answer: 'Gap filling (%index%):correct answer'
 question.compelete: Complete
 question.next: 'Next'
@@ -783,9 +783,9 @@ course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.range: >
-  价格 : %minPrice%元 - %maxPrice%元
+  price : %minPrice%CNY - %maxPrice%CNY
 course.price.fixed: >
-  价格 : %minPrice%元
+  price : %minPrice%CNY
 course.price.limited_time_free: 'Free in limited time'
 course.price.discount: '%discount% off'
 course.chapter: 'Chapter %number% : %title%'
@@ -796,7 +796,7 @@ course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled
 course.course_member_count: '%studentsNum% students'
 course.activity: Activity
 
-course.teaching_plan.access_denied_hint: 无权限管理
+course.teaching_plan.access_denied_hint: No rights management
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
@@ -845,7 +845,7 @@ course.plan_setup.member_numbers.view_rule_btn: '[check the live course informat
 course.plan_setup.summary: Summary
 course.plan_setup.target: Goal
 course.plan_setup.audiences: 'Target users'
-course.marketing_setup.reward: 积分
+course.marketing_setup.reward: reward point
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
@@ -971,15 +971,15 @@ course.testpaper_check.status.not_submit: 'Uncommited'
 course.testpaper_check.optional_task_title: Optional Task:%title%
 course.testpaper_check.testpaper_delete: Exam was deleted
 course.testpaper_check.graph_avg_score: Average Score:%avgScore%
-course.testpaper_check.graph_max_score: Max Score:%maxScore% 分
+course.testpaper_check.graph_max_score: Max Score:%maxScore% score
 course.testpaper_check.graph_passed_percent: Percent Of Pass:%percent%%
 course.testpaper_check.btn_score_distribution: Score Distribution
 course.testpaper_check.btn_question_distribution: Question Distribution
 course.testpaper_check.btn_check: Check
 course.testpaper_check.first_answer: 'first time'
 course.testpaper_check.number: 'person-time'
-course.testpaper_check.get_score: 得 %questonScore% 分
-course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
+course.testpaper_check.get_score: Score %questonScore% score
+course.testpaper_check.get_score_range: Score 0 - %questonScore% score
 course.testpaper_check.testpaper_analysis: 'item analysis'
 
 course.homepage.re_try_btn: 'Try again'
@@ -1053,7 +1053,7 @@ course.dashboard.task_detail: Task detail
 course.dashboard.student_chart.time_select_all: all
 course.dashboard.student_chart.time_select_unFinished: unFinished
 course.dashboard.student_chart.time_select_seven_days: Seven days without school
-course.dashboard.student_chart.name_or_mobile_placeholder: 用户名/手机号
+course.dashboard.student_chart.name_or_mobile_placeholder: nickname/mobile
 
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
@@ -1102,8 +1102,8 @@ course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
 course.expiry_date.days_remaining: '（remaining  %lastDays% day(s)）'
 course.buy_expiry_date: 'Purchase validity period'
 course.buy_expiry_date.buy_expiry_time: '<span class="course-detail-title ">Due date</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
-course.joined: 已加入
-course.not_joined: 未加入
+course.joined: joined
+course.not_joined: Not joined
 course.showServices: 'Show service'
 course.showServices.empty: 'Not provided yet'
 course.status.followed: Bookmarked
@@ -1173,15 +1173,15 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
-course.task.user_all_task: %nickname%的全部任务
-course.task.completion_degree: 完成度
-course.task.start_time: 任务开始时间
-course.task.finish_time: 任务完成时间
+course.task.user_all_task: "%nickname%'s all tasks"
+course.task.completion_degree: Degree of completion
+course.task.start_time: task start time
+course.task.finish_time: task finish time
 course.task.progress: 'task progress'
 course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior task to continue.'
 course.task.learning: 'Task learning'
-course.task.learning.learning_hint: 请先学完当前课程
+course.task.learning.learning_hint: please finish the current course first
 course.task.learning.back_course_btn: 'Back'
 course.task.learning.finish_condition: 'Task completion condition'
 course.task.learning.finish_btn: 'Task completed'
@@ -1232,7 +1232,7 @@ course.btn.free_join: 'Enroll Free'
 course.btn.join: Join
 course.btn.free_join: 'Join Free'
 course.btn.pay_tips: 'creating the order'
-course.export: 导出课时数据
+course.export: export course data
 course.btn.pay: Pay
 course.btn.buy: Buy
 course.btn.announcement: Announcement
@@ -1673,7 +1673,7 @@ course.live_lesson_manage.live_about: 'About'
 course.live_lesson_manage.live_length.input_placeholder: Duration
 course.live_lesson_manage.live_length.minutes: Minutes
 
-course.live_activity.room_type: 授课形式
+course.live_activity.room_type: teaching form
 course.live_activity.large_room_type: Large
 course.live_activity.small_room_type: Small
 
@@ -1827,7 +1827,7 @@ classroom.buy_classroom.to_pay: Pay
 classroom.buy_classroom.pay_submiting: 'Creating the order'
 classroom.preview.buy_classroom_tips: 'You can''t pay under the previewing mode  %role%'
 classroom.buy_classroom.tips: null
-classroom.showServices: null
+classroom.showServices: Commitment service
 classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
@@ -2412,7 +2412,7 @@ user.settings.security.password_reset.success: 'Reset password successed'
 user.settings.security.password_reset.success.content_title: 'Reset password successed'
 user.settings.security.password_reset.success.tips: 'Set new password successed and re-login'
 user.settings.security.password_reset.success_hint: >
-  你已经通过手机重置密码成功。请前往 <a class="link-primary" href="%loginUrl%">登录
+  You have successfully reset your password via your mobile phone. Please go <a class="link-primary" href="%loginUrl%">login</a>
 user.settings.security.pay_password_set: 'Set payment password'
 user.settings.security.pay_password_set.find_pay_password: 'Find payment password'
 user.settings.security.pay_password_set.password_forget: 'Forgot payment password?'
@@ -2735,7 +2735,7 @@ custom_page.empty: 'The current page has not been edited yet ,please edit in the
 search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
-search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
+search.relative_classrooms_result: Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%
 search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
 search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
 search.all_courses: 'All courses'
@@ -3340,13 +3340,13 @@ my.teaching.open_course.header.not_lesson.tips: 'Please try it later because the
 my.teaching.open_course.header.lesson.tips: 'The material has been removed for this lesson'
 my.teaching.open_course.lesson.empty: 'No published live temporarily'
 my.teaching.open_course.lesson.content.tips: 'Live will start at'
-my.teaching.open_course.lesson.content.statrt.tips: null
+my.teaching.open_course.lesson.content.statrt.tips: Start
 my.teaching.open_course.lesson.header.live_open_course_play_btn: Enter
 my.teaching.open_course.lesson.header.remind_btn: 'Already Set'
 my.teaching.open_course.lesson.header.remind_me_btn: 'Remind Me'
 my.teaching.open_course.lesson.header.remind.tips: "<span class=\"member-num\">%notifyNum%</span>persons have set the remind\n"
 my.teaching.open_course.lesson.header.content.tips: 'Live has already start, and will end at'
-my.teaching.open_course.lesson.header.content.end.tips: null
+my.teaching.open_course.lesson.header.content.end.tips: Finished
 my.teaching.open_course.lesson.header.live_course_end: 'Live has ended'
 my.teaching.open_course.lesson.header.view_replay_btn: 'Watch Replay'
 my.teaching.open_course.lesson.header.view_replay.tips: 'Please come back later bucause the replay is still in building'
@@ -3585,17 +3585,17 @@ admin.course_copy.course_copying.btn: Copying
 admin.course_copy.success.notify: Your new course《%newTitle%》is copied success from origin course《%originTitle%》！
 admin.course_copy.failure.notify: Your new course《%newTitle%》is copied failed from origin course《%originTitle%》！
 
-admin.queue.failed_detail: 失败详情
-admin.queue.queue_label: 队列
-admin.queue.class_label: 任务类型
-admin.queue.priority_label: 优先级
-admin.queue.timeout_label: 超时时间
-admin.queue.body_label: 消息体
-admin.queue.failed_reason_label: 错误原因
-admin.queue.error_time_label: 错误时间
-admin.queue.failed_time_label: 失败时间
-admin.queue.name: 对列名
-admin.queue.type: 类型
+admin.queue.failed_detail: failure details
+admin.queue.queue_label: queue
+admin.queue.class_label: task type
+admin.queue.priority_label: priority
+admin.queue.timeout_label: overtime time
+admin.queue.body_label: message body
+admin.queue.failed_reason_label: wrong reason
+admin.queue.error_time_label: wrong time
+admin.queue.failed_time_label: failure time
+admin.queue.name: queue name
+admin.queue.type: type
 
 change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
@@ -3642,7 +3642,7 @@ contetn.article_list.contentCategory: "<span class=\"color-gray\">published at %
 course.block_grid.view_course_btn: View
 course.block_grid.countinue_learn_btn: Continue
 course.block_grid.from_classroom: 'From classroom '
-course.block_grid.empty_hint: 找不到相关课程！
+course.block_grid.empty_hint: Can't find related courses!
 
 course.block_grid.DRAFT_STATUS: Draft
 course.block_grid.CLOSE_STATUS: Closed
@@ -3814,7 +3814,7 @@ admin.course_manage.manage.course_name_placeholder: 'Course name'
 admin.course_manage.manage.status_placeholder: Status
 admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Course Description</span><br>\n  1. The id and sorting are not available to edit;<br>\n  2. Rule of course url：domain name/course/course id;\n</div>\n"
 admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%courseNum%</strong>\n"
-admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>个 \n"
+admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
 admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.course_manage.manage.number: Id
@@ -3902,7 +3902,7 @@ admin.course_manage.statistics.student: Student
 admin.course_manage.statistics.student_number: 'Student count'
 admin.course_manage.statistics.finished_number: 'Finished Num(Person)'
 admin.course_manage.statistics.study_time_minute: 'Study Duration(mins)'
-admin.course_manage.statistics.income_RMB: 课程收入(元)
+admin.course_manage.statistics.income_RMB: Income(RMB)
 admin.course_manage.statistics.income_CNY: Income(CNY)
 admin.course_manage.statistics.no_introduce: 'Without introducing'
 admin.course_manage.statistics.watch_task: 'View Task'
@@ -3938,30 +3938,30 @@ admin.user.statistics.data_detail.student_trend_ninety_days: '90 days'
 admin.user.statistics.data_detail.plan_progress_tip: 'The average plan progress is the average of all plans'
 admin.user.statistics.data_detail.task_progress_tip: 'Task completion ratio is the number of completed tasks divide the total number of tasks'
 admin.user.statistics.data_detail.from_classroom: From Class
-admin.user.statistics.sync_info.upgrade_time: 升级时间
-admin.user.statistics.sync_info.history_data_range: 历史数据生成范围
-admin.user.statistics.sync_info.table_total_history_data_sync_status: total表历史数据同步状态
-admin.user.statistics.sync_info.table_daily_history_data_sync_status: daily表历史数据同步状态
-admin.user.statistics.sync_info.table_daily_create_status: 新增daily表状态
-admin.user.statistics.sync_info.history_data_range_days: %days%天
-admin.user.statistics.sync_info.sync_user_id: 目前同步到的用户Id
-admin.user.statistics.sync_info.sync_complete: 是否同步完成
-admin.user.statistics.sync_info.sync_time: 目前同步到的时间
-admin.user.statistics.sync_info.sync_total: 总数
-admin.user.statistics.sync_info.not_sync_total: 未同步到总表的条数
-admin.user.statistics.sync_info.true: 是
-admin.user.statistics.sync_info.false: 否
+admin.user.statistics.sync_info.upgrade_time: Upgrade time
+admin.user.statistics.sync_info.history_data_range: Historical data generation range
+admin.user.statistics.sync_info.table_total_history_data_sync_status: Total table history data synchronization status
+admin.user.statistics.sync_info.table_daily_history_data_sync_status: Daily table history data synchronization status
+admin.user.statistics.sync_info.table_daily_create_status: Add daily table status
+admin.user.statistics.sync_info.history_data_range_days: %days% Day
+admin.user.statistics.sync_info.sync_user_id: User ID currently synced
+admin.user.statistics.sync_info.sync_complete: Done synchronously
+admin.user.statistics.sync_info.sync_time: Current sync time
+admin.user.statistics.sync_info.sync_total: Total
+admin.user.statistics.sync_info.not_sync_total: Number of rows not synchronized to the total table
+admin.user.statistics.sync_info.true: 'True'
+admin.user.statistics.sync_info.false: 'False'
 
 ## 用户在线模块
-admin.user.online.operate_system: 操作系统
-admin.user.online.client: 客户端
-admin.user.online.device: 设备
-admin.user.online.last_access_time: 最后访问时间
-admin.user.online.empty: 暂无记录!
-admin.user.online.visitor: 游客
-admin.user.online.registed_user: 注册用户
-admin.user.online.all_visitors: 全部访客
-admin.user.online.online_user_count: 共查询到 %count% 位符合条件的在线用户（15分钟以内有活动）
+admin.user.online.operate_system: Operating system
+admin.user.online.client: Client
+admin.user.online.device: Device
+admin.user.online.last_access_time: Last access time
+admin.user.online.empty: No records!
+admin.user.online.visitor: Visitor
+admin.user.online.registed_user: Registered user
+admin.user.online.all_visitors: All visitors
+admin.user.online.online_user_count: A total of %count% eligible online users (within 15 minutes)
 
 admin.comment_manage.title: 'Comments'
 admin.comment_manage.monitor: 'Comment monitor'
@@ -4094,7 +4094,7 @@ admin.performance_setting.content_title: 'Static Pages'
 admin.classroom_manage.manage.name_placeholder: '%name% Title'
 admin.classroom_manage.manage.describe_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Class Instruction</span><br>\n  1. Id and sequence cannot be changed；<br>\n  2. Class url format：domain/classroom/id；\n</div>\n"
 admin.classroom_manage.manage.count: "Classrooms：<strong class=\"inflow-num\">%courseNum%</strong>\n"
-admin.classroom_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>个 \n"
+admin.classroom_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.classroom_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
 admin.classroom_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.classroom_manage.manage.number_th: '%title% ID'
@@ -4310,10 +4310,10 @@ admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
-admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">如何制作合适的图片？</a>'
+admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
-admin.setting.site.favicon.help_block: 'Please upload images with format of ICO. Recommended image size is 16×16px or 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">如何制作合适的图片？</a>'
+admin.setting.site.favicon.help_block: 'Please upload images with format of ICO. Recommended image size is 16×16px or 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.setting.site.seo_keywords: 'SEO Keyword'
 admin.setting.site.seo_keywords.help_block: 'Please use "," to separate multiple Keywords'
 admin.setting.site.seo_description: 'SEO Description'
@@ -4368,10 +4368,10 @@ admin.setting.theme.manage.modal.student_comment: 'Student Comments'
 admin.setting.theme.manage.modal.student_dynamic: 'Latest updates'
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 'Class Capacity Setting'
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 'Teacher Count Setting'
-admin.setting.theme.manage.top: 顶部
-admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.top: top
+admin.setting.theme.manage.setting_navigation: Navigation bar settings
 admin.setting.theme.manage.navigation_num_tips: >
-  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+  When there are more than <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> navigations, it will be "..." to avoid navigation misplacement.
 
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
@@ -4431,7 +4431,7 @@ admin.setting.consult.delete_btn: Delete
 admin.setting.consult.add_btn: Delete
 admin.setting.consult.customer_service_settings: ' Customer Service Setting'
 admin.setting.consult.get_online_service_link.tips: 'How to get online customer service link?'
-admin.setting.consult.customer_service_settings.tips: "1，Login <a target=\"_blank\" href=\"https://id.b.qq.com/login/index\">https://id.b.qq.com/login/index</a>。 <br> 2, find【营销QQ】-【在线代码生成】，choose【在论坛/微博发布在线咨询链接】。（include “%http%://”）\n"
+admin.setting.consult.customer_service_settings.tips: "1，Login <a target=\"_blank\" href=\"https://id.b.qq.com/login/index\">https://id.b.qq.com/login/index</a>。 <br> 2, find【Marketing QQ】-【Online code generation】，choose【Publish online consultation link in forum/weibo】。（include “%http%://”）\n"
 admin.setting.consult.QQ_customer_service_name.placeholer: 'QQ Customer Service Name'
 admin.setting.consult.QQ_number.placeholer: QQ
 admin.setting.consult.enter_link_addr.placeholer: 'If you need to use Marketing QQ，please enter online service link.'
@@ -4573,7 +4573,7 @@ admin.custom_page_manage.custom_page_template: Template
 admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
-admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format.Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format.Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.mobile_manage.banner_label: 'Slider Image'
 admin.mobile_manage.upload_btn: Upload
 admin.mobile_manage.delete_btn: Delete
@@ -4958,7 +4958,7 @@ admin.user.approval.approved_empty_hint: 'No "real-name authentication" user ver
 admin.user.approval.approving_empty_hint: 'No need to review the real-name authentication users'
 admin.user.approval.fields.idcard_face_img_label: 'Front Side of ID Card'
 admin.user.approval.fields.idcard_back_img_label: 'Back Side of ID Card'
-admin.user.approval.approving_tab.approve.heading_title: null
+admin.user.approval.approving_tab.approve.heading_title: User certification audit
 admin.user.approval.approving_tab.approve.fields.rejection_reason_label: 'Rejected Reason'
 admin.user.approval.approving_tab.approve.failed_btn: Rejected
 admin.user.approval.approving_tab.approve.success_btn: Accepted
@@ -5143,11 +5143,11 @@ admin.edu_cloud.edu_video.play_water_mark_tips: 'The watermark will be broadcast
 admin.edu_cloud.edu_video.open_embed_watermark: 'Open embedded watermark'
 admin.edu_cloud.edu_video.open_embed_watermark_tips: 'Can better protect the video copyright; upload the watermark embedded in the video encoding, can not be deleted; not embedded in the watermark video will play the player when the watermark.'
 admin.edu_cloud.edu_video.play_water_mark_picture: 'Player Watermark Image'
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.edu_cloud.edu_video.picture_upload_btn: 'Upload Picture'
 admin.edu_cloud.edu_video.picture_delete_btn: Delete
 admin.edu_cloud.edu_video.play_embed_watermark: 'Video embedded watermark image'
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.edu_cloud.edu_video.video_embed_watermark_picture: 'Video embedded watermark image'
 admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, the current website domain name and student username will be displayed randomly at random time in the video playback.'
 admin.edu_cloud.edu_video.finger_print_time_label: 'Cloud video fingerprint display duration'
@@ -5187,7 +5187,7 @@ admin.edu_cloud.edu_video.delete_ok_btn: OK
 #TOFO trans
 admin.edu_cloud.edu_video.delete_confirm_title: 'Delete normal video'
 admin.edu_cloud.edu_video.delete_confirm_content: 'Removing the normal format video can enhance the security of video and reduce the risk of downloading video.It will not affect the normal playback of encrypted video.'
-admin.edu_cloud.edu_video.h5_enable_label: H5播放：
+admin.edu_cloud.edu_video.h5_enable_label: "H5 playback:"
 
 admin.edu_cloud.edu_live.student_num: 'Number of live participants (last 7 days)'
 admin.edu_cloud.edu_live.locked_tips: 'Your education cloud service has been locked, please contact customer service 4008041114.'
@@ -5323,7 +5323,7 @@ admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notificat
 admin.edu_cloud.edu_sms.study_task_notify_tips: 'Course: Your course "course name- study task "task name" will start at [start  time ]! Link'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify: 'Live notification  (advance 1 Days)'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify: 'Live notification (advance 1 Hours)'
-admin.edu_cloud.edu_sms.live_broadcast_notify_tips: 'Course:《课程名称》－Task：《学习任务名称》will start at［开播时间]！The url is '
+admin.edu_cloud.edu_sms.live_broadcast_notify_tips: 'Course:《Course Name》－Task：《Study Task name》will start at［Broadcast time]！The url is '
 admin.edu_cloud.edu_sms.homework_checked: 'The homework is completed'
 admin.edu_cloud.edu_sms.homework_checked_tips: 'The homework of Course：<Course Name>-<Study Task name> is reviewed. Please check.'
 admin.edu_cloud.edu_sms.testpaper_checked: 'Testpaper marked'
@@ -5650,7 +5650,7 @@ admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
-admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.user_center.message_title_name: Message setting
 admin.user_center.message_student_to_student: Allow student to student send message
 admin.user_center.message_student_to_teacher: Allow student to teacher send message
@@ -5717,7 +5717,7 @@ admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
-admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.setting_course.classroom.setting_classroom_name: 'Class''s name'
 admin.setting_course.classroom.setting_classroom_name.help_block: 'Users will see is the class''s name'
 admin.setting_course.classroom.setting_classroom_name.tips: 'Please note: The following settings related to the basic mode of class operation, be care or your settings, and do not change it often!'
@@ -5726,8 +5726,8 @@ admin.setting_course.classroom.course_discount.help_block: 'When purchasing a cl
 admin.setting_course.classroom.classroom_list_default_seq: 'Default order of class list'
 admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
-admin.setting_course.custom_chapter_name: 设置章节名称
-admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
+admin.setting_course.custom_chapter_name: Set chapter name
+admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the class management, the system will automatically generate the chapter name set as follows.
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
@@ -5741,7 +5741,7 @@ admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
-admin.developer_setting.mp_service_url_label: 小程序服务平台地址
+admin.developer_setting.mp_service_url_label: Applet service platform address
 admin.magic_setting.need_careful_tips: Attention
 admin.magic_setting.developer_use_tips: 'Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system.'
 admin.magic_setting.video_fingerprint: 'Video fingerprint'
@@ -5832,34 +5832,34 @@ admin.crontab_job.task_object_open_course: 'Open course'
 admin.crontab_job.task_object_lesson: Lesson
 admin.crontab_job.empty: 'No data'
 admin.crontab_job.error_hint: >
-  Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
-admin.crontab_job.command_label: 命令
-admin.crontab_job.status_label: 状态
-admin.crontab_job.enabled_label: 开启
-admin.crontab_job.disabled_label: 禁用
-admin.crontab_job.resotre_btn: 点击重新初始化
-admin.crontab_job.name: 名称
-admin.crontab_job.class: 类名
-admin.crontab_job.resource: 来源
-admin.crontab_job.operation: 操作
-admin.crontab_job.status: 状态
-admin.crontab_job.execution_time: 执行时间
-admin.crontab_job.time: 时间
-admin.crontab_job.enable_status: 启用状态
-admin.crontab_job.empty_hint: 暂无任务信息!
-admin.crontab_job.next_time: 下一次时间
-admin.crontab_job.last_time: 上一次时间
-admin.crontab_job.log_title: 任务日志
-admin.crontab_job.log_empty_hint: 暂无日志信息!
-admin.crontab_job.log_name: 名称
-admin.crontab_job.log_time: 时间
-admin.crontab_job.log_resource: 来源
-admin.crontab_job.log_status: 状态
-admin.crontab_job.run_log_title: 任务运行日志
-admin.crontab_job.log_show_btn: 日志查看
-admin.crontab_job.enable: 启用
-admin.crontab_job.disable: 禁用
-admin.crontab_job.run_log: 运行日志
+  Windows systems cannot be configured on this page, please refer to <a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">this address</a> to configure on your EduSoho server.
+admin.crontab_job.command_label: Command
+admin.crontab_job.status_label: Status
+admin.crontab_job.enabled_label: enable
+admin.crontab_job.disabled_label: disable
+admin.crontab_job.resotre_btn: Click reinitialize
+admin.crontab_job.name: Name
+admin.crontab_job.class: Class
+admin.crontab_job.resource: Source
+admin.crontab_job.operation: Operation
+admin.crontab_job.status: Status
+admin.crontab_job.execution_time: Execution time
+admin.crontab_job.time: Time
+admin.crontab_job.enable_status: Enabled state
+admin.crontab_job.empty_hint: No task information!
+admin.crontab_job.next_time: Next time
+admin.crontab_job.last_time: Last time
+admin.crontab_job.log_title: Task log
+admin.crontab_job.log_empty_hint: No log information yet!
+admin.crontab_job.log_name: Name
+admin.crontab_job.log_time: Time
+admin.crontab_job.log_resource: Source
+admin.crontab_job.log_status: Status
+admin.crontab_job.run_log_title: Task run log
+admin.crontab_job.log_show_btn: Log view
+admin.crontab_job.enable: enable
+admin.crontab_job.disable: disable
+admin.crontab_job.run_log: Running log
 admin.ip_black_list.titile: 'IP Blacklist'
 admin.ip_black_list.tips: 'One IP per line. IPs on the blacklist are blocked from visiting the site! You can use wildcards such as: 202.101.20.*.'
 admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5 minutes'
@@ -6002,7 +6002,7 @@ admin.coin_setting.description: Description
 admin.coin_setting.description_hint: 'Virtual coin can be usd as payment in the site'
 admin.coin_setting.promotion_proposal: 'Promotion recommendation'
 admin.coin_setting.promotion_proposal_hint: '1 Virtual coin can be used to price the courses; <br>2 Virtual coin recharge can enhance customer loyalty; <br>3 Virtual coin is recommended to use with recharge cards (business applications); <br>'
-admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.coin_setting.coin_description: 'Virtual coin Description'
 admin.coin_setting.content_hint: 'It can be used to describe virtual coin''s usage, access methods and other related content'
 admin.coin_setting.update_submit_btn: 'Submit updates'
@@ -6047,7 +6047,7 @@ admin.article_setting.publish_time_tips: 'Content show in chronological order'
 admin.article_setting.image.content_title: 'Set thumbnail'
 admin.article_setting.image: Thumbnail
 admin.article_setting.image.tips: 'Tip: Select the crop area.'
-admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.article_setting.image.choose_btn: 'Select upload file'
 admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
@@ -6131,7 +6131,7 @@ admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
 admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gif, jpg format.'
 admin.mobile_setting.online_school_about_hint: 'This profile will be displayed in the app''s " About Us" part'
-admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">如何制作合适的图片？</a>'
+admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.mobile_setting.app_custom_setting_option: 'Custom APP Set'
 admin.mobile_setting.app_custom_name: 'APP name'
 admin.mobile_setting.app_custom_about: 'APP Profile'
@@ -6358,32 +6358,32 @@ admin.org_manage.modal.org_code.help_block: 'Required. Sugguest use English word
 admin.org_manage.modal.org_description: Description
 admin.org_manage.modal.org_description.help_block: Optional
 admin.org_manage.modal.delete.tips: 'It will delete all sub-organizations at the same time.'
-admin.wechat_app.banner_title: 网校小程序，招生学习更便捷
-admin.wechat_app.banner_introduce: 网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
-admin.wechat_app.access_btn: 立即开通
-admin.wechat_app.install_btn: 立即安装
-admin.wechat_app.fast_access_introduction_title: 快速接入
-admin.wechat_app.fast_access_introduction_content: 只需一键授权，无需任何开发，即可拥有自己的网校小程序
-admin.wechat_app.data_sync_introduction_title: 数据同步
-admin.wechat_app.data_sync_introduction_content: 小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理
-admin.wechat_app.flow_entrance_introduction_title: 自带流量
-admin.wechat_app.flow_entrance_introduction_content: 微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户
-admin.wechat_app.easy_promotion_introduction_title: 超轻推广
-admin.wechat_app.easy_promotion_introduction_content: 流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化
-admin.xapi.title: 推送详情
-admin.xapi.id: 推送id
-admin.xapi.status: 推送状态
-admin.xapi.version: xAPI版本
-admin.xapi.body: 推送主体
-admin.xapi.status: 推送状态
-admin.xapi.verb: 推送行为
-admin.xapi.target_type: 推送类型
-admin.xapi.time: 推送时间
-admin.xapi.created_time: 创建时间
-admin.xapi.operation: 操作
-admin.xapi.enable_label: 开启xAPI
-admin.xapi.push_url_label: 设置xAPI地址
-admin.xapi.default_url: 默认地址是：https://lrs.qiqiuyun.net/v1/xapi/
+admin.wechat_app.banner_title: Online school Small Programs, enrollment learning is more convenient
+admin.wechat_app.banner_introduce: Online school Small Programs, seamless link network school and public number, WeChat group, let WeChat operation and network school operations integration.
+admin.wechat_app.access_btn: Open immediately
+admin.wechat_app.install_btn: Install now
+admin.wechat_app.fast_access_introduction_title: Fast access
+admin.wechat_app.fast_access_introduction_content: With one-click license, you can have your own online school small programs without any development.
+admin.wechat_app.data_sync_introduction_title: Data synchronization
+admin.wechat_app.data_sync_introduction_content: Small Programs learning and order records are directly connected to the EduSoho main system, and can be easily managed without additional operating costs.
+admin.wechat_app.flow_entrance_introduction_title: Self-contained traffic
+admin.wechat_app.flow_entrance_introduction_content: WeChat's 900 million monthly active users, nearby small programs, WeChat search and other functions, let you easily get traffic and seize customers
+admin.wechat_app.easy_promotion_introduction_title: Ultralight promotion
+admin.wechat_app.easy_promotion_introduction_content: Streamlined experience, lowering user thresholds, and facilitating users to quickly spread on WeChat, promoting low-cost and high-transformation
+admin.xapi.title: Push details
+admin.xapi.id: Push id
+admin.xapi.status: Push status
+admin.xapi.version: xAPI version
+admin.xapi.body: Push body
+admin.xapi.status: Push status
+admin.xapi.verb: Push behavior
+admin.xapi.target_type: Push type
+admin.xapi.time: Push time
+admin.xapi.created_time: Created Time
+admin.xapi.operation: Operation
+admin.xapi.enable_label: Turn on xAPI
+admin.xapi.push_url_label: Set the xAPI address
+admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
 site.date_format: 'Y-n-d H:i:s'
 site.date_format_H_i: 'Y-n-d H:i'
@@ -6510,19 +6510,19 @@ course.homework_check.need_check_item: "Waiting to check  <small class=\"color-g
 
 course.question_marker_statistics: PopQuestion Statistics
 
-course.question_marker.no_task: 无任务
-course.question_marker.make_time: 时间点
-course.question_marker.stem: 题干
-course.question_marker.join_num: 参与人数
-course.question_marker.answer_num: 答题次数
-course.question_marker.right_num: 正确次数
-course.question_marker.operation: 操作
-course.question_marker.btn_question_distribution: 答题分布
-course.question_marker.empty_question_marker_hint: 该任务下无驻点弹题
+course.question_marker.no_task: No task
+course.question_marker.make_time: Time point
+course.question_marker.stem: Stem
+course.question_marker.join_num: Number of participants
+course.question_marker.answer_num: Number of answers
+course.question_marker.right_num: Number of Correct times
+course.question_marker.operation: Operation
+course.question_marker.btn_question_distribution: Answer distribution
+course.question_marker.empty_question_marker_hint: No stagnation title under this task
 course.question_marker.total_answer_num: >
-  共计<span class="color-primary text-success pls prs">%totalAnswerNum%</span>
+  Total <span class="color-primary text-success pls prs">%totalAnswerNum%</span> questions
 course.question_marker.total_user_num: >
-  <span class="color-primary pls prs">%totalUserNum%</span>人参与答题
+  <span class="color-primary pls prs">%totalUserNum%</span> people participated in the answer
 
 course.plan_task.exercise.question_numbers: 'Number'
 course.plan_task.exercise.question_sourse: 'Source'
@@ -6575,15 +6575,15 @@ open_course.my_other_courses: 'My other courses'
 open_course.my_all_course: 'All courses'
 open_course.lesson_empty_tips: 'No records found'
 open_course.select_course: 'Choose a course'
-open_course.choose_again: 重新选择
-open_course.chooser_from_material: 从资料库中选择
-open_course.upload_form_course_file: 从课程文件中选择
-open_course.link: 网络链接
-open_course.coursematerial.tips: 支持常见文档、图片、音视频、压缩包文件格式。
+open_course.choose_again: Reselect
+open_course.chooser_from_material: Choose from material
+open_course.upload_form_course_file: Choose from course file
+open_course.link: Internet connection
+open_course.coursematerial.tips: Support to upload document, picture, video, audio, zip file.
 open_course.coursematerial.cloud_tips: >
-  <li>文件将上传到<strong>云服务器</stron
-open_course.empty_file_hint: 暂无文件，请先上传。
-open_course.material_link: 资料链接地址
+  <li>File will be uploaded to <strong>cloud server</strong></li>
+open_course.empty_file_hint: No files, please upload first.
+open_course.material_link: Material link address
 clean_search: Clear
 search_by_course_title_or_keyword: 'By course title or keyword'
 site.save.success: Save successfully
@@ -6831,7 +6831,7 @@ my.reward_point.product_detail_permissions: Sorry, you do not have permission to
 my.reward_point.record.permissions: Sorry, you do not have permission to view the %name% exchange records page. If necessary, please contact the webmaster!
 my.reward_point.rule.permissions: Sorry, you do not have permission to view the %name% rule page. If necessary, please contact the webmaster!
 my.reward_point.mall.permissions: Sorry, you do not have permission to view %name% mall, please contact the webmaster if necessary!
-my.reward_point: 我的%name%
+my.reward_point: My %name%
 reward_point.reply_discussion_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
 reward_point.reply_discussion_hint_unlimited: >
@@ -6892,7 +6892,7 @@ register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
 cashflow.title: Name
 cashflow.sn: sn
-cashflow.order_sn: 订单号
+cashflow.order_sn: order sn
 cashflow.user_name: username
 cashflow.created_time: createdTime
 cashflow.amount: amount
@@ -6901,7 +6901,7 @@ cashflow.inflow: 'Inflow'
 cashflow.platform: platform
 
 cashflow.trade_sn: 'Trace SN'
-cashflow.platform_sn: 支付平台流水号
+cashflow.platform_sn: Platform SN
 
 cashflow.user_truename: truename
 cashflow.user_email: emial
@@ -6909,7 +6909,7 @@ cashflow.user_mobile: mobile
 cashflow.refund: 'Refund'
 
 admin.cashflow.keyword: keyword
-admin.cashflow.keyword_default: --选择类型--
+admin.cashflow.keyword_default: --Choose Type--
 
 order.pay_check_msg.parameters_error: parameters_error
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
@@ -7189,5 +7189,5 @@ exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.user.not_found: 'Cannot find this user!'
 exception.user.reset_password_email_send: 'Failed to send email. Contact site administrator for help.'
 
-exception.sms.setting_enbale: 云短信相关设置未开启!
-exception.sms.code_invalid: 短信验证码错误
+exception.sms.setting_enbale: Cloud SMS related settings are not enabled!
+exception.sms.code_invalid: SMS verification code error
