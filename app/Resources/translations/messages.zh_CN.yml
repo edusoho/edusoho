@@ -1007,6 +1007,8 @@ course.marketing_setup.preview.set_task.task_name: %name%%taskName%
 course.marketing_setup.preview.set_task.free: 免费
 course.marketing_setup.preview.set_task.free_tips: 免费活动仅支持
 course.marketing_setup.preview.try_watch: 视频试看
+course.marketing_setup.preview.not.support.try_watch: 不支持试看
+course.marketing_setup.preview.minutes.try_watch: 分钟试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
 course.marketing_setup.services.show_services: 展示承诺服务
