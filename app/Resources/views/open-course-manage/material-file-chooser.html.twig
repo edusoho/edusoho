@@ -160,17 +160,17 @@
 <div class="file-chooser">
   <div class="file-chooser-bar" style="display:none;">
     <span data-role="placeholder"></span>
-    <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> {{'重新选择'|trans}}</button>
+    <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> {{'open_course.choose_again:'|trans}}</button>
   </div>
   <div class="file-chooser-main">
     <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
-      <li><a class="file-chooser-uploader-tab" href="#file-chooser-upload-pane" data-toggle="tab">{{'上传文件'|trans}}</a></li>
-      <li><a href="#file-chooser-browser-pane" data-toggle="tab">{{'从资料库中选择'|trans}}</a></li>
+      <li><a class="file-chooser-uploader-tab" href="#file-chooser-upload-pane" data-toggle="tab">{{'upload.content_title'|trans}}</a></li>
+      <li><a href="#file-chooser-browser-pane" data-toggle="tab">{{'open_course.chooser_from_material'|trans}}</a></li>
       {% if showCourseMaterialPane %}
-        <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'从课程文件中选择'|trans}}</a></li>
+        <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'open_course.upload_form_course_file'|trans}}</a></li>
       {% endif %}
       {% if showLinkPane %}
-        <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'网络链接'|trans}}</a></li>
+        <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'open_course.link'|trans}}</a></li>
       {% endif %}
     </ul>
     <div class="tab-content">
@@ -183,14 +183,14 @@
           data-accept="{{ uploader_accept(targetType)|json_encode }}"
           data-process="{{ uploader_process(targetType) }}"
         >
-          <div class="balloon-uploader-heading">{{'上传文件'|trans}}</div>
+          <div class="balloon-uploader-heading">{{'upload.content_title'|trans}}</div>
           <div class="balloon-uploader-body">
-            <div class="balloon-nofile">{{'请将文件拖到这里，或点击添加文件按钮'|trans}}</div>
+            <div class="balloon-nofile">{{'upload.upload_tips'|trans}}</div>
             <div class="balloon-filelist">
               <div class="balloon-filelist-heading">
-                <div class="file-name">{{'文件名'|trans}}</div>
-                <div class="file-size">{{'大小'|trans}}</div>
-                <div class="file-status">{{'状态'|trans}}</div>
+                <div class="file-name">{{'upload.file.name'|trans}}</div>
+                <div class="file-size">{{'upload.file.size'|trans}}</div>
+                <div class="file-status">{{'upload.file.status'|trans}}</div>
               </div>
               <ul>
               </ul>
@@ -198,11 +198,11 @@
           </div>
           <div class="alert alert-info">
             <ul>
-              <li>{{'支持常见文档、图片、音视频、压缩包文件格式。'|trans}}</li>
+              <li>{{'open_course.coursematerial.tips'|trans}}</li>
               {% if storageSetting.upload_mode == 'cloud' %}
-                <li>{{'文件将上传到'|trans}}<strong>{{'云服务器'|trans}}</strong></li>
+                {{ 'open_course.coursematerial.cloud_tips'|trans|raw }}
               {% else %}
-                <li>{{'视频将上传到'|trans}}<strong>{{'网站服务器'|trans}}</strong>{{'，如需使用%Edusoho%云视频,点击'|trans({'%Edusoho%': 'EduSoho'|copyright_less})}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</li>
+                {{ 'courseset_manage.batch_upload.coursematerial.not_cloud.tips'|trans({'%EduSoho%':'EduSoho'|copyright_less})|raw }}
               {% endif %}
             </ul>
           </div>
@@ -214,7 +214,7 @@
           data-base-url="{{ path('uploadfile_browser', {source:'upload'}) }}"
           data-default-url="{{ path('uploadfile_browser', {source:'upload'}) }}"
           data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-          data-empty="{{'暂无文件，请先上传。'|trans}}">
+          data-empty="{{'open_course.empty_file_hint'|trans}}">
           <div class="file-browser-list-container"></div>
         </div>
       </div>
@@ -226,13 +226,13 @@
       <div class="tab-pane" id="file-chooser-course-pane">
         <div id="file-browser" data-role="course-file-browser"
           data-url="{{ materialBrowserUrl }}"
-          data-empty="{{'暂无文件，请先上传。'|trans}}">
+          data-empty="{{'open_course.empty_file_hint'|trans}}">
         </div>
       </div>
       <div class="tab-pane" id="file-chooser-link-pane">
         <div class="form-group" style="margin-bottom:0px;">
           <div class="col-md-12 controls">
-            <input type="text" class="form-control" name="link" placeholder="{{'资料链接地址'|trans}}">
+            <input type="text" class="form-control" name="link" placeholder="{{'open_course.material_link'|trans}}">
             <div class="help-block"></div>
           </div>
         </div>

@@ -7,7 +7,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    {{'课程图片'|trans}}
+    {{'my.teaching.open_course.course_picture.title'|trans}}
   </div>
 
   <div id="course-picture-crop-form" class="panel-body">
@@ -17,7 +17,7 @@
           <img class="img-responsive" src="{{ filepath(pictureUrl) }}"
           id="course-picture-crop"
           width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
-          <div class="help-block">{{'提示：请选择图片裁剪区域。'|trans}}</div>
+          <div class="help-block">{{'courseset_manage.cover_img.tips'|trans}}</div>
         </div>
       </div>
 
@@ -27,14 +27,14 @@
          <button class="btn btn-fat btn-primary upload-picture-btn"
           data-url="{{path('open_course_manage_picture_crop', {id: course.id})}}"
           data-goto-url="{{path('open_course_manage_picture',{id: course.id})}}"
-          id="upload-picture-btn">{{'保存'|trans}}</button>
+          id="upload-picture-btn">{{'form.btn.save'|trans}}</button>
         {% else %}
          <button class="btn btn-fat btn-primary upload-picture-btn"
           data-url="{{path('course_manage_picture_crop', {id: course.id})}}"
           data-goto-url="{{path('course_manage_picture',{id: course.id})}}"
-          id="upload-picture-btn">{{'保存'|trans}}</button>
+          id="upload-picture-btn">{{'form.btn.save'|trans}}</button>
         {% endif %}
-          <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
+          <a href="javascript:;" class="go-back btn btn-link">{{'courseset_manage.cover_img.again_select_picture_btn'|trans}}</a>
         </div>
       </div>
   </div>

@@ -25,20 +25,20 @@
       {% for index,subAnswer in question.answer %}
         <li class="list clearfix ">
           <span class="num">{{ loop.index }}</span>
-          正确答案<strong class="text-success">{{ subAnswer|join(' 或 ') }}</strong>
-          <span class="pull-right">正确率：<span class="badge badge-primary">{{ stats[loop.index0].pct }}%</span></span></li>
+          {{ 'question.correct_answer_tips'|trans }}<strong class="text-success">{{ subAnswer|join('site.default.or'|trans) }}</strong>
+          <span class="pull-right">{{ 'question.correct_rate'|trans }}：<span class="badge badge-primary">{{ stats[loop.index0].pct }}%</span></span></li>
       {% endfor %}
 
     {% elseif question.type == 'determine' %}
       <li class="list {% if question.answer[0] == 1 %} right {% endif %}">
         <span class="num">A</span>
-        <div class="info">{{ '正确'|trans }}</div>
-        <span class="pull-right">选择率：<span class="badge">{{ stats[0].pct }}%</span>
+        <div class="info">{{ 'question.answer_correct'|trans }}</div>
+        <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[0].pct }}%</span>
       </li>
       <li class="list {% if question.answer[0] == 0 %} right {% endif %}">
         <span class="num">B</span>
-        <div class="info">{{ '错误'|trans }}</div>
-        <span class="pull-right">选择率：<span class="badge">{{ stats[1].pct }}%</span>
+        <div class="info">{{ 'question.answer_wrong'|trans }}</div>
+        <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[1].pct }}%</span>
       </li>
     {% else %}
       {% for subAnswer in question.metas.choices %}
@@ -46,7 +46,7 @@
         <li class="list clearfix {% if loop.index0 in question.answer %} right {% endif %}">
           <span class="num" >{{ (loop.index0+65)|chr }}</span>
           <div  class="info">{{  choice|bbCode2Html|raw }}</div>
-          <span class="pull-right">选择率：<span class="badge">{{ stats[loop.index0].pct }}%</span>
+          <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[loop.index0].pct }}%</span>
         </li>
       {% endfor %}
     {% endif %}
@@ -63,5 +63,5 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
 {% endblock %}

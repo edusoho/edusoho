@@ -32,17 +32,17 @@
 
         <h4 class="course-title"><a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
         {% if courseSet.serializeMode=='serialized' %}
-          <span class="label label-success ">{{'更新中'|trans}}</span>
+          <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
         {% elseif courseSet.serializeMode=='finished' %}
-          <span class="label label-warning ">{{'已完结'|trans}}</span>
+          <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
         {% endif %}
 
         {% if courseSet.type == 'live' %}
             {% set task = courseSet['task']|default(null) %}
             {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
-              <span class="label label-warning">{{'正在直播中'|trans}}</span>
+              <span class="label label-warning">{{'course.block_grid.onlive'|trans}}</span>
             {% else %}
-              <span class="label label-success">{{'直播'|trans}}</span>
+              <span class="label label-success">{{'course.block_grid.live'|trans}}</span>
             {% endif %}
         {% endif %}
         </h4>
@@ -52,7 +52,7 @@
           {% if task %}
             <div class="live-course-lesson mbm">
               <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('n月j日 H:i'|trans) }}</span>
-              <span class="color-gray fsm mrm">{{'第%number%任务'|trans({'%number%': task.number})}}</span>
+              <span class="color-gray fsm mrm">{{'course.block_grid.taskNumber'|trans({'%number%': task.number})}}</span>
             </div>
           {% endif %}
         {% else %}
@@ -77,7 +77,7 @@
       </div>
     </li>
   {% else %}
-    <div class="empty">{{'找不到相关课程！'|trans}}</div>
+    <div class="empty">{{'course.block_grid.empty_hint'|trans}}</div>
   {% endfor %}
 </ul>
 
