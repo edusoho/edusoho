@@ -487,6 +487,8 @@ order.refunded_cash_amount: 已退现金
 order.use_coupon: 使用优惠券
 order.refund_feedback: 反馈信息
 order.refund.id: 退款号
+order.refund.equal: 等于
+order.refund.discount: 折
 order.created_time: 创建时间
 order.pay_time: 付款时间
 order.closed_time: 关闭时间
@@ -731,6 +733,8 @@ question.answer_correct: 正确
 question.answer_wrong: 错误
 question.fill.content_title: 填空题
 question.correct_answer_tips: 正确答案
+question.correct_rate: 正确率
+question.selection_rate: 选择率
 question.fill_correct_answer: 填空(%index%):正确答案
 question.compelete: 完成
 question.next: 下一题
@@ -895,6 +899,10 @@ course.price.RMB: %price%元
 course.minimum_price.unit: %price%%unit%起
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
+course.price.range: >
+  价格 : %minPrice%元 - %maxPrice%元
+course.price.fixed: >
+  价格 : %minPrice%元
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
 course.chapter: '第%number%%chapter_name%: %title%'
@@ -908,6 +916,7 @@ course.course_member_count: %studentsNum%人
 course.activity: 活动
 course.praise: 好评课程
 
+course.teaching_plan.access_denied_hint: 无权限管理
 course.teaching_plan: 教学计划
 course.teaching_plan.free: 自由式学习
 course.teaching_plan.locked: 解锁式学习
@@ -962,6 +971,7 @@ course.plan_setup.summary: 计划简介
 course.plan_setup.target: 课程目标
 course.plan_setup.audiences: 适应人群
 
+course.marketing_setup.reward: 积分
 course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
@@ -1139,6 +1149,20 @@ course.homework_check.need_check_item: >
 
 course.question_marker_statistics: 弹题统计
 
+course.question_marker.no_task: 无任务
+course.question_marker.make_time: 时间点
+course.question_marker.stem: 题干
+course.question_marker.join_num: 参与人数
+course.question_marker.answer_num: 答题次数
+course.question_marker.right_num: 正确次数
+course.question_marker.operation: 操作
+course.question_marker.btn_question_distribution: 答题分布
+course.question_marker.empty_question_marker_hint: 该任务下无驻点弹题
+course.question_marker.total_answer_num: >
+  共计<span class="color-primary text-success pls prs">%totalAnswerNum%</span>
+course.question_marker.total_user_num: >
+  <span class="color-primary pls prs">%totalUserNum%</span>人参与答题
+
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
@@ -1184,6 +1208,7 @@ course.dashboard.task_detail: 任务详情
 course.dashboard.student_chart.time_select_all: 全部
 course.dashboard.student_chart.time_select_unFinished: 未完成
 course.dashboard.student_chart.time_select_seven_days: 7天未学
+course.dashboard.student_chart.name_or_mobile_placeholder: 用户名/手机号
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
@@ -1246,6 +1271,8 @@ course.buy_expiry_date.buy_expiry_time: >
   <span class="course-detail-title ">购买截止日期</span>
   <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
 
+course.joined: 已加入
+course.not_joined: 未加入
 course.showServices: 承诺服务
 course.showServices.empty: 暂未提供
 course.status.followed: 已收藏
@@ -1316,11 +1343,17 @@ course.note.all_task: 全部任务
 course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
+course.optional_task: 选修任务
 course.task: 任务
+course.task.user_all_task: %nickname%的全部任务
+course.task.completion_degree: 完成度
+course.task.start_time: 任务开始时间
+course.task.finish_time: 任务完成时间
 course.task.progress: 任务进度
 course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个任务才能学习
 course.task.learning: 任务学习
+course.task.learning.learning_hint: 请先学完当前课程
 course.task.learning.back_course_btn: 返回课程
 course.task.learning.finish_condition: 任务完成条件
 course.task.learning.finish_btn: 任务完成
@@ -1942,6 +1975,8 @@ course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.task.learning.remaining.watch_time: 剩余观看时长
 course.btn.pay_tips: 正在创建订单...
+
+course.export: 导出课时数据
 
 # 文件
 file_chooser.empty: 没有资源...
@@ -2867,6 +2902,8 @@ user.settings.security.password_reset.mobile: 手机号码
 user.settings.security.password_reset.success: 重设密码成功
 user.settings.security.password_reset.success.content_title: 重设密码成功
 user.settings.security.password_reset.success.tips: 新密码设置成功，请重新登录。
+user.settings.security.password_reset.success_hint: >
+  你已经通过手机重置密码成功。请前往 <a class="link-primary" href="%loginUrl%">登录
 
 user.settings.security.pay_password_set: 设置支付密码
 user.settings.security.pay_password_set.find_pay_password: 找回支付密码
@@ -4308,6 +4345,19 @@ admin.course_copy.course_copying.btn: 正在复制
 admin.course_copy.success.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制完成！
 admin.course_copy.failure.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制失败！
 
+admin.queue.failed_detail: 失败详情
+admin.queue.queue_label: 队列
+admin.queue.class_label: 任务类型
+admin.queue.priority_label: 优先级
+admin.queue.timeout_label: 超时时间
+admin.queue.body_label: 消息体
+admin.queue.failed_reason_label: 错误原因
+admin.queue.error_time_label: 错误时间
+admin.queue.failed_time_label: 失败时间
+admin.queue.name: 对列名
+admin.queue.type: 类型
+admin.queue.
+
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志
@@ -4378,6 +4428,7 @@ course.block_grid.learn_time: 学习总时长：%learnTime%
 course.block_grid.live_finish: 直播结束
 course.block_grid.live_back: 回放
 course.block_grid.from_classroom: 来自班级：
+course.block_grid.empty_hint: 找不到相关课程！
 
 # course/header
 course.header.vip: 会员
@@ -4753,6 +4804,30 @@ admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
 admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
 admin.user.statistics.data_detail.from_classroom: 来自班级
+admin.user.statistics.sync_info.upgrade_time: 升级时间
+admin.user.statistics.sync_info.history_data_range: 历史数据生成范围
+admin.user.statistics.sync_info.table_total_history_data_sync_status: total表历史数据同步状态
+admin.user.statistics.sync_info.table_daily_history_data_sync_status: daily表历史数据同步状态
+admin.user.statistics.sync_info.table_daily_create_status: 新增daily表状态
+admin.user.statistics.sync_info.history_data_range_days: %days%天
+admin.user.statistics.sync_info.sync_user_id: 目前同步到的用户Id
+admin.user.statistics.sync_info.sync_complete: 是否同步完成
+admin.user.statistics.sync_info.sync_time: 目前同步到的时间
+admin.user.statistics.sync_info.sync_total: 总数
+admin.user.statistics.sync_info.not_sync_total: 未同步到总表的条数
+admin.user.statistics.sync_info.true: 是
+admin.user.statistics.sync_info.false: 否
+
+## 用户在线模块
+admin.user.online.operate_system: 操作系统
+admin.user.online.client: 客户端
+admin.user.online.device: 设备
+admin.user.online.last_access_time: 最后访问时间
+admin.user.online.empty: 暂无记录!
+admin.user.online.visitor: 游客
+admin.user.online.registed_user: 注册用户
+admin.user.online.all_visitors: 全部访客
+admin.user.online.online_user_count: 共查询到 %count% 位符合条件的在线用户（15分钟以内有活动）
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
@@ -6237,6 +6312,7 @@ admin.edu_cloud.edu_video.delete_ok_confirm: 恭喜，您的云视频全部为�
 admin.edu_cloud.edu_video.delete_ok_btn: 好
 admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
 admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video.h5_enable_label: H5播放：
 
 # 云直播
 admin.edu_cloud.edu_live.student_num: 参与直播人数（最近7天）
@@ -6947,6 +7023,8 @@ admin.setting_course.classroom.course_discount.help_block: 购买班级时，如
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin.setting_course.custom_chapter_name: 设置章节名称
+admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
 
 #开发者设置
 admin.developer_setting.content_title: 开发者设置
@@ -6973,6 +7051,7 @@ admin.developer_setting.tips: >
       「HLS加密视频」：　开启
     </li>
   </ul>
+admin.developer_setting.mp_service_url_label: 小程序服务平台地址
 admin.magic_setting.need_careful_tips: 注意事项
 admin.magic_setting.developer_use_tips: 此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！
 admin.magic_setting.video_fingerprint: 视频指纹
@@ -7072,6 +7151,34 @@ admin.crontab_job.task_object_classroom: 班级
 admin.crontab_job.task_object_open_course: 公开课
 admin.crontab_job.task_object_lesson: 课时
 admin.crontab_job.empty: 无定时任务记录
+admin.crontab_job.error_hint: >
+Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
+admin.crontab_job.command_label: 命令
+admin.crontab_job.status_label: 状态
+admin.crontab_job.enabled_label: 开启
+admin.crontab_job.disabled_label: 禁用
+admin.crontab_job.resotre_btn: 点击重新初始化
+admin.crontab_job.name: 名称
+admin.crontab_job.class: 类名
+admin.crontab_job.resource: 来源
+admin.crontab_job.operation: 操作
+admin.crontab_job.status: 状态
+admin.crontab_job.execution_time: 执行时间
+admin.crontab_job.time: 时间
+admin.crontab_job.enable_status: 启用状态
+admin.crontab_job.empty_hint: 暂无任务信息!
+admin.crontab_job.next_time: 下一次时间
+admin.crontab_job.last_time: 上一次时间
+admin.crontab_job.log_title: 任务日志
+admin.crontab_job.log_empty_hint: 暂无日志信息!
+admin.crontab_job.log_name: 名称
+admin.crontab_job.log_time: 时间
+admin.crontab_job.log_resource: 来源
+admin.crontab_job.log_status: 状态
+admin.crontab_job.run_log_title: 任务运行日志
+admin.crontab_job.log_show_btn: 日志查看
+admin.crontab_job.enable: 启用
+admin.crontab_job.disable: 禁用
 
 #　ip黑名单
 admin.ip_black_list.titile: IP黑名单
@@ -7711,6 +7818,34 @@ admin.org_manage.modal.org_description: 描述
 admin.org_manage.modal.org_description.help_block: 非必填
 admin.org_manage.modal.delete.tips: 会同时删除下辖组织机构
 
+admin.wechat_app.banner_title: 网校小程序，招生学习更便捷
+admin.wechat_app.banner_introduce: 网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
+admin.wechat_app.access_btn: 立即开通
+admin.wechat_app.install_btn: 立即安装
+admin.wechat_app.fast_access_introduction_title: 快速接入
+admin.wechat_app.fast_access_introduction_content: 只需一键授权，无需任何开发，即可拥有自己的网校小程序
+admin.wechat_app.data_sync_introduction_title: 数据同步
+admin.wechat_app.data_sync_introduction_content: 小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理
+admin.wechat_app.flow_entrance_introduction_title: 自带流量
+admin.wechat_app.flow_entrance_introduction_content: 微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户
+admin.wechat_app.easy_promotion_introduction_title: 超轻推广
+admin.wechat_app.easy_promotion_introduction_content: 流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化
+
+admin.xapi.title: 推送详情
+admin.xapi.id: 推送id
+admin.xapi.status: 推送状态
+admin.xapi.version: xAPI版本
+admin.xapi.body: 推送主体
+admin.xapi.status: 推送状态
+admin.xapi.verb: 推送行为
+admin.xapi.target_type: 推送类型
+admin.xapi.time: 推送时间
+admin.xapi.created_time: 创建时间
+admin.xapi.operation: 操作
+admin.xapi.enable_label: 开启xAPI
+admin.xapi.push_url_label: 设置xAPI地址
+admin.xapi.default_url: 默认地址是：https://lrs.qiqiuyun.net/v1/xapi/
+
 user.card_show_following: 关注
 user.card_show_followed: 已关注
 user.card_show_message: 私信
@@ -7737,6 +7872,15 @@ open_course.my_other_courses: 我的其它课程
 open_course.my_all_course: 所有课程
 open_course.lesson_empty_tips: 暂无课时记录
 open_course.select_course: 选择课程
+open_course.choose_again: 重新选择
+open_course.chooser_from_material: 从资料库中选择
+open_course.upload_form_course_file: 从课程文件中选择
+open_course.link: 网络链接
+open_course.coursematerial.tips: 支持常见文档、图片、音视频、压缩包文件格式。
+open_course.coursematerial.cloud_tips: >
+  <li>文件将上传到<strong>云服务器</stron
+open_course.empty_file_hint: 暂无文件，请先上传。
+open_course.material_link: 资料链接地址
 
 clean_search: 清除搜索
 
@@ -8003,6 +8147,7 @@ my.reward_point.product_detail_permissions: 抱歉，您无权查看%name%商品
 my.reward_point.record.permissions: 抱歉，您无权查看%name%兑换记录页面，如有需要请联系网站管理员！
 my.reward_point.rule.permissions: 抱歉，您无权查看%name%规则页面，如有需要请联系网站管理员！
 my.reward_point.mall.permissions: 抱歉，您无权查看%name%商城，如有需要请联系网站管理员！
+my.reward_point: 我的%name%
 reward_point.mall.search_empty: 没有搜到相关商品，请换个关键词试试！
 
 reward_point.reply_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天
