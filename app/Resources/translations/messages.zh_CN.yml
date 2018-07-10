@@ -4356,7 +4356,6 @@ admin.queue.error_time_label: 错误时间
 admin.queue.failed_time_label: 失败时间
 admin.queue.name: 对列名
 admin.queue.type: 类型
-admin.queue.
 
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
@@ -7152,7 +7151,7 @@ admin.crontab_job.task_object_open_course: 公开课
 admin.crontab_job.task_object_lesson: 课时
 admin.crontab_job.empty: 无定时任务记录
 admin.crontab_job.error_hint: >
-Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
+  Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
 admin.crontab_job.command_label: 命令
 admin.crontab_job.status_label: 状态
 admin.crontab_job.enabled_label: 开启

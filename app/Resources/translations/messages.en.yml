@@ -3583,6 +3583,17 @@ admin.course_copy.course_copying.btn: Copying
 admin.course_copy.success.notify: Your new course《%newTitle%》is copied success from origin course《%originTitle%》！
 admin.course_copy.failure.notify: Your new course《%newTitle%》is copied failed from origin course《%originTitle%》！
 
+admin.queue.failed_detail: 失败详情
+admin.queue.queue_label: 队列
+admin.queue.class_label: 任务类型
+admin.queue.priority_label: 优先级
+admin.queue.timeout_label: 超时时间
+admin.queue.body_label: 消息体
+admin.queue.failed_reason_label: 错误原因
+admin.queue.error_time_label: 错误时间
+admin.queue.failed_time_label: 失败时间
+admin.queue.name: 对列名
+admin.queue.type: 类型
 
 change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
@@ -5819,7 +5830,7 @@ admin.crontab_job.task_object_open_course: 'Open course'
 admin.crontab_job.task_object_lesson: Lesson
 admin.crontab_job.empty: 'No data'
 admin.crontab_job.error_hint: >
-Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
+  Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
 admin.crontab_job.command_label: 命令
 admin.crontab_job.status_label: 状态
 admin.crontab_job.enabled_label: 开启
@@ -6496,6 +6507,20 @@ course.homework_check.need_check_item: "Waiting to check  <small class=\"color-g
 
 
 course.question_marker_statistics: PopQuestion Statistics
+
+course.question_marker.no_task: 无任务
+course.question_marker.make_time: 时间点
+course.question_marker.stem: 题干
+course.question_marker.join_num: 参与人数
+course.question_marker.answer_num: 答题次数
+course.question_marker.right_num: 正确次数
+course.question_marker.operation: 操作
+course.question_marker.btn_question_distribution: 答题分布
+course.question_marker.empty_question_marker_hint: 该任务下无驻点弹题
+course.question_marker.total_answer_num: >
+  共计<span class="color-primary text-success pls prs">%totalAnswerNum%</span>
+course.question_marker.total_user_num: >
+  <span class="color-primary pls prs">%totalUserNum%</span>人参与答题
 
 course.plan_task.exercise.question_numbers: 'Number'
 course.plan_task.exercise.question_sourse: 'Source'
