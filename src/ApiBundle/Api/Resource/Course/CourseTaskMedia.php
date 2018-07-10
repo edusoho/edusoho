@@ -35,12 +35,12 @@ class CourseTaskMedia extends AbstractResource
     {
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $video = $config->get($activity['mediaId']);
-        $watchStatus = $type->getWatchStatus($activity);
+        $watchStatus = $config->getWatchStatus($activity);
         if ('error' === $watchStatus['status']) {
             throw new AccessDeniedHttpException('您的视频观看时长已达限制，无法继续观看！');
         }
 
-        $video = $type->prepareMediaUri($video);
+        $video = $config->prepareMediaUri($video);
 
         if ('self' != $video['mediaSource']) {
             return $video;
@@ -80,6 +80,17 @@ class CourseTaskMedia extends AbstractResource
 
     protected function getLive($course, $task, $activity, $ssl = false)
     {
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $live = $config->get($activity['mediaId']);
+        if ($live['roomCreated']) {
+            $format = 'Y-m-d H:i';
+
+            return array(
+                'entryUrl' => $this->generateUrl('task_live_entry', array('courseId' => $course['id'], 'activityId' => $activity['id']), true),
+                'startTime' => date($format, $activity['startTime']),
+                'endTime' => date($format, $activity['endTime']),
+            );
+        }
     }
 
     protected function getText($course, $task, $activity, $ssl = false)
