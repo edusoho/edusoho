@@ -11,11 +11,10 @@
 {% block main %}
 
   <div role="courseset-manage-testpaper">
-    <div class="courseset-manage-body__title">
+    <div class="courseset-manage-body__title">{{ 'course.testpaper_manage.content_title'|trans }}
       <div class="courseset-manage-body__btn">
         <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
           class="btn btn-info btn-sm pull-right mls"><span class="es-icon es-icon-anonymous-iconfont"></span>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
-        {{ 'course.testpaper_manage.content_title'|trans }}
         {{ slot('course_set.testpaper_import_btn.extension', {'courseSet': courseSet}) }}
       </div>
     </div>
