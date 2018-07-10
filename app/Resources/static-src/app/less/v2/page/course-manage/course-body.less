@@ -42,6 +42,12 @@
   .cd-box-shadow;
   .form-group {
     margin-bottom: 24px;
+    .control-label-required {
+      &:before {
+        top: 0;
+        color: @brand-danger;
+      }
+    }
   }
   .cd-radio {
     min-width: 76px;
