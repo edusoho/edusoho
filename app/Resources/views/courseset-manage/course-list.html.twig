@@ -3,9 +3,11 @@
 {% endblock %}
 
 {% block title %}
-  <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
-    {{ course.title }}
-  </a>
+  {% if courseTypes > 1 %}
+    <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
+      {{ course.title }}
+    </a>
+  {% endif %}
 {% endblock %}
 
 {% block planType %}
