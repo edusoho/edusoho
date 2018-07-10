@@ -335,7 +335,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $this->getBlockTemplateDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function  getPosters()
+    public function getPosters()
     {
         $posters = array();
         $theme = $this->getSettingService()->get('theme', array());
@@ -358,6 +358,7 @@ class BlockServiceImpl extends BaseService implements BlockService
                 array_push($posters, $item);
             }
         }
+
         return $posters;
     }
 
