@@ -16,6 +16,8 @@ class PageCourse extends AbstractResource
     public function get(ApiRequest $request, $portal, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        $course['learnedNum'] = empty($member) ? 0 : $member['learnedNum'];
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
@@ -84,5 +86,10 @@ class PageCourse extends AbstractResource
     private function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
+    }
+
+    private function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }
