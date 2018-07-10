@@ -18,7 +18,7 @@
   <div class="pull-right hidden-xs courses-operation js-plan-operation">
     {% if courseSet.canManage|default() or course.canManage|default()  %}
       <div class="js-plan-icon">
-        <a class="cd-mr32 cd-link-major" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">
+        <a class="cd-mr32 cd-link-major" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}">
           <i class="es-icon es-icon-setting"></i>
         </a>
 

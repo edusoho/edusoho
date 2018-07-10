@@ -9,9 +9,11 @@
 {% block main_heading_class %} course-manage-info__title {% endblock %}
 {% block main_body %}
 {{ web_macro.flash_messages() }}
+{% set courseTypes = get_course_count(courseSet.id) %}
 {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
 <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-  <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+  {% if courseTypes == 1 %}
+    <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
     <div class="form-group">
       <div class="col-sm-2 control-label">
       <label class="control-label-required">{{ 'course.plan_setup.name'|trans }}</label>
@@ -28,6 +30,8 @@
         <textarea class="form-control" id="intro" name="intro"></textarea>
       </div>
     </div>
+  {% endif %}
+
   <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
   <div role="course-marketing-info">
     {% include 'course-manage/base-info/marketing.html.twig' %}
