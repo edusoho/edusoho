@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\PptActivityDao;
 use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 
 class Ppt extends Activity
 {
@@ -112,7 +113,10 @@ class Ppt extends Activity
 
     public function get($targetId)
     {
-        return $this->getPptActivityDao()->get($targetId);
+        $activity = $this->getPptActivityDao()->get($targetId);
+        $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+
+        return $activity;
     }
 
     public function find($targetIds)
@@ -144,5 +148,13 @@ class Ppt extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

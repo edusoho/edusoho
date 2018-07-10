@@ -110,6 +110,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         }
 
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result['resId'] = $file['globalId'];
 
         $isConvertNotSuccess = isset($file['convertStatus']) && FileImplementor::CONVERT_STATUS_SUCCESS != $file['convertStatus'];
 
@@ -147,6 +148,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             }
         }
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result['resId'] = $file['globalId'];
 
         if (isset($result['error'])) {
             $error['code'] = 'error';
