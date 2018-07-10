@@ -335,6 +335,32 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $this->getBlockTemplateDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function  getPosters()
+    {
+        $posters = array();
+        $theme = $this->getSettingService()->get('theme', array());
+        $topBanner = $this->getBlockDao()->getByCode($theme['uri'].':home_top_banner');
+        if (empty($topBanner)) {
+            $topBanner = $this->getBlockTemplateDao()->getByCode($theme['uri'].':home_top_banner');
+        }
+        if (!empty($topBanner)) {
+            $data = $topBanner['data'];
+        }
+        if (empty($data['posters'])) {
+            return $posters;
+        }
+        foreach ($data['posters'] as $poster) {
+            if (1 == $poster['status']) {
+                $item = array(
+                    'image' => $poster['src'],
+                    'link' => array('type' => 'url', 'url' => $poster['href']),
+                );
+                array_push($posters, $item);
+            }
+        }
+        return $posters;
+    }
+
     /**
      * @return BlockTemplateDao
      */
