@@ -16,7 +16,7 @@
       {% elseif item.itemType == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter infinite-item">
         <span class="title">
-          {{'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title})}}
+          {{'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('site.data.part'|trans),'%number%':item.number, '%title%':item.title})}}
         </span>
         </li>
       {% else %}
