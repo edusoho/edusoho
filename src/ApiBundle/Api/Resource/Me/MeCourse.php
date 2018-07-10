@@ -29,7 +29,7 @@ class MeCourse extends AbstractResource
         );
 
         $courseConditions = array(
-            'ids' => ArrayToolkit::column($members, 'courseId'),
+            'ids' => ArrayToolkit::column($members, 'courseId') ?: array(0),
             'excludeTypes' => array('reservation'),
         );
 
