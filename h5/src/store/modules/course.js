@@ -5,7 +5,7 @@ const state = {
   selectedPlanIndex: 0,
   joinStatus: false, // 当前计划是否已加入学习
   sourceType: 'img', //
-  details: []
+  details: {}
 };
 
 const hasJoinedCourse = course => course.access.code === 'member.member_exist';
