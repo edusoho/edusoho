@@ -3,12 +3,13 @@
   {% do script(['app/js/courseset-manage/header/index.js']) %}
 {% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
-
-<div class="courseset-manage-header js-origin-header clearfix">
+<div class="courseset-manage-header {% if couserNum > 1 and showFold|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
   {% block unfold %}
-    <div class="courseset-manage-hide js-new-header"><a class="js-show-courseset cd-link-assist" href="javascript:;">{{ 'course.base'|trans }}<i class="es-icon es-icon-xiala"></i></a></div>
+    {% if couserNum > 1 %}
+      <div class="courseset-manage-hide js-new-header"><a class="js-show-courseset cd-link-assist" href="javascript:;">{{ 'course.base'|trans }}<i class="es-icon es-icon-xiala"></i></a></div>
+    {% endif %}
   {% endblock %}
-  <div class="clearfix js-origin-header-content">
+  <div class="clearfix js-origin-header-content {% if couserNum > 1 and showFold|default(0) == 1 %}courseset-manage-opacity {% endif %}">
     {# 课程封面 #}
     <a href="{{basepath}}">
       <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
@@ -84,7 +85,9 @@
 
 
 {% block fold %}
-  <div class="text-center cd-dark-assist courseset-manage-fold js-shrink-item cd-mv8"><a class="js-shrink-courseset cd-link-assist" href="javascript:;">{{ 'customer_service.close_btn'|trans }}<i class="es-icon es-icon-xiala"></i></a></div>
+  {% if couserNum > 1 %}
+    <div class="text-center cd-dark-assist courseset-manage-fold js-shrink-item cd-mv8"><a class="js-shrink-courseset cd-link-assist hidden" href="javascript:;">{{ 'customer_service.close_btn'|trans }}<i class="es-icon es-icon-xiala"></i></a></div>
+  {% endif %}
 {% endblock %}
 
 {% block close %}
