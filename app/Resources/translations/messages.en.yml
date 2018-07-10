@@ -796,7 +796,7 @@ course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled
 course.course_member_count: '%studentsNum% students'
 course.activity: Activity
 
-course.teaching_plan.access_denied_hint: No rights management
+course.teaching_plan.access_denied_hint: 'No permission'
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
@@ -978,8 +978,8 @@ course.testpaper_check.btn_question_distribution: Question Distribution
 course.testpaper_check.btn_check: Check
 course.testpaper_check.first_answer: 'first time'
 course.testpaper_check.number: 'person-time'
-course.testpaper_check.get_score: Score %questonScore% score
-course.testpaper_check.get_score_range: Score 0 - %questonScore% score
+course.testpaper_check.get_score: 'Score %questonScore%'
+course.testpaper_check.get_score_range: 'Score 0 - %questonScore%'
 course.testpaper_check.testpaper_analysis: 'item analysis'
 
 course.homepage.re_try_btn: 'Try again'
@@ -1173,10 +1173,10 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
-course.task.user_all_task: "%nickname%'s all tasks"
-course.task.completion_degree: Degree of completion
-course.task.start_time: task start time
-course.task.finish_time: task finish time
+course.task.user_all_task: "%nickname%'s tasks"
+course.task.completion_degree: 'Degree of completion'
+course.task.start_time: 'start time'
+course.task.finish_time: 'finish time'
 course.task.progress: 'task progress'
 course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior task to continue.'
@@ -1827,7 +1827,7 @@ classroom.buy_classroom.to_pay: Pay
 classroom.buy_classroom.pay_submiting: 'Creating the order'
 classroom.preview.buy_classroom_tips: 'You can''t pay under the previewing mode  %role%'
 classroom.buy_classroom.tips: null
-classroom.showServices: Commitment service
+classroom.showServices: Service
 classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
@@ -3585,15 +3585,15 @@ admin.course_copy.course_copying.btn: Copying
 admin.course_copy.success.notify: Your new course《%newTitle%》is copied success from origin course《%originTitle%》！
 admin.course_copy.failure.notify: Your new course《%newTitle%》is copied failed from origin course《%originTitle%》！
 
-admin.queue.failed_detail: failure details
+admin.queue.failed_detail: 'failure details'
 admin.queue.queue_label: queue
 admin.queue.class_label: task type
 admin.queue.priority_label: priority
-admin.queue.timeout_label: overtime time
+admin.queue.timeout_label: timeout
 admin.queue.body_label: message body
-admin.queue.failed_reason_label: wrong reason
-admin.queue.error_time_label: wrong time
-admin.queue.failed_time_label: failure time
+admin.queue.failed_reason_label: 'failed reason'
+admin.queue.error_time_label: error time
+admin.queue.failed_time_label: failed time
 admin.queue.name: queue name
 admin.queue.type: type
 
@@ -3939,13 +3939,13 @@ admin.user.statistics.data_detail.plan_progress_tip: 'The average plan progress 
 admin.user.statistics.data_detail.task_progress_tip: 'Task completion ratio is the number of completed tasks divide the total number of tasks'
 admin.user.statistics.data_detail.from_classroom: From Class
 admin.user.statistics.sync_info.upgrade_time: Upgrade time
-admin.user.statistics.sync_info.history_data_range: Historical data generation range
+admin.user.statistics.sync_info.history_data_range: 'Historical data'
 admin.user.statistics.sync_info.table_total_history_data_sync_status: Total table history data synchronization status
 admin.user.statistics.sync_info.table_daily_history_data_sync_status: Daily table history data synchronization status
 admin.user.statistics.sync_info.table_daily_create_status: Add daily table status
 admin.user.statistics.sync_info.history_data_range_days: %days% Day
-admin.user.statistics.sync_info.sync_user_id: User ID currently synced
-admin.user.statistics.sync_info.sync_complete: Done synchronously
+admin.user.statistics.sync_info.sync_user_id: 'Synced User ID'
+admin.user.statistics.sync_info.sync_complete: 'Sync Done'
 admin.user.statistics.sync_info.sync_time: Current sync time
 admin.user.statistics.sync_info.sync_total: Total
 admin.user.statistics.sync_info.not_sync_total: Number of rows not synchronized to the total table
@@ -5727,7 +5727,7 @@ admin.setting_course.classroom.classroom_list_default_seq: 'Default order of cla
 admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
 admin.setting_course.custom_chapter_name: Set chapter name
-admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the class management, the system will automatically generate the chapter name set as follows.
+admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
@@ -5837,7 +5837,7 @@ admin.crontab_job.command_label: Command
 admin.crontab_job.status_label: Status
 admin.crontab_job.enabled_label: enable
 admin.crontab_job.disabled_label: disable
-admin.crontab_job.resotre_btn: Click reinitialize
+admin.crontab_job.resotre_btn: Click to reinitialize
 admin.crontab_job.name: Name
 admin.crontab_job.class: Class
 admin.crontab_job.resource: Source
@@ -6358,16 +6358,16 @@ admin.org_manage.modal.org_code.help_block: 'Required. Sugguest use English word
 admin.org_manage.modal.org_description: Description
 admin.org_manage.modal.org_description.help_block: Optional
 admin.org_manage.modal.delete.tips: 'It will delete all sub-organizations at the same time.'
-admin.wechat_app.banner_title: Online school Small Programs, enrollment learning is more convenient
-admin.wechat_app.banner_introduce: Online school Small Programs, seamless link network school and public number, WeChat group, let WeChat operation and network school operations integration.
+admin.wechat_app.banner_title: WeApp, enrollment learning is more convenient
+admin.wechat_app.banner_introduce: WeApp, seamless link network school and public number, WeChat group, let WeChat operation and network school operations integration.
 admin.wechat_app.access_btn: Open immediately
 admin.wechat_app.install_btn: Install now
 admin.wechat_app.fast_access_introduction_title: Fast access
-admin.wechat_app.fast_access_introduction_content: With one-click license, you can have your own online school small programs without any development.
+admin.wechat_app.fast_access_introduction_content: One-click, you can have your own WeApp without any development.
 admin.wechat_app.data_sync_introduction_title: Data synchronization
-admin.wechat_app.data_sync_introduction_content: Small Programs learning and order records are directly connected to the EduSoho main system, and can be easily managed without additional operating costs.
+admin.wechat_app.data_sync_introduction_content: WeApp learning and order records are directly connected to the EduSoho main system, and can be easily managed without additional operating costs.
 admin.wechat_app.flow_entrance_introduction_title: Self-contained traffic
-admin.wechat_app.flow_entrance_introduction_content: WeChat's 900 million monthly active users, nearby small programs, WeChat search and other functions, let you easily get traffic and seize customers
+admin.wechat_app.flow_entrance_introduction_content: WeChat's 900 million monthly active users, nearby WeApp, WeChat search and other functions, let you easily get customers.
 admin.wechat_app.easy_promotion_introduction_title: Ultralight promotion
 admin.wechat_app.easy_promotion_introduction_content: Streamlined experience, lowering user thresholds, and facilitating users to quickly spread on WeChat, promoting low-cost and high-transformation
 admin.xapi.title: Push details
@@ -6518,7 +6518,7 @@ course.question_marker.answer_num: Number of answers
 course.question_marker.right_num: Number of Correct times
 course.question_marker.operation: Operation
 course.question_marker.btn_question_distribution: Answer distribution
-course.question_marker.empty_question_marker_hint: No stagnation title under this task
+course.question_marker.empty_question_marker_hint: No marker question under this task
 course.question_marker.total_answer_num: >
   Total <span class="color-primary text-success pls prs">%totalAnswerNum%</span> questions
 course.question_marker.total_user_num: >

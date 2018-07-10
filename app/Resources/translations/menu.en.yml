@@ -18,7 +18,7 @@ admin.nav.operation: Operation
 admin.nav.finance: Finance
 admin.nav.cloud:  ES Cloud
 admin.nav.system: System
-admin.nav.wechat_app: Wechat App
+admin.nav.wechat_app: Mobile
 
 #用户模块
 admin.user.basic_menu: Users
