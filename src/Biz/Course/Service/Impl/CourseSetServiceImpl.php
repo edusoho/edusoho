@@ -1008,6 +1008,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             );
             array_push($pageCourses, $items);
         }
+
         return $pageCourses;
     }
 
