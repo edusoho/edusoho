@@ -20,9 +20,11 @@ class PageDiscovery extends AbstractResource
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         
-        $hotCourseList = $this->findCoursesByCourseSet('hotSeq');
-        $recommendedCourseList = $this->findCoursesByCourseSet(
-            array('recommendedSeq' => 'DESC', 'recommendedTime' => 'DESC')
+        $hotCourseList = $this->findCoursesAndCourseSetsBySort(
+            array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC')
+        );
+        $recommendedCourseList = $this->findCoursesAndCourseSetsBySort(
+            array('recommendedSeq' => 'DESC', 'recommendedTime' => 'DESC', 'id' => 'DESC')
         );
 
         $posters = $this->getBlockService()->getPosters();
@@ -47,10 +49,10 @@ class PageDiscovery extends AbstractResource
         return $result;
     }
 
-    protected function findCoursesByCourseSet($orderBy)
+    protected function findCoursesAndCourseSetsBySort($sort)
     {
         $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, 4);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $sort, 0, 4);
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $courses = $this->getCourseService()->fillCourseTryLookVideo($courses);
 
