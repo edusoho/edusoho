@@ -71,6 +71,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         }
 
         return array(
+            'resId' => $file['globalId'],
             'mp4Url' => isset($mp4Url) ? $mp4Url : null,
             'isEncryptionPlus' => $isEncryptionPlus,
             'context' => $context,

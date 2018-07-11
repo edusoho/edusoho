@@ -72,9 +72,11 @@ class CourseTaskMedia extends AbstractResource
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
         return array(
-            'file' => $file,
+            'resId' => $file['globalId'],
             'url' => isset($url) ? $url : null,
             'player' => $player,
+            'videoHeaderLength' => isset($context['videoHeaderLength']) ? $context['videoHeaderLength'] : 0,
+            'timeLimit' => isset($context['watchTimeLimit']) ? $context['watchTimeLimit'] : 0,
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
         );
@@ -99,7 +101,7 @@ class CourseTaskMedia extends AbstractResource
         $url = $this->getPlayUrl($file, array(), $ssl);
 
         return array(
-            'file' => $file,
+            'resId' => $file['globalId'],
             'url' => isset($url) ? $url : null,
             'player' => $player,
             'agentInWhiteList' => $agentInWhiteList,
