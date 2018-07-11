@@ -1,5 +1,4 @@
 <div class="es-piece">
-  <div class="piece-header">{{'course.marketing_setup.rule'|trans}}</div>
   <div class="form-group">
     <label class="col-sm-2 control-label">
       {{ 'course.marketing_setup.rule.expiry_date'|trans }}
@@ -30,7 +29,7 @@
         {% endif %}
 
         <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
-          <input class="form-control width-150 mr10" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
+          <input autocomplete="off" class="form-control width-150 mr10" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
         </div>
 
         <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}" id="deadlineType-days">

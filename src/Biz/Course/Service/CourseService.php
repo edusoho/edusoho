@@ -259,4 +259,14 @@ interface CourseService
      *    （如果已经存在 excludeTypes 属性，则额外新增，非替换）
      */
     public function appendReservationConditions($conditions);
+
+    //修改课程基础信息
+    public function updateBaseInfo($id, $fields);
+
+    /**
+     * 是否能修改基础信息
+     * 管理员可以修改
+     * 课程老师，后台设置可修改营销设置可修改
+     */
+    public function canUpdateCourseBaseInfo($courseId);
 }
