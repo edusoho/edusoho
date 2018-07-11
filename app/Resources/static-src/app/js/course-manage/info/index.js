@@ -343,6 +343,5 @@ jQuery.validator.addMethod('live_capacity', function (value, element) {
 import Intro from './intro';
 
 setTimeout(function() {
-  let intro = new Intro();
-  
+  new Intro();
 }, 500);

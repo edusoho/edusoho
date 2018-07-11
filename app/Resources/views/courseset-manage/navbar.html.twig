@@ -9,16 +9,19 @@
     {% endif %}
   </li>
 {% if get_course_count(courseSet.id) == 1 %}
-  <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}" id="step-2">
+<div class="pull-left nav-header-section-step" id="step-2">
+  <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}">
     {% if courseSet.locked %}
       <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ 'site.default.plan_setting'|trans }}</a>
     {% else %}
       <a class="nav-header-section__link" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ 'site.default.plan_setting'|trans }}</a>
     {% endif %}
   </li>
+</div>
 {% endif %}
 
-  <li class="nav-header-section__item {% if side_nav == 'plan' %}active{% endif %}" id="step-3">
+<div class="pull-left nav-header-section-step" id="step-3">
+  <li class="nav-header-section__item {% if side_nav == 'plan' %}active{% endif %}">
     {% if courseSet.locked %}
       <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">
         {{ 'course.teach_plan_manage'|trans }}
@@ -29,6 +32,7 @@
       <a class="nav-header-section__link" href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">{{ 'course.filter.all_plan'|trans }}</a>
     {% endif %}
   </li>
+</div>
 
 
   <div class="clearfix nav-header-section-step" id="step-1">
