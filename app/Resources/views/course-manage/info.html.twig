@@ -10,10 +10,10 @@
 
 {% block main_body %}
 {{ web_macro.flash_messages() }}
-{% set courseTypes = get_course_count(courseSet.id) %}
+{% set isMulPlansCourse = is_mul_plans_course(courseSet.id) %}
 {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
 <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-  {% if courseTypes > 1 %}
+  {% if isMulPlansCourse %}
     <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
     <div class="form-group">
       <div class="col-sm-2 control-label">

@@ -52,6 +52,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
             new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
             new \Twig_SimpleFunction('get_course_count', array($this, 'getCourseCount')),
+            new \Twig_SimpleFunction('is_mul_plans_course', array($this, 'isMulPlansCourse')),
         );
     }
 
@@ -67,6 +68,16 @@ class CourseExtension extends \Twig_Extension
         return $this->getCourseService()->countCourses($conditions);
     }
 
+    /**
+     * 判断一个课程是否有多个计划
+     */
+    public function isMulPlansCourse($courseSetId, $isPublish = 0)
+    {
+        $plansCount = $this->getCourseCount($courseSetId, $isPublish);
+
+        return $plansCount > 1;  //大于1个，说明有个多个
+    }
+
     public function getCourseDailyTasksNum($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -80,6 +91,7 @@ class CourseExtension extends \Twig_Extension
 
         return round($finishedTaskPerDay, 0);
     }
+
     public function getDynUrl($baseUrl, $params)
     {
         return DynUrlToolkit::getUrl($this->biz, $baseUrl, $params);
