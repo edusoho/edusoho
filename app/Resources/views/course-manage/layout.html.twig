@@ -3,7 +3,8 @@
   {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
 {% endblock %}
 
-{% block sectionClass %} courseset-header-section {% endblock %}
+{% set side_nav =  1 == get_course_count(courseSet.id) ?  'default-course-info' : 'plan' %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
@@ -12,12 +13,12 @@
   </ol>
 {% endblock %}
 
+
 {% block sidebar %}
-  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), courseSideNav: course_side_nav|default(null)})) }}
 {% endblock %}
-{% block course_header %}
-  {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
-{% endblock %}
+
+
 {% block main %}
   <div class="cd-main">
     <div class="cd-main__heading">

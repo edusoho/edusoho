@@ -51,7 +51,20 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
             new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
+            new \Twig_SimpleFunction('get_course_count', array($this, 'getCourseCount')),
         );
+    }
+
+    public function getCourseCount($courseSetId, $isPublish = 0)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+        if ($isPublish) {
+            $conditions['status'] = 'published';
+        }
+
+        return $this->getCourseService()->countCourses($conditions);
     }
 
     public function getCourseDailyTasksNum($courseId)
