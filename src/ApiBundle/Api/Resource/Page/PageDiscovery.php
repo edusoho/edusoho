@@ -19,12 +19,10 @@ class PageDiscovery extends AbstractResource
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         
-        $hotCourseList = $this->getCourseSetService()->findCoursesbyCourseSetOrder('hotSeq');
-        $recommendedCourseList = $this->getCourseSetService()->findCoursesbyCourseSetOrder(
+        $hotCourseList = $this->getCourseService()->findCoursesByCourseSet('hotSeq');
+        $recommendedCourseList = $this->getCourseService()->findCoursesByCourseSet(
             array('recommendedSeq' => 'DESC', 'recommendedTime' => 'DESC')
         );
-        $this->getOCUtil()->multiple($hotCourseList, array('courseSetId'), 'courseSet');
-        $this->getOCUtil()->multiple($recommendedCourseList, array('courseSetId'), 'courseSet');
 
         $posters = $this->getBlockService()->getPosters();
 
@@ -49,11 +47,11 @@ class PageDiscovery extends AbstractResource
     }
 
     /**
-     * @return \Biz\Course\Service\CourseSetService
+     * @return \Biz\Course\Service\CourseService
      */
-    protected function getCourseSetService()
+    protected function getCourseService()
     {
-        return $this->service('Course:CourseSetService');
+        return $this->service('Course:CourseService');
     }
 
     /**

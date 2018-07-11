@@ -1951,6 +1951,46 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $liveCourses;
     }
 
+    public function findCoursesByCourseSet($orderBy)
+    {
+        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, 4);
+        $courses = $this->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $courses = $this->fillCourseTryLookVideo($courses);
+        return array('courses' => $courses, 'courseSets' => $courseSets);
+    }
+
+    protected function fillCourseTryLookVideo($courses)
+    {
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']) && 'published' === $course['status'];
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
+
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+
+            foreach ($courses as &$course) {
+                if (!empty($activities[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+
+        return $courses;
+    }
+
     protected function hasAdminRole()
     {
         $user = $this->getCurrentUser();
