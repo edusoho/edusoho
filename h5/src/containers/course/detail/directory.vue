@@ -4,7 +4,6 @@
 
     <div class="directory-list">
       <div class="directory-list__item" v-for="(item, index) in chapters">
-
         <div class="directory-list__item-chapter" 
           @click="item.show = !item.show" 
           v-if="item.type === 'chapter'">
@@ -15,7 +14,6 @@
         <div :class="['directory-list__item-unit', 
           {'unit-show': item.show}]"
           v-for="task in tasks[index]">
-
           <div class="lesson-cell__unit" v-if="task.type === 'unit'">
             第{{ task.number }}节：{{ task.title }}
           </div>
@@ -45,7 +43,7 @@
 
   export default {
     props: {
-      courseItem: {
+      courseItems: {
         type: Array,
         default: () => ([])
       },
@@ -64,12 +62,13 @@
     },
     computed: {
       ...mapState('course', {
-        joinStatus: state => state.joinStatus
+        joinStatus: state => state.joinStatus,
+        selectedPlanId: state => state.selectedPlanId
       })
     },
     data() {
       return {
-        directoryArray: this.courseItem,
+        directoryArray: this.courseItems,
         chapters: [],
         tasks: []
       }
@@ -117,14 +116,18 @@
         if (data[last].type !== 'chapter') {
           this.tasks.push(temp);
         }
+
+        if (data[0].type !== 'chapter') {
+          this.chapters.unshift({show:true});
+        }
         console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
       getCurrentStatus (task) {
-        if (this.tryLookable
+        if (Number(this.tryLookable)
           && task.type === 'video'
           && task.activity.mediaStorage) {
           return 'is-tryLook';
-        } else if (task.isFree) {
+        } else if (Number(task.isFree)) {
           return 'is-free';
         }
         return '';
@@ -146,7 +149,7 @@
               name: 'course_try'
             })
             this.setSourceType('video');
-          } else if (task.task.type === 'doc') {
+          } else if (['doc', 'ppt'].includes(task.task.type)) {
             this.$router.push({
               name: 'course_web'
             })
@@ -157,23 +160,33 @@
           this.showTypeDetail(task.task);
         }
         //join after click
-
       },
       showTypeDetail (task) {
         switch(task.type) {
           case 'video':
             if (task.mediaSource == 'self') {
-              this.setSourceType('video')
+              this.setSourceType({
+                sourceType: 'video',
+                taskId: task.id
+              })
             } else {
               Toast('暂不支持此类型');
             }
             break;
           case 'audio':
-            this.setSourceType('audio')
+            this.setSourceType({
+              sourceType: 'audio',
+              taskId: task.id
+            })
             break;
+          case 'ppt':
           case 'doc':
             this.$router.push({
-              name: 'course_web'
+              name: 'course_web',
+              params: {
+                courseId: this.selectedPlanId,
+                taskId: task.id
+              }
             })
             break;
           default:

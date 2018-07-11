@@ -1,12 +1,12 @@
 <template>
   <div class="join-before">
     <detail-head 
-      :price="details[selectPlanIndex].price"
-      :courseSet="details[selectPlanIndex].courseSet"></detail-head>
+      :price="details.price"
+      :courseSet="details.courseSet"></detail-head>
 
     <detail-plan
-      :price="details[selectPlanIndex].price"
-      :courseSet="details[selectPlanIndex].courseSet"></detail-plan>
+      :price="details.price"
+      :courseSet="details.courseSet"></detail-plan>
     <div class="segmentation"></div>
 
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
@@ -21,16 +21,16 @@
     <teacher 
       ref="teacher"
       class="teacher"
-      :teacherInfo="details[selectPlanIndex].teachers"></teacher>
+      :teacherInfo="details.teachers"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
     <directory ref="directory" 
-      :tryLookable="details[selectPlanIndex].tryLookable"
-      :courseItem="details[selectPlanIndex].courseItem"></directory>
+      :tryLookable="details.tryLookable"
+      :courseItem="details.courseItem"></directory>
     
     <e-footer @click.native="handleJoin">
-      {{details[selectPlanIndex].access.code | filterJoinStatus}}</e-footer>
+      {{details.access.code | filterJoinStatus}}</e-footer>
   </div>
 </template>
 <script>

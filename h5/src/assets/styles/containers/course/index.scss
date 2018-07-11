@@ -105,8 +105,9 @@
     display: flex;
     justify-content: flex-start;
     > li {
-      width: vw(66);
+      // width: vw(66);
       height: 30px;
+      padding: 0 8px;
       border: 1px solid $border-grey;
       text-align: center;
       line-height: 30px;

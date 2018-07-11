@@ -1,8 +1,7 @@
 <template>
   <div class="course-detail">
-    <!-- <span>selectedPlanIndex {{selectedPlanIndex}}</span> -->
-    <join-before v-if="!joinStatus && details.length" :details="details"></join-before>    
-    <join-after :details="details[selectedPlanIndex]" v-if="joinStatus && details.length"></join-after>
+    <join-before v-if="!joinStatus && !isEmpty" :details="details"></join-before>    
+    <join-after :details="details" v-if="joinStatus && !isEmpty"></join-after>
   </div>
 </template>
 
@@ -17,23 +16,19 @@
       joinAfter,
       joinBefore
     },
-    data() {
-      return {
-        // joinStatus: true, // joinAfter = true
-        details: []
-      };
-    },
     computed: {
       ...mapState('course', {
         selectedPlanIndex: state => state.selectedPlanIndex,
-        joinStatus: state => state.joinStatus
-      })
+        joinStatus: state => state.joinStatus,
+        details:  state => state.details
+      }),
+      isEmpty() {
+        return Object.keys(this.details).length == 0;
+      }
     },
     created(){
       this.getCourseDetail({
         courseId: this.$route.params.id
-      }).then(res => {
-        this.details = res;
       })
     },
     methods: {

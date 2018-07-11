@@ -25,15 +25,12 @@
           :hiddeTitle=true
           class="join-after-dirctory"
           :tryLookable="details.tryLookable"
-          :courseItem="details.courseItem"></directory>
+          :courseItems="details.courseItems"></directory>
       </template>
 
       <template v-else>
         <!-- 课程计划 -->
-        <detail-plan
-          :price="details.price"
-          :courseSet="details.courseSet"
-          ></detail-plan>
+        <detail-plan></detail-plan>
 
         <div class="segmentation"></div>
         <!-- 课程介绍 -->
@@ -53,6 +50,7 @@ import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
+import { mapState } from 'vuex';
 
 export default {
   props: ['details'],
@@ -60,17 +58,28 @@ export default {
     return {
       active: 0,
       tabs: ['课程目录', '课程简介'],
-      progress: '20%'
     }
   },
+  computed: {
+    progress () {
+      return (this.details.learnedNum /
+        this.details.publishedTaskNum).toFixed(2)*100+'%';
+    }
+  },
+  // watch: {
+  //   'details': {
+  //     deep: true,
+  //     handler: function(v) {
+  //       this.active = 0;
+  //       console.log(v, '22')
+  //     }
+  //   }
+  // },
   components: {
     Directory,
     DetailHead,
     DetailPlan,
     Teacher
-  },
-  created(){
-    console.log('after', this.details)
   },
   methods: {
     onTabClick(){

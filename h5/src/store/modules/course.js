@@ -2,29 +2,29 @@ import Api from '@/api';
 import * as types from '../mutation-types';
 
 const state = {
-  selectedPlanIndex: 0,
+  selectedPlanId: 0,
   joinStatus: false, // 当前计划是否已加入学习
   sourceType: 'img', //
-  details: {}
+  details: {},
+  taskId: 0 // 任务id
 };
 
 const hasJoinedCourse = course => course.access.code === 'member.member_exist';
 
 const mutations = {
-  [types.SET_PLAN_INDEX](currentState, payload) {
-    currentState.selectedPlanIndex = payload;
-    currentState.joinStatus = hasJoinedCourse(payload[currentState.selectedPlanIndex]);
-  },
   [types.GET_COURSE_DETAIL](currentState, payload) {
+    currentState.selectedPlanId = payload.id;
     currentState.details = payload;
-    currentState.joinStatus = hasJoinedCourse(payload[currentState.selectedPlanIndex]);
+    currentState.joinStatus = hasJoinedCourse(payload);
+    console.log('current', currentState);
   },
   [types.JOIN_COURSE](currentState, payload) {
     currentState.joinStatus = true;
     console.log('join-course', payload);
   },
   [types.SET_SOURCETYPE](currentState, payload) {
-    currentState.sourceType = payload;
+    currentState.sourceType = payload.sourceType;
+    currentState.taskId = payload.taskId;
   }
 };
 

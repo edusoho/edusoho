@@ -21,11 +21,6 @@ const config = [
     method: 'GET'
   },
   {
-    name: 'getCourses',
-    url: '/course_sets',
-    method: 'GET'
-  },
-  {
     name: 'discoveries',
     url: '/pages/h5/discoveries',
     method: 'GET'
@@ -66,6 +61,11 @@ const config = [
     name: 'joinCourse',
     url: '/courses/{id}/members',
     method: 'POST'
+  }, {
+    // 课时播放
+    name: 'getMedia',
+    url: '/courses/{courseId}/task_medias/{taskId}',
+    method: 'GET'
   }
 ];
 
