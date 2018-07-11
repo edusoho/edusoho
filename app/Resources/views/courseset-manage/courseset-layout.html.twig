@@ -6,3 +6,6 @@
     <li class="active">{{ courseSet.title|plain_text(21) }}</li>
   </ol>
 {% endblock %}
+{% block courseset_header %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 0})) }}
+{% endblock %}
