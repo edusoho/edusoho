@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
+use AppBundle\Common\ArrayToolkit;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -19,8 +20,8 @@ class PageDiscovery extends AbstractResource
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         
-        $hotCourseList = $this->getCourseService()->findCoursesByCourseSet('hotSeq');
-        $recommendedCourseList = $this->getCourseService()->findCoursesByCourseSet(
+        $hotCourseList = $this->findCoursesByCourseSet('hotSeq');
+        $recommendedCourseList = $this->findCoursesByCourseSet(
             array('recommendedSeq' => 'DESC', 'recommendedTime' => 'DESC')
         );
 
@@ -46,12 +47,30 @@ class PageDiscovery extends AbstractResource
         return $result;
     }
 
+    protected function findCoursesByCourseSet($orderBy)
+    {
+        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, 4);
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $courses = $this->getCourseService()->fillCourseTryLookVideo($courses);
+
+        return array('courses' => $courses, 'courseSets' => $courseSets);
+    }
+
     /**
      * @return \Biz\Course\Service\CourseService
      */
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
     }
 
     /**

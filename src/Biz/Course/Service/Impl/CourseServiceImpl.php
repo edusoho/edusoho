@@ -1951,17 +1951,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $liveCourses;
     }
 
-    public function findCoursesByCourseSet($orderBy)
-    {
-        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, 4);
-        $courses = $this->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
-        $courses = $this->fillCourseTryLookVideo($courses);
-
-        return array('courses' => $courses, 'courseSets' => $courseSets);
-    }
-
-    protected function fillCourseTryLookVideo($courses)
+    public function fillCourseTryLookVideo($courses)
     {
         if (!empty($courses)) {
             $tryLookAbleCourses = array_filter($courses, function ($course) {
@@ -1976,7 +1966,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $activities = array_filter($activities, function ($activity) use ($tasks) {
                 return $tasks[$activity['id']]['status'] === 'published';
             });
-
+            //返回有云视频任务的课程
             $activities = ArrayToolkit::index($activities, 'fromCourseId');
 
             foreach ($courses as &$course) {

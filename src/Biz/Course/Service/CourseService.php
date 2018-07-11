@@ -250,5 +250,5 @@ interface CourseService
      */
     public function appendReservationConditions($conditions);
 
-    public function findCoursesByCourseSet($orderBy);
+    public function fillCourseTryLookVideo($courses);
 }
