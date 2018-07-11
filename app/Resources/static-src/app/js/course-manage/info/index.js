@@ -338,3 +338,11 @@ jQuery.validator.addMethod('live_capacity', function (value, element) {
 
   return true;
 });
+
+
+import Intro from './intro';
+
+setTimeout(function() {
+  let intro = new Intro();
+  
+}, 500);

@@ -1,4 +1,11 @@
 @import '~common/variable.less';
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
+}
+
 .introjs-overlay {
   position: absolute;
   box-sizing: content-box;
@@ -197,8 +204,8 @@ tr.introjs-showElement > th {
   visibility: visible;
   padding: 10px;
   background-color: white;
-  min-width: 200px;
-  max-width: 300px;
+  min-width: 360px;
+  // max-width: 300px;
   border-radius: 3px;
   box-shadow: 0 1px 10px rgba(0,0,0,.4);
   -webkit-transition: opacity 0.1s ease-out;
@@ -528,11 +535,12 @@ tr.introjs-showElement > th {
     padding: 5px 10px;
     color: #fff;
     text-shadow: none;
-    // .es-transition(all,0);
-    margin-left: 13px;
+    margin: 10px;
     border-radius: 4px;
+    .es-transition;
     &:hover,
     &:focus {
+      .es-transition;
       border-color: @brand-primary;
       background-color: darken(@brand-primary,10%);
       color:#fff;
@@ -572,10 +580,12 @@ tr.introjs-showElement > th {
     color: #fff;
     text-shadow: none;
     // .es-transition(all,0);
-    margin-left: 13px;
+    margin: 10px;
     border-radius: 4px;
+    .es-transition;
     &:hover,
     &:focus {
+      .es-transition;
       border-color: @brand-primary;
       background-color: darken(@brand-primary,10%);
       color:#fff;

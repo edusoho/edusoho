@@ -275,10 +275,17 @@
   .border-top-left-radius(0) !important;
   .border-top-right-radius(0) !important;
 }
+
+.nav-header-section-step {
+  float: right;
+  height: 48px;
+}
 .nav-header-section.nav {
   margin-bottom: 0;
   border: none;
   .nav-header-section__item {
+    padding-top: 16px;
+    line-height: 1;
     @media (max-width: @screen-xs-min) {
       margin-right: 8px;
       &:first-child {
@@ -286,11 +293,13 @@
       }
     }
 
-    margin-right: 64px;
+    margin: 0 32px;
     &.active > a {
       color: @cd-dark-major;
     }
     > a {
+      font-size: 16px;
+      font-weight: 500;
       padding: 0 0 16px 0;
       line-height: 1;
       color: @cd-dark-minor;
