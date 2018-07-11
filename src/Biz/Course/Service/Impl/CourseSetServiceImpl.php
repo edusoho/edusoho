@@ -979,7 +979,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->refreshHotSeq();
     }
 
-    public function findCourseSetsbyOrder($orderBy)
+    public function findCoursesbyCourseSetOrder($orderBy)
     {
         $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
         $courseSets = $this->searchCourseSets($conditions, $orderBy, 0, 4);
@@ -998,40 +998,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $courseSet['course'] = $courses[$courseSet['id']];
             }
         });
-        $homepageCourseSets = array();
-        foreach ($courseSets as $courseSet) {
+        $pageCourses = array();
+        $orderedCourses = ArrayToolkit::column($courseSets, 'course');
+        foreach ($orderedCourses as $orderedCourse) {
             $items = array(
-                'courseId' => $courseSet['course']['id'],
-                'image' => $this->courseSetCover($courseSet['cover']),
-                'title' => $courseSet['title'],
-                'summary' => $courseSet['summary'],
-                'minPrice' => $courseSet['minCoursePrice'],
-                'maxPrice' => $courseSet['maxCoursePrice'],
-                'memberNum' => $courseSet['studentNum'],
+                'id' => $orderedCourse['id'],
+                'price' => $orderedCourse['price'],
+                'courseSetId' => $orderedCourse['courseSetId'],
             );
-            array_push($homepageCourseSets, $items);
+            array_push($pageCourses, $items);
         }
-        return $homepageCourseSets;
-    }
-
-    protected function courseSetCover($cover, $type = 'large')
-    {
-        $coverPath = null;
-
-        if (!empty($cover) && !empty($cover[$type])) {
-            $coverPath = $cover[$type];
-        }
-
-        if (empty($coverPath)) {
-            $settings = $this->getSettingService()->get('default');
-            $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
-        }
-
-        if (empty($coverPath)) {
-            $coverPath = "/assets/img/default/courseSet.png";
-        }
-
-        return $coverPath;
+        return $pageCourses;
     }
 
     protected function fillCourseTryLookVideo($courses)

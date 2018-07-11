@@ -274,5 +274,5 @@ interface CourseSetService
 
     public function refreshHotSeq();
 
-    public function findCourseSetsbyOrder($orderBy);
+    public function findCoursesbyCourseSetOrder($orderBy);
 }
