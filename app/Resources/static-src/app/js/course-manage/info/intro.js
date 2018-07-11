@@ -23,6 +23,7 @@ export default class Intro {
     const self = this;
     $('body').on('click','.js-skip', (event) => {
       this.intro.exit();
+      this.$intro.removeClass('hidden');
     });
     $('body').on('click', '.js-plan-intro-btn', (event) => {
       $('html').scrollTop(0);
@@ -76,7 +77,6 @@ export default class Intro {
       console.log(this.intro);
       if (this.intro._currentStep == (this.intro._introItems.length - 1 ) ) {
         $('.introjs-nextbutton').before('<a class="introjs-button done-button js-skip">'+Translator.trans('intro.confirm_hint')+'<a/>');
-        this.$intro.removeClass('hidden');
       } else {
         $('.js-skip').remove();
       }
