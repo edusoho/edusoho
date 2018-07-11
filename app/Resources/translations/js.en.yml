@@ -454,6 +454,16 @@ course_set.manage.activity_link_hint: >
   <p class = "title"> Tasks </p>When designing learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 course_set.manage.upgrade_hint: >
   <p class = "title"> Feature Upgrade </p> The course management feature is now updated.
+course_set.manage.img: >
+  <div class="course-manage-spread"></div>
+course_set.manage.couseset_tab: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、课程文件、课程试卷、课程题库为共用功能，支持任意计划来进行引用。</div>
+course_set.manage.single_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">请进入默认计划设置，对首个计划的价格等内容进行设置。</div>
+course_set.manage.all_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">若需要创建更多计划，请通过全部计划进行设置。</div>
+course_set.manage.publish_courseset: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">点击发布课程，即可以将课程发布在前台，允许学员进行购买和学习。</div>
 course_set.manage.all_tutorial: >
   <div class = "btn-content"> <p> <a class='btn btn-success js-reset-intro %introBtnClassName%'> view the </a> </ p> <a class = 'btn btn- Info '> complete tutorial </a> <div>
 course_set.manage.hint: >

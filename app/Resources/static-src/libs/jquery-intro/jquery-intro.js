@@ -1267,7 +1267,7 @@
     if (this._options.hints) {
       for (var i = 0, l = this._options.hints.length; i < l; i++) {
         var currentItem = _cloneObject(this._options.hints[i]);
-        console.log(currentItem);
+
         if (typeof(currentItem.element) === 'string') {
           //grab the element with given selector from the page
           currentItem.element = document.querySelector(currentItem.element);
