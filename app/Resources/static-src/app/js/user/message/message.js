@@ -22,7 +22,7 @@ class Message {
       },
       ajax: true,
       submitSuccess() {
-        notify('success', Translator.trans('私信发送成功'));
+        notify('success', Translator.trans('notify.message_send_success'));
         $element.closest('.modal').modal('hide');
       },
       submitError(response) {

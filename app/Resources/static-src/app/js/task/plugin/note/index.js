@@ -25,7 +25,7 @@ setInterval(saveNote,30000);
 
 function saveNote($btn = null) {
   if(!$.trim($content.val())) {
-    $btn ? notify('danger', '请输入笔记内容！') : '';
+    $btn ? notify('danger', Translator.trans('course.notebook.empty_note_content_notice')) : '';
     return;
   }
   let $form = $('#task-note-plugin-form');
