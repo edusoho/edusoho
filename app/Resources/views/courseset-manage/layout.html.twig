@@ -8,20 +8,18 @@
           {# 面包屑courseset 和 course 分开 #}
         {% endblock %}
         {% block courseset_header %}
-          {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+          {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 0})) }}
         {% endblock %}
         {% block navbar %}
           {% include 'courseset-manage/navbar.html.twig' %}
         {% endblock %}
-        <div>
-          {% block course_header %}
-          {% endblock %}
-        </div>
+        {% block course_header %}
+        {% endblock %}
       </div>
     </div>
   {% endblock %}
   <div class="container cd-container">
-    <div class="cd-content courseset-manage-body">
+    <div class="cd-content courseset-manage-body {% block paddingClass %} courseset-manage-padding {% endblock %}">
       {% block sidebar %}
       {% endblock %}
 

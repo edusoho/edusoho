@@ -19,7 +19,7 @@
   <div class="course-manage-header-info">
     <h1 class="course-manage-header-info__title text-overflow">
       {% block title %}
-        <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
+        <a class="cd-link-major" href="{{basepath}}">{{ course.title }}</a>
       {% endblock %}
     </h1>
     <div class="course-manage-header-info__type">
@@ -29,50 +29,31 @@
     </div>
   </div>
 
-  <div class="course-manage-header-data">
-    <span class="course-manage-header-data__icon">{{ 'course.plan_task.total_tasks'|trans }}{{ course.lessonNum }}</span>
-    <span class="course-manage-header-data__icon">{{ 'course.plan_total_members'|trans }}{{course.studentNum}}</span>
-    <span class="course-manage-header-data__price color-danger">
-      {% include 'common/price.html.twig' with {'productPrice': course.price} %}
-    </span>
-  </div>
-  {% block action %}
-    <div class="pull-right hidden-xs">
-      {# 发布状态 #}
-      {% if course.status == 'published' %}
-        <div class="btn-group">
-          <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
-        </div>
-        <div class="btn-group">
-          {% if courseSet.type == 'live' %}
-            <a class="cd-btn cd-btn-primary" href="{{ path('course_set_manage_base', {id: courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
-          {% else %}
-            <a class="cd-btn cd-btn-primary" href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
-          {% endif %}
-        </div>
-      {% endif %}
 
+  {% block action %}
+    <div class="pull-right hidden-xs course-manage-header-btns">
       {# 未发布状态 #}
       {% if course.status != 'published' %}
-        <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
-        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-          <button class="cd-btn cd-btn-primary course-manage-header-more">
-            <i class="es-icon es-icon-morehoriz"></i>
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <a target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a>
-            </li>
-            <li>
-              {% if courseSet.type == 'live' %}
-                <a href="{{ path('course_set_manage_base', {id: courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
-              {% else %}
-                <a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{'course.btn.back_course_edit'|trans}}</a>
-              {% endif %}
-            </li>
-          </ul>
-        </div>
+        <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a><button class="cd-btn cd-btn-primary js-course-publish-btn cd-ml16" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
       {% endif %}
     </div>
   {% endblock %}
+
+  <div class="courseset-manage-header-data course-manage-header__price mt0">
+    <span class="cd-text-medium">{{ 'course.teach_plan_price'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num color-danger">{% include 'common/price.html.twig' with {'productPrice': course.price} %}</span></div>
+  </div>
+
+  <div class="courseset-manage-header-data mt0">
+    <span class="cd-text-medium">{{ 'course.plan_total_members'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
+  </div>
+
+  <div class="courseset-manage-header-data mt0">
+    <span class="cd-text-medium">{{ 'course.plan_task.total_tasks'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
+  </div>
+
+
+
 </div>

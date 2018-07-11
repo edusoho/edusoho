@@ -30,11 +30,11 @@ class courseInfo {
         values = JSON.parse($values);
       }
 
-      if ($item.hasClass('label-primary')) {
-        $item.removeClass('label-primary').addClass('label-default');
+      if ($item.hasClass('service-primary-item')) {
+        $item.removeClass('service-primary-item');
         values.splice(values.indexOf($item.data('code')), 1);
       } else {
-        $item.removeClass('label-default').addClass('label-primary');
+        $item.addClass('service-primary-item');
         values.push($item.data('code'));
       }
       
@@ -82,6 +82,13 @@ class courseInfo {
           required: true,
           live_capacity: true,
           positive_integer: true
+        },
+        title: {
+          required: true,
+          maxlength: 10,
+        },
+        intro: {
+          maxlength: 30
         },
         expiryDays: {
           required: () => {
@@ -195,6 +202,16 @@ class courseInfo {
       }
       this.initExpiryMode();
     });
+
+    $('input[name="enableBuyExpiryTime"]').on('change', (event) => {
+      if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
+        $('#buyExpiryTime').addClass('hidden');
+      } else {
+        $('#buyExpiryTime').removeClass('hidden');
+      }
+      this.initenableBuyExpiry();
+    });
+
   }
 
   initExpiryMode() {

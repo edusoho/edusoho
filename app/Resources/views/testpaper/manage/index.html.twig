@@ -10,15 +10,16 @@
 
 {% block main %}
 
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">
-      <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
-         class="btn btn-info btn-sm pull-right mls"><span class="es-icon es-icon-anonymous-iconfont"></span>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
-      {{ 'course.testpaper_manage.content_title'|trans }}
-      {{ slot('course_set.testpaper_import_btn.extension', {'courseSet': courseSet}) }}
+  <div role="courseset-manage-testpaper">
+    <div class="courseset-manage-body__title">{{ 'course.testpaper_manage.content_title'|trans }}
+      <div class="courseset-manage-body__btn">
+        <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
+          class="btn btn-info btn-sm pull-right mls"><span class="es-icon es-icon-anonymous-iconfont"></span>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
+        {{ slot('course_set.testpaper_import_btn.extension', {'courseSet': courseSet}) }}
+      </div>
     </div>
 
-    <div class="panel-body " id="quiz-table-container">
+    <div id="quiz-table-container">
 
       <table class="table table-striped table-hover" id="quiz-table">
         {{ web_macro.flash_messages() }}
@@ -48,7 +49,7 @@
       </table>
       <div>
         <label class="checkbox-inline"><input type="checkbox" autocomplete="off" data-role="batch-select"> {{'course.question_manage.select_all'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{ 'course.testpaper_manage.testpaper'|trans }}" data-url="{{ path('course_set_manage_testpaper_deletes',{courseSetId:courseSet.id}) }}">{{ 'course.testpaper_manage.delete_btn'|trans }}</button>
+        <button class="cd-btn cd-btn-default cd-btn-sm mlm" data-role="batch-delete" data-name="{{ 'course.testpaper_manage.testpaper'|trans }}" data-url="{{ path('course_set_manage_testpaper_deletes',{courseSetId:courseSet.id}) }}">{{ 'course.testpaper_manage.delete_btn'|trans }}</button>
       </div>
 
       {{ web_macro.paginator(paginator) }}

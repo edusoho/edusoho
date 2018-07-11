@@ -64,6 +64,7 @@ site.default.bar: Bar
 site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
+site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
@@ -777,6 +778,7 @@ course.remove_students_tips: 'The course is closed. But students of the course c
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
+course.price.show: 课程价格
 
 course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
@@ -790,6 +792,7 @@ course.announcement.default_content: '<span class="text-warning">(click to view)
 course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
 course.course_member_count: '%studentsNum% students'
 course.activity: Activity
+course.plan: 课程计划
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
@@ -823,6 +826,7 @@ course.teaching_plan.expiry_date.date_mode: 'Fix time'
 course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
 course.teaching_plan.publish_btn: 'Publish'
+course.teaching_plan.manage: 计划管理
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
@@ -832,6 +836,7 @@ course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
 course.plan_base_info: 基础设置
 course.plan_setup.name: 'Program name'
+course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock'
@@ -844,12 +849,16 @@ course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
+course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: Goal
 course.plan_setup.audiences: 'Target users'
+course.base_setup: 基础设置
+course.base_setup.rules: 基础规则
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
+course.marketing_setup.setup.can_not_join: 不可加入
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
@@ -863,7 +872,7 @@ course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
 course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
 course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
-course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry Mode can not be edited since the program was published, but expiry date can be edited while course or the program was closed.'
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
@@ -873,6 +882,8 @@ course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
 course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
+course.marketing_setup.preview.not.support.try_watch: 不支持试看
+course.marketing_setup.preview.minutes.try_watch: 分钟试看
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
@@ -1085,8 +1096,11 @@ course.replay_manage.live_show.edit: 'Edit when record'
 course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
 course.teach_plan_manage: 'Programs'
+course.teach_plan_price: 计划价格
 course.cover: 'Course cover'
+
 course.cover_image: 'Cover'
+course.cover.change: 修改封面图片
 course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
@@ -1113,12 +1127,13 @@ course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
 course.filter.all_plan: 全部计划
-course.student_member: 学员总数
+course.student_member: 课程学员
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
+course.check.plan: 查看计划
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
@@ -1243,6 +1258,15 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
+course.plan_info: >
+  <p class="cd-dark-minor cd-mb24">教学计划使用方式介绍：</p>
+  <p>为了更快捷的组织教学，计划管理可以让单个课程支持多种教学组织模式：</p>
+  <p>1、支持不同时期开设相同内容的课程：三月班、四月班、五月班；</p>
+  <p>2、支持区分学员，开设多个教学班：数学一班、数学二班、数学三班；</p>
+  <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
+  <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
+  <p class="cd-mt24">欢迎您
+
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.notes: 'Notes'

@@ -70,6 +70,7 @@ site.default.bar: 条
 site.default.times: 次
 site.default.detail: 明细
 site.default.program_name: 默认教学计划
+site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
@@ -877,6 +878,7 @@ course.create.rank: 头衔
 course.create.introduction: 自我介绍
 course.id: 课程编号
 course.price_setting: 课程价格设置
+
 course.is_student_tips: 您已经是该教学计划的学员了！
 course.payments_disabled_tips: 尚未开启支付模块，无法购买课程。
 course.delete_from_classroom_tips: 课程已从%classroomName%中移除
@@ -892,6 +894,7 @@ course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
+course.price.show: 课程价格
 
 course.minimum_price.unit: %price%%unit%起
 course.origin_price.RMB: %originPrice%元
@@ -908,7 +911,7 @@ course.students_count: >
 course.course_member_count: %studentsNum%人
 course.activity: 活动
 course.praise: 好评课程
-
+course.plan: 课程计划
 course.teaching_plan: 教学计划
 course.teaching_plan.free: 自由式学习
 course.teaching_plan.locked: 解锁式学习
@@ -946,8 +949,9 @@ course.teaching_plan.expiry_date.date_mode: 固定周期
 course.teaching_plan.expiry_date.end_date_mode: 按截止日期
 course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
+course.teaching_plan.manage: 计划管理
 course.teaching_plan.delete_btn: 删除
-course.teaching_plan.copy_btn: 复制为
+course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览
 course.teaching_plan.more_btn: 更多
 course.teaching_plan.manage_btn: 管理
@@ -956,6 +960,7 @@ course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 计划设置
 course.plan_base_info: 基础设置
 course.plan_setup.name: 计划名称
+course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 学习模式
 course.plan_setup.mode.free: 自由式学习
 course.plan_setup.mode.locked: 解锁式学习
@@ -968,13 +973,16 @@ course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
 course.plan_setup.summary: 计划简介
+course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: 课程目标
 course.plan_setup.audiences: 适应人群
-
+course.base_setup: 基础设置
+course.base_setup.rules: 基础规则
 course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
-course.marketing_setup.setup.can_join: 加入设置
+course.marketing_setup.setup.can_join: 可加入
+course.marketing_setup.setup.can_not_join: 不可加入
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
@@ -988,7 +996,7 @@ course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
@@ -1000,6 +1008,8 @@ course.marketing_setup.preview.set_task.task_name: %name%%taskName%
 course.marketing_setup.preview.set_task.free: 免费
 course.marketing_setup.preview.set_task.free_tips: 免费活动仅支持
 course.marketing_setup.preview.try_watch: 视频试看
+course.marketing_setup.preview.not.support.try_watch: 不支持试看
+course.marketing_setup.preview.minutes.try_watch: 分钟试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
 course.marketing_setup.services.show_services: 展示承诺服务
@@ -1227,12 +1237,14 @@ course.replay_manage.upload_modal.edit_replay: 编辑回放视频
 course.replay_manage.upload_modal.add_replay: 添加回放视频
 
 course.teach_plan_manage: 教学计划
+course.teach_plan_price: 计划价格
 
 course.cover: 课程封面
+course.cover.change: 修改封面图片
 course.cover_image: 封面图片
 course.cover_image.content_title: 封面图片
 course.cover_image.upload_tips: >
-  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>建议图片大小不超过<strong>2MB</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
@@ -1267,12 +1279,13 @@ course.status.serialized: 更新中
 course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
-course.student_member: 学员总数
+course.student_member: 课程学员
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
 course.preview.course: 预览课程
 course.preview.plan: 预览计划
+course.check.plan: 查看计划
 course.share: 分享
 course.belong_to_classroom_tips: >
   该课程属于
@@ -1394,6 +1407,15 @@ course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
 course.btn.publish_task: 发布计划
+course.plan_info: >
+  <p class="cd-dark-minor cd-mb24">教学计划使用方式介绍：</p>
+  <p>为了更快捷的组织教学，计划管理可以让单个课程支持多种教学组织模式：</p>
+  <p>1、支持不同时期开设相同内容的课程：三月班、四月班、五月班；</p>
+  <p>2、支持区分学员，开设多个教学班：数学一班、数学二班、数学三班；</p>
+  <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
+  <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
+  <p class="cd-mt24">欢迎您使用教学计划管理，新的功能将更好的支持您开展教学工作，您的声音是我们前进的动力！</p>
+
 
 # 课程扩展
 course.tab.tasks: '目录'
@@ -1657,8 +1679,8 @@ course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式
 course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
-course.plan_task.total_tasks: 课时总数：
-course.plan_total_members: 学员总数：
+course.plan_task.total_tasks: 课时总数
+course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 已发布课时数：
 course.plan_task.unpublished_lessons: 未发布课时数：
 course.plan_task.everyday_finish_tasks: >
