@@ -9,15 +9,15 @@
     {% endif %}
   </li>
 
-{% if get_course_count(courseSet.id) == 1 %}
-  <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}">
-    {% if courseSet.locked %}
-      <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ '默认教学计划'|trans }}</a>
-    {% else %}
-      <a class="nav-header-section__link" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ '默认教学计划'|trans }}</a>
-    {% endif %}
-  </li>
-{% endif %}
+  {% if get_course_count(courseSet.id) == 1 %}
+    <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}">
+      {% if courseSet.locked %}
+        <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ '默认教学计划'|trans }}</a>
+      {% else %}
+        <a class="nav-header-section__link" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">{{ '默认教学计划'|trans }}</a>
+      {% endif %}
+    </li>
+  {% endif %}
 
   <li class="nav-header-section__item {% if side_nav == 'plan' %}active{% endif %}">
     {% if courseSet.locked %}
