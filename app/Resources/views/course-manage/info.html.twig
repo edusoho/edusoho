@@ -62,11 +62,12 @@
         </label>
       </div>
     </div>
-    {% if courseSet.type != 'live' %}
+    {% if courseSet.type == 'live' %}
+      {% include 'course-manage/marketing/set-live-capacity.html.twig' %}
+    {% else %}
       {% include 'course-manage/marketing/set-preview.html.twig' %}
     {% endif %}
-
-    <div class="form-group js-services {% if course.showServices|default(1) == 0 %}hidden{% endif %}">
+    <div class="form-group js-services">
       <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.provide_services'|trans }}</label>
       <div class="col-sm-8 form-control-static">
         {% set serviceTags = services(course.services | default([])) %}
