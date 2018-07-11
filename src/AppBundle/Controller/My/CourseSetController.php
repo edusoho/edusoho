@@ -81,8 +81,8 @@ class CourseSetController extends CourseBaseController
                 if ($courseNum > 1) {
                     $set['redirect_path'] = $that->generateUrl('course_set_manage_courses', array('courseSetId' => $set['id']));
                 } else {
-                    $course = $service->findCoursesByCourseSetId($set['id']);
-                    $set['redirect_path'] = $that->generateUrl('course_set_manage_course_tasks', array('courseId' => $course['0']['id'], 'courseSetId' => $set['id']));
+                    $courses = $service->findCoursesByCourseSetId($set['id']);
+                    $set['redirect_path'] = $that->generateUrl('course_set_manage_course_info', array('courseSetId' => $set['id'], 'courseId' => $courses['0']['id']));
                 }
 
                 $set['courseNum'] = $courseNum;
