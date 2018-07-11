@@ -8,7 +8,6 @@
       <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.base'|trans }}</a>
     {% endif %}
   </li>
-
 {% if get_course_count(courseSet.id) == 1 %}
   <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}">
     {% if courseSet.locked %}
@@ -18,7 +17,6 @@
     {% endif %}
   </li>
 {% endif %}
-
   <li class="nav-header-section__item {% if side_nav == 'plan' %}active{% endif %}">
     {% if courseSet.locked %}
       <a class="nav-header-section__link" href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: courseSet.defaultCourseId}) }}">
@@ -30,7 +28,6 @@
       <a class="nav-header-section__link" href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">{{ 'course.filter.all_plan'|trans }}</a>
     {% endif %}
   </li>
-
 
   <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
     {% if courseSet.locked %}
