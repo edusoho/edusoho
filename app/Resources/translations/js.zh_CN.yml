@@ -183,6 +183,14 @@ activity.live.content_title: 直播说明
 activity.live.entry_live_room: 进入直播教室
 activity.live.count_down_title: 倒计时
 activity.live.not_created_notice: 直播教室尚未创建
+activity.live.overlap_time_notice: 所选时间已经有直播了，请换个时间
+activity.live.day: 天
+activity.live.hour: 时
+activity.live.minute: 分
+activity.live.second: 秒
+activity.live.started_tip: 直播已经开始
+activity.live.started_or_ended_notice: 直播已经开始或者结束,无法编辑
+
 
 activity.audio_manage.length_required_error_hint: 请输入时长
 activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
@@ -434,6 +442,10 @@ course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
 course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
+course.manage.reward_point_required_hint: 请输入教学计划奖励积分
+course.manage.task_reward_point_required_hint: 请输入计划任务奖励积分
+course.manage.max_point_error_hint: 请输入0-100000的整数
+course.manage.student_expiry_day_hint: 只有按天数设置的学习有效期，才可手动增加有效期。
 
 material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
@@ -471,9 +483,16 @@ course.question.create.choose_min_num_hint: 选项最少%minNum%个!
 course.question.create_hint: 新增选项
 course.question.right_answer_hint: 正确答案
 course.question.right_answer_content_hint: 请输入选项内容
+course.question.type.single_choice: 单选题
 
 course.notebook.delete_hint: 真的要删除该笔记吗？
+course.notebook.empty_note_content_notice: 请输入笔记内容！
 
+course.question_marker.selection_rate: 选择率
+course.question_marker.correct_rate: 正确率
+course.question_marker.gap_filling: 填空
+course.question_marker.view_analysis: 查看解析
+course.question_marker.back_to_questions: 返回题目
 
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
@@ -482,6 +501,8 @@ classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
 classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
+classroom.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href="javascript:document.location.reload()">重试</a>或<a href="javascript:window.close();">关闭</a>
+classroom.live_room.retry_or_close: <a href="javascript:document.location.reload()">重试</a>或<a href="javascript:window.close();">关闭</a>
 
 thread.post.reply: 回复
 thread.post.reply_error_hint: 发表回复失败，请重试
@@ -541,6 +562,9 @@ open_course.file_format_conversion_failed_hint: (文件格式转换失败)
 open_course.unpublish_success_hint: 课时已取消发布!
 
 open_course.lesson_delete_success_hint: 课时已删除!
+
+open_course.collect: 收藏
+open_course.collected: 已收藏
 
 order.create.minus: 抵扣
 order.create.discount.minus: 打折活动抵扣
@@ -660,6 +684,8 @@ validate.valid_score_input.message: 请输入正确的分数格式，最多保�
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
 validate.success: 验证成功
 validate.fail: 验证失败
+validate.expiry_days_required_hint: 请输入有效期
+validate.empty_content_hint: 请输入内容!
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -697,6 +723,11 @@ notify.pay_failed.message: 支付失败
 notify.share_success.message: 分享成功
 notify.share_fail.message: 分享失败
 notify.reward_point: 积分
+notify.sms_send_success.message: 短信发送成功
+notify.password_reset_email_send_success.message: 重置密码邮件已发送
+notify.password_reset_success.message: 重置密码成功
+notify.message_send_success: 私信发送成功
+notify.danger_operation_message: 这是警告消息<a href="http://demo.edusoho.com" class="notify-action">操作</a>
 
 json_response.nickname_can_use.message: 该昵称可以使用
 json_response.verification_code_error.message: 验证码错误

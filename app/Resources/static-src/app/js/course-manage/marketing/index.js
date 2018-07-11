@@ -88,12 +88,12 @@ class Marketing {
           date: Translator.trans('course.manage.buy_expiry_time_error_hint')
         },
         rewardPoint: {
-          required: Translator.trans('请输入教学计划奖励积分'),
-          max: Translator.trans('请输入0-100000的整数')
+          required: Translator.trans('course.manage.reward_point_required_hint'),
+          max: Translator.trans('course.manage.max_point_error_hint')
         },
         taskRewardPoint: {
-          required: Translator.trans('请输入计划任务奖励积分'),
-          max: Translator.trans('请输入0-100000的整数')
+          required: Translator.trans('course.manage.task_reward_point_required_hint'),
+          max: Translator.trans('course.manage.max_point_error_hint')
         },
       }
     });

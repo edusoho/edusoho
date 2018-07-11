@@ -154,6 +154,13 @@ activity.live.content_title: Live description
 activity.live.entry_live_room: Enter the live classroom
 activity.live.count_down_title: Countdown
 activity.live.not_created_notice: Live classroom not yet created
+activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
+activity.live.day: day
+activity.live.hour: hour
+activity.live.minute: minute
+activity.live.second: second
+activity.live.started_tip: The live has already started
+activity.live.started_or_ended_notice: The live has already started or finshished,unable to edit
 
 activity.audio_manage.length_required_error_hint: Please enter the durations
 activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
@@ -490,6 +497,10 @@ course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
+course.manage.reward_point_required_hint: please input the reward point
+course.manage.task_reward_point_required_hint: please input the task reward point
+course.manage.max_point_error_hint: Please input an integer from 0-10000000
+course.manage.student_expiry_day_hint: The validity period can be manually increased only by the learning expiration date set by the number of days.
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
@@ -526,9 +537,16 @@ course.question.create.choose_min_num_hint:  Maximum %minNum% options
 course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
+course.question.type.single_choice: single choice
 
 course.notebook.delete_hint: Really want to delete the note?
+course.notebook.empty_note_content_notice: please input the note content!
 
+course.question_marker.selection_rate: selection rate
+course.question_marker.correct_rate: correct rate
+course.question_marker.gap_filling: gap filling
+course.question_marker.view_analysis: view analysis
+course.question_marker.back_to_questions: back to questions
 
 classroom.manage.tag_required_hint: Please enter a tag
 classroom.manage.delete_course_hint: Do you want to remove the course from the class?
@@ -537,6 +555,10 @@ classroom.manage.delete_course_fail_hint: Course removal failed
 classroom.manage.expiry_mode_days_error_hint: Please enter the number of valid days
 classroom.manage.expiry_mode_date_error_hint: Please enter the due date
 classroom.manage.coin_price_hint: Equivalent to% coinPrice %% coinName%
+classroom.live_room.entry_error_hint: >
+  Enter the live classroom error, please contact the administrator, <a href="javascript:document.location.reload()"> retry </a> or <a href="javascript:window.close();"> off </a>
+classroom.live_room.retry_or_close: >
+  <a href="javascript:document.location.reload()"> retry </a> or <a href="javascript:window.close();"> off </a>
 
 thread.post.reply: Reply
 thread.post.reply_error_hint: Post reply failed, please try again
@@ -596,6 +618,9 @@ open_course.file_format_conversion_failed_hint: (File format conversion failed)
 open_course.unpublish_success_hint: Lesson unpublished!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
+
+open_course.collect: collect
+open_course.collected: collected
 
 order.create.minus: deduct
 order.create.discount.minus: discount deduction
@@ -715,6 +740,8 @@ validate.valid_score_input.message: Please enter the correct decimals, leaving o
 validate.mobile_or_email_message: please input the right mobile/email
 validate.success: Verified successfully
 validate.fail: Failed to verify
+validate.expiry_days_required_hint: please input the expiry days
+validate.empty_content_hint: please input content!
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -752,6 +779,11 @@ notify.pay_failed.message: Payment failed！
 notify.share_success.message: Share successfully
 notify.share_fail.message: Share failed
 notify.reward_point: Reward Point
+notify.sms_send_success.message: sms sent successfully
+notify.password_reset_email_send_success.message: reset password mail has been sent
+notify.password_reset_success.message: reset password successfully
+notify.message_send_success: message sent successfully
+notify.danger_operation_message: This is a warning message <a href="http://demo.edusoho.com" class="notify-action">operation</a>
 
 json_response.nickname_can_use.message: The nickname can be used
 json_response.verification_code_error.message: Verification code error
