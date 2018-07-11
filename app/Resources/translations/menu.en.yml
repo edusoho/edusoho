@@ -80,6 +80,7 @@ admin.course.basic.basic_tab.recommend_btn: Recommend
 admin.course.basic.basic_tab.preview_btn: Preview
 admin.course.basic.basic_tab.close_btn: Close
 admin.course.basic.basic_tab.publish_submit_btn: Publish
+admin.course.basic.basic_tab.clone_btn: Clone
 admin.course.basic.basic_tab.delete_submit_btn: Delete
 
 ##班级管理模块
