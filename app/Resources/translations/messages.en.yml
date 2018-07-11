@@ -3840,6 +3840,7 @@ admin.course_manage.manage.auth_user: 'Validate Users'
 admin.course_manage.manage.user_passwd: 'User Password'
 admin.course_manage.manage.input_passwd_placeholder: 'Please input your password'
 admin.course_manage.manage.week_excellent_courses: 'Weekly Excellent Course'
+admin.course_manage.manage.course_num: 'Course Num'
 admin.course_manage.file.name_title: 'Files'
 admin.course_manage.file.type_option: 'File Type'
 admin.course_manage.file.creator_placeholer: Creator
