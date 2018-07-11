@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.teach_plan_manage'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'plan' %}
-{% set isMulPlansCourse = is_mul_plans_course(courseSet.id) %}
+{% set hasMulCourses = has_mul_courses(courseSet.id) %}
 {% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
@@ -12,7 +12,7 @@
         <div class="js-sort-group hidden-xs">
           <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
             data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button>
-          {% if isMulPlansCourse %}<button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
+          {% if hasMulCourses %}<button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
         </div>
         <div class="js-sort-group hidden-xs hide">
           <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>
@@ -22,8 +22,8 @@
       <div class="cd-select teaching-type-select" id="select-single">
         <div class="select-value">{{ 'course.filter.all_plan'|trans }}</div>
         <ul class="select-options">
-          <li class="checked" data-value="">{{ 'course.filter.all_plan'|trans }}123</li>
-          <li data-value="published">{{ 'course.status.published'|trans }}111</li>
+          <li class="checked" data-value="">{{ 'course.filter.all_plan'|trans }}</li>
+          <li data-value="published">{{ 'course.status.published'|trans }}</li>
           <li data-value="draft">{{ 'course.status.unpublished'|trans }}</li>
           <li data-value="closed">{{ 'course.status.closed'|trans }}</li>
         </ul>
@@ -32,11 +32,11 @@
     <ul class="js-plan-list courses-manage-list sortable-list" data-sort-url="{{ path('course_sort', {courseSetId: courseSet.id}) }}">
       {% for course in courses %}
         <li class="cd-mb24 js-plan-item courses-manage-item js-status-{{ course.status }}" id="course-plan-{{ course.id }}" data-course-id="{{ course.id }}">
-          {% include 'courseset-manage/course-list.html.twig' with { isMulPlansCourse: isMulPlansCourse }%}
+          {% include 'courseset-manage/course-list.html.twig' with { hasMulCourses: hasMulCourses }%}
         </li>
     {% endfor %}
     </ul>
-    {% if not isMulPlansCourse %}
+    {% if not hasMulCourses %}
       <div class="courses-manage-plan-info">
         {{ 'course.plan_info'|trans|raw }}
       </div>

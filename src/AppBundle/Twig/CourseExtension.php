@@ -52,7 +52,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
             new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
             new \Twig_SimpleFunction('get_course_count', array($this, 'getCourseCount')),
-            new \Twig_SimpleFunction('is_mul_plans_course', array($this, 'isMulPlansCourse')),
+            new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
         );
     }
 
@@ -71,11 +71,9 @@ class CourseExtension extends \Twig_Extension
     /**
      * 判断一个课程是否有多个计划
      */
-    public function isMulPlansCourse($courseSetId, $isPublish = 0)
+    public function hasMulCourses($courseSetId, $isPublish = 0)
     {
-        $plansCount = $this->getCourseCount($courseSetId, $isPublish);
-
-        return $plansCount > 1;  //大于1个，说明有个多个
+        return $this->getCourseService()->hasMulCourses($courseSetId, $isPublish);
     }
 
     public function getCourseDailyTasksNum($courseId)

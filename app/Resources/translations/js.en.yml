@@ -176,6 +176,7 @@ activity.download_manage.materials_exist_error_hint: The file is already added, 
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
 
+course.manage.title_maxlength_error_hint: The length of title should not exceed 30
 activity.exercise_manage.title_required_error_hint: Please fill in the title
 activity.exercise_manage.title_range_error_hint: Title Source
 activity.exercise_manage.item_count_required_error_hint: Please fill in the number of questions

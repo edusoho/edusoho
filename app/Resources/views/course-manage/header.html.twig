@@ -34,7 +34,11 @@
     <div class="pull-right hidden-xs course-manage-header-btns">
       {# 未发布状态 #}
       {% if course.status != 'published' %}
-        <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a><button class="cd-btn cd-btn-primary js-course-publish-btn cd-ml16" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
+        <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a>
+        <button class="cd-btn cd-btn-primary js-course-publish-btn cd-ml16" 
+          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
+          data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
+          data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
       {% endif %}
     </div>
   {% endblock %}

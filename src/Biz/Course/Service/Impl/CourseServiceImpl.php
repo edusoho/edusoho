@@ -228,7 +228,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'maxStudentNum',
                 'services',
-                'tryLookLength'
+                'tryLookLength',
             )
         );
         if (!empty($fields['services'])) {
@@ -632,6 +632,50 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
+    }
+
+    public function hasNoTitleForDefaultPlanInMulPlansCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ($this->hasMulCourses($course['courseSetId'])) {
+            $defaultCourse = $this->getDefaultCourseByCourseSetId($course['courseSetId']);
+
+            return !empty($defaultCourse) && empty($defaultCourse['title']);
+        }
+
+        return false;
+    }
+
+    public function publishAndSetDefaultCourseType($courseId, $title)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        if ($this->hasMulCourses($course['courseSetId'])) {
+            $defaultCourse = $this->getDefaultCourseByCourseSetId($course['courseSetId']);
+            try {
+                $this->beginTransaction();
+                $this->updateCourse($defaultCourse['id'], array('title' => $title));
+                $this->publishCourse($courseId);
+                $this->commit();
+            } catch (\Exception $e) {
+                $this->rollback();
+                throw $e;
+            }
+        }
+    }
+
+    public function hasMulCourses($courseSetId, $isPublish = 0)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+        if ($isPublish) {
+            $conditions['status'] = 'published';
+        }
+
+        $count = $this->countCourses(array('courseSetId' => $courseSetId));
+
+        return $count > 1;
     }
 
     protected function validateExpiryMode($course)

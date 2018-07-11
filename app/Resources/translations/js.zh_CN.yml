@@ -408,6 +408,7 @@ course_set.manage.upgrade_step3_hint:  >
 course_set.manage.upgrade_step5_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 
+course.manage.title_maxlength_error_hint: 教学计划标题长度不能超过30字符
 course.manage.title_required_error_hint: 请输入教学计划标题
 course.manage.expiry_end_date_error_hint: 请输入结束日期
 course.manage.expiry_start_date_error_hint: 请输入开始日期

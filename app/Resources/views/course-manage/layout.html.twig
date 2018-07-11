@@ -3,8 +3,8 @@
   {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
 {% endblock %}
 
-{% set isMulPlansCourse = is_mul_plans_course(courseSet.id) %}
-{% set side_nav =  isMulPlansCourse ? 'plan' : 'default-course-info' %}
+{% set hasMulCourses = has_mul_courses(courseSet.id) %}
+{% set side_nav =  hasMulCourses ? 'plan' : 'default-course-info' %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
@@ -21,7 +21,7 @@
 {% block paddingClass %}course-manage-body {% endblock %}
 
 {% block course_header %}
-  {% if isMulPlansCourse %}
+  {% if hasMulCourses %}
     <div class="course-manage-header-wrap">
       {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
     </div>
