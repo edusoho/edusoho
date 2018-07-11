@@ -230,7 +230,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'maxStudentNum',
                 'services',
-                'tryLookLength'
+                'tryLookLength',
             )
         );
         if (!empty($fields['services'])) {
@@ -244,7 +244,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
     }
-    
+
     public function updateCourse($id, $fields)
     {
         $this->tryManageCourse($id);
@@ -255,7 +255,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields,
             array(
                 'title',
-                'subtitle'
+                'subtitle',
                 'courseSetTitle',
                 'about', //@todo 目前没有这个字段
                 'courseSetId',
