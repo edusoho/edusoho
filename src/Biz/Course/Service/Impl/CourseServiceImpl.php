@@ -1957,6 +1957,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, 4);
         $courses = $this->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $courses = $this->fillCourseTryLookVideo($courses);
+
         return array('courses' => $courses, 'courseSets' => $courseSets);
     }
 
