@@ -353,7 +353,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $tasks = $this->findTasksByCourseId($courseId);
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = $this->getActivityService()->findActivities($activityIds, false);
         $activities = ArrayToolkit::index($activities, 'id');
 
         array_walk(
@@ -819,7 +819,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $tasks = $this->findTasksByChapterId($chapterId);
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = $this->getActivityService()->findActivities($activityIds, false);
         $activities = ArrayToolkit::index($activities, 'id');
 
         array_walk(
@@ -1209,7 +1209,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = $this->getActivityService()->findActivities($activityIds, false);
         $activities = ArrayToolkit::index($activities, 'id');
 
         $taskIds = ArrayToolkit::column($tasks, 'id');
