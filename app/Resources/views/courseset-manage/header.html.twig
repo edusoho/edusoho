@@ -42,6 +42,13 @@
           <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
         {% endblock %}
       </div>
+      <div class="courseset-manage-header-info__price color-danger">
+        {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
+          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}
+        {% else %}
+          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}<span class="cd-text-sm">～</span><span class="cd-text-sm">¥</span>{{ courseSet.maxCoursePrice }}
+        {% endif %}
+      </div>
     </div>
 
     <div class="courseset-manage-header-btn hidden-xs">
@@ -56,19 +63,6 @@
         {% endif %}
       {% endblock %}
 
-    </div>
-
-    <div class="courseset-manage-header-data">
-      <span class="cd-text-medium">{{ 'course.price.show'|trans }}</span>
-      <div class="cd-mt16 cd-dark-major">
-        <span class="courseset-manage-header-data__num color-danger">
-          {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
-            <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}
-          {% else %}
-            <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}～<span class="cd-text-sm">¥</span>{{ courseSet.maxCoursePrice }}
-          {% endif %}
-        </span>
-      </div>
     </div>
 
     <div class="courseset-manage-header-data">

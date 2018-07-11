@@ -127,6 +127,9 @@ class courseInfo {
           required: Translator.trans('course.manage.expiry_end_date_error_hint'),
           after: Translator.trans('course.manage.expiry_start_date_error_hint')
         }
+      },
+      submitSuccess: function(data) {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });
 
@@ -193,12 +196,16 @@ class courseInfo {
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
+        $('.js-course-manage-expiry-tip').removeClass('ml0');
       } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
+        $('.js-course-manage-expiry-tip').removeClass('ml0');
       } else {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $(event.target).closest('.form-group').removeClass('has-error');
+        $('.js-course-manage-expiry-tip').addClass('ml0');
       }
       this.initExpiryMode();
     });
