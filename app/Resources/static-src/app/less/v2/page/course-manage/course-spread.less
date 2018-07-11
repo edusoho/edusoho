@@ -77,10 +77,12 @@
   background-image: -webkit-image-set(url("@{img-src}spread.png") 1x,url("@{img-src}spread@2x.png") 2x);
 }
 
+
 .course-manage-intro {
-  position: absolute;
+  position: fixed;
   bottom: 30px;
-  right: 40px;
+  right: 10%;
+  z-index: 1000;
   .course-manage-intro__outer {
     margin: 0 6px;
     padding: 10px;
@@ -105,3 +107,8 @@
   }
 }
 
+.course-manage-intro-float {
+  position: absolute;
+  bottom: 30px;
+  right: 40px !important;
+}

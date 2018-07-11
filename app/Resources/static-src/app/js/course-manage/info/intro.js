@@ -20,12 +20,21 @@ export default class Intro {
   }
 
   initEvent() {
+    const self = this;
     $('body').on('click','.js-skip', (event) => {
       this.intro.exit();
     });
     $('body').on('click', '.js-plan-intro-btn', (event) => {
       $('html').scrollTop(0);
       this.introStart(this.initSingleStep());
+    });
+    $(window).scroll((event) => {
+      const scrollTop = $(document).scrollTop();
+      if (scrollTop > 440) {
+        self.$intro.addClass('course-manage-intro-float');
+      } else {
+        self.$intro.removeClass('course-manage-intro-float');
+      }
     });
   }
   
