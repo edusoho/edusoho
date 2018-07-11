@@ -8,7 +8,6 @@
       <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.base'|trans }}</a>
     {% endif %}
   </li>
-
 {% if get_course_count(courseSet.id) == 1 %}
   <li class="nav-header-section__item {% if side_nav == 'default-course-info' %}active{% endif %}" id="step-2">
     {% if courseSet.locked %}

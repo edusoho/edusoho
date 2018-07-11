@@ -1,6 +1,7 @@
 .es-intro-help {
   padding: 0;
   &.multistep {
+    margin-top: -380px !important;
     .introjs-nextbutton,
     .done-button {
       margin: 24px 24px 24px 16px;
@@ -20,13 +21,23 @@
 }
 
 .es-intro-single {
+  position: relative;
+  margin-top: -380px !important;
+  width: 600px;
   .introjs-skipbutton {
-    margin: 24px 24px 24px 16px;
-    padding: 12px 18px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
-    .border-radius;
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: -4px;
+    i {
+      font-size: 34px;
+      color: #fff;
+    }
+    &:hover {
+      background: transparent;
+      border: none;
+    }
   }
 }
 
@@ -35,6 +46,7 @@
     padding: 24px 24px 0 24px;
   }
   &.multistep {
+    margin-top: auto !important;
     .introjs-skipbutton {
       top: 10px;
       i {
@@ -70,10 +82,11 @@
   bottom: 30px;
   right: 40px;
   .course-manage-intro__outer {
+    margin: 0 6px;
     padding: 10px;
     width: 74px;
     .border-radius(50%);
-    background-color: lighten(@brand-primary, 30%);
+    background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.2);
     &:hover {
       cursor: pointer;
     }

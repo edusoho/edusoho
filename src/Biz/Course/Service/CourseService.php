@@ -253,6 +253,7 @@ interface CourseService
     public function sortByCourses($courses);
 
     public function countCourseItems($course);
+
     /**
      * 如果 约排课已开启，不额外添加查询条件，
      * 如果 未开启，添加 excludeTypes = 'reservation' 的查询条件

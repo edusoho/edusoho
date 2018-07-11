@@ -33,7 +33,6 @@ export default class Intro {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
     if (steps.length < 2) {
-      doneLabel = Translator.trans('intro.confirm_hint');
       this.customClass = 'es-intro-help es-intro-single';
     } else {
       this.customClass = 'es-intro-help multistep';
