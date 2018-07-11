@@ -87,7 +87,7 @@ class courseInfo {
           required: true,
           maxlength: 10,
         },
-        intro: {
+        subtitle: {
           maxlength: 30
         },
         expiryDays: {

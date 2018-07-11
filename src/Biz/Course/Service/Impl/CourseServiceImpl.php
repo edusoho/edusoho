@@ -215,6 +215,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts(
             $fields,
             array(
+                'title',
+                'subtitle',
                 'originPrice',
                 'enableAudio',
                 'tryLookable',
@@ -237,13 +239,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
-
         $course = $this->getCourseDao()->update($id, $fields);
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
     }
-
+    
     public function updateCourse($id, $fields)
     {
         $this->tryManageCourse($id);
@@ -254,6 +255,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields,
             array(
                 'title',
+                'subtitle'
                 'courseSetTitle',
                 'about', //@todo 目前没有这个字段
                 'courseSetId',
