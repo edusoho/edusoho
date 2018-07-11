@@ -40,7 +40,7 @@ class PageCourseFilter extends Filter
         $data['courses'] = $courses;
     }
 
-     private function convertToLeadingItems($originItems, $onlyPublishTask = false)
+    private function convertToLeadingItems($originItems, $onlyPublishTask = false)
     {
         $newItems = array();
         $number = 1;
@@ -87,6 +87,7 @@ class PageCourseFilter extends Filter
                 unset($items[$key]);
             }
         }
+
         return array_values($items);
     }
 }
