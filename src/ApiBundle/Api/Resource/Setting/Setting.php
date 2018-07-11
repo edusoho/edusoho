@@ -103,12 +103,12 @@ class Setting extends AbstractResource
     {
         $loginSetting = $this->getSettingService()->get('login_bind', array());
         return array(
-            'login_limit' => isset($loginSetting['login_limit']) ? $loginSetting['login_limit'] : 0,
+            'loginLimit' => isset($loginSetting['login_limit']) ? $loginSetting['login_limit'] : 0,
             'enabled' => isset($loginSetting['enabled']) ? $loginSetting['enabled'] : 0,
-            'temporary_lock_enabled' => isset($loginSetting['temporary_lock_enabled']) ? $loginSetting['temporary_lock_enabled'] : 0,
-            'temporary_lock_allowed_times' => isset($loginSetting['temporary_lock_allowed_times']) ? $loginSetting['temporary_lock_allowed_times'] : 5,
-            'ip_temporary_lock_allowed_times' => isset($loginSetting['ip_temporary_lock_allowed_times']) ? $loginSetting['ip_temporary_lock_allowed_times'] : 20,
-            'temporary_lock_minutes' => isset($loginSetting['temporary_lock_minutes']) ? $loginSetting['temporary_lock_minutes'] : 20,
+            'temporaryLockEnabled' => isset($loginSetting['temporary_lock_enabled']) ? $loginSetting['temporary_lock_enabled'] : 0,
+            'temporaryLockAllowedTimes' => isset($loginSetting['temporary_lock_allowed_times']) ? $loginSetting['temporary_lock_allowed_times'] : 5,
+            'ipTemporaryLockAllowedTimes' => isset($loginSetting['ip_temporary_lock_allowed_times']) ? $loginSetting['ip_temporary_lock_allowed_times'] : 20,
+            'temporaryLockMinutes' => isset($loginSetting['temporary_lock_minutes']) ? $loginSetting['temporary_lock_minutes'] : 20,
         );
     }
 
