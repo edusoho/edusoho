@@ -34,7 +34,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         });
     }
 
-    public function getVideoPlayer($file, $agentInWhiteList, $context, $ssl)
+    public function getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl)
     {
         $storageSetting = $this->getSettingService()->get('storage');
 
@@ -75,6 +75,58 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             'isEncryptionPlus' => $isEncryptionPlus,
             'context' => $context,
         );
+    }
+
+    public function getVideoPlayUrl($file, $context, $ssl)
+    {
+        if ('cloud' == $file['storage']) {
+            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
+                    $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
+                    $token = $this->makeToken('hls.playlist', $file['id'], $context);
+                    $params = array(
+                        'id' => $file['id'],
+                        'token' => $token['token'],
+                    );
+
+                    return array(
+                        'route' => 'hls_playlist',
+                        'params' => $params,
+                        'referenceType' => true,
+                    );
+                } else {
+                    throw new \RuntimeException('当前视频格式不能被播放！');
+                }
+            } else {
+                $result = array();
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+
+                if ($key) {
+                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+                }
+            }
+
+            return array(
+                'url' => isset($result['url']) ? $result['url'] : '',
+            );
+        } else {
+            $token = $this->makeToken('local.media', $file['id']);
+            $params = array(
+                'id' => $file['id'],
+                'token' => $token['token'],
+            );
+
+            return array(
+                'route' => 'player_local_media',
+                'params' => $params,
+                'referenceType' => true,
+            );
+        }
     }
 
     public function isHiddenVideoHeader($isHidden = false)
@@ -163,6 +215,30 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         foreach ($subtitles as &$subtitle) {
             $subtitle['name'] = rtrim($subtitle['name'], '.srt');
         }
+    }
+
+    protected function makeToken($type, $fileId, $context = array())
+    {
+        $fields = array(
+            'data' => array(
+                'id' => $fileId,
+            ),
+            'times' => 10,
+            'duration' => 3600,
+            'userId' => $this->getCurrentUser()->getId(),
+        );
+
+        if (isset($context['watchTimeLimit'])) {
+            $fields['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fields['data']['hideBeginning'] = $context['hideBeginning'];
+        }
+
+        $token = $this->getTokenService()->makeToken($type, $fields);
+
+        return $token;
     }
 
     /**

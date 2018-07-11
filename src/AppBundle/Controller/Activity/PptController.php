@@ -39,32 +39,8 @@ class PptController extends BaseActivityController implements ActivityActionInte
         $config = $this->getActivityService()->getActivityConfig('ppt');
 
         $ppt = $config->get($activity['mediaId']);
-
-        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
-
-        if (empty($file) || 'ppt' !== $file['type']) {
-            throw $this->createAccessDeniedException('file type error');
-        }
-
-        $error = array();
-        if (isset($file['convertStatus']) && 'success' != $file['convertStatus']) {
-            if ('error' == $file['convertStatus']) {
-                $url = $this->generateUrl('course_set_manage_files', array('id' => $courseId));
-                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
-                $error['code'] = 'error';
-                $error['message'] = $message;
-            } else {
-                $error['code'] = 'processing';
-                $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
-            }
-        }
         $ssl = $request->isSecure() ? true : false;
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
-
-        if (isset($result['error'])) {
-            $error['code'] = 'error';
-            $error['message'] = $result['error'];
-        }
+        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
 
         $slides = isset($result['images']) ? $result['images'] : array();
 

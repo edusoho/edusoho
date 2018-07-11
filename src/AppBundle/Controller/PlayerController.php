@@ -32,7 +32,7 @@ class PlayerController extends BaseController
 
         $isEncryptionPlus = false;
         if ('video' == $file['type'] && 'cloud' == $file['storage']) {
-            $videoPlayer = $this->getPlayerService()->getVideoPlayer($file, $agentInWhiteList, $context, $ssl);
+            $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
             $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
             $context = $videoPlayer['context'];
             if (!empty($videoPlayer['mp4Url'])) {
@@ -59,42 +59,12 @@ class PlayerController extends BaseController
 
     protected function getPlayUrl($file, $context, $ssl)
     {
-        if ('cloud' == $file['storage']) {
-            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
-                    $context['hideBeginning'] = $this->getWebExtension()->isHiddenVideoHeader($hideBeginning);
-                    $token = $this->makeToken('hls.playlist', $file['id'], $context);
-                    $params = array(
-                        'id' => $file['id'],
-                        'token' => $token['token'],
-                    );
-
-                    return $this->generateUrl('hls_playlist', $params, true);
-                } else {
-                    throw new \RuntimeException('当前视频格式不能被播放！');
-                }
-            } else {
-                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                    $key = $file['metas']['hd']['key'];
-                } else {
-                    $key = $file['hashId'];
-                }
-
-                if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
-                }
-            }
-
-            return isset($result['url']) ? $result['url'] : '';
-        } else {
-            $token = $this->makeToken('local.media', $file['id']);
-
-            return $this->generateUrl('player_local_media', array(
-                'id' => $file['id'],
-                'token' => $token['token'],
-            ));
+        $result = $this->getPlayerService()->getVideoPlayUrl($file, $context, $ssl);
+        if (isset($result['url'])) {
+            return $result['url'];
         }
+
+        return $this->generateUrl($result['route'], $result['params'], $result['referenceType']);
     }
 
     public function localMediaAction(Request $request, $id, $token)
@@ -248,30 +218,6 @@ class PlayerController extends BaseController
         $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
 
         return $this->createJsonResponse($playlist);
-    }
-
-    protected function makeToken($type, $fileId, $context = array())
-    {
-        $fields = array(
-            'data' => array(
-                'id' => $fileId,
-            ),
-            'times' => 10,
-            'duration' => 3600,
-            'userId' => $this->getUser()->getId(),
-        );
-
-        if (isset($context['watchTimeLimit'])) {
-            $fields['data']['watchTimeLimit'] = $context['watchTimeLimit'];
-        }
-
-        if (isset($context['hideBeginning'])) {
-            $fields['data']['hideBeginning'] = $context['hideBeginning'];
-        }
-
-        $token = $this->getTokenService()->makeToken($type, $fields);
-
-        return $token;
     }
 
     /**
