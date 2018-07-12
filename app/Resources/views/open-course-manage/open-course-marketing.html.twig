@@ -3,13 +3,18 @@
 {% set side_nav = 'marketing' %}
 {% do script(['app/js/open-course-manage/recommend-course/index.js'])%}
 
-{% block main %}
-<div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'my.teaching.open_course.recommend_setting.title'|trans}}
-    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
-  </div>
+{#{% block main %}#}
+{#<div class="panel panel-default panel-col">#}
 
-  <div class="panel-body">
+  {% block main_heading %}
+  {#<div class="panel-heading">{{'my.teaching.open_course.recommend_setting.title'|trans}}#}
+    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
+  {#</div>#}
+
+  {% endblock %}
+  {% block main_body %}
+
+  {#<div class="panel-body">#}
     <form class="form-horizontal" id="recommend-course-form" method="post" action="{{ path('open_course_manage_marketing',{id:course.id}) }}">
       {% set openCourse = course %}
       {{ web_macro.flash_messages() }}
@@ -125,7 +130,8 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
     </form>
-  </div>
-</div>
+  {% endblock %}
+  {#</div>#}
+{#</div>#}
 
-{% endblock %}
+{#{% endblock %}#}

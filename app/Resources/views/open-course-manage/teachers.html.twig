@@ -5,11 +5,16 @@
 {% set side_nav = 'teachers' %}
 {% do script(['libs/jquery-validation.js','app/js/course-manage/teachers/index.js']) %}
 
-{% block main %}
+{#{% block main %}#}
 
-<div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'my.teaching.open_course.teachers_setting.title'|trans}}</div>
-  <div class="panel-body">
+{#<div class="panel panel-default panel-col">#}
+  {% block main_heading %}
+  {#<div class="panel-heading">#}
+    {{'my.teaching.open_course.teachers_setting.title'|trans}}
+  {#</div>#}
+  {% endblock %}
+  {% block main_body %}
+  {#<div class="panel-body">#}
     <form id="teachers-form" class="form-horizontal" method="post" >
       {{ web_macro.flash_messages() }}
       <div class="form-group" id="teachers-form-group">
@@ -26,6 +31,7 @@
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
-  </div>
-</div>
-{% endblock %}
+  {% endblock %}
+  {#</div>#}
+  {#</div>#}
+{#{% endblock %}#}

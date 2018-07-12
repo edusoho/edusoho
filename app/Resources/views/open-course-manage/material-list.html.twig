@@ -7,18 +7,20 @@
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
 
-{% block main %}
+{#{% block main %}#}
 
-  <style type="text/css">
-  .tooltip-inner{
-  max-width: 600px;
-  }
-  </style>
 
   {% set targetType = 'opencoursematerial' %}
   
-  <div class="panel panel-default" role="courseset-manage-file">
-    <div class="panel-heading">
+  {#<div class="panel panel-default" role="courseset-manage-file">#}
+    {% block main_heading %}
+
+      <style type="text/css">
+        .tooltip-inner{
+          max-width: 600px;
+        }
+      </style>
+    {#<div class="panel-heading">#}
       <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
@@ -26,8 +28,10 @@
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'course.course_files.create_btn'|trans}}
       </a>
       {{'course.course_files.content_title'|trans}}
-    </div>
+    {#</div>#}
+    {% endblock %}
 
+    {% block main_body %}
     <div class="panel-body" id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
@@ -65,5 +69,6 @@
       </nav>
 
     </div>
-  </div>
-{% endblock %}
+    {% endblock %}
+  {#</div>#}
+{#{% endblock %}#}

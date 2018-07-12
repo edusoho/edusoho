@@ -9,10 +9,17 @@ tagMatchUrl: path('tag_match')
 } %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/bootstrap-datetimepicker.js','libs/jquery-validation.js', 'libs/select2.js', 'app/js/open-course-manage/base/index.js'])%}
 
-{% block main %}
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{ 'my.teaching.open_course.Basic_Info'|trans }}</div>
-    <div class="panel-body">
+{#{% block main %}#}
+
+
+  {#<div class="panel panel-default panel-col">#}
+    {% block main_heading %}
+    {#<div class="panel-heading">#}
+      {{ 'my.teaching.open_course.Basic_Info'|trans }}
+    {#</div>#}
+    {% endblock %}
+    {% block main_body %}
+    {#<div class="panel-body">#}
       {{ web_macro.flash_messages() }}
       <form class="form-horizontal" id="course-form" method="post">
 
@@ -24,10 +31,20 @@ tagMatchUrl: path('tag_match')
           </div>
         </div>
 
+        {#<div class="form-group">#}
+          {#<label class="col-md-2 control-label" for="course_subtitle">{{ 'my.teaching.open_course.Basic_Info.subtitle'|trans }}</label>#}
+          {#<div class="col-md-8 controls">#}
+            {#<textarea id="course_subtitle" name="subtitle" class="form-control">{{ course.subtitle|default('') }}</textarea>#}
+            {#<div class="help-block" style="display:none;"></div>#}
+          {#</div>#}
+        {#</div>#}
+
         <div class="form-group">
-          <label class="col-md-2 control-label" for="course_subtitle">{{ 'my.teaching.open_course.Basic_Info.subtitle'|trans }}</label>
+          <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.category'|trans }}</label>
           <div class="col-md-8 controls">
-            <textarea id="course_subtitle" name="subtitle" class="form-control">{{ course.subtitle|default('') }}</textarea>
+            <select id="course_categoryId" name="categoryId" class="form-control width-input width-input-large">
+              {{ select_options(category_choices('course'), course.categoryId, {0:'my.teaching.open_course.Basic_Info.category'|trans}) }}
+            </select>
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
@@ -41,13 +58,21 @@ tagMatchUrl: path('tag_match')
           </div>
         </div>
 
+        <!-- 封面图片 -->
         <div class="form-group">
-          <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.category'|trans }}</label>
+          <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
           <div class="col-md-8 controls">
-            <select id="course_categoryId" name="categoryId" class="form-control width-input width-input-large">
-              {{ select_options(category_choices('course'), course.categoryId, {0:'my.teaching.open_course.Basic_Info.category'|trans}) }}
-            </select>
-            <div class="help-block" style="display:none;"></div>
+            {% include 'common/upload-image.html.twig' with {
+            saveUrl: path('open_course_manage_picture_crop', {id: course.id}),
+            targetImg: 'picture',
+            cropWidth: '480',
+            cropHeight: '270',
+            uploadToken: 'tmp',
+            imageClass: 'course-manage-cover',
+            imageText: 'course.cover.change'|trans,
+            imageSrc: filepath(course.largePicture, 'course.png'),
+            } %}
+            <div class="courseset-manage-body__tip">{{ 'my.teaching.open_course.course_picture.title.help_block'|trans|raw }}</div>
           </div>
         </div>
 
@@ -56,32 +81,33 @@ tagMatchUrl: path('tag_match')
           <div class="col-md-8 controls">
             <textarea name="about" rows="10" id="course-about-field" class="form-control"
               data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ course.about }}</textarea>
-            <div class="help-block">{{ 'my.teaching.open_course.Basic_Info.about.help_block'|trans }}</div>
+            <div class="help-block">{{ 'my.teaching.open_course.Basic_Info.about.help_block'|trans }}<strong>{{'2MB'|trans}}</strong>。</div>
           </div>
         </div>
 
-        <div class="form-group clearfix">
-          <div class="col-md-offset-2 col-md-8 controls">
-            <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
-          </div>
-        </div>
+        {#<div class="form-group clearfix">#}
+          {#<div class="col-md-2 control-label"><label>{{ 'my.teaching.open_course.course_picture.title'|trans }}</label></div>#}
+          {#<div class="col-md-8 controls">#}
+            {#<img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />#}
+          {#</div>#}
+        {#</div>#}
 
-        <div class="form-group clearfix">
-          <div class="col-md-offset-2 col-md-8 controls">
-            <p class="help-block">{{ 'my.teaching.open_course.course_picture.title.help_block'|trans|raw }}<strong>{{'2MB'|trans}}</strong>。</p>
-          </div>
-        </div>
+        {#<div class="form-group clearfix">#}
+          {#<div class="col-md-offset-2 col-md-8 controls">#}
+            {#<p class="help-block">{{ 'my.teaching.open_course.course_picture.title.help_block'|trans|raw }}<strong>{{'2MB'|trans}}</strong>。</p>#}
+          {#</div>#}
+        {#</div>#}
 
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-8 controls">
-            <a
-            id="upload-picture-btn"
-            class="btn btn-fat btn-primary upload-picture-btn"
-            data-upload-token="{{ upload_token('tmp', 'image') }}"
-            data-goto-url="{{path('open_course_manage_picture_crop', {id:course.id})}}"
-            >{{'form.btn.picture_crop'|trans}}</a>
-          </div>
-        </div>
+        {#<div class="form-group">#}
+          {#<div class="col-md-offset-2 col-md-8 controls">#}
+            {#<a#}
+            {#id="upload-picture-btn"#}
+            {#class="btn btn-fat btn-primary upload-picture-btn"#}
+            {#data-upload-token="{{ upload_token('tmp', 'image') }}"#}
+            {#data-goto-url="{{path('open_course_manage_picture_crop', {id:course.id})}}"#}
+            {#>{{'form.btn.picture_crop'|trans}}</a>#}
+          {#</div>#}
+        {#</div>#}
 
         <div class="form-group">
           <div class="col-md-offset-2 col-md-8 controls">
@@ -92,10 +118,11 @@ tagMatchUrl: path('tag_match')
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
       </form>
-    </div>
-  </div>
+    {#</div>#}
+    {% endblock %}
+  {#</div>#}
 
-{% endblock %}
+{#{% endblock %}#}
 
 
 
