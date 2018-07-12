@@ -303,13 +303,16 @@ class CourseSetController extends BaseController
         $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
         $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
 
+        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         foreach ($courseSets as $key => &$courseSet) {
+            // TODO 完成人数目前只统计了默认教学计划
             $courseSetId = $courseSet['id'];
-            $course = $this->getCourseService()->getCourse($courseSet['id']);
-            $courseTaskNum = $course['taskNum'];
+            $defaultCourseId = $courseSet['defaultCourseId'];
             $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
-            $isLearnedNum = $this->getMemberService()->countMembers(
-                array('finishedTime_GT' => 0, 'courseSetId' => $courseSetId, 'learnedNumGreaterThan' => $courseTaskNum)
+            $isLearnedNum = empty($courses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
+                array('finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $courses[$defaultCourseId]['compulsoryTaskNum'])
             );
 
             $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
