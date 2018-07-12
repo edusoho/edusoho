@@ -43,4 +43,4 @@ $newHeader.on('click', '.js-show-courseset', (event) => {
   });
 });
 
-publish('.js-course-publish-btn', info);
+publish('.js-courseset-publish-btn', info);
