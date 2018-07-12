@@ -63,7 +63,7 @@ class courseInfo {
     $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function(){
       let mode = $('#course-audio-mode').data('value');
       if (mode == 'notAllowed') {
-        notify('info', Translator.trans('course.audio.enable.biz.user'));
+        cd.message({ type: 'info', message: Translator.trans('course.audio.enable.biz.user') });
         $('[name=\'enableAudio\']')[1].checked = true;
         $('[name=\'enableAudio\']')[0].checked = false;
       }
