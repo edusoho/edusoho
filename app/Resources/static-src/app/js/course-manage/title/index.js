@@ -2,7 +2,6 @@ class PlanTitle {
   constructor() {
     this.validator = null;
     this.init();
-    // this.isInitIntro();
   }
 
   init() {
