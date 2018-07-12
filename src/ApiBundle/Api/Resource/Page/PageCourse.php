@@ -22,6 +22,7 @@ class PageCourse extends AbstractResource
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
         $course['courseItems'] = $this->getCourseService()->findCourseItems($courseId);
+        $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
 
         return $course;
@@ -40,5 +41,10 @@ class PageCourse extends AbstractResource
     private function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

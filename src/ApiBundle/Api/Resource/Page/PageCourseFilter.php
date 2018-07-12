@@ -12,7 +12,7 @@ class PageCourseFilter extends Filter
         'id', 'title', 'courseSetTitle',
     );
     protected $publicFields = array(
-        'access', 'learnMode', 'learnedNum', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses',
+        'access', 'learnMode', 'learnedNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses',
     );
 
     protected function publicFields(&$data)
@@ -32,10 +32,12 @@ class PageCourseFilter extends Filter
         }
 
         $learnedNum = $data['learnedNum'];
+        $allowAnonymousPreview = $data['allowAnonymousPreview'];
         $courseFilter = new CourseFilter();
         $courseFilter->setMode(Filter::PUBLIC_MODE);
         $courseFilter->filter($data);
         $data['learnedNum'] = $learnedNum;
+        $data['allowAnonymousPreview'] = $allowAnonymousPreview;
         $data['courseItems'] = $courseItems;
         $data['courses'] = $courses;
     }
