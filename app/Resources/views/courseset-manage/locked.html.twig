@@ -6,8 +6,13 @@
 
 {% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
 {% set side_nav = sideNav %}
+{% set course_side_nav = 'tasks' %}
 
-{% block main %}
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:0} %}
+{% endblock %}
+
+{% block main_body %}
   <div class="panel panel-default">
     <div class="panel-heading">{{ menuTitle|trans }}</div>
     <div class="panel-body">
