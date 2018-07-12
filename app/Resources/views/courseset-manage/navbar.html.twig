@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs nav-header-section cd-mt40 clearfix">
-  {% if courseSet.type != 'live' %}
+  {% if not is_un_multi_courseset(courseSet.id) %}
     <li class="nav-header-section__item cd-ml32 {% if side_nav == 'base' %}active{% endif %}">
       {% if courseSet.locked %}
         <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'base'}) }}">
