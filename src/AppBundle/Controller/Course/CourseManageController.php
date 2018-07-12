@@ -804,6 +804,33 @@ class CourseManageController extends BaseController
         }
     }
 
+    public function prePublishAction($courseSetId, $courseId)
+    {
+        return $this->createJsonResponse(array(
+            'success' => $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($courseId),
+        ));
+    }
+
+    public function publishSetTitleAction(Request $request, $courseSetId, $courseId)
+    {
+        if ($request->isMethod('POST')) {
+            $defaultPlanTitle = $request->request->get('title');
+            $this->getCourseService()->publishAndSetDefaultCourseType($courseId, $defaultPlanTitle);
+
+            return $this->createJsonResponse(array(
+                'success' => true,
+            ));
+        }
+
+        return $this->render(
+            'course-manage/publish-set-title-modal.html.twig',
+            array(
+                'courseSetId' => $courseSetId,
+                'courseId' => $courseId,
+            )
+        );
+    }
+
     public function courseItemsSortAction(Request $request, $courseId)
     {
         $ids = $request->request->get('ids', array());
