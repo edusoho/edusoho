@@ -5,12 +5,17 @@
   {% set status = lesson.status|default('create') == 'published' ? 1 : 0 %}
   <ul class="dropdown-menu task-manage-item__dropdown">
     <li>
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {courseId:course.id, lessonId:lesson.id}) }}">{{ 'course.lesson_manage.rename'|trans }}</a>
+      <a class='js-publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
+        {{'course.plan_task.publish_btn'|trans}}{{ 'course.lesson'|trans }}
+      </a>
     </li>
     <li>
       <a class='js-unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
         {{'course.plan_task.unpublish_btn'|trans}}
       </a>
+    </li>
+    <li>
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {courseId:course.id, lessonId:lesson.id}) }}">{{ 'course.lesson_manage.rename'|trans }}</a>
     </li>
     <li>
       <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
