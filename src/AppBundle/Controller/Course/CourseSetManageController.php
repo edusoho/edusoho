@@ -141,6 +141,15 @@ class CourseSetManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        if (in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId'])) {
+            return $this->redirectToRoute(
+                'course_set_manage_course_info',
+                array(
+                    'courseSetId' => $id,
+                    'courseId' => $courseSet['defaultCourseId'],
+                )
+            );
+        }
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);

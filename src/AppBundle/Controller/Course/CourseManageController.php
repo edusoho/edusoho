@@ -478,8 +478,8 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $isUnMultiCourseSet = $this->container->get('course.extension')->isUnMultiCourseSet($courseSetId);
-            if ($isUnMultiCourseSet) {
+            $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+            if (in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
                 unset($data['title']);
                 unset($data['subtitle']);
