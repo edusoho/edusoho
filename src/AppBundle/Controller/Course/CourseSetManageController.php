@@ -91,7 +91,7 @@ class CourseSetManageController extends BaseController
                 'course' => $course,
                 'studentNum' => $studentNum,
                 'couserNum' => $couserNum,
-                'foldType' => $foldType
+                'foldType' => $foldType,
             )
         );
     }
@@ -141,7 +141,6 @@ class CourseSetManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
