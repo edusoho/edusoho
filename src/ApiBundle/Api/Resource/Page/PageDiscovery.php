@@ -32,17 +32,21 @@ class PageDiscovery extends AbstractResource
         $result = array(
             array(
                 'type' => 'slide_show', 
+                'moduleType' => 'slide',
                 'data' => $posters,
             ),
             array(
                 'type' => 'course_list', 
-                'data' => array(
-                    array('title' => '热门课程', 'items' => $hotCourseList, 'source' => 
-                        array('categoryId' => 0, 'courseType' => 'all', 'sort' => 'hitNum')
-                    ),
-                    array('title' => '推荐课程', 'items' => $recommendedCourseList, 'source' => 
+                'moduleType' => 'hotCourseList',
+                'data' => array('title' => '热门课程', 'items' => $hotCourseList, 'source' => 
+                    array('categoryId' => 0, 'courseType' => 'all', 'sort' => 'hitNum')
+                ),
+            ),
+            array(
+                'type' => 'course_list',
+                'moduleType' => 'recommendedCourseList',
+                'data' => array('title' => '推荐课程', 'items' => $recommendedCourseList, 'source' => 
                         array('categoryId' => 0, 'courseType' => 'all', 'sort' => 'recommendedSeq')
-                    ),
                 ),
             ),
         );

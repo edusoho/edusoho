@@ -9,7 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class PageDiscoveryFilter extends Filter
 {
-    protected $publicFields = array('type', 'data');
+    protected $publicFields = array('type', 'data', 'moduleType');
 
     protected function publicFields(&$data)
     {
@@ -19,14 +19,13 @@ class PageDiscoveryFilter extends Filter
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         if ('course_list' == $data['type']) {
-            foreach ($data['data'] as &$single) {
-                $single['items'] = $this->getHomepageCourses(
-                    isset($single['items']['courses']) ? $single['items']['courses'] : array(), 
-                    isset($single['items']['courseSets']) ? $single['items']['courseSets'] : array()
-                );
-                foreach ($single['items'] as &$items) {
-                    $courseSetFilter->filter($items['courseSet']);
-                }
+            $items = $data['data']['items'];
+            $data['data']['items'] = $this->getHomepageCourses(
+                isset($items['courses']) ? $items['courses'] : array(), 
+                isset($items['courseSets']) ? $items['courseSets'] : array()
+            );
+            foreach ($data['data']['items'] as &$item) {
+                $courseSetFilter->filter($item['courseSet']);
             }
         }
     }
