@@ -2,14 +2,14 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img v-bind:src="course.image">
+        <img v-bind:src="course.courseSet.cover.middle">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ course.courseSetTitil }}</div>
+        <div class="e-course__title text-overflow">{{ course.courseSetTitle }}</div>
         <div class="e-course__project text-overflow">
           <span v-if="course.title !== '默认教学计划'">{{ course.title }}</span>
         </div>
-        <switchBox :type="type" :course="course"></switchBox>
+        <switchBox :type="type" :course="course" :learnedNum="course.learnedNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
       </div>
     </div>
   </div>
@@ -19,6 +19,9 @@
   import switchBox from './e-course-switch-box.vue';
 
   export default {
+    components: {
+      switchBox,
+    },
     props: {
       course: {
         type: Object,
@@ -33,9 +36,6 @@
       return {
 
       };
-    },
-    components: {
-      switchBox,
     },
     methods: {
       onClick() {

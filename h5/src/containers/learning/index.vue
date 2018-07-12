@@ -2,8 +2,12 @@
   <div class="e-learn">
     <emptyCourse v-if="isEmptyCourse && isFirstRequestCompile"></emptyCourse>
     <lazyLoading v-else
-      :courseList = courseList
+      :courseList = "courseList"
+      :isAllCourse = "isAllCourse"
+      v-model="isRequestCompile"
+      @needRequest="sendRequest"
     ></lazyLoading>
+    <div class="mt50"></div>
   </div>
 </template>
 <script>
@@ -21,33 +25,72 @@
       return {
         isEmptyCourse: true,
         isFirstRequestCompile: false,
-        courseList: []
+        isRequestCompile: false,
+        isAllCourse: false,
+        courseList: [],
+        offset: 0,
+        limit: 10,
       };
     },
     methods: {
-      judgeIsEmptyCourse(courseInfomation) {
-        if (courseInfomation.data.length !== 0) {
-          return false
+      judegIsAllCourse(courseInfomation) {
+        if (this.courseList.length == courseInfomation.paging.total) {
+          return true
         }
-        return true
+        return false
+      },
+
+      requestCourses(setting) {
+        this.isRequestCompile = false;
+        return Api.myStudyState({
+          params: setting
+        }).then((data) => {
+          let isAllCourse;
+          if (!isAllCourse) {
+            data.data.forEach(element => {
+              this.courseList.push(element);
+              this.offset++;
+            })
+          }
+          isAllCourse = this.judegIsAllCourse(data);
+          this.isAllCourse = isAllCourse;
+          this.isRequestCompile = true;
+        }).catch((err) => {
+          console.log(err, 'error');
+        })
+      },
+
+      sendRequest() {
+        const args = {
+          offset: this.offset,
+          limit: this.limit
+        };
+
+        if (!this.isAllCourse) this.requestCourses(args);
       }
     },
+
     beforeRouteEnter(to, from, next) {
       // 判断是否登录
       const isLogin = !!store.state.token;
 
       !isLogin ? next({name: 'prelogin',query: { redirect: to.name }}) : next();
     },
+
     created() {
-      Api.myStudyState().then((data) => {
-        console.log(data, 'my study');
-        const isEmptyCourse = this.judgeIsEmptyCourse(data);
-        this.isEmptyCourse = isEmptyCourse;
-        this.isFirstRequestCompile = true;
-        if (!isEmptyCourse) this.courseList = data.data;
-      }).catch((err) => {
-        console.log(err, 'error');
-      });;
+      const setting = {
+            offset: this.offset,
+            limit: this.limit
+          };
+      this.requestCourses(setting)
+        .then(() => {
+          this.isFirstRequestCompile = true;
+          if (this.courseList.length !== 0) {
+            this.isEmptyCourse = false;
+          } else {
+            this.isEmptyCourse = true;
+          }
+        });
     }
 
   }

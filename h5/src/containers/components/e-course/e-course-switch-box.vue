@@ -56,15 +56,17 @@
         type: Object,
         default: {},
       },
-      rate: {
-        type: Number,
-        default: 0,
-      }
     },
     data() {
       return {
         isFree: this.course.price == 0,
       };
+    },
+    computed: {
+      rate() {
+        if (this.course.publishedTaskNum) return 0;
+        return (this.course.learnedNum/this.course.publishedTaskNum)*100
+      }
     },
     created() {
 
