@@ -371,6 +371,7 @@ class CourseSetManageController extends BaseController
                 'copyCourseSet' => $copyCourseSet,
                 'menuPath' => $menuPath,
                 'menuTitle' => $menuTitle,
+                'course' => $courses[0],
             )
         );
     }
