@@ -51,10 +51,6 @@
         type: String,
         default: ''
       },
-      // joinStatus: {
-      //   type: String,
-      //   default: ''
-      // },
       hiddeTitle: {
         type: Boolean,
         default: false
@@ -63,7 +59,8 @@
     computed: {
       ...mapState('course', {
         joinStatus: state => state.joinStatus,
-        selectedPlanId: state => state.selectedPlanId
+        selectedPlanId: state => state.selectedPlanId,
+        details: state => state.details
       })
     },
     data() {
@@ -179,13 +176,15 @@
               taskId: task.id
             })
             break;
+          case 'text':
           case 'ppt':
           case 'doc':
             this.$router.push({
               name: 'course_web',
               params: {
                 courseId: this.selectedPlanId,
-                taskId: task.id
+                taskId: task.id,
+                type: task.type
               }
             })
             break;

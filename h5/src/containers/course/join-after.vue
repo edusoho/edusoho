@@ -64,17 +64,17 @@ export default {
     progress () {
       return (this.details.learnedNum /
         this.details.publishedTaskNum).toFixed(2)*100+'%';
+    },
+    ...mapState('course', {
+      selectedPlanId: state => state.selectedPlanId,
+    })
+  },
+  watch: {
+    selectedPlanId: (val, oldVal) => {
+      val !== oldVal && (this.active = 0)
+      console.log(this.active, 'active')
     }
   },
-  // watch: {
-  //   'details': {
-  //     deep: true,
-  //     handler: function(v) {
-  //       this.active = 0;
-  //       console.log(v, '22')
-  //     }
-  //   }
-  // },
   components: {
     Directory,
     DetailHead,

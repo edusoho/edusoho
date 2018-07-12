@@ -33,12 +33,10 @@ export default {
       }
       return item;
     });
-    console.log('items', this.items)
   },
   computed: {
     ...mapState('course', {
-      details: state => state.details,
-
+      details: state => state.details
     })
   },
   methods: {

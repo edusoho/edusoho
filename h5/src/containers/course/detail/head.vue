@@ -1,9 +1,11 @@
 <template>
 <div class="course-detail__head">
-  <div class="course-detail__head--img" v-if="sourceType === 'img'">
+  <div class="course-detail__head--img" v-show="sourceType === 'img'">
     <img :src="courseSet.cover.large" alt="">
   </div>
- <div id="course-detail__head--video" v-if="sourceType === 'video'"></div>
+ <div id="course-detail__head--video" 
+  ref="video"
+  v-show="['video', 'audio'].includes(sourceType)"></div>
 </div>
 
 </template>
@@ -40,6 +42,8 @@ export default {
   },
   methods: {
     async initPlayer (){
+      this.$refs.video.innerHTML = '';
+
       const player = await Api.getMedia({
         query: {
           courseId: this.selectedPlanId,
@@ -54,7 +58,7 @@ export default {
         user: {},
         playlist: media.url,
         autoplay: true,
-        poster: 'https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg'
+        poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
 
       this.loadPlayerSDK().then(SDK => {

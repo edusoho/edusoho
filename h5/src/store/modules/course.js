@@ -16,6 +16,7 @@ const mutations = {
     currentState.selectedPlanId = payload.id;
     currentState.details = payload;
     currentState.joinStatus = hasJoinedCourse(payload);
+    currentState.sourceType = 'img';
     console.log('current', currentState);
   },
   [types.JOIN_COURSE](currentState, payload) {

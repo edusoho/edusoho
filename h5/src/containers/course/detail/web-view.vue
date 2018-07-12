@@ -1,7 +1,10 @@
 <template>
   <div class="web-view">
     <!-- web-view -->
-    <div id="player"></div>
+    <div id="player" v-show="media !== 'text'"></div>
+    <div class="media-text" ref="text" v-show="media === 'text'">
+
+    </div>
   </div>
 </template>
 <script>
@@ -10,11 +13,23 @@ import QiQiuYun from 'qiqiuyun-sdk';
 import Api from '@/api'
 
 export default {
-  async created () {
-    const { courseId, taskId } = this.$route.params;
+  data () {
+    return {
+      media: ''
+    }
+  },
+  async mounted () {
+    const { courseId, taskId, type } = this.$route.params;
+    this.media = type;
+
     const player = await Api.getMedia({query: { courseId,taskId }});
     console.log(player, 'player')
-    this.initPlayer(player);
+
+    if (['ppt', 'doc'].includes(type)) {
+      this.initPlayer(player)
+    } else {
+      this.$refs.text.innerHTML = player.media.content
+    }
   },
   methods: {
     initPlayer(player) {
