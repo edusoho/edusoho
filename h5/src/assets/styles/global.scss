@@ -13,7 +13,6 @@ a {
 }
 
 .clearfix {
-  display: block;
   clear: both;
 }
 
@@ -57,6 +56,10 @@ a {
 
 .mb20 {
   margin-bottom: vw(20) !important;
+}
+
+.mt50 {
+  margin-top: vw(50);
 }
 
 // color
@@ -109,7 +112,7 @@ a {
   background: #f7f7f7;
 }
 
-// icon 
+// icon
 .icon-unfold {
   width: vw(14);
   height: vw(14);

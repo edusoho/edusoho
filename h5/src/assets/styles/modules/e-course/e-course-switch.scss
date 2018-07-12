@@ -45,7 +45,10 @@
 }
 
 .rank-box {
+  display: flex;
   flex: 1;
+  justify-content: space-between;
+  overflow: hidden;
   .progress {
     width: vw(150);
     background: #ddd;

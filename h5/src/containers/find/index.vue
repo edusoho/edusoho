@@ -6,7 +6,7 @@
       <e-promotion v-if="part.type == 'image'" :promotion="part.data"></e-promotion>
     </div>
     <!-- 垫底的 -->
-    <div style="margin-top: 50px"></div>
+    <div class="mt50"></div>
   </div>
 </template>
 
