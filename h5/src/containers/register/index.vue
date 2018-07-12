@@ -37,7 +37,7 @@
           slot="button" 
           size="small" 
           type="primary"
-          :disabled="codeBtnDisable"
+          :disabled="count.codeBtnDisable"
           @click="handleSendSms">
           发送验证码
           <span v-show="count.showCount">({{ count.num }})</span>
@@ -127,6 +127,7 @@ export default {
     },
     handleSmsSuccess(token) {
       this.registerInfo.dragCaptchaToken = token;
+      this.handleSendSms();
     },
     handleSubmit() {
       const password = this.registerInfo.encrypt_password;

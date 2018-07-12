@@ -1,12 +1,12 @@
 <template>
   <div class="join-before">
     <detail-head 
-      :price="details[selectPlanIndex].price"
-      :courseSet="details[selectPlanIndex].courseSet"></detail-head>
+      :price="details.price"
+      :courseSet="details.courseSet"></detail-head>
 
     <detail-plan
-      :price="details[selectPlanIndex].price"
-      :courseSet="details[selectPlanIndex].courseSet"></detail-plan>
+      :price="details.price"
+      :courseSet="details.courseSet"></detail-plan>
     <div class="segmentation"></div>
 
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
@@ -14,23 +14,25 @@
     </van-tabs>
 
     <!-- 课程介绍 -->
-    <e-panel title="课程介绍" ref="about" class="about"></e-panel>
+    <e-panel title="课程介绍" ref="about" class="about">
+      <div v-html="details.courseSet.summary"></div>
+    </e-panel>
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
     <teacher 
       ref="teacher"
       class="teacher"
-      :teacherInfo="details[selectPlanIndex].teachers"></teacher>
+      :teacherInfo="details.teachers"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
     <directory ref="directory" 
-      :tryLookable="details[selectPlanIndex].tryLookable"
-      :courseItem="details[selectPlanIndex].courseItem"></directory>
+      :tryLookable="details.tryLookable"
+      :courseItems="details.courseItems"></directory>
     
     <e-footer @click.native="handleJoin">
-      {{details[selectPlanIndex].access.code | filterJoinStatus}}</e-footer>
+      {{details.access.code | filterJoinStatus}}</e-footer>
   </div>
 </template>
 <script>
@@ -45,8 +47,8 @@
     name: 'joinBefore',
     props: {
       details: {
-        type: Array,
-        default: () => ([])
+        type: Object,
+        default: () => ({})
       }
     },
     data() {
@@ -59,8 +61,7 @@
           tabsTop: 0,
           teacherTop: 0,
           aboutTop: 0,
-        },
-        selectPlanIndex: 0 //当前选中计划下标
+        }
       }
     },
     components: {
@@ -117,7 +118,7 @@
       handleJoin(){
         if (this.$store.state.token) {
           this.joinCourse({
-            id: this.$route.params.id
+            id: this.details.id
           });
         } else {
           this.$router.push({name: 'login'});

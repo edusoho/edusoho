@@ -25,19 +25,18 @@
           :hiddeTitle=true
           class="join-after-dirctory"
           :tryLookable="details.tryLookable"
-          :courseItem="details.courseItem"></directory>
+          :courseItems="details.courseItems"></directory>
       </template>
 
       <template v-else>
         <!-- 课程计划 -->
-        <detail-plan
-          :price="details.price"
-          :courseSet="details.courseSet"
-          ></detail-plan>
+        <detail-plan></detail-plan>
 
         <div class="segmentation"></div>
         <!-- 课程介绍 -->
-        <e-panel title="课程介绍"></e-panel>
+        <e-panel title="课程介绍">
+          <div v-html="details.courseSet.summary"></div>
+        </e-panel>
         <div class="segmentation"></div>
 
         <!-- 教师介绍 -->
@@ -53,6 +52,7 @@ import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
+import { mapState } from 'vuex';
 
 export default {
   props: ['details'],
@@ -60,7 +60,21 @@ export default {
     return {
       active: 0,
       tabs: ['课程目录', '课程简介'],
-      progress: '20%'
+    }
+  },
+  computed: {
+    progress () {
+      return (this.details.learnedNum /
+        this.details.publishedTaskNum).toFixed(2)*100+'%';
+    },
+    ...mapState('course', {
+      selectedPlanId: state => state.selectedPlanId,
+    })
+  },
+  watch: {
+    selectedPlanId: (val, oldVal) => {
+      val !== oldVal && (this.active = 0)
+      console.log(this.active, 'active')
     }
   },
   components: {
@@ -68,9 +82,6 @@ export default {
     DetailHead,
     DetailPlan,
     Teacher
-  },
-  created(){
-    console.log('after', this.details)
   },
   methods: {
     onTabClick(){

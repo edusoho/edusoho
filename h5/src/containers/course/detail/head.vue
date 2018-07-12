@@ -1,15 +1,18 @@
 <template>
 <div class="course-detail__head">
-  <div class="course-detail__head--img" v-if="sourceType === 'img'">
+  <div class="course-detail__head--img" v-show="sourceType === 'img'">
     <img :src="courseSet.cover.large" alt="">
   </div>
- <div id="course-detail__head--video" v-if="sourceType === 'video'"></div>
+ <div id="course-detail__head--video" 
+  ref="video"
+  v-show="['video', 'audio'].includes(sourceType)"></div>
 </div>
 
 </template>
 <script>
 import loadScript from 'load-script';
 import { mapState } from 'vuex';
+import Api from '@/api'
 
 export default {
   props: {
@@ -24,27 +27,38 @@ export default {
   },
   computed: {
     ...mapState('course', {
-      sourceType: state => state.sourceType
+      sourceType: state => state.sourceType,
+      selectedPlanId: state => state.selectedPlanId,
+      taskId: state => state.taskId
     })
   },
   watch: {
     sourceType: {
       immediate: true,
       handler(v) {
-        ['video', 'radio'].includes(v) && this.initPlayer(v);
+        ['video', 'audio'].includes(v) && this.initPlayer(v);
       }
     }
   },
   methods: {
-    initPlayer (type){
+    async initPlayer (){
+      this.$refs.video.innerHTML = '';
+
+      const player = await Api.getMedia({
+        query: {
+          courseId: this.selectedPlanId,
+          taskId: this.taskId
+        }});
+
+      console.log(player, 'player')
+      const media = player.media;
       const options = {
         id: 'course-detail__head--video',
-        resId: '',
+        resId: media.resId,
         user: {},
-        // playlist: 'http://ese2a3b1c3d55k.pri.qiqiuyun.net/course-task-1/20180621030306-7ks1a405yug48kog?e=1530687514&token=ExRD5wolmUnwwITVeSEXDQXizfxTRp7vnaMKJbO-:hMWXT4qoehVwiMUBgR9ketcNvYA=',
-        playlist: 'http://ese2a3b1c3d55k.pri.qiqiuyun.net/course-task-1/20180621030306-7ks1a405yug48kog?e=1530687514&token=ExRD5wolmUnwwITVeSEXDQXizfxTRp7vnaMKJbO-:hMWXT4qoehVwiMUBgR9ketcNvYA=',
+        playlist: media.url,
         autoplay: true,
-        poster: 'https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg'
+        poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
 
       this.loadPlayerSDK().then(SDK => {

@@ -1,51 +1,67 @@
 <template>
   <div>
-    <e-panel :title="courseSet.title">
+    <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
-        <span>¥{{ price }}</span>
-        <span>{{ courseSet.studentNum }}人在学</span>
+        <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
+        <span>{{ details.courseSet.studentNum }}人在学</span>
       </div>
     </e-panel>
 
     <ul class="course-detail__plan">
       <li v-for="(item, index) in items" 
         @click="handleClick(item, index)" 
-        :class="{ active: item.active }">三月班</li>
+        :class="{ active: item.active }">{{item.title}}</li>
     </ul>
   </div>
 </template>
 <script>
 import * as types from '@/store/mutation-types';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
-  props: ['courseSet', 'price'],
   data() {
     return {
-      items: [{
-        name: '三月班',
-        active: true,
-      },{
-        name: '三月班',
-        active: false,
-      },{
-        name: '三月班',
-        active: false,
-      },{
-        name: '三月班',
-        active: false,
-      }]
+      items: [],
+      isFree: false
     }
   },
+  created () {
+    this.items = this.details.courses.map((item, index) => {
+      this.$set(item, 'active', false);
+
+      if(this.details.id === item.id) {
+        item.active = true;
+      }
+      return item;
+    });
+  },
+  computed: {
+    ...mapState('course', {
+      details: state => state.details
+    })
+  },
   methods: {
-    ...mapMutations('course',{
-      setPlanIndex: types.SET_PLAN_INDEX
-    }),
-    handleClick(item, index){
+    ...mapActions ('course', [
+      'getCourseDetail'
+    ]),
+    handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
 
-      this.setPlanIndex(index);
+      this.getCourseDetail({
+        courseId: item.id
+      })
+    },
+    filterPrice () {
+      const details = this.details;
+
+      if (details.isFree || details.price === '0.00') {
+        this.isFree = true;
+        return '免费';
+      }
+
+      this.isFree = false
+      return `¥${details.price}`;
     }
   }
 }

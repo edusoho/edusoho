@@ -4,7 +4,6 @@
 
     <div class="directory-list">
       <div class="directory-list__item" v-for="(item, index) in chapters">
-
         <div class="directory-list__item-chapter" 
           @click="item.show = !item.show" 
           v-if="item.type === 'chapter'">
@@ -15,7 +14,6 @@
         <div :class="['directory-list__item-unit', 
           {'unit-show': item.show}]"
           v-for="task in tasks[index]">
-
           <div class="lesson-cell__unit" v-if="task.type === 'unit'">
             第{{ task.number }}节：{{ task.title }}
           </div>
@@ -45,7 +43,7 @@
 
   export default {
     props: {
-      courseItem: {
+      courseItems: {
         type: Array,
         default: () => ([])
       },
@@ -53,10 +51,6 @@
         type: String,
         default: ''
       },
-      // joinStatus: {
-      //   type: String,
-      //   default: ''
-      // },
       hiddeTitle: {
         type: Boolean,
         default: false
@@ -64,12 +58,14 @@
     },
     computed: {
       ...mapState('course', {
-        joinStatus: state => state.joinStatus
+        joinStatus: state => state.joinStatus,
+        selectedPlanId: state => state.selectedPlanId,
+        details: state => state.details
       })
     },
     data() {
       return {
-        directoryArray: this.courseItem,
+        directoryArray: this.courseItems,
         chapters: [],
         tasks: []
       }
@@ -117,14 +113,18 @@
         if (data[last].type !== 'chapter') {
           this.tasks.push(temp);
         }
+
+        if (data[0].type !== 'chapter') {
+          this.chapters.unshift({show:true});
+        }
         console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
       getCurrentStatus (task) {
-        if (this.tryLookable
+        if (Number(this.tryLookable)
           && task.type === 'video'
           && task.activity.mediaStorage) {
           return 'is-tryLook';
-        } else if (task.isFree) {
+        } else if (Number(task.isFree)) {
           return 'is-free';
         }
         return '';
@@ -138,42 +138,69 @@
 
         return '';
       },
-      lessonCellClick (task) {
+      lessonCellClick (data) {
+        const task = data.task;
+
+        if (!this.joinStatus && Number(this.tryLookable)) {
         // trylook and free video click
-        if (!this.joinStatus && !!this.tryLookable) {
-          if (task.task.type === 'video' || task.task.type === 'audio') {
-            this.$router.push({
-              name: 'course_try'
-            })
-            this.setSourceType('video');
-          } else if (task.task.type === 'doc') {
-            this.$router.push({
-              name: 'course_web'
-            })
-          } else {
-            Toast('请先加入课程');
+          switch (task.type) {
+            case 'video':
+            case 'audio':
+              this.$router.push({
+                name: 'course_try'
+              })
+
+              this.setSourceType({
+                sourceType: task.type,
+                taskId: task.id
+              });
+              break;
+            case 'doc':
+            case 'ppt':
+              this.$router.push({
+                name: 'course_web',
+                params: {
+                  courseId: this.selectedPlanId,
+                  taskId: task.id,
+                  type: task.type
+                }
+              })
+              break;
+            default:
+              Toast('请先加入课程');
           }
-        } else {
-          this.showTypeDetail(task.task);
         }
         //join after click
-
+        this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
       },
       showTypeDetail (task) {
         switch(task.type) {
           case 'video':
             if (task.mediaSource == 'self') {
-              this.setSourceType('video')
+              this.setSourceType({
+                sourceType: 'video',
+                taskId: task.id
+              })
             } else {
               Toast('暂不支持此类型');
             }
             break;
           case 'audio':
-            this.setSourceType('audio')
+            this.setSourceType({
+              sourceType: 'audio',
+              taskId: task.id
+            })
             break;
+          case 'text':
+          case 'ppt':
           case 'doc':
             this.$router.push({
-              name: 'course_web'
+              name: 'course_web',
+              params: {
+                courseId: this.selectedPlanId,
+                taskId: task.id,
+                type: task.type
+              }
             })
             break;
           default:

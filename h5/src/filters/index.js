@@ -29,6 +29,7 @@ const filters = [
         case 'text':
           type = '图文';
           break;
+        case 'ppt':
         case 'doc':
           type = '文档';
           break;

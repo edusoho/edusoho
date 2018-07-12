@@ -33,9 +33,10 @@
           &.unit-show {
             height: auto;
             margin:0 vw(10);            
-            + .unit-show:not(:last-child) {
-              border-bottom: 1px solid #EEE;
-              margin-bottom: 10px;
+            + .unit-show {
+              border-top: 1px solid #EEE;
+              margin-top: 5px;
+              padding-top: 15px;
             }
           }
         }
