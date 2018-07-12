@@ -892,7 +892,7 @@ course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
 course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。
 course.name: 课程名称
-course.price: 价格：
+course.price: 价格
 course.price.RMB: %price%元
 course.price.show: 课程价格
 

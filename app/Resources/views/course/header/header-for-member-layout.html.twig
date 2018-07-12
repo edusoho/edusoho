@@ -8,6 +8,7 @@
   </div>
   {% endif %}
 {% endblock %}
+
 {% block course_member_exit %}
 	{% if member and not member.locked and member.role != 'teacher' and course.parentId == 0 %}
 		<li>
