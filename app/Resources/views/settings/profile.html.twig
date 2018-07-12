@@ -20,19 +20,15 @@
   {{ web_macro.flash_messages(true) }}
   <form id="user-profile-form" class="row cd-row" method="post">
     <div class="col-md-11">
-      <div class="cd-image-upload cd-mr24 cd-mb40">
-        <img class="cd-avatar cd-avatar-square cd-avatar-lg" id="profile-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
-        <div class="image-upload-mask">
-          <div class="image-upload-content">
-            <i class="cd-icon cd-icon-camera"></i>
-            {{'user.settings.basic_info.shange_avatar'|trans}}
-          </div>
-        </div>
-        {% include 'common/local-crop-image.html.twig' with {
-          saveUrl: 'settings_profile_avatar_crop_modal',
-          targetImg: '#profile-avatar',
+      <div class=" cd-mr24 cd-mb40">
+        {% include 'common/upload-image.html.twig' with {
+          saveUrl: path('settings_profile_avatar_crop_modal'),
+          targetImg: 'profile-avatar',
           cropWidth: '270',
-          cropHeight: '270'
+          cropHeight: '270',
+          imageClass: 'cd-avatar cd-avatar-square cd-avatar-lg',
+          imageText: 'user.settings.basic_info.shange_avatar'|trans,
+          imageSrc: filepath(user.largeAvatar, 'avatar.png'),
         } %}
       </div>
       <p class="image-upload-tip">{{ 'user.settings.upload.img.tip'|trans }}</p>

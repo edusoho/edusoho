@@ -78,7 +78,7 @@ class CourseSetManageController extends BaseController
         );
     }
 
-    public function headerAction($courseSet, $course = null)
+    public function headerAction($courseSet, $course = null, $foldType = 0)
     {
         //暂时显示课程的创建者
         $studentNum = $this->getCourseMemberService()->countStudentMemberByCourseSetId($courseSet['id']);
@@ -91,11 +91,12 @@ class CourseSetManageController extends BaseController
                 'course' => $course,
                 'studentNum' => $studentNum,
                 'couserNum' => $couserNum,
+                'foldType' => $foldType
             )
         );
     }
 
-    public function sidebarAction($courseSetId, $curCourse, $sideNav)
+    public function sidebarAction($courseSetId, $curCourse, $courseSideNav)
     {
         $user = $this->getCurrentUser();
 
@@ -130,7 +131,7 @@ class CourseSetManageController extends BaseController
                 'courseSet' => $courseSet,
                 'curCourse' => $curCourse,
                 'courses' => $courses,
-                'side_nav' => $sideNav,
+                'course_side_nav' => $courseSideNav,
                 'hasLiveTasks' => $hasLiveTasks,
             )
         );
@@ -173,50 +174,10 @@ class CourseSetManageController extends BaseController
         );
     }
 
-    public function coverAction(Request $request, $id)
-    {
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            $this->getCourseSetService()->changeCourseSetCover($id, $data);
-
-            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $id)));
-        }
-
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        // if ($courseSet['cover']) {
-        //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
-        // }
-
-        if ($courseSet['locked']) {
-            return $this->redirectToRoute(
-                'course_set_manage_sync',
-                array(
-                    'id' => $id,
-                    'sideNav' => 'cover',
-                )
-            );
-        }
-
-        return $this->render(
-            'courseset-manage/cover.html.twig',
-            array(
-                'courseSet' => $courseSet,
-            )
-        );
-    }
-
     public function coverCropAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-            $courseSet = $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data['images'], true));
-            $cover = $this->getWebExtension()->getFpath($courseSet['cover']['large']);
-
-            return $this->createJsonResponse(array('code' => true, 'cover' => $cover));
-        }
-
         if ($courseSet['locked']) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
@@ -227,19 +188,15 @@ class CourseSetManageController extends BaseController
             );
         }
 
-        $fileId = $request->getSession()->get('fileId');
+        if ('POST' == $request->getMethod()) {
+            $data = $request->request->all();
+            $courseSet = $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
+            $cover = $this->getWebExtension()->getFpath($courseSet['cover']['large']);
 
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
+            return $this->createJsonResponse(array('image' => $cover));
+        }
 
-        return $this->render(
-            'courseset-manage/cover-crop-modal.html.twig',
-            array(
-                'courseSet' => $courseSet,
-                'pictureUrl' => $pictureUrl,
-                'naturalSize' => $naturalSize,
-                'scaledSize' => $scaledSize,
-            )
-        );
+        return $this->render('courseset-manage/cover-crop-modal.html.twig');
     }
 
     public function deleteAction($id)
@@ -444,6 +401,7 @@ class CourseSetManageController extends BaseController
             return $this->createJsonResponse($e->getMessage(), 500);
         }
     }
+
     protected function getCourseTypes()
     {
         return $this->get('web.twig.course_extension')->getCourseTypes();

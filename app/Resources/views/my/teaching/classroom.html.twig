@@ -37,7 +37,7 @@
                 <i class="es-icon es-icon-groupadd mll"></i> {{classroom.studentNum + classroom.auditorNum}}</span>
                 <div class="course-footer clearfix mtl">
                    <strong class="mrl">{{'my.teaching.classroom.today_data_title'|trans}}</strong>
-                   {{ 'my.teaching.classroom.today_data'|trans({'%allCount%':classroom.allCount, '%threadCount%':classroom.threadCount, '%todayFinishedTaskNum%':classroom.todayFinishedTaskNum})|raw }}
+                   {{ 'my.teaching.classroom.today_data'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%allCount%':classroom.allCount, '%threadCount%':classroom.threadCount, '%todayFinishedTaskNum%':classroom.todayFinishedTaskNum})|raw }}
                 </div>
               </div>
             </li>

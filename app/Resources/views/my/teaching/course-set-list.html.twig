@@ -16,8 +16,11 @@
 {% endblock %}
 
 {% block btn %}
-  <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.manage_btn'|trans }}</a>
+  <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
 {% endblock %}
 
 {% block close %}
 {% endblock %}
+
+{% block fold %}{% endblock %}
+{% block unfold %}{% endblock %}

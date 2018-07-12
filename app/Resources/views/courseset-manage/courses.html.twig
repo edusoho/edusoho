@@ -1,20 +1,20 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 
 {% block title %}{{ 'course.teach_plan_manage'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'plan' %}
-
+{% set courseTypes = get_course_count(courseSet.id) %}
 {% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
   <div role="courseset-manage-courses">
     <div class="cd-mb24 clearfix">
       <div class="pull-right">
-        <div class="js-sort-group">
+        <div class="js-sort-group hidden-xs">
           <button class="cd-btn cd-btn-primary cd-mr16" data-toggle="modal" data-target="#modal"
             data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}">{{ 'course.teaching_plan.create'|trans }}</button>
-          <button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>
+          {% if courseTypes > 1 %}<button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
         </div>
-        <div class="js-sort-group hide">
+        <div class="js-sort-group hidden-xs hide">
           <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>
           <button class="cd-btn cd-btn-default js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
         </div>
@@ -32,10 +32,15 @@
     <ul class="js-plan-list courses-manage-list sortable-list" data-sort-url="{{ path('course_sort', {courseSetId: courseSet.id}) }}">
       {% for course in courses %}
         <li class="cd-mb24 js-plan-item courses-manage-item js-status-{{ course.status }}" id="course-plan-{{ course.id }}" data-course-id="{{ course.id }}">
-          {% include 'courseset-manage/course-list.html.twig' %}
+          {% include 'courseset-manage/course-list.html.twig' with { courseTypes: courseTypes }%}
         </li>
     {% endfor %}
-    </div>
+    </ul>
+    {% if courseTypes == 1 %}
+      <div class="courses-manage-plan-info">
+        {{ 'course.plan_info'|trans|raw }}
+      </div>
+    {% endif %}
     <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
   </div>
 {% endblock %}

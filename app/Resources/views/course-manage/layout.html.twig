@@ -3,7 +3,9 @@
   {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
 {% endblock %}
 
-{% block sectionClass %} course-header-section {% endblock %}
+{% set courseTypes = get_course_count(courseSet.id) %}
+{% set side_nav =  1 == courseTypes ?  'default-course-info' : 'plan' %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
@@ -12,20 +14,28 @@
   </ol>
 {% endblock %}
 
-{% block navbar %}
+{% block courseset_header %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 1})) }}
 {% endblock %}
 
+
+{% block paddingClass %}course-manage-body {% endblock %}
+
 {% block course_header %}
-  {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+  {% if courseTypes > 1 %}
+    <div class="course-manage-header-wrap">
+      {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block sidebar %}
-  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), courseSideNav: course_side_nav|default(null)})) }}
 {% endblock %}
 
 {% block main %}
   <div class="cd-main">
-    <div class="cd-main__heading">
+    <div class="cd-main__heading {% block main_heading_class %}{% endblock %}">
       {% block main_heading %}
         <div class="cd-main__title">
           {% block page_title %}{% endblock %}

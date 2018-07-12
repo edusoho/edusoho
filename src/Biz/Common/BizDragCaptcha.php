@@ -19,6 +19,8 @@ class BizDragCaptcha extends BizAware
 
     const TOKENTYPE = 'drag_captcha';
 
+    const TIMES_LIMIT = 2;
+
     private $backgroundImages = array(
         '1.jpg',
         '2.jpg',
@@ -28,8 +30,14 @@ class BizDragCaptcha extends BizAware
         '6.jpg',
     );
 
-    public function generate()
+    public function generate($params, $limitKey = '')
     {
+        $params = array_merge(array(
+            'times' => 2,
+        ), $params);
+        $params = $this->filter($params);
+        $this->limit($limitKey);
+
         $bg = $this->backgroundImages[rand(0, 5)];
         $imagePath = $this->getImagePath($bg);
         $size = getimagesize($imagePath);
@@ -43,7 +51,7 @@ class BizDragCaptcha extends BizAware
         $jigsaw = $this->getJigsaw($options);
 
         $token = $this->getTokenService()->makeToken(self::TOKENTYPE, array(
-            'times' => 2,
+            'times' => $params['times'],
             'duration' => 60 * 15,
             'userId' => 0,
             'data' => $options,
@@ -97,6 +105,31 @@ class BizDragCaptcha extends BizAware
         }
 
         return true;
+    }
+
+    private function filter($params)
+    {
+        if ($params['times'] > self::TIMES_LIMIT) {
+            $params['times'] = self::TIMES_LIMIT;
+        }
+
+        return $params;
+    }
+
+    private function limit($limitKey)
+    {
+        if (empty($limitKey)) {
+            return;
+        }
+
+        $biz = $this->biz;
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('drag_captcha', 100, 3600);
+        $remain = $limiter->check($limitKey);
+
+        if (0 == $remain) {
+            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_FREQUENT();
+        }
     }
 
     private function decodeToken($toke)

@@ -1,8 +1,3 @@
-import ReactDOM from 'react-dom';
-import React from 'react';
-import MultiInput from 'app/common/component/multi-input';
-import postal from 'postal';
-
 export default class detail {
   constructor() {
     this.$from = $('#courseset-detail-form');
@@ -11,8 +6,6 @@ export default class detail {
 
   init() {
     this.initCkeditor();
-    this.renderMultiGroupComponent('course-goals', 'goals');
-    this.renderMultiGroupComponent('intended-students', 'audiences');
   }
 
   initCkeditor() {
@@ -30,40 +23,20 @@ export default class detail {
     });
   }
 
-  renderMultiGroupComponent(elementId, name) {
-    let datas = $('#' + elementId).data('init-value');
-    ReactDOM.render(<MultiInput
-      blurIsAdd={true}
-      sortable={true}
-      dataSource={datas}
-      inputName={name + '[]'}
-      outputDataElement={name} />,
-    document.getElementById(elementId)
-    );
-  }
-
   submitForm() {
     this.validator = this.$from.validate({
       rules: {
         summary: {
           ckeditor_maxlength: 10000,
-        },
+        }
       }
     });
 
     $('#detail-submit').click(() => {
-      this.publishAddMessage();
       $('#courseset-summary-field').val(this.editor.getData());
       if (this.validator.form()) {
         this.$from.submit();
       }
-    });
-  }
-
-  publishAddMessage() {
-    postal.publish({
-      channel: 'courseInfoMultiInput',
-      topic: 'addMultiInput',
     });
   }
 }

@@ -5,12 +5,7 @@ import postal from 'postal';
 import notify from 'common/notify';
 
 class courseInfo {
-
   constructor() {
-    this.init();
-  }
-
-  init() {
     if ($('#maxStudentNum-field').length > 0) {
       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
         $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
@@ -19,24 +14,49 @@ class courseInfo {
     this.initValidator();
     this.checkBoxChange();
     this.changeAudioMode();
-    this.initDatePicker('#expiryStartDate');
-    this.initDatePicker('#expiryEndDate');
-    this.renderMultiGroupComponent('course-goals', 'goals');
-    this.renderMultiGroupComponent('intended-students', 'audiences');
+    this.initDatetimepicker();
+    this.initExpiryMode();
+    this.setService();
   }
 
-  initCkeidtor() {
-    this.editor = CKEDITOR.replace('summary', {
-      allowedContent: true,
-      toolbar: 'Detail',
-      fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
-    });
+  setService() {
+    $('.js-service-item').click(function (event) {
+      let $item = $(event.currentTarget);
+      let $values = $('#course_services').val();
+      let values;
+      if (!$values) {
+        values = [];
+      } else {
+        values = JSON.parse($values);
+      }
 
-    this.editor.on('blur', () => {
-      $('#summary').val(this.editor.getData());
-      this.validator.form();
+      if ($item.hasClass('service-primary-item')) {
+        $item.removeClass('service-primary-item');
+        values.splice(values.indexOf($item.data('code')), 1);
+      } else {
+        $item.addClass('service-primary-item');
+        values.push($item.data('code'));
+      }
+      
+      $('#course_services').val(JSON.stringify(values));
     });
+  }
+
+  initDatetimepicker() {
+    $('input[name="buyExpiryTime"]').datetimepicker({
+      format: 'yyyy-mm-dd',
+      language: document.documentElement.lang,
+      minView: 2, //month
+      autoclose: true,
+    }).on('hide', () => {
+      this.validator && this.validator.form();
+    });
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now()));
+    $('input[name="buyExpiryTime"]').datetimepicker('setEndDate', new Date(Date.now() + 86400 * 365 * 10 * 1000));
+
+    this.initDatePicker('#expiryStartDate');
+    this.initDatePicker('#expiryEndDate');
+    this.initDatePicker('#deadline');
   }
 
   changeAudioMode() {
@@ -58,22 +78,17 @@ class courseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
-        summary: {
-          ckeditor_maxlength: 10000,
-        },
-        title: {
-          maxlength: 100,
-          required: {
-            depends: function () {
-              $(this).val($.trim($(this).val()));
-              return true;
-            }
-          }
-        },
         maxStudentNum: {
           required: true,
           live_capacity: true,
           positive_integer: true
+        },
+        title: {
+          required: true,
+          maxlength: 10,
+        },
+        subtitle: {
+          maxlength: 30
         },
         expiryDays: {
           required: () => {
@@ -137,12 +152,20 @@ class courseInfo {
       Translator.trans('course.manage.expiry_start_date_error_hint')
     );
 
-    $('#course-submit').click(() => {
-      $('#summary').val(this.editor.getData());
-      if (this.validator.form()) {
-        this.publishAddMessage();
-        $form.submit();
+    $.validator.addMethod('max_year', function (value, element) {
+      return this.optional(element) || value < 100000;
+    }, Translator.trans('course.manage.max_year_error_hint'));
+
+    $.validator.addMethod('live_capacity', function (value, element) {
+      const maxCapacity = parseInt($(element).data('liveCapacity'));
+      if (value > maxCapacity) {
+        const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
+        $(element).parent().siblings('.js-course-rule').find('p').html(message);
+      } else {
+        $(element).parent().siblings('.js-course-rule').find('p').html('');
       }
+
+      return true;
     });
   }
 
@@ -158,33 +181,160 @@ class courseInfo {
     $picker.datetimepicker('setStartDate', new Date());
   }
 
+
   checkBoxChange() {
-    $('input[name="expiryMode"]').on('change', function (event) {
+    $('input[name="buyable"]').on('change',  (event)=> {
+      if ($('input[name="buyable"]:checked').val() == 0) {
+        $('.js-course-add-close-show').removeClass('hidden');
+        $('.js-course-add-open-show').addClass('hidden');
+      } else {
+        $('.js-course-add-close-show').addClass('hidden');
+        $('.js-course-add-open-show').removeClass('hidden');
+      }
+      this.initenableBuyExpiry();
+    });
+
+    $('input[name="deadlineType"]').on('change', (event) => {
+      if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+        $('#deadlineType-date').removeClass('hidden');
+        $('#deadlineType-days').addClass('hidden');
+      } else {
+        $('#deadlineType-date').addClass('hidden');
+        $('#deadlineType-days').removeClass('hidden');
+      }
+      this.initExpiryMode();
+    });
+
+    $('input[name="expiryMode"]').on('change', (event) => {
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
-      } else {
+      } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
+      } else {
+        $('#expiry-date').removeClass('hidden').addClass('hidden');
+        $('#expiry-days').removeClass('hidden').addClass('hidden');
       }
+      this.initExpiryMode();
     });
+
+    $('input[name="enableBuyExpiryTime"]').on('change', (event) => {
+      if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
+        $('#buyExpiryTime').addClass('hidden');
+      } else {
+        $('#buyExpiryTime').removeClass('hidden');
+      }
+      this.initenableBuyExpiry();
+    });
+
+  }
+
+  initExpiryMode() {
+    let $deadline = $('[name="deadline"]');
+    let $expiryDays = $('[name="expiryDays"]');
+    let $expiryStartDate = $('[name="expiryStartDate"]');
+    let $expiryEndDate = $('[name="expiryEndDate"]');
+    let expiryMode = $('[name="expiryMode"]:checked').val();
+    let $deadlineType = $('[name="deadlineType"]:checked');
+    this.elementRemoveRules($deadline);
+    this.elementRemoveRules($expiryDays);
+    this.elementRemoveRules($expiryStartDate);
+    this.elementRemoveRules($expiryEndDate);
+
+    switch (expiryMode) {
+    case 'days':
+      if ($deadlineType.val() === 'end_date') {
+        this.elementAddRules($deadline, this.getDeadlineEndDateRules());
+        this.validator.form();
+        return;
+      }
+      this.elementAddRules($expiryDays, this.getExpiryDaysRules());
+      this.validator.form();
+      break;
+    case 'date':
+      this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
+      this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
+      this.validator.form();
+      break;
+    default:
+      this.validator.form();
+      break;
+    }
+  }
+
+  elementRemoveRules($element) {
+    $element.rules('remove');
+  }
+
+  elementAddRules($element, options) {
+    $element.rules('add', options);
+  }
+
+  getExpiryDaysRules() {
+    return {
+      required: true,
+      positive_integer: true,
+      max_year: true,
+      messages: {
+        required: Translator.trans(Translator.trans('course.manage.expiry_days_error_hint'))
+      }
+    };
+  }
+
+  initenableBuyExpiry() {
+    let $enableBuyExpiryTime = $('[name="enableBuyExpiryTime"]:checked');
+    let $buyable = $('[name="buyable"]:checked');
+    let $buyExpiryTime = $('[name="buyExpiryTime"]');
+    if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
+      this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
+    }
+    else {
+      this.elementRemoveRules($buyExpiryTime);
+    }
+    this.validator.form();
+  }
+
+  getBuyExpiryTimeRules() {
+    return {
+      required: true,
+      messages: {
+        required: Translator.trans('course.manage.buy_expiry_time_required_error_hint')
+      }
+    };
+  }
+
+  getExpiryStartDateRules() {
+    return {
+      required: true,
+      date: true,
+      before_date: '#expiryEndDate',
+      messages: {
+        required: Translator.trans('course.manage.expiry_start_date_error_hint')
+      }
+    };
+  }
+
+  getExpiryEndDateRules() {
+    return {
+      required: true,
+      date: true,
+      after_date: '#expiryStartDate',
+      messages: {
+        required: Translator.trans('course.manage.expiry_end_date_error_hint')
+      }
+    };
+  }
+
+  getDeadlineEndDateRules() {
+    return {
+      required: true,
+      date: true,
+      messages: {
+        required: Translator.trans('course.manage.deadline_end_date_error_hint')
+      }
+    };
   }
 }
 
 new courseInfo();
-
-jQuery.validator.addMethod('max_year', function (value, element) {
-  return this.optional(element) || value < 100000;
-}, Translator.trans('course.manage.max_year_error_hint'));
-
-jQuery.validator.addMethod('live_capacity', function (value, element) {
-  const maxCapacity = parseInt($(element).data('liveCapacity'));
-  if (value > maxCapacity) {
-    const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
-    $(element).parent().siblings('.js-course-rule').find('p').html(message);
-  } else {
-    $(element).parent().siblings('.js-course-rule').find('p').html('');
-  }
-
-  return true;
-});

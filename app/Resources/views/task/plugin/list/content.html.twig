@@ -39,12 +39,12 @@
           {% if not task_lock  and   task.status == 'published' %}
             <a class="title"
                href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-              {% if task.isOptional %}<span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% else %}{{'course.plan_task.task'|trans}}{{ task.number }}:{% endif %} {{ task.title }}
+              {% if task.isOptional %}<span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% else %}{{'course.plan_task.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}{{ task.number }}:{% endif %} {{ task.title }}
             </a>
           {% else %}
             <div class="title"
                  data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-              {% if task.isOptional %}<span class="label label-success mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% endif %}{{'course.plan_task.task'|trans}}{{ task.number }}: {{ task.title }}
+              {% if task.isOptional %}<span class="label label-success mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% endif %}{{'course.plan_task.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}{{ task.number }}: {{ task.title }}
             </div>
           {% endif %}
 
@@ -54,11 +54,11 @@
             <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format(task.activity.mediaType) }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
         </span>
-            <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans}}</span>
+            <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
           {% else %}
             <span class="right-menu">{{ task.activity.length|activity_length_format(task.activity.mediaType) }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"
-                 data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}{{'course.plan_task.task'|trans}}"></i></span>
+                 data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}{{'course.plan_task.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}"></i></span>
           {% endif %}
         </li>
 

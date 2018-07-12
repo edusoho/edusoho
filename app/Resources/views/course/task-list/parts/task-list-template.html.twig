@@ -15,7 +15,7 @@
   <li class="task-item task-content mouse-control infinite-item"
       display-if="{isTask}">
     <i display-if="{isTaskLocked}" class="{taskClass}" data-toggle="tooltip" data-trigger="hover" 
-      data-placement="top" title="{{ 'course.task.lock_tips'|trans }}">
+      data-placement="top" title="{{ 'course.task.lock_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}">
     </i>
 
     <i hide-if="{isTaskLocked}" class="{taskClass}">

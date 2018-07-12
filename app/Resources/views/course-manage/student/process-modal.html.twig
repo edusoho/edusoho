@@ -59,7 +59,7 @@
 	  <div class="lump-list">
 	    <a class="color-lump lump-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content='<div class="process-popover"'>
 	      <div class="process-popover-title bg-danger"> <i class="es-icon es-icon-assignment-turned-in mrs"></i>
-	        {{ 'course.members_manage.official_student.detail.task_sleep'|trans }}
+	        {{ 'course.members_manage.official_student.detail.task_sleep'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
 	      </div>
 	      <div class="process-popover-score">1 天</div>
 	      <div class="process-popover-date">计划完成日期：2016-03-08</div>
