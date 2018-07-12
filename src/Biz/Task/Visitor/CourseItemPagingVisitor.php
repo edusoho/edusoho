@@ -174,7 +174,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         }
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, false);
+        $activities = $this->getActivityService()->findActivities($activityIds, true , 0);
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as &$task) {
