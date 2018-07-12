@@ -1,7 +1,7 @@
 {% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) and setting('storage.upload_mode') == 'cloud' %}
   {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~fileType  : 'js-attachment-ids'%}
   {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
-  {% set reupload = attachments|default(null)|length %}
+  {% set reupload = attachments|default()|length %}
 
   {#{% do load_script('topxiawebbundle/controller/attachment/upload-form') %}#}
 

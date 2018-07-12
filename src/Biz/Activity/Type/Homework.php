@@ -19,7 +19,7 @@ class Homework extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'homework');
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'homework');
     }
