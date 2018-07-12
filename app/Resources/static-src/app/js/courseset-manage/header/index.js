@@ -16,7 +16,7 @@ export const publishCourseSet = () => {
         notify('success', Translator.trans('course_set.manage.publish_success_hint'));
         location.reload();
       } else {
-        notify('danger',Translator.trans('course_set.manage.publish_fail_hint')+':' + Translator.trans(data.message), {delay:5000});
+        notify('danger', Translator.trans('course_set.manage.publish_fail_hint') + ':' + Translator.trans(data.message), { delay: 5000 });
       }
     });
   });

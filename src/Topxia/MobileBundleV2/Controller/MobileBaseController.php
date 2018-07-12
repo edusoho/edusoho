@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Biz\Course\Util\CourseTitleUtils;
 
 class MobileBaseController extends BaseController
 {
@@ -364,11 +365,7 @@ class MobileBaseController extends BaseController
         foreach ($copyKeys as $value) {
             $course[$value] = $courseSet[$value];
         }
-        if (CourseService::DEFAULT_COURSE_TYPE == $course['courseType'] && '默认教学计划' == $course['title']) {
-            $course['title'] = $courseSet['title'];
-        } else {
-            $course['title'] = $courseSet['title'].'-'.$course['title'];
-        }
+        $course = CourseTitleUtils::formatTitle($course, $courseSet['title']);
 
         return $course;
     }

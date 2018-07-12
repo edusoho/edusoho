@@ -817,9 +817,9 @@ class CourseManageController extends BaseController
             $defaultPlanTitle = $request->request->get('title');
             $this->getCourseService()->publishAndSetDefaultCourseType($courseId, $defaultPlanTitle);
 
-            return $this->redirect(
-                $this->generateUrl('course_set_manage_courses', array('courseSetId' => $courseSetId))
-            );
+            return $this->createJsonResponse(array(
+                'success' => true,
+            ));
         }
 
         return $this->render(

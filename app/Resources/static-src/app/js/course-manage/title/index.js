@@ -30,7 +30,12 @@ class PlanTitle {
     $('#course-title-submit').click((evt) => {
       if (this.validator.form()) {
         $(evt.currentTarget).button('loading');
-        $form.submit();
+        let params = { title: $('#planTitle').val() };
+        $.post($form.attr('action'), params, resp => {
+          if (resp && resp.success) {
+            location.reload();
+          }
+        });
       }
     });
   }

@@ -673,7 +673,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['status'] = 'published';
         }
 
-        $count = $this->countCourses(array('courseSetId' => $courseSetId));
+        $count = $this->countCourses($conditions);
 
         return $count > 1;
     }
