@@ -14,7 +14,7 @@ class PageDiscoveryFilter extends Filter
     protected function publicFields(&$data)
     {
         if ('slide_show' == $data['type']) {
-            $this->getFullImagePath($data['data']);
+            $this->getFullPath($data['data']);
         }
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
@@ -31,10 +31,11 @@ class PageDiscoveryFilter extends Filter
         }
     }
 
-    protected function getFullImagePath(&$data)
+    protected function getFullPath(&$data)
     {
         foreach ($data as &$items) {
             $items['image'] = AssetHelper::uriForPath($items['image']);
+            $items['link']['url'] = empty($items['link']['url']) ? AssetHelper::uriForPath('') : $items['link']['url'];
         }
     }
 
