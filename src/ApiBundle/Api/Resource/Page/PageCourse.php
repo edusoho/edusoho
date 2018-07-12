@@ -1,0 +1,50 @@
+<?php
+
+namespace ApiBundle\Api\Resource\Page;
+
+use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Annotation\ResponseFilter;
+
+class PageCourse extends AbstractResource
+{
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Page\PageCourseFilter", mode="public")
+     */
+    public function get(ApiRequest $request, $portal, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        $course['learnedNum'] = empty($member) ? 0 : $member['learnedNum'];
+        $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
+        $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
+        $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
+        $course['courseItems'] = $this->getCourseService()->findCourseItems($courseId);
+        $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
+        $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
+
+        return $course;
+    }
+
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
+    }
+
+    private function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+}

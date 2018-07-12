@@ -249,4 +249,6 @@ interface CourseService
      *    （如果已经存在 excludeTypes 属性，则额外新增，非替换）
      */
     public function appendReservationConditions($conditions);
+
+    public function fillCourseTryLookVideo($courses);
 }
