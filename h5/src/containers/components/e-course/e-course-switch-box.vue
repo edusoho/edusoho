@@ -32,13 +32,11 @@
     </div>
 
     <!-- rank -->
-    <div class="rank-box clearfix" v-if="type === 'rank'">
-      <div>
-        <div class="progress round-conner pull-left">
-          <div class="curRate round-conner" :style="{ width: rate + '%' }"></div>
-        </div>
+    <div class="rank-box" v-if="type === 'rank'">
+      <div class="progress round-conner">
+        <div class="curRate round-conner" :style="{ width: rate + '%' }"></div>
       </div>
-      <span class="pull-right">{{ this.rate }}%</span>
+      <span class="">{{ this.rate }}%</span>
     </div>
   </div>
 </template>
@@ -58,15 +56,17 @@
         type: Object,
         default: {},
       },
-      rate: {
-        type: Number,
-        default: 0,
-      }
     },
     data() {
       return {
         isFree: this.course.price == 0,
       };
+    },
+    computed: {
+      rate() {
+        if (this.course.publishedTaskNum) return 0;
+        return (this.course.learnedNum/this.course.publishedTaskNum)*100
+      }
     },
     created() {
 
