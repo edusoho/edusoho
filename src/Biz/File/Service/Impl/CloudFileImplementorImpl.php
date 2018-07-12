@@ -338,7 +338,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         foreach ($globalIdsChunks as $globalIdsChunk) {
             $conditions['limit'] = count($globalIdsChunk);
             $conditions['nos'] = implode(',', $globalIdsChunk);
-            $result = $this->createApi('leaf')->get('/resources', $conditions);
+            $result = $this->createApi('root')->get('/resources', $conditions);
             if (!empty($result['data'])) {
                 $data = array_merge($data, $result['data']);
                 $count += $result['count'];

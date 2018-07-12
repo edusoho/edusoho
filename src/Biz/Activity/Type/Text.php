@@ -20,7 +20,7 @@ class Text extends Activity
         return $this->getTextActivityDao()->get($targetId);
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         return $this->getTextActivityDao()->findByIds($ids);
     }
