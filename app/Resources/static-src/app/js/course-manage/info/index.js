@@ -88,7 +88,7 @@ class courseInfo {
           required: true,
           maxlength: 10,
         },
-        intro: {
+        subtitle: {
           maxlength: 30
         },
         expiryDays: {
@@ -155,6 +155,22 @@ class courseInfo {
       },
       Translator.trans('course.manage.expiry_start_date_error_hint')
     );
+
+    $.validator.addMethod('max_year', function (value, element) {
+      return this.optional(element) || value < 100000;
+    }, Translator.trans('course.manage.max_year_error_hint'));
+
+    $.validator.addMethod('live_capacity', function (value, element) {
+      const maxCapacity = parseInt($(element).data('liveCapacity'));
+      if (value > maxCapacity) {
+        const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
+        $(element).parent().siblings('.js-course-rule').find('p').html(message);
+      } else {
+        $(element).parent().siblings('.js-course-rule').find('p').html('');
+      }
+
+      return true;
+    });
   }
 
   initDatePicker($id) {
@@ -330,19 +346,3 @@ class courseInfo {
 }
 
 new courseInfo();
-
-jQuery.validator.addMethod('max_year', function (value, element) {
-  return this.optional(element) || value < 100000;
-}, Translator.trans('course.manage.max_year_error_hint'));
-
-jQuery.validator.addMethod('live_capacity', function (value, element) {
-  const maxCapacity = parseInt($(element).data('liveCapacity'));
-  if (value > maxCapacity) {
-    const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
-    $(element).parent().siblings('.js-course-rule').find('p').html(message);
-  } else {
-    $(element).parent().siblings('.js-course-rule').find('p').html('');
-  }
-
-  return true;
-});
