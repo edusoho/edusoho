@@ -68,13 +68,17 @@
   }
 
   .course-operation--market {
-    left: 24px;
-    bottom: 0;
+    position: static;
+    float: left;
+    line-height: 34px;
   }
   
   .course-operation--normal {
     right: 10px;
     top: 20px;
+  }
+  .course-operation-btn {
+    margin-right: 24px;
   }
 
   .course-detail-bottom {
@@ -135,7 +139,6 @@
     .course-detail-info {
       position: relative;
       padding-left: 24px;
-      padding-top: 8px;
       margin-left: 480px;
       height: 270px;
       font-size: 12px;
@@ -145,7 +148,9 @@
        padding: 0;
       }
       .course-detail-title {
+        margin-right: 12px;
         width: 64px;
+        text-align: right;
         display: inline-block;
         @media(max-width:@screen-xs-max) {
           display: none;
@@ -159,7 +164,14 @@
         .course-detail-expiry {
           font-weight: 500;
         }
-        @media(max-width:@screen-sm-max){
+        &.course-detail-gray--market {
+          margin: 0 24px 16px 0;
+          padding: 16px 0 16px 16px;
+          @media(min-width: @screen-xs-min) {
+            background-color: @bg-color;
+          }
+        }
+        @media(max-width: @screen-sm-max) {
           padding-left: 15px;
           min-height: auto;
           margin: 0px -15px 10px -15px;
@@ -174,8 +186,7 @@
         }
         .course-detail-content {
           position: relative;
-          height: 22px;
-          padding-left: 68px;
+          padding-left: 80px;
           @media(max-width: @screen-xs-max){
             padding-left: 0;
             padding-right: 15px;
@@ -185,10 +196,7 @@
               .border-radius(2px);
               font-size: 12px !important;
               line-height: 1 !important;
-              padding: 4px 8px !important;
-              &:after {
-                border-width: 0 0 8px 8px !important;
-              }
+              padding: 7px 8px !important;
             }
             display: inline-block;
              @media(max-width: @screen-xs-max){
@@ -204,6 +212,7 @@
           .course-detail-title {
             position: absolute;
             left: 0;
+            line-height: 28px;
           }
         }
       }
@@ -253,7 +262,7 @@
 }
 
 .course-detail-info__title {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   color: @gray-darker;
   font-size: 20px;
   font-weight: 500;
@@ -267,37 +276,52 @@
   }
 }
 
-.course-detail-price-label {
+.course-detail__label {
+  margin-right: 12px;
   width: 48px;
   color: @gray;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1;
 }
 
+.course-detail-activity-title {
+  padding-right: 16px;
+  border-right: 1px solid @brand-warning;
+}
+
 .course-detail-price-money {
-  vertical-align: sub;
   font-size: 24px;
   line-height: 1;
   color: #ff0000;
 }
 
+
 .course-detail-expiry-wrap {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   line-height: 1;
 }
 .course-detail-btn {
-  position: absolute;
-  bottom: 0;
-  right: 48px;
+}
+
+.vertical-sub {
+  vertical-align: sub;
 }
 
 .course-detail-service {
+  line-height: 20px;
   .lump-sm {
     color: @gray-dark;
     &.bg-primary {
       color: #fff;
     }
+  }
+}
+.course-detail-listening {
+  line-height: 20px;
+  margin-top: 16px;
+  @media (max-width: @screen-xs-min) {
+    margin-top: 0;
   }
 }
 
@@ -482,11 +506,17 @@
 }
 
 .buy-btn-group  {
-  @media(max-width:@screen-xs-max) {
+  @media(max-width: @screen-sm-max) {
     line-height: 33px;
     position: absolute;
     right: 10px;
-    bottom: 40px;
+    bottom: -50px;
+  }
+  @media(max-width: @screen-xs-max) {
+    bottom: -30px;
+  }
+  @media(max-width: @screen-xs-min) {
+    bottom: -50px;
   }
   .btn-lg {
     padding: 10px 35px;
