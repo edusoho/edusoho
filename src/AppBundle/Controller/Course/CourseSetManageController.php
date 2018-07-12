@@ -145,9 +145,7 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect($this->generateUrl('course_set_manage_base', array('id' => $id)));
+            return $this->createJsonResponse(true);
         }
 
         if ($courseSet['locked']) {

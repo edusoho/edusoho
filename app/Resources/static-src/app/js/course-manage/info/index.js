@@ -74,6 +74,7 @@ class courseInfo {
     let $form = $('#course-info-form');
     this.validator = $form.validate({
       currentDom: '#course-submit',
+      ajax: true,
       groups: {
         date: 'expiryStartDate expiryEndDate'
       },
@@ -128,7 +129,7 @@ class courseInfo {
           after: Translator.trans('course.manage.expiry_start_date_error_hint')
         }
       },
-      submitSuccess: function(data) {
+      submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });

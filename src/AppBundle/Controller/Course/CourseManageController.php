@@ -488,14 +488,7 @@ class CourseManageController extends BaseController
                 $this->getCourseService()->batchConvert($course['id']);
             }
 
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'course_set_manage_course_info',
-                    array('courseSetId' => $courseSetId, 'courseId' => $courseId)
-                )
-            );
+            return $this->createJsonResponse(true);
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
