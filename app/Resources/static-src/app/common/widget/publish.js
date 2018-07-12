@@ -3,7 +3,7 @@ export const publish = (element, info) => {
     const $target = $(evt.target);
 
     $.post($target.data('preUrl'), (data) => {
-      if (data.success) { //多教学计划课程中的默认教学计划已经有设置过名称
+      if (data.success) { //多教学计划课程中的默认教学计划未设置过名称
         let loading = cd.loading({ isFixed: true });
         $('#modal').html(loading).modal({
           backdrop: 'static',
