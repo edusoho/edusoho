@@ -12,7 +12,7 @@
 
 {% block planType %}
   {% if course.courseType == 'default' %}
-    <span class="cd-tag cd-tag-blue cd-ml8">{{ 'course.teaching_default_plan'|trans }}</span>
+    <span class="cd-tag cd-tag-blue cd-ml8 {% if courseTypes == 1 %} default-single-span {% endif %}">{{ 'course.teaching_default_plan'|trans }}</span>
   {% endif %}
 {% endblock %}
 

@@ -1572,6 +1572,7 @@ course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
+course.lesson_manage.rename: 重命名
 
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
