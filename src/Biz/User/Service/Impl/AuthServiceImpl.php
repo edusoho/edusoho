@@ -4,6 +4,7 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\AuthService;
+use Codeages\RateLimiter\RateLimiter;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\TimeMachine;
 use Topxia\Service\Common\ServiceKernel;
@@ -11,6 +12,12 @@ use Biz\User\UserException;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
+    const MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY = 30;
+
+    const HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_DAY = 10;
+
+    const HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR = 1;
+
     private $partner = null;
 
     public function register($registration, $type = 'default')
@@ -64,31 +71,30 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         switch ($type) {
             case 'middle':
-                $condition = array(
-                    'startTime' => TimeMachine::time() - 24 * 3600,
-                    'createdIp' => $ip, );
-                $registerCount = $this->getUserService()->countUsers($condition);
+                $factory = $this->biz['ratelimiter.factory'];
+                /** @var RateLimiter $limiter */
+                $limiter = $factory('register.ip.mid_one_day', self::MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
 
-                if ($registerCount > 30) {
+                $remain = $limiter->check($ip);
+
+                if (0 == $remain) {
                     return false;
                 }
 
                 return true;
             case 'high':
-                $condition = array(
-                    'startTime' => TimeMachine::time() - 24 * 3600,
-                    'createdIp' => $ip, );
-                $registerCount = $this->getUserService()->countUsers($condition);
-
-                if ($registerCount > 10) {
+                $factory = $this->biz['ratelimiter.factory'];
+                /** @var RateLimiter $dayLimiter */
+                $dayLimiter = $factory('register.ip.high_one_day', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
+                $remain = $dayLimiter->check($ip);
+                if (0 == $remain) {
                     return false;
                 }
 
-                $registerCount = $this->getUserService()->countUsers(array(
-                    'startTime' => TimeMachine::time() - 3600,
-                    'createdIp' => $ip, ));
-
-                if ($registerCount >= 1) {
+                /** @var RateLimiter $hourLimiter */
+                $hourLimiter = $factory('register.ip.high_one_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_DAY);
+                $remain = $hourLimiter->check($ip);
+                if (0 == $remain) {
                     return false;
                 }
 

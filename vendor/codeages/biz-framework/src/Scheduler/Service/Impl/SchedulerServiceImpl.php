@@ -45,7 +45,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $default = array(
             'misfire_threshold' => 300,
             'misfire_policy' => 'missed',
-            'priority' => 100,
+            'priority' => 200,
             'source' => 'MAIN',
         );
 
@@ -343,6 +343,9 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             'job_detail' => $job,
             'job_name' => $job['name'],
         );
+        if (empty($job['expression'])) {
+            $jobFired['priority'] = 200;
+        }
         $jobFired = $this->getJobFiredDao()->create($jobFired);
         $jobFired['job_detail'] = $this->updateNextFireTime($job);
 
