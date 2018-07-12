@@ -14,7 +14,9 @@
     </van-tabs>
 
     <!-- 课程介绍 -->
-    <e-panel title="课程介绍" ref="about" class="about"></e-panel>
+    <e-panel title="课程介绍" ref="about" class="about">
+      <div v-html="details.courseSet.summary"></div>
+    </e-panel>
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
@@ -27,7 +29,7 @@
     <!-- 课程目录 -->
     <directory ref="directory" 
       :tryLookable="details.tryLookable"
-      :courseItem="details.courseItem"></directory>
+      :courseItems="details.courseItems"></directory>
     
     <e-footer @click.native="handleJoin">
       {{details.access.code | filterJoinStatus}}</e-footer>
@@ -45,8 +47,8 @@
     name: 'joinBefore',
     props: {
       details: {
-        type: Array,
-        default: () => ([])
+        type: Object,
+        default: () => ({})
       }
     },
     data() {
@@ -59,8 +61,7 @@
           tabsTop: 0,
           teacherTop: 0,
           aboutTop: 0,
-        },
-        selectPlanIndex: 0 //当前选中计划下标
+        }
       }
     },
     components: {
@@ -117,7 +118,7 @@
       handleJoin(){
         if (this.$store.state.token) {
           this.joinCourse({
-            id: this.$route.params.id
+            id: this.details.id
           });
         } else {
           this.$router.push({name: 'login'});

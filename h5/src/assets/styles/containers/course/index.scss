@@ -132,6 +132,10 @@
           @extend .grey;
           font-size: vw(14);
         }
+        &.isFree {
+          color: $primary-color;
+          font-size: vw(16);
+        }
       }
     }
   }
@@ -187,6 +191,15 @@
   }
 }
 // web-view
-#player {
-  height: 100vh;
+
+.web-view {
+  #player {
+    height: 100vh;
+  }
+  .media-text {
+    padding: 0 10px;
+    img {
+      max-width: 100%;
+    }
+  }
 }

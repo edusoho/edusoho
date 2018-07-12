@@ -138,25 +138,40 @@
 
         return '';
       },
-      lessonCellClick (task) {
+      lessonCellClick (data) {
+        const task = data.task;
+
+        if (!this.joinStatus && Number(this.tryLookable)) {
         // trylook and free video click
-        if (!this.joinStatus && !!this.tryLookable) {
-          if (task.task.type === 'video' || task.task.type === 'audio') {
-            this.$router.push({
-              name: 'course_try'
-            })
-            this.setSourceType('video');
-          } else if (['doc', 'ppt'].includes(task.task.type)) {
-            this.$router.push({
-              name: 'course_web'
-            })
-          } else {
-            Toast('请先加入课程');
+          switch (task.type) {
+            case 'video':
+            case 'audio':
+              this.$router.push({
+                name: 'course_try'
+              })
+
+              this.setSourceType({
+                sourceType: task.type,
+                taskId: task.id
+              });
+              break;
+            case 'doc':
+            case 'ppt':
+              this.$router.push({
+                name: 'course_web',
+                params: {
+                  courseId: this.selectedPlanId,
+                  taskId: task.id,
+                  type: task.type
+                }
+              })
+              break;
+            default:
+              Toast('请先加入课程');
           }
-        } else {
-          this.showTypeDetail(task.task);
         }
         //join after click
+        this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
       },
       showTypeDetail (task) {
         switch(task.type) {

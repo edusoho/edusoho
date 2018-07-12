@@ -34,7 +34,9 @@
 
         <div class="segmentation"></div>
         <!-- 课程介绍 -->
-        <e-panel title="课程介绍"></e-panel>
+        <e-panel title="课程介绍">
+          <div v-html="details.courseSet.summary"></div>
+        </e-panel>
         <div class="segmentation"></div>
 
         <!-- 教师介绍 -->

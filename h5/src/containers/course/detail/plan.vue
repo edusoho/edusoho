@@ -2,7 +2,7 @@
   <div>
     <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
-        <span>¥{{ details.price }}</span>
+        <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
         <span>{{ details.courseSet.studentNum }}人在学</span>
       </div>
     </e-panel>
@@ -21,7 +21,8 @@ import { mapMutations, mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      items: []
+      items: [],
+      isFree: false
     }
   },
   created () {
@@ -40,16 +41,27 @@ export default {
     })
   },
   methods: {
-    ...mapActions('course', [
+    ...mapActions ('course', [
       'getCourseDetail'
     ]),
-    handleClick(item, index){
+    handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
 
       this.getCourseDetail({
         courseId: item.id
       })
+    },
+    filterPrice () {
+      const details = this.details;
+
+      if (details.isFree || details.price === '0.00') {
+        this.isFree = true;
+        return '免费';
+      }
+
+      this.isFree = false
+      return `¥${details.price}`;
     }
   }
 }

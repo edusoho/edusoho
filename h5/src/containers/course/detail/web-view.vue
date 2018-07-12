@@ -3,7 +3,6 @@
     <!-- web-view -->
     <div id="player" v-show="media !== 'text'"></div>
     <div class="media-text" ref="text" v-show="media === 'text'">
-
     </div>
   </div>
 </template>
