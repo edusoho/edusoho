@@ -7,7 +7,7 @@
         <p class="price" v-if="!isFree">¥ {{ course.price }}</p>
       </span>
       <span class="switch-box__state">
-        <p>{{ course.memberNum }}人在学</p>
+        <p>{{ course.courseSet.studentNum }}人在学</p>
       </span>
     </div>
 

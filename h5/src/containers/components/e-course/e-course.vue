@@ -5,7 +5,7 @@
         <img v-bind:src="course.courseSet.cover.middle">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ course.courseSetTitle }}</div>
+        <div class="e-course__title text-overflow">{{ course.courseSet.title }}</div>
         <div class="e-course__project text-overflow">
           <span v-if="course.title !== '默认教学计划'">{{ course.title }}</span>
         </div>
