@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/courseset-layout.html.twig' %}
+{% extends 'courseset-manage/layout.html.twig' %}
 
 {% block title %}{{'my.teaching.open_course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 
@@ -9,7 +9,7 @@
   </ol>
 {% endblock %}
 
-{% block course_header %}
+{% block courseset_header %}
   {% include 'open-course-manage/header.html.twig' %}
 {% endblock %}
 
