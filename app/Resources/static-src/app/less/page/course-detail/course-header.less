@@ -140,7 +140,9 @@
       position: relative;
       padding-left: 24px;
       margin-left: 480px;
-      height: 270px;
+      @media(min-width: @screen-sm-max) {
+        height: 270px;
+      }
       font-size: 12px;
       color: @gray;
       @media(max-width:@screen-sm-max){
@@ -167,20 +169,20 @@
         &.course-detail-gray--market {
           margin: 0 24px 16px 0;
           padding: 16px 0 16px 16px;
-          @media(min-width: @screen-xs-min) {
+          @media(min-width: @screen-xs-max) {
             background-color: @bg-color;
           }
         }
         @media(max-width: @screen-sm-max) {
           padding-left: 15px;
-          min-height: auto;
+          min-height: 158px;
           margin: 0px -15px 10px -15px;
           padding-top: 0;
           background-color: transparent;
         }
         &.not-activity {
           @media(max-width: @screen-sm-max) {
-            min-height: auto;
+            min-height: 158px;
           }
         }
         .course-detail-content {
@@ -247,7 +249,7 @@
         height: 24px;
         color: #fff;
         line-height: 24px;
-        .discount-font{
+        .discount-font {
           margin-left:25px;
         }
       } 
@@ -509,13 +511,7 @@
     line-height: 33px;
     position: absolute;
     right: 10px;
-    bottom: -50px;
-  }
-  @media(max-width: @screen-xs-max) {
-    bottom: -30px;
-  }
-  @media(max-width: @screen-xs-min) {
-    bottom: -50px;
+    bottom: 15px;
   }
   .btn-lg {
     padding: 10px 35px;
