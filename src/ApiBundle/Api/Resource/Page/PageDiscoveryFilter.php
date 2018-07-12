@@ -58,6 +58,7 @@ class PageDiscoveryFilter extends Filter
             $items = array(
                 'id' => $courseSet['course']['id'],
                 'price' => $courseSet['course']['price'],
+                'title' => $courseSet['course']['title'],
                 'courseSet' => $courseSet,
             );
             array_push($pageCourses, $items);
