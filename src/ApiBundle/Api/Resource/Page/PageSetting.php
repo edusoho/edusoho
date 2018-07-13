@@ -29,15 +29,45 @@ class PageSetting extends AbstractResource
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         return array(
-            'categories' => $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], 0),
-            'courseType' => array(
-                'normal' => '课程',
-                'live' => '直播',
+            array(
+                'type' => 'category',
+                'moduleType' => 'tree',
+                'text' => '分类',
+                'data' => $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], 0),
             ),
-            'sort' => array(
-                'recommendedSeq' => '推荐',
-                'hitNum' => '热门',
-                'createdTime' => '最新',
+            array(
+                'type' => 'courseType',
+                'moduleType' => 'normal',
+                'text' => '课程类型',
+                'data' => array(
+                    array(
+                        'type' => 'normal',
+                        'text' => '课程',
+                    ),
+                    array(
+                        'type' => 'live',
+                        'text' => '直播',
+                    ),
+                ),
+            ),
+            array(
+                'type' => 'sort',
+                'moduleType' => 'normal',
+                'text' => '课程类型',
+                'data' => array(
+                    array(
+                        'type' => 'recommendedSeq',
+                        'text' => '推荐',
+                    ),
+                    array(
+                        'type' => 'hitNum',
+                        'text' => '热门',
+                    ),
+                    array(
+                        'type' => 'createdTime',
+                        'text' => '最新',
+                    ),
+                ),
             ),
         );
     }
