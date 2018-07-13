@@ -2,6 +2,9 @@
 
 <div class="cd-sidebar">
     <ul class="cd-sidebar__list">
+
+        <li class="cd-sidebar__heading"></li>
+
         <li class="cd-sidebar__item {% if side_nav == 'base' %}active{% endif %}">
           <a href="{{ path('open_course_manage_base', {id:course.id}) }}">
             <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.Basic_Info'|trans}}
@@ -9,11 +12,6 @@
         </li>
 
         {% if course.type == 'liveOpen' %}
-            <li class="cd-sidebar__item {% if side_nav == 'liveTimeSet' %}active{% endif %}">
-                <a href="{{ path('open_course_manage_live_time_set', {id:course.id}) }}">
-                    <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.lesson.manage'|trans}}
-                </a>
-            </li>
             <li class="cd-sidebar__item {% if side_nav == 'replay' %}active{% endif %}" >
                 <a href="{{ path('live_open_course_manage_replay', {id:course.id}) }}">
                     <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.live_manage'|trans}}</a>

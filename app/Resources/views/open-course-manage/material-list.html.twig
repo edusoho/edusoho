@@ -7,68 +7,60 @@
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
 
-{#{% block main %}#}
-
-
-  {% set targetType = 'opencoursematerial' %}
+{% set targetType = 'opencoursematerial' %}
   
-  {#<div class="panel panel-default" role="courseset-manage-file">#}
-    {% block main_heading %}
+{% block page_title %}
 
-      <style type="text/css">
-        .tooltip-inner{
-          max-width: 600px;
-        }
-      </style>
-    {#<div class="panel-heading">#}
-      <a class="btn btn-info btn-sm pull-right"
-        data-toggle="modal" data-target="#modal"
-        data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
-      >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'course.course_files.create_btn'|trans}}
-      </a>
-      {{'course.course_files.content_title'|trans}}
-    {#</div>#}
-    {% endblock %}
+  <style type="text/css">
+    .tooltip-inner{
+      max-width: 600px;
+    }
+  </style>
+  <a class="btn btn-info btn-sm pull-right"
+    data-toggle="modal" data-target="#modal"
+    data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
+  >
+    <i class="glyphicon glyphicon-cloud-upload"></i>{{'course.course_files.create_btn'|trans}}
+  </a>
+  {{'course.course_files.content_title'|trans}}
+{% endblock %}
 
-    {% block main_body %}
-    <div class="panel-body" id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
-      <table class="table table-striped table-hover" id="course-lesson-table">
-        <thead>
-          <tr>
-            <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
-            <th width="30%">{{'course.course_files.name'|trans}}</th>
-            <th>{{'course.course_files.type'|trans}}</th>
-            <th>{{'course.course_files.size'|trans}}</th>
-            <th>{{'course.course_files.use_status'|trans}}</th>
-            <th>{{'course.course_files.last_update'|trans}}</th>
-            <th>{{'course.course_files.operation'|trans}}</th>
-          </tr>
-        </thead>
-        <tbody>
+{% block main_body %}
+<div class="panel-body" id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
+  <table class="table table-striped table-hover" id="course-lesson-table">
+    <thead>
+      <tr>
+        <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
+        <th width="30%">{{'course.course_files.name'|trans}}</th>
+        <th>{{'course.course_files.type'|trans}}</th>
+        <th>{{'course.course_files.size'|trans}}</th>
+        <th>{{'course.course_files.use_status'|trans}}</th>
+        <th>{{'course.course_files.last_update'|trans}}</th>
+        <th>{{'course.course_files.operation'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
 
-          {% for uploadFile in files if uploadFile %}
-            {% include 'open-course-manage/material-list-tr.html.twig' %}
-          {% else %}
-            <tr class="empty"><td colspan="20">{{'course.course_files.empty'|trans}}</td></tr>
-          {% endfor %}
+      {% for uploadFile in files if uploadFile %}
+        {% include 'open-course-manage/material-list-tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">{{'course.course_files.empty'|trans}}</td></tr>
+      {% endfor %}
 
-        </tbody>
-      </table>
+    </tbody>
+  </table>
 
-      <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'course.course_files.select_all_btn'|trans}}</label>
+  <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'course.course_files.select_all_btn'|trans}}</label>
 
-      <div class="btn-group mbm">
-        <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
-        <i class="glyphicon glyphicon-trash"></i>
-        {{'form.btn.remove'|trans}}</button>
-      </div>
+  <div class="btn-group mbm">
+    <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
+    <i class="glyphicon glyphicon-trash"></i>
+    {{'form.btn.remove'|trans}}</button>
+  </div>
 
-      <nav class="text-center">
-        {{ web_macro.paginator(paginator) }}
-      </nav>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
 
-    </div>
-    {% endblock %}
-  {#</div>#}
-{#{% endblock %}#}
+</div>
+{% endblock %}

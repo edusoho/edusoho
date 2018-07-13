@@ -27,10 +27,66 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
+        $canUpdateStartTime = true;
+
+        if($course['type'] == 'liveOpen') {
+            $openLiveLesson = $this->getOpenCourseService()->searchLessons(
+                array('courseId' => $course['id']),
+                array('startTime' => 'DESC'),
+                0,
+                1
+            );
+
+            if (!empty($liveLesson['startTime']) && time() > $liveLesson['startTime']) {
+                $canUpdateStartTime = false;
+            }
+        }
+        $liveLesson = isset($openLiveLesson) ? $openLiveLesson[0] : array();
+
+
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
-            $this->getOpenCourseService()->updateCourse($id, $data);
+            $courseFields = $data;
+            unset($courseFields['startTime']);
+            unset($courseFields['timeLength']);
+
+            $this->getOpenCourseService()->updateCourse($id, $courseFields);
+
+            if ($course['type'] == 'liveOpen' && isset($data['startTime']) && !empty($data['startTime'])) {
+                $liveLessonFields['startTime'] = $data['startTime'];
+                $liveLessonFields['timeLength'] = $data['timeLength'];
+
+                $liveLesson['type'] = 'liveOpen';
+                $liveLesson['courseId'] = $course['id'];
+                $liveLesson['startTime'] = strtotime($liveLessonFields['startTime']);
+                $liveLesson['length'] = $liveLessonFields['timeLength'];
+                $liveLesson['title'] = $course['title'];
+                if ($liveLesson['startTime'] < time()) {
+                    return $this->createMessageResponse('error', '开始时间应晚于当前时间');
+                }
+
+                $routes = array(
+                    'authUrl' => $this->generateUrl('live_auth', array(), true),
+                    'jumpUrl' => $this->generateUrl('live_jump', array('id' => $course['id']), true),
+                );
+                if ($openLiveLesson) {
+                    $this->getLiveCourseService()->editLiveRoom($course, $liveLesson, $routes);
+                    $this->getOpenCourseService()->updateLesson(
+                        $liveLesson['courseId'],
+                        $liveLesson['id'],
+                        $liveLesson
+                    );
+                } else {
+                    $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLesson, $routes);
+
+                    $liveLesson['mediaId'] = $live['id'];
+                    $liveLesson['liveProvider'] = $live['provider'];
+
+                    $this->getOpenCourseService()->createLesson($liveLesson);
+                }
+            }
+
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
@@ -44,10 +100,13 @@ class OpenCourseManageController extends BaseController
             'open-course-manage/base-info.html.twig',
             array(
                 'course' => $course,
+                'openLiveLesson' => $liveLesson,
                 'tags' => ArrayToolkit::column($tags, 'name'),
                 'default' => $default,
+                'canUpdateStartTime' => $canUpdateStartTime,
             )
         );
+
     }
 
     public function saveCourseAction(Request $request)
@@ -94,25 +153,14 @@ class OpenCourseManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
-            $course = $this->getOpenCourseService()->changeCoursePicture($course['id'], json_decode($data['images'], true));
-
+            $course = $this->getOpenCourseService()->changeCoursePicture($course['id'], $data['images']);
             $cover = $this->getWebExtension()->getFpath($course['largePicture']);
 
-            return $this->createJsonResponse(array('code' => true, 'cover' => $cover));
+//            return $this->createJsonResponse(array('code' => true, 'cover' => $cover));
+            return $this->createJsonResponse(array('image' => $cover));
         }
 
-        $fileId = $request->getSession()->get('fileId');
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
-
-        return $this->render(
-            'open-course-manage/picture-crop-modal.html.twig',
-            array(
-                'course' => $course,
-                'pictureUrl' => $pictureUrl,
-                'naturalSize' => $naturalSize,
-                'scaledSize' => $scaledSize,
-            )
-        );
+        return $this->render('open-course-manage/picture-crop-modal.html.twig');
     }
 
     /**
