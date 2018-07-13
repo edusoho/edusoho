@@ -1764,6 +1764,7 @@ course.lesson: 课时
 course.manage.create_lesson: 添加课时
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
+course.lesson_manage.rename: 重命名
 
 # activity-活动
 course.plan_task.activity_manage.finished_condition: 完成条件
