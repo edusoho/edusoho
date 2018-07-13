@@ -4,7 +4,7 @@ import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
 import Intro from './intro';
-import Base from 'app/js/courseset-manage/base/base.js';
+// import Base from 'app/js/courseset-manage/base/base.js';
 
 class CourseInfo {
   constructor() {
@@ -367,5 +367,5 @@ setTimeout(function() {
   new Intro();
 }, 500);
 
-new Base();
+// new Base();
 new CourseInfo();
