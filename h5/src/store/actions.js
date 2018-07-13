@@ -20,9 +20,9 @@ export const userLogin = ({ commit }, { username, password }) => {
 
 
 export const getUserInfo = ({ commit }) => Api.getUserInfo({
-  headers: {
-    Authorization: `Basic ${localStorage.getItem('Authorization')}`
-  }
+  // headers: {
+  //   Authorization: `Basic ${localStorage.getItem('Authorization')}`
+  // }
 }).then(res => {
   commit(types.USER_INFO, res);
   return res;

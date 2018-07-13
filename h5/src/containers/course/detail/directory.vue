@@ -167,7 +167,6 @@
               })
               break;
             default:
-            debugger
               return Toast('请先加入课程');
           }
         } else {
