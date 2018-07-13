@@ -32,5 +32,9 @@ export default {
       nickname: payload.nickname
     });
     localStorage.setItem('user', JSON.stringify(payload));
+  },
+  [types.SET_AVATAR](state, payload) {
+    state.user = payload;
+    localStorage.setItem('user', JSON.stringify(payload));
   }
 };

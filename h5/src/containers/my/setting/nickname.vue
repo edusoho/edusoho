@@ -32,7 +32,7 @@ export default {
         nickname: this.nickname
       }).then(() => {
         Toast.success('修改成功');
-        this.$router.push({name: 'my'})
+        this.$router.go(-1);
       }).catch(err => {
         Toast.fail(err.message)
       })

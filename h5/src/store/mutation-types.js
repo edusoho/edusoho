@@ -14,5 +14,6 @@ export const SET_SOURCETYPE = 'SET_SOURCETYPE';
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';
 
-// 修改昵称
+// 个人设置
 export const SET_NICKNAME = 'SET_NICKNAME';
+export const SET_AVATAR = 'SET_AVATAR';

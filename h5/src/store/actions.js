@@ -19,14 +19,11 @@ export const userLogin = ({ commit }, { username, password }) => {
 };
 
 
-export const getUserInfo = ({ commit }) => Api.getUserInfo({
-  // headers: {
-  //   Authorization: `Basic ${localStorage.getItem('Authorization')}`
-  // }
-}).then(res => {
-  commit(types.USER_INFO, res);
-  return res;
-});
+export const getUserInfo = ({ commit }) => Api.getUserInfo({})
+  .then(res => {
+    commit(types.USER_INFO, res);
+    return res;
+  });
 
 export const addUser = ({ commit }, data) =>
   new Promise((resolve, reject) => {
@@ -60,7 +57,18 @@ export const setNickname = ({ commit }, { nickname }) =>
       commit(types.SET_NICKNAME, res);
       resolve(res);
       return res;
-    }).catch(err => {
-      reject(err);
-    });
+    }).catch(err => reject(err));
+  });
+
+export const setAvatar = ({ commit }, { avatarId }) =>
+  new Promise((resolve, reject) => {
+    Api.setAvatar({
+      data: {
+        avatarId
+      }
+    }).then(res => {
+      commit(types.SET_NICKNAME, res);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
   });
