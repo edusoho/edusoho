@@ -24,6 +24,7 @@ class DeveloperSettingController extends BaseController
             'app_api_url' => '',
             'cloud_sdk_cdn' => '',
             'hls_encrypted' => '1',
+            'mp_service_url' => 'http://mp-service.qiqiuyun.net',
         );
 
         $developerSetting = array_merge($default, $developerSetting);

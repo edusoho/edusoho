@@ -4,8 +4,9 @@ import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
 import Intro from './intro';
+import Base from 'app/js/courseset-manage/base/base.js';
 
-class courseInfo {
+class CourseInfo {
   constructor() {
     if ($('#maxStudentNum-field').length > 0) {
       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
@@ -345,7 +346,6 @@ class courseInfo {
   }
 }
 
-new courseInfo();
 
 jQuery.validator.addMethod('max_year', function (value, element) {
   return this.optional(element) || value < 100000;
@@ -367,3 +367,5 @@ setTimeout(function() {
   new Intro();
 }, 500);
 
+new Base();
+new CourseInfo();

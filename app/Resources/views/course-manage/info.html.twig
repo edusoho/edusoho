@@ -2,7 +2,8 @@
 
 {% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/info/index.js']) %}
+
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'app/js/course-manage/info/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -10,11 +11,17 @@
 
 {% block main_body %}
 {{ web_macro.flash_messages() }}
-{% set courseTypes = get_course_count(courseSet.id) %}
+{% set hasMulCourses = has_mul_courses(courseSet.id) %}
 {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
   <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-    {% if courseTypes > 1 %}
-      {# 基础设置 #}
+    {# 课程基础信息 #}
+    {% if is_un_multi_courseset(courseSet.id) %}
+      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+      {% include 'courseset-manage/base-info/info.html.twig' %}
+    {% endif %}
+
+    {# 计划基础信息 #}
+    {% if hasMulCourses %}
       <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
       {% include 'course-manage/base-info/title.html.twig' %}
     {% endif %}

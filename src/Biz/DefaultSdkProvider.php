@@ -44,7 +44,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
         $biz['qiQiuYunSdk.mp'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $that->generateSdk($biz, array());
+            $sdk = $that->generateSdk($biz, $that->getMpConfig($biz));
             if (!empty($sdk)) {
                 $service = $sdk->getMpService();
             }
@@ -113,5 +113,22 @@ class DefaultSdkProvider implements ServiceProviderInterface
                 'school_version' => System::VERSION,
             ),
         );
+    }
+
+    public function getMpConfig(Biz $biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+        if (isset($developerSetting['mp_service_url']) && !empty($developerSetting['mp_service_url'])) {
+            $urlSegs = explode('://', $developerSetting['mp_service_url']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return array('mp' => array('host' => $hostUrl));
     }
 }
