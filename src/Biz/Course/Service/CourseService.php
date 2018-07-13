@@ -70,6 +70,15 @@ interface CourseService
     public function publishCourse($id, $withTasks = false);
 
     /**
+     * 判断所给计划，是否在其所属课程内，有多个计划同时默认教学计划未设置标题
+     */
+    public function hasNoTitleForDefaultPlanInMulPlansCourse($id);
+
+    public function hasMulCourses($courseSetId, $isPublish = 0);
+
+    public function publishAndSetDefaultCourseType($courseId, $title);
+
+    /**
      * @param  $courseId
      * @param int $limitNum 限制取几条任务，默认不限制
      *

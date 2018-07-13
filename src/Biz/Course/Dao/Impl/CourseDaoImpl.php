@@ -197,6 +197,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
                 'type NOT IN (:excludeTypes)',
                 'type IN (:types)',
+                'courseType = :courseType',
             ),
             'wave_cahceable_fields' => array('hitNum'),
         );

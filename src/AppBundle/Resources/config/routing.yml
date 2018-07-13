@@ -1931,6 +1931,15 @@ course_set_manage_course_publish:
   defaults: {_controller: AppBundle:Course/CourseManage:publish}
   methods: [POST]
 
+course_set_manage_course_pre_publish:
+  path: /course_set/{courseSetId}/course/{courseId}/pre_publish
+  defaults: {_controller: AppBundle:Course/CourseManage:prePublish}
+  methods: [POST]
+
+course_set_manage_course_publish_set_title:
+  path: /course_set/{courseSetId}/course/{courseId}/publish_set_title
+  defaults: {_controller: AppBundle:Course/CourseManage:publishSetTitle}
+
 course_manage_items_sort:
   path:  /course/{courseId}/manage/items/sort
   defaults: { _controller: AppBundle:Course/CourseManage:courseItemsSort }
