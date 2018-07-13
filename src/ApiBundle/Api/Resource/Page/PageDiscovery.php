@@ -19,7 +19,7 @@ class PageDiscovery extends AbstractResource
         if (!in_array($portal, array('h5', 'miniprogram'))) {
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
-        
+
         $hotCourseList = $this->findCoursesAndCourseSetsBySort(
             array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC')
         );
@@ -31,25 +31,24 @@ class PageDiscovery extends AbstractResource
 
         $result = array(
             array(
-                'type' => 'slide_show', 
+                'type' => 'slide_show',
                 'moduleType' => 'slide',
                 'data' => $posters,
             ),
             array(
-                'type' => 'course_list', 
+                'type' => 'course_list',
                 'moduleType' => 'hotCourseList',
-                'data' => array('title' => '热门课程', 'items' => $hotCourseList, 'source' => 
-                    array('categoryId' => 0, 'courseType' => 'all', 'sort' => 'hitNum')
+                'data' => array('title' => '热门课程', 'items' => $hotCourseList, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => 'hitNum'),
                 ),
             ),
             array(
                 'type' => 'course_list',
                 'moduleType' => 'recommendedCourseList',
-                'data' => array('title' => '推荐课程', 'items' => $recommendedCourseList, 'source' => 
-                        array('categoryId' => 0, 'courseType' => 'all', 'sort' => 'recommendedSeq')
+                'data' => array('title' => '推荐课程', 'items' => $recommendedCourseList, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => 'recommendedSeq'),
                 ),
             ),
         );
+
         return $result;
     }
 
