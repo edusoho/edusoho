@@ -42,12 +42,7 @@ export default class Intro {
   introStart(steps) {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
-    if (steps.length < 2) {
-      this.customClass = 'es-intro-help es-intro-single';
-    } else {
-      this.customClass = 'es-intro-help multistep';
-    }
-  
+    this.customClass = steps.length < 2 ? 'es-intro-help es-intro-single' : 'es-intro-help multistep';
     this.intro.setOptions({
       steps: steps,
       skipLabel: doneLabel,
