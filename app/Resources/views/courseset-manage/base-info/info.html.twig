@@ -3,8 +3,7 @@
     <label class="control-label-required" for="title">{{ 'course.base.title'|trans }}</label>
   </div>
   <div class="col-md-8">
-    <input type="text" id="title" name="title" required="required" class="form-control"
-            value="{{ courseSet.title|default('') }}">
+    <input type="text" id="title" name="title" required="required" class="form-control" value="{{ courseSet.title|default('') }}">
     <div class="help-block" style="display:none;"></div>
   </div>
 </div>
@@ -20,7 +19,7 @@
 <div class="form-group">
   <label class="col-md-2 control-label" for="tags">{{ 'course.base.tag'|trans }}</label>
   <div class="col-md-8 controls">
-    <input type="text" id="tags" name="tags" class="width-full select2-offscreen"tabindex="-1" value="{{tags|join(',')}}"
+    <input type="text" id="tags" name="tags" class="width-full select2-offscreen"tabindex="-1" value="{{tags|default('')|join(',')}}"
       data-url="{{ path('tag_match') }}"
       data-explain="{{ 'course.base.tag_tips'|trans }}">
     <div class="help-block courseset-manage-body__tip">{{ 'course.base.tag_tips'|trans }}</div>

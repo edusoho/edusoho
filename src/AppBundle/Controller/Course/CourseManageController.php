@@ -478,6 +478,12 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+            if (in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId'])) {
+                $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
+                unset($data['title']);
+                unset($data['subtitle']);
+            }
             $data = $this->prepareExpiryMode($data);
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
@@ -518,11 +524,16 @@ class CourseManageController extends BaseController
             $course['deadlineType'] = 'end_date';
             $course['expiryMode'] = 'days';
         }
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course-set',
+            'ownerId' => $course['courseSetId'],
+        ));
 
         return $this->render(
             'course-manage/info.html.twig',
             array(
                 'courseSet' => $courseSet,
+                'tags' => ArrayToolkit::column($tags, 'name'),
                 'course' => $course,
                 'audioServiceStatus' => $audioServiceStatus,
                 'canFreeTasks' => $this->findCanFreeTasks($course),
@@ -1201,5 +1212,10 @@ class CourseManageController extends BaseController
     protected function getCourseLessonService()
     {
         return $this->createService('Course:LessonService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
     }
 }

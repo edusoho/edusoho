@@ -980,6 +980,7 @@ course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: 课程目标
 course.plan_setup.audiences: 适应人群
 course.base_setup: 基础设置
+courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
 course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
