@@ -17,6 +17,7 @@
 {% endblock %}
 
 {% block action %}
+  <a class="pull-right cd-btn cd-btn-ghost-primary visible-xs" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.teaching_plan.manage'|trans }}</a>
   <div class="pull-right hidden-xs courses-operation js-plan-operation">
     {% if courseSet.canManage|default() or course.canManage|default()  %}
       <div class="js-plan-icon">

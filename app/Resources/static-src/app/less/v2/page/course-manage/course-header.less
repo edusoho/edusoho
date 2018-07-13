@@ -23,6 +23,11 @@
 
 .course-manage-header-btns {
   margin-top: 7px;
+  @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
+    position: absolute;
+    bottom: 15px;
+    right: 24px;
+  }
 }
 
 .course-manage-header-info {
@@ -204,7 +209,12 @@
   @media (min-width: @screen-md-max) {
     margin-right: 19%;
   }
+
+  @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
+    margin-bottom: 40px;
+  }
 }
+
 
 .courseset-manage-header-data {
   float: right;

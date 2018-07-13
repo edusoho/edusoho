@@ -25,7 +25,7 @@
     {% endblock %}
   </div>
 
-  <div class="courseset-manage-header-btn hidden-xs">
+  <div class="courseset-manage-header-btn">
     {% block btn %}
       {% if course.status == 'published' %}
         <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
@@ -37,7 +37,7 @@
     {% endblock %}
   </div>
 
-  <div class="courseset-manage-header-data">
+  <div class="courseset-manage-header-data hidden-xs">
     <span>{{ 'my.teaching.open_course.hit_num'|trans }}</span>
     <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.hitNum }}</span>{{ 'site.default.times'|trans }}</div>
   </div>

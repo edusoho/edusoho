@@ -27,6 +27,9 @@
   i {
     font-size: 24px;
   }
+  & + .courseset-manage-data {
+    margin-bottom: 0;
+  }
 }
 
 .courses-operation-dropdown {
@@ -156,7 +159,9 @@
 }
 
 .course-manage-subltitle {
-  margin-left: -32px;
+  @media (min-width: @screen-xs-min) {
+    margin-left: -32px;
+  }
   padding: 9px 0 9px 32px;
   font-size: 14px;
   font-weight: 500;
@@ -202,7 +207,9 @@
 }
 
 .course-mange-info__select {
-  width: 322px;
+  @media (min-width: @screen-xs-min) {
+    width: 322px;
+  }
 }
 
 .course-mange-space {
