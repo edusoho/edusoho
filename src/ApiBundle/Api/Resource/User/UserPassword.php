@@ -12,6 +12,7 @@ use Biz\User\UserException;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\Common\CommonException;
 use AppBundle\Common\SimpleValidator;
+use Biz\Sms\SmsException;
 
 class UserPassword extends AbstractResource
 {
@@ -50,7 +51,7 @@ class UserPassword extends AbstractResource
         $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);
 
         if (BizSms::STATUS_SUCCESS != $result) {
-            throw UserException::FORBIDDEN_REGISTER();
+            throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
 
         $this->getUserService()->changePassword($user['id'], $password);
