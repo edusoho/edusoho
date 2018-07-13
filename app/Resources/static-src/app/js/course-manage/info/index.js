@@ -3,7 +3,6 @@ import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
-import Base from 'app/js/courseset-manage/base/base.js';
 
 class CourseInfo {
   constructor() {
@@ -338,5 +337,4 @@ class CourseInfo {
   }
 }
 
-new Base();
 new CourseInfo();

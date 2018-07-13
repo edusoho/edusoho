@@ -12,7 +12,7 @@ export default class Base {
   }
 
   initValidator() {
-    const $form = $('#courseset-form');
+    const $form = $('#title').closest('form');
     const validator = $form.validate({
       rules: {
         title: {
