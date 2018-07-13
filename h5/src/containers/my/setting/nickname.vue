@@ -2,13 +2,15 @@
   <div class="my_setting-nickname">
     <van-field v-model="nickname" placeholder="请修改您的用户名" class=" my_setting-nickname--input"/>
     <van-button type="default" 
-    @click="setNickname"
+    @click="modifyNickname"
     :disabled="btnDisable"
     class="primary-btn my_setting-nickname—-btn">确定</van-button>
   </div>
 </template>
 <script>
 import Api from '@/api';
+import { Toast } from 'vant';
+import { mapActions } from 'vuex';
 
 export default {
   data () {
@@ -22,11 +24,17 @@ export default {
     }
   },
   methods: {
-    setNickname() {
-      Api.setNickname({
+    ...mapActions([
+      'setNickname'
+    ]),
+    modifyNickname() {
+      this.setNickname({
         nickname: this.nickname
-      }).then(res => {
-        console.log(res);
+      }).then(() => {
+        Toast.success('修改成功');
+        this.$router.push({name: 'my'})
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     }
   }

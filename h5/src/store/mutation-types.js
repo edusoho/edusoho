@@ -13,3 +13,6 @@ export const SET_SOURCETYPE = 'SET_SOURCETYPE';
 // register
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';
+
+// 修改昵称
+export const SET_NICKNAME = 'SET_NICKNAME';

@@ -49,3 +49,18 @@ export const sendSmsCenter = ({ commit }, data) =>
       return res;
     }).catch(err => reject(err));
   });
+
+export const setNickname = ({ commit }, { nickname }) =>
+  new Promise((resolve, reject) => {
+    Api.setNickname({
+      query: {
+        nickname
+      }
+    }).then(res => {
+      commit(types.SET_NICKNAME, res);
+      resolve(res);
+      return res;
+    }).catch(err => {
+      reject(err);
+    });
+  });

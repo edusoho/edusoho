@@ -28,7 +28,6 @@
 
     <!-- 课程目录 -->
     <directory ref="directory" 
-      :tryLookable="details.tryLookable"
       :courseItems="details.courseItems"></directory>
     
     <e-footer @click.native="handleJoin">

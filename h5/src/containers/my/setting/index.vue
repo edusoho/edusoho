@@ -57,8 +57,11 @@ export default {
       }
     },
     onRead(file) {
-      Api.setAvatar({
-        "images": file.content
+      Api.updateFile({
+        data: {
+          file: file.content,
+          group:'user'
+        }
       }).then(res => {
         this.$set(this.settings[0], 'info', file.content);
       })

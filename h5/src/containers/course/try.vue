@@ -1,11 +1,11 @@
 <template>
   <div class="course-detail try">
     <detail-head
-      :courseSet="details[selectedPlanIndex].courseSet"></detail-head>
+      :courseSet="details.courseSet"></detail-head>
     
     <directory
       :hiddeTitle=true
-      :courseItem="details[selectedPlanIndex].courseItem"
+      :courseItems="details.courseItems"
     ></directory>
   </div>
 </template>

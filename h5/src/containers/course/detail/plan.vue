@@ -55,7 +55,7 @@ export default {
     filterPrice () {
       const details = this.details;
 
-      if (details.isFree || details.price === '0.00') {
+      if (Number(details.isFree) || details.price === '0.00') {
         this.isFree = true;
         return '免费';
       }

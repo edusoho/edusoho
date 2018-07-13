@@ -19,10 +19,6 @@ export default {
     courseSet: {
       type: Object,
       default: {}
-    },
-    type: {
-      type: String,
-      default: 'img'
     }
   },
   computed: {
@@ -34,7 +30,7 @@ export default {
   },
   watch: {
     sourceType: {
-      immediate: true,
+      // immediate: true,
       handler(v) {
         ['video', 'audio'].includes(v) && this.initPlayer(v);
       }

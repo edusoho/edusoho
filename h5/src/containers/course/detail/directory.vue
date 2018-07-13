@@ -47,10 +47,6 @@
         type: Array,
         default: () => ([])
       },
-      tryLookable: {
-        type: String,
-        default: ''
-      },
       hiddeTitle: {
         type: Boolean,
         default: false
@@ -120,7 +116,7 @@
         console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
       getCurrentStatus (task) {
-        if (Number(this.tryLookable)
+        if (Number(this.details.tryLookable)
           && task.type === 'video'
           && task.activity.mediaStorage) {
           return 'is-tryLook';
@@ -140,8 +136,11 @@
       },
       lessonCellClick (data) {
         const task = data.task;
+        const details = this.details;
 
-        if (!this.joinStatus && Number(this.tryLookable)) {
+        !details.allowAnonymousPreview && this.$route.push({name: 'login'})
+
+        if (!this.joinStatus && Number(details.tryLookable)) {
         // trylook and free video click
           switch (task.type) {
             case 'video':
@@ -156,6 +155,7 @@
               });
               break;
             case 'doc':
+            case 'text':
             case 'ppt':
               this.$router.push({
                 name: 'course_web',
@@ -167,11 +167,13 @@
               })
               break;
             default:
-              Toast('请先加入课程');
+            debugger
+              return Toast('请先加入课程');
           }
+        } else {
+          this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
         }
         //join after click
-        this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
       },
       showTypeDetail (task) {
         switch(task.type) {
