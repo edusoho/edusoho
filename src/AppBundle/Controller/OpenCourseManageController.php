@@ -29,6 +29,8 @@ class OpenCourseManageController extends BaseController
 
         $canUpdateStartTime = true;
 
+        $liveLesson = array();
+
         if($course['type'] == 'liveOpen') {
             $openLiveLesson = $this->getOpenCourseService()->searchLessons(
                 array('courseId' => $course['id']),
@@ -40,8 +42,8 @@ class OpenCourseManageController extends BaseController
             if (!empty($liveLesson['startTime']) && time() > $liveLesson['startTime']) {
                 $canUpdateStartTime = false;
             }
+            $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
         }
-        $liveLesson = isset($openLiveLesson) ? $openLiveLesson[0] : array();
 
 
         if ('POST' == $request->getMethod()) {
