@@ -23,6 +23,11 @@
 
 .course-manage-header-btns {
   margin-top: 7px;
+  @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
+    position: absolute;
+    bottom: 15px;
+    right: 24px;
+  }
 }
 
 .course-manage-header-info {
@@ -170,9 +175,6 @@
 
 .courseset-manage-header-info {
   float: left;
-  @media (max-width: @screen-xs-min) {
-    height: 74px;
-  }
   @media (max-width: 320px) {
     .courseset-manage-header-info__title {
       width: 100px;
@@ -181,8 +183,7 @@
 }
 
 .courseset-manage-header-info__title {
-  margin-top: 8px;
-  margin-bottom: 16px;
+  margin: 8px 0;
   font-size: 16px;
   line-height: 1;
   font-weight: 500;
@@ -196,6 +197,7 @@
 }
 
 .courseset-manage-header-info__price {
+  margin-top: 16px;
   font-size: 18px;
   line-height: 1;
 }
@@ -204,7 +206,12 @@
   @media (min-width: @screen-md-max) {
     margin-right: 19%;
   }
+
+  @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
+    margin-bottom: 40px;
+  }
 }
+
 
 .courseset-manage-header-data {
   float: right;
@@ -251,8 +258,12 @@
 
 .courseset-manage-header-btn {
   float: right;
+  @media (max-width: @screen-xs-min) {
+    margin-top: 16px;
+  }
   margin-top: 28px;
   margin-left: 24px;
+  font-size: 0;
   @media (max-width: @screen-sm-max) {
     margin-left: 0;
   }

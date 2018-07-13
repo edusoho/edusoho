@@ -35,9 +35,6 @@
 
     <div class="courseset-manage-header-info">
       <div class="courseset-manage-header-info__title text-overflow">
-        {% if courseSet.type != 'normal' %}
-          [{{ dict('courseType')[courseSet.type] }}]
-        {% endif %}
         {% block coursesetTitle %}
           <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
         {% endblock %}
@@ -51,7 +48,7 @@
       </div>
     </div>
 
-    <div class="courseset-manage-header-btn hidden-xs">
+    <div class="courseset-manage-header-btn">
       {% block btn %}
         {# 课程发布按钮 #}
         {% if courseSet.status == 'published' %}
@@ -65,16 +62,17 @@
 
     </div>
 
-    <div class="courseset-manage-header-data">
+    <div class="courseset-manage-header-data hidden-xs">
       <span class="cd-text-medium">{{ 'course.student_member'|trans }}</span>
       <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
     </div>
 
-
-    <div class="courseset-manage-header-data">
-      <span class="cd-text-medium">{{ 'course.plan'|trans }}</span>
-      <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span></div>
-    </div>
+    {% if courseSet.type != 'live' %}
+      <div class="courseset-manage-header-data hidden-xs">
+        <span class="cd-text-medium">{{ 'course.plan'|trans }}</span>
+        <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span></div>
+      </div>
+    {% endif %}
   </div>
 </div>
 
