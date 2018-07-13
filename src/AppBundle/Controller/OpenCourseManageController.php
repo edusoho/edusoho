@@ -48,45 +48,19 @@ class OpenCourseManageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
-            $courseFields = $data;
-            unset($courseFields['startTime']);
-            unset($courseFields['timeLength']);
-
-            $this->getOpenCourseService()->updateCourse($id, $courseFields);
-
             if ('liveOpen' == $course['type'] && isset($data['startTime']) && !empty($data['startTime'])) {
-                $liveLessonFields['startTime'] = $data['startTime'];
-                $liveLessonFields['timeLength'] = $data['timeLength'];
+                $data['length'] = $data['timeLength'];
+                unset($data['timeLength']);
+                $data['startTime'] = strtotime($data['startTime']);
 
-                $liveLesson['type'] = 'liveOpen';
-                $liveLesson['courseId'] = $course['id'];
-                $liveLesson['startTime'] = strtotime($liveLessonFields['startTime']);
-                $liveLesson['length'] = $liveLessonFields['timeLength'];
-                $liveLesson['title'] = $course['title'];
-                if ($liveLesson['startTime'] < time()) {
+                if ($data['startTime'] < time()) {
                     return $this->createMessageResponse('error', '开始时间应晚于当前时间');
                 }
 
-                $routes = array(
-                    'authUrl' => $this->generateUrl('live_auth', array(), true),
-                    'jumpUrl' => $this->generateUrl('live_jump', array('id' => $course['id']), true),
-                );
-                if ($openLiveLesson) {
-                    $this->getLiveCourseService()->editLiveRoom($course, $liveLesson, $routes);
-                    $this->getOpenCourseService()->updateLesson(
-                        $liveLesson['courseId'],
-                        $liveLesson['id'],
-                        $liveLesson
-                    );
-                } else {
-                    $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLesson, $routes);
-
-                    $liveLesson['mediaId'] = $live['id'];
-                    $liveLesson['liveProvider'] = $live['provider'];
-
-                    $this->getOpenCourseService()->createLesson($liveLesson);
-                }
+                $data['authUrl'] = $this->generateUrl('live_auth', array(), true);
+                $data['jumpUrl'] = $this->generateUrl('live_jump', array('id' => $course['id']), true);
             }
+            $this->getOpenCourseService()->updateCourse($id, $data);
 
             $this->setFlashMessage('success', 'site.save.success');
 
