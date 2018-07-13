@@ -171,8 +171,8 @@ class CourseTaskMedia extends AbstractResource
 
             return array(
                 'entryUrl' => $this->generateUrl('task_live_entry', array('courseId' => $course['id'], 'activityId' => $activity['id']), true),
-                'startTime' => date($format, $activity['startTime']),
-                'endTime' => date($format, $activity['endTime']),
+                'startTime' => date('c', $activity['startTime']),
+                'endTime' => date('c', $activity['endTime']),
             );
         }
     }
