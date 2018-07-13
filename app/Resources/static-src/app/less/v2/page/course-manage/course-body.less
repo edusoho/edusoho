@@ -5,8 +5,14 @@
 
 .courseset-type-list {
   li {
+    @media (max-width: @screen-xs-min) {
+      margin-right: 4px;
+    }
     margin-right: 10px;
     a {
+      @media (max-width: @screen-xs-min) {
+        padding: 10px 8px;
+      }
       padding: 10px 14px;
       font-weight: 500;
       line-height: 1;
@@ -26,6 +32,9 @@
   line-height: 38px;
   i {
     font-size: 24px;
+  }
+  & + .courseset-manage-data {
+    margin-bottom: 0;
   }
 }
 
@@ -156,7 +165,9 @@
 }
 
 .course-manage-subltitle {
-  margin-left: -32px;
+  @media (min-width: @screen-xs-min) {
+    margin-left: -32px;
+  }
   padding: 9px 0 9px 32px;
   font-size: 14px;
   font-weight: 500;
@@ -202,7 +213,9 @@
 }
 
 .course-mange-info__select {
-  width: 322px;
+  @media (min-width: @screen-xs-min) {
+    width: 322px;
+  }
 }
 
 .course-mange-space {
@@ -225,4 +238,41 @@
 .service-primary-item {
   color: #fff;
   background-color: @brand-primary;
+}
+.course-manage-expiry {
+  position: relative;
+  margin-left: -24px;
+  margin-top: 16px;
+  padding: 12px 0 24px 24px;
+  max-width: 496px;
+  background-color: @gray-lighter;
+  .border-radius;
+  .form-error-message {
+    margin-top: 8px;
+    height: 12px;
+    font-size: 12px;
+    line-height: 1;
+  }
+  .caret {
+    position: absolute;
+    top: -10px;
+    left: 60px;
+    border-bottom: 10px solid;
+    border-top: 0;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    color: @gray-lighter;
+  }
+  & + & {
+    .caret {
+      left: 180px;
+    }
+  }
+  & + .course-mangae-info__tip {
+    margin-left: -24px;
+  }
+}
+
+.course-manage-expiry__circle {
+  margin-top: 12px;
 }

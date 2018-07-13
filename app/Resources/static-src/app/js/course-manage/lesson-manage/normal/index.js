@@ -1,6 +1,6 @@
 import {hiddenUnpublishTask, addLesson} from './../header-util';
 import BaseManage from './../BaseManage';
-
+import { TaskListHeaderFixed } from 'app/js/course-manage/help';
 class NormalManage extends BaseManage {
   constructor($container) {
     super($container);
@@ -20,4 +20,4 @@ new NormalManage('#sortable-list');
 
 hiddenUnpublishTask();
 addLesson();
-
+TaskListHeaderFixed();

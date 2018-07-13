@@ -63,7 +63,7 @@ class CourseInfo {
     $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function(){
       let mode = $('#course-audio-mode').data('value');
       if (mode == 'notAllowed') {
-        notify('info', Translator.trans('course.audio.enable.biz.user'));
+        cd.message({ type: 'info', message: Translator.trans('course.audio.enable.biz.user') });
         $('[name=\'enableAudio\']')[1].checked = true;
         $('[name=\'enableAudio\']')[0].checked = false;
       }
@@ -74,6 +74,7 @@ class CourseInfo {
     let $form = $('#course-info-form');
     this.validator = $form.validate({
       currentDom: '#course-submit',
+      ajax: true,
       groups: {
         date: 'expiryStartDate expiryEndDate'
       },
@@ -127,6 +128,9 @@ class CourseInfo {
           required: Translator.trans('course.manage.expiry_end_date_error_hint'),
           after: Translator.trans('course.manage.expiry_start_date_error_hint')
         }
+      },
+      submitSuccess: (data) => {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });
 
@@ -209,12 +213,16 @@ class CourseInfo {
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
+        $('.js-course-manage-expiry-tip').removeClass('ml0');
       } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
+        $('.js-course-manage-expiry-tip').removeClass('ml0');
       } else {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $(event.target).closest('.form-group').removeClass('has-error');
+        $('.js-course-manage-expiry-tip').addClass('ml0');
       }
       this.initExpiryMode();
     });
