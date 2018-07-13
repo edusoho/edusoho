@@ -82,23 +82,23 @@ export default class Intro {
   initAllSteps() {
     let arry = [
       {
-        intro: Translator.trans('course_set.manage.img'), // 第一步
+        intro: Translator.trans('course_set.manage.img'),
       },
       {
         element: '#step-1',
-        intro: Translator.trans('course_set.manage.couseset_tab'),  // 第二步
+        intro: Translator.trans('course_set.manage.couseset_tab'),
       },
       {
         element: '#step-2',
-        intro: Translator.trans('course_set.manage.single_plan'),  // 第二步
+        intro: Translator.trans('course_set.manage.single_plan'),
       },
       {
         element: '#step-3',
-        intro: Translator.trans('course_set.manage.all_plan'), // 第三步
+        intro: Translator.trans('course_set.manage.all_plan'),
       },
       {
         element: '#step-4',
-        intro: Translator.trans('course_set.manage.publish_courseset'), // 第四步
+        intro: Translator.trans('course_set.manage.publish_courseset'),
       }
     ];
   
