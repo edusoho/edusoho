@@ -1095,7 +1095,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $lesson = $this->getCourseLessonService()->getLesson($lessonId);
 
-        if (empty($lesson) || $lesson['type'] != 'lesson') {
+        if (empty($lesson) || 'lesson' != $lesson['type']) {
             throw $this->createInvalidArgumentException('Argument invalid');
         }
 
@@ -1290,7 +1290,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->createService('Course:LessonService');
     }
-    
+
     /**
      * @return SchedulerService
      */

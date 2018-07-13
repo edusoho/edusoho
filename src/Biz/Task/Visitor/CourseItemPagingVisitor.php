@@ -199,7 +199,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         if ($this->isHiddenUnpublishTasks()) {
             $conditions['status'] = 'published';
         }
-        
+
         if ('down' == $this->paging['direction']) {
             $conditions['seq_GTE'] = $this->paging['offsetSeq'];
             $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
