@@ -106,14 +106,14 @@ class Flash extends Activity
         return $flashActivity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         $flashActivities = $this->getFlashActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($flashActivities, 'mediaId');
         try {
             $files = $this->getUploadFileService()->findFilesByIds(
                 $mediaIds,
-                $showCloud = 1
+                $showCloud
             );
         } catch (CloudAPIIOException $e) {
             $files = array();

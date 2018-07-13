@@ -13,6 +13,7 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\DeviceToolkit;
 use Biz\System\SettingException;
 use Biz\Common\CommonException;
+use Biz\Sms\SmsException;
 
 class User extends AbstractResource
 {
@@ -80,7 +81,7 @@ class User extends AbstractResource
         //校验验证码,基于token，默认10次机会
         $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
         if ($status != BizSms::STATUS_SUCCESS) {
-            throw CommonException::ERROR_PARAMETER();
+            throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
 
         $nickname = substr(MathToolkit::uniqid(), 8, 16);

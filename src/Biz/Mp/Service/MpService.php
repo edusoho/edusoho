@@ -11,4 +11,10 @@ namespace Biz\Mp\Service;
 interface MpService
 {
     public function getMpSdk();
+
+    public function getAuthorization();
+
+    public function generateInitUrl($params, $schema);
+
+    public function generateVersionManagementUrl($params, $schema);
 }

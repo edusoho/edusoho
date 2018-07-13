@@ -3,13 +3,12 @@
 namespace ApiBundle\Api\Resource\User;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\User\UserException;
 
 class UserSmsResetPassword extends AbstractResource
 {
@@ -18,7 +17,12 @@ class UserSmsResetPassword extends AbstractResource
      */
     public function add(ApiRequest $request, $mobile)
     {
-        $fields = $request->request->all();
+        if ($this->getUserService()->isMobileUnique($mobile)) {
+            throw UserException::NOTFOUND_USER();
+        }
+
+        $token = $request->request->get('dragCaptchaToken', '');
+        $this->getDragCaptcha()->check($token);
         $smsToken = $this->getBizSms()->send(BizSms::SMS_FORGET_PASSWORD, $mobile);
 
         return array(
@@ -47,6 +51,11 @@ class UserSmsResetPassword extends AbstractResource
     private function getBizSms()
     {
         return $this->biz['biz_sms'];
+    }
+
+    public function getDragCaptcha()
+    {
+        return $this->biz['biz_drag_captcha'];
     }
 
     private function getUserService()

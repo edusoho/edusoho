@@ -7,7 +7,7 @@ use Biz\User\Job\UpdateInviteRecordOrderInfoJob;
 
 class UpdateInviteRecordOrderInfoJobTest extends BaseTestCase
 {
-    public function testExcute()
+    public function testExecute()
     {
         $inviteRecordService = $this->mockBiz('User:InviteRecordService', array(
             array(
