@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% set modal_class= "modal-lg" %}
+{% set modal_class= "modal-lg cd-modal-dialog" %}
 
 {% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js', 'app/js/course-manage/create/index.js']) %}
 
@@ -99,6 +99,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="course-submit" type="button" class="btn btn-primary pull-right" data-loading-text="{{ 'form.btn.create.submiting'|trans }}">{{ 'form.btn.create'|trans }}</button>
-  <button id="course-cancel" type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="course-cancel" type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.create.submiting'|trans }}">{{ 'form.btn.create'|trans }}</button>
 {% endblock %}
