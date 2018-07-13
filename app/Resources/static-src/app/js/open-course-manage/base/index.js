@@ -21,9 +21,9 @@ if (!$form.data('update')) {
   $('[name=startTime]').attr('disabled', true);
   $('#live-length-field').attr('disabled', true);
 
-  $('#starttime-help-block').html('直播已经开始或者结束,无法编辑');
+  $('#starttime-help-block').html(Translator.trans('open_course.live_time_can_not_edit_bint'));
   $('#starttime-help-block').css('color', '#a94442');
-  $('#timelength-help-block').html('直播已经开始或者结束,无法编辑');
+  $('#timelength-help-block').html(Translator.trans('open_course.live_time_can_not_edit_bint'));
   $('#timelength-help-block').css('color', '#a94442');
 } else {
   $('[name=startTime]').attr('disabled', false);

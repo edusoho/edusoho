@@ -548,6 +548,7 @@ open_course.add_lesson_hint: 公开课当前仅支持添加一个课时!
 open_course.file_format_conversion_hint: (正在文件格式转换)
 open_course.file_format_conversion_failed_hint: (文件格式转换失败)
 open_course.unpublish_success_hint: 课时已取消发布!
+open_course.live_time_can_not_edit_bint: 直播已经开始或者结束,无法编辑!
 
 open_course.lesson_delete_success_hint: 课时已删除!
 

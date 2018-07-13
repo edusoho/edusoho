@@ -607,6 +607,7 @@ open_course.add_lesson_hint: Open class only supports a lesson!
 open_course.file_format_conversion_hint: (File format converting)
 open_course.file_format_conversion_failed_hint: (File format conversion failed)
 open_course.unpublish_success_hint: Lesson unpublished!
+open_course.live_time_can_not_edit_bint: 直播已经开始或者结束,无法编辑!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 

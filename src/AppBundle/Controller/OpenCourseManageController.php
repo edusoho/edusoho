@@ -39,10 +39,10 @@ class OpenCourseManageController extends BaseController
                 1
             );
 
+            $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
             if (!empty($liveLesson['startTime']) && time() > $liveLesson['startTime']) {
                 $canUpdateStartTime = false;
             }
-            $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
         }
 
         if ('POST' == $request->getMethod()) {
