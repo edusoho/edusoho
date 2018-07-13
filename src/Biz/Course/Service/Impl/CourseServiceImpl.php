@@ -236,7 +236,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!empty($fields['services'])) {
             $fields['showServices'] = 1;
         }
-
+        if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
         $course = $this->getCourseDao()->update($id, $fields);

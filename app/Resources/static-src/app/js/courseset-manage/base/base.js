@@ -14,6 +14,8 @@ export default class Base {
   initValidator() {
     const $form = $('#courseset-form');
     const validator = $form.validate({
+      currentDom: '#courseset-base-submit',
+      ajax: true,
       rules: {
         title: {
           maxlength: 30,
@@ -36,12 +38,8 @@ export default class Base {
           course_title: true
         }
       },
-    });
-
-    $('#courseset-base-submit').click((event) => {
-      if (validator.form()) {
-        $(event.currentTarget).button('loading');
-        $form.submit();
+      submitSuccess: (data) => {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });
   }
