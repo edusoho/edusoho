@@ -18,37 +18,26 @@
 
   <div class="courseset-manage-header-info">
     <div class="courseset-manage-header-info__title text-overflow">
-      [{{ dict('courseType')[course.type] }}]<a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+      <a class="cd-link-major" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     </div>
     {% block liveTag %}
+      <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
     {% endblock %}
   </div>
 
-  <div class="courseset-manage-header-btn hidden-xs">
+  <div class="courseset-manage-header-btn">
     {% block btn %}
       {% if course.status == 'published' %}
         <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
       {% else %}
         <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
       {% endif %}
-
-      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-        <button class="cd-btn cd-btn-primary course-manage-header-more">
-          <i class="es-icon es-icon-morehoriz"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
-          </li>
-          <li>
-            <a href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
-          </li>
-        </ul>
-      </div>
+      <a class="cd-btn cd-btn-default cd-ml16" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
+      <a class="cd-btn cd-btn-default cd-ml16" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
     {% endblock %}
   </div>
 
-  <div class="courseset-manage-header-data">
+  <div class="courseset-manage-header-data hidden-xs">
     <span>{{ 'my.teaching.open_course.hit_num'|trans }}</span>
     <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.hitNum }}</span>{{ 'site.default.times'|trans }}</div>
   </div>

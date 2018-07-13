@@ -9,41 +9,40 @@
 {% block main_heading_class %} course-manage-info__title {% endblock %}
 
 {% block main_body %}
-{{ web_macro.flash_messages() }}
-{% set hasMulCourses = has_mul_courses(courseSet.id) %}
-{% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
-  <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-    {# 课程基础信息 #}
-    {% if is_un_multi_courseset(courseSet.id) %}
-      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
-      {% include 'courseset-manage/base-info/info.html.twig' %}
-    {% endif %}
+  {% set hasMulCourses = has_mul_courses(courseSet.id) %}
+  {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
+    <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
+      {# 课程基础信息 #}
+      {% if is_un_multi_courseset(courseSet.id) %}
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+        {% include 'courseset-manage/base-info/info.html.twig' %}
+      {% endif %}
 
-    {# 计划基础信息 #}
-    {% if hasMulCourses %}
-      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
-      {% include 'course-manage/base-info/title.html.twig' %}
-    {% endif %}
-    
-    {# 营销设置 #}
-    <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
-    <div role="course-marketing-info">
-      {% include 'course-manage/base-info/marketing.html.twig' %}
-    </div>
-
-    {# 基础规则 #}
-    <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
-    <div role="course-base-rule">
-      {% include 'course-manage/base-info/rule.html.twig' %}
-    </div>
-    
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-8">
-        <button  type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-        <div id="test"></div>
+      {# 计划基础信息 #}
+      {% if hasMulCourses %}
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+        {% include 'course-manage/base-info/title.html.twig' %}
+      {% endif %}
+      
+      {# 营销设置 #}
+      <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
+      <div role="course-marketing-info">
+        {% include 'course-manage/base-info/marketing.html.twig' %}
       </div>
-    </div>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </form>
-{% endif %}
+
+      {# 基础规则 #}
+      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
+      <div role="course-base-rule">
+        {% include 'course-manage/base-info/rule.html.twig' %}
+      </div>
+      
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button id="course-submit" type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+          <div id="test"></div>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% endif %}
 {% endblock %}

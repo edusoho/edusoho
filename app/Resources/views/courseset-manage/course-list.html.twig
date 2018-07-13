@@ -12,11 +12,12 @@
 
 {% block planType %}
   {% if course.courseType == 'default' %}
-    <span class="cd-tag cd-tag-blue cd-ml8">{{ 'course.teaching_default_plan'|trans }}</span>
+    <span class="cd-tag cd-tag-blue cd-ml8 {% if courseTypes == 1 %} default-single-span {% endif %}">{{ 'course.teaching_default_plan'|trans }}</span>
   {% endif %}
 {% endblock %}
 
 {% block action %}
+  <a class="pull-right cd-btn cd-btn-ghost-primary visible-xs" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.teaching_plan.manage'|trans }}</a>
   <div class="pull-right hidden-xs courses-operation js-plan-operation">
     {% if courseSet.canManage|default() or course.canManage|default()  %}
       <div class="js-plan-icon">
