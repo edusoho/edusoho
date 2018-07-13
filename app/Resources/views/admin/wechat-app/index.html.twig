@@ -13,9 +13,9 @@
       </p>
 
       {% if not purchased %}
-        <a class="btn btn-primary" href="javascript: window.open('http://www.baidu.com')">立即开通</a>
+        <a class="btn btn-primary" href="javascript: window.open('{{path('admin_wechat_app_access')}}')">立即开通</a>
       {% elseif purchased and not installed %}
-        <a href="#" data-toggle="modal" data-target="#modal" data-url="/admin/app/package_update/1349/modal?type=install" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">立即安装</a>
+        <a href="#" data-toggle="modal" data-target="#modal" data-url="{{path('admin_app_package_update_modal', {'id': latestPackageId, 'type': 'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">立即安装</a>
       {% endif %}
     </div>
   </div>

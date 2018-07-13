@@ -2345,3 +2345,7 @@ admin_cloud_data_lab_setting_disable_modal:
 admin_wechat_app:
     path: /wechat_app
     defaults: { _controller: AppBundle:Admin/WeChatApp:index }
+
+admin_wechat_app_access:
+    path:  /cloud/accessWechat
+    defaults: { _controller: AppBundle:Admin/Cloud:accessWechat }

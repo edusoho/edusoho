@@ -1756,7 +1756,16 @@ class WebExtension extends \Twig_Extension
         return $wechat && !empty($loginBind['enabled']) && !empty($loginBind['weixinmob_enabled']);
     }
 
-    
+    public function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->getSetting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function canSendMessage($userId)
     {
         $user = $this->biz['user'];

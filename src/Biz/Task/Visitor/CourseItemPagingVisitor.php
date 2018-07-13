@@ -180,7 +180,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         }
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = $this->getActivityService()->findActivities($activityIds, true, 0);
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as &$task) {
@@ -199,7 +199,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         if ($this->isHiddenUnpublishTasks()) {
             $conditions['status'] = 'published';
         }
-        
+
         if ('down' == $this->paging['direction']) {
             $conditions['seq_GTE'] = $this->paging['offsetSeq'];
             $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
