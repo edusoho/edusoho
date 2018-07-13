@@ -4,7 +4,6 @@ import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
 import Intro from './intro';
-// import Base from 'app/js/courseset-manage/base/base.js';
 
 class CourseInfo {
   constructor() {
@@ -354,26 +353,9 @@ class CourseInfo {
   }
 }
 
-
-jQuery.validator.addMethod('max_year', function (value, element) {
-  return this.optional(element) || value < 100000;
-}, Translator.trans('course.manage.max_year_error_hint'));
-
-jQuery.validator.addMethod('live_capacity', function (value, element) {
-  const maxCapacity = parseInt($(element).data('liveCapacity'));
-  if (value > maxCapacity) {
-    const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
-    $(element).parent().siblings('.js-course-rule').find('p').html(message);
-  } else {
-    $(element).parent().siblings('.js-course-rule').find('p').html('');
-  }
-
-  return true;
-});
+new CourseInfo();
 
 setTimeout(function() {
   new Intro();
 }, 500);
 
-// new Base();
-new CourseInfo();

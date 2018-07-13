@@ -7,6 +7,14 @@
       color: @cd-dark-major;
     }
   }
+  .nav-header-section.nav {
+    margin-bottom: 0;
+    border: none;
+    .nav-header-section__item {
+      padding-top: 16px;
+      margin: 0 32px;
+    }
+  }
 }
 .course-manage-header {
   position: relative;
@@ -301,11 +309,11 @@
   float: right;
   height: 43px;
 }
+
 .nav-header-section.nav {
   margin-bottom: 0;
   border: none;
   .nav-header-section__item {
-    padding-top: 16px;
     line-height: 1;
     @media (max-width: @screen-xs-min) {
       margin-right: 8px;
@@ -313,8 +321,7 @@
         margin-left: 0 !important;
       }
     }
-
-    margin: 0 32px;
+    margin-right: 64px;
     &.active > a {
       color: @cd-dark-major;
     }
