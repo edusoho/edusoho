@@ -800,6 +800,9 @@ course.teaching_plan.free_mode: 自由式学习模式
 course.teaching_plan.locked_mode: 解锁式学习模式
 course.teaching_default_plan: 默认计划
 course.teaching_plan.create: 'Add'
+course.teaching_plan.default.title: 操作提醒
+course.teaching_plan.default.title.set.tip: 您的首个计划未设置标题，完成设置后，才支持当前计划的发布。
+course.teaching_plan.default.title.set: 设置首个计划的标题
 course.teaching_plan.sort: 调整顺序
 course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
@@ -853,6 +856,7 @@ course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: Goal
 course.plan_setup.audiences: 'Target users'
 course.base_setup: 基础设置
+courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
