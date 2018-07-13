@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
@@ -15,11 +17,28 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseTaskMedia extends AbstractResource
 {
+    /**
+     * @param ApiRequest $request
+     * @param $courseId
+     * @param $taskId
+     *
+     * @return array
+     * @Access(roles="")
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $courseId, $taskId)
     {
         $ssl = $request->getHttpRequest()->isSecure() ? true : false;
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
-        $task = $this->getTaskService()->tryTakeTask($taskId);
+        $preview = $request->query->get('preview');
+        if ($preview) {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $task = $this->getTaskService()->getTask($taskId);
+            $this->checkPreview($course, $task);
+        } else {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+            $task = $this->getTaskService()->tryTakeTask($taskId);
+        }
+
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $method = 'get'.$activity['mediaType'];
         if (!method_exists($this, $method)) {
@@ -31,6 +50,10 @@ class CourseTaskMedia extends AbstractResource
             'mediaType' => $activity['mediaType'],
             'media' => $media,
         );
+    }
+
+    protected function checkPreview($course, $task)
+    {
     }
 
     protected function getVideo($course, $task, $activity, $request, $ssl = false)
@@ -68,6 +91,9 @@ class CourseTaskMedia extends AbstractResource
             if (!empty($videoPlayer['mp4Url'])) {
                 $mp4Url = $videoPlayer['mp4Url'];
             }
+        }
+        if (!empty($course['tryLookable'])) {
+            $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
