@@ -22,7 +22,7 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->getActivity($targetId);
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         return $this->getTestpaperActivityService()->findActivitiesByIds($ids);
     }

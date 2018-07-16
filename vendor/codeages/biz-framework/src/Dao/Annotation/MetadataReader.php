@@ -130,7 +130,7 @@ class MetadataReader
     {
         $fs = new Filesystem();
         if ($fs->exists($cacheDirectory)) {
-            return;
+            return ;
         }
 
         $fs->mkdir($cacheDirectory);
