@@ -416,7 +416,7 @@ class CourseSetManageController extends BaseController
     protected function getTemplate($sideNav)
     {
         if (in_array($sideNav, array('files', 'testpaper', 'question'))) {
-            return 'courseset-manage/locked-list.html.twig';
+            return 'courseset-manage/locked-item.html.twig';
         } else {
             return 'courseset-manage/locked.html.twig';
         }
