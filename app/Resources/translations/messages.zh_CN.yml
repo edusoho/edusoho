@@ -8517,3 +8517,8 @@ exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+
+admin.index.course_order: 课程订单
+admin.index.classroom_order: 班级订单
+admin.index.vip_order: 会员订单
+admin.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】

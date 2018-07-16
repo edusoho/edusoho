@@ -82,7 +82,7 @@ class LiveExtension extends \Twig_Extension
     public function getLiveAccount()
     {
         $liveAccount = $this->getEdusohoLiveAccount();
-        $liveAccount['isExpired'] = $liveAccount['expire'] < time() ? 1 : 0;
+        $liveAccount['isExpired'] = !empty($liveAccount['expire']) && $liveAccount['expire'] < time() ? 1 : 0;
 
         return $liveAccount;
     }

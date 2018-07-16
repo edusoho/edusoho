@@ -2479,7 +2479,7 @@ user.settings.basic_info.occupation: Occupation
 user.settings.basic_info.rank: Title
 user.settings.basic_info.personal_signature: 'Personal signature'
 user.settings.basic_info.personal_space: 'Personal space'
-user.settings.basic_info.public: 'Weibo, WeChat, QQ information will be displayed on your personal homepage.'
+user.settings.basic_info.public: 'Weibo, WeChat, QQ information will be displayed on your homepage.'
 user.settings.basic_info.self_introduction: 'About me'
 user.settings.basic_info.alter_description: 'You can create a course after setting till and self-introduction.'
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
@@ -2682,8 +2682,8 @@ homepage.header.search: Search
 homepage.header.login: Log In
 homepage.header.logout: Log Out
 homepage.header.register: Sign Up
-homepage.header.my_course: 'My Courses'
-homepage.header.my_learning: 'My Courses'
+homepage.header.my_course: 'My Teaching'
+homepage.header.my_learning: 'My Learning'
 homepage.header.notice: Notification
 homepage.header.check_all_notifications: 'View all notification'
 homepage.header.no_new_notifications: 'No new notification'
@@ -7192,3 +7192,8 @@ exception.user.reset_password_email_send: 'Failed to send email. Contact site ad
 
 exception.sms.setting_enbale: Cloud SMS related settings are not enabled!
 exception.sms.code_invalid: SMS verification code error
+
+admin.index.course_order: "course order"
+admin.index.classroom_order: "classroom order"
+admin.index.vip_order: vip order
+admin.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【Site Setting】-【Basic Info】-【Site Domain】
