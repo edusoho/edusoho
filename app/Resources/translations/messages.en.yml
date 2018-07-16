@@ -2361,7 +2361,7 @@ user.settings.security.no_more_setup_tips: 'This account has set the Emall addre
 user.settings.security.setup_login_password.failed_tips: 'This account has set the password, cannot be set again！'
 user.settings.security.sms_code: 'SMS verification code'
 user.settings.security.sms_code_tips: 'Input SMS verification code'
-user.settings.security.get_sms_code_btn: 'Get SMS verification code'
+user.settings.security.get_sms_code_btn: 'Get verification code'
 user.settings.security.input_sms_code: 'Input SMS verification code'
 user.settings.security.change_captcha_code: 'Not clear？Click to change'
 user.settings.security.mobile: Mobile
