@@ -3238,8 +3238,9 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
-my.teaching.open_course.Basic_Info: 'Basic Info'
-my.teaching.open_course.Basic_Info.title: Title
+my.teaching.open_course.Basic_Info: 课程设置
+my.teaching.open_course.Basic_Info.message: 基础信息
+my.teaching.open_course.Basic_Info.title: 课程名称
 my.teaching.open_course.Basic_Info.subtitle: Subtitle
 my.teaching.open_course.Basic_Info.tags: Tag
 my.teaching.open_course.Basic_Info.tags.explain: 'Will be used for courses searching'

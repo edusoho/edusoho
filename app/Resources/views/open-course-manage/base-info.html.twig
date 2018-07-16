@@ -14,7 +14,7 @@ tagMatchUrl: path('tag_match')
 {% endblock %}
 
 {% block main_body %}
-  {{ 'my.teaching.open_course.Basic_Info'|trans }}
+  <div class="course-manage-subltitle cd-mb40">{{ 'my.teaching.open_course.Basic_Info'|trans }}</div>
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" id="course-form" method="post" data-update = "{{ canUpdateStartTime }}">
 
@@ -72,9 +72,8 @@ tagMatchUrl: path('tag_match')
       </div>
     </div>
 
-  {#直播设置#}
     {% if course.type == 'liveOpen' %}
-    {{'my.teaching.open_course.liveTimeSet.title'|trans}}
+    <div class="course-manage-subltitle cd-mb40">{{ 'my.teaching.open_course.liveTimeSet.title'|trans }}</div>
 
       <div class="form-group">
         <label class="col-md-2 control-label" for="live-startTime">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
