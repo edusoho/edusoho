@@ -1,5 +1,10 @@
   // 课程目录
   .directory {
+    .empty {
+      color: #71777d;
+      padding-left: 10px;
+      font-size: vw(14);
+    }
     .e-panel-body {
       @extend .flex-column;
       margin:0 vw(-10) vw(50);

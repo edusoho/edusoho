@@ -29,7 +29,7 @@ export default {
     this.items = this.details.courses.map((item, index) => {
       this.$set(item, 'active', false);
 
-      if(this.details.id === item.id) {
+      if(!index) {
         item.active = true;
       }
       return item;
@@ -55,7 +55,7 @@ export default {
     filterPrice () {
       const details = this.details;
 
-      if (details.isFree || details.price === '0.00') {
+      if (Number(details.isFree) || details.price === '0.00') {
         this.isFree = true;
         return '免费';
       }

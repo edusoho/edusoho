@@ -38,6 +38,13 @@
   dependencies:
     "@babel/types" "7.0.0-beta.44"
 
+"@babel/helper-module-imports@^7.0.0-beta.34":
+  version "7.0.0-beta.53"
+  resolved "https://registry.yarnpkg.com/@babel/helper-module-imports/-/helper-module-imports-7.0.0-beta.53.tgz#e735e6aa30a504b0f9d85c38a6d470a9f4aa81d9"
+  dependencies:
+    "@babel/types" "7.0.0-beta.53"
+    lodash "^4.17.5"
+
 "@babel/helper-split-export-declaration@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "http://registry.npm.taobao.org/@babel/helper-split-export-declaration/download/@babel/helper-split-export-declaration-7.0.0-beta.44.tgz#c0b351735e0fbcb3822c8ad8db4e583b05ebd9dc"
@@ -90,6 +97,14 @@
   dependencies:
     esutils "^2.0.2"
     lodash "^4.2.0"
+    to-fast-properties "^2.0.0"
+
+"@babel/types@7.0.0-beta.53":
+  version "7.0.0-beta.53"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.0.0-beta.53.tgz#19a461c0da515595dfb6740b4b45dc7bb0e6b375"
+  dependencies:
+    esutils "^2.0.2"
+    lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
 "@types/strip-bom@^3.0.0":
@@ -647,6 +662,12 @@ babel-plugin-dynamic-import-node@^1.2.0:
   resolved "http://registry.npm.taobao.org/babel-plugin-dynamic-import-node/download/babel-plugin-dynamic-import-node-1.2.0.tgz#f91631e703e0595e47d4beafbb088576c87fbeee"
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
+
+babel-plugin-import@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-import/-/babel-plugin-import-1.8.0.tgz#260deddd78f6fea0d110e1d106ba72a518d3c88c"
+  dependencies:
+    "@babel/helper-module-imports" "^7.0.0-beta.34"
 
 babel-plugin-istanbul@^4.0.0, babel-plugin-istanbul@^4.1.5:
   version "4.1.6"

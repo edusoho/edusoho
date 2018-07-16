@@ -44,7 +44,17 @@ const config = [
   {
     // 修改头像
     name: 'setAvatar',
-    url: '/me/avatar',
+    url: '/me',
+    method: 'PATCH'
+  }, {
+    // 修改昵称
+    name: 'setNickname',
+    url: '/me/nickname/{nickname}',
+    method: 'PATCH'
+  }, {
+    // 上传文件
+    name: 'updateFile',
+    url: '/files',
     method: 'POST'
   }, {
     // 我的订单

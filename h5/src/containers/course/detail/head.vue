@@ -19,38 +19,47 @@ export default {
     courseSet: {
       type: Object,
       default: {}
-    },
-    type: {
-      type: String,
-      default: 'img'
     }
   },
   computed: {
     ...mapState('course', {
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
-      taskId: state => state.taskId
+      taskId: state => state.taskId,
+      details: state => state.details,
+      joinStatus: state => state.joinStatus
     })
   },
   watch: {
-    sourceType: {
-      immediate: true,
-      handler(v) {
-        ['video', 'audio'].includes(v) && this.initPlayer(v);
+    taskId: {
+      handler(v, oldVal) {
+        ['video', 'audio'].includes(this.sourceType) && this.initPlayer();
       }
     }
   },
   methods: {
-    async initPlayer (){
-      this.$refs.video.innerHTML = '';
+    getParams () {
+      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
 
-      const player = await Api.getMedia({
+      return canTryLookable ? {
         query: {
           courseId: this.selectedPlanId,
           taskId: this.taskId
-        }});
+        }, params: {
+          preview: 1
+        }
+      } : {
+        query: {
+          courseId: this.selectedPlanId,
+          taskId: this.taskId
+        }
+      }
+    },
+    async initPlayer (){
+      this.$refs.video.innerHTML = '';
 
-      console.log(player, 'player')
+      const player = await Api.getMedia(this.getParams());
+
       const media = player.media;
       const options = {
         id: 'course-detail__head--video',
@@ -61,7 +70,9 @@ export default {
         poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
 
+      this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.loadPlayerSDK().then(SDK => {
+        this.$store.commit('UPDATE_LOADING_STATUS', false);
         const player = new SDK(options);
       })
     },

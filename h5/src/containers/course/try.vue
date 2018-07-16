@@ -1,11 +1,12 @@
 <template>
   <div class="course-detail try">
+    <e-loading v-if="isLoading"></e-loading>
     <detail-head
-      :courseSet="details[selectedPlanIndex].courseSet"></detail-head>
+      :courseSet="details.courseSet"></detail-head>
     
     <directory
       :hiddeTitle=true
-      :courseItem="details[selectedPlanIndex].courseItem"
+      :courseItems="details.courseItems"
     ></directory>
   </div>
 </template>
@@ -30,6 +31,9 @@ export default {
     ...mapState('course', {
       details: state => state.details,
       selectedPlanIndex: state => state.selectedPlanIndex
+    }),
+    ...mapState({
+      isLoading: state => state.isLoading,
     })
   },
   beforeRouteLeave (to, from, next) {

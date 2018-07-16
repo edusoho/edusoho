@@ -48,6 +48,7 @@
   // tabs component
   .van-tabs {
     margin-bottom: -44px;
+    z-index: 999;
     &.after-tabs {
       margin-bottom: 0;
     }
@@ -70,6 +71,9 @@
 
   .about {
     margin-top: 44px;
+    img {
+      width: 100%;
+    }
   }
   .box {
     opacity: 0;

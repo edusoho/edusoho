@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <van-nav-bar :title="title"
-      :class="{'blue-nav': navClass}"
+      class="nav-bar"
       :left-arrow="showLeftArrow"
       @click-left="$router.go(-1)"/>
     <router-view></router-view>
@@ -15,11 +15,11 @@ export default {
       showLeftArrow: false
     }
   },
-  computed: {
-    navClass() {
-      return ['learning', 'find', 'prelogin'].includes(this.$route.name)
-    }
-  },
+  // computed: {
+  //   navClass() {
+  //     return ['learning', 'find', 'prelogin'].includes(this.$route.name)
+  //   }
+  // },
   watch: {
     '$route': {
       handler(to) {
