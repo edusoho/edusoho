@@ -395,6 +395,16 @@ course_set.manage.activity_link_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 course_set.manage.upgrade_hint:  >
   <p class="title">功能升级</p>课程管理功能现已全新升级。
+course_set.manage.img: >
+  <div class="course-manage-spread"></div>
+course_set.manage.couseset_tab: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、课程文件、课程试卷、课程题库为共用功能，支持任意计划来进行引用。</div>
+course_set.manage.single_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">请进入默认计划设置，对首个计划的价格等内容进行设置。</div>
+course_set.manage.all_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">若需要创建更多计划，请通过全部计划进行设置。</div>
+course_set.manage.publish_courseset: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">点击发布课程，即可以将课程发布在前台，允许学员进行购买和学习。</div>
 course_set.manage.all_tutorial:  >
   <div class="btn-content"><p><a class='btn btn-success js-reset-intro %introBtnClassName%'>查看引导</a></p><a class='btn btn-info'>完整教程</a><div>
 course_set.manage.hint:  >
@@ -549,6 +559,7 @@ open_course.add_lesson_hint: 公开课当前仅支持添加一个课时!
 open_course.file_format_conversion_hint: (正在文件格式转换)
 open_course.file_format_conversion_failed_hint: (文件格式转换失败)
 open_course.unpublish_success_hint: 课时已取消发布!
+open_course.live_time_can_not_edit_bint: 直播已经开始或者结束,无法编辑!
 
 open_course.lesson_delete_success_hint: 课时已删除!
 
@@ -599,7 +610,7 @@ homework_manage.result_graph.status_distribution: 结果区间
 homework_manage.result_graph.first_status_num: 首次成绩结果人数
 homework_manage.result_graph.max_status_num: 最优成绩结果人数
 
-intro.confirm_hint: 我知道了
+intro.confirm_hint: 完成
 
 
 validate.required.message: 请输入%display%

@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.base'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js']) %}
 {% set side_nav = 'base' %}
 
 {% block main %}
@@ -14,7 +14,7 @@
 
       <div class="form-group cd-mt40">
         <div class="col-md-offset-2 col-sm-8">
-          <button id="courseset-base-submit" type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+          <button id="courseset-base-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
         </div>
       </div>
 

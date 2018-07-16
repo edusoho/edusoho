@@ -14,5 +14,25 @@
 {% endblock %}
 
 {% block navbar %}
-  {% include 'open-course-manage/navbar.html.twig' %}
 {% endblock %}
+
+{% block sidebar %}
+  {% include 'open-course-manage/sidebar.html.twig' %}
+{% endblock %}
+
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
