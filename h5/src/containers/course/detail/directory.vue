@@ -61,30 +61,38 @@
     },
     data() {
       return {
-        directoryArray: this.courseItems,
+        directoryArray: [],
         chapters: [],
         tasks: []
       }
     },
     filters:{
       filterNumber(task) {
-        return Number(task.seq) ? `${task.number}-${task.seq}` : `${task.number}`
+        return Number(task.seq)
+          ? `${task.number}-${task.seq}`
+          : `${task.number}`
       }
     },
     watch: {
-      selectedPlanId: function(val, oldVal) {
-        console.log(val, oldVal, 'idddd')
-      }
-    },
-    created() {
-      if (this.directoryArray.length > 0) {
-        this.directoryArray.map(item => {
-          this.$set(item, 'show', true);
-          if (item.type == 'task') {
-            item['status'] = this.getCurrentStatus(item.task);
-          }
-      })
-        this.getTasks(this.directoryArray);
+      selectedPlanId: {
+        immediate: true,
+        handler(v) {
+          if (!this.details.courseItems.length) return;
+
+          this.directoryArray =
+            this.details.courseItems.map(item => {
+
+            this.$set(item, 'show', true);
+
+            if (item.type == 'task') {
+              item['status'] = this.getCurrentStatus(item.task);
+            }
+
+            return item;
+          })
+
+          this.getTasks(this.directoryArray);
+        }
       }
     },
     methods: {
@@ -93,6 +101,8 @@
       }),
       getTasks (data) {
         let temp = [];
+        this.chapters = [];
+        this.tasks = [];
 
         data.forEach(item => {
           if (item.type !== 'chapter') {
@@ -116,9 +126,8 @@
         }
 
         if (data[0].type !== 'chapter') {
-          this.chapters.unshift({show:true});
+          this.chapters.unshift({ show: true });
         }
-        console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
       getCurrentStatus (task) {
         if (Number(this.details.tryLookable)
@@ -170,7 +179,6 @@
                   courseId: this.selectedPlanId,
                   taskId: task.id,
                   type: task.type,
-
                 }
               })
               break;

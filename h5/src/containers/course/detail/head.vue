@@ -70,7 +70,9 @@ export default {
         poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
 
+      this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.loadPlayerSDK().then(SDK => {
+        this.$store.commit('UPDATE_LOADING_STATUS', false);
         const player = new SDK(options);
       })
     },
