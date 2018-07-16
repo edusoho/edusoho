@@ -26,6 +26,15 @@ export default {
   },
   [types.SMS_CENTER](state, payload) {
     state.smsToken = payload;
-    console.log('SMS_CENTER', payload);
+  },
+  [types.SET_NICKNAME](state, payload) {
+    state.user = Object.assign({}, state.user, {
+      nickname: payload.nickname
+    });
+    localStorage.setItem('user', JSON.stringify(payload));
+  },
+  [types.SET_AVATAR](state, payload) {
+    state.user = payload;
+    localStorage.setItem('user', JSON.stringify(payload));
   }
 };

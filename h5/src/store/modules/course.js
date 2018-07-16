@@ -17,11 +17,9 @@ const mutations = {
     currentState.details = payload;
     currentState.joinStatus = hasJoinedCourse(payload);
     currentState.sourceType = 'img';
-    console.log('current', currentState);
   },
-  [types.JOIN_COURSE](currentState, payload) {
+  [types.JOIN_COURSE](currentState) {
     currentState.joinStatus = true;
-    console.log('join-course', payload);
   },
   [types.SET_SOURCETYPE](currentState, payload) {
     currentState.sourceType = payload.sourceType;

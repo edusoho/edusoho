@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { Toast } from 'vant';
 import Api from '@/api';
 
@@ -24,10 +24,10 @@ export default {
         info: '',
       }, {
         name: '昵称',
-        info: '1111'
+        info: ''
       }, {
         name: '手机',
-        info: '122222222222'
+        info: ''
       }]
     }
   },
@@ -42,6 +42,9 @@ export default {
     this.$set(this.settings[2], 'info', this.user.school);
   },
   methods: {
+    ...mapActions([
+      'setAvatar'
+    ]),
     handleSetting(index) {
       switch(index) {
         case 0:
@@ -57,10 +60,20 @@ export default {
       }
     },
     onRead(file) {
-      Api.setAvatar({
-        "images": file.content
+      Api.updateFile({
+        data: {
+          file: file.content,
+          group:'user'
+        }
       }).then(res => {
         this.$set(this.settings[0], 'info', file.content);
+        this.setAvatar({
+          avatarId: res.id
+        }).then(() => {
+          Toast.success('修改成功');
+        }).catch(err => {
+          Toast.fail(err.message)
+        })
       })
     }
   }
