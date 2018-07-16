@@ -858,6 +858,7 @@ course.plan_setup.audiences: 'Target users'
 course.base_setup: 基础设置
 courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
+course.base_plan_intro: 计划使用指南
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'

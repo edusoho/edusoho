@@ -3,6 +3,7 @@ import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
+import Intro from './intro';
 
 class CourseInfo {
   constructor() {
@@ -17,6 +18,13 @@ class CourseInfo {
     this.initDatetimepicker();
     this.initExpiryMode();
     this.setService();
+    this.setIntroPosition();
+  }
+
+  setIntroPosition() {
+    const space = 40;
+    const introRight = $('.js-course-manage-info').offset().left + space;
+    $('.js-plan-intro').css('right', `${introRight}px`);
   }
 
   setService() {
@@ -346,3 +354,8 @@ class CourseInfo {
 }
 
 new CourseInfo();
+
+setTimeout(function() {
+  new Intro();
+}, 500);
+

@@ -982,6 +982,7 @@ course.plan_setup.audiences: 适应人群
 course.base_setup: 基础设置
 courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
+course.base_plan_intro: 计划使用指南
 course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
