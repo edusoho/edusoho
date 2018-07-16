@@ -14,7 +14,6 @@ tagMatchUrl: path('tag_match')
 {% endblock %}
 
 {% block main_body %}
-  {{ 'my.teaching.open_course.Basic_Info'|trans }}
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" id="course-form" method="post" data-update = "{{ canUpdateStartTime }}">
 
