@@ -846,3 +846,17 @@ User account is locked.: 帐号被封禁
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
 message.send.not_allowed: 不允许发送私信
 
+admin.index.register_count: 新增注册
+admin.index.active_user_count: 活跃用户
+admin.index.lost_user_count: 流失用户
+
+admin.index.new_order_count: 新增订单
+admin.index.new_paid_order_count: 付费订单
+
+admin.index.course_order: 课程订单
+admin.index.classroom_order: 班级订单
+admin.index.vip_order: 会员订单
+admin.index.order_count: 订单量
+admin.index.finished_task_count: 学习任务数
+admin.index.notify_teacher_success: 提醒教师的通知，发送成功！
+admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~

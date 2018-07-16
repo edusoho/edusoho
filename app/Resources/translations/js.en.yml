@@ -21,7 +21,7 @@ site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%
 site.data.delete_submiting_hint: Deleting ...
 site.date.year: Years
 site.date.month: Month
-site.data.get_sms_code_btn: Get SMS verification code
+site.data.get_sms_code_btn: Get verification code
 site.data.get_sms_code_again_btn: Reacquire later after
 site.data.get_sms_code_success_hint: Send SMS successful
 site.data.get_sms_code_allowance_success_hint: SMS sent successfully, %allowance% SMS balance reamin.
@@ -904,3 +904,18 @@ User account is locked.: The account is blocked.
 
 cloud_search.network.error_message: Due to the poor network condition, you are switched to simple search mode. 
 message.send.not_allowed: not allowed to send messages
+
+admin.index.register_count: register count
+admin.index.active_user_count: active user count
+admin.index.lost_user_count: lost user count
+
+admin.index.new_order_count: new order count
+admin.index.new_paid_order_count: new paid order count
+
+admin.index.course_order: "course"
+admin.index.classroom_order: "classroom"
+admin.index.vip_order: vip
+admin.index.order_count: order count
+admin.index.finished_task_count: finished task count
+admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
+admin.user.cloude_sms_enable_hint: please go to【Admin】-【ES Cloud】-【Cloud Sms】open cloud sms first.
