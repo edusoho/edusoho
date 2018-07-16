@@ -2518,7 +2518,7 @@ classroom.live: 直播
 classroom.task_num: >
   第%number%%taskName%
 classroom.total_task_count: >
-  %taskNum%个%takName%
+  %taskNum%个%taskName%
 classroom.expiry_mode: 有效期
 classroom.forever: 永久
 classroom.course_tips: >

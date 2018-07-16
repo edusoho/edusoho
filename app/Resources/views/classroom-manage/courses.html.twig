@@ -106,7 +106,7 @@
                         {% endif %}  
 
                           <span class="color-gray text-sm">
-                              {{'classroom.total_task_count'|trans({'%takName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNum%':course.taskNum})}}
+                              {{'classroom.total_task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNum%':course.taskNum})}}
                           </span>
                           <span class="divider"></span>
                           <span class="color-gray text-sm">
