@@ -71,6 +71,14 @@ const config = [
     name: 'getMedia',
     url: '/courses/{courseId}/task_medias/{taskId}',
     method: 'GET'
+  }, {
+    // 更多获取筛选信息
+    name: 'getSelectItems',
+    url: '/pages/h5/settings/course'
+  }, {
+    // 获取课程列表数据
+    name: 'getCourseList',
+    url: '/courses'
   }
 ];
 

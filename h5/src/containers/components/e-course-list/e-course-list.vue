@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import course from '../e-course/e-course';
   const url = '/api/plugins/we_chat_app/course';
 
