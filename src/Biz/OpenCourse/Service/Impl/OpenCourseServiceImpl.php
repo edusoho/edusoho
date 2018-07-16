@@ -78,11 +78,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
     }
 
-    public function updateCourse($id, $fields)
+    protected function filterOpenCourseFields($fields)
     {
-        $user = $this->getCurrentUser();
-        $argument = $fields;
-
         $fields = ArrayToolkit::parts($fields, array(
             'title',
             'subtitle',
@@ -115,11 +112,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'jumpUrl',
         ));
 
-        $course = $this->getCourse($id);
+        return $fields;
+    }
 
-        if (empty($course)) {
-            throw $this->createServiceException('课程不存在，更新失败！');
-        }
+    protected function updateOpenCourse($course, $fields)
+    {
+        $user = $this->getCurrentUser();
 
         $courseFields = ArrayToolkit::parts($fields, array(
             'title',
@@ -157,51 +155,75 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->getLogService()->info('open_course', 'update_course', "更新公开课《{$course['title']}》(#{$course['id']})的信息", $courseFields);
 
-        $updatedCourse = $this->getOpenCourseDao()->update($id, $courseFields);
+        $updatedCourse = $this->getOpenCourseDao()->update($course['id'], $courseFields);
 
-        $this->dispatchEvent('open.course.update', array('argument' => $argument, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        $this->dispatchEvent('open.course.update', array('argument' => $fields, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
 
-        if ('liveOpen' == $course['type'] && isset($fields['startTime']) && !empty($fields['startTime'])) {
-            $openLiveLesson = $this->searchLessons(
-                array('courseId' => $course['id']),
-                array('startTime' => 'DESC'),
-                0,
-                1
+        return $updatedCourse;
+    }
+
+    protected function shouldUpdateLiveLesson($course, $fields)
+    {
+        return 'liveOpen' == $course['type'] && isset($fields['startTime']) && !empty($fields['startTime']);
+    }
+
+    protected function updateLiveLesson($course, $fields)
+    {
+        $openLiveLesson = $this->searchLessons(
+            array('courseId' => $course['id']),
+            array('startTime' => 'DESC'),
+            0,
+            1
+        );
+        $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
+
+        $liveLessonFields = ArrayToolkit::parts($fields, array(
+            'startTime',
+            'length',
+            'authUrl',
+            'jumpUrl',
+        ));
+
+        $liveLessonFields = array_merge($liveLesson, $liveLessonFields);
+
+        $liveLessonFields['type'] = 'liveOpen';
+        $liveLessonFields['courseId'] = $course['id'];
+        $liveLessonFields['title'] = $course['title'];
+
+        $routes = array(
+            'authUrl' => $fields['authUrl'],
+            'jumpUrl' => $fields['jumpUrl'],
+        );
+        if ($openLiveLesson) {
+            $this->getLiveCourseService()->editLiveRoom($course, $liveLessonFields, $routes);
+            $this->updateLesson(
+                $liveLessonFields['courseId'],
+                $liveLessonFields['id'],
+                $liveLessonFields
             );
-            $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
+        } else {
+            $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLessonFields, $routes);
 
-            $liveLessonFields = ArrayToolkit::parts($fields, array(
-               'startTime',
-               'length',
-               'authUrl',
-               'jumpUrl',
-            ));
+            $liveLessonFields['mediaId'] = $live['id'];
+            $liveLessonFields['liveProvider'] = $live['provider'];
 
-            $liveLessonFields = array_merge($liveLesson, $liveLessonFields);
+            $this->createLesson($liveLessonFields);
+        }
+    }
 
-            $liveLessonFields['type'] = 'liveOpen';
-            $liveLessonFields['courseId'] = $course['id'];
-            $liveLessonFields['title'] = $course['title'];
+    public function updateCourse($id, $fields)
+    {
+        $fields = $this->filterOpenCourseFields($fields);
 
-            $routes = array(
-                'authUrl' => $fields['authUrl'],
-                'jumpUrl' => $fields['jumpUrl'],
-            );
-            if ($openLiveLesson) {
-                $this->getLiveCourseService()->editLiveRoom($course, $liveLessonFields, $routes);
-                $this->updateLesson(
-                    $liveLessonFields['courseId'],
-                    $liveLessonFields['id'],
-                    $liveLessonFields
-                );
-            } else {
-                $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLessonFields, $routes);
+        $course = $this->getCourse($id);
+        if (empty($course)) {
+            throw $this->createServiceException('课程不存在，更新失败！');
+        }
 
-                $liveLessonFields['mediaId'] = $live['id'];
-                $liveLessonFields['liveProvider'] = $live['provider'];
+        $updatedCourse = $this->updateOpenCourse($course, $fields);
 
-                $this->createLesson($liveLessonFields);
-            }
+        if ($this->shouldUpdateLiveLesson($course, $fields)) {
+            $this->updateLiveLesson($course, $fields);
         }
 
         return $updatedCourse;
