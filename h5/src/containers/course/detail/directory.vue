@@ -1,8 +1,8 @@
 <template>
   <e-panel title="课程目录" class="directory" :hidde-title="hiddeTitle">
     <!-- 暂无学习任务 -->
-
-    <div class="directory-list">
+    <div v-if="courseItems.length == 0" class="empty">暂无学习任务</div>
+    <div class="directory-list" v-else>
       <div class="directory-list__item" v-for="(item, index) in chapters">
         <div class="directory-list__item-chapter" 
           @click="item.show = !item.show" 
@@ -69,6 +69,11 @@
     filters:{
       filterNumber(task) {
         return Number(task.seq) ? `${task.number}-${task.seq}` : `${task.number}`
+      }
+    },
+    watch: {
+      selectedPlanId: function(val, oldVal) {
+        console.log(val, oldVal, 'idddd')
       }
     },
     created() {
@@ -140,13 +145,15 @@
 
         !details.allowAnonymousPreview && this.$route.push({name: 'login'})
 
-        if (!this.joinStatus && Number(details.tryLookable)) {
+        if (!this.joinStatus
+          && Number(details.tryLookable)
+          && ['is-tryLook', 'is-free'].includes(data.status)) {
         // trylook and free video click
           switch (task.type) {
             case 'video':
             case 'audio':
               this.$router.push({
-                name: 'course_try'
+                name: 'course_try',
               })
 
               this.setSourceType({
@@ -162,7 +169,8 @@
                 params: {
                   courseId: this.selectedPlanId,
                   taskId: task.id,
-                  type: task.type
+                  type: task.type,
+
                 }
               })
               break;
