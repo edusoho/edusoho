@@ -111,7 +111,7 @@ export default class Intro {
   initSingleStep() {
     let array = [
       {
-        intro: Translator.trans('course_set.manage.img'), // 第一步
+        intro: Translator.trans('course_set.manage.img'),
       },
     ];
     return array;
