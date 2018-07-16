@@ -21,7 +21,7 @@
   </div>
   <div class="wechat-app-introduction row">
     <div class="col-md-3 col-sm-4 col-xs-6">
-      <div class="introduction-box">
+      <div class="introduction-box" {% if lang|default(null) == 'en' %}style="height: 336px;"{% endif %}>
         <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/fast-access.png') }}"
           srcset="{{ asset('static-dist/app/img/admin/wechat-app/fast-access.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/fast-access@2x.png') }} 2x"/>
         <h4 class="introduction-title">{{ 'admin.wechat_app.fast_access_introduction_title'|trans }}</h4>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-4 col-xs-6">
-      <div class="introduction-box">
+      <div class="introduction-box" {% if lang|default(null) == 'en' %}style="height: 336px;"{% endif %}>
         <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/data-synchronization.png') }}"
           srcset="{{ asset('static-dist/app/img/admin/wechat-app/data-synchronization.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/data-synchronization@2x.png') }} 2x"/>
         <h4 class="introduction-title">{{ 'admin.wechat_app.data_sync_introduction_title'|trans }}</h4>
@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-4 col-xs-6">
-      <div class="introduction-box">
+      <div class="introduction-box" {% if lang|default(null) == 'en' %}style="height: 336px;"{% endif %}>
         <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/flow-entrance.png') }}"
           srcset="{{ asset('static-dist/app/img/admin/wechat-app/flow-entrance.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/flow-entrance@2x.png') }} 2x"/>
         <h4 class="introduction-title">{{ 'admin.wechat_app.flow_entrance_introduction_title'|trans }}</h4>
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-4 col-xs-6">
-      <div class="introduction-box">
+      <div class="introduction-box" {% if lang|default(null) == 'en' %}style="height: 336px;"{% endif %}>
         <img class="introduction-icon" src="{{ asset('static-dist/app/img/admin/wechat-app/easy-promotion.png') }}"
           srcset="{{ asset('static-dist/app/img/admin/wechat-app/easy-promotion.png') }} 1x, {{ asset('static-dist/app/img/admin/wechat-app/easy-promotion@2x.png') }} 2x"/>
         <h4 class="introduction-title">{{ 'admin.wechat_app.easy_promotion_introduction_title'|trans }}</h4>
