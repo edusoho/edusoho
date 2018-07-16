@@ -362,8 +362,10 @@ class CourseSetManageController extends BaseController
 
         $copyCourseSet = $this->getCourseSetService()->getCourseSet($courseSet['parentId']);
 
+        $template = $this->getTemplate($sideNav);
+
         return $this->render(
-            'courseset-manage/locked.html.twig',
+            $template,
             array(
                 'id' => $id,
                 'sideNav' => $sideNav,
@@ -408,6 +410,15 @@ class CourseSetManageController extends BaseController
             return $this->createJsonResponse(true, 200);
         } catch (\Exception $e) {
             return $this->createJsonResponse($e->getMessage(), 500);
+        }
+    }
+
+    protected function getTemplate($sideNav)
+    {
+        if (in_array($sideNav, array('files', 'testpaper', 'question'))) {
+            return 'courseset-manage/locked-list.html.twig';
+        } else {
+            return 'courseset-manage/locked.html.twig';
         }
     }
 
