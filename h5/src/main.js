@@ -21,7 +21,8 @@ import {
   Swipe,
   SwipeItem,
   List,
-  Field
+  Field,
+  Loading
 } from 'vant';
 
 Vue.component('van-nav-bar', NavBar);
@@ -34,6 +35,7 @@ Vue.component('van-button', Button);
 Vue.component('van-tab', Tab);
 Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
+Vue.component('van-loading', Loading);
 
 Vue.use(filters);
 Vue.use(plugins);

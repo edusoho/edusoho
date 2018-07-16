@@ -1,5 +1,6 @@
 <template>
   <div class="course-detail">
+    <e-loading v-if="isLoading"></e-loading>
     <join-before v-if="!joinStatus && !isEmpty" :details="details"></join-before>    
     <join-after :details="details" v-if="joinStatus && !isEmpty"></join-after>
   </div>
@@ -22,8 +23,11 @@
         joinStatus: state => state.joinStatus,
         details:  state => state.details
       }),
+      ...mapState({
+        isLoading: state => state.isLoading
+      }),
       isEmpty() {
-        return Object.keys(this.details).length == 0;
+        return Object.keys(this.details).length === 0;
       }
     },
     created(){
