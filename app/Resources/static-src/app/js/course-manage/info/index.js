@@ -274,6 +274,7 @@ class CourseInfo {
       this.validator.form();
       break;
     default:
+      console.log('expiryMode');
       this.validator.form();
       break;
     }

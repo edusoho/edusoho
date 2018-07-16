@@ -2,8 +2,7 @@
 
 {% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js','libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'app/js/course-manage/info/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'app/js/course-manage/info/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -43,6 +42,14 @@
           <div id="test"></div>
         </div>
       </div>
+
+      <div class="course-manage-intro js-plan-intro">
+        <div class="course-manage-intro__outer js-plan-intro-btn">
+          <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>
+        </div>
+        <div class="cd-dark-major mtm">{{ 'course.base_plan_intro'|trans }}</div>
+      </div>
+
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   {% endif %}

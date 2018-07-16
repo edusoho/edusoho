@@ -1,5 +1,6 @@
 import 'store';
 import Cookies from 'js-cookie';
+import { debounce } from 'app/common/widget/debounce';
 const COURSE_BASE_INTRO = 'COURSE_BASE_INTRO';
 
 export default class Intro {
@@ -29,14 +30,7 @@ export default class Intro {
       $('html').scrollTop(0);
       this.introStart(this.initSingleStep());
     });
-    $(window).scroll((event) => {
-      const scrollTop = $(document).scrollTop();
-      if (scrollTop > 440) {
-        self.$intro.addClass('course-manage-intro-float');
-      } else {
-        self.$intro.removeClass('course-manage-intro-float');
-      }
-    });
+    window.addEventListener('scroll', debounce(self.scrollPosition, 100, true));
   }
   
   introStart(steps) {
@@ -78,6 +72,15 @@ export default class Intro {
     });
   }
 
+  scrollPosition() {
+    const $intro = $('.js-plan-intro');
+    const scrollTop = $(document).scrollTop();
+    if (scrollTop > 440) {
+      $intro.addClass('course-manage-intro-float');
+    } else {
+      $intro.removeClass('course-manage-intro-float');
+    }
+  }
   
   initAllSteps() {
     let arry = [
@@ -113,5 +116,4 @@ export default class Intro {
     ];
     return array;
   }
-  
 }

@@ -485,6 +485,7 @@ class CourseManageController extends BaseController
                 unset($data['subtitle']);
             }
             $data = $this->prepareExpiryMode($data);
+            var_dump($data);exit();
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
