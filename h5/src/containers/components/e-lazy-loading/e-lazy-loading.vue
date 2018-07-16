@@ -28,14 +28,14 @@
     props: {
       courseList: Array,
       isRequestCompile: Boolean,
-      isAllCourse: Boolean
+      isAllCourse: Boolean,
+      courseItemType: String
     },
 
     data() {
       return {
         list: [],
         finished: false,
-        courseItemType: 'rank'
       };
     },
 

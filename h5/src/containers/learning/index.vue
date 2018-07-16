@@ -2,8 +2,9 @@
   <div class="e-learn">
     <emptyCourse v-if="isEmptyCourse && isFirstRequestCompile"></emptyCourse>
     <lazyLoading v-else
-      :courseList = "courseList"
-      :isAllCourse = "isAllCourse"
+      :courseList="courseList"
+      :isAllCourse="isAllCourse"
+      :courseItemType="courseItemType"
       v-model="isRequestCompile"
       @needRequest="sendRequest"
     ></lazyLoading>
@@ -23,6 +24,7 @@
     },
     data() {
       return {
+        courseItemType: 'rank',
         isEmptyCourse: true,
         isFirstRequestCompile: false,
         isRequestCompile: false,
@@ -46,13 +48,13 @@
           params: setting
         }).then((data) => {
           let isAllCourse;
+          isAllCourse = this.judegIsAllCourse(data);
           if (!isAllCourse) {
             data.data.forEach(element => {
               this.courseList.push(element);
               this.offset++;
             })
           }
-          isAllCourse = this.judegIsAllCourse(data);
           this.isAllCourse = isAllCourse;
           this.isRequestCompile = true;
         }).catch((err) => {
