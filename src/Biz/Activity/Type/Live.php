@@ -98,7 +98,7 @@ class Live extends Activity
         return $this->getLiveActivityService()->getLiveActivity($targetId);
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getLiveActivityService()->findLiveActivitiesByIds($targetIds);
     }
