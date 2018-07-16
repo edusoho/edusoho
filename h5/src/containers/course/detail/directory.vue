@@ -126,9 +126,8 @@
         }
 
         if (data[0].type !== 'chapter') {
-          this.chapters.unshift({show:true});
+          this.chapters.unshift({ show: true });
         }
-        console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
       getCurrentStatus (task) {
         if (Number(this.details.tryLookable)

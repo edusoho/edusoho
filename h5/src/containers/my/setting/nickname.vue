@@ -1,6 +1,8 @@
 <template>
   <div class="my_setting-nickname">
+    <e-loading v-if="isLoading"></e-loading>
     <van-field v-model="nickname" placeholder="请修改您的用户名" class=" my_setting-nickname--input"/>
+    
     <van-button type="default" 
     @click="modifyNickname"
     :disabled="btnDisable"
@@ -10,18 +12,21 @@
 <script>
 import Api from '@/api';
 import { Toast } from 'vant';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   data () {
     return {
-      nickname: '',
+      nickname: ''
     }
   },
   computed: {
     btnDisable() {
       return this.nickname.length <= 3;
-    }
+    },
+    ...mapState({
+      isLoading: state => state.isLoading
+    })
   },
   methods: {
     ...mapActions([

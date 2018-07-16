@@ -29,7 +29,7 @@ export default {
     this.items = this.details.courses.map((item, index) => {
       this.$set(item, 'active', false);
 
-      if(this.details.id === item.id) {
+      if(!index) {
         item.active = true;
       }
       return item;

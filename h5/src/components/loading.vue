@@ -8,13 +8,14 @@
     position: fixed;
     height: 100vh;
     width: 100vw;
+    z-index: 1000;    
     .van-loading--white {
       position: absolute;
-      top: 35%;
+      top: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
       background-color: rgba(0, 0, 0, .5);
-      padding: 10px;
+      padding: 15px;
       border-radius: 3px;
     }
   }

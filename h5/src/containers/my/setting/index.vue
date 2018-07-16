@@ -1,5 +1,6 @@
 <template>
   <div class="my_setting">
+    <e-loading v-if="isLoading"></e-loading>
     <div class="my_setting-item" v-for="(item, index) in settings" @click="handleSetting(index)">
       <span class="my_setting-title title-18">{{item.name}}</span>
       <div class="my_setting-content">
@@ -33,7 +34,8 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.user
+      user: state => state.user,
+      isLoading: state => state.isLoading
     })
   },
   created() {
@@ -50,7 +52,9 @@ export default {
         case 0:
           break;
         case 1:
-          this.$router.push('/setting/nickname');
+          this.$router.push({
+            name: 'setting_nickname'
+          });
           break;
         case 2:
           Toast('更改手机号，后续开通');
