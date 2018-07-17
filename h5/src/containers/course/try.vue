@@ -1,3 +1,4 @@
+ <!-- 试看页 -->
 <template>
   <div class="course-detail try">
     <e-loading v-if="isLoading"></e-loading>
