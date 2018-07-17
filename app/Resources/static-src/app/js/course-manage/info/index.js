@@ -154,7 +154,7 @@ class CourseInfo {
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
-      },
+      }
     });
 
     $.validator.addMethod(
