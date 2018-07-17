@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      {% if not hasMulCourses %}
+      {% if not hasMulCourses and courseSet.type == 'normal' %}
         <div class="course-manage-intro js-plan-intro">
           <div class="course-manage-intro__outer js-plan-intro-btn">
             <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>
