@@ -74,6 +74,38 @@ export default class Base {
           required: true,
           maxlength: 70,
         },
+        startTime: {
+          required: true,
+          after_now: true,
+          es_remote: {
+            type: 'post',
+            data: {
+              clientTime: function () {
+                return $('[name=startTime]').val();
+              }
+            }
+          }
+        },
+        timeLength: {
+          required: true,
+          positive_integer: true,
+          es_remote: {
+            type: 'get',
+            data: {                     //要传递的数据
+              startTime: function () {
+                return $('[name=startTime]').val();
+              },
+              length: function () {
+                return $('[name=timeLength]').val();
+              },
+            }
+          }
+        }
+      },
+      messages: {
+        startTime: {
+          es_remote: Translator.trans('validate.after_now.message')
+        }
       }
     });
 
@@ -82,6 +114,32 @@ export default class Base {
         $form.submit();
       }
     });
+
+    
+
+
+    if (!$form.data('update')) {
+
+      $('[name=startTime]').attr('disabled', true);
+      $('#live-length-field').attr('disabled', true);
+
+      $('#starttime-help-block').html(Translator.trans('open_course.live_time_can_not_edit_bint'));
+      $('#starttime-help-block').css('color', '#a94442');
+      $('#timelength-help-block').html(Translator.trans('open_course.live_time_can_not_edit_bint'));
+      $('#timelength-help-block').css('color', '#a94442');
+    } else {
+      $('[name=startTime]').attr('disabled', false);
+    }
+
+    let now = new Date();
+
+    $('[name=startTime]').datetimepicker({
+      autoclose: true,
+      language: document.documentElement.lang
+    }).on('hide', function (ev) {
+      validator.element('[name=startTime]');
+    });
+    $('[name=startTime]').datetimepicker('setStartDate', now);
   }
 
   initCkeditor() {
