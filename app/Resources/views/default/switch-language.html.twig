@@ -1,6 +1,13 @@
-<li class="visitor-li hidden-xs">
-    <a href="{{ path('switch_language', {language: 'zh_CN', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{ 'homepage.switch_language.chinese'|trans }}</a>
+{% if isAdapt|default(null) %}
+  <!-- 自适应 -->
+  {% set langClass = 'text-center' %}
+{% else %}
+  {% set langClass = 'visitor-li hidden-xs' %}
+{% endif %}
+
+<li class="{{ langClass }}">
+  <a href="{{ path('switch_language', {language: 'zh_CN', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{ 'homepage.switch_language.chinese'|trans }}</a>
 </li>
-<li class="visitor-li hidden-xs">
-<a href="{{ path('switch_language', {language: 'en', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{ 'homepage.switch_language.english'|trans }}</a>
+<li class="{{ langClass }}">
+  <a href="{{ path('switch_language', {language: 'en', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{ 'homepage.switch_language.english'|trans }}</a>
 </li>
