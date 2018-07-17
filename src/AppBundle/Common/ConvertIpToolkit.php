@@ -2,15 +2,25 @@
 
 namespace AppBundle\Common;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class ConvertIpToolkit
 {
+    //https://www.ipip.net/product/ip.html
+    private static $ip = null;
+
+    private static $fp = null;
+    private static $offset = null;
+    private static $index = null;
+
     public static function convertIps(array $array)
     {
         $result = array();
         foreach ($array as $key => $value) {
-            $value['location'] = static::convertIp($value['ip']);
+            $location = static::convertIp($value['ip']);
+            if ('N/A' == $location) {
+                $location = '未知区域';
+            }
+
+            $value['location'] = $location;
             $result[$key] = $value;
         }
 
@@ -19,41 +29,75 @@ class ConvertIpToolkit
 
     public static function convertIp($ip)
     {
-        static $fp = null, $offset = array(), $index = null;
-
-        $ips = explode('.', $ip);
-        $ip = pack('N', ip2long($ip));
-
-        $ips[0] = (int) $ips[0];
-        $ips[1] = (int) $ips[1];
-
-        $tinyipdataPath = __DIR__.'/tinyipdata.dat';
-        if ($fp = @fopen($tinyipdataPath, 'rb')) {
-            $offset = @unpack('Nlen', @fread($fp, 4));
-            $index = @fread($fp, $offset['len'] - 4);
-        } else {
-            throw new \Exception(ServiceKernel::instance()->trans('无法打开tinyipdata文件'), 1);
+        if ('127.0.0.1') {
+            return '本机地址';
         }
 
-        $length = $offset['len'] - 1028;
-        $start = @unpack('Vlen', $index[$ips[0] * 4].$index[$ips[0] * 4 + 1].$index[$ips[0] * 4 + 2].$index[$ips[0] * 4 + 3]);
+        if (empty($ip) === true) {
+            return 'N/A';
+        }
 
-        for ($start = $start['len'] * 8 + 1024; $start < $length; $start += 8) {
-            if ($index[$start].$index[$start + 1].$index[$start + 2].$index[$start + 3] >= $ip) {
-                $index_offset = @unpack('Vlen', $index[$start + 4].$index[$start + 5].$index[$start + 6]."\x0");
-                $index_length = @unpack('Clen', $index[$start + 7]);
+        $nip = gethostbyname($ip);
+        $ipdot = explode('.', $nip);
+
+        if ($ipdot[0] < 0 || $ipdot[0] > 255 || count($ipdot) !== 4) {
+            return 'N/A';
+        }
+
+        if (self::$fp === null) {
+            self::init();
+        }
+
+        $nip2 = pack('N', ip2long($nip));
+
+        $tmp_offset = ((int) $ipdot[0] * 256 + (int) $ipdot[1]) * 4;
+        $start = unpack('Vlen', self::$index[$tmp_offset].self::$index[$tmp_offset + 1].self::$index[$tmp_offset + 2].self::$index[$tmp_offset + 3]);
+
+        $index_offset = $index_length = null;
+        $max_comp_len = self::$offset['len'] - 262144 - 4;
+        for ($start = $start['len'] * 9 + 262144; $start < $max_comp_len; $start += 9) {
+            if (self::$index[$start].self::$index[$start + 1].self::$index[$start + 2].self::$index[$start + 3] >= $nip2) {
+                $index_offset = unpack('Vlen', self::$index[$start + 4].self::$index[$start + 5].self::$index[$start + 6]."\x0");
+                $index_length = unpack('nlen', self::$index[$start + 7].self::$index[$start + 8]);
+
                 break;
             }
         }
 
-        @fseek($fp, $offset['len'] + $index_offset['len'] - 1024);
+        if ($index_offset === null) {
+            return 'N/A';
+        }
 
-        if ($index_length['len']) {
-            $result = @fread($fp, $index_length['len']);
+        fseek(self::$fp, self::$offset['len'] + $index_offset['len'] - 262144);
 
-            return $result;
-        } else {
-            return ServiceKernel::instance()->trans('查询不到此IP');
+        return fread(self::$fp, $index_length['len']);
+    }
+
+    private static function init()
+    {
+        if (self::$fp === null) {
+            self::$ip = new self();
+
+            self::$fp = fopen(__DIR__.'/tinyipdata.datx', 'rb');
+            if (self::$fp === false) {
+                throw new Exception('Invalid tinyipdata.datx file!');
+            }
+
+            self::$offset = unpack('Nlen', fread(self::$fp, 4));
+            if (self::$offset['len'] < 4) {
+                throw new Exception('Invalid tinyipdata.datx file!');
+            }
+
+            self::$index = fread(self::$fp, self::$offset['len'] - 4);
+        }
+    }
+
+    public function __destruct()
+    {
+        if (self::$fp !== null) {
+            fclose(self::$fp);
+
+            self::$fp = null;
         }
     }
 }
