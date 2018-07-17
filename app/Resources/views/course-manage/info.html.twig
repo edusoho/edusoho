@@ -38,12 +38,12 @@
       
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-8">
-          <button id="course-submit" type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+          <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
           <div id="test"></div>
         </div>
       </div>
 
-      {% if not hasMulCourses %}
+      {% if not hasMulCourses and courseSet.type == 'normal' %}
         <div class="course-manage-intro js-plan-intro">
           <div class="course-manage-intro__outer js-plan-intro-btn">
             <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>

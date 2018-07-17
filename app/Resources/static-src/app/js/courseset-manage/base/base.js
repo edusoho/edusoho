@@ -1,9 +1,10 @@
 import Detail from './detail';
 
 export default class Base {
-  constructor() {
+  constructor(element) {
     this.init();
-    this.detail = new Detail();
+    console.log(element);
+    this.detail = new Detail(element);
   }
 
   init() {
@@ -44,6 +45,7 @@ export default class Base {
     });
   }
 
+  // 通用标签选择组件
   initTags() {
     const $tags = $('#tags');
     $tags.select2({

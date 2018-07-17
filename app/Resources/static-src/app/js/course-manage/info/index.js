@@ -4,6 +4,7 @@ import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
 import Intro from './intro';
+import Base from 'app/js/courseset-manage/base/base';
 
 class CourseInfo {
   constructor() {
@@ -87,14 +88,14 @@ class CourseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
+        title: {
+          required: true,
+          maxlength: 10,
+        },
         maxStudentNum: {
           required: true,
           live_capacity: true,
           positive_integer: true
-        },
-        title: {
-          required: true,
-          maxlength: 10,
         },
         subtitle: {
           maxlength: 30
@@ -105,6 +106,11 @@ class CourseInfo {
           },
           digits: true,
           max_year: true
+        },
+        originPrice: {
+          required: true,
+          positive_price: true,
+          min: 0
         },
         expiryStartDate: {
           required: () => {
@@ -119,9 +125,15 @@ class CourseInfo {
           },
           date: true,
           after_date: '#expiryStartDate'
+        },
+        summary: {
+          ckeditor_maxlength: 10000,
         }
       },
       messages: {
+        originPrice: {
+          required: Translator.trans('validate_old.positive_currency.message')
+        },
         maxStudentNum: {
           required: Translator.trans('course.manage.max_student_num_error_hint')
         },
@@ -139,7 +151,7 @@ class CourseInfo {
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
-      }
+      },
     });
 
     $.validator.addMethod(
@@ -247,12 +259,16 @@ class CourseInfo {
   }
 
   initExpiryMode() {
+    if ($('input[name="expiryMode"]:checked').val() !== 'forever') {
+      $('.js-course-manage-expiry-tip').removeClass('ml0');
+    }
     let $deadline = $('[name="deadline"]');
     let $expiryDays = $('[name="expiryDays"]');
     let $expiryStartDate = $('[name="expiryStartDate"]');
     let $expiryEndDate = $('[name="expiryEndDate"]');
     let expiryMode = $('[name="expiryMode"]:checked').val();
     let $deadlineType = $('[name="deadlineType"]:checked');
+
     this.elementRemoveRules($deadline);
     this.elementRemoveRules($expiryDays);
     this.elementRemoveRules($expiryStartDate);
@@ -359,3 +375,8 @@ setTimeout(function() {
   new Intro();
 }, 500);
 
+
+
+if ($('#courseset-summary-field').length) {
+  new Base($('#course-submit'));
+}

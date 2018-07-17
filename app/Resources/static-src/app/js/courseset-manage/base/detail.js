@@ -1,7 +1,9 @@
 export default class detail {
-  constructor() {
+  constructor(element) {
     this.$from = $('#title').closest('form');
+    this.btn = element;
     this.init();
+    console.log(element);
   }
 
   init() {
@@ -32,7 +34,7 @@ export default class detail {
         }
       }
     });
-    $('#detail-submit').click(() => {
+    this.btn.click(() => {
       $('#courseset-summary-field').val(this.editor.getData());
       if (this.validator.form()) {
         this.$from.submit();

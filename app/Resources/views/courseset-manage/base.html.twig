@@ -2,14 +2,13 @@
 
 {% block title %}{{ 'course.base'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
 {% set side_nav = 'base' %}
 
 {% block main %}
   <div class="courseset-manage-body__title">{{ 'course.base.content_title'|trans }}</div>
   <div class="courseset-manage-body__content cd-mt32">
     <form class="form-horizontal" id="courseset-form" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
-      {{ web_macro.flash_messages() }}
       {% include 'courseset-manage/base-info/info.html.twig' %}
 
       <div class="form-group cd-mt40">
