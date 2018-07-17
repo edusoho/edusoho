@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\PluginBundle\System\PluginRegister;
 use Symfony\Component\HttpFoundation\Request;
 
 class AppController extends BaseController
@@ -139,8 +140,16 @@ class AppController extends BaseController
     {
         $code = $request->get('code');
         $this->getAppService()->uninstallApp($code);
+        $this->refreshInstalledPluginConfiguration();
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function refreshInstalledPluginConfiguration()
+    {
+        $rootDir = dirname($this->getParameter('kernel.root_dir'));
+        $register = new PluginRegister($rootDir, 'plugins', $this->getBiz());
+        $register->refreshInstalledPluginConfiguration();
     }
 
     public function upgradesAction()

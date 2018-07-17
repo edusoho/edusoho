@@ -1,0 +1,114 @@
+.es-intro-help {
+  padding: 0;
+  &.multistep {
+    margin-top: -380px !important;
+    .introjs-nextbutton,
+    .done-button {
+      margin: 24px 24px 24px 16px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      .border-radius;
+    }
+    .introjs-skipbutton {
+      i {
+        font-size: 34px;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.es-intro-single {
+  position: relative;
+  margin-top: -380px !important;
+  width: 600px;
+  .introjs-skipbutton {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: -4px;
+    i {
+      font-size: 34px;
+      color: #fff;
+    }
+    &:hover {
+      background: transparent;
+      border: none;
+    }
+  }
+}
+
+.es-intro-normal-tip {
+  .introjs-tooltiptext {
+    padding: 24px 24px 0 24px;
+  }
+  &.multistep {
+    margin-top: auto !important;
+    .introjs-skipbutton {
+      top: 10px;
+      i {
+        font-size: 14px;
+        color: @gray;
+      }
+    }
+    .introjs-prevbutton {
+      color: @cd-dark-major;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        color: @cd-dark-minor;
+      }
+    }
+  }
+}
+
+.course-manage-spread {
+  min-width: 600px;
+  min-height: 770px;
+  background: url("@{img-src}spread.png") cover no-repeat;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: -webkit-image-set(url("@{img-src}spread.png") 1x,url("@{img-src}spread@2x.png") 2x);
+}
+
+
+.course-manage-intro {
+  position: fixed;
+  bottom: 30px;
+  right: 10%;
+  z-index: 1000;
+  .course-manage-intro__outer {
+    margin: 0 6px;
+    padding: 10px;
+    width: 74px;
+    .border-radius(50%);
+    background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.2);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .course-manage-intro__inner {
+    width: 54px;
+    height: 54px;
+    text-align: center;
+    .border-radius(50%);
+    color: #fff;
+    background-color: @brand-primary;
+  }
+  i {
+    line-height: 54px;
+    font-size: 24px;
+  }
+}
+
+.course-manage-intro-float {
+  position: absolute;
+  bottom: 30px;
+  right: 40px !important;
+}

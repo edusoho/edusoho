@@ -6,11 +6,36 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class TaskDaoTest extends BaseDaoTestCase
 {
+    public function testCountByChpaterId()
+    {
+        $this->mockDataObject();
+        $count = $this->getDao()->countByChpaterId(3);
+        $this->assertEquals(1, $count);
+        $this->mockDataObject();
+        $count = $this->getDao()->countByChpaterId(3);
+        $this->assertEquals(2, $count);
+
+        $this->mockDataObject(array('categoryId' => 1));
+        $count = $this->getDao()->countByChpaterId(3);
+        $this->assertEquals(2, $count);
+    }
+
     public function testDeleteByCategoryId()
     {
         $expected = $this->mockDataObject();
         $this->getDao()->deleteByCategoryId(3);
         $result = $this->getDao()->get(1);
+        $this->assertNull($result);
+    }
+
+    public function testDeleteByCourseId()
+    {
+        $expected = $this->mockDataObject();
+        $this->assertNotNull($expected);
+
+        $this->getDao()->deleteByCourseId(2);
+
+        $result = $this->getDao()->get($expected['id']);
         $this->assertNull($result);
     }
 

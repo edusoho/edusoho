@@ -5,35 +5,30 @@
 {% set side_nav = 'lesson' %}
 {% do script(['app/js/open-course-manage/lesson/index.js'])%}
 
-{% block main %}
 
-<div class="panel panel-default panel-col lesson-manage-panel" data-file-status-url={{path('open_course_manage_file_status')}}>
-  <div class="panel-heading">
-    <div class="pull-right">
-      <button class="btn btn-info btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'my.teaching.open_course.lesson.add_btn'|trans}}{% endif %}</button>
-    </div>
-    {{'my.teaching.open_course.lesson.manage'|trans}}
+{% block page_title %}
+  <div class="pull-right">
+    <button class="cd-btn cd-btn-primary cd-btn-sm js-lesson-create-btn" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}">{% if course.type == 'open' %}{{'course.manage.create_lesson'|trans}}{% endif %}</button>
   </div>
+  {{'my.teaching.open_course.lesson.manage'|trans}}
+{% endblock %}
 
-  <div class="alert alert-warning only-one-lesson-notify" {% if items %}style="display:none;"{% endif %}>{{ 'my.teaching.open_course.lesson.tips'|trans }}</div>
+{% block main_body %}
+
+  <div class="cd-alert cd-alert-warning js-lesson-notify" {% if items %}style="display:none;"{% endif %}>{{ 'my.teaching.open_course.lesson.tips'|trans }}</div>
 
   {% if items is empty %}
 
-   <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+    <div class="empty">{{'site.datagrid.empty'|trans}}</div>
 
-   {% endif %}
+  {% endif %}
 
-  <div class="panel-body">
-    <ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
-      {% for id, item in items %}
-        
-        {% if 'lesson' in id  %}
-          {% include 'open-course-manage/lesson-list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-        {% endif %}
-      {% endfor %}
-
-    </ul>
-  </div>
-</div>
-
+  <ul class="open-course-lesson" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
+    {% for id, item in items %}
+      {% if 'lesson' in id  %}
+        {% include 'open-course-manage/lesson-list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
+      {% endif %}
+    {% endfor %}
+  </ul>
 {% endblock %}
+

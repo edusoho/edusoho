@@ -2,23 +2,17 @@
 'marketing':'course.marketing_setup'|trans,'teachers':'course.teacher_setup'|trans,'students':'course.members_manage'|trans,'testpaper-check':'course.testpaper_check'|trans
 ,'homework-check':'course.homework_check'|trans,'dashboard':'course.dashboard'|trans,'orders':'course.order'|trans, 'overview' :'course.plan_overview'|trans} %}
 {% set menuType = 'course' %}
-{% if side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files','plan'] %}
+{% if course_side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files','plan'] %}
     {% set menuType = 'courseSet' %}
 {% endif %}
 
 {# 直播课程不需要显示计划发布功能 #}
-{% if courseSet.type != 'live' %}
-  <div class="panel-heading">
-    {{ side_navs[code]|trans }}
-    {% if btnGroup|default() %}
-      {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: side_nav} %}
-    {% endif %}
-  </div>
-{% else %}
-  <div class="panel-heading">
-    {{ side_navs[code]|trans }}
-    {% if btnGroup|default() %}
-      {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: side_nav} %}
-    {% endif %}
+
+<div class="cd-main__title">
+  {{ side_navs[code]|trans }}
+</div>
+{% if btnGroup|default() %}
+  <div class="course-main-header__operation">
+    {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: side_nav} %}
   </div>
 {% endif %}

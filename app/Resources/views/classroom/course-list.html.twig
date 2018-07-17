@@ -64,7 +64,7 @@
               </div>
               <div class="metas">
                 <span class="class-teacher">
-                  <i class="fa fa-user"></i>
+                  <i class="es-icon es-icon-groupadd"></i>
                   {% set teacher = teachers[course.id]|default(null) %}
                     {% if teacher %}
                     {% for user in teacher%}
@@ -75,7 +75,7 @@
                     {% endif %}
                 </span>
                 {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                <span class="class-student"><i class="fa fa-users"></i>{{course.studentNum}}</span>
+                <span class="class-student"><i class="es-icon es-icon-groupadd"></i>{{course.studentNum}}</span>
                 {% endif %}
                 <span class="stars-{{ (course.rating)|number_format }} pull-right hidden-xs">&nbsp;</span>
               </div>

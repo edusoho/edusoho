@@ -53,7 +53,7 @@ class Courses extends MarketingBase
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
         $results = array();
         foreach ($courses  as $courseId => $course) {
-            if ($course['status'] != 'published' || $course['originPrice'] < 1) {
+            if ('published' != $course['status'] || $course['originPrice'] < 1) {
                 continue;
             }
             $courseSet = $courseSets[$course['courseSetId']];
@@ -125,7 +125,7 @@ class Courses extends MarketingBase
 
     private function fillName($course, $courseSet)
     {
-        if ($course['title'] == '默认教学计划') {
+        if (empty($course['title'])) {
             $name = "《{$courseSet['title']}》";
         } else {
             $name = "课程《{$courseSet['title']}》的教学计划:{$course['title']}";

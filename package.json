@@ -105,7 +105,7 @@
     "clean": "rm -rf node_modules",
     "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
     "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
-    "test:simple": "mocha --recursive --require babel-core/register",
+    "test:simple": "mocha --recursive --require babel-core/register --reporter dot",
     "commitmsg": "es-commit-msg-validator"
   }
 }

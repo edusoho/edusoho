@@ -82,7 +82,7 @@
               {% endif %}
             </tr>
             <tr>
-              <td>{{'classroom.tash_num'|trans}}</td>
+              <td>{{'classroom.tash_num'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</td>
               <td><span class="label label-default pull-right">{{classroom.lessonNum}}</span></td>
             </tr>
           </table>
@@ -134,7 +134,7 @@
               <td>{{studentCount}}</td>
             </tr>
             <tr>
-              <td>{{'classroom.task_finish_num'|trans}}</td>
+              <td>{{'classroom.task_finish_num'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</td>
               <td>{{yesterdayFinishedTaskNum}}</td>
               <td>{{todayFinishedTaskNum}}</td>
             </tr>

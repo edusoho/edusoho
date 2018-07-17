@@ -20,8 +20,14 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.create' => 'onTaskCreate',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
-            'course.task.publish' => 'onPublishTaskNumberChange',
-            'course.task.unpublish' => 'onPublishTaskNumberChange',
+            //'course.task.publish' => 'onPublishTaskNumberChange',
+            //'course.task.unpublish' => 'onPublishTaskNumberChange',
+
+            'course.lesson.publish' => array('onPublishLessonNumberChange', -100),
+            'course.lesson.unpublish' => array('onPublishLessonNumberChange', -100),
+            'course.lesson.create' => array('onLessonNumberChange', -100),
+            'course.lesson.delete' => array('onLessonNumberChange', -100),
+            'course.lesson.setOptional' => array('onLessonOptionalChange', -100),
 
             'course.thread.create' => 'onCourseThreadChange',
             'course.thread.delete' => 'onCourseThreadChange',
@@ -81,6 +87,22 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         ));
     }
 
+    public function onPublishLessonNumberChange(Event $event)
+    {
+        $lesson = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($lesson['courseId'], array(
+            'compulsoryTaskNum', 'publishLessonNum',
+        ));
+    }
+
+    public function onLessonNumberChange(Event $event)
+    {
+        $lesson = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($lesson['courseId'], array(
+            'lessonNum', 'publishLessonNum',
+        ));
+    }
+
     public function onCourseThreadChange(Event $event)
     {
         $thread = $event->getSubject();
@@ -103,6 +125,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $course = $event->getSubject();
 
         $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('ratingNum', 'noteNum', 'studentNum', 'materialNum'));
+    }
+
+    public function onLessonOptionalChange(Event $event)
+    {
+        $lesson = $event->getSubject();
+
+        $this->getCourseService()->updateCourseStatistics($lesson['courseId'], array('compulsoryTaskNum'));
     }
 
     protected function onTaskNumberChange(Event $event, $fields)

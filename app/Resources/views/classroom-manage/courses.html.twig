@@ -12,7 +12,7 @@
 }
 </style>
 
-{% set url = path('classroom_courses_select',{id:classroom.id}) %}       
+{% set url = path('classroom_courses_select',{id:classroom.id}) %}
 
 <div class="panel panel-default" role="classroom-manage-course-manage">
   <div class="panel-heading">{{'classroom.course_manage'|trans}}
@@ -29,13 +29,13 @@
 
               <li class="course-item item-{{course.id}} clearfix" data-role="item" >
               <input type="hidden" name="courseIds[]" value="{{course.id}}" />
-              <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>    
+              <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
               <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
                 <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
               <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" style="font-size:35px;" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
                   <div class="course-body">
-                   <div style="float:right;" class="color-gray mrm mls">
+                   <div class="color-gray mrm mls pull-right">
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                           <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.originPrice * setting('coin.cash_rate')}}">
                             {% if course.originPrice > 0 %}
@@ -57,13 +57,16 @@
                       {% endif %}
                     </div>
 
-                    <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}({{'classroom.teach_plan'|trans}}：{{course.title}})</a>
-                    {% if course.serializeMode=='serialized' %}
-                      <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
-                    {% elseif course.serializeMode=='finished' %}
-                      <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
-                    {% endif %}
-                    {% if course.type == 'live' %}
+                    <h4 class="course-title text-overflow mb0">
+                      {% if course.serializeMode=='serialized' %}
+                        <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
+                      {% elseif course.serializeMode=='finished' %}
+                        <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
+                      {% endif %}
+                      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
+                      <div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{course.title|sub_text(20)}}</div>
+
+                      {% if course.type == 'live' %}
                         {% set lesson = course['lesson']|default(null) %}
                         {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                           <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
@@ -78,14 +81,14 @@
                       {% if lesson %}
                         <div class="live-course-lesson mbm">
                           <span class="color-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                          <span class="color-gray fsm mrm">{{'classroom.task_num'|trans({'%number%':lesson.number})}}</span>
+                          <span class="color-gray fsm mrm">{{'classroom.task_num'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%':lesson.number})}}</span>
                         </div>
                       {% endif %}
                     {% else %}
-                      <div class="course-about ellipsis">{{ course.courseSet.subtitle|default('') }}</div>
+                      <div class="pull-right cd-mr40"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_base', {id: course.courseSet.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
                     {% endif %}
 
-                    <div class="course-footer clearfix">
+                    <div class="course-footer cd-mt32 clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}
                         <div class="teacher">
@@ -103,7 +106,7 @@
                         {% endif %}  
 
                           <span class="color-gray text-sm">
-                              {{'classroom.total_task_count'|trans({'%taskNum%':course.taskNum})}}
+                              {{'classroom.total_task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNum%':course.taskNum})}}
                           </span>
                           <span class="divider"></span>
                           <span class="color-gray text-sm">

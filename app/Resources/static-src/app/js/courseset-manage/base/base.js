@@ -1,6 +1,9 @@
+import Detail from './detail';
+
 export default class Base {
   constructor() {
     this.init();
+    this.detail = new Detail();
   }
 
   init() {
@@ -9,11 +12,13 @@ export default class Base {
   }
 
   initValidator() {
-    const $form = $('#courseset-form');
+    const $form = $('#title').closest('form');
     const validator = $form.validate({
+      currentDom: '#courseset-base-submit',
+      ajax: true,
       rules: {
         title: {
-          maxlength: 100,
+          maxlength: 30,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -23,6 +28,7 @@ export default class Base {
           course_title: true
         },
         subtitle: {
+          maxlength: 50,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -32,11 +38,8 @@ export default class Base {
           course_title: true
         }
       },
-    });
-    $('#courseset-base-submit').click((event) => {
-      if (validator.form()) {
-        $(event.currentTarget).button('loading');
-        $form.submit();
+      submitSuccess: (data) => {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });
   }
@@ -78,6 +81,9 @@ export default class Base {
       },
       formatResult (item) {
         return item.name;
+      },
+      formatNoMatches: function() {
+        return '未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。';
       },
       formatSearching: function() {
         return Translator.trans('site.searching_hint');

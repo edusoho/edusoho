@@ -1,36 +1,29 @@
-{% extends 'layout.html.twig' %}
+{% extends 'v2/layout.html.twig' %}
 
-{% block title %}{{'course.course_manage'|trans}} - {{ parent() }}{% endblock %}
-{% set use_webapck_loader = true %}
-
-{% do script(['libs/jquery-intro.js','app/js/courseset-manage/index.js']) %}
-
-{% block content %}
-  {% block course_header %}
-    {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
-  {% endblock %}
-  {#<div class="intro-fixed-group js-intro-btn-group ">#}
-    {#<span type="button" class="intro-btn" data-container=".intro-btn"#}
-    {#data-trigger="click" data-placement="left"#}
-    {#data-content="<div class='text-center'><p><a class='btn btn-success js-reset-intro '>查看引导</a></p><a class='btn btn-info'>完整教程</a></div>">#}
-    {#改版引导#}
-    {#</span>#}
-  {#</div>#}
-  {#链接还没有#}
-  {#<div class="intro-fixed-group js-intro-btn-group ">#}
-    {#<a type="button" class="intro-btn" href="http://www.qiqiuyu.com/" target="_blank">#}
-    {#{{ 'course.btn.edit_help_btn'|trans }}#}
-    {#</a>#}
-  {#</div>#}
-  <div class="row">
-    <div class="col-md-3">
-      {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+{% block full_content %}
+  {% block top_content %}
+    <div class="{% block sectionClass %} courseset-header-section {% endblock %}">
+      <div class="container cd-container">
+        {% block breadcrumb %}
+          {# 面包屑courseset 和 course 分开 #}
+        {% endblock %}
+        {% block courseset_header %}
+        {% endblock %}
+        {% block navbar %}
+          {% include 'courseset-manage/navbar.html.twig' %}
+        {% endblock %}
+        {% block course_header %}
+        {% endblock %}
+      </div>
     </div>
-    <div class="col-md-9">
-      {% block main %}{% endblock %}
+  {% endblock %}
+  <div class="container cd-container">
+    <div class="cd-content courseset-manage-body {% block paddingClass %} courseset-manage-padding {% endblock %}">
+      {% block sidebar %}
+      {% endblock %}
+
+      {% block main %}
+      {% endblock %}
     </div>
   </div>
-  {% endblock %}
-
-{% block bottom %}
 {% endblock %}

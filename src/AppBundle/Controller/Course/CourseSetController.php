@@ -16,12 +16,9 @@ class CourseSetController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
         $previewAs = $request->query->get('previewAs');
-        //如果计划都尚未发布，则获取第一个创建的
-        if (empty($course)) {
-            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
-        }
         if (empty($course)) {
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }

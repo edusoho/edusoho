@@ -24,7 +24,8 @@ class CourseSetCourse extends AbstractResource
         }
 
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
-
+        $courses = $this->getCourseService()->sortByCourses($courses);
+        
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 

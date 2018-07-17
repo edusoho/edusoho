@@ -1,75 +1,40 @@
-{% extends 'layout.html.twig' %}
+{% extends 'courseset-manage/layout.html.twig' %}
 
 {% block title %}{{'my.teaching.open_course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 
-{% block content %}
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+    <li class="active">{{ course.title|plain_text(21) }}</li>
+  </ol>
+{% endblock %}
+
+{% block courseset_header %}
   {% include 'open-course-manage/header.html.twig' %}
+{% endblock %}
 
-  <div class="row">
-    <div class="col-md-3">
-      {% block side %}
-        {% set side_nav = side_nav|default(null) %}
-        <div class="sidenav locked">
-          <ul class="list-group">
-            <li class="list-group-heading">{{'my.teaching.open_course.course_info'|trans}}</li>
-            <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
-              <a href="{{ path('open_course_manage_base', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.Basic_Info'|trans}}
-              </a>
-            </li>
-            <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
-              <a href="{{ path('open_course_manage_picture', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.course_picture.title'|trans}}
-              </a>
-            </li>
-            {% if course.type == 'liveOpen' %}
-              <li class="list-group-item {% if side_nav == 'liveTimeSet' %}active{% endif %}">
-                <a href="{{ path('open_course_manage_live_time_set', {id:course.id}) }}">
-                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.liveTimeSet.title'|trans}}
-                </a>
-              </li>
-              <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
-                <a href="{{ path('live_open_course_manage_replay', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.live_manage'|trans}}</a>
-              </li>
-            {% endif %}
-            {% if course.type == 'open' %}
-              <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
-                <a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">
-                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.lesson.manage'|trans}}
-                </a>
-              </li>
-              <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
-                <a href="{{ path('open_course_manage_files', {id:course.id}) }}">
-                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.file_manage_btn'|trans}}
-                </a>
-              </li>
-            {% endif %}
-          </ul>
+{% block navbar %}
+{% endblock %}
 
-          <ul class="list-group">
-            <li class="list-group-heading">{{'my.teaching.open_course.liveTimeSet.course_setting'|trans}}</li>
-            <li class="list-group-item {% if side_nav == 'marketing' %}active{% endif %}">
-              <a href="{{ path('open_course_manage_marketing', {id:course.id}) }}">
-                <span></span>{{'my.teaching.open_course.liveTimeSet.recommend_setting'|trans}}
-              </a>
-            </li>
-            <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
-              <a href="{{ path('open_course_manage_teachers', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.teachers_setting.title'|trans}}
-              </a>
-            </li>
-            <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
-              <a href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
-                <span></span>{{'site.default.student'|trans}}{{'my.teaching.open_course.student_setting.manage_btn'|trans}}
-              </a>
-            </li>
-          </ul>
+{% block sidebar %}
+  {% include 'open-course-manage/sidebar.html.twig' %}
+{% endblock %}
+
+{% block paddingClass %}{% endblock %}
+
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
         </div>
       {% endblock %}
     </div>
-    <div class="col-md-9">
-      {% block main %}{% endblock %}
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
     </div>
   </div>
 {% endblock %}
+

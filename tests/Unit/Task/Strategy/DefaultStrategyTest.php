@@ -23,18 +23,6 @@ class DefaultStrategyTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testGetTasksTemplate()
-    {
-        $result = $this->getDefaultStrategy()->getTasksTemplate();
-        $this->assertEquals('course-manage/tasks/default-tasks.html.twig', $result);
-    }
-
-    public function testGetTaskItemTemplate()
-    {
-        $result = $this->getDefaultStrategy()->getTaskItemTemplate();
-        $this->assertEquals('task-manage/item/default-list-item.html.twig', $result);
-    }
-
     public function testCreateTask()
     {
         $field = array(
@@ -209,6 +197,17 @@ class DefaultStrategyTest extends BaseTestCase
             'courseId' => '1',
             'categoryId' => '1',
         );
+
+        $this->mockBiz(
+            'Course:CourseDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'status' => 'published', 'title' => 'title', 'courseSetId' => 3, 'parentId' => 0),
+                    'withParams' => array(1),
+                ),
+            )
+        );
         $this->getDefaultStrategy()->deleteTask($task);
         $this->getTaskDao()->shouldHaveReceived('delete')->times(2);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(2);
@@ -312,29 +311,8 @@ class DefaultStrategyTest extends BaseTestCase
             'Task:TaskDao',
             array(
                 array(
-                    'functionName' => 'findByChapterId',
-                    'returnValue' => array(
-                        array(
-                            'id' => 1,
-                            'mode' => 'preparation',
-                            'title' => 'task1',
-                        ),
-                        array(
-                            'id' => 2,
-                            'mode' => 'lesson',
-                            'title' => 'task2',
-                        ),
-                    ),
-                ),
-                array(
                     'functionName' => 'update',
-                    'withParams' => array(1, array('status' => 'unpublished')),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'update',
-                    'withParams' => array(2, array('status' => 'unpublished')),
-                    'runTimes' => 2,
+                    'returnValue' => array('status' => 'unpublished'),
                 ),
             )
         );
@@ -344,7 +322,8 @@ class DefaultStrategyTest extends BaseTestCase
             'status' => 'published',
         );
         $task = $this->getDefaultStrategy()->unpublishTask($task);
-        $this->getTaskDao()->shouldHaveReceived('update')->times(2);
+
+        $this->getTaskDao()->shouldHaveReceived('update')->times(1);
         $this->assertEquals('unpublished', $task['status']);
     }
 

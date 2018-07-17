@@ -5,33 +5,36 @@
 {% set side_nav = 'replay' %}
 {% do script(['app/js/open-course-manage/replay-lesson/index.js'])%}
 
-{% block main %}
+{#{% block main %}#}
 
-<div class="panel panel-default panel-col lesson-manage-panel">
-	<div class="panel-heading">
-		{{'course.live.replay_manage.content_title'|trans}}
-	</div>
+{#<div class="panel panel-default panel-col lesson-manage-panel">#}
 
-	{% if items is empty %}
+  {% block page_title %}
 
-	 <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
+  {#<div class="panel-heading">#}
+    {{'course.live.replay_manage.content_title'|trans}}
+  {#</div>#}
 
-	 {% endif %}
+  {% endblock %}
+  {% block main_body %}
 
-	<div class="panel-body">
-		<ul class="lesson-list sortable-list" id="course-item-list" {% if course.type == 'normal' or course.type == 'live' %}data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}"{% endif %}>
+  {% if items is empty %}
+    <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
+  {% endif %}
 
-			{% for id, item in items %}
-			  {% if 'chapter' in id %}
-			    {% include 'live-course-replay-manage/chapter-item.html.twig' with {chapter: item} %}
-			  {% elseif 'lesson' in id %}
-			    {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
-			  {% endif %}
-			{% endfor %}
+  <div class="panel-body">
+    <ul class="open-course-lesson" id="course-item-list">
+      {% for id, item in items %}
+        {% if 'lesson' in id %}
+          {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="cd-mt16 cd-ml40 color-warning">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
+  </div>
 
-		</ul>
-		<div>{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
-	</div>
-</div>
+  {% endblock %}
 
-{% endblock %}
+{#</div>#}
+
+{#{% endblock %}#}

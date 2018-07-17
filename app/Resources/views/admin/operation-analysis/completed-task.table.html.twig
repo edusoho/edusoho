@@ -1,8 +1,8 @@
       <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
           <thead>
             <tr>
-              <th>{{'admin.operation_analysis.task'|trans}}</th>
-              <th>{{'admin.operation_analysis.task.type'|trans}}</th>
+              <th>{{setting('course.task_name')|default('admin.setting_course.task'|trans)}}</th>
+              <th>{{'admin.operation_analysis.task.type'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</th>
               <th>{{'site.default.student'|trans}}</th>
             </tr>
           </thead>

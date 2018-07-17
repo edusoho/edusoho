@@ -1,0 +1,48 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js', 'app/js/course-chapter-manage/index.js']) %}
+{% set chapter = chapter|default(null) %}
+{% set type = chapter.type|default(type) %}
+{% block title %}
+  {% if chapter %}
+    {{ 'form.btn.edit'|trans }}
+  {% else %}  
+    {{ 'form.btn.create'|trans }}
+  {% endif %}
+  {{ course_chapter_alias(type)|trans }}  
+{% endblock %}
+
+{% block body %}
+  {% if chapter.type|default('') == 'lesson' %}
+    {% set saveUrl = path('course_manage_lesson_update', {courseId: course.id, lessonId: chapter.id|default()}) %}
+  {% else %}
+    {% set saveUrl = path('course_manage_chapter_manage', {courseId: course.id, chapterId: chapter.id|default()}) %}
+  {% endif %}
+  
+  <form id="course-chapter-form" class="form-horizontal" method="post" data-chapter-id="{{ chapter.id|default(0) }}" data-parentId="{{ parentId|default() }}"
+      action="{{ saveUrl }}">
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="chapter-title-field">
+          {{ course_chapter_alias(type)|trans }} {{'site.data.title'|trans}}
+        </label>
+      </div>
+      <div class="col-md-8 controls">
+        <input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control">
+      </div>
+    </div>
+    <input type="hidden" name="type" value="{{ type }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+    <button id="course-chapter-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">
+      {% if chapter %}
+        {{'form.btn.save'|trans}}
+      {% else %}
+        {{'form.btn.add'|trans}}
+      {% endif %}
+    </button>
+{% endblock %}
+
+{% set hideFooter = true %}
