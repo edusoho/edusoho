@@ -12,11 +12,8 @@
 {% set parentQuestion = parentQuestion|default(null) %}
 {% set questionTypesDict = getQuestionTypes() %}
 
-<div class="panel panel-default panel-col">
-  <div class="panel-heading clearfix">
-    {{'course.question_manage'|trans}}
-  </div>
-  <div class="panel-body">
+<div class="panel-col">
+  <div class="courseset-manage-body__title">{{'course.question_manage'|trans}}</div>
 
     <ol class="breadcrumb">
       <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'course.question_manage'|trans}}</a></li>
@@ -115,7 +112,6 @@
       </form>
     </div>
 
-  </div>
 </div>
 
 
