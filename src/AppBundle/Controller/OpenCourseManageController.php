@@ -62,9 +62,7 @@ class OpenCourseManageController extends BaseController
             }
             $this->getOpenCourseService()->updateCourse($id, $data);
 
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
+            return $this->createJsonResponse(true);
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $id));

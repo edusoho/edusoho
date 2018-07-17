@@ -66,6 +66,8 @@ export default class Base {
   initValidator() {
     let $form = $('#course-form');
     let validator = $form.validate({
+      currentDom: '#course-create-btn',
+      ajax: true,
       rules: {
         title: {
           required: true
@@ -106,6 +108,9 @@ export default class Base {
         startTime: {
           es_remote: Translator.trans('validate.after_now.message')
         }
+      },
+      submitSuccess: (data) => {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });
 
@@ -115,18 +120,12 @@ export default class Base {
       }
     });
 
-    
-
-
     if (!$form.data('update')) {
 
       $('[name=startTime]').attr('disabled', true);
       $('#live-length-field').attr('disabled', true);
-
-      $('#starttime-help-block').html(Translator.trans('open_course.live_time_can_not_edit_bint'));
-      $('#starttime-help-block').css('color', '#a94442');
-      $('#timelength-help-block').html(Translator.trans('open_course.live_time_can_not_edit_bint'));
-      $('#timelength-help-block').css('color', '#a94442');
+      const $helpTip = $('.js-time-help-tip');
+      $helpTip.html(Translator.trans('open_course.live_time_can_not_edit_bint')).addClass('color-danger');
     } else {
       $('[name=startTime]').attr('disabled', false);
     }
