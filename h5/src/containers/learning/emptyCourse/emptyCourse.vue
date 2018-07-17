@@ -13,7 +13,10 @@
     methods: {
       jumpBack() {
         this.$router.push({
-          name: 'find'
+          name: 'find',
+          query: {
+            redirect: 'find'
+          }
         });
       }
     },

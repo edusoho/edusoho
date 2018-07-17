@@ -17,6 +17,7 @@
 <script>
 import * as types from '@/store/mutation-types';
 import { mapMutations, mapState, mapActions } from 'vuex';
+import tryVue from '../try.vue';
 
 export default {
   data() {
@@ -25,19 +26,26 @@ export default {
       isFree: false
     }
   },
-  created () {
-    this.items = this.details.courses.map((item, index) => {
-      this.$set(item, 'active', false);
+  watch: {
+    selectedPlanId: {
+      immediate: true,
+      handler(v) {
+        this.items = this.details.courses.map((item, index) => {
+          this.$set(item, 'active', false);
 
-      if(!index) {
-        item.active = true;
+          if(item.id === this.details.id) {
+            item.active = true;
+          }
+
+          return item;
+        });
       }
-      return item;
-    });
+    }
   },
   computed: {
     ...mapState('course', {
-      details: state => state.details
+      details: state => state.details,
+      selectedPlanId: state => state.selectedPlanId
     })
   },
   methods: {

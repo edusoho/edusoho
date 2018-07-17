@@ -43,29 +43,23 @@ export default {
     }
   },
   watch: {
-    $route() {
-      this.active = this.judgeIndex(this.$route.name);
-    }
-  },
-  created() {
-    this.items.some((item, index) => {
-      const redirect = this.$route.query.redirect || '';
+    '$route': {
+      deep: true,
+      immediate: true,
+      handler(to) {
+        this.items.some((item, index) => {
+          const redirect = to.query.redirect || '';
 
-      item.name === ( redirect || this.$route.name ) && ( this.active = index );
-    })
+          item.name === ( redirect || to.name ) && ( this.active = index );
+        })
+      }
+    }
   },
   methods: {
     onChange(index) {
       this.$router.push({
         name: this.items[index].name
       })
-    },
-    judgeIndex(routerName) {
-      const items = this.items;
-      const result = items.map((item, index) => {
-        return item.name == routerName;
-      });
-      return result.indexOf(true)
     }
   },
 }

@@ -38,6 +38,7 @@ Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
 Vue.component('van-loading', Loading);
 Vue.component('van-uploader', Uploader);
+
 Vue.use(filters);
 Vue.use(plugins);
 Vue.use(utils);
