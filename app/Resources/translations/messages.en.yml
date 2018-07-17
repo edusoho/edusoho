@@ -2676,7 +2676,7 @@ user.homepage.following_fan.fan_empty: 'No fans'
 homepage: Home
 homepage.student_evaluate: 'Student''s review'
 homepage.reviewer_comment_course: 'Say'
-homepage.switch_language.chinese: Chinese
+homepage.switch_language.chinese: 中文
 homepage.switch_language.english: English
 homepage.header.search: Search
 homepage.header.login: Log In
