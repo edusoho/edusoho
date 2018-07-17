@@ -121,11 +121,11 @@ export default class Base {
     });
 
     if (!$form.data('update')) {
-
-      $('[name=startTime]').attr('disabled', true);
-      $('#live-length-field').attr('disabled', true);
       const $helpTip = $('.js-time-help-tip');
       $helpTip.html(Translator.trans('open_course.live_time_can_not_edit_bint')).addClass('color-danger');
+      $('[name=startTime]').attr('disabled', true);
+      $('#live-length-field').attr('disabled', true);
+      $('#course-create-btn').attr('disabled', true);
     } else {
       $('[name=startTime]').attr('disabled', false);
     }
