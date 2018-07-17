@@ -1750,7 +1750,7 @@ course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
-  选择教学手段
+  添加教学任务
 course.plan_task.activity_manage.setup_content: >
   <span class="number">2</span>
   设置内容
