@@ -3,7 +3,6 @@ import Detail from './detail';
 export default class Base {
   constructor(element) {
     this.init();
-    console.log(element);
     this.detail = new Detail(element);
   }
 
@@ -85,7 +84,7 @@ export default class Base {
         return item.name;
       },
       formatNoMatches: function() {
-        return '未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。';
+        return Translator.trans('validate.tag_required_not_found_hint');
       },
       formatSearching: function() {
         return Translator.trans('site.searching_hint');

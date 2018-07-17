@@ -4,7 +4,8 @@ import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
 import Intro from './intro';
-import Base from 'app/js/courseset-manage/base/base';
+import Detail from 'app/js/courseset-manage/base/detail';
+import { initTags } from 'app/js/courseset-manage/base/tag';
 
 class CourseInfo {
   constructor() {
@@ -20,6 +21,7 @@ class CourseInfo {
     this.initExpiryMode();
     this.setService();
     this.setIntroPosition();
+    this.saveForm();
   }
 
   setIntroPosition() {
@@ -83,6 +85,7 @@ class CourseInfo {
     let $form = $('#course-info-form');
     this.validator = $form.validate({
       currentDom: '#course-submit',
+      onfocusout: false,
       ajax: true,
       groups: {
         date: 'expiryStartDate expiryEndDate'
@@ -91,6 +94,8 @@ class CourseInfo {
         title: {
           required: true,
           maxlength: 10,
+          trim: true,
+          course_title: true,
         },
         maxStudentNum: {
           required: true,
@@ -191,8 +196,25 @@ class CourseInfo {
 
       return true;
     });
+
+    if ($('#tags').length) {
+      initTags();
+    }
+    if ($('#courseset-summary-field').length) {
+      new Detail($('#course-submit'));
+    } 
   }
 
+  saveForm() {
+    if ($('#courseset-summary-field').length) {
+      return;
+    }
+    $('#course-submit').on('click', (event) => {
+      if (this.validator.form()) {
+        $('#course-info-form').submit();
+      }
+    });
+  }
   initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({
@@ -374,9 +396,3 @@ new CourseInfo();
 setTimeout(function() {
   new Intro();
 }, 500);
-
-
-
-if ($('#courseset-summary-field').length) {
-  new Base($('#course-submit'));
-}

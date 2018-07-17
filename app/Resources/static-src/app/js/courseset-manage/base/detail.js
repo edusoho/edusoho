@@ -1,9 +1,9 @@
 export default class detail {
   constructor(element) {
-    this.$from = $('#title').closest('form');
-    this.btn = element;
+    this.$form = $('#title').closest('form');
+    this.$btn = element;
+    this.$replaceCkeditor = $('#courseset-summary-field');
     this.init();
-    console.log(element);
   }
 
   init() {
@@ -21,23 +21,23 @@ export default class detail {
     });
 
     self.editor.on('blur', () => {
-      $('#courseset-summary-field').val(self.editor.getData());
+      this.$replaceCkeditor.val(self.editor.getData());
       self.validator.form();
     });
   }
 
   submitForm() {
-    this.validator = this.$from.validate({
+    this.validator = this.$form.validate({
       rules: {
         summary: {
           ckeditor_maxlength: 10000,
         }
       }
     });
-    this.btn.click(() => {
-      $('#courseset-summary-field').val(this.editor.getData());
+    this.$btn.click(() => {
+      this.$replaceCkeditor.val(this.editor.getData());
       if (this.validator.form()) {
-        this.$from.submit();
+        this.$form.submit();
       }
     });
   }
