@@ -7,6 +7,14 @@
       color: @cd-dark-major;
     }
   }
+  .nav-header-section.nav {
+    margin-bottom: 0;
+    border: none;
+    .nav-header-section__item {
+      padding-top: 16px;
+      margin: 0 32px;
+    }
+  }
 }
 .course-manage-header {
   position: relative;
@@ -19,15 +27,15 @@
   .cd-box-shadow-z(8px);
   .cd-border-radius;
   background-color: #fff;
-  .course-manage-header__price {
-    @media (min-width: @screen-lg-min) {
-      margin-right: 68px;
-    }
-  }
 }
 
 .course-manage-header-btns {
   margin-top: 7px;
+  @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
+    position: absolute;
+    bottom: 15px;
+    right: 24px;
+  }
 }
 
 .course-manage-header-info {
@@ -45,9 +53,9 @@
   font-size: 16px;
   line-height: 1;
   font-weight: 500;
-  width: 350px;
+  width: 250px;
   @media (max-width: @screen-md-max) {
-    width: 300px;
+    width: 200px;
   }
   @media (max-width: @screen-sm-max) {
     width: 150px;
@@ -61,6 +69,9 @@
   span {
     position: absolute;
     top: 42px;
+  }
+  .default-single-span {
+    top: 30px;
   }
 }
 
@@ -172,9 +183,6 @@
 
 .courseset-manage-header-info {
   float: left;
-  @media (max-width: @screen-xs-min) {
-    height: 74px;
-  }
   @media (max-width: 320px) {
     .courseset-manage-header-info__title {
       width: 100px;
@@ -183,10 +191,9 @@
 }
 
 .courseset-manage-header-info__title {
-  margin-top: 8px;
-  margin-bottom: 16px;
+  margin: 8px 0;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 1;
   font-weight: 500;
   width: 350px;
   @media (max-width: @screen-md-max) {
@@ -198,9 +205,21 @@
 }
 
 .courseset-manage-header-info__price {
+  margin-top: 16px;
   font-size: 18px;
   line-height: 1;
 }
+
+.courseset-manage-data {
+  @media (min-width: @screen-md-max) {
+    margin-right: 19%;
+  }
+
+  @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
+    margin-bottom: 40px;
+  }
+}
+
 
 .courseset-manage-header-data {
   float: right;
@@ -230,6 +249,12 @@
   }
 }
 
+.course-manage-header__price {
+  @media (min-width: @screen-md-min) {
+    min-width: 150px;
+  }
+}
+
 .courseset-manage-header-data__num {
   font-size: 18px;
   line-height: 1;
@@ -241,8 +266,12 @@
 
 .courseset-manage-header-btn {
   float: right;
+  @media (max-width: @screen-xs-min) {
+    margin-top: 16px;
+  }
   margin-top: 28px;
   margin-left: 24px;
+  font-size: 0;
   @media (max-width: @screen-sm-max) {
     margin-left: 0;
   }
@@ -275,22 +304,30 @@
   .border-top-left-radius(0) !important;
   .border-top-right-radius(0) !important;
 }
+
+.nav-header-section-step {
+  float: right;
+  height: 43px;
+}
+
 .nav-header-section.nav {
   margin-bottom: 0;
   border: none;
   .nav-header-section__item {
+    line-height: 1;
     @media (max-width: @screen-xs-min) {
       margin-right: 8px;
       &:first-child {
         margin-left: 0 !important;
       }
     }
-
     margin-right: 64px;
     &.active > a {
       color: @cd-dark-major;
     }
     > a {
+      font-size: 16px;
+      font-weight: 500;
       padding: 0 0 16px 0;
       line-height: 1;
       color: @cd-dark-minor;

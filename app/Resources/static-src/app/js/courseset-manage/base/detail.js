@@ -1,10 +1,11 @@
 export default class detail {
   constructor() {
-    this.$from = $('#courseset-detail-form');
+    this.$from = $('#title').closest('form');
     this.init();
   }
 
   init() {
+    this.submitForm();
     this.initCkeditor();
   }
 
@@ -31,7 +32,6 @@ export default class detail {
         }
       }
     });
-
     $('#detail-submit').click(() => {
       $('#courseset-summary-field').val(this.editor.getData());
       if (this.validator.form()) {

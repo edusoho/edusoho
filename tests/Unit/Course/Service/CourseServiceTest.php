@@ -41,7 +41,7 @@ class CourseServiceTest extends BaseTestCase
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->sortCourse(1, array(2, 1, 4, 5));
     }
-    
+
     public function testRecommendCourseByCourseSetId()
     {
         TimeMachine::setMockedTime(time());
@@ -486,6 +486,46 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($published['status'], 'published');
     }
 
+    public function testHasNoTitleForDefaultPlanInMulPlansCourse()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($defaultCourse['id']);
+        $this->assertFalse($hasNoTitle);
+
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($defaultCourse['id']);
+        $this->assertTrue($hasNoTitle);
+    }
+
+    public function testPublishAndSetDefaultCourseType()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $this->assertEquals('', $defaultCourse['title']);
+        $this->assertEquals('draft', $secondCourse['status']);
+
+        $this->getCourseService()->publishAndSetDefaultCourseType($secondCourse['id'], '设置的计划名');
+
+        $updatedDefaultCourse = $this->getCourseService()->getCourse($defaultCourse['id']);
+        $updatedSecondCourse = $this->getCourseService()->getCourse($secondCourse['id']);
+
+        $this->assertEquals('设置的计划名', $updatedDefaultCourse['title']);
+        $this->assertEquals('published', $updatedSecondCourse['status']);
+    }
+
+    public function testHasMulCourses()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $hasMulCourses = $this->getCourseService()->hasMulCourses($defaultCourse['courseSetId']);
+        $this->assertTrue($hasMulCourses);
+
+        $hasMulCourses = $this->getCourseService()->hasMulCourses($defaultCourse['courseSetId'], 1);
+        $this->assertFalse($hasMulCourses);
+    }
+
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
         $course1 = $this->defaultCourse('test course 1', array('id' => 1));
@@ -840,6 +880,7 @@ class CourseServiceTest extends BaseTestCase
 
         $this->assertEquals(5, $result);
     }
+
     public function testAppendReservationConditionsWithClosed()
     {
         $this->mockBiz('System:SettingService');
@@ -913,15 +954,23 @@ class CourseServiceTest extends BaseTestCase
         return $user;
     }
 
-    protected function defaultCourse($title, $courseSet)
+    protected function defaultCourse($title, $courseSet, $isDefault = 1)
     {
-        return  array(
+        return array(
             'title' => $title,
             'courseSetId' => $courseSet['id'],
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
-            'courseType' => 'normal',
+            'isDefault' => $isDefault,
+            'courseType' => $isDefault ? 'default' : 'normal',
         );
+    }
+
+    protected function createDefaultCourse($title, $courseSet, $isDefault = 1)
+    {
+        $course = $this->defaultCourse($title, $courseSet, $isDefault);
+
+        return $this->getCourseService()->createCourse($course);
     }
 
     /**

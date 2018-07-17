@@ -91,7 +91,7 @@ class CourseSetManageController extends BaseController
                 'course' => $course,
                 'studentNum' => $studentNum,
                 'couserNum' => $couserNum,
-                'foldType' => $foldType
+                'foldType' => $foldType,
             )
         );
     }
@@ -141,13 +141,20 @@ class CourseSetManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
+        if (in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId'])) {
+            return $this->redirectToRoute(
+                'course_set_manage_course_info',
+                array(
+                    'courseSetId' => $id,
+                    'courseId' => $courseSet['defaultCourseId'],
+                )
+            );
+        }
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
-            $this->setFlashMessage('success', 'site.save.success');
 
-            return $this->redirect($this->generateUrl('course_set_manage_base', array('id' => $id)));
+            return $this->createJsonResponse(true);
         }
 
         if ($courseSet['locked']) {

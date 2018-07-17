@@ -2,110 +2,56 @@
 
 {% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/info/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'app/js/course-manage/info/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
-{% block paddingClass %}course-manage-body course-manage-info{% endblock %}
+{% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
 {% block main_heading_class %} course-manage-info__title {% endblock %}
 
 {% block main_body %}
-{{ web_macro.flash_messages() }}
-{% set courseTypes = get_course_count(courseSet.id) %}
-{% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
-<form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-  {% if courseTypes > 1 %}
-    <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
-    <div class="form-group">
-      <div class="col-sm-2 control-label">
-        <label for="title" class="control-label-required">{{ 'course.plan_setup.name'|trans }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input class="form-control" type="text" id="title" name="title" placeholder="{{ 'course.plan_setup.placeholder'|trans }}">
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-2 control-label">
-      <label>{{ 'course.plan_setup.subtitle'|trans }}</label>
-      </div>
-      <div class="col-sm-8">
-        <textarea class="form-control" id="intro" name="intro"></textarea>
-      </div>
-    </div>
-  {% endif %}
+  {% set hasMulCourses = has_mul_courses(courseSet.id) %}
+  {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
+    <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
+      {# 课程基础信息 #}
+      {% if is_un_multi_courseset(courseSet.id) %}
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+        {% include 'courseset-manage/base-info/info.html.twig' %}
+      {% endif %}
 
-  <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
-  <div role="course-marketing-info">
-    {% include 'course-manage/base-info/marketing.html.twig' %}
-  </div>
-  <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
-  <div role="course-base-rule">
-    <div class="form-group">
-      <label for="" class="col-sm-2 control-label">{{'course.plan_setup.mode'|trans}}</label>
-      <div class="col-sm-8 form-control-static">
-          {% if course.learnMode|default('freeMode') == 'freeMode' %}
-            <span class="cd-dark-major">{{'course.plan_setup.mode.free'|trans}}</span><a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.free_tips'|trans}}"></a>
-          {% else %}
-            <span class="cd-dark-major">{{'course.plan_setup.mode.locked'|trans}}</span><a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.locked_tips'|trans}}"></a>
-            <p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{''|trans}}</p>
-          {% endif %}
+      {# 计划基础信息 #}
+      {% if hasMulCourses %}
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+        {% include 'course-manage/base-info/title.html.twig' %}
+      {% endif %}
+      
+      {# 营销设置 #}
+      <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
+      <div role="course-marketing-info">
+        {% include 'course-manage/base-info/marketing.html.twig' %}
       </div>
-    </div>
-    {% include 'course-manage/marketing/set-rule.html.twig' %}
-    <div class="form-group">
-      <label for="" class="col-sm-2 control-label mbs">{{'course.plan_setup.finish_rule'|trans}}</label>
-      <div class="col-sm-8 cd-radio-group mb0">
-        <label class="cd-radio {% if course.enableFinish|default('0') == 1 %}checked{% endif %}">
-          <input type="radio" data-toggle="cd-radio" name="enableFinish" value="1" > {{'course.plan_setup.finish_rule.nothing'|trans}}
-        </label><label class="cd-radio {% if course.enableFinish|default('0') == 0 %}checked{% endif %}">
-          <input type="radio" data-toggle="cd-radio"  name="enableFinish" value="0"> {{'course.plan_setup.finish_rule.depend_on_finish_condition'|trans}}
-          <a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans}}"></a>
-        </label>
-      </div>
-    </div>
-    {% if courseSet.type != 'live' %}
-      {% include 'course-manage/marketing/set-preview.html.twig' %}
-    {% endif %}
 
-    <div class="form-group js-services {% if course.showServices|default(1) == 0 %}hidden{% endif %}">
-      <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.provide_services'|trans }}</label>
-      <div class="col-sm-8 form-control-static">
-        {% set serviceTags = services(course.services | default([])) %}
-        {% for tag in serviceTags %}
-          <span class="service-item js-service-item {% if tag.active %}service-primary-item{% endif %}" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ tag.summary|trans }}" data-code="{{ tag.code }}">{{ tag.fullName|trans }}</span>
-        {% endfor %}
-        <input type="hidden" id="course_services" name="services" value="{{ course.services|default([])|json_encode_utf8() }}">
+      {# 基础规则 #}
+      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
+      <div role="course-base-rule">
+        {% include 'course-manage/base-info/rule.html.twig' %}
       </div>
-    </div>
-
-    {% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
-      <div class="form-group" id="audio-modal-id">
-        <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
-        <div class="col-sm-8 cd-radio-group" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
-          <label class="cd-radio {% if course.enableAudio|default('0') == 1 %}checked{% endif %}">
-            <input type="radio" data-toggle="cd-radio" name="enableAudio" value="1">
-            {{ 'course.info.video.convert.audio.start'|trans }}
-          </label>
-          <label class="cd-radio {% if course.enableAudio|default('0') == 0 %}checked{% endif %}">
-            <input type="radio" data-toggle="cd-radio" name="enableAudio" value="0">
-            {{ 'course.info.video.convert.audio.close'|trans }}
-          </label>
-          <div>
-            <div class="course-mangae-info__tip">1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</div>
-            <div class="course-mangae-info__tip">2.{{ 'course.video.convert.audio.status'|trans }}：{{ video_convert_completion(course.id) }} <a class="ml5 link-primary" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'course.video.convert.audio.detail'|trans }}</a></div>
-          </div>
+      
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button id="course-submit" type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+          <div id="test"></div>
         </div>
       </div>
-    {% endif %}
 
-    {% include 'course-manage/marketing/set-reward-point.html.twig' %}
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-8">
-      <button  type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-      <div id="test"></div>
-    </div>
-  </div>
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-</form>
-{% endif %}
+      {% if not hasMulCourses and courseSet.type == 'normal' %}
+        <div class="course-manage-intro js-plan-intro">
+          <div class="course-manage-intro__outer js-plan-intro-btn">
+            <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>
+          </div>
+          <div class="cd-dark-major mtm">{{ 'course.base_plan_intro'|trans }}</div>
+        </div>
+      {% endif %}
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% endif %}
 {% endblock %}

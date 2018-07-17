@@ -58,7 +58,7 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
                 }
 
                 /** @var RateLimiter $hourLimiter */
-                $hourLimiter = $factory('register.ip.high_one_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_DAY);
+                $hourLimiter = $factory('register.ip.high_one_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_HOUR);
                 $remain = $hourLimiter->check($request->getClientIp());
                 if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();

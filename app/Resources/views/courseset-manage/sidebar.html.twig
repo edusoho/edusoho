@@ -13,7 +13,7 @@
             </a>
           {% endif %}
         </li>
-        <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}" id="step-1">
+        <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
               <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_task'|trans }}

@@ -3,8 +3,9 @@ import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
+import Intro from './intro';
 
-class courseInfo {
+class CourseInfo {
   constructor() {
     if ($('#maxStudentNum-field').length > 0) {
       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
@@ -17,6 +18,13 @@ class courseInfo {
     this.initDatetimepicker();
     this.initExpiryMode();
     this.setService();
+    this.setIntroPosition();
+  }
+
+  setIntroPosition() {
+    const space = 40;
+    const introRight = $('.js-course-manage-info').offset().left + space;
+    $('.js-plan-intro').css('right', `${introRight}px`);
   }
 
   setService() {
@@ -63,7 +71,7 @@ class courseInfo {
     $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function(){
       let mode = $('#course-audio-mode').data('value');
       if (mode == 'notAllowed') {
-        notify('info', Translator.trans('course.audio.enable.biz.user'));
+        cd.message({ type: 'info', message: Translator.trans('course.audio.enable.biz.user') });
         $('[name=\'enableAudio\']')[1].checked = true;
         $('[name=\'enableAudio\']')[0].checked = false;
       }
@@ -74,6 +82,7 @@ class courseInfo {
     let $form = $('#course-info-form');
     this.validator = $form.validate({
       currentDom: '#course-submit',
+      ajax: true,
       groups: {
         date: 'expiryStartDate expiryEndDate'
       },
@@ -87,7 +96,7 @@ class courseInfo {
           required: true,
           maxlength: 10,
         },
-        intro: {
+        subtitle: {
           maxlength: 30
         },
         expiryDays: {
@@ -127,6 +136,9 @@ class courseInfo {
           required: Translator.trans('course.manage.expiry_end_date_error_hint'),
           after: Translator.trans('course.manage.expiry_start_date_error_hint')
         }
+      },
+      submitSuccess: (data) => {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       }
     });
 
@@ -151,6 +163,22 @@ class courseInfo {
       },
       Translator.trans('course.manage.expiry_start_date_error_hint')
     );
+
+    $.validator.addMethod('max_year', function (value, element) {
+      return this.optional(element) || value < 100000;
+    }, Translator.trans('course.manage.max_year_error_hint'));
+
+    $.validator.addMethod('live_capacity', function (value, element) {
+      const maxCapacity = parseInt($(element).data('liveCapacity'));
+      if (value > maxCapacity) {
+        const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
+        $(element).parent().siblings('.js-course-rule').find('p').html(message);
+      } else {
+        $(element).parent().siblings('.js-course-rule').find('p').html('');
+      }
+
+      return true;
+    });
   }
 
   initDatePicker($id) {
@@ -193,12 +221,16 @@ class courseInfo {
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
+        $('.js-course-manage-expiry-tip').removeClass('ml0');
       } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
+        $('.js-course-manage-expiry-tip').removeClass('ml0');
       } else {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $(event.target).closest('.form-group').removeClass('has-error');
+        $('.js-course-manage-expiry-tip').addClass('ml0');
       }
       this.initExpiryMode();
     });
@@ -321,20 +353,9 @@ class courseInfo {
   }
 }
 
-new courseInfo();
+new CourseInfo();
 
-jQuery.validator.addMethod('max_year', function (value, element) {
-  return this.optional(element) || value < 100000;
-}, Translator.trans('course.manage.max_year_error_hint'));
+setTimeout(function() {
+  new Intro();
+}, 500);
 
-jQuery.validator.addMethod('live_capacity', function (value, element) {
-  const maxCapacity = parseInt($(element).data('liveCapacity'));
-  if (value > maxCapacity) {
-    const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
-    $(element).parent().siblings('.js-course-rule').find('p').html(message);
-  } else {
-    $(element).parent().siblings('.js-course-rule').find('p').html('');
-  }
-
-  return true;
-});

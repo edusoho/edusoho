@@ -18,7 +18,9 @@
       {{ course.title }}<span class="mh5">／</span>{{ testpaper.name }}
       {% if course.status != 'published' %}
         <button class="btn btn-success btn-sm pull-right js-publish-course" 
-          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
+          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+          data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
+          data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}">
           {{ 'testpaper.check.course.publish_btn'|trans }}
         </button>
       {% endif %}

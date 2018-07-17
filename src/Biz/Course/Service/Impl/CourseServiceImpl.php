@@ -215,6 +215,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts(
             $fields,
             array(
+                'title',
+                'subtitle',
                 'originPrice',
                 'enableAudio',
                 'tryLookable',
@@ -228,16 +230,17 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'maxStudentNum',
                 'services',
-                'tryLookLength'
+                'tryLookLength',
             )
         );
         if (!empty($fields['services'])) {
             $fields['showServices'] = 1;
         }
-
+        if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
-
         $course = $this->getCourseDao()->update($id, $fields);
 
         $this->dispatchEvent('course.update', new Event($course));
@@ -254,6 +257,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields,
             array(
                 'title',
+                'subtitle',
                 'courseSetTitle',
                 'about', //@todo 目前没有这个字段
                 'courseSetId',
@@ -632,6 +636,50 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
+    }
+
+    public function hasNoTitleForDefaultPlanInMulPlansCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ($this->hasMulCourses($course['courseSetId'])) {
+            $defaultCourse = $this->getDefaultCourseByCourseSetId($course['courseSetId']);
+
+            return !empty($defaultCourse) && empty($defaultCourse['title']);
+        }
+
+        return false;
+    }
+
+    public function publishAndSetDefaultCourseType($courseId, $title)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        if ($this->hasMulCourses($course['courseSetId'])) {
+            $defaultCourse = $this->getDefaultCourseByCourseSetId($course['courseSetId']);
+            try {
+                $this->beginTransaction();
+                $this->updateCourse($defaultCourse['id'], array('title' => $title));
+                $this->publishCourse($courseId);
+                $this->commit();
+            } catch (\Exception $e) {
+                $this->rollback();
+                throw $e;
+            }
+        }
+    }
+
+    public function hasMulCourses($courseSetId, $isPublish = 0)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+        if ($isPublish) {
+            $conditions['status'] = 'published';
+        }
+
+        $count = $this->countCourses($conditions);
+
+        return $count > 1;
     }
 
     protected function validateExpiryMode($course)

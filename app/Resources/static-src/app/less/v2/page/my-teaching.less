@@ -9,6 +9,9 @@
     font-weight: 500;
     line-height: 64px !important;
     color: @gray-base;
+    @media (max-width: @screen-xs-min) {
+      width: 100%;
+    }
   }
   .nav-header-section__item {
     margin-right: 60px !important;
@@ -17,6 +20,11 @@
     }
     a {
       padding: 24px 0 !important;
+    }
+    @media (max-width: @screen-xs-min) {
+      a {
+        padding: 8px 0 !important;
+      }
     }
   }
 }
