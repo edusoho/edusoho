@@ -15,13 +15,14 @@ admin.tab.setting_tab: Setting
 admin.nav.user: User
 admin.nav.course: Course
 admin.nav.operation: Operation
-admin.nav.finance: 交易
+admin.nav.finance: Finance
 admin.nav.cloud:  ES Cloud
 admin.nav.system: System
+admin.nav.wechat_app: Mobile
 
 #用户模块
 admin.user.basic_menu: Users
-admin.user.statistics_manage: 用户数据统计
+admin.user.statistics_manage: Statistics
 admin.user.teacher_menu: Teachers
 admin.user.approval_menu: Authentication
 admin.user.message_menu: Messages
@@ -79,6 +80,7 @@ admin.course.basic.basic_tab.recommend_btn: Recommend
 admin.course.basic.basic_tab.preview_btn: Preview
 admin.course.basic.basic_tab.close_btn: Close
 admin.course.basic.basic_tab.publish_submit_btn: Publish
+admin.course.basic.basic_tab.clone_btn: Clone
 admin.course.basic.basic_tab.delete_submit_btn: Delete
 
 ##班级管理模块
@@ -154,7 +156,9 @@ admin.operation.group.group_tab.create_group_btn: Add Group
 
 ##邀请管理模块
 admin.operation.invite.basic_tab: Invitations
+admin.operation.invite.record_tab: Invitation Records
 admin.operation.invite.coupon_tab: Rewards
+admin.operation.invite.user_tab: User Search
 
 ##网站公告管理管理模块
 admin.operation.announcement.basic_tab: 'Site Announcements'
@@ -231,8 +235,8 @@ admin.cloud.attachment_setting_menu: Cloud Attachement Review
 admin.cloud.app_center_menu: ES App Center
 admin.cloud.attachment_menu: Cloud Attachement
 admin.cloud.consult_menu: Cloud Q&A
-admin.cloud.data_lab: 数据实验室
-admin.cloud.data_lab_setting: 设置
+admin.cloud.data_lab: Data Laboratory
+admin.cloud.data_lab_setting: Data Laboratory Setting
 admin.cloud.cloud_setting_menu: License
 
 ##概览模块
@@ -322,6 +326,7 @@ admin.system.finance.coin_tab: Virtual Coin
 admin.system.finance.refund_tab: Refund
 
 ##移动端设置模块
+admin.system.mobile.h5: Mobile Site Setting
 admin.system.mobile.basic_tab: Mobile Setting
 
 ##IOS内购商品设置模块
@@ -351,7 +356,10 @@ admin.system.org.basic_tab: Organization
 
 ##营销模块
 admin.marketing.menu: Marketing
-admin.distributor.menu: 分销
+admin.distributor.menu: Distributor
+
+##微信小程序模块
+admin.wechat_app.menu: Wechat App Setting
 
 #web模块
 web.course: Courses

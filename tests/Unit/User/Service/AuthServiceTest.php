@@ -2,11 +2,12 @@
 
 namespace Tests\Unit\User\Service;
 
+namespace Biz\User\Service\Impl;
+
 use AppBundle\Common\SimpleValidator;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ReflectionUtils;
-use AppBundle\Common\TimeMachine;
 
 // TODO
 
@@ -41,7 +42,6 @@ class AuthServiceTest extends BaseTestCase
 
     public function testRegisterLimitValidator()
     {
-        TimeMachine::setMockedTime(1515977986);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 2,
@@ -52,81 +52,33 @@ class AuthServiceTest extends BaseTestCase
             'roles' => array('ROLE_USER'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $condition = array(
-            'startTime' => TimeMachine::time() - 24 * 3600,
-            'createdIp' => '127.0.0.1',
-        );
-        $this->mockBiz(
-            'User:UserService',
-            array(
-                array(
-                    'functionName' => 'countUsers',
-                    'returnValue' => 40,
-                    'withParams' => array($condition),
-                ),
-            )
-        );
         $value = array('register_mode' => 'default', 'register_protective' => 'middle');
         $this->getSettingService()->set('auth', $value);
         $service = $this->getAuthService();
+        for ($i = 1; $i <= AuthServiceImpl::MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY; ++$i) {
+            $result = ReflectionUtils::invokeMethod($service, 'registerLimitValidator', array(array('createdIp' => '127.0.0.1')));
+            $this->assertFalse($result);
+        }
         $result = ReflectionUtils::invokeMethod($service, 'registerLimitValidator', array(array('createdIp' => '127.0.0.1')));
         $this->assertTrue($result);
     }
 
     public function testProtectiveRule()
     {
-        TimeMachine::setMockedTime(1515977986);
-        $condition = array(
-            'startTime' => TimeMachine::time() - 24 * 3600,
-            'createdIp' => '127.0.0.1',
-        );
-        $this->mockBiz(
-            'User:UserService',
-            array(
-                array(
-                    'functionName' => 'countUsers',
-                    'returnValue' => 40,
-                    'withParams' => array($condition),
-                    'runTimes' => 2,
-                ),
-                array(
-                    'functionName' => 'countUsers',
-                    'returnValue' => 5,
-                    'withParams' => array($condition),
-                    'runTimes' => 3,
-                ),
-                array(
-                    'functionName' => 'countUsers',
-                    'returnValue' => 2,
-                    'withParams' => array(array('startTime' => TimeMachine::time() - 3600, 'createdIp' => '127.0.0.1')),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'countUsers',
-                    'returnValue' => 0,
-                    'withParams' => array(array('startTime' => TimeMachine::time() - 3600, 'createdIp' => '127.0.0.1')),
-                    'runTimes' => 1,
-                ),
-            )
-        );
         $service = $this->getAuthService();
+        for ($i = 0; $i < AuthServiceImpl::MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY; ++$i) {
+            $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('middle', '127.0.0.1'));
+            $this->assertTrue($result);
+        }
         $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('middle', '127.0.0.1'));
         $this->assertFalse($result);
 
+        for ($i = 0; $i < AuthServiceImpl::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR; ++$i) {
+            $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
+            $this->assertTrue($result);
+        }
         $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
         $this->assertFalse($result);
-
-        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('middle', '127.0.0.1'));
-        $this->assertTrue($result);
-
-        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
-        $this->assertFalse($result);
-
-        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
-        $this->assertTrue($result);
-
-        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('default', '127.0.0.1'));
-        $this->assertTrue($result);
     }
 
     //同步功能需要Discuz的安装支持，暂时不能测

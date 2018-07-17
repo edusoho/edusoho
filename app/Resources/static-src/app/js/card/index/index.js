@@ -15,6 +15,6 @@ $('body').on('click', '.money-card-use', function () {
     notify('success', Translator.trans('card.card_receive_success_hint', {coinAmount: coinAmount, coinName: coinName}));
     setTimeout('window.location.href = \'' + target_url + '\'', 2000);
   }).error(function () {
-    notify('danger', Translator.trans('失败！'));
+    notify('danger', Translator.trans('card.card_receive_failed_hint'));
   });
 });

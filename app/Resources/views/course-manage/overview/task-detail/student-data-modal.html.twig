@@ -7,8 +7,8 @@
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title">
-              {{ user.nickname }}的全部任务
-              <span class="mll">完成度
+              {{ 'course.task.user_all_task'|trans({'%nickname%': user.nickname}) }}
+              <span class="mll">{{ 'course.task.completion_degree'|trans }}
                   {{ percent(member.learnedCompulsoryTaskNum, course.compulsoryTaskNum) }}
               </span>
           </h4>

@@ -109,7 +109,7 @@ $list.on('click', '.unpublish-lesson-btn', function (e) {
     let id = '#' + $(html).attr('id');
 
     if ($(id).find('.item-content').find('.unpublish-warning').length == 0) {
-      $(id).find('.item-content').append('<span class="unpublish-warning text-warning">(' + Translator.trans('未发布') + ')</span>');
+      $(id).find('.item-content').append('<span class="unpublish-warning text-warning">' + Translator.trans('open_course.unpublish_hint') + '</span>');
       $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
       $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
       $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');

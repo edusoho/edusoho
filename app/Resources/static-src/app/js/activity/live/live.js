@@ -58,14 +58,14 @@ export default class LiveShow {
     let minutes = Math.floor(modulo / 60);
     let seconds = modulo % 60;
     let context = '';
-    context += days ? days + '天' : '';
-    context += hours ? hours + '时' : '';
-    context += minutes ? minutes + '分' : '';
-    context += seconds ? seconds + '秒' : '';
+    context += days ? days + Translator.trans('activity.live.day') : '';
+    context += hours ? hours + Translator.trans('activity.live.hour') : '';
+    context += minutes ? minutes + Translator.trans('activity.live.minute') : '';
+    context += seconds ? seconds + Translator.trans('activity.live.second') : '';
     this.timeRemain = timeRemain - interval;
     $countdown.text(context);
     if (this.timeRemain<=0) {
-      $countdown.text('直播已经开始');
+      $countdown.text(Translator.trans('activity.live.started_tip'));
       window.clearInterval(this.iId);
     }
   }

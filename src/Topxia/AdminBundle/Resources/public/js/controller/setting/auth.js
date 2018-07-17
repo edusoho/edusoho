@@ -117,7 +117,7 @@ define(function(require, exports, module) {
           $('[data-modle="' + old_modle_value + '"]').addClass("btn-primary");
           modle = old_modle_value;
 
-          Notify.danger(Translator.trans("请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~"));
+          Notify.danger(Translator.trans('admin.user.cloude_sms_enable_hint'));
         }
       }
 

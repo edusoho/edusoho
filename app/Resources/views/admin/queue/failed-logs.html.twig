@@ -9,10 +9,10 @@
       <thead>
       <tr>
         <th>{{'ID'|trans}}</th>
-        <th>{{'对列名'|trans}}</th>
-        <th>{{'类型'|trans}}</th>
-        <th width="20%">{{'错误原因'|trans}}</th>
-        <th>{{'失败时间'|trans}}</th>
+        <th>{{'admin.queue.name'|trans}}</th>
+        <th>{{'admin.queue.type'|trans}}</th>
+        <th width="20%">{{'admin.queue.failed_reason_label'|trans}}</th>
+        <th>{{'admin.queue.failed_time_label'|trans}}</th>
       </tr>
       </thead>
       <tbody>
@@ -44,7 +44,7 @@
 
     </table>
   {% else %}
-    <div class="empty">{{'暂无任务信息!'|trans}}</div>
+    <div class="empty">{{'admin.crontab_job.empty_hint'|trans}}</div>
   {% endif %}
   {{ admin_macro.paginator(paginator) }}
 
