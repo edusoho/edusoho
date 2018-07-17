@@ -2345,7 +2345,7 @@ user.settings.security_menu: Security
 user.settings.email_menu: Email
 user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
-user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
+user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
@@ -2959,8 +2959,8 @@ article.popular_article_mpty: 'No popular article'
 article.popular_comments: 'Popular replies'
 article.popular_comments_empty: 'None reply'
 article.comment_target: 'Reply at'
-article.recommend_article: 'Recommend %article_name%'
-article.recommend_article_empty: 'No recommend now %article_name%'
+article.recommend_article: 'Recommend'
+article.recommend_article_empty: 'No recommend now'
 article.detail.text: Text
 article.detail.source: 'Article source'
 article.detail.source_url: 'Original article link'
@@ -6289,6 +6289,7 @@ admin.cloud_combo.service_over_deadline: "The package has expired, please <a hre
 admin.cloud_combo.service_deadline_tips: "The package will be exired after %packageDate% day(s),please <a href=\"http://www.edusoho.com/product/system\" target=\"_blank\">renew</a> to continue use it.\n"
 admin.account_center.this_week_data: 'Data of this week'
 admin.account_center.income_unit: 'Income unit'
+admin.account_center.RMB: CNY
 admin.account_center.CNY: CNY
 admin.account_center.loading_data: 'Loading data ... please wait.'
 admin.account_center.month: 'This month'
