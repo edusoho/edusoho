@@ -284,9 +284,6 @@ class CourseInfo {
   }
 
   initExpiryMode() {
-    if ($('input[name="expiryMode"]:checked').val() !== 'forever') {
-      $('.js-course-manage-expiry-tip').removeClass('ml0');
-    }
     let $deadline = $('[name="deadline"]');
     let $expiryDays = $('[name="expiryDays"]');
     let $expiryStartDate = $('[name="expiryStartDate"]');
