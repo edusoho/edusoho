@@ -55,14 +55,14 @@
 
 		{% if task.status == 'published' and task.isEnd  %}
 			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
-				<button class="cd-link-assist cd-mr24 js-generate-replay"
+				<a class="cd-link-assist cd-mr24 js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
 				title="{{'course.replay_manage.record'|trans}}"
 				{% else %}
 				title="{{'course.replay_manage.record_again'|trans}}"
 				{% endif %}
 				 data-url="{{ createUrl }}"><span class="es-icon es-icon-videocam"></span>
-				</button>
+				</a>
 			{% endif %}
 
 			<a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
