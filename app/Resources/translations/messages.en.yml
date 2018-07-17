@@ -2480,7 +2480,7 @@ user.settings.verification.approved_content_tips: 'The real name information can
 user.settings.verification.unapprove_tips: 'To protect your account and get better service, please complete your real-name certification as soon as possible.'
 user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
 user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
-user.settings.verification.approve_failed_reason_tips: 'The review failed, due to: %reason%. Please check'.
+user.settings.verification.approve_failed_reason_tips: 'The review failed, due to: %reason%. Please check.'
 
 user.settings.verification.notice: 'Notice'
 user.settings.verification.notice_content: "<p>1, please make sure that the photo of the ID card is clear and identifiable. PS is strictly forbidden, otherwise you will bear the corresponding legal consequences. <br> 2. After the real name authentication is successful, the real name information cannot be modified and deleted. Please fill in carefully. <br> 3. We will review the information you submitted as soon as possible, and you will receive a system notification when processing is complete. </p>"
