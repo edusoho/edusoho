@@ -122,9 +122,15 @@ class MockController extends BaseController
 
     private function validate()
     {
-        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost', 'www.edusoho-test1.com', 'chenwei.st.edusoho.cn');
+        $validHosts = array(
+            'local',
+            'dev',
+            'esdev.com',
+            'localhost',
+            'www.edusoho-test1.com',
+        );
         $host = $_SERVER['HTTP_HOST'];
-        if (!in_array($host, $validHosts) && false === strpos($host, '.st.edusoho.cn')) {
+        if (!in_array($host, $validHosts) && false === strpos($host, '.edusoho.cn')) {
             throw new AccessDeniedException($host.'不允许使用此功能！！！');
         }
 
