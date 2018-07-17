@@ -21,7 +21,6 @@ class CourseInfo {
     this.initExpiryMode();
     this.setService();
     this.setIntroPosition();
-    this.saveForm();
   }
 
   setIntroPosition() {
@@ -85,7 +84,6 @@ class CourseInfo {
     let $form = $('#course-info-form');
     this.validator = $form.validate({
       currentDom: '#course-submit',
-      onfocusout: false,
       ajax: true,
       groups: {
         date: 'expiryStartDate expiryEndDate'
@@ -202,13 +200,12 @@ class CourseInfo {
     }
     if ($('#courseset-summary-field').length) {
       new Detail($('#course-submit'));
-    } 
+    } else {
+      this.saveForm();
+    }
   }
 
   saveForm() {
-    if ($('#courseset-summary-field').length) {
-      return;
-    }
     $('#course-submit').on('click', (event) => {
       if (this.validator.form()) {
         $('#course-info-form').submit();
