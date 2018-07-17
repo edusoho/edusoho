@@ -44,9 +44,6 @@
 
         this.$router.push({
           path: `${name}/${id}`,
-          // params: {
-          //   id: this.course.id || this.course.targetId
-          // }
         });
       }
     }
