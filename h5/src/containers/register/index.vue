@@ -1,5 +1,6 @@
 <template>
   <div class="register">
+    <e-loading v-if="isLoading"></e-loading>    
     <span class='register-title'>注册账号</span>
 
       <van-field
@@ -66,7 +67,7 @@
 </template>
 <script>
 import EDrag from '@/containers/components/e-drag';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
@@ -106,7 +107,9 @@ export default {
       return !(this.registerInfo.mobile
         && this.registerInfo.encrypt_password);
     },
-
+    ...mapState({
+      isLoading: state => state.isLoading
+    })
   },
   methods: {
     ...mapActions([
