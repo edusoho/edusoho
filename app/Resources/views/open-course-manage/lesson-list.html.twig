@@ -23,7 +23,7 @@
 
   {% endif %}
 
-  <ul class="open-course-lesson" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
+  <ul class="open-course-lesson ml0" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
     {% for id, item in items %}
       {% if 'lesson' in id  %}
         {% include 'open-course-manage/lesson-list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
