@@ -7,7 +7,7 @@
     {% else %}
       {% include 'default/header/part/visitor-login.html.twig' %}
     {% endif %}
-    {#{% include 'default/switch-language.html.twig' %}#}
+    {% include 'default/switch-language.html.twig' %}
   </ul>
   <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
     <div class="form-group">
