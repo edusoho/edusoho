@@ -90,9 +90,12 @@
 
   // head component
   &__head {
+    height: vw(210);
+    background-color: #DCDBDC;
+    
     &--img {
       >img {
-        height: vw(210);
+        // height: vw(210);
         vertical-align: middle;
         width: 100%;
       }
