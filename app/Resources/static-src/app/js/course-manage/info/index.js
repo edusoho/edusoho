@@ -223,6 +223,8 @@ class CourseInfo {
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+    }).on('hide', () => {
+      this.validator && this.validator.element($picker);
     });
     $picker.datetimepicker('setStartDate', new Date());
   }
@@ -278,6 +280,10 @@ class CourseInfo {
       this.initenableBuyExpiry();
     });
 
+    $('input[name="expiryDays"]').on('blur', (event) => {
+      this.validator.element($(event.target));
+    });
+
   }
 
   initExpiryMode() {
@@ -300,19 +306,19 @@ class CourseInfo {
     case 'days':
       if ($deadlineType.val() === 'end_date') {
         this.elementAddRules($deadline, this.getDeadlineEndDateRules());
-        this.validator.form();
+        this.validator.element($deadline);
         return;
       }
       this.elementAddRules($expiryDays, this.getExpiryDaysRules());
-      this.validator.form();
+      this.validator.element($expiryDays);
       break;
     case 'date':
       this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
       this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
-      this.validator.form();
+      this.validator.element($expiryStartDate);
+      this.validator.element($expiryEndDate);
       break;
     default:
-      this.validator.form();
       break;
     }
   }
