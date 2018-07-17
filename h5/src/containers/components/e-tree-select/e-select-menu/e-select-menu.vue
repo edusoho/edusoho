@@ -4,15 +4,16 @@
     <div class="e-menu__tree" v-if="menuContent.moduleType == 'tree'">
       <!-- first-level -->
       <div class="e-menu__items level-one">
-        <div class="e-menu__item selected"
-          :class="{ item.id === queryData.categoryId ? 'selected' : '' }"
+        <div class="e-menu__item"
+          :class="[item.id === queryData.categoryId ? 'selected' : '']"
           v-for="item in menuContent.data"
           @click="itemSelect(item, menuContent.type, 'levelOne')"
         >{{ item.name }}</div>
       </div>
       <!-- second-level -->
       <div class="e-menu__items level-two">
-        <div class="e-menu__item selected"
+        <div class="e-menu__item"
+          :class="[item.id === queryData.categoryId ? 'selected' : '']"
           v-for="item in secondLevel"
           @click="itemSelect(item, menuContent.type, 'levelTwo')"
         >{{ item.text }}</div>
@@ -20,6 +21,7 @@
       <!-- third-level -->
       <div class="e-menu__items level-three">
         <div class="e-menu__item"
+          :class="[item.id === queryData.categoryId ? 'selected' : '']"
           v-for="item in thirdLevel"
           @click="itemSelect(item, menuContent.type, 'levelThree')"
         >{{ item.text }}</div>
@@ -28,6 +30,7 @@
     <!-- line -->
     <div class="e-menu__line" v-if="menuContent.moduleType == 'normal'">
       <div class="e-menu__item"
+        :class="judgeIsSelected(item, menuContent.type)"
         v-for="item in menuContent.data"
         @click="itemSelect(item, menuContent.type)"
       >{{ item.text }}</div>
@@ -59,6 +62,11 @@
         queryData: {},
         isReadyEmit: false
       };
+    },
+    watch: {
+      selectedData() {
+        this.queryData = {...this.selectedData}
+      }
     },
     methods: {
       itemSelect(item, type, level) {
@@ -101,6 +109,12 @@
         }
         // 更新数据
         if (this.isReadyEmit) this.$emit('selectedChange', this.queryData);
+      },
+      judgeIsSelected(item, type) {
+        console.log(this.selectedData);
+        console.log(this.queryData[this.queryForm[type]], item.type, 'wahahahah');
+        const isSelected = this.queryData[this.queryForm[type]] === item.type;
+        if (isSelected) return 'selected'
       },
     },
   }

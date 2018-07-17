@@ -4,13 +4,13 @@
       <div class="e-tree-select__item"
         v-bind:class="{ active: selectedIndex === index && isActive }"
         v-for="(item, index) in selectItems"
-        v-model="selectedData"
         @click="toggle(item, index)"
       >{{ item.text }}</div>
     </div>
 
     <selectMenu
       v-show="isActive"
+      v-model="proxyData"
       :menuContent="menuContent"
       @selectedChange="sendQuery"
     ></selectMenu>
@@ -40,16 +40,15 @@
     data() {
       return {
         isActive: false,
-        activeId: null,
         menuContent: {},
         selectedIndex: null,
-        queryData: {}
+        proxyData: {}
       };
     },
     watch: {
-      selectItems() {
-        console.log(this.selectItems, "show");
-      },
+      selectedData() {
+        this.proxyData = this.selectedData;
+      }
     },
     methods: {
       toggle(item, index) {
