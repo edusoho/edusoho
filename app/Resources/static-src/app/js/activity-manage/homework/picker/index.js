@@ -8,3 +8,7 @@ new QuestionPicker($questionPickerBody , $step2Form);
 new BatchSelect($questionPickerBody);
 
 new SelectLinkage($('[name="courseId"]',window.parent.document),$('[name="lessonId"]',window.parent.document));
+
+$('.js-pick-button').click(function(){
+  $(this).button('loading').addClass('disabled');
+});

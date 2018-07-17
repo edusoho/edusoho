@@ -19,6 +19,6 @@
   {% endif %}
   <td>
     <button data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview" data-role="preview-btn">{{'question.btn.preview'|trans}}</button>
-    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-question-id="{{ question.id }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">{% if replace|default(null) %}{{'question.btn.replace'|trans}}{% else %}{{'question.btn.choose'|trans}}{% endif %}</button>
+    <button type="button" class="btn btn-primary btn-sm js-pick-button" data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-question-id="{{ question.id }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">{% if replace|default(null) %}{{'question.btn.replace'|trans}}{% else %}{{'question.btn.choose'|trans}}{% endif %}</button>
   </td>
 </tr>
