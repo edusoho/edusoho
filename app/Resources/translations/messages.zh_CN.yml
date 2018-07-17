@@ -8373,3 +8373,4 @@ exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+exception.user_lock: 账户被封禁，请联系管理员
