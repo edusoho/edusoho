@@ -5,7 +5,7 @@
       <!-- first-level -->
       <div class="e-menu__items level-one">
         <div class="e-menu__item selected"
-          :class="{ item.id === queryData.categoryId ? 'selected' : '' }"
+          :class="item.id === queryData.categoryId ? 'selected' : ''"
           v-for="item in menuContent.data"
           @click="itemSelect(item, menuContent.type, 'levelOne')"
         >{{ item.name }}</div>

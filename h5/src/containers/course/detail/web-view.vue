@@ -1,6 +1,7 @@
 <template>
   <!-- 文档播放器 -->
   <div class="web-view">
+    <e-loading v-if="isLoading"></e-loading>
     <!-- web-view -->
     <div id="player" v-show="media !== 'text'"></div>
     <div class="media-text" ref="text" v-show="media === 'text'">
@@ -23,6 +24,9 @@ export default {
     ...mapState('course', {
       details: state => state.details,
       joinStatus: state => state.joinStatus
+    }),
+    ...mapState({
+      isLoading: state => state.isLoading
     })
   },
   async mounted () {
@@ -41,8 +45,8 @@ export default {
     * eg: /api/courses/1/task_medias/1?preview=1
     */
     getParams () {
-      const { courseId, taskId, type } = this.$route.params;
-      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+      const { courseId, taskId, type } = this.$route.query;
+      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable || true)
       this.media = type;
 
       return canTryLookable ? {

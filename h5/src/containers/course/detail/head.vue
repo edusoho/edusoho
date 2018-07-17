@@ -1,13 +1,15 @@
 <template>
-<div class="course-detail__head">
-  <div class="course-detail__head--img" v-show="sourceType === 'img'">
-    <img :src="courseSet.cover.large" alt="">
-  </div>
- <div id="course-detail__head--video" 
-  ref="video"
-  v-show="['video', 'audio'].includes(sourceType)"></div>
-</div>
+  <div class="course-detail__head">
+    <div class="course-detail__head--img" 
+      v-show="sourceType === 'img'">
+      <img :src="courseSet.cover.large" alt="">
+    </div>
 
+    <div id="course-detail__head--video" 
+      ref="video"
+      v-show="['video', 'audio'].includes(sourceType)">
+    </div>
+  </div>
 </template>
 <script>
 import loadScript from 'load-script';
@@ -33,6 +35,7 @@ export default {
   watch: {
     taskId: {
       handler(v, oldVal) {
+        window.scrollTo(0, 0);
         ['video', 'audio'].includes(this.sourceType) && this.initPlayer();
       }
     }
