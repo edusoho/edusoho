@@ -29,10 +29,6 @@ class ConvertIpToolkit
 
     public static function convertIp($ip)
     {
-        if ('127.0.0.1') {
-            return '本机地址';
-        }
-
         if (empty($ip) === true) {
             return 'N/A';
         }
@@ -69,8 +65,17 @@ class ConvertIpToolkit
         }
 
         fseek(self::$fp, self::$offset['len'] + $index_offset['len'] - 262144);
+        $locations = explode("\t", fread(self::$fp, $index_length['len']));
+        $location = '';
+        foreach ($locations as $key => $value) {
+            if (0 == $key) {
+                $location = $value;
+            } else {
+                $location .= $locations[$key - 1] == $value ? '' : $value;
+            }
+        }
 
-        return fread(self::$fp, $index_length['len']);
+        return $location;
     }
 
     private static function init()
