@@ -32,11 +32,6 @@
         default: 'price'
       }
     },
-    data () {
-      return {
-
-      };
-    },
     methods: {
       onClick() {
         const name = this.type === 'order'? 'order' : 'course';

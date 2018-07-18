@@ -2,14 +2,14 @@
   <div class="orders">
     <span class='orders-title'>我的订单</span>
 
-    <div class="orders-container__empty" v-if="empty">
+    <div class="orders-container__empty">
       <img src="/static/images/orderEmpty.png" >
       <span>暂无订单记录</span>
     </div>
-   
-    <template v-else>
-      <e-course v-for="course in courses" :key="course.id" :course="course"
-       type="order"></e-course>
+
+    <template>
+      <!-- <e-course v-for="course in courses" :key="course.id" :course="course"
+       type="order"></e-course> -->
     </template>
   </div>
 </template>
@@ -22,33 +22,9 @@ export default {
     eCourse
   },
   data() {
-    return {
-      empty: false,
-      courses: [{
-        items: {
-          image:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
-        },
-        title: '收费课程0412',
-        pay_amount: '1',
-        targetId: 1,
-        courseSetTitil: '四月班'
-      }, {
-        courseSet: {
-          cover: {
-            large:'https://mp1.cg-dev.cn/files/default/2018/04-13/14081939db25426228.jpg'
-          },
-        },
-        pay_amount: '1',
-        targetId: 2,
-        title: '收费课程0412',
-        courseSetTitil: '四月班'
-      }]
-    }
+    return {}
   },
   created() {
-    this.courses.length > 0 ? this.empty = false : this.empty = true;
-
-    console.log(this.$route);
     Api.getMyOrder().then(res => {
       console.log(res, 'orders');
     })
