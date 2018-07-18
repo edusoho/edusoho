@@ -1,3 +1,3 @@
 import Base from './base';
 
-new Base($('#courseset-base-submit'));
+new Base('#courseset-summary-field');

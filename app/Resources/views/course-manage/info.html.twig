@@ -15,7 +15,7 @@
       {# 课程基础信息 #}
       {% if is_un_multi_courseset(courseSet.id) %}
         <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
-        {% include 'courseset-manage/base-info/info.html.twig' %}
+        {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}
       {% endif %}
 
       {# 计划基础信息 #}

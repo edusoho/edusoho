@@ -68,6 +68,6 @@
 <div class="form-group">
   <label class="col-md-2 control-label">{{'course.detail.summary'|trans}}</label>
   <div class="col-md-8 controls">
-    <textarea name="summary" rows="10" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
+    <textarea name="summary" rows="10" data-form="{{ form }}" data-button="{{ button }}" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
   </div>
 </div>

@@ -199,7 +199,7 @@ class CourseInfo {
       initTags();
     }
     if ($('#courseset-summary-field').length) {
-      new Detail($('#course-submit'));
+      new Detail('#courseset-summary-field');
     } else {
       this.saveForm();
     }
