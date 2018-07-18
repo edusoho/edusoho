@@ -1,4 +1,4 @@
-import 'libs/jquery-sortable';
+import 'jquery-sortable';
 
 const sortList = (options, callback = () => {}) => {
   let defaultOptions = {
