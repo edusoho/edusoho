@@ -9,10 +9,15 @@ define(function(require, exports, module) {
         $('.sendOtherMsg').val(sendMsg);
         $('.doc').val($('.' + $('.selectedType').val() + '_doc').html());
         $('.api-url').val('');
+        $('.api-user-id').val('');
 
         if ($('.doc').val().indexOf('api-url-editable: true') != -1) {
           $apiInfo = $.parseJSON($('.' + $('.selectedType').val() + '_apiInfo').html());
           $('.api-url').val($apiInfo['apiUrl']);
+        }
+
+        if ($('.doc').val().indexOf('api-login: true') != -1) {
+          $('.api-user-id').val(1);
         }
       }
     );
@@ -34,6 +39,10 @@ define(function(require, exports, module) {
 
         if ($('.doc').val().indexOf('api-url-editable: true') != -1) {
           $postData['apiUrl'] = $('.api-url').val();
+        }
+
+        if ($('.doc').val().indexOf('api-login: true') != -1) {
+          $postData['apiUserId'] = $('.api-user-id').val();
         }
 
         $.post(
