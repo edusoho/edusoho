@@ -134,9 +134,7 @@ class CourseInfo {
         }
       },
       messages: {
-        originPrice: {
-          required: Translator.trans('validate_old.positive_currency.message')
-        },
+        originPrice: Translator.trans('validate_old.positive_currency.message'),
         maxStudentNum: {
           required: Translator.trans('course.manage.max_student_num_error_hint')
         },
