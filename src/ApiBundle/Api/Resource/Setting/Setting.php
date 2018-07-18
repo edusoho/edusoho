@@ -15,13 +15,33 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('register', 'payment', 'vip', 'magic', 'login'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $method = "get${type}";
 
         return $this->$method();
+    }
+
+    public function getSite()
+    {
+        $siteSetting = $this->getSettingService()->get('site');
+
+        return array(
+            'name' => $siteSetting['name'],
+            'url' => $siteSetting['url'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
+        );
+    }
+
+    public function getWap()
+    {
+        $wapSetting = $this->getSettingService()->get('wap', array('enabled' => 1));
+
+        return array(
+            'enabled' => $wapSetting['enabled'],
+        );
     }
 
     public function getRegister()
@@ -96,19 +116,6 @@ class Setting extends AbstractResource
         return array(
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
-        );
-    }
-
-    public function getLogin()
-    {
-        $loginSetting = $this->getSettingService()->get('login_bind', array());
-        return array(
-            'loginLimit' => isset($loginSetting['login_limit']) ? $loginSetting['login_limit'] : 0,
-            'enabled' => isset($loginSetting['enabled']) ? $loginSetting['enabled'] : 0,
-            'temporaryLockEnabled' => isset($loginSetting['temporary_lock_enabled']) ? $loginSetting['temporary_lock_enabled'] : 0,
-            'temporaryLockAllowedTimes' => isset($loginSetting['temporary_lock_allowed_times']) ? $loginSetting['temporary_lock_allowed_times'] : 5,
-            'ipTemporaryLockAllowedTimes' => isset($loginSetting['ip_temporary_lock_allowed_times']) ? $loginSetting['ip_temporary_lock_allowed_times'] : 20,
-            'temporaryLockMinutes' => isset($loginSetting['temporary_lock_minutes']) ? $loginSetting['temporary_lock_minutes'] : 20,
         );
     }
 
