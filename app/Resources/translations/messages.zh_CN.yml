@@ -1447,8 +1447,8 @@ course.task_toolbar.questions: 问答
 
 course.base: 课程信息
 course.base.content_title: 课程信息
-course.base.title: 标题
-course.base.sub_title: 副标题
+course.base.title: 课程标题
+course.base.sub_title: 课程副标题
 course.base.tag: 标签
 course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
 course.base.category: 分类
@@ -3883,7 +3883,7 @@ my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服�
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程信息
-my.teaching.open_course.Basic_Info.title: 标题
+my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
 my.teaching.open_course.Basic_Info.tags: 标签
 my.teaching.open_course.Basic_Info.tags.explain: 将会应用于按标签搜索课程、相关课程的提取等
