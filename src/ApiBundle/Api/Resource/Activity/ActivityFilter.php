@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'remark', 'ext', 'mediaType', 'mediaId',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime',
     );
 
     protected function publicFields(&$data)
@@ -31,6 +31,17 @@ class ActivityFilter extends Filter
 
         if (!empty($data['ext']) && !empty($data['ext']['file'])) {
             $data['mediaStorage'] = $data['ext']['file']['storage'];
+        }
+
+        //testpaper module
+        if ('testpaper' == $data['mediaType']) {
+            if (!empty($data['ext'])) {
+                $data['testpaperInfo']['testMode'] = $data['ext']['testMode'];
+                $data['testpaperInfo']['limitTime'] = $data['ext']['limitedTime'];
+                $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval'] * 60; //分钟
+                $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
+                $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? date('c', $data['startTime']) : null;
+            }
         }
 
         unset($data['ext']);
