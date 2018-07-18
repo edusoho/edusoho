@@ -919,3 +919,90 @@ admin.index.order_count: order count
 admin.index.finished_task_count: finished task count
 admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
 admin.user.cloude_sms_enable_hint: please go to【Admin】-【ES Cloud】-【Cloud Sms】open cloud sms first.
+
+admin.account_center.cash_income: cash income
+admin.account_center.coin_income: coin income
+admin.analysis.classroom_income: classroom income
+admin.analysis.course_income: course income
+admin.analysis.course_total: total number of courses
+admin.analysis.program_total: total number of programs
+admin.analysis.add_course_total: number of new courses
+admin.analysis.exit_learning_total: number of exit learning
+admin.analysis.finished_lesson_total: number of finished lesson
+admin.analysis.income: income
+admin.analysis.join_lesson_total: number of join lesson
+admin.analysis.add_lesson_num: number of new lessons
+admin.analysis.login_num: number of visitors
+admin.analysis.paid_classroom_num: number of paid classrooms
+admin.analysis.paid_lesson_num: number of paid courses
+admin.analysis.register_num: number of registered
+admin.analysis.user_total_num: total number of users
+admin.analysis.view_num: number of views
+admin.analysis.vip_income: vip income
+admin.announcement.save_error_hint: Operation failed
+admin.announcement.delete_hint: Are you sure you want to delete this announcement?
+admin.app.uninstall_hint: Really want to uninstall this app?
+admin.app.upgrade_success_hint: Application installation / Upgrade is successful!
+admin.app.upgrade_hint: Whether to confirm the upgrade, the website will enter the maintenance state during the upgrade process.
+admin.app.upgrade_roll_back_hint: The last time you upgraded the application, you need to roll back. If you continue to install, you may have unpredictable errors. Are you sure to continue?
+admin.app.upgrade_exec_hint: In the process of %title%
+admin.app.upgrade_exec_failed_hint: "%title% failed："
+admin.app.upgrade_exec_finished_hint: "%title% finished"
+admin.app.upgrade_exec_error_hint: "An unknown error occurred while %title%."
+admin.app.upgrade_finish: finished
+admin.app.upgrade_check_env_hint: Check the system environment
+admin.app.upgrade_check_dependency_hint: Check dependency
+admin.app.upgrade_backup_system_file_hint: Backup system file
+admin.app.upgrade_backup_database_hint: Backup database
+admin.app.upgrade_check_download_permission: Check download permissions
+admin.app.upgrade_download_installer: Download the installer
+admin.app.upgrade_exec_install_hint: Perform the installation upgrade
+admin.app.upgrade_check_app_version_hint: Check system version
+admin.article.category.save_success_hint: Save category successfully！
+admin.article.category.save_fail_hint: Save category failed，please try again！
+admin.article.category.delete_hint: Really want to delete this category？
+admin.article.category.delete_failed_hint: Failed to delete the category, please try again！%error%
+admin.article.delete_hint: Really want to permanently delete the content?
+admin.article.picture_upload_success_hint: Uploaded successfully!
+admin.attachment.delete_hint: Really want to delete this attachment?
+admin.attachment.delete_success_hint: Attachment deleted
+admin.attachment.delete_failed_hint: Attachment deletion failed, please try again later
+admin.batch_notification.send_hint: Cannot be modified after sending, confirm sending?
+admin.batch_notification.delete_hint: Really want to delete the content?
+admin.batch_notification.publish_success_hint: Successfully published!
+admin.batch_notification.save_success_hint: Saved successfully!
+admin.block.history_recover_hint: The content of the block has been restored, please save!
+admin.block.delete_hint: Are you sure you want to delete this block template?
+admin.block.delete_success_hint: Delete the edit block successfully!
+admin.block.create_success_hint: Create block template successfully!
+admin.block.edit_success_hint: Update the block template successfully!
+admin.block.upload_failed_hint: Upload the picture failed, please try again!
+admin.block.upload_success_hint: Upload the picture successfully!
+admin.block.delete_picture_success_hint: Delete the picture successfully!
+admin.block.edit_success_hint: Updated successfully!
+admin.block.submit_success_hint: Submitted successfully!
+admin.block.select_picture_hint: Please select the image to upload first
+admin.block.upload_picture_success_hint: Upload the picture successfully!
+admin.block.not_saved_data_hint: There are still no saved data, do you want to leave this page?
+admin.block.add_max_num_hint: Can only add up to %panelGroup%!
+admin.block.delete_tip: Are you sure you want to delete?
+admin.block.delete_min_num_hint: There must be one!
+admin.block.uploading_hint: Uploading, please wait!
+admin.block.upload_success_hint: Uploaded successfully!
+admin.block.upload_failed_hint: Upload failed, please try again!
+admin.block.poster: poster (%index%)
+admin.category.icon_delete_hint: Are you sure you want to delete the icon?
+admin.category.icon_delete_success_hint: Delete the category icon successfully!
+admin.category.icon_delete_fail_hint: Delete the category icon failed!
+admin.category.delete_hint: Are you sure you want to delete this category and its subcategories?
+admin.classroom.choose_success_hint: Choose classroom success
+admin.classroom.operation_success_hint: successfully！
+admin.classroom.operation_fail_hint: failure
+admin.classroom.operation_hint: ？
+admin.classroom.delete_hint: Really want to delete the classroom?
+admin.classroom.delete_success_hint: successfully deleted!
+admin.classroom.cancel_recommend_hint: "%title% ?"
+admin.classroom.cancel_recommend_success_hint: "%title% successfully!"
+admin.classroom.cancel_recommend_fail_hint: "%title% failure!"
+admin.classroom.recommend_success_hint: Set the recommended classroom operation successfully!
+admin.classroom.recommend_fail_hint: Set the recommended classroom operation failed!

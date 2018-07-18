@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('新增课时数')],
+                      labels: [Translator.trans('admin.analysis.add_lesson_num')],
                       xLabels:"day"
                     });
         }

@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('观看数')],
+                      labels: [Translator.trans('admin.analysis.view_num')],
                       xLabels:"day"
                     });
         }

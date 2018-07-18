@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('退出学习数')],
+                      labels: [Translator.trans('admin.analysis.exit_learning_total')],
                       xLabels:"day"
                     });
         }
