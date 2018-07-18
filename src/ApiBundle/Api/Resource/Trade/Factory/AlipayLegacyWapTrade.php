@@ -23,6 +23,8 @@ class AlipayLegacyWapTrade extends BaseTrade
 
     private function makePayForm($platformCreatedResult)
     {
+        $platformCreatedResult['data']['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+        $platformCreatedResult['data']['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         $form = array();
         $urlParts = explode('?', $platformCreatedResult['url']);
         $form['action'] = $urlParts[0].'?_input_charset=UTF-8';
