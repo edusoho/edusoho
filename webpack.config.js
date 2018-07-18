@@ -9,7 +9,7 @@ module.exports = {
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
     'jquery-nouislider': ['libs/jquery-nouislider.js'],
-    'jquery-sortable': ['jquery-sortable'],
+    'jquery-sortable': ['libs/jquery-sortable.js'],
     'swiper': ['swiper'],
     'perfect-scrollbar': ['libs/perfect-scrollbar/index.js'],
     'jquery-validation': ['libs/jquery-validation.js'],
