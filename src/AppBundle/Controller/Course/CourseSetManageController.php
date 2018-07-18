@@ -256,12 +256,13 @@ class CourseSetManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+        $course = empty($courses) ? array() : reset($courses);
         if (!$courseSet['locked']) {
             $courseSetId = $courseSet['id'];
-            $courseId = $courses[0]['id'];
+            $courseId = $course['id'];
         } else {
             $courseSetId = $courseSet['parentId'];
-            $courseId = $courses[0]['parentId'];
+            $courseId = $course['parentId'];
         }
 
         //同步的课程不允许操作的菜单列表
@@ -361,8 +362,10 @@ class CourseSetManageController extends BaseController
 
         $copyCourseSet = $this->getCourseSetService()->getCourseSet($courseSet['parentId']);
 
+        $template = $this->getTemplate($sideNav);
+
         return $this->render(
-            'courseset-manage/locked.html.twig',
+            $template,
             array(
                 'id' => $id,
                 'sideNav' => $sideNav,
@@ -370,6 +373,7 @@ class CourseSetManageController extends BaseController
                 'copyCourseSet' => $copyCourseSet,
                 'menuPath' => $menuPath,
                 'menuTitle' => $menuTitle,
+                'course' => $course,
             )
         );
     }
@@ -406,6 +410,15 @@ class CourseSetManageController extends BaseController
             return $this->createJsonResponse(true, 200);
         } catch (\Exception $e) {
             return $this->createJsonResponse($e->getMessage(), 500);
+        }
+    }
+
+    protected function getTemplate($sideNav)
+    {
+        if (in_array($sideNav, array('files', 'testpaper', 'question'))) {
+            return 'courseset-manage/locked-item.html.twig';
+        } else {
+            return 'courseset-manage/locked.html.twig';
         }
     }
 

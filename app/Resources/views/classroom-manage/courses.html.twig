@@ -85,7 +85,7 @@
                         </div>
                       {% endif %}
                     {% else %}
-                      <div class="pull-right cd-mr40"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_base', {id: course.courseSet.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
+                      <div class="pull-right cd-mr40"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
                     {% endif %}
 
                     <div class="course-footer cd-mt32 clearfix">

@@ -51,11 +51,11 @@
 
   <div class="item-actions">
     <a class="cd-mr24 cd-link-assist" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" >
-      <span class="es-icon es-icon-edit"></span>
+      <span class="es-icon es-icon-edit" data-toggle="tooltip" data-container="body" title="{{ 'course.manage.edit_lesson'|trans }}"></span>
     </a>
 
     <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
-      <a class="cd-link-assist" href="javascript:;">
+      <a class="cd-link-assist cd-mr16" href="javascript:;">
         <i class="es-icon es-icon-morehoriz"></i>
       </a>
       <ul class="dropdown-menu open-course-lesson-item__dropdown">

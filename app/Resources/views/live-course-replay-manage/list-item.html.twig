@@ -43,7 +43,7 @@
 
 		{% if lesson.status == 'published' and lesson.type in ['live','liveOpen'] and lesson.isEnd  %}
 			{% if lesson.canRecord|default(false) and lesson.replayStatus != 'videoGenerated' %}
-				<a class="cd-link-assist cd-mr24 js-generate-replay"
+				<a class="cd-link-assist cd-mr24 js-generate-replay js-tip-show"
 				{% if lesson.replayStatus == 'ungenerated' %}
 				title="{{'course.live.replay_manage.record'|trans}}"
 				{% else %}
@@ -53,7 +53,7 @@
 				</a>
 			{% endif %}
 
-			<a class="cd-link-assist item-actions__btn js-tip-show" href="#modal" title="{{'course.live.replay_manage.upload_btn'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			<a class="cd-link-assist item-actions__btn cd-mr16 js-tip-show" href="#modal" data-container="body" title="{{'course.live.replay_manage.upload_btn'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
 		{% endif %}
 	</div>
 </li>

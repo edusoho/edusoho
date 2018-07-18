@@ -1763,6 +1763,7 @@ course.plan_task.activity_manage.preview: 预览活动
 
 course.lesson: 课时
 course.manage.create_lesson: 添加课时
+course.manage.edit_lesson: 编辑课时
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
@@ -2518,7 +2519,7 @@ classroom.live: 直播
 classroom.task_num: >
   第%number%%taskName%
 classroom.total_task_count: >
-  %taskNum%个%takName%
+  %taskNum%个%taskName%
 classroom.expiry_mode: 有效期
 classroom.forever: 永久
 classroom.course_tips: >
@@ -3882,7 +3883,8 @@ my.teaching.course_set.select_type.live_open_course.available_after_open: 云直
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
 # 录播公开课
-my.teaching.open_course.Basic_Info: 课程信息
+my.teaching.open_course.Basic_Info: 课程设置
+my.teaching.open_course.Basic_Info.message: 基础信息
 my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
 my.teaching.open_course.Basic_Info.tags: 标签
@@ -5080,9 +5082,8 @@ admin.tag_manage.tag.create_time_th: 添加时间
 admin.tag_manage.tag.operate_th: 操作
 admin.tag_manage.tag.edit_btn: 编辑
 admin.tag_manage.tag.empty: 暂无标签记录
-admin.tag_manage.tag.footer_one_tips: 1.标签可用于课程和资讯；
-admin.tag_manage.tag.footer_two_tips: >
-  2.可<a target="_blank" href="%courseSet%">开启</a>根据标签在课程介绍页显示相关课程。
+admin.tag_manage.tag.footer_one_tips: 1.课程和咨询设置时可以选择不同的标签，通过搜索标签找到网站内与这个标签相关的内容；
+admin.tag_manage.tag.footer_two_tips: 2.可开启根据标签在课程介绍页显示相关课程的功能。
 
 ## 新增，编辑标签modal
 admin.tag_manage.tag.create.modal_title: 新增标签
@@ -8425,3 +8426,4 @@ exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+exception.user_lock: 账户被封禁，请联系管理员

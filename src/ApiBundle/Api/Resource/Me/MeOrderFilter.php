@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class MeOrderFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'sn', 'pay_amount', 'created_time', 'status', 'cover', 'targetType',
+        'id', 'title', 'sn', 'pay_amount', 'created_time', 'status', 'cover', 'targetType', 'targetId',
     );
 
     protected function simpleFields(&$data)

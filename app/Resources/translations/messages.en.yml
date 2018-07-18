@@ -1575,6 +1575,7 @@ course.plan_task.activity_manage.preview: 预览活动
 
 course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
+course.manage.edit_lesson: 编辑课时
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
@@ -3244,8 +3245,9 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
-my.teaching.open_course.Basic_Info: 'Basic Info'
-my.teaching.open_course.Basic_Info.title: Title
+my.teaching.open_course.Basic_Info: 课程设置
+my.teaching.open_course.Basic_Info.message: 基础信息
+my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: Subtitle
 my.teaching.open_course.Basic_Info.tags: Tag
 my.teaching.open_course.Basic_Info.tags.explain: 'Will be used for courses searching'
@@ -4167,8 +4169,8 @@ admin.tag_manage.tag.create_time_th: 'Created Time'
 admin.tag_manage.tag.operate_th: Action
 admin.tag_manage.tag.edit_btn: Edit
 admin.tag_manage.tag.empty: 'No Record'
-admin.tag_manage.tag.footer_one_tips: '1. Label can be used in course and articles'
-admin.tag_manage.tag.footer_two_tips: "2. You can <a target=\"_blank\" href=\"%courseSet%\">open</a> the recommended function to recommend course by label on course detail page.\n"
+admin.tag_manage.tag.footer_one_tips: 1.课程和咨询设置时可以选择不同的标签，通过搜索标签找到网站内与这个标签相关的内容；
+admin.tag_manage.tag.footer_two_tips: 2.可开启根据标签在课程介绍页显示相关课程的功能。
 admin.tag_manage.tag.create.modal_title: 'Create Label'
 admin.tag_manage.tag.edit.modal_title: Edittag
 admin.tag_manage.tag.name_label: 'Label Name'
@@ -7105,3 +7107,4 @@ exception.user.reset_password_email_send: 重设密码邮件发送失败，请�
 
 exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
+exception.user_lock: User account is locked, please contact system administrator.
