@@ -91,6 +91,13 @@ const routes = [
       title: '所有课程'
     },
     component: resolve => require(['@/containers/more/index.vue'], resolve)
+  }, {
+    path: '/pay',
+    name: 'pay',
+    meta: {
+      title: '订单支付'
+    },
+    component: resolve => require(['@/containers/pay/index.vue'], resolve)
   }
 ];
 

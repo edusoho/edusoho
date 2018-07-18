@@ -2,14 +2,14 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img v-bind:src="course.courseSet.cover.middle">
+        <img v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ course.courseSet.title }}</div>
+        <div class="e-course__title text-overflow">{{ title }}</div>
         <div class="e-course__project text-overflow">
-          <span v-if="course.title !== '默认教学计划'">{{ course.title }}</span>
+          <span v-if="teachPlan && teachPlan !== '默认教学计划'">{{ teachPlan }}</span>
         </div>
-        <switchBox :type="type" :course="course" :learnedNum="course.learnedNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
+        <switchBox :type="type" :course="course" :order="order" :learnedNum="course.learnedNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
       </div>
     </div>
   </div>
@@ -25,21 +25,47 @@
     props: {
       course: {
         type: Object,
-        default: {},
+        default() {
+          return {}
+        }
+      },
+      order: {
+        type: Object,
+        default() {
+          return {}
+        }
       },
       type: {
         type: String,
         default: 'price'
       }
     },
+    computed: {
+      imgSrc() {
+        return this.course.courseSet ? this.course.courseSet.cover.middle : this.order.cover.middle
+      },
+      title() {
+        return this.course.courseSet ? this.course.courseSet.title : this.order.title
+      },
+      teachPlan() {
+        if (this.course.title || this.course.title === '') {
+          return this.course.title
+        } else {
+          return false
+        }
+      }
+    },
     methods: {
-      onClick() {
+      onClick(e) {
         const name = this.type === 'order'? 'order' : 'course';
-        const id = this.course.id || this.course.targetId;
-
-        this.$router.push({
-          path: `${name}/${id}`,
-        });
+        const id = this.course.id || this.course.targetId || this.order.id;
+        if (e.target.tagName === 'SPAN') {
+          console.log(e.target.tagName);
+        } else {
+          this.$router.push({
+            path: `${name}/${id}`,
+          });
+        }
       }
     }
   }

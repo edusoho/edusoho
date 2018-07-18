@@ -15,12 +15,15 @@
     <div class="switch-box" v-if="type === 'order'">
       <span class="switch-box__price">
         <p class="free" v-if="isFree">免费</p>
-        <p class="price" v-if="!isFree">¥ {{ course.pay_amount | toMoney}}</p>
+        <p class="price" v-if="!isFree">¥ {{ order.pay_amount }}</p>
       </span>
       <span class="switch-box__state">
-        <p class="order-close" v-if="orderType === 'close'">交易关闭</p>
-        <p class="order-success" v-if="orderType === 'success'">交易成功</p>
-        <span class="order-pay" v-if="orderType === 'pay'">去支付</span>
+        <p class="order-close" v-if="order.status === 'closed'">交易关闭</p>
+        <p class="order-success" v-if="order.status === 'success'">交易成功</p>
+        <span class="order-pay"
+          v-if="order.status === 'created'"
+          @click="goToPay"
+          >去支付</span>
       </span>
     </div>
 
@@ -48,11 +51,11 @@
         type: String,
         default: 'price',
       },
-      orderType: {
-        type: String,
-        default: 'pay',
-      },
       course: {
+        type: Object,
+        default: {},
+      },
+      order: {
         type: Object,
         default: {},
       },
@@ -68,8 +71,14 @@
         return (this.course.learnedNum/this.course.publishedTaskNum)*100
       }
     },
-    created() {
-
+    methods: {
+      goToPay() {
+        // 花钱去吧！
+        console.log('花钱');
+        this.$router.push({
+          path: '/pay',
+        });
+      }
     }
   }
 </script>

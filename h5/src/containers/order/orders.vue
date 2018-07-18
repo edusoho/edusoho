@@ -1,16 +1,15 @@
 <template>
   <div class="orders">
     <span class='orders-title'>我的订单</span>
-
-    <div class="orders-container__empty">
+    <div class="orders-container__empty" v-if="isEmptyOrder && isFirstRequestCompile">
       <img src="/static/images/orderEmpty.png" >
       <span>暂无订单记录</span>
     </div>
 
-    <template>
-      <!-- <e-course v-for="course in courses" :key="course.id" :course="course"
-       type="order"></e-course> -->
-    </template>
+    <div class="order" v-else>
+      <e-course v-for="order in orderList" :key="order.id" :order="order"
+       type="order"></e-course>
+    </div>
   </div>
 </template>
 <script>
@@ -22,11 +21,17 @@ export default {
     eCourse
   },
   data() {
-    return {}
+    return {
+      orderList: [],
+      isEmptyOrder: true,
+      isFirstRequestCompile: false
+    }
   },
   created() {
-    Api.getMyOrder().then(res => {
-      console.log(res, 'orders');
+    Api.getMyOrder().then((res) => {
+      this.orderList = res.data;
+      if (this.orderList.length) this.isEmptyOrder = false;
+      this.isFirstRequestCompile = true
     })
   }
 }
