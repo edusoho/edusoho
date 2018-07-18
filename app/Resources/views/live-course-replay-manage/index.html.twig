@@ -5,25 +5,15 @@
 {% set side_nav = 'replay' %}
 {% do script(['app/js/open-course-manage/replay-lesson/index.js'])%}
 
-{#{% block main %}#}
-
-{#<div class="panel panel-default panel-col lesson-manage-panel">#}
-
-  {% block page_title %}
-
-  {#<div class="panel-heading">#}
-    {{'course.live.replay_manage.content_title'|trans}}
-  {#</div>#}
-
-  {% endblock %}
+  {% block page_title %}{{'course.live.replay_manage.content_title'|trans}}{% endblock %}
   {% block main_body %}
 
   {% if items is empty %}
     <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
   {% endif %}
 
-  <div class="panel-body">
-    <ul class="open-course-lesson" id="course-item-list">
+  <div>
+    <ul class="open-course-lesson ml0" id="course-item-list">
       {% for id, item in items %}
         {% if 'lesson' in id %}
           {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
@@ -34,7 +24,3 @@
   </div>
 
   {% endblock %}
-
-{#</div>#}
-
-{#{% endblock %}#}
