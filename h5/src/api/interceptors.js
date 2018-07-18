@@ -14,11 +14,16 @@ axios.interceptors.request.use(config => {
   if (store.state.token) {
     config.headers['X-Auth-Token'] = store.state.token;
   }
+  store.commit('UPDATE_LOADING_STATUS', true);
 
   return config;
 }, error => Promise.reject(error));
 
-axios.interceptors.response.use(res => res.data, error => {
+axios.interceptors.response.use(res => {
+  store.commit('UPDATE_LOADING_STATUS', false);
+  return res.data;
+}, error => {
+  store.commit('UPDATE_LOADING_STATUS', false);
   switch (error.response.status) {
     case 401:
       const code = error.response.data.error.code;

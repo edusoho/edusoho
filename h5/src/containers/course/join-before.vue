@@ -28,7 +28,6 @@
 
     <!-- 课程目录 -->
     <directory ref="directory" 
-      :tryLookable="details.tryLookable"
       :courseItems="details.courseItems"></directory>
     
     <e-footer @click.native="handleJoin">
@@ -40,17 +39,11 @@
   import Directory from './detail/directory';
   import DetailHead from './detail/head';
   import DetailPlan from './detail/plan';
-  import { mapMutations, mapActions } from 'vuex';
+  import { mapMutations, mapActions, mapState } from 'vuex';
   import * as types from '@/store/mutation-types';
 
   export default {
     name: 'joinBefore',
-    props: {
-      details: {
-        type: Object,
-        default: () => ({})
-      }
-    },
     data() {
       return {
         teacherInfo: {},
@@ -69,6 +62,11 @@
       Directory,
       DetailHead,
       DetailPlan
+    },
+    computed: {
+      ...mapState('course', {
+        details: state => state.details
+      })
     },
     mounted() {
       const refs = this.$refs;
@@ -116,12 +114,17 @@
           :(scrollTop >= tops.directoryTop ? 2 : 1);
       },
       handleJoin(){
-        if (this.$store.state.token) {
+        if (!this.$store.state.token) {
+          this.$router.push({ name: 'login' });
+          return;
+        }
+
+        if (Number(this.details.price)) {
+          this.$router.push({path: `/order/${this.details.id}`});
+        } else {
           this.joinCourse({
             id: this.details.id
           });
-        } else {
-          this.$router.push({name: 'login'});
         }
       }
     },

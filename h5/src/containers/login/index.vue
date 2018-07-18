@@ -13,7 +13,7 @@
       placeholder="请输入密码" />
     <van-button type="default" class="primary-btn mb20" @click="onSubmit" :disabled="btnDisable">登录</van-button>
     <div class="login-bottom">
-      <router-link to="/register" class='login-account'>找回密码</router-link>
+      <!-- <router-link to="/register" class='login-account'>找回密码</router-link> -->
       还没有注册帐号？
       <router-link to="/register" class='login-account'>立即注册</router-link>
     </div>

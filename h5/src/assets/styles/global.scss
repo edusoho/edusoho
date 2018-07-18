@@ -83,11 +83,12 @@ a {
 }
 
 // nav
-.nav {
+.nav-bar {
   background-color: $bg-black;
   color: #fff;
   .van-icon {
     color: #fff;
+    font-weight: bold;
   }
 }
 .blue-nav {

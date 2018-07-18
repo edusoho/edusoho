@@ -64,6 +64,8 @@ export default {
   },
   computed: {
     progress () {
+      if(!Number(this.details.publishedTaskNum)) return '0%';
+
       return (this.details.learnedNum /
         this.details.publishedTaskNum).toFixed(2)*100+'%';
     },

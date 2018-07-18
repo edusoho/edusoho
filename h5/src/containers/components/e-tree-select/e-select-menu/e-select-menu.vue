@@ -1,65 +1,122 @@
 <template>
   <div class="e-menu">
     <!-- select-tree -->
-    <div class="e-menu__tree" v-if="menuContent.type == 'tree'">
+    <div class="e-menu__tree" v-if="menuContent.moduleType == 'tree'">
       <!-- first-level -->
       <div class="e-menu__items level-one">
-        <div class="e-menu__item selected"
-          v-for="item in menuContent.children"
-          @click="itemSelect(item, 'levelOne')"
-        >{{ item.text }}</div>
+        <div class="e-menu__item"
+          :class="[item.id === queryData.categoryId ? 'selected' : '']"
+          v-for="item in menuContent.data"
+          @click="itemSelect(item, menuContent.type, 'levelOne')"
+        >{{ item.name }}</div>
       </div>
       <!-- second-level -->
       <div class="e-menu__items level-two">
-        <div class="e-menu__item selected"
+        <div class="e-menu__item"
+          :class="[item.id === queryData.categoryId ? 'selected' : '']"
           v-for="item in secondLevel"
-          @click="itemSelect(item, 'levelTwo')"
+          @click="itemSelect(item, menuContent.type, 'levelTwo')"
         >{{ item.text }}</div>
       </div>
       <!-- third-level -->
       <div class="e-menu__items level-three">
         <div class="e-menu__item"
+          :class="[item.id === queryData.categoryId ? 'selected' : '']"
           v-for="item in thirdLevel"
+          @click="itemSelect(item, menuContent.type, 'levelThree')"
         >{{ item.text }}</div>
       </div>
     </div>
     <!-- line -->
-    <div class="e-menu__line" v-if="menuContent.type == 'normal'">
-      <div class="e-menu__item selected">推荐</div>
-      <div class="e-menu__item">最新</div>
-      <div class="e-menu__item">最热</div>
+    <div class="e-menu__line" v-if="menuContent.moduleType == 'normal'">
+      <div class="e-menu__item"
+        :class="judgeIsSelected(item, menuContent.type)"
+        v-for="item in menuContent.data"
+        @click="itemSelect(item, menuContent.type)"
+      >{{ item.text }}</div>
     </div>
   </div>
 </template>
 
 <script>
+  import Api from '@/api';
+
   export default {
+    model: {
+      prop: 'selectedData',
+      event: 'selectedChange'
+    },
     props: {
-      menuContent: {
-        type: Object,
-        default: {}
-      }
+      menuContent: Object,
+      selectedData: Object
     },
     data() {
       return {
         secondLevel: [],
         thirdLevel: [],
+        queryForm: {
+          courseType: 'type',
+          category: 'categoryId',
+          sort: 'sort'
+        },
+        queryData: {},
+        isReadyEmit: false
       };
     },
     watch: {
-
+      selectedData() {
+        this.queryData = {...this.selectedData}
+      }
     },
     methods: {
-      itemSelect(item, level) {
-        switch(level) {
-          case 'levelOne':
-            this.secondLevel = item.children;
-            break;
-          case 'levelTwo':
-            this.thirdLevel = item.children;
+      itemSelect(item, type, level) {
+        const query = this.queryForm[type];
+        this.isReadyEmit = false;
+        if (query === 'categoryId') {
+          switch(level) {
+            case 'levelOne':
+              if (item.children) {
+                this.secondLevel = item.children;
+              } else {
+                this.queryData = {
+                  categoryId: item.id,
+                };
+                this.isReadyEmit = true;
+              }
+              break;
+            case 'levelTwo':
+              if (item.children) {
+                this.thirdLevel = item.children;
+              } else {
+                this.queryData = {
+                  categoryId: item.id,
+                };
+                this.isReadyEmit = true;
+              }
+              break;
+            case 'levelThree':
+              this.queryData = {
+                categoryId: item.id,
+              };
+              this.isReadyEmit = true;
+              break;
+          }
+        } else {
+          this.queryData = {
+            [query]: item.type,
+          };
+          this.isReadyEmit = true;
         }
-      }
-    }
+        // 更新数据
+        if (this.isReadyEmit) this.$emit('selectedChange', this.queryData);
+      },
+      judgeIsSelected(item, type) {
+        console.log(this.selectedData);
+        console.log(this.queryData[this.queryForm[type]], item.type, 'wahahahah');
+        const isSelected = this.queryData[this.queryForm[type]] === item.type;
+        if (isSelected) return 'selected'
+      },
+    },
   }
 
 </script>

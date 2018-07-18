@@ -1,8 +1,8 @@
 <template>
   <e-panel title="课程目录" class="directory" :hidde-title="hiddeTitle">
     <!-- 暂无学习任务 -->
-
-    <div class="directory-list">
+    <div v-if="courseItems.length == 0" class="empty">暂无学习任务</div>
+    <div class="directory-list" v-else>
       <div class="directory-list__item" v-for="(item, index) in chapters">
         <div class="directory-list__item-chapter" 
           @click="item.show = !item.show" 
@@ -47,10 +47,6 @@
         type: Array,
         default: () => ([])
       },
-      tryLookable: {
-        type: String,
-        default: ''
-      },
       hiddeTitle: {
         type: Boolean,
         default: false
@@ -65,25 +61,38 @@
     },
     data() {
       return {
-        directoryArray: this.courseItems,
+        directoryArray: [],
         chapters: [],
         tasks: []
       }
     },
     filters:{
       filterNumber(task) {
-        return Number(task.seq) ? `${task.number}-${task.seq}` : `${task.number}`
+        return Number(task.seq)
+          ? `${task.number}-${task.seq}`
+          : `${task.number}`
       }
     },
-    created() {
-      if (this.directoryArray.length > 0) {
-        this.directoryArray.map(item => {
-          this.$set(item, 'show', true);
-          if (item.type == 'task') {
-            item['status'] = this.getCurrentStatus(item.task);
-          }
-      })
-        this.getTasks(this.directoryArray);
+    watch: {
+      selectedPlanId: {
+        immediate: true,
+        handler(v) {
+          if (!this.details.courseItems.length) return;
+
+          this.directoryArray =
+            this.details.courseItems.map(item => {
+
+            this.$set(item, 'show', true);
+
+            if (item.type == 'task') {
+              item['status'] = this.getCurrentStatus(item.task);
+            }
+
+            return item;
+          })
+
+          this.getTasks(this.directoryArray);
+        }
       }
     },
     methods: {
@@ -92,6 +101,8 @@
       }),
       getTasks (data) {
         let temp = [];
+        this.chapters = [];
+        this.tasks = [];
 
         data.forEach(item => {
           if (item.type !== 'chapter') {
@@ -115,12 +126,11 @@
         }
 
         if (data[0].type !== 'chapter') {
-          this.chapters.unshift({show:true});
+          this.chapters.unshift({ show: true });
         }
-        console.log('chapters', this.chapters, 'tasks', this.tasks);
       },
       getCurrentStatus (task) {
-        if (Number(this.tryLookable)
+        if (Number(this.details.tryLookable)
           && task.type === 'video'
           && task.activity.mediaStorage) {
           return 'is-tryLook';
@@ -140,14 +150,19 @@
       },
       lessonCellClick (data) {
         const task = data.task;
+        const details = this.details;
 
-        if (!this.joinStatus && Number(this.tryLookable)) {
+        !details.allowAnonymousPreview && this.$route.push({name: 'login'})
+
+        if (!this.joinStatus
+          && Number(details.tryLookable)
+          && ['is-tryLook', 'is-free'].includes(data.status)) {
         // trylook and free video click
           switch (task.type) {
             case 'video':
             case 'audio':
               this.$router.push({
-                name: 'course_try'
+                name: 'course_try',
               })
 
               this.setSourceType({
@@ -156,22 +171,24 @@
               });
               break;
             case 'doc':
+            case 'text':
             case 'ppt':
               this.$router.push({
                 name: 'course_web',
-                params: {
+                query: {
                   courseId: this.selectedPlanId,
                   taskId: task.id,
-                  type: task.type
+                  type: task.type,
                 }
               })
               break;
             default:
-              Toast('请先加入课程');
+              return Toast('请先加入课程');
           }
+        } else {
+          this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
         }
         //join after click
-        this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
       },
       showTypeDetail (task) {
         switch(task.type) {

@@ -44,7 +44,17 @@ const config = [
   {
     // 修改头像
     name: 'setAvatar',
-    url: '/me/avatar',
+    url: '/me',
+    method: 'PATCH'
+  }, {
+    // 修改昵称
+    name: 'setNickname',
+    url: '/me/nickname/{nickname}',
+    method: 'PATCH'
+  }, {
+    // 上传文件
+    name: 'updateFile',
+    url: '/files',
     method: 'POST'
   }, {
     // 我的订单
@@ -71,6 +81,14 @@ const config = [
     name: 'getMedia',
     url: '/courses/{courseId}/task_medias/{taskId}',
     method: 'GET'
+  }, {
+    // 更多获取筛选信息
+    name: 'getSelectItems',
+    url: '/pages/h5/settings/course'
+  }, {
+    // 获取课程列表数据
+    name: 'getCourseList',
+    url: '/courses'
   }
 ];
 
