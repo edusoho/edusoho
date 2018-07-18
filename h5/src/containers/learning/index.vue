@@ -73,7 +73,6 @@
     },
 
     beforeRouteEnter(to, from, next) {
-      debugger
       // 判断是否登录
       const isLogin = !!store.state.token;
 

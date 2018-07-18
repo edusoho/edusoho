@@ -5,3 +5,9 @@
     min-height: 125px;
   }
 }
+.van-hairline--bottom::after {
+  border-bottom-width: 0;
+}
+.van-tabbar--fixed {
+  z-index: 10
+}
