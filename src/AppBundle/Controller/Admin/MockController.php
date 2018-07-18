@@ -169,7 +169,7 @@ class MockController extends BaseController
         $apiUrl = $params['apiUrl'];
         $apiMethod = $params['apiMethod'];
         $apiAuthorized = $params['apiAuthorized'];
-        $apiUserId = $params['apiUserId'];
+        $apiUserId = empty($params['apiUserId']) ? null : $params['apiUserId'];
 
         unset($params['apiUrl']);
         unset($params['apiMethod']);
