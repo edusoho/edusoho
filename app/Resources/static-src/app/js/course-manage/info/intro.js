@@ -12,6 +12,9 @@ export default class Intro {
   }
 
   init() {
+    if (!this.$intro.length) {
+      return;
+    }
     if (!store.get(COURSE_BASE_INTRO)) {
       store.set(COURSE_BASE_INTRO, true);
       this.introStart(this.initAllSteps());
@@ -36,7 +39,7 @@ export default class Intro {
   introStart(steps) {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
-    this.customClass = steps.length < 2 ? 'es-intro-help es-intro-single' : 'es-intro-help multistep';
+    this.customClass = steps.length < 2 ? 'es-intro-help js-intro-help es-intro-single' : 'es-intro-help js-intro-help multistep';
     this.intro.setOptions({
       steps: steps,
       skipLabel: doneLabel,
@@ -70,6 +73,7 @@ export default class Intro {
         $('.js-skip').remove();
       }
     });
+    $('.js-intro-help').parent().css('top', '0');
   }
 
   scrollPosition() {
