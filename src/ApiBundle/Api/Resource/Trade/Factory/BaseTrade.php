@@ -72,17 +72,17 @@ abstract class BaseTrade
             $tradeFields['amount'] = $order['pay_amount'];
             $tradeFields['order_sn'] = $order['sn'];
             $coinAmount = empty($params['coinAmount']) ? 0 : $params['coinAmount'];
-            $tradeFields['coin_amount'] = MathToolkit::simple($coinAmount, 100);
+            $tradeFields['coin_amount'] = round(MathToolkit::simple($coinAmount, 100));
             $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount);
-            $tradeFields['cash_amount'] = MathToolkit::simple($cashAmount, 100);
+            $tradeFields['cash_amount'] = round(MathToolkit::simple($cashAmount, 100));
             $tradeFields['goods_title'] = $order['title'];
         }
 
         if ('recharge' == $params['type']) {
             $tradeFields['goods_title'] = '现金充值';
             $tradeFields['order_sn'] = '';
-            $tradeFields['amount'] = MathToolkit::simple($params['amount'], 100);
-            $tradeFields['cash_amount'] = MathToolkit::simple($params['amount'], 100);
+            $tradeFields['amount'] = round(MathToolkit::simple($params['amount'], 100));
+            $tradeFields['cash_amount'] = round(MathToolkit::simple($params['amount'], 100));
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
