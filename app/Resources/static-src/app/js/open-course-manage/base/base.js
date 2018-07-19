@@ -70,11 +70,10 @@ export default class Base {
       ajax: true,
       rules: {
         title: {
-          required: true
-        },
-        subtitle: {
           required: true,
-          maxlength: 70,
+          maxlength: 30,
+          trim: true,
+          course_title: true,
         },
         startTime: {
           required: true,
@@ -125,7 +124,6 @@ export default class Base {
       $helpTip.html(Translator.trans('open_course.live_time_can_not_edit_bint')).addClass('color-danger');
       $('[name=startTime]').attr('disabled', true);
       $('#live-length-field').attr('disabled', true);
-      $('#course-create-btn').attr('disabled', true);
     } else {
       $('[name=startTime]').attr('disabled', false);
     }

@@ -43,14 +43,14 @@
 
 	</div>
 	<div class="item-actions">
-    <a class="cd-link-assist cd-mr24" title="{{'course.replay_manage.preview_btn'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="es-icon es-icon-removeredeye"></span></a>
+    <a class="cd-link-assist cd-mr24" title="{{'course.replay_manage.preview_btn'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{'course.replay_manage.preview_btn'|trans}}"></span></a>
 
     {% set editUrl = path('course_manage_task_replay_edit',{ courseId: course.id, taskId:task.id}) %}
     {% set createUrl = path('course_manage_task_replay_create', {courseId:course.id, taskId:task.id}) %}
     {% set uploadUrl = path('course_manage_task_replay_upload', {courseId:course.id, taskId:task.id}) %}
 
 		{% if task.status == 'published' and task.isEnd and activity.ext.replayStatus == 'generated' %}
-			<a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list"></span></a>
+			<a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list" data-toggle="tooltip" title="{{'course.replay_manage.edit_btn'|trans}}"></span></a>
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd  %}
@@ -61,11 +61,12 @@
 				{% else %}
 				title="{{'course.replay_manage.record_again'|trans}}"
 				{% endif %}
-				 data-url="{{ createUrl }}"><span class="es-icon es-icon-videocam"></span>
+				 data-url="{{ createUrl }}"><span class="es-icon es-icon-videocam" data-toggle="tooltip" title="{% if activity.ext.replayStatus == 'ungenerated' %}
+				{{'course.replay_manage.record'|trans}}{% else %}{{'course.replay_manage.record_again'|trans}}{% endif %}"></span>
 				</a>
 			{% endif %}
 
-			<a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			<a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
 		{% endif %}
 
 	</div>
