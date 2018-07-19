@@ -3,6 +3,7 @@ export const UPDATE_LOADING_STATUS = 'UPDATE_LOADING_STATUS';
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const USER_INFO = 'USER_INFO';
+export const GET_SETTINGS = 'GET_SETTINGS';
 
 // course detail
 export const SELECTED_PLAN_ID = 'selectedPlanId';

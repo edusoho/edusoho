@@ -89,6 +89,11 @@ const config = [
     // 获取课程列表数据
     name: 'getCourseList',
     url: '/courses'
+  }, {
+    // 获取全局设置
+    name: 'getSettings',
+    url: '/settings/{type}',
+    method: 'GET'
   }
 ];
 

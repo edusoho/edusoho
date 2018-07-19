@@ -36,5 +36,8 @@ export default {
   [types.SET_AVATAR](state, payload) {
     state.user = payload;
     localStorage.setItem('user', JSON.stringify(payload));
+  },
+  [types.GET_SETTINGS](state, payload) {
+    state.settings = payload;
   }
 };
