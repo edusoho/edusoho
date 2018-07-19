@@ -1,16 +1,17 @@
 import Vue from 'vue';
+import axios from 'axios';
 import router from '@/router';
 import filters from '@/filters';
 import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
-// import Vant from 'vant';
+
 import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
 import App from '@/App';
+import Api from '@/api';
 
-// Vue.use(Vant);
 import {
   Button,
   NavBar,
@@ -25,7 +26,7 @@ import {
   Loading,
   Uploader
 } from 'vant';
-
+// 按需引入组件
 Vue.component('van-nav-bar', NavBar);
 Vue.component('van-tabbar', Tabbar);
 Vue.component('van-tabbar-item', TabbarItem);
@@ -47,10 +48,24 @@ Vue.use(EdusohoUI);
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
+
+Api.getSettings({
+  query: {
+    type: 'wap'
+  }
+}).then(res => {
+  if (!res.enabled) {
+    // 如果没有开通微网校，则跳回老版本网校
+    window.location.href = axios.defaults.baseURL || 'http://zyc.st.edusoho.cn/';
+    return;
+  }
+
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>'
+  });
 });
+

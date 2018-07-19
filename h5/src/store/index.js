@@ -13,7 +13,8 @@ const state = {
   isLoading: false,
   token: null,
   user: {},
-  smsToken: ''
+  smsToken: '',
+  settings: {}
 };
 
 const debug = process.env.NODE_ENV !== 'production';

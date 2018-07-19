@@ -72,3 +72,17 @@ export const setAvatar = ({ commit }, { avatarId }) =>
       return res;
     }).catch(err => reject(err));
   });
+
+// 全局设置
+export const getGlobalSettings = ({ commit }, { type }) =>
+  new Promise((resolve, reject) => {
+    Api.getSettings({
+      query: {
+        type
+      }
+    }).then(res => {
+      commit(types.GET_SETTINGS, res);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
+  });

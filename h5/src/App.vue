@@ -8,6 +8,8 @@
   </div>
 </template>
 <script>
+import Api from '@/api'
+
 export default {
   data() {
     return  {
@@ -15,11 +17,6 @@ export default {
       showLeftArrow: false
     }
   },
-  // computed: {
-  //   navClass() {
-  //     return ['learning', 'find', 'prelogin'].includes(this.$route.name)
-  //   }
-  // },
   watch: {
     '$route': {
       handler(to) {
@@ -35,6 +32,6 @@ export default {
         this.title = to.meta.title;
       }
     }
-  },
+  }
 }
 </script>

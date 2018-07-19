@@ -7,12 +7,14 @@ import learning from './learning';
 import my from './my';
 
 Vue.use(Router);
-
 const routes = [
   {
     path: '/',
     redirect: '/find',
     name: 'home',
+    meta: {
+      title: ''
+    },
     component: resolve => require(['@/containers/home.vue'], resolve),
     children: [
       ...find,
@@ -31,21 +33,21 @@ const routes = [
     path: '/login',
     name: 'login',
     meta: {
-      title: 'EduSoho 微网校'
+      title: ''
     },
     component: resolve => require(['@/containers/login/index.vue'], resolve)
   }, {
     path: '/register',
     name: 'register',
     meta: {
-      title: 'EduSoho 微网校'
+      title: ''
     },
     component: resolve => require(['@/containers/register/index.vue'], resolve)
   }, {
     path: '/protocol',
     name: 'protocol',
     meta: {
-      title: 'EduSoho 微网校'
+      title: ''
     },
     component: resolve => require(['@/containers/register/protocol/index.vue'], resolve)
   }, {
@@ -106,4 +108,22 @@ const router = new Router({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  if (!Object.keys(store.state.settings).length) {
+    // 获取全局设置
+    store.dispatch('getGlobalSettings', { type: 'site' })
+      .then(res => {
+        console.log(res, '222');
+        if (to.name === 'find') {
+          to.meta.title = res.name;
+        }
+        next();
+      });
+  } else if (['register', 'login', 'protocol', 'find'].includes(to.name)) {
+    to.meta.title = store.state.settings.name;
+    next();
+  } else {
+    next();
+  }
+});
 export default router;
