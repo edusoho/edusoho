@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import createLogger from 'vuex/dist/logger';
 
 import * as getters from './getters';
 import * as actions from './actions';
@@ -17,7 +16,6 @@ const state = {
   settings: {}
 };
 
-const debug = process.env.NODE_ENV !== 'production';
 
 export default new Vuex.Store({
   state,
@@ -26,6 +24,5 @@ export default new Vuex.Store({
   mutations,
   modules: {
     course
-  },
-  plugins: debug ? [createLogger()] : []
+  }
 });

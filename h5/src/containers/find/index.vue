@@ -36,11 +36,9 @@
       })
     },
     created() {
-
       Api.discoveries()
         .then((data) => {
           this.parts = data;
-          console.log(data, 'success');
         })
         .catch((err) => {
           console.log(err, 'error');
