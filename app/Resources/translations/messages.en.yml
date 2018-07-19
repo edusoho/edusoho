@@ -3247,7 +3247,7 @@ my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
 my.teaching.open_course.Basic_Info: 课程设置
 my.teaching.open_course.Basic_Info.message: 基础信息
-my.teaching.open_course.Basic_Info.title: 课程名称
+my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: Subtitle
 my.teaching.open_course.Basic_Info.tags: Tag
 my.teaching.open_course.Basic_Info.tags.explain: 'Will be used for courses searching'
@@ -4169,8 +4169,8 @@ admin.tag_manage.tag.create_time_th: 'Created Time'
 admin.tag_manage.tag.operate_th: Action
 admin.tag_manage.tag.edit_btn: Edit
 admin.tag_manage.tag.empty: 'No Record'
-admin.tag_manage.tag.footer_one_tips: '1. Label can be used in course and articles'
-admin.tag_manage.tag.footer_two_tips: "2. You can <a target=\"_blank\" href=\"%courseSet%\">open</a> the recommended function to recommend course by label on course detail page.\n"
+admin.tag_manage.tag.footer_one_tips: 1.课程和咨询设置时可以选择不同的标签，通过搜索标签找到网站内与这个标签相关的内容；
+admin.tag_manage.tag.footer_two_tips: 2.可开启根据标签在课程介绍页显示相关课程的功能。
 admin.tag_manage.tag.create.modal_title: 'Create Label'
 admin.tag_manage.tag.edit.modal_title: Edittag
 admin.tag_manage.tag.name_label: 'Label Name'

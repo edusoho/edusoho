@@ -20,7 +20,7 @@ tagMatchUrl: path('tag_match')
   <form class="form-horizontal" id="course-form" method="post" data-update = "{{ canUpdateStartTime }}">
 
     <div class="form-group">
-      <label class="col-md-2 control-label" for="course_title">{{ 'my.teaching.open_course.Basic_Info.title'|trans }}</label>
+      <div class="col-md-2 control-label"><label class="control-label-required" for="course_title">{{ 'my.teaching.open_course.Basic_Info.title'|trans }}</label></div>
       <div class="col-md-8 controls">
         <input type="text" id="course_title" name="title" class="form-control" value="{{ course.title|default('') }}">
         <div class="help-block cd-text-sm" style="display:none;"></div>

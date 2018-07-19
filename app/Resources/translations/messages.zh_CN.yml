@@ -1447,8 +1447,8 @@ course.task_toolbar.questions: 问答
 
 course.base: 课程信息
 course.base.content_title: 课程信息
-course.base.title: 标题
-course.base.sub_title: 副标题
+course.base.title: 课程标题
+course.base.sub_title: 课程副标题
 course.base.tag: 标签
 course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
 course.base.category: 分类
@@ -1750,7 +1750,7 @@ course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
-  选择教学手段
+  添加教学任务
 course.plan_task.activity_manage.setup_content: >
   <span class="number">2</span>
   设置内容
@@ -3885,7 +3885,7 @@ my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服�
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
 my.teaching.open_course.Basic_Info.message: 基础信息
-my.teaching.open_course.Basic_Info.title: 课程名称
+my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
 my.teaching.open_course.Basic_Info.tags: 标签
 my.teaching.open_course.Basic_Info.tags.explain: 将会应用于按标签搜索课程、相关课程的提取等
@@ -5082,9 +5082,8 @@ admin.tag_manage.tag.create_time_th: 添加时间
 admin.tag_manage.tag.operate_th: 操作
 admin.tag_manage.tag.edit_btn: 编辑
 admin.tag_manage.tag.empty: 暂无标签记录
-admin.tag_manage.tag.footer_one_tips: 1.标签可用于课程和资讯；
-admin.tag_manage.tag.footer_two_tips: >
-  2.可<a target="_blank" href="%courseSet%">开启</a>根据标签在课程介绍页显示相关课程。
+admin.tag_manage.tag.footer_one_tips: 1.课程和咨询设置时可以选择不同的标签，通过搜索标签找到网站内与这个标签相关的内容；
+admin.tag_manage.tag.footer_two_tips: 2.可开启根据标签在课程介绍页显示相关课程的功能。
 
 ## 新增，编辑标签modal
 admin.tag_manage.tag.create.modal_title: 新增标签

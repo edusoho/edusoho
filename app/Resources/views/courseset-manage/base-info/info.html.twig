@@ -1,4 +1,3 @@
-{% do script(['app/js/courseset-manage/base/index.js']) %}
 <div class="form-group">
   <div class="col-md-2 control-label courseset-manage-body__lable">
     <label class="control-label-required" for="title">{{ 'course.base.title'|trans }}</label>
@@ -69,6 +68,6 @@
 <div class="form-group">
   <label class="col-md-2 control-label">{{'course.detail.summary'|trans}}</label>
   <div class="col-md-8 controls">
-    <textarea name="summary" rows="10" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
+    <textarea name="summary" rows="10" data-form="{{ form }}" data-button="{{ button }}" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
   </div>
 </div>

@@ -1,6 +1,11 @@
 export default class detail {
-  constructor() {
-    this.$from = $('#title').closest('form');
+  constructor(element) {
+    this.$element = $(element);
+    this.formId = $(element).data('form');
+    this.btnId = $(element).data('button');
+    this.$form = $(`#${this.formId}`);
+    this.$btn = $(`#${this.btnId}`);
+    this.uploadUrl = this.$element.data('imageUploadUrl');
     this.init();
   }
 
@@ -15,27 +20,27 @@ export default class detail {
       allowedContent: true,
       toolbar: 'Detail',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: $('input[name="summary"]').data('imageUploadUrl')
+      filebrowserImageUploadUrl: this.uploadUrl
     });
 
     self.editor.on('blur', () => {
-      $('#courseset-summary-field').val(self.editor.getData());
+      this.$element.val(self.editor.getData());
       self.validator.form();
     });
   }
 
   submitForm() {
-    this.validator = this.$from.validate({
+    this.validator = this.$form.validate({
       rules: {
         summary: {
           ckeditor_maxlength: 10000,
         }
       }
     });
-    $('#detail-submit').click(() => {
-      $('#courseset-summary-field').val(this.editor.getData());
+    this.$btn.click(() => {
+      this.$element.val(this.editor.getData());
       if (this.validator.form()) {
-        this.$from.submit();
+        this.$form.submit();
       }
     });
   }

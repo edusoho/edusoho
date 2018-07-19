@@ -1,7 +1,7 @@
 import Base from './base';
 import EsWebUploader from 'common/es-webuploader.js';
 
-new Base();
+new Base($('#course-create-btn'));
 
 let uploader = new EsWebUploader({
   element: '#upload-picture-btn',

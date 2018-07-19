@@ -8,12 +8,9 @@
 
 {% block main %}
 
-<div class="panel panel-default panel-col">
+<div class="panel-col">
 
-  <div class="panel-heading clearfix">{{'testpaper.edit.content_title'|trans}}</div>
-
-  <div class="panel-body">
-
+    <div class="courseset-manage-body__title">{{'testpaper.edit.content_title'|trans}}</div>
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'testpaper.edit.content_title'} %}
 
     <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="true" data-have-base-fields="true">
@@ -32,7 +29,6 @@
 
     </form>
 
-  </div>
 </div>
 
 

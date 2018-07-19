@@ -4,6 +4,8 @@ import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
 import notify from 'common/notify';
 import Intro from './intro';
+import Detail from 'app/js/courseset-manage/base/detail';
+import { initTags } from 'app/js/courseset-manage/base/tag';
 
 class CourseInfo {
   constructor() {
@@ -87,14 +89,16 @@ class CourseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
+        title: {
+          required: true,
+          maxlength: 10,
+          trim: true,
+          course_title: true,
+        },
         maxStudentNum: {
           required: true,
           live_capacity: true,
           positive_integer: true
-        },
-        title: {
-          required: true,
-          maxlength: 10,
         },
         subtitle: {
           maxlength: 30
@@ -105,6 +109,11 @@ class CourseInfo {
           },
           digits: true,
           max_year: true
+        },
+        originPrice: {
+          required: true,
+          positive_price: true,
+          min: 0
         },
         expiryStartDate: {
           required: () => {
@@ -119,9 +128,13 @@ class CourseInfo {
           },
           date: true,
           after_date: '#expiryStartDate'
+        },
+        summary: {
+          ckeditor_maxlength: 10000,
         }
       },
       messages: {
+        originPrice: Translator.trans('validate_old.positive_currency.message'),
         maxStudentNum: {
           required: Translator.trans('course.manage.max_student_num_error_hint')
         },
@@ -179,8 +192,24 @@ class CourseInfo {
 
       return true;
     });
+
+    if ($('#tags').length) {
+      initTags();
+    }
+    if ($('#courseset-summary-field').length) {
+      new Detail('#courseset-summary-field');
+    } else {
+      this.saveForm();
+    }
   }
 
+  saveForm() {
+    $('#course-submit').on('click', (event) => {
+      if (this.validator.form()) {
+        $('#course-info-form').submit();
+      }
+    });
+  }
   initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({
@@ -189,6 +218,8 @@ class CourseInfo {
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+    }).on('hide', () => {
+      this.validator && this.validator.element($picker);
     });
     $picker.datetimepicker('setStartDate', new Date());
   }
@@ -244,6 +275,10 @@ class CourseInfo {
       this.initenableBuyExpiry();
     });
 
+    $('input[name="expiryDays"]').on('blur', (event) => {
+      this.validator.element($(event.target));
+    });
+
   }
 
   initExpiryMode() {
@@ -253,6 +288,7 @@ class CourseInfo {
     let $expiryEndDate = $('[name="expiryEndDate"]');
     let expiryMode = $('[name="expiryMode"]:checked').val();
     let $deadlineType = $('[name="deadlineType"]:checked');
+
     this.elementRemoveRules($deadline);
     this.elementRemoveRules($expiryDays);
     this.elementRemoveRules($expiryStartDate);
@@ -262,19 +298,19 @@ class CourseInfo {
     case 'days':
       if ($deadlineType.val() === 'end_date') {
         this.elementAddRules($deadline, this.getDeadlineEndDateRules());
-        this.validator.form();
+        this.validator.element($deadline);
         return;
       }
       this.elementAddRules($expiryDays, this.getExpiryDaysRules());
-      this.validator.form();
+      this.validator.element($expiryDays);
       break;
     case 'date':
       this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
       this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
-      this.validator.form();
+      this.validator.element($expiryStartDate);
+      this.validator.element($expiryEndDate);
       break;
     default:
-      this.validator.form();
       break;
     }
   }
@@ -358,4 +394,3 @@ new CourseInfo();
 setTimeout(function() {
   new Intro();
 }, 500);
-

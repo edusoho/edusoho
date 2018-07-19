@@ -15,7 +15,7 @@
       {# 课程基础信息 #}
       {% if is_un_multi_courseset(courseSet.id) %}
         <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
-        {% include 'courseset-manage/base-info/info.html.twig' %}
+        {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}
       {% endif %}
 
       {# 计划基础信息 #}
@@ -38,7 +38,7 @@
       
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-8">
-          <button id="course-submit" type="submit" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+          <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
           <div id="test"></div>
         </div>
       </div>
