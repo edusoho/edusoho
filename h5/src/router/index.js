@@ -113,7 +113,6 @@ router.beforeEach((to, from, next) => {
     // 获取全局设置
     store.dispatch('getGlobalSettings', { type: 'site' })
       .then(res => {
-        console.log(res, '222');
         if (to.name === 'find') {
           to.meta.title = res.name;
         }

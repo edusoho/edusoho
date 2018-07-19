@@ -71,15 +71,15 @@
     mounted() {
       const refs = this.$refs;
 
+      window.addEventListener('touchmove', this.handleTouch);
       window.addEventListener('scroll', this.handleScroll);
-
       setTimeout(() => {
         window.scrollTo(0,0);
 
         Object.keys(refs).forEach(item => {
           this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
         })
-        // console.log(this.tops);
+        console.log(this.tops);
       }, 100)
     },
     methods: {
@@ -88,13 +88,12 @@
        ]),
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
-        window.alert('tab', ref.$el.scrollTop)
-        // window.scrollTo(0, ref.$el.offsetTop - 44);
+        window.scrollTo(0, ref.$el.offsetTop - 44);
       },
       transIndex2Tab(index) {
         return index ? (index > 1 ? 'directory' : 'teacher') : 'about';
       },
-      handleScroll() {
+      handleTouch() {
         const scrollTop = window.pageYOffset ||
           document.documentElement.scrollTop || document.body.scrollTop;
 
@@ -105,7 +104,6 @@
           : this.tabsClass = '';
       },
       activeCurrentTab(scrollTop) {
-        // console.log(scrollTop)
         const tops = this.tops;
 
         scrollTop  = scrollTop + 44;
@@ -129,7 +127,7 @@
       }
     },
     destroyed () {
-      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('touchmove', this.handleScroll);
     },
   }
 </script>
