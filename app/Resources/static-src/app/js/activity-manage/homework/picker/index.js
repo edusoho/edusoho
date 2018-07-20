@@ -10,5 +10,5 @@ new BatchSelect($questionPickerBody);
 new SelectLinkage($('[name="courseId"]',window.parent.document),$('[name="lessonId"]',window.parent.document));
 
 $('.js-pick-button').click(function(){
-  $(this).button('loading').addClass('disabled');
+  $(this).addClass('disabled');
 });
