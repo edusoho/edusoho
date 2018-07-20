@@ -20,6 +20,7 @@ class CourseInfo {
     this.initDatetimepicker();
     this.initExpiryMode();
     this.setService();
+    this.taskPriceSetting();
     this.setIntroPosition();
   }
 
@@ -82,6 +83,7 @@ class CourseInfo {
 
   initValidator() {
     let $form = $('#course-info-form');
+    $('.js-task-price-setting').perfectScrollbar();
     this.validator = $form.validate({
       currentDom: '#course-submit',
       ajax: true,
@@ -210,6 +212,7 @@ class CourseInfo {
       }
     });
   }
+
   initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({
@@ -222,6 +225,22 @@ class CourseInfo {
       this.validator && this.validator.element($picker);
     });
     $picker.datetimepicker('setStartDate', new Date());
+  }
+
+  taskPriceSetting() {
+    const $priceItem = $('.js-task-price-setting');
+    $priceItem.on('click', 'li', (event) => {
+      const $li = $(event.currentTarget);
+      $li.toggleClass('open');
+      const $input = $li.find('input');
+      $input.prop('checked', !$input.is(':checked'));
+    });
+
+    $priceItem.on('click', 'input', (event) => {
+      event.stopPropagation();
+      const $input = $(event.target);
+      $input.closest('li').toggleClass('open');
+    });
   }
 
 
