@@ -18,6 +18,7 @@ site.data.not_found: Not found ...
 site.data.delete_name_hint: Really want to delete the% name%?
 site.data.uncheck_name_hint: No %name% selected
 site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
+site.data.delete_title_hint: Delete %name%
 site.data.delete_submiting_hint: Deleting ...
 site.date.year: Years
 site.date.month: Month
