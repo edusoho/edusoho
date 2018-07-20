@@ -8,9 +8,13 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
-    <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
-    <li><a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{courseSet.title|plain_text(21)}}</a></li>
-    <li class="active">{{course.title}}</li>
+    <li><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    {% if course.type == 'normal' %}
+      <li><a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{courseSet.title|plain_text(21)}}</a></li>
+      <li class="active">{{course.title}}</li>
+    {% else %}
+      <li><a class="active">{{courseSet.title|plain_text(21)}}</a></li>
+    {% endif %}
   </ol>
 {% endblock %}
 

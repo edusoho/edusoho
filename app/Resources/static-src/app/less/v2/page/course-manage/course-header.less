@@ -13,6 +13,30 @@
     .nav-header-section__item {
       padding-top: 16px;
       margin: 0 32px;
+      @media (max-width: @screen-xs-min) {
+        margin: 0 16px !important;
+      }
+    }
+  }
+
+  .courseset-manage-header {
+    @media (max-width: @screen-xs-min) {
+      padding: 16px;
+    }
+  }
+  .courseset-manage-header-info__price {
+    @media (max-width: @screen-xs-min) {
+      margin-top: 4px;
+    }
+  }
+  .courseset-manage-header-info__title {
+    @media (max-width: @screen-xs-min) {
+      margin: 4px 0;
+    }
+  }
+  .courseset-manage-header-btn {
+    @media (max-width: @screen-xs-min) {
+      margin-top: -16px;
     }
   }
 }
@@ -161,6 +185,9 @@
   overflow: hidden;
   position: relative;
   padding: 16px 32px 16px 16px;
+  @media (max-width: @screen-xs-min) {
+    padding: 16px;
+  }
   .cd-box-shadow-z(4px);
   .cd-border-radius;
   background-color: #fff;

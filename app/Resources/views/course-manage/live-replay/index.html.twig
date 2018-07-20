@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.replay_manage'|trans }} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'replay' %}
+{% set course_side_nav = 'replay' %}
 {% do script(['app/js/course-manage/live-replay/index.js']) %}
 
 {% block page_title %}{{ 'course.replay_manage.content_title'|trans }}{% endblock %}
