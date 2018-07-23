@@ -213,7 +213,7 @@
           case 'doc':
             this.$router.push({
               name: 'course_web',
-              params: {
+              query: {
                 courseId: this.selectedPlanId,
                 taskId: task.id,
                 type: task.type

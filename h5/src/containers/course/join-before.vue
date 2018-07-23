@@ -117,7 +117,7 @@
           return;
         }
 
-        if (Number(this.details.price)) {
+        if (+this.details.price) {
           this.$router.push({path: `/order/${this.details.id}`});
         } else {
           this.joinCourse({
