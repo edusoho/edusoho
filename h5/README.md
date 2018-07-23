@@ -7,7 +7,6 @@
 - [视频播放器文档](/doc/player.md)
 - [需求文档](https://pro.modao.cc/app/43be7ceee9ba1239e1366453d273907de9ac2043#screen=sFAABE922B31526366021396)
 
-> 
 ## Build Setup
 
 ``` bash
