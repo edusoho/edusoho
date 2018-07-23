@@ -1,19 +1,24 @@
-# edusoho-h5
+# edusoho-h5 (h5微网校项目)
 
-> A Vue.js project
+> 相关文档
 
+- [接口地址](http://kb.codeages.net/edusoho/api/api-h5.html)
+- [文档播放器地址](http://coding.codeages.net/qiqiuyun/api-doc/blob/master/v2/resource-play.md)
+- [视频播放器文档](/doc/player.md)
+- [需求文档](https://pro.modao.cc/app/43be7ceee9ba1239e1366453d273907de9ac2043#screen=sFAABE922B31526366021396)
+
+> 
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 开发阶段
 npm run dev
 
-# build for production with minification
+# build 打包
 npm run build
 
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
