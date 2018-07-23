@@ -11,7 +11,7 @@ class CourseV8AddSubtitleFields extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("ALTER TABLE `course_v8` ADD `subtitle` varchar(120) DEFAULT '' COMMENT '计划副标题';");
+        $db->exec("ALTER TABLE `course_v8` ADD `subtitle` varchar(120) DEFAULT '' COMMENT '计划副标题' AFTER `title`;");
     }
 
     /**
