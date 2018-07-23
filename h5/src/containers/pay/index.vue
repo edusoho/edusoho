@@ -11,7 +11,16 @@
           <span class="sum__price">¥ <span class="num">99</span></span>
         </div>
         <div class="payWay">
-          <div class="payWay__item"></div>
+          <div class="payWay__item payWay__item--selected">
+            <div class="right"></div>
+            <i></i>
+            <img src="/static/images/zfb.png">
+          </div>
+          <div class="payWay__item">
+            <div class="right"></div>
+            <i></i>
+            <img src="/static/images/wx.png">
+          </div>
         </div>
       </div>
     </div>

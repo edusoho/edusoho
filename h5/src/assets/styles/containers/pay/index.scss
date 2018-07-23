@@ -31,8 +31,35 @@
         }
       }
       .payWay {
+        display: flex;
+        justify-content: space-around;
         .payWay__item {
-
+          border: 1px solid #F5F5F5;
+          padding: vw(12) vw(22);
+          background: #FFFFFF;
+        }
+        .payWay__item--selected {
+          position: relative;
+          border-color: #408FFB;
+          font-size: 14px;
+          color: #FFFFFF;
+          .right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-top: vw(20) solid #408FFB;
+            border-left: vw(20) solid transparent;
+            width: 0;
+            height: 0;
+          }
+          i {
+            &::before {
+              position: absolute;
+              top: 0;
+              right: 0;
+              content: '\2713';
+            }
+          }
         }
       }
     }
