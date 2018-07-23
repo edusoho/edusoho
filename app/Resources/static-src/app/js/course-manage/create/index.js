@@ -24,13 +24,11 @@ class Creator {
       },
       rules: {
         title: {
+          maxlength: 10,
           required: true,
           trim: true
         }
       },
-      messages: {
-        title: Translator.trans('course.manage.title_required_error_hint'),
-      }
     });
 
     $('#course-submit').click((evt) => {
