@@ -955,6 +955,7 @@ course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
 course.members_manage.official_student.remark.tips: 'Please input student''s note'
+course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: Add
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 'Course expiry date'
 course.members_manage.official_student.add_expiry_day.title: 'Course title'

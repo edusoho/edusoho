@@ -1083,6 +1083,7 @@ course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
 course.members_manage.official_student.remark.tips: >
   请填写学员的备注信息
+course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: 增加
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 课程有效期
 course.members_manage.official_student.add_expiry_day.title: 课程标题
