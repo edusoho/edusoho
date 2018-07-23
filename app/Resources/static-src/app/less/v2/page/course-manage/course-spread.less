@@ -88,34 +88,34 @@
 .course-manage-intro {
   position: fixed;
   bottom: 30px;
-  right: 10%;
   z-index: 1000;
   .course-manage-intro__outer {
-    margin: 0 6px;
-    padding: 10px;
-    width: 74px;
-    .border-radius(50%);
-    background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.2);
-    &:hover {
-      cursor: pointer;
-    }
+    padding: 0 15px;
+    width: 72px;
   }
   .course-manage-intro__inner {
-    width: 54px;
-    height: 54px;
+    width: 42px;
+    height: 42px;
     text-align: center;
     .border-radius(50%);
     color: #fff;
     background-color: @brand-primary;
+    &:hover {
+      cursor: pointer;
+    }
   }
   i {
-    line-height: 54px;
-    font-size: 24px;
+    line-height: 42px;
+    font-size: 16px;
+  }
+  .course-manage-intro__tip {
+    font-size: 12px;
+    line-height: 1;
   }
 }
 
 .course-manage-intro-float {
   position: absolute;
-  bottom: 30px;
-  right: 40px !important;
+  bottom: 40px;
+  right: 44px !important;
 }
