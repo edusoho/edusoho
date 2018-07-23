@@ -859,6 +859,7 @@ course.plan_setup.audiences: 'Target users'
 course.base_setup: 基础设置
 courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
+course.base_info: 基础信息
 course.base_plan_intro: 计划使用指南
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
@@ -954,6 +955,7 @@ course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
 course.members_manage.official_student.remark.tips: 'Please input student''s note'
+course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: Add
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 'Course expiry date'
 course.members_manage.official_student.add_expiry_day.title: 'Course title'
@@ -1488,7 +1490,7 @@ course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
-course.plan_overview: 'Tasks Overview'
+course.plan_overview: 'Data Overview'
 
 course.plan_task: Lessons
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'

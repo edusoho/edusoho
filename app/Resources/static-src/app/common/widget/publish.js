@@ -7,7 +7,7 @@ export const publish = (element, info) => {
         title: Translator.trans(info.title),
         content: Translator.trans(info.hint),
         okText: Translator.trans('site.confirm'),
-        cancelText: Translator.trans('site.close')
+        cancelText: Translator.trans('site.cancel')
       }).on('ok', () => {
         $.post($target.data('url'), (data) => {
           if (data.success) {

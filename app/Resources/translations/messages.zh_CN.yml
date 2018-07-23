@@ -983,6 +983,7 @@ course.plan_setup.audiences: 适应人群
 course.base_setup: 基础设置
 courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
+course.base_info: 基础信息
 course.base_plan_intro: 计划使用指南
 course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
@@ -1082,6 +1083,7 @@ course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
 course.members_manage.official_student.remark.tips: >
   请填写学员的备注信息
+course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: 增加
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 课程有效期
 course.members_manage.official_student.add_expiry_day.title: 课程标题
@@ -1658,7 +1660,7 @@ course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
 course.course_files.re_try_convert_video_to_audio: 重新转码
 
-course.plan_overview: 计划概览
+course.plan_overview: 数据概览
 
 course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
