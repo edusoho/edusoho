@@ -64,16 +64,20 @@ class Creator {
     });
 
     $('input[name="expiryMode"]').on('change', (event) => {
+      const $tip = $('.js-info-tip');
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
+        $tip.removeClass('ml0');
       } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
         $('input[name="deadlineType"][value="days"]').prop('checked', true);
+        $tip.removeClass('ml0');
       } else {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $tip.addClass('ml0');
       }
       this.initExpiryMode();
     });
@@ -98,7 +102,7 @@ class Creator {
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     }).on('hide', () => {
-      this.validator.form();
+      this.validator && this.validator.element($picker);
     });
     $picker.datetimepicker('setStartDate', new Date());
   }
@@ -119,16 +123,17 @@ class Creator {
     case 'days':
       if ($deadlineType.val() === 'end_date') {
         this.elementAddRules($deadline, this.getDeadlineEndDateRules());
-        this.validator.form();
+        this.validator.element($deadline);
         return;
       }
       this.elementAddRules($expiryDays, this.getExpiryDaysRules());
-      this.validator.form();
+      this.validator.element($expiryDays);
       break;
     case 'date':
       this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
       this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
-      this.validator.form();
+      this.validator.element($expiryStartDate);
+      this.validator.element($expiryEndDate);
       break;
     default:
       break;

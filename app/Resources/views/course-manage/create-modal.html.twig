@@ -73,29 +73,33 @@
                   )
                 }}
                 {#随到随学#}
-                <div class="mb20 mt20 hidden" id="expiry-days">
+                <div class="course-manage-expiry hidden" id="expiry-days">
+                  <span class="caret"></span>
                   {{
                     cd_radios(
                       'deadlineType',
-                      { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans}
+                      { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans}, course.deadlineType|default('days')
                     )
                   }}
-                  <div class="mb20 mt20 hidden" id="deadlineType-date">
+                  <div class="cd-mt16 hidden" id="deadlineType-date">
                     {{'course.plan_task.deadline_learn_tips'|trans|raw}}
                   </div>
-                  <div class="mb20 mt20" id="deadlineType-days">
+                  <div class="cd-mt16" id="deadlineType-days">
                     {{'course.plan_task.expiry_days_learn_tips'|trans|raw}}
                   </div>
                 </div>
                 {#固定周期#}
-                <div class="mb20 mt20 hidden" id="expiry-date">
-                  {{'course.plan_task.start_time'|trans}}
-                  <input class="form-control mh10 width-150" id="expiryStartDate" type="text" name="expiryStartDate" value="">
-                  {{'course.plan_task.end_time'|trans}}
-                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
-                  value="">
+                <div class="course-manage-expiry hidden" id="expiry-date">
+                  <span class="caret"></span>
+                  <div class="course-manage-expiry__circle">
+                    {{'course.plan_task.start_time'|trans}}
+                    <input class="form-control mh10 width-150" id="expiryStartDate" type="text" name="expiryStartDate" value="">
+                    {{'course.plan_task.end_time'|trans}}
+                    <input class="form-control ml5 width-150" type="text" id="expiryEndDate" name="expiryEndDate"
+                    value="">
+                  </div>
                 </div>
-                <div class="cd-text-sm cd-dark-assist">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
+                <div class="cd-text-sm cd-dark-assist course-mangae-info__tip js-info-tip ml0">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
             </div>
           </div>
       </form>
