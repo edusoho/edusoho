@@ -15,10 +15,7 @@
 <script>
 export default {
   name: 'teacher',
-  props: ['teacherInfo'],
-  created() {
-    console.log('teacherInfo', this.teacherInfo)
-  }
+  props: ['teacherInfo']
 }
 </script>
 

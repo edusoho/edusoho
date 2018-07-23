@@ -4,12 +4,12 @@
       :price="details.price"
       :courseSet="details.courseSet"></detail-head>
 
-    <detail-plan
-      :price="details.price"
-      :courseSet="details.courseSet"></detail-plan>
+    <detail-plan></detail-plan>
     <div class="segmentation"></div>
 
-    <van-tabs v-model="active" @click="onTabClick" :class="tabsClass" ref="tabs">
+    <van-tabs v-model="active" 
+      @click="onTabClick" 
+      :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
 
@@ -71,8 +71,8 @@
     mounted() {
       const refs = this.$refs;
 
+      window.addEventListener('touchmove', this.handleTouch);
       window.addEventListener('scroll', this.handleScroll);
-
       setTimeout(() => {
         window.scrollTo(0,0);
 
@@ -88,13 +88,12 @@
        ]),
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
-
         window.scrollTo(0, ref.$el.offsetTop - 44);
       },
       transIndex2Tab(index) {
         return index ? (index > 1 ? 'directory' : 'teacher') : 'about';
       },
-      handleScroll() {
+      handleTouch() {
         const scrollTop = window.pageYOffset ||
           document.documentElement.scrollTop || document.body.scrollTop;
 
@@ -105,7 +104,6 @@
           : this.tabsClass = '';
       },
       activeCurrentTab(scrollTop) {
-        console.log(scrollTop)
         const tops = this.tops;
 
         scrollTop  = scrollTop + 44;
@@ -129,7 +127,7 @@
       }
     },
     destroyed () {
-      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('touchmove', this.handleScroll);
     },
   }
 </script>

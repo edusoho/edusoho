@@ -3,12 +3,11 @@ import axios from 'axios';
 // API配置
 import config from '@/api/config';
 
-// 模拟数据
-// import '@/api/mock';
-
 // 拦截器
 import '@/api/interceptors';
 import { parseUrl, addPrefix } from './utils';
+
+// axios.defaults.baseURL = 'http://zyc.st.edusoho.cn';
 
 const Api = {};
 
