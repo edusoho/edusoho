@@ -31,7 +31,9 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.commit(types.SET_SOURCETYPE, 'img');
+    this.$store.commit(`course/${types.SET_SOURCETYPE}`, {
+      sourceType: 'img'
+    });
     next();
   }
 }
