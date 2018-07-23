@@ -5,7 +5,11 @@
 
 {% block title %}
   {% if course|default(false) %}
-    {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
+    {% if course.title is empty() %}
+      {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ courseSet.title ~ '"'})}}
+    {% else %}
+      {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
+    {% endif %}
   {% else %}
     {{ 'course.teaching_plan.create'|trans }}
   {% endif %}
