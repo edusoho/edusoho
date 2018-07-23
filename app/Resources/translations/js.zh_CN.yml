@@ -42,6 +42,11 @@ site.cancel: 取消
 site.confirm: 确定
 site.close: 关闭
 site.delete: 删除
+site.time: 时间
+site.step_two: 步骤2
+site.step_one: 步骤1
+site.information: 信息
+site.unknow_server_error: 发生未知错误
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -151,6 +156,17 @@ importer.import_confirm_btn: 确定导入
 importer.import_error: 导入出错
 importer.import_progress_data: 已经导入%number%条数据
 importer.import_finish_data: 导入成功, 总共导入%number%条数据
+importer.batch_import_title: 批量导入
+importer.importing_finish_hint: 正在完成导入, 请稍等...
+importer.importing_finished: 完成导入
+importer.importing_loading_hint: 正在导入, 请勿关闭当前窗口...
+importer.import_file_pick_hint: 选择要导入的文件
+importer.import_file_view: 浏览...
+importer.download_sample_file: 点击下载示例说明文件
+importer.import_tip: 支持从Excel文件导入
+importer.start_verifying_data_tip: 开始校验数据
+importer.imported_data: "已经导入: "
+importer.imported_success_data: "导入成功, 总共导入:"
 
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕
@@ -675,6 +691,8 @@ validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中
 validate.character_maxlength: 字数不能超过%max%字！
 validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
+validate.title_required_hint: 请输入标题，不能为空。
+
 
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -686,6 +704,7 @@ validate.success: 验证成功
 validate.fail: 验证失败
 validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
+validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -791,6 +810,7 @@ validate_old.unsigned_integer.message: %display%必须为非负整数
 validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
+validate_old.server_upload_attachment_limit.message: 当前服务器附件大小上限为2048MB
 
 export.not_allowed: 你无权导出该文件
 export.empty: 没有可导出的数据
@@ -859,6 +879,7 @@ admin.index.vip_order: 会员订单
 admin.index.order_count: 订单量
 admin.index.finished_task_count: 学习任务数
 admin.index.notify_teacher_success: 提醒教师的通知，发送成功！
+admin.index.upgrade_acceptance_hint: 升级受理中
 admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~
 
 admin.account_center.cash_income: 现金收入
@@ -949,3 +970,77 @@ admin.classroom.cancel_recommend_success_hint: "%title%成功！"
 admin.classroom.cancel_recommend_fail_hint: "%title%失败!"
 admin.classroom.recommend_success_hint: 设置推荐班级操作成功!
 admin.classroom.recommend_fail_hint: 设置推荐班级操作失败!
+admin.cloud_file.tag_required_hint: 标签
+admin.cloud_file.detail_show_error_hint: Opps,出错了
+admin.cloud_file.re_transcode_success_hint: 重新转码成功!
+admin.cloud_file.re_transcode_fail_hint: 重新转码失败!
+admin.cloud_file.detail_loading_hint: 正在加载，请等待......
+admin.cloud_file.select_course_placeholder: 选择课程
+admin.cloud_file.select_user_placeholder: 选择用户
+admin.coin.edit_success_hint: 操作成功
+admin.coin.edit_fail_hint: 操作失败
+admin.coin.give_success_hint: 操作成功
+admin.coin.give_fail_hint: 操作失败
+admin.coin.picture_upload_fail_hint: 图片格式或大小不正确，上传图片失败，请检查后重试！
+admin.coin.picture_upload_success_hint: 上传虚拟币图片成功！
+admin.coin.picture_delete_hint: 确认要删除吗？
+admin.coin.picture_delete_success_hint: 删除虚拟币图片成功！
+admin.coin.picture_delete_fail_hint: 删除虚拟币图片失败！
+admin.comment.delete_hint: 确定要删除评论吗?
+admin.comment.delete_success_hint: 删除成功!
+admin.comment.delete_fail_hint: 删除失败:%response%
+admin.content.upload_hint: 正在上传附图，请等待附图上传成功后，再保存！
+admin.content.delete_hint: 真的要永久删除该内容吗？
+admin.course.add_student_success_hint: 添加学员操作成功!
+admin.course.add_student_fail_hint: 添加学员操作失败!
+admin.course.choose_success_hint: 指定课程成功
+admin.course.copy_success_hint: 复制课程成功
+admin.course.copy_fail_hint: 复制课程失败
+admin.course.delete_success_hint: 删除课程成功
+admin.course.delete_failed_hint: 删除课程失败
+admin.course.delete_course.check_password_fail_hint: 验证密码错误
+admin.course.validate_old.password_required_hint: 密码
+admin.course.cancel_recommend_success_hint: 课程推荐已取消！
+admin.course.close_course_hint: 您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。
+admin.course.close_success_hint: 课程关闭成功！
+admin.course.publish_hint: 您确认要发布此课程吗？
+admin.course.publish_success_hint: 课程发布成功！
+admin.course.unknow_error_hint: 未知错误
+admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
+admin.course.remind_teacher_success_hint: 提醒教师的通知，发送成功！
+admin.course.cancel_recommend_hint: 真的要取消该课程推荐吗？
+admin.course.recommend_success_hint: 设置推荐课程操作成功!
+admin.course.recommend_fail_hint: 设置推荐课程操作失败!
+admin.course.week_excellent_courses.setting_hint: 每周精品栏目只能设置三门课程！
+admin.course.week_excellent_courses.setting_error_hint: 每周精品栏目中已经存在此门课程！
+admin.course.copying_hint: 正在复制课程
+admin.course.copying_progress_hint: 进度：
+admin.dictionary.delete_hint: 确定要删除该分类展示吗？
+admin.dictionary.delete_success_hint: 删除成功!
+admin.dictionary.service_error_hint: 服务器错误!
+admin.dictionary.update_success_hint: 更新栏目成功！
+admin.dictionary.create_success_hint: 添加栏目成功！
+admin.dictionary.update_fail_hint: 更新栏目成功失败，请重试！
+admin.dictionary.create_fail_hint: 添加栏目成功失败，请重试！
+admin.edu_cloud.validate_old.title.message: 网校名称最多不能超过8个汉字
+admin.edu_cloud.sms_send_num: 发送量(条)
+admin.edu_cloud.close_sms_fail_hint: 您启用了手机注册模式，不可关闭短信功能！
+admin.file.delete_hint: 真的要删除该文件吗？
+admin.group.operating_hint: %trigger%吗？
+admin.group.operating_success_hint: %trigger%成功！
+admin.group.operating_fail_hint: %trigger%失败
+admin.group.thread_delete_hint: 确定要删除话题吗？
+admin.group.thread_delete_pick_hint: 确定要删除话题吗？
+admin.keyword.delete_hint: 确定删除此关键字吗？
+admin.material_lib.video: 视频
+admin.material_lib.audio: 音频
+admin.material_lib.picture: 图片
+admin.material_lib.document: 文档
+admin.material_lib.other: 其他
+admin.material_lib.space_pie_chart_title: 存储空间使用分布
+admin.material_lib.flow_pie_chart_title: 流量使用分布
+admin.material_lib.total_line_chart_title: 空间/流量详情
+admin.material_lib.video_line_chart_title: 视频详情
+admin.material_lib.audio_line_chart_title: 音频详情
+admin.material_lib.document_line_chart_title: 文档详情
+admin.navigation.save_success_hint: 保存导航成功！

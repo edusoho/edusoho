@@ -11,7 +11,7 @@ define(function(require, exports, module) {
             },
             tooltip: {},
             legend: {
-                data:['时间']
+                data:[Translator.trans('site.time')]
             },
             xAxis: {
                 data: chartData.date
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 minInterval: 1
             },
             series: [{
-                name: '发送量(条)',
+                name: Translator.trans('admin.edu_cloud.sms_send_num'),
                 type: 'bar',
                 data: chartData.count
             }],

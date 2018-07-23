@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 $('#navigation-save-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
-                    Notify.success(Translator.trans('保存导航成功！'));
+                    Notify.success(Translator.trans('admin.navigation.save_success_hint'));
                     window.location.reload();
                 });
 

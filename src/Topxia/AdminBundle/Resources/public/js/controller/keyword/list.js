@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         $('#keyword-table').on('click','.delete-btn',function(){
 
-            if (!confirm(Translator.trans('确定删除此关键字吗？'))) {
+            if (!confirm(Translator.trans('admin.keyword.delete_hint'))) {
                 return ;
             }
 

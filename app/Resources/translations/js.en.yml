@@ -56,6 +56,11 @@ site.cancel: Cancel
 site.confirm: Confirm
 site.close: Close
 site.delete: Delete
+site.time: Time
+site.step_two: Step 2
+site.step_one: Step 1
+site.information: information
+site.unknow_server_error: An unknown error has occurred
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -131,6 +136,17 @@ importer.import_confirm_btn: confirm import
 importer.import_error: import error
 importer.import_progress_data: %number% data imported
 importer.import_finish_data: import successfully and have imported %number% data
+importer.batch_import_title: batch import
+importer.importing_finish_hint: Importing is being completed, please wait...
+importer.importing_finished: Complete import
+importer.importing_loading_hint: Importing, do not close the current window...
+importer.import_file_pick_hint: Select the file to import
+importer.import_file_view: Browse...
+importer.download_sample_file: Click to download the sample documentation
+importer.import_tip: Support import from Excel file
+importer.start_verifying_data_tip: Start verifying data
+importer.imported_data: "Imported Data: "
+importer.imported_success_data: "Imported successfully, total import:"
 
 subtitle.delete_success_hint: Delete subtitle success
 subtitle.no_subtitle_hint: None subtitle
@@ -736,12 +752,14 @@ validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
+validate.title_required_hint: Please enter a title, it cannot be empty.
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.mobile_or_email_message: please input the right mobile/email
 validate.success: Verified successfully
 validate.fail: Failed to verify
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
+validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -847,6 +865,7 @@ validate_old.unsigned_integer.message: %display% must be a non-negative integer
 validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
+validate_old.server_upload_attachment_limit.message: The current server attachment size is limited to 2048MB
 validate.character_maxlength: Do not exceed %max% letters.
 
 export.not_allowed: you are not allowed to download
@@ -918,6 +937,7 @@ admin.index.vip_order: vip
 admin.index.order_count: order count
 admin.index.finished_task_count: finished task count
 admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
+admin.index.upgrade_acceptance_hint: Upgrade acceptance
 admin.user.cloude_sms_enable_hint: please go to【Admin】-【ES Cloud】-【Cloud Sms】open cloud sms first.
 
 admin.account_center.cash_income: cash income
@@ -1006,3 +1026,76 @@ admin.classroom.cancel_recommend_success_hint: "%title% successfully!"
 admin.classroom.cancel_recommend_fail_hint: "%title% failure!"
 admin.classroom.recommend_success_hint: Set the recommended classroom operation successfully!
 admin.classroom.recommend_fail_hint: Set the recommended classroom operation failed!
+admin.cloud_file.tag_required_hint: tag
+admin.cloud_file.detail_show_error_hint: Opps, something went wrong
+admin.cloud_file.re_transcode_success_hint: Retranscoding successfully!
+admin.cloud_file.re_transcode_fail_hint: Retranscoding failed!
+admin.cloud_file.detail_loading_hint: Loading, please wait...
+admin.cloud_file.select_course_placeholder: Select Course
+admin.cloud_file.select_user_placeholder: Select User
+admin.coin.edit_success_hint: operation Successful
+admin.coin.edit_fail_hint: operation failed
+admin.coin.give_success_hint: operation Successful
+admin.coin.give_fail_hint: operation failed
+admin.coin.picture_upload_fail_hint: The image format or size is incorrect. Uploading the image failed. Please check and try again!
+admin.coin.picture_upload_success_hint: Uploading coin picture successfully!
+admin.coin.picture_delete_hint: Are you sure you want to delete?
+admin.coin.picture_delete_success_hint: Delete coin picture successfully!
+admin.coin.picture_delete_fail_hint: Delete coin picture failed!
+admin.comment.delete_hint: Are you sure you want to delete the comment?
+admin.comment.delete_success_hint: successfully deleted!
+admin.comment.delete_fail_hint: "Delete failed:%response%"
+admin.content.upload_hint: Uploading the drawing, please wait for the drawing to upload successfully, then save!
+admin.content.delete_hint: Really want to permanently delete the content?
+admin.course.add_student_success_hint: Add student operation is successful!
+admin.course.add_student_fail_hint: Add student operation failed!
+admin.course.choose_success_hint: choose course success
+admin.course.copy_success_hint: Copy course successfully
+admin.course.copy_fail_hint: Copy course failed
+admin.course.delete_success_hint: Delete course successfully
+admin.course.delete_failed_hint: Delete course failed
+admin.course.delete_course.check_password_fail_hint: Verify password error
+admin.course.validate_old.password_required_hint: password
+admin.course.cancel_recommend_success_hint: Course recommendation has been cancelled!
+admin.course.close_course_hint: Are you sure you want to close this class? After the course is closed, students who are still in the validity period will be able to continue their studies.
+admin.course.close_success_hint: Course was closed successfully!
+admin.course.publish_hint: Are you sure you want to publish this course?
+admin.course.publish_success_hint: The course was published successfully!
+admin.course.unknow_error_hint: unknown mistake
+admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
+admin.course.remind_teacher_success_hint: Remind the teacher's notice and send it successfully!
+admin.course.cancel_recommend_hint: Really you want to cancel the course recommend?
+admin.course.recommend_success_hint: Setting the recommended course operation successfully!
+admin.course.recommend_fail_hint: Setting the recommended course operation failed!
+admin.course.week_excellent_courses.setting_hint: Only three courses can be set up in the weekly excellent courses!
+admin.course.week_excellent_courses.setting_error_hint: This course already exists in the weekly excellent courses!
+admin.course.copying_hint: Copying course
+admin.course.copying_progress_hint: "schedule:"
+admin.dictionary.delete_hint: Are you sure you want to delete this category display?
+admin.dictionary.delete_success_hint: successfully deleted!
+admin.dictionary.service_error_hint: Server Error!
+admin.dictionary.update_success_hint: Update the dictionary successfully!
+admin.dictionary.create_success_hint: Add the dictionary successfully!
+admin.dictionary.update_fail_hint: Update the dictionary failed, please try again!
+admin.dictionary.create_fail_hint: Add the dictionary failed, please try again!
+admin.edu_cloud.validate_old.title.message: The name of the online school can not exceed 8 Chinese characters.
+admin.edu_cloud.sms_send_num: Send amount (s)
+admin.edu_cloud.close_sms_fail_hint: You have enabled the phone registration mode, you can not turn off the SMS function!
+admin.file.delete_hint: Are you sure you want to delete this file?
+admin.group.operating_hint: %trigger% ？
+admin.group.operating_success_hint: %trigger% successfully！
+admin.group.operating_fail_hint: %trigger% failed
+admin.group.thread_delete_hint: Are you sure you want to delete the thread?
+admin.keyword.delete_hint: Are you sure you want to delete this keyword?
+admin.material_lib.video: Video
+admin.material_lib.audio: Audio
+admin.material_lib.picture: Picture
+admin.material_lib.document: Document
+admin.material_lib.other: Other
+admin.material_lib.space_pie_chart_title: Storage space usage distribution
+admin.material_lib.flow_pie_chart_title: Flow usage distribution
+admin.material_lib.total_line_chart_title: Space/flow details
+admin.material_lib.video_line_chart_title: Video details
+admin.material_lib.audio_line_chart_title: Audio details
+admin.material_lib.document_line_chart_title: Document details
+admin.navigation.save_success_hint: Save navigation successfully!
