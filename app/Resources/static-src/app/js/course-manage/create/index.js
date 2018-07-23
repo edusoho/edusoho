@@ -64,19 +64,20 @@ class Creator {
     });
 
     $('input[name="expiryMode"]').on('change', (event) => {
+      const $tip = $('.js-info-tip');
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
-        $('.js-info-tip').removeClass('ml0');
+        $tip.removeClass('ml0');
       } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
         $('input[name="deadlineType"][value="days"]').prop('checked', true);
-        $('.js-info-tip').removeClass('ml0');
+        $tip.removeClass('ml0');
       } else {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden').addClass('hidden');
-        $('.js-info-tip').addClass('ml0');
+        $tip.addClass('ml0');
       }
       this.initExpiryMode();
     });
