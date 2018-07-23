@@ -33,7 +33,7 @@
             </td>
              {% endif %}
             <td>{{ 'admin.course_manage.statistics.teach_plan_count'|trans }}</td>
-            <td>{{ 'admin.course_manage.statistics.task_count'|trans }}</td>
+            <td>{{ 'admin.course_manage.statistics.task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</td>
             <td>{{'admin.course_manage.statistics.student_number'|trans }}</td>
             <td>{{'admin.course_manage.statistics.finished_number'|trans}}</td>
             <td>{{'admin.course_manage.statistics.study_time_minute'|trans}}</td>
@@ -64,7 +64,7 @@
               <td>{{courseSet.learnedTime}}</td>
               <td>{{courseSet.income|default()}}</td>
               <td>
-                <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'admin.course_manage.statistics.watch_task'|trans}}</a>
+                <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'admin.course_manage.statistics.watch_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>
               </td>
             </tr>
             {% endfor %}

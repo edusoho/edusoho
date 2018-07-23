@@ -1,0 +1,40 @@
+<div class="nav-header">
+  <ul class="nav nav-tabs nav-header-section clearfix">
+    <div class="nav-header-section__heading">{{ 'my.teaching.menu_heading'|trans }}</div>
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-courses' %} active {% endif %}">
+      <a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-live-calendar' %} active {% endif %}">
+      <a href="{{ path('my_teaching_live_calendar') }}">{{ 'my.teaching.live_schedule_menu'|trans }}</a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
+      <a href="{{ path('my_teaching_classrooms') }}">{{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("classroom"|trans)}) }}
+      </a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-questions' %}active {% endif %}">
+      <a href="{{ path('my_teaching_threads', {type:'question'}) }}">
+        {{ 'my.teaching.question_menu'|trans }}
+      </a>
+    </li>
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}">
+      <a href="{{ path('my_teaching_threads', {type:'discussion'}) }}">
+        {{ 'my.teaching.discussion_menu'|trans }}
+      </a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-testpaper-check' %} active {% endif %}">
+      <a href="{{ path('my_testpaper_check_list',{status:'reviewing'}) }}">{{ 'my.teaching.testpaper_check_menu'|trans }}</a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-homework-check' %} active {% endif %}">
+      <a href="{{ path('my_homework_check_list',{status:'reviewing'}) }}">{{ 'my.teaching.homework_check_menu'|trans }}</a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'material-lib' %} active {% endif %}">
+      <a href="{{ path('material_lib_browsing') }}">{{ 'my.teaching.material_lib_menu'|trans }}</a>
+    </li>
+  </ul>
+</div>

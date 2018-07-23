@@ -2,7 +2,7 @@
           <thead>
             <tr>
               <th>{{'admin.operation_analysis.video.username'|trans}}</th>
-              <th>{{'admin.operation_analysis.video.task'|trans}}</th>
+              <th>{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}</th>
               <th>{{'admin.operation_analysis.video.watch_time'|trans}}</th>
               <th>{{'admin.operation_analysis.video.type'|trans}}</th>
             </tr>
@@ -20,7 +20,7 @@
                   {% else %}
                   <tr class="danger">
                     <td>{{ users[val.userId].nickname }}</td>
-                    <td>({{'admin.operation_analysis.task.empty'|trans}})</td>
+                    <td>({{'admin.operation_analysis.task.empty'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}})</td>
                     <td>{{val.createdTime|date_format}}</td>
                     <td>{{dict_text('videoStorageType',val.fileStorage)}}</td>
                   </tr>

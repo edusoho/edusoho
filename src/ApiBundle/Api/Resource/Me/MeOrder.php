@@ -27,7 +27,7 @@ class MeOrder extends AbstractResource
         foreach ($orders as &$order) {
             $product = $this->getProduct($order['id']);
             $covers = $product->cover;
-            $order['cover'] = empty(count($covers)) ? array('middle' => '') : $covers;
+            $order['cover'] = count($covers) ? $covers : array('middle' => '');
             $order['targetType'] = $product->targetType;
             $order['targetId'] = $product->targetId;
         }

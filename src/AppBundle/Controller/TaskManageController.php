@@ -43,8 +43,15 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
-        $categoryId = $request->query->get('categoryId');
-        $chapterId = $request->query->get('chapterId');
+
+        $categoryId = $request->query->get('categoryId', 0);
+
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'categoryId' => $categoryId));
+        if ($taskCount >= 5) {
+            return $this->createJsonResponse(array('code' => false, 'message' => 'lesson_tasks_no_more_than_5'));
+        }
+
+        //categoryId  所属课时
         $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task = $request->request->all();
@@ -53,30 +60,18 @@ class TaskManageController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        return $this->render(
+        $html = $this->renderView(
             'task-manage/modal.html.twig',
             array(
                 'mode' => 'create',
                 'course' => $course,
                 'courseSet' => $courseSet,
                 'categoryId' => $categoryId,
-                'chapterId' => $chapterId,
                 'taskMode' => $taskMode,
             )
         );
-    }
 
-    protected function prepareRenderTaskForDefaultCourseType($courseType, $task)
-    {
-        if (CourseService::DEFAULT_COURSE_TYPE != $courseType) {
-            return $task;
-        }
-        $chapter = $this->getChapterDao()->get($task['categoryId']);
-        $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
-        $chapter['tasks'] = $tasks;
-        $chapter['mode'] = $task['mode'];
-
-        return $chapter;
+        return $this->createJsonResponse(array('code' => true, 'message', 'html' => $html));
     }
 
     public function batchCreateTasksAction(Request $request, $courseId)
@@ -151,34 +146,9 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
-
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
-        if (CourseService::DEFAULT_COURSE_TYPE == $course['courseType'] && isset($task['mode']) && 'lesson' != $task['mode']) {
-            return $this->createJsonResponse(
-                array(
-                    'append' => false,
-                    'html' => '',
-                )
-            );
-        }
-
-        $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task);
-
-        $htmlResponse = $this->render(
-            $this->createCourseStrategy($course)->getTaskItemTemplate(),
-            array(
-                'course' => $course,
-                'task' => $task,
-            )
-        );
-
-        return $this->createJsonResponse(
-            array(
-                'append' => true,
-                'html' => $htmlResponse->getContent(),
-            )
-        );
+        return $this->getTaskJsonView($task);
     }
 
     public function updateAction(Request $request, $courseId, $id)
@@ -203,7 +173,7 @@ class TaskManageController extends BaseController
 
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
 
-            return $this->createJsonResponse(array('append' => false, 'html' => ''));
+            return $this->getTaskJsonView($task);
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -220,6 +190,21 @@ class TaskManageController extends BaseController
                 'taskMode' => $taskMode,
             )
         );
+    }
+
+    //创建任务或修改任务返回的html
+    private function getTaskJsonView($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $taskJsonData = $this->createCourseStrategy($course)->getTasksJsonData($task);
+        if (empty($taskJsonData)) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse($this->renderView(
+            $taskJsonData['template'],
+            $taskJsonData['data']
+        ));
     }
 
     public function publishAction(Request $request, $courseId, $id)
@@ -278,9 +263,6 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($taskId);
-        if (isset($task['mode']) && 'lesson' == $task['mode']) {
-            $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
-        }
 
         return $this->createJsonResponse(array('success' => true));
     }

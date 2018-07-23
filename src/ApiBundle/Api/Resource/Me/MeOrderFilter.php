@@ -13,14 +13,25 @@ class MeOrderFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        if (0 === strpos($data['cover']['middle'], '/assets') && '' !== $data['cover']) {
+        if ($this->hasAssetsCover($data) || $this->hasVipIcon($data)) {
             $data['cover']['small'] = AssetHelper::uriForPath($data['cover']['small']);
             $data['cover']['middle'] = AssetHelper::uriForPath($data['cover']['middle']);
             $data['cover']['large'] = AssetHelper::uriForPath($data['cover']['large']);
         } else {
-            $data['cover']['small'] = AssetHelper::getFurl(empty($data['cover']['small']) ? '' : $data['cover']['small'], $data['targetType'].'.png');
-            $data['cover']['middle'] = AssetHelper::getFurl(empty($data['cover']['middle']) ? '' : $data['cover']['middle'], $data['targetType'].'.png');
-            $data['cover']['large'] = AssetHelper::getFurl(empty($data['cover']['large']) ? '' : $data['cover']['large'], $data['targetType'].'.png');
+            $targetTypeIcon = ('vip' == $data['targetType']) ? 'vip_icon_bronze' : $data['targetType'];
+            $data['cover']['small'] = AssetHelper::getFurl(empty($data['cover']['small']) ? '' : $data['cover']['small'], $targetTypeIcon.'.png');
+            $data['cover']['middle'] = AssetHelper::getFurl(empty($data['cover']['middle']) ? '' : $data['cover']['middle'], $targetTypeIcon.'.png');
+            $data['cover']['large'] = AssetHelper::getFurl(empty($data['cover']['large']) ? '' : $data['cover']['large'], $targetTypeIcon.'.png');
         }
+    }
+
+    private function hasVipIcon($data)
+    {
+        return 'vip' == $data['targetType'] && !empty($data['cover']['small']);
+    }
+
+    private function hasAssetsCover($data)
+    {
+        return 0 === strpos($data['cover']['middle'], '/assets') && '' !== $data['cover'];
     }
 }

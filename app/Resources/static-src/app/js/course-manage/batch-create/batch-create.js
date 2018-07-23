@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-import { sortablelist } from 'app/js/course-manage/help';
 
 class BatchCreate {
   constructor(options) {
@@ -24,6 +23,7 @@ class BatchCreate {
       accept: $uploader.data('accept'),
       process: this.getUploadProcess(),
       ui: 'batch',
+      fileNumLimit: $uploader.data('fileNumLimit') !== undefined ? $uploader.data('NumLimit') : null,
       locale: document.documentElement.lang
     });
 
@@ -54,6 +54,11 @@ class BatchCreate {
 
       let $btn = $(event.currentTarget);
       $btn.button('loading');
+      if (!this.validLessonNum($btn)) {
+        console.log(this.validLessonNum($btn));
+        return ;
+      }
+
       console.log('files', this.files);
 
       this.files.map((file, index) => {
@@ -94,6 +99,27 @@ class BatchCreate {
     return uploadProcess;
   }
 
+  validLessonNum($btn) {
+    let valid = true;
+    $.ajax({
+      type: 'post',
+      url: $btn.data('validUrl'),
+      async: false,
+      data: {
+        number: this.files.length
+      },
+      success: function(response) {
+        if (response && response.error) {
+          notify('danger', response.error);
+          $btn.button('reset');
+          valid = false;
+        }
+        valid = true;
+      }
+    });
+    return valid;
+  }
+
   createLesson($btn, file, isLast) {
     let self = this;
     $.ajax({
@@ -107,7 +133,7 @@ class BatchCreate {
         if (response && response.error) {
           notify('danger', response.error);
         } else {
-          self.$sortable.append(response.html);
+          self.$sortable.trigger('addItem', response);
         }
       },
       error: function(response) {
@@ -117,7 +143,6 @@ class BatchCreate {
       complete: function (response) {
         console.log('complete', response);
         if (isLast) {
-          sortablelist(self.$sortable);
           $('#modal').modal('hide');
         }
       }

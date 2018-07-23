@@ -46,11 +46,57 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
+            new \Twig_SimpleFunction('course_daily_tasks_num', array($this, 'getCourseDailyTasksNum')),
             new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
             new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
             new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
+            new \Twig_SimpleFunction('get_course_count', array($this, 'getCourseCount')),
+            new \Twig_SimpleFunction('is_un_multi_courseset', array($this, 'isUnMultiCourseSet')),
+            new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
         );
+    }
+
+    public function getCourseCount($courseSetId, $isPublish = 0)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+        if ($isPublish) {
+            $conditions['status'] = 'published';
+        }
+
+        return $this->getCourseService()->countCourses($conditions);
+    }
+
+    //是否为非多计划的课程，如：直播课程，约排课课程，班级课程等特殊课程类型（公开课不在此列）
+    public function isUnMultiCourseSet($courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        return in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId']);
+    }
+
+    /**
+     * 判断一个课程是否有多个计划
+     */
+    public function hasMulCourses($courseSetId, $isPublish = 0)
+    {
+        return $this->getCourseService()->hasMulCourses($courseSetId, $isPublish);
+    }
+
+    public function getCourseDailyTasksNum($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $taskNum = $course['taskNum'];
+        if ('days' == $course['expiryMode']) {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
+        } else {
+            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
+        }
+
+        return round($finishedTaskPerDay, 0);
     }
 
     public function getDynUrl($baseUrl, $params)
@@ -81,18 +127,28 @@ class CourseExtension extends \Twig_Extension
 
     public function getCourseChapterAlias($type)
     {
+        if ('lesson' == $type) {
+            return 'site.data.lesson';
+        }
         $defaultCourseChapterAlias = array(
-            'chapter' => '章',
-            'part' => '节',
+            'chapter' => 'site.data.chapter',
+            'unit' => 'site.data.part',
+            'part' => 'site.data.part',
         );
 
         $courseSetting = $this->getSettingService()->get('course');
 
         if (empty($courseSetting['custom_chapter_enabled'])) {
-            return false;
+            return $defaultCourseChapterAlias[$type];
         }
 
-        return $courseSetting[$type.'_name'];
+        $settingKey = array(
+            'chapter' => 'chapter_name',
+            'unit' => 'part_name',
+            'part' => 'part_name',
+        );
+
+        return $courseSetting[$settingKey[$type]];
     }
 
     public function isMemberExpired($course, $member)

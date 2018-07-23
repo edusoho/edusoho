@@ -1,0 +1,24 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}
+  {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
+{% endblock %}
+
+{% block full_content %}
+  {% block top_content %}
+    <div class="my-header-section">
+      <div class="cd-container">
+        {% include 'my/navbar.html.twig' %}
+      </div>
+    </div>
+  {% endblock %}
+  <div class="cd-container">
+    <div class="cd-content my-teaching-body">
+      {{ render(controller('AppBundle:My/User:avatarAlert')) }}
+      {% block main %}
+      {% endblock %}
+
+      {% block main_mobile %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

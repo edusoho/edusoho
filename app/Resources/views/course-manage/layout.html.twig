@@ -1,23 +1,54 @@
 {% extends 'courseset-manage/layout.html.twig' %}
-{% block title %}{{ 'course.plan_task.manage'|trans }} - {{ parent() }}{% endblock %} {%
-do script(['app/js/course-manage/index.js']) %}
+{% block title %}
+  {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
+{% endblock %}
+
+{% set hasMulCourses = has_mul_courses(courseSet.id) %}
+{% set side_nav =  hasMulCourses ? 'plan' : 'default-course-info' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    {% if course.type == 'normal' %}
+      <li><a href="{{ path('course_set_manage_courses', {'courseSetId': courseSet.id})}}">{{courseSet.title|plain_text(21)}}</a></li>
+      <li class="active">{{course.title}}</li>
+    {% else %}
+      <li><a class="active">{{courseSet.title|plain_text(21)}}</a></li>
+    {% endif %}
+  </ol>
+{% endblock %}
+
+{% block courseset_header %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 1})) }}
+{% endblock %}
+
+
+{% block paddingClass %}course-manage-body {% endblock %}
 
 {% block course_header %}
-  {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+  {% if hasMulCourses %}
+    <div class="course-manage-header-wrap">
+      {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), courseSideNav: course_side_nav|default(null)})) }}
 {% endblock %}
 
 {% block main %}
-  <div class="panel panel-default">
-
-      <div class="panel-heading">
-        {{ course.title }}
-          <button class="btn btn-success btn-sm pull-right js-publish-course"
-            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-            {{ 'course.plan_task.publish_btn'|trans }}
-          </button>
-      </div>
-    <div class="panel-body">
-      {% block course %} {% endblock %}
+  <div class="cd-main">
+    <div class="cd-main__heading {% block main_heading_class %}{% endblock %}">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
     </div>
   </div>
 {% endblock %}

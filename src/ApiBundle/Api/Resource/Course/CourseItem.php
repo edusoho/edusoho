@@ -22,16 +22,16 @@ class CourseItem extends AbstractResource
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
-        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $request->query->get('onlyPublished', 0));
+        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $courseId, $request->query->get('onlyPublished', 0));
     }
 
-    private function convertToLeadingItems($originItems, $onlyPublishTask = false)
+    private function convertToLeadingItems($originItems, $courseId, $onlyPublishTask = false)
     {
         $newItems = array();
         $number = 1;
         foreach ($originItems as $originItem) {
             $item = array();
-            if ($originItem['itemType'] == 'task') {
+            if ('task' == $originItem['itemType']) {
                 $item['type'] = 'task';
                 $item['seq'] = '0';
                 $item['number'] = strval($number++);
@@ -41,7 +41,7 @@ class CourseItem extends AbstractResource
                 continue;
             }
 
-            if ($originItem['itemType'] == 'chapter' && $originItem['type'] == 'lesson') {
+            if ('chapter' == $originItem['itemType'] && 'lesson' == $originItem['type']) {
                 $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
@@ -64,18 +64,29 @@ class CourseItem extends AbstractResource
             $newItems[] = $item;
         }
 
-        return $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $newItems;
+        return $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
     }
 
     private function filterUnPublishTask($items)
     {
         foreach ($items as $key => $item) {
-            if ($item['type'] == 'task' && $item['task']['status'] != 'published') {
+            if ('task' == $item['type'] && 'published' != $item['task']['status']) {
                 unset($items[$key]);
             }
         }
 
         return array_values($items);
+    }
+
+    private function isHiddenUnpublishTasks($items, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (!$course['isShowUnpublish']) {
+            return $this->filterUnPublishTask($items);
+        }
+
+        return $items;
     }
 
     /**

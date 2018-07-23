@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ 'course.task.learning'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'course.task.learning'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = "" %}
 {% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
@@ -26,7 +26,7 @@
         <a class="back-link" href="{{ path('my_course_show',{id:course.id}) }}">
           <i class="es-icon es-icon-chevronleft"></i>{{ 'course.task.learning.back_course_btn'|trans }}
         </a>
-        {{ 'course.task'|trans }}{{ task.number }}：{{ task.title }}
+        {{ 'course.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}{{ task.number }}：{{ task.title }}
       </div>
       <div class="dashboard-body">
         <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper">
@@ -76,7 +76,7 @@
             data-trigger="hover"
             data-placement="top"
             data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
-            <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans }}
+            <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </a>
           <span class="btn text-sm{% if task.type == 'video' %} hidden-xs{% endif %} js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
@@ -86,7 +86,7 @@
               data-container=".js-learned-prompt"
               data-content='{% include "task/task-finished-prompt.html.twig" %}'
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
-              <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{ 'course.task.learning.finish_btn'|trans }}
+              <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{ 'course.task.learning.finish_btn'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </span>
         </div>
         {% if course.enableFinish|default(0) == 1 %}
