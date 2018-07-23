@@ -27,12 +27,12 @@ class Text extends Activity
 
     public function copy($activity, $config = array())
     {
-        $biz = $this->getBiz();
+        $user = $this->getCurrentUser();
         $text = $this->getTextActivityDao()->get($activity['mediaId']);
         $newText = array(
             'finishType' => $text['finishType'],
             'finishDetail' => $text['finishDetail'],
-            'createdUserId' => $biz['user']['id'],
+            'createdUserId' => $user['id'],
         );
 
         return $this->getTextActivityDao()->create($newText);
@@ -58,12 +58,12 @@ class Text extends Activity
             )
         );
 
-        $biz = $this->getBiz();
-        $text['createdUserId'] = $biz['user']['id'];
+        $user = $this->getCurrentUser();
+        $text['createdUserId'] = $user['id'];
         $this->getCourseDraftService()->deleteCourseDrafts(
             $activity['fromCourseId'],
             $activity['id'],
-            $biz['user']['id']
+            $user['id']
         );
 
         return $this->getTextActivityDao()->update($targetId, $text);
@@ -94,10 +94,10 @@ class Text extends Activity
                 'finishDetail',
             )
         );
-        $biz = $this->getBiz();
-        $text['createdUserId'] = $biz['user']['id'];
+        $user = $this->getCurrentUser();
+        $text['createdUserId'] = $user['id'];
 
-        $this->getCourseDraftService()->deleteCourseDrafts($fields['fromCourseId'], 0, $biz['user']['id']);
+        $this->getCourseDraftService()->deleteCourseDrafts($fields['fromCourseId'], 0, $user['id']);
 
         return $this->getTextActivityDao()->create($text);
     }

@@ -36,7 +36,7 @@ class Testpaper extends Activity
 
     public function copy($activity, $config = array())
     {
-        if ($activity['mediaType'] !== 'testpaper') {
+        if ('testpaper' !== $activity['mediaType']) {
             return null;
         }
 
@@ -86,7 +86,7 @@ class Testpaper extends Activity
         }
 
         //引用传递，当考试时间设置改变时，时间值也改变
-        if ($fields['doTimes'] == 0 || $fields['testMode'] == 'normal') {
+        if (0 == $fields['doTimes'] || 'normal' == $fields['testMode']) {
             $fields['startTime'] = 0;
         }
 
@@ -102,8 +102,7 @@ class Testpaper extends Activity
 
     public function isFinished($activityId)
     {
-        $biz = $this->getBiz();
-        $user = $biz['user'];
+        $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -175,7 +174,7 @@ class Testpaper extends Activity
             unset($filterFields['length']);
         }
 
-        if (isset($filterFields['doTimes']) && $filterFields['doTimes'] == 0) {
+        if (isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) {
             $filterFields['testMode'] = 'normal';
         }
 

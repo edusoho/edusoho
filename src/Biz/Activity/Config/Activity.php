@@ -155,6 +155,23 @@ abstract class Activity
         return new InvalidArgumentException($message);
     }
 
+    protected function getCurrentUser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user'];
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->getBiz()->offsetGet('web.twig.extension');
+    }
+
+    protected function setting($name, $default = null)
+    {
+        return $this->getWebExtension()->getSetting($name, $default);
+    }
+
     /**
      * @return Biz
      */

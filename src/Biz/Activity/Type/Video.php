@@ -5,6 +5,7 @@ namespace Biz\Activity\Type;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
+use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
@@ -139,6 +140,72 @@ class Video extends Activity
         return $videoActivities;
     }
 
+    /**
+     * get the information if the video can be watch.
+     *
+     * @param $activity
+     *
+     * @return array
+     */
+    public function getWatchStatus($activity)
+    {
+        $user = $this->getCurrentUser();
+        $watchTime = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
+
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        $watchStatus = array('status' => 'ok');
+        if ($course['watchLimit'] > 0 && $this->setting('magic.lesson_watch_limit')) {
+            //只有视频课程才限制观看时长
+            if (empty($course['watchLimit']) || 'video' !== $activity['mediaType']) {
+                return array('status' => 'ignore');
+            }
+
+            $watchLimitTime = $activity['length'] * $course['watchLimit'];
+            if (empty($watchTime)) {
+                return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
+            }
+            if ($watchTime < $watchLimitTime) {
+                return array('status' => 'ok', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
+            }
+
+            return array('status' => 'error', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
+        }
+
+        return $watchStatus;
+    }
+
+    public function prepareMediaUri($video)
+    {
+        if ('self' != $video['mediaSource']) {
+            if ('youku' == $video['mediaSource']) {
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = "//player.youku.com/embed/{$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
+                }
+            } elseif ('tudou' == $video['mediaSource']) {
+                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
+                }
+            } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
+                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = $matches[2];
+                }
+            } elseif ('qqvideo' == $video['mediaSource']) {
+                $video['mediaUri'] = str_replace('static.video.qq.com', 'imgcache.qq.com/tencentvideo_v1/playerv3', $video['mediaUri']);
+                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = $matches[2];
+                }
+            }
+        }
+
+        return $video;
+    }
+
     public function findWithoutCloudFiles($targetIds)
     {
         return $this->getVideoActivityDao()->findByIds($targetIds);
@@ -190,5 +257,13 @@ class Video extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 }
