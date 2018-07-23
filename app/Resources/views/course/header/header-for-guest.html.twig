@@ -56,9 +56,9 @@
         {% endif %}
       </div>
       {% if courseSet.subtitle %}
-        <p class="course-detail-info__subtitle text-overflow subtitle cd-text-sm cd-mb16" data-toggle="tooltip" data-container="body" data-placement="top"
-          data-trigger="hover" title="{{courseSet.subtitle}}">
-          <span>{{ courseSet.subtitle }}</span>
+        <p class="course-detail-info__subtitle text-overflow subtitle cd-text-sm cd-mb16">
+          <span data-toggle="tooltip" data-container="body" data-placement="top"
+          data-trigger="hover" title="{{courseSet.subtitle}}">{{ courseSet.subtitle }}</span>
         </p>
       {% endif %}
       <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
@@ -184,9 +184,11 @@
 
       <div class="course-operation-wrap">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
-          <li class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
-            <a class="btn btn-default btn-xs" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ '扫一扫'|trans }}"><i class="es-icon es-icon-saoyisao"></i>
-            <span class="qrcode-popover"><img class="mb0" src="" alt=""></span></a>
+          <li class="es-qrcode top hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+             <a class="btn btn-default btn-xs" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'site.qrcode_tips'|trans }}"><i class="es-icon es-icon-saoyisao"></i></a>
+            <span class="qrcode-popover">
+              <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
+            </span>
           </li>
           <!--营销页显示-->
           {# 收藏图标设置 #}

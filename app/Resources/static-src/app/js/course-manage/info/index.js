@@ -154,6 +154,7 @@ class CourseInfo {
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
+        window.location.reload();
       }
     });
 
@@ -207,6 +208,7 @@ class CourseInfo {
 
   saveForm() {
     $('#course-submit').on('click', (event) => {
+
       if (this.validator.form()) {
         $('#course-info-form').submit();
       }
@@ -359,11 +361,12 @@ class CourseInfo {
     let $buyExpiryTime = $('[name="buyExpiryTime"]');
     if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
       this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
-    }
-    else {
+    } else {
       this.elementRemoveRules($buyExpiryTime);
+      $enableBuyExpiryTime.closest('.form-group').removeClass('has-error');
+      $buyExpiryTime.removeClass('form-control-error');
+      $('.jq-validate-error').remove();
     }
-    this.validator.form();
   }
 
   getBuyExpiryTimeRules() {

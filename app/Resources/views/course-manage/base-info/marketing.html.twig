@@ -24,7 +24,7 @@
     </div>
     <div class="col-sm-8 cd-radio-group course-mangae-info__group mb0">
       {{ cd_radios('enableBuyExpiryTime', {'0': 'course.marketing_setup.expiry_date.anytime'|trans, '1': 'course.marketing_setup.expiry_date.custom'|trans,}, course.buyExpiryTime|default(0) > 0 ? 1 : 0 ) }}
-      <input type="text" class="form-control course-mangae-info__input mlm hidden" id="buyExpiryTime" name="buyExpiryTime"
+      <input type="text" class="form-control course-mangae-info__input mlm {% if course.buyExpiryTime == 0 %} hidden {% endif %}" id="buyExpiryTime" name="buyExpiryTime"
               value="{% if course.buyExpiryTime > 0 %}{{ course.buyExpiryTime|date_format('Y-m-d') }}{% endif %}">
     </div>
   </div>
