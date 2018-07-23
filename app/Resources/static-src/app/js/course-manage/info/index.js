@@ -20,6 +20,7 @@ class CourseInfo {
     this.initDatetimepicker();
     this.initExpiryMode();
     this.setService();
+    this.taskPriceSetting();
     this.setIntroPosition();
   }
 
@@ -82,6 +83,7 @@ class CourseInfo {
 
   initValidator() {
     let $form = $('#course-info-form');
+    $('.js-task-price-setting').perfectScrollbar();
     this.validator = $form.validate({
       currentDom: '#course-submit',
       ajax: true,
@@ -152,6 +154,7 @@ class CourseInfo {
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
+        window.location.reload();
       }
     });
 
@@ -205,11 +208,13 @@ class CourseInfo {
 
   saveForm() {
     $('#course-submit').on('click', (event) => {
+
       if (this.validator.form()) {
         $('#course-info-form').submit();
       }
     });
   }
+
   initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({
@@ -222,6 +227,22 @@ class CourseInfo {
       this.validator && this.validator.element($picker);
     });
     $picker.datetimepicker('setStartDate', new Date());
+  }
+
+  taskPriceSetting() {
+    const $priceItem = $('.js-task-price-setting');
+    $priceItem.on('click', 'li', (event) => {
+      const $li = $(event.currentTarget);
+      $li.toggleClass('open');
+      const $input = $li.find('input');
+      $input.prop('checked', !$input.is(':checked'));
+    });
+
+    $priceItem.on('click', 'input', (event) => {
+      event.stopPropagation();
+      const $input = $(event.target);
+      $input.closest('li').toggleClass('open');
+    });
   }
 
 
@@ -340,11 +361,12 @@ class CourseInfo {
     let $buyExpiryTime = $('[name="buyExpiryTime"]');
     if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
       this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
-    }
-    else {
+    } else {
       this.elementRemoveRules($buyExpiryTime);
+      $enableBuyExpiryTime.closest('.form-group').removeClass('has-error');
+      $buyExpiryTime.removeClass('form-control-error');
+      $('.jq-validate-error').remove();
     }
-    this.validator.form();
   }
 
   getBuyExpiryTimeRules() {

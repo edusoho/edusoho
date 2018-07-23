@@ -68,6 +68,7 @@ site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
+site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
 site.validate_rules.two_decimal_places: 'Keep the second decimal'

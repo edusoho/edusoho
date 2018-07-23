@@ -74,7 +74,8 @@ site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
-site.tips.scan_qrcode_tips: 扫二维码继续学习二维码时效为半小时
+site.qrcode_tips: 扫一扫
+site.tips.scan_qrcode_tips: 扫二维码继续学习 二维码时效为半小时
 site.validate_rules.max_int: 最大值为9位整数
 site.validate_rules.two_decimal_places: 保留到2位小数
 site.btn.expand: 展开
