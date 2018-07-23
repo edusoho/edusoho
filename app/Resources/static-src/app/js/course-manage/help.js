@@ -7,7 +7,7 @@ export const closeCourse = () => {
       title: Translator.trans('site.close'),
       content: Translator.trans('course.manage.close_hint'),
       okText: Translator.trans('site.confirm'),
-      cancelText: Translator.trans('site.close')
+      cancelText: Translator.trans('site.cancel')
     }).on('ok', () => {
       $.post($target.data('checkUrl'), (data) => {
         if (data.warn) {
@@ -15,7 +15,7 @@ export const closeCourse = () => {
             title: Translator.trans('site.close'),
             content: Translator.trans(data.message),
             okText: Translator.trans('site.confirm'),
-            cancelText: Translator.trans('site.close')
+            cancelText: Translator.trans('site.cancel')
           }).on('ok', () => {
             closeCourseAction($target);
           });
@@ -44,7 +44,7 @@ export const deleteCourse = () => {
       title: Translator.trans('site.delete'),
       content: Translator.trans('course.manage.delete_hint'),
       okText: Translator.trans('site.confirm'),
-      cancelText: Translator.trans('site.close')
+      cancelText: Translator.trans('site.cancel')
     }).on('ok', () => {
       $.post($(evt.currentTarget).data('url'), (data) => {
         if (data.success) {
