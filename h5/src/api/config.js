@@ -59,7 +59,7 @@ const config = [
   }, {
     // 我的订单
     name: 'getMyOrder',
-    url: '/me/orders?type=course',
+    url: '/me/orders',
     method: 'GET'
   }, {
     // 课程详情页
