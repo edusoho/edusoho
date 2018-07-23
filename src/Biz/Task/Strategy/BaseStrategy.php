@@ -123,4 +123,9 @@ class BaseStrategy
     {
         return $this->biz->service('Activity:ActivityService');
     }
+
+    protected function getCourseLessonService()
+    {
+        return $this->biz->service('Course:LessonService');
+    }
 }

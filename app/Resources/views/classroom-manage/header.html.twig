@@ -15,7 +15,7 @@
 {% endif %}
 
 
-<div class="es-section course-manage-header clearfix">
+<div class="es-section classroom-manage-header clearfix">
   <img class="picture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}">
   <h1 class="title"><a href="{{path('classroom_show',{id:classroom.id})}}">{{classroom.title}}</a>
     {% if classroom.status == "draft" %}

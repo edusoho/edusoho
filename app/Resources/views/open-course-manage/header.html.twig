@@ -1,46 +1,44 @@
 {% import "macro.html.twig" as web_macro %}
-{% do script(['app/js/open-course-manage/header/index.js'])%}
+{% block js %}
+  {% do script(['app/js/open-course-manage/header/index.js'])%}
+{% endblock %}
 
-<div class="es-section course-manage-header clearfix">
+<div class="courseset-manage-header cd-mb32 clearfix">
   <a href="{{ path('open_course_show', {courseId:course.id}) }}">
-    <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
+    <img class="courseset-manage-header__img" src="{{ filepath(course.largePicture, 'course.png') }}" />
   </a>
-  <h1 class="title">
-    [{{ dict('courseType')[course.type] }}]
-    <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
-    {% if course.status=='closed' %}
-      <span class="label label-danger ">{{'course.status.closed'|trans}}</span>
-    {% elseif course.status=='draft' %}
-      <span class="label label-warning ">{{'course.status.unpublished'|trans}}</span>
-    {% elseif course.status=='published' %}    
-      <span class="label label-warning ">{{'course.status.published'|trans}}</span>
-    {% endif %}
-  </h1>
 
-  <div class="teachers">
-    {% if course.teacherIds|default(null) %}
-      {{'course.teacher'|trans}}
-      {% for id in course.teacherIds if id %}
-        {% set user = data('User',{userId:id}) %}
-        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
-      {% endfor %}
-    {% endif  %}
+  {% if course.status =='closed' %}
+    <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
+  {% elseif course.status =='draft' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
+  {% elseif course.status =='published' %}
+    <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans }}</span>
+  {% endif %}
+
+  <div class="courseset-manage-header-info">
+    <div class="courseset-manage-header-info__title text-overflow">
+      <a class="cd-link-major" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+    </div>
+    {% block liveTag %}
+      <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
+    {% endblock %}
   </div>
 
-  <div class="toolbar hidden-xs">
-    
-    {% if course.status == 'published' %}
-      <div class="btn-group">
-        <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
-      </div>
-    {% else %}
-      <div class="btn-group">
-        <button class="btn btn-primary btn-sm course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
-      </div>
-    {% endif %}
-    <div class="btn-group">
-      <a class="btn btn-default btn-sm mrs" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
-      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
-    </div>
+  <div class="courseset-manage-header-btn">
+    {% block btn %}
+      {% if course.status == 'published' %}
+        <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
+      {% else %}
+        <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
+      {% endif %}
+      <a class="cd-btn cd-btn-default cd-ml16" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
+      <a class="cd-btn cd-btn-default cd-ml16" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
+    {% endblock %}
+  </div>
+
+  <div class="courseset-manage-header-data hidden-xs">
+    <span>{{ 'my.teaching.open_course.hit_num'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.hitNum }}</span>{{ 'site.default.times'|trans }}</div>
   </div>
 </div>

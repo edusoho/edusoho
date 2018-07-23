@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 {% import 'macro.html.twig' as macro %}
 
 {% block title %}{{'course.question_manage'|trans}} - {{ parent() }}{% endblock %}
@@ -12,9 +12,9 @@
 
  {% set questionTypes = getQuestionTypes() %}
 
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">
-      <div class="pull-right">
+  <div role="courseset-manage-question">
+    <div class="courseset-manage-body__title">
+      <div class="courseset-manage-body__btn">
         {{ slot('course_set.questions_import_btn.extension', {'courseSet': courseSet}) }}
         {% for type,name in questionTypes %}
           {% if loop.index <= 3 %}
@@ -36,7 +36,7 @@
       {{'course.question_manage.content_title'|trans}}
     </div>
 
-    <div class="panel-body " id="quiz-table-container">
+    <div id="quiz-table-container">
 
       {% if parentQuestion %}
         <ol class="breadcrumb">
@@ -84,7 +84,7 @@
       </table>
       <div>
         <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'course.question_manage.select_all'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'course.question_manage.question'|trans}}" data-url="{{ path('course_set_manage_question_deletes',{courseSetId:courseSet.id}) }}" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
+        <button class="cd-btn cd-btn-default cd-btn-sm mlm" data-role="batch-delete"  data-name="{{'course.question_manage.question'|trans}}" data-url="{{ path('course_set_manage_question_deletes',{courseSetId:courseSet.id}) }}" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
         <span class="pull-right color-gray">{{'course.question_manage.count'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
       </div>
       <nav class="text-center">

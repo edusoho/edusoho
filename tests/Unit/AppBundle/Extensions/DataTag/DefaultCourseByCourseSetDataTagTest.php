@@ -22,7 +22,7 @@ class DefaultCourseByCourseSetDataTagTest extends BaseTestCase
         $this->assertTrue($hasException);
 
         $result = $datatag->getData(array('courseSetId' => $courseSet['id']));
-        $this->assertEquals('默认教学计划', $result['title']);
+        $this->assertEquals('', $result['title']);
     }
 
     private function getCourseService()

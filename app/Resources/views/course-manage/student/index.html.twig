@@ -1,17 +1,18 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.members_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
-{% set side_nav = 'students' %}
+{% set course_side_nav = 'students' %}
 
-{% block main %}
-  <div class="panel panel-default" role="course-manage-student-index">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
+{% endblock %}
 
-    <div class="panel-body">
+{% block main_body %}
+    <div id="student-table-container" role="course-manage-student-index">
       {{ web_macro.flash_messages() }}
       {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': 'manage'} %}
-      
+
       <form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
         <div class="form-group col-md-7">
           <input class="form-control " type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
@@ -19,73 +20,24 @@
         </div>
         <div class="clearfix"></div>
       </form>
+      {% if 'forever' != course.expiryMode %}
+        <button id="batch-update-expiry-day" type="button" class="btn btn-primary" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id})}}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+      {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>
           <tr>
-            <th width="40%">{{'site.default.student'|trans}}</th>
-            <th width="30%">{{'course.members_manage.official_student.progress'|trans}}</th>
-            <th width="30%">{{'course.members_manage.official_student.operation'|trans}}</th>
+            <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+            <th width="25%">{{'site.default.student'|trans}}</th>
+            <th width="16%">{{'course.members_manage.official_student.progress'|trans}}</th>
+            <th width="17%">{{'join.time'|trans}}</th>
+            <th width="17%">{{'course.expiry_date'|trans}}</th>
+            <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
           </tr>
         </thead>
         <tbody>
           {% for student in students if student %}
             {% set user = users[student.userId]|default(null) %}
-            <tr id="student-{{user.id}}-tr" class="students-item js-students-item">
-              <td class="media media-middle" >
-                <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
-                  {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
-                </a>
-                <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
-
-                {% if student.remark %}
-                  <span class="color-gray text-sm js-remark" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
-                {% endif %}
-                <div class="color-gray text-sm">{{'course.members_manage.official_student.join_time'|trans({'%createdTime%': student.createdTime|date('Y-n-d H:i') })}}</div>
-                {% if course.expiryDays > 0 and student.deadline > 0 %}
-                  <div class="color-gray text-sm">{{'course.members_manage.official_student.expiry_date'|trans({'%deadline%': student.deadline|date('Y-n-d H:i') })}} ({{ student.deadline|remain_time }})</div>
-                {% endif %}
-              </td>
-              <td style="vertical-align: middle;">
-                {{ student.learningProgressPercent }}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.detail'|trans}}</a>
-              </td>
-              <td style="vertical-align: middle;">
-                <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
-                {% if app.user.isAdmin() %}
-                  <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>
-                {% endif %}
-                <div class="btn-group vertical-top">
-                  <a href="#" class="mrm link-primary dropdown-toggle" data-toggle="dropdown">
-                    {{'course.members_manage.official_student.more'|trans}}
-                    <span class="caret mls"></span>
-                  </a>
-                  <ul class="dropdown-menu pull-right">
-                    <li>
-                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_remark', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}">{{'course.members_manage.official_student.remark'|trans}}</a>
-                    </li>
-                    <li>
-                      <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" {% if not followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.cancel_follow_btn'|trans}}</a>
-                      <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}" {% if followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.follow_btn'|trans}}</a>
-                    </li>
-                    {% if app.user.isAdmin() or  app.user.isTeacher() %}
-                      <li>
-                          {% if course.expiryMode == "days" and course.expiryDays > 0 %}
-                            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_expiryday', {courseSetId: course.courseSetId, courseId: course.id, userId: student.userId})}}">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
-
-                          {% else %}
-                            <a class="js-expiry-days" href="javascript:;">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
-                          {% endif %}
-                      </li>
-                    {% endif %}
-                    {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
-                      <li>
-                        <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="{{'site.default.student'|trans}}">{{'course.members_manage.official_student.remove_btn'|trans}}</a>
-                      </li>
-                    {% endif %}
-
-                  </ul>
-                </div>
-              </td>
-            </tr>
+            {% include 'course-manage/student/tr-v2.html.twig' %}
           {% else %}
             <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
           {% endfor %}
@@ -96,5 +48,4 @@
         {{ web_macro.paginator(paginator) }}
       </nav>
     </div>
-  </div>
 {% endblock %}

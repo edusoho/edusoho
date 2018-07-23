@@ -23,7 +23,10 @@ interface CourseStrategy
 
     public function prepareCourseItems($course, $tasks, $limitNum);
 
-    public function getTasksTemplate();
+    //任务列表
+    public function getTasksListJsonData($task);
 
-    public function getTaskItemTemplate();
+    //自由式：单个任务
+    //传授式：课时以及任务
+    public function getTasksJsonData($task);
 }

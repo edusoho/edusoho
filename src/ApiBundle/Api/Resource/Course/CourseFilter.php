@@ -17,7 +17,7 @@ class CourseFilter extends Filter
     );
 
     protected $publicFields = array(
-        'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
+        'subtitle', 'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime', 'access', 'isAudioOn',
@@ -62,7 +62,7 @@ class CourseFilter extends Filter
         unset($data['expiryEndDate']);
         unset($data['expiryDays']);
 
-        if ($data['learningExpiryDate']['expiryMode'] == 'forever' || $data['learningExpiryDate']['expiryMode'] == 'days') {
+        if ('forever' == $data['learningExpiryDate']['expiryMode'] || 'days' == $data['learningExpiryDate']['expiryMode']) {
             $data['learningExpiryDate']['expired'] = false;
         } else {
             $data['learningExpiryDate']['expired'] = time() > strtotime($data['learningExpiryDate']['expiryEndDate']);

@@ -133,7 +133,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('Course ID can not be empty.');
         }
 
-        if (empty(trim($thread['title']))) {
+        $trimedThreadTitle = empty($thread['title']) ? '' : trim($thread['title']);
+        if (empty($trimedThreadTitle)) {
             throw $this->createServiceException('thread title is null');
         }
 

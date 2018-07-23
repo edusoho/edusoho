@@ -14,7 +14,7 @@
       <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
         {% set task = tasks[selectedTaskId]|default(null) %}
         {% if task is empty %}
-          {{ 'course.note.all_task'|trans }}
+          {{ 'course.note.all_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
         {% else %}
           {{ task.title }}
         {% endif %}
@@ -24,7 +24,7 @@
         <ul class="dropdown-menu" role="menu">
           <li class="{% if selectedTaskId == 0  %}active{% endif %}">
             <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: 0, selectedCourse: selectedCourseId }) }}#notes">
-              {{ 'course.note.all_task'|trans }}
+              {{ 'course.note.all_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
             </a>
           </li>
           {% for task in tasks %}
@@ -102,7 +102,7 @@
               </a>
             {% endif %}
             {% else %}
-              {{ 'course.note.mission_delete_tips'|trans }}
+              {{ 'course.note.mission_delete_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
             {% endif %}
             <span class="metas-sns">
               <span class="icon-favour">

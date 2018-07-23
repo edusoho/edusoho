@@ -10,9 +10,13 @@ class ConvertIpToolkitTest extends BaseTestCase
     public function testConvertIp()
     {
         $result = ConvertIpToolkit::convertIp('8.8.8.8');
-        $this->assertEquals('美国', $result);
+
+        $this->assertEquals('GOOGLE.COM', $result);
 
         $result = ConvertIpToolkit::convertIp('223.5.5.5');
-        $this->assertEquals('中国', $result);
+        $this->assertEquals('ALIDNS.COM', $result);
+
+        $result = ConvertIpToolkit::convertIp('127.0.0.1');
+        $this->assertEquals('本机地址', $result);
     }
 }

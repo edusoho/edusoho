@@ -6,8 +6,8 @@ use Silex\Application;
 use Topxia\Api\Util\TagUtil;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-
 use Biz\Course\Service\CourseService;
+use Biz\Course\Util\CourseTitleUtils;
 
 class Course extends BaseResource
 {
@@ -24,6 +24,7 @@ class Course extends BaseResource
     {
         $course = $this->convertOldFields($course);
         $course = $this->filledCourseByCourseSet($course);
+
         return $course;
     }
 
@@ -38,7 +39,7 @@ class Course extends BaseResource
         $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
         $course['isAudioOn'] = $enableAudioStatus ? 1 : 0;
         unset($course['enableAudio']);
-        
+
         return $course;
     }
 
@@ -68,13 +69,10 @@ class Course extends BaseResource
         $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
         $course['summary'] = $this->filterHtml($course['summary']);
 
-        if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
-            $course['title'] = $courseSet['title'];
-        } else {
-            $course['title'] = $courseSet['title'].'-'.$course['title'];
-        }
+        $course = CourseTitleUtils::formatTitle($course, $courseSet['title']);
 
         unset($course['courseSet']);
+
         return $course;
     }
 

@@ -3,8 +3,6 @@
   {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
   {% set reupload = attachments|default()|length %}
 
-  {#{% do load_script('topxiawebbundle/controller/attachment/upload-form') %}#}
-
   {% if bundle_namespace|default(null) == 'admin' %}
     {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true } %}
   {% else %}

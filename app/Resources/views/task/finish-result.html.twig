@@ -3,7 +3,7 @@
 
 {% block title %}
   <i class="es-icon es-icon-iccheckcircleblack24px color-success mrs" style="font-size:20px"></i>
-  {{'course.plan_task.finish_task_title'|trans}}
+  {{'course.plan_task.finish_task_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
 {% endblock %}
 
 {% block body %}
@@ -34,6 +34,6 @@
     {% include 'common/share-dropdown.html.twig' with {type:'courseSet' , courseSet:courseSet} %}
   </div>
   {% if nextTask|default(false) %}
-  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">{{'course.plan_task.next_task'|trans}}</a>
+  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">{{'course.plan_task.next_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>
   {% endif %}
 {% endblock %}

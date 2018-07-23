@@ -1,0 +1,29 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ '课程图片上传'|trans }}
+{% endblock %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+{% do script(['app/js/open-course-manage/picture-crop/index.js']) %}
+
+{% block body %}
+  <img class="img-full" src="" id="open-course-crop"/>
+  <div class="text-center cd-dark-major cd-mt16 cd-mb16">
+    {{'user.settings.avatar.crop_hint'|trans}}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="text-center">
+    <button type="button" class="btn cd-btn cd-btn-ghost-default cd-btn-lg" id="select-btn">
+      {{'user.settings.profile.choose_again'|trans}}
+    </button>
+
+    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" id="save-btn"
+            data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+      {{'保存图片'|trans}}
+    </button>
+  </div>
+{% endblock %}
+
