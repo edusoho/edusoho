@@ -25,9 +25,11 @@ class CourseInfo {
   }
 
   setIntroPosition() {
-    const space = 40;
+    const space = 44;
     const introRight = $('.js-course-manage-info').offset().left + space;
-    $('.js-plan-intro').css('right', `${introRight}px`);
+    window.onload = () => {
+      $('.js-plan-intro').css('right', `${introRight}px`).removeClass('hidden');
+    };
   }
 
   setService() {
