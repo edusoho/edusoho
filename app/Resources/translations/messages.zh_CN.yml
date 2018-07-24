@@ -970,9 +970,9 @@ course.plan_setup.mode.free: 自由式学习
 course.plan_setup.mode.locked: 解锁式学习
 course.plan_setup.mode.locked_tips: 根据既定顺序逐个解锁学习
 course.plan_setup.mode.free_tips: 学习过程自由安排
-course.plan_setup.finish_rule: 活动完成规则
-course.plan_setup.finish_rule.depend_on_finish_condition: 由活动完成条件决定
-course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，活动才算完成
+course.plan_setup.finish_rule: %taskName%完成规则
+course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
 course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
@@ -1010,10 +1010,10 @@ course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
   例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
 course.marketing_setup.preview: 预览试看
-course.marketing_setup.preview.set_task: 设置免费学习活动
+course.marketing_setup.preview.set_task: 设置免费学习%taskName%
 course.marketing_setup.preview.set_task.task_name: %name%%taskName%
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费活动仅支持
+course.marketing_setup.preview.set_task.free_tips: 免费%taskName%仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.not.support.try_watch: 不支持试看
 course.marketing_setup.preview.minutes.try_watch: 分钟试看
@@ -1171,9 +1171,9 @@ course.question_marker_statistics: 弹题统计
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
-course.dashboard.success_rate: 活动完成率
+course.dashboard.success_rate: %taskName%完成率
 course.dashboard.study_detail: 活动学习详情
-course.dashboard.study_detail.name: 活动名
+course.dashboard.study_detail.name: %taskName%名
 course.dashboard.study_detail.per_study_time: 平均学习时长(分)
 course.dashboard.study_detail.per_study_time_tips: 活动学习时长：从活动开始到活动完成的耗时，活动平均学习时长：每个学员的活动学习时长的平均数
 course.dashboard.study_detail.audio_time: 音视频时长(分)
@@ -1209,7 +1209,7 @@ course.dashboard.student_trend: 学员趋势
 course.dashboard.student_trend_seven_days: 7天
 course.dashboard.student_trend_thirty_days: 30天
 course.dashboard.student_detail: 学员详情
-course.dashboard.task_detail: 活动详情
+course.dashboard.task_detail: %taskName%详情
 course.dashboard.student_chart.time_select_all: 全部
 course.dashboard.student_chart.time_select_unFinished: 未完成
 course.dashboard.student_chart.time_select_seven_days: 7天未学
@@ -1354,7 +1354,7 @@ course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
 course.task: %taskName%
-course.task.progress: 活动进度
+course.task.progress: %taskName%进度
 course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个%taskName%才能学习
 course.task.learning: %taskName%学习
@@ -1562,7 +1562,7 @@ course.testpaper_manage.empty: >
 course.testpaper_manage.delete_btn: 删除
 course.testpaper_manage.tips: >
   提示：试卷一旦发布不能修改，发布后的试卷需要
-  <strong class="color-warning">添加到活动</strong>
+  <strong class="color-warning">添加到%taskName%</strong>
   中才能正常使用。
 course.testpaper_manage.score: %score%分
 course.testpaper_manage.passed_condition: 及格%passedCondition%分
@@ -1687,7 +1687,7 @@ course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式
 course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
-course.plan_task.total_tasks: 课时总数
+course.plan_task.total_lessons: 课时总数
 course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 已发布课时数：
 course.plan_task.unpublished_lessons: 未发布课时数：
@@ -1760,9 +1760,9 @@ course.plan_task.activity_manage.setup_content: >
 course.plan_task.activity_manage.setup_finish_condition:  >
   <span class="number">3</span>
   设置完成条件
-course.plan_task.activity_manage.create: 添加活动
-course.plan_task.activity_manage.modify: 编辑活动
-course.plan_task.activity_manage.preview: 预览活动
+course.plan_task.activity_manage.create: 添加%taskName%
+course.plan_task.activity_manage.modify: 编辑%taskName%
+course.plan_task.activity_manage.preview: 预览%taskName%
 
 course.lesson: 课时
 course.manage.create_lesson: 添加课时

@@ -8,7 +8,7 @@
             </li>
             <li>
                 <a href="#task-data-detail" data-toggle="tab">
-                    {{ 'course.dashboard.task_detail'|trans }}
+                    {{ 'course.dashboard.task_detail'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
                 </a>
             </li>
         </ul>
