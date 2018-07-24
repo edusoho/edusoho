@@ -42,7 +42,7 @@ export default class QuestionPicker {
     let questionId = $target.data('questionId');
     let questionIds = [];
     questionIds.push(questionId);
-    $target.addClass('disabled');
+    $target.attr('disabled',true);
     this.pickItemPost($target.data('url'),questionIds,replace);
   }
 
@@ -86,7 +86,7 @@ export default class QuestionPicker {
       let questionId = $(this).data('questionId');
       questionIds.push(questionId);
     });
-    $target.addClass('disabled');
+    $target.attr('disabled',true);
     this.pickItemPost(url, questionIds,null);
   }
 
