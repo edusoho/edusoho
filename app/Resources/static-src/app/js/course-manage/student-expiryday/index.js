@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 class Deadline {
   constructor() {
     this.validator = null;
@@ -27,8 +25,9 @@ class Deadline {
   }
 
   initValidator() {
-    let $modal = $('#deadline-set-form').parents('.modal');
     let $form = $('#deadline-set-form');
+    let $modal = $form.parents('.modal');
+
 
     this.validator = $form.validate({
       rules: {
@@ -51,6 +50,7 @@ class Deadline {
       },
       messages: {
         day: {
+          required: Translator.trans('validate.modify_days'),
           remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
         }
       }
@@ -60,7 +60,7 @@ class Deadline {
       if (this.validator && this.validator.form()) {
         $.post($form.attr('action'), $form.serialize(), function () {
           let user_name = $('#submit').data('user');
-          notify('success',Translator.trans('course_manage.student_expiryday_extend_success_hint', { name: user_name }));
+          cd.message({ type: 'success', message: Translator.trans('course_manage.student_expiryday_extend_success_hint', { name: user_name }) });
           $modal.modal('hide');
           window.location.reload();
         });
@@ -153,6 +153,7 @@ class Deadline {
       },
       messages: {
         remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_date'),
+        required: Translator.trans('validate.modify_date'),
       }
     };
   }
