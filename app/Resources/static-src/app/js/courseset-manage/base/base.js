@@ -48,23 +48,21 @@ export default class Base {
         if (!$btn.length) {
           $btn = $(form).find('[type="submit"]');
         }
-        $btn.button('loading');
         if ($isMulCourseSet == 1 && $newSummary != '' && $newSummary != $oldSummary) {
           cd.confirm({
             title: Translator.trans('course_set.manage.operation_hint'),
             content: Translator.trans('course_set.manage.courseset_summary_operation_hint'),
             okText: Translator.trans('site.confirm'),
-            cancelText: Translator.trans('site.close'),
+            cancelText: Translator.trans('site.cancel'),
           }).on('ok', () => {
             $.post($form.attr('action'), $form.serializeArray(), (data) => {
-              $btn.button('reset');
               settings.submitSuccess(data);
             }).error((data) => {
-              $btn.button('reset');
               settings.submitError(data);
             });
           });
         } else {
+          $btn.button('loading');
           $.post($form.attr('action'), $form.serializeArray(), (data) => {
             $btn.button('reset');
             settings.submitSuccess(data);
@@ -73,7 +71,6 @@ export default class Base {
             settings.submitError(data);
           });
         }
-        $btn.button('reset');
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
