@@ -44,7 +44,6 @@ export default class QuestionPicker {
     questionIds.push(questionId);
     $target.addClass('disabled');
     this.pickItemPost($target.data('url'),questionIds,replace);
-    $target.removeClass('disabled');
   }
 
   pickItemPost(url, questionIds, replace=null) {
@@ -89,7 +88,6 @@ export default class QuestionPicker {
     });
     $target.addClass('disabled');
     this.pickItemPost(url, questionIds,null);
-    $target.removeClass('disabled');
   }
 
   _refreshSeqs() {
