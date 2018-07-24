@@ -1687,7 +1687,6 @@ course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式
 course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
-course.plan_task.total_tasks: 课时总数
 course.plan_task.total_lessons: 课时总数
 course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 已发布课时数：

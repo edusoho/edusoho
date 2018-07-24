@@ -1510,7 +1510,6 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Lessons in total:'
 course.plan_task.total_lessons: 'Lessons in total:'
 course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 'Published Lesson Number:'
