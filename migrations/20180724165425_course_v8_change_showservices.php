@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class UpdateCourseV8Showservices extends Migration
+class CourseV8ChangeShowservices extends Migration
 {
     /**
      * Do the migration
