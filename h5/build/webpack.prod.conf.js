@@ -27,7 +27,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -97,7 +97,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     //   }
     // }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['common', 'vendor']
+      name: 'vendor',
+      minChunks: Infinity
     }),
 
     // new webpack.optimize.CommonsChunkPlugin({
