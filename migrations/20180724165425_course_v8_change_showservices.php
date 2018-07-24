@@ -12,9 +12,9 @@ class UpdateCourseV8Showservices extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("
+        $connection->exec('
             ALTER TABLE course_v8 alter column `showServices` set default 0;
-        ");
+        ');
     }
 
     /**
@@ -22,6 +22,5 @@ class UpdateCourseV8Showservices extends Migration
      */
     public function down()
     {
-
     }
 }
