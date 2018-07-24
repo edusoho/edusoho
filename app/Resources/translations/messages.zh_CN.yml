@@ -1168,7 +1168,7 @@ course.question_marker_statistics: 弹题统计
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
-course.dashboard.success_rate: 活动完成率
+course.dashboard.success_rate: %taskName%完成率
 course.dashboard.study_detail: 活动学习详情
 course.dashboard.study_detail.name: %taskName%名
 course.dashboard.study_detail.per_study_time: 平均学习时长(分)
