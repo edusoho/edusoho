@@ -4,5 +4,5 @@ export default [{
   meta: {
     title: ''
   },
-  component: import(/* webpackChunkName: "find" */'@/containers/find/index.vue')
+  component: () => import(/* webpackChunkName: "find" */'@/containers/find/index.vue')
 }];

@@ -58,25 +58,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true
     }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   names: "common",
-    //   minChunks: function(module, count) {
-    //     if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
-    //       return false;
-    //     }
-    //     return module.context && 
-    //       module.context.includes("node_modules");
-    //   }
-    // }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['common', 'vendor']
+      name: 'vendor',
+      minChunks: Infinity
     }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   names: "vue-common",
-    //   minChunks: function(module, count) {
-    //     return module.context && ['vue', 'vant', 'axios'].includes(module.context);
-    //   }
-    // }),
     // copy custom static assets
     new CopyWebpackPlugin([
       {

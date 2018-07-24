@@ -4,5 +4,5 @@ export default [{
   meta: {
     title: '我的学习'
   },
-  component: import(/* webpackChunkName: "learning" */'@/containers/learning/index.vue')
+  component: () => import(/* webpackChunkName: "learning" */'@/containers/learning/index.vue')
 }];
