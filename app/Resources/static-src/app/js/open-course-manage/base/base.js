@@ -151,9 +151,6 @@ export default class Base {
         filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
       });
     }
-    self.editor.on('blur', () => {
-      $('#course-about-field').val(self.editor.getData());
-    });
   }
 
   initCategory() {
