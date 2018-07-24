@@ -43,7 +43,7 @@ export default class Base {
         let $form = $(form);
         let settings = this.settings;
         let $btn = $(settings.currentDom);
-        let $isMulCourseSet = $('#isMulCourseSet').val();
+        let $isMulCourseSet = $form.data('value');
         let $newSummary = $('#courseset-summary-field').val();
         if (!$btn.length) {
           $btn = $(form).find('[type="submit"]');
