@@ -241,8 +241,17 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateCourseShowServices()
     {
         $connection = $this->getConnection();
+        if ($this->isFieldExist('course_v8', 'showServices')) {
+            $connection->exec("
+                ALTER TABLE course_v8 alter column `showServices` set default 0
+            ");
+        }
         $connection->exec("
-            UPDATE course_v8 SET showServices = 1
+            UPDATE course_v8 SET showServices = 0 where services = '' or services is null
+        ");
+
+        $connection->exec("
+            UPDATE course_v8 SET showServices = 1 where services != '' and services is not null
         ");
 
         return 1;     
