@@ -462,7 +462,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $fields = $this->filterFields($fields);
-
+        $isMulCourseSet = $this->getCourseService()->hasMulCourses($courseSet['id'], 0);
+        if ($isMulCourseSet && $courseSet['summary'] != $fields['summary']) {
+            $this->updateCourseSummary($courseSet);
+        }
         $this->updateCourseSerializeMode($courseSet, $fields);
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
@@ -484,6 +487,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                     )
                 );
             }
+        }
+    }
+
+    protected function updateCourseSummary($courseSet)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        foreach ($courses as $course) {
+            $this->getCourseService()->updateCourse(
+                $course['id'],
+                array(
+                    'summary' => '',
+                )
+            );
         }
     }
 
