@@ -4,6 +4,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Biz\Util\PluginUtil;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\BlockToolkit;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -12,6 +13,8 @@ class EduSohoUpgrade extends AbstractUpdater
     public function __construct($biz)
     {
         parent::__construct($biz);
+        $this->setCourseUpdateHelper();
+        $this->setCourseSetUpdateHelper();
     }
 
     public function update($index = 0)
@@ -61,7 +64,11 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateTaskFields',
             'updateChpaterCopyId',
             'updateLessonNum',
-            'updateLessonIsOptionAndStatus'
+            'updateLessonIsOptionAndStatus',
+            'updateCourseShowServices',
+            'updateCourseIsFree',
+            'updateCourseTitle',
+            'updateCourseSetSummary'
         );
 
         $funcNames = array();
@@ -228,8 +235,75 @@ class EduSohoUpgrade extends AbstractUpdater
             UPDATE `course_chapter` cc,course_task ct SET cc.isoptional = ct.isoptional,cc.status = ct.status where cc.id=ct.categoryId and cc.type='lesson' and ct.mode='lesson'
         ");
 
+        return 1;      
+    }
+
+    protected function updateCourseShowServices()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            UPDATE course_v8 SET showServices = 1
+        ");
+
+        return 1;     
+    }
+
+    protected function updateCourseIsFree()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            UPDATE course_v8 SET isFree = 0 where isFree = 1 and originPrice > 0
+        ");
+
         return 1;
-        
+    }
+
+    protected function updateCourseTitle($page)
+    {
+        $connection = $this->getConnection();
+        $countSql = "SELECT count(*) from course_v8";
+        $count = $this->getConnection()->fetchColumn($countSql);
+        if ($count == 0) {
+            return;
+        }
+        $start = $this->getStart($page);
+        $sql = "SELECT id FROM course_v8 where isDefault=1 group by courseSetId HAVING count(courseSetId)=1 limit {$start}, {$this->pageSize}";
+        $courses = $this->getConnection()->fetchAll($sql);
+        foreach ($courses as $course) {
+             $this->courseUpdateHelper->add('id', $course['id'], array('title' => ''));
+        }
+        $this->courseUpdateHelper->flush();
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return 1;
+        }
+
+        return $nextPage;
+    }
+
+    protected function updateCourseSetSummary($page)
+    {
+        $connection = $this->getConnection();
+        $countSql = "SELECT count(*) from course_v8";
+        $count = $this->getConnection()->fetchColumn($countSql);
+        if ($count == 0) {
+            return;
+        }
+        $start = $this->getStart($page);
+        $sql = "SELECT id, courseSetId, summary FROM course_v8 where isDefault=1 group by courseSetId HAVING count(courseSetId)=1 limit {$start}, {$this->pageSize}";
+        $courses = $this->getConnection()->fetchAll($sql);
+        foreach ($courses as $course) {
+             if (!empty($course['summary'])) {
+                $this->courseSetUpdateHelper->add('id', $course['courseSetId'], array('summary' => $course['summary']));
+             }
+        }
+        $this->courseSetUpdateHelper->flush();
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return 1;
+        }
+
+        return $nextPage;
     }
 
     protected function deleteCache()
@@ -289,6 +363,22 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStart($page)
     {
         return ($page - 1) * $this->pageSize;
+    }
+
+    private function setCourseUpdateHelper()
+    {
+        $courseDao = $this->createDao('Course:CourseDao');
+        $this->courseUpdateHelper = new BatchUpdateHelper($courseDao);
+
+        return $this->courseUpdateHelper;
+    }
+
+    private function setCourseSetUpdateHelper()
+    {
+        $courseSetDao = $this->createDao('Course:CourseSetDao');
+        $this->courseSetUpdateHelper = new BatchUpdateHelper($courseSetDao);
+
+        return $this->courseSetUpdateHelper;
     }
 }
 
