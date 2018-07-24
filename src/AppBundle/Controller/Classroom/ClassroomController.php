@@ -539,6 +539,12 @@ class ClassroomController extends BaseController
 
     public function canviewAction($classroomId)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $result = $this->getClassroomService()->canLookClassroom($classroomId);
 
         return $this->createJsonResponse($result);
