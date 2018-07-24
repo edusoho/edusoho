@@ -44,7 +44,7 @@
     <select class="form-control width-150" name="ranges[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSet.id}) }}">
       <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'course.testpaper_manage.create.range.course'|trans}}</option>
       {% for course in courses if course %}
-        <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
+        <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
       {% endfor %}
     </select>
     <select class="form-control width-150" {% if not showTasks|default(null) %}style="display:none;"{% endif %} name="ranges[lessonId]" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSet.id}) }}">
