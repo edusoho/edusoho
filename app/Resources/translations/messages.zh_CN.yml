@@ -969,7 +969,7 @@ course.plan_setup.mode.free: 自由式学习
 course.plan_setup.mode.locked: 解锁式学习
 course.plan_setup.mode.locked_tips: 根据既定顺序逐个解锁学习
 course.plan_setup.mode.free_tips: 学习过程自由安排
-course.plan_setup.finish_rule: 活动完成规则
+course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
 course.plan_setup.finish_rule.nothing: 无限制

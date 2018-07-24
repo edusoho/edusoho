@@ -11,7 +11,7 @@
 </div>
 {% include 'course-manage/marketing/set-rule.html.twig' %}
 <div class="form-group">
-  <label for="" class="col-sm-2 control-label mbs">{{'course.plan_setup.finish_rule'|trans}}</label>
+  <label for="" class="col-sm-2 control-label mbs">{{'course.plan_setup.finish_rule'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</label>
   <div class="col-sm-8 cd-radio-group mb0">
     <label class="cd-radio {% if course.enableFinish|default('0') == 1 %}checked{% endif %}">
       <input type="radio" data-toggle="cd-radio" name="enableFinish" value="1" > {{'course.plan_setup.finish_rule.nothing'|trans}}
