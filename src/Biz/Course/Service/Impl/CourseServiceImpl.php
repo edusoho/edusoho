@@ -2389,10 +2389,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
             $fields['isFree'] = 1;
+        } else {
+            $fields['isFree'] = 0;
         }
 
         if ('normal' == $courseSet['type'] && 0 == $fields['tryLookLength']) {
             $fields['tryLookLength'] = 0;
+            $fields['tryLookable'] = 0;
+        } else {
+            $fields['tryLookable'] = 1;
         }
 
         if (!empty($fields['buyExpiryTime'])) {
