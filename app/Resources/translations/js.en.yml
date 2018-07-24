@@ -740,6 +740,9 @@ validate.tag_required_hint: Please input tags
 validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.modify_date: 请输入修改日期
+validate.modify_days: 请输入修改天数
+validate.modify_day_number: 请输入不大于 7300（20年）的数值
 validate.success: 验证成功
 validate.fail: 验证失败
 

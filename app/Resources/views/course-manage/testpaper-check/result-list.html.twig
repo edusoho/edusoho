@@ -2,6 +2,7 @@
 
 {% block title %}{{ testpaper.name }} - {{'course.testpaper_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% import 'macro.html.twig' as macro %}
+{% block main_heading_class %}course-main-header{% endblock %}
 {% block main_heading %}
   <div class="cd-main__title">
     {% if course.title is empty() %}{{ courseSet.title }}{% else %}{{ course.title }}{% endif %}<span class="mh5">／</span>{{ testpaper.name }}

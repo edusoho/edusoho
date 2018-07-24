@@ -34,8 +34,8 @@ class Deadline {
         day: {
           required: true,
           positive_integer: true,
-          remote: {
-            url: $('[name=day]').data('url'),
+          max: 7300,
+          es_remote: {
             type: 'get',
             data: {
               waveType: function () {
@@ -51,7 +51,8 @@ class Deadline {
       messages: {
         day: {
           required: Translator.trans('validate.modify_days'),
-          remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
+          max: Translator.trans('validate.modify_day_number'),
+          es_remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
         }
       }
     });
@@ -120,8 +121,7 @@ class Deadline {
     return {
       required: true,
       positive_integer: true,
-      remote: {
-        url: $('[name=day]').data('url'),
+      es_remote: {
         type: 'get',
         data: {
           waveType: function () {
@@ -133,7 +133,7 @@ class Deadline {
         }
       },
       messages: {
-        remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
+        es_remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
       }
     };
   }
@@ -142,8 +142,7 @@ class Deadline {
     return {
       required: true,
       date: true,
-      remote: {
-        url: $('[name=deadline]').data('url'),
+      es_remote: {
         type: 'get',
         data: {
           deadline: function () {
@@ -152,7 +151,7 @@ class Deadline {
         }
       },
       messages: {
-        remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_date'),
+        es_remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_date'),
         required: Translator.trans('validate.modify_date'),
       }
     };
