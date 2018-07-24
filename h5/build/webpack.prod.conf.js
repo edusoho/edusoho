@@ -27,7 +27,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -112,6 +112,16 @@ const webpackConfig = merge(baseWebpackConfig, {
       minChunks: 3
     }),
 
+    new webpack.optimize.CommonsChunkPlugin({
+      names: "common",
+      minChunks: function(module, count) {
+        if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
+          return false;
+        }
+        return module.context && module.context.includes("node_modules");
+      }
+    }),
+
     // copy custom static assets
     new CopyWebpackPlugin([
       {
@@ -141,6 +151,7 @@ if (config.build.productionGzip) {
   )
 }
 
+// build时进行包分析
 if (config.build.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
