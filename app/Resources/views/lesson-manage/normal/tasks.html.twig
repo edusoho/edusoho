@@ -6,7 +6,7 @@
     <div class="item-content js-item-content text-overflow">
       <i class="es-icon {{ activity_metas(activity.mediaType).icon }} mrs" data-role="task"></i>
       {% if not task.isOptional %}
-        {{'course.activity'|trans}}<span class="number mls">{{ task.number }}</span>：
+        {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ task.number }}</span>：
       {% endif %}
       {{ task.title|sub_text(30) }}
 
@@ -32,10 +32,10 @@
     </div>
     <div class="item-actions">
       <a class="cd-mr24" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}">
-        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans }}" data-placement="top"></i>
+        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
       </a>
       <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
-        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans }}" data-placement="top"></i>
+        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
       </a>
       
       <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
@@ -45,7 +45,7 @@
         <ul class="dropdown-menu task-manage-item__dropdown">
           <li>
             <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
-              {{'course.plan_task.delete_btn'|trans}}{{ 'course.activity'|trans }}
+              {{'course.plan_task.delete_btn'|trans}}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
             </a>
           </li>
           {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}

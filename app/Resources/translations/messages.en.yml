@@ -882,7 +882,7 @@ course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 course.marketing_setup.preview: Preview
-course.marketing_setup.preview.set_task: 'Free tasks'
+course.marketing_setup.preview.set_task: 'Free %taskName%'
 course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
 course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
@@ -1394,7 +1394,7 @@ course.testpaper_manage.update: 'Updated'
 course.testpaper_manage.operation: Action
 course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
-course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to Task</strong>.\n"
+course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to %taskName%</strong>.\n"
 course.testpaper_manage.score: 'Score %score%'
 course.testpaper_manage.passed_condition: 'Passing score is %passedCondition% point'
 course.testpaper_manage.limited_time: '%limitedTime% minutes'
@@ -1569,9 +1569,9 @@ course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will no
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
 course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Please setup content'
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
-course.plan_task.activity_manage.create: 'Add'
-course.plan_task.activity_manage.modify: 'Edit'
-course.plan_task.activity_manage.preview: 预览活动
+course.plan_task.activity_manage.create: 'Add%taskName%'
+course.plan_task.activity_manage.modify: 'Edit%taskName%'
+course.plan_task.activity_manage.preview: 'Preview%taskName%'
 
 course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
