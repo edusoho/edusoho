@@ -8,7 +8,7 @@ define(function(require, exports, module) {
         var $table = $('#user-table');
 
         $table.on('click', '.cancel-approval', function() {
-            if (!confirm((Translator.trans('确定要撤销这条认证成功的实名认证吗？')))) {
+            if (!confirm((Translator.trans('admin.user.cancel_approval_hint')))) {
                 return;
             }
 

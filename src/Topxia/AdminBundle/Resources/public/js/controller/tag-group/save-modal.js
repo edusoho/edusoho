@@ -20,7 +20,7 @@ define(function(require, exports, module) {
         }
 
         if ($('#s2id_tags').find('.select2-search-choice').length == 0) {
-            Notify.danger(Translator.trans('标签组内标签不能为空'));
+            Notify.danger(Translator.trans('admin.tag_group.select_tag_empty_hint'));
             return;
         }
 
@@ -30,13 +30,13 @@ define(function(require, exports, module) {
             var $html = $(html);
             if ($table.find( '#' +  $html.attr('id')).length > 0) {
                 $('#' + $html.attr('id')).replaceWith($html);
-                Notify.success(Translator.trans('标签组更新成功！'));
+                Notify.success(Translator.trans('admin.tag_group.update_success_hint'));
             } else {
                 if ($('.empty')) {
                   $('.empty').remove();
                 }
                 $table.find('tbody').prepend(html);
-                Notify.success(Translator.trans('标签组添加成功!'));
+                Notify.success(Translator.trans('admin.tag_group.add_success_hint'));
             }
             $modal.modal('hide');
         });
@@ -50,7 +50,7 @@ define(function(require, exports, module) {
     });
 
     $modal.find('.delete-tag-group').on('click', function() {
-    if (!confirm(Translator.trans('真的要删除该标签组吗？'))) {
+    if (!confirm(Translator.trans('admin.tag_group.delete_hint'))) {
       return ;
     }
 
@@ -111,7 +111,7 @@ define(function(require, exports, module) {
         width: 'off',
         maximumSelectionSize: 50,
         maximumInputLength: 10,
-        placeholder: Translator.trans('请输入标签'),
+        placeholder: Translator.trans('admin.tag_group.tag_input_placeholder'),
         multiple: true,
         tokenSeparators: [",", " "],
         createSearchChoice: function(term,data) {

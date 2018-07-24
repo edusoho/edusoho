@@ -6,13 +6,13 @@ define(function (require, exports, module) {
       var $btn = $(this);
 
       if ($btn.data('protocol') < 3) {
-        alert('该主题暂不适配当前ES版本，请先升级');
+        alert(Translator.trans('admin.setting.theme.upgrade_error_hint'));
         return false;
-      } else if (confirm(Translator.trans('真的要使用该主题吗？'))) {
+      } else if (confirm(Translator.trans('admin.setting.theme.use_hint'))) {
 
         $.post($(this).data('url'), function (response) {
           if (response === false) {
-            alert('该主题暂不适配当前ES版本，请先升级');
+            alert(Translator.trans('admin.setting.theme.upgrade_error_hint'));
           } else {
             window.location.reload();
           }

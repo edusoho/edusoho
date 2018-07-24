@@ -10,34 +10,34 @@ define(function(require, exports, module) {
         $table.on('click', '.lock-user, .unlock-user', function() {
             var $trigger = $(this);
 
-            if (!confirm(Translator.trans('真的要%title%吗？',{title:$trigger.attr('title')}))) {
+            if (!confirm(Translator.trans('admin.user.lock_operational_hint',{title:$trigger.attr('title')}))) {
                 return;
             }
 
             $.post($(this).data('url'), function(html) {
-                Notify.success(Translator.trans('%title%成功！',{title:$trigger.attr('title')}));
+                Notify.success(Translator.trans('admin.user.lock_operational_success_hint',{title:$trigger.attr('title')}));
                 var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function() {
-                Notify.danger(Translator.trans('%title%失败',{title:$trigger.attr('title')}));
+                Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
             });
         });
 
         $table.on('click', '.send-passwordreset-email', function() {
-            Notify.info(Translator.trans('正在发送密码重置验证邮件，请稍等。'), 60);
+            Notify.info(Translator.trans('admin.user.sending_passwordreset_email_hint'), 60);
             $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('密码重置验证邮件，发送成功！'));
+                Notify.success(Translator.trans('admin.user.password_reset_email_send_success_hint'));
             }).error(function() {
-                Notify.danger(Translator.trans('密码重置验证邮件，发送失败'));
+                Notify.danger(Translator.trans('admin.user.password_reset_email_send_fail_hint'));
             });
         });
 
         $table.on('click', '.send-emailverify-email', function() {
-            Notify.info(Translator.trans('正在发送Email验证邮件，请稍等。'), 60);
+            Notify.info(Translator.trans('admin.user.sending_email_verify_email_hint'), 60);
             $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('Email验证邮件，发送成功！'));
+                Notify.success(Translator.trans('admin.user.email_verify_email_send_success_hint'));
             }).error(function() {
-                Notify.danger(Translator.trans('Email验证邮件，发送失败'));
+                Notify.danger(Translator.trans('admin.user.email_verify_email_send_fail_hint'));
             });
         });
 

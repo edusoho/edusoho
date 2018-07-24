@@ -814,6 +814,7 @@ validate_old.maxsize_image.message: %display%必须小于2M
 validate_old.server_upload_attachment_limit.message: 当前服务器附件大小上限为2048MB
 validate_old.chinese_english.message: %display%必须是中文字、英文字母组成
 validate_old.alpha_numeric.message: %display%必须是英文字母、数字组成
+validate_old.html_tag.message: %display%应该为HTML meta标签
 
 export.not_allowed: 你无权导出该文件
 export.empty: 没有可导出的数据
@@ -1130,3 +1131,141 @@ admin.setting.consult_setting.upload_qrcode_success_hint: 上传微信二维码�
 admin.setting.consult_setting.setting_max_num_hint: 最多设置10个..
 admin.setting.consult_setting.delete_hint: 确认要删除吗？
 admin.setting.course_avatar.select_default_pic.message: 请选择要上传的默认课程图片文件
+admin.setting.course.upload_live_course_logo_success_hint: 上传直播课程的LOGO成功！
+admin.setting.course.live_course_logo_delete_hint: 确认要删除吗？
+admin.setting.course.live_course_logo_delete_success_hint: 删除直播课程LOGO成功！
+admin.setting.course.upload_live_course_logo_fail_hint: 删除直播课程LOGO失败！
+admin.setting.course.upload_default_pic_success_hint: 上传成功！
+admin.setting.default_user_avatar.upload_success_hint: 上传成功！
+admin.setting.upload_live_logo_success_hint: 上传LOGO成功！
+admin.setting.upload_live_logo_fail_hint: 上传LOGO失败！
+admin.setting.mobile_iap_delete_hint: 确认要删除吗？
+admin.setting.mobile_iap_delete_success_hint: 删除成功
+admin.setting.mobile_iap_delete_fail_hint: 删除失败
+admin.setting.mobile.startup_diagram_delete_hint: 确认要删除吗？
+admin.setting.mobile.upload_startup_diagram_figure_1_success_hint: 上传网校启动图1成功！
+admin.setting.mobile.delete_startup_diagram_figure_1_success_hint: 删除网校启动图1成功！
+admin.setting.mobile.delete_startup_diagram_figure_1_fail_hint: 删除网校启动图1失败！
+admin.setting.mobile.upload_startup_diagram_figure_2_success_hint: 上传网校启动图2成功！
+admin.setting.mobile.delete_startup_diagram_figure_2_success_hint: 删除网校启动图2成功！
+admin.setting.mobile.delete_startup_diagram_figure_2_fail_hint: 删除网校启动图2失败！
+admin.setting.mobile.upload_startup_diagram_figure_3_success_hint: 上传网校启动图3成功！
+admin.setting.mobile.delete_startup_diagram_figure_3_success_hint: 删除网校启动图3成功！
+admin.setting.mobile.delete_startup_diagram_figure_3_fail_hint: 删除网校启动图3失败！
+admin.setting.mobile.upload_startup_diagram_figure_4_success_hint: 上传网校启动图4成功！
+admin.setting.mobile.delete_startup_diagram_figure_4_success_hint: 删除网校启动图4成功！
+admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint: 删除网校启动图4失败！
+admin.setting.mobile.upload_startup_diagram_figure_5_success_hint: 上传网校启动图5成功！
+admin.setting.mobile.delete_startup_diagram_figure_5_success_hint: 删除网校启动图5成功！
+admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint: 删除网校启动图5失败！
+admin.setting.mobile.upload_logo_success_hint: 上传网校LOGO成功！
+admin.setting.mobile.delete_logo_success_hint: 删除网校LOGO成功！
+admin.setting.mobile.delete_logo_fail_hint: 删除网校LOGO失败！
+admin.setting.mobile.upload_app_icon_success_hint: 上传app图标成功！
+admin.setting.mobile.delete_app_icon_success_hint: 删除网校app图标成功！
+admin.setting.mobile.delete_app_icon_fail_hint: 删除网校app图标失败！
+admin.setting.mobile.upload_app_cover_success_hint: 上传app封面成功！
+admin.setting.mobile.delete_app_cover_success_hint: 删除app封面成功！
+admin.setting.mobile.delete_app_cover_fail_hint: 删除app封面失败！
+admin.site.upload_logo_success_hint: 上传网站LOGO成功！
+admin.site.delete_logo_success_hint: 删除网站LOGO成功！
+admin.site.delete_logo_fail_hint: 删除网站LOGO失败！
+admin.site.upload_favicon_success_hint: 上传网站浏览器图标成功！
+admin.site.delete_favicon_success_hint: 删除网站浏览器图标成功！
+admin.site.delete_favicon_fail_hint: 删除网站浏览器图标失败！
+admin.site.delete_hint: 确认要删除吗？
+admin.setting.theme.upgrade_error_hint: 该主题暂不适配当前ES版本，请先升级
+admin.setting.theme.use_hint: 真的要使用该主题吗？
+admin.sms.send_success_hint: 发送成功！
+admin.sms.sending_hint: 正在发送
+admin.sms.send_fail_hint: 失败：
+admin.sms.finished: 完成
+admin.sms.send_finished: 发送完成
+admin.sms.send_error_hint: 发送发生了未知错误。
+admin.system.mailer.mail_sent_hint: 邮件已发送, 请注意查收
+admin.system.mailer.mail_send_fail_hint: 邮件发送失败，请检查邮箱服务器配置
+admin.system.mailer.sender_name_input.message: 请输入发信人名称
+admin.system.mailer.smtp_server_host_input.message: 请输入SMTP服务器地址
+admin.system.mailer.smtp_server_port_input.message: 请输入SMTP端口号
+admin.system.mailer.smtp_server_username_input.message: 请输入SMTP用户名
+admin.system.mailer.smtp_server_password_input.message: 请输入SMTP密码
+admin.system.mailer.sender_address_input.message: 请输入发信人地址
+admin.system.mailer.close_email_verify_hint: 您开启了用户注册模式下的邮箱验证登录，请先关闭<a href="%emailSetUrl%">邮箱验证登录</a>功能！
+admin.system.mailer.verify_hint: 验证
+admin.system.mailer.in_verify_hint: 验证中..
+admin.system.payment.alipay_secret_input.message: 请输入Key
+admin.system.payment.alipay_key_input.message: 请输入PID
+admin.system.payment.wxpay_appid_input.message: 请输入AppID
+admin.system.payment.wxpay_secret_input.message: 请输入AppSecret
+admin.system.payment.wxpay_mp_secret_input.message: 请输入MP文件验证码
+admin.system.payment.wxpay_account_input.message: 请输入商户号
+admin.system.payment.wxpay_key_input.message: 请输入商户平台Key
+admin.system.payment.llpay_key_input.message: 请输入商户帐号
+admin.system.payment.llpay_accessKey_input.message: 请输入公钥
+admin.system.payment.llpay_secretKey_input.message: 请输入密钥
+admin.system.user_fields.truename: 真实姓名
+admin.system.user_fields.mobile: 手机号码
+admin.system.user_fields.company: 所在公司
+admin.system.user_fields.idcard: 身份证号码
+admin.system.user_fields.gender: 性别
+admin.system.user_fields.career: 职业
+admin.system.user_fields.weibo: 微博
+admin.system.user_fields.wechat: 微信
+admin.system.user_fields.add_field_title_error_hint: 请勿添加与默认字段相同的自定义字段！
+admin.system.user_fields.field_type_input.message: 请选择字段类型
+admin.tag.delete_hint: 确认要删除标签吗？
+admin.tag.delete_success_hint: 删除成功
+admin.tag.delete_fail_hint: 服务器错误!
+admin.tag.update_tag_success_hint: 标签更新成功！
+admin.tag.add_tag_success_hint: 标签添加成功!
+admin.tag.single_delete_hint: 真的要删除该标签吗？
+admin.tag_group.select_tag_empty_hint: 标签组内标签不能为空
+admin.tag_group.update_success_hint: 标签组更新成功！
+admin.tag_group.add_success_hint: 标签组添加成功!
+admin.tag_group.delete_hint: 真的要删除该标签组吗？
+admin.tag_group.tag_input_placeholder: 请输入标签
+admin.teacher.cancel_promote_hint: 真的要取消该教师推荐吗？
+admin.teacher.cancel_recommend_success_hint: 教师推荐已取消！
+admin.teacher.set_recommend_success_hint: 设置推荐老师操作成功!
+admin.teacher.set_recommend_fail_hint: 设置推荐老师操作失败!
+admin.user.approve_fail_confirm_hint: 是否确认审核失败?
+admin.user.approve_success_confirm_hint: 是否确认审核通过?
+admin.user.rejection_reason_empty_hint: 请输入驳回原因！
+admin.user.valid_remark_length_hint: 不好意思，备注太长，请限制在100个字以内!
+admin.user.approve_submiting_hint: 提交中...
+admin.user.cancel_approval_hint: 确定要撤销这条认证成功的实名认证吗？
+admin.user.update_avatar_success_hint: 头像更新成功！
+admin.user.upload_avatar_success_hint: 上传成功！
+admin.user.password_modify_success_hint: 密码修改成功
+admin.user.password_modify_error_hint: 操作失败
+admin.user.create_new_user_success_hint: 新用户添加成功
+admin.user.create_new_user_fail_hint: 新用户添加失败
+admin.user.edit_user_profile_success_hint: 用户信息保存成功
+admin.user.edit_user_profile_error_hint: 操作失败
+admin.user.valid_weibo_address_input.message: 网站地址不正确，须以http://weibo.com开头。
+admin.user.valid_site_address_input.message: 网站地址不正确，须以http://或https://开头。
+admin.user.import_finish_hint: 导入完成！
+admin.user.import_progress_hint: 已经导入：%progressNum%
+admin.user.import_fail_hint: %title%失败：
+admin.user.import_completed_hint: %title%完成
+admin.user.import_error_hint: %title%时，发生了未知错误。
+admin.user.lock_operational_hint: 真的要%title%吗？
+admin.user.lock_operational_success_hint: %title%成功！
+admin.user.lock_operational_fail_hint: %title%失败
+admin.user.sending_passwordreset_email_hint: 正在发送密码重置验证邮件，请稍等。
+admin.user.password_reset_email_send_success_hint: 密码重置验证邮件，发送成功！
+admin.user.password_reset_email_send_fail_hint: 密码重置验证邮件，发送失败
+admin.user.sending_email_verify_email_hint: 正在发送Email验证邮件，请稍等。
+admin.user.email_verify_email_send_success_hint: Email验证邮件，发送成功！
+admin.user.email_verify_email_send_fail_hint: Email验证邮件，发送失败
+admin.user.change_user_role_fail_hint: 用户必须拥有%user%角色
+admin.user.cancel_user_teacher_role_hint: 取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？
+admin.user.change_roles_success_hint: 用户组保存成功
+admin.user.change_roles_fail_hint: 操作失败
+admin.user.update_org_success_hint: 修改用户所属机构成功
+admin.user.update_org_fail_hint: 操作失败
+admin.wechat_app.mp_name_input.message: 请填写10个字以内的小程序标题
+admin.wechat_app.mp_description_input.message: 请填写小程序介绍
+admin.wechat_app.contact_name_input.message: 请填写联系人姓名
+admin.wechat_app.contact_phone_input.message: 请填写正确的电话号码
+admin.wechat_app.contact_qq_input.message: 请填写正确的 QQ 号

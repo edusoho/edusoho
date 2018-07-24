@@ -869,6 +869,7 @@ validate_old.maxsize_image.message: %display% must be less than 2M
 validate_old.server_upload_attachment_limit.message: The current server attachment size is limited to 2048MB
 validate_old.chinese_english.message: %display% must be Chinese, alphabetical
 validate_old.alpha_numeric.message: %display% must be alphabetical, numeric
+validate_old.html_tag.message: %display% should be HTML meta tag
 validate.character_maxlength: Do not exceed %max% letters.
 
 export.not_allowed: you are not allowed to download
@@ -1184,3 +1185,141 @@ admin.setting.consult_setting.upload_qrcode_success_hint: Upload WeChat QR code 
 admin.setting.consult_setting.setting_max_num_hint: Set up to 10..
 admin.setting.consult_setting.delete_hint: Are you sure you want to delete?
 admin.setting.course_avatar.select_default_pic.message: Please select the default course image file to upload
+admin.setting.course.upload_live_course_logo_success_hint: Upload the live course LOGO success!
+admin.setting.course.live_course_logo_delete_hint: Are you sure you want to delete?
+admin.setting.course.live_course_logo_delete_success_hint: Delete live course LOGO success!
+admin.setting.course.live_course_logo_delete_fail_hint: Delete live course LOGO failed!
+admin.setting.course.upload_default_pic_success_hint: Uploaded successfully!
+admin.setting.default_user_avatar.upload_success_hint: Uploaded successfully!
+admin.setting.upload_live_logo_success_hint: Upload LOGO successfully!
+admin.setting.upload_live_logo_fail_hint: Upload LOGO failed!
+admin.setting.mobile_iap_delete_hint: Are you sure you want to delete?
+admin.setting.mobile_iap_delete_success_hint: delete success
+admin.setting.mobile_iap_delete_fail_hint: delete failed
+admin.setting.mobile.startup_diagram_delete_hint: Are you sure you want to delete?
+admin.setting.mobile.upload_startup_diagram_figure_1_success_hint: Uploading the network school startup diagram Figure 1 success!
+admin.setting.mobile.delete_startup_diagram_figure_1_success_hint: Delete the network school startup diagram Figure 1 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_1_fail_hint: Delete the network school startup diagram Figure 1 failed!
+admin.setting.mobile.upload_startup_diagram_figure_2_success_hint: Uploading the network school startup diagram Figure 2 success!
+admin.setting.mobile.delete_startup_diagram_figure_2_success_hint: Delete the network school startup diagram Figure 2 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_2_fail_hint: Delete the network school startup diagram Figure 2 failed!
+admin.setting.mobile.upload_startup_diagram_figure_3_success_hint: Uploading the network school startup diagram Figure 3 success!
+admin.setting.mobile.delete_startup_diagram_figure_3_success_hint: Delete the network school startup diagram Figure 3 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_3_fail_hint: Delete the network school startup diagram Figure 3 failed!
+admin.setting.mobile.upload_startup_diagram_figure_4_success_hint: Uploading the network school startup diagram Figure 4 success!
+admin.setting.mobile.delete_startup_diagram_figure_4_success_hint: Delete the network school startup diagram Figure 4 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint: Delete the network school startup diagram Figure 4 failed!
+admin.setting.mobile.upload_startup_diagram_figure_5_success_hint: Uploading the network school startup diagram Figure 5 success!
+admin.setting.mobile.delete_startup_diagram_figure_5_success_hint: Delete the network school startup diagram Figure 5 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint: Delete the network school startup diagram Figure 5 failed!
+admin.setting.mobile.upload_logo_success_hint: Upload the network school LOGO success!
+admin.setting.mobile.delete_logo_success_hint: Delete the network school LOGO success!
+admin.setting.mobile.delete_logo_fail_hint: Delete the network school LOGO failed!
+admin.setting.mobile.upload_app_icon_success_hint: Upload app icon successfully!
+admin.setting.mobile.delete_app_icon_success_hint: Delete the network school app icon successfully!
+admin.setting.mobile.delete_app_icon_fail_hint: Delete the network school app icon failed!
+admin.setting.mobile.upload_app_cover_success_hint: Upload the app cover successfully!
+admin.setting.mobile.delete_app_cover_success_hint: Delete the app cover successfully!
+admin.setting.mobile.delete_app_cover_fail_hint: Delete the app cover failed!
+admin.site.upload_logo_success_hint: Upload site LOGO successfully!
+admin.site.delete_logo_success_hint: Delete site LOGO successfully!
+admin.site.delete_logo_fail_hint: Delete site LOGO failed!
+admin.site.upload_favicon_success_hint: Upload site favicon successfully!
+admin.site.delete_favicon_success_hint: Delete site favicon successfully!
+admin.site.delete_favicon_fail_hint: Delete site favicon failed!
+admin.site.delete_hint: Are you sure you want to delete?
+admin.setting.theme.upgrade_error_hint: This topic is not currently compatible with the current ES version. Please upgrade first.
+admin.setting.theme.use_hint: Do you really want to use this theme?
+admin.sms.send_success_hint: Sent successfully!
+admin.sms.sending_hint: Sending
+admin.sms.send_fail_hint: "failure:"
+admin.sms.finished: finished
+admin.sms.send_finished: Send completed
+admin.sms.send_error_hint: An unknown error has occurred in the transmission.
+admin.system.mailer.mail_sent_hint: The mail has been sent, please check it
+admin.system.mailer.mail_send_fail_hint: Mail failed to send, please check the mailbox server configuration
+admin.system.mailer.sender_name_input.message: Please input the sender name
+admin.system.mailer.smtp_server_host_input.message: Please input the SMTP server address
+admin.system.mailer.smtp_server_port_input.message: Please input the SMTP port number
+admin.system.mailer.smtp_server_username_input.message: Please input the SMTP username
+admin.system.mailer.smtp_server_password_input.message: Please input the SMTP password
+admin.system.mailer.sender_address_input.message: Please input the sender address
+admin.system.mailer.close_email_verify_hint: You have turned on the mailbox verification login in the user registration mode. Please turn off the <a href="%emailSetUrl%">mailbox verification login</a> function first!
+admin.system.mailer.verify_hint: verify
+admin.system.mailer.in_verify_hint: In verification..
+admin.system.payment.alipay_secret_input.message: Please input Key
+admin.system.payment.alipay_key_input.message: Please input PID
+admin.system.payment.wxpay_appid_input.message: Please input AppID
+admin.system.payment.wxpay_secret_input.message: Please input AppSecret
+admin.system.payment.wxpay_mp_secret_input.message: Please input MP file verification code
+admin.system.payment.wxpay_account_input.message: Please input the merchant number
+admin.system.payment.wxpay_key_input.message: Please input the merchant platform Key
+admin.system.payment.llpay_key_input.message: Please input the merchant account number
+admin.system.payment.llpay_accessKey_input.message: Please input the public key
+admin.system.payment.llpay_secretKey_input.message: Please input the secret key
+admin.system.user_fields.truename: truename
+admin.system.user_fields.mobile: mobile
+admin.system.user_fields.company: company
+admin.system.user_fields.idcard: idcard
+admin.system.user_fields.gender: gender
+admin.system.user_fields.career: career
+admin.system.user_fields.weibo: weibo
+admin.system.user_fields.wechat: wechat
+admin.system.user_fields.add_field_title_error_hint: Do not add custom fields that are the same as the default fields!
+admin.system.user_fields.field_type_input.message: Please select a field type
+admin.tag.delete_hint: Are you sure you want to delete the tag?
+admin.tag.delete_success_hint: Delete successfully
+admin.tag.delete_fail_hint: Server Error!
+admin.tag.update_tag_success_hint: The tag was updated successfully!
+admin.tag.add_tag_success_hint: The tag was added successfully!
+admin.tag.single_delete_hint: Are you sure you want to delete this tag?
+admin.tag_group.select_tag_empty_hint: tags in the tag group cannot be empty
+admin.tag_group.update_success_hint: The tag group was updated successful!
+admin.tag_group.add_success_hint: The tag group was added successfully!
+admin.tag_group.delete_hint: Are you sure you want to delete this tag group?
+admin.tag_group.tag_input_placeholder: Please input a tag
+admin.teacher.cancel_promote_hint: Really want to cancel the teacher recommendation?
+admin.teacher.cancel_recommend_success_hint: Teacher recommendation has been canceled!
+admin.teacher.set_recommend_success_hint: Set the recommended teacher successfully!
+admin.teacher.set_recommend_fail_hint: Set the recommended teacher failed!
+admin.user.approve_fail_confirm_hint: Do you confirm that the audit failed?
+admin.user.approve_success_confirm_hint: Do you confirm the approval?
+admin.user.rejection_reason_empty_hint: Please input the reason for the rejection!
+admin.user.valid_remark_length_hint: Sorry, the remarks is too long, please limit it to 100 words!
+admin.user.approve_submiting_hint: submitting...
+admin.user.cancel_approval_hint: Are you sure you want to cancel this successful approval?
+admin.user.update_avatar_success_hint: The avatar update is successful!
+admin.user.upload_avatar_success_hint: Uploaded successfully!
+admin.user.password_modify_success_hint: Password modified successfully
+admin.user.password_modify_error_hint: operation failed
+admin.user.create_new_user_success_hint: New user added successfully
+admin.user.create_new_user_fail_hint: New user added failed
+admin.user.edit_user_profile_success_hint: User profile saved successfully
+admin.user.edit_user_profile_error_hint: operation failed
+admin.user.valid_weibo_address_input.message: The website address is incorrect and must start with http://weibo.com.
+admin.user.valid_site_address_input.message: The website address is incorrect and must start with http:// or https://.
+admin.user.import_finish_hint: The import is complete!
+admin.user.import_progress_hint: Already imported：%progressNum%
+admin.user.import_fail_hint: %title% failure：
+admin.user.import_completed_hint: %title% completed
+admin.user.import_error_hint: %title%, An unknown error has occurred.
+admin.user.lock_operational_hint: Really want %title%?
+admin.user.lock_operational_success_hint: %title% successfully！
+admin.user.lock_operational_fail_hint: %title% failed
+admin.user.sending_passwordreset_email_hint: A password reset verification email is being sent, please wait a moment.
+admin.user.password_reset_email_send_success_hint: Password reset verification email, sent successfully!
+admin.user.password_reset_email_send_fail_hint: Password reset verification email, failed to send
+admin.user.sending_email_verify_email_hint: Email verification email is being sent, please wait a moment.
+admin.user.email_verify_email_send_success_hint: Email verification email, sent successfully!
+admin.user.email_verify_email_send_fail_hint: Email verification email, failed to send
+admin.user.change_user_role_fail_hint: User must have %user% role
+admin.user.cancel_user_teacher_role_hint: Cancel the teacher role of the user and will retake the teacher rights for all taught courses for that user. Do you really want to do this?
+admin.user.change_roles_success_hint: User group saved successfully
+admin.user.change_roles_fail_hint: operation failed
+admin.user.update_org_success_hint: Modify the user's organization success
+admin.user.update_org_fail_hint: operation failed
+admin.wechat_app.mp_name_input.message: Please fill in the weapp title within 10 words
+admin.wechat_app.mp_description_input.message: Please fill out the weapp introduction
+admin.wechat_app.contact_name_input.message: Please fill in the contact name
+admin.wechat_app.contact_phone_input.message: Please fill in the correct phone number
+admin.wechat_app.contact_qq_input.message: Please fill in the correct QQ number
