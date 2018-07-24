@@ -16,6 +16,6 @@
   <td>{{ questionTypesDict[question.type] }}</td>
   <td>
     <button class="btn btn-default btn-sm question-preview"  data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" data-role="preview-btn">{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</button>
-    <button class="btn btn-primary btn-sm js-pick-button" type="button"  data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-question-id="{{ question.id }}" data-url="{{ path('course_set_manage_homework_question_picked', {courseSetId:courseSet.id }) }}">{% if replace|default(null) %}{{'course.testpaper_manage.question.operation.replace_btn'|trans}}{% else %}{{'form.btn.select'|trans}}{% endif %}</button>
+    <button class="btn btn-primary btn-sm" type="button"  data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-question-id="{{ question.id }}" data-url="{{ path('course_set_manage_homework_question_picked', {courseSetId:courseSet.id }) }}">{% if replace|default(null) %}{{'course.testpaper_manage.question.operation.replace_btn'|trans}}{% else %}{{'form.btn.select'|trans}}{% endif %}</button>
   </td>
 </tr>
