@@ -3,7 +3,7 @@
     <label class="control-label-required" for="title">{{ 'course.base.title'|trans }}</label>
   </div>
   <div class="col-md-8">
-    <input type="text" id="title" name="title" required="required" class="form-control" value="{{ courseSet.title|default('') }}">
+    <input type="text" id="title" name="title" required="required" class="form-control js-courseset-title" value="{{ courseSet.title|default('') }}">
     <div class="help-block" style="display:none;"></div>
   </div>
 </div>
@@ -11,7 +11,7 @@
 <div class="form-group">
   <label class="col-md-2 control-label" for="subtitle">{{ 'course.base.sub_title'|trans }}</label>
   <div class="col-md-8">
-    <textarea id="subtitle" name="subtitle" class="form-control">{{ courseSet.subtitle|default('') }}</textarea>
+    <textarea id="subtitle" name="subtitle" class="form-control js-courseset-subtitle">{{ courseSet.subtitle|default('') }}</textarea>
     <div class="help-block" style="display:none;"></div>
   </div>
 </div>
