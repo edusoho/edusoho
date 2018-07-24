@@ -27,7 +27,6 @@ class CourseItem extends AbstractResource
 
     private function convertToLeadingItems($originItems, $courseId, $onlyPublishTask = false)
     {
-        var_dump(json_encode($originItems));
         $newItems = array();
         $number = 1;
         foreach ($originItems as $originItem) {
