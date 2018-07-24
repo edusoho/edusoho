@@ -440,7 +440,7 @@ course.manage.close_hint: 是否确定关闭该教学计划？
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.delete_hint: 是否确定删除该教学计划？
-course.manage.task_delete_hint: 是否确定删除该活动吗？
+course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
