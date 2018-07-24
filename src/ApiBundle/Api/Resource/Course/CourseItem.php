@@ -27,11 +27,12 @@ class CourseItem extends AbstractResource
 
     private function convertToLeadingItems($originItems, $courseId, $onlyPublishTask = false)
     {
+        var_dump(json_encode($originItems));
         $newItems = array();
         $number = 1;
         foreach ($originItems as $originItem) {
             $item = array();
-            if ($originItem['itemType'] == 'task') {
+            if ('task' == $originItem['itemType']) {
                 $item['type'] = 'task';
                 $item['seq'] = '0';
                 $item['number'] = strval($number++);
@@ -41,7 +42,8 @@ class CourseItem extends AbstractResource
                 continue;
             }
 
-            if ($originItem['itemType'] == 'chapter' && $originItem['type'] == 'lesson') {
+            if ('chapter' == $originItem['itemType'] && 'lesson' == $originItem['type']) {
+                $originItem['tasks'] = empty($originItem['tasks']) ? array() : $originItem['tasks'];
                 $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
@@ -70,7 +72,7 @@ class CourseItem extends AbstractResource
     private function filterUnPublishTask($items)
     {
         foreach ($items as $key => $item) {
-            if ($item['type'] == 'task' && $item['task']['status'] != 'published') {
+            if ('task' == $item['type'] && $item['task']['status'] != 'published') {
                 unset($items[$key]);
             }
         }
