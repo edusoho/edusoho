@@ -41,9 +41,11 @@
       </div>
       <div class="courseset-manage-header-info__price color-danger">
         {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
-          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
         {% else %}
-          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}<span class="cd-text-sm">～</span><span class="cd-text-sm">¥</span>{{ courseSet.maxCoursePrice }}
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
+          <span class="cd-text-sm">～</span>
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.maxCoursePrice} %}
         {% endif %}
       </div>
     </div>
