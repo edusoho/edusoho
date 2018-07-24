@@ -57,6 +57,7 @@ site.confirm: Confirm
 site.close: Close
 site.delete: Delete
 site.time: Time
+site.capacity: capacity(G)
 site.step_two: Step 2
 site.step_one: Step 1
 site.information: information
@@ -866,6 +867,8 @@ validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
 validate_old.server_upload_attachment_limit.message: The current server attachment size is limited to 2048MB
+validate_old.chinese_english.message: %display% must be Chinese, alphabetical
+validate_old.alpha_numeric.message: %display% must be alphabetical, numeric
 validate.character_maxlength: Do not exceed %max% letters.
 
 export.not_allowed: you are not allowed to download
@@ -1099,3 +1102,85 @@ admin.material_lib.video_line_chart_title: Video details
 admin.material_lib.audio_line_chart_title: Audio details
 admin.material_lib.document_line_chart_title: Document details
 admin.navigation.save_success_hint: Save navigation successfully!
+admin.open_course.member_delete_title: Delete member
+admin.open_course.recommend_delete_title: Delete related recommended course
+admin.open_course.material_delete_title: Delete lesson material
+admin.open_course.lesson_delete_title: Delete lesson
+admin.open_course.course_delete_title: Delete course
+admin.open_course.delete_unknow_error_hint: %title%,An unknown error has occurred.
+admin.open_course.delete_exec_hint: in the process of %title%
+admin.open_course_analysis.chart_title: Access source
+admin.open_course_analysis.watch.chart_title: View statistics
+admin.open_course_analysis.watch.chart_data_title: Number of views
+admin.operation.upload_carousel_one_success_hint: Upload carousel Figure 1 successfully!
+admin.operation.delete_hint: Are you sure you want to delete?
+admin.operation.delete_carousel_one_success_hint: Delete the carousel Figure 1 successfully!
+admin.operation.delete_carousel_one_fail_hint: Delete the carousel Figure 1 failed!
+admin.operation.upload_carousel_two_success_hint: Upload carousel Figure 2 successfully!
+admin.operation.delete_carousel_two_success_hint: Delete the carousel Figure 2 successfully!
+admin.operation.delete_carousel_two_fail_hint: Delete the carousel Figure 2 failed!
+admin.operation.upload_carousel_three_success_hint: Upload carousel Figure 3 successfully!
+admin.operation.delete_carousel_three_success_hint: Delete the carousel Figure 3 successfully!
+admin.operation.delete_carousel_three_fail_hint: Delete the carousel Figure 3 failed!
+admin.operation.upload_carousel_four_success_hint: Upload carousel Figure 4 successfully!
+admin.operation.delete_carousel_four_success_hint: Delete the carousel Figure 4 successfully!
+admin.operation.delete_carousel_four_fail_hint: Delete the carousel Figure 4 failed!
+admin.operation.upload_carousel_five_success_hint: Upload carousel Figure 5 successfully!
+admin.operation.delete_carousel_five_success_hint: Delete the carousel Figure 5 successfully!
+admin.operation.delete_carousel_five_fail_hint: Delete the carousel Figure 5 failed!
+admin.optimize.check_optimize_file: Check optimization file
+admin.optimize.optimize_file_success_hint: Optimized file success
+admin.optimize.optimizing_file_hint: in the process of %title%
+admin.optimize.optimize_file_fail_message: %title% fail：
+admin.optimize.optimize_file_success_message: %title% finish
+admin.optimize.optimize_file_error_message: %title%,An unknown error has occurred.
+admin.optimize.remove_cache_success_hint: Refresh the cache successfully!
+admin.optimize.remove_cache_fail_hint: Refresh the cache failure!
+admin.optimize.remove_tmp_success_hint: Optimize disk space successfully!
+admin.optimize.remove_tmp_fail_hint: Optimize disk space failure!
+admin.optimize.remove_backup_hint: Are you sure you want to clear the system backup data?
+admin.optimize.remove_backup_success_hint: Clear the system backup data successfully!
+admin.optimize.remove_backup_fail_hint: Clear the system backup data failure!
+admin.optimize.backup_database_success_hint: Backup database is successful, please download the database and optimize disk space in time!
+admin.optimize.backup_database_fail_hint: Backup database failed!
+admin.order.validate_old.adjust_price.display: Discounted price
+admin.order.validate_old.valid_price_input.message: Please enter the correct price, up to two decimal places
+admin.order.validate_old.discount.display: Discount
+admin.order.validate_old.valid_discount_input.message: Please enter the correct discount, up to two decimal places
+admin.order.validate_old.result_input.message: Please select an audit result
+admin.order.refund_cancel_hint: Do you really want to cancel your refund application?
+admin.order.refund_cancel_success_hint: Refund application cancelled!
+admin.org.batch_select_check_hint: Please select data first
+admin.org.update_success_hint: Update organization success
+admin.org.update_fail_hint: operation failed
+admin.org_manage.save_success_hint: Save the organization successfully!
+admin.org_manage.add_org_fail_hint: Add the organization failed, please try again!
+admin.org_manage.delete_hint: Are you really going to delete the organization and its sub-organizations?
+admin.org_manage.delete_success_hint: Organization has been deleted
+admin.org_manage.contains_data.delete_fail_hint: The organization contains data
+admin.org_manage.contains_data_num: (s)
+admin.org_manage.contains_data.delete_hint: Please move to another organization and delete it!
+admin.role.update_success_hint: The role has been modified successfully!
+admin.role.add_success_hint: The role is added successfully!
+admin.role.delete_hint: Are you sure to delete this role?
+admin.role.delete_success_hint: Delete role successfully
+admin.role.delete_fail_hint: Delete role failed
+admin.setting.operation_fail_hint: operation failed!
+admin.setting.operation_success_hint: operation successfully!
+admin.setting.auth.email_verified_hint: Please verify your email before opening.
+admin.setting.cloud_key.bind_hint: Once the authorized domain name is bound, it cannot be changed. Do you really want to bind the authorized domain name?
+admin.setting.cloud.upload_cloud_video_watermark_error_hint: Upload cloud video player watermark failed, please try again!
+admin.setting.cloud.upload_cloud_video_watermark_success_hint: Upload cloud video player watermark successfully!
+admin.setting.cloud.delete_cloud_video_watermark_hint: Are you sure you want to delete the cloud video player watermark?
+admin.setting.cloud.delete_cloud_video_watermark_success_hint: Delete the cloud video player watermark successfully!
+admin.setting.cloud.delete_cloud_video_watermark_fail_hint: Delete the cloud video player watermark failed!
+admin.setting.cloud.upload_cloud_video_embed_watermark_success_hint: Upload cloud video embed watermark successfully!
+admin.setting.cloud.upload_cloud_video_embed_watermark_fail_hint: Upload cloud video embed watermark failed, please try again!
+admin.setting.cloud.delete_cloud_video_embed_watermark_hint: Are you sure you want to delete the cloud video watermark?
+admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint: Delete cloud video embed watermark successfully!
+admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint: Delete cloud video embed watermark failed!
+admin.setting.cloud.validate_old.video_fingerprint_time.display: Cloud video fingerprint display time
+admin.setting.consult_setting.upload_qrcode_success_hint: Upload WeChat QR code successfully!
+admin.setting.consult_setting.setting_max_num_hint: Set up to 10..
+admin.setting.consult_setting.delete_hint: Are you sure you want to delete?
+admin.setting.course_avatar.select_default_pic.message: Please select the default course image file to upload

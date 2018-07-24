@@ -14,7 +14,7 @@ define(function(require, exports, module) {
         });
 
         $info.on('click', '.key-bind-btn', function() {
-            if (!confirm(Translator.trans('授权域名一旦绑定就无法变更，您真的要绑定该授权域名吗？'))) {
+            if (!confirm(Translator.trans('admin.setting.cloud_key.bind_hint'))) {
                 return ;
             }
             $(this).button('loading');

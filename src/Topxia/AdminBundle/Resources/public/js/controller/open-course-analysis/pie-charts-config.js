@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
 	function EchartsConfig(options) {
 		var defaultOption = {
-			name: '访问来源',
+			name: Translator.trans('admin.open_course_analysis.chart_title'),
 			formatter: "{a} <br/>{b}: {c} ({d}%)"
 		}
 		this.config = $.extend(defaultOption, options);

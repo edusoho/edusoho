@@ -6,35 +6,35 @@ define(function(require, exports, module) {
 
         $('#removecache').on('click',  function() {
             $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('刷新缓存成功！'));
+                Notify.success(Translator.trans('admin.optimize.remove_cache_success_hint'));
             }).error(function(response){
-                Notify.danger(Translator.trans('刷新缓存失败！'));
+                Notify.danger(Translator.trans('admin.optimize.remove_cache_fail_hint'));
             });
         });
         $('#removeTmp').on('click',  function() {
             $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('优化磁盘空间成功！'));
+                Notify.success(Translator.trans('admin.optimize.remove_tmp_success_hint'));
             }).error(function(response){
-                Notify.danger(Translator.trans('优化磁盘空间失败！'));
+                Notify.danger(Translator.trans('admin.optimize.remove_tmp_fail_hint'));
             });
         });
         $('#removeBackup').on('click',  function() {
-            if (!confirm(Translator.trans('确认要清空系统备份数据吗？'))) return false;
+            if (!confirm(Translator.trans('admin.optimize.remove_backup_hint'))) return false;
             $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('清空系统备份数据成功！'));
+                Notify.success(Translator.trans('admin.optimize.remove_backup_success_hint'));
             }).error(function(response){
-                Notify.danger(Translator.trans('清空系统备份数据失败！'));
+                Notify.danger(Translator.trans('admin.optimize.remove_backup_fail_hint'));
             });
         });
         $('#backupDatabase').on('click',  function() {
             $.post($(this).data('url'), function(response) {
                 if(response.status=='ok'){
-                    Notify.success(Translator.trans('备份数据库成功，请下载数据库，并及时优化磁盘空间！'));
+                    Notify.success(Translator.trans('admin.optimize.backup_database_success_hint'));
                     $('#dbbackup').removeClass('hide');
                     $('#dbdownload').attr('href',response.result);
                 }
             }).error(function(response){
-                Notify.danger(Translator.trans('备份数据库失败！'));
+                Notify.danger(Translator.trans('admin.optimize.backup_database_fail_hint'));
             });
         });
 
