@@ -118,19 +118,21 @@
 				
 				{% if course.showServices | default(1) %}
           <div class="course-detail-service">
-            <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
-  					{% set serviceTags = services(course.services|default([])) %}
+            {% set serviceTags = services(course.services|default([])) %}
+  		      <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
   					{% for tag in serviceTags %}
-              <span
-                  class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
-                  data-container="body"
-                  data-trigger="hover"
-                  data-placement="top"
-                  data-toggle="tooltip"
-                  title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
-                  data-content="{{ tag.summary }}">
-                {{ tag.shortName }}
-              </span>
+              {% if tag.active %}
+                <span
+                    class="lump-sm color-lump bg-primary mr5 hidden-xs"
+                    data-container="body"
+                    data-trigger="hover"
+                    data-placement="top"
+                    data-toggle="tooltip"
+                    title="{{ tag.fullName }}"
+                    data-content="{{ tag.summary }}">
+                  {{ tag.shortName }}
+                </span>
+              {% endif %}
   					{% endfor %}
           </div>
 				{% endif %}

@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import BatchSelect from 'app/common/widget/batch-select';
 new BatchSelect($('#student-table-container'));
 class Students {
@@ -25,10 +24,10 @@ class Students {
       }
       $.post($(evt.target).data('url'), function (data) {
         if (data.success) {
-          notify('success', Translator.trans('site.delete_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
           location.reload();
         } else {
-          notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
+          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
         }
       });
     });
@@ -41,10 +40,10 @@ class Students {
         $this.hide();
         if ($this.hasClass('follow-student-btn')) {
           $this.parent().find('.unfollow-student-btn').show();
-          notify('success', Translator.trans('user.follow_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('user.follow_success_hint') });
         } else {
           $this.parent().find('.follow-student-btn').show();
-          notify('success', Translator.trans('user.unfollow_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('user.unfollow_success_hint') });
         }
       });
 
@@ -59,7 +58,7 @@ class Students {
       });
       console.log(ids);
       if (ids.length == 0) {
-        notify('danger', Translator.trans('course.manage.student.add_expiry_day.select_tips'));
+        cd.message({ type: 'danger', message: Translator.trans('course.manage.student.add_expiry_day.select_tips') });
         return ;
       }
       $.get($(this).data('url'), {ids:ids}, function(html) {

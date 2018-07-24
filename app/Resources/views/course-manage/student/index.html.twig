@@ -3,7 +3,7 @@
 {% block title %}{{'course.members_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
 {% set course_side_nav = 'students' %}
-
+{% block main_heading_class %}course-main-header{% endblock %}
 {% block main_heading %}
   {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
 {% endblock %}
@@ -15,13 +15,13 @@
 
       <form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
         <div class="form-group col-md-7">
-          <input class="form-control " type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
-          <button type="submit" class="btn btn-primary">{{'course.members_manage.official_student.search'|trans}}</button>
+          <input class="form-control" type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+          <button type="submit" class="cd-btn cd-btn-primary">{{'course.members_manage.official_student.search'|trans}}</button>
         </div>
         <div class="clearfix"></div>
       </form>
-      {% if 'forever' != course.expiryMode %}
-        <button id="batch-update-expiry-day" type="button" class="btn btn-primary" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id})}}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+      {% if 'forever' != course.expiryMode and students|length > 0 %}
+        <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id})}}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
       {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>

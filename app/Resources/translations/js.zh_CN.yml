@@ -683,6 +683,9 @@ validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
 validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.modify_date: 请输入修改日期
+validate.modify_days: 请输入修改天数
+validate.modify_day_number: 请输入不大于 7300（20年）的数值
 validate.success: 验证成功
 validate.fail: 验证失败
 
