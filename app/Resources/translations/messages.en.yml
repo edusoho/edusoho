@@ -846,8 +846,8 @@ course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
 course.plan_setup.mode.free_tips: 'Learn freely'
 course.plan_setup.finish_rule: 'Task rules'
-course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by task finish conditions'
-course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the task'
+course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
@@ -885,7 +885,7 @@ course.marketing_setup.preview: Preview
 course.marketing_setup.preview.set_task: 'Free %taskName%'
 course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson %taskName% only support'
 course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.not.support.try_watch: 不支持试看
 course.marketing_setup.preview.minutes.try_watch: 分钟试看
@@ -1031,7 +1031,7 @@ course.dashboard.content_title: 'Course Learn data'
 course.dashboard.course_dashboard: 'Data overview'
 course.dashboard.success_rate: 'Task finish rate'
 course.dashboard.study_detail: 'Task detail'
-course.dashboard.study_detail.name: 'Task name'
+course.dashboard.study_detail.name: '%taskName活动进度% name'
 course.dashboard.study_detail.per_study_time: 'Average Learn time(mintue)'
 course.dashboard.study_detail.per_study_time_tips: 'Task time: From start time to finish time of the task.  average  task time:average task time of students'
 course.dashboard.study_detail.audio_time: 'Video and audio duration(mintue)'
@@ -1067,7 +1067,7 @@ course.dashboard.student_trend: Student trend
 course.dashboard.student_trend_seven_days: week
 course.dashboard.student_trend_thirty_days: month
 course.dashboard.student_detail: Student detail
-course.dashboard.task_detail: Task detail
+course.dashboard.task_detail: %taskName% detail
 course.dashboard.student_chart.time_select_all: all
 course.dashboard.student_chart.time_select_unFinished: unFinished
 course.dashboard.student_chart.time_select_seven_days: Seven days without school
@@ -1197,7 +1197,7 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: %taskName%
-course.task.progress: 'task progress'
+course.task.progress: '%taskName% progress'
 course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior %taskName% to continue.'
 course.task.learning: '%taskName% learning'

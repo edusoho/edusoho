@@ -970,8 +970,8 @@ course.plan_setup.mode.locked: 解锁式学习
 course.plan_setup.mode.locked_tips: 根据既定顺序逐个解锁学习
 course.plan_setup.mode.free_tips: 学习过程自由安排
 course.plan_setup.finish_rule: 活动完成规则
-course.plan_setup.finish_rule.depend_on_finish_condition: 由任务完成条件决定
-course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，任务才算完成
+course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
 course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
@@ -1011,7 +1011,7 @@ course.marketing_setup.preview: 预览试看
 course.marketing_setup.preview.set_task: 设置免费学习%taskName%
 course.marketing_setup.preview.set_task.task_name: %name%%taskName%
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
+course.marketing_setup.preview.set_task.free_tips: 免费%taskName%仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.not.support.try_watch: 不支持试看
 course.marketing_setup.preview.minutes.try_watch: 分钟试看
@@ -1170,7 +1170,7 @@ course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
 course.dashboard.success_rate: 活动完成率
 course.dashboard.study_detail: 活动学习详情
-course.dashboard.study_detail.name: 活动名
+course.dashboard.study_detail.name: %taskName%名
 course.dashboard.study_detail.per_study_time: 平均学习时长(分)
 course.dashboard.study_detail.per_study_time_tips: 活动学习时长：从活动开始到活动完成的耗时，活动平均学习时长：每个学员的活动学习时长的平均数
 course.dashboard.study_detail.audio_time: 音视频时长(分)
@@ -1206,7 +1206,7 @@ course.dashboard.student_trend: 学员趋势
 course.dashboard.student_trend_seven_days: 7天
 course.dashboard.student_trend_thirty_days: 30天
 course.dashboard.student_detail: 学员详情
-course.dashboard.task_detail: 活动详情
+course.dashboard.task_detail: %taskName%详情
 course.dashboard.student_chart.time_select_all: 全部
 course.dashboard.student_chart.time_select_unFinished: 未完成
 course.dashboard.student_chart.time_select_seven_days: 7天未学
@@ -1351,7 +1351,7 @@ course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
 course.task: %taskName%
-course.task.progress: 活动进度
+course.task.progress: %taskName%进度
 course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个%taskName%才能学习
 course.task.learning: %taskName%学习

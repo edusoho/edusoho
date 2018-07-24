@@ -16,7 +16,7 @@
       {% endfor %}
     </ul>
     {% set can_free_activity_types = can_free_activity_types() %}
-    <div class="help-block course-mange-space">{{'course.marketing_setup.preview.set_task.free_tips'|trans}}{{ can_free_activity_types|join('word.seperator'|trans) }}
+    <div class="help-block course-mange-space">{{'course.marketing_setup.preview.set_task.free_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}{{ can_free_activity_types|join('word.seperator'|trans) }}
     </div>
   </div>
 </div>
