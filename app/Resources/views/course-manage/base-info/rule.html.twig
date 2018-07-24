@@ -11,13 +11,13 @@
 </div>
 {% include 'course-manage/marketing/set-rule.html.twig' %}
 <div class="form-group">
-  <label for="" class="col-sm-2 control-label mbs">{{'course.plan_setup.finish_rule'|trans}}</label>
+  <label for="" class="col-sm-2 control-label mbs">{{'course.plan_setup.finish_rule'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</label>
   <div class="col-sm-8 cd-radio-group mb0">
     <label class="cd-radio {% if course.enableFinish|default('0') == 1 %}checked{% endif %}">
       <input type="radio" data-toggle="cd-radio" name="enableFinish" value="1" > {{'course.plan_setup.finish_rule.nothing'|trans}}
     </label><label class="cd-radio {% if course.enableFinish|default('0') == 0 %}checked{% endif %}">
-      <input type="radio" data-toggle="cd-radio"  name="enableFinish" value="0"> {{'course.plan_setup.finish_rule.depend_on_finish_condition'|trans}}
-      <a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans}}"></a>
+      <input type="radio" data-toggle="cd-radio"  name="enableFinish" value="0"> {{'course.plan_setup.finish_rule.depend_on_finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
+      <a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}"></a>
     </label>
   </div>
 </div>
