@@ -4,5 +4,5 @@ export default [{
   meta: {
     title: '我的'
   },
-  component: resolve => require(['@/containers/my/index.vue'], resolve)
+  component: import(/* webpackChunkName: "my" */'@/containers/my/index.vue')
 }];
