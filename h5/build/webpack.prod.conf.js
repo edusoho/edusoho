@@ -96,6 +96,17 @@ const webpackConfig = merge(baseWebpackConfig, {
         )
       }
     }),
+
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   names: "common",
+    //   minChunks: function(module, count) {
+    //     if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
+    //       return false;
+    //     }
+    //     return module.context && 
+    //       module.context.includes("node_modules");
+    //   }
+    // }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     new webpack.optimize.CommonsChunkPlugin({
@@ -110,16 +121,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       async: 'vendor-async',
       children: true,
       minChunks: 3
-    }),
-
-    new webpack.optimize.CommonsChunkPlugin({
-      names: "common",
-      minChunks: function(module, count) {
-        if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
-          return false;
-        }
-        return module.context && module.context.includes("node_modules");
-      }
     }),
 
     // copy custom static assets

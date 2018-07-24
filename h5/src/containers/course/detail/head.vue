@@ -4,6 +4,7 @@
       v-show="sourceType === 'img'">
       <img :src="courseSet.cover.large" alt="">
     </div>
+    <div>test</div>
     <div id="course-detail__head--video" 
       ref="video"
       v-show="['video', 'audio'].includes(sourceType)">
