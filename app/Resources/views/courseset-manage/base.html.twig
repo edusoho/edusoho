@@ -17,6 +17,7 @@
         </div>
       </div>
 
+      <input type="hidden" name="isMulCourseSet" id="isMulCourseSet" value="{{ has_mul_courses(courseSet.id) }}">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>

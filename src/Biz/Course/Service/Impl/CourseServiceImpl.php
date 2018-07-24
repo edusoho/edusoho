@@ -233,9 +233,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'tryLookLength',
             )
         );
-        if (!empty($fields['services'])) {
-            $fields['showServices'] = 1;
-        }
+
         if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
@@ -2389,6 +2387,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
             $fields['isFree'] = 1;
+        }
+
+        if (!empty($fields['originPrice']) && $fields['originPrice'] > 0) {
+            $fields['isFree'] = 0;
+        }
+
+        if (empty($fields['tryLookLength'])) {
+            $fields['tryLookLength'] = 0;
         }
 
         if ('normal' == $courseSet['type'] && 0 == $fields['tryLookLength']) {
