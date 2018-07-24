@@ -1,0 +1,57 @@
+{% for task in tasks|default() %}
+  {% set activity = task.activity|default() %}
+  {% set file = task.activity.ext.file|default(null) %}
+
+  <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
+    <div class="item-content js-item-content text-overflow">
+      <i class="es-icon {{ activity_metas(activity.mediaType).icon }} mrs" data-role="task"></i>
+      {% if not task.isOptional %}
+        {{'course.activity'|trans}}<span class="number mls">{{ task.number }}</span>：
+      {% endif %}
+      {{ task.title|sub_text(30) }}
+
+       {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
+        <span class="cd-tag cd-tag-red ml5">{{'course.plan_task.convert_failed'|trans}}</span>
+      {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
+        <span class="cd-tag cd-tag-orange ml5">{{'course.plan_task.converting'|trans}}</span>
+      {% endif %}
+
+      {% if activity.mediaType is same as('live') %}
+        {% if not activity.ext.roomCreated|default(true) %}
+          <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
+        {% elseif activity.endTime < date().timestamp %}
+          <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
+        {% else %}
+          <span class="color-success mls">
+          {{ activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ activity.endTime|date('H:i')|trans }}</span>
+        {% endif %}
+      {% else %}
+        {% if activity.length|activity_length_format(activity.mediaType) %}<span class="mls">
+          （{{ activity.length|activity_length_format(activity.mediaType) }}）</span>{% endif %}
+      {% endif %}
+    </div>
+    <div class="item-actions">
+      <a class="cd-mr24" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}">
+        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans }}" data-placement="top"></i>
+      </a>
+      <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
+        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans }}" data-placement="top"></i>
+      </a>
+      
+      <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+        <a  class="cd-link-assist" href="javascript:;">
+          <i class="es-icon es-icon-morehoriz"></i>
+        </a>
+        <ul class="dropdown-menu task-manage-item__dropdown">
+          <li>
+            <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+              {{'course.plan_task.delete_btn'|trans}}{{ 'course.activity'|trans }}
+            </a>
+          </li>
+          {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}
+          {{ slot('task.menu.extension', {'task': task}) }}
+        </ul>
+      </div>
+    </div>
+  </li>
+{% endfor %}

@@ -51,6 +51,8 @@ interface CourseService
 
     public function updateChapter($courseId, $chapterId, $fields);
 
+    public function deleteChapter($courseId, $chapterId);
+
     public function findChaptersByCourseId($courseId);
 
     public function updateCourse($id, $fields);
@@ -66,6 +68,15 @@ interface CourseService
     public function closeCourse($id);
 
     public function publishCourse($id, $withTasks = false);
+
+    /**
+     * 判断所给计划，是否在其所属课程内，有多个计划同时默认教学计划未设置标题
+     */
+    public function hasNoTitleForDefaultPlanInMulPlansCourse($id);
+
+    public function hasMulCourses($courseSetId, $isPublish = 0);
+
+    public function publishAndSetDefaultCourseType($courseId, $title);
 
     /**
      * @param  $courseId
@@ -173,8 +184,6 @@ interface CourseService
 
     public function sortCourseItems($courseId, $ids);
 
-    public function deleteChapter($courseId, $chapterId);
-
     public function analysisCourseDataByTime($startTime, $endTime);
 
     public function countCourses(array $conditions);
@@ -243,10 +252,31 @@ interface CourseService
 
     public function findLiveCourse($conditions, $userId, $role);
 
+    public function changeShowPublishLesson($courseId, $status);
+
+    public function countCoursesByCourseSetId($courseSetId);
+
+    //排序教学计划
+    public function sortCourse($courseSetId, $ids);
+
+    public function sortByCourses($courses);
+
+    public function countCourseItems($course);
+
     /**
      * 如果 约排课已开启，不额外添加查询条件，
      * 如果 未开启，添加 excludeTypes = 'reservation' 的查询条件
      *    （如果已经存在 excludeTypes 属性，则额外新增，非替换）
      */
     public function appendReservationConditions($conditions);
+
+    //修改课程基础信息
+    public function updateBaseInfo($id, $fields);
+
+    /**
+     * 是否能修改基础信息
+     * 管理员可以修改
+     * 课程老师，后台设置可修改营销设置可修改
+     */
+    public function canUpdateCourseBaseInfo($courseId);
 }

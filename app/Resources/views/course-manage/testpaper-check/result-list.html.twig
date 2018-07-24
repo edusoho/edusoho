@@ -2,35 +2,35 @@
 
 {% block title %}{{ testpaper.name }} - {{'course.testpaper_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% import 'macro.html.twig' as macro %}
-
-{% set side_nav = 'testpaper-check' %}
+{% block main_heading %}
+  <div class="cd-main__title">
+    {% if course.title is empty() %}{{ courseSet.title }}{% else %}{{ course.title }}{% endif %}<span class="mh5">／</span>{{ testpaper.name }}
+  </div>
+  {% if course.status != 'published' %}
+    <div class="course-main-header__operation">
+      <button class="cd-btn cd-btn-success cd-btn-sm pull-right js-publish-course"
+        data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+        data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+        data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}">
+        {{ 'testpaper.check.course.publish_btn'|trans }}
+      </button>
+    </div>
+  {% endif %}
+{% endblock %}
+{% set course_side_nav = 'testpaper-check' %}
 {% if testpaper.type == 'homework' %}
-  {% set side_nav = 'homework-check' %}
+  {% set course_side_nav = 'homework-check' %}
   {% set typeName = 'testpaper.check.homework'|trans %}
 {% else %}
-  {% set side_nav = 'testpaper-check' %}
+  {% set course_side_nav = 'testpaper-check' %}
   {% set typeName = 'testpaper.check.testpaper'|trans %}
 {% endif %}
 
-{% block main %}
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      {{ course.title }}<span class="mh5">／</span>{{ testpaper.name }}
-      {% if course.status != 'published' %}
-        <button class="btn btn-success btn-sm pull-right js-publish-course" 
-          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-          {{ 'testpaper.check.course.publish_btn'|trans }}
-        </button>
-      {% endif %}
-      {#{% if course_count(course.courseSetId) > 1 %}
-        <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
-      {% endif %}#}
-    </div>
-    <div class="panel-body">
-      {% if isTeacher is defined and not isTeacher %}
-        <span class="color-danger">{{'testpaper.check.not_isTeacher.tips'|trans({'%typeName%':typeName}) }}</span>
-      {% endif %}
-      {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id, activityId: activityId})) }}
-    </div>
+{% block main_body %}
+  <div>
+    {% if isTeacher is defined and not isTeacher %}
+      <span class="color-danger">{{'testpaper.check.not_isTeacher.tips'|trans({'%typeName%':typeName}) }}</span>
+    {% endif %}
+    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id, activityId: activityId})) }}
   </div>
 {% endblock %}

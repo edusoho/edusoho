@@ -41,6 +41,8 @@ class CourseChapterCopy extends AbstractCopy
             'number',
             'seq',
             'title',
+            'status',
+            'isOptional',
         );
     }
 

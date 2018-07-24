@@ -1,14 +1,16 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.order.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'orders' %}
+{% set course_side_nav = 'orders' %}
 
 {% do script(['libs/bootstrap-datetimepicker.js', 'app/js/course-manage/order/index.js']) %}
 
-{% block main %}
-  <div class="panel panel-default">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
-    <div class="panel-body">
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav,btnGroup:1} %}
+{% endblock %}
+
+{% block main_body %}
+    <div>
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="orderItemType" value="course">
         <input type="hidden" name="order_item_target_ids[]" value="{{ course.id }}">
@@ -59,5 +61,4 @@
       </table>
       {{ web_macro.paginator(paginator) }}
     </div>
-  </div>
 {% endblock %}

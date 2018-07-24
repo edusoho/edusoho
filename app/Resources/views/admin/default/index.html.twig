@@ -146,13 +146,13 @@
                       data-url="{{ path('admin_task_learn_statistic', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
             </div>
           </div>
-          <h3 class="panel-title">{{ 'admin.homepage.task_finish_statistic_title'|trans }}
+          <h3 class="panel-title">{{ 'admin.homepage.task_finish_statistic_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
             <span data-toggle="popover"
                   class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
             <div class="popover-content hidden">
               <div class="popover-item">
                 <div class="content">
-                  {{ 'admin.homepage.task_finish_statistic.tips'|trans }}
+                  {{ 'admin.homepage.task_finish_statistic.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
                 </div>
               </div>
             </div>

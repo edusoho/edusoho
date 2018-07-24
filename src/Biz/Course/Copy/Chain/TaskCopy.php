@@ -6,6 +6,7 @@ use Biz\Task\Dao\TaskDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Copy\AbstractEntityCopy;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class TaskCopy extends AbstractEntityCopy
 {
@@ -50,6 +51,7 @@ class TaskCopy extends AbstractEntityCopy
         //sort tasks
         $num = 1;
         $newTasks = array();
+        $updateChapterIds = array();
         foreach ($tasks as $task) {
             $newTask = $this->doCopyTask($task, $config['isCopy']);
             $newTask['courseId'] = $newCourse['id'];
@@ -64,14 +66,19 @@ class TaskCopy extends AbstractEntityCopy
             if (!empty($task['categoryId'])) {
                 $newChapter = $chapterMap[$task['categoryId']];
                 //如果是从默认教学计划复制，则删除type=lesson的chapter，并将对应task的categoryId指向该chapter的父级
-                if ($modeChange && $newChapter['type'] === 'lesson') {
+                /*if ($modeChange && $newChapter['type'] === 'lesson') {
                     $this->getChapterDao()->delete($newChapter['id']);
                     $newTask['mode'] = 'default';
                     unset($newTask['categoryId']);
-                } else {
-                    $newTask['categoryId'] = $newChapter['id'];
-                }
+                } else {*/
+                $newTask['categoryId'] = $newChapter['id'];
+                //}
             }
+
+            if (!$config['isCopy'] && $task['type'] === 'live') {
+                $updateChapterIds[] = empty($newChapter) ? 0 : $newChapter['id'];
+            }
+
             $newTask['activityId'] = $activityMap[$task['activityId']];
             $newTask['createdUserId'] = $user['id'];
             $newTasks[] = $newTask;
@@ -83,6 +90,7 @@ class TaskCopy extends AbstractEntityCopy
             $this->updateQuestionsLessonId($newCourseSetId);
             $this->updateExerciseRange($newCourseSetId);
         }
+        $this->updateChapter($newCourse['id'], $updateChapterIds);
 
         return $this->getTaskService()->findTasksByCourseId($newCourse['id']);
     }
@@ -127,9 +135,9 @@ class TaskCopy extends AbstractEntityCopy
 
         $new['copyId'] = $isCopy ? $task['id'] : 0;
 
-        if (!$isCopy && $task['type'] === 'live') {
+        /*if (!$isCopy && $task['type'] === 'live') {
             $new['status'] = 'create';
-        }
+        }*/
 
         return $new;
     }
@@ -195,6 +203,30 @@ class TaskCopy extends AbstractEntityCopy
 
             $this->getTestpaperService()->updateTestpaper($exercise['id'], $fields);
         }
+    }
+
+    /**
+     * [当有直播任务时，修改该课时及所包含的所有任务状态为未发布]
+     *
+     * @param [type] $courseId   [description]
+     * @param [type] $chapterIds 包含直播任务的课时ids
+     *
+     * @return [type] [description]
+     */
+    protected function updateChapter($courseId, $chapterIds)
+    {
+        if (empty($chapterIds)) {
+            return;
+        }
+
+        $chapterBatchHelper = new BatchUpdateHelper($this->getChapterDao());
+        foreach ($chapterIds as $chapterId) {
+            $fields = array('status' => 'create');
+            $chapterBatchHelper->add('id', $chapterId, $fields);
+        }
+
+        $chapterBatchHelper->flush();
+        $this->getTaskDao()->update(array('courseId' => $courseId, 'categoryIds' => $chapterIds), array('status' => 'create'));
     }
 
     /**

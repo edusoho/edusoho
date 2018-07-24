@@ -1,8 +1,21 @@
 .task-price-setting-group {
   position: relative;
-  max-height:211px;
-  overflow: hidden;
   padding-bottom: 5px;
+  max-height: 215px;
+  overflow: hidden;
+  border: 1px solid @gray-medium;
+  .border-radius;
+  .task-price-setting-group__item {
+    &:first-child {
+      border-top: none;
+    }
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+  }
   .price {
     visibility: hidden;
   }

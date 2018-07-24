@@ -1,0 +1,16 @@
+<div class="visible-xs cd-mb24 clearfix">
+  <div class="pull-right">
+    <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
+  </div>
+</div>
+<div class="cd-mb24">
+  <div class="pull-right hidden-xs">
+    <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
+  </div>
+  <ul class="courseset-type-list nav nav-pills">
+    <li class="{% if filter == 'normal' %}active{% endif %}"><a href="{{path('my_teaching_course_sets', {filter:'normal'}) }}">{{'my.teaching.course_set.normal'|trans}}</a></li>
+    <li class="{% if filter == 'live' %}active{% endif %}"><a href="{{path('my_teaching_course_sets', {filter:'live'}) }}">{{'my.teaching.course_set.live'|trans}}</a></li>
+    <li class="{% if filter == 'open' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'open'}) }}">{{'my.teaching.open_course.normal'|trans}}</a></li>
+    <li class="{% if filter == 'liveOpen' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'liveOpen'}) }}">{{'my.teaching.open_course.live'|trans}}</a></li>
+  </ul>
+</div>

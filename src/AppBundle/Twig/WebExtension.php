@@ -720,7 +720,7 @@ class WebExtension extends \Twig_Extension
         if (!empty($ip)) {
             $location = ConvertIpToolkit::convertIp($ip);
 
-            if ('INNA' === $location) {
+            if ('N/A' === $location) {
                 return '未知区域';
             }
 

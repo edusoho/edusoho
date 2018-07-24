@@ -9,7 +9,7 @@ module.exports = {
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
     'jquery-nouislider': ['libs/jquery-nouislider.js'],
-    'jquery-sortable': ['jquery-sortable'],
+    'jquery-sortable': ['es-jquery-sortable'],
     'swiper': ['swiper'],
     'perfect-scrollbar': ['libs/perfect-scrollbar/index.js'],
     'jquery-validation': ['libs/jquery-validation.js'],
@@ -43,7 +43,7 @@ module.exports = {
     'html5shiv': 'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker': 'bootstrap-daterangepicker/daterangepicker.js',
     'bootstrap-datetime-picker': 'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
-    'jquery-sortable': 'jquery-sortable/source/js/jquery-sortable.js',
+    'jquery-sortable': 'es-jquery-sortable/source/js/jquery-sortable.js',
     'jquery-cycle2': 'jquery.cycle2/src/jquery.cycle2.min.js',
     'nouislider': 'nouislider/distribute/nouislider.js',
     'echo-js': 'echo-js/dist/echo.js',

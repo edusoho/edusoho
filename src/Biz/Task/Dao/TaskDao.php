@@ -8,6 +8,8 @@ interface TaskDao extends AdvancedDaoInterface
 {
     public function deleteByCategoryId($categoryId);
 
+    public function deleteByCourseId($courseId);
+
     public function findByCourseId($courseId);
 
     public function findByCourseIds($courseIds);
@@ -67,4 +69,6 @@ interface TaskDao extends AdvancedDaoInterface
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 
     public function analysisTaskDataByTime($startTime, $endTime);
+
+    public function countByChpaterId($chapterId);
 }

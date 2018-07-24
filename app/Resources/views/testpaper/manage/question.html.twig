@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 
 {% block title %}{{'course.testpaper_manage.question'|trans}} - {{ parent() }}{% endblock %}
 
@@ -30,10 +30,9 @@ tr.placeholder:before {
 }
 </style>
 {% set questionTypesDict = getQuestionTypes() %}
-<div class="panel panel-default panel-col" id="testpaper-items-manager">
-  <div class="panel-heading">{{testpaper.name}}
-  </div>
-  <div class="panel-body clearfix">
+<div class="panel-col" id="testpaper-items-manager">
+  <div class="courseset-manage-body__title">{{testpaper.name}}</div>
+  <div class="clearfix">
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'course.testpaper_manage.question'|trans} %}
     <div class="clearfix mbm">
       <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="es-icon es-icon-anonymous-iconfont"></span> {{'course.testpaper_manage.question.create_btn'|trans}}</button>
