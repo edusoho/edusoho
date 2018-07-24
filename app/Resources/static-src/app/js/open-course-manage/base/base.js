@@ -116,6 +116,7 @@ export default class Base {
 
     $('#course-create-btn').click(() => {
       if (validator.form()) {
+        $('#course-about-field').val(this.editor.getData());
         $form.submit();
       }
     });
@@ -141,14 +142,18 @@ export default class Base {
   }
 
   initCkeditor() {
+    let self = this;
     if ($('#course-about-field').length > 0) {
-      CKEDITOR.replace('course-about-field', {
+      self.editor = CKEDITOR.replace('course-about-field', {
         allowedContent: true,
         toolbar: 'Detail',
         fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
       });
     }
+    self.editor.on('blur', () => {
+      $('#course-about-field').val(self.editor.getData());
+    });
   }
 
   initCategory() {
