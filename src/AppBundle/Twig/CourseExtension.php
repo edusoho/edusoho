@@ -54,6 +54,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_course_count', array($this, 'getCourseCount')),
             new \Twig_SimpleFunction('is_un_multi_courseset', array($this, 'isUnMultiCourseSet')),
             new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
+            new \Twig_SimpleFunction('get_course_title', array($this, 'getCourseTitle')),
         );
     }
 
@@ -83,6 +84,11 @@ class CourseExtension extends \Twig_Extension
     public function hasMulCourses($courseSetId, $isPublish = 0)
     {
         return $this->getCourseService()->hasMulCourses($courseSetId, $isPublish);
+    }
+
+    public function getCourseTitle($course)
+    {
+        return empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
     }
 
     public function getCourseDailyTasksNum($courseId)

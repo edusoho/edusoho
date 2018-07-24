@@ -36,7 +36,7 @@
               <select class="form-control width-150" name="courseId" data-role="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
                 <option value="0" {% if not question.courseId|default(0) %}selected{% endif %}>{{'course.question_manage.manage.default_belong'|trans}}</option>
                 {% for course in courses if course %}
-                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
+                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
                 {% endfor %}
               </select>
               <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="lessonId" data-role="lessonId">
