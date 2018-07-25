@@ -798,6 +798,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $fields['status'] = 'closed';
             }
             $courseSet = $this->getCourseSetDao()->update($id, $fields);
+
+            $course = $this->getCourseDao()->get($courses[0]['parentId']);
+            $fields['lessonNum'] = $course['lessonNum'];
+            $fields['publishLessonNum'] = $course['publishLessonNum'];
+
             $this->getCourseDao()->update($courses[0]['id'], $fields);
 
             $this->dispatchEvent('course-set.unlock', new Event($courseSet));
