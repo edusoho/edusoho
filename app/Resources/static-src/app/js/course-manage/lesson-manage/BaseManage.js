@@ -116,7 +116,7 @@ export default class Manage {
         title: Translator.trans('site.delete'),
         content: text,
         okText: Translator.trans('site.confirm'),
-        cancelText: Translator.trans('site.close')
+        cancelText: Translator.trans('site.cancel')
       }).on('ok', () => {
         if ('task' == $this.data('type') && $parent.siblings().length == 0) {
           $parent.closest('.js-task-manage-lesson').remove();
@@ -135,7 +135,7 @@ export default class Manage {
   _getDeleteText($element) {
     // 获得删除章节课时时，提示文案
     if ('task' == $element.data('type')) {
-      return Translator.trans('course.manage.task_delete_hint');
+      return Translator.trans('course.manage.task_delete_hint', { taskName: $element.data('name') });
     }
     return Translator.trans('course.manage.chapter_delete_hint', { name: $element.data('name') });
   }

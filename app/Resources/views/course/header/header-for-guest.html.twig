@@ -6,7 +6,7 @@
 {% endif %}
 
 {% set page_type = 'guest' %}
-{% set courseTypes = get_course_count(courseSet.id) %}
+
 {# showCourses 该参数直播课及插件约排课不展示计划 #}
 {% set showCourses = showCourses|default(1) %}
 {% block course_header_subtitle %}{% endblock %}
@@ -74,7 +74,12 @@
         </div>
 			{% endif %}
       <div class="course-detail-gray course-detail-gray--market {% if not onDiscount %} not-activity {% endif %}">
-				{% if showCourses and courseTypes > 1 %}
+        {% if previewAs %}
+          {% set hasMulCoursePlans = has_mul_courses(courseSet.id) %}
+        {% else %}
+          {% set hasMulCoursePlans = has_mul_courses(courseSet.id, 1) %}
+        {% endif %}
+        {% if showCourses and hasMulCoursePlans %}
           <div class="course-detail-content">
             <span class="course-detail-title vertical-middle">{{ 'course.teaching_plan'|trans }}</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
@@ -118,19 +123,21 @@
 				
 				{% if course.showServices | default(1) %}
           <div class="course-detail-service">
-            <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
-  					{% set serviceTags = services(course.services|default([])) %}
+            {% set serviceTags = services(course.services|default([])) %}
+  		      <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
   					{% for tag in serviceTags %}
-              <span
-                  class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
-                  data-container="body"
-                  data-trigger="hover"
-                  data-placement="top"
-                  data-toggle="tooltip"
-                  title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
-                  data-content="{{ tag.summary }}">
-                {{ tag.shortName }}
-              </span>
+              {% if tag.active %}
+                <span
+                    class="lump-sm color-lump bg-primary mr5 hidden-xs"
+                    data-container="body"
+                    data-trigger="hover"
+                    data-placement="top"
+                    data-toggle="tooltip"
+                    title="{{ tag.fullName }}"
+                    data-content="{{ tag.summary }}">
+                  {{ tag.shortName }}
+                </span>
+              {% endif %}
   					{% endfor %}
           </div>
 				{% endif %}

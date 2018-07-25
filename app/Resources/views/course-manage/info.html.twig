@@ -14,13 +14,13 @@
     <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
       {# 课程基础信息 #}
       {% if is_un_multi_courseset(courseSet.id) %}
-        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
         {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}
       {% endif %}
 
       {# 计划基础信息 #}
       {% if hasMulCourses %}
-        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup'|trans }}</div>
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
         {% include 'course-manage/base-info/title.html.twig' %}
       {% endif %}
       
@@ -53,5 +53,7 @@
       {% endif %}
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
+  {% else %}
+    <div class="cd-alert cd-alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
   {% endif %}
 {% endblock %}

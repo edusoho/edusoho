@@ -1,6 +1,6 @@
 <span class="select-content">
   <form class="js-task-detail" id="overview-task-list">
-    <input class="select-time-input" type="text" name="titleLike" placeholder="{{ 'course.dashboard.study_detail.name'|trans }}">
+    <input class="select-time-input" type="text" name="titleLike" placeholder="{{ 'course.dashboard.study_detail.name'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}">
     <i class="es-icon es-icon-search cursor-pointer js-task-detail-search"></i>
     <input type="hidden" name="courseId" value="{{ course.id }}">
   </form>

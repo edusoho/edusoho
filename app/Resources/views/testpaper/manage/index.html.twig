@@ -55,7 +55,7 @@
       {{ web_macro.paginator(paginator) }}
 
       <div class="color-gray mtl">
-        {{ 'course.testpaper_manage.tips'|trans|raw }}
+        {{ 'course.testpaper_manage.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}
       </div>
     </div>
   </div>

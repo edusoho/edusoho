@@ -235,7 +235,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         if (!empty($fields['services'])) {
             $fields['showServices'] = 1;
+        } else {
+            $fields['showServices'] = 0;
         }
+
         if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
@@ -680,6 +683,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         $count = $this->countCourses($conditions);
 
         return $count > 1;
+    }
+
+    public function isCourseSetCoursesSummaryEmpty($courseSetId)
+    {
+        $isMulCourses = $this->hasMulCourses($courseSetId);
+        if ($isMulCourses) {
+            $courses = $this->searchCourses(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX, array('summary'));
+            foreach ($courses as $course) {
+                if (!empty($course['summary'])) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return false;
     }
 
     protected function validateExpiryMode($course)
@@ -2389,10 +2409,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
             $fields['isFree'] = 1;
+        } else {
+            $fields['isFree'] = 0;
+        }
+
+        if (empty($fields['tryLookLength'])) {
+            $fields['tryLookLength'] = 0;
         }
 
         if ('normal' == $courseSet['type'] && 0 == $fields['tryLookLength']) {
             $fields['tryLookLength'] = 0;
+            $fields['tryLookable'] = 0;
+        } else {
+            $fields['tryLookable'] = 1;
         }
 
         if (!empty($fields['buyExpiryTime'])) {

@@ -476,6 +476,8 @@ class CourseManageController extends BaseController
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
         $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId);
+
+        $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
@@ -487,6 +489,14 @@ class CourseManageController extends BaseController
             $data = $this->prepareExpiryMode($data);
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
+            }
+
+            if (!empty($data['freeTaskIds'])) {
+                $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
+                $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
+                $canFreeTaskIds = $data['freeTaskIds'];
+                $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
+                unset($data['freeTaskIds']);
             }
 
             $updatedCourse = $this->getCourseService()->updateBaseInfo($courseId, $data);
@@ -530,6 +540,7 @@ class CourseManageController extends BaseController
                 'course' => $course,
                 'audioServiceStatus' => $audioServiceStatus,
                 'canFreeTasks' => $this->findCanFreeTasks($course),
+                'freeTasks' => $freeTasks,
             )
         );
     }

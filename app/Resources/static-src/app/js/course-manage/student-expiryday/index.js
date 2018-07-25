@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 class Deadline {
   constructor() {
     this.validator = null;
@@ -27,16 +25,17 @@ class Deadline {
   }
 
   initValidator() {
-    let $modal = $('#deadline-set-form').parents('.modal');
     let $form = $('#deadline-set-form');
+    let $modal = $form.parents('.modal');
+
 
     this.validator = $form.validate({
       rules: {
         day: {
           required: true,
           positive_integer: true,
-          remote: {
-            url: $('[name=day]').data('url'),
+          max: 7300,
+          es_remote: {
             type: 'get',
             data: {
               waveType: function () {
@@ -51,7 +50,9 @@ class Deadline {
       },
       messages: {
         day: {
-          remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
+          required: Translator.trans('validate.modify_days'),
+          max: Translator.trans('validate.modify_day_number'),
+          es_remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
         }
       }
     });
@@ -60,7 +61,7 @@ class Deadline {
       if (this.validator && this.validator.form()) {
         $.post($form.attr('action'), $form.serialize(), function () {
           let user_name = $('#submit').data('user');
-          notify('success',Translator.trans('course_manage.student_expiryday_extend_success_hint', { name: user_name }));
+          cd.message({ type: 'success', message: Translator.trans('course_manage.student_expiryday_extend_success_hint', { name: user_name }) });
           $modal.modal('hide');
           window.location.reload();
         });
@@ -120,8 +121,7 @@ class Deadline {
     return {
       required: true,
       positive_integer: true,
-      remote: {
-        url: $('[name=day]').data('url'),
+      es_remote: {
         type: 'get',
         data: {
           waveType: function () {
@@ -133,7 +133,7 @@ class Deadline {
         }
       },
       messages: {
-        remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
+        es_remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_day'),
       }
     };
   }
@@ -142,8 +142,7 @@ class Deadline {
     return {
       required: true,
       date: true,
-      remote: {
-        url: $('[name=deadline]').data('url'),
+      es_remote: {
         type: 'get',
         data: {
           deadline: function () {
@@ -152,7 +151,8 @@ class Deadline {
         }
       },
       messages: {
-        remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_date'),
+        es_remote: Translator.trans('course_manage.student_expiryday_extend_error_hint_date'),
+        required: Translator.trans('validate.modify_date'),
       }
     };
   }

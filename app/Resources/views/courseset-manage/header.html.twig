@@ -2,7 +2,7 @@
 {% block js %}
   {% do script(['app/js/courseset-manage/header/index.js']) %}
 {% endblock %}
-{% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
+{% set basepath = path('course_show', {id: courseSet.defaultCourseId, previewAs:1}) %}
 <div class="courseset-manage-header {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
 
   {% block unfold %}
@@ -41,9 +41,11 @@
       </div>
       <div class="courseset-manage-header-info__price color-danger">
         {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
-          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
         {% else %}
-          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}<span class="cd-text-sm">～</span><span class="cd-text-sm">¥</span>{{ courseSet.maxCoursePrice }}
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
+          <span class="cd-text-sm">～</span>
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.maxCoursePrice} %}
         {% endif %}
       </div>
     </div>

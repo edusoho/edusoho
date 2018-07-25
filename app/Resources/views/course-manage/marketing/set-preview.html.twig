@@ -1,7 +1,7 @@
 <div class="form-group">
-  <label class="col-sm-2 control-label mbs">{{ 'course.marketing_setup.preview.set_task'|trans }}</label>
+  <label class="col-sm-2 control-label mbs">{{ 'course.marketing_setup.preview.set_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</label>
   <div class="col-sm-8">
-    <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting">
+    <ul class="list-group mb0 pb0 {% if canFreeTasks|length > 0 %}task-price-setting-group{% endif %} js-task-price-setting">
 
       {% for task in canFreeTasks %}
         <li class="task-price-setting-group__item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
@@ -17,7 +17,7 @@
       {% endfor %}
     </ul>
     {% set can_free_activity_types = can_free_activity_types() %}
-    <div class="help-block course-mange-space">{{'course.marketing_setup.preview.set_task.free_tips'|trans}}{{ can_free_activity_types|join('word.seperator'|trans) }}
+    <div class="help-block course-mange-space">{{'course.marketing_setup.preview.set_task.free_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}{{ can_free_activity_types|join('word.seperator'|trans) }}
     </div>
   </div>
 </div>
