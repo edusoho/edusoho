@@ -44,12 +44,12 @@ export default class Base {
         let $form = $(form);
         let settings = this.settings;
         let $btn = $(settings.currentDom);
-        let $isEmptySummaryCourses = $form.data('value');
+        let $isCoursesSummaryEmpty = $form.data('value');
         let $newSummary = $('#courseset-summary-field').val();
         if (!$btn.length) {
           $btn = $(form).find('[type="submit"]');
         }
-        if ($isEmptySummaryCourses == 1 && $newSummary != '' && $newSummary != $oldSummary) {
+        if ($isCoursesSummaryEmpty == 1 && $newSummary != '' && $newSummary != $oldSummary) {
           cd.confirm({
             title: Translator.trans('course_set.manage.operation_hint'),
             content: Translator.trans('course_set.manage.courseset_summary_operation_hint'),

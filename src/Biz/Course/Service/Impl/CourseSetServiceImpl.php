@@ -462,8 +462,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $fields = $this->filterFields($fields);
-        $isEmptySummaryCourses = $this->getCourseService()->isEmptySummaryCourses($courseSet['id']);
-        if ($isEmptySummaryCourses && $courseSet['summary'] != $fields['summary']) {
+        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($courseSet['id']);
+        if ($isCoursesSummaryEmpty && $courseSet['summary'] != $fields['summary']) {
             $this->updateCourseSummary($courseSet);
         }
         $this->updateCourseSerializeMode($courseSet, $fields);

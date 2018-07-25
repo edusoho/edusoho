@@ -685,7 +685,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $count > 1;
     }
 
-    public function isEmptySummaryCourses($courseSetId)
+    public function isCourseSetCoursesSummaryEmpty($courseSetId)
     {
         $isMulCourses = $this->hasMulCourses($courseSetId);
         if ($isMulCourses) {
