@@ -80,7 +80,7 @@
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
 							{% set current_course = course %}
               {% for course in courses if course.status == 'published' or previewAs %}
-                <li class="cd-mb8 mrs {% if current_course.id == course.id %} active {% endif %}">
+                <li class="mb5 mrs {% if current_course.id == course.id %} active {% endif %}">
                   <a data-toggle="tooltip" data-placement="top" data-container="body" title="{{ course.subtitle }}"
                 data-trigger="hover" href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}
                   </a>
@@ -91,7 +91,7 @@
           </div>
 				{% endif %}
 
-        <div class="hidden-xs course-detail-expiry-wrap">
+        <div class="hidden-xs common-line-height">
           <span class="course-detail-title">{{ 'course.expiry_date'|trans }}</span>
 					{% if course.expiryMode == 'days'  %}
             <span class="gray-dark course-detail-expiry">
@@ -111,13 +111,13 @@
         </div>
 				
 				{% if course.buyable != 0  and course.buyExpiryTime != 0 %}
-          <div class="mb15 hidden-xs">
+          <div class="mtl hidden-xs common-line-height">
 						{{ 'course.buy_expiry_date.buy_expiry_time'|trans({'%buyExpiryTime%':course.buyExpiryTime|date('Y-m-d ')})|raw }}
           </div>
 				{% endif %}
 				
 				{% if course.showServices | default(1) %}
-          <div class="course-detail-service">
+          <div class="course-detail-service cd-mt16">
             {% set serviceTags = services(course.services|default([])) %}
   		      <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
   					{% for tag in serviceTags %}
@@ -139,7 +139,7 @@
         
         {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
           <div class="course-detail-listening">
-            <span class="course-detail-title"><span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span></span>
+            <span class="course-detail-title">{{ 'course.info.video.convert.audio.enable_label'|trans }}</span>
             {{ 'course.video.convert.client.click.listen'|trans }}
             <a href="{{ path('mobile') }}" target="__blank">{{ 'course.video.convert.client.try'|trans }}</a>
           </div>
