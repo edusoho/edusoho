@@ -83,22 +83,18 @@ const webpackConfig = merge(baseWebpackConfig, {
     // enable scope hoisting
     new webpack.optimize.ModuleConcatenationPlugin(),
     // split vendor js into its own file
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'vendor',
-    //   minChunks (module) {
-    //     // any required modules inside node_modules are extracted to vendor
-    //     return (
-    //       module.resource &&
-    //       /\.js$/.test(module.resource) &&
-    //       module.resource.indexOf(
-    //         path.join(__dirname, '../node_modules')
-    //       ) === 0
-    //     )
-    //   }
-    // }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: Infinity
+      minChunks (module) {
+        // any required modules inside node_modules are extracted to vendor
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(
+            path.join(__dirname, '../node_modules')
+          ) === 0
+        )
+      }
     }),
 
     // new webpack.optimize.CommonsChunkPlugin({
@@ -108,7 +104,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     //       return false;
     //     }
     //     return module.context && 
-    //       module.context.includes("node_modules");
+    //       (module.context.includes("vue") ||
+    //       module.context.includes("vant") ||
+    //       module.context.includes("vuex") ||
+    //       module.context.includes("vue-router"));
     //   }
     // }),
     // extract webpack runtime and module manifest to its own file in order to
