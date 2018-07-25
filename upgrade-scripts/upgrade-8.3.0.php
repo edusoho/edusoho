@@ -167,7 +167,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $countSql = "SELECT count(*) from `course_task` where courseId in (select id from course_v8 where courseType='normal')";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
-            return;
+            return 1;
         }
         $start = $this->getStart($page);
         if ($page == 1) {
@@ -193,7 +193,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `createdTime`,
                 0 as `copyId`,
                 `id` as `migrate_task_id`
-            from `course_task` where courseId in (select id from course_v8 where courseType='normal') order by id limit {$start}, {$this->pageSize};;
+            from `course_task` where courseId in (select id from course_v8 where courseType='normal') order by id limit {$start}, {$this->pageSize};
         ");
         $nextPage = $this->getNextPage($count, $page);
         if (empty($nextPage)) {
@@ -279,7 +279,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $countSql = "SELECT count(*) from course_v8";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
-            return;
+            return 1;
         }
         $start = $this->getStart($page);
         $sql = "SELECT id, isDefault FROM course_v8 group by courseSetId HAVING count(courseSetId)=1 and isDefault=1 limit {$start}, {$this->pageSize}";
@@ -302,7 +302,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $countSql = "SELECT count(*) from course_v8";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
-            return;
+            return 1;
         }
         $start = $this->getStart($page);
         $sql = "SELECT id, courseSetId, summary, isDefault FROM course_v8 group by courseSetId HAVING count(courseSetId)=1 and isDefault=1 limit {$start}, {$this->pageSize}";
