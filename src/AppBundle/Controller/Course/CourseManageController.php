@@ -496,7 +496,6 @@ class CourseManageController extends BaseController
                 $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
                 $canFreeTaskIds = $data['freeTaskIds'];
                 $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
-                $freeTasks = $this->findCanFreeTasks($course);
                 unset($data['freeTaskIds']);
             }
 
