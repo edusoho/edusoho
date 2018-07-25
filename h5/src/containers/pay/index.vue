@@ -14,12 +14,12 @@
           <div class="payWay__item payWay__item--selected">
             <div class="right"></div>
             <i></i>
-            <img src="/static/images/zfb.png">
+            <img src="static/images/zfb.png">
           </div>
           <div class="payWay__item">
             <div class="right"></div>
             <i></i>
-            <img src="/static/images/wx.png">
+            <img src="static/images/wx.png">
           </div>
         </div>
       </div>

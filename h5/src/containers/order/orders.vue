@@ -2,7 +2,7 @@
   <div class="orders">
     <span class='orders-title'>我的订单</span>
     <div class="orders-container__empty" v-if="isEmptyOrder && isFirstRequestCompile">
-      <img src="/static/images/orderEmpty.png" >
+      <img src="static/images/orderEmpty.png" >
       <span>暂无订单记录</span>
     </div>
 
