@@ -695,8 +695,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     return true;
                 }
             }
+
             return false;
         }
+
         return false;
     }
 
