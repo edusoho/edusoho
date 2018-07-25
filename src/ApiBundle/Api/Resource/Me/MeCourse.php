@@ -53,6 +53,7 @@ class MeCourse extends AbstractResource
     {
         $orderedCourses = array();
         $members = ArrayToolkit::index($members, 'courseId');
+        $courses = ArrayToolkit::index($courses, 'id');
         foreach ($members as $member) {
             $courseId = $member['courseId'];
             if (!empty($courses[$courseId])) {
