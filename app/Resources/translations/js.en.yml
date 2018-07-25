@@ -1323,3 +1323,10 @@ admin.wechat_app.mp_description_input.message: Please fill out the weapp introdu
 admin.wechat_app.contact_name_input.message: Please fill in the contact name
 admin.wechat_app.contact_phone_input.message: Please fill in the correct phone number
 admin.wechat_app.contact_qq_input.message: Please fill in the correct QQ number
+admin.util.batch_delete.checked_empty_hint: No %name% is selected
+admin.util.batch_delete.delete_hint: Are you sure you want to delete the selected %ids%(s) %name%?
+admin.util.batch_delete.deleting_hint: Deleting %name%, please wait a moment.
+admin.util.item_delete.delete_hint: Really want to delete the %name%?
+admin.util.item_delete.delete_success_hint: Delete %name% successfully
+admin.shortcut_add_success_hint: The current page has been added as a popular link!
+admin.shortcut_delete_success_hint: Delete frequently used links successfully!

@@ -1269,3 +1269,10 @@ admin.wechat_app.mp_description_input.message: 请填写小程序介绍
 admin.wechat_app.contact_name_input.message: 请填写联系人姓名
 admin.wechat_app.contact_phone_input.message: 请填写正确的电话号码
 admin.wechat_app.contact_qq_input.message: 请填写正确的 QQ 号
+admin.util.batch_delete.checked_empty_hint: 未选中任何%name%
+admin.util.batch_delete.delete_hint: 确定要删除选中的%ids%条%name%吗？
+admin.util.batch_delete.deleting_hint: 正在删除%name%，请稍等。
+admin.util.item_delete.delete_hint: 真的要删除该%name%吗？
+admin.util.item_delete.delete_success_hint: 删除%name%成功
+admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
+admin.shortcut_delete_success_hint: 删除常用链接成功！
