@@ -12,6 +12,7 @@ export default class Base {
   }
 
   initValidator() {
+    const self = this;
     const $form = $('#title').closest('form');
     let $oldSummary = $('#courseset-summary-field').val();
     const validator = $form.validate({
@@ -43,41 +44,41 @@ export default class Base {
         let $form = $(form);
         let settings = this.settings;
         let $btn = $(settings.currentDom);
-        let $isMulCourseSet = $form.data('value');
+        let $isCoursesSummaryEmpty = $form.data('value');
         let $newSummary = $('#courseset-summary-field').val();
         if (!$btn.length) {
           $btn = $(form).find('[type="submit"]');
         }
-        $btn.button('loading');
-        if ($isMulCourseSet == 1 && $newSummary != '' && $newSummary != $oldSummary) {
+        if ($isCoursesSummaryEmpty == 1 && $newSummary != '' && $newSummary != $oldSummary) {
           cd.confirm({
             title: Translator.trans('course_set.manage.operation_hint'),
             content: Translator.trans('course_set.manage.courseset_summary_operation_hint'),
             okText: Translator.trans('site.confirm'),
-            cancelText: Translator.trans('site.close'),
+            cancelText: Translator.trans('site.cancel'),
           }).on('ok', () => {
-            $.post($form.attr('action'), $form.serializeArray(), (data) => {
-              $btn.button('reset');
-              settings.submitSuccess(data);
-            }).error((data) => {
-              $btn.button('reset');
-              settings.submitError(data);
-            });
+            self.savePost(form, settings);
           });
         } else {
-          $.post($form.attr('action'), $form.serializeArray(), (data) => {
-            $btn.button('reset');
-            settings.submitSuccess(data);
-          }).error((data) => {
-            $btn.button('reset');
-            settings.submitError(data);
-          });
+          self.savePost(form, settings);
         }
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
         window.location.reload();
       }
+    });
+  }
+
+  savePost(form, settings) {
+    let $form = $(form);
+    let $btn = $(settings.currentDom);
+    $btn.button('loading');
+    $.post($form.attr('action'), $form.serializeArray(), (data) => {
+      $btn.button('reset');
+      settings.submitSuccess(data);
+    }).error((data) => {
+      $btn.button('reset');
+      settings.submitError(data);
     });
   }
 

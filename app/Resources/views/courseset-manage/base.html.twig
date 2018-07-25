@@ -8,7 +8,7 @@
 {% block main %}
   <div class="courseset-manage-body__title">{{ 'course.base.content_title'|trans }}</div>
   <div class="courseset-manage-body__content cd-mt32">
-    <form class="form-horizontal" id="courseset-form" data-value="{{ has_mul_courses(courseSet.id) }}"" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
+    <form class="form-horizontal" id="courseset-form" data-value="{{ isCoursesSummaryEmpty }}"" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
       {% include 'courseset-manage/base-info/info.html.twig' with {form: 'courseset-form', button:'courseset-base-submit'} %}
 
       <div class="form-group cd-mt40">

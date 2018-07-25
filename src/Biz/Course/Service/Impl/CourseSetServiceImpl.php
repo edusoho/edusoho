@@ -462,8 +462,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $fields = $this->filterFields($fields);
-        $isMulCourseSet = $this->getCourseService()->hasMulCourses($courseSet['id'], 0);
-        if ($isMulCourseSet && $courseSet['summary'] != $fields['summary']) {
+        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($courseSet['id']);
+        if ($isCoursesSummaryEmpty && $courseSet['summary'] != $fields['summary']) {
             $this->updateCourseSummary($courseSet);
         }
         $this->updateCourseSerializeMode($courseSet, $fields);
@@ -1104,7 +1104,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'serializeMode' => $created['serializeMode'],
             'status' => 'draft',
             'type' => $created['type'],
-            'showServices' => isset($created['showServices']) ? $created['showServices'] : 1,
+            'showServices' => isset($created['showServices']) ? $created['showServices'] : 0,
         );
 
         return $defaultCourse;

@@ -76,6 +76,8 @@ interface CourseService
 
     public function hasMulCourses($courseSetId, $isPublish = 0);
 
+    public function isCourseSetCoursesSummaryEmpty($courseSetId);
+
     public function publishAndSetDefaultCourseType($courseId, $title);
 
     /**
