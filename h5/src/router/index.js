@@ -7,6 +7,7 @@ import learning from './learning';
 import my from './my';
 
 Vue.use(Router);
+// 路由懒加载 实现代码分离
 const routes = [
   {
     path: '/',
@@ -15,7 +16,7 @@ const routes = [
     meta: {
       title: ''
     },
-    component: resolve => require(['@/containers/home.vue'], resolve),
+    component: () => import(/* webpackChunkName: "home" */ '@/containers/home.vue'),
     children: [
       ...find,
       ...learning,
@@ -26,7 +27,8 @@ const routes = [
         meta: {
           title: '我的'
         },
-        component: resolve => require(['@/containers/login/prelogin.vue'], resolve)
+        component: () =>
+          import(/* webpackChunkName: "loginPrelogin" */'@/containers/login/prelogin.vue')
       }
     ]
   }, {
@@ -35,71 +37,71 @@ const routes = [
     meta: {
       title: ''
     },
-    component: resolve => require(['@/containers/login/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "login" */ '@/containers/login/index.vue')
   }, {
     path: '/register',
     name: 'register',
     meta: {
       title: ''
     },
-    component: resolve => require(['@/containers/register/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "register" */'@/containers/register/index.vue')
   }, {
     path: '/protocol',
     name: 'protocol',
     meta: {
       title: ''
     },
-    component: resolve => require(['@/containers/register/protocol/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "protocol" */'@/containers/register/protocol/index.vue')
   }, {
     path: '/my/setting',
     name: 'my_setting',
     meta: {
       title: '设置'
     },
-    component: resolve => require(['@/containers/my/setting/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "setting" */'@/containers/my/setting/index.vue')
   }, {
     path: '/setting/nickname',
     name: 'setting_nickname',
     meta: {
       title: '昵称设置'
     },
-    component: resolve => require(['@/containers/my/setting/nickname.vue'], resolve)
+    component: () => import(/* webpackChunkName: "nickname" */'@/containers/my/setting/nickname.vue')
   }, {
     path: '/course/try',
     name: 'course_try',
-    component: resolve => require(['@/containers/course/try.vue'], resolve)
+    component: () => import(/* webpackChunkName: "courseTry" */'@/containers/course/try.vue')
   }, {
     path: '/course/web',
     name: 'course_web',
-    component: resolve => require(['@/containers/course/detail/web-view.vue'], resolve)
+    component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
   }, {
     path: '/course/:id',
     name: 'course',
     meta: {
       title: '课程详情'
     },
-    component: resolve => require(['@/containers/course/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "course" */'@/containers/course/index.vue')
   }, {
     path: '/order/:id',
     name: 'order',
     meta: {
       title: '确认订单'
     },
-    component: resolve => require(['@/containers/order/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "order" */'@/containers/order/index.vue')
   }, {
     path: '/more',
     name: 'more',
     meta: {
       title: '所有课程'
     },
-    component: resolve => require(['@/containers/more/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/index.vue')
   }, {
     path: '/pay',
     name: 'pay',
     meta: {
       title: '订单支付'
     },
-    component: resolve => require(['@/containers/pay/index.vue'], resolve)
+    component: () => import(/* webpackChunkName: "pay" */'@/containers/pay/index.vue')
   }
 ];
 

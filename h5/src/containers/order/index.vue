@@ -18,7 +18,6 @@ export default {
     return {
 
     }
-  },
-
+  }
 }
 </script>

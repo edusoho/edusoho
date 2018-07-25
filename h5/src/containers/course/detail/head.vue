@@ -4,7 +4,6 @@
       v-show="sourceType === 'img'">
       <img :src="courseSet.cover.large" alt="">
     </div>
-
     <div id="course-detail__head--video" 
       ref="video"
       v-show="['video', 'audio'].includes(sourceType)">
@@ -34,9 +33,12 @@ export default {
   },
   watch: {
     taskId: {
+      immediate: true,
       handler(v, oldVal) {
-        window.scrollTo(0, 0);
-        ['video', 'audio'].includes(this.sourceType) && this.initPlayer();
+        if (['video', 'audio'].includes(this.sourceType)) {
+          window.scrollTo(0, 0);
+          this.initPlayer();
+        }
       }
     }
   },
@@ -59,7 +61,7 @@ export default {
       }
     },
     async initPlayer (){
-      this.$refs.video.innerHTML = '';
+      this.$refs.video && (this.$refs.video.innerHTML = '');
 
       const player = await Api.getMedia(this.getParams());
 

@@ -27,7 +27,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -96,6 +96,22 @@ const webpackConfig = merge(baseWebpackConfig, {
         )
       }
     }),
+    // 仅有vendor达不到目的，目的是打包一次之后，尽可能缓存到浏览器，
+    // vendor无法保证，之后有新的依赖包引入 hash值不变化
+    // 所以将不变的依赖包再次抽离出来
+    new webpack.optimize.CommonsChunkPlugin({
+      names: "common",
+      minChunks: function(module, count) {
+        if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
+          return false;
+        }
+        return module.context && 
+          (module.context.includes("vue") ||
+          module.context.includes("vant") ||
+          module.context.includes("vuex") ||
+          module.context.includes("vue-router"));
+      }
+    }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     new webpack.optimize.CommonsChunkPlugin({
@@ -141,6 +157,7 @@ if (config.build.productionGzip) {
   )
 }
 
+// build时进行包分析
 if (config.build.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
