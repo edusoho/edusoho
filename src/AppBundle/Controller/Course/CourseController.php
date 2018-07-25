@@ -121,9 +121,15 @@ class CourseController extends CourseBaseController
             return false;
         }
 
-        $matchExpre = "/{$host}\/(my\/)?course\/(\d)+/i";
-        if (preg_match($matchExpre, $referer)) {
-            return false;
+        $matchExpreList = array(
+            "/{$host}\/(my\/)?course\/(\d)+/i",
+            "/{$host}\/course_set\/(\d)+\/manage\/(\S)+/i",
+        );
+
+        foreach ($matchExpreList as $matchExpre) {
+            if (preg_match($matchExpre, $referer)) {
+                return false;
+            }
         }
 
         return true;
@@ -139,7 +145,7 @@ class CourseController extends CourseBaseController
         foreach ($tasks as $task) {
             if (empty($tag) && 'video' === $task['type'] && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                if (!empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                     $tag = 'site.badge.try_watch';
                 }
             }
