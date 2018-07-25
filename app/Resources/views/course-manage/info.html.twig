@@ -53,5 +53,7 @@
       {% endif %}
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
+  {% else %}
+    <div class="cd-alert cd-alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
   {% endif %}
 {% endblock %}

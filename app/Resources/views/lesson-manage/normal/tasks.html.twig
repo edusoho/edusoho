@@ -44,7 +44,7 @@
         </a>
         <ul class="dropdown-menu task-manage-item__dropdown">
           <li>
-            <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+            <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}" data-name="{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}">
               {{'course.plan_task.delete_btn'|trans}}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
             </a>
           </li>

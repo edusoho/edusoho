@@ -895,7 +895,7 @@ course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student
 course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
-course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
+course.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 course.marketing_setup.reward_point_setting: %name% setting
 course.marketing_setup.study_award:　Study Award
 course.marketing_setup.task_award: Task Award

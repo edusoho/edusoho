@@ -7,9 +7,9 @@
 
 {% if coinEnabled %}
     <span class="coin">
-        {{ productPrice * currentCoinSetting.cash_rate }}
-        {{ currentCoinSetting.coin_name|default('finance.coin'|trans) }}
+      {{ productPrice * currentCoinSetting.cash_rate }}
+      <span class="cd-text-sm">{{ currentCoinSetting.coin_name|default('finance.coin'|trans) }}</span>
     </span>
 {% else %}
-    <span class="money-symbol">¥</span><span class="pure-price">{{ productPrice }}</b>
+    <span class="money-symbol cd-text-sm">¥</span><span class="pure-price">{{ productPrice }}</b>
 {% endif %}
