@@ -926,6 +926,7 @@ course.teaching_plan.default.title.set: 首个计划的标题
 course.teaching_plan.sort: 调整顺序
 course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
+course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 新计划名称
 course.teaching_plan.create.create_tips: 教学计划创建后“学习模式”将不能修改。
 course.teaching_plan.create.name: 名称
