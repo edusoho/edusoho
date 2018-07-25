@@ -682,7 +682,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $count = $this->countCourses($conditions);
 
-        return $count > 1;
+        return $count >= 1;
     }
 
     public function isCourseSetCoursesSummaryEmpty($courseSetId)
