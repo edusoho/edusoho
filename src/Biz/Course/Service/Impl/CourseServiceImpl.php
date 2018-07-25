@@ -1575,7 +1575,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ('audio' == $task['type']) {
             $task['mediaSource'] = 'self';
         } elseif ('live' == $task['type']) {
-            if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+            if ('videoGenerated' == $activity['ext']['replayStatus']) {
                 $task['mediaSource'] = 'self';
             }
 
@@ -2469,7 +2469,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
-    public function canUpdateCourseBaseInfo($courseId)
+    public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0)
     {
         $course = $this->getCourse($courseId);
         $user = $this->getCurrentUser();
@@ -2479,6 +2479,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return $course;
         }
 
-        return $this->tryManageCourse($courseId);
+        return $this->tryManageCourse($courseId, $courseSetId);
     }
 }

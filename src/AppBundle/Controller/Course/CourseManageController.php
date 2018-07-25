@@ -475,7 +475,7 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
-        $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId);
+        $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId, $courseSetId);
 
         $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
         if ($request->isMethod('POST')) {
