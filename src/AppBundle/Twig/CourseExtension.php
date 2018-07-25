@@ -140,6 +140,7 @@ class CourseExtension extends \Twig_Extension
             'chapter' => 'site.data.chapter',
             'unit' => 'site.data.part',
             'part' => 'site.data.part',
+            'task' => 'site.data.task',
         );
 
         $courseSetting = $this->getSettingService()->get('course');
@@ -152,9 +153,10 @@ class CourseExtension extends \Twig_Extension
             'chapter' => 'chapter_name',
             'unit' => 'part_name',
             'part' => 'part_name',
+            'task' => 'task_name',
         );
 
-        return $courseSetting[$settingKey[$type]];
+        return isset($courseSetting[$settingKey[$type]]) ? $courseSetting[$settingKey[$type]] : $defaultCourseChapterAlias[$type];
     }
 
     public function isMemberExpired($course, $member)

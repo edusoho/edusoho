@@ -52,7 +52,7 @@ class PagedCourseLesson {
         },
 
         'getTaskName': function(data, context) {
-          return Translator.trans('course.catalogue.task_status.task', { taskNumber: data.number, taskTitle: data.title });
+          return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
         },
 
         'hasWatchLimitRemaining': function(data, context) {
