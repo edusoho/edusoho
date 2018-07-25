@@ -172,10 +172,13 @@ class CourseSetManageController extends BaseController
             'ownerId' => $id,
         ));
 
+        $isEmptySummaryCourses = $this->getCourseService()->isEmptySummaryCourses($courseSet['id']);
+
         return $this->render(
             'courseset-manage/base.html.twig',
             array(
                 'courseSet' => $courseSet,
+                'isEmptySummaryCourses' => $isEmptySummaryCourses,
                 'tags' => ArrayToolkit::column($tags, 'name'),
             )
         );
