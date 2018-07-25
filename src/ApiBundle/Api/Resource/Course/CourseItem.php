@@ -71,11 +71,7 @@ class CourseItem extends AbstractResource
     private function filterUnPublishTask($items)
     {
         foreach ($items as $key => $item) {
-<<<<<<< HEAD
             if ('task' == $item['type'] && 'published' != $item['task']['status']) {
-=======
-            if ('task' == $item['type'] && $item['task']['status'] != 'published') {
->>>>>>> d0303e01300ed0fae5400108c3135435abd330f1
                 unset($items[$key]);
             }
         }
