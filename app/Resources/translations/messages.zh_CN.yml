@@ -22,7 +22,7 @@ site.data.empty: 无
 site.data.chapter: 章
 site.data.unit: 节
 site.data.lesson: 课时
-site.data.task: 活动
+site.data.task: 任务
 site.data.part: 节
 site.data.title: 标题
 site.data.score: 分

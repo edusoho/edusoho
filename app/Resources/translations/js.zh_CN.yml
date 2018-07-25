@@ -341,7 +341,7 @@ course.buy.price_free_hint: 去学习
 
 course.chapter: '第%number%%chapter_name%: %title%'
 course.unit: '第%number%%part_name%: %title%'
-course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
 
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
