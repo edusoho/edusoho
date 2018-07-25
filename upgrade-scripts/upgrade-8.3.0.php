@@ -152,6 +152,12 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `course_chapter` ADD INDEX migrate_task_id (migrate_task_id);");
         }
 
+        if (!$this->isFieldExist('course_v8', 'subtitle')) {
+            $connection->exec("
+                ALTER TABLE `course_v8` ADD `subtitle` varchar(120) DEFAULT '' COMMENT '计划副标题' AFTER `title`;
+            ");
+        }
+
         return 1;
     }
 
