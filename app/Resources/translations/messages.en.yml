@@ -1078,6 +1078,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
+course.members_manage.add_failed_tips: 课程未发布，不可添加学员
 course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
@@ -7058,6 +7059,7 @@ course.video.convert.client.try: '（试一试）'
 course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
 course.task.show.video.convert.client.notify: 不再提醒
 course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.enable_label: 音频听课
 course.info.video.convert.audio.start: 开启
 course.info.video.convert.audio.close: 关闭
 
