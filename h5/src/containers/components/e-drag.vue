@@ -17,7 +17,7 @@
           @touchend="handletTouchEnd"
           @touchmove="handleTouchMove" 
           :style="{ left: `${dragState.currentLeft}px`}">
-          <img src="/static/images/drag.png" alt="">
+          <img src="static/images/drag.png" alt="">
         </div>
       </div>
       

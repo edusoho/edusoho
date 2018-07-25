@@ -6,7 +6,7 @@
       <div class="my_setting-content">
         <img :src="item.info" alt="" v-if="!index" class="my_setting-avatar">
         <span  v-if="index">{{item.info}}</span>
-        <img src="/static/images/more.png" alt="" class="my_setting-more">
+        <img src="static/images/more.png" alt="" class="my_setting-more">
       </div>
       <van-uploader :after-read="onRead" v-if="!index"></van-uploader>
     </div>
