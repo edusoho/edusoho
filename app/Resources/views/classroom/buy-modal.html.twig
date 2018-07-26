@@ -38,9 +38,9 @@
 
     {% if billable %}
       <div class="form-group">
-        <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
-        <div class="col-sm-9 controls color-warning">
-          <span class="form-control-static">
+        <div class="col-sm-3 control-label">{{'site.price'|trans}}</div>
+        <div class="col-sm-9 form-control-static color-warning">
+          <span>
             {% if vipStatus|default(0) %}
               {{'classroom.buy_classroom.vip_free'|trans}}
             {% else %}
