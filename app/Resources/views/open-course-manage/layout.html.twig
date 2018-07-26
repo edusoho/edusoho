@@ -24,7 +24,7 @@
 
 {% block main %}
   <div class="cd-main">
-    <div class="cd-main__heading open-course-heading">
+    <div class="cd-main__heading open-course-heading {% block main_heading_class %}{% endblock %}">
       {% block main_heading %}
         <div class="cd-main__title open-course-heading__title">
           {% block page_title %}{% endblock %}
