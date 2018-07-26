@@ -7117,3 +7117,6 @@ exception.user_lock: User account is locked, please contact system administrator
 
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
+
+
+course.unname_title: unname course

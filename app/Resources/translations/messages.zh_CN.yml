@@ -8436,3 +8436,5 @@ exception.user_lock: 账户被封禁，请联系管理员
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
+
+course.unname_title: 未命名计划

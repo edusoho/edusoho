@@ -87,7 +87,7 @@
               {% for course in courses if course.status == 'published' or previewAs %}
                 <li class="mb5 mrs {% if current_course.id == course.id %} active {% endif %}">
                   <a data-toggle="tooltip" data-placement="top" data-container="body" title="{{ course.subtitle }}"
-                data-trigger="hover" href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}
+                data-trigger="hover" href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10)|default('course.unname_title'|trans) }}
                   </a>
                   <i class="es-icon es-icon-done done-icon"></i>
                 </li>

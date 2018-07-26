@@ -126,6 +126,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course['isDefault'] = 0;
         }
 
+        $count = $this->searchCourseCount(
+            array(
+                'courseSetId' => $course['courseSetId'],
+            )
+        );
+        if ($count > 9) {
+            throw $this->createInvalidArgumentException('计划数不得超过10个！');
+        }
+
         $course = ArrayToolkit::parts(
             $course,
             array(
@@ -687,16 +696,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function isCourseSetCoursesSummaryEmpty($courseSetId)
     {
-        $isMulCourses = $this->hasMulCourses($courseSetId);
-        if ($isMulCourses) {
-            $courses = $this->searchCourses(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX, array('summary'));
-            foreach ($courses as $course) {
-                if (!empty($course['summary'])) {
-                    return true;
-                }
+        $courses = $this->searchCourses(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX, array('summary'));
+        foreach ($courses as $course) {
+            if (!empty($course['summary'])) {
+                return true;
             }
-
-            return false;
         }
 
         return false;
@@ -1575,7 +1579,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ('audio' == $task['type']) {
             $task['mediaSource'] = 'self';
         } elseif ('live' == $task['type']) {
-            if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+            if ('videoGenerated' == $activity['ext']['replayStatus']) {
                 $task['mediaSource'] = 'self';
             }
 
@@ -2407,7 +2411,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
-        if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
+        if (empty($fields['originPrice']) || $fields['originPrice'] <= 0) {
             $fields['isFree'] = 1;
         } else {
             $fields['isFree'] = 0;
@@ -2469,9 +2473,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
-    public function canUpdateCourseBaseInfo($courseId)
+    public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0)
     {
         $course = $this->getCourse($courseId);
+
+        if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
+            throw $this->createInvalidArgumentException(
+                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
+            );
+        }
+
         $user = $this->getCurrentUser();
         $courseSetting = $this->getSettingService()->get('course');
 
@@ -2479,6 +2490,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return $course;
         }
 
-        return $this->tryManageCourse($courseId);
+        return $this->tryManageCourse($courseId, $courseSetId);
     }
 }

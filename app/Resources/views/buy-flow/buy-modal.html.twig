@@ -20,7 +20,7 @@
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'course.name'|trans}}</div>
       <div class="col-sm-9 form-control-static ">
-        <span class="form-control-static color-gray">《{{ courseSet.title }}》 - {{ course.title }} </span>
+        <span class="form-control-static color-gray">《{{ courseSet.title }}》 {% if course.title is not empty %}- {{ course.title }} {% endif %}
       </div>
     </div>
 
