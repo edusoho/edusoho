@@ -1,5 +1,4 @@
 import loadAnimation from 'common/load-animation';
-import notify from 'common/notify';
 import FileChooser from 'app/js/file-chooser/file-choose';
 import SubtitleDialog from 'app/js/activity-manage/video/subtitle/dialog';
 
@@ -40,7 +39,7 @@ class LessonModal {
         'mediaSource': Translator.trans('activity.video_manage.media_error_hint'),
       },
       submitSuccess(res) {
-        notify('success', Translator.trans('open_course.lesson.create_success'));
+        cd.message({ type: 'success', message: Translator.trans('open_course.lesson.create_success')});
         document.location.reload();
       },
       submitError(res) {
@@ -49,7 +48,7 @@ class LessonModal {
         if (errorRes.error && errorRes.error.message) {
           msg = errorRes.error.message;
         }
-        notify('warning', Translator.trans('open_course.lesson.create_error') + ':' + msg);
+        cd.message({ type: 'warning', message: Translator.trans('open_course.lesson.create_error') + ':' + msg });
       }
     });
 
