@@ -12,7 +12,7 @@ class TradeFilter extends Filter
     );
 
     protected $publicFields = array(
-        'status', 'payUrl', 'paymentForm', 'paymentHtml', 'paymentUrl',
+        'status', 'payUrl', 'paymentForm', 'paymentHtml', 'paymentUrl', 'mwebUrl', 'appid', 'partnerid', 'prepayid', 'package', 'noncestr', 'timestamp', 'sign', 'cash_amount', 'qrcodeUrl', 'successUrl', 'open_id', 'attach',
     );
 
     protected function publicFields(&$data)
