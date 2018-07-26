@@ -687,16 +687,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function isCourseSetCoursesSummaryEmpty($courseSetId)
     {
-        $isMulCourses = $this->hasMulCourses($courseSetId);
-        if ($isMulCourses) {
-            $courses = $this->searchCourses(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX, array('summary'));
-            foreach ($courses as $course) {
-                if (!empty($course['summary'])) {
-                    return true;
-                }
+        $courses = $this->searchCourses(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX, array('summary'));
+        foreach ($courses as $course) {
+            if (!empty($course['summary'])) {
+                return true;
             }
-
-            return false;
         }
 
         return false;
@@ -1575,7 +1570,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ('audio' == $task['type']) {
             $task['mediaSource'] = 'self';
         } elseif ('live' == $task['type']) {
-            if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+            if ('videoGenerated' == $activity['ext']['replayStatus']) {
                 $task['mediaSource'] = 'self';
             }
 

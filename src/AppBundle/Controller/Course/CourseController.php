@@ -237,8 +237,16 @@ class CourseController extends CourseBaseController
             1
         );
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
-        $courses = $this->getCourseService()->sortByCourses($courses);
+        $conditions = array(
+            'courseSetId' => $courseSet['id'],
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            0,
+            10
+        );
 
         return $this->render(
             'course/header/header-for-guest.html.twig',
@@ -696,6 +704,7 @@ class CourseController extends CourseBaseController
     {
         $masterRequest = $this->get('request_stack')->getMasterRequest();
         $routeParams = $masterRequest->attributes->get('_route_params');
+        $previewAs = $masterRequest->query->get('previewAs', null);
         $currentCourse = $this->getCourseService()->getCourse($routeParams['id']);
 
         $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
@@ -716,6 +725,7 @@ class CourseController extends CourseBaseController
             'currentCourse' => $currentCourse,
             'courses' => $courses,
             'tab' => $routeParams['tab'],
+            'previewAs' => $previewAs,
             'selectedCourseId' => $selectedCourseId,
         ));
     }
