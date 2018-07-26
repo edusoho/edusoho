@@ -236,6 +236,10 @@ class CourseSetCoursesCopy extends AbstractCopy
             'locked',
             'status',
             'teacherIds',
+            'lessonNum',
+            'publishLessonNum',
+            'subtitle',
+
         );
     }
 
