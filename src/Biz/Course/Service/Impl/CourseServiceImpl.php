@@ -2472,6 +2472,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0)
     {
         $course = $this->getCourse($courseId);
+
+        if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
+            throw $this->createInvalidArgumentException(
+                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
+            );
+        }
+
         $user = $this->getCurrentUser();
         $courseSetting = $this->getSettingService()->get('course');
 
