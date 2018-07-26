@@ -23,7 +23,7 @@ class BatchCreate {
       accept: $uploader.data('accept'),
       process: this.getUploadProcess(),
       ui: 'batch',
-      fileNumLimit: $uploader.data('fileNumLimit') !== undefined ? $uploader.data('NumLimit') : null,
+      fileNumLimit: $uploader.data('numLimit') !== undefined ? $uploader.data('numLimit') : null,
       locale: document.documentElement.lang
     });
 
