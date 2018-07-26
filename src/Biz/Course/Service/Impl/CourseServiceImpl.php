@@ -126,6 +126,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course['isDefault'] = 0;
         }
 
+        $count = $this->searchCourseCount(
+            array(
+                'courseSetId' => $course['courseSetId'],
+            )
+        );
+        if ($count > 9) {
+            throw $this->createInvalidArgumentException('计划数不得超过10个！');
+        }
+
         $course = ArrayToolkit::parts(
             $course,
             array(
