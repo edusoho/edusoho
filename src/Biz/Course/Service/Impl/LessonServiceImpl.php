@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\LessonException;
 use Biz\Course\Service\LessonService;
 use Codeages\Biz\Framework\Event\Event;
 use AppBundle\Common\ArrayToolkit;
@@ -152,7 +153,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $lessonCount = $this->countLessons(array('courseId' => $courseId));
 
         if ($lessonCount >= self::LESSON_LIMIT_NUMBER) {
-            throw $this->createServiceException('lesson_count_no_more_than_300');
+            throw $this->createNewException(LessonException::LESSON_NUM_LIMIT());
         }
 
         return true;

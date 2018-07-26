@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
-import notify from 'common/notify';
 import Intro from './intro';
 import Detail from 'app/js/courseset-manage/base/detail';
 import { initTags } from 'app/js/courseset-manage/base/tag';

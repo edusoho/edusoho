@@ -3,6 +3,7 @@ import sortList from 'common/sortable';
 export default class CourseManage {
   constructor() {
     this.$sortBtn = $('.js-sort-btn');
+    this.createBtn = $('.js-create-plan');
     this.sortList = this._getSort();
     this.init();
   }
@@ -26,6 +27,32 @@ export default class CourseManage {
         $('.js-status-' + value).show();
       } else {
         $('.js-plan-item').show();
+      }
+    });
+
+    this.copyPlan();
+  }
+
+  copyPlan() {
+    const self = this;
+    const planNumber = $('.js-plan-item').length;
+    $('.js-plan-operation').on('click', '.js-copy-plan', (event) => {
+      const $target = $(event.currentTarget);
+      if (planNumber > 9) {
+        cd.confirm({
+          title: Translator.trans('course.manage.copy_title'),
+          content: Translator.trans('course.manage.max_course_number_tip'),
+          okText: Translator.trans('site.confirm'),
+          cancelText: Translator.trans('site.cancel')
+        }).on('ok', () => {
+          self.createBtn.prop('disabled', true);
+        }).on('cancle', () => {
+          self.createBtn.prop('disabled', true);
+        });
+      } else {
+        $.get($target.data('url'), (response) => {
+          $('#modal').modal('show').html(response);
+        });
       }
     });
   }

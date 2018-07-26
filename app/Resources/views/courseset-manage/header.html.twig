@@ -2,7 +2,7 @@
 {% block js %}
   {% do script(['app/js/courseset-manage/header/index.js']) %}
 {% endblock %}
-{% set basepath = path('course_show', {id: courseSet.defaultCourseId, previewAs:1}) %}
+{% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
 <div class="courseset-manage-header {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
 
   {% block unfold %}
@@ -54,7 +54,7 @@
       {% block btn %}
         {# 课程发布按钮 #}
         {% if courseSet.status == 'published' %}
-          {# <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a> #}
+          <a class="cd-btn cd-btn-primary" target="_blank" href="{{ basepath }}">{{'my.learning.course.watch'|trans}}</a>
         {% endif %}
 
         {% if courseSet.status != 'published' %}
@@ -69,7 +69,7 @@
       <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
     </div>
 
-    {% if courseSet.type != 'live' %}
+    {% if not is_un_multi_courseset(courseSet.id) %}
       <div class="courseset-manage-header-data hidden-xs">
         <span class="cd-text-medium">{{ 'course.plan'|trans }}</span>
         <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span></div>

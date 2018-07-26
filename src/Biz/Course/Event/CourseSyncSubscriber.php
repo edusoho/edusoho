@@ -167,6 +167,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'taskRewardPoint',
             'maxStudentNum',
             'isShowUnpublish',
+            'lessonNum',
+            'publishLessonNum',
         ));
         $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
     }

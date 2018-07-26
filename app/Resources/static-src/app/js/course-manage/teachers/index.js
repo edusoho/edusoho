@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import PersonaMultiInput from 'app/common/component/persona-multi-input';
 import sortList from 'common/sortable';
-import notify from 'common/notify';
 
 ReactDOM.render( 
   <PersonaMultiInput 
@@ -19,6 +18,6 @@ $('.js-btn-save').on('click', function(event){
   if($('input[name=teachers]').val() !== '[]'){
     $('#teachers-form').submit();
   }else{
-    notify('warning', Translator.trans('course.manage.min_teacher_num_error_hint'));
+    cd.message({ type: 'warning', message: Translator.trans('course.manage.min_teacher_num_error_hint')});
   }
 });

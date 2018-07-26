@@ -1,3 +1,5 @@
+import { enterSubmit } from 'app/common/form';
+
 class PlanTitle {
   constructor() {
     this.validator = null;
@@ -9,7 +11,8 @@ class PlanTitle {
   }
 
   initValidator() {
-    let $form = $('#course-title-form');
+    const $form = $('#course-title-form');
+    const $btn = $('#course-title-submit');
     this.validator = $form.validate({
       rules: {
         title: {
@@ -20,13 +23,12 @@ class PlanTitle {
       },
       messages: {
         title: {
-          required: Translator.trans('course.manage.title_required_error_hint'),
           maxlength: Translator.trans('course.manage.title_maxlength_error_hint'),
         }
       }
     });
 
-    $('#course-title-submit').click((evt) => {
+    $btn.click((evt) => {
       if (this.validator.form()) {
         $(evt.currentTarget).button('loading');
         let params = { title: $('#planTitle').val() };
@@ -37,7 +39,9 @@ class PlanTitle {
         });
       }
     });
+    enterSubmit($form, $btn);
   }
+
 }
 
 new PlanTitle();

@@ -807,6 +807,7 @@ course.teaching_plan.default.title.set: 首个计划的标题
 course.teaching_plan.sort: 调整顺序
 course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
+course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
@@ -1078,6 +1079,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
+course.members_manage.add_failed_tips: 计划未发布，不可添加学员
 course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
@@ -7058,6 +7060,7 @@ course.video.convert.client.try: '（试一试）'
 course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
 course.task.show.video.convert.client.notify: 不再提醒
 course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.enable_label: 音频听课
 course.info.video.convert.audio.start: 开启
 course.info.video.convert.audio.close: 关闭
 
@@ -7111,3 +7114,9 @@ exception.user.reset_password_email_send: 重设密码邮件发送失败，请�
 exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
 exception.user_lock: User account is locked, please contact system administrator.
+
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
+
+
+course.unname_title: unname course
