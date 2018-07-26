@@ -5,7 +5,7 @@
     </li>
     {% for selectCourse in courses if selectCourse.status == 'published' or previewAs|default(null) %}
       <li role="presentation" {% if selectCourse.id == selectedCourseId %}class="active"{% endif %}>
-        <a href="{{ path(currentRoute, {id: currentCourse.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title|sub_text(12) }}</a>
+        <a href="{{ path(currentRoute, {id: currentCourse.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title|sub_text(12)|default('course.unname_title'|trans) }}</a>
       </li>
     {% endfor %}
   </ul>
