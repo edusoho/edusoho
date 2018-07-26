@@ -54,7 +54,7 @@
       {% block btn %}
         {# 课程发布按钮 #}
         {% if courseSet.status == 'published' %}
-          {# <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a> #}
+          <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'my.learning.course.watch'|trans}}</a>
         {% endif %}
 
         {% if courseSet.status != 'published' %}
