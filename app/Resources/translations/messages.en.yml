@@ -7114,3 +7114,6 @@ exception.user.reset_password_email_send: 重设密码邮件发送失败，请�
 exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
 exception.user_lock: User account is locked, please contact system administrator.
+
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
