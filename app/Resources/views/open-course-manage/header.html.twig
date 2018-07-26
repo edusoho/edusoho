@@ -28,7 +28,7 @@
   <div class="courseset-manage-header-btn">
     {% block btn %}
       {% if course.status == 'published' %}
-        <a class="cd-btn cd-btn-primary" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'my.learning.course.watch'|trans}}</a>
+        <a class="cd-btn cd-btn-primary" target="_blank" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'my.learning.course.watch'|trans}}</a>
       {% else %}
         <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
       {% endif %}
