@@ -20,14 +20,14 @@
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'course.name'|trans}}</div>
       <div class="col-sm-9 form-control-static ">
-      	<span class="form-control-static color-gray">《{{ courseSet.title }}》 - {{ course.title }} </span>
+        <span class="form-control-static color-gray">《{{ courseSet.title }}》 - {{ course.title }} </span>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'course.price'|trans}}</div>
-      <div class="col-sm-9 controls color-warning">
-      	<span class="form-control-static">
+      <div class="col-sm-9 form-control-static color-warning">
+        <span>
           {% if course.isFree or vipStatus|default(0) %}
             <strong class="money">{{ 'course.price.free'|trans }}</strong>
           {% else %}
