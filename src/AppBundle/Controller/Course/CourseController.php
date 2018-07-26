@@ -696,6 +696,7 @@ class CourseController extends CourseBaseController
     {
         $masterRequest = $this->get('request_stack')->getMasterRequest();
         $routeParams = $masterRequest->attributes->get('_route_params');
+        $previewAs = $masterRequest->query->get('previewAs', null);
         $currentCourse = $this->getCourseService()->getCourse($routeParams['id']);
 
         $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
@@ -705,6 +706,7 @@ class CourseController extends CourseBaseController
             'currentCourse' => $currentCourse,
             'courses' => $this->getCourseService()->findCoursesByCourseSetId($currentCourse['courseSetId']),
             'tab' => $routeParams['tab'],
+            'previewAs' => $previewAs,
             'selectedCourseId' => $selectedCourseId,
         ));
     }
