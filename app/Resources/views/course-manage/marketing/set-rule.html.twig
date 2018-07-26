@@ -16,9 +16,11 @@
     {{ cd_radios('expiryMode',
     { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
     course.expiryMode|default('days'), coursePublished or courseClosed ? 'disabled' : '') }}
-
+    
+    {% if coursePublished or courseClosed %}
+      <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
+    {% endif %}
     {#随到随学#}
-
     <div class="course-manage-expiry {% if course.expiryMode|default('days') in ['date', 'forever'] %}hidden{% endif %}" id="expiry-days">
       <span class="caret"></span>
       {{ cd_radios('deadlineType',
