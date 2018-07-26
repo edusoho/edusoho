@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 class Unlock {
   constructor() {
     this.init();		
@@ -11,11 +9,11 @@ class Unlock {
       $.post($form.attr('action'), $form.serialize(), function(resp){
         console.log(resp);
         if(resp.success){
-          notify('success', Translator.trans('course_set.manage.unlock_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('course_set.manage.unlock_success_hint')});
           $('#modal').modal('hide');
           location.reload();
         }else{
-          notify('danger', Translator.trans('course_set.manage.unlock_failure_hint')+ resp.message);
+          cd.message({ type: 'danger', message: Translator.trans('course_set.manage.unlock_failure_hint')+ resp.message});
         }
       });
     });

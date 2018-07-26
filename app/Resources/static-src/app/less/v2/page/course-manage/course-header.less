@@ -11,7 +11,6 @@
     margin-bottom: 0;
     border: none;
     .nav-header-section__item {
-      padding-top: 16px;
       margin: 0 32px;
       @media (max-width: @screen-xs-min) {
         margin: 0 16px !important;
@@ -354,7 +353,8 @@
     > a {
       font-size: 16px;
       font-weight: 500;
-      padding: 0 0 16px 0;
+      padding: 16px 0 16px 0;
+      display: block;
       line-height: 1;
       color: @cd-dark-minor;
       &:hover,
@@ -365,9 +365,6 @@
         font-size: 20px;
       }
     }
-  }
-  .highlight {
-    border-width: 4px;
   }
 }
 

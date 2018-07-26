@@ -2,11 +2,10 @@
 {% block title %}{{'my.teaching.open_course.recommend_setting.title'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'marketing' %}
 {% do script(['app/js/open-course-manage/recommend-course/index.js'])%}
-
 {% block page_title %}
   {{'my.teaching.open_course.recommend_setting.title'|trans}}
   <div class="pull-right">
-    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
+    <button class="cd-btn cd-btn-success cd-btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
   </div>
 {% endblock %}
 
@@ -116,7 +115,7 @@
     {% if courseSets %}
       <div class="form-group">
         <div class="col-md-offset-9 col-md-3 controls">
-          <button type="submit" class="btn btn-fat btn-primary pull-right">{{ 'my.teaching.open_course.recommend_setting.save_btn'|trans }}</button>
+          <button type="submit" class="cd-btn cd-btn-primary pull-right">{{ 'my.teaching.open_course.recommend_setting.save_btn'|trans }}</button>
         </div>
       </div>
     {% else %}

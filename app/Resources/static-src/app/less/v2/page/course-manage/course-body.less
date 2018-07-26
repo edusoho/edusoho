@@ -49,39 +49,6 @@
   background-color: #fff;
   .border-radius;
   .cd-box-shadow;
-  .form-inline {
-    .form-group {
-      margin-bottom: 0;
-    }
-  }
-  .form-group {
-    margin-bottom: 24px;
-    .control-label-required {
-      &:before {
-        top: 0;
-        color: @brand-danger;
-      }
-    }
-    .form-error-message  {
-      font-size: 12px;
-    }
-  }
-  .cd-radio {
-    min-width: 76px;
-    color: @cd-dark-major;
-    &.disabled {
-      color: @cd-dark-assist;
-    }
-    font-weight: normal;
-  }
-  .form-control-static {
-    height: 34px;
-  }
-  .width-input-large {
-    @media (min-width: @screen-xs-min) {
-      width: 298px;
-    }
-  }
   @media (max-width: @screen-xs-min) {
     padding: 16px;
   }
@@ -194,6 +161,34 @@
 }
 .course-manage-info {
   position: relative;
+  .form-group {
+    margin-bottom: 24px;
+    .control-label-required {
+      &:before {
+        top: 0;
+        color: @brand-danger;
+      }
+    }
+    .form-error-message  {
+      font-size: 12px;
+    }
+  }
+  .cd-radio {
+    min-width: 76px;
+    color: @cd-dark-major;
+    &.disabled {
+      color: @cd-dark-assist;
+    }
+    font-weight: normal;
+  }
+  .form-control-static {
+    height: 34px;
+  }
+  .width-input-large {
+    @media (min-width: @screen-xs-min) {
+      width: 298px;
+    }
+  }
   .course-manage-info__title {
     box-shadow: none;
     & + div {
