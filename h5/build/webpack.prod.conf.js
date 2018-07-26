@@ -82,7 +82,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting
     new webpack.optimize.ModuleConcatenationPlugin(),
-    // split vendor js into its own file
+    // 仅有vendor达不到目的，目的是打包一次之后，尽可能缓存到浏览器，
+    // vendor无法保证，之后有新的依赖包引入 hash值不变化
+    // 所以将不变的依赖包再次抽离出来
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      minChunks: Infinity
+    }),
+    // split vendor js into its own file    
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks (module) {
@@ -94,29 +101,16 @@ const webpackConfig = merge(baseWebpackConfig, {
             path.join(__dirname, '../node_modules')
           ) === 0
         )
-      }
+      }, 
+      chunks: ['app'] // 讲app入口中的公共模块提取出来
     }),
-    // 仅有vendor达不到目的，目的是打包一次之后，尽可能缓存到浏览器，
-    // vendor无法保证，之后有新的依赖包引入 hash值不变化
-    // 所以将不变的依赖包再次抽离出来
-    new webpack.optimize.CommonsChunkPlugin({
-      names: "common",
-      minChunks: function(module, count) {
-        if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
-          return false;
-        }
-        return module.context && 
-          (module.context.includes("vue") ||
-          module.context.includes("vant") ||
-          module.context.includes("vuex") ||
-          module.context.includes("vue-router"));
-      }
-    }),
+
+  
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
-      minChunks: Infinity
+      minChunks: Infinity //保证没有其他模块打包进manifest
     }),
     // This instance extracts shared chunks from code splitted chunks and bundles them
     // in a separate chunk, similar to the vendor chunk
@@ -125,7 +119,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       name: 'app',
       async: 'vendor-async',
       children: true,
-      minChunks: 3
+      minChunks: 3 // 某模块至少被3个文件引入，则打包进app文件
     }),
 
     // copy custom static assets

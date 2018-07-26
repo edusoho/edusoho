@@ -23,6 +23,7 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js',
+    common: ['vue', 'vuex', 'vant', 'axios']
   },
   output: {
     path: config.build.assetsRoot,
