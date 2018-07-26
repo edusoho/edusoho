@@ -2464,7 +2464,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
-    public function canUpdateCourseBaseInfo($courseId)
+    public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0)
     {
         $course = $this->getCourse($courseId);
         $user = $this->getCurrentUser();
@@ -2474,6 +2474,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return $course;
         }
 
-        return $this->tryManageCourse($courseId);
+        return $this->tryManageCourse($courseId, $courseSetId);
     }
 }
