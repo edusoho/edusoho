@@ -139,7 +139,7 @@ class CourseController extends CourseBaseController
         foreach ($tasks as $task) {
             if (empty($tag) && 'video' === $task['type'] && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                if (!empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                     $tag = 'site.badge.try_watch';
                 }
             }
@@ -690,6 +690,7 @@ class CourseController extends CourseBaseController
     {
         $masterRequest = $this->get('request_stack')->getMasterRequest();
         $routeParams = $masterRequest->attributes->get('_route_params');
+        $previewAs = $masterRequest->query->get('previewAs', null);
         $currentCourse = $this->getCourseService()->getCourse($routeParams['id']);
 
         $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
@@ -699,6 +700,7 @@ class CourseController extends CourseBaseController
             'currentCourse' => $currentCourse,
             'courses' => $this->getCourseService()->findCoursesByCourseSetId($currentCourse['courseSetId']),
             'tab' => $routeParams['tab'],
+            'previewAs' => $previewAs,
             'selectedCourseId' => $selectedCourseId,
         ));
     }
