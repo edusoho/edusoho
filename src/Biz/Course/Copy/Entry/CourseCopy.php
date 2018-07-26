@@ -93,7 +93,6 @@ class CourseCopy extends AbstractEntityCopy
             'lessonNum',
             'publishLessonNum',
             'subtitle',
-            'isShowUnpublish',
         );
     }
 
