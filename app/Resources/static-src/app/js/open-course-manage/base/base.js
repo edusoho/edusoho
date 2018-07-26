@@ -71,7 +71,7 @@ export default class Base {
       rules: {
         title: {
           required: true,
-          maxlength: 30,
+          maxlength: 60,
           trim: true,
           course_title: true,
         },

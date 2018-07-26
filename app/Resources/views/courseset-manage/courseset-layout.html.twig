@@ -2,8 +2,8 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
-    <li><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
-    <li class="active">{{ courseSet.title }}</li>
+    <li class="text-overflow"><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    <li class="active text-overflow courseset-header-section__breadcrumb" title="{{ courseSet.title }}">{{ courseSet.title }}</li>
   </ol>
 {% endblock %}
 {% block courseset_header %}

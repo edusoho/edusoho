@@ -20,7 +20,7 @@ export default class Base {
       ajax: true,
       rules: {
         title: {
-          maxlength: 30,
+          maxlength: 60,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
