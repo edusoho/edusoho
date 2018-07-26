@@ -18,11 +18,11 @@
         {{ slot('course_set.questions_import_btn.extension', {'courseSet': courseSet}) }}
         {% for type,name in questionTypes %}
           {% if loop.index <= 3 %}
-            <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name|trans }}</a>
+            <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="cd-btn cd-btn-info cd-btn-sm"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ name|trans }}</a>
           {% endif %}
         {% endfor %}
         <div class="btn-group">
-        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+        <a href="#" type="button" class="cd-btn cd-btn-default cd-btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
         <ul class="dropdown-menu pull-right">
           {% for type,name in questionTypes %}
             {% if loop.index > 3 and ((type == 'material' and not parentQuestion) or type != 'material') %}
