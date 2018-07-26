@@ -10,7 +10,6 @@
 </template>
 <script>
 import loadScript from 'load-script';
-import QiQiuYun from 'qiqiuyun-sdk';
 import Api from '@/api';
 import { mapState } from 'vuex';
 
