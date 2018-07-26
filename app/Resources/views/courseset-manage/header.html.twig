@@ -69,7 +69,7 @@
       <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
     </div>
 
-    {% if courseSet.type != 'live' %}
+    {% if not is_un_multi_courseset(courseSet.id) %}
       <div class="courseset-manage-header-data hidden-xs">
         <span class="cd-text-medium">{{ 'course.plan'|trans }}</span>
         <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span></div>
