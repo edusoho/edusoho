@@ -237,8 +237,16 @@ class CourseController extends CourseBaseController
             1
         );
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
-        $courses = $this->getCourseService()->sortByCourses($courses);
+        $conditions = array(
+            'courseSetId' => $courseSet['id'],
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            0,
+            10
+        );
 
         return $this->render(
             'course/header/header-for-guest.html.twig',
