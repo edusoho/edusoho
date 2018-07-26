@@ -2411,7 +2411,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
-        if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
+        if (empty($fields['originPrice']) || $fields['originPrice'] <= 0) {
             $fields['isFree'] = 1;
         } else {
             $fields['isFree'] = 0;
