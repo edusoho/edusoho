@@ -9,6 +9,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use AppBundle\Util\UploaderToken;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\InvalidArgumentException;
 
@@ -48,7 +49,7 @@ class TaskManageController extends BaseController
 
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'categoryId' => $categoryId));
         if ($taskCount >= 5) {
-            return $this->createJsonResponse(array('code' => false, 'message' => 'lesson_tasks_no_more_than_5'));
+            return $this->createNewException(TaskException::TASK_NUM_LIMIT());
         }
 
         //categoryId  所属课时
