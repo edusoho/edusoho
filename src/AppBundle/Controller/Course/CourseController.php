@@ -700,10 +700,21 @@ class CourseController extends CourseBaseController
 
         $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
 
+        $conditions = array(
+            'courseSetId' => $currentCourse['courseSetId'],
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            0,
+            10
+        );
+
         return $this->render('course/tabs/widget/course-choice.html.twig', array(
             'currentRoute' => $masterRequest->get('_route'),
             'currentCourse' => $currentCourse,
-            'courses' => $this->getCourseService()->findCoursesByCourseSetId($currentCourse['courseSetId']),
+            'courses' => $courses,
             'tab' => $routeParams['tab'],
             'selectedCourseId' => $selectedCourseId,
         ));
