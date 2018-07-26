@@ -4,6 +4,7 @@
 
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
 {% set side_nav = 'base' %}
+{% block paddingClass %} courseset-manage-padding course-manage-info {% endblock %}
 
 {% block main %}
   <div class="courseset-manage-body__title">{{ 'course.base.content_title'|trans }}</div>
