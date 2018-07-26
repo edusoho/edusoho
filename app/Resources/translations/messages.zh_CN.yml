@@ -1217,8 +1217,8 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
-course.members_manage.import_failed_tips: 课程未发布,不可导入学员
-course.members_manage.add_failed_tips: 课程未发布，不可添加学员
+course.members_manage.import_failed_tips: 计划未发布,不可导入学员
+course.members_manage.add_failed_tips: 计划未发布，不可添加学员
 course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
