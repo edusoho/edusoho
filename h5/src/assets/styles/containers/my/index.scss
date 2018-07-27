@@ -37,6 +37,15 @@
     font-size: vw(18);
     font-family: PingFangSC-Medium;
   }
+  .order {
+    .e-course {
+      padding-bottom: vw(30);
+      padding-top: 0;
+      &:last-child {
+        padding-bottom: vw(80);
+      }
+    }
+  }
 
   &-container__empty {
     display: flex;

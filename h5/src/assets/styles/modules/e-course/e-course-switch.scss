@@ -28,13 +28,15 @@
   font-family: Futura-Medium;
   p {
     margin: 0;
-  }
-  .order-close {
-    color: #B0BDC9;
-  }
-  .order-success {
     color: #408FFB;
+    &.closed {
+      color: #B0BDC9;
+    }
+    // &.success {
+    //   color: #408FFB;
+    // }
   }
+
   .order-pay {
     border-radius: 42px;
     padding: vw(8) vw(12);

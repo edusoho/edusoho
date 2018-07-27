@@ -62,6 +62,26 @@ const config = [
     url: '/me/orders',
     method: 'GET'
   }, {
+    // 确认订单信息
+    name: 'confirmOrder',
+    url: '/order_infos',
+    method: 'POST'
+  }, {
+    // 创建订单信息
+    name: 'createOrder',
+    url: '/orders',
+    method: 'POST'
+  }, {
+    // 创建支付信息
+    name: 'createTrade',
+    url: '/trades',
+    method: 'POST'
+  }, {
+    // 获取订单信息
+    name: 'getOrderDetail',
+    url: '/orders/{sn}',
+    method: 'GET'
+  }, {
     // 课程详情页
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
