@@ -1,5 +1,6 @@
 <template>
   <div class="order">
+    <e-loading v-if="isLoading"></e-loading>
     <e-course type="confirmOrder" :order="course" v-if="Object.keys(course).length >0"></e-course>
     <div class="order-submit-bar">
       <span class='red'> 合计: {{ course.totalPrice }} 元 </span>
@@ -22,6 +23,11 @@ export default {
     return {
       course: {}
     }
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    }),
   },
   created () {
     Api.confirmOrder({

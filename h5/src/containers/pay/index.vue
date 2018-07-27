@@ -93,7 +93,7 @@ export default {
           orderSn: this.detail.sn
         }
       }).then(res => {
-        window.location.href = res.payUrl
+        window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
       })
     },
     isWeixinBrowser (){
