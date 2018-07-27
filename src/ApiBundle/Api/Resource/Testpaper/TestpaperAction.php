@@ -17,17 +17,19 @@ class TestpaperAction extends AbstractResource
     /**
      * @param $request
      * @param $id testId testResultId
-     * @param $action "do/redo"
+     * action "do/redo"
      * post params: targetType targetId
      */
-    public function add(ApiRequest $request, $id, $action)
+    public function add(ApiRequest $request, $id)
     {
+        $action = $request->request->get('action');
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
         $method = $action.'Testpaper';
         if (!method_exists($this, $method)) {
             throw new \BadMethodCallException(sprintf('Unknown property "%s" on TestpaperAction "%s".', $action, get_class($this)));
         }
-        $this->$method($request, $testpaper);
+
+        return $this->$method($request, $testpaper);
     }
 
     protected function doTestpaper(ApiRequest $request, $testpaper)
@@ -67,7 +69,6 @@ class TestpaperAction extends AbstractResource
 
         $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
-
         if (empty($testpaperResult)) {
             if ('draft' == $testpaper['status']) {
                 throw new AccessDeniedHttpException('该试卷未发布，如有疑问请联系老师！!');
