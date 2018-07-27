@@ -97,7 +97,7 @@ class CourseExtension extends \Twig_Extension
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
                     'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
                     'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length']),
-                    'activityEndTime' => $item['activity']['endTime'],
+                    'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
                 );
