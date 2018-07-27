@@ -64,9 +64,9 @@ class CourseExtension extends \Twig_Extension
         if (empty($courseItems)) {
             return json_encode(array());
         }
-        
+
         $results = array();
-        foreach($courseItems as $item) {
+        foreach ($courseItems as $item) {
             if (!($item['itemType'] == 'task' && $item['isOptional'])) {
                 $default = array(
                     'result' => array('id' => 0, 'status' => ''),
@@ -103,7 +103,7 @@ class CourseExtension extends \Twig_Extension
                     'isTaskTryLookable' => $item['tryLookable'],
                 );
             }
-        };
+        }
 
         return json_encode($results);
     }
