@@ -240,6 +240,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'maxStudentNum',
                 'services',
                 'tryLookLength',
+                'watchLimit',
             )
         );
         if (!empty($fields['services'])) {
