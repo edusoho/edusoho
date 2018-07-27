@@ -1,8 +1,8 @@
 <template>
   <div class="order">
-    <e-course type="confirmOrder" :course="details"></e-course>
+    <e-course type="confirmOrder" :order="course" v-if="Object.keys(course).length >0"></e-course>
     <div class="order-submit-bar">
-      <span class='red'> 合计: 元 </span>
+      <span class='red'> 合计: {{ course.totalPrice }} 元 </span>
       <van-button class="primary-btn submit-btn" 
         @click="handleSubmit"
         size="small">提交订单</van-button>
@@ -22,11 +22,6 @@ export default {
     return {
       course: {}
     }
-  },
-  computed: {
-    ...mapState('course', {
-      details: state => state.details
-    })
   },
   created () {
     Api.confirmOrder({

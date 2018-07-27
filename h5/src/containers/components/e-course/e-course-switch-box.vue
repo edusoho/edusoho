@@ -32,7 +32,7 @@
      <!-- confirm order -->
     <div class="switch-box" v-if="type === 'confirmOrder'">
       <span class="switch-box__price">
-        <p class="price">¥ {{ course.totalPrice | toMoney}}</p>
+        <p class="price">¥ {{ order.totalPrice}}</p>
       </span>
     </div>
 
@@ -64,7 +64,7 @@
     },
     data() {
       return {
-        isFree: this.course.price == 0,
+        isFree: this.course.price == 0
       };
     },
     computed: {

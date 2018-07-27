@@ -84,6 +84,8 @@ export default {
   },
   methods: {
     handlePay () {
+      this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser() && (this.payWay = 'WechatPay_Js')
+
       Api.createTrade({
         data: {
           gateway: this.payWay,
