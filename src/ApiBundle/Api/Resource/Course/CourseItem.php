@@ -42,7 +42,10 @@ class CourseItem extends AbstractResource
                 continue;
             }
 
-            if ('default' == $course['courseType'] && 'chapter' == $originItem['itemType'] && 'lesson' == $originItem['type']) {
+            if ('chapter' == $originItem['itemType'] && 'lesson' == $originItem['type']) {
+                if ('normal' == $course['courseType']) {
+                    continue;
+                }
                 $originItem['tasks'] = empty($originItem['tasks']) ? array() : $originItem['tasks'];
                 $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {

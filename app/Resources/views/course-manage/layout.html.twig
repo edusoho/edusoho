@@ -8,8 +8,8 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
-    <li><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
-    <li><a class="active">{{courseSet.title}}</a></li>
+    <li class="text-overflow"><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    <li class="text-overflow courseset-header-section__breadcrumb"><a class="active" title="{{courseSet.title}}">{{courseSet.title}}</a></li>
   </ol>
 {% endblock %}
 
