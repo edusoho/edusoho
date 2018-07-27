@@ -92,7 +92,7 @@ class CourseExtension extends \Twig_Extension
                     'isOptional' => $item['isOptional'],
                     'type' => $item['type'],
                     'isTaskFree' => $item['isFree'],
-                    'watchLimitRemaining' => empty($item['watchLimitRemaining']) ? 0 : $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']),
+                    'watchLimitRemaining' => (empty($item['watchLimitRemaining']) || (int) $item['watchLimitRemaining'] < 0) ? 0 : $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']),
                     'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
                     'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
