@@ -705,6 +705,7 @@ page.video_hd.message: 高清
 confirm.private_message_delete.message: 真的要删除该私信吗？
 notify.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
 confirm.last_private_message_delete.message: 本条信息为最后一条，真的要删除该私信吗？
+private_message.send_success: 私信发送成功
 confirm.delete_lesson.message: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？
 notify.lesson_deleted.message: 课时已删除！
 confirm.delete_chapter.message: 您真的要删除该%chapter_name%%part_name%吗？

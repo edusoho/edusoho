@@ -67,38 +67,36 @@ class CourseExtension extends \Twig_Extension
 
         $results = array();
         foreach ($courseItems as $item) {
-            if (!($item['itemType'] == 'task' && $item['isOptional'])) {
+            if (!('task' == $item['itemType'] && $item['isOptional'])) {
                 $default = array(
-                    'result' => array('id' => 0, 'status' => ''),
                     'lock' => '',
                     'status' => '',
                     'isOptional' => '',
                     'type' => '',
                     'isFree' => '',
-                    'watchLimitRemaining' => '',
                     'activity' => array(),
                     'tryLookable' => '',
                 );
                 $item = array_merge($default, $item);
-                $mediaType = empty($item['activity']['mediaType']) ? 'vedio' : $item['activity']['mediaType'];
+                $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
                 $results[] = array(
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
                     'title' => $item['title'],
-                    'result' => $item['result']['id'],
-                    'resultStatus' => $item['result']['status'],
+                    'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
+                    'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
                     'lock' => $item['lock'],
                     'status' => $item['status'],
                     'taskId' => $item['id'],
                     'isOptional' => $item['isOptional'],
-                    'type' => $item['isFree'],
-                    'isTaskFree' => $item['number'],
-                    'watchLimitRemaining' => $item['watchLimitRemaining'],
+                    'type' => $item['type'],
+                    'isTaskFree' => $item['isFree'],
+                    'watchLimitRemaining' => isset($item['watchLimitRemaining']) ? $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']) : false,
                     'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
                     'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
-                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length']),
-                    'activityEndTime' => $item['activity']['endTime'],
+                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType),
+                    'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
                 );

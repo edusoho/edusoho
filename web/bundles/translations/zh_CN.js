@@ -575,6 +575,7 @@ t.add("page.video_hd.message", "\u9ad8\u6e05", "js", "zh_CN");
 t.add("confirm.private_message_delete.message", "\u771f\u7684\u8981\u5220\u9664\u8be5\u79c1\u4fe1\u5417\uff1f", "js", "zh_CN");
 t.add("notify.private_message_maxlength.message", "\u4e0d\u597d\u610f\u601d\uff0c\u79c1\u4fe1\u5185\u5bb9\u957f\u5ea6\u4e0d\u80fd\u8d85\u8fc7500!", "js", "zh_CN");
 t.add("confirm.last_private_message_delete.message", "\u672c\u6761\u4fe1\u606f\u4e3a\u6700\u540e\u4e00\u6761\uff0c\u771f\u7684\u8981\u5220\u9664\u8be5\u79c1\u4fe1\u5417\uff1f", "js", "zh_CN");
+t.add("private_message.send_success", "\u79c1\u4fe1\u53d1\u9001\u6210\u529f", "js", "zh_CN");
 t.add("confirm.delete_lesson.message", "\u5220\u9664\u8bfe\u65f6\u7684\u540c\u65f6\u4f1a\u5220\u9664\u8bfe\u65f6\u7684\u8d44\u6599\u3001\u6d4b\u9a8c\u3002\u60a8\u771f\u7684\u8981\u5220\u9664\u8be5\u8bfe\u65f6\u5417\uff1f", "js", "zh_CN");
 t.add("notify.lesson_deleted.message", "\u8bfe\u65f6\u5df2\u5220\u9664\uff01", "js", "zh_CN");
 t.add("confirm.delete_chapter.message", "\u60a8\u771f\u7684\u8981\u5220\u9664\u8be5%chapter_name%%part_name%\u5417\uff1f", "js", "zh_CN");

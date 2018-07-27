@@ -424,6 +424,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($shouldCalcWatchLimitRemaining) {
                 if ($task['result']) {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                    $task['watchLimitRemaining'] = $task['watchLimitRemaining'] < 0 ? 0 : $task['watchLimitRemaining'];
                 } else {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
                 }
