@@ -95,9 +95,9 @@
           <div class="col-md-8 col-md-offset-2 controls">
             {% block question_buttons %}
               {% if not question|default(null) %}
-                <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save_and_continue_add'|trans}}</button>
+                <button type="button" data-role="submit" class="cd-btn cd-btn-primary submit-btn" data-submission="continue" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save_and_continue_add'|trans}}</button>
               {% endif %}
-              <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+              <button type="button" data-role="submit" class="cd-btn cd-btn-primary submit-btn" data-submission="submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
             {% endblock %}
             <a href="{{ path('course_set_manage_question', {id:courseSet.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'form.btn.return'|trans}}</a>
           </div>
