@@ -75,7 +75,7 @@ class CourseExtension extends \Twig_Extension
                     'isOptional' => '',
                     'type' => '',
                     'isFree' => '',
-                    'watchLimitRemaining' => ',',
+                    'watchLimitRemaining' => '',
                     'activity' => array(),
                     'tryLookable' => '',
                 );

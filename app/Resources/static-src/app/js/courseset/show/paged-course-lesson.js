@@ -79,7 +79,7 @@ class PagedCourseLesson {
         },
 
         'isPublished': function(data, context) {
-          return 'published' == context.course.status && 'published' == data.status;
+          return 'published' == data.status;
         },
 
         'isCloudVideo': function(data, context) {
