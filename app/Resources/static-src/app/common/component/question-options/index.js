@@ -207,7 +207,7 @@ export default class QuestionOptions extends Component {
         }
         <div className="form-group">
           <div className="col-md-8 col-md-offset-2">
-            <a className="cd-btn cd-btn-success btn-sm pull-right" onClick={()=>this.addOption()}>{ createNewName }</a>
+            <a className="cd-btn cd-btn-success cd-btn-sm pull-right" onClick={()=>this.addOption()}>{ createNewName }</a>
           </div>
         </div>
       </div>
