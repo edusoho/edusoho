@@ -69,7 +69,6 @@ class CourseExtension extends \Twig_Extension
         foreach ($courseItems as $item) {
             if (!($item['itemType'] == 'task' && $item['isOptional'])) {
                 $default = array(
-                    'result' => array('id' => 0, 'status' => ''),
                     'lock' => '',
                     'status' => '',
                     'isOptional' => '',
@@ -85,14 +84,14 @@ class CourseExtension extends \Twig_Extension
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
                     'title' => $item['title'],
-                    'result' => $item['result']['id'],
-                    'resultStatus' => $item['result']['status'],
+                    'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
+                    'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
                     'lock' => $item['lock'],
                     'status' => $item['status'],
                     'taskId' => $item['id'],
                     'isOptional' => $item['isOptional'],
-                    'type' => $item['isFree'],
-                    'isTaskFree' => $item['number'],
+                    'type' => $item['type'],
+                    'isTaskFree' => $item['isFree'],
                     'watchLimitRemaining' => $item['watchLimitRemaining'],
                     'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
