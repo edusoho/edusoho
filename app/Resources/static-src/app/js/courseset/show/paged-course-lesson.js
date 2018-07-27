@@ -56,7 +56,7 @@ class PagedCourseLesson {
         },
 
         'hasWatchLimitRemaining': function(data, context) {
-          return data.watchLimitRemaining != '';
+          return data.watchLimitRemaining !== false;
         },
 
         'taskClass': function(data, context) {
