@@ -361,6 +361,6 @@ class CourseExtension extends \Twig_Extension
 
     protected function getActivityExtension()
     {
-        return $this->container->get('activity.extension');
+        return $this->container->get('web.twig.activity_extension');
     }
 }
