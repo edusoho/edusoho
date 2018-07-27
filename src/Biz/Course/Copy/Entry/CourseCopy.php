@@ -90,6 +90,9 @@ class CourseCopy extends AbstractEntityCopy
             'taskNumber',
             'compulsoryTaskNum',
             'enableAudio',
+            'lessonNum',
+            'publishLessonNum',
+            'subtitle',
         );
     }
 

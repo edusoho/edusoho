@@ -2411,7 +2411,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
-        if (empty($fields['originPrice']) || $fields['originPrice'] < 0) {
+        if (empty($fields['originPrice']) || $fields['originPrice'] <= 0) {
             $fields['isFree'] = 1;
         } else {
             $fields['isFree'] = 0;
@@ -2476,6 +2476,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0)
     {
         $course = $this->getCourse($courseId);
+
+        if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
+            throw $this->createInvalidArgumentException(
+                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
+            );
+        }
+
         $user = $this->getCurrentUser();
         $courseSetting = $this->getSettingService()->get('course');
 

@@ -10,7 +10,7 @@ export default class Create {
     this.validator = this.$element.validate({
       rules: {
         title: {
-          maxlength: 30,
+          maxlength: 60,
           required: true,
           trim: true,
           course_title: true,

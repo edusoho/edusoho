@@ -2155,9 +2155,9 @@ es-jcrop@latest:
   version "2.0.5"
   resolved "http://registry.npm.taobao.org/es-jcrop/download/es-jcrop-2.0.5.tgz#68ab9377af369c88600caae147eb9dddafd221dd"
 
-es-jquery-sortable@^0.9.13-patch1:
+es-jquery-sortable@0.9.13-patch1:
   version "0.9.13-patch1"
-  resolved "https://registry.yarnpkg.com/es-jquery-sortable/-/es-jquery-sortable-0.9.13-patch1.tgz#1e952348aa74a630894bf193a01762db798d44c7"
+  resolved "https://registry.npmjs.org/es-jquery-sortable/-/es-jquery-sortable-0.9.13-patch1.tgz#1e952348aa74a630894bf193a01762db798d44c7"
   dependencies:
     jquery "^2.1.2"
 
