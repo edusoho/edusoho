@@ -75,7 +75,7 @@ class PagedCourseLesson {
 
         'isTaskLocked': function(data, context) {
           return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' &&
-            (data.lock == 'true' || !context.course.member);
+            (data.lock || !context.course.isMember);
         },
 
         'isPublished': function(data, context) {
