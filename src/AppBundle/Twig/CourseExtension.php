@@ -74,12 +74,11 @@ class CourseExtension extends \Twig_Extension
                     'isOptional' => '',
                     'type' => '',
                     'isFree' => '',
-                    'watchLimitRemaining' => '',
                     'activity' => array(),
                     'tryLookable' => '',
                 );
                 $item = array_merge($default, $item);
-                $mediaType = empty($item['activity']['mediaType']) ? 'vedio' : $item['activity']['mediaType'];
+                $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
                 $results[] = array(
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
@@ -92,11 +91,11 @@ class CourseExtension extends \Twig_Extension
                     'isOptional' => $item['isOptional'],
                     'type' => $item['type'],
                     'isTaskFree' => $item['isFree'],
-                    'watchLimitRemaining' => (empty($item['watchLimitRemaining']) || (int) $item['watchLimitRemaining'] < 0) ? 0 : $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']),
+                    'watchLimitRemaining' => isset($item['watchLimitRemaining']) ? $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']) : false,
                     'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
                     'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
-                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length']),
+                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType),
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
