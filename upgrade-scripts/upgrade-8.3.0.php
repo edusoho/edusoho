@@ -282,7 +282,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
         $start = $this->getStart($page);
-        $sql = "SELECT id, isDefault, courseSetId FROM course_v8 group by courseSetId HAVING count(courseSetId)=1 and isDefault=1 limit {$start}, {$this->pageSize}";
+        $sql = "select id from `course_v8` where isDefault = 1 and courseSetId in (SELECT courseSetId FROM course_v8 where isDefault=1 group by courseSetId HAVING count(courseSetId)=1 ) limit {$start}, {$this->pageSize}";
         $courses = $this->getConnection()->fetchAll($sql);
         foreach ($courses as $course) {
              $this->courseUpdateHelper->add('id', $course['id'], array('title' => ''));
@@ -305,7 +305,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
         $start = $this->getStart($page);
-        $sql = "SELECT id, courseSetId, summary, isDefault FROM course_v8 group by courseSetId HAVING count(courseSetId)=1 and isDefault=1 limit {$start}, {$this->pageSize}";
+        $sql = "select id, summary, courseSetId from course_v8 where courseSetId in (SELECT courseSetId FROM course_v8 where isDefault=1 group by courseSetId HAVING count(courseSetId)=1) limit {$start}, {$this->pageSize}";
         $courses = $this->getConnection()->fetchAll($sql);
         foreach ($courses as $course) {
              if (!empty($course['summary'])) {
