@@ -1113,6 +1113,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function filterFields($fields)
     {
+        if (isset($fields['tags'])) {
+            if (empty($fields['tags'])) {
+                $fields['tags'] = array();
+            } else {
+                $tags = explode(',', $fields['tags']);
+                $tags = $this->getTagService()->findTagsByNames($tags);
+                $tagIds = ArrayToolkit::column($tags, 'id');
+                $fields['tags'] = $tagIds;
+            }
+        }
+
         $fields = array_filter(
             $fields,
             function ($value) {
@@ -1123,15 +1134,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 return true;
             }
         );
-
-        if (!empty($fields['tags'])) {
-            $tags = explode(',', $fields['tags']);
-            $tags = $this->getTagService()->findTagsByNames($tags);
-            $tagIds = ArrayToolkit::column($tags, 'id');
-            $fields['tags'] = $tagIds;
-        } else {
-            $fields['tags'] = array();
-        }
 
         if (!empty($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
