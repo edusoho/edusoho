@@ -105,6 +105,33 @@ const filters = [
       }
       return code;
     }
+  },
+  {
+    name: 'filterOrderStatus',
+    handler(status) {
+      switch (status) {
+        case 'created':
+          status = '去支付';
+          break;
+        case 'success':
+          status = '已付款';
+          break;
+        case 'refunded':
+          status = '退款成功';
+          break;
+        case 'finished':
+          status = '交易成功';
+          break;
+        case 'closed':
+          status = '交易关闭';
+          break;
+        case 'paid':
+          status = '已付款';
+          break;
+        default:
+      }
+      return status;
+    }
   }
 ];
 

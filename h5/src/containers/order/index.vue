@@ -1,14 +1,18 @@
 <template>
   <div class="order">
-    <e-course type="confirmOrder" v-for="course in courses" :key="course.id" :course="course"></e-course>
+    <e-course type="confirmOrder" :course="details"></e-course>
     <div class="order-submit-bar">
       <span class='red'> 合计: 元 </span>
-      <van-button class="primary-btn submit-btn" size="small">提交订单</van-button>
+      <van-button class="primary-btn submit-btn" 
+        @click="handleSubmit"
+        size="small">提交订单</van-button>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import eCourse from '@/containers/components/e-course/e-course.vue';
+import Api from '@/api'
 
 export default {
   components: {
@@ -16,7 +20,32 @@ export default {
   },
   data () {
     return {
-
+      course: {}
+    }
+  },
+  computed: {
+    ...mapState('course', {
+      details: state => state.details
+    })
+  },
+  created () {
+    Api.confirmOrder({
+      data: {
+        targetType: 'course',
+        targetId: this.$route.params.id
+      }
+    }).then(res => {
+      this.course = Object.assign({}, res)
+    })
+  },
+  methods: {
+    handleSubmit () {
+      this.$router.push({
+        name: 'pay',
+        query: {
+          id: this.$route.params.id
+        }
+      })
     }
   }
 }

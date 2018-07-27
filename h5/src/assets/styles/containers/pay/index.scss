@@ -32,11 +32,12 @@
       }
       .payWay {
         display: flex;
-        justify-content: space-around;
+        // justify-content: space-around;
         .payWay__item {
           border: 1px solid #F5F5F5;
           padding: vw(12) vw(22);
           background: #FFFFFF;
+          margin-right: 10px;
         }
         .payWay__item--selected {
           position: relative;

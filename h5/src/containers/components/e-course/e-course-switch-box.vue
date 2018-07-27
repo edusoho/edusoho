@@ -15,15 +15,17 @@
     <div class="switch-box" v-if="type === 'order'">
       <span class="switch-box__price">
         <p class="free" v-if="isFree">免费</p>
-        <p class="price" v-if="!isFree">¥ {{ order.pay_amount }}</p>
+        <p class="price" v-if="!isFree">¥ {{ order.pay_amount/100 }}</p>
       </span>
       <span class="switch-box__state">
-        <p class="order-close" v-if="order.status === 'closed'">交易关闭</p>
-        <p class="order-success" v-if="order.status === 'success'">交易成功</p>
+        <p :class="order.status"
+          v-if="order.status !== 'created'">
+          {{ order.status | filterOrderStatus}}
+        </p>
         <span class="order-pay"
           v-if="order.status === 'created'"
           @click="goToPay"
-          >去支付</span>
+          >{{ order.status | filterOrderStatus}}</span>
       </span>
     </div>
 
@@ -73,10 +75,13 @@
     },
     methods: {
       goToPay() {
-        // 花钱去吧！
-        console.log('花钱');
         this.$router.push({
           path: '/pay',
+          query: {
+            id: this.order.id,
+            source: 'order',
+            sn: this.order.sn
+          }
         });
       }
     }

@@ -118,7 +118,9 @@
         }
 
         if (+this.details.price) {
-          this.$router.push({path: `/order/${this.details.id}`});
+          this.$router.push({
+            path: `/order/${this.details.id}`
+          });
         } else {
           this.joinCourse({
             id: this.details.id
