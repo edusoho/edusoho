@@ -157,7 +157,7 @@ class PagedCourseLesson {
   _toJson(str) {
     let json = {};
     if (str) {
-      json = $.parseJSON(str.replace(/[\r\n]/g, ''));
+      json = $.parseJSON(str.replace(/[\r\n\t]/g, ''));
     }
     return json;
   }
