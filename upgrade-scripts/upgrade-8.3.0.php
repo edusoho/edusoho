@@ -282,7 +282,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
         $start = $this->getStart($page);
-        $sql = "SELECT id, isDefault FROM course_v8 group by courseSetId HAVING count(courseSetId)=1 and isDefault=1 limit {$start}, {$this->pageSize}";
+        $sql = "SELECT id, isDefault, courseSetId FROM course_v8 group by courseSetId HAVING count(courseSetId)=1 and isDefault=1 limit {$start}, {$this->pageSize}";
         $courses = $this->getConnection()->fetchAll($sql);
         foreach ($courses as $course) {
              $this->courseUpdateHelper->add('id', $course['id'], array('title' => ''));
