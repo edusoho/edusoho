@@ -4,7 +4,7 @@
 
 {% block title %}
   {% if hasMulCourses %}
-    <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
+    <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank" title="{{ course.title }}">
       {{ course.title }}
     </a>
   {% endif %}
