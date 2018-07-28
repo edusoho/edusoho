@@ -17,8 +17,8 @@
   {% endif %}
 
   <div class="courseset-manage-header-info">
-    <div class="courseset-manage-header-info__title text-overflow">
-      <a class="cd-link-major" href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">{{ course.title }}</a>
+    <div class="courseset-manage-header-info__title text-overflow" {% if course.title|length > 21 %}data-toggle="tooltip" title="{{ course.title }}" data-container="body" {% endif %}>
+      <a class="cd-link-major" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     </div>
     {% block liveTag %}
       <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
