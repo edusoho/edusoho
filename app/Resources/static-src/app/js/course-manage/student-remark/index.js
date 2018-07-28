@@ -1,7 +1,5 @@
-import notify from 'common/notify';
 let $modal = $('#student-remark-form').parents('.modal');
 let $form = $('#student-remark-form');
-
 let validator = $form.validate({
   rules: {
     remark: {
@@ -22,12 +20,16 @@ $('.js-student-remark-save-btn').click((event) => {
     $.post($form.attr('action'), $form.serialize(), function (resp) {
       $modal.modal('hide');
       let user_name = $form.data('user');
-      notify('success', Translator.trans('course_manage.student_remark_success_hint', { username: user_name }), {delay:1000, onClose: function () {
+      cd.message({ 
+        type: 'success', 
+        message: Translator.trans('course_manage.student_remark_success_hint', { username: user_name }), 
+        delay: 1000 
+      }).on('close', () => {
         window.location.reload();
-      }});
+      });
     }).error(function () {
       let user_name = $form.data('user');
-      notify('danger', Translator.trans('course_manage.student_remark_failed_hint', { username: user_name }));
+      cd.message({ type: 'danger', message: Translator.trans('course_manage.student_remark_failed_hint', { username: user_name }) });
     });
   }
 });

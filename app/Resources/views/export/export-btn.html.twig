@@ -1,4 +1,4 @@
-<a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn {% endif %} mhs {{ exportClass|default('btn-primary') }} js-export-btn"
+<a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} cd-btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
    href="javascript:;"
    data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
    data-url="{{ path('export',{'name':exportFileName}) }}"
@@ -6,7 +6,7 @@
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
    data-target-form="#{{ targetFormId }}"
 >
-    <i class="es-icon es-icon-filedownload"></i>
+    <i class="es-icon es-icon-filedownload cd-text-sm"></i>
     {% if showDownLoadText|default(1) %}
       {{ text|default('form.btn.export')|trans }}
     {% endif %}

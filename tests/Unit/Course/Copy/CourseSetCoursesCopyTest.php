@@ -144,6 +144,9 @@ class CourseSetCoursesCopeTest extends BaseTestCase
             'locked',
             'status',
             'teacherIds',
+            'lessonNum',
+            'publishLessonNum',
+            'subtitle',
         ), $result);
     }
 

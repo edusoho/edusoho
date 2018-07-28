@@ -55,7 +55,55 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_un_multi_courseset', array($this, 'isUnMultiCourseSet')),
             new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
             new \Twig_SimpleFunction('get_course_title', array($this, 'getCourseTitle')),
+            new \Twig_SimpleFunction('task_list_json_data', array($this, 'taskListJsonData')),
         );
+    }
+
+    public function taskListJsonData($courseItems)
+    {
+        if (empty($courseItems)) {
+            return json_encode(array());
+        }
+
+        $results = array();
+        foreach ($courseItems as $item) {
+            if (!('task' == $item['itemType'] && $item['isOptional'])) {
+                $default = array(
+                    'lock' => '',
+                    'status' => '',
+                    'isOptional' => '',
+                    'type' => '',
+                    'isFree' => '',
+                    'activity' => array(),
+                    'tryLookable' => '',
+                );
+                $item = array_merge($default, $item);
+                $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
+                $results[] = array(
+                    'itemType' => $item['itemType'],
+                    'number' => $item['number'],
+                    'title' => $item['title'],
+                    'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
+                    'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
+                    'lock' => $item['lock'],
+                    'status' => $item['status'],
+                    'taskId' => $item['id'],
+                    'isOptional' => $item['isOptional'],
+                    'type' => $item['type'],
+                    'isTaskFree' => $item['isFree'],
+                    'watchLimitRemaining' => isset($item['watchLimitRemaining']) ? $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']) : false,
+                    'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
+                    'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
+                    'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
+                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType),
+                    'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
+                    'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
+                    'isTaskTryLookable' => $item['tryLookable'],
+                );
+            }
+        }
+
+        return json_encode($results);
     }
 
     public function getCourseCount($courseSetId, $isPublish = 0)
@@ -140,6 +188,7 @@ class CourseExtension extends \Twig_Extension
             'chapter' => 'site.data.chapter',
             'unit' => 'site.data.part',
             'part' => 'site.data.part',
+            'task' => 'site.data.task',
         );
 
         $courseSetting = $this->getSettingService()->get('course');
@@ -152,9 +201,10 @@ class CourseExtension extends \Twig_Extension
             'chapter' => 'chapter_name',
             'unit' => 'part_name',
             'part' => 'part_name',
+            'task' => 'task_name',
         );
 
-        return $courseSetting[$settingKey[$type]];
+        return isset($courseSetting[$settingKey[$type]]) ? $courseSetting[$settingKey[$type]] : $defaultCourseChapterAlias[$type];
     }
 
     public function isMemberExpired($course, $member)
@@ -305,5 +355,10 @@ class CourseExtension extends \Twig_Extension
     public function getName()
     {
         return 'topxia_course_twig';
+    }
+
+    protected function getActivityExtension()
+    {
+        return $this->container->get('web.twig.activity_extension');
     }
 }

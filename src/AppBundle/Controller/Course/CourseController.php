@@ -121,9 +121,15 @@ class CourseController extends CourseBaseController
             return false;
         }
 
-        $matchExpre = "/{$host}\/(my\/)?course\/(\d)+/i";
-        if (preg_match($matchExpre, $referer)) {
-            return false;
+        $matchExpreList = array(
+            "/{$host}\/(my\/)?course\/(\d)+/i",
+            "/{$host}\/course_set\/(\d)+\/manage\/(\S)+/i",
+        );
+
+        foreach ($matchExpreList as $matchExpre) {
+            if (preg_match($matchExpre, $referer)) {
+                return false;
+            }
         }
 
         return true;
@@ -139,7 +145,7 @@ class CourseController extends CourseBaseController
         foreach ($tasks as $task) {
             if (empty($tag) && 'video' === $task['type'] && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                if (!empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                     $tag = 'site.badge.try_watch';
                 }
             }
@@ -231,8 +237,16 @@ class CourseController extends CourseBaseController
             1
         );
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
-        $courses = $this->getCourseService()->sortByCourses($courses);
+        $conditions = array(
+            'courseSetId' => $courseSet['id'],
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            0,
+            10
+        );
 
         return $this->render(
             'course/header/header-for-guest.html.twig',
@@ -690,15 +704,28 @@ class CourseController extends CourseBaseController
     {
         $masterRequest = $this->get('request_stack')->getMasterRequest();
         $routeParams = $masterRequest->attributes->get('_route_params');
+        $previewAs = $masterRequest->query->get('previewAs', null);
         $currentCourse = $this->getCourseService()->getCourse($routeParams['id']);
 
         $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
 
+        $conditions = array(
+            'courseSetId' => $currentCourse['courseSetId'],
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            0,
+            10
+        );
+
         return $this->render('course/tabs/widget/course-choice.html.twig', array(
             'currentRoute' => $masterRequest->get('_route'),
             'currentCourse' => $currentCourse,
-            'courses' => $this->getCourseService()->findCoursesByCourseSetId($currentCourse['courseSetId']),
+            'courses' => $courses,
             'tab' => $routeParams['tab'],
+            'previewAs' => $previewAs,
             'selectedCourseId' => $selectedCourseId,
         ));
     }

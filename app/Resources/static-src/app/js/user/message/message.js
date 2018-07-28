@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 class Message {
   constructor(options) {
     this.$element = $(options.element);
@@ -22,11 +20,11 @@ class Message {
       },
       ajax: true,
       submitSuccess() {
-        notify('success', Translator.trans('私信发送成功'));
+        cd.message({ type: 'success', message: Translator.trans('private_message.send_success') });
         $element.closest('.modal').modal('hide');
       },
       submitError(response) {
-        notify('danger', Translator.trans(response.responseJSON.error.message));
+        cd.message({ type: 'danger', message: Translator.trans(response.responseJSON.error.message) });
       }
     });
   }

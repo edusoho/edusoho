@@ -341,7 +341,7 @@ course.buy.price_free_hint: 去学习
 
 course.chapter: '第%number%%chapter_name%: %title%'
 course.unit: '第%number%%part_name%: %title%'
-course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
 
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
@@ -418,6 +418,8 @@ course_set.manage.upgrade_step3_hint:  >
   <p class="title">添加任务</p>您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。
 course_set.manage.upgrade_step5_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
+course_set.manage.operation_hint: 操作提醒
+course_set.manage.courseset_summary_operation_hint: 课程简介编辑后保存，将会统一覆盖前台所有计划的简介内容，请确认是否保存修改。
 
 course.manage.title_maxlength_error_hint: 教学计划标题长度不能超过{0}字符
 course.manage.title_required_error_hint: 请输入教学计划标题
@@ -439,8 +441,10 @@ course.manage.publish_fail_hint: 教学计划发布失败
 course.manage.close_hint: 是否确定关闭该教学计划？
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
+course.manage.copy_title: 复制计划
+course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
-course.manage.task_delete_hint: 是否确定删除该活动吗？
+course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
@@ -681,6 +685,9 @@ validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
 validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.modify_date: 请输入修改日期
+validate.modify_days: 请输入修改天数
+validate.modify_day_number: 请输入不大于 7300（20年）的数值
 validate.success: 验证成功
 validate.fail: 验证失败
 
@@ -698,6 +705,7 @@ page.video_hd.message: 高清
 confirm.private_message_delete.message: 真的要删除该私信吗？
 notify.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
 confirm.last_private_message_delete.message: 本条信息为最后一条，真的要删除该私信吗？
+private_message.send_success: 私信发送成功
 confirm.delete_lesson.message: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？
 notify.lesson_deleted.message: 课时已删除！
 confirm.delete_chapter.message: 您真的要删除该%chapter_name%%part_name%吗？

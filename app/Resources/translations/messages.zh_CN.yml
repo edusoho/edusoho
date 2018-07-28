@@ -22,7 +22,7 @@ site.data.empty: 无
 site.data.chapter: 章
 site.data.unit: 节
 site.data.lesson: 课时
-site.data.task: 活动
+site.data.task: 任务
 site.data.part: 节
 site.data.title: 标题
 site.data.score: 分
@@ -926,6 +926,7 @@ course.teaching_plan.default.title.set: 首个计划的标题
 course.teaching_plan.sort: 调整顺序
 course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
+course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 新计划名称
 course.teaching_plan.create.create_tips: 教学计划创建后“学习模式”将不能修改。
 course.teaching_plan.create.name: 名称
@@ -1021,7 +1022,7 @@ course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前
 course.marketing_setup.services: 增值服务
 course.marketing_setup.services.show_services: 展示承诺服务
 course.marketing_setup.services.provide_services: 承诺提供服务
-course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程营销，如有需要请联系网站管理员！
+course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程基础设置，如有需要请联系网站管理员！
 course.marketing_setup.reward_point_setting: %name%设置
 course.marketing_setup.study_award:　学习奖励
 course.marketing_setup.task_award: 完成单个活动
@@ -1216,7 +1217,8 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
-course.members_manage.import_failed_tips: 课程未发布,不可导入学员
+course.members_manage.import_failed_tips: 计划未发布,不可导入学员
+course.members_manage.add_failed_tips: 计划未发布，不可添加学员
 course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
@@ -1687,7 +1689,7 @@ course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式
 course.plan_task.extra_class: 课外
 course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
-course.plan_task.total_tasks: 课时总数
+course.plan_task.total_lessons: 课时总数
 course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 已发布课时数：
 course.plan_task.unpublished_lessons: 未发布课时数：
@@ -8364,6 +8366,7 @@ course.video.convert.client.try: '（试一试）'
 course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
 course.task.show.video.convert.client.notify: 不再提醒
 course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.enable_label: 音频听课
 course.info.video.convert.audio.start: 开启
 course.info.video.convert.audio.close: 关闭
 
@@ -8430,3 +8433,8 @@ exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
 exception.user_lock: 账户被封禁，请联系管理员
+
+lesson_count_no_more_than_300: 课时总数不能超过300个
+lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
+
+course.unname_title: 未命名计划

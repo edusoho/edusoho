@@ -424,12 +424,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($shouldCalcWatchLimitRemaining) {
                 if ($task['result']) {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                    $task['watchLimitRemaining'] = $task['watchLimitRemaining'] < 0 ? 0 : $task['watchLimitRemaining'];
                 } else {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
                 }
             }
 
-            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['ext']['file']) && $task['ext']['file']['storage'] === 'cloud';
+            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['ext']['file']) && 'cloud' === $task['ext']['file']['storage'];
             if ($isTryLookable) {
                 $task['tryLookable'] = 1;
             } else {
@@ -479,7 +480,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 }
             }
 
-            $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
+            $isTaskLearned = empty($preTask['result']) ? false : ('finish' === $preTask['result']['status']);
             if ($isTaskLearned) {
                 continue;
             } else {
@@ -1207,7 +1208,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         //如果该任务已经完成则忽略其他的条件
-        if (isset($task['result']['status']) && ($task['result']['status'] === 'finish')) {
+        if (isset($task['result']['status']) && ('finish' === $task['result']['status'])) {
             $task['lock'] = false;
         }
 

@@ -2,6 +2,7 @@
 
 {% block title %}{{'course.order.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'orders' %}
+{% block main_heading_class %}course-main-header{% endblock %}
 
 {% do script(['libs/bootstrap-datetimepicker.js', 'app/js/course-manage/order/index.js']) %}
 
@@ -52,7 +53,7 @@
             <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
           </div>
 
-          <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+          <button class="cd-btn cd-btn-primary">{{'form.btn.search'|trans}}</button>
         </div>
         <input type="hidden" name="courseId" value="{{ course.id }}">
       </form>

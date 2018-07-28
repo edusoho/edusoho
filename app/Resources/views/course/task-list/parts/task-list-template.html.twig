@@ -41,40 +41,13 @@
 <div class="hidden js-hidden-i18n">
   {
     "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
-    "i18nUnitName": "{{course_chapter_alias('part')|trans}}"
+    "i18nUnitName": "{{course_chapter_alias('part')|trans}}",
+    "i18nTaskName":"{{ course_chapter_alias('task')|trans}}"
   }
 </div>
 
 <div class="hidden js-hidden-data">
-  [
-    {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
-      {% if not loop.first %}
-        ,
-      {% endif %}
-      
-      {
-        "itemType": "{{item.itemType}}",
-        "number": "{{item.number}}",
-        "title": "{{item.title}}",
-        "result": "{{item.result.id|default('')}}",
-        "resultStatus": "{{item.result.status|default('')}}",
-        "lock": "{{item.lock|default('')}}",
-        "status": "{{item.status|default('')}}",
-        "taskId": "{{item.id}}",
-        "isOptional": "{{item.isOptional|default('')}}",
-        "type": "{{item.type|default('')}}",
-        "isTaskFree": "{{item.isFree|default('')}}",
-        "watchLimitRemaining": "{{item.watchLimitRemaining|default('')}}",
-        "replayStatus": "{{item.activity.ext.replayStatus|default('')}}",
-        "activityStartTimeStr": "{{item.activity.startTime|default(0)|date('m-d H:i')}}",
-        "activityStartTime": "{{item.activity.startTime|default(0)}}",
-        "activityEndTime": "{{item.activity.endTime|default(0)}}",
-        "activityLength": "{{item.activity.length|default(0)|activity_length_format(item.activity.mediaType|default('video'))}}",
-        "fileStorage": "{{item.activity.ext.file.storage|default('')}}",
-        "isTaskTryLookable": "{{item.tryLookable|default('')}}"
-      }
-    {% endfor %}
-  ]
+  {{ task_list_json_data(courseItems) }}
 </div>
 
 <div class="hidden js-hidden-activity-metas">

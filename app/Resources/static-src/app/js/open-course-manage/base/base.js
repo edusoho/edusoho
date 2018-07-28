@@ -71,7 +71,7 @@ export default class Base {
       rules: {
         title: {
           required: true,
-          maxlength: 30,
+          maxlength: 60,
           trim: true,
           course_title: true,
         },
@@ -116,6 +116,7 @@ export default class Base {
 
     $('#course-create-btn').click(() => {
       if (validator.form()) {
+        $('#course-about-field').val(this.editor.getData());
         $form.submit();
       }
     });
@@ -141,8 +142,9 @@ export default class Base {
   }
 
   initCkeditor() {
+    let self = this;
     if ($('#course-about-field').length > 0) {
-      CKEDITOR.replace('course-about-field', {
+      self.editor = CKEDITOR.replace('course-about-field', {
         allowedContent: true,
         toolbar: 'Detail',
         fileSingleSizeLimit: app.fileSingleSizeLimit,

@@ -308,7 +308,7 @@ class LessonServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Course\LessonException
      * @expectedExceptionMessage lesson_count_no_more_than_300
      */
     public function testIsLessonCountEnoughError()

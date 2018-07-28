@@ -36,14 +36,16 @@
     <div class="courseset-manage-header-info">
       <div class="courseset-manage-header-info__title text-overflow">
         {% block coursesetTitle %}
-          <a class="cd-link-major" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+          <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title }}</a>
         {% endblock %}
       </div>
       <div class="courseset-manage-header-info__price color-danger">
         {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
-          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
         {% else %}
-          <span class="cd-text-sm">¥</span>{{ courseSet.minCoursePrice }}<span class="cd-text-sm">～</span><span class="cd-text-sm">¥</span>{{ courseSet.maxCoursePrice }}
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
+          <span class="cd-text-sm">～</span>
+          {% include 'common/price.html.twig' with {'productPrice': courseSet.maxCoursePrice} %}
         {% endif %}
       </div>
     </div>
@@ -52,7 +54,7 @@
       {% block btn %}
         {# 课程发布按钮 #}
         {% if courseSet.status == 'published' %}
-          {# <a class="cd-btn cd-btn-primary" href="{{ basepath }}">{{'course.btn.back_course_homepage'|trans}}</a> #}
+          <a class="cd-btn cd-btn-primary" target="_blank" href="{{ basepath }}">{{'my.learning.course.watch'|trans}}</a>
         {% endif %}
 
         {% if courseSet.status != 'published' %}
@@ -67,7 +69,7 @@
       <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ courseSet.studentNum|default() }} </span></div>
     </div>
 
-    {% if courseSet.type != 'live' %}
+    {% if not is_un_multi_courseset(courseSet.id) %}
       <div class="courseset-manage-header-data hidden-xs">
         <span class="cd-text-medium">{{ 'course.plan'|trans }}</span>
         <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ couserNum|default(0) }}{% endblock %}</span></div>

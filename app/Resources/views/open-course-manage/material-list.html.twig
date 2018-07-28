@@ -16,7 +16,7 @@
       max-width: 600px;
     }
   </style>
-  <a class="btn btn-info btn-sm pull-right"
+  <a class="cd-btn cd-btn-info cd-btn-sm pull-right"
     data-toggle="modal" data-target="#modal"
     data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
   >
@@ -26,7 +26,7 @@
 {% endblock %}
 
 {% block main_body %}
-<div class="panel-body" id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
+<div id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
   <table class="table table-striped table-hover" id="course-lesson-table">
     <thead>
       <tr>
@@ -53,7 +53,7 @@
   <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'course.course_files.select_all_btn'|trans}}</label>
 
   <div class="btn-group mbm">
-    <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
+    <button class="cd-btn cd-btn-danger cd-btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
     <i class="glyphicon glyphicon-trash"></i>
     {{'form.btn.remove'|trans}}</button>
   </div>

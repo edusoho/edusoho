@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
-import notify from 'common/notify';
 import Intro from './intro';
 import Detail from 'app/js/courseset-manage/base/detail';
 import { initTags } from 'app/js/courseset-manage/base/tag';
@@ -93,19 +92,11 @@ class CourseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
-        title: {
-          required: true,
-          maxlength: 10,
-          trim: true,
-          course_title: true,
-        },
+
         maxStudentNum: {
           required: true,
           live_capacity: true,
           positive_integer: true
-        },
-        subtitle: {
-          maxlength: 30
         },
         expiryDays: {
           required: () => {
@@ -159,6 +150,30 @@ class CourseInfo {
         window.location.reload();
       }
     });
+
+    if ($('.js-course-title').length) {
+      $('.js-course-title').rules('add', {
+        required: true,
+        maxlength: 10,
+        trim: true,
+        course_title: true,
+      });
+      $('.js-course-subtitle').rules('add', {
+        maxlength: 30
+      });
+    }
+    if ($('.js-courseset-title').length) {
+      $('.js-courseset-title').rules('add', {
+        required: true,
+        maxlength: 60,
+        trim: true,
+        course_title: true,
+      });
+      $('.js-courseset-subtitle').rules('add', {
+        maxlength: 50
+      });
+    }
+
 
     $.validator.addMethod(
       'before',
