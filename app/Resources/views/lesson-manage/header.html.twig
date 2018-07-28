@@ -1,4 +1,4 @@
-<div class="task-list-header clearfix js-task-list-header cd-mt16">
+<div class="task-list-header clearfix js-task-list-header">
   <span data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-html="true" data-content="{{ 'course.plan_task.published_lessons'|trans }}{{ course.publishLessonNum }}<br/>{{ 'course.plan_task.unpublished_lessons'|trans }}{{ course.lessonNum - course.publishLessonNum }}">{{'course.plan_task.total_lessons'|trans}}<span class="cd-mr16 cd-ml8" id="task-num">{{ course.lessonNum }}</span></span>
   {% set taskPerDay = course_daily_tasks_num(course.id) %}
   {% if taskPerDay|default(false) %}

@@ -17,7 +17,7 @@
   {% endif %}
 
   <div class="course-manage-header-info">
-    <h1 class="course-manage-header-info__title text-overflow">
+    <h1 class="course-manage-header-info__title text-overflow" {% if course.title|length > 10 %}data-toggle="tooltip" data-container="body" title="{{ course.title }}" {% endif %}>
       {% block title %}
         <a class="cd-link-major" href="{{basepath}}">{{ course.title }}</a>
       {% endblock %}
