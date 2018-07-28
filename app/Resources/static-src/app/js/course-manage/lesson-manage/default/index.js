@@ -17,16 +17,16 @@ class DefaultManage extends BaseManage {
   }
 
   _showLesson() {
-    this.$element.find('.js-task-manage-item').first().addClass('active').find('.js-settings-list').stop().slideDown('fast');
+    this.$element.find('.js-task-manage-item').first().addClass('active').find('.js-settings-list').stop().slideDown(500);
     this.$element.on('click', '.js-item-content', (event) => {
       let $this = $(event.currentTarget);
       let $li = $this.closest('.js-task-manage-item');
       if ($li.hasClass('active')) {
-        $li.removeClass('active').find('.js-settings-list').stop().slideUp('fast');
+        $li.removeClass('active').find('.js-settings-list').stop().slideUp(500);
       }
       else {
-        $li.addClass('active').find('.js-settings-list').stop().slideDown('fast');
-        $li.siblings('.js-task-manage-item.active').removeClass('active').find('.js-settings-list').stop().slideUp('fast');
+        $li.addClass('active').find('.js-settings-list').stop().slideDown(500);
+        $li.siblings('.js-task-manage-item.active').removeClass('active').find('.js-settings-list').hide();
       }
     });
   }
