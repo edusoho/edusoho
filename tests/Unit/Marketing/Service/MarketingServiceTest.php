@@ -19,7 +19,15 @@ class MarketingServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'getCourse',
                     'withParams' => array(12),
-                    'returnValue' => array('title' => '', 'courseSetId' => 3, 'courseSetTitle' => 'CourseSet', 'id' => 12),
+                    'returnValue' => array(
+                        'title' => '',
+                        'courseSetId' => 3,
+                        'courseSetTitle' => 'CourseSet',
+                        'id' => 12,
+                        'price' => 12,
+                        'originPrice' => 12,
+                        'maxRate' => 1,
+                    ),
                 ),
             )
         );
