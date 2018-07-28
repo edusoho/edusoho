@@ -8,7 +8,15 @@
     }
   }
   .courseset-header-section__breadcrumb {
-    width: 380px;
+    @media (min-width: @screen-lg-min) {
+      width: 280px;
+    }
+    @media (max-width: @screen-md-max) {
+      width: 240px;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 130px;
+    }
     @media (max-width: @screen-xs-min) {
       width: 80%;
     }
