@@ -12,6 +12,16 @@ class MarketingServiceTest extends BaseTestCase
     public function testAddUserToCourse()
     {
         TimeMachine::setMockedTime(1517401609);
+
+        $mockedCourseService = $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'getCourse',
+                    'returnValue' => array('title' => '', 'courseSetTitle' => 'CourseSet'),
+                ),
+            )
+        );
         $postData = array(
             'mobile' => '13675641112',
             'user_id' => 12,
@@ -106,6 +116,7 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals('1', $order['paid_cash_amount']);
         $this->assertEquals('2', $order['expired_refund_days']);
         $this->assertEquals(1517574409, $order['refund_deadline']);
+        $this->assertEquals('CourseSet', $order['title']);
     }
 
     public function testAddUserToClassroom()
