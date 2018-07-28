@@ -19,10 +19,22 @@ class MarketingServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'getCourse',
                     'withParams' => array(12),
-                    'returnValue' => array('title' => '', 'courseSetTitle' => 'CourseSet', 'id' => 12),
+                    'returnValue' => array('title' => '', 'courseSetId' => 3, 'courseSetTitle' => 'CourseSet', 'id' => 12),
                 ),
             )
         );
+
+        $mockedCourseSetService = $this->mockBiz(
+            'Course:CourseSetService',
+            array(
+                array(
+                    'functionName' => 'getCourseSet',
+                    'withParams' => array(3),
+                    'returnValue' => array('cover' => 'cover'),
+                ),
+            )
+        );
+
         $postData = array(
             'mobile' => '13675641112',
             'user_id' => 12,
