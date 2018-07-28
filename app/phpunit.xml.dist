@@ -16,29 +16,6 @@
     <!-- 如何执行见 .travis.yml -->
     <testsuites>
         <testsuite name="UnitA2B">
-            <directory>../tests/Unit/M*</directory>
-        </testsuite>
-        <testsuite name="UnitC2D">
-            <directory>../tests/Unit/M*</directory>
-        </testsuite>
-        <testsuite name="UnitE2P">
-            <directory>../tests/Unit/M*</directory>
-        </testsuite>
-        <testsuite name="UnitQ2T">
-            <directory>../tests/Unit/M*</directory>
-        </testsuite>
-        <testsuite name="UnitU2Z">
-            <directory>../tests/Unit/M*</directory>
-        </testsuite>
-        <testsuite name="CustomBundle">
-            <directory>../src/CustomBundle/Tests</directory>
-            <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <!-- 
-    <testsuites>
-        <testsuite name="UnitA2B">
             <directory>../tests/Unit/A*</directory>
             <directory>../tests/Unit/B*</directory>
             <file>./tests/Unit/AbstractCopyTest.php</file>
@@ -80,7 +57,6 @@
             <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>
         </testsuite>
     </testsuites>
-    -->
 
     <php>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
