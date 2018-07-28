@@ -173,6 +173,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($page == 1) {
             $connection->exec("DELETE FROM `course_chapter` WHERE `migrate_task_id`>0");
         }
+        //not EXISTS部分是为了排除升级过一次后自己创建的任务，这种数据的migrate_task_id为0但是已经是有对应course_chapter数据了
         $connection->exec("
             INSERT into `course_chapter` (
                 `courseId`,
@@ -193,7 +194,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `createdTime`,
                 0 as `copyId`,
                 `id` as `migrate_task_id`
-            from `course_task` where courseId in (select id from course_v8 where courseType='normal') order by id limit {$start}, {$this->pageSize};
+            from `course_task` ct where courseId in (select id from course_v8 where courseType='normal') and not EXISTS (select * from course_chapter cc where cc.id=ct.categoryid) order by id limit {$start}, {$this->pageSize};
         ");
         $nextPage = $this->getNextPage($count, $page);
         if (empty($nextPage)) {
