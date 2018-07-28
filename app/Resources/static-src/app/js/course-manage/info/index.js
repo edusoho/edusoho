@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
-import notify from 'common/notify';
 import Intro from './intro';
 import Detail from 'app/js/courseset-manage/base/detail';
 import { initTags } from 'app/js/courseset-manage/base/tag';
@@ -20,13 +19,16 @@ class CourseInfo {
     this.initDatetimepicker();
     this.initExpiryMode();
     this.setService();
+    this.taskPriceSetting();
     this.setIntroPosition();
   }
 
   setIntroPosition() {
-    const space = 40;
+    const space = 44;
     const introRight = $('.js-course-manage-info').offset().left + space;
-    $('.js-plan-intro').css('right', `${introRight}px`);
+    window.onload = () => {
+      $('.js-plan-intro').css('right', `${introRight}px`).removeClass('hidden');
+    };
   }
 
   setService() {
@@ -82,6 +84,7 @@ class CourseInfo {
 
   initValidator() {
     let $form = $('#course-info-form');
+    $('.js-task-price-setting').perfectScrollbar();
     this.validator = $form.validate({
       currentDom: '#course-submit',
       ajax: true,
@@ -89,19 +92,11 @@ class CourseInfo {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
-        title: {
-          required: true,
-          maxlength: 10,
-          trim: true,
-          course_title: true,
-        },
+
         maxStudentNum: {
           required: true,
           live_capacity: true,
           positive_integer: true
-        },
-        subtitle: {
-          maxlength: 30
         },
         expiryDays: {
           required: () => {
@@ -152,8 +147,33 @@ class CourseInfo {
       },
       submitSuccess: (data) => {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
+        window.location.reload();
       }
     });
+
+    if ($('.js-course-title').length) {
+      $('.js-course-title').rules('add', {
+        required: true,
+        maxlength: 10,
+        trim: true,
+        course_title: true,
+      });
+      $('.js-course-subtitle').rules('add', {
+        maxlength: 30
+      });
+    }
+    if ($('.js-courseset-title').length) {
+      $('.js-courseset-title').rules('add', {
+        required: true,
+        maxlength: 60,
+        trim: true,
+        course_title: true,
+      });
+      $('.js-courseset-subtitle').rules('add', {
+        maxlength: 50
+      });
+    }
+
 
     $.validator.addMethod(
       'before',
@@ -205,11 +225,13 @@ class CourseInfo {
 
   saveForm() {
     $('#course-submit').on('click', (event) => {
+
       if (this.validator.form()) {
         $('#course-info-form').submit();
       }
     });
   }
+
   initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({
@@ -222,6 +244,22 @@ class CourseInfo {
       this.validator && this.validator.element($picker);
     });
     $picker.datetimepicker('setStartDate', new Date());
+  }
+
+  taskPriceSetting() {
+    const $priceItem = $('.js-task-price-setting');
+    $priceItem.on('click', 'li', (event) => {
+      const $li = $(event.currentTarget);
+      $li.toggleClass('open');
+      const $input = $li.find('input');
+      $input.prop('checked', !$input.is(':checked'));
+    });
+
+    $priceItem.on('click', 'input', (event) => {
+      event.stopPropagation();
+      const $input = $(event.target);
+      $input.closest('li').toggleClass('open');
+    });
   }
 
 
@@ -340,11 +378,12 @@ class CourseInfo {
     let $buyExpiryTime = $('[name="buyExpiryTime"]');
     if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
       this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
-    }
-    else {
+    } else {
       this.elementRemoveRules($buyExpiryTime);
+      $enableBuyExpiryTime.closest('.form-group').removeClass('has-error');
+      $buyExpiryTime.removeClass('form-control-error');
+      $('.jq-validate-error').remove();
     }
-    this.validator.form();
   }
 
   getBuyExpiryTimeRules() {

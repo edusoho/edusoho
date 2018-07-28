@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'course.members_manage.official_student.add_expiry_day.add'|trans}}{{'site.default.student'|trans}} {{'course.members_manage.official_student.add_expiry_day.course_expiry_date'|trans}}{% endblock %}
+{% block title %}{{ 'course.members_manage.official_student.modify_expiry_day'|trans }}{% endblock %}
 {% do script(['libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/student-expiryday/index.js'])%}
 
 {% block body %}
@@ -33,7 +33,7 @@
         <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
       </div>
       <div class="col-md-2 control-label">
-        <label for="day"><input type="radio" name="updateType" value="day" checked="checked"> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
+        <label><input type="radio" name="updateType" value="day" checked="checked"> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
       </div>
       <div class="col-md-2 controls">
         <select class="form-control" name="waveType">
@@ -47,9 +47,9 @@
 
     <div class="row form-group">
       <div class="col-md-offset-2 col-md-2 control-label">
-        <label for="deadline"><input type="radio" name="updateType" value="date"> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
+        <label><input type="radio" name="updateType" value="date"> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
       </div>
-      <div class="col-md-6 controls">
+      <div class="col-md-8 controls">
         <input type="text" id="deadline" name="deadline" data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
@@ -62,7 +62,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="button" id="submit" class="btn btn-primary pull-right js-save-deadline-set-form" data-target="#deadline-set-form" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+    <button type="button" id="submit" class="cd-btn cd-btn-primary pull-right js-save-deadline-set-form" data-target="#deadline-set-form" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
   {% endif %}
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <button type="button" class="cd-btn cd-btn-link-default cd-mr16 pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 {% endblock %}

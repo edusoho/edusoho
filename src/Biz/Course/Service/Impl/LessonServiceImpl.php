@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\LessonException;
 use Biz\Course\Service\LessonService;
 use Codeages\Biz\Framework\Event\Event;
 use AppBundle\Common\ArrayToolkit;
@@ -15,7 +16,7 @@ class LessonServiceImpl extends BaseService implements LessonService
     {
         $lesson = $this->getCourseChapterDao()->get($lessonId);
 
-        if (empty($lesson) || $lesson['type'] != 'lesson') {
+        if (empty($lesson) || 'lesson' != $lesson['type']) {
             throw $this->createInvalidArgumentException('Argument invalid');
         }
 
@@ -152,7 +153,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $lessonCount = $this->countLessons(array('courseId' => $courseId));
 
         if ($lessonCount >= self::LESSON_LIMIT_NUMBER) {
-            throw $this->createServiceException('lesson_count_no_more_than_300');
+            throw $this->createNewException(LessonException::LESSON_NUM_LIMIT());
         }
 
         return true;
@@ -168,7 +169,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
 
         $lesson = $this->getLesson($lessonId);
-        if (empty($lesson) || $lesson['type'] != 'lesson' || $lesson['courseId'] != $courseId) {
+        if (empty($lesson) || 'lesson' != $lesson['type'] || $lesson['courseId'] != $courseId) {
             throw $this->createInvalidArgumentException('Argument invalid');
         }
 
@@ -195,7 +196,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
 
         $lesson = $this->getLesson($lessonId);
-        if (empty($lesson) || $lesson['type'] != 'lesson' || $lesson['courseId'] != $courseId) {
+        if (empty($lesson) || 'lesson' != $lesson['type'] || $lesson['courseId'] != $courseId) {
             throw $this->createInvalidArgumentException('Argument invalid');
         }
 

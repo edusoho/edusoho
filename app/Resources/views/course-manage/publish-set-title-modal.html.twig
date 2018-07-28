@@ -12,7 +12,7 @@
     <form id="course-title-form" method="post"
         action="{{path('course_set_manage_course_publish_set_title', {courseSetId: courseSetId, courseId: courseId})}}">
       <div class="form-group">
-        <label for="title" class="control-label-required">{{ 'course.teaching_plan.default.title.set'|trans }}</label>
+        <label for="planTitle" class="control-label-required">{{ 'course.teaching_plan.default.title.set'|trans }}</label>
         <input type="text" id="planTitle" name="title" class="form-control">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </div>

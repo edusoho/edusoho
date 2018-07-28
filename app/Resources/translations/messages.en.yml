@@ -68,6 +68,7 @@ site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
+site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
 site.validate_rules.two_decimal_places: 'Keep the second decimal'
@@ -806,6 +807,7 @@ course.teaching_plan.default.title.set: 首个计划的标题
 course.teaching_plan.sort: 调整顺序
 course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
+course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
@@ -845,9 +847,9 @@ course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
 course.plan_setup.mode.free_tips: 'Learn freely'
-course.plan_setup.finish_rule: 'Task rules'
-course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by task finish conditions'
-course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the task'
+course.plan_setup.finish_rule: '%taskName% rules'
+course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
@@ -858,6 +860,7 @@ course.plan_setup.audiences: 'Target users'
 course.base_setup: 基础设置
 courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
+course.base_info: 基础信息
 course.base_plan_intro: 计划使用指南
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
@@ -882,10 +885,10 @@ course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 course.marketing_setup.preview: Preview
-course.marketing_setup.preview.set_task: 'Free tasks'
+course.marketing_setup.preview.set_task: 'Free %taskName%'
 course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson %taskName% only support'
 course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.not.support.try_watch: 不支持试看
 course.marketing_setup.preview.minutes.try_watch: 分钟试看
@@ -893,7 +896,7 @@ course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student
 course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
-course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
+course.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 course.marketing_setup.reward_point_setting: %name% setting
 course.marketing_setup.study_award:　Study Award
 course.marketing_setup.task_award: Task Award
@@ -953,6 +956,7 @@ course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
 course.members_manage.official_student.remark.tips: 'Please input student''s note'
+course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: Add
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 'Course expiry date'
 course.members_manage.official_student.add_expiry_day.title: 'Course title'
@@ -1029,9 +1033,9 @@ course.assignment_check.need_check_item: 'Questions wait for review <small class
 course.dashboard: 'Learn data'
 course.dashboard.content_title: 'Course Learn data'
 course.dashboard.course_dashboard: 'Data overview'
-course.dashboard.success_rate: 'Task finish rate'
+course.dashboard.success_rate: '%taskName% finish rate'
 course.dashboard.study_detail: 'Task detail'
-course.dashboard.study_detail.name: 'Task name'
+course.dashboard.study_detail.name: '%taskName% name'
 course.dashboard.study_detail.per_study_time: 'Average Learn time(mintue)'
 course.dashboard.study_detail.per_study_time_tips: 'Task time: From start time to finish time of the task.  average  task time:average task time of students'
 course.dashboard.study_detail.audio_time: 'Video and audio duration(mintue)'
@@ -1067,7 +1071,7 @@ course.dashboard.student_trend: Student trend
 course.dashboard.student_trend_seven_days: week
 course.dashboard.student_trend_thirty_days: month
 course.dashboard.student_detail: Student detail
-course.dashboard.task_detail: Task detail
+course.dashboard.task_detail: %taskName% detail
 course.dashboard.student_chart.time_select_all: all
 course.dashboard.student_chart.time_select_unFinished: unFinished
 course.dashboard.student_chart.time_select_seven_days: Seven days without school
@@ -1075,6 +1079,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
+course.members_manage.add_failed_tips: 计划未发布，不可添加学员
 course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
@@ -1197,7 +1202,7 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: %taskName%
-course.task.progress: 'task progress'
+course.task.progress: '%taskName% progress'
 course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior %taskName% to continue.'
 course.task.learning: '%taskName% learning'
@@ -1394,7 +1399,7 @@ course.testpaper_manage.update: 'Updated'
 course.testpaper_manage.operation: Action
 course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
-course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to Task</strong>.\n"
+course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to %taskName%</strong>.\n"
 course.testpaper_manage.score: 'Score %score%'
 course.testpaper_manage.passed_condition: 'Passing score is %passedCondition% point'
 course.testpaper_manage.limited_time: '%limitedTime% minutes'
@@ -1487,7 +1492,7 @@ course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
-course.plan_overview: 'Tasks Overview'
+course.plan_overview: 'Data Overview'
 
 course.plan_task: Lessons
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
@@ -1507,7 +1512,7 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Lessons in total:'
+course.plan_task.total_lessons: 'Lessons in total:'
 course.plan_total_members: 学员总数
 course.plan_task.published_lessons: 'Published Lesson Number:'
 course.plan_task.unpublished_lessons: 'Unpublish Lesson Number:'
@@ -1569,9 +1574,9 @@ course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will no
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
 course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Please setup content'
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
-course.plan_task.activity_manage.create: 'Add'
-course.plan_task.activity_manage.modify: 'Edit'
-course.plan_task.activity_manage.preview: 预览活动
+course.plan_task.activity_manage.create: 'Add%taskName%'
+course.plan_task.activity_manage.modify: 'Edit%taskName%'
+course.plan_task.activity_manage.preview: 'Preview%taskName%'
 
 course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
@@ -7055,6 +7060,7 @@ course.video.convert.client.try: '（试一试）'
 course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
 course.task.show.video.convert.client.notify: 不再提醒
 course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.enable_label: 音频听课
 course.info.video.convert.audio.start: 开启
 course.info.video.convert.audio.close: 关闭
 
@@ -7108,3 +7114,9 @@ exception.user.reset_password_email_send: 重设密码邮件发送失败，请�
 exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
 exception.user_lock: User account is locked, please contact system administrator.
+
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
+
+
+course.unname_title: unname course

@@ -1,8 +1,9 @@
 {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
-  <button class="cd-btn cd-btn-info cd-btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'course.members_manage.add_btn'|trans}}</button>
   {% if course.status == 'published' %}
+    <button class="cd-btn cd-btn-info cd-btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'course.members_manage.add_btn'|trans}}</button>
     <a class="cd-btn cd-btn-info cd-btn-sm mhs" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('importer_index', {type: 'course-member', courseId:course.id}) }}"><i class="glyphicon glyphicon-import"></i> {{ 'course.members_manage.batch_import_btn'|trans }}</a>
   {% else %}
+    <a class="cd-btn cd-btn-info cd-btn-sm mhs" disabled id="student-add-btn" data-toggle="tooltip" data-placement="top" title="{{ 'course.members_manage.add_failed_tips'|trans }}"><i class="glyphicon glyphicon-plus"></i> {{'course.members_manage.add_btn'|trans}}</a>
     <a class="cd-btn cd-btn-info cd-btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{ 'course.members_manage.import_failed_tips'|trans }}"><i class="glyphicon glyphicon-import"></i> {{ 'course.members_manage.batch_import_btn'|trans }}</a>
   {% endif %}
 {% endif %}
@@ -11,7 +12,7 @@
     { 
       'exportFileName': 'course-students', 
       'targetFormId': 'course-students-export',
-      'exportClass': 'btn-info btn-sm',
+      'exportClass': 'cd-btn-info cd-btn-sm',
       'text': 'form.btn.export'|trans ~ 'site.default.student'|trans,
       'exportWebpack': true
     } 

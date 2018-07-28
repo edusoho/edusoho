@@ -31,7 +31,7 @@
             </a>
         </li>
 
-        <li class="cd-sidebar__heading"></li>
+        <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
 
         <li class="cd-sidebar__item {% if side_nav == 'teachers' %}active{% endif %}">
             <a href="{{ path('open_course_manage_teachers', {id:course.id}) }}">
@@ -44,7 +44,7 @@
             </a>
         </li>
 
-        <li class="cd-sidebar__heading"></li>
+        <li class="cd-sidebar__heading">{% if course.type == 'open' %}<hr class="mt0 mb0 mh10 bg-border-color"/>{% endif %}</li>
 
         {% if course.type == 'open' %}
             <li class="cd-sidebar__item {% if side_nav == 'files' %}active{% endif %}">

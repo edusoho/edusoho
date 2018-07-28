@@ -1,7 +1,7 @@
 .es-intro-help {
   padding: 0;
   &.multistep {
-    margin-top: 64px !important;
+    margin-top: 128px !important;
     .introjs-nextbutton,
     .done-button {
       margin: 24px 24px 24px 16px;
@@ -17,13 +17,20 @@
         color: #fff;
       }
     }
+    &:not(.es-intro-normal-tip) {
+      .introjs-nextbutton {
+        position: absolute;
+        right: 0;
+        bottom: 10px;
+      }
+    }
   }
 }
 
 .es-intro-single {
   position: relative;
-  margin-top: 64px !important;
-  width: 600px;
+  margin-top: 128px !important;
+  width: 822px;
   .introjs-skipbutton {
     background: transparent;
     border: none;
@@ -69,9 +76,9 @@
 }
 
 .course-manage-spread {
-  min-width: 600px;
-  min-height: 770px;
-  background: url("@{img-src}spread.png") cover no-repeat;
+  min-width: 822px;
+  min-height: 1169px;
+  background-image: url("@{img-src}spread.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-image: -webkit-image-set(url("@{img-src}spread.png") 1x,url("@{img-src}spread@2x.png") 2x);
@@ -81,34 +88,34 @@
 .course-manage-intro {
   position: fixed;
   bottom: 30px;
-  right: 10%;
   z-index: 1000;
   .course-manage-intro__outer {
-    margin: 0 6px;
-    padding: 10px;
-    width: 74px;
-    .border-radius(50%);
-    background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.2);
-    &:hover {
-      cursor: pointer;
-    }
+    padding: 0 15px;
+    width: 72px;
   }
   .course-manage-intro__inner {
-    width: 54px;
-    height: 54px;
+    width: 42px;
+    height: 42px;
     text-align: center;
     .border-radius(50%);
     color: #fff;
     background-color: @brand-primary;
+    &:hover {
+      cursor: pointer;
+    }
   }
   i {
-    line-height: 54px;
-    font-size: 24px;
+    line-height: 42px;
+    font-size: 16px;
+  }
+  .course-manage-intro__tip {
+    font-size: 12px;
+    line-height: 1;
   }
 }
 
 .course-manage-intro-float {
   position: absolute;
-  bottom: 30px;
-  right: 40px !important;
+  bottom: 40px;
+  right: 44px !important;
 }

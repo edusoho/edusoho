@@ -14,7 +14,7 @@
     <div class="courseset-manage-body__title">{{ 'course.testpaper_manage.content_title'|trans }}
       <div class="courseset-manage-body__btn">
         <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
-          class="btn btn-info btn-sm pull-right mls"><span class="es-icon es-icon-anonymous-iconfont"></span>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
+          class="cd-btn cd-btn-info cd-btn-sm pull-right mls"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
         {{ slot('course_set.testpaper_import_btn.extension', {'courseSet': courseSet}) }}
       </div>
     </div>
@@ -55,7 +55,7 @@
       {{ web_macro.paginator(paginator) }}
 
       <div class="color-gray mtl">
-        {{ 'course.testpaper_manage.tips'|trans|raw }}
+        {{ 'course.testpaper_manage.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}
       </div>
     </div>
   </div>

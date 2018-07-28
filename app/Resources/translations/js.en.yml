@@ -18,6 +18,7 @@ site.data.not_found: Not found ...
 site.data.delete_name_hint: Really want to delete the% name%?
 site.data.uncheck_name_hint: No %name% selected
 site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
+site.data.delete_title_hint: Delete %name%
 site.data.delete_submiting_hint: Deleting ...
 site.date.year: Years
 site.date.month: Month
@@ -399,7 +400,7 @@ course.buy.price_free_hint: Go study
 
 course.chapter: '%chapter_name% %number% : %title%'
 course.unit: '%part_name% %number% : %title%'
-course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
+course.catalogue.task_status.task: '%TaskName%.%taskNumber%:%taskTitle%'
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
@@ -477,6 +478,8 @@ course_set.manage.upgrade_step3_hint: >
   <p class = "title"> Add tasks </p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
 course_set.manage.upgrade_step5_hint: >
   <p class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+course_set.manage.operation_hint: Operation Hint
+course_set.manage.courseset_summary_operation_hint: 课程简介编辑后保存，将会统一覆盖前台所有计划的简介内容，请确认是否保存修改。
 
 course.manage.title_required_error_hint: Please enter the tutorial schedule title
 course.manage.expiry_end_date_error_hint: Please enter the end date
@@ -497,8 +500,10 @@ course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Are you sure to close the program?
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
+course.manage.copy_title: 复制计划
+course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: Are you sure you want to delete the plan?
-course.manage.task_delete_hint: Are you sure you want to delete the task?
+course.manage.task_delete_hint: Are you sure you want to delete the %taskName%?
 course.manage.chapter_delete_hint: Are you sure you want to delete this %name%?
 course.manage.task_publish_success_hint: Published successfully
 course.manage.task_publish_fail_hint:  Publish failed
@@ -739,6 +744,9 @@ validate.tag_required_hint: Please input tags
 validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.modify_date: 请输入修改日期
+validate.modify_days: 请输入修改天数
+validate.modify_day_number: 请输入不大于 7300（20年）的数值
 validate.success: 验证成功
 validate.fail: 验证失败
 
@@ -756,6 +764,7 @@ page.video_hd.message: HD
 confirm.private_message_delete.message: Are you determined to deleted this private message?
 notify.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
 confirm.last_private_message_delete.message: This message for the last one, really want to delete the private message?
+private_message.send_success: 私信发送成功
 confirm.delete_lesson.message: Delete the lesson at the same time will delete the time of the information, test. Do you really want to delete that class?
 notify.lesson_deleted.message: Lesson has been deleted!
 confirm.delete_chapter.message: Do you really want to delete that% chapter_name %% part_name%?

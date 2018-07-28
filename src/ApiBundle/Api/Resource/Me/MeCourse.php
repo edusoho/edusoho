@@ -53,32 +53,20 @@ class MeCourse extends AbstractResource
     {
         $orderedCourses = array();
         $members = ArrayToolkit::index($members, 'courseId');
-        foreach ($courses as $course) {
-            if (empty($members[$course['id']])) {
-                continue;
+        $courses = ArrayToolkit::index($courses, 'id');
+        foreach ($members as $member) {
+            $courseId = $member['courseId'];
+            if (!empty($courses[$courseId])) {
+                $course = $courses[$courseId];
+                $course['learnedNum'] = $member['learnedNum'];
+                $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
+                /*
+                 * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
+                 */
+                $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
+                $orderedCourses[] = $course;
             }
-            $member = $members[$course['id']];
-            $course['learnedNum'] = $member['learnedNum'];
-            /*
-             * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
-             */
-            $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
-            $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
-            $orderedCourses[] = $course;
         }
-//        foreach ($members as $member) {
-//            $courseId = $member['courseId'];
-//            if (!empty($courses[$courseId])) {
-//                $course = $courses[$courseId];
-//                $course['learnedNum'] = $member['learnedNum'];
-//                $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
-//                /*
-//                 * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
-//                 */
-//                $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
-//                $orderedCourses[] = $course;
-//            }
-//        }
 
         return $orderedCourses;
     }

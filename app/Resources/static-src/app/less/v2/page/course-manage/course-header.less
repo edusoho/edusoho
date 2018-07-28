@@ -7,11 +7,16 @@
       color: @cd-dark-major;
     }
   }
+  .courseset-header-section__breadcrumb {
+    width: 380px;
+    @media (max-width: @screen-xs-min) {
+      width: 80%;
+    }
+  }
   .nav-header-section.nav {
     margin-bottom: 0;
     border: none;
     .nav-header-section__item {
-      padding-top: 16px;
       margin: 0 32px;
       @media (max-width: @screen-xs-min) {
         margin: 0 16px !important;
@@ -48,7 +53,9 @@
     padding-left: 16px;
     padding-right: 16px;
   }
-  .cd-box-shadow-z(8px);
+  -webkit-box-shadow:0 0 2px 0 rgba(0,0,0,0.02), 0 0 2px 0 rgba(0,0,0,0.04), 0 0 2px 0 rgba(0,0,0,0.06), 0 0 2px 0 rgba(0,0,0,0.10);
+  -moz-box-shadow: 0 0 2px 0 rgba(0,0,0,0.02), 0 0 2px 0 rgba(0,0,0,0.04), 0 0 2px 0 rgba(0,0,0,0.06), 0 0 2px 0 rgba(0,0,0,0.10);
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.02), 0 0 2px 0 rgba(0,0,0,0.04), 0 0 2px 0 rgba(0,0,0,0.06), 0 0 2px 0 rgba(0,0,0,0.10);
   .cd-border-radius;
   background-color: #fff;
 }
@@ -71,7 +78,7 @@
 }
 
 .course-manage-header-info__title {
-  margin-top: 0;
+  margin-top: 4px;
   margin-bottom: 0;
   min-height: 5px;
   font-size: 16px;
@@ -92,10 +99,10 @@
   color: @cd-dark-assist;
   span {
     position: absolute;
-    top: 42px;
+    top: 46px;
   }
   .default-single-span {
-    top: 30px;
+    top: 34px;
   }
 }
 
@@ -127,7 +134,7 @@
 .course-publish-status {
   position: absolute;
   left: -6px;
-  top: 24px;
+  top: 28px;
   padding: 9px 16px;
   color: #fff;
   font-size: 14px;
@@ -243,7 +250,9 @@
   }
 
   @media (max-width: @screen-sm-max) and (min-width: @screen-xs-min) {
-    margin-bottom: 40px;
+    &.courseset-manage-data--unpublished {
+      margin-bottom: 40px;
+    }
   }
 }
 
@@ -286,9 +295,6 @@
   font-size: 18px;
   line-height: 1;
   margin-right: 4px;
-  .money-symbol {
-    font-size: 12px;
-  }
 }
 
 .courseset-manage-header-btn {
@@ -355,7 +361,8 @@
     > a {
       font-size: 16px;
       font-weight: 500;
-      padding: 0 0 16px 0;
+      padding: 16px 0 16px 0;
+      display: block;
       line-height: 1;
       color: @cd-dark-minor;
       &:hover,
@@ -366,9 +373,6 @@
         font-size: 20px;
       }
     }
-  }
-  .highlight {
-    border-width: 4px;
   }
 }
 

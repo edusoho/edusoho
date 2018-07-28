@@ -52,11 +52,11 @@ class PagedCourseLesson {
         },
 
         'getTaskName': function(data, context) {
-          return Translator.trans('course.catalogue.task_status.task', { taskNumber: data.number, taskTitle: data.title });
+          return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
         },
 
         'hasWatchLimitRemaining': function(data, context) {
-          return data.watchLimitRemaining != '';
+          return data.watchLimitRemaining !== false;
         },
 
         'taskClass': function(data, context) {
@@ -75,11 +75,11 @@ class PagedCourseLesson {
 
         'isTaskLocked': function(data, context) {
           return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' &&
-            (data.lock == 'true' || !context.course.member);
+            (data.lock || !context.course.isMember);
         },
 
         'isPublished': function(data, context) {
-          return 'published' == context.course.status && 'published' == data.status;
+          return 'published' == data.status;
         },
 
         'isCloudVideo': function(data, context) {
@@ -157,7 +157,7 @@ class PagedCourseLesson {
   _toJson(str) {
     let json = {};
     if (str) {
-      json = $.parseJSON(str.replace(/[\r\n]/g, ''));
+      json = $.parseJSON(str.replace(/[\r\n\t]/g, ''));
     }
     return json;
   }
