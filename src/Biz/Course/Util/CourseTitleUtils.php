@@ -14,4 +14,17 @@ class CourseTitleUtils
 
         return $course;
     }
+
+    public static function getDisplayedTitle($course)
+    {
+        if (!empty($course['courseSetTitle'])) {
+            if (empty($course['title'])) {
+                return $course['courseSetTitle'];
+            } else {
+                return $course['courseSetTitle'].'-'.$course['title'];
+            }
+        }
+
+        return null;
+    }
 }
