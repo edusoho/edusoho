@@ -12,8 +12,8 @@ class TestpaperActionFilter extends Filter
     protected function publicFields(&$data)
     {
         if (!empty($data['items'])) {
-            $isShowTestResult = empty($data['isShowTestResult']) ? 0 : 1;
-            $data['items'] = $this->coverTestpaperItems($data['items'], $isShowTestResult);
+//            $isShowTestResult = empty($data['isShowTestResult']) ? 0 : 1;
+//            $data['items'] = $this->coverTestpaperItems($data['items'], $isShowTestResult);
         }
 
         if (!empty($data['task'])) {
