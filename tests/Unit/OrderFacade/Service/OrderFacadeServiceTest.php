@@ -23,8 +23,24 @@ class OrderFacadeServiceTest extends BaseTestCase
         $biz = $this->getBiz();
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 100, 'originPrice' => 200, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0, 'buyable' => true)),
-            array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array(
+                    'id' => 1,
+                    'title' => 'course name1',
+                    'courseSetTitle' => 'course set',
+                    'price' => 100,
+                    'originPrice' => 200,
+                    'courseSetId' => 1,
+                    'status' => 'published',
+                    'maxRate' => 0,
+                    'buyable' => true,
+                ),
+            ),
+            array(
+                'functionName' => 'canJoinCourse',
+                'returnValue' => array('code' => AccessorInterface::SUCCESS),
+            ),
         ));
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
         $courseProduct->init(array('targetId' => 1));
@@ -38,6 +54,7 @@ class OrderFacadeServiceTest extends BaseTestCase
         $order = $this->getOrderFacadeService()->create($courseProduct);
 
         $this->assertEquals(60 * 100, $order['pay_amount']);
+        $this->assertEquals('course set-course name1', $order['title']);
     }
 
     /**
@@ -55,7 +72,19 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testCreateCourseImportOrder()
     {
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 1, 'originPrice' => 10, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array(
+                    'id' => 1,
+                    'title' => 'course name1',
+                    'courseSetTitle' => 'course set',
+                    'price' => 1,
+                    'originPrice' => 10,
+                    'courseSetId' => 1,
+                    'status' => 'published',
+                    'maxRate' => 0,
+                ),
+            ),
         ));
 
         $this->mockBiz('Course:MemberService', array(
@@ -79,6 +108,7 @@ class OrderFacadeServiceTest extends BaseTestCase
         $order = $this->getOrderFacadeService()->createSpecialOrder($courseProduct, 10, $params);
 
         $this->assertEquals('paid', $order['status']);
+        $this->assertEquals('course set-course name1', $order['title']);
         $this->assertArraySubset($params, $order);
     }
 

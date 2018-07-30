@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
+use Biz\Course\Util\CourseTitleUtils;
 use AppBundle\Common\ServiceToolkit;
 
 class CourseFilter extends Filter
@@ -44,6 +45,14 @@ class CourseFilter extends Filter
          */
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
+    }
+
+    protected function simpleFields(&$data)
+    {
+        $displayedTitle = CourseTitleUtils::getDisplayedTitle($data);
+        if (!empty($displayedTitle)) {
+            $data['displayedTitle'] = $displayedTitle;
+        }
     }
 
     private function learningExpiryDate(&$data)
