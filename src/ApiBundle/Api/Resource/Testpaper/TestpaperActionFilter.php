@@ -14,6 +14,14 @@ class TestpaperActionFilter extends Filter
         if (!empty($data['items'])) {
 //            $isShowTestResult = empty($data['isShowTestResult']) ? 0 : 1;
 //            $data['items'] = $this->coverTestpaperItems($data['items'], $isShowTestResult);
+            foreach ($data['items'] as $questionType => &$questions) {
+                foreach ($questions as $questionId => &$question) {
+                    $question['stem'] = $this->convertAbsoluteUrl($question['stem']);
+                }
+            }
+        }
+        if (!empty($data['testpaperResult'])) {
+            $data['testpaperResult']['teacherSay'] = $this->convertAbsoluteUrl($data['testpaperResult']['teacherSay']);
         }
 
         if (!empty($data['task'])) {
