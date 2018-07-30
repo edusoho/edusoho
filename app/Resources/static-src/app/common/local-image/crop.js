@@ -1,5 +1,4 @@
 import EsImageCrop from 'common/es-image-crop';
-import notify from 'common/notify';
 
 class LocalImageCrop {
   constructor(props) {
@@ -108,10 +107,10 @@ class LocalImageCrop {
         $.post($input.data('saveUrl'), { images: res }, function(data) {
           if (data.image) {
             $($input.data('targetImg')).attr('src', data.image);
-            notify('success', Translator.trans('site.upload_success_hint'));
+            cd.message({ type: 'success', message: Translator.trans('site.upload_success_hint') });
           }
-        }).error(function() { 
-          notify('danger', Translator.trans('site.upload_fail_retry_hint'));
+        }).error(function() {
+          cd.message({ type: 'danger', message: Translator.trans('site.upload_fail_retry_hint') });
         }).always(function() {
           $input.val('');
           $modal.modal('hide');

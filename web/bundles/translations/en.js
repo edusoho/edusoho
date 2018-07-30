@@ -633,6 +633,7 @@ t.add("page.video_hd.message", "HD", "js", "en");
 t.add("confirm.private_message_delete.message", "Are you determined to deleted this private message?", "js", "en");
 t.add("notify.private_message_maxlength.message", "Sorry, the maximum characters of private message is 500 .", "js", "en");
 t.add("confirm.last_private_message_delete.message", "This message for the last one, really want to delete the private message?", "js", "en");
+t.add("private_message.send_success", "\u79c1\u4fe1\u53d1\u9001\u6210\u529f", "js", "en");
 t.add("confirm.delete_lesson.message", "Delete the lesson at the same time will delete the time of the information, test. Do you really want to delete that class?", "js", "en");
 t.add("notify.lesson_deleted.message", "Lesson has been deleted!", "js", "en");
 t.add("confirm.delete_chapter.message", "Do you really want to delete that% chapter_name %% part_name%?", "js", "en");
