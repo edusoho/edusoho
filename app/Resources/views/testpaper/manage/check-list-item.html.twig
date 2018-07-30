@@ -2,7 +2,7 @@
 {% set targetResultInfo = targetResultInfo|default(null) %}
 {% set resultListRout = resultListRout|default('course_manage_testpaper_result_list') %}
 
-{% set taskTitle = task.isOptional ? 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) : 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) %}
+{% set taskTitle = task.isOptional ? 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) : 'course.catalogue.task_status.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNumber%':task.number, '%taskTitle%':task.title}) %}
 {% if targetType == 'classroom' %}
   {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
   {% set graphUrl = path('classroom_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}

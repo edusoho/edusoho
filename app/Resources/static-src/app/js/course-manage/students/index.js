@@ -1,11 +1,11 @@
-import notify from 'common/notify';
-
+import BatchSelect from 'app/common/widget/batch-select';
+new BatchSelect($('#student-table-container'));
 class Students {
   constructor() {
     this.initTooltips();
     this.initDeleteActions();
     this.initFollowActions();
-    this.initExpiryDayActions();
+    this.initBatchUpdateActions();
   }
 
   initTooltips() {
@@ -24,10 +24,10 @@ class Students {
       }
       $.post($(evt.target).data('url'), function (data) {
         if (data.success) {
-          notify('success', Translator.trans('site.delete_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
           location.reload();
         } else {
-          notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
+          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
         }
       });
     });
@@ -40,19 +40,30 @@ class Students {
         $this.hide();
         if ($this.hasClass('follow-student-btn')) {
           $this.parent().find('.unfollow-student-btn').show();
-          notify('success', Translator.trans('user.follow_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('user.follow_success_hint') });
         } else {
           $this.parent().find('.follow-student-btn').show();
-          notify('success', Translator.trans('user.unfollow_success_hint'));
+          cd.message({ type: 'success', message: Translator.trans('user.unfollow_success_hint') });
         }
       });
 
     });
   }
 
-  initExpiryDayActions() {
-    $('.js-expiry-days').on('click', () => {
-      notify('danger', '只有按天数设置的学习有效期，才可手动增加有效期。');
+  initBatchUpdateActions() {
+    $('#student-table-container').on('click', '#batch-update-expiry-day', function () {
+      let ids = [];
+      $('#course-student-list').find('[data-role="batch-item"]:checked').each(function(){
+        ids.push(this.value);
+      });
+      console.log(ids);
+      if (ids.length == 0) {
+        cd.message({ type: 'danger', message: Translator.trans('course.manage.student.add_expiry_day.select_tips') });
+        return ;
+      }
+      $.get($(this).data('url'), {ids:ids}, function(html) {
+        $('#modal').html(html).modal('show');
+      });
     });
   }
 }

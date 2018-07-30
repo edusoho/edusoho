@@ -112,6 +112,12 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'seq_GT' => $task['seq'],
             'seq_LTE' => $task['seq'] + $downLimit,
         );
+
+        if ($this->isHiddenUnpublishTasks()) {
+            $upConditions['status'] = 'published';
+            $downConditions['status'] = 'published';
+        }
+
         $upChapters = $this->getChapterDao()->search(
             $upConditions,
             array(),
@@ -190,6 +196,10 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'courseId' => $this->courseId,
         );
 
+        if ($this->isHiddenUnpublishTasks()) {
+            $conditions['status'] = 'published';
+        }
+
         if ('down' == $this->paging['direction']) {
             $conditions['seq_GTE'] = $this->paging['offsetSeq'];
             $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
@@ -201,6 +211,13 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         }
 
         return $conditions;
+    }
+
+    private function isHiddenUnpublishTasks()
+    {
+        $course = $this->getCourseService()->getCourse($this->courseId);
+
+        return !$course['isShowUnpublish'];
     }
 
     /**
@@ -217,6 +234,11 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     private function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 
     /**

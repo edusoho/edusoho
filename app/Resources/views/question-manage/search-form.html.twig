@@ -9,7 +9,7 @@
     <select class="form-control width-150" name="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
       <option value="0" {% if not app.request.get('courseId',0) %}selected{% endif %}>{{'course.question_manage.filter.course'|trans}}</option>
       {% for selectCourse in searchCourses if selectCourse %}
-        <option value="{{ selectCourse.id }}" {% if app.request.get('courseId','') == selectCourse.id %}selected{% endif %}>{{ selectCourse.title }}</option>
+        <option value="{{ selectCourse.id }}" {% if app.request.get('courseId','') == selectCourse.id %}selected{% endif %}>{{ get_course_title(selectCourse) }}</option>
       {% endfor %}
     </select>
     <select class="form-control width-150" {% if not showTasks|default(null) %}style="display:none;"{% endif %} name="lessonId">
@@ -23,7 +23,8 @@
   <div class="form-group">
     <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'course.question_manage.filter.keywords'|trans}}">
   </div>
-
-  <button class="btn btn-primary btn-sm">{{'form.btn.search'|trans}}</button>
-  {{ slot('course_set.questions_export_btn.extension', {'courseSet':courseSet, 'type':app.request.query.get('type'), 'courseId':app.request.query.get('courseId'), 'lessonId':app.request.query.get('lessonId'), 'keyword':app.request.query.get('keyword')}) }}
+  <div class="form-group">
+    <button class="cd-btn cd-btn-primary cd-btn-sm">{{'form.btn.search'|trans}}</button>
+    {{ slot('course_set.questions_export_btn.extension', {'courseSet':courseSet, 'type':app.request.query.get('type'), 'courseId':app.request.query.get('courseId'), 'lessonId':app.request.query.get('lessonId'), 'keyword':app.request.query.get('keyword')}) }}
+  </div>
 </form>

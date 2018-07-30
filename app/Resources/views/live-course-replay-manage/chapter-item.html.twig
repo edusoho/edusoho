@@ -1,3 +1,0 @@
-<li class="item-chapter {% if chapter.type == 'unit' %}item-chapter-unit{% endif %} clearfix" id="chapter-{{ chapter.id }}">
-	<div class="item-content">{{ 'course.live.replay_manage.chapter'|trans({'%chapterName%': chapter.number})|raw }} {% if chapter.type == 'unit' %}{% if course_chapter_alias('part') %}{{course_chapter_alias('part')|default('site.data.part'|trans)}}{% else %}{{'site.data.part'|trans}}{% endif %}{% else %}{% if course_chapter_alias('chapter') %}{{course_chapter_alias('chapter')|default('site.data.chapter'|trans)}}{% else %}{{'site.data.chapter'|trans}}{% endif %}{% endif %}： {{ chapter.title }}</div>
-</li>

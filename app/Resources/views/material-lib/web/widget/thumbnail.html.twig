@@ -2,9 +2,9 @@
     data-link-count="{{ uploadFile.usedCount }}"
     data-file-name="{{ uploadFile.filename }}" style="display:none;">
 {% if uploadFile.storage == 'local' or (uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] and uploadFile.convertStatus != "success") %}
-  <img src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+  <img class="img-responsive" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
 {% else %}
-  <img src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+  <img class="img-responsive" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
 {% endif %}
 
 <div class="mask">

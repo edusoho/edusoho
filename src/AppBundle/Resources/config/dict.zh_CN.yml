@@ -467,3 +467,7 @@ exchangeStatus:
 rewardPointUserType:
     nickname: 用户名
     truename: 姓名
+
+waveType:
+    plus: 增加
+    minus: 减少

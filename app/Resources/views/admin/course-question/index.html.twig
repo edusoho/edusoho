@@ -78,7 +78,7 @@
 
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
-                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{'admin.course_question.task_btn'|trans}}{{task.number}}：{{ task.title }}</a>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{task.number}}：{{ task.title }}</a>
                 {% endif %}
               </div>
             </td>

@@ -28,6 +28,9 @@ class CourseCopyTest extends BaseTestCase
         $this->assertEquals($created['courseSetId'], $copied['courseSetId']);
         $this->assertEquals($created['expiryMode'], $copied['expiryMode']);
         $this->assertEquals($created['learnMode'], $copied['learnMode']);
+        $this->assertEquals($created['subtitle'], $copied['subtitle']);
+        $this->assertEquals($created['lessonNum'], $copied['lessonNum']);
+        $this->assertEquals($created['publishLessonNum'], $copied['publishLessonNum']);
     }
 
     /**
@@ -154,6 +157,16 @@ class CourseCopyTest extends BaseTestCase
             'finishType' => 'time',
             'status' => 'published',
         );
+
+        $lesson = array(
+            'courseId' => $fields['fromCourseId'],
+            'title' => $fields['title'],
+            'type' => 'lesson',
+            'status' => 'created',
+        );
+        $lesson = $this->getCourseService()->createChapter($lesson);
+
+        $fields['categoryId'] = $lesson['id'];
 
         return $this->getTaskService()->createTask($fields);
     }

@@ -309,7 +309,7 @@ class BaseController extends Controller
 
         throw new \Exception();
     }
-
+    
     /**
      * 安全的重定向.
      *

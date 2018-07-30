@@ -28,10 +28,10 @@
             <div class="notebook-note-heading">
               {% if task %}
                 <a href="{{ path('course_task_show', {id:note.taskId, courseId: note.courseId}) }}" target="_blank">
-                  {{'my.learning.note.course_task_number'|trans({'%number%': task.number,'%title%': task.title})}}
+                  {{'my.learning.note.course_task_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title})}}
                 </a>
               {% else %}
-                <span>{{'my.learning.note.course_task_empty'|trans}}</span>
+                <span>{{'my.learning.note.course_task_empty'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
               {% endif %}
               <span class="pull-right notebook-note-length">{{'my.learning.note.total_length'|trans({'%length%':note.length})}}</span>
             </div>

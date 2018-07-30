@@ -8,7 +8,7 @@
       <div class="media-body">
         <div class="mbs">
           {% if task and task.status != 'published' %}
-            {{ material.title }} <span class="color-gray text-sm">({{'course.material.unpublished_tips'|trans}})</span>
+            {{ material.title }} <span class="color-gray text-sm">({{'course.material.unpublished_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}})</span>
           {% else %}
             {% if material.link %}
               <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
@@ -31,7 +31,7 @@
             <span class="bullet">•</span>
           {% endif %}
           {% if task %}
-            <a class="link-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'course.thread.mission_number'|trans({'%number%': task.number })}}</a>
+            <a class="link-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'course.thread.mission_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number })}}</a>
             <span class="bullet">•</span>
           {% endif %}
           <span class="color-gray">{{ 'course.material.upload_time'|trans({'%createdTime%':material.createdTime|smart_time}) }}</span>

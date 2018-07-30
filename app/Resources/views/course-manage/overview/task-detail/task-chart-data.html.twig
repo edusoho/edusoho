@@ -2,7 +2,7 @@
 <div class="row">
     <div class="legend clearfix">
         <div class="col-10">
-            {{ 'course.task'|trans }}
+            {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
         </div>
         <div class="col-80">
             {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
@@ -13,9 +13,9 @@
         <div class="chart-item clearfix">
             <div class="col-10 color-gray">
                 {% if task.number %}
-                    {{ 'course.task'|trans }}{{ task.number }}
+                    {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }}
                 {% else %}
-                    {{ 'course.plan_task.is_optional_task'|trans }}{{ 'course.task'|trans }}
+                    {{ 'course.plan_task.is_optional_task'|trans }}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
                 {% endif %}
             </div>
             <div class="col-80">
