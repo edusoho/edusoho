@@ -211,3 +211,25 @@ a.btn.disabled, fieldset[disabled] a.btn {
   padding-left: 30px;
   padding-right: 30px;
 }
+
+// 禁止按钮hover效果且popover中有相关操作
+.btn-disabled-popover-base(@color) {
+  background: rgba(red(@color), green(@color), blue(@color), .4) !important;
+  border-color: rgba(red(@color), green(@color), blue(@color), .4) !important;
+  color: rgba(0, 0, 0, 0.32) !important;
+}
+
+.btn-popover-operation(@color) {
+  .btn-disabled-popover-base(@color);
+  box-shadow: none !important;
+  &:hover {
+    .btn-disabled-popover-base(@color);
+    box-shadow: none;
+    cursor: not-allowed;
+    .opacity(1) !important;
+  }
+}
+
+.btn-default-popover {
+  .btn-popover-operation(#ececec);
+}

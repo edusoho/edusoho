@@ -17,16 +17,16 @@
     </button>
 
     {% if courseSet.type|default('') == 'normal' %}
-      <a class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add"
+      <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add btn-default-popover"
         {% if setting('storage.upload_mode', 'local') == 'local' %}
-          data-toggle="popover" data-placement="top" data-trigger="hover"
-          data-content="{{'course.plan_task.batch_create_tips'|trans}}" disabled
+          data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
+          data-content="{{'course.plan_task.batch_create_tips'|trans}}"
         {% else %}
           data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
           data-url="{{ path('course_manage_lesson_batch_create', {courseId:course.id, mode:taskMode|default('default'), token:uploader_token('course-task', app.user.id, 'private')}) }}"
         {% endif %}>
         {{'course.plan_task.batch_create_btn'|trans}}
-      </a>
+      </button>
     {% endif %}
 
     <div class="cd-dropdown" data-toggle="cd-dropdown">
