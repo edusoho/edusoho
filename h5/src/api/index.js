@@ -16,7 +16,7 @@ const axiosApi = () => {
     Api[item.name] = options => {
       let url = item.url;
       url = options && options.query ? parseUrl(url, options.query) : url;
-      url = addPrefix(url);
+      url = item.noPrefix ? url : addPrefix(url);
 
       return axios(Object.assign({}, item, options, { url }));
     };

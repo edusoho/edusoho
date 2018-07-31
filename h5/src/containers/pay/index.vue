@@ -12,14 +12,14 @@
           <span class="sum__price">¥ <span class="num">{{ detail.pay_amount | toMoney }}</span></span>
         </div>
         <div class="payWay">
-          <div :class="['payWay__item', {'payWay__item--selected': selected}]" 
+          <div :class="['payWay__item', {'payWay__item--selected': selected}]"
             v-show="paySettings.alipayEnabled"
             @click="payWay = 'Alipay_LegacyWap';selected = true">
             <div class="right"></div>
             <i></i>
             <img src="/static/images/zfb.png">
           </div>
-          <div :class="['payWay__item', {'payWay__item--selected': !selected}]" 
+          <div :class="['payWay__item', {'payWay__item--selected': !selected}]"
             v-show="paySettings.wxpayEnabled"
             @click="payWay = 'WechatPay_MWeb'; selected = false">
             <div class="right"></div>
@@ -86,16 +86,22 @@ export default {
     handlePay () {
       // this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()
       //  && (this.payWay = 'WechatPay_Js')
+      console.log(this.payWay, 777);
+      if (this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()) {
+        Api.getOpenId().then(res => {
+          console.log(res, 888);
+        });
+      }
 
-      Api.createTrade({
-        data: {
-          gateway: this.payWay,
-          type: 'purchase',
-          orderSn: this.detail.sn
-        }
-      }).then(res => {
-        window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
-      })
+      // Api.createTrade({
+      //   data: {
+      //     gateway: this.payWay,
+      //     type: 'purchase',
+      //     orderSn: this.detail.sn
+      //   }
+      // }).then(res => {
+      //   window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
+      // })
     },
     isWeixinBrowser (){
       return /micromessenger/.test(navigator.userAgent.toLowerCase())
