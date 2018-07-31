@@ -34,7 +34,7 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse = $this->filterFields($course);
 
         $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
-        $newCourse['isDefault'] = $course['isDefault'];
+        $newCourse['isDefault'] = 1;
         $modeChange = false;
         $newCourse['parentId'] = $course['id'];
         $newCourse['locked'] = 1; //默认锁定
