@@ -3343,7 +3343,7 @@ my.teaching.open_course.recommend_setting.live: Live
 my.teaching.open_course.recommend_setting.task_number: '%taskName% %task_number%'
 my.teaching.open_course.recommend_setting.save_btn: Save
 my.teaching.open_course.recommend_setting.course_empty: 'Add a course firstly'
-my.teaching.open_course.teachers_setting.title: 'Teachers Settings'
+my.teaching.open_course.teachers_setting.title: 'Teachers Manage'
 my.teaching.open_course.teachers_setting.is_added: 'Added teacher'
 my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 'Only the users with teacher authority could be added'
 my.teaching.open_course.student_setting.manage_btn: Manage

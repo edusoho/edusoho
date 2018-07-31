@@ -4029,7 +4029,7 @@ my.teaching.open_course.recommend_setting.live: 直播
 my.teaching.open_course.recommend_setting.task_number: 第%task_number%%taskName%
 my.teaching.open_course.recommend_setting.save_btn: 保存修改
 my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
-my.teaching.open_course.teachers_setting.title: 教师设置
+my.teaching.open_course.teachers_setting.title: 教师管理
 my.teaching.open_course.teachers_setting.is_added: 已添加教师
 my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加有教师权限的用户
 my.teaching.open_course.student_setting.manage_btn: 管理
