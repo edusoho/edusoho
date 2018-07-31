@@ -54,9 +54,12 @@ function discountCountdown() {
 const fixButtonPosition = () => {
   const $target = $('.js-course-detail-info');
   const height = $target.height();
+  const $btn = $('.js-course-header-operation');
   if (height >  240) {
-    $('.js-course-header-operation').removeClass('course-detail-info__btn');
+    $btn.removeClass('course-detail-info__btn');
   }
+  $btn.removeClass('hidden');
+
 };
 
 window.onload = () => {
