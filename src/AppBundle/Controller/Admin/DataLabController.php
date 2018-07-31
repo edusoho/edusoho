@@ -20,22 +20,20 @@ class DataLabController extends BaseController
         return $this->render('admin/data-lab/setting.html.twig');
     }
 
-    public function enableXapiSettingAction(Request $request)
+    public function enableAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
             $this->setSiteTrace(1);
-
             return $this->setXapiSetting(1);
         }
 
         return $this->render('admin/data-lab/open-setting.html.twig');
     }
 
-    public function disableXapiSettingAction(Request $request)
+    public function disableAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
             $this->setSiteTrace(0);
-
             return $this->setXapiSetting(0);
         }
 
@@ -48,7 +46,7 @@ class DataLabController extends BaseController
 
         $biz = $this->getBiz();
         $siteSetting = $this->getSettingService()->get('site', array());
-        $result = $biz['qiQiuYunSdk.siteTrace']->getTraceScript(array(
+        $result = $biz['qiQiuYunSdk.esOp']->getTraceScript(array(
             'site_name' => empty($siteSetting['name']) ? 'EDUSOHO测试站' : $siteSetting['name'],
             'domain' => $this->getRequest()->getHost(),
             'enable' => $enable,

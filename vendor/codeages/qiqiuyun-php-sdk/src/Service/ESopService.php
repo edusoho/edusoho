@@ -4,7 +4,7 @@ namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Exception\SDKException;
 
-class SiteTraceService extends BaseService
+class ESopService extends BaseService
 {
     protected $host = 'esop-service.qiqiuyun.net';
 

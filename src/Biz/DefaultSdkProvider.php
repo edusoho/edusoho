@@ -42,11 +42,11 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
 
-        $biz['qiQiuYunSdk.siteTrace'] = function ($biz) use ($that) {
+        $biz['qiQiuYunSdk.es_op'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $that->generateSdk($biz, $that->getSiteTraceConfig($biz));
+            $sdk = $that->generateSdk($biz, $that->getESopConfig($biz));
             if (!empty($sdk)) {
-                $service = $sdk->getSiteTraceService();
+                $service = $sdk->getESopService();
             }
 
             return $service;
@@ -102,13 +102,13 @@ class DefaultSdkProvider implements ServiceProviderInterface
         return array('drp' => array('host' => $hostUrl));
     }
 
-    public function getSiteTraceConfig($biz)
+    public function getESopConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
         $developerSetting = $setting->get('developer', array());
 
-        if (!empty($developerSetting['cloud_api_site_trace_server'])) {
-            $urlSegs = explode('://', $developerSetting['cloud_api_site_trace_server']);
+        if (!empty($developerSetting['cloud_api_es_op_server'])) {
+            $urlSegs = explode('://', $developerSetting['cloud_api_es_op_server']);
             if (2 == count($urlSegs)) {
                 $hostUrl = $urlSegs[1];
             }
@@ -118,7 +118,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $hostUrl = '';
         }
 
-        return array('sitetrace' => array('host' => $hostUrl));
+        return array('esop' => array('host' => $hostUrl));
     }
 
     public function getXAPIConfig(Biz $biz)

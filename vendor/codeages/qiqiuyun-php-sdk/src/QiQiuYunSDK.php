@@ -82,11 +82,11 @@ class QiQiuYunSDK
     }
 
     /**
-     * @return \QiQiuYun\SDK\Service\SiteTraceService
+     * @return \QiQiuYun\SDK\Service\ESopService
      */
-    public function getSiteTraceService()
+    public function getESopService()
     {
-        return $this->getService('SiteTrace');
+        return $this->getService('ESop');
     }
 
     /**
