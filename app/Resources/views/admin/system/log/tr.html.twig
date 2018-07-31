@@ -1,0 +1,25 @@
+  {#{% if log.message == 'course' %}#}
+
+{% if log.level == 'error' %}
+
+  {{ ('log.action.' ~ log.module ~ '.' ~ log.action)|trans }}
+  <br>
+  {{ log.message|trans }}
+  <br>
+  {{ log.data|json_encode }}
+
+{% else %}
+
+  {% if log.module == 'course' %}
+    {{ ('log.action.' ~ log.module ~ '.' ~ log.action)|trans }}
+    {% if log.data.title is defined %}
+
+      <a href="{{ log.data. }}">{{ log.data.title }}</a>
+
+    {% else %}
+
+
+    {% endif %}
+  {% endif %}
+
+{% endif %}

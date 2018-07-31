@@ -55,17 +55,20 @@
   <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
 
 </form>
-
+  <div>{{'admin.system_log.total_count'|trans({'%itemCount%': paginator.itemCount})|raw}}</div>
   <table class="table table-hover" id="log-table">
     <tr>
-      <th width="15%">{{'admin.system_log.username'|trans}}</th>
-      <th width="55%">{{'admin.system_log.operation'|trans}}</th>
       <th width="10%">{{'admin.system_log.log_lenvel'|trans}}</th>
-      <th width="20%">{{'admin.system_log.time_and_ip'|trans}}</th>
-    </tr>   
+      <th width="10%">{{'admin.system_log.username'|trans}}</th>
+      <th width="40%">{{'admin.system_log.operation'|trans}}</th>
+      <th width="9%">{{'admin.system_log.module'|trans}}</th>
+      <th width="16%">{{'admin.system_log.time'|trans}}</th>
+      <th width="15%">{{'admin.system_log.ip'|trans}}</th>
+    </tr>
     {% for log in logs %}
       {% set user = users[log.userId]|default(null) %}
       <tr>
+        <td>{{ dict_macro.logLevel(log.level)}}</td>
         <td>
           {% if user and log.module != 'crontab'%}
             {{ admin_macro.user_link(user) }}
@@ -74,20 +77,21 @@
           {% endif %}
         <td>
           <div style="word-break: break-all;word-wrap: break-word;">
-            {{ log_trans(log.message, log.data) }}
-            {% if log.data %}
-              <a href="javascript:;" class="text-sm text-warning show-data">{{'admin.system_log.show_data'|trans}}</a>
-              <a href="javascript:;" class="text-sm text-warning hide-data" style="display:none;">{{'admin.system_log.hide_data'|trans}}</a>
-              <div class="data" style="display:none;">{{ log.data|json_encode }}</div>
-            {% endif %}
+            {% include 'admin/system/log/tr.html.twig' %}
+
           </div>
           <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
         </td>
-        <td>{{ dict_macro.logLevel(log.level)}}</td>
+        <td>
+            {{ ('log.module.' ~ log.module)|trans }}
+        </td>
         <td>
           <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
-          <br />
+        </td>
+        <td>
           <a  class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ convert_ip(log.ip) }}</a>
+          <br>
+          {{ log.ip }}
         </td>
       </tr>
     {% else %}

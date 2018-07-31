@@ -7206,6 +7206,10 @@ admin.system_log.show_data: 查看数据
 admin.system_log.hide_data: 隐藏数据
 admin.system_log.empty: 无日志记录
 admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
+admin.system_log.module: 业务模块
+admin.system_log.time: 操作时间
+admin.system_log.ip: IP地址
+admin.system_log.total_count: 共<strong class="inflow-num">%itemCount%</strong>条数据
 
 # 管理员帐号同步
 admin.admin_sync.content_title: 管理员帐号同步
@@ -8155,6 +8159,7 @@ log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
 log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
+log.action.course.create_lesson: 创建课时
 log.action.course.add_student: 添加课程学员
 log.action.course.remove_student: 移除课程学员
 log.action.course.update_teacher: 更新课程教师

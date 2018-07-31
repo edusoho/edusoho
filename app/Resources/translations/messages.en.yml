@@ -5901,6 +5901,11 @@ admin.system_log.show_data: 'Viewing the data'
 admin.system_log.hide_data: 'Hide data'
 admin.system_log.empty: 'No rcord'
 admin.system_log.code_run_log.show_rencent_data_tips: 'Displays latest 2000 Log information.'
+admin.system_log.module: 业务模块
+admin.system_log.time: 操作时间
+admin.system_log.ip: IP地址
+admin.system_log.total_count: 共<strong class="inflow-num">%itemCount%</strong>条数据
+
 admin.admin_sync.content_title: 'Administrator account synchronization'
 admin.admin_sync.tips: '<p><strong> Notes: </strong></p><p> Administrator account synchronization, is to cover the EduSoho administrator account you login now with the administrator account of the User Center %centerName%. <br> Each account can synchronize once. </p>'
 admin.admin_sync.username: 'The administrator username'
@@ -6896,6 +6901,7 @@ log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
 log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
+log.action.course.create_lesson: 创建课时
 log.action.course.add_student: 添加课程学员
 log.action.course.remove_student: 移除课程学员
 log.action.course.update_teacher: 更新课程教师
