@@ -52,6 +52,13 @@ export default class Create {
           type: 'get',
         }
       },
+      invitedCode: {
+        required: false,
+        reg_inviteCode: true,
+        es_remote: {
+          type: 'get'
+        }
+      },
       password: {
         required: true,
         minlength: 5,

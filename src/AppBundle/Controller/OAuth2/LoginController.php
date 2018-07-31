@@ -170,9 +170,12 @@ class LoginController extends LoginBindController
             return $response;
         } else {
             $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
+            $invitedCode = $this->get('session')->get('invitedCode');
+            $inviteUser = empty($invitedCode) ? array() : $this->getUserService()->getUserByInviteCode($invitedCode);
 
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
+                'inviteUser' => $inviteUser,
                 'captchaStatus' => $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp()),
             ));
         }
@@ -217,6 +220,7 @@ class LoginController extends LoginBindController
         $registerFields = array(
             'nickname' => $request->request->get('nickname'),
             'password' => $request->request->get('password'),
+            'invitedCode' => $request->request->get('invitedCode'),
             $oauthUser->accountType => $oauthUser->account,
             'avatar' => $oauthUser->avatar,
             'type' => $oauthUser->type,
