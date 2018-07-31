@@ -194,7 +194,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `createdTime`,
                 0 as `copyId`,
                 `id` as `migrate_task_id`
-            from `course_task` ct where courseId in (select id from course_v8 where courseType='normal') and not EXISTS (select * from course_chapter cc where cc.id=ct.categoryid) order by id limit {$start}, {$this->pageSize};
+            from `course_task` ct where courseId in (select id from course_v8 where courseType='normal') and not EXISTS (select * from course_chapter cc where cc.id=ct.categoryid and cc.type='lesson') order by id limit {$start}, {$this->pageSize};
         ");
         $nextPage = $this->getNextPage($count, $page);
         if (empty($nextPage)) {
