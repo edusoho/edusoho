@@ -26,6 +26,9 @@ class MeOrderFilter extends Filter
         }
 
         $data['priceConvert'] = Money::convert($data['pay_amount']);
+        if (isset($data['priceConvert']['coinAmount'])) {
+            $data['priceConvert']['coinAmount'] = round($data['priceConvert']['coinAmount']);
+        }
     }
 
     private function hasVipIcon($data)
