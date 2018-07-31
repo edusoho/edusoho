@@ -545,8 +545,10 @@
 }
 
 .course-detail-info__btn {
-  position: absolute;
-  bottom: 0;
-  padding-right: 24px;
-  width: 100%;
+  @media(min-width: @screen-lg-min) {
+    position: absolute;
+    bottom: 0;
+    padding-right: 24px;
+    width: 100%;
+  }
 }
