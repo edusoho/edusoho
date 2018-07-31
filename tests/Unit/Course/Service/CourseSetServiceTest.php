@@ -5,6 +5,7 @@ namespace Tests\Unit\Course\Service;
 use Biz\BaseTestCase;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use AppBundle\Common\ReflectionUtils;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -254,6 +255,34 @@ class CourseSetServiceTest extends BaseTestCase
         $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
 
         $this->assertEquals(0, $result['hotSeq']);
+    }
+
+    public function testUpdateCourseSummary()
+    {
+        $courseSet = array(
+            'title' => 'courseSetTitle',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $courseFields = array(
+            'id' => 2,
+            'courseSetId' => $courseSet['id'],
+            'title' => '计划名称',
+            'learnMode' => 'freeMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($courseFields);
+        $firstCourse = $this->getCourseService()->updateCourse(1, array('summary' => '计划简介1'));
+        $secondCourse = $this->getCourseService()->updateCourse(2, array('summary' => '计划简介2'));
+
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSummary', array($courseSet));
+        $result = $this->getCourseService()->getCourse($firstCourse['id']);
+        $this->assertEmpty($result['summary']);
+
+        $result = $this->getCourseService()->getCourse($secondCourse['id']);
+        $this->assertEmpty($result['summary']);
     }
 
     protected function getCourseSetService()
