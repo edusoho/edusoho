@@ -40,7 +40,7 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['limitTime'] = $data['ext']['limitedTime'];
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval'] * 60; //分钟
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
-                $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? date('c', $data['startTime']) : null;
+                $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
             }
         }
 
