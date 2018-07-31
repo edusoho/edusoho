@@ -1,11 +1,11 @@
 import 'app/common/widget/qrcode';
+
 let $unfavorite = $('.js-unfavorite-btn');
 let $favorite = $('.js-favorite-btn');
 bindOperation($unfavorite, $favorite);
 bindOperation($favorite, $unfavorite);
 discountCountdown();
 ancelRefund();
-
 
 function ancelRefund() {
   $('.cancel-refund').on('click', function () {
