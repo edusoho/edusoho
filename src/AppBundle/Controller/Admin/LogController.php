@@ -53,11 +53,11 @@ class LogController extends BaseController
         ));
     }
 
-    public function blockMatchAction(Request $request)
+    public function usernameMatchUsersAction(Request $request)
     {
-        $likeString = $request->query->get('q');
+        $nickname = $request->query->get('nickname');
         $conditions = array(
-            'nickname' => $likeString,
+            'nickname' => $nickname,
         );
         $orderBy = array('createdTime' => 'ASC');
         $existsUser = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 10);

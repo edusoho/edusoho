@@ -1021,9 +1021,9 @@ admin_logs_action_dicts:
     path:  /setting/logs/logActions
     defaults: { _controller: AppBundle:Admin/Log:logActions }
 
-admin_logs_match:
-    path:  /setting/logs/quikSearch
-    defaults: { _controller: AppBundle:Admin/Log:blockMatch }
+admin_logs_username_match:
+    path:  /setting/logs/usernameMatchUsers
+    defaults: { _controller: AppBundle:Admin/Log:usernameMatchUsers }
 
 admin_cloud_access:
     path:  /cloud/access
