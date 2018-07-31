@@ -49,7 +49,8 @@
   </div>
 
   <div class="form-group">
-    <input type="text" id="nickname" name="nickname" value="{{app.request.query.get('nickname')}}" class="form-control" placeholder="{{'admin.system_log.username_placeholder'|trans}}" style="width:120px;">
+    {% set url = path('admin_logs_match') ~ '?q={{query}}' %}
+    <input class="form-control quicksearch" id="nickname" name="nickname" data-role="item-input" placeholder="{{'admin.system_log.username_placeholder'|trans}}" data-url='{{url}}' value="{{app.request.query.get('nickname')}}">
   </div>
 
   <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
@@ -96,5 +97,33 @@
   </table>
 
   {{ admin_macro.paginator(paginator) }}
+
+  <style>
+
+    .ui-autocomplete {
+      border:1px solid #ccc;
+      background-color: #FFFFFF;
+      box-shadow: 2px 2px 3px #EEEEEE;
+    }
+    .ui-autocomplete-ctn{
+      margin:0;
+      padding:0;
+    }
+    .ui-autocomplete-item {
+      width: 180px;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 30px;
+      padding:0 10px 0 10px;
+      cursor: default;
+    }
+    .ui-autocomplete-item-hover {
+      background:#f2f2f2;
+    }
+    .ui-autocomplete-item-hl {
+      background:#F6FF94;
+    }
+  </style>
 
 {% endblock %}

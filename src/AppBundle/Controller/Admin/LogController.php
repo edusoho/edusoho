@@ -53,6 +53,18 @@ class LogController extends BaseController
         ));
     }
 
+    public function blockMatchAction(Request $request)
+    {
+        $likeString = $request->query->get('q');
+        $conditions = array(
+            'nickname' => $likeString,
+        );
+        $orderBy = array('createdTime' => 'ASC');
+        $existsUser = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 10);
+
+        return $this->createJsonResponse($existsUser);
+    }
+
     public function prodAction(Request $request)
     {
         $logfile = $this->container->getParameter('kernel.root_dir').'/logs/prod.log';
@@ -76,7 +88,7 @@ class LogController extends BaseController
         $eof = '';
         $str = '';
         while ($n > 0) {
-            while ($eof != "\n") {
+            while ("\n" != $eof) {
                 if (!fseek($fp, $pos, SEEK_END)) {
                     $eof = fgetc($fp);
                     --$pos;
