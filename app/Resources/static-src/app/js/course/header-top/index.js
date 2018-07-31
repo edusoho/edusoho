@@ -1,11 +1,11 @@
 import 'app/common/widget/qrcode';
-
 let $unfavorite = $('.js-unfavorite-btn');
 let $favorite = $('.js-favorite-btn');
 bindOperation($unfavorite, $favorite);
 bindOperation($favorite, $unfavorite);
 discountCountdown();
 ancelRefund();
+
 
 function ancelRefund() {
   $('.cancel-refund').on('click', function () {
@@ -51,3 +51,14 @@ function discountCountdown() {
   }
 }
 
+const fixButtonPosition = () => {
+  const $target = $('.js-course-detail-info');
+  const height = $target.height();
+  if (height >  240) {
+    $('.js-course-header-operation').removeClass('course-detail-info__btn');
+  }
+};
+
+window.onload = () => {
+  fixButtonPosition();
+};

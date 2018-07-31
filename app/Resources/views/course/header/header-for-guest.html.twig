@@ -47,6 +47,7 @@
       </div>
     </div>
     <div class="course-detail-info">
+    <div class="course-detail-info__text js-course-detail-info">
 			{% set onDiscount =  is_discount(course) %}
       <div class="course-detail-info__title">
         {% if marketingPage %}
@@ -66,7 +67,7 @@
       </div>
 			
 			{% if onDiscount %}
-        <div class="cd-mb16">
+        <div class="cd-mb8">
           <span class="course-detail__label">{{ 'course.activity'|trans }}</span>
           <span class="text-12 color-warning">
             <b class="hidden-xs course-detail-activity-title">{{ course.discount.name|sub_text(10) }}</b><span class="cd-text-medium cd-ml16" id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}></span><i class="es-icon es-icon-accesstime text-14 mls cd-text-medium"></i>
@@ -188,8 +189,9 @@
 
         </ul>
       </div>
+    </div>
 
-      <div class="course-operation-wrap">
+      <div class="course-detail-info__btn js-course-header-operation">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
           <li class="es-qrcode top hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
              <a class="btn btn-default btn-xs" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'site.qrcode_tips'|trans }}"><i class="es-icon es-icon-saoyisao"></i></a>
