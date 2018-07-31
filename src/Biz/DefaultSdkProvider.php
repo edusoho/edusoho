@@ -42,6 +42,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
 
+        $biz['qiQiuYunSdk.siteTrace'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, $that->getSiteTraceConfig($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getSiteTraceService();
+            }
+
+            return $service;
+        };
+
         $biz['qiQiuYunSdk.mp'] = function ($biz) use ($that) {
             $service = null;
             $sdk = $that->generateSdk($biz, $that->getMpConfig($biz));
@@ -90,6 +100,24 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('drp' => array('host' => $hostUrl));
+    }
+
+    public function getSiteTraceConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (!empty($developerSetting['cloud_api_site_trace_server'])) {
+            $urlSegs = explode('://', $developerSetting['cloud_api_site_trace_server']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+        return array('sitetrace' => array('host' => $hostUrl));
     }
 
     public function getXAPIConfig(Biz $biz)

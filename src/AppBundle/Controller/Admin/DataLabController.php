@@ -23,6 +23,7 @@ class DataLabController extends BaseController
     public function enableXapiSettingAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $this->setSiteTrace(1);
             return $this->setXapiSetting(1);
         }
 
@@ -32,10 +33,30 @@ class DataLabController extends BaseController
     public function disableXapiSettingAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $this->setSiteTrace(0);
             return $this->setXapiSetting(0);
         }
 
         return $this->render('admin/data-lab/close-setting.html.twig');
+    }
+
+    private function setSiteTrace($enable)
+    {
+        $siteTraceSetting = $this->getSettingService()->get('siteTrace', array());
+
+        $biz = $this->getBiz();
+        $result = $biz['qiQiuYunSdk.siteTrace']->getTraceScript(array(
+            'site_name' => 'localhost',
+            'domain' => 'localhost',
+            'enable' => $enable,
+        ));
+
+        $siteTraceSetting = array(
+            'enabled' => $enable,
+            'script' => $result['script']
+        );
+        
+        $siteTraceSetting = $this->getSettingService()->set('siteTrace', $siteTraceSetting);
     }
 
     private function setXapiSetting($enable)

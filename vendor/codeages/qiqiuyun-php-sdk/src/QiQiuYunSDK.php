@@ -82,6 +82,14 @@ class QiQiuYunSDK
     }
 
     /**
+     * @return \QiQiuYun\SDK\Service\SiteTraceService
+     */
+    public function getSiteTraceService()
+    {
+        return $this->getService('SiteTrace');
+    }
+
+    /**
      * 创建API请求认证类实例
      *
      * @param string $accessKey

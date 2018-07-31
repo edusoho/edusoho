@@ -129,6 +129,15 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>Site Trace API</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_site_trace_server" value="{{ developerSetting.cloud_api_site_trace_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ 'admin.developer_setting.hls_encrypted'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">
