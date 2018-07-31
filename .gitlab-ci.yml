@@ -137,6 +137,7 @@ Api Test With 5.5:
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
+    - composer config -g repo.packagist composer https://packagist.laravel-china.org
     - composer config repo.packagist composer https://packagist.phpcomposer.com
     - composer require "codeception/codeception:*" --ignore-platform-reqs
 
@@ -147,7 +148,7 @@ Api Test With 5.5:
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin &&  app/console plugin:register Discount
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin &&  app/console plugin:register MoneyCard
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin &&  app/console plugin:register UserImporter
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/qiqiuyun-mp/WeChatAppPlugin.git plugins/WeChatAppPlugin &&  app/console plugin:register WeChatApp
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/qiqiuyun-mp/WeChatAppPlugin.git plugins/WeChatAppPlugin &&  app/console plugin:register WeChatApp
 #    - wget -O app/config/plugin.php http://download-devtest.codeages.net/api-test-data/20180620/plugin.php
 #    - wget -O app/config/routing_plugins.yml http://download-devtest.codeages.net/api-test-data/20180620/routing_plugins.yml
 
