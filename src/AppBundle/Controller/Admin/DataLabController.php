@@ -24,6 +24,7 @@ class DataLabController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $this->setSiteTrace(1);
+
             return $this->setXapiSetting(1);
         }
 
@@ -34,6 +35,7 @@ class DataLabController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $this->setSiteTrace(0);
+
             return $this->setXapiSetting(0);
         }
 
@@ -53,9 +55,9 @@ class DataLabController extends BaseController
 
         $siteTraceSetting = array(
             'enabled' => $enable,
-            'script' => $result['script']
+            'script' => $result['script'],
         );
-        
+
         $siteTraceSetting = $this->getSettingService()->set('siteTrace', $siteTraceSetting);
     }
 

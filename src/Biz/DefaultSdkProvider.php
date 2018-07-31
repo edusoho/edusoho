@@ -117,6 +117,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         if (empty($hostUrl)) {
             $hostUrl = '';
         }
+
         return array('sitetrace' => array('host' => $hostUrl));
     }
 
