@@ -13,6 +13,12 @@
   </ol>
 {% endblock %}
 
+{% block navbar %}
+  {% if course.type != 'reservation' %}
+    {% include 'courseset-manage/navbar.html.twig' %}
+  {% endif %}
+{% endblock %}
+
 {% block courseset_header %}
   {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 1})) }}
 {% endblock %}

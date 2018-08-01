@@ -54,6 +54,7 @@ site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.plan: 计划
 site.default.more: More
 site.default.manage: Config
 site.default.none: None
@@ -1078,8 +1079,8 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
-course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
-course.members_manage.add_failed_tips: 计划未发布，不可添加学员
+course.members_manage.import_failed_tips: 'Import student failed, the %type% is not published'
+course.members_manage.add_failed_tips: %type%未发布，不可添加学员
 course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'

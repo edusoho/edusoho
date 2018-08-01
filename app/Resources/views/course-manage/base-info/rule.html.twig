@@ -58,3 +58,20 @@
 {% endif %}
 
 {% include 'course-manage/marketing/set-reward-point.html.twig' %}
+
+<div class="form-group">
+  <label class="col-sm-2 control-label mbs">{{ '单节课次时长'}} <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
+    data-content="<p>单节课次时长是由网校统一设定，不能修改。</p>"></a>
+  </label>
+  <div class="col-sm-8 course-mange-space">
+    {{ setting('plugin_reservation.courseLength') }}<span class="cd-ml8">分钟</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-sm-2 control-label mbs">{{ '课程人数'}}</label>
+  <div class="col-sm-8 course-mange-space">
+    <div>1</div>
+    <a class="cd-text-sm cd-link-primary live-course-rule" href="{{ path('content_course_rule') }}" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
+  </div>
+</div>
