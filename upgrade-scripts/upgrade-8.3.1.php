@@ -4,6 +4,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use QiQiuYun\SDK\Auth;
+use QiQiuYun\SDK\HttpClient\Client;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -54,7 +56,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function toggleSiteTrace()
     {
-
         $siteSetting = $this->getSettingService()->get('site', array());
         $xapiSetting = $this->getSettingService()->get('xapi', array());
         $data = array(
@@ -77,9 +78,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $headers['Authorization'] = $auth->makeRequestAuthorization($uri, $options['body']);
         $headers['Content-Type'] = 'application/json';
         $options['headers'] = $headers;
-
         $client = new Client(array());
-        $url = "http://esop-service.qiqiuyun.net{uri}";
+        $url = "http://esop-service.qiqiuyun.net{$uri}";
         $response = $client->request('POST', $url, $options);
     }
 
