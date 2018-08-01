@@ -20,8 +20,15 @@ class TestpaperItemFilter extends Filter
             $data['analysis'] = $this->convertAbsoluteUrl($data['analysis']);
         }
 
-        if (!empty($data['testResult']) && !empty($data['testResult']['teacherSay'])) {
-            $data['testResult']['teacherSay'] = $this->convertAbsoluteUrl($data['testResult']['teacherSay']);
+        if (!empty($data['testResult'])) {
+            if (!empty($data['testResult']['teacherSay'])) {
+                $data['testResult']['teacherSay'] = $this->convertAbsoluteUrl($data['testResult']['teacherSay']);
+            }
+            if (!empty($data['testResult']['answer'])) {
+                foreach ($data['testResult']['answer'] as &$answer) {
+                    $answer = $this->convertAbsoluteUrl($answer);
+                }
+            }
         }
 
         if (!empty($data['type'])) {
