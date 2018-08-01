@@ -8,7 +8,7 @@ class TestpaperItemFilter extends Filter
 {
     protected $publicFields = array('id', 'type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'target',
         'courseId', 'lessonId', 'parentId', 'subCount', 'finishedTimes', 'passedTimes', 'createdUserId', 'updatedUserId', 'courseSetId',
-        'seq', 'missScore', 'missScore', 'subs', 'testResult', );
+        'seq', 'missScore', 'missScore', 'subs', 'testResult');
 
     protected function publicFields(&$data)
     {
