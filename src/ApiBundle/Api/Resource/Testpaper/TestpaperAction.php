@@ -16,7 +16,7 @@ class TestpaperAction extends AbstractResource
 {
     /**
      * @param $request
-     * @param $id testId testResultId
+     * @param $id
      * action "do/redo"
      * post params: targetType targetId
      */

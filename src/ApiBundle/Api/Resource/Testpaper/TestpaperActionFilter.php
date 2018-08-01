@@ -15,7 +15,8 @@ class TestpaperActionFilter extends Filter
 //            $isShowTestResult = empty($data['isShowTestResult']) ? 0 : 1;
 //            $data['items'] = $this->coverTestpaperItems($data['items'], $isShowTestResult);
             foreach ($data['items'] as $questionType => &$questions) {
-                foreach ($questions as $questionId => &$question) {
+                $questions = array_values($questions);
+                foreach ($questions as &$question) {
                     $question['stem'] = $this->convertAbsoluteUrl($question['stem']);
                 }
             }
