@@ -241,11 +241,12 @@ class CourseController extends CourseBaseController
             'courseSetId' => $courseSet['id'],
         );
 
+        $totalCount = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
             array('seq' => 'DESC', 'createdTime' => 'ASC'),
             0,
-            10
+            $totalCount
         );
 
         return $this->render(
