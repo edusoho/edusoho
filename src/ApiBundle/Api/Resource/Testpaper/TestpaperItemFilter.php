@@ -8,7 +8,7 @@ class TestpaperItemFilter extends Filter
 {
     protected $publicFields = array('id', 'type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'target',
         'courseId', 'lessonId', 'parentId', 'subCount', 'finishedTimes', 'passedTimes', 'createdUserId', 'updatedUserId', 'courseSetId',
-        'seq', 'missScore', 'missScore', 'subs', 'testResult');
+        'seq', 'missScore', 'missScore', 'subs', 'testResult', );
 
     protected function publicFields(&$data)
     {
@@ -32,13 +32,16 @@ class TestpaperItemFilter extends Filter
         }
 
         if (!empty($data['type'])) {
-            if (in_array($data['type'], array('essay'))) {
+            if (in_array($data['type'], array('essay')) && !empty($data['answer']) && is_array($data['answer'])) {
                 foreach ($data['answer'] as &$answer) {
                     $answer = $this->convertAbsoluteUrl($answer);
                 }
             }
 
-            if (in_array($data['type'], array('single_choice', 'choice', 'uncertain_choice'))) {
+            if (in_array($data['type'], array('single_choice', 'choice', 'uncertain_choice'))
+                && !empty($data['metas'])
+                && !empty($data['metas']['choices'])
+                && is_array($data['metas']['choices'])) {
                 foreach ($data['metas']['choices'] as &$choice) {
                     $choice = $this->convertAbsoluteUrl($choice);
                 }
