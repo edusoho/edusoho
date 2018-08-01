@@ -1,8 +1,5 @@
 <template>
   <div id="app-admin">
-    <van-nav-bar :title="title"
-      class="nav-bar"
-      />
     <router-view></router-view>
   </div>
 </template>
