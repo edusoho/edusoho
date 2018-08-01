@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Testpaper;
+namespace ApiBundle\Api\Resource\TestpaperInfo;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -10,7 +10,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Testpaper extends AbstractResource
+class TestpaperInfo extends AbstractResource
 {
     public function get(ApiRequest $request, $testId)
     {

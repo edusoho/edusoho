@@ -1,11 +1,11 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Testpaper;
+namespace ApiBundle\Api\Resource\TestpaperInfo;
 
 use ApiBundle\Api\Resource\Course\CourseTaskFilter;
 use ApiBundle\Api\Resource\Filter;
 
-class TestpaperFilter extends Filter
+class TestpaperInfoFilter extends Filter
 {
     protected $publicFields = array('testpaper', 'items', 'task');
 
