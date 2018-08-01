@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "38fe0dd73bdbbbc89ab38ae184813614",
+    "content-hash": "e198b48e1c224052a4e0a468103d12c9",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -468,16 +468,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.2.25",
+            "version": "v0.2.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "ec3bd2f9526c647903d5fc47c79f4721366dd161"
+                "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/ec3bd2f9526c647903d5fc47c79f4721366dd161",
-                "reference": "ec3bd2f9526c647903d5fc47c79f4721366dd161",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
+                "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
                 "shasum": ""
             },
             "require": {
@@ -507,7 +507,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-07-04T07:00:48+00:00"
+            "time": "2018-07-31T11:48:03+00:00"
         },
         {
             "name": "codeages/rate-limiter",
