@@ -121,7 +121,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
         $normalTaskCount = 0;
         foreach ($tasks as $task) {
-            if ($task['isOptional'] == 0) {
+            if (0 == $task['isOptional']) {
                 ++$normalTaskCount;
             }
         }
@@ -163,7 +163,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
         if ($task['isOptional']) {
             return '';
         } else {
-            if ($normalTaskCount == 1) {
+            if (1 == $normalTaskCount) {
                 return $taskNumber;
             } else {
                 return $taskNumber.'-'.$subTaskNumber++;
@@ -285,20 +285,20 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             $needResetUnitNumber = false;
         }
 
-        if ($chapter['type'] == 'chapter') {
+        if ('chapter' == $chapter['type']) {
             $fields['number'] = $chapterNumber;
             ++$chapterNumber;
             $needResetUnitNumber = true;
             ++$seq;
         }
 
-        if ($chapter['type'] == 'unit') {
+        if ('unit' == $chapter['type']) {
             ++$seq;
             $fields['number'] = $unitNumber;
             ++$unitNumber;
         }
 
-        if ($chapter['type'] == 'lesson') {
+        if ('lesson' == $chapter['type']) {
             ++$seq;
             $fields['number'] = $lessonNumber;
             ++$lessonNumber;

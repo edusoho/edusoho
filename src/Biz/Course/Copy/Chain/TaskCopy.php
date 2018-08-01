@@ -75,7 +75,7 @@ class TaskCopy extends AbstractEntityCopy
                 //}
             }
 
-            if (!$config['isCopy'] && $task['type'] === 'live') {
+            if (!$config['isCopy'] && 'live' === $task['type']) {
                 $updateChapterIds[] = empty($newChapter) ? 0 : $newChapter['id'];
             }
 

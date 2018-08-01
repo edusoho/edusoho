@@ -6,7 +6,6 @@ use Silex\Application;
 use Topxia\Api\Util\TagUtil;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Util\CourseTitleUtils;
 
 class Course extends BaseResource
