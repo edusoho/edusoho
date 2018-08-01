@@ -25,11 +25,7 @@ class TestpaperResult extends AbstractResource
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($data['resultId']);
 
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            return true;
-        }
-
-        if ($user['id'] != $testpaperResult['userId']) {
-            return false;
+            throw new AccessDeniedHttpException('试卷已经做完，不能重复提交!');
         }
 
         $testpaperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $data);
@@ -43,7 +39,7 @@ class TestpaperResult extends AbstractResource
             throw new AccessDeniedHttpException('不可以访问其他学生的试卷哦!');
         }
 
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
+        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
 
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
@@ -59,9 +55,10 @@ class TestpaperResult extends AbstractResource
 
         $answerShowMode = empty($questionSetting['testpaper_answers_show_mode']) ? 'submitted' : $questionSetting['testpaper_answers_show_mode'];
 
+        $resultShow = true;
         // 不显示题目
         if ('hide' == $answerShowMode) {
-            throw new AccessDeniedHttpException('网校已关闭交卷后答案解析的显示!');
+            $resultShow = false;
         }
 
         $user = $this->getCurrentUser();
@@ -72,13 +69,10 @@ class TestpaperResult extends AbstractResource
 
         //客观题自动批阅完后先显示答案解析
         if ('reviewed' == $answerShowMode && 'finished' != $testpaperResult['status']) {
-            throw new AccessDeniedHttpException('试卷正在批阅，需要批阅完后才能显示答案解析!');
+            $resultShow = false;
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
-//        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
-//        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         if ($testpaperResult['userId'] != $user['id']) {
             $course = $this->getCourseService()->tryManageCourse($testpaperResult['courseId']);
@@ -92,8 +86,11 @@ class TestpaperResult extends AbstractResource
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($user['id']);
 
+//        if ($resultShow) {
         $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
-
+//        } else {
+//            $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
+//        }
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
@@ -102,6 +99,7 @@ class TestpaperResult extends AbstractResource
             'accuracy' => $accuracy,
             'testpaperResult' => $testpaperResult,
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'resultShow' => $resultShow,
         );
     }
 

@@ -1,21 +1,16 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Testpaper;
+namespace ApiBundle\Api\Resource\TestpaperResult;
 
-use ApiBundle\Api\Resource\Course\CourseTaskFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\Testpaper\TestpaperItemFilter;
 
-class TestpaperFilter extends Filter
+class TestpaperResultFilter extends Filter
 {
-    protected $publicFields = array('testpaper', 'items', 'task');
+    protected $publicFields = array('testpaper', 'items', 'accuracy', 'testpaperResult', 'favorites', 'resultShow');
 
     protected function publicFields(&$data)
     {
-        if (!empty($data['task'])) {
-            $tasKFilter = new CourseTaskFilter();
-            $tasKFilter->filter($data['task']);
-        }
-
         if (!empty($data['items'])) {
             foreach ($data['items'] as $questionType => &$questions) {
                 $questions = array_values($questions);
