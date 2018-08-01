@@ -15,15 +15,5 @@ class TestpaperFilter extends Filter
             $tasKFilter = new CourseTaskFilter();
             $tasKFilter->filter($data['task']);
         }
-
-        if (!empty($data['items'])) {
-            foreach ($data['items'] as $questionType => &$questions) {
-                $questions = array_values($questions);
-                foreach ($questions as &$question) {
-                    $itemFilter = new TestpaperItemFilter();
-                    $itemFilter->filter($question);
-                }
-            }
-        }
     }
 }
