@@ -86,11 +86,11 @@ class TestpaperResult extends AbstractResource
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($user['id']);
 
-//        if ($resultShow) {
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
-//        } else {
-//            $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-//        }
+        if ($resultShow) {
+            $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
+        } else {
+            $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
+        }
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
