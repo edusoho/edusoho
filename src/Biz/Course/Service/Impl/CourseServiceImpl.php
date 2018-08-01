@@ -183,6 +183,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->commit();
             $this->dispatchEvent('course.create', new Event($created));
 
+            $infoData = array(
+                'id' => $created['id'],
+                'title' => $created['title'],
+            );
+
+            $this->getLogService()->info('course', 'create_course', sprintf('创建计划任务《%s》(#%s)', $created['title'], $created['id']), $infoData);
+
             return $created;
         } catch (\Exception $e) {
             $this->rollback();
@@ -258,11 +265,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
+
+        $courseSetChangeFields = $this->getChangeFields($oldCourse, $fields);
+        $courseSetChangeFields['id'] = $id;
+
+        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseSetChangeFields);
     }
 
     public function updateCourse($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $oldCourse = $this->tryManageCourse($id);
 
         $this->validatie($id, $fields);
 
@@ -297,7 +309,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.update', new Event($course));
 
+        $courseSetChangeFields = $this->getChangeFields($oldCourse, $fields);
+        $courseSetChangeFields['id'] = $id;
+
+        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseSetChangeFields);
+
         return $course;
+    }
+
+    private function getChangeFields($course, $fields)
+    {
+        $changeFields = array();
+        foreach ($fields as $key => $value) {
+            if ($course[$key] != $value) {
+                $changeFields[$key] = $course[$key];
+            }
+        }
+
+        return $changeFields;
     }
 
     public function recommendCourseByCourseSetId($courseSetId, $fields)

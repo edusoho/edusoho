@@ -30,12 +30,31 @@ class LogController extends BaseController
         $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->getActionsByModule($module);
 
+        $templates = array(
+            'course' => array(
+                'remove_student',
+                'add_student',
+                'create',
+                'delete_thread',
+                'update',
+                'publish',
+                'close',
+                'create_course',
+                'update_course',
+            ),
+            'classroom' => array(
+                'create',
+                'update',
+            ),
+        );
+
         return $this->render('admin/system/log/logs.html.twig', array(
             'logs' => $logs,
             'paginator' => $paginator,
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
+            'templates' => $templates,
         ));
     }
 
@@ -76,7 +95,7 @@ class LogController extends BaseController
         $eof = '';
         $str = '';
         while ($n > 0) {
-            while ($eof != "\n") {
+            while ("\n" != $eof) {
                 if (!fseek($fp, $pos, SEEK_END)) {
                     $eof = fgetc($fp);
                     --$pos;

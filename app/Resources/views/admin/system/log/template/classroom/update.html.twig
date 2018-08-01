@@ -1,0 +1,16 @@
+
+
+{% if log.data.id is defined %}
+
+  {% set courseSet = data('Classroom', {classroomId: log.data.id}) %}
+
+  {% set url = path('classroom_show', { id: log.data.id}) %}
+
+  {{ 'log.action.template.classroom.update'|trans({'%url%': url, '%title%': log.data.title })|raw }}
+
+
+{% else %}
+
+  {{ log_trans(log.message, log.data) }}
+
+{% endif %}

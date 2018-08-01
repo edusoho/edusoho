@@ -1,0 +1,11 @@
+{% if log.data.id is defined %}
+
+  {% set url = path('course_set_show', { id: log.data.id}) %}
+
+  {{ 'log.action.template.course.create_course'|trans({'%url%': url, '%title%': log.data.title })|raw }}
+
+{% else %}
+
+  {{ log_trans(log.message, log.data) }}
+
+{% endif %}

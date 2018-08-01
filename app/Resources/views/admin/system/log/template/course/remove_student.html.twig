@@ -1,0 +1,13 @@
+
+
+{% if log.data.title is defined and log.data.courseId is defined and log.data.nickname is defined %}
+
+  {% set url = path('my_course_show', { id: log.data.courseId}) %}
+
+  {{ 'log.action.template.course.remove_student'|trans({'%url%': url, '%title%': log.data.title, '%nickname%': log.data.nickname })|raw }}
+
+{% else %}
+
+  {{ log_trans(log.message, log.data) }}
+
+{% endif %}

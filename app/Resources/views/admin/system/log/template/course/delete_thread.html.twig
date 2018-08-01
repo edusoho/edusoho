@@ -1,0 +1,9 @@
+{% if log.data.title is defined %}
+
+  {{ 'log.action.template.course.delete_thread'|trans({'%title%': log.data.title })|raw }}
+
+{% else %}
+
+  {{ log_trans(log.message, log.data) }}
+
+{% endif %}

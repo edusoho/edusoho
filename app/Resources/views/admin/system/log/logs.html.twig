@@ -60,8 +60,8 @@
     <tr>
       <th width="10%">{{'admin.system_log.log_lenvel'|trans}}</th>
       <th width="10%">{{'admin.system_log.username'|trans}}</th>
-      <th width="40%">{{'admin.system_log.operation'|trans}}</th>
-      <th width="9%">{{'admin.system_log.module'|trans}}</th>
+      <th width="39%">{{'admin.system_log.operation'|trans}}</th>
+      <th width="10%">{{'admin.system_log.module'|trans}}</th>
       <th width="16%">{{'admin.system_log.time'|trans}}</th>
       <th width="15%">{{'admin.system_log.ip'|trans}}</th>
     </tr>
@@ -77,10 +77,15 @@
           {% endif %}
         <td>
           <div style="word-break: break-all;word-wrap: break-word;">
-            {% include 'admin/system/log/tr.html.twig' %}
 
+            {% set module = log.module %}
+
+            {% if templates[module] is defined and log.action in templates[module] %}
+                {% include 'admin/system/log/template/'~log.module~'/'~log.action~'.html.twig' %}
+            {% else %}
+              {{ log_trans(log.message, log.data) }}
+            {% endif %}
           </div>
-          <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
         </td>
         <td>
             {{ ('log.module.' ~ log.module)|trans }}

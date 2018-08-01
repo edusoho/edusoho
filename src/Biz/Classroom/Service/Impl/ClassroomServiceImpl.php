@@ -212,7 +212,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent('classroom.create', $classroom);
 
-        $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
+        $infoData = array(
+            'id' => $classroom['id'],
+            'title' => $classroom['title'],
+        );
+
+        $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})", $infoData);
 
         return $classroom;
     }
@@ -303,6 +308,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $fields = $this->fillOrgId($fields);
 
+        $classroomChangeFields = $this->getChangeFields($classroom, $fields);
+        $classroomChangeFields['id'] = $id;
+
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
@@ -319,7 +327,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $arguments['tagIds'] = $tagIds;
 
-        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})");
+        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})", $classroomChangeFields);
         $this->dispatchEvent('classroom.update', new Event(array(
             'userId' => $user['id'],
             'classroom' => $classroom,
@@ -327,6 +335,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         )));
 
         return $classroom;
+    }
+
+    private function getChangeFields($classroom, $fields)
+    {
+        $changeFields = array();
+        foreach ($fields as $key => $value) {
+            if ($classroom[$key] != $value) {
+                $changeFields[$key] = $classroom[$key];
+            }
+        }
+
+        return $changeFields;
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
@@ -562,7 +582,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($addTeacherIds as $userId) {
             if (!empty($addMembers[$userId])) {
-                if ($addMembers[$userId]['role'][0] == 'auditor') {
+                if ('auditor' == $addMembers[$userId]['role'][0]) {
                     $addMembers[$userId]['role'][0] = 'teacher';
                 } else {
                     $addMembers[$userId]['role'][] = 'teacher';
@@ -897,7 +917,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!empty($member)) {
             $member['orderId'] = $fields['orderId'];
             $member['refundDeadline'] = $fields['refundDeadline'];
-            if ($member['role'][0] != 'auditor') {
+            if ('auditor' != $member['role'][0]) {
                 $member['role'][] = 'student';
                 $member['levelId'] = $fields['levelId'];
                 $member['remark'] = $fields['remark'];
@@ -1146,7 +1166,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMember($classroomId, $userId);
 
             if ($member) {
-                if ($member['role'][0] == 'auditor') {
+                if ('auditor' == $member['role'][0]) {
                     $member['role'][0] = 'headTeacher';
                 } else {
                     $member['role'][] = 'headTeacher';
