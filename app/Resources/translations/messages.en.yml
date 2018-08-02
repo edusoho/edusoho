@@ -6960,7 +6960,7 @@ log.action.system.setting_userCenter: 用户中心设置
 log.action.system.update_block: 更新编辑区
 log.action.system.update_app_version: 更新版本
 log.action.classroom.create: 新增班级
-log.action.classroom.update: 删除班级
+log.action.classroom.update: 修改班级
 log.action.classroom.delete: 删除班级
 log.action.classroom.add_course: 添加课程
 log.action.classroom.add_student: 添加学员
