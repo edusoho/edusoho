@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Util\AssetHelper;
+use ApiBundle\Api\Util\Money;
 
 class MeOrderFilter extends Filter
 {
@@ -22,6 +23,11 @@ class MeOrderFilter extends Filter
             $data['cover']['small'] = AssetHelper::getFurl(empty($data['cover']['small']) ? '' : $data['cover']['small'], $targetTypeIcon.'.png');
             $data['cover']['middle'] = AssetHelper::getFurl(empty($data['cover']['middle']) ? '' : $data['cover']['middle'], $targetTypeIcon.'.png');
             $data['cover']['large'] = AssetHelper::getFurl(empty($data['cover']['large']) ? '' : $data['cover']['large'], $targetTypeIcon.'.png');
+        }
+
+        $data['priceConvert'] = Money::convert($data['pay_amount']);
+        if (isset($data['priceConvert']['coinAmount'])) {
+            $data['priceConvert']['coinAmount'] = strval(round($data['priceConvert']['coinAmount']));
         }
     }
 

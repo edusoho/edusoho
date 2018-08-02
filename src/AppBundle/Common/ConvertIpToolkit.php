@@ -29,18 +29,18 @@ class ConvertIpToolkit
 
     public static function convertIp($ip)
     {
-        if (empty($ip) === true) {
+        if (true === empty($ip)) {
             return 'N/A';
         }
 
         $nip = gethostbyname($ip);
         $ipdot = explode('.', $nip);
 
-        if ($ipdot[0] < 0 || $ipdot[0] > 255 || count($ipdot) !== 4) {
+        if ($ipdot[0] < 0 || $ipdot[0] > 255 || 4 !== count($ipdot)) {
             return 'N/A';
         }
 
-        if (self::$fp === null) {
+        if (null === self::$fp) {
             self::init();
         }
 
@@ -60,7 +60,7 @@ class ConvertIpToolkit
             }
         }
 
-        if ($index_offset === null) {
+        if (null === $index_offset) {
             return 'N/A';
         }
 
@@ -80,11 +80,11 @@ class ConvertIpToolkit
 
     private static function init()
     {
-        if (self::$fp === null) {
+        if (null === self::$fp) {
             self::$ip = new self();
 
             self::$fp = fopen(__DIR__.'/tinyipdata.datx', 'rb');
-            if (self::$fp === false) {
+            if (false === self::$fp) {
                 throw new Exception('Invalid tinyipdata.datx file!');
             }
 
@@ -99,7 +99,7 @@ class ConvertIpToolkit
 
     public function __destruct()
     {
-        if (self::$fp !== null) {
+        if (null !== self::$fp) {
             fclose(self::$fp);
 
             self::$fp = null;

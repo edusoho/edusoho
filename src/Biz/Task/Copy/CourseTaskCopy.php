@@ -3,7 +3,6 @@
 namespace Biz\Task\Copy;
 
 use Biz\AbstractCopy;
-use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
@@ -49,7 +48,7 @@ class CourseTaskCopy extends AbstractCopy
                 $chapter = $chaptersMap[$task['categoryId']];
                 $newTask['categoryId'] = $chapter['id'];
             }
-            if ($task['type'] == 'live') {
+            if ('live' == $task['type']) {
                 //$newTask['status'] = 'create';
                 $updateChapterIds[] = empty($chapter) ? 0 : $chapter['id'];
             }

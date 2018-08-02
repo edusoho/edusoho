@@ -57,8 +57,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onCourseSetUnlock(Event $event)
     {
         $courseSet = $event->getSubject();
-        $defaultCourse = $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSet['id']);
-        $this->getChapterDao()->update(array('courseId' => $defaultCourse['id']), array('copyId' => 0));
+        $this->getChapterDao()->update(array('courseId' => $courseSet['defaultCourseId']), array('copyId' => 0));
     }
 
     /**
