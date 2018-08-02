@@ -857,6 +857,31 @@ material_lib.btn.back: 返回列表
 
 # 课程
 course: 课程
+course.title: 计划标题
+course.subtitle: 计划副标题
+course.isFree: 是否免费
+course.buyExpiryTime: 加入截止日期
+course.expiryMode: 学习有效期模式
+course.expiryMode.date: 固定周期
+course.expiryMode.end_date: 截止日期
+course.expiryMode.days: 按有效期天数
+course.expiryMode.forever: 永久有效
+course.expiryDays: 有效期天数
+course.expiryStartDate: 有效开始日期
+course.expiryEndDate: 有效结束日期
+course.enableFinish: 任务完成规则
+course.enableFinish.0: 由任务完成条件决定
+course.enableFinish.1: 无限制
+course.enableAudio: 音频听课
+course.enableAudio.0: 关闭
+course.enableAudio.1: 开启
+course.buyable: 是否可加入
+course.buyable.0: 不可加入
+course.buyable.1: 可加入
+course.tryLookable: 是否开启视频试看
+course.tryLookable.0: 关闭
+course.tryLookable.1: 开启
+course.tryLookLength: 试看时长
 course.lesson: 课时
 course.preview: 预览
 course.empty_tips: 暂无课程
@@ -2156,8 +2181,24 @@ classroom.cancle_refund_btn: 取消退款，继续学习！
 classroom.courses_count: 共%courseNum%课
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
+classroom.title: 名称
+classroom.about: 简介
+classroom.showable: 班级展示
+classroom.showable.0: 关闭
+classroom.showable.1: 开启
+classroom.buyable: 班级购买
+classroom.buyable.0: 关闭
+classroom.buyable.1: 开启
+classroom.categoryId: 分类
+classroom.status: 班级状态
+classroom.status.published: 已发布
 classroom.status.unpublish: 未发布
 classroom.status.closed: 已关闭
+classroom.expiryMode: 学习有效期模式
+classroom.expiryMode.date: 截止日期
+classroom.expiryMode.days: 有效期天数
+classroom.expiryMode.forever: 永久有效
+classroom.expiryValue: 有效期
 classroom.course.base: 课程基本信息
 classroom.course.content: >
   本课程内容与原课程
@@ -8328,6 +8369,10 @@ log.action.template.course.create_course: 新建了教学计划《<a href="%url%
 log.action.template.course.update_course: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+
+log.field.detail: 详情
+log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
+
 
 cashflow.title: 名称
 cashflow.sn: 流水号

@@ -58,6 +58,26 @@ class LogController extends BaseController
         ));
     }
 
+    public function logFieldChangeAction(Request $request)
+    {
+        $log = $request->query->get('log');
+        $oldData = $log['data'];
+
+        $newData = array();
+        if (isset($oldData['id'])) {
+            unset($oldData['id']);
+        }
+        if (isset($log['data']['newData'])) {
+            $newData = $log['data']['newData'];
+            unset($oldData['data']['newData']);
+        }
+
+        return $this->render('admin/system/log/template/'.$log['module'].'/modal/'.$log['action'].'-data-modal.html.twig', array(
+            'oldData' => $oldData,
+            'newData' => $newData,
+        ));
+    }
+
     public function logActionsAction(Request $request)
     {
         $module = $request->query->get('module');

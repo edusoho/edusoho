@@ -313,6 +313,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
+        $classroomChangeFields['newData'] = $classroom;
+
         $arguments = $fields;
 
         if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom, $arguments['expiryMode'])

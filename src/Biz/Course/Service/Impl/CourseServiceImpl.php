@@ -268,6 +268,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseSetChangeFields = $this->getChangeFields($oldCourse, $fields);
         $courseSetChangeFields['id'] = $id;
+        $courseSetChangeFields['newData'] = $course;
 
         $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseSetChangeFields);
     }
@@ -311,6 +312,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseSetChangeFields = $this->getChangeFields($oldCourse, $fields);
         $courseSetChangeFields['id'] = $id;
+        $courseSetChangeFields['newData'] = $course;
 
         $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseSetChangeFields);
 

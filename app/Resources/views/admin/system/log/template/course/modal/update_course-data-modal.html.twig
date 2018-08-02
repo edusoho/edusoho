@@ -1,0 +1,149 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% endblock %}
+{% block body %}
+  <div class="table-responsive">
+    <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+      {% for key,value in oldData %}
+
+        {% if key == 'price' %}
+          <tr class="active">
+            <td>{{ key|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newData[key] })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'title' %}
+          <tr class="active">
+            <td>{{ 'course.title'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newData[key] })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'subtitle' %}
+          <tr class="active">
+            <td>{{ 'course.subtitle'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newData[key] })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'buyExpiryTime' %}
+          <tr class="active">
+
+            {% if value != 0 %}
+              {% set value = value|date("Y-m-d H:i:s") %}
+            {% endif %}
+
+            {% set newValue = newData[key] %}
+            {% if newData[key] != 0 %}
+              {% set newValue = newValue|date("Y-m-d H:i:s") %}
+            {% endif %}
+
+            <td>{{ 'course.buyExpiryTime'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newValue })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'expiryMode' %}
+          <tr class="active">
+            <td>{{ 'course.expiryMode'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': ('course.expiryMode.'~value)|trans, '%new%': ('course.expiryMode.'~newData[key])|trans })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'expiryDays' %}
+          <tr class="active">
+            <td>{{ 'course.expiryDays'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newData[key] })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'expiryStartDate' %}
+          <tr class="active">
+            {% if value > 10000 %}
+              {% set value = value|date("Y-m-d H:i:s") %}
+            {% endif %}
+
+            {% if newData[key] is defined %}
+              {% set newValue = newData[key] %}
+            {% else %}
+              {% set newValue = 0 %}
+            {% endif %}
+
+            {% if newValue > 10000 %}
+              {% set newValue = newValue|date("Y-m-d H:i:s") %}
+            {% endif %}
+
+            <td>{{ 'course.expiryStartDate'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newValue })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'expiryEndDate' %}
+          <tr class="active">
+            {% if value > 10000 %}
+              {% set value = value|date("Y-m-d H:i:s") %}
+            {% endif %}
+
+            {% if newData[key] is defined %}
+              {% set newValue = newData[key] %}
+            {% else %}
+              {% set newValue = 0 %}
+            {% endif %}
+
+            {% if newValue > 10000 %}
+              {% set newValue = newValue|date("Y-m-d H:i:s") %}
+            {% endif %}
+
+            <td>{{ 'course.expiryEndDate'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newValue })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'enableFinish' %}
+          <tr class="active">
+            <td>{{ 'course.enableFinish'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': ('course.enableFinish.'~value)|trans, '%new%': ('course.enableFinish.'~newData[key])|trans })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'enableAudio' %}
+          <tr class="active">
+            <td>{{ 'course.enableAudio'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': ('course.enableAudio.'~value)|trans, '%new%': ('course.enableAudio.'~newData[key])|trans })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'buyable' %}
+          <tr class="active">
+            <td>{{ 'course.buyable'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': ('course.buyable.'~value)|trans, '%new%': ('course.buyable.'~newData[key])|trans })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'tryLookable' %}
+          <tr class="active">
+            <td>{{ 'course.tryLookable'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': ('course.tryLookable.'~value)|trans, '%new%': ('course.tryLookable.'~newData[key])|trans })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'tryLookLength' %}
+          <tr class="active">
+            <td>{{ 'course.tryLookLength'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value, '%new%': newData[key] })|raw }}</td>
+          </tr>
+        {% endif %}
+
+        {% if key == 'status' %}
+          <tr class="active">
+            <td>{{ 'classroom.status'|trans }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': ('classroom.status.'~value)|trans, '%new%': ('classroom.status.'~newData[key])|trans })|raw }}</td>
+          </tr>
+        {% endif %}
+
+
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}
