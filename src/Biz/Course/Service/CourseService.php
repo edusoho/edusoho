@@ -3,6 +3,7 @@
 namespace Biz\Course\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Targetlog\Annotation\Log;
 
 interface CourseService
 {
@@ -34,6 +35,12 @@ interface CourseService
 
     public function getFirstCourseByCourseSetId($courseSetId);
 
+    /**
+     * @param $course
+     *
+     * @return mixed
+     * @Log(level="info",action="create",targetType="course",message="创建课程")
+     */
     public function createCourse($course);
 
     /**
