@@ -28,15 +28,6 @@ class Cdn extends AbstractResource
     }
 
     /**
-     * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
-     */
-    public function search(ApiRequest $request)
-    {
-        return $this->getSettingService()->get('cdn');
-    }
-
-    /**
      * @return \Biz\System\Service\SettingService
      */
     private function getSettingService()
