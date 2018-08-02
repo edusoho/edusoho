@@ -8,16 +8,6 @@ class ThreadShowWidget {
 
   init() {
     this.initEvent();
-    if ($('[name=access-intercept-check]').length > 0) {
-      $.get($('[name=access-intercept-check]').val(), function (response) {
-        if (response) {
-          return;
-        }
-
-        $('.access-intercept-modal').modal('show');
-
-      }, 'json');
-    }
     this.initPostForm();
   }
   initEvent() {

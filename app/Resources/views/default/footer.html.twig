@@ -10,7 +10,13 @@
   <div class="copyright">
     <div class="container">
       {% include "powered-by.html.twig" %}
+
       {{ setting('site.analytics')|raw }}
+
+      {% if setting('siteTrace.enabled')|default(false) %}
+        {{ setting('siteTrace.script')|raw }}
+      {% endif %}
+
       <a class="mlm" href="{{ path('course_set_archive') }}">{{'homepage.footer.archive'|trans}}</a>
       <div class="mts">
         {% if setting('site.copyright') %}

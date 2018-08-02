@@ -14,7 +14,7 @@ class ChapterManageController extends BaseController
         $chapterId = $request->query->get('chapterId', 0);
         $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
             $chapter = empty($chapter) ? $this->create($fields, $courseId) : $this->editor($chapterId, $courseId, $fields);
 

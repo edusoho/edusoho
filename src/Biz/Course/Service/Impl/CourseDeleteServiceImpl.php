@@ -219,7 +219,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteJob($task)
     {
-        if ($task['type'] != 'live') {
+        if ('live' != $task['type']) {
             return;
         }
         //当前系统已不存在这个job PushNotificationOneHourJob_lesson_taskId

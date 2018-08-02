@@ -10,7 +10,6 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Router;
 
 abstract class BaseTrade
 {
