@@ -82,7 +82,7 @@ class LogController extends BaseController
         $eof = '';
         $str = '';
         while ($n > 0) {
-            while ($eof != "\n") {
+            while ("\n" != $eof) {
                 if (!fseek($fp, $pos, SEEK_END)) {
                     $eof = fgetc($fp);
                     --$pos;
