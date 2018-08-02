@@ -7206,6 +7206,7 @@ admin.system_log.show_data: 查看数据
 admin.system_log.hide_data: 隐藏数据
 admin.system_log.empty: 无日志记录
 admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
+admin.system_log.log_num: 共 <strong class="inflow-num">%itemCount%</strong> 条数据
 
 # 管理员帐号同步
 admin.admin_sync.content_title: 管理员帐号同步
