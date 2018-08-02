@@ -94,7 +94,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
         $connection->exec("
-            UPDATE course_v8 cv SET cv.isfree=1,cv.originprice=0 WHERE cv.isfree=0 AND cv.price=0 AND cv.originprice>0 AND EXISTS (SELECT * FROM course_set_v8 csv WHERE csv.id=cv.coursesetid AND csv.discountid=0)
+            UPDATE course_v8 cv SET cv.isFree=1,cv.originPrice=0 WHERE cv.isFree=0 AND cv.price=0 AND cv.originPrice>0 AND EXISTS (SELECT * FROM course_set_v8 csv WHERE csv.id=cv.courseSetId AND csv.discountId=0)
         ");
         return 1;
     }
