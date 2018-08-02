@@ -14,7 +14,7 @@ class LogController extends BaseController
 
         if (isset($conditions['hasSystemOperation']) && 0 == $conditions['hasSystemOperation']) {
             $systemUser = $this->getUserService()->getUserByType('system');
-            $conditions['noUserId'] = $systemUser['id'];
+            $conditions['exceptedUserId'] = $systemUser['id'];
         }
 
         $paginator = new Paginator(
@@ -41,7 +41,7 @@ class LogController extends BaseController
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
-            'hasSystemOperation' => empty($conditions['noUserId']) ? 1 : 0,
+            'hasSystemOperation' => empty($conditions['exceptedUserId']) ? 1 : 0,
         ));
     }
 

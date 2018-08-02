@@ -25,7 +25,7 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
                 'createdTime < :endDateTime',
                 'createdTime >= :startDateTime_GE',
                 'userId IN ( :userIds )',
-                'userId != :noUserId',
+                'userId != :exceptedUserId',
             ),
         );
     }
