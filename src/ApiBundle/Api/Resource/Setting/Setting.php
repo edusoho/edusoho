@@ -125,9 +125,9 @@ class Setting extends AbstractResource
 
         return array(
             'enabled' => empty($cdn['enabled']) ? false : true,
-            'defaultUrl' => $cdn['defaultUrl'],
-            'userUrl' => $cdn['userUrl'], 
-            'contentUrl' => $cdn['contentUrl'],
+            'defaultUrl' => empty($cdn['defaultUrl']) ? '' : $cdn['defaultUrl'],
+            'userUrl' => empty($cdn['userUrl']) ? '' : $cdn['userUrl'], 
+            'contentUrl' => empty($cdn['contentUrl']) ? '' : $cdn['contentUrl'],
         );
     }
 
