@@ -685,6 +685,12 @@ class ClassroomServiceTest extends BaseTestCase
                             'middlePicture' => 'uri2',
                             'largePicture' => 'uri3',
                         ),
+                        array(
+                            'smallPicture'=>'smallPicture',
+                            'middlePicture'=>'middlePicture',
+                            'largePicture'=>'largePicture',
+                            'id'=>1
+                        ),
                     ),
                     'runTimes' => 1,
                 ),
