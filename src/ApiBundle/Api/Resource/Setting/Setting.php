@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -116,6 +116,18 @@ class Setting extends AbstractResource
         return array(
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
+        );
+    }
+
+    public function getCdn()
+    {
+        $cdn = $this->getSettingService()->get('cdn');
+
+        return array(
+            'enabled' => empty($cdn['enabled']) ? false : true,
+            'defaultUrl' => empty($cdn['defaultUrl']) ? '' : $cdn['defaultUrl'],
+            'userUrl' => empty($cdn['userUrl']) ? '' : $cdn['userUrl'], 
+            'contentUrl' => empty($cdn['contentUrl']) ? '' : $cdn['contentUrl'],
         );
     }
 
