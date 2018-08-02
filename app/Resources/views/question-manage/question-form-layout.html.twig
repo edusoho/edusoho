@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 
 {% block title %}
   {% if question|default(null) %}{{'course.question_manage.edit'|trans}}{% else %}{{'course.question_manage.manage'|trans}}{% endif %} - {{ parent() }}
@@ -12,11 +12,8 @@
 {% set parentQuestion = parentQuestion|default(null) %}
 {% set questionTypesDict = getQuestionTypes() %}
 
-<div class="panel panel-default panel-col">
-  <div class="panel-heading clearfix">
-    {{'course.question_manage'|trans}}
-  </div>
-  <div class="panel-body">
+<div class="panel-col">
+  <div class="courseset-manage-body__title">{{'course.question_manage'|trans}}</div>
 
     <ol class="breadcrumb">
       <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'course.question_manage'|trans}}</a></li>
@@ -39,7 +36,7 @@
               <select class="form-control width-150" name="courseId" data-role="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
                 <option value="0" {% if not question.courseId|default(0) %}selected{% endif %}>{{'course.question_manage.manage.default_belong'|trans}}</option>
                 {% for course in courses if course %}
-                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
+                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
                 {% endfor %}
               </select>
               <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="lessonId" data-role="lessonId">
@@ -48,7 +45,6 @@
                   <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
                 {% endfor %}
               </select>
-              <div class="help-block">{{'course.question_manage.manage.belong_tips'|trans}}</div>
             </div>
           </div>
         {% endif %}
@@ -99,9 +95,9 @@
           <div class="col-md-8 col-md-offset-2 controls">
             {% block question_buttons %}
               {% if not question|default(null) %}
-                <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save_and_continue_add'|trans}}</button>
+                <button type="button" data-role="submit" class="cd-btn cd-btn-primary submit-btn" data-submission="continue" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save_and_continue_add'|trans}}</button>
               {% endif %}
-              <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+              <button type="button" data-role="submit" class="cd-btn cd-btn-primary submit-btn" data-submission="submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
             {% endblock %}
             <a href="{{ path('course_set_manage_question', {id:courseSet.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'form.btn.return'|trans}}</a>
           </div>
@@ -115,7 +111,6 @@
       </form>
     </div>
 
-  </div>
 </div>
 
 

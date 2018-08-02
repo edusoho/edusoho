@@ -7,11 +7,11 @@
       course: course,
       member: member
     }) %}
-    {% if  member.deadline < timestamp() %}
+    {% if member.deadline < timestamp() and member.deadline != 0 %}
       {% if course.expiryMode == 'date' %}
-        {{ 'course.member.course.tips'|trans }}
+        {{ 'course.member.course.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
       {% else %}
-        {{ 'course.member.course.allow_buy.tips'|trans }}
+        {{ 'course.member.course.allow_buy.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
       {% endif %}
     {% elseif message|trim is not empty  %}
        {{ message|raw }}

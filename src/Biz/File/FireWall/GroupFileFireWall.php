@@ -13,14 +13,14 @@ class GroupFileFireWall extends BaseFireWall implements FireWallInterface
 
         $targetTypes = explode('.', $attachment['targetType']);
         $type = array_pop($targetTypes);
-        if ($type === 'thread') {
+        if ('thread' === $type) {
             $thread = $this->getThreadService()->getThread($attachment['targetId']);
             $group = $this->getGroupService()->getGroup($thread['groupId']);
 
             if ($user['id'] == $thread['userId'] || $user['id'] == $group['ownerId']) {
                 return true;
             }
-        } elseif ($type === 'post') {
+        } elseif ('post' === $type) {
             $post = $this->getThreadService()->getPost($attachment['targetId']);
             $thread = $this->getThreadService()->getThread($post['threadId']);
             $group = $this->getGroupService()->getGroup($thread['groupId']);

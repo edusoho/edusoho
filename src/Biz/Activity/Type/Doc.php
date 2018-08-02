@@ -120,14 +120,14 @@ class Doc extends Activity
         return $activity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         $docActivities = $this->getDocActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($docActivities, 'mediaId');
         try {
             $files = $this->getUploadFileService()->findFilesByIds(
                 $mediaIds,
-                $showCloud = 1
+                $showCloud
             );
         } catch (CloudAPIIOException $e) {
             $files = array();
@@ -145,6 +145,11 @@ class Doc extends Activity
         );
 
         return $docActivities;
+    }
+
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getDocActivityDao()->findByIds($targetIds);
     }
 
     public function materialSupported()

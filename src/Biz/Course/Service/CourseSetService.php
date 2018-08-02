@@ -16,8 +16,6 @@ interface CourseSetService
 
     const NORMAL_TYPE = 'normal';
     const LIVE_TYPE = 'live';
-    const LIVE_OPEN_TYPE = 'liveOpen';
-    const OPEN_TYPE = 'open';
 
     /**
      * collect course set.
@@ -134,8 +132,6 @@ interface CourseSetService
     public function copyCourseSet($classroomId, $courseSetId, $courseId);
 
     public function updateCourseSet($id, $fields);
-
-    public function updateCourseSetDetail($id, $fields);
 
     /**
      * 更新课程营销设置.

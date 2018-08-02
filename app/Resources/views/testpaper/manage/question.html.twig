@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 
 {% block title %}{{'course.testpaper_manage.question'|trans}} - {{ parent() }}{% endblock %}
 
@@ -30,13 +30,12 @@ tr.placeholder:before {
 }
 </style>
 {% set questionTypesDict = getQuestionTypes() %}
-<div class="panel panel-default panel-col" id="testpaper-items-manager">
-  <div class="panel-heading">{{testpaper.name}}
-  </div>
-  <div class="panel-body clearfix">
+<div class="panel-col" id="testpaper-items-manager">
+  <div class="courseset-manage-body__title">{{testpaper.name}}</div>
+  <div class="clearfix">
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'course.testpaper_manage.question'|trans} %}
     <div class="clearfix mbm">
-      <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="es-icon es-icon-anonymous-iconfont"></span> {{'course.testpaper_manage.question.create_btn'|trans}}</button>
+      <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="cd-btn cd-btn-info cd-btn-sm pull-right" data-role="pick-item"><i class="cd-icon cd-icon-add cd-text-sm"></i> {{'course.testpaper_manage.question.create_btn'|trans}}</button>
       <ul class="nav nav-pills nav-mini" id="testpaper-question-nav">
         {% for type,count in testpaper['metas']['counts'] if count > 0 %}
           <li {% if loop.index == 1 %}class="active"{% endif %}><a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link">{{ questionTypesDict[type] }}</a></li>
@@ -75,12 +74,12 @@ tr.placeholder:before {
       </table>
       <p>
         <label class="inline-block vertical-top checkbox-inline"><input type="checkbox" data-role="batch-select">{{'course.testpaper_manage.question.select_all'|trans}}</label>
-        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.delete_btn'|trans}}</button>
+        <button type="button" class="cd-btn cd-btn-default cd-btn-sm mlm" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.delete_btn'|trans}}</button>
       </p>
       <p class="js-subjective-remask {% if hasEssay %} hidden {% endif %}">
         {{ 'course.testpaper_manage.question.subjective_remask_tips'|trans({'%passedScoreDefault%': passedScoreDefault})|raw }}
       </p>
-      <p class="text-right"><button type="button" class="btn btn-primary js-request-save">{{'course.testpaper_manage.question.save_btn'|trans}}</button></p>
+      <p class="text-right"><button type="button" class="cd-btn cd-btn-primary js-request-save">{{'course.testpaper_manage.question.save_btn'|trans}}</button></p>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>

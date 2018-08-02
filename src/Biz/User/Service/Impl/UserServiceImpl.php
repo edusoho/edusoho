@@ -14,6 +14,7 @@ use AppBundle\Common\FileToolkit;
 use Biz\Card\Service\CardService;
 use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserApprovalDao;
+use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -54,13 +55,13 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->count($conditions);
     }
 
-    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = array())
     {
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = strtoupper($conditions['nickname']);
         }
 
-        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
+        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit, $columns = array());
 
         return UserSerialize::unserializes($users);
     }
@@ -557,7 +558,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function isMobileUnique($mobile)
     {
-        $count = $this->countUsers(array('verifiedMobile' => $mobile));
+        $count = $this->countUsers(array('wholeVerifiedMobile' => $mobile));
 
         if ($count > 0) {
             return false;
@@ -829,7 +830,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function updateUserProfile($id, $fields)
+    public function updateUserProfile($id, $fields, $strict = true)
     {
         $user = $this->getUser($id);
 
@@ -957,16 +958,17 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['isQQPublic'] = 1;
         }
 
-        $fields = array_filter($fields, function ($value) {
-            if (0 === $value) {
-                return true;
-            }
+        if ($strict) {
+            $fields = array_filter($fields, function ($value) {
+                if (0 === $value) {
+                    return true;
+                }
 
-            return !empty($value);
-        });
+                return !empty($value);
+            });
+        }
 
         $userProfile = $this->getProfileDao()->update($id, $fields);
-
         $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
 
         return $userProfile;
@@ -1866,7 +1868,6 @@ class UserServiceImpl extends BaseService implements UserService
                 in_array($registerSetting['register_mode'], array('mobile', 'email_or_mobile'))) {
             $registerProtective = empty($registerSetting['register_protective']) ?
                     'none' : $registerSetting['register_protective'];
-
             if (in_array($registerProtective, array('middle', 'low'))) {
                 $factory = $this->biz->offsetGet('ratelimiter.factory');
                 $rateLimiter = $factory('sms_registration_captcha_code', 1, 3600);
@@ -1892,6 +1893,27 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getSmsRegisterCaptchaStatus($clientIp, true);
     }
 
+    public function initPassword($id, $newPassword)
+    {
+        $this->beginTransaction();
+
+        try {
+            $fields = array(
+                'passwordInit' => 1,
+            );
+
+            $this->getAuthService()->changePassword($id, null, $newPassword);
+            $this->getUserDao()->update($id, $fields);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $this->getUserDao()->update($id, $fields);
+    }
+
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && 'truename' == $conditions['keywordType']) {
@@ -1906,6 +1928,14 @@ class UserServiceImpl extends BaseService implements UserService
         unset($conditions['keyword']);
 
         return $conditions;
+    }
+
+    /**
+     * @return AuthService
+     */
+    protected function getAuthService()
+    {
+        return $this->createService('User:AuthService');
     }
 
     /**

@@ -81,7 +81,7 @@ orderLogStatus:
     order.paid: 已付款
     order.refunding: 退款中
     order.refunded: 已退款
-    order.success: 交易成功
+    order.finished: 交易成功
     order.fail: 交易失败
     order.closed: 已关闭
     order_refund.auditing: 退款审核中
@@ -109,6 +109,7 @@ payment:
     iap: 苹果应用内支付
     lianlianpay: 连连支付
     coin: 虚拟币
+    wechat_app: 微信小程序
     none: 其他
 
 paymentSelect:
@@ -117,6 +118,7 @@ paymentSelect:
     iap: 苹果应用内支付
     lianlianpay: 连连支付
     coin: 虚拟币
+    wechat_app: 微信小程序
     none: 其他
 
 orderSource:
@@ -465,3 +467,7 @@ exchangeStatus:
 rewardPointUserType:
     nickname: 用户名
     truename: 姓名
+
+waveType:
+    plus: 增加
+    minus: 减少

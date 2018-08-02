@@ -52,7 +52,7 @@
           {% if task %}
             <div class="live-course-lesson mbm">
               <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('n月j日 H:i'|trans) }}</span>
-              <span class="color-gray fsm mrm">{{'第%number%任务'|trans({'%number%': task.number})}}</span>
+              <span class="color-gray fsm mrm">{{'course.block_grid.taskNumber'|trans({'%number%': task.number,'%taskName%': setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
             </div>
           {% endif %}
         {% else %}

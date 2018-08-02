@@ -2,32 +2,45 @@ import { enterSubmit } from 'app/common/form';
 import notify from 'common/notify';
 import { countDown } from './count-down';
 import Api from 'common/api';
-
+import Drag from 'app/common/drag';
 
 export default class Create {
   constructor() {
     this.$form = $('#third-party-create-account-form');
     this.$btn = $('.js-submit-btn');
     this.validator = null;
-    this.captchaToken = null;
+    this.dragCaptchaToken = '';
     this.smsToken = null;
-
+    this.$sendBtn = $('.js-sms-send');
+    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+      limitType: 'bind_register'
+    }) : false;
     this.init();
   }
 
   init() {
-    this.initCaptchaCode();
     this.initValidator();
-    this.changeCaptchaCode();
-    this.sendMessage();
+    this.smsSend();
     this.submitForm();
     this.removeSmsErrorTip();
+    this.dragEvent();
+  }
+
+  dragEvent() {
+    let self = this;
+    if (this.drag) {
+      this.drag.on('success', function(data){
+        self.$sendBtn.attr('disabled', false);
+        self.dragCaptchaToken = data.token;
+      });
+    }
+    
+    if (!$('.js-drag-jigsaw').hasClass('hidden')) {
+      this.addDragCaptchaRules();
+    }
   }
 
   initValidator() {
-    const self = this;
-    const $smsCode = $('.js-sms-send');
-
     this.rules = {
       username: {
         required: true,
@@ -55,10 +68,6 @@ export default class Create {
       },
     };
 
-    if (!$('.js-captcha').hasClass('hidden')) {
-      this.rules['captcha_code'] = this.getCaptchaCodeRule();
-    }
-
     this.validator = this.$form.validate({
       rules: this.rules,
       messages: {
@@ -68,106 +77,42 @@ export default class Create {
         }
       }
     });
-
-    $.validator.addMethod('captcha_checkout', function(value, element, param) {
-      let $element = $(element);
-      if (value.length < 5) {
-        $.validator.messages.captcha_checkout = Translator.trans('oauth.captcha_code_length_tip');
-        return;
-      }
-      let data = param.data ? param.data : { phrase: value };
-      let callback = param.callback ? param.callback : null;
-      let isSuccess = 0;
-      let params = {
-        captchaToken: self.captchaToken
-      };
-      Api.captcha.validate({ data: data, params: params, async: false, promise: false }).done(res => {
-        if (res.status === 'success') {
-          isSuccess = true;
-        } else if (res.status === 'expired') {
-          isSuccess = false;
-          $.validator.messages.captcha_checkout = Translator.trans('oauth.captcha_code_expired_tip');
-        } else {
-          isSuccess = false;
-          $.validator.messages.captcha_checkout = Translator.trans('oauth.captcha_code_error_tip');
-        }
-        if (callback) {
-          callback(isSuccess);
-        }
-      }).error(res => {
-        console.log(res);
-      });
-      return this.optional(element) || isSuccess;
-    }, Translator.trans('validate.captcha_checkout.message'));
   }
 
-  initCaptchaCode() {
-    const $getCodeNum = $('#getcode_num');
-    if (!$getCodeNum.length) {
-      return;
-    }
-    Api.captcha.get({ async: false, promise: false }).done(res => {
-      $getCodeNum.attr('src', res.image);
-      this.captchaToken = res.captchaToken;
-    }).error(res => {
-      console.log('catch', res.responseJSON.error.message);
-    });
-    return this.captchaToken;
-  }
-
-  sendMessage() {
-    const $smsCode = $('.js-sms-send');
+  smsSend() {
+    let self = this;
     const $captchaCode = $('#captcha_code');
-    if (!$smsCode.length) {
+    if (!this.$sendBtn.length) {
       return;
     }
-    $smsCode.click((event) => {
-      const $target = $(event.target);
+    
+    this.$sendBtn.click((event) => {
+      if (!self.smsSended) {
+        //手机发送验证码，第一次时，需要验证码时，不需要提示
+        $.ajaxSetup({global: false});
+        self.smsSended = true;
+      }
+      
+      self.$sendBtn.attr('disabled', true);
       let data = {
         type: 'register',
-        mobile: $('.js-account').html(),
-        captchaToken: this.captchaToken,
+        mobile: $('.js-account').text(),
+        dragCaptchaToken: this.dragCaptchaToken,
         phrase: $captchaCode.val()
       };
+
       Api.sms.send({ data: data }).then((res) => {
+        $.ajaxSetup({global: true});
         this.smsToken = res.smsToken;
         countDown(120);
       }).catch((res) => {
-        const code = res.responseJSON.error.code;
-        switch (code) {
-        case 30001:
-          if ($('.js-captcha').hasClass('hidden')) {
-            $('.js-captcha').removeClass('hidden');
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_required_tip'));
-            $('[name=\'captcha_code\']').rules('add', this.getCaptchaCodeRule());
-          } else {
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
-            $captchaCode.val('');
-            this.initCaptchaCode();
-          }
-          $target.attr('disabled', true);
-          break;
-        case 30002:
-          notify('danger', Translator.trans('oauth.send.error_message_tip'));
-          break;
-        case 30003:
-          notify('danger', Translator.trans('admin.site.cloude_sms_enable_hint'));
-          break;
-        default:
-          notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
-          break;
+        if (self.drag) {
+          $.ajaxSetup({global: true});
+          self.addDragCaptchaRules();
+          self.drag.initDragCaptcha();
+          $('.js-drag-jigsaw').removeClass('hidden');
         }
       });
-    });
-  }
-
-  changeCaptchaCode() {
-    const $getCodeNum = $('#getcode_num');
-    if (!$getCodeNum.length) {
-      return;
-    }
-    $getCodeNum.click(() => {
-      this.initCaptchaCode();
     });
   }
 
@@ -185,7 +130,8 @@ export default class Create {
         smsToken: this.smsToken,
         smsCode: $('#sms-code').val(),
         captchaToken: this.captchaToken,
-        phrase: $('#captcha_code').val()
+        phrase: $('#captcha_code').val(),
+        dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
@@ -199,15 +145,19 @@ export default class Create {
         }
       }).error((response) => {
         $target.button('reset');
-        if (response.status === 429) {
-          notify('danger', Translator.trans('oauth.register.time_limit'));
-        } else {
-          notify('danger', Translator.trans('oauth.register.error_message'));
-        }
       });
     });
 
     enterSubmit(this.$form, this.$btn);
+  }
+
+  addDragCaptchaRules() {
+    $('[name="dragCaptchaToken"]').rules('add', {
+      required: true,
+      messages: {
+        required: Translator.trans('auth.register.drag_captcha_tips')
+      }
+    });
   }
 
   removeSmsErrorTip() {
@@ -218,25 +168,4 @@ export default class Create {
       }
     });
   }
-
-  getCaptchaCodeRule() {
-    var self = this;
-    return {
-      required: true,
-      alphanumeric: true,
-      captcha_checkout: {
-        callback: function(bool) {
-          if (bool) {
-            $('.js-sms-send').removeAttr('disabled');
-          } else {
-            $('.js-sms-send').attr('disabled', true);
-            let changeToken = self.initCaptchaCode();
-            self.captchaToken = changeToken;
-            return self.captchaToken;
-          }
-        }
-      }
-    };
-  }
-
 }

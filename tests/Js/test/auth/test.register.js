@@ -4,35 +4,34 @@ import Register from 'test-src/app/js/auth/register/register.js';
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+// describe('register:initValidator', function() {
+//   it('register:initValidator', function() {
+//     let validateStub = sinon.stub($.fn, 'validate');
 
-describe('register:initValidator', function() {
-  it('register:initValidator', function() {
-    let validateStub = sinon.stub($.fn, 'validate');
-
-    let initValidator = Register.prototype.initValidator;
-    initValidator();
-    let expectedParams = {
-      rules: {
-        nickname: {
-          required: true,
-          byte_minlength: 4,
-          byte_maxlength: 18,
-          nickname: true,
-          chinese_alphanumeric: true,
-          es_remote: {
-            type: 'get',
-          }
-        },
-        password: {
-          minlength: 5,
-          maxlength: 20,
-        }
-      },
-    };
-    sinon.assert.calledWith(validateStub, expectedParams);
-    validateStub.restore();
-  });
-});
+//     let initValidator = Register.prototype.initValidator;
+//     initValidator();
+//     let expectedParams = {
+//       rules: {
+//         nickname: {
+//           required: true,
+//           byte_minlength: 4,
+//           byte_maxlength: 18,
+//           nickname: true,
+//           chinese_alphanumeric: true,
+//           es_remote: {
+//             type: 'get',
+//           }
+//         },
+//         password: {
+//           minlength: 5,
+//           maxlength: 20,
+//         }
+//       },
+//     };
+//     sinon.assert.calledWith(validateStub, expectedParams);
+//     validateStub.restore();
+//   });
+// });
 
 describe('register:inEventMobile', function() {
   beforeEach(function() {
@@ -71,43 +70,29 @@ describe('register:inEventMobile', function() {
   });
 });
 
-describe('register:initDate', function() {
-  it('register:initDate', function() {
-    let stub = sinon.stub($.fn, 'datetimepicker');
-    let initDate = Register.prototype.initDate;
-    initDate();
-    sinon.assert.calledWith(stub, {
-      autoclose: true,
-      format: 'yyyy-mm-dd',
-      minView: 'month',
-      language: window.document.documentElement.lang
-    });
-    stub.restore();
-  });
-});
-
-describe('register:initCaptchaCode', function() {
+describe('register:initDragCaptchaCodeRule', function() {
   beforeEach(function() {
     utilInit.init(`
-      <a id="getcode_num" data-url="test"></a>
+      <div class="js-drag-img"></div>
+      <input type="hidden" name="drag_captcha_token" value="test" />
     `);
   });
-  it('register:initCaptchaCode', function() {
-    let mockObject = {
-      initCaptchaCodeRule: function(){}
-    };
-    let stub = sinon.stub(mockObject, 'initCaptchaCodeRule');
-    let randomStub = sinon.stub(Math, 'random').returns('12349123');
-    let initCaptchaCode = Register.prototype.initCaptchaCode;
-
-    initCaptchaCode.apply(mockObject);
-    $('#getcode_num').trigger('click');
-    assert.equal('test?12349123', $('#getcode_num').attr('src'));
+  it('register:initDragCaptchaCodeRule', function() {
+    $.fn.rules = function(){};
+    let stub = sinon.stub($.fn, 'rules');
+    let initDragCaptchaCodeRule = Register.prototype.initDragCaptchaCodeRule;
+    initDragCaptchaCodeRule();
     stub.restore();
-    randomStub.restore();
     sinon.assert.calledOnce(stub);
+    sinon.assert.calledWith(stub, 'add', {
+      required: true,
+      messages: {
+        required: 'auth.register.drag_captcha_tips'
+      }
+    });
   });
 });
+
 
 describe('register:emSmsCodeValidate', function() {
   beforeEach(function() {
@@ -121,7 +106,6 @@ describe('register:emSmsCodeValidate', function() {
     let emSmsCodeValidate = Register.prototype.emSmsCodeValidate;
     let mockObject = {
       initSmsCodeRule: function(){},
-      initCaptchaCodeRule: function(){}
     };
     let initSmsCodeRuleStub = sinon.stub(mockObject, 'initSmsCodeRule');
     emSmsCodeValidate.apply(mockObject, [13967340627]);
@@ -133,32 +117,12 @@ describe('register:emSmsCodeValidate', function() {
     let emSmsCodeValidate = Register.prototype.emSmsCodeValidate;
     let mockObject = {
       initSmsCodeRule: function(){},
-      initCaptchaCodeRule: function(){}
+      initDragCaptchaCodeRule: function(){},
     };
-    let initCaptchaCodeRuleStub = sinon.stub(mockObject, 'initCaptchaCodeRule');
+    let initDragCaptchaCodeRuleStub = sinon.stub(mockObject, 'initDragCaptchaCodeRule');
     emSmsCodeValidate.apply(mockObject, [12341]);
-    sinon.assert.calledOnce(initCaptchaCodeRuleStub);
-    initCaptchaCodeRuleStub.restore();
-  });
-});
-
-describe('register:initUserTermsRule', function() {
-  it('register:initUserTermsRule', function() {
-    utilInit.init(`
-      <div id="user_terms">
-      </div>
-    `);
-    $.fn.rules = function() {};
-    let stub = sinon.stub($.fn, 'rules');
-    let initUserTermsRule = Register.prototype.initUserTermsRule;
-    initUserTermsRule();
-    sinon.assert.calledOnce(stub);
-    sinon.assert.calledWith(stub, 'add', {
-      required: true,
-      messages: {
-        required: 'validate.user_terms.message'
-      }
-    });
+    sinon.assert.calledOnce(initDragCaptchaCodeRuleStub);
+    initDragCaptchaCodeRuleStub.restore();
   });
 });
 
@@ -166,89 +130,6 @@ describe('register:constructor', function() {
   it('register:constructor', function() {
     utilInit.init();
     let register = new Register();
-  });
-});
-
-
-describe('register:initRegisterTypeRule', function() {
-  it('register:initRegisterTypeRule if email exsit', function() {
-    utilInit.init(`
-      <input name="email" />
-    `);
-    $.fn.rules = function() {};
-    let stub = sinon.stub($.fn, 'rules');
-    let initRegisterTypeRule = Register.prototype.initRegisterTypeRule;
-    initRegisterTypeRule();
-    sinon.assert.calledOnce(stub);
-    sinon.assert.calledWith(stub, 'add', {
-      required: true,
-      email: true,
-      es_remote: {
-        type: 'get'
-      },
-      messages: {
-        required: 'validate.valid_email_input.message',
-      }
-    });
-  });
-
-  it('register:initRegisterTypeRule if emailOrMobile exsit', function() {
-    utilInit.init(`
-      <input name="emailOrMobile" />
-    `);
-    $.fn.rules = function() {};
-    let stub = sinon.stub($.fn, 'rules');
-    let initRegisterTypeRule = Register.prototype.initRegisterTypeRule;
-    initRegisterTypeRule();
-    sinon.assert.calledOnce(stub);
-    sinon.assert.calledWithMatch(stub, 'add',{
-      required: true,
-      email_or_mobile_check: true,
-      messages: {
-        required: 'validate.phone_and_email_input.message'
-      },
-    });
-  });
-});
-
-describe('register:initUserTermsRule', function() {
-  it('register:initUserTermsRule', function() {
-    utilInit.init(`
-      <div class="invitecode">
-      </div>
-    `);
-    $.fn.rules = function() {};
-    let stub = sinon.stub($.fn, 'rules');
-    let initInviteCodeRule = Register.prototype.initInviteCodeRule;
-    initInviteCodeRule();
-    sinon.assert.calledOnce(stub);
-    sinon.assert.calledWith(stub, 'add', {
-      required: false,
-      reg_inviteCode: true,
-      es_remote: {
-        type: 'get'
-      }
-    });
-  });
-});
-
-describe('register:initInviteCodeRule', function() {
-  it('register:initInviteCodeRule', function() {
-    utilInit.init(`
-      <input class="captcha_code" />
-    `);
-    $.fn.rules = function() {};
-    let stub = sinon.stub($.fn, 'rules');
-    let initCaptchaCodeRule = Register.prototype.initCaptchaCodeRule;
-    initCaptchaCodeRule();
-    sinon.assert.calledOnce(stub);
-    sinon.assert.calledWithMatch(stub, 'add', {
-      required: true,
-      alphanumeric: true,
-      es_remote: {
-        type: 'get'
-      },
-    });
   });
 });
 
@@ -275,28 +156,3 @@ describe('register:initSmsCodeRule', function() {
     });
   });
 });
-
-// describe('register:initMobileMsgVeriCodeSendBtn', function() {
-//   it('register:initMobileMsgVeriCodeSendBtn', function() {
-//     utilInit.init(`
-//       <div class="js-sms-send-btn"></div>
-//       <input name="verifiedMobile" />
-//       <div id="js-time-left"></div>
-//     `);
-//     let stub = sinon.spy(() => sinon.createStubInstance(SmsSender));
-    
-//     //let stub = sinon.spy(SmsSender.prototype, 'constructor');
-//     let initMobileMsgVeriCodeSendBtn = Register.prototype.initMobileMsgVeriCodeSendBtn;
-//     initMobileMsgVeriCodeSendBtn();
-//     $('.js-sms-send-btn').trigger('click');
-//     //sinon.assert.calledOnce(stub);
-//     // sinon.assert.calledWithMatch(stub, {
-//     //   element: '.js-sms-send',
-//     //   url: $('.js-sms-send').data('smsUrl'),
-//     //   smsType: 'sms_registration',
-//     //   dataTo: 'verifiedMobile',
-//     //   captcha: false,
-//     // });
-//     stub.restore();
-//   });
-// });

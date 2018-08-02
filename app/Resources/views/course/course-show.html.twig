@@ -4,7 +4,7 @@
 
 {% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}
 {% set bodyClass = 'course-dashboard-page' %}
-
+{% set description = course.summary ? course.summary : course_set.summary %}
 
 {% block title %}{{ course_set.title }} - {{ parent() }}{% endblock %}
 
@@ -12,14 +12,15 @@
   {% for tag in course_set.tags %}{{ tag.name }}{% if not loop.last %},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
-{% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
+{% block description %}{{ description|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
 
 {% block full_content %}
     {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
     {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
 
   {% set previewAs = app.request.query.get('previewAs') %}
-  {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+  {% set defaultMetas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+  {% set metas = metas|default(defaultMetas) %}
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
@@ -30,6 +31,9 @@
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
+
+        {{ slot('course.show.content.section', {'course':course}) }}
+
         <section class="es-section">
           <div class="nav-btn-tab">
 

@@ -31,6 +31,7 @@ class CourseSetController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        $conditions['excludeTypes'] = array('reservation');
         $conditions = $this->filterCourseSetConditions($filter, $conditions);
 
         $paginator = new Paginator(
@@ -168,12 +169,8 @@ class CourseSetController extends BaseController
         }
 
         $this->getCourseSetService()->publishCourseSet($id);
-        $html = $this->renderCourseTr($id, $request)->getContent();
 
-        return $this->createJsonResponse(array(
-            'success' => true,
-            'message' => $html,
-        ));
+        return $this->renderCourseTr($id, $request);
     }
 
     public function recommendAction(Request $request, $id)
@@ -269,6 +266,8 @@ class CourseSetController extends BaseController
 
         if ('normal' == $filter) {
             $conditions['parentId'] = 0;
+            $conditions['excludeTypes'] = array('reservation');
+            $conditions = $this->filterCourseSetType($conditions);
         }
 
         if ('classroom' == $filter) {
@@ -304,11 +303,16 @@ class CourseSetController extends BaseController
         $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
         $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
 
+        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         foreach ($courseSets as $key => &$courseSet) {
+            // TODO 完成人数目前只统计了默认教学计划
             $courseSetId = $courseSet['id'];
+            $defaultCourseId = $courseSet['defaultCourseId'];
             $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
-            $isLearnedNum = $this->getMemberService()->countMembers(
-                array('isLearned' => 1, 'courseSetId' => $courseSetId)
+            $isLearnedNum = empty($courses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
+                array('finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $courses[$defaultCourseId]['compulsoryTaskNum'])
             );
 
             $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
@@ -588,7 +592,7 @@ class CourseSetController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('seq' => 'DESC', 'createdTime' => 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -612,6 +616,7 @@ class CourseSetController extends BaseController
             $conditions['parentId'] = 0;
         } else {
             $conditions['parentId'] = 0;
+            $conditions = $this->filterCourseSetType($conditions);
         }
 
         $conditions = $this->fillOrgCode($conditions);
@@ -669,6 +674,15 @@ class CourseSetController extends BaseController
         }
 
         return $courseSets;
+    }
+
+    protected function filterCourseSetType($conditions)
+    {
+        if (!$this->getWebExtension()->isPluginInstalled('Reservation')) {
+            $conditions['excludeTypes'] = array('reservation');
+        }
+
+        return $conditions;
     }
 
     /**
@@ -789,5 +803,10 @@ class CourseSetController extends BaseController
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->get('web.twig.extension');
     }
 }

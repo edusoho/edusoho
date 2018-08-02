@@ -39,7 +39,7 @@ interface UserService
 
     public function findUserProfilesByIds(array $ids);
 
-    public function searchUsers(array $conditions, array $orderBy, $start, $limit);
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = array());
 
     public function countUsers(array $conditions);
 
@@ -306,4 +306,9 @@ interface UserService
     public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
 
     public function updateSmsRegisterCaptchaStatus($clientIp);
+
+    /**
+     * 用户首次登录修改密码.
+     */
+    public function initPassword($id, $newPassword);
 }

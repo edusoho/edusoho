@@ -19,6 +19,7 @@ site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
 site.data.uncheck_name_hint: 未选中任何%name%
 site.data.delete_check_name_hint: 确定要删除选中的%name%吗？
+site.data.delete_title_hint: 删除%name%
 site.data.delete_submiting_hint: 正在删除...
 site.date.year: 年
 site.date.month: 月
@@ -41,6 +42,7 @@ site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
 site.close: 关闭
+site.delete: 删除
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -303,6 +305,7 @@ auth.register.email_required_error_hint: 请输入邮箱
 auth.register.mobile_required_error_hint: 请输入手机
 auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
 auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
+auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
@@ -336,6 +339,10 @@ coin.invite_url_copy_success_hint: 已复制邀请链接到剪切板，快去分
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
 
+course.chapter: '第%number%%chapter_name%: %title%'
+course.unit: '第%number%%part_name%: %title%'
+course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
+
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
@@ -358,6 +365,8 @@ course_manage.course_overview.try_view_increase_num: 免费试看数
 
 course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
 course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
+course_manage.student_expiryday_extend_error_hint_day: 减少天数超出最大可减少数
+course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间或任何一个学员的有效期截止日
 
 course_manage.student_remark_validate_error_hint: 备注字数不超过80
 course_manage.student_remark_success_hint: 备注%username%成功
@@ -376,6 +385,7 @@ course_set.title_required_error_hint: 请输入标题
 course_set.learn_progress: 学习进度
 course_set.manage.tag_required_hint: 请输入标签
 course_set.manage.publish_hint: 是否确定发布该课程？
+course_set.manage.publish_title: 发布课程
 course_set.manage.publish_success_hint: 课程发布成功
 course_set.manage.publish_fail_hint: 课程发布失败
 course_set.manage.next_label: 继续了解
@@ -386,6 +396,16 @@ course_set.manage.activity_link_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 course_set.manage.upgrade_hint:  >
   <p class="title">功能升级</p>课程管理功能现已全新升级。
+course_set.manage.img: >
+  <div class="course-manage-spread"></div>
+course_set.manage.couseset_tab: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、课程文件、课程试卷、课程题库为共用功能，支持任意计划来进行引用。</div>
+course_set.manage.single_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">请进入默认计划设置，对首个计划的价格等内容进行设置。</div>
+course_set.manage.all_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">若需要创建更多计划，请通过全部计划进行设置。</div>
+course_set.manage.publish_courseset: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">点击发布课程，即可以将课程发布在前台，允许学员进行购买和学习。</div>
 course_set.manage.all_tutorial:  >
   <div class="btn-content"><p><a class='btn btn-success js-reset-intro %introBtnClassName%'>查看引导</a></p><a class='btn btn-info'>完整教程</a><div>
 course_set.manage.hint:  >
@@ -398,8 +418,11 @@ course_set.manage.upgrade_step3_hint:  >
   <p class="title">添加任务</p>您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。
 course_set.manage.upgrade_step5_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
+course_set.manage.operation_hint: 操作提醒
+course_set.manage.courseset_summary_operation_hint: 课程简介编辑后保存，将会统一覆盖前台所有计划的简介内容，请确认是否保存修改。
 
-course.manage.title_required_error_hint: 请输入教学.计划课程标题
+course.manage.title_maxlength_error_hint: 教学计划标题长度不能超过{0}字符
+course.manage.title_required_error_hint: 请输入教学计划标题
 course.manage.expiry_end_date_error_hint: 请输入结束日期
 course.manage.expiry_start_date_error_hint: 请输入开始日期
 course.manage.expiry_days_error_hint: 请输入有效期天数
@@ -412,14 +435,17 @@ course.manage.expiry_end_date_error_hint: 开始日期应早于结束日期
 course.manage.max_year_error_hint: 有效期最大值不能超过99,999天
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
+course.manage.publish_title: 发布教学计划
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
 course.manage.close_hint: 是否确定关闭该教学计划？
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
+course.manage.copy_title: 复制计划
+course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
-course.manage.task_delete_hint: 是否确定删除该任务吗？
-course.manage.chapter_delete_hint: 是否确定删除该章节吗？
+course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
+course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
@@ -432,7 +458,8 @@ course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
 course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
-
+course.manage.sort_cancel: 取消当前排序
+course.manage.student.add_expiry_day.select_tips: 请至少选中一项后进行修改
 material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
 material_lib.have_no_permission_hint: 抱歉，您无权操作此文件
@@ -520,7 +547,7 @@ open_course.load_search_hint: 搜索中...
 open_course.tag_required_hint: 请输入标签
 open_course.publish_hint: 您真的要发布该课程吗？
 open_course.picture_upload_success_hint: 上传成功！
-open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗?
+open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料。您真的要删除该课时吗?
 open_course.chapter_delete_hint: 您真的要删除该（%chapterName%）(%partName%）吗?
 open_course_chapter_delete_success_hint: 已删除
 open_course.add_replay_hint: 您真的要录制回放吗?
@@ -528,7 +555,7 @@ open_course.add_replay_failed_where_live: 录制失败，直播时您没有进�
 open_course.add_replay_failed_hint: 录制失败!
 open_course.add_replay_success_hint: 课时已录制!
 open_course.publish_lesson_hint: 课时发布成功!
-open_course.unpublish_hint: (未发布)
+open_course.unpublish_hint: 未发布
 open_course.exercise_delete_hint: 您真的要删除该课时练习吗?
 open_course.exercise_delete_success_hint: 练习已删除!
 open_course.homework_delete_hint: 您真的要删除该课时作业吗?
@@ -537,6 +564,7 @@ open_course.add_lesson_hint: 公开课当前仅支持添加一个课时!
 open_course.file_format_conversion_hint: (正在文件格式转换)
 open_course.file_format_conversion_failed_hint: (文件格式转换失败)
 open_course.unpublish_success_hint: 课时已取消发布!
+open_course.live_time_can_not_edit_bint: 直播已经开始或者结束,无法编辑!
 
 open_course.lesson_delete_success_hint: 课时已删除!
 
@@ -587,7 +615,7 @@ homework_manage.result_graph.status_distribution: 结果区间
 homework_manage.result_graph.first_status_num: 首次成绩结果人数
 homework_manage.result_graph.max_status_num: 最优成绩结果人数
 
-intro.confirm_hint: 我知道了
+intro.confirm_hint: 完成
 
 
 validate.required.message: 请输入%display%
@@ -646,9 +674,10 @@ validate.es_remote.message: 验证错误
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
-
+validate.character_maxlength: 字数不能超过%max%字！
 validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
+validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。
 
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -656,6 +685,11 @@ validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
 validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
+validate.modify_date: 请输入修改日期
+validate.modify_days: 请输入修改天数
+validate.modify_day_number: 请输入不大于 7300（20年）的数值
+validate.success: 验证成功
+validate.fail: 验证失败
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -671,6 +705,7 @@ page.video_hd.message: 高清
 confirm.private_message_delete.message: 真的要删除该私信吗？
 notify.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
 confirm.last_private_message_delete.message: 本条信息为最后一条，真的要删除该私信吗？
+private_message.send_success: 私信发送成功
 confirm.delete_lesson.message: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？
 notify.lesson_deleted.message: 课时已删除！
 confirm.delete_chapter.message: 您真的要删除该%chapter_name%%part_name%吗？
@@ -728,6 +763,7 @@ validate_old.date_and_time_check.message: 结束时间不能早于或等于开�
 validate_old.date_and_time.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
+validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
 validate_old.visible_character.message: %display%请输入可见性字符
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
@@ -804,8 +840,12 @@ admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: --选择所属栏目--
 
+lesson_count_no_more_than_300: 课时总数不能超过300个
+lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
+
 Bad credentials.: 用户名或密码错误
 User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
 message.send.not_allowed: 不允许发送私信
+

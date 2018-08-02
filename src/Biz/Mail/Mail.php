@@ -4,7 +4,7 @@ namespace Biz\Mail;
 
 use AppBundle\Common\SettingToolkit;
 use Codeages\Biz\Framework\Context\BizAware;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\Common\CommonException;
 
 abstract class Mail extends BizAware
 {
@@ -36,7 +36,7 @@ abstract class Mail extends BizAware
     public function __isset($name)
     {
         if ('options' === $name) {
-            return $this->options !== null;
+            return null !== $this->options;
         }
 
         return isset($this->options[$name]);
@@ -71,8 +71,8 @@ abstract class Mail extends BizAware
         $factory = $this->biz['ratelimiter.factory'];
         $limiter = $factory('email_'.$this->options['template'], 5, 1800);
         $remain = $limiter->check($this->to);
-        if ($remain == 0) {
-            throw new AccessDeniedException('操作过于频繁，请30分钟之后再试');
+        if (0 == $remain) {
+            throw CommonException::FORBIDDEN_FREQUENT_OPERATION();
         }
     }
 

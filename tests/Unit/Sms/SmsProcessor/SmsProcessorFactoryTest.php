@@ -10,6 +10,8 @@ class SmsProcessorFactoryTest extends BaseTestCase
 {
     public function testCreate()
     {
+        $result = SmsProcessorFactory::create('LiveOpenLesson');
+        $this->assertEquals('Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor', get_class($result));
         $class = SmsProcessorFactory::create('task');
         $this->assertEquals(true, $class instanceof TaskSmsProcessor);
     }

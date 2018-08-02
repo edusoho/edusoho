@@ -23,26 +23,59 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return true;
     }
 
-    public function getTasksTemplate()
+    protected function getFinishedTaskPerDay($course, $tasks)
     {
-        return 'course-manage/tasks/default-tasks.html.twig';
+        $taskNum = $course['taskNum'];
+        if ('days' == $course['expiryMode']) {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
+        } else {
+            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
+        }
+
+        return round($finishedTaskPerDay, 0);
     }
 
-    public function getTaskItemTemplate()
+    public function getTasksListJsonData($courseId)
     {
-        return 'task-manage/item/default-list-item.html.twig';
+        $course = $this->getCourseService()->getCourse($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $items = $this->prepareCourseItems($course['id'], $tasks);
+
+        return array(
+            'data' => array(
+                'items' => $items,
+            ),
+            'template' => 'lesson-manage/default-list.html.twig',
+        );
+    }
+
+    public function getTasksJsonData($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
+        $lesson = $this->getChapterDao()->get($task['categoryId']);
+        $lesson['tasks'] = $tasks;
+
+        return array(
+            'data' => array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ),
+            'template' => 'lesson-manage/default/lesson.html.twig',
+        );
     }
 
     public function createTask($field)
     {
         $this->validateTaskMode($field);
 
-        if ($field['mode'] == 'lesson') {
-            // 创建课时
-            return $this->_createLesson($field);
-        } else {
+        if (isset($field['mode']) && 'lesson' != $field['mode']) {
             // 创建课时中的环节
             return $this->_createLessonLink($field);
+        } else {
+            // 创建课时
+            return $this->_createLesson($field);
         }
     }
 
@@ -84,6 +117,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $this->getActivityService()->deleteActivity($_task['activityId']);
             }
 
+            if ($task['mode'] == 'lesson') {
+                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
+            }
+
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
@@ -93,7 +130,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     protected function validateTaskMode($field)
     {
-        if (empty($field['mode']) || !in_array(
+        if (!empty($field['mode']) && !in_array(
                 $field['mode'],
                 array('preparation', 'lesson', 'exercise', 'homework', 'extraClass')
             )
@@ -102,7 +139,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
     }
 
-    public function prepareCourseItems($courseId, $tasks, $limitNum)
+    public function prepareCourseItems($courseId, $tasks, $limitNum = 0)
     {
         if ($limitNum) {
             $tasks = array_slice($tasks, 0, $limitNum);
@@ -183,24 +220,20 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     //取消发布课时中一组任务
     public function unpublishTask($task)
     {
-        $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
-        foreach ($tasks as $task) {
-            $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
-        }
-        $task['status'] = 'unpublished';
-
-        return $task;
+        return $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
     }
 
     private function _createLesson($task)
     {
-        $chapter = array(
+        /*$chapter = array(
             'courseId' => $task['fromCourseId'],
             'title' => $task['title'],
             'type' => 'lesson',
+            'status' => 'create',
         );
         $chapter = $this->getCourseService()->createChapter($chapter);
-        $task['categoryId'] = $chapter['id'];
+        $task['categoryId'] = $chapter['id'];*/
+        $task['mode'] = 'lesson';
 
         return parent::createTask($task);
     }

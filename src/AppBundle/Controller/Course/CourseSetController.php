@@ -16,12 +16,9 @@ class CourseSetController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
         $previewAs = $request->query->get('previewAs');
-        //如果计划都尚未发布，则获取第一个创建的
-        if (empty($course)) {
-            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
-        }
         if (empty($course)) {
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
@@ -76,6 +73,7 @@ class CourseSetController extends BaseController
             'parentId' => '0',
         );
 
+        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -143,7 +141,7 @@ class CourseSetController extends BaseController
         $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-        if ($taskId == '' && $tasks != null) {
+        if ('' == $taskId && null != $tasks) {
             $currentTask = current($tasks);
         } else {
             $currentTask = $this->getTaskService()->getTask($taskId);

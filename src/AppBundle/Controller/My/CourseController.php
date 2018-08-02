@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Course\Service\CourseSetService;
 
 class CourseController extends CourseBaseController
 {
@@ -39,7 +40,10 @@ class CourseController extends CourseBaseController
 
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
 
-        $conditions = array('ids' => $learningCourseSetIds);
+        $conditions = array(
+            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE),
+            'ids' => $learningCourseSetIds,
+        );
 
         $paginator = new Paginator(
             $request,
@@ -217,7 +221,7 @@ class CourseController extends CourseBaseController
 
         $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('offsetTaskId' => $offsetTaskId));
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 10000));
 
         return $this->render(
             'course/tabs/tasks.html.twig',

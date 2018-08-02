@@ -4,7 +4,6 @@ namespace Tests\Unit\AppBundle\Component\RateLimit;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
-use Biz\Common\BizCaptcha;
 use AppBundle\Common\ReflectionUtils;
 
 class SmsRateLimiterTest extends BaseTestCase
@@ -12,32 +11,17 @@ class SmsRateLimiterTest extends BaseTestCase
     public function testHandle()
     {
         $limiter = new SmsRateLimiter($this->biz);
+
         $request = $this->mockRequest(
             array(
                 'request' => array(
-                    'captchaToken' => 'kuozhi',
-                    'phrase' => 'password',
+                    'dragCaptchaToken' => 'kuozhi',
                 ),
                 'getClientIp' => '128.2.2.1',
             )
         );
 
-        $captcha = $this->mockBiz(
-            'biz_captcha',
-            array(
-                array(
-                    'functionName' => 'check',
-                    'withParams' => array('kuozhi', 'password'),
-                    'returnValue' => BizCaptcha::STATUS_SUCCESS,
-                ),
-            )
-        );
-
-        $this->biz['biz_captcha'] = $captcha;
-
         $result = $limiter->handle($request);
-
-        $captcha->shouldHaveReceived('check')->times(1);
         $request->shouldHaveReceived('getClientIp')->times(1);
         $this->assertNull($result);
     }
@@ -47,7 +31,7 @@ class SmsRateLimiterTest extends BaseTestCase
         $limiter = new SmsRateLimiter($this->biz);
         $exception = ReflectionUtils::invokeMethod($limiter, 'createMaxRequestOccurException');
         $this->assertEquals(
-            'Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException',
+            'AppBundle\Component\RateLimit\RateLimitException',
             get_class($exception)
         );
     }

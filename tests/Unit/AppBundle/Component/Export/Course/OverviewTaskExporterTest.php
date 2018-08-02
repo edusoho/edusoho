@@ -51,8 +51,8 @@ class OverviewTaskExporterTest extends BaseTestCase
         $this->assertArrayEquals(array(
             'lallll',
             '11',
-            '13',
             '14',
+            '13',
             '1',
         ), $result[0]);
     }

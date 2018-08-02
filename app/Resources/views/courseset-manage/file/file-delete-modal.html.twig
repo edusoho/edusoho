@@ -28,7 +28,7 @@
 
 {% block footer %}
   <div class="pull-left pts">
-    <span class="color-danger">{{'admin.course_manage.file.remove_tips'|trans}}</span>
+    <span class="color-danger">{{'admin.course_manage.file.remove_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
   </div>
   <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'admin.course_manage.file.remove_confirm'|trans}}</button>
 {% endblock %}

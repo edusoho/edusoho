@@ -31,6 +31,7 @@ class LiveExtension extends \Twig_Extension
             new \Twig_SimpleFunction('live_can_record', array($this, 'canRecord')),
             new \Twig_SimpleFunction('is_live_finished', array($this, 'isLiveFinished')),
             new \Twig_SimpleFunction('get_live_room_type', array($this, 'getLiveRoomType')),
+            new \Twig_SimpleFunction('get_live_account', array($this, 'getLiveAccount')),
         );
     }
 
@@ -47,7 +48,7 @@ class LiveExtension extends \Twig_Extension
 
     public function isLiveFinished($mediaId, $type)
     {
-        if ($type == 'openCourse') {
+        if ('openCourse' == $type) {
             return $this->getLiveCourseService()->isLiveFinished($mediaId);
         } else {
             return $this->getActivityService()->isLiveFinished($mediaId);
@@ -56,13 +57,17 @@ class LiveExtension extends \Twig_Extension
 
     public function getLiveRoomType()
     {
-        $roomTypes = $this->getRoomTypes();
+        $liveAccount = $this->getEdusohoLiveAccount();
+        if (isset($liveAccount['error'])) {
+            return array();
+        }
 
         $default = array(
             'large' => 'course.live_activity.large_room_type',
             'small' => 'course.live_activity.small_room_type',
         );
 
+        $roomTypes = $liveAccount['roomType'];
         if (empty($roomTypes)) {
             return array();
         }
@@ -74,15 +79,21 @@ class LiveExtension extends \Twig_Extension
         }
     }
 
-    protected function getRoomTypes()
+    public function getLiveAccount()
+    {
+        $liveAccount = $this->getEdusohoLiveAccount();
+        $liveAccount['isExpired'] = !empty($liveAccount['expire']) && $liveAccount['expire'] < time() ? 1 : 0;
+
+        return $liveAccount;
+    }
+
+    protected function getEdusohoLiveAccount()
     {
         $client = new EdusohoLiveClient();
         try {
-            $result = $client->getLiveAccount();
-
-            return $result['roomType'];
+            return $client->getLiveAccount();
         } catch (CloudAPIIOException $cloudAPIIOException) {
-            return array();
+            return array('error' => $cloudAPIIOException->getMessage());
         }
     }
 

@@ -98,9 +98,9 @@ class HtmlExtension extends \Twig_Extension
 
         foreach ($choices as $value => $label) {
             if ($checked == $value) {
-                $html .= "<label class=\"cd-radio checked\"><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" {$disable} checked=\"checked\" data-toggle=\"cd-radio\"> {$label}</label>";
+                $html .= "<label class=\"cd-radio checked {$disable}\"><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" {$disable} checked=\"checked\" data-toggle=\"cd-radio\"> {$label}</label>";
             } else {
-                $html .= "<label class=\"cd-radio\"><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" {$disable} data-toggle=\"cd-radio\"> {$label}</label>";
+                $html .= "<label class=\"cd-radio {$disable}\"><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" {$disable} data-toggle=\"cd-radio\"> {$label}</label>";
             }
         }
 

@@ -309,7 +309,7 @@ class BaseController extends Controller
 
         throw new \Exception();
     }
-
+    
     /**
      * 安全的重定向.
      *
@@ -325,6 +325,16 @@ class BaseController extends Controller
         $url = $this->filterRedirectUrl($url);
 
         return $this->redirect($url, $status);
+    }
+
+    public function render($view, array $parameters = array(), Response $response = null)
+    {
+        $biz = $this->getBiz();
+        foreach ($biz['render_view_resolvers'] as $resolver) {
+            $view = $resolver->generateRenderView($view, $parameters);
+        }
+
+        return parent::render($view, $parameters, $response);
     }
 
     /**

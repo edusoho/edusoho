@@ -6,8 +6,6 @@ if ($('a').hasClass('money-card-use')) {
   let coinName = $moneyCard.data('coinName');
   let targetUrl = $moneyCard.data('targetUrl');
   let coinAmount = $('.card-coin-val').val();
-
-
   $.post(url, function (response) {
     notify('success',Translator.trans('card.card_receive_success_hint', {coinAmount: coinAmount, coinName: coinName}));
     setTimeout('window.location.href = \'' + targetUrl + '\'', 2000);

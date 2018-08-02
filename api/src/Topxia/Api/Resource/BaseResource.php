@@ -143,6 +143,7 @@ abstract class BaseResource
         $simple['title'] = $user['title'];
         $simple['roles'] = $user['roles'];
         $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
+        $simple['uuid'] = $user['uuid'];
 
         return $simple;
     }

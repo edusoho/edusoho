@@ -1,0 +1,16 @@
+<label class="{% if auth|default(null) %} control-label {% endif %} required {% if oauth2|default(null) %}cd-mb8{% endif %}">{{ 'user.register.account_with_sms_code_label'|trans }}</label>
+<input type="hidden" name="dragCaptchaToken" value="" />
+<div class="drag-section-wrap">
+  <div class="drag-section">
+    <div class="drag-img js-drag-img">
+      <img class="js-jigsaw drag-img__jigsaw">
+      <div class="drag-img__mask js-drag-img-mask infinite-loading"></div>
+    </div>
+
+    <div class="drag-bar">
+      <span class="drag-bar__tip js-drag-bar-tip">{{ 'user.register.drag_captcha_tips'|trans }}</span>
+      <div class="drag-bar__mask js-drag-bar-mask"></div>
+      <div id="drag-btn" class="drag-bar__btn"></div>
+    </div>
+  </div>
+</div>

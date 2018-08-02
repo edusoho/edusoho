@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
@@ -23,15 +24,25 @@ class MeCourse extends AbstractResource
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
             array('lastLearnTime' => 'DESC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        $courseConditions = array(
+            'ids' => ArrayToolkit::column($members, 'courseId'),
+            'excludeTypes' => array('reservation'),
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $courseConditions,
+            array(),
             $offset,
             $limit
         );
 
-        $courses = $this->getCourseService()->findCoursesByIds(array_column($members, 'courseId'));
-
         $courses = $this->appendAttrAndOrder($courses, $members);
 
-        $total = $this->getCourseMemberService()->countMembers($conditions);
+        $total = $this->getCourseService()->countCourses($courseConditions);
 
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
@@ -41,6 +52,8 @@ class MeCourse extends AbstractResource
     private function appendAttrAndOrder($courses, $members)
     {
         $orderedCourses = array();
+        $members = ArrayToolkit::index($members, 'courseId');
+        $courses = ArrayToolkit::index($courses, 'id');
         foreach ($members as $member) {
             $courseId = $member['courseId'];
             if (!empty($courses[$courseId])) {

@@ -62,7 +62,7 @@ abstract class Type extends BizAware
         $courses = $this->find(
             $subject,
             'Course:CourseDao',
-            array('courseSetId', 'title'),
+            array('courseSetId', 'title', 'price'),
             $conditions
         );
 
@@ -70,15 +70,42 @@ abstract class Type extends BizAware
             array($courses, 'courseSetId')
         );
 
+        $this->appendTags($courseSets);
+
         foreach ($courses as &$course) {
             if (!empty($courseSets[$course['courseSetId']])) {
                 $courseSet = $courseSets[$course['courseSetId']];
                 $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
                 $course['title'] = $courseSet['title'].'-'.$course['title'];
+                $course['tags'] = empty($courseSet['tagsStr']) ? '' : $courseSet['tagsStr'];
             }
         }
 
         return $courses;
+    }
+
+    private function appendTags(&$courseSets)
+    {
+        $tagIdGroups = ArrayToolkit::column($courseSets, 'tags');
+
+        if (empty($tagIdGroups)) {
+            return;
+        }
+
+        $tagIds = ArrayToolkit::mergeArraysValue($tagIdGroups);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
+
+        array_walk($courseSets, function (&$courseSet) use ($tags) {
+            $courseSetTags = array();
+
+            foreach ($courseSet['tags'] as $tagId) {
+                if (isset($tags[$tagId])) {
+                    $courseSetTags[] = $tags[$tagId]['name'];
+                }
+            }
+
+            $courseSet['tagsStr'] = $courseSetTags ? '|'.implode('|', $courseSetTags).'|' : '';
+        });
     }
 
     protected function findCourseSets($subject, $conditions = array())
@@ -86,7 +113,7 @@ abstract class Type extends BizAware
         return $this->find(
             $subject,
             'Course:CourseSetDao',
-            array('title', 'subtitle'),
+            array('title', 'subtitle', 'tags'),
             $conditions
         );
     }
@@ -114,10 +141,10 @@ abstract class Type extends BizAware
     protected function findActivities($subject)
     {
         $activityIds = ArrayToolkit::column($subject[0], $subject[1]);
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
-        $activities = ArrayToolkit::index($activities, 'id');
+        $activities = $this->getActivityMedia($activityIds);
 
         $resourceIds = array();
+
         foreach ($activities as $activity) {
             if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
                 if (!empty($activity['ext']['mediaId'])) {
@@ -125,10 +152,33 @@ abstract class Type extends BizAware
                 }
             }
         }
+
         $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
         $resources = ArrayToolkit::index($resources, 'id');
 
         return array($activities, $resources);
+    }
+
+    private function getActivityMedia($activityIds)
+    {
+        $activities = $this->getActivityDao()->findByIds($activityIds);
+        $activityGroups = ArrayToolkit::group($activities, 'mediaType');
+
+        foreach ($activityGroups as $mediaType => $activityGroup) {
+            $activityConfig = $this->getActivityConfig($mediaType);
+            $mediaIds = ArrayToolkit::column($activityGroup, 'mediaId');
+            $medias = $activityConfig->findWithoutCloudFiles($mediaIds);
+            $medias = ArrayToolkit::index($medias, 'id');
+
+            array_walk(
+                $activities,
+                function (&$activity) use ($medias) {
+                    $activity['ext'] = empty($medias[$activity['mediaId']]) ? array() : $medias[$activity['mediaId']];
+                }
+            );
+        }
+
+        return ArrayToolkit::index($activities, 'id');
     }
 
     protected function createService($alias)
@@ -266,6 +316,24 @@ abstract class Type extends BizAware
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return \Biz\Taxonomy\Service\TagService
+     */
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
+    }
+
+    protected function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
     }
 
     protected function getActor($userId)

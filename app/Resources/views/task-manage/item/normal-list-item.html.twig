@@ -38,8 +38,12 @@
     <a class="btn gray-darker" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}"><i
         class="es-icon es-icon-edit mrs"></i>{{'course.plan_task.edit_btn'|trans}}</a>
-    <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
-      target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>{{'course.plan_task.preview_btn'|trans}}</a>
+    {% if showPreviewBtn|default(1) %}
+      <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
+        <i class="es-icon es-icon-removeredeye mrs"></i>{{'course.plan_task.preview_btn'|trans}}
+      </a>
+    {% endif %}
+
     <span class="dropdown">
       <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#"><i
           class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true"

@@ -418,7 +418,12 @@ $.validator.addMethod('es_remote', function(value, element, params) {
 
   if (cacheKey in this.valueCache) {
     $.validator.messages.es_remote = this.valueCache[cacheKey].message;
-    return this.optional(element) || this.valueCache[cacheKey].isSuccess;
+    
+    let result = this.optional(element) || this.valueCache[cacheKey].isSuccess;
+    if (typeof callback === 'function') {
+      callback(result);
+    }
+    return result;
   }
 
   $.ajax({
@@ -505,6 +510,12 @@ $.validator.addMethod('email_or_mobile_check', function (value, element, params)
   $.validator.messages.email_or_mobile_check = Translator.trans('validate.mobile_or_email_message');
   return this.optional(element) || result;
 }, Translator.trans('validate.email_or_mobile_check.message'));
+
+$.validator.addMethod('ckeditor_maxlength', function (value, element, params) {
+  $.validator.messages.ckeditor_maxlength = Translator.trans('validate.character_maxlength', {max: params});
+
+  return value.replace(/<\/?[^>]+(>|$)/g, '').replace(/[\r\n]/g,'').length > params ? false : true;
+});
 
 function calculateByteLength(string) {
   let length = string.length;

@@ -18,6 +18,7 @@ site.data.not_found: Not found ...
 site.data.delete_name_hint: Really want to delete the% name%?
 site.data.uncheck_name_hint: No %name% selected
 site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
+site.data.delete_title_hint: Delete %name%
 site.data.delete_submiting_hint: Deleting ...
 site.date.year: Years
 site.date.month: Month
@@ -55,6 +56,8 @@ site.form.submit_error: Form submit error
 site.cancel: Cancel
 site.confirm: Confirm
 site.close: Close
+site.delete: Delete
+
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -174,6 +177,7 @@ activity.download_manage.materials_exist_error_hint: The file is already added, 
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
 
+course.manage.title_maxlength_error_hint: The length of title should not exceed {0}
 activity.exercise_manage.title_required_error_hint: Please fill in the title
 activity.exercise_manage.title_range_error_hint: Title Source
 activity.exercise_manage.item_count_required_error_hint: Please fill in the number of questions
@@ -359,6 +363,7 @@ auth.register.email_required_error_hint: Please enter email
 auth.register.mobile_required_error_hint: Please enter your mobile number
 auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
 auth.register.number_validate_error_hint: 11 numbers, the first number can not be 1
+auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
@@ -393,6 +398,10 @@ coin.invite_url_copy_success_hint: The link was copied successfully
 course.buy.discount_hint: Dicounted
 course.buy.price_free_hint: Go study
 
+course.chapter: '%chapter_name% %number% : %title%'
+course.unit: '%part_name% %number% : %title%'
+course.catalogue.task_status.task: '%TaskName%.%taskNumber%:%taskTitle%'
+
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
 
@@ -412,6 +421,10 @@ course_manage.course_overview.try_view_increase_num: Number of try view increase
 
 course_manage.student_expiryday_extend_success_hint: Extend %name% expiration time successful!
 course_manage.student_expiryday_extend_failed_hint: Extend %name% expiration time failed!
+course_manage.student_expiryday_extend_error_hint_day: 减少天数超出最大可减少数
+course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间或任何一个学员的有效期截止日
+
+
 
 course_manage.student_remark_validate_error_hint: Remarks words does not exceed 80
 course_manage.student_remark_success_hint: Remarks %username% succeed
@@ -427,11 +440,12 @@ course_set.live_room.entry_error_hint: >
 course_set.live_room.entry_error_with_message: >
   Enter live classroom error,% message%, <a href='javascript:window.location.reload()'> Retry </a> or <a href = 'javascript: window.close () ; '> Off </a>;
 course_set.refund_cancel_hint: Do you really want to cancel your refund application?
-course_set.refund_cancel_success: Refund application canceled!
+course_set.refund_cancel_success: Refund application cancelled!
 course_set.title_required_error_hint: Please enter a title
 course_set.learn_progress: Learning progress
 course_set.manage.tag_required_hint: Please enter a label
 course_set.manage.publish_hint: Are you sure you want to post the course?
+course_set.manage.publish_title: 发布课程
 course_set.manage.publish_success_hint: The course was published successfully
 course_set.manage.publish_fail_hint: Course release failed
 course_set.manage.next_label: Continue to learn
@@ -442,6 +456,16 @@ course_set.manage.activity_link_hint: >
   <p class = "title"> Tasks </p>When designing learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 course_set.manage.upgrade_hint: >
   <p class = "title"> Feature Upgrade </p> The course management feature is now updated.
+course_set.manage.img: >
+  <div class="course-manage-spread"></div>
+course_set.manage.couseset_tab: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、课程文件、课程试卷、课程题库为共用功能，支持任意计划来进行引用。</div>
+course_set.manage.single_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">请进入默认计划设置，对首个计划的价格等内容进行设置。</div>
+course_set.manage.all_plan: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">若需要创建更多计划，请通过全部计划进行设置。</div>
+course_set.manage.publish_courseset: >
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">点击发布课程，即可以将课程发布在前台，允许学员进行购买和学习。</div>
 course_set.manage.all_tutorial: >
   <div class = "btn-content"> <p> <a class='btn btn-success js-reset-intro %introBtnClassName%'> view the </a> </ p> <a class = 'btn btn- Info '> complete tutorial </a> <div>
 course_set.manage.hint: >
@@ -454,6 +478,8 @@ course_set.manage.upgrade_step3_hint: >
   <p class = "title"> Add tasks </p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
 course_set.manage.upgrade_step5_hint: >
   <p class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+course_set.manage.operation_hint: Operation Hint
+course_set.manage.courseset_summary_operation_hint: 课程简介编辑后保存，将会统一覆盖前台所有计划的简介内容，请确认是否保存修改。
 
 course.manage.title_required_error_hint: Please enter the tutorial schedule title
 course.manage.expiry_end_date_error_hint: Please enter the end date
@@ -468,14 +494,17 @@ course.manage.expiry_end_date_error_hint: The start date should be earlier than 
 course.manage.max_year_error_hint: The maximum value of the validity period can not exceed 99,999 days
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
+course.manage.publish_title: 发布教学计划
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Are you sure to close the program?
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
+course.manage.copy_title: 复制计划
+course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: Are you sure you want to delete the plan?
-course.manage.task_delete_hint: Are you sure you want to delete the task?
-course.manage.chapter_delete_hint: Are you sure you want to delete this chapter?
+course.manage.task_delete_hint: Are you sure you want to delete the %taskName%?
+course.manage.chapter_delete_hint: Are you sure you want to delete this %name%?
 course.manage.task_publish_success_hint: Published successfully
 course.manage.task_publish_fail_hint:  Publish failed
 course.manage.task_unpublish_success_hint:  Publish cancelled successful
@@ -488,6 +517,8 @@ course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
+course.manage.sort_cancel: 取消当前排序
+course.manage.student.add_expiry_day.select_tips: Please select at least one item
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
@@ -561,9 +592,9 @@ user.account.refund_cancel_title: Cancel refund application
 user.account.refund_cancel_hint: Do you really want to cancel your refund application?
 user.account.cancel_order_title: Cancel order
 user.account.cancel_order_hint: Do you want to cancel the order?
-user.account.refund_cancel_success_hint: The refund application has been canceled!
+user.account.refund_cancel_success_hint: The refund application has been cancelled!
 user.account.cancel_order_fail_hint: Order Cancel Failed!
-user.account.cancel_order_success_hint: Order canceled!
+user.account.cancel_order_success_hint: Order cancelled!
 
 user.fields.idcard_front_placeholder: Please upload Id crad front
 user.fields.idcard_back_placeholder: Please upload Id crad back
@@ -575,7 +606,7 @@ open_course.load_search_hint: Search ...
 open_course.tag_required_hint: Please enter a tag
 open_course.publish_hint: Do you really want to publish this course?
 open_course.picture_upload_success_hint: Uploaded successfully!
-open_course.lesson_delete_hint: When delete the lesson, the test and resource of this lesson will also be deleted. Do you really want to delete the lesson?
+open_course.lesson_delete_hint: When delete the lesson, the resource of this lesson will also be deleted. Do you really want to delete the lesson?
 open_course.chapter_delete_hint: Do you really want to delete the (% chapterName%) (% partName%)?
 Open_course_chapter_delete_success_hint: Deleted
 open_course.add_replay_hint: Do you really want to record playback?
@@ -583,7 +614,7 @@ open_course.add_replay_failed_where_live: Recording failed, you did not record i
 open_course.add_replay_failed_hint: Recording failed!
 open_course.add_replay_success_hint: Lesson has been recorded!
 open_course.publish_lesson_hint: Lesson publish successfully!
-open_course.unpublish_hint: (Unpublished)
+open_course.unpublish_hint: Unpublished
 open_course.exercise_delete_hint: Do you really want to delete this lesson practice?
 open_course.exercise_delete_success_hint: Practice deleted!
 open_course.homework_delete_hint: Do you really want to delete the assingment?
@@ -592,6 +623,7 @@ open_course.add_lesson_hint: Open class only supports a lesson!
 open_course.file_format_conversion_hint: (File format converting)
 open_course.file_format_conversion_failed_hint: (File format conversion failed)
 open_course.unpublish_success_hint: Lesson unpublished!
+open_course.live_time_can_not_edit_bint: 直播已经开始或者结束,无法编辑!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 
@@ -642,7 +674,7 @@ homework_manage.result_graph.status_distribution: Result Distribution
 homework_manage.result_graph.first_status_num: Number of first result
 homework_manage.result_graph.max_status_num: Number of max result
 
-intro.confirm_hint: I know
+intro.confirm_hint: 完成
 
 
 
@@ -709,9 +741,14 @@ validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
+validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.mobile_or_email_message: 请输入正确的手机／邮箱
-
+validate.modify_date: 请输入修改日期
+validate.modify_days: 请输入修改天数
+validate.modify_day_number: 请输入不大于 7300（20年）的数值
+validate.success: 验证成功
+validate.fail: 验证失败
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -727,6 +764,7 @@ page.video_hd.message: HD
 confirm.private_message_delete.message: Are you determined to deleted this private message?
 notify.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
 confirm.last_private_message_delete.message: This message for the last one, really want to delete the private message?
+private_message.send_success: 私信发送成功
 confirm.delete_lesson.message: Delete the lesson at the same time will delete the time of the information, test. Do you really want to delete that class?
 notify.lesson_deleted.message: Lesson has been deleted!
 confirm.delete_chapter.message: Do you really want to delete that% chapter_name %% part_name%?
@@ -742,7 +780,7 @@ notify.lesson_exercise_deleted.message: Exercise has been deleted！
 confirm.delete_lesson_homework.message: Do you really want to delete the lesson homework?
 notify.lesson_homework_deleted.message: Homework has been deleted！
 notify.order_cancel_failed.message: Order Cancel failed！
-notify.order_cancel_succeed.message: The order has been canceled successfully
+notify.order_cancel_succeed.message: The order has been cancelled successfully
 confirm.bind_pay_bank.message: Are you sure you want to unbind the bank card?
 notify.copy_succeed.message: Copy successful！
 notify.pay_failed.message: Payment failed！
@@ -784,6 +822,7 @@ validate_old.date_and_time_check.message: The end time can not be earlier than o
 validate_old.date_and_time.message: Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: The start time must be less than or equal to the end time
 validate_old.not_all_digital.message: %display% can not be all numbers
+validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: Please input correct es version，correct is XX.XX.XX
 validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
@@ -811,7 +850,7 @@ validate_old.unsigned_integer.message: %display% must be a non-negative integer
 validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
-
+validate.character_maxlength: 字数不能超过%max%字！
 
 export.not_allowed: you are not allowed to download
 export.empty: Export the result is empty
@@ -862,6 +901,9 @@ admin.data.lab.setting.error: 发生异常了，请重试！
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
 admin.article_setting.choose_category: 'Choose column'
+
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
 Bad credentials.: 用户名或密码错误
 User account is locked.: 帐号被封禁

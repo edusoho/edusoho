@@ -34,6 +34,12 @@ class TradeFactory
             case 'Lianlian_Wap':
                 $tradeInstance = new LianlianPayWapTrade();
                 break;
+            case 'WeChatPay_MiniApp':
+                $tradeInstance = new WeChatPayMiniAppTrade();
+                break;
+            case 'Coin':
+                $tradeInstance = new CoinTrade();
+                break;
             default:
                 throw new BadRequestHttpException();
         }

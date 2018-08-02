@@ -2341,3 +2341,11 @@ admin_cloud_data_lab_setting_enable_modal:
 admin_cloud_data_lab_setting_disable_modal:
     path: /data/lab/setting/modal/disable
     defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }
+
+admin_wechat_app:
+    path: /wechat_app
+    defaults: { _controller: AppBundle:Admin/WeChatApp:index }
+
+admin_wechat_app_access:
+    path:  /cloud/accessWechat
+    defaults: { _controller: AppBundle:Admin/Cloud:accessWechat }

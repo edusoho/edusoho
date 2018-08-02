@@ -164,7 +164,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
-            $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+            $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId']);
             $this->getLogService()->info(AppLoggerConstant::LIVE, 'delete_live_activity', "删除直播活动（#{$liveActivity['id']}）", $liveActivity);
         }
     }

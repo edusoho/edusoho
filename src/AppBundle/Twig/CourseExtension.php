@@ -10,6 +10,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DynUrlToolkit;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -45,8 +46,124 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
+            new \Twig_SimpleFunction('course_daily_tasks_num', array($this, 'getCourseDailyTasksNum')),
+            new \Twig_SimpleFunction('dyn_url', array($this, 'getDynUrl')),
+            new \Twig_SimpleFunction('get_course_types', array($this, 'getCourseTypes')),
             new \Twig_SimpleFunction('is_task_available', array($this, 'isTaskAvailable')),
+            new \Twig_SimpleFunction('is_discount', array($this, 'isDiscount')),
+            new \Twig_SimpleFunction('get_course_count', array($this, 'getCourseCount')),
+            new \Twig_SimpleFunction('is_un_multi_courseset', array($this, 'isUnMultiCourseSet')),
+            new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
+            new \Twig_SimpleFunction('get_course_title', array($this, 'getCourseTitle')),
+            new \Twig_SimpleFunction('task_list_json_data', array($this, 'taskListJsonData')),
         );
+    }
+
+    public function taskListJsonData($courseItems)
+    {
+        if (empty($courseItems)) {
+            return json_encode(array());
+        }
+
+        $results = array();
+        foreach ($courseItems as $item) {
+            if (!('task' == $item['itemType'] && $item['isOptional'])) {
+                $default = array(
+                    'lock' => '',
+                    'status' => '',
+                    'isOptional' => '',
+                    'type' => '',
+                    'isFree' => '',
+                    'activity' => array(),
+                    'tryLookable' => '',
+                );
+                $item = array_merge($default, $item);
+                $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
+                $results[] = array(
+                    'itemType' => $item['itemType'],
+                    'number' => $item['number'],
+                    'title' => $item['title'],
+                    'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
+                    'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
+                    'lock' => $item['lock'],
+                    'status' => $item['status'],
+                    'taskId' => $item['id'],
+                    'isOptional' => $item['isOptional'],
+                    'type' => $item['type'],
+                    'isTaskFree' => $item['isFree'],
+                    'watchLimitRemaining' => isset($item['watchLimitRemaining']) ? $this->container->get('web.twig.extension')->durationTextFilter($item['watchLimitRemaining']) : false,
+                    'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
+                    'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
+                    'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
+                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType),
+                    'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
+                    'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
+                    'isTaskTryLookable' => $item['tryLookable'],
+                );
+            }
+        }
+
+        return json_encode($results);
+    }
+
+    public function getCourseCount($courseSetId, $isPublish = 0)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+        );
+        if ($isPublish) {
+            $conditions['status'] = 'published';
+        }
+
+        return $this->getCourseService()->countCourses($conditions);
+    }
+
+    //是否为非多计划的课程，如：直播课程，约排课课程，班级课程等特殊课程类型（公开课不在此列）
+    public function isUnMultiCourseSet($courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        return in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId']);
+    }
+
+    /**
+     * 判断一个课程是否有多个计划
+     */
+    public function hasMulCourses($courseSetId, $isPublish = 0)
+    {
+        return $this->getCourseService()->hasMulCourses($courseSetId, $isPublish);
+    }
+
+    public function getCourseTitle($course)
+    {
+        return empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
+    }
+
+    public function getCourseDailyTasksNum($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $taskNum = $course['taskNum'];
+        if ('days' == $course['expiryMode']) {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
+        } else {
+            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
+        }
+
+        return round($finishedTaskPerDay, 0);
+    }
+
+    public function getDynUrl($baseUrl, $params)
+    {
+        return DynUrlToolkit::getUrl($this->biz, $baseUrl, $params);
+    }
+
+    public function isDiscount($course)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $discountPlugin = $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Discount');
+
+        return $discountPlugin && $courseSet['discountId'] > 0 && ($course['price'] < $course['originPrice']) && 0 == $course['parentId'];
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
@@ -64,18 +181,30 @@ class CourseExtension extends \Twig_Extension
 
     public function getCourseChapterAlias($type)
     {
+        if ('lesson' == $type) {
+            return 'site.data.lesson';
+        }
         $defaultCourseChapterAlias = array(
-            'chapter' => '章',
-            'part' => '节',
+            'chapter' => 'site.data.chapter',
+            'unit' => 'site.data.part',
+            'part' => 'site.data.part',
+            'task' => 'site.data.task',
         );
 
         $courseSetting = $this->getSettingService()->get('course');
 
         if (empty($courseSetting['custom_chapter_enabled'])) {
-            return false;
+            return $defaultCourseChapterAlias[$type];
         }
 
-        return $courseSetting[$type.'_name'];
+        $settingKey = array(
+            'chapter' => 'chapter_name',
+            'unit' => 'part_name',
+            'part' => 'part_name',
+            'task' => 'task_name',
+        );
+
+        return isset($courseSetting[$settingKey[$type]]) ? $courseSetting[$settingKey[$type]] : $defaultCourseChapterAlias[$type];
     }
 
     public function isMemberExpired($course, $member)
@@ -141,6 +270,24 @@ class CourseExtension extends \Twig_Extension
         return !empty($setting['buy_fill_userinfo']);
     }
 
+    public function getCourseTypes()
+    {
+        $courseTypes = $this->container->get('extension.manager')->getCourseTypes();
+        $visibleCourseTypes = array_filter($courseTypes, function ($type) {
+            return 1 == $type['visible'];
+        });
+
+        uasort($visibleCourseTypes, function ($type1, $type2) {
+            if ($type1['priority'] == $type2['priority']) {
+                return 0;
+            }
+
+            return $type1['priority'] > $type2['priority'] ? -1 : 1;
+        });
+
+        return $visibleCourseTypes;
+    }
+
     public function isTaskAvailable($task)
     {
         $course = $this->getCourseService()->getCourse($task['courseId']);
@@ -176,6 +323,11 @@ class CourseExtension extends \Twig_Extension
         return $this->biz->service('Course:CourseService');
     }
 
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
+    }
+
     /**
      * @return MemberService
      */
@@ -203,5 +355,10 @@ class CourseExtension extends \Twig_Extension
     public function getName()
     {
         return 'topxia_course_twig';
+    }
+
+    protected function getActivityExtension()
+    {
+        return $this->container->get('web.twig.activity_extension');
     }
 }

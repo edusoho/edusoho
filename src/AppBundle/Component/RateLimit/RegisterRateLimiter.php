@@ -43,7 +43,11 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
 
                 break;
             case 'high':
-                $this->validateCaptcha($request);
+                //手机不需要校验验证码，只需要短信校验码
+                $oauthUser = $this->getOauthUser($request);
+                if ($oauthUser->captchaEnabled) {
+                    $this->validateCaptcha($request);
+                }
 
                 $factory = $this->biz['ratelimiter.factory'];
                 /** @var RateLimiter $dayLimiter */
@@ -54,7 +58,7 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
                 }
 
                 /** @var RateLimiter $hourLimiter */
-                $hourLimiter = $factory('register.ip.high_one_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_DAY);
+                $hourLimiter = $factory('register.ip.high_one_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_HOUR);
                 $remain = $hourLimiter->check($request->getClientIp());
                 if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
@@ -64,6 +68,12 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
             default:
                 return;
         }
+    }
+
+    protected function validateCaptcha($request)
+    {
+        $token = $request->request->get('dragCaptchaToken', '');
+        $this->getDragCaptcha()->check($token);
     }
 
     private function getRegisterProtective()

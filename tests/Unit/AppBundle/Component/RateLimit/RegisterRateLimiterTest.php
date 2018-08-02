@@ -4,7 +4,6 @@ namespace Tests\Unit\AppBundle\Component\RateLimit;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
-use Biz\Common\BizCaptcha;
 use AppBundle\Controller\OAuth2\OAuthUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -55,7 +54,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             )
         );
 
-        $this->setOauthUser($request, true);
+        $this->setOauthUser($request, false);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -83,12 +82,11 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'captchaToken' => 'kuozhi',
-                'phrase' => 'password',
+                'dragCaptchaToken' => 'kuozhi',
             )
         );
 
-        $this->setOauthUser($request, false);
+        $this->setOauthUser($request, true);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -104,17 +102,33 @@ class RegisterRateLimiterTest extends BaseTestCase
         );
 
         $captcha = $this->mockBiz(
-            'biz_captcha',
+            'biz_drag_captcha',
             array(
                 array(
                     'functionName' => 'check',
-                    'withParams' => array('kuozhi', 'password'),
-                    'returnValue' => BizCaptcha::STATUS_SUCCESS,
+                    'withParams' => array(
+                        'kuozhi',
+                    ),
+                    'returnValue' => true,
                 ),
             )
         );
 
-        $this->biz['biz_captcha'] = $captcha;
+        $this->mockBiz(
+            'User:TokenService',
+            array(
+                array(
+                    'functionName' => 'verifyToken',
+                    'returnValue' => array(
+                        'data' => array(
+                            'positionX' => 12,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $this->biz['biz_drag_captcha'] = $captcha;
 
         $result = $limiter->handle($request);
 
@@ -138,7 +152,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             array('REMOTE_ADDR' => '128.2.2.1')
         );
 
-        $this->setOauthUser($request, true);
+        $this->setOauthUser($request, false);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -165,8 +179,7 @@ class RegisterRateLimiterTest extends BaseTestCase
         $request = new Request(
             array(),
             array(
-                'captchaToken' => 'kuozhi',
-                'phrase' => 'password',
+                'dragCaptchaToken' => 'kuozhi',
             ),
             array(),
             array(),
@@ -174,7 +187,7 @@ class RegisterRateLimiterTest extends BaseTestCase
             array('REMOTE_ADDR' => '128.2.2.1')
         );
 
-        $this->setOauthUser($request, false);
+        $this->setOauthUser($request, true);
 
         $settingService = $this->mockBiz(
             'System:SettingService',
@@ -190,17 +203,32 @@ class RegisterRateLimiterTest extends BaseTestCase
         );
 
         $captcha = $this->mockBiz(
-            'biz_captcha',
+            'biz_drag_captcha',
             array(
                 array(
                     'functionName' => 'check',
-                    'withParams' => array('kuozhi', 'password'),
-                    'returnValue' => BizCaptcha::STATUS_SUCCESS,
+                    'withParams' => array(
+                    ),
+                    'returnValue' => true,
                 ),
             )
         );
 
-        $this->biz['biz_captcha'] = $captcha;
+        $this->mockBiz(
+            'User:TokenService',
+            array(
+                array(
+                    'functionName' => 'verifyToken',
+                    'returnValue' => array(
+                        'data' => array(
+                            'positionX' => 12,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $this->biz['biz_drag_captcha'] = $captcha;
 
         $result = $limiter->handle($request);
 
@@ -212,13 +240,29 @@ class RegisterRateLimiterTest extends BaseTestCase
     public function testHandleWithHighSecurity()
     {
         $limiter = new RegisterRateLimiter($this->biz);
-        $request = $this->mockRequest(
+        $request = new Request(
+            array(),
             array(
-                'request' => array(
-                    'captchaToken' => 'kuozhi',
-                    'phrase' => 'password',
+                'dragCaptchaToken' => 'kuozhi',
+                'jigsaw' => '12',
+            ),
+            array(),
+            array(),
+            array(),
+            array('REMOTE_ADDR' => '128.2.2.1')
+        );
+        $this->setOauthUser($request, true);
+        $this->mockBiz(
+            'User:TokenService',
+            array(
+                array(
+                    'functionName' => 'verifyToken',
+                    'returnValue' => array(
+                        'data' => array(
+                            'positionX' => 12,
+                        ),
+                    ),
                 ),
-                'getClientIp' => '128.2.2.1',
             )
         );
 
@@ -236,30 +280,28 @@ class RegisterRateLimiterTest extends BaseTestCase
         );
 
         $captcha = $this->mockBiz(
-            'biz_captcha',
+            'biz_drag_captcha',
             array(
                 array(
                     'functionName' => 'check',
-                    'withParams' => array('kuozhi', 'password'),
-                    'returnValue' => BizCaptcha::STATUS_SUCCESS,
+                    'returnValue' => true,
                 ),
             )
         );
 
-        $this->biz['biz_captcha'] = $captcha;
+        $this->biz['biz_drag_captcha'] = $captcha;
 
         $result = $limiter->handle($request);
 
         $settingService->shouldHaveReceived('get')->times(1);
         $captcha->shouldHaveReceived('check')->times(1);
-        $request->shouldHaveReceived('getClientIp')->times(2);
         $this->assertNull($result);
     }
 
-    private function setOauthUser($request, $isFirst)
+    private function setOauthUser($request, $captchaEnabled)
     {
         $oauthUser = new OAuthUser();
-        $oauthUser->captchaEnabled = !(true == $isFirst);
+        $oauthUser->captchaEnabled = $captchaEnabled;
         $session = new Session(new MockArraySessionStorage());
         $request->setSession($session);
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);

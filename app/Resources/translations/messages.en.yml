@@ -16,7 +16,9 @@ site.date.second: Second
 site.data.people: Person
 site.data.empty: Empty
 site.data.chapter: Chapter
+site.data.lesson: Lesson
 site.data.task: Task
+site.data.unit: unit
 site.data.part: Part
 site.data.title: Title
 site.data.score: Score
@@ -62,9 +64,11 @@ site.default.bar: Bar
 site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
+site.default.plan_setting: 默认计划设置
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
+site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
 site.validate_rules.two_decimal_places: 'Keep the second decimal'
@@ -136,8 +140,8 @@ es_bar.mobile: Mobile
 es_bar.go_top: 'Top'
 es_bar.study_place.content_title: 'My Courses/%name%'
 es_bar.study_center.content_title: 'Learning'
-es_bar.study_center.study_mission: 'Learning Tasks'
-es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
+es_bar.study_center.study_mission: 'Learning %taskName%'
+es_bar.study_center.mission_number_and_title: '%taskName% No. %number%-%title%'
 es_bar.study_center.course_title: 'Course: %title%'
 es_bar.study_center.mission_empty_tips: 'No data found. <a href="%courseSetExplore%">Explore now.'
 es_bar.study_center.recent_live_tasks: 'Comming Lives'
@@ -240,6 +244,7 @@ form.field.create: Add
 form.field.amount: Amount
 form.field.cut: Cut
 form.btn.create: Add
+form.btn.edit: Edit
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
@@ -774,30 +779,42 @@ course.remove_students_tips: 'The course is closed. But students of the course c
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
+course.price.show: 课程价格
 
 course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
 course.price.discount: '%discount% off'
-course.chapter: 'Chapter %number% : %title%'
-course.unit: 'Part %number% : %title%'
+course.chapter: '%chapter_name% %number% : %title%'
+course.unit: '%chapter_name% %number% : %title%'
 course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
 course.course_member_count: '%studentsNum% students'
 course.activity: Activity
+course.plan: 课程计划
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
+course.teaching_plan.free_mode: 自由式学习模式
+course.teaching_plan.locked_mode: 解锁式学习模式
+course.teaching_default_plan: 默认计划
 course.teaching_plan.create: 'Add'
+course.teaching_plan.default.title: 操作提醒
+course.teaching_plan.default.title.set.tip: 您的首个计划未设置标题，完成设置后，才支持当前计划的发布。
+course.teaching_plan.default.title.set: 首个计划的标题
+course.teaching_plan.sort: 调整顺序
+course.teaching_plan.sort.save: 保存排序
+course.teaching_plan.sort.cancel: 取消排序
+course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
 course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
 course.teaching_plan.create.mode.limit: "<li><b>lock mode：</b> Unlock lessons step by step.</li>\n"
-course.teaching_plan.create.task_numbers: Tasks
+course.teaching_plan.create.task_numbers: %taskName%s
 course.teaching_plan.create.student: Students
 course.teaching_plan.create.price: 'Price (CNY)'
 course.teaching_plan.create.status: Status
@@ -814,31 +831,42 @@ course.teaching_plan.expiry_date.date_mode: 'Fix time'
 course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
 course.teaching_plan.publish_btn: 'Publish'
+course.teaching_plan.manage: 计划管理
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Config
+course.teaching_plan.no_permission: 无权限管理
 course.plan_setup: 'Setting'
+course.plan_base_info: 基础设置
 course.plan_setup.name: 'Program name'
+course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
 course.plan_setup.mode.free_tips: 'Learn freely'
-course.plan_setup.finish_rule: 'Task rules'
-course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by task finish conditions'
-course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the task'
+course.plan_setup.finish_rule: '%taskName% rules'
+course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
+course.plan_setup.subtitle: 计划副标题
 course.plan_setup.target: Goal
 course.plan_setup.audiences: 'Target users'
+course.base_setup: 基础设置
+courseset.setup: 课程设置
+course.base_setup.rules: 基础规则
+course.base_info: 基础信息
+course.base_plan_intro: 计划使用指南
 course.marketing_setup: 'Markets'
 course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
+course.marketing_setup.setup.can_not_join: 不可加入
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
@@ -846,29 +874,29 @@ course.marketing_setup.for_show_tips: 'Show only'
 course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.expiry_date.custom: Custom
 course.marketing_setup.expiry_date.anytime: 'Any time'
-course.marketing_setup.expiry_date_tips: 'Enroll before this date'
 course.marketing_setup.approval: 'Id verification'
 course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrollment.'
 course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
 course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
 course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
-course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry Mode can not be edited since the program was published, but expiry date can be edited while course or the program was closed.'
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 course.marketing_setup.preview: Preview
-course.marketing_setup.preview.set_task: 'Free tasks'
-course.marketing_setup.preview.set_task.task: Task
-course.marketing_setup.preview.set_task.task_name: 'Task %name%'
+course.marketing_setup.preview.set_task: 'Free %taskName%'
+course.marketing_setup.preview.set_task.task_name: '%taskName% %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson %taskName% only support'
 course.marketing_setup.preview.try_watch: Preview
+course.marketing_setup.preview.not.support.try_watch: 不支持试看
+course.marketing_setup.preview.minutes.try_watch: 分钟试看
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
-course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
+course.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 course.marketing_setup.reward_point_setting: %name% setting
 course.marketing_setup.study_award:　Study Award
 course.marketing_setup.task_award: Task Award
@@ -880,6 +908,7 @@ course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teache
 course.members_manage: 'Students'
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
+course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
@@ -891,6 +920,7 @@ course.members_manage.official_student.remark: Note
 course.members_manage.official_student.follow_btn: Follow
 course.members_manage.official_student.cancel_follow_btn: Unfollow
 course.members_manage.official_student.add_expiry_day_btn: 'Extend expiry date'
+course.members_manage.official_student.update_expiry_day_btn: 'Update expiry date'
 course.members_manage.official_student.remove_btn: Remove
 course.members_manage.official_student.join_time: 'Enroll time：%createdTime%'
 course.members_manage.official_student.expiry_date: 'Expiry date：%deadline%'
@@ -921,16 +951,19 @@ course.members_manage.official_student.detail.status.unfinished: Unfinished
 course.members_manage.official_student.detail.status.finished: 'Finished on time'
 course.members_manage.official_student.detail.status.overdue: Overdue
 course.members_manage.official_student.detail.status.serious_overdue: 'Serious overdue'
-course.members_manage.official_student.detail.task_sleep: 'Task: Sleep'
+course.members_manage.official_student.detail.task_sleep: '%taskName%: Sleep'
 course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
 course.members_manage.official_student.remark.tips: 'Please input student''s note'
+course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: Add
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 'Course expiry date'
 course.members_manage.official_student.add_expiry_day.title: 'Course title'
 course.members_manage.official_student.add_expiry_day.username: Username
-course.members_manage.official_student.add_expiry_day.days: Extend
+course.members_manage.official_student.add_expiry_day.update: Update
+course.members_manage.official_student.add_expiry_day.update.days: 'Update days'
+course.members_manage.official_student.add_expiry_day.update.date: 'Update date'
 course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to extend'
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
 course.members_manage.quit_records: 'Quit history'
@@ -1000,9 +1033,9 @@ course.assignment_check.need_check_item: 'Questions wait for review <small class
 course.dashboard: 'Learn data'
 course.dashboard.content_title: 'Course Learn data'
 course.dashboard.course_dashboard: 'Data overview'
-course.dashboard.success_rate: 'Task finish rate'
+course.dashboard.success_rate: '%taskName% finish rate'
 course.dashboard.study_detail: 'Task detail'
-course.dashboard.study_detail.name: 'Task name'
+course.dashboard.study_detail.name: '%taskName% name'
 course.dashboard.study_detail.per_study_time: 'Average Learn time(mintue)'
 course.dashboard.study_detail.per_study_time_tips: 'Task time: From start time to finish time of the task.  average  task time:average task time of students'
 course.dashboard.study_detail.audio_time: 'Video and audio duration(mintue)'
@@ -1038,7 +1071,7 @@ course.dashboard.student_trend: Student trend
 course.dashboard.student_trend_seven_days: week
 course.dashboard.student_trend_thirty_days: month
 course.dashboard.student_detail: Student detail
-course.dashboard.task_detail: Task detail
+course.dashboard.task_detail: %taskName% detail
 course.dashboard.student_chart.time_select_all: all
 course.dashboard.student_chart.time_select_unFinished: unFinished
 course.dashboard.student_chart.time_select_seven_days: Seven days without school
@@ -1046,7 +1079,8 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
-course.order: 'Check order'
+course.members_manage.add_failed_tips: 计划未发布，不可添加学员
+course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
 course.order.conditions: 'Filter'
@@ -1072,8 +1106,11 @@ course.replay_manage.live_show.edit: 'Edit when record'
 course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
 course.teach_plan_manage: 'Programs'
+course.teach_plan_price: 计划价格
 course.cover: 'Course cover'
+
 course.cover_image: 'Cover'
+course.cover.change: 修改封面图片
 course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
@@ -1099,6 +1136,14 @@ course.status.unpublished: Unpublished
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
+course.filter.all_plan: 全部计划
+course.student_member: 课程学员
+course.student.cell: 人
+course.plan.cell: 个
+course.manage_btn: 管理课程
+course.preview.course: 预览课程
+course.preview.plan: 预览计划
+course.check.plan: 查看计划
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
@@ -1119,8 +1164,7 @@ course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Preview
 course.catalogue.task.join_btn: Enroll
 course.catalogue.task.buy_btn: Buy
-course.catalogue.task.name: 'Task %name%'
-course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
+course.catalogue.task_status.task: '%taskName% No.%taskNumber%:%taskTitle%'
 course.catalogue.task_status.free: Free
 course.catalogue.task_status.try_lookable: Preview
 course.catalogue.task_status.is_optional: Optional
@@ -1143,7 +1187,6 @@ course.reviews.success_tips: 'Your review has been saved'
 course.reviews.empty: 'No comment found'
 course.teacher: Tearcher：
 course.reward_point.award: Reward Point Award
-course.reward_point.task_award: Task Award
 course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
 course.characteristic.content_title: 'Course features'
@@ -1152,22 +1195,22 @@ course.students_dynamic.content_title: 'Latest updates'
 course.students_dynamic.empty: 'No updates found'
 course.note.expand_btn: '[Full Article]'
 course.note.collapse_btn: '[Short Article]'
-course.note.mission_delete_tips: '· The task has been deleted'
+course.note.mission_delete_tips: '· The %taskName% has been deleted'
 course.note.empty: 'No note found'
-course.note.all_task: 'All Tasks'
+course.note.all_task: 'All %taskName%s'
 course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
-course.task: Task
-course.task.progress: 'task progress'
+course.task: %taskName%
+course.task.progress: '%taskName% progress'
 course.task.rate.finish: 'rate of finish'
-course.task.lock_tips: 'Unlock the prior task to continue.'
-course.task.learning: 'Task learning'
+course.task.lock_tips: 'Unlock the prior %taskName% to continue.'
+course.task.learning: '%taskName% learning'
 course.task.learning.back_course_btn: 'Back'
-course.task.learning.finish_condition: 'Task completion condition'
-course.task.learning.finish_btn: 'Task completed'
+course.task.learning.finish_condition: '%taskName% completion condition'
+course.task.learning.finish_btn: '%taskName% completed'
 course.task.learning.learned_btn: Learned
-course.task.preview.content_title: 'Task review'
+course.task.preview.content_title: '%taskName% review'
 course.task.preview.login_and_learn_tips: 'Login to learn'
 course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to enroll the course'
@@ -1180,7 +1223,7 @@ course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
-course.thread.mission_number: Task%number%
+course.thread.mission_number: %taskName%%number%
 course.thread.teacher_answer: 'Tearcher''s answer'
 course.thread.form.edit: 'Edit'
 course.thread.form.create: 'Publish'
@@ -1203,7 +1246,7 @@ course.thread.nav.posted: 'Last reply'
 course.thread.nav.created: 'Newest post'
 course.thread.post_form.create_btn: Publish
 course.thread.post_form.create_tips: Publishing
-course.material.unpublished_tips: 'Could not download the materail before the task published.'
+course.material.unpublished_tips: 'Could not download the materail before the %taskName% published.'
 course.material.links: 'Internet refrence links'
 course.material.upload_time: 'Upload at %createdTime%'
 course.material.empty: 'No files for the course'
@@ -1225,6 +1268,15 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
+course.plan_info: >
+  <p class="cd-dark-minor cd-mb24">教学计划使用方式介绍：</p>
+  <p>为了更快捷的组织教学，计划管理可以让单个课程支持多种教学组织模式：</p>
+  <p>1、支持不同时期开设相同内容的课程：三月班、四月班、五月班；</p>
+  <p>2、支持区分学员，开设多个教学班：数学一班、数学二班、数学三班；</p>
+  <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
+  <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
+  <p class="cd-mt24">欢迎您
+
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.notes: 'Notes'
@@ -1263,6 +1315,7 @@ course.detail.content_title: Detail
 course.detail.summary: About
 course.detail.target: 'Goals'
 course.detail.intended-students: Who should take the course
+course.detail.info_tip: 以下设置可以在教学计划中具体设置，也可以在此处统一设置。在此处统一设置以应用于所有教学计划。
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
@@ -1346,7 +1399,7 @@ course.testpaper_manage.update: 'Updated'
 course.testpaper_manage.operation: Action
 course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
-course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to Task</strong>.\n"
+course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to %taskName%</strong>.\n"
 course.testpaper_manage.score: 'Score %score%'
 course.testpaper_manage.passed_condition: 'Passing score is %passedCondition% point'
 course.testpaper_manage.limited_time: '%limitedTime% minutes'
@@ -1439,9 +1492,9 @@ course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
-course.plan_overview: 'Tasks Overview'
+course.plan_overview: 'Data Overview'
 
-course.plan_task: Tasks
+course.plan_task: Lessons
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
@@ -1449,9 +1502,9 @@ course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Config
 course.plan_task.publish_btn: Publish
 course.plan_task.manage: 'Programs'
-course.plan_task.content_title: Tasks
-course.plan_task.locked.task_locked: 'Task locked'
-course.plan_task.task: Task
+course.plan_task.content_title: Lessons
+course.plan_task.locked.task_locked: '%taskName% locked'
+course.plan_task.task: %taskName% learn
 course.plan_task.practice: Exercise
 course.plan_task.practice_tips: 'Setting include all kinds of type such as exercise.'
 course.plan_task.homework: Homework
@@ -1459,12 +1512,19 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Tasks in total:'
-course.plan_task.everyday_finish_tasks: ''
+course.plan_task.total_lessons: 'Lessons in total:'
+course.plan_total_members: 学员总数
+course.plan_task.published_lessons: 'Published Lesson Number:'
+course.plan_task.unpublished_lessons: 'Unpublish Lesson Number:'
+course.plan_task.everyday_finish_tasks: >
+  日均需完成：<span class="color-warning">%taskPerDay%</span> 个课时
+course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: Add
 course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
+course.plan_task.edit_chapter_btn: 编辑%chapter_name%
 course.plan_task.add_part_btn: 'Add %part_name%'
+course.plan_task.edit_part_btn: 编辑%part_name%
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
 course.plan_task.more_btn: 'More'
@@ -1472,20 +1532,18 @@ course.plan_task.lesson-marker_btn: 'Popups'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
-course.plan_task.preparation_tips: 'Students can learn to learn by looking at tasks such as video and reading materials.'
+course.plan_task.preparation_tips: 'Students can learn to learn by looking at %taskName% such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
-course.plan_task.empty: 'It''s empty, add a task now.'
+course.plan_task.empty: 'It's empty, add a lesson now'
 course.plan_task.task_unpublished: （unpublish）
 course.plan_task.is_optional_task: Optional
 course.plan_task.edit_tips: 'Create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
-course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
-course.plan_task.which_part: "</i>No.<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
-course.plan_task.which_task: "</i>No.<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
+course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n"
+course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
-course.plan_task.create_task: 'Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
 course.plan_task.question_title: Title
 course.plan_task.question_describe: Description
@@ -1494,30 +1552,39 @@ course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
 course.plan_task.go_back_btn: Back
-course.plan_task.question_author: '%nickname%<i>is asking...</i>'
+course.plan_task.question_author: By 
 course.plan_task.question_answer: Answer
 course.plan_task.question_content: Content
 course.plan_task.add_answer_btn: 'Add answer'
-course.plan_task.finish_task_title: 'Complete Task'
+course.plan_task.finish_task_title: 'Complete %taskName%'
 course.plan_task.congratulation_finish: Congrats
 course.plan_task.finish_all_course: 'Greeting, You have already completed the course！'
 course.plan_task.finish_rate_course: 'You have finished %finishedRate%%，keep going！'
 course.plan_task.share: Share
-course.plan_task.next_task: 'Next'
-course.plan_task.task_edit_tips: 'The current task is in editing, please try later.'
-course.plan_task.task_title: '《 Task：%taskTitle% 》'
+course.plan_task.next_task: 'Next %taskName%'
+course.plan_task.task_edit_tips: 'The current %taskName% is in editing, please try later.'
+course.plan_task.task_title: '《 %taskName%：%taskTitle% 》'
 course.plan_task.study_rate: 'Learn progress'
 course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
-course.plan_task.activity_manage.preview_failed_tips: 'Please enroll to start.'
+course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
-course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next task to unlock.'
+course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
 course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Please setup content'
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
-course.plan_task.activity_manage.create: 'Add'
-course.plan_task.activity_manage.modify: 'Edit'
+course.plan_task.activity_manage.create: 'Add%taskName%'
+course.plan_task.activity_manage.modify: 'Edit%taskName%'
+course.plan_task.activity_manage.preview: 'Preview%taskName%'
+
+course.lesson: Lesson
+course.manage.create_lesson: Add Lesson
+course.manage.edit_lesson: 编辑课时
+course.lesson_manage.set_optional: 设置选修
+course.lesson_manage.unset_optional: 设置必修
+course.lesson_manage.rename: 重命名
+
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
 course.plan_task.activity_manage.audio.converting: 'Transcoding, please wait.'
@@ -1774,7 +1841,7 @@ open_course.load_search_hint: Search ...
 open_course.tag_required_hint: Please enter a tag
 open_course.publish_hint: Do you really want to publish this course?
 open_course.picture_upload_success_hint: Uploaded successfully!
-open_course.lesson_delete_hint: When delete the lesson, the test and resource of this lesson will also be deleted. Do you really want to delete the lesson?
+open_course.lesson_delete_hint: When delete the lesson, the resource of this lesson will also be deleted. Do you really want to delete the lesson?
 open_course.chapter_delete_hint: Do you really want to delete the (% chapterName%) (% partName%)?
 open_course_chapter_delete_success_hint: Deleted
 open_course.add_replay_hint: Do you really want to record playback?
@@ -1920,7 +1987,6 @@ classroom.manage.picture: Picture
 classroom.manage.price: Price
 classroom.manage.course: Course
 classroom.manage.courses_count: 'Courses'
-classroom.manage.tasks_count: 'Tasks'
 classroom.manage.student: Student
 classroom.manage.student_number: 'Students'
 classroom.manage.auditor_num: 'Auditors'
@@ -1929,7 +1995,6 @@ classroom.manage.Yesterday: Yesterday
 classroom.manage.today: Today
 classroom.manage.all_student_number: 'Total'
 classroom.manage.full_student_number: 'Number of formal students'
-classroom.manage.finished_task_number: 'Number of completed tasks'
 classroom.manage.thread_count: 'New Discussions'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
@@ -2011,12 +2076,12 @@ classroom.manage: Manage
 classroom.about: About
 classroom.small_picture: Picture
 classroom.course: Course
-classroom.tash_num: 'Task number'
+classroom.tash_num: '%taskName% number'
 classroom.student: Student
 classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
 classroom.formal_student_num: 'Students'
-classroom.task_finish_num: 'Number of completed tasks'
+classroom.task_finish_num: 'Number of completed %taskName%s'
 classroom.add_thread_num: 'Number of new discussions'
 classroom.latest_review: 'Latest reviews'
 classroom.auditor_num: 'Number of auditors'
@@ -2119,8 +2184,8 @@ classroom.free_course: Free
 classroom.teach_plan: 'Program'
 classroom.live_course_playing: 'On live'
 classroom.live: Live
-classroom.task_num: "Task number: %number%\n"
-classroom.total_task_count: "%taskNum% Tasks\n"
+classroom.task_num: "%taskName% number: %number%\n"
+classroom.total_task_count: "%taskNum% %taskName%s\n"
 classroom.forever: Forever
 classroom.course_tips: "All learning data of this course will be erased if delete this course.\n"
 classroom.total_price: Total
@@ -2278,6 +2343,12 @@ user.register.email_label: Email
 user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload your avatar later'
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
+user.register.drag_captcha_tips: 拖动左边滑块完成上方拼图
+user.init.password_tips: Please change your password
+user.init.password_placeholder: 请输入您的密码
+user.init.password_placeholder_again: 请再输入一遍您的密码
+user.init.password.confirm.password: 确认提交
+user.init.password.submit.password.loading: 提交中...
 
 user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
@@ -2712,6 +2783,7 @@ search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
 search.live_courses: 'Live courses'
+search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
 cloud_file.preview: 'File preview'
@@ -2966,6 +3038,8 @@ thread.status.top: Headline
 thread.status.recommend: Recommend
 thread.status.reward: Reward
 thread.status.question: Ask
+thread.status.answer: 答
+thread.status.all.answer: 全部的回答
 thread.hover_tips.question: 'Q&A'
 thread.hover_tips.activiy: Activity
 thread.hover_tips.thread: 'Discussions'
@@ -3176,8 +3250,9 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
-my.teaching.open_course.Basic_Info: 'Basic Info'
-my.teaching.open_course.Basic_Info.title: Title
+my.teaching.open_course.Basic_Info: 课程设置
+my.teaching.open_course.Basic_Info.message: 基础信息
+my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: Subtitle
 my.teaching.open_course.Basic_Info.tags: Tag
 my.teaching.open_course.Basic_Info.tags.explain: 'Will be used for courses searching'
@@ -3265,7 +3340,7 @@ my.teaching.open_course.recommend_setting.serializeMode.live: Serialize
 my.teaching.open_course.recommend_setting.serializeMode.finished: Finished
 my.teaching.open_course.recommend_setting.onlive: 'On live'
 my.teaching.open_course.recommend_setting.live: Live
-my.teaching.open_course.recommend_setting.task_number: 'Task %task_number%'
+my.teaching.open_course.recommend_setting.task_number: '%taskName% %task_number%'
 my.teaching.open_course.recommend_setting.save_btn: Save
 my.teaching.open_course.recommend_setting.course_empty: 'Add a course firstly'
 my.teaching.open_course.teachers_setting.title: 'Teachers Settings'
@@ -3364,11 +3439,11 @@ my.course.free_mode_plan.task_finished: Finished
 my.course.free_mode_plan.task_empty: 'No record'
 my.course.free_mode_plan.next_task: Next
 my.course.free_mode_plan.task_progress: Finished
-my.course.lock_mode_plan.task_progress: 'Finished %spanHtml% task'
+my.course.lock_mode_plan.task_progress: 'Finished %spanHtml% %taskName%'
 my.course.lock_mode_plan.behind_plan: 'Behind Schedule'
 my.course.lock_mode_plan.expiry_date: 'Expiry Date'
-my.task.title: 'My Task'
-my.task.calendar: 'My Task Calendar'
+#my.task.title: 'My Task'
+#my.task.calendar: 'My Task Calendar'
 my.learning.homework: 'My Assignment'
 my.learning.homework.check_title: 'Assignment Review'
 my.learning.homework.uncheck: Unreviewed
@@ -3421,7 +3496,7 @@ my.learning.course.favorite: Favorite
 my.learning.course.favorited: Favorited
 my.learning.course.favorite_empty: 'No record'
 my.learning.course.learned_empty: 'No record'
-my.learning.course.finish_task: 'Finish Task'
+my.learning.course.finish_task: 'Finish %taskName%'
 my.learning.course.contiune_study: Continue
 my.learning.course.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
@@ -3449,8 +3524,8 @@ my.learning.note.watch_link: View
 my.learning.note.empty: 'No record'
 my.learning.note.go_back: Back
 my.learning.note.target_course: 《%title%》notes
-my.learning.note.course_task_number: 'Task %number%'
-my.learning.note.course_task_empty: 'This task has been deleted'
+my.learning.note.course_task_number: '%taskName% %number%'
+my.learning.note.course_task_empty: 'This %taskName% has been deleted'
 my.learning.note.total_length: '%length% words in total'
 my.learning.note.delete: 'Delete Notes'
 my.learning.question: 'My Q&A'
@@ -3685,17 +3760,17 @@ testpaper.check.testpaper: Testpaper
 testpaper.check.course.publish_btn: Publish
 testpaper.check.not_isTeacher.tips: 'You are not teacher of current course, you have no permission to review %typeName%'
 testpaper.course.rule: 'Course Rule'
-testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1. Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
+testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1. Free Course：User should login site and the course is free to learn.<br>\n  2.Free %taskName%：The %taskName% selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The %taskName% configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
 course_set.course.about: About
 course_set.course.category: Category
 course_set.course.goals: Target
 course_set.course.audiences: Audiences
 course_set.course.tags: 'Course Tags：'
 course_set.course.show_btn: 'View Courses'
-course_set.course.task_list: 'Task List'
+course_set.course.task_list: '%taskName% List'
 course_set.course.empty: 'No record'
-course_set.course.taskNumber: "Task %number%: %title% \n"
-course_set.task.taskNumber: 'Task %taskNumber%：%taskTitle%'
+course_set.course.taskNumber: "%taskName% %number%: %title% \n"
+course_set.task.taskNumber: '%taskName% %taskNumber%：%taskTitle%'
 course_set.task.empty: 'No record'
 course_set.live.category: 'Course Category'
 course_set.live.vip_category: 'VIP Course'
@@ -3714,7 +3789,7 @@ course_set.live.today_live: 'Live Today'
 course_set.live.today_live.empty: 'No record'
 course_set.live.status.onlive: 'On live'
 course_set.live.status.live_soon: 'Live soon'
-courseset_manage.batch_upload.upload_courseLesson_file: 'Upload lesson file'
+courseset_manage.batch_upload.upload_courseLesson_file: 'Upload %taskName% file'
 courseset_manage.batch_upload.upload_material_file: 'Upload material'
 courseset_manage.batch_upload.upload_materiallib_file: 'Upload file to material lib'
 courseset_manage.batch_upload.add_wait_upload_file_btn: 'Add file to upload'
@@ -3723,7 +3798,7 @@ courseset_manage.batch_upload.file_name: 'File Name'
 courseset_manage.batch_upload.file_size: 'File Size'
 courseset_manage.batch_upload.status: Progress
 courseset_manage.batch_upload.tips: "<li>Support to upload <strong>mp4, mp3</strong>, and file size shouldn't larger than <strong>%upload_max_filesize%</strong>. <br>Please use AVC(H264) for MP4 encoding format, otherwise the browser can't play the video </li><li>Video will be uploaded to <strong>site server</strong>, if you want to use %EduSoho% cloud video service, click <a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">here </a>to learn more.</li> \n"
-courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video task, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
+courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video %taskName%, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
 courseset_manage.batch_upload.cloud.video_transcoding_type: 'Video Conversion Type'
 courseset_manage.batch_upload.cloud.setting_btn: Setting
 courseset_manage.batch_upload.cloud.video-quality: 'Video'
@@ -3852,17 +3927,17 @@ admin.course_manage.recommend.set_seq.seq_tips: 'Please input integer number bet
 admin.course_manage.statistics.name: 'Course Name'
 admin.course_manage.statistics.classroom: Class
 admin.course_manage.statistics.teach_plan_count: 'Program count'
-admin.course_manage.statistics.task_count: 'Task count'
+admin.course_manage.statistics.task_count: '%taskName% count'
 admin.course_manage.statistics.student: Student
 admin.course_manage.statistics.student_number: 'Student count'
 admin.course_manage.statistics.finished_number: 'Finished Num(Person)'
 admin.course_manage.statistics.study_time_minute: 'Study Duration(mins)'
 admin.course_manage.statistics.income_CNY: Income(CNY)
 admin.course_manage.statistics.no_introduce: 'Without introducing'
-admin.course_manage.statistics.watch_task: 'View Task'
+admin.course_manage.statistics.watch_task: 'View %taskName%'
 admin.course_manage.statistics.watch_course_data: 'View Course Data'
 admin.course_manage.statistics.modal_title: '%title% Course Data'
-admin.course_manage.statistics.data.name: 'Task Name'
+admin.course_manage.statistics.data.name: '%taskName% Name'
 admin.course_manage.statistics.data.study_number: 'Study Num(Person)'
 admin.course_manage.statistics.data.finished_number: 'Finish Num(Person)'
 admin.course_manage.statistics.data.average_study_time: 'Avg Study Duration(mins)'
@@ -3882,7 +3957,7 @@ admin.user.statistics.data_detail.note_number: Note Number
 admin.user.statistics.data_detail.learning_course_sets: Learning CourseSet
 admin.user.statistics.data_detail.learning_courses: Learning Course
 admin.user.statistics.data_detail.average_process: Average Process
-admin.user.statistics.data_detail.task_rate: TaskRate
+admin.user.statistics.data_detail.task_rate: %taskName%Rate
 admin.user.statistics.data_detail.thread_number: Thread Number
 admin.user.statistics.data_detail.review_number: Review Number
 admin.user.statistics.data_detail.active_chart: Active
@@ -4001,12 +4076,11 @@ admin.live_manage.coming_live: 'Coming Soon'
 admin.live_manage.underway_live: Ongoing
 admin.live_manage.end_live: Ended
 admin.live_manage.name_option: 'Course Title'
-admin.live_manage.task_option: 'Task Title'
+admin.live_manage.task_option: '%taskName% Title'
 admin.live_manage.keyword_placeholder: Keyword
 admin.live_manage.live_start_time_label: 'Start Time'
 admin.live_manage.live_start_time_placeholder: 'Start Time'
 admin.live_manage.live_end_time_placeholder: 'End Time'
-admin.live_manage.task_th: Task
 admin.live_manage.live_start_time_th: 'Start Time'
 admin.live_manage.live_time_long_th: 'Duration(min)'
 admin.live_manage.max_participate_count_th: 'Max Participant Number'
@@ -4100,8 +4174,8 @@ admin.tag_manage.tag.create_time_th: 'Created Time'
 admin.tag_manage.tag.operate_th: Action
 admin.tag_manage.tag.edit_btn: Edit
 admin.tag_manage.tag.empty: 'No Record'
-admin.tag_manage.tag.footer_one_tips: '1. Label can be used in course and articles'
-admin.tag_manage.tag.footer_two_tips: "2. You can <a target=\"_blank\" href=\"%courseSet%\">open</a> the recommended function to recommend course by label on course detail page.\n"
+admin.tag_manage.tag.footer_one_tips: 1.课程和咨询设置时可以选择不同的标签，通过搜索标签找到网站内与这个标签相关的内容；
+admin.tag_manage.tag.footer_two_tips: 2.可开启根据标签在课程介绍页显示相关课程的功能。
 admin.tag_manage.tag.create.modal_title: 'Create Label'
 admin.tag_manage.tag.edit.modal_title: Edittag
 admin.tag_manage.tag.name_label: 'Label Name'
@@ -4210,8 +4284,8 @@ admin.homepage.todays_data.thread_un_answer: 'Not Answered'
 admin.homepage.order_statistic_title: 'Order Statistic'
 admin.homepage.order_statistic.tips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">`\n    <div class=\"title\">New Orders</div>\n    <div class=\"content\">New created orders include free or paid orders.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Paid Orders</div>\n    <div class=\"content\">New created paid order numbers</div>\n  </div>\n</div>\n"
 admin.homepage.pay_order_statistic_title: 'Paid Orders Statistic'
-admin.homepage.task_finish_statistic_title: 'Completed Tasks'
-admin.homepage.task_finish_statistic.tips: 'Learned Tasks'
+admin.homepage.task_finish_statistic_title: 'Completed %taskName%s'
+admin.homepage.task_finish_statistic.tips: 'Learned %taskName%s'
 admin.homepage.course_ranking_title: 'Course Rank List'
 admin.homepage.latest_question_title: 'Latest Answer'
 admin.homepage.latest_question.tr.question_th: Question
@@ -4574,9 +4648,8 @@ admin.operation_analysis.course.creator: Creator
 admin.operation_analysis.course.student_unit: Numbers
 admin.operation_analysis.course.category: Category
 admin.operation_analysis.course.empty: 'No Course Detail'
-admin.operation_analysis.task: Task
-admin.operation_analysis.task.study_task: 'Study Task'
-admin.operation_analysis.task.type: 'Task Type'
+admin.operation_analysis.task.study_task: 'Study %taskName%'
+admin.operation_analysis.task.type: '%taskName% Type'
 admin.operation_analysis.task.creator: Creator
 admin.operation_analysis.task.belong_to_course: "Belong to：%courseTitle%\n"
 admin.operation_analysis.task.text: 'Rich Text'
@@ -4587,7 +4660,7 @@ admin.operation_analysis.task.testpaper: Testpaper
 admin.operation_analysis.task.live: Live
 admin.operation_analysis.task.flash: Flash
 admin.operation_analysis.task.doc: Document
-admin.operation_analysis.task.empty: 'The task has been deleted'
+admin.operation_analysis.task.empty: 'The %taskName% has been deleted'
 admin.operation_analysis.join_lesson: 'Enroll Course'
 admin.operation_analysis.join_lesson.username: Username
 admin.operation_analysis.join_lesson.time: 'Enrolled Date'
@@ -4603,7 +4676,6 @@ admin.operation_analysis.paid_course.paid_time: 'Order Payment Time'
 admin.operation_analysis.paid_course.empty: 'Course Not Exist'
 admin.operation_analysis.paid_course.order: 'Order Number'
 admin.operation_analysis.video.username: Username
-admin.operation_analysis.video.task: Task
 admin.operation_analysis.video.watch_time: 'Watch Time'
 admin.operation_analysis.video.type: 'Video Type'
 admin.operation_analysis.income.course: Course
@@ -4945,14 +5017,12 @@ admin.course_thread.course_thread_manage_tab.form.type_option: 'Post Type'
 admin.course_thread.course_thread_manage_tab.form.thread_type_option: Attributes
 admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: Sticky
 admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: Featured
-admin.course_thread.course_thread_manage_tab.task_btn: Task
 admin.course_thread.course_thread_manage_tab.isElite_btn: Featured
 admin.course_thread.course_thread_manage_tab.isStick_btn: Top
 admin.course_question.question_th: Question
 admin.course_question.view_th: View
 admin.course_question.createdTime_th: 'Create Time'
 admin.course_question.replay_or_review_th: Reply/View
-admin.course_question.task_btn: Task
 admin.course_question.td_operations.remind_teachers_btn: 'Remind Teacher'
 admin.course_question.td_operations.dropdown.delete_question_btn: 'Delete Question'
 admin.course_note.content_th: Content
@@ -5582,6 +5652,7 @@ admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
 admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
+
 admin.user_center.message_title_name: Message setting
 admin.user_center.message_student_to_student: Allow student to student send message
 admin.user_center.message_student_to_teacher: Allow student to teacher send message
@@ -5637,11 +5708,15 @@ admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free t
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
 admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of student allowed to display in the course'
 admin.setting_course.customer_chapter_section_name: 'Custom chapter name'
-admin.setting_course.customer_chapter_section_name.tips: 'Note: After you update the school field, relevant field names will be changed accordingly to the modified name in the site.'
+admin.setting_course.customer_task_name: 'Custom task name'
+admin.setting_course.customer_chapter_section_name.tips: 系统中的"章"、"节"会被设置的名称所替代
+admin.setting_course.customer_task_name.tips: 系统中的"任务"会被设置的名称所替代
 admin.setting_course.task_chapter_name: 'Task chapter name'
 admin.setting_course.chapter: Chapter
 admin.setting_course.task_section_name: 'Task part name'
 admin.setting_course.section: Part
+admin.setting_course.task_name: 'Task name'
+admin.setting_course.task: Task
 admin.setting_course.questions_setting: 'Display answer and resolution after handing in the testpaper'
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
@@ -5681,6 +5756,7 @@ admin.magic_setting.buy_before_approval: 'ID verification before course purchase
 admin.magic_setting.disable_web_crontab: 'Turn on web scheduled task or not'
 admin.magic_setting.cloud_search: 'Turn on cloud search service'
 admin.magic_setting.ios_buy_disable: 'Close iOS payment or not'
+admin.magic_setting.ios_vip_close: '是否关闭iOS会员模块'
 admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'
@@ -6405,7 +6481,7 @@ course.block_grid.live_back: Playback
 admin.course_manage.file.remove: 'File removal'
 admin.course_manage.file.remove_course_contact: 'The file will be removed from the course'
 admin.course_manage.file.remove_material_lib: 'At the same time in my teaching materials to delete the relevant documents'
-admin.course_manage.file.remove_tips: 'Removal or deletion causes the referenced task to not work properly'
+admin.course_manage.file.remove_tips: 'Removal or deletion causes the referenced %taskName% to not work properly'
 admin.course_manage.file.remove_confirm: Confirm
 admin.course_manage.file.use: 'File %filename% referenced'
 admin.classroom_manage.manage.coin_price: 'Origin Price %coinPriceAll% %coinname%'
@@ -6470,7 +6546,7 @@ notification.comment-post.course_review_reply: Your rating in Course %course% ha
 notification.student-create: You have been added to course %course% by admin, hurry to learn.
 notification.student-remove: You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.
 notification.user-follow.follow: %who% has been following you!
-notification.user-follow.unfollow: %who% has canceled following you!
+notification.user-follow.unfollow: %who% has cancelled following you!
 notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
 notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on discussion %thread%.
@@ -6487,7 +6563,7 @@ notification.group-profile.setAdmin: You are appointed as deputy head of the gro
 notification.group-profile.removeAdmin: You are the group leader in the %group%.
 notification.group-thread.delete: Your discussion %thread% was deleted by %who%.
 notification.group-thread.elite: Your discussion %thread% is set to be highlight.
-notification.group-thread.unelite: Your discussion %thread% was canceled highlight.
+notification.group-thread.unelite: Your discussion %thread% was cancelled highlight.
 notification.group-thread.top: Your discussion %thread% is bumped up.
 notification.group-thread.untop: Your discussion %thread% was bumped down.
 notification.group-thread.close: Your discussion %thread% is closed.
@@ -6513,9 +6589,9 @@ notification.course-thread.delete: Your %thread% was removed by administrator.
 notification.course-thread.delete-post: Your %thread% was removed by administrator.
 notification.course-thread.modify: Your %thread% was edited by administrator.
 notification.course-thread.top: Your %thread% is highlight by administrator.
-notification.course-thread.untop: Your %thread% is canceled to be highlight by administrator.
+notification.course-thread.untop: Your %thread% is cancelled to be highlight by administrator.
 notification.course-thread.elite: Your %thread% is elite by administrator.
-notification.course-thread.unelite: Your %thread% is canceled to be elite by administrator.
+notification.course-thread.unelite: Your %thread% is cancelled to be elite by administrator.
 notification.test-paper.perusal: 【Complete】%who% was finished %what%, %do%.
 notification.test-paper.read: 【Review】%who% was reviewed completely %what%, %do%.
 notification.test-paper.perusal.do: please click to review
@@ -6525,7 +6601,7 @@ notification.order_refund.audit_reject: 'Your refund request has not been approv
 notification.coupon.receive_minus: You have a coupon worth %rate%.
 notification.coupon.receive_discount: You have a coupon with a discount of %rate%.
 notification.vip.add_by_admin: You have been added as a %vipName% member by the administrator.
-notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
+notification.vip.remove_by_admin: You have been cancelled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
 #TODO trans
@@ -6755,6 +6831,7 @@ cashflow.refund: 网校退款
 admin.cashflow.keyword: keyword
 
 order.pay_check_msg.parameters_error: parameters_error
+order.pay_check_msg.coin_amount_error: coin amount error
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
 order.pay_check_msg.unpurchasable_product: Unpurchasable Product
 order.pay_check_msg.order_not_exist: Order not exist
@@ -6983,6 +7060,7 @@ course.video.convert.client.try: '（试一试）'
 course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
 course.task.show.video.convert.client.notify: 不再提醒
 course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.enable_label: 音频听课
 course.info.video.convert.audio.start: 开启
 course.info.video.convert.audio.close: 关闭
 
@@ -7014,7 +7092,31 @@ admin.datalab.setting.btn_use: 再用用看
 
 exception.common_forbidden: 被禁止的操作
 exception.common_error: 服务器内部错误
+exception.common_drag_captcha_error: 验证码验证失败！
+exception.common_drag_captcha_expired: 验证码失效！
+exception.common_drag_captcha_required: 验证码参数缺失！
+exception.common_frequent_operation: 操作过于频繁，请稍后再试！
+exception.common_parameter_missing: 参数缺失，请重试！
+exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
+
+exception.user.mobile_registered: 该手机号码已被注册！
 exception.article.notfound: 资讯不存在
 exception.user.unlogin: 未登陆，请登陆后操作
 exception.user.message_forbidden: 不支持向该用户发送私信
+exception.user.register_limit: 注册次数已达最大限制!
 exception.form.expire: 页面已过期，请重新提交数据！
+exception.user.register_error: 用户数据异常，注册失败！
+exception.sensitive.words: 您填写的内容中包含敏感词!
+exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.user.not_found: 找不到该用户！
+exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
+
+exception.sms.setting_enbale: 云短信相关设置未开启!
+exception.sms.code_invalid: 短信验证码错误
+exception.user_lock: User account is locked, please contact system administrator.
+
+lesson_count_no_more_than_300: Lesson count no more than three hundred.
+lesson_tasks_no_more_than_5: Lesson task no more than 5.
+
+
+course.unname_title: unname course

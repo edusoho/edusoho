@@ -1,4 +1,4 @@
-{{ 'course.task.progress'|trans }}
+{{ 'course.task.progress'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
 <span class="legend-icon mll finish js-legend-btn"  data-bar-class=".finish-color">
     {{ 'course.member_learn_status.learned'|trans }}
 </span>

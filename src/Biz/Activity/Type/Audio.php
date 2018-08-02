@@ -94,7 +94,7 @@ class Audio extends Activity
         return $audioActivity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         $audioActivities = $this->getAudioActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($audioActivities, 'mediaId');
@@ -102,7 +102,7 @@ class Audio extends Activity
         $files = array();
         try {
             foreach ($groupMediaIds as $mediaIds) {
-                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud);
                 $files = array_merge($files, $chuckFiles);
             }
         } catch (CloudAPIIOException $e) {
@@ -120,6 +120,11 @@ class Audio extends Activity
         );
 
         return $audioActivities;
+    }
+
+    public function findWithoutCloudFiles($targetIds)
+    {
+        return $this->getAudioActivityDao()->findByIds($targetIds);
     }
 
     public function materialSupported()

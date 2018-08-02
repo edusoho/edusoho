@@ -37,11 +37,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->getByCopyIdAndCourseSetId($copyId, $courseSetId);
     }
 
-    public function findActivities($ids, $fetchMedia = false)
+    public function findActivities($ids, $fetchMedia = false, $showCloud = 1)
     {
         $activities = $this->getActivityDao()->findByIds($ids);
 
-        return $this->prepareActivities($fetchMedia, $activities);
+        return $this->prepareActivities($fetchMedia, $activities, $showCloud);
     }
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false)
@@ -106,7 +106,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->triggerActivityLearnLogListener($activity, $key, $data);
             $this->triggerExtendListener($activity, $key, $data);
         }
-        if ('doing' == $eventName) {
+        if ('doing' == $eventName || 'finish' == $eventName) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
@@ -443,12 +443,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
-    public function fetchMedias($mediaType, $activities)
+    public function fetchMedias($mediaType, $activities, $showCloud = 1)
     {
         $activityConfig = $this->getActivityConfig($mediaType);
 
         $mediaIds = ArrayToolkit::column($activities, 'mediaId');
-        $medias = $activityConfig->find($mediaIds);
+        $medias = $activityConfig->find($mediaIds, $showCloud);
 
         $medias = ArrayToolkit::index($medias, 'id');
 
@@ -615,7 +615,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      *
      * @return mixed
      */
-    protected function prepareActivities($fetchMedia, $activities)
+    protected function prepareActivities($fetchMedia, $activities, $showCloud = 1)
     {
         if (empty($activities)) {
             return $activities;
@@ -623,7 +623,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityGroups = ArrayToolkit::group($activities, 'mediaType');
         if ($fetchMedia) {
             foreach ($activityGroups as $mediaType => $activityGroup) {
-                $activityGroups[$mediaType] = $this->fetchMedias($mediaType, $activityGroup);
+                $activityGroups[$mediaType] = $this->fetchMedias($mediaType, $activityGroup, $showCloud);
             }
         }
 
