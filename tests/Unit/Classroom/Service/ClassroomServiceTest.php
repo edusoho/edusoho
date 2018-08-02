@@ -695,12 +695,12 @@ class ClassroomServiceTest extends BaseTestCase
                         'classroom',
                         'update',
                         '更新班级《title》(#1)',
-                    ),
-                    array(
-                        'smallPicture'=>'smallPicture',
-                        'middlePicture'=>'middlePicture',
-                        'largePicture'=>'largePicture',
-                        'id'=>1
+                        array(
+                            'smallPicture'=>'smallPicture',
+                            'middlePicture'=>'middlePicture',
+                            'largePicture'=>'largePicture',
+                            'id'=>1
+                        ),
                     ),
                     'runTimes' => 1,
                 ),
