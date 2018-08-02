@@ -59,9 +59,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $siteSetting = $this->getSettingService()->get('site', array());
         $xapiSetting = $this->getSettingService()->get('xapi', array());
         global $request;
+        $host = $request->getHost();
         $data = array(
             'site_name' => empty($siteSetting['name']) ? 'EDUSOHO测试站' : $siteSetting['name'],
-            'domain' => empty($request->getHost()) ? $siteSetting['url'] : $request->getHost(),
+            'domain' => empty($host) ? $siteSetting['url'] : $host,
             'enable' => empty($xapiSetting['enabled']) ? 0 : $xapiSetting['enabled'],
         );
 
