@@ -99,9 +99,9 @@ class WechatController extends PaymentController
 
         $params = $request->getSession()->get('wechat_pay_params_h5');
         $params['openid'] = $openid;
+        $params = http_build_query($params);
 
-        var_dump($params);
-        exit();
+        return $this->createRedirectResponse('/h5/index.html?'.$params.'#/wechat_pay');
     }
 
     public function wechatAppMwebTradeAction(Request $request)
