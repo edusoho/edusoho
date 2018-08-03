@@ -33,6 +33,16 @@ class ServiceProxy
         return $result;
     }
 
+    public function getClassName()
+    {
+        return $this->className;
+    }
+
+    public function getClass()
+    {
+        return $this->class;
+    }
+
     public function handleInterceptors()
     {
         $biz = $this->biz;
