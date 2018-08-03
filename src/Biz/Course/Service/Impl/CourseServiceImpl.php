@@ -33,6 +33,7 @@ use Biz\Course\Service\CourseDeleteService;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Common\CourseToolkit;
+use Biz\System\Util\LogDataUtils;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -266,11 +267,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
 
-        $courseSetChangeFields = $this->getChangeFields($oldCourse, $fields);
-        $courseSetChangeFields['id'] = $id;
-        $courseSetChangeFields['newData'] = $course;
+        $courseChangeFields = ArrayToolkit::changes($oldCourse, $fields);
+        $courseChangeFields = LogDataUtils::serializeCourse($courseChangeFields);
+        $courseChangeFields['id'] = $id;
+        $courseChangeFields['showTitle'] = $course['title'];
 
-        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseSetChangeFields);
+        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseChangeFields);
     }
 
     public function updateCourse($id, $fields)
@@ -310,25 +312,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.update', new Event($course));
 
-        $courseSetChangeFields = $this->getChangeFields($oldCourse, $fields);
-        $courseSetChangeFields['id'] = $id;
-        $courseSetChangeFields['newData'] = $course;
+        $courseChangeFields = ArrayToolkit::changes($oldCourse, $fields);
+        $courseChangeFields = LogDataUtils::serializeCourse($courseChangeFields);
+        $courseChangeFields['id'] = $id;
+        $courseChangeFields['showTitle'] = $course['title'];
 
-        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseSetChangeFields);
+        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseChangeFields);
 
         return $course;
-    }
-
-    private function getChangeFields($course, $fields)
-    {
-        $changeFields = array();
-        foreach ($fields as $key => $value) {
-            if ($course[$key] != $value) {
-                $changeFields[$key] = $course[$key];
-            }
-        }
-
-        return $changeFields;
     }
 
     public function recommendCourseByCourseSetId($courseSetId, $fields)

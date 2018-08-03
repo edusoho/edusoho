@@ -22,6 +22,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\User\UserException;
+use Biz\System\Util\LogDataUtils;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -474,8 +475,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
         $this->updateCourseSerializeMode($courseSet, $fields);
 
-        $courseSetChangeFields = $this->getChangeFields($courseSet, $fields);
-        $courseSetChangeFields['id'] = $courseSet['id'];
+        $courseSetChangeFields = ArrayToolkit::changes($courseSet, $fields);
+        $courseSetChangeFields = LogDataUtils::serializeCourseSet($courseSetChangeFields);
+        $courseSetChangeFields['id'] = $id;
+        $courseSetChangeFields['showTitle'] = $courseSet['title'];
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
@@ -483,18 +486,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
-    }
-
-    private function getChangeFields($courseSet, $fields)
-    {
-        $changeFields = array();
-        foreach ($fields as $key => $value) {
-            if ($courseSet[$key] != $value) {
-                $changeFields[$key] = $courseSet[$key];
-            }
-        }
-
-        return $changeFields;
     }
 
     protected function updateCourseSerializeMode($courseSet, $fields)

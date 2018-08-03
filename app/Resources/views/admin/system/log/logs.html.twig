@@ -79,12 +79,7 @@
           <div style="word-break: break-all;word-wrap: break-word;">
 
             {% set module = log.module %}
-
-            {% if templates[module] is defined and log.action in templates[module] %}
-                {% include 'admin/system/log/template/'~log.module~'/'~log.action~'.html.twig' %}
-            {% else %}
-              {{ log_trans(log.message, log.data) }}
-            {% endif %}
+              {% include 'admin/system/log/template.html.twig' %}
           </div>
         </td>
         <td>
