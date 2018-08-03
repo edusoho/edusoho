@@ -15,6 +15,7 @@ class LogAddFields extends Migration
           ALTER TABLE `log` ADD `browser` varchar(120) DEFAULT '' COMMENT '浏览器信息' AFTER `ip`;
           ALTER TABLE `log` ADD `operatingSystem` varchar(120) DEFAULT '' COMMENT '操作系统' AFTER `browser`;
           ALTER TABLE `log` ADD `device` varchar(120) DEFAULT '' COMMENT '移动端或者计算机 移动端mobile 计算机computer' AFTER `operatingSystem`;
+          ALTER TABLE `log` ADD `userAgent` text COMMENT 'HTTP_USER_AGENT' AFTER `device`;
         ");
     }
 
@@ -36,6 +37,10 @@ class LogAddFields extends Migration
 
         if ($this->isFieldExist('log', 'device')) {
             $db->exec('ALTER TABLE `log` DROP `device`;');
+        }
+
+        if ($this->isFieldExist('log', 'userAgent')) {
+            $db->exec('ALTER TABLE `log` DROP `userAgent`;');
         }
     }
 

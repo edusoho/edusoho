@@ -76,6 +76,7 @@ class LogServiceImpl extends BaseService implements LogService
                 'browser' => $this->getBrowse(),
                 'operatingSystem' => $this->getOperatingSystem(),
                 'device' => $this->getDevice(),
+                'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
                 'createdTime' => time(),
                 'level' => $level,
             )
@@ -156,6 +157,10 @@ class LogServiceImpl extends BaseService implements LogService
 
     protected function getBrowse()
     {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            return '未知浏览器';
+        }
+
         $agent = $_SERVER['HTTP_USER_AGENT'];  //获取用户代理字符串
 
         if (false !== stripos($agent, 'Firefox/')) {
@@ -217,6 +222,10 @@ class LogServiceImpl extends BaseService implements LogService
 
     protected function getOperatingSystem()
     {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            return '未知操作系统';
+        }
+
         $agent = $_SERVER['HTTP_USER_AGENT'];
         if (stripos($agent, 'win') && stripos($agent, '95')) {
             $os = 'Windows 95';
@@ -267,7 +276,7 @@ class LogServiceImpl extends BaseService implements LogService
         } elseif (stripos($agent, 'offline')) {
             $os = 'offline';
         } else {
-            $os = 'Unknown';
+            $os = '未知操作系统';
         }
 
         return $os;
