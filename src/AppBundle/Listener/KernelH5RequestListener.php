@@ -2,12 +2,11 @@
 
 namespace AppBundle\Listener;
 
-use ApiBundle\ApiBundle;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use AppBundle\Common\DeviceToolkit;
 
 class KernelH5RequestListener
 {
@@ -24,11 +23,11 @@ class KernelH5RequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+        if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
 
-        if ($request->getMethod() !== 'GET') {
+        if ('GET' !== $request->getMethod()) {
             return;
         }
 
@@ -40,24 +39,24 @@ class KernelH5RequestListener
 
         $h5 = empty($route['_h5']) ? array() : $route['_h5'];
         if (empty($h5)) {
-            return ;
+            return;
         }
 
         $wapSetting = $this->getSettingService()->get('wap');
         if (empty($wapSetting['enabled'])) {
-            return ;
+            return;
         }
+
+        if (!DeviceToolkit::isMobileClient()) {
+            return;
+        }
+
         $params = $request->query->all();
         $query = http_build_query($params);
         $url = empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html?'.$query.'#'.$pathInfo;
         $response = new RedirectResponse($url);
         $event->setResponse($response);
     }
-
-    
-
-
-
 
     protected function getSettingService()
     {
