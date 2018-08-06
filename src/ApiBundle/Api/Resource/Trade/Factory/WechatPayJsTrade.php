@@ -36,7 +36,7 @@ class WechatPayJsTrade extends BaseTrade
         }
 
         return array(
-            'platformCreatedResult' => json_encode($trade['platform_created_resul']),
+            'platformCreatedResult' => json_encode($trade['platform_created_result']),
             'paidSuccessUrlH5' => $paidSuccessUrlH5,
         );
     }
