@@ -20,6 +20,10 @@ class WechatPayJsTrade extends BaseTrade
     public function getCustomResponse($trade)
     {
         if ('purchase' == $trade['type']) {
+            $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
+
+            $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+            $item1 = reset($items);
             $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
             $paidSuccessUrlH5 = $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
         } else {
