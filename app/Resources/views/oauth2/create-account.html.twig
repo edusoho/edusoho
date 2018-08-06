@@ -64,7 +64,7 @@
         <div class="form-group cd-form-group">
           <label class="control-label" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
           <div class="controls">
-            <input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
+            <input type="text" name="invitedCode" id="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
           </div>
         </div>
       {% endif %}
