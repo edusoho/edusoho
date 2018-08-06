@@ -1,3 +1,8 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
+import MultiInput from 'app/common/component/multi-input';
+import postal from 'postal';
+
 class Marketing {
   constructor() {
     this.validator = null;
@@ -8,6 +13,7 @@ class Marketing {
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
     this.initDatePicker('#deadline');
+    this.initCkeidtor();
     this.initValidator();
     this.initExpiryMode();
     this.initenableBuyExpiry();
@@ -15,6 +21,17 @@ class Marketing {
     this.checkBoxChange();
     this.initDatetimepicker();
     this.setService();
+    this.renderMultiGroupComponent('course-goals', 'goals');
+    this.renderMultiGroupComponent('intended-students', 'audiences');
+  }
+
+  initCkeidtor() {
+    CKEDITOR.replace('summary', {
+      allowedContent: true,
+      toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
+    });
   }
 
   setService() {
@@ -60,6 +77,15 @@ class Marketing {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
+        title: {
+          maxlength: 100,
+          required: {
+            depends: function () {
+              $(this).val($.trim($(this).val()));
+              return true;
+            }
+          }
+        },
         originPrice: {
           required: function () {
             return $('[name=isFree]:checked').val() == 0;
@@ -83,6 +109,9 @@ class Marketing {
         }
       },
       messages: {
+        title: {
+          require: Translator.trans('course.manage.title_required_error_hint')
+        },
         buyExpiryTime: {
           required: Translator.trans('course.manage.buy_expiry_time_error_hint'),
           date: Translator.trans('course.manage.buy_expiry_time_error_hint')
@@ -99,6 +128,7 @@ class Marketing {
     });
     $('#course-submit').click((event) => {
       if (this.validator && this.validator.form()) {
+        this.publishAddMessage();
         $(event.currentTarget).button('loading');
         $form.submit();
       }
@@ -198,7 +228,7 @@ class Marketing {
     let $picker = $($id);
     $picker.datetimepicker({
       format: 'yyyy-mm-dd',
-      language: 'zh',
+      language: document.documentElement.lang,
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
@@ -312,6 +342,20 @@ class Marketing {
 
   elementRemoveRules($element) {
     $element.rules('remove');
+  }
+
+  publishAddMessage() {
+    postal.publish({
+      channel: 'courseInfoMultiInput',
+      topic: 'addMultiInput',
+    });
+  }
+
+  renderMultiGroupComponent(elementId, name) {
+    let datas = $('#' + elementId).data('init-value');
+    ReactDOM.render(<MultiInput
+      dataSource={datas}
+      outputDataElement={name} />, document.getElementById(elementId));
   }
 }
 

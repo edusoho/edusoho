@@ -111,7 +111,7 @@ class Video extends Activity
         return $videoActivity;
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         $videoActivities = $this->getVideoActivityDao()->findByIds($ids);
         $mediaIds = ArrayToolkit::column($videoActivities, 'mediaId');
@@ -119,7 +119,7 @@ class Video extends Activity
         $files = array();
         try {
             foreach ($groupMediaIds as $mediaIds) {
-                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud);
                 $files = array_merge($files, $chuckFiles);
             }
         } catch (CloudAPIIOException $e) {

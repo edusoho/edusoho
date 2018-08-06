@@ -119,7 +119,7 @@ class Ppt extends Activity
         return $activity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getPptActivityDao()->findByIds($targetIds);
     }

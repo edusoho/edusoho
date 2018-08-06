@@ -49,6 +49,12 @@ class SystemUtil
 
         if (empty(self::$mockedDump)) {
             $dump = new MySQLDumper(ServiceKernel::instance()->getConnection(), $dbSetting);
+        } else {
+            $dump = self::$mockedDump;
+        }
+
+        if (empty(self::$mockedDump)) {
+            $dump = new MySQLDumper(ServiceKernel::instance()->getConnection(), $dbSetting);
 
             return $dump->export($backUpdir);
         } else {

@@ -5,8 +5,7 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-
-use Biz\Course\Service\CourseService;
+use Biz\Course\Util\CourseTitleUtils;
 
 class ChaosThreadsPosts extends BaseResource
 {
@@ -73,9 +72,8 @@ class ChaosThreadsPosts extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-
         $total = $this->getCourseThreadService()->getMyReplyThreadCount();
-        $start = $start == -1 ? rand(0, $total - 1) : $start;
+        $start = -1 == $start ? rand(0, $total - 1) : $start;
 
         $posts = $this->getCourseThreadService()->getMyLatestReplyPerThread($start, $limit);
         if (empty($posts)) {
@@ -99,12 +97,7 @@ class ChaosThreadsPosts extends BaseResource
             $course['smallPicture'] = $this->getFileUrl($smallPicture, 'course.png');
             $course['middlePicture'] = $this->getFileUrl($middlePicture, 'course.png');
             $course['largePicture'] = $this->getFileUrl($largePicture, 'course.png');
-
-            if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
-                $course['title'] = $courseSet['title'];
-            } else {
-                $course['title'] = $courseSet['title'].'-'.$course['title'];
-            }
+            $course = CourseTitleUtils::formatTitle($course, $courseSet['title']);
 
             $post['type'] = $thread['type'];
             $post['title'] = $thread['title'];
@@ -127,12 +120,14 @@ class ChaosThreadsPosts extends BaseResource
             'largePicture',
             'createdTime',
         );
+
         return ArrayToolkit::parts($course, $keys);
     }
 
     public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
+
         return $res;
     }
 

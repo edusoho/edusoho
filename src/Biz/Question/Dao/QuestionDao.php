@@ -14,6 +14,8 @@ interface QuestionDao extends GeneralDaoInterface
 
     public function deleteSubQuestions($parentId);
 
+    public function deleteByCourseSetId($courseSetId);
+
     public function copyQuestionsUpdateSubCount($parentId, $subCount);
 
     public function getQuestionCountGroupByTypes($conditions);

@@ -1,23 +1,22 @@
 
-let { getRootPath, init } = require('../../../util/init.js');
-const { shortLongText } = require(getRootPath() + '/app/Resources/static-src/app/common/widget/short-long-text.js');
+let { init } = require('test/util/init.js');
+const { shortLongText } = require('test-src/app/common/widget/short-long-text.js');
 const assert = require('chai').assert;
+const sinon = require('sinon');
+let clock;
 
-describe('common:short-long-test', function() {
+describe('app/common/widget/short-long-text:shortLongText', function() {
   before(function() {
     init('<div class="short-text">tesast</div>');
     shortLongText($('body'));
   });
-  after(function() {
-  });
+
   it('short-text click event', function() {
+    clock = sinon.useFakeTimers(); 
     $('body').find('.short-text').trigger('click');
     assert.equal($('.short-text').css('display'), 'block');
-    
-    let test = function() {
-      assert.equal($('.short-text').css('display'), 'none');
-    };
-
-    setTimeout(test, 1001);
+    clock.tick(1000);
+    assert.equal($('.short-text').css('display'), 'none');
+    clock.restore();
   });
 });

@@ -19,7 +19,7 @@ class Homework extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'homework');
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'homework');
     }
@@ -81,6 +81,8 @@ class Homework extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
+        $fields['passedCondition'] = $homework['passedCondition'];
+
         $filterFields = $this->filterFields($fields);
 
         return $this->getTestpaperService()->updateTestpaper($homework['id'], $filterFields);
@@ -103,7 +105,7 @@ class Homework extends Activity
             return false;
         }
 
-        if ($homework['passedCondition']['type'] === 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+        if ('submit' === $homework['passedCondition']['type'] && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -130,7 +132,7 @@ class Homework extends Activity
             'copyId',
         ));
 
-        if (!empty($filterFields['finishCondition']) && !empty($filterFields['passedCondition'])) {
+        if (!empty($filterFields['finishCondition'])) {
             $filterFields['passedCondition']['type'] = $filterFields['finishCondition'];
         }
 

@@ -32,7 +32,7 @@
                 {{'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%': setting("classroom.name")|default('classroom'|trans)})}}
               </td>
             {% endif %}
-            <td>{{ 'admin.course_manage.statistics.task_count'|trans }}</td>
+            <td>{{ 'admin.course_manage.statistics.task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</td>
             <td>{{'admin.course_manage.statistics.student_number'|trans }}</td>
             <td>{{'admin.course_manage.statistics.finished_number'|trans}}</td>
             <td>{{'admin.course_manage.statistics.study_time_minute'|trans}}</td>

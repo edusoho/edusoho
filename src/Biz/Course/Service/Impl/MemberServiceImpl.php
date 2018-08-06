@@ -22,6 +22,7 @@ use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
+use AppBundle\Common\TimeMachine;
 
 /**
  * Class MemberServiceImpl
@@ -1108,22 +1109,76 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
-    public function addMemberExpiryDays($courseId, $userId, $day)
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        $this->getCourseService()->tryManageCourse($courseId);
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
+            foreach ($userIds as $userId) {
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
-        if ($member['deadline'] > 0) {
-            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
-        } else {
-            $deadline = $day * 24 * 60 * 60 + time();
+                $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
+                $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+
+                $this->getMemberDao()->update(
+                    $member['id'],
+                    array(
+                        'deadline' => $deadline,
+                    )
+                );
+            }
+        }
+    }
+
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
+    {
+        $members = $this->searchMembers(
+            array('userIds' => $userIds, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        if ('minus' == $waveType) {
+            $member = array_shift($members);
+            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
+            if ($day > $maxAllowMinusDay) {
+                return false;
+            }
         }
 
-        return $this->getMemberDao()->update(
-            $member['id'],
-            array(
-                'deadline' => $deadline,
-            )
+        return true;
+    }
+
+    public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date)) {
+            foreach ($userIds as $userId) {
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+                $this->getMemberDao()->update(
+                    $member['id'],
+                    array(
+                        'deadline' => $date,
+                    )
+                );
+            }
+        }
+    }
+
+    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
+    {
+        $members = $this->searchMembers(
+            array('userIds' => $userIds, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
         );
+        $member = array_shift($members);
+        if ($date < $member['deadline'] || time() > $date) {
+            return false;
+        }
+
+        return true;
     }
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
@@ -1164,6 +1219,16 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function findMembersByIds($ids)
     {
         return $this->getMemberDao()->findByIds($ids);
+    }
+
+    public function countStudentMemberByCourseSetId($couseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $couseSetId,
+            'role' => 'student',
+        );
+
+        return $this->getMemberDao()->count($conditions);
     }
 
     protected function createOrder($courseId, $userId, $data)

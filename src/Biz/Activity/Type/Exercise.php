@@ -19,7 +19,7 @@ class Exercise extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'exercise');
     }

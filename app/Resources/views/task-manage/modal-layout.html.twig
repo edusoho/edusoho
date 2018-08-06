@@ -3,9 +3,13 @@
 
 {% block title %}
   {% if task|default(false) %}
-    {{ 'course.plan_task.activity_manage.modify'|trans }}
+    {{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
   {% else %}
-    {{ 'course.plan_task.activity_manage.create'|trans }}
+    {% if categoryId|default(0) %}
+      {{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+    {% else %}
+      {{ 'course.manage.create_lesson'|trans }}
+    {% endif %}
   {% endif %}
 {% endblock %}
 
@@ -32,8 +36,8 @@
             data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
       <i class="es-icon es-icon-delete"></i>{{ 'form.btn.delete'|trans }}</button>
   {% endif %}
-  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ '上一步'|trans }}</button>
-  <button id="course-tasks-next" type="submit" class="btn btn-default hidden">{{ '下一步'|trans }}</button>
+  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ 'form.btn.back'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-default hidden">{{ 'form.btn.next'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-primary hidden"
-          data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+          data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
 {% endblock %}

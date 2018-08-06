@@ -82,10 +82,19 @@ class QiQiuYunSDK
     }
 
     /**
+     * @return \QiQiuYun\SDK\Service\ESopService
+     */
+    public function getESopService()
+    {
+        return $this->getService('ESop');
+    }
+
+    /**
      * 创建API请求认证类实例
      *
      * @param string $accessKey
      * @param string $secretKey
+     *
      * @return Auth
      */
     public function createAuth($accessKey, $secretKey)

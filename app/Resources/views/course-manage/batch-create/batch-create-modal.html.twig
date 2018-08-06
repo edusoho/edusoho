@@ -3,7 +3,7 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-	{{'course_manage.batch_create.title'|trans}}
+	{{'course_manage.batch_create.title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
 {% endblock %}
 
 {% do script([cloud_sdk_url('uploader'), 'libs/jquery-sortable.js', 'app/js/course-manage/batch-create/index.js']) %}
@@ -15,5 +15,6 @@
 
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_task_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ 'upload.content_title.uploading_tips'|trans }}">{{'form.btn.add'|trans}}</button>
+  <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-valid-url="{{ path('course_manage_lesson_valid_num', {courseId:courseId}) }}"
+          data-url="{{ path('course_manage_lesson_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ 'upload.content_title.uploading_tips'|trans }}">{{'form.btn.add'|trans}}</button>
 {% endblock %}

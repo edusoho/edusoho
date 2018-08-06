@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 {% import 'macro.html.twig' as web_macro %}
 
 {% block title %}{{'testpaper.edit'|trans}} - {{ parent() }}{% endblock %}
@@ -8,12 +8,9 @@
 
 {% block main %}
 
-<div class="panel panel-default panel-col">
+<div class="panel-col">
 
-  <div class="panel-heading clearfix">{{'testpaper.edit.content_title'|trans}}</div>
-
-  <div class="panel-body">
-
+    <div class="courseset-manage-body__title">{{'testpaper.edit.content_title'|trans}}</div>
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'testpaper.edit.content_title'} %}
 
     <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="true" data-have-base-fields="true">
@@ -23,7 +20,7 @@
 
       <div class="form-group">
         <div class="col-md-8 col-md-offset-2 controls">
-          <button type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
+          <button type="submit" class="cd-btn cd-btn-primary">{{'form.btn.save'|trans}}</button>
           <a href="{{ path('course_set_manage_testpaper',{id:courseSet.id}) }}" class="btn btn-link">{{'form.btn.return'|trans}}</a>
         </div>
       </div>
@@ -32,7 +29,6 @@
 
     </form>
 
-  </div>
 </div>
 
 

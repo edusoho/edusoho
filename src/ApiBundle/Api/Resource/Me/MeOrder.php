@@ -24,14 +24,12 @@ class MeOrder extends AbstractResource
             $limit
         );
 
-        foreach ($orders as $key => $value) {
-            $product = $this->getProduct($orders[$key]['id']);
-            if (0 == count($product->cover)) {
-                $orders[$key]['cover']['middle'] = '';
-            } else {
-                $orders[$key]['cover'] = $product->cover;
-            }
-            $orders[$key]['targetType'] = $product->targetType;
+        foreach ($orders as &$order) {
+            $product = $this->getProduct($order['id']);
+            $covers = $product->cover;
+            $order['cover'] = count($covers) ? $covers : array('middle' => '');
+            $order['targetType'] = $product->targetType;
+            $order['targetId'] = $product->targetId;
         }
         $total = $this->getOrderService()->countOrders($conditions);
 
@@ -46,24 +44,13 @@ class MeOrder extends AbstractResource
         return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
-    /**
-     * @return OrderService
-     */
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
     }
 
-    /**
-     * @return OrderFacadeService
-     */
     private function getOrderFacadeService()
     {
         return $this->getBiz()->service('OrderFacade:OrderFacadeService');
-    }
-
-    protected function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 }

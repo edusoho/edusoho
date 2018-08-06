@@ -442,6 +442,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'lastViewTime',
                 'seq',
                 'learnedCompulsoryTaskNum',
+                'deadline',
             ),
             'conditions' => array(
                 'id NOT IN (:excludeIds)',
@@ -471,6 +472,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'updatedTime >= :updatedTime_GE',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
+                'finishedTime > :finishedTime_GT',
                 'lastLearnTime <= :lastLearnTime_LE',
                 'deadlineNotified = :deadlineNotified',
             ),

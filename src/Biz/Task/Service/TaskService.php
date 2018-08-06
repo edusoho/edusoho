@@ -36,6 +36,8 @@ interface TaskService
 
     public function deleteTask($id);
 
+    public function deleteTasksByCategoryId($courseId, $categoryId);
+
     public function findTasksByCourseId($courseId);
 
     public function findTasksByCourseSetId($courseSetId);
@@ -220,4 +222,8 @@ interface TaskService
     public function findPublishedTasksByCourseSetId($courseSetId);
 
     public function getTodayLiveCourseNumber();
+
+    public function countTasksByChpaterId($chapterId);
+
+    public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0);
 }

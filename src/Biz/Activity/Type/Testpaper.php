@@ -22,7 +22,7 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->getActivity($targetId);
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         return $this->getTestpaperActivityService()->findActivitiesByIds($ids);
     }
@@ -43,7 +43,7 @@ class Testpaper extends Activity
         $ext = $this->get($activity['mediaId']);
 
         $newExt = array(
-            'mediaId' => $config['testId'],
+            'mediaId' => empty($config['testId']) ? 0 : $config['testId'],
             'doTimes' => $ext['doTimes'],
             'redoInterval' => $ext['redoInterval'],
             'limitedTime' => $ext['limitedTime'],
@@ -122,7 +122,7 @@ class Testpaper extends Activity
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && $testpaperActivity['finishCondition']['type'] === 'submit'
+            ) && 'submit' === $testpaperActivity['finishCondition']['type']
         ) {
             return true;
         }
@@ -130,7 +130,7 @@ class Testpaper extends Activity
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && $testpaperActivity['finishCondition']['type'] === 'score' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
+            ) && 'score' === $testpaperActivity['finishCondition']['type'] && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
         ) {
             return true;
         }

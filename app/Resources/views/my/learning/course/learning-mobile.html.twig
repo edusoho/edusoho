@@ -37,7 +37,7 @@
               </a>
             </div>
             <div class="metas clearfix">
-              <span class="finished-percentage text-sm color-gray">{{'my.learning.course.finish_task'|trans}} : <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.taskNum }}</span></span>
+              <span class="finished-percentage text-sm color-gray">{{'my.learning.course.finish_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}} : <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.taskNum }}</span></span>
               <a href="{{ path('my_course_show', {id:course.id}) }}" target="_blank"><span class="btn btn-primary btn-xs pull-right">{{'my.learning.course.contiune_study'|trans}}</span></a>
             </div>
           </div>
