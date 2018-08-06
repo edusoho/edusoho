@@ -6,7 +6,7 @@ cache:
 
 deploy for develop:
   stage: deploy
-  image: codeages/ci-php:71-6
+  image: codeages/ci-php71:6
   script:
     - npm install yarn
     - node_modules/yarn/bin/yarn config set registry https://registry.npm.taobao.org
