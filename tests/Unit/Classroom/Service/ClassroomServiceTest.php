@@ -494,10 +494,6 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $fields);
 
         $this->assertEquals($fields['title'], $classroom['title']);
-
-        $classroom = $this->getClassroomService()->updateClassroom('999', $fields);
-
-        $this->assertEquals(null, $classroom);
     }
 
     /**
@@ -709,9 +705,11 @@ class ClassroomServiceTest extends BaseTestCase
                         'update',
                         '更新班级《title》(#1)',
                         array(
-                            'smallPicture' => 'smallPicture',
-                            'middlePicture' => 'middlePicture',
-                            'largePicture' => 'largePicture',
+                            'smallPicture' => array('old' => 'smallPicture', 'new' => 'smallPicture'),
+                            'middlePicture' => array('old' => 'middlePicture', 'new' => 'middlePicture'),
+                            'largePicture' => array('old' => 'largePicture', 'new' => 'largePicture'),
+                            'id' => 1,
+                            'showTitle' => 'title',
                         ),
                     ),
                     'runTimes' => 1,
