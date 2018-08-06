@@ -369,14 +369,14 @@ class StudentManageController extends BaseController
 
         foreach ($activitiesWithMeta as $activity) {
             if ('homework' === $activity['mediaType']) {
-                $homeworksCount += 1;
+                ++$homeworksCount;
                 $activities[] = array(
                     'id' => $activity['id'],
                     'mediaId' => $activity['mediaId'],
                     'name' => $activity['title'],
                 );
             } elseif ('testpaper' === $activity['mediaType']) {
-                $testpapersCount += 1;
+                ++$testpapersCount;
                 $activities[] = array(
                     'id' => $activity['id'],
                     'mediaId' => $activity['ext']['mediaId'],
@@ -430,9 +430,9 @@ class StudentManageController extends BaseController
                     $currentActivityId = $target['lessonId'];
                 }
                 if ('homework' === $target['type']) {
-                    $finishedHomeworksCount += 1;
+                    ++$finishedHomeworksCount;
                 } else {
-                    $finishedTestpapersCount += 1;
+                    ++$finishedTestpapersCount;
                 }
 
                 if (empty($bestTests[$currentActivityId])) {

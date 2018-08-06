@@ -130,7 +130,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         //自由式学习 可以学习任意课时
-        if ($course['learnMode'] == 'freeMode') {
+        if ('freeMode' == $course['learnMode']) {
             return true;
         }
 
@@ -139,16 +139,16 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
-        if ($task['type'] == 'live') {
+        if ('live' == $task['type']) {
             return true;
         }
 
-        if ($task['type'] == 'testpaper' && $task['startTime']) {
+        if ('testpaper' == $task['type'] && $task['startTime']) {
             return true;
         }
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
-        if ($taskResult['status'] == 'finish') {
+        if ('finish' == $taskResult['status']) {
             return true;
         }
 
@@ -245,7 +245,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
 
         $taskCount = 0;
         foreach ($items as $key => $item) {
-            if (strpos($key, 'task') !== false) {
+            if (false !== strpos($key, 'task')) {
                 ++$taskCount;
             }
             if ($taskCount > $limitNum) {
@@ -269,7 +269,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     private function _createLesson($task)
     {
         $chapter = $this->getCourseService()->getChapter($task['fromCourseId'], $task['categoryId']);
-        if (empty($chapter) || $chapter['type'] != 'lesson') {
+        if (empty($chapter) || 'lesson' != $chapter['type']) {
             throw new InvalidArgumentException('CategoryId Invalid');
         }
 

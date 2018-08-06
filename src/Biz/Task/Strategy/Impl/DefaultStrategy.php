@@ -69,7 +69,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function createTask($field)
     {
         $this->validateTaskMode($field);
-
         if (isset($field['mode']) && 'lesson' != $field['mode']) {
             // 创建课时中的环节
             return $this->_createLessonLink($field);
@@ -84,7 +83,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($fields);
         $task = parent::updateTask($id, $fields);
 
-        if ($task['mode'] == 'lesson') {
+        if ('lesson' == $task['mode']) {
             $this->getCourseService()->updateChapter(
                 $task['courseId'],
                 $task['categoryId'],
@@ -103,7 +102,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         try {
             $this->biz['db']->beginTransaction();
             $allTasks = array();
-            if ($task['mode'] == 'lesson') {
+            if ('lesson' == $task['mode']) {
                 $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId(
                     $task['courseId'],
                     $task['categoryId']
@@ -117,7 +116,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $this->getActivityService()->deleteActivity($_task['activityId']);
             }
 
-            if ($task['mode'] == 'lesson') {
+            if ('lesson' == $task['mode']) {
                 $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
             }
 
@@ -165,7 +164,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             if ($limitNum && $taskCount > $limitNum) {
                 unset($items[$key]);
             }
-            if ($item['type'] !== 'lesson') {
+            if ('lesson' !== $item['type']) {
                 continue;
             }
 
@@ -247,7 +246,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $task = parent::createTask($task);
-        if ($lessonTask['status'] == 'published') {
+        if ('published' == $lessonTask['status']) {
             $this->getTaskService()->publishTask($task['id']);
         }
 
@@ -258,7 +257,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         if (!array_key_exists($taskMode, $taskModes)) {
-            throw new InvalidArgumentException('task mode is invalida');
+            throw new InvalidArgumentException('task mode is invalid');
         }
 
         return $chapterSeq + $taskModes[$taskMode];

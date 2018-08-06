@@ -526,6 +526,19 @@ class CourseServiceTest extends BaseTestCase
         $this->assertFalse($hasMulCourses);
     }
 
+    public function testIsCourseSetCoursesSummaryEmpty()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($defaultCourse['courseSetId']);
+        $this->assertFalse($isCoursesSummaryEmpty);
+
+        $course = $this->getCourseService()->updateCourse(2, array('summary' => '计划简介'));
+        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($defaultCourse['courseSetId']);
+        $this->assertTrue($isCoursesSummaryEmpty);
+    }
+
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
         $course1 = $this->defaultCourse('test course 1', array('id' => 1));

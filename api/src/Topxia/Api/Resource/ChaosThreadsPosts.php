@@ -5,7 +5,6 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Util\CourseTitleUtils;
 
 class ChaosThreadsPosts extends BaseResource
@@ -74,7 +73,7 @@ class ChaosThreadsPosts extends BaseResource
         $limit = $request->query->get('limit', 10);
 
         $total = $this->getCourseThreadService()->getMyReplyThreadCount();
-        $start = $start == -1 ? rand(0, $total - 1) : $start;
+        $start = -1 == $start ? rand(0, $total - 1) : $start;
 
         $posts = $this->getCourseThreadService()->getMyLatestReplyPerThread($start, $limit);
         if (empty($posts)) {
