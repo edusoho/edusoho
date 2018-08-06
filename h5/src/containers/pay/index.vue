@@ -84,24 +84,22 @@ export default {
   },
   methods: {
     handlePay () {
-      // this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()
-      //  && (this.payWay = 'WechatPay_Js')
-      console.log(this.payWay, 777);
-      if (this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()) {
-        Api.getOpenId().then(res => {
-          console.log(res, 888);
-        });
+      const isWxPay = this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()
+      if (!isWxPay) {
+        window.location.href = `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
+        return;
       }
 
-      // Api.createTrade({
-      //   data: {
-      //     gateway: this.payWay,
-      //     type: 'purchase',
-      //     orderSn: this.detail.sn
-      //   }
-      // }).then(res => {
-      //   window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
-      // })
+      Api.createTrade({
+        data: {
+          gateway: this.payWay,
+          type: 'purchase',
+          orderSn: this.detail.sn
+        }
+      }).then(res => {
+        window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
+      })
     },
     isWeixinBrowser (){
       return /micromessenger/.test(navigator.userAgent.toLowerCase())

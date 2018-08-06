@@ -41,11 +41,6 @@ const config = [
     url: '/me',
     method: 'GET'
   }, {
-    name: 'getOpenId',
-    url: '/pay/openid',
-    method: 'GET',
-    noPrefix: true
-  }, {
     // 修改头像
     name: 'setAvatar',
     url: '/me',

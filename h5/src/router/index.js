@@ -102,6 +102,13 @@ const routes = [
       title: '订单支付'
     },
     component: () => import(/* webpackChunkName: "pay" */'@/containers/pay/index.vue')
+  }, {
+    path: '/weixin_pay',
+    name: 'wxpay',
+    meta: {
+      title: '微信支付'
+    },
+    component: () => import(/* webpackChunkName: "pay" */'@/containers/wxpay/index.vue')
   }
 ];
 
