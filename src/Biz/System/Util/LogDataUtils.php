@@ -10,10 +10,19 @@ class LogDataUtils
     {
         $config = array(
             'course' => array(
-                'remove_student',
-                'add_student',
-                'create',
-                'delete_thread',
+                'create' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_set_show',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
                 'update' => array(
                     'generateUrl' => array(
                         '%url%' => array(
@@ -27,8 +36,6 @@ class LogDataUtils
                         '%title%' => 'showTitle',
                     ),
                 ),
-                'publish',
-                'close',
                 'create_course' => array(
                     'generateUrl' => array(
                         '%url%' => array(
@@ -55,13 +62,57 @@ class LogDataUtils
                         '%title%' => 'showTitle',
                     ),
                 ),
+                'add_student' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_show',
+                            'param' => array(
+                                'id' => 'courseId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                        '%nickname%' => 'nickname',
+                        '%remark%' => 'remark',
+                    ),
+                ),
+                'remove_student' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_show',
+                            'param' => array(
+                                'id' => 'courseId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                        '%nickname%' => 'nickname',
+                    ),
+                ),
+                'delete_thread',
+                'publish',
+                'close',
             ),
             'classroom' => array(
-                'create',
+                'create' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'classroom_show',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
                 'update' => array(
                     'generateUrl' => array(
                         '%url%' => array(
-                            'path' => 'course_set_show',
+                            'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'id',
                             ),
@@ -81,13 +132,10 @@ class LogDataUtils
     {
         $showModals = array(
             'course' => array(
-                'create',
                 'update',
-                'create_course',
                 'update_course',
             ),
             'classroom' => array(
-                'create',
                 'update',
             ),
         );

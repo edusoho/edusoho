@@ -705,9 +705,9 @@ class ClassroomServiceTest extends BaseTestCase
                         'update',
                         '更新班级《title》(#1)',
                         array(
-                            'smallPicture' => array('old' => 'smallPicture', 'new' => 'smallPicture'),
-                            'middlePicture' => array('old' => 'middlePicture', 'new' => 'middlePicture'),
-                            'largePicture' => array('old' => 'largePicture', 'new' => 'largePicture'),
+                            'smallPicture' => array('old' => 'smallPicture', 'new' => 'uri1'),
+                            'middlePicture' => array('old' => 'middlePicture', 'new' => 'uri2'),
+                            'largePicture' => array('old' => 'largePicture', 'new' => 'uri3'),
                             'id' => 1,
                             'showTitle' => 'title',
                         ),
