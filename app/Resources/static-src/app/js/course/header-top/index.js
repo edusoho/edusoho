@@ -58,10 +58,8 @@ const fixButtonPosition = () => {
   if (height >  240) {
     $btn.removeClass('course-detail-info__btn');
   }
-  $btn.removeClass('hidden');
-
 };
 
-window.onload = () => {
+$(document).ready(() => {
   fixButtonPosition();
-};
+});
