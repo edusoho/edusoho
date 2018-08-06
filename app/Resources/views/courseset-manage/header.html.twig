@@ -4,7 +4,7 @@
 {% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
 
-<div class="courseset-manage-header {% if courseSet.type == 'reservation' %}cd-mb32 {% endif %}{% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
+<div class="courseset-manage-header {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
   {% block unfold %}
     {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}
       <div class="courseset-manage-hide js-new-header"><a class="js-show-courseset cd-link-assist" href="javascript:;">{{ 'course.base'|trans }}<i class="es-icon es-icon-xiala"></i></a></div>
