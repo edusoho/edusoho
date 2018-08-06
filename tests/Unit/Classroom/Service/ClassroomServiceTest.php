@@ -700,7 +700,7 @@ class ClassroomServiceTest extends BaseTestCase
                             'middlePicture' => 'middlePicture',
                             'largePicture' => 'largePicture',
                             'id' => 1,
-                            'showTitle'=>'title',
+                            'showTitle' => 'title',
                         ),
                     ),
                     'runTimes' => 1,
