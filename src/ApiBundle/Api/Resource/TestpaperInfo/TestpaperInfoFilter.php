@@ -15,6 +15,5 @@ class TestpaperInfoFilter extends Filter
             $tasKFilter = new CourseTaskFilter();
             $tasKFilter->filter($data['task']);
         }
-        $data['currentTime'] = time();
     }
 }
