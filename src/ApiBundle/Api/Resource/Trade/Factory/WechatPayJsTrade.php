@@ -24,6 +24,11 @@ class WechatPayJsTrade extends BaseTrade
 
             $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
             $item1 = reset($items);
+            $params = array(
+                'targetId' => $item1['target_id'],
+                'num' => $item1['num'],
+                'unit' => $item1['unit'],
+            );
             $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
             $paidSuccessUrlH5 = $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
         } else {
