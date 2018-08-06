@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\System\Util\LogDataUtils;
 
 class LogController extends BaseController
 {
@@ -25,28 +26,12 @@ class LogController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $logs = $this->logsSetUrlParamsJson($logs);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $modules = $this->getLogService()->getModules();
         $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->getActionsByModule($module);
-
-        $templates = array(
-            'course' => array(
-                'remove_student',
-                'add_student',
-                'create',
-                'delete_thread',
-                'update',
-                'publish',
-                'close',
-                'create_course',
-                'update_course',
-            ),
-            'classroom' => array(
-                'create',
-                'update',
-            ),
-        );
 
         return $this->render('admin/system/log/logs.html.twig', array(
             'logs' => $logs,
@@ -54,28 +39,91 @@ class LogController extends BaseController
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
-            'templates' => $templates,
         ));
     }
 
     public function logFieldChangeAction(Request $request)
     {
         $log = $request->query->get('log');
-        $oldData = $log['data'];
+        $data = $log['data'];
+        $showData = array();
 
-        $newData = array();
-        if (isset($oldData['id'])) {
-            unset($oldData['id']);
-        }
-        if (isset($log['data']['newData'])) {
-            $newData = $log['data']['newData'];
-            unset($oldData['data']['newData']);
+        foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                $key = LogDataUtils::trans($k, $log['module'], $log['action']);
+                if (!isset($v['old'])) {
+                    $v['old'] = '';
+                }
+                if (!isset($v['new'])) {
+                    $v['new'] = '';
+                }
+                $v['old'] = $this->tryTrans($log['module'], $log['action'], $v['old'], $k);
+                $v['new'] = $this->tryTrans($log['module'], $log['action'], $v['new'], $k);
+
+                $showData[$key] = $v;
+            }
         }
 
-        return $this->render('admin/system/log/template/'.$log['module'].'/modal/'.$log['action'].'-data-modal.html.twig', array(
-            'oldData' => $oldData,
-            'newData' => $newData,
+        return $this->render('admin/system/log/data-modal.html.twig', array(
+            'data' => $showData,
         ));
+    }
+
+    private function logsSetUrlParamsJson($logs)
+    {
+        $transConfigs = LogDataUtils::getTransConfig();
+        foreach ($logs as $k => &$v) {
+            $transJsonData = array();
+            $logData = $v['data'];
+            $v['urlParamsJson'] = array();
+            $v['shouldShowModal'] = false;
+            $v['shouldShowTemplate'] = false;
+            if (array_key_exists($v['module'], $transConfigs)) {
+                if (array_key_exists($v['action'], $transConfigs[$v['module']])) {
+                    $transConfig = $transConfigs[$v['module']][$v['action']];
+
+                    if (isset($transConfig['getValue'])) {
+                        foreach ($transConfig['getValue'] as $kk => $vv) {
+                            $transJsonData[$kk] = $logData[$vv];
+                        }
+                    }
+                    if (isset($transConfig['generateUrl'])) {
+                        foreach ($transConfig['generateUrl'] as $kk => $vv) {
+                            $urlConfig = $vv;
+
+                            $urlParam = array();
+                            foreach ($urlConfig['param'] as $kkk => $vvv) {
+                                $urlParam[$kkk] = $logData[$vvv];
+                            }
+
+                            $transJsonData[$kk] = $this->generateUrl($urlConfig['path'], $urlParam);
+                        }
+                    }
+
+                    $v['urlParamsJson'] = $transJsonData;
+                    $v['shouldShowModal'] = LogDataUtils::shouldShowModal($v['module'], $v['action']);
+                    $v['shouldShowTemplate'] = true;
+                }
+            }
+        }
+
+        return $logs;
+    }
+
+    private function tryTrans($module, $action, $message, $prefix = '')
+    {
+        $transMessage = $message;
+        if (!empty($prefix)) {
+            $transMessage = $prefix.'.'.$transMessage;
+        }
+
+        $trans = LogDataUtils::trans($transMessage, $module, $action);
+
+        if ($trans == $transMessage) {
+            return $message;
+        }
+
+        return $trans;
     }
 
     public function logActionsAction(Request $request)

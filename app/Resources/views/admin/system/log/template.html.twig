@@ -1,6 +1,6 @@
 
 
-{% if log.data.id is defined %}
+{% if log.shouldShowTemplate == true %}
 
   {{ ('log.action.template.'~log.module~'.'~log.action)|trans(log.urlParamsJson)|raw }}
 

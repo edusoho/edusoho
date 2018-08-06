@@ -1,7 +1,7 @@
 <?php
 
 namespace Biz\System\Util;
-use AppBundle\Common\ArrayToolkit;
+
 use Topxia\Service\Common\ServiceKernel;
 
 class LogDataUtils
@@ -19,41 +19,41 @@ class LogDataUtils
                         '%url%' => array(
                             'path' => 'course_set_show',
                             'param' => array(
-                                'id' => 'id'
-                            )
-                        )
+                                'id' => 'id',
+                            ),
+                        ),
                     ),
                     'getValue' => array(
                         '%title%' => 'showTitle',
-                    )
+                    ),
                 ),
                 'publish',
                 'close',
-                'create_course'  => array(
+                'create_course' => array(
                     'generateUrl' => array(
                         '%url%' => array(
                             'path' => 'course_show',
                             'param' => array(
-                                'id' => 'id'
-                            )
-                        )
+                                'id' => 'id',
+                            ),
+                        ),
                     ),
                     'getValue' => array(
                         '%title%' => 'title',
-                    )
+                    ),
                 ),
                 'update_course' => array(
                     'generateUrl' => array(
                         '%url%' => array(
                             'path' => 'course_show',
                             'param' => array(
-                                'id' => 'id'
-                            )
-                        )
+                                'id' => 'id',
+                            ),
+                        ),
                     ),
                     'getValue' => array(
                         '%title%' => 'showTitle',
-                    )
+                    ),
                 ),
             ),
             'classroom' => array(
@@ -63,27 +63,18 @@ class LogDataUtils
                         '%url%' => array(
                             'path' => 'course_set_show',
                             'param' => array(
-                                'id' => 'id'
-                            )
-                        )
+                                'id' => 'id',
+                            ),
+                        ),
                     ),
                     'getValue' => array(
                         '%title%' => 'showTitle',
-                    )
+                    ),
                 ),
             ),
         );
 
         return $config;
-    }
-
-    public static function getTransPrefix($module, $action)
-    {
-        return array(
-            'log.attr.' . $module . '.' . $action,
-            'log.attr.' . $module,
-            'log.attr',
-        );
     }
 
     public static function shouldShowModal($module, $action)
@@ -100,11 +91,12 @@ class LogDataUtils
                 'update',
             ),
         );
-        if(array_key_exists($module, $showModals)){
-            if(in_array($action, $showModals[$module])){
+        if (array_key_exists($module, $showModals)) {
+            if (in_array($action, $showModals[$module])) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -112,51 +104,68 @@ class LogDataUtils
     {
         $prefix = self::getTransPrefix($module, $action);
         foreach ($prefix as $v) {
-            $transMessage = $v . '.' . $message;
+            $transMessage = $v.'.'.$message;
             $trans = ServiceKernel::instance()->trans($transMessage, array(), null, null);
             if ($trans != $transMessage) {
                 return $trans;
             }
         }
+
         return $message;
     }
 
-    public static function serializeCourse($changeFields){
+    public static function serializeCourse($changeFields)
+    {
         $config = array(
             'buyExpiryTime' => array(
-                'timeConvent'
+                'timeConvent',
             ),
             'expiryStartDate' => array(
-                'timeConvent'
+                'timeConvent',
             ),
             'expiryEndDate' => array(
-                'timeConvent'
-            )
+                'timeConvent',
+            ),
         );
+
         return self::serializeData($config, $changeFields);
     }
 
-    public static function serializeCourseSet($changeFields){
+    public static function serializeCourseSet($changeFields)
+    {
         $config = array(
             'expiryValue' => array(
-                'timeConvent'
-            )
+                'timeConvent',
+            ),
         );
+
         return self::serializeData($config, $changeFields);
     }
 
-    private function serializeData($config, $changeFields){
+    public static function serializeClassroom($changeFields)
+    {
+        $config = array(
+            'expiryValue' => array(
+                'timeConvent',
+            ),
+        );
+
+        return self::serializeData($config, $changeFields);
+    }
+
+    private function serializeData($config, $changeFields)
+    {
         $data = array();
         $oldData = $changeFields['before'];
         $newData = $changeFields['after'];
 
-        foreach ($oldData as $key => $oldValue){
+        foreach ($oldData as $key => $oldValue) {
             $newValue = $newData[$key];
             $old = $oldValue;
             $new = $newValue;
 
-            if(isset($config[$key])){
-                foreach ($config[$key] as $vv){
+            if (isset($config[$key])) {
+                foreach ($config[$key] as $vv) {
                     $old = self::$vv($oldValue);
                     $new = self::$vv($newValue);
                 }
@@ -168,52 +177,24 @@ class LogDataUtils
             );
         }
 
-
         return $data;
     }
 
-    private function conventData($conventConfig, $changeFields){
-        $data = array();
-
-        foreach ($conventConfig as $key => $value){
-
-            foreach ($value as $kk => $vv){
-                $method = $vv['method'];
-                $data[$kk] = self::$method($changeFields, $vv['params']);
-            }
-
-            $data[$key] = $value;
-        }
-
-
-        return $data;
+    public static function getTransPrefix($module, $action)
+    {
+        return array(
+            'log.attr.'.$module.'.'.$action,
+            'log.attr.'.$module,
+            'log.attr',
+        );
     }
 
-
-    private function timeConvent($time){
-        if($time > 10000){
-            $time = date("Y-m-d H:i:s", $time);
+    private function timeConvent($time)
+    {
+        if ($time > 10000) {
+            $time = date('Y-m-d H:i:s', $time);
         }
 
         return $time;
     }
-
-
-
-    private function thisValue($data, $params){
-        return $params;
-    }
-
-    private function getValue($data, $params){
-        if(isset($data[$params])){
-            return $data[$params];
-        }else{
-            return '';
-        }
-
-    }
-
-
-
-
 }
