@@ -81,10 +81,14 @@ class LogController extends BaseController
             if (array_key_exists($v['module'], $transConfigs)) {
                 if (array_key_exists($v['action'], $transConfigs[$v['module']])) {
                     $transConfig = $transConfigs[$v['module']][$v['action']];
+                    $v['shouldShowTemplate'] = true;
+                    $v['shouldShowModal'] = LogDataUtils::shouldShowModal($v['module'], $v['action']);
 
                     if (isset($transConfig['getValue'])) {
                         foreach ($transConfig['getValue'] as $kk => $vv) {
                             if (!array_key_exists($vv, $logData)) {
+                                $v['shouldShowTemplate'] = false;
+                                $v['shouldShowModal'] = false;
                                 continue;
                             }
                             $transJsonData[$kk] = $logData[$vv];
@@ -97,6 +101,8 @@ class LogController extends BaseController
                             $urlParam = array();
                             foreach ($urlConfig['param'] as $kkk => $vvv) {
                                 if (!array_key_exists($vvv, $logData)) {
+                                    $v['shouldShowTemplate'] = false;
+                                    $v['shouldShowModal'] = false;
                                     continue 2;
                                 }
                                 $urlParam[$kkk] = $logData[$vvv];
@@ -107,8 +113,6 @@ class LogController extends BaseController
                     }
 
                     $v['urlParamsJson'] = $transJsonData;
-                    $v['shouldShowModal'] = LogDataUtils::shouldShowModal($v['module'], $v['action']);
-                    $v['shouldShowTemplate'] = true;
                 }
             }
         }

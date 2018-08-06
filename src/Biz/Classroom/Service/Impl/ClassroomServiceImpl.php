@@ -287,6 +287,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            throw $this->createNotFoundException("Classroom#{$id} Not Found");
+        }
 
         unset($fields['tagIds']);
         $fields = $this->filterClassroomFields($fields);
@@ -483,7 +486,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($classrooms as $classroom) {
             $member = $members[$classroom['id']];
 
-            if ($classroom['expiryValue'] > 0 && 0 == $member['deadlineNotified'] && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
+            if ($classroom['expiryValue'] > 0 && 0 == $member['deadlineNotified'] && $currentTime < $member['deadline'] && (10 * 24 * 680 * 60 + $currentTime) > $member['deadline']) {
                 $shouldNotifyClassrooms[] = $classroom;
                 $shouldNotifyClassroomMembers[] = $member;
             }
