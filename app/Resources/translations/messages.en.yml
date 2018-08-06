@@ -745,31 +745,6 @@ resource_lib.btn.batch_manage: 'Batch config'
 resource_lib.btn.add_tag: 'Add tag'
 resource_lib.btn.back: 'Back to list'
 course: Course
-course.title: 计划标题
-course.subtitle: 计划副标题
-course.isFree: 是否免费
-course.buyExpiryTime: 加入截止日期
-course.expiryMode: 学习有效期模式
-course.expiryMode.date: 固定周期
-course.expiryMode.end_date: 截止日期
-course.expiryMode.days: 按有效期天数
-course.expiryMode.forever: 永久有效
-course.expiryDays: 有效期天数
-course.expiryStartDate: 有效开始日期
-course.expiryEndDate: 有效结束日期
-course.enableFinish: 任务完成规则
-course.enableFinish.0: 由任务完成条件决定
-course.enableFinish.1: 无限制
-course.enableAudio: 音频听课
-course.enableAudio.0: 关闭
-course.enableAudio.1: 开启
-course.buyable: 是否可加入
-course.buyable.0: 不可加入
-course.buyable.1: 可加入
-course.tryLookable: 是否开启视频试看
-course.tryLookable.0: 关闭
-course.tryLookable.1: 开启
-course.tryLookLength: 试看时长
 course.lesson: Lesson
 course.preview: Preview
 course.empty_tips: 'No data'
@@ -1915,16 +1890,8 @@ classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
 classroom.courses_count: '%courseNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
-classroom.title: 名称
-classroom.status: 班级状态
-classroom.status.published: 已发布
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
-classroom.expiryMode: 学习有效期模式
-classroom.expiryMode.date: 截止日期
-classroom.expiryMode.days: 有效期天数
-classroom.expiryMode.forever: 永久有效
-classroom.expiryValue: 有效期
 classroom.course.base: 'Basic info'
 classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
 classroom.course.unlock_tips: 'To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : This operation is not reversible!</font>'
@@ -5937,7 +5904,6 @@ admin.system_log.code_run_log.show_rencent_data_tips: 'Displays latest 2000 Log 
 admin.system_log.module: 业务模块
 admin.system_log.time: 操作时间
 admin.system_log.ip: IP地址
-admin.system_log.total_count: 共<strong class="inflow-num">%itemCount%</strong>条数据
 
 admin.admin_sync.content_title: 'Administrator account synchronization'
 admin.admin_sync.tips: '<p><strong> Notes: </strong></p><p> Administrator account synchronization, is to cover the EduSoho administrator account you login now with the administrator account of the User Center %centerName%. <br> Each account can synchronize once. </p>'
@@ -7103,6 +7069,55 @@ log.action.template.course.create_course: 新建了教学计划《<a href="%url%
 log.action.template.course.update_course: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+
+log.field.detail: 详情
+log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
+
+log.attr.course.update_course.title: 计划标题
+log.attr.course.update_course.subtitle: 计划副标题
+log.attr.course.update_course.originPrice: 课程人民币原价
+log.attr.course.update_course.price: 价格
+log.attr.course.update_course.isFree: 是否免费
+log.attr.course.update_course.buyExpiryTime: 加入截止日期
+log.attr.course.update_course.expiryMode: 学习有效期模式
+log.attr.course.update_course.expiryMode.date: 固定周期
+log.attr.course.update_course.expiryMode.end_date: 截止日期
+log.attr.course.update_course.expiryMode.days: 按有效期天数
+log.attr.course.update_course.expiryMode.forever: 永久有效
+log.attr.course.update_course.expiryDays: 有效期天数
+log.attr.course.update_course.expiryStartDate: 有效开始日期
+log.attr.course.update_course.expiryEndDate: 有效结束日期
+log.attr.course.update_course.enableFinish: 任务完成规则
+log.attr.course.update_course.enableFinish.0: 由任务完成条件决定
+log.attr.course.update_course.enableFinish.1: 无限制
+log.attr.course.update_course.enableAudio: 音频听课
+log.attr.course.update_course.enableAudio.0: 关闭
+log.attr.course.update_course.enableAudio.1: 开启
+log.attr.course.update_course.buyable: 是否可加入
+log.attr.course.update_course.buyable.0: 不可加入
+log.attr.course.update_course.buyable.1: 可加入
+log.attr.course.update_course.tryLookable: 是否开启视频试看
+log.attr.course.update_course.tryLookable.0: 关闭
+log.attr.course.update_course.tryLookable.1: 开启
+log.attr.course.update_course.tryLookLength: 试看时长
+log.attr.classroom.title: 名称
+log.attr.classroom.about: 简介
+log.attr.classroom.showable: 班级展示
+log.attr.classroom.showable.0: 关闭
+log.attr.classroom.showable.1: 开启
+log.attr.classroom.buyable: 班级购买
+log.attr.classroom.buyable.0: 关闭
+log.attr.classroom.buyable.1: 开启
+log.attr.classroom.categoryId: 分类
+log.attr.classroom.status: 班级状态
+log.attr.classroom.status.published: 已发布
+log.attr.classroom.status.unpublish: 未发布
+log.attr.classroom.status.closed: 已关闭
+log.attr.classroom.expiryMode: 学习有效期模式
+log.attr.classroom.expiryMode.date: 截止日期
+log.attr.classroom.expiryMode.days: 有效期天数
+log.attr.classroom.expiryMode.forever: 永久有效
+log.attr.classroom.expiryValue: 有效期
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

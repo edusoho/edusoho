@@ -29,6 +29,8 @@ class LogController extends BaseController
         $logs = $this->logsSetUrlParamsJson($logs);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $users = $this->setSystemUserName($users);
+
         $modules = $this->getLogService()->getModules();
         $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->getActionsByModule($module);
@@ -67,6 +69,18 @@ class LogController extends BaseController
         return $this->render('admin/system/log/data-modal.html.twig', array(
             'data' => $showData,
         ));
+    }
+
+    private function setSystemUserName($users)
+    {
+        $systemUser = $this->getUserService()->getUserByType('system');
+        foreach ($users as &$user) {
+            if ($user['id'] == $systemUser['id']) {
+                $user['nickname'] = '系统';
+            }
+        }
+
+        return $users;
     }
 
     private function logsSetUrlParamsJson($logs)
