@@ -1,5 +1,5 @@
 'use strict'
-require('../check-versions')()
+require('../../build/check-versions')()
 
 process.env.NODE_ENV = 'production'
 

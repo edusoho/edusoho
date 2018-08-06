@@ -1,6 +1,6 @@
 'use strict'
 const path = require('path')
-const utils = require('../utils')
+const utils = require('../../build/utils')
 const webpack = require('webpack')
 const config = require('../../config')
 const merge = require('webpack-merge')

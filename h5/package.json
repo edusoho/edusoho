@@ -6,11 +6,11 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "admin-dev": "webpack-dev-server --inline --progress --config build/admin/webpack.dev.conf.js",
+    "admin-dev": "webpack-dev-server --inline --progress --config admin/build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
-    "admin-build": "node build/admin/build.js",
+    "admin-build": "node admin/build/build.js",
     "analyze": "NODE_ENV=production npm_config_report=true npm run build"
   },
   "dependencies": {
