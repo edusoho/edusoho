@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Targetlog\Annotation;
+namespace Biz\System\Annotation;
 
 /**
  * @Annotation
@@ -30,6 +30,8 @@ class Log
     private $level;
 
     private $action;
+
+    private $module;
 
     private $targetType;
 
@@ -76,6 +78,11 @@ class Log
             default:
                 return 1;
         }
+    }
+
+    public function getModule()
+    {
+        return $this->module;
     }
 
     public function getMessage()
@@ -126,5 +133,10 @@ class Log
     public function setTargetId($targetId)
     {
         $this->targetId = $targetId;
+    }
+
+    public function setModule($module)
+    {
+        $this->module = $module;
     }
 }

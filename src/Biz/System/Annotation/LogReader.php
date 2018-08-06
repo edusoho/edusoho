@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Targetlog\Annotation;
+namespace Biz\System\Annotation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\Filesystem\Filesystem;
@@ -31,7 +31,7 @@ class LogReader
             $reflectInterface = new \ReflectionClass($interfaceName);
             $methods = $reflectInterface->getMethods();
             foreach ($methods as $method) {
-                $annotation = $annotationReader->getMethodAnnotation($method, 'Codeages\Biz\Framework\TargetLog\Annotation\Log');
+                $annotation = $annotationReader->getMethodAnnotation($method, '\Biz\System\Annotation\Log');
                 if (empty($annotation)) {
                     $interceptorData[$method->getName()] = array();
                     continue;
@@ -39,6 +39,7 @@ class LogReader
                 $log = array();
                 $log['level'] = $annotation->getLevel();
                 $log['levelId'] = $annotation->getLevelId();
+                $log['module'] = $annotation->getModule();
                 $log['targetType'] = $annotation->getTargetType();
                 $log['targetId'] = $annotation->getTargetId();
                 $log['action'] = $annotation->getAction();

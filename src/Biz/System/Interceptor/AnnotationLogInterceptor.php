@@ -1,13 +1,13 @@
 <?php
 
-namespace Codeages\Biz\Framework\Targetlog\Interceptor;
+namespace Biz\System\Interceptor;
 
+use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\AbstractInterceptor;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Targetlog\Annotation\Log;
-use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 
-class AnnotationInterceptor extends AbstractInterceptor
+class AnnotationLogInterceptor extends AbstractInterceptor
 {
     /**
      * @var Biz
@@ -31,7 +31,7 @@ class AnnotationInterceptor extends AbstractInterceptor
     public function __construct(Biz $biz, $className)
     {
         $this->biz = $biz;
-        $this->interceptorData = $biz['service_targetlog.annotation_reader']->read($className);
+        $this->interceptorData = $biz['service_log.annotation_reader']->read($className);
     }
 
     /**
@@ -42,16 +42,18 @@ class AnnotationInterceptor extends AbstractInterceptor
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
             $currentUser = $this->biz['user'];
-            $levelId = $log['levelId'];
+            $level = $log['level'];
             $targetType = $log['targetType'];
             $targetId = $log['targetId'];
+            $module = $log['module'];
+            $action = $log['action'];
             $context['@funcName'] = $funcName;
             $context['@action'] = $log['action'];
             $context['@args'] = $args;
             $context['@user_id'] = empty($currentUser['id']) ? 0 : $currentUser['id'];
             $context['@ip'] = empty($currentUser['currentIp']) ? '' : $currentUser['currentIp'];
             $message = $log['message'];
-            $this->getTargetlogService()->log($levelId, $targetType, $targetId, $message, $context);
+            $this->getLogService()->$level($module, $action, $message, $context);
         }
     }
 
@@ -61,10 +63,10 @@ class AnnotationInterceptor extends AbstractInterceptor
     }
 
     /**
-     * @return TargetlogService
+     * @return LogService
      */
-    private function getTargetlogService()
+    private function getLogService()
     {
-        return $this->biz->service('Targetlog:TargetlogService');
+        return $this->biz->service('System:LogService');
     }
 }
