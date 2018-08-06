@@ -35,10 +35,13 @@ class WechatPayJsTrade extends BaseTrade
             $paidSuccessUrlH5 = $this->generateUrl('my_coin');
         }
 
-        return array(
+        $result = array(
             'platformCreatedResult' => json_encode($trade['platform_created_result']),
             'paidSuccessUrlH5' => $paidSuccessUrlH5,
         );
+        var_dump($result);
+        exit();
+        return $result;
     }
 
     /**
