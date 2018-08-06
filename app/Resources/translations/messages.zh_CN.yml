@@ -60,6 +60,7 @@ site.default.doing: 进行中
 site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
+site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
 site.default.none: 无
@@ -1217,8 +1218,8 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
-course.members_manage.import_failed_tips: 计划未发布,不可导入学员
-course.members_manage.add_failed_tips: 计划未发布，不可添加学员
+course.members_manage.import_failed_tips: %type%未发布,不可导入学员
+course.members_manage.add_failed_tips: %type%未发布，不可添加学员
 course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
@@ -4029,7 +4030,7 @@ my.teaching.open_course.recommend_setting.live: 直播
 my.teaching.open_course.recommend_setting.task_number: 第%task_number%%taskName%
 my.teaching.open_course.recommend_setting.save_btn: 保存修改
 my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
-my.teaching.open_course.teachers_setting.title: 教师设置
+my.teaching.open_course.teachers_setting.title: 教师管理
 my.teaching.open_course.teachers_setting.is_added: 已添加教师
 my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加有教师权限的用户
 my.teaching.open_course.student_setting.manage_btn: 管理
