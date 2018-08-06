@@ -85,7 +85,7 @@ export default {
   methods: {
     handlePay () {
       const isWxPay = this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()
-      if (!isWxPay) {
+      if (isWxPay) {
         window.location.href = `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
           `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
         return;
