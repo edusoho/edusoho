@@ -148,7 +148,7 @@
       padding-left: 24px;
       margin-left: 480px;
       @media(min-width: @screen-sm-max) {
-        height: 270px;
+        min-height: 270px;
       }
       font-size: 12px;
       color: @gray;
@@ -541,5 +541,14 @@
         max-width: 90%;
       }
     }
+  }
+}
+
+.course-detail-info__btn {
+  @media(min-width: @screen-lg-min) {
+    position: absolute;
+    bottom: 0;
+    padding-right: 24px;
+    width: 100%;
   }
 }
