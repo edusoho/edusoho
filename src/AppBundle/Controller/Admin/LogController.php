@@ -84,6 +84,9 @@ class LogController extends BaseController
 
                     if (isset($transConfig['getValue'])) {
                         foreach ($transConfig['getValue'] as $kk => $vv) {
+                            if (!array_key_exists($vv, $logData)) {
+                                continue;
+                            }
                             $transJsonData[$kk] = $logData[$vv];
                         }
                     }
@@ -93,6 +96,9 @@ class LogController extends BaseController
 
                             $urlParam = array();
                             foreach ($urlConfig['param'] as $kkk => $vvv) {
+                                if (!array_key_exists($vvv, $logData)) {
+                                    continue 2;
+                                }
                                 $urlParam[$kkk] = $logData[$vvv];
                             }
 
