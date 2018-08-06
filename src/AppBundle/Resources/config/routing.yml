@@ -1018,6 +1018,10 @@ cashier_wechat_js_pay:
     path:   /pay/center/wxpay
     defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
 
+cashier_wechat_js_pay_h5:
+    path:   /pay/center/wxpay_h5
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPayH5 }
+
 cashier_wechat_mweb_app_trade:
     path:   /pay/center/wxpay_mweb_app_trade
     defaults: { _controller: AppBundle:Cashier/Wechat:wechatAppMwebTrade }

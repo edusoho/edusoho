@@ -72,6 +72,38 @@ class WechatController extends PaymentController
         );
     }
 
+    public function wechatJsPayH5Action(Request $request)
+    {
+        if (!$request->query->get('code', '')) {
+            $request->getSession()->set('wechat_pay_params_h5', $request->query->all());
+        }
+
+        try {
+            $biz = $this->getBiz();
+
+            $options = $biz['payment.platforms.options']['wechat'];
+
+            $jsApi = new JsApiPay(array(
+                'appid' => $options['appid'],
+                'account' => $options['mch_id'],
+                'key' => $options['key'],
+                'secret' => $options['secret'],
+                'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay_h5', array(), true),
+                'isMicroMessenger' => true,
+            ), $request);
+
+            $openid = $jsApi->getOpenid();
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', '不能使用微信支付，可能是网校未开启微信支付或配置不正确');
+        }
+
+        $params = $request->getSession()->get('wechat_pay_params_h5');
+        $params['openid'] = $openid;
+        $params = http_build_query($params);
+
+        return $this->createRedirectResponse('/h5/#/weixin_pay?'.$params);
+    }
+
     public function wechatAppMwebTradeAction(Request $request)
     {
         $tradeSn = $request->query->get('tradeSn');

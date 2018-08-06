@@ -17,6 +17,21 @@ class WechatPayJsTrade extends BaseTrade
         );
     }
 
+    public function getCustomResponse($trade)
+    {
+        if ('purchase' == $trade['type']) {
+            $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
+            $paidSuccessUrlH5 = $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
+        } else {
+            $paidSuccessUrlH5 = $this->generateUrl('my_coin');
+        }
+
+        return array(
+            'platformCreatedResult' => json_encode($trade['platform_created_resul']),
+            'paidSuccessUrlH5' => $paidSuccessUrlH5,
+        );
+    }
+
     /**
      * @return UserService
      */
