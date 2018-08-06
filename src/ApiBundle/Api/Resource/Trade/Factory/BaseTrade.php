@@ -114,7 +114,6 @@ abstract class BaseTrade
             return $defaultResponse;
         } else {
             $result = array_merge($defaultResponse, $this->getCustomResponse($trade));
-            var_dump($result);exit();
             return $result;
         }
     }
