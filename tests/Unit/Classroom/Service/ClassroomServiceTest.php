@@ -500,6 +500,19 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(null, $classroom);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage Classroom#999 Not Found
+     */
+    public function testUpdateClassroomNotFound()
+    {
+        $fields = array(
+            'title' => 'test11111',
+        );
+
+        $this->getClassroomService()->updateClassroom('999', $fields);
+    }
+
     public function testWaveClassroom()
     {
         $this->mockBiz(
@@ -696,11 +709,9 @@ class ClassroomServiceTest extends BaseTestCase
                         'update',
                         '更新班级《title》(#1)',
                         array(
-                            'smallPicture' => array('smallPicture'),
-                            'middlePicture' => array('middlePicture'),
-                            'largePicture' => array('largePicture'),
-                            'id' => 1,
-                            'showTitle' => 'title',
+                            'smallPicture' => 'smallPicture',
+                            'middlePicture' => 'middlePicture',
+                            'largePicture' => 'largePicture',
                         ),
                     ),
                     'runTimes' => 1,
