@@ -53,7 +53,7 @@ class KernelH5RequestListener
 
         $params = $request->query->all();
         $query = http_build_query($params);
-        $url = empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html?'.$query.'#'.$pathInfo;
+        $url = empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
         $response = new RedirectResponse($url);
         $event->setResponse($response);
     }
