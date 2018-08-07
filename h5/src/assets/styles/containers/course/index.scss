@@ -106,13 +106,13 @@
   }
   // plan component
   &__plan {
-    padding: vw(20) 0;
+    overflow: hidden;
+    padding: vw(20) 0 vw(10);
     border-top: 1px solid $border-grey;
     margin: 0 vw(20);
-    display: flex;
-    justify-content: flex-start;
     > li {
-      // width: vw(66);
+      white-space: nowrap;
+      float: left;
       height: 30px;
       padding: 0 8px;
       border: 1px solid $border-grey;
@@ -121,6 +121,7 @@
       font-size: vw(14);
       color: #71777d;
       margin-right: vw(20);
+      margin-bottom: vw(10);
       border-radius: 2px;
       &.active {
         color: white;
@@ -156,6 +157,11 @@
       bottom: 0;
       top: vw(300);
       overflow: auto;
+      .e-panel-body {
+        img {
+          width: 100%;
+        }
+      }
     }
   }
   .after-tabs {

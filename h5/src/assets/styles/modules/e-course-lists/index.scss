@@ -20,15 +20,15 @@
   font-size: vw(14);
   .more-text {
     display: block;
-    margin-right: 6px;
+    margin-right: 3px;
     height: 100%;
     line-height: vw(25);
   }
   &:after {
     content: '';
     float: left;
-    margin-top: vw(7);
-    margin-right: vw(4);
+    margin-top: vw(8);
+    margin-right: vw(2);
     width: vw(7);
     height: vw(7);
     border-top: 2px solid #71777D;
