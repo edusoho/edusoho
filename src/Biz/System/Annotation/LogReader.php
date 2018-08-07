@@ -24,7 +24,6 @@ class LogReader
         }
         $annotationReader = new AnnotationReader();
         $annotationReader::addGlobalIgnoredName('before');
-        $annotationReader::addGlobalIgnoredName('params');
         $reflectClass = new \ReflectionClass($service);
         $interfaces = $reflectClass->getInterfaces();
 
