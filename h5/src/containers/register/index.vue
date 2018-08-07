@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <e-loading v-if="isLoading"></e-loading>    
+    <e-loading v-if="isLoading"></e-loading>
     <span class='register-title'>注册账号</span>
 
       <van-field
@@ -21,9 +21,9 @@
         placeholder="请设置密码（5-20位字符）"
       />
 
-      <e-drag 
+      <e-drag
         v-if="dragEnable"
-        :info="registerInfo" 
+        :info="registerInfo"
         @success="handleSmsSuccess"></e-drag>
 
       <van-field
@@ -34,9 +34,9 @@
         maxLength="6"
         placeholder="请输入验证码"
         >
-        <van-button 
-          slot="button" 
-          size="small" 
+        <van-button
+          slot="button"
+          size="small"
           type="primary"
           :disabled="count.codeBtnDisable"
           @click="handleSendSms">
@@ -44,14 +44,14 @@
           <span v-show="count.showCount">({{ count.num }})</span>
           </van-button>
       </van-field>
-      
-      <van-button type="default" 
-        class="primary-btn mb20" 
+
+      <van-button type="default"
+        class="primary-btn mb20"
         :disabled="btnDisable"
         @click="handleSubmit">同意服务协议并注册</van-button>
-      
+
       <div class="login-bottom ">
-        请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link> 
+        请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
       </div>
 
       <!-- 一期不做 -->
@@ -105,7 +105,8 @@ export default {
   computed: {
     btnDisable() {
       return !(this.registerInfo.mobile
-        && this.registerInfo.encrypt_password);
+        && this.registerInfo.encrypt_password
+        && this.registerInfo.smsCode);
     },
     ...mapState({
       isLoading: state => state.isLoading
