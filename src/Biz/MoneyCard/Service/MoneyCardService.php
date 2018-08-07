@@ -33,7 +33,7 @@ interface MoneyCardService
      * @param array $conditions
      *
      * @return mixed
-     * @befor  searchMoneyCardsCount
+     * @before  searchMoneyCardsCount
      */
     public function countMoneyCards(array $conditions);
 
@@ -43,7 +43,7 @@ interface MoneyCardService
      * @param array $conditions
      *
      * @return mixed
-     * @befor  searchBatchsCount
+     * @before  searchBatchsCount
      */
     public function countBatches(array $conditions);
 
