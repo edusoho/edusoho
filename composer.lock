@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e198b48e1c224052a4e0a468103d12c9",
+    "content-hash": "b24dbd9d3fdd1c31873a9497e8ab8af7",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,22 +293,23 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.27",
+            "version": "v0.9.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "90e35a62d79353c05b97d58302b54b43ff3dbd05"
+                "reference": "aad3ae9eeb50426bf427349069d5977556a5ca02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/90e35a62d79353c05b97d58302b54b43ff3dbd05",
-                "reference": "90e35a62d79353c05b97d58302b54b43ff3dbd05",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/aad3ae9eeb50426bf427349069d5977556a5ca02",
+                "reference": "aad3ae9eeb50426bf427349069d5977556a5ca02",
                 "shasum": ""
             },
             "require": {
                 "codeages/symfony-lock-lite": "^1.0",
                 "davedevelopment/phpmig": "~1.2",
                 "doctrine/annotations": "~1.2",
+                "doctrine/common": "~2.4",
                 "doctrine/dbal": "~2.4",
                 "monolog/monolog": "^1.20",
                 "mtdowling/cron-expression": "~1.2",
@@ -344,7 +345,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-07-10T01:35:01+00:00"
+            "time": "2018-08-06T02:49:06+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
