@@ -81,6 +81,9 @@ class Course extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
+        if (isset($conditions['type']) && 'all' == $conditions['type']) {
+            unset($conditions['type']);
+        }
         $conditions['status'] = 'published';
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
