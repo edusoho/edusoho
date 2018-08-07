@@ -10,7 +10,7 @@ interface LiveActivityService
 
     public function createLiveActivity($activity, $ignoreValidation = false);
 
-    public function updateLiveActivity($id, &$fields, $activity);
+    public function updateLiveActivity($id, $fields, $activity);
 
     public function updateLiveStatus($liveId, $status);
 

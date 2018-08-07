@@ -56,13 +56,22 @@
 
 </form>
 
+<p class="text-muted log-operation">
+  <span class="mrl">
+    {{ 'admin.system_log.log_num'|trans({'%itemCount%':paginator.itemCount})|raw }}
+  </span>
+  <label for="switch-operation" class="switch{% if hasSystemOperation == 0 %} checked{% endif %}">
+    <input type="checkbox" name="operation" value="" id="switch-operation" data-toggle="switch" {% if hasSystemOperation == 1 %} data-url="{{ path('admin_logs', {hasSystemOperation: 0}) }}" {% else %} data-url="{{ path('admin_logs', {hasSystemOperation: 1}) }}" {% endif %}>
+  </label>
+</p>
+
   <table class="table table-hover" id="log-table">
     <tr>
       <th width="15%">{{'admin.system_log.username'|trans}}</th>
       <th width="55%">{{'admin.system_log.operation'|trans}}</th>
       <th width="10%">{{'admin.system_log.log_lenvel'|trans}}</th>
       <th width="20%">{{'admin.system_log.time_and_ip'|trans}}</th>
-    </tr>   
+    </tr>
     {% for log in logs %}
       {% set user = users[log.userId]|default(null) %}
       <tr>
