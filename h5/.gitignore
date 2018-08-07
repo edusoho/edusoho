@@ -9,6 +9,7 @@ yarn-error.log*
 selenium-debug.log
 /vendor/
 composer.json
+composer.lock
 
 # Editor directories and files
 .idea
