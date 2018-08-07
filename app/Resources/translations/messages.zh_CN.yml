@@ -7209,6 +7209,7 @@ admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日�
 admin.system_log.module: 业务模块
 admin.system_log.time: 操作时间
 admin.system_log.ip: IP地址
+admin.system_log.log_num: 共 <strong class="inflow-num">%itemCount%</strong> 条数据
 
 # 管理员帐号同步
 admin.admin_sync.content_title: 管理员帐号同步
