@@ -168,6 +168,18 @@ class LogController extends BaseController
         ));
     }
 
+    public function usernameMatchUsersAction(Request $request)
+    {
+        $nickname = $request->query->get('nickname');
+        $conditions = array(
+            'nickname' => $nickname,
+        );
+        $orderBy = array('createdTime' => 'ASC');
+        $existsUser = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 10);
+
+        return $this->createJsonResponse($existsUser);
+    }
+
     public function prodAction(Request $request)
     {
         $logfile = $this->container->getParameter('kernel.root_dir').'/logs/prod.log';

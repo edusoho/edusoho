@@ -49,7 +49,8 @@
   </div>
 
   <div class="form-group">
-    <input type="text" id="nickname" name="nickname" value="{{app.request.query.get('nickname')}}" class="form-control" placeholder="{{'admin.system_log.username_placeholder'|trans}}" style="width:120px;">
+    {% set url = path('admin_logs_username_match') ~ '?nickname={{query}}' %}
+    <input class="form-control quicksearch" id="nickname" name="nickname" data-role="item-input" placeholder="{{'admin.system_log.username_placeholder'|trans}}" data-url='{{url}}' value="{{app.request.query.get('nickname')}}">
   </div>
 
   <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
@@ -109,5 +110,6 @@
   </table>
 
   {{ admin_macro.paginator(paginator) }}
+
 
 {% endblock %}
