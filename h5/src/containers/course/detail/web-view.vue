@@ -30,12 +30,12 @@ export default {
   },
   async mounted () {
     const player = await Api.getMedia(this.getParams());
-
     if (['ppt', 'doc'].includes(this.media)) {
       this.initPlayer(player)
     } else {
       // text类型不需要播放器
-      this.$refs.text.innerHTML = player.media.content
+      this.$refs.text.innerHTML = player.media.content;
+      this.$route.meta.title = player.media.title;
     }
   },
   methods: {
