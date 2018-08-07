@@ -5901,6 +5901,9 @@ admin.system_log.show_data: 'Viewing the data'
 admin.system_log.hide_data: 'Hide data'
 admin.system_log.empty: 'No rcord'
 admin.system_log.code_run_log.show_rencent_data_tips: 'Displays latest 2000 Log information.'
+admin.system_log.module: 业务模块
+admin.system_log.time: 操作时间
+admin.system_log.ip: IP地址
 admin.system_log.log_num: 共 <strong class="inflow-num">%itemCount%</strong> 条数据
 
 admin.admin_sync.content_title: 'Administrator account synchronization'
@@ -6805,7 +6808,7 @@ task.learn_data_detail.testpaper_firstScore: First Score
 task.learn_data_detail.testpaper_maxScore: Max Score
 task.learn_data_detail.learnTime: Learn Time(minute)
 task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
-task.learn_data_detail.contact_information: contact information 
+task.learn_data_detail.contact_information: contact information
 task.learn_data_detail.task_title: Task Title
 task.learn_data_detail.completed_number: completed number
 task.learn_data_detail.unfinished_number: unfinished number
@@ -6898,6 +6901,7 @@ log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
 log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
+log.action.course.create_lesson: 创建课时
 log.action.course.add_student: 添加课程学员
 log.action.course.remove_student: 移除课程学员
 log.action.course.update_teacher: 更新课程教师
@@ -6925,6 +6929,8 @@ log.action.course.sync_when_task_update: 同步更新任务
 log.action.course.sync_when_task_delete: 同步删除任务
 log.action.course.clone_course_set: 复制课程
 log.action.course.unlock_course: 解除课程同步
+log.action.course.create_course: 创建教学计划
+log.action.course.update_course: 修改教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -6954,6 +6960,7 @@ log.action.system.setting_userCenter: 用户中心设置
 log.action.system.update_block: 更新编辑区
 log.action.system.update_app_version: 更新版本
 log.action.classroom.create: 新增班级
+log.action.classroom.update: 修改班级
 log.action.classroom.delete: 删除班级
 log.action.classroom.add_course: 添加课程
 log.action.classroom.add_student: 添加学员
@@ -7051,6 +7058,77 @@ log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成直播回放
 log.action.live.delete_live_activity: 删除直播活动
+
+log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.publish: 发布了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.close: 关闭了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
+log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.delete_thread: 删除了<strong class="color-success">话题</strong> %title%
+log.action.template.course.create_course: 新建了教学计划《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.update_course: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+
+log.field.detail: 详情
+log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
+
+log.attr.course.update.title: 课程标题
+log.attr.course.update.subtitle: 课程副标题
+log.attr.course.update.serializeMode: 连载状态
+log.attr.course.update.serializeMode.none: 非连载课程
+log.attr.course.update.serializeMode.serialized: 更新中
+log.attr.course.update.serializeMode.finished: 已完结
+log.attr.course.update.summary: 详情
+log.attr.course.update_course.title: 计划标题
+log.attr.course.update_course.subtitle: 计划副标题
+log.attr.course.update_course.originPrice: 课程人民币原价
+log.attr.course.update_course.price: 价格
+log.attr.course.update_course.isFree: 是否免费
+log.attr.course.update_course.buyExpiryTime: 加入截止日期
+log.attr.course.update_course.expiryMode: 学习有效期模式
+log.attr.course.update_course.expiryMode.date: 固定周期
+log.attr.course.update_course.expiryMode.end_date: 截止日期
+log.attr.course.update_course.expiryMode.days: 按有效期天数
+log.attr.course.update_course.expiryMode.forever: 永久有效
+log.attr.course.update_course.expiryDays: 有效期天数
+log.attr.course.update_course.expiryStartDate: 有效开始日期
+log.attr.course.update_course.expiryEndDate: 有效结束日期
+log.attr.course.update_course.enableFinish: 任务完成规则
+log.attr.course.update_course.enableFinish.0: 由任务完成条件决定
+log.attr.course.update_course.enableFinish.1: 无限制
+log.attr.course.update_course.enableAudio: 音频听课
+log.attr.course.update_course.enableAudio.0: 关闭
+log.attr.course.update_course.enableAudio.1: 开启
+log.attr.course.update_course.buyable: 是否可加入
+log.attr.course.update_course.buyable.0: 不可加入
+log.attr.course.update_course.buyable.1: 可加入
+log.attr.course.update_course.tryLookable: 是否开启视频试看
+log.attr.course.update_course.tryLookable.0: 关闭
+log.attr.course.update_course.tryLookable.1: 开启
+log.attr.course.update_course.tryLookLength: 试看时长
+log.attr.classroom.title: 名称
+log.attr.classroom.about: 简介
+log.attr.classroom.showable: 班级展示
+log.attr.classroom.showable.0: 关闭
+log.attr.classroom.showable.1: 开启
+log.attr.classroom.buyable: 班级购买
+log.attr.classroom.buyable.0: 关闭
+log.attr.classroom.buyable.1: 开启
+log.attr.classroom.categoryId: 分类
+log.attr.classroom.status: 班级状态
+log.attr.classroom.status.published: 已发布
+log.attr.classroom.status.unpublish: 未发布
+log.attr.classroom.status.closed: 已关闭
+log.attr.classroom.expiryMode: 学习有效期模式
+log.attr.classroom.expiryMode.date: 截止日期
+log.attr.classroom.expiryMode.days: 有效期天数
+log.attr.classroom.expiryMode.forever: 永久有效
+log.attr.classroom.expiryValue: 有效期
+log.attr.classroom.smallPicture: 小图
+log.attr.classroom.middlePicture: 中图
+log.attr.classroom.largePicture: 大图
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

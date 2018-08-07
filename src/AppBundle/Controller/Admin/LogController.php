@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\System\Util\LogDataUtils;
 
 class LogController extends BaseController
 {
@@ -30,7 +31,11 @@ class LogController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $logs = $this->logsSetUrlParamsJson($logs);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $users = $this->setSystemUserName($users);
+
         $modules = $this->getLogService()->getModules();
         $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->getActionsByModule($module);
@@ -43,6 +48,110 @@ class LogController extends BaseController
             'actions' => $actions,
             'hasSystemOperation' => empty($conditions['exceptedUserId']) ? 1 : 0,
         ));
+    }
+
+    public function logFieldChangeAction(Request $request)
+    {
+        $log = $request->query->get('log');
+        $data = $log['data'];
+        $showData = array();
+
+        foreach ($data as $message => $fieldChange) {
+            if (is_array($fieldChange)) {
+                $key = LogDataUtils::trans($message, $log['module'], $log['action']);
+                if (!isset($fieldChange['old'])) {
+                    $fieldChange['old'] = '';
+                }
+                if (!isset($fieldChange['new'])) {
+                    $fieldChange['new'] = '';
+                }
+                $fieldChange['old'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['old'], $message);
+                $fieldChange['new'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['new'], $message);
+
+                $showData[$key] = $fieldChange;
+            }
+        }
+
+        return $this->render('admin/system/log/data-modal.html.twig', array(
+            'data' => $showData,
+        ));
+    }
+
+    private function setSystemUserName($users)
+    {
+        $systemUser = $this->getUserService()->getUserByType('system');
+        foreach ($users as &$user) {
+            if ($user['id'] == $systemUser['id']) {
+                $user['nickname'] = '系统';
+            }
+        }
+
+        return $users;
+    }
+
+    private function logsSetUrlParamsJson($logs)
+    {
+        $transConfigs = LogDataUtils::getTransConfig();
+        foreach ($logs as &$log) {
+            $transJsonData = array();
+            $logData = $log['data'];
+            $log['urlParamsJson'] = array();
+            $log['shouldShowModal'] = false;
+            $log['shouldShowTemplate'] = false;
+            if (array_key_exists($log['module'], $transConfigs)) {
+                if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
+                    $transConfig = $transConfigs[$log['module']][$log['action']];
+                    $log['shouldShowTemplate'] = true;
+                    $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
+
+                    if (isset($transConfig['getValue'])) {
+                        foreach ($transConfig['getValue'] as $key => $value) {
+                            if (!array_key_exists($value, $logData)) {
+                                $log['shouldShowTemplate'] = false;
+                                $log['shouldShowModal'] = false;
+                                continue;
+                            }
+                            $transJsonData[$key] = $logData[$value];
+                        }
+                    }
+                    if (isset($transConfig['generateUrl'])) {
+                        foreach ($transConfig['generateUrl'] as $key => $urlConfig) {
+                            $urlParam = array();
+                            foreach ($urlConfig['param'] as $param => $value) {
+                                if (!array_key_exists($value, $logData)) {
+                                    $log['shouldShowTemplate'] = false;
+                                    $log['shouldShowModal'] = false;
+                                    continue 2;
+                                }
+                                $urlParam[$param] = $logData[$value];
+                            }
+
+                            $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
+                        }
+                    }
+
+                    $log['urlParamsJson'] = $transJsonData;
+                }
+            }
+        }
+
+        return $logs;
+    }
+
+    private function tryTrans($module, $action, $message, $prefix = '')
+    {
+        $transMessage = $message;
+        if (!empty($prefix)) {
+            $transMessage = $prefix.'.'.$transMessage;
+        }
+
+        $trans = LogDataUtils::trans($transMessage, $module, $action);
+
+        if ($trans == $transMessage) {
+            return $message;
+        }
+
+        return $trans;
     }
 
     public function logActionsAction(Request $request)

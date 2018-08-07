@@ -33,6 +33,7 @@ use Biz\Course\Service\CourseDeleteService;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Common\CourseToolkit;
+use Biz\System\Util\LogDataUtils;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -183,6 +184,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->commit();
             $this->dispatchEvent('course.create', new Event($created));
 
+            $infoData = array(
+                'id' => $created['id'],
+                'title' => $created['title'],
+            );
+
+            $this->getLogService()->info('course', 'create_course', sprintf('创建计划任务《%s》(#%s)', $created['title'], $created['id']), $infoData);
+
             return $created;
         } catch (\Exception $e) {
             $this->rollback();
@@ -258,11 +266,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
+
+        $courseChangeFields = LogDataUtils::serializeCourse($oldCourse, $fields);
+
+        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseChangeFields);
     }
 
     public function updateCourse($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $oldCourse = $this->tryManageCourse($id);
 
         $this->validatie($id, $fields);
 
@@ -296,6 +308,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->update($id, $fields);
 
         $this->dispatchEvent('course.update', new Event($course));
+
+        $courseChangeFields = LogDataUtils::serializeCourse($oldCourse, $fields);
+
+        $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseChangeFields);
 
         return $course;
     }

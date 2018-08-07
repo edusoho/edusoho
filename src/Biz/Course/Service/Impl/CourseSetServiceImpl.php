@@ -22,6 +22,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\User\UserException;
+use Biz\System\Util\LogDataUtils;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -387,7 +388,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         //update courseSet defaultId
         $created = $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
-        $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
+
+        $infoData = array(
+            'id' => $created['id'],
+            'title' => $created['title'],
+        );
+
+        $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']), $infoData);
 
         return $created;
     }
@@ -467,9 +474,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->updateCourseSummary($courseSet);
         }
         $this->updateCourseSerializeMode($courseSet, $fields);
+
+        $courseSetChangeFields = LogDataUtils::serializeCourseSet($courseSet, $fields);
+
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
-        $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})");
+        $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})", $courseSetChangeFields);
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -682,7 +692,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->commit();
 
             $this->dispatchEvent('course-set.publish', new Event($courseSet));
-            $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
+            $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})", $courseSet);
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -712,7 +722,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $exception;
         }
 
-        $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
+        $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})", $courseSet);
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
