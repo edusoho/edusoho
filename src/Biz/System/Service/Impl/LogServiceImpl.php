@@ -8,6 +8,7 @@ use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
+use AppBundle\Common\DeviceToolkit;
 
 class LogServiceImpl extends BaseService implements LogService
 {
@@ -73,6 +74,10 @@ class LogServiceImpl extends BaseService implements LogService
                 'data' => empty($data) ? '' : json_encode($data),
                 'userId' => $user['id'],
                 'ip' => $user['currentIp'],
+                'browser' => DeviceToolkit::getBrowse(),
+                'operatingSystem' => DeviceToolkit::getOperatingSystem(),
+                'device' => DeviceToolkit::isMobileClient() ? 'mobile' : 'computer',
+                'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
                 'createdTime' => time(),
                 'level' => $level,
             )
