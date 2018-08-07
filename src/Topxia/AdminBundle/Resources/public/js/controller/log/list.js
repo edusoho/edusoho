@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
 	require("jquery.bootstrap-datetimepicker");
 	require("$");
-	var AutoComplete = require('autocomplete');
 
 	exports.run = function() {
 		$("#startDateTime, #endDateTime").datetimepicker({
@@ -26,18 +25,10 @@ define(function(require, exports, module) {
 				$('#log-action').html(html);
 			});
 		});
-		
-		var autocomplete = new AutoComplete({
-			trigger: '#nickname',
-			dataSource: $("#nickname").data('url'),
-			filter: {
-				name: 'stringMatch',
-				options: {
-					key: 'nickname'
-				}
-			},
-			selectFirst: true
-		}).render();
+
+		$('[data-toggle="switch"]').on('click', function() {
+			window.location.href = $(this).data('url');
+		})
 	};
 
 });
