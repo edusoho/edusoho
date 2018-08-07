@@ -34,25 +34,25 @@ export default {
     }),
   },
   mounted() {
-    const { pay_amount, title, sn, openId } = this.$route.query;
-    this.detail = { pay_amount, title, sn, openId };
+    const { pay_amount, title, sn, openid } = this.$route.query;
+    this.detail = { pay_amount, title, sn, openid };
   },
   methods: {
     handlePay() {
       Api.createTrade({
         data: {
-          gateway: 'WechatPay_MWeb',
+          gateway: 'WechatPay_Js',
           type: 'purchase',
           orderSn: this.detail.sn,
-          openId: this.detail.openId,
+          openid: this.detail.openid,
         }
-      }).then(res => {
+      }).then((data) => {
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest',
-          res,
+          data.platformCreatedResult,
           (res) => {
             if (res.err_msg == 'get_brand_wcpay_request:ok') {
-              this.$router.push({name: 'learning'});
+              this.$router.push({ path: data.paidSuccessUrlH5 });
             } else {
               if (res.err_msg == 'get_brand_wcpay_request:fail') {
                 alert('支付失败');

@@ -17,14 +17,14 @@
             @click="payWay = 'Alipay_LegacyWap';selected = true">
             <div class="right"></div>
             <i></i>
-            <img src="/static/images/zfb.png">
+            <img src="static/images/zfb.png">
           </div>
           <div :class="['payWay__item', {'payWay__item--selected': !selected}]"
             v-show="paySettings.wxpayEnabled"
             @click="payWay = 'WechatPay_MWeb'; selected = false">
             <div class="right"></div>
             <i></i>
-            <img src="/static/images/wx.png">
+            <img src="static/images/wx.png">
           </div>
         </div>
       </div>
