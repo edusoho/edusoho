@@ -1868,13 +1868,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ('popular' == $sort || 'hitNum' == $sort) {
             $orderBy = array('hitNum' => 'DESC');
         } elseif ('recommended' == $sort) {
-            $orderBy = array('recommended' => 1, 'recommendedTime' => 'DESC');
+            $orderBy = array('recommendedTime' => 'DESC');
         } elseif ('rating' == $sort) {
             $orderBy = array('rating' => 'DESC');
         } elseif ('studentNum' == $sort) {
             $orderBy = array('studentNum' => 'DESC');
         } elseif ('recommendedSeq' == $sort) {
-            $orderBy = array('recommended' => 1, 'recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC');
+            $orderBy = array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC');
         } elseif ('createdTimeByAsc' == $sort) {
             $orderBy = array('createdTime' => 'ASC');
         } else {

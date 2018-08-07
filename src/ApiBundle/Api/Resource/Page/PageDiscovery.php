@@ -24,7 +24,7 @@ class PageDiscovery extends AbstractResource
             array('hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC')
         );
         $recommendedCourseList = $this->findCoursesAndCourseSetsBySort(
-            array('recommended' => 1, 'recommendedSeq' => 'DESC', 'recommendedTime' => 'DESC', 'id' => 'DESC')
+            array('recommendedSeq' => 'DESC', 'recommendedTime' => 'DESC', 'id' => 'DESC')
         );
 
         $posters = $this->getBlockService()->getPosters();

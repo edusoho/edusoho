@@ -87,7 +87,6 @@ class Course extends AbstractResource
         $conditions['status'] = 'published';
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
-
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
         $courses = $this->service('Course:CourseService')->searchCourses(
