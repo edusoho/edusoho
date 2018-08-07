@@ -56,19 +56,19 @@ class LogController extends BaseController
         $data = $log['data'];
         $showData = array();
 
-        foreach ($data as $k => $v) {
-            if (is_array($v)) {
-                $key = LogDataUtils::trans($k, $log['module'], $log['action']);
-                if (!isset($v['old'])) {
-                    $v['old'] = '';
+        foreach ($data as $message => $fieldChange) {
+            if (is_array($fieldChange)) {
+                $key = LogDataUtils::trans($message, $log['module'], $log['action']);
+                if (!isset($fieldChange['old'])) {
+                    $fieldChange['old'] = '';
                 }
-                if (!isset($v['new'])) {
-                    $v['new'] = '';
+                if (!isset($fieldChange['new'])) {
+                    $fieldChange['new'] = '';
                 }
-                $v['old'] = $this->tryTrans($log['module'], $log['action'], $v['old'], $k);
-                $v['new'] = $this->tryTrans($log['module'], $log['action'], $v['new'], $k);
+                $fieldChange['old'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['old'], $message);
+                $fieldChange['new'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['new'], $message);
 
-                $showData[$key] = $v;
+                $showData[$key] = $fieldChange;
             }
         }
 
@@ -92,47 +92,45 @@ class LogController extends BaseController
     private function logsSetUrlParamsJson($logs)
     {
         $transConfigs = LogDataUtils::getTransConfig();
-        foreach ($logs as $k => &$v) {
+        foreach ($logs as &$log) {
             $transJsonData = array();
-            $logData = $v['data'];
-            $v['urlParamsJson'] = array();
-            $v['shouldShowModal'] = false;
-            $v['shouldShowTemplate'] = false;
-            if (array_key_exists($v['module'], $transConfigs)) {
-                if (array_key_exists($v['action'], $transConfigs[$v['module']])) {
-                    $transConfig = $transConfigs[$v['module']][$v['action']];
-                    $v['shouldShowTemplate'] = true;
-                    $v['shouldShowModal'] = LogDataUtils::shouldShowModal($v['module'], $v['action']);
+            $logData = $log['data'];
+            $log['urlParamsJson'] = array();
+            $log['shouldShowModal'] = false;
+            $log['shouldShowTemplate'] = false;
+            if (array_key_exists($log['module'], $transConfigs)) {
+                if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
+                    $transConfig = $transConfigs[$log['module']][$log['action']];
+                    $log['shouldShowTemplate'] = true;
+                    $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
 
                     if (isset($transConfig['getValue'])) {
-                        foreach ($transConfig['getValue'] as $kk => $vv) {
-                            if (!array_key_exists($vv, $logData)) {
-                                $v['shouldShowTemplate'] = false;
-                                $v['shouldShowModal'] = false;
+                        foreach ($transConfig['getValue'] as $key => $value) {
+                            if (!array_key_exists($value, $logData)) {
+                                $log['shouldShowTemplate'] = false;
+                                $log['shouldShowModal'] = false;
                                 continue;
                             }
-                            $transJsonData[$kk] = $logData[$vv];
+                            $transJsonData[$key] = $logData[$value];
                         }
                     }
                     if (isset($transConfig['generateUrl'])) {
-                        foreach ($transConfig['generateUrl'] as $kk => $vv) {
-                            $urlConfig = $vv;
-
+                        foreach ($transConfig['generateUrl'] as $key => $urlConfig) {
                             $urlParam = array();
-                            foreach ($urlConfig['param'] as $kkk => $vvv) {
-                                if (!array_key_exists($vvv, $logData)) {
-                                    $v['shouldShowTemplate'] = false;
-                                    $v['shouldShowModal'] = false;
+                            foreach ($urlConfig['param'] as $param => $value) {
+                                if (!array_key_exists($value, $logData)) {
+                                    $log['shouldShowTemplate'] = false;
+                                    $log['shouldShowModal'] = false;
                                     continue 2;
                                 }
-                                $urlParam[$kkk] = $logData[$vvv];
+                                $urlParam[$param] = $logData[$value];
                             }
 
-                            $transJsonData[$kk] = $this->generateUrl($urlConfig['path'], $urlParam);
+                            $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
                         }
                     }
 
-                    $v['urlParamsJson'] = $transJsonData;
+                    $log['urlParamsJson'] = $transJsonData;
                 }
             }
         }

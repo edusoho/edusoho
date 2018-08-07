@@ -267,10 +267,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $course));
 
-        $courseChangeFields = ArrayToolkit::changes($oldCourse, $fields);
-        $courseChangeFields = LogDataUtils::serializeCourse($courseChangeFields);
-        $courseChangeFields['id'] = $id;
-        $courseChangeFields['showTitle'] = $course['title'];
+        $courseChangeFields = LogDataUtils::serializeCourse($oldCourse, $fields);
 
         $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseChangeFields);
     }
@@ -312,10 +309,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.update', new Event($course));
 
-        $courseChangeFields = ArrayToolkit::changes($oldCourse, $fields);
-        $courseChangeFields = LogDataUtils::serializeCourse($courseChangeFields);
-        $courseChangeFields['id'] = $id;
-        $courseChangeFields['showTitle'] = $course['title'];
+        $courseChangeFields = LogDataUtils::serializeCourse($oldCourse, $fields);
 
         $this->getLogService()->info('course', 'update_course', "修改教学计划《{$course['title']}》(#{$course['id']})", $courseChangeFields);
 

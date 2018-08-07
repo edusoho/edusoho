@@ -3,6 +3,7 @@
 namespace Biz\System\Util;
 
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\ArrayToolkit;
 
 class LogDataUtils
 {
@@ -91,9 +92,37 @@ class LogDataUtils
                         '%nickname%' => 'nickname',
                     ),
                 ),
-                'delete_thread',
-                'publish',
-                'close',
+                'delete_thread' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'publish' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_set_show',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'close' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_set_show',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'classroom' => array(
                 'create' => array(
@@ -150,9 +179,9 @@ class LogDataUtils
 
     public static function trans($message, $module, $action)
     {
-        $prefix = self::getTransPrefix($module, $action);
-        foreach ($prefix as $v) {
-            $transMessage = $v.'.'.$message;
+        $prefixs = self::getTransPrefix($module, $action);
+        foreach ($prefixs as $prefix) {
+            $transMessage = $prefix.'.'.$message;
             $trans = ServiceKernel::instance()->trans($transMessage, array(), null, null);
             if ($trans != $transMessage) {
                 return $trans;
@@ -162,8 +191,13 @@ class LogDataUtils
         return $message;
     }
 
-    public static function serializeCourse($changeFields)
+    public static function getChangeFields()
     {
+    }
+
+    public static function serializeCourse($oldCourse, $fields)
+    {
+        $changeFields = ArrayToolkit::changes($oldCourse, $fields);
         $config = array(
             'buyExpiryTime' => array(
                 'timeConvent',
@@ -176,29 +210,44 @@ class LogDataUtils
             ),
         );
 
-        return self::serializeData($config, $changeFields);
+        $changeFields = self::serializeData($config, $changeFields);
+
+        $changeFields['id'] = $oldCourse['id'];
+        $changeFields['showTitle'] = $oldCourse['title'];
+
+        return $changeFields;
     }
 
-    public static function serializeCourseSet($changeFields)
+    public static function serializeCourseSet($courseSet, $fields)
     {
+        $changeFields = ArrayToolkit::changes($courseSet, $fields);
         $config = array(
             'expiryValue' => array(
                 'timeConvent',
             ),
         );
 
-        return self::serializeData($config, $changeFields);
+        $changeFields = self::serializeData($config, $changeFields);
+        $changeFields['id'] = $courseSet['id'];
+        $changeFields['showTitle'] = $courseSet['title'];
+
+        return $changeFields;
     }
 
-    public static function serializeClassroom($changeFields)
+    public static function serializeClassroom($classroom, $fields)
     {
+        $changeFields = ArrayToolkit::changes($classroom, $fields);
         $config = array(
             'expiryValue' => array(
                 'timeConvent',
             ),
         );
 
-        return self::serializeData($config, $changeFields);
+        $changeFields = self::serializeData($config, $changeFields);
+        $changeFields['id'] = $classroom['id'];
+        $changeFields['showTitle'] = $classroom['title'];
+
+        return $changeFields;
     }
 
     private function serializeData($config, $changeFields)
@@ -213,9 +262,9 @@ class LogDataUtils
             $new = $newValue;
 
             if (isset($config[$key])) {
-                foreach ($config[$key] as $vv) {
-                    $old = self::$vv($oldValue);
-                    $new = self::$vv($newValue);
+                foreach ($config[$key] as $function) {
+                    $old = self::$function($oldValue);
+                    $new = self::$function($newValue);
                 }
             }
 

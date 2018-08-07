@@ -312,10 +312,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $fields = $this->fillOrgId($fields);
 
-        $classroomChangeFields = ArrayToolkit::changes($classroom, $fields);
-        $classroomChangeFields = LogDataUtils::serializeClassroom($classroomChangeFields);
-        $classroomChangeFields['id'] = $id;
-        $classroomChangeFields['showTitle'] = $classroom['title'];
+        $classroomChangeFields = LogDataUtils::serializeClassroom($classroom, $fields);
 
         $classroom = $this->getClassroomDao()->update($id, $fields);
 

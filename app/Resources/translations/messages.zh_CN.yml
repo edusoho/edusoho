@@ -8332,6 +8332,13 @@ log.action.template.classroom.update: 修改了<strong class="color-success">班
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
 
+log.attr.course.update.title: 课程标题
+log.attr.course.update.subtitle: 课程副标题
+log.attr.course.update.serializeMode: 连载状态
+log.attr.course.update.serializeMode.none: 非连载课程
+log.attr.course.update.serializeMode.serialized: 更新中
+log.attr.course.update.serializeMode.finished: 已完结
+log.attr.course.update.summary: 详情
 log.attr.course.update_course.title: 计划标题
 log.attr.course.update_course.subtitle: 计划副标题
 log.attr.course.update_course.originPrice: 课程人民币原价
@@ -8377,6 +8384,9 @@ log.attr.classroom.expiryMode.date: 截止日期
 log.attr.classroom.expiryMode.days: 有效期天数
 log.attr.classroom.expiryMode.forever: 永久有效
 log.attr.classroom.expiryValue: 有效期
+log.attr.classroom.smallPicture: 小图
+log.attr.classroom.middlePicture: 中图
+log.attr.classroom.largePicture: 大图
 
 cashflow.title: 名称
 cashflow.sn: 流水号

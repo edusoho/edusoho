@@ -475,10 +475,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
         $this->updateCourseSerializeMode($courseSet, $fields);
 
-        $courseSetChangeFields = ArrayToolkit::changes($courseSet, $fields);
-        $courseSetChangeFields = LogDataUtils::serializeCourseSet($courseSetChangeFields);
-        $courseSetChangeFields['id'] = $id;
-        $courseSetChangeFields['showTitle'] = $courseSet['title'];
+        $courseSetChangeFields = LogDataUtils::serializeCourseSet($courseSet, $fields);
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
