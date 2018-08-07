@@ -11,6 +11,7 @@
       :courseItemType="courseItemType"
       v-model="isRequestCompile"
       @needRequest="sendRequest"
+      :isMorePage=true
     ></lazyLoading>
   </div>
 </template>
@@ -83,7 +84,7 @@
       requestCourses(setting) {
         this.isRequestCompile = false;
         const config = Object.assign(setting, this.selectedData);
-        return Api.getCourseList({
+        return Api.getCourseSets({
           params: config
         }).then((data) => {
           let isAllCourse= this.judegIsAllCourse(data);

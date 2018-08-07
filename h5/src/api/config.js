@@ -109,6 +109,10 @@ const config = [
     name: 'getCourseList',
     url: '/courses'
   }, {
+    // 获取课程搜索列表
+    name: 'getCourseSets',
+    url: '/course_sets'
+  }, {
     // 获取全局设置
     name: 'getSettings',
     url: '/settings/{type}',
