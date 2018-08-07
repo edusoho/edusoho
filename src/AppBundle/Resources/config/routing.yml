@@ -2877,6 +2877,7 @@ course_order_repay:
 course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
+  h5: true
 
 course_task_paging_show:
   path: /course/{courseId}/tasks/paging
