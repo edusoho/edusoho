@@ -2,20 +2,19 @@
   <div class="setting-page">
     <img class="find-head-img" src="/static/images/find_head_url.jpg" alt="">
     <van-nav-bar :title="title" class="nav-bar"/>
-    <div class="find-page__part" v-for="part in parts">
-      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
-    </div>
+    <div class="find-page__part" v-for="part in parts"></div>
+    <swipe></swipe>
     <img class="find-footer-img" src="/static/images/find_bottom.jpg" alt="">
   </div>
 </template>
 
 <script>
 import Api from '@/api'
-import swipe from '@/containers/components/e-swipe/e-swipe.vue'
+import Swipe from '@admin/containers/components/e-swipe/e-swipe.vue';
 
 export default {
   components: {
-    'e-swipe': swipe,
+    'swipe': Swipe,
   },
   data() {
     return  {
