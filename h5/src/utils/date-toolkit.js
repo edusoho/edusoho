@@ -30,10 +30,10 @@ const formatTime = date => {
   const second = date.getSeconds();
   return `${[year, month, day].map(n => {
     n = n.toString();
-    return n[1] ? n : `0${ n}`;
+    return n[1] ? n : `0${n}`;
   }).join('/')} ${[hour, minute, second].map(n => {
     n = n.toString();
-    return n[1] ? n : `0${ n}`;
+    return n[1] ? n : `0${n}`;
   }).join(':')}`;
 };
 
