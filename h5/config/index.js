@@ -8,11 +8,11 @@ module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/h5/',
     proxyTable: {
       '/api': {
         // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
-        target: 'http://zyc.st.edusoho.cn/',
+        target: 'http://lvliujie.st.edusoho.cn/',
         changeOrigin: true,
         secure: false,
       }
