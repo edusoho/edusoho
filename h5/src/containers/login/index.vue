@@ -47,10 +47,15 @@ export default {
         username: this.username,
         password: this.password
       }).then(res => {
-        Toast.success('登录成功');
+        Toast.success({
+          duration: 2000,
+          message: '登录成功'
+        });
         const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-
-        this.$router.push({name: redirect});
+        var jumpAction = () => {
+          this.$router.push({name: redirect});
+        }
+        setTimeout(jumpAction, 2000);
       }).catch(err => {
         Toast.fail(err.message);
       })

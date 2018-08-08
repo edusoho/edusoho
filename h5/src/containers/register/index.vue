@@ -86,6 +86,7 @@ export default {
         type: 'register'
       },
       dragEnable: false,
+      submitFlag: true,
       options: [{
         model: 'email'
       }, {
@@ -136,11 +137,22 @@ export default {
     handleSubmit() {
       const password = this.registerInfo.encrypt_password;
 
-      this.registerInfo.encrypt_password =
-        window.XXTEA.encryptToBase64(password, window.location.host);
+      if(this.submitFlag) {
+        this.registerInfo.encrypt_password = window.XXTEA.encryptToBase64(password, window.location.host);
+        this.submitFlag = false;
+      }
 
       this.addUser(this.registerInfo)
-      .then()
+      .then(res => {
+        Toast.success({
+          duration: 2000,
+          message: '注册成功'
+        });
+        var jumpToLogin = () => {
+          this.$router.push({name: 'login'});
+        }
+        setTimeout(jumpToLogin, 2000);
+      })
       .catch(err => {
         Toast.fail(err.message);
       });
