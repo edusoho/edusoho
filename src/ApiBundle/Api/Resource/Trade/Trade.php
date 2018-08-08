@@ -108,6 +108,9 @@ class Trade extends AbstractResource
     {
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
+        if (!isset($params['app_pay'])) {
+            $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
+        }
         if (isset($params['payPassword'])) {
             $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
         }
@@ -117,7 +120,6 @@ class Trade extends AbstractResource
         }
 
         if ('Alipay_LegacyWap' == $params['gateway']) {
-            $params['app_pay'] = isset($params['appPay']) && 'N' == $params['appPay'] ? 'N' : 'Y';
             $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }
