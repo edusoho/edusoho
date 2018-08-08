@@ -74,6 +74,13 @@ const routes = [
     name: 'course_web',
     component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
   }, {
+    path: '/course/explore',
+    name: 'more',
+    meta: {
+      title: '所有课程'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/index.vue')
+  }, {
     path: '/course/:id',
     name: 'course',
     meta: {
@@ -87,13 +94,6 @@ const routes = [
       title: '确认订单'
     },
     component: () => import(/* webpackChunkName: "order" */'@/containers/order/index.vue')
-  }, {
-    path: '/course/explore',
-    name: 'more',
-    meta: {
-      title: '所有课程'
-    },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/more/index.vue')
   }, {
     path: '/pay',
     name: 'pay',
