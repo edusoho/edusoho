@@ -4,26 +4,29 @@
 
   &-section {
     display: flex;
-    height: 136px;
+    padding: 25px 20px 25px 25px;
   }
 
   &-img {
     height: vw(86);
     width: vw(86);
     border-radius: vw(43);
-    margin: vw(20) 0 0 vw(20);
   }
 
   &-name {
-    margin: vw(54) 0 0 vw(20);
+    margin-left: vw(20);
     flex: 1;
+    align-self: center;
     font-size: vw(18);
     font-family: PingFangSC-Medium;
   }
   &-setting {
     height: vw(20);
     width: vw(20);
-    margin: vw(20) vw(25) 0 0;
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
 }
 
