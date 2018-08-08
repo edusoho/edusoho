@@ -75,6 +75,7 @@
             cover: course.cover,
             studentNum: course.studentNum
           };
+          course.title = '';
           course.price = course.minCoursePrice
           return course;
         }
