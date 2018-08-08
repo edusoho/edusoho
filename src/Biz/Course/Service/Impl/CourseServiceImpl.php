@@ -785,7 +785,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $result = $this->createCourseStrategy($course)->accept(new CourseItemPagingVisitor($this->biz, $courseId, $paging));
-        if ($result[1] > $paging['limit']) {  //$result[1] 为总数， $result[0] 为相应的数据
+        if (!empty($paging['limit']) && $result[1] > $paging['limit']) {  //$result[1] 为总数， $result[0] 为相应的数据
             $result[0] = array_slice($result[0], 0, $paging['limit']);
             $result[1] = $paging['limit'];
         }
