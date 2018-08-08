@@ -17,6 +17,16 @@ class CallbackController extends BaseController
         ));
     }
 
+    public function returnForH5Action(Request $request, $payment)
+    {
+        $targetCallback = $this->getTargetCallback($payment);
+
+        return $this->forward($targetCallback['returnForApp'], array(
+            'request' => $request,
+            'payment' => $payment,
+        }
+    }
+
     public function returnForAppAction(Request $request, $payment)
     {
         $targetCallback = $this->getTargetCallback($payment);

@@ -86,9 +86,8 @@ abstract class BaseTrade
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
-        $trade = $this->getPayService()->createTrade($tradeFields);
 
-        return $trade;
+        return $this->getPayService()->createTrade($tradeFields);
     }
 
     public function getCustomFields($params)
@@ -114,9 +113,7 @@ abstract class BaseTrade
 
             return $defaultResponse;
         } else {
-            $result = array_merge($defaultResponse, $this->getCustomResponse($trade));
-
-            return $result;
+            return array_merge($defaultResponse, $this->getCustomResponse($trade));
         }
     }
 

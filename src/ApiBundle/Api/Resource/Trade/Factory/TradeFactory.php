@@ -40,6 +40,15 @@ class TradeFactory
             case 'Coin':
                 $tradeInstance = new CoinTrade();
                 break;
+            case 'WechatPay_H5':
+                $tradeInstance = new WeChatPayH5Trade();
+                break;
+            case 'WechatPay_JsH5':
+                $tradeInstance = new WeChatPayJsH5Trade();
+                break;
+            case 'Alipay_LegacyH5':
+                $tradeInstance = new AlipayLegacyH5Trade();
+                // no break
             default:
                 throw new BadRequestHttpException();
         }
