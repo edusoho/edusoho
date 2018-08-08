@@ -99,6 +99,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
       let waypoint = new Waypoint({
         element: $('.js-down-loading-more')[0],
         handler: function(direction) {
+          self._scrollToBottom();
           if (direction == 'down') {
             if (self._isLastPage) {
               waypoint.disable();
@@ -178,6 +179,21 @@ export default class ESInfiniteCachedScroll extends Emitter {
       }
     }
   }
+
+  _scrollToBottom() {
+    const self = this;
+    if (this._afterFirstLoad) {
+      const sidebarHight = $('.js-sidebar-pane').height();
+      $('.js-sidebar-pane').scroll(function() {
+        const scrollHight = $(this)[0].scrollHeight;
+        const scrollTop = $(this)[0].scrollTop;
+        if (scrollTop + sidebarHight >= scrollHight) {
+          self._displayCurrentPageDataAndSwitchToNext();
+        }
+      });
+    }
+  }
+
 
   _generateSingleCachedData(data) {
     let clonedHtml = $(this._options['dataTemplateNode']).html();
