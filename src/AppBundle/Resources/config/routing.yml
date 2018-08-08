@@ -1015,10 +1015,6 @@ cashier_redirect:
     path:   /cashier/redirect
     defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
 
-cashier_redirect_for_h5:
-    path:   /cashierh5/redirect
-    defaults: { _controller: AppBundle:Cashier/CashierH5:redirect }
-
 cashier_wechat_js_pay:
     path:   /pay/center/wxpay
     defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
@@ -1044,11 +1040,6 @@ cashier_pay_success:
     path:   /cashier/pay/success
     defaults: { _controller: AppBundle:Cashier/Cashier:success }
 
-
-cashier_pay_success_for_h5:
-    path:   /cashierh5/pay/success
-    defaults: { _controller: AppBundle:Cashier/CashierH5:success }
-
 cashier_pay_notify:
     path: /callback/{payment}/notify
     defaults: { _controller: AppBundle:Cashier/Callback:notify}
@@ -1057,6 +1048,14 @@ cashier_pay_notify:
 cashier_pay_return_for_app:
     path: /callback/{payment}/return_for_app
     defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
+
+cashier_redirect_for_h5:
+    path:   /h5cashier/redirect
+    defaults: { _controller: AppBundle:Cashier/CashierH5:redirect }
+
+cashier_pay_success_for_h5:
+    path:   /h5cashier/pay/success
+    defaults: { _controller: AppBundle:Cashier/CashierH5:success }
 
 cashier_pay_return_for_h5:
     path: /callback/{payment}/return_for_h5
