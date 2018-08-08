@@ -2,10 +2,10 @@ import TaskSidebar from './widget/sidebar';
 import TaskUi from './widget/task-ui';
 import TaskPipe from './widget/task-pipe';
 import Emitter from 'common/es-event-emitter';
-import ESInfiniteScroll from 'common/es-infinite-scroll';
+import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 
 export default class TaskShow extends Emitter {
-  constructor({element, mode}) {
+  constructor({ element, mode }) {
     super();
     this.element = $(element);
     this.mode = mode;
@@ -41,7 +41,7 @@ export default class TaskShow extends Emitter {
         $('#modal').html(response);
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
         let $nextBtn = $('.js-next-mobile-btn');
-        if($nextBtn.data('url')) {
+        if ($nextBtn.data('url')) {
           $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
         }
         this.ui.learned();
@@ -64,7 +64,7 @@ export default class TaskShow extends Emitter {
         this.ui.learned();
         this.sidebar.reload();
         let $nextBtn = $('.js-next-mobile-btn');
-        if($nextBtn.data('url')) {
+        if ($nextBtn.data('url')) {
           $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
         }
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
@@ -88,29 +88,34 @@ export default class TaskShow extends Emitter {
           right: px
         }, time);
       })
-      .on('task-list-loaded',($paneBody)=>{
+      .on('task-list-loaded', ($paneBody) => {
         let $box = $paneBody.parent();
         let boxHeight = $box.height();
         let bodyHeight = $paneBody.height();
-        let $activeItem = $paneBody.find('.task-item.active');
-        let top = $activeItem.position().top;
-        let standardPosition = (boxHeight - $activeItem.height())/2;
 
-        new ESInfiniteScroll({
-          context: document.getElementsByClassName('js-sidebar-pane ps-container')
+        new PagedCourseLesson({
+          'afterFirstLoad': function() {
+            let $activeItem = $paneBody.find('.task-item.active');
+            let top = $activeItem.position().top;
+            let standardPosition = (boxHeight - $activeItem.height()) / 2;
+
+            if ((bodyHeight - top) < standardPosition) {
+              console.log('位置靠近底部，top偏移', top - standardPosition);
+              console.log(bodyHeight - boxHeight);
+              $box.scrollTop(bodyHeight - boxHeight);
+              return;
+            }
+            if (top > standardPosition) {
+              console.log('位置大于标准位置时，top偏移', top - standardPosition);
+              console.log(top, standardPosition);
+              $box.scrollTop(top - standardPosition);
+            }
+          },
+          'displayItem': {
+            'key': 'taskId',
+            'value': $('.js-hidden-current-task-id').html()
+          }
         });
-
-        if ((bodyHeight - top) < standardPosition) {
-          console.log('位置靠近底部，top偏移',top - standardPosition);
-          console.log(bodyHeight - boxHeight);
-          $box.scrollTop(bodyHeight - boxHeight);
-          return;
-        }
-        if (top > standardPosition) {
-          console.log('位置大于标准位置时，top偏移',top - standardPosition);
-          console.log(top,standardPosition);
-          $box.scrollTop(top - standardPosition);
-        }
       });
   }
 }
