@@ -32,8 +32,7 @@ $('#search').on('click', function () {
 
 });
 
-$('.courses-list').on('click', '.pagination li', function (e) {
-  e.stopPropagation();
+$('.courses-list').on('click', '.pagination li', function () {
   var url = $(this).data('url');
   if (typeof (url) !== 'undefined') {
     $.post(url, $('.form-search').serialize(), function (data) {
