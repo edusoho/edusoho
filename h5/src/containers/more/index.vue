@@ -136,14 +136,14 @@
           this.selectItems = data;
         });
       // 根据筛选条件获取相应课程
-      this.requestCourses(config)
-        .then(() => {
-          if (this.courseList.length !== 0) {
-            this.isEmptyCourse = false;
-          } else {
-            this.isEmptyCourse = true;
-          }
-        });
+      // this.requestCourses(config)
+      //   .then(() => {
+      //     if (this.courseList.length !== 0) {
+      //       this.isEmptyCourse = false;
+      //     } else {
+      //       this.isEmptyCourse = true;
+      //     }
+      //   });
     }
   }
 </script>
