@@ -1,7 +1,7 @@
 import { isEmpty } from 'common/utils';
 import 'waypoints/lib/jquery.waypoints.min';
 import Emitter from 'common/es-event-emitter';
-
+import { debounce } from 'app/common/widget/debounce';
 /** 
  * 伪分页，从缓存中读取数据，数据结构格式见 构造方法
  *   例子见 app/Resources/static-src/app/js/courseset/show/index.js
@@ -41,7 +41,6 @@ import Emitter from 'common/es-event-emitter';
      <!-- 当页面上看到此节点时，会自动显示下一页 -->
      <div class="js-down-loading-more" style="min-height: 1px"></div>
  */
-
 export default class ESInfiniteCachedScroll extends Emitter {
   /**
    * @param options  
@@ -99,11 +98,11 @@ export default class ESInfiniteCachedScroll extends Emitter {
       let waypoint = new Waypoint({
         element: $('.js-down-loading-more')[0],
         handler: function(direction) {
-          self._scrollToBottom();
           if (direction == 'down') {
             if (self._isLastPage) {
               waypoint.disable();
             } else {
+              self._scrollToBottom();
               waypoint.disable();
               self._displayCurrentPageDataAndSwitchToNext();
               Waypoint.refreshAll();
@@ -182,15 +181,20 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
   _scrollToBottom() {
     const self = this;
-    if (this._afterFirstLoad) {
-      const sidebarHight = $('.js-sidebar-pane').height();
-      $('.js-sidebar-pane').scroll(function() {
-        const scrollHight = $(this)[0].scrollHeight;
-        const scrollTop = $(this)[0].scrollTop;
-        if (scrollTop + sidebarHight >= scrollHight) {
+    const $target = $('.js-sidebar-pane');
+    if (!$target.length) {
+      return;
+    }
+    const $targetDom = $target[0];
+    const sidebarHight = $target.height();
+    const scrollHight = $targetDom.scrollHeight;
+    const scrollTop = $targetDom.scrollTop;
+    if (self._afterFirstLoad) {
+      $targetDom.addEventListener('scroll', debounce(() => {
+        if (scrollTop + sidebarHight >= scrollHight && !this._isLastPage) {
           self._displayCurrentPageDataAndSwitchToNext();
         }
-      });
+      }, 500, true));
     }
   }
 
