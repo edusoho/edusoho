@@ -5,8 +5,8 @@
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
       <span class='user-name'>{{ user.nickname }}</span>
-      <router-link to="/settings">
-        <img class='user-setting' src='static/images/setting.png'>
+      <router-link to="/settings" class='user-setting'>
+        <img src='static/images/setting.png'>
       </router-link>
     </div>
   </div>
