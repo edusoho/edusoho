@@ -13,6 +13,7 @@
       @needRequest="sendRequest"
       :isMorePage=true
     ></lazyLoading>
+    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false"></emptyCourse>
   </div>
 </template>
 
@@ -20,11 +21,13 @@
   import Api from '@/api';
   import treeSelect from '../components/e-tree-select/e-tree-select.vue';
   import lazyLoading from '../components/e-lazy-loading/e-lazy-loading.vue';
+  import emptyCourse from '../learning/emptyCourse/emptyCourse.vue';
 
   export default {
     components: {
       treeSelect,
       lazyLoading,
+      emptyCourse
     },
     data() {
       return {
