@@ -1,3 +1,7 @@
+<!-- 
+  接受参数 showOptional, 表示是否显示选修课程
+-->
+
 <div class="hidden js-hidden-course-info">
   {
     "id": "{{course.id}}",
@@ -20,7 +24,7 @@
 </div>
 
 <div class="hidden js-hidden-data">
-  {{ task_list_json_data(courseItems) }}
+  {{ task_list_json_data(courseItems, showOptional|default(false)) }}
 </div>
 
 <div class="hidden js-hidden-activity-metas">

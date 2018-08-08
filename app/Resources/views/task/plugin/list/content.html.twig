@@ -36,9 +36,11 @@
         </tmp>
 
         <tmp hide-if="{isOptional}">
-          {{'course.plan_task.task'|trans}}{number}:
+          {getTaskName}
         </tmp>
-        {title}
+        <tmp display-if="{isOptional}">
+          {title}
+        </tmp>
       </div>
 
       <tmp hide-if="{isPublished}">
@@ -69,4 +71,4 @@
   <div class="infinite-more-link js-down-loading-more" style="min-height: 1px"></div>
 </div>
 
-{% include 'course/task-list/parts/task-course-data.html.twig' %}
+{% include 'course/task-list/parts/task-course-data.html.twig' with {showOptional: true} %}
