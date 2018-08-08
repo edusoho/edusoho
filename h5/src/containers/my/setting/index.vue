@@ -10,12 +10,15 @@
       </div>
       <van-uploader :after-read="onRead" v-if="!index"></van-uploader>
     </div>
+    <div class="log-out-btn title-18" @click="logout"><span>退出登录</span></div>
   </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
 import { Toast } from 'vant';
 import Api from '@/api';
+import * as types from '@/store/mutation-types';
+import store from '@/store';
 
 export default {
   data() {
@@ -62,6 +65,15 @@ export default {
         default:
           break;
       }
+    },
+    logout() {
+      this.$store.commit(types.USER_LOGIN, {
+        token: '',
+        user: {}
+      });
+      this.$router.push({
+        name: 'my'
+      })
     },
     onRead(file) {
       Api.updateFile({

@@ -1,4 +1,5 @@
 .my_setting {
+  padding: 0 16px;
   &-item {
     display: flex;
     justify-content: space-between;
@@ -7,16 +8,13 @@
     border-bottom: 1px solid #eee;
     position: relative;
   }
-  &-title {
-    margin-left: vw(30);
-  }
   &-content {
 
   }
   &-more {
     height: vw(14);
     width: vw(14);
-    margin: 0 vw(24) 0 vw(18);
+    margin-left: vw(18);
   }
   &-avatar {
     height: vw(50);
@@ -45,5 +43,13 @@
     &--btn {
       margin-top: vw(40);
     }
+  }
+  .log-out-btn {
+    text-align: center;
+    border: 1px solid $primary-color;
+    border-radius: 4px;
+    padding: vw(7);
+    margin-top: vw(30);
+    color: $primary-color;
   }
 }
