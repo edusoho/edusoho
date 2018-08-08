@@ -186,9 +186,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             $task['activity'] = $activities[$task['activityId']];
         }
 
-        
         $tasks = $this->getTaskService()->wrapTaskResultToTasks($this->courseId, $tasks);
-    
     }
 
     private function getConditions()
