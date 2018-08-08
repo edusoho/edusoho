@@ -11,7 +11,8 @@
 <script>
 import loadScript from 'load-script';
 import Api from '@/api';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   data () {
@@ -35,9 +36,13 @@ export default {
     } else {
       // text类型不需要播放器
       this.$refs.text.innerHTML = player.media.content;
+      this.setNavbarTitle(player.media.title)
     }
   },
   methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE
+    }),
     /*
     * 试看需要传preview=1
     * eg: /api/courses/1/task_medias/1?preview=1

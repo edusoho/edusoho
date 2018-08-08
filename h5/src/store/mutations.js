@@ -39,5 +39,8 @@ export default {
   },
   [types.GET_SETTINGS](state, payload) {
     state.settings = payload;
+  },
+  [types.SET_NAVBAR_TITLE](state, payload) {
+    state.title = payload;
   }
 };

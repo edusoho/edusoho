@@ -13,7 +13,8 @@ const state = {
   token: null,
   user: {},
   smsToken: '',
-  settings: {}
+  settings: {},
+  title: ''
 };
 
 

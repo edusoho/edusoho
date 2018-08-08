@@ -9,13 +9,22 @@
 </template>
 <script>
 import Api from '@/api'
+import * as types from '@/store/mutation-types';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   data() {
     return  {
-      title: '',
       showLeftArrow: false
     }
+  },
+  methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE
+    }),
+  },
+  computed: {
+    ...mapState(['title'])
   },
   watch: {
     '$route': {
@@ -25,11 +34,11 @@ export default {
         this.showLeftArrow = !['my', 'find', 'learning', 'prelogin'].includes(to.name);
 
         if(redirect === 'learning') {
-          this.title = '我的学习';
+          this.setNavbarTitle('我的学习')
           return;
         }
 
-        this.title = to.meta.title;
+        this.setNavbarTitle(to.meta.title)
       }
     }
   }
