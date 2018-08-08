@@ -24,7 +24,7 @@ class CallbackController extends BaseController
         return $this->forward($targetCallback['returnForApp'], array(
             'request' => $request,
             'payment' => $payment,
-        });
+        ));
     }
 
     public function returnForAppAction(Request $request, $payment)
