@@ -64,6 +64,7 @@ class MeCourse extends AbstractResource
                  * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
                  */
                 $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
+                $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
                 $orderedCourses[] = $course;
             }
         }
@@ -93,5 +94,10 @@ class MeCourse extends AbstractResource
     private function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    private function getLearningDataAnalysisService()
+    {
+        return $this->service('Course:LearningDataAnalysisService');
     }
 }
