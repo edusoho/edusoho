@@ -37,7 +37,7 @@
     methods: {
       jumpTo(source) {
         this.$router.push({
-          path: '/more',
+          name: 'more',
           query: {...this.source}
         });
       }

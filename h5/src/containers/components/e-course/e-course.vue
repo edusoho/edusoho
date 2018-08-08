@@ -63,7 +63,7 @@
           console.log(e.target.tagName);
         } else {
           this.$router.push({
-            path: `${name}/${id}`,
+            path: `/${name}/${id}`,
           });
         }
       }

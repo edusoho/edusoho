@@ -1,5 +1,5 @@
 export default [{
-  path: 'my',
+  path: '/my/orders',
   name: 'my',
   meta: {
     title: '我的'
