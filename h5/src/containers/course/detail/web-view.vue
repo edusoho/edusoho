@@ -35,7 +35,6 @@ export default {
     } else {
       // text类型不需要播放器
       this.$refs.text.innerHTML = player.media.content;
-      this.$route.meta.title = player.media.title;
     }
   },
   methods: {

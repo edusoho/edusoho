@@ -73,9 +73,6 @@ const routes = [
   }, {
     path: '/course/web',
     name: 'course_web',
-    meta: {
-      title: ''
-    },
     component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
   }, {
     path: '/course/:id',

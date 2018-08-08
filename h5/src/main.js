@@ -56,7 +56,7 @@ Api.getSettings({
 }).then(res => {
   if (!res.enabled) {
     // 如果没有开通微网校，则跳回老版本网校 TODO
-    window.location.href = axios.defaults.baseURL || 'http://zyc.st.edusoho.cn/';
+    window.location.href = location.origin;
     return;
   }
 
