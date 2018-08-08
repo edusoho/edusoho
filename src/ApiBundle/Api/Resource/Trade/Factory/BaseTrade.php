@@ -61,6 +61,7 @@ abstract class BaseTrade
             'platform' => $this->payment,
             'platform_type' => $this->platformType,
             'app_pay' => isset($params['app_pay']) ? $params['app_pay'] : '',
+            'wap_pay' => isset($params['wap_pay']) ? $params['wap_pay'] : '',
             'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => $this->payment), true),
             'return_url' => isset($params['return_url']) ? $params['return_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
             'show_url' => isset($params['show_url']) ? $params['show_url'] : '',
@@ -114,6 +115,7 @@ abstract class BaseTrade
             return $defaultResponse;
         } else {
             $result = array_merge($defaultResponse, $this->getCustomResponse($trade));
+
             return $result;
         }
     }
