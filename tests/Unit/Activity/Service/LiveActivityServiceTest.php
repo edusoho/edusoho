@@ -216,10 +216,7 @@ class LiveActivityServiceTest extends BaseTestCase
     {
         $service = $this->createService('Activity:LiveActivityService');
         //mock client
-        $class = new \ReflectionClass(get_class($service));
-        $clientProp = $class->getProperty('client');
-        $clientProp->setAccessible(true);
-        $clientProp->setValue($service, new MockEdusohoLiveClient());
+        ReflectionUtils::setProperty($service, 'client', new MockEdusohoLiveClient());
 
         return $service;
     }

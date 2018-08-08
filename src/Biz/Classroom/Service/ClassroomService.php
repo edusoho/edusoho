@@ -4,6 +4,14 @@ namespace Biz\Classroom\Service;
 
 interface ClassroomService
 {
+    /**
+     * @param $conditions
+     * @param $orderBy
+     * @param $start
+     * @param $limit
+     *
+     * @return mixed
+     */
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function findClassroomsByIds(array $ids);
@@ -86,8 +94,6 @@ interface ClassroomService
     public function findClassroomCourseByCourseSetIds($courseSetIds);
 
     /**
-     * @before findClassroomByCourseId
-     *
      * @param  $courseId
      *
      * @return mixed
@@ -144,8 +150,6 @@ interface ClassroomService
     public function findClassroomsByCourseId($courseId);
 
     /**
-     * @before findClassroomCourse
-     *
      * @param  $classroomId
      * @param  $courseId
      *

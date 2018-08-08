@@ -6,13 +6,13 @@ interface MoneyCardService
 {
     /**
      * 输入数组
-     * key1: @money 充值的金额
-     * key2: @cardPrefix  帐号的前缀
-     * key3: @cardLength  帐号的长度
-     * key4: @number  生成本批次帐号的数目
-     * key5: @note 本次充值的备注
-     * key6: @deadline 截止失效日期
-     * key7: @passwordLength 密码长度.
+     * key1: money 充值的金额
+     * key2: cardPrefix  帐号的前缀
+     * key3: cardLength  帐号的长度
+     * key4: number  生成本批次帐号的数目
+     * key5: note 本次充值的备注
+     * key6: deadline 截止失效日期
+     * key7: passwordLength 密码长度.
      *
      * 返回值 array()
      * 本批次充值生成的记录
@@ -33,7 +33,7 @@ interface MoneyCardService
      * @param array $conditions
      *
      * @return mixed
-     * @befor  searchMoneyCardsCount
+     * @before  searchMoneyCardsCount
      */
     public function countMoneyCards(array $conditions);
 
@@ -43,7 +43,7 @@ interface MoneyCardService
      * @param array $conditions
      *
      * @return mixed
-     * @befor  searchBatchsCount
+     * @before  searchBatchsCount
      */
     public function countBatches(array $conditions);
 
