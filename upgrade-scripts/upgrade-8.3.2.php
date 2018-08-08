@@ -68,6 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'deleteDataFromTable',
             'addColumnToJob',
         );
 
@@ -102,6 +103,13 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    protected function deleteDataFromTable()
+    {
+        $this->getConnection()->exec("TRUNCATE TABLE `biz_scheduler_job_log`;");
+
+        return 1;
     }
 
     protected function addColumnToJob()
