@@ -89,10 +89,6 @@ export default class TaskShow extends Emitter {
         }, time);
       })
       .on('task-list-loaded', ($paneBody) => {
-        let $box = $paneBody.parent();
-        let boxHeight = $box.height();
-        let bodyHeight = $paneBody.height();
-
         new PagedCourseLesson({
           'afterFirstLoad': function() {
             const $box = $paneBody.parent();
