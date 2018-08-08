@@ -95,7 +95,9 @@ export default {
         data: {
           gateway: this.payWay,
           type: 'purchase',
-          orderSn: this.detail.sn
+          orderSn: this.detail.sn,
+          app_pay: 'Y',
+          wap_pay: true
         }
       }).then(res => {
         window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
