@@ -90,12 +90,12 @@
         return Api.getCourseSets({
           params: config
         }).then((data) => {
+          data.data.forEach(element => {
+            this.courseList.push(element);
+          })
           let isAllCourse= this.judegIsAllCourse(data);
           if (!isAllCourse) {
-            data.data.forEach(element => {
-              this.courseList.push(element);
-              this.offset++;
-            })
+            this.offset = this.courseList.length;
           }
           this.isAllCourse = isAllCourse;
           this.isRequestCompile = true;
