@@ -7,8 +7,6 @@ import config from '@/api/config';
 import '@/api/interceptors';
 import { parseUrl, addPrefix } from './utils';
 
-// axios.defaults.baseURL = 'http://zyc.st.edusoho.cn';
-
 const Api = {};
 
 const axiosApi = () => {
