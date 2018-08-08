@@ -78,8 +78,11 @@ class PagedCourseLesson {
         },
 
         'isTaskLocked': function(data, context) {
-          return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' &&
-            (data.lock || !context.course.isMember);
+          if (context.course.isMember) {
+            return context.course.learnMode == 'lockMode' && data.lock == '1';
+          } else {
+            return context.course.learnMode == 'lockMode';
+          }
         },
 
         'isPublished': function(data, context) {
