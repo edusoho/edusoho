@@ -48,7 +48,7 @@ class TradeFactory
                 break;
             case 'Alipay_LegacyH5':
                 $tradeInstance = new AlipayLegacyH5Trade();
-                // no break
+                break;
             default:
                 throw new BadRequestHttpException();
         }
