@@ -11,7 +11,6 @@ Vue.use(Router);
 const routes = [
   {
     path: '/',
-    redirect: '/find',
     name: 'home',
     meta: {
       title: ''
@@ -53,7 +52,7 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "protocol" */'@/containers/register/protocol/index.vue')
   }, {
-    path: '/my/setting',
+    path: '/settings',
     name: 'my_setting',
     meta: {
       title: '设置'

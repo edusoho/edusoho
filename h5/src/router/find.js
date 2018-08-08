@@ -1,5 +1,5 @@
 export default [{
-  path: 'find',
+  path: '/',
   name: 'find',
   meta: {
     title: ''

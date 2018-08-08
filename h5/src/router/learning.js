@@ -1,5 +1,5 @@
 export default [{
-  path: '/learning',
+  path: '/my/courses/learning',
   name: 'learning',
   meta: {
     title: '我的学习'

@@ -1,11 +1,11 @@
 <template>
   <div class="user">
     <div class="user-section">
-      <router-link to="/my/setting">
+      <router-link to="/setting">
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
       <span class='user-name'>{{ user.nickname }}</span>
-      <router-link to="/my/setting">
+      <router-link to="/setting">
         <img class='user-setting' src='static/images/setting.png'>
       </router-link>
     </div>
