@@ -40,6 +40,7 @@ class CutFileCommand extends BaseCommand
         for ($i = 0; $i < $fileCount; ++$i) {
             $lineStart = $i * $line;
             $lineEnd = ($i + 1) * $line > $totalLines ? $totalLines : ($i + 1) * $line;
+            file_put_contents($rootPath.'web/install/edusoho_init_'.$i.'.sql', '');
             for ($j = $lineStart; $j < $lineEnd; ++$j) {
                 if (strlen($contents[$j]) > 1) {
                     file_put_contents($rootPath.'web/install/edusoho_init_'.$i.'.sql', $contents[$j], FILE_APPEND);
