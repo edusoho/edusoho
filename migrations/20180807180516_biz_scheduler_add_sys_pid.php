@@ -24,8 +24,8 @@ class BizSchedulerAddSysPid extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("ALTER TABLE `biz_scheduler_job_fired` DROP COLUMN `pid`;");
-        $connection->exec("ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `process_id`;");
-        $connection->exec("ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `pid`;");
+        $connection->exec('ALTER TABLE `biz_scheduler_job_fired` DROP COLUMN `pid`;');
+        $connection->exec('ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `process_id`;');
+        $connection->exec('ALTER TABLE `biz_scheduler_job_log` DROP COLUMN `pid`;');
     }
 }
