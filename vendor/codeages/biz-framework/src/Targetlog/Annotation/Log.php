@@ -35,6 +35,8 @@ class Log
 
     private $targetId = 0;
 
+    private $param;
+
     public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
@@ -103,6 +105,11 @@ class Log
         return $this->targetId;
     }
 
+    public function getParam()
+    {
+        return $this->param;
+    }
+
     public function setMessage($message)
     {
         $this->message = $message;
@@ -126,5 +133,10 @@ class Log
     public function setTargetId($targetId)
     {
         $this->targetId = $targetId;
+    }
+
+    public function setParam($param)
+    {
+        $this->param = $param;
     }
 }

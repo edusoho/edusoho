@@ -37,7 +37,7 @@ class AnnotationInterceptor extends AbstractInterceptor
     /**
      * @param $args
      */
-    public function exec($funcName, $args)
+    public function exec($funcName, $args, $result)
     {
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
@@ -45,11 +45,12 @@ class AnnotationInterceptor extends AbstractInterceptor
             $levelId = $log['levelId'];
             $targetType = $log['targetType'];
             $targetId = $log['targetId'];
-            $context['@funcName'] = $funcName;
-            $context['@action'] = $log['action'];
-            $context['@args'] = $args;
-            $context['@user_id'] = empty($currentUser['id']) ? 0 : $currentUser['id'];
-            $context['@ip'] = empty($currentUser['currentIp']) ? '' : $currentUser['currentIp'];
+            $context = $args;
+            if (isset($log['param'])) {
+                if ('result' == $log['param']) {
+                    $context = $result;
+                }
+            }
             $message = $log['message'];
             $this->getTargetlogService()->log($levelId, $targetType, $targetId, $message, $context);
         }

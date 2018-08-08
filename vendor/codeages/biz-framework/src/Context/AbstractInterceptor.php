@@ -10,7 +10,7 @@ abstract class AbstractInterceptor
         $this->className = $className;
     }
 
-    abstract public function exec($funcName, $args);
+    abstract public function exec($funcName, $args, $result);
 
     abstract public function getInterceptorData();
 }

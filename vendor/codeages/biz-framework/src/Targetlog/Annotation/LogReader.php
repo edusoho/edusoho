@@ -43,6 +43,7 @@ class LogReader
                 $log['targetId'] = $annotation->getTargetId();
                 $log['action'] = $annotation->getAction();
                 $log['message'] = $annotation->getMessage();
+                $log['param'] = $annotation->getParam();
                 $interceptorData[$method->getName()] = $log;
             }
         }

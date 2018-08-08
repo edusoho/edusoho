@@ -389,13 +389,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         //update courseSet defaultId
         $created = $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
 
-        $infoData = array(
-            'id' => $created['id'],
-            'title' => $created['title'],
-        );
-
-        $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']), $infoData);
-
         return $created;
     }
 

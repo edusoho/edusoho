@@ -22,13 +22,13 @@ class ServiceProxy
 
     public function __call($funcName, $arguments)
     {
+        $result = call_user_func_array(array($this->class, $funcName), $arguments);
+
         foreach ($this->interceptorDatas as $interceptorName => $interceptorData) {
             if (!empty($interceptorData[$funcName])) {
-                $this->interceptors[$interceptorName]->exec($funcName, $arguments);
+                $this->interceptors[$interceptorName]->exec($funcName, $arguments, $result);
             }
         }
-
-        $result = call_user_func_array(array($this->class, $funcName), $arguments);
 
         return $result;
     }

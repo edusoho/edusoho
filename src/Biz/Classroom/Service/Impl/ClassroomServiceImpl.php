@@ -213,13 +213,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent('classroom.create', $classroom);
 
-        $infoData = array(
-            'id' => $classroom['id'],
-            'title' => $classroom['title'],
-        );
-
-        $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})", $infoData);
-
         return $classroom;
     }
 

@@ -184,13 +184,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->commit();
             $this->dispatchEvent('course.create', new Event($created));
 
-            $infoData = array(
-                'id' => $created['id'],
-                'title' => $created['title'],
-            );
-
-            $this->getLogService()->info('course', 'create_course', sprintf('创建计划任务《%s》(#%s)', $created['title'], $created['id']), $infoData);
-
             return $created;
         } catch (\Exception $e) {
             $this->rollback();

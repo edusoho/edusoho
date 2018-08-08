@@ -3,6 +3,7 @@
 namespace Biz\Course\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\System\Annotation\Log;
 
 interface CourseSetService
 {
@@ -118,6 +119,12 @@ interface CourseSetService
 
     public function getCourseSet($id);
 
+    /**
+     * @param $courseSet
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="create",message="创建课程",targetType="courseSet",param="result")
+     */
     public function createCourseSet($courseSet);
 
     /**

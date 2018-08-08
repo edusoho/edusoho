@@ -2,6 +2,8 @@
 
 namespace Biz\Classroom\Service;
 
+use Biz\System\Annotation\Log;
+
 interface ClassroomService
 {
     /**
@@ -72,6 +74,12 @@ interface ClassroomService
 
     public function countClassrooms($condtions);
 
+    /**
+     * @param $classroom
+     *
+     * @return mixed
+     * @Log(level="info",module="classroom",action="create",message="创建班级",targetType="classroom",param="result")
+     */
     public function addClassroom($classroom);
 
     public function findClassroomByTitle($title);
