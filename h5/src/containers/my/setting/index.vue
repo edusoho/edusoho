@@ -29,9 +29,9 @@ export default {
       }, {
         name: '昵称',
         info: ''
-      }, {
-        name: '手机',
-        info: ''
+      // }, {
+      //   name: '手机',
+      //   info: ''
       }]
     }
   },
@@ -44,7 +44,7 @@ export default {
   created() {
     this.$set(this.settings[0], 'info', this.user.avatar.large);
     this.$set(this.settings[1], 'info', this.user.nickname);
-    this.$set(this.settings[2], 'info', this.user.school);
+    // this.$set(this.settings[2], 'info', this.user.school);
   },
   methods: {
     ...mapActions([

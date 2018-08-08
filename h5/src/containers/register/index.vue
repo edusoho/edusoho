@@ -140,6 +140,8 @@ export default {
       if(this.submitFlag) {
         const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
         this.registerInfo.encrypt_password = encrypt;
+        this.registerInfo.encrypt_password
+          = window.XXTEA.encryptToBase64(password, window.location.host);
         this.submitFlag = false;
       }
 
