@@ -5,7 +5,7 @@
         v-bind:class="{ active: selectedIndex === index && isActive }"
         v-for="(item, index) in selectItems"
         @click="toggle(item, index)"
-      >{{ item.text }}</div>
+      >{{ selectedText(item.data, index) }}</div>
     </div>
 
     <selectMenu
@@ -42,12 +42,15 @@
         isActive: false,
         menuContent: {},
         selectedIndex: null,
-        proxyData: {}
       };
     },
-    watch: {
-      selectedData() {
-        this.proxyData = this.selectedData;
+    computed: {
+      proxyData: {
+        get() {
+          return {...this.selectedData};
+        },
+        set() {
+        }
       }
     },
     methods: {
@@ -69,6 +72,22 @@
       sendQuery(value) {
         this.$emit('selectedChange', value);
         this.toggle();
+      },
+      selectedText(value, index) {
+        const TREE = {
+          CATEGORY: 0,
+          TYPE: 1,
+          SORT: 2
+        }
+        for (let i = 0; i < value.length; i++) {
+          if (index === TREE.CATEGORY) {
+            if (value[i].id == this.selectedData.categoryId) return value[i].name
+          } else if (index === TREE.TYPE) {
+            if (value[i].type === this.selectedData.type) return value[i].text
+          } else if (index === TREE.SORT) {
+            if (value[i].type === this.selectedData.sort) return value[i].text
+          }
+        }
       }
     }
   }

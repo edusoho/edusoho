@@ -5,7 +5,7 @@
       <!-- first-level -->
       <div class="e-menu__items level-one">
         <div class="e-menu__item"
-          :class="[item.id === queryData.categoryId ? 'selected' : '']"
+          :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in menuContent.data"
           @click="itemSelect(item, menuContent.type, 'levelOne')"
         >{{ item.name }}</div>
@@ -13,7 +13,7 @@
       <!-- second-level -->
       <div class="e-menu__items level-two">
         <div class="e-menu__item"
-          :class="[item.id === queryData.categoryId ? 'selected' : '']"
+          :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in secondLevel"
           @click="itemSelect(item, menuContent.type, 'levelTwo')"
         >{{ item.text }}</div>
@@ -21,7 +21,7 @@
       <!-- third-level -->
       <div class="e-menu__items level-three">
         <div class="e-menu__item"
-          :class="[item.id === queryData.categoryId ? 'selected' : '']"
+          :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in thirdLevel"
           @click="itemSelect(item, menuContent.type, 'levelThree')"
         >{{ item.text }}</div>
@@ -59,13 +59,16 @@
           category: 'categoryId',
           sort: 'sort'
         },
-        queryData: {},
         isReadyEmit: false
       };
     },
-    watch: {
-      selectedData() {
-        this.queryData = {...this.selectedData}
+    computed: {
+      queryData: {
+        get() {
+          return {...this.selectedData};
+        },
+        set() {
+        }
       }
     },
     methods: {
@@ -78,9 +81,7 @@
               if (item.children) {
                 this.secondLevel = item.children;
               } else {
-                this.queryData = {
-                  categoryId: item.id,
-                };
+                this.queryData.categoryId = item.id
                 this.isReadyEmit = true;
               }
               break;
@@ -88,31 +89,23 @@
               if (item.children) {
                 this.thirdLevel = item.children;
               } else {
-                this.queryData = {
-                  categoryId: item.id,
-                };
+                this.queryData.categoryId = item.id
                 this.isReadyEmit = true;
               }
               break;
             case 'levelThree':
-              this.queryData = {
-                categoryId: item.id,
-              };
+              this.queryData.categoryId = item.id
               this.isReadyEmit = true;
               break;
           }
         } else {
-          this.queryData = {
-            [query]: item.type,
-          };
+          this.queryData[query] = item.type
           this.isReadyEmit = true;
         }
         // 更新数据
         if (this.isReadyEmit) this.$emit('selectedChange', this.queryData);
       },
       judgeIsSelected(item, type) {
-        console.log(this.selectedData);
-        console.log(this.queryData[this.queryForm[type]], item.type, 'wahahahah');
         const isSelected = this.queryData[this.queryForm[type]] === item.type;
         if (isSelected) return 'selected'
       },

@@ -133,6 +133,14 @@
       // 获取select items
       Api.getSelectItems()
         .then((data) => {
+          data[0].data.unshift({
+            name: '全部',
+            id: '0'
+          });
+          data[1].data.unshift({
+            text: '全部',
+            type: 'all'
+          });
           this.selectItems = data;
         });
       // 根据筛选条件获取相应课程
