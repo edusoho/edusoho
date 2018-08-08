@@ -41,7 +41,7 @@ export default {
     handlePay() {
       Api.createTrade({
         data: {
-          gateway: 'WechatPay_Js',
+          gateway: 'WechatPay_JsH5',
           type: 'purchase',
           orderSn: this.detail.sn,
           openid: this.detail.openid,

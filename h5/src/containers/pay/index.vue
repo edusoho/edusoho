@@ -14,14 +14,14 @@
         <div class="payWay">
           <div :class="['payWay__item', {'payWay__item--selected': selected}]"
             v-show="paySettings.alipayEnabled"
-            @click="payWay = 'Alipay_LegacyWap';selected = true">
+            @click="payWay = 'Alipay_LegacyH5';selected = true">
             <div class="right"></div>
             <i></i>
             <img src="static/images/zfb.png">
           </div>
           <div :class="['payWay__item', {'payWay__item--selected': !selected}]"
             v-show="paySettings.wxpayEnabled"
-            @click="payWay = 'WechatPay_MWeb'; selected = false">
+            @click="payWay = 'WechatPay_H5'; selected = false">
             <div class="right"></div>
             <i></i>
             <img src="static/images/wx.png">
@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       detail: {},
-      payWay: 'Alipay_LegacyWap', // WechatPay_Js--微信内支付 WechatPay_MWeb--微信wap支付
+      payWay: 'Alipay_LegacyH5', // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
       selected: true,
       paySettings: {},
       inWechat: this.isWeixinBrowser()
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     handlePay () {
-      const isWxPay = this.payWay === 'WechatPay_MWeb' && this.isWeixinBrowser()
+      const isWxPay = this.payWay === 'WechatPay_H5' && this.isWeixinBrowser()
       if (isWxPay) {
         window.location.href = `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
           `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
@@ -99,7 +99,7 @@ export default {
           app_pay: 'Y'
         }
       }).then(res => {
-        window.location.href = this.payWay ===  'Alipay_LegacyWap' ? res.payUrl: res.paymentUrl
+        window.location.href = this.payWay ===  'Alipay_LegacyH5' ? res.payUrl: res.paymentUrl
       })
     },
     isWeixinBrowser (){
