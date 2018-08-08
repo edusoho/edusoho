@@ -89,15 +89,14 @@ export default class TaskShow extends Emitter {
         }, time);
       })
       .on('task-list-loaded', ($paneBody) => {
-        let $box = $paneBody.parent();
-        let boxHeight = $box.height();
-        let bodyHeight = $paneBody.height();
-
         new PagedCourseLesson({
           'afterFirstLoad': function() {
-            let $activeItem = $paneBody.find('.task-item.active');
-            let top = $activeItem.position().top;
-            let standardPosition = (boxHeight - $activeItem.height()) / 2;
+            const $box = $paneBody.parent();
+            const boxHeight = $box.height();
+            const bodyHeight = $paneBody.height();
+            const $activeItem = $paneBody.find('.task-item.active');
+            const top = $activeItem.position().top;
+            const standardPosition = (boxHeight - $activeItem.height()) / 2;
 
             if ((bodyHeight - top) < standardPosition) {
               console.log('位置靠近底部，top偏移', top - standardPosition);
