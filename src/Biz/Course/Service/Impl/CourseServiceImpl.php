@@ -784,7 +784,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
 
-        return $this->createCourseStrategy($course)->accept(new CourseItemPagingVisitor($this->biz, $courseId, $paging));
+        $result = $this->createCourseStrategy($course)->accept(new CourseItemPagingVisitor($this->biz, $courseId, $paging));
+        if (!empty($paging['limit']) && $result[1] > $paging['limit']) {  //$result[1] 为总数， $result[0] 为相应的数据
+            $result[0] = array_slice($result[0], 0, $paging['limit']);
+            $result[1] = $paging['limit'];
+        }
+
+        return $result;
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)

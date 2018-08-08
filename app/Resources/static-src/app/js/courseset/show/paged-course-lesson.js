@@ -6,20 +6,19 @@ class PagedCourseLesson {
    * @param options 
    * {
    *   'displayAllImmediately': false //默认为false, 如果为true, 则不做分页处理，立刻显示全部
+   *   'afterFirstLoad': function() {},
+   *   'pageSize': 25,
    * }
    */
   constructor(options) {
     if (typeof options == 'undefined') {
       options = {};
     }
-    this._displayAllImmediately = options['displayAllImmediately'] ? true : false;
-    this._init();
+    this._init(options);
   }
 
-  _init() {
-    new ESInfiniteCachedScroll({
-      'displayAllImmediately': this._displayAllImmediately,
-
+  _init(options) {
+    let defaultOptions = {
       'data': this._toJson($('.js-hidden-data').html()),
 
       'context': {
@@ -59,6 +58,11 @@ class PagedCourseLesson {
           return data.watchLimitRemaining !== false;
         },
 
+        /** 课时详情页中，当前课时会高亮 */
+        'highlightTaskClass': function(data, context) {
+          return data.taskId == context.course.currentTaskId ? 'active' : '';
+        },
+
         'taskClass': function(data, context) {
           let classNames = 'es-icon left-menu';
           if (context.isTaskLocked(data, context)) {
@@ -74,12 +78,19 @@ class PagedCourseLesson {
         },
 
         'isTaskLocked': function(data, context) {
-          return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' &&
-            (data.lock || !context.course.isMember);
+          if (context.course.isMember) {
+            return context.course.learnMode == 'lockMode' && data.lock == '1';
+          } else {
+            return context.course.learnMode == 'lockMode';
+          }
         },
 
         'isPublished': function(data, context) {
           return 'published' == data.status;
+        },
+
+        'isPublishedTaskUnlocked': function(data, context) {
+          return context.isPublished(data, context) && !context.isTaskLocked(data, context);
         },
 
         'isCloudVideo': function(data, context) {
@@ -127,7 +138,10 @@ class PagedCourseLesson {
       },
 
       'dataTemplateNode': '.js-infinite-item-template'
-    });
+    };
+
+    let finalOptions = $.extend(defaultOptions, options);
+    new ESInfiniteCachedScroll(finalOptions);
 
     if (this._displayAllImmediately) {
       this._destroyPaging();
