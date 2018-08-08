@@ -69,7 +69,7 @@
     },
     computed: {
       rate() {
-        if (!this.course.publishedTaskNum) return 0;
+        if (!parseInt(this.course.publishedTaskNum)) return 0;
         return parseInt((this.course.learnedNum/this.course.publishedTaskNum)*100)
       }
     },

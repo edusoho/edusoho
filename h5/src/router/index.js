@@ -88,7 +88,7 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "order" */'@/containers/order/index.vue')
   }, {
-    path: '/more',
+    path: '/course/explore',
     name: 'more',
     meta: {
       title: '所有课程'
