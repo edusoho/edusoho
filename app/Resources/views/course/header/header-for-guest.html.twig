@@ -47,149 +47,151 @@
       </div>
     </div>
     <div class="course-detail-info">
-			{% set onDiscount =  is_discount(course) %}
-      <div class="course-detail-info__title">
-        {% if marketingPage %}
-          {{ courseSet.title }}
-        {% else %}
-          {{ course.title }}
-        {% endif %}
-      </div>
-      {% if courseSet.subtitle %}
-        <p class="course-detail-info__subtitle text-overflow subtitle cd-text-sm cd-mb16">
-          <span data-toggle="tooltip" data-container="body" data-placement="top"
-          data-trigger="hover" title="{{courseSet.subtitle}}">{{ courseSet.subtitle }}</span>
-        </p>
-      {% endif %}
-      <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
-				{% include 'course/header/header-for-price.html.twig' %}
-      </div>
-			
-			{% if onDiscount %}
-        <div class="cd-mb16">
-          <span class="course-detail__label">{{ 'course.activity'|trans }}</span>
-          <span class="text-12 color-warning">
-            <b class="hidden-xs course-detail-activity-title">{{ course.discount.name|sub_text(10) }}</b><span class="cd-text-medium cd-ml16" id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}></span><i class="es-icon es-icon-accesstime text-14 mls cd-text-medium"></i>
-          <span>
+      <div class="course-detail-info__text js-course-detail-info">
+        {% set onDiscount =  is_discount(course) %}
+        <div class="course-detail-info__title">
+          {% if marketingPage %}
+            {{ courseSet.title }}
+          {% else %}
+            {{ course.title }}
+          {% endif %}
         </div>
-			{% endif %}
-      <div class="course-detail-gray course-detail-gray--market {% if not onDiscount %} not-activity {% endif %}">
-        {% if previewAs %}
-          {% set hasMulCoursePlans = has_mul_courses(courseSet.id) %}
-        {% else %}
-          {% set hasMulCoursePlans = has_mul_courses(courseSet.id, 1) %}
+        {% if courseSet.subtitle %}
+          <p class="course-detail-info__subtitle text-overflow subtitle cd-text-sm cd-mb16">
+            <span data-toggle="tooltip" data-container="body" data-placement="top"
+            data-trigger="hover" title="{{courseSet.subtitle}}">{{ courseSet.subtitle }}</span>
+          </p>
         {% endif %}
-        {% if showCourses and hasMulCoursePlans %}
-          <div class="course-detail-content">
-            <span class="course-detail-title vertical-middle">{{ 'course.teaching_plan'|trans }}</span>
-            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
-							{% set current_course = course %}
-              {% for course in courses if course.status == 'published' or previewAs %}
-                <li class="mb5 mrs {% if current_course.id == course.id %} active {% endif %}">
-                  <a data-toggle="tooltip" data-placement="top" data-container="body" title="{{ course.subtitle }}"
-                data-trigger="hover" href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10)|default('course.unname_title'|trans) }}
-                  </a>
-                  <i class="es-icon es-icon-done done-icon"></i>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-				{% endif %}
-
-        <div class="hidden-xs common-line-height">
-          <span class="course-detail-title">{{ 'course.expiry_date'|trans }}</span>
-					{% if course.expiryMode == 'days'  %}
-            <span class="gray-dark course-detail-expiry">
-              {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':course.expiryDays})|raw }}
-            </span>
-					{% elseif course.expiryMode == 'end_date' %}
-            <span class="gray-dark course-detail-expiry">
-              {{ 'course.expiry_date.end_date_mode'|trans({'%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
-            </span>
-					{% elseif course.expiryMode == 'date' %}
-            <span class="gray-dark course-detail-expiry">
-              {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':course.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
-            </span>
-					{% elseif course.expiryMode == 'forever' %}
-            <span class="gray-dark course-detail-expiry mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
-					{% endif %}
+        <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
+          {% include 'course/header/header-for-price.html.twig' %}
         </div>
-				
-				{% if course.buyable != 0  and course.buyExpiryTime != 0 %}
-          <div class="mtl hidden-xs common-line-height">
-						{{ 'course.buy_expiry_date.buy_expiry_time'|trans({'%buyExpiryTime%':course.buyExpiryTime|date('Y-m-d ')})|raw }}
-          </div>
-				{% endif %}
-				
-				{% if course.showServices | default(1) %}
-          <div class="course-detail-service cd-mt16">
-            {% set serviceTags = services(course.services|default([])) %}
-  		      <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
-  					{% for tag in serviceTags %}
-              {% if tag.active %}
-                <span
-                    class="lump-sm color-lump bg-primary mr5 hidden-xs"
-                    data-container="body"
-                    data-trigger="hover"
-                    data-placement="top"
-                    data-toggle="tooltip"
-                    title="{{ tag.fullName }}"
-                    data-content="{{ tag.summary }}">
-                  {{ tag.shortName }}
-                </span>
-              {% endif %}
-  					{% endfor %}
-          </div>
-				{% endif %}
         
-        {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
-          <div class="course-detail-listening">
-            <span class="course-detail-title">{{ 'course.info.video.convert.audio.enable_label'|trans }}</span>
-            {{ 'course.video.convert.client.click.listen'|trans }}
-            <a href="{{ path('mobile') }}" target="__blank">{{ 'course.video.convert.client.try'|trans }}</a>
+        {% if onDiscount %}
+          <div class="cd-mb8">
+            <span class="course-detail__label">{{ 'course.activity'|trans }}</span>
+            <span class="text-12 color-warning">
+              <b class="hidden-xs course-detail-activity-title">{{ course.discount.name|sub_text(10) }}</b><span class="cd-text-medium cd-ml16" id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}></span><i class="es-icon es-icon-accesstime text-14 mls cd-text-medium"></i>
+            <span>
           </div>
         {% endif %}
-      </div>
+        <div class="course-detail-gray course-detail-gray--market {% if not onDiscount %} not-activity {% endif %}">
+          {% if previewAs %}
+            {% set hasMulCoursePlans = has_mul_courses(courseSet.id) %}
+          {% else %}
+            {% set hasMulCoursePlans = has_mul_courses(courseSet.id, 1) %}
+          {% endif %}
+          {% if showCourses and hasMulCoursePlans %}
+            <div class="course-detail-content">
+              <span class="course-detail-title vertical-middle">{{ 'course.teaching_plan'|trans }}</span>
+              <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
+                {% set current_course = course %}
+                {% for course in courses if course.status == 'published' or previewAs %}
+                  <li class="mb5 mrs {% if current_course.id == course.id %} active {% endif %}">
+                    <a data-toggle="tooltip" data-placement="top" data-container="body" title="{{ course.subtitle }}"
+                  data-trigger="hover" href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10)|default('course.unname_title'|trans) }}
+                    </a>
+                    <i class="es-icon es-icon-done done-icon"></i>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
 
-      <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
-        <ul class="clearfix">
-          <!--营销页显示-->
-					{% if marketingPage %}
-            <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
-						    {% if not isUserFavorite %}style="display: none" {% endif %}>
-              <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
-                 data-trigger="hover">
-                <i class="es-icon es-icon-bookmark color-primary"></i>
-                <br/>
-								{{ 'course.status.followed'|trans }}
-              </a>
-            </li>
-            <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
-						    {% if isUserFavorite %}style="display: none"{% endif %}>
-              <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
-                 data-trigger="hover">
-                <i class="es-icon es-icon-bookmarkoutline"></i>
-                <br/>
-								{{ 'course.status.follow'|trans }}
-              </a>
-            </li>
-					{% endif %}
+          <div class="hidden-xs common-line-height">
+            <span class="course-detail-title">{{ 'course.expiry_date'|trans }}</span>
+            {% if course.expiryMode == 'days'  %}
+              <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':course.expiryDays})|raw }}
+              </span>
+            {% elseif course.expiryMode == 'end_date' %}
+              <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.end_date_mode'|trans({'%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+              </span>
+            {% elseif course.expiryMode == 'date' %}
+              <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':course.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+              </span>
+            {% elseif course.expiryMode == 'forever' %}
+              <span class="gray-dark course-detail-expiry mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
+            {% endif %}
+          </div>
           
-          <li class="es-share top">
-            <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
-              <i class="es-icon es-icon-share"></i>
-              <br/>
-							{{ 'course.share'|trans }}
-            </a>
-						{% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
-          </li>
+          {% if course.buyable != 0  and course.buyExpiryTime != 0 %}
+            <div class="mtl hidden-xs common-line-height">
+              {{ 'course.buy_expiry_date.buy_expiry_time'|trans({'%buyExpiryTime%':course.buyExpiryTime|date('Y-m-d ')})|raw }}
+            </div>
+          {% endif %}
+          
+          {% if course.showServices | default(1) %}
+            <div class="course-detail-service cd-mt16">
+              {% set serviceTags = services(course.services|default([])) %}
+              <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
+              {% for tag in serviceTags %}
+                {% if tag.active %}
+                  <span
+                      class="lump-sm color-lump bg-primary mr5 hidden-xs"
+                      data-container="body"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-toggle="tooltip"
+                      title="{{ tag.fullName }}"
+                      data-content="{{ tag.summary }}">
+                    {{ tag.shortName }}
+                  </span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          
+          {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
+            <div class="course-detail-listening">
+              <span class="course-detail-title">{{ 'course.info.video.convert.audio.enable_label'|trans }}</span>
+              {{ 'course.video.convert.client.click.listen'|trans }}
+              <a href="{{ path('mobile') }}" target="__blank">{{ 'course.video.convert.client.try'|trans }}</a>
+            </div>
+          {% endif %}
+        </div>
 
-          {{ slot('course.header-marketing-btn.extension', {'course': course, 'mobile': true}) }}
+        <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
+          <ul class="clearfix">
+            <!--营销页显示-->
+            {% if marketingPage %}
+              <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
+                  {% if not isUserFavorite %}style="display: none" {% endif %}>
+                <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
+                  data-trigger="hover">
+                  <i class="es-icon es-icon-bookmark color-primary"></i>
+                  <br/>
+                  {{ 'course.status.followed'|trans }}
+                </a>
+              </li>
+              <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
+                  {% if isUserFavorite %}style="display: none"{% endif %}>
+                <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
+                  data-trigger="hover">
+                  <i class="es-icon es-icon-bookmarkoutline"></i>
+                  <br/>
+                  {{ 'course.status.follow'|trans }}
+                </a>
+              </li>
+            {% endif %}
+            
+            <li class="es-share top">
+              <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
+                <i class="es-icon es-icon-share"></i>
+                <br/>
+                {{ 'course.share'|trans }}
+              </a>
+              {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
+            </li>
 
-        </ul>
+            {{ slot('course.header-marketing-btn.extension', {'course': course, 'mobile': true}) }}
+
+          </ul>
+        </div>
       </div>
 
-      <div class="course-operation-wrap">
+      <div class="course-detail-info__btn js-course-header-operation">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
           <li class="es-qrcode top hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
              <a class="btn btn-default btn-xs" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'site.qrcode_tips'|trans }}"><i class="es-icon es-icon-saoyisao"></i></a>

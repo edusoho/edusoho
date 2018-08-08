@@ -245,7 +245,7 @@ class CourseController extends CourseBaseController
             $conditions,
             array('seq' => 'DESC', 'createdTime' => 'ASC'),
             0,
-            10
+            PHP_INT_MAX
         );
 
         return $this->render(

@@ -15,6 +15,9 @@
   {{ courseSet.courseNum|default(0) }}
 {% endblock %}
 
+{% block courseType %}
+{% endblock %}
+
 {% block btn %}
   <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
 {% endblock %}

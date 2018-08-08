@@ -41,20 +41,32 @@ class TestpaperInfo extends AbstractResource
         if (!method_exists($this, $method)) {
             throw new \BadMethodCallException(sprintf('Unknown property "%s" on Testpaper "%s".', $targetType, get_class($this)));
         }
-        $this->$method($testId, $targetId, $results);
+        $this->$method($user, $testpaper, $targetId, $results);
 
         return $results;
     }
 
-    protected function handleTask($testId, $taskId, &$results)
+    protected function handleTask($user, $testpaper, $taskId, &$results)
     {
         $task = $this->getTaskService()->tryTakeTask($taskId);
         if (empty($task)) {
             throw new NotFoundHttpException('任务不存在');
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ('testpaper' != $activity['mediaType'] || $activity['ext']['mediaId'] != $testId) {
+        if ('testpaper' != $activity['mediaType'] || $activity['ext']['mediaId'] != $testpaper['id']) {
             throw new AccessDeniedHttpException('试卷不属于当前任务！');
+        }
+
+        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(
+            $user['id'],
+            $testpaper['id'],
+            $activity['fromCourseId'],
+            $activity['id'],
+            $testpaper['type']
+        );
+
+        if (!empty($testpaperResult)) {
+            $results['testpaperResult'] = $testpaperResult;
         }
 
         $task['activity'] = $activity;
