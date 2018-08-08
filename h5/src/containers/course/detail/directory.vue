@@ -4,21 +4,21 @@
     <div v-if="courseItems.length == 0" class="empty">暂无学习任务</div>
     <div class="directory-list" v-else>
       <div class="directory-list__item" v-for="(item, index) in chapters">
-        <div class="directory-list__item-chapter" 
-          @click="item.show = !item.show" 
+        <div class="directory-list__item-chapter"
+          @click="item.show = !item.show"
           v-if="item.type === 'chapter'">
-          <span>第{{ item.number }}章：{{ item.title }}</span> 
+          <span>第{{ item.number }}章：{{ item.title }}</span>
           <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"></i>
         </div>
 
-        <div :class="['directory-list__item-unit', 
+        <div :class="['directory-list__item-unit',
           {'unit-show': item.show}]"
           v-for="task in tasks[index]">
           <div class="lesson-cell__unit" v-if="task.type === 'unit'">
             第{{ task.number }}节：{{ task.title }}
           </div>
 
-          <div :class="['box', {'show-box': item.show}]" 
+          <div :class="['box', {'show-box': item.show}]"
             v-if="task.type === 'task'">
             <div class="lesson-cell">
               <span class="lesson-cell__number">{{ task | filterNumber }}</span>
@@ -68,9 +68,7 @@
     },
     filters:{
       filterNumber(task) {
-        return Number(task.seq)
-          ? `${task.number}-${task.seq}`
-          : `${task.number}`
+        return task.task.number
       }
     },
     watch: {
