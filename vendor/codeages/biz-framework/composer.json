@@ -20,6 +20,7 @@
         "php": "^5.3|^7.0",
         "pimple/pimple": "~3.2",
         "doctrine/dbal": "~2.4",
+        "doctrine/common": "~2.4",
         "doctrine/annotations": "~1.2",
         "davedevelopment/phpmig": "~1.2",
         "symfony/event-dispatcher": "~2.8|~3.0",
