@@ -79,7 +79,7 @@ class PagedCourseLesson {
 
         'isTaskLocked': function(data, context) {
           if (context.course.isMember) {
-            return context.course.learnMode == 'lockMode' && data.lock == '1';
+            return context.course.learnMode == 'lockMode' && data.lock;
           } else {
             return context.course.learnMode == 'lockMode';
           }
