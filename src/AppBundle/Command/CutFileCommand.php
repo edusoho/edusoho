@@ -37,16 +37,21 @@ class CutFileCommand extends BaseCommand
         $contents = file($filepath);
         $totalLines = count($contents);
         $fileCount = ceil($totalLines / $line);
+        $num = 0;
         for ($i = 0; $i < $fileCount; ++$i) {
             $lineStart = $i * $line;
             $lineEnd = ($i + 1) * $line > $totalLines ? $totalLines : ($i + 1) * $line;
-            file_put_contents($rootPath.'web/install/edusoho_init_'.$i.'.sql', '');
+            $isEmpty = true;
             for ($j = $lineStart; $j < $lineEnd; ++$j) {
                 if (strlen($contents[$j]) > 1) {
-                    file_put_contents($rootPath.'web/install/edusoho_init_'.$i.'.sql', $contents[$j], FILE_APPEND);
+                    file_put_contents($rootPath.'web/install/edusoho_init_'.$num.'.sql', $contents[$j], FILE_APPEND);
+                    $isEmpty = false;
                 }
             }
-            $output->writeln('<info>生成edusoho_init_'.$i.'.sql</info>');
+            $output->writeln('<info>生成edusoho_init_'.$num.'.sql</info>');
+            if (!$isEmpty) {
+                $num++;
+            }
         }
 
         $output->writeln('<info>dump-init-sql结束</info>');
