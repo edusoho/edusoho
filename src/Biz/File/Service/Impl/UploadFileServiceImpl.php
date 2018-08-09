@@ -186,6 +186,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return false;
     }
 
+    public function sharePublic($id)
+    {
+        return $this->getUploadFileDao()->update($id, array('isPublic' => 1));
+    }
+
+    public function unsharePublic($id)
+    {
+        return $this->getUploadFileDao()->update($id, array('isPublic' => 0));
+    }
+
     public function getDownloadMetas($id, $ssl = false)
     {
         $file = $this->getUploadFileDao()->get($id);

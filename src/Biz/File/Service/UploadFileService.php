@@ -19,6 +19,10 @@ interface UploadFileService
 
     public function update($fileId, $fields);
 
+    public function sharePublic($id);
+
+    public function unsharePublic($id);
+
     public function getDownloadMetas($id, $ssl = false);
 
     public function getUploadAuth($params);
