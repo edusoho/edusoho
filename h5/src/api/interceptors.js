@@ -10,7 +10,7 @@ const statusCode = {
 
 axios.interceptors.request.use(config => {
   config.headers.Accept = 'application/vnd.edusoho.v2+json';
-  config.headers.sessionEnabled = 0;
+  config.headers.SessionIgnore = 1;
 
   if (store.state.token) {
     config.headers['X-Auth-Token'] = store.state.token;
