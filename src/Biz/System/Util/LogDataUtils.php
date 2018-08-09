@@ -123,6 +123,32 @@ class LogDataUtils
                         '%title%' => 'title',
                     ),
                 ),
+                'create_lesson' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_show',
+                            'param' => array(
+                                'id' => 'courseId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'add_task' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_show',
+                            'param' => array(
+                                'id' => 'courseId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'classroom' => array(
                 'create' => array(
