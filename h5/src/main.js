@@ -55,13 +55,13 @@ Api.getSettings({
 }).then(res => {
   if (!parseInt(res.enabled, 10)) {
     // 如果没有开通微网校，则跳回老版本网校 TODO
-    const hash = location.hash;
+    const hashStr = location.hash;
     const getPathNameByHash = hash => {
       const hasQuery = hash.indexOf('?');
       if (hasQuery === -1) return hash.slice(1);
       return hash.match(/#.*\?/g)[0].slice(1, -1);
     };
-    window.location.href = location.origin + getPathNameByHash(hash);
+    window.location.href = location.origin + getPathNameByHash(hashStr);
     return;
   }
 
