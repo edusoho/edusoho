@@ -8,10 +8,14 @@ class TestpaperItemFilter extends Filter
 {
     protected $publicFields = array('id', 'type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'target',
         'courseId', 'lessonId', 'parentId', 'subCount', 'finishedTimes', 'passedTimes', 'createdUserId', 'updatedUserId', 'courseSetId',
-        'seq', 'missScore', 'missScore', 'subs', 'testResult', );
+        'seq', 'missScore', 'missScore', 'subs', 'testResult', 'isDeleted', );
 
     protected function publicFields(&$data)
     {
+        if (!empty($data['isDeleted'])) {
+            unset($data['answer']);
+        }
+
         if (!empty($data['stem'])) {
             $data['stem'] = $this->convertAbsoluteUrl($data['stem']);
         }
@@ -35,6 +39,14 @@ class TestpaperItemFilter extends Filter
             if (in_array($data['type'], array('essay')) && !empty($data['answer']) && is_array($data['answer'])) {
                 foreach ($data['answer'] as &$answer) {
                     $answer = $this->convertAbsoluteUrl($answer);
+                }
+            }
+
+            if (in_array($data['type'], array('fill')) && !empty($data['answer']) && is_array($data['answer'])) {
+                foreach ($data['answer'] as &$answer) {
+                    if (is_array($answer)) {
+                        $answer = implode('|', $answer);
+                    }
                 }
             }
 

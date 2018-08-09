@@ -17,7 +17,7 @@
     </button>
 
     {% if courseSet.type|default('') == 'normal' %}
-      <button data-position="" class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add"
+      <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add {% if setting('storage.upload_mode', 'local') == 'local' %}btn-default-popover{% endif %}"
         {% if setting('storage.upload_mode', 'local') == 'local' %}
           data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
           data-content="{{'course.plan_task.batch_create_tips'|trans}}"

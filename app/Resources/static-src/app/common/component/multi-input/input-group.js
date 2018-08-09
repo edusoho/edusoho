@@ -13,6 +13,7 @@ export default class InputGroup extends Component {
       resultful: false,
       searchResult: [],
     };
+    this.timer = false;
     this.subscribeMessage();
   }
 
@@ -56,7 +57,8 @@ export default class InputGroup extends Component {
       return;
     }
 
-    setTimeout(() => {
+    if (this.timer) clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
       send(this.context.searchable.url + value, searchResult => {
         if (this.state.itemName.length > 0) {
           console.log({ 'searchResult': searchResult });
@@ -66,7 +68,7 @@ export default class InputGroup extends Component {
           });
         }
       });
-    }, 100);
+    }, 500);
   }
 
   handleAdd() {

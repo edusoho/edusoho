@@ -3,8 +3,8 @@
   {% do script(['app/js/courseset-manage/header/index.js']) %}
 {% endblock %}
 {% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
-<div class="courseset-manage-header {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
 
+<div class="courseset-manage-header {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-header--hide {% endif %}js-origin-header clearfix">
   {% block unfold %}
     {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}
       <div class="courseset-manage-hide js-new-header"><a class="js-show-courseset cd-link-assist" href="javascript:;">{{ 'course.base'|trans }}<i class="es-icon es-icon-xiala"></i></a></div>
@@ -39,6 +39,11 @@
           <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title }}</a>
         {% endblock %}
       </div>
+      {% block courseType %}
+        {% if is_un_multi_courseset(courseSet.id) %}
+          <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
+        {% endif %}
+      {% endblock %}
       <div class="courseset-manage-header-info__price color-danger">
         {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
           {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}

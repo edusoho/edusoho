@@ -15,7 +15,7 @@ class TaskPluginController extends BaseController
 {
     public function taskListAction(Request $request, $courseId, $taskId)
     {
-        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         $task = $this->getTaskService()->getTask($taskId);
 
@@ -26,12 +26,13 @@ class TaskPluginController extends BaseController
         $preview = $request->query->get('preview', false);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetTaskId' => $taskId));
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('limit' => 10000));
 
         return $this->render('task/plugin/task-list.html.twig', array(
             'courseItems' => $courseItems,
             'nextOffsetSeq' => $nextOffsetSeq,
             'course' => $course,
+            'member' => $member,
             'currentTaskId' => $taskId,
             'preview' => $preview,
         ));

@@ -8,6 +8,9 @@
     <div class="footer-copyright">
       {% include "powered-by.html.twig" %}
       {{ setting('site.analytics')|raw }}
+      {% if setting('siteTrace.enabled')|default(false) %}
+        {{ setting('siteTrace.script')|raw }}
+      {% endif %}
       <a class="mlm" href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a>
       <div class="mts">
         {% if setting('site.copyright') %}{{ '课程内容版权均归'|trans }}
