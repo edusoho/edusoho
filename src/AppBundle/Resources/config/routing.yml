@@ -375,6 +375,7 @@ cloud_search:
 settings:
     path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
+    h5: true
 
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
@@ -591,6 +592,7 @@ my_homework_list:
 my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
+    h5: true
 
 my_order_refunds:
     path: /my/order_refunds
@@ -1795,6 +1797,7 @@ course_manage_change_lesson_show_status:
 course_set_explore:
    path:  /course/explore/{category}
    defaults: { _controller: AppBundle:Explore:courseSets, category:'' }
+   h5: true
 
 live_course_set_explore:
     path:  /live
@@ -1966,6 +1969,7 @@ course_manage_items_sort:
 my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: AppBundle:My/Course:learning }
+    h5: true
 
 my_courses_learned:
     path: /my/courses/learned
@@ -2919,6 +2923,7 @@ coupon_check:
 my_course_show:
     path:  /my/course/{id}/{tab}
     defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }
+    h5: true
 
 course_member_expired:
     path:  /course/{id}/member/expired
