@@ -24,7 +24,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
         }
         $sessionIgnore = $request->headers->get('SessionIgnore', false);
         $session = $this->container->get('session');
-        if (null === $session || null === $token = $session->get($this->sessionKey) || $sessionIgnore) {
+        if ((bool) $sessionIgnore || null === $session || null === $token = $session->get($this->sessionKey)) {
             return;
         }
 
