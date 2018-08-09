@@ -45,7 +45,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $default = array(
             'misfire_threshold' => 300,
             'misfire_policy' => 'missed',
-            'priority' => 100,
+            'priority' => 200,
             'source' => 'MAIN',
         );
 
@@ -82,11 +82,13 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $this->updateWaitingJobsToAcquired();
         do {
             $result = $this->runAcquiredJobs($initProcess['id']);
-            $peak_memory = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
-        } while ($result && $peak_memory < SchedulerService::JOB_MEMORY_LIMIT);
+            $peakMemory = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
+            $currentTime = $this->getMillisecond();
+            $processUsedTime = (int) (($currentTime - $process['start_time']) / 1000);
+        } while ($result && $peakMemory < SchedulerService::JOB_MEMORY_LIMIT && $processUsedTime < $this->getMaxProcessExecTime());
         $process['end_time'] = $this->getMillisecond();
         $process['cost_time'] = $process['end_time'] - $process['start_time'];
-        $process['peak_memory'] = $peak_memory;
+        $process['peak_memory'] = $peakMemory;
 
         $this->updateJobProcess($initProcess['id'], $process);
     }
@@ -341,6 +343,9 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             'job_detail' => $job,
             'job_name' => $job['name'],
         );
+        if (empty($job['expression'])) {
+            $jobFired['priority'] = 200;
+        }
         $jobFired = $this->getJobFiredDao()->create($jobFired);
         $jobFired['job_detail'] = $this->updateNextFireTime($job);
 
@@ -445,7 +450,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         ), array(), 0, 100);
 
         foreach ($jobFireds as $jobFired) {
-            if ($jobFired['job_detail']['name'] != 'Scheduler_MarkExecutingTimeoutJob') {
+            if ('Scheduler_MarkExecutingTimeoutJob' != $jobFired['job_detail']['name']) {
                 $this->markTimeout($jobFired);
             }
         }
@@ -528,5 +533,10 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     protected function getMaxRetryNum()
     {
         return $this->biz['scheduler.options']['max_retry_num'];
+    }
+
+    protected function getMaxProcessExecTime()
+    {
+        return $this->biz['scheduler.options']['max_process_exec_time'];
     }
 }

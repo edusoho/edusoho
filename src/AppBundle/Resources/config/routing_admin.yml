@@ -2336,20 +2336,16 @@ admin_cloud_data_lab_setting:
 
 admin_cloud_data_lab_setting_enable_modal:
     path: /data/lab/setting/modal/enable
-    defaults: { _controller: AppBundle:Admin/DataLab:enableXapiSetting }
+    defaults: { _controller: AppBundle:Admin/DataLab:enable }
 
 admin_cloud_data_lab_setting_disable_modal:
     path: /data/lab/setting/modal/disable
-    defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }
+    defaults: { _controller: AppBundle:Admin/DataLab:disable }
 
 admin_wechat_app:
     path: /wechat_app
     defaults: { _controller: AppBundle:Admin/WeChatApp:index }
 
-admin_wechat_app_request:
-    path: /wechat_app/request
-    defaults: { _controller: AppBundle:Admin/WeChatApp:request }
-
-admin_wechat_app_request_success:
-    path: /wechat_app/request/success
-    defaults: { _controller: AppBundle:Admin/WeChatApp:requestSuccess }
+admin_wechat_app_access:
+    path:  /cloud/accessWechat
+    defaults: { _controller: AppBundle:Admin/Cloud:accessWechat }

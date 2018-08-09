@@ -1,0 +1,50 @@
+<li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix">
+  {% set tasks = array_index(lesson.tasks, 'mode') %}
+  {% set task = tasks.lesson|default(null) %}
+
+  <div class="item-default-header clearfix">
+    <div class="item-line"></div>
+    <div class="item-content text-overflow js-item-content">
+      <span class="lesson-unpublish-status js-lesson-unpublish-status
+        {% if lesson.status == 'published' %}
+          hidden
+        {% endif %}">
+         {{'course.plan_task.task_unpublished'|trans}}
+      </span>
+
+      <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not task.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
+      {% if not task.isOptional %}
+        {{'course.lesson'|trans}}<span class="number mls">{{ lesson.number }}</span>：
+      {% endif %}
+      {{ lesson.title|sub_text(30) }}
+
+      {% if task.activity.mediaType is same as('live') %}
+        {% if not task.activity.ext.roomCreated|default(true) %}
+          <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
+        {% elseif task.activity.endTime < date().timestamp %}
+          <span class="color-gray cd-ml8">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
+        {% else %}
+          <span class="color-success mls">
+          {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
+        {% endif %}
+      {% else %}
+        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="mls">
+          （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
+      {% endif %}
+    </div>
+
+    <div class="item-actions">
+      <a class="cd-mr24" data-role='update-task' href="javascript:;"
+        data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
+        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
+      </a>
+      <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id, courseId:task.courseId, preview:1}) }}" target="_blank">
+        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
+      </a>
+
+      {% include 'lesson-manage/default/lesson-manage.html.twig' %}
+    </div>
+  </div>
+
+  {% include 'lesson-manage/default/tasks.html.twig' %}
+</li>

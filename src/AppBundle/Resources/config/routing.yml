@@ -1224,6 +1224,10 @@ settings_find_pay_password_by_sms:
     path:  /settings/find_pay_password_by_sms
     defaults: { _controller: AppBundle:Settings:findPayPasswordBySms }
 
+password_reset_by_email_success:
+    path:  /password/reset/email/success
+    defaults: { _controller:  AppBundle:PasswordReset:emailResetSuccess }
+
 settings_find_pay_password_by_question:
     path:  /settings/find_pay_password_by_question
     defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
@@ -1317,10 +1321,6 @@ open_course_manage_lesson_sort:
 open_course_draft_create:
    path:  /open/course/draft/create
    defaults: { _controller: AppBundle:OpenCourseLessonManage:draftCreate }
-
-open_course_manage_picture:
-    path:  /open/course/{id}/manage/picture
-    defaults: { _controller: AppBundle:OpenCourseManage:picture }
 
 open_course_manage_picture_crop:
     path:  /open/course/{id}/manage/picture/crop
@@ -1608,6 +1608,7 @@ course_manage_task_pre_update_check:
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create }
@@ -1728,18 +1729,57 @@ course_task_plugin_thread_answer:
   defaults: { _controller: AppBundle:TaskPlugin:answerQuestion }
   methods: [POST]
 
-#course_chapter
-course_manage_chapter_create:
-    path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: AppBundle:Course/ChapterManage:create }
-
-course_manage_chapter_edit:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: AppBundle:Course/ChapterManage:edit }
+course_manage_chapter_manage:
+    path:  /course/{courseId}/manage/chapter/manage
+    defaults: { _controller: AppBundle:Course/ChapterManage:manage}
 
 course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete
     defaults: { _controller: AppBundle:Course/ChapterManage:delete }
+    methods: [POST]
+
+course_manage_lesson_create:
+    path:  /course/{courseId}/lesson/create
+    defaults: { _controller: AppBundle:Course/LessonManage:create }
+
+course_manage_lesson_batch_create:
+    path:  /course/{courseId}/lesson/batch_create
+    defaults: { _controller: AppBundle:Course/LessonManage:batchCreate }
+
+course_manage_lesson_valid_num:
+    path: /course/{courseId}/lesson/valid_num
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
+    methods: [POST]
+
+course_manage_lesson_update:
+    path:  /course/{courseId}/lesson/{lessonId}/update
+    defaults: { _controller: AppBundle:Course/LessonManage:update }
+
+course_manage_lesson_publish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/publish
+    defaults: { _controller: AppBundle:Course/LessonManage:publish }
+
+course_manage_lesson_unpublish:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
+    defaults: { _controller: AppBundle:Course/LessonManage:unpublish }
+
+course_manage_lesson_delete:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/delete
+    defaults: { _controller: AppBundle:Course/LessonManage:delete }
+
+course_manage_lesson_set_optional:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/setoptional
+    defaults: { _controller: AppBundle:Course/LessonManage:setOptional }
+    methods: [POST]
+
+course_manage_lesson_unset_optional:
+    path:  /course/{courseId}/manage/lesson/{lessonId}/unsetoptional
+    defaults: { _controller: AppBundle:Course/LessonManage:unsetOptional }
+    methods: [POST]
+
+course_manage_change_lesson_show_status:
+    path:  /course/{courseId}/manage/change/lesson/show/status
+    defaults: { _controller: AppBundle:Course/CourseManage:showPublish }
     methods: [POST]
 
 #course
@@ -1836,9 +1876,20 @@ course_set_manage_course_students_remark:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/remark
   defaults: { _controller: AppBundle:Course/StudentManage:remark }
 
-course_set_manage_course_students_expiryday:
-  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
-  defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
+course_set_manage_course_students_deadline_batch:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline
+  defaults: { _controller: AppBundle:Course/StudentManage:batchUpdateMemberDeadlines }
+
+course_set_manage_course_students_deadline_batch_day_check:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/day/check
+  defaults: { _controller: AppBundle:Course/StudentManage:checkDay }
+
+course_set_manage_course_students_deadline_batch_deadline_check:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline/check
+  defaults: { _controller: AppBundle:Course/StudentManage:checkDeadline }
+
+
+
 
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
@@ -1887,6 +1938,15 @@ course_set_manage_course_publish:
   path: /course_set/{courseSetId}/course/{courseId}/publish
   defaults: {_controller: AppBundle:Course/CourseManage:publish}
   methods: [POST]
+
+course_set_manage_course_pre_publish:
+  path: /course_set/{courseSetId}/course/{courseId}/pre_publish
+  defaults: {_controller: AppBundle:Course/CourseManage:prePublish}
+  methods: [POST]
+
+course_set_manage_course_publish_set_title:
+  path: /course_set/{courseSetId}/course/{courseId}/publish_set_title
+  defaults: {_controller: AppBundle:Course/CourseManage:publishSetTitle}
 
 course_manage_items_sort:
   path:  /course/{courseId}/manage/items/sort
@@ -2048,14 +2108,6 @@ course_set_manage:
 course_set_manage_base:
   path: /course_set/{id}/manage/base
   defaults: {_controller: AppBundle:Course/CourseSetManage:base}
-
-course_set_manage_detail:
-  path: /course_set/{id}/manage/detail
-  defaults: {_controller: AppBundle:Course/CourseSetManage:detail}
-
-course_set_manage_cover:
-  path: /course_set/{id}/manage/cover
-  defaults: {_controller: AppBundle:Course/CourseSetManage:cover}
 
 course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
@@ -3014,6 +3066,11 @@ member_operation_record:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+
+course_sort:
+    path: /courseset/{courseSetId}/sort
+    defaults: { _controller: AppBundle:Course/CourseSetManage:courseSort, limit: '' }
+    methods: [POST]
 
 client_time_check:
     path: /client_time_check

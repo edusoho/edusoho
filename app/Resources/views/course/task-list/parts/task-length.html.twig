@@ -20,5 +20,5 @@
   {% else %}
     {{ task.activity.length|default(0)|activity_length_format(task.activity.mediaType) }}
   {% endif %}
-  <i class="{{ meta.icon }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务" data-container="body"></i>
+  <i class="{{ meta.icon }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}" data-container="body"></i>
 </span>

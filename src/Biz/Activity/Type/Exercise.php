@@ -19,7 +19,7 @@ class Exercise extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'exercise');
     }
@@ -132,7 +132,7 @@ class Exercise extends Activity
             return false;
         }
 
-        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] === 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+        if (!empty($exercise['passedCondition']) && 'submit' === $exercise['passedCondition']['type'] && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 

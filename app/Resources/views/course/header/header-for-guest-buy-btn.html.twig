@@ -23,7 +23,7 @@
   {# 特殊业务逻辑 #}
   {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId > 0) and noVipText %}
   {% else %}
-    <a class="btn btn-primary js-buy-btn btn-lg {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
+    <a class="cd-btn cd-btn-primary js-buy-btn {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
       {{ btnText|trans }}
     </a>
   {% endif %}

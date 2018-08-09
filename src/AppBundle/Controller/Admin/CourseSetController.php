@@ -303,11 +303,16 @@ class CourseSetController extends BaseController
         $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
         $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
 
+        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         foreach ($courseSets as $key => &$courseSet) {
+            // TODO 完成人数目前只统计了默认教学计划
             $courseSetId = $courseSet['id'];
+            $defaultCourseId = $courseSet['defaultCourseId'];
             $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
-            $isLearnedNum = $this->getMemberService()->countMembers(
-                array('isLearned' => 1, 'courseSetId' => $courseSetId)
+            $isLearnedNum = empty($courses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
+                array('finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $courses[$defaultCourseId]['compulsoryTaskNum'])
             );
 
             $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
@@ -587,7 +592,7 @@ class CourseSetController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('seq' => 'DESC', 'createdTime' => 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

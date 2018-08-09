@@ -95,7 +95,7 @@ class Activity
         return array();
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return array();
     }

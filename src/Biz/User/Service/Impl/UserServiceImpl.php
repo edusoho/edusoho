@@ -558,7 +558,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function isMobileUnique($mobile)
     {
-        $count = $this->countUsers(array('verifiedMobile' => $mobile));
+        $count = $this->countUsers(array('wholeVerifiedMobile' => $mobile));
 
         if ($count > 0) {
             return false;
@@ -2158,7 +2158,7 @@ class UserSerialize
 
     private static function _userRolesSort($user)
     {
-        if (!empty($user['roles'][1]) && $user['roles'][1] == 'ROLE_USER') {
+        if (!empty($user['roles'][1]) && 'ROLE_USER' == $user['roles'][1]) {
             $temp = $user['roles'][1];
             $user['roles'][1] = $user['roles'][0];
             $user['roles'][0] = $temp;

@@ -2272,6 +2272,12 @@ es-jcrop@latest:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/es-jcrop/-/es-jcrop-2.0.5.tgz#68ab9377af369c88600caae147eb9dddafd221dd"
 
+es-jquery-sortable@0.9.13-patch1:
+  version "0.9.13-patch1"
+  resolved "https://registry.npmjs.org/es-jquery-sortable/-/es-jquery-sortable-0.9.13-patch1.tgz#1e952348aa74a630894bf193a01762db798d44c7"
+  dependencies:
+    jquery "^2.1.2"
+
 es-messenger@latest:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/es-messenger/-/es-messenger-2.3.0.tgz#2466e3a959e83dd25160db0997de78f8efcff052"
@@ -3861,11 +3867,9 @@ jquery-form@3.50.0:
   dependencies:
     jquery ">=1.5"
 
-jquery-sortable@0.9.13:
-  version "0.9.13"
-  resolved "https://registry.yarnpkg.com/jquery-sortable/-/jquery-sortable-0.9.13.tgz#1cbfb655013a0747370571f06e22f524a00ffba2"
-  dependencies:
-    jquery "^2.1.2"
+jquery-migrate@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/jquery-migrate/-/jquery-migrate-3.0.0.tgz#03f320596fe1a1db09cdcfb74b14571994aad7bb"
 
 jquery-validation@1.15.1:
   version "1.15.1"
@@ -3887,13 +3891,9 @@ jquery.cycle2@2.1.7:
   dependencies:
     jquery ">=1.7"
 
-jquery@1.12.4:
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-1.12.4.tgz#01e1dfba290fe73deba77ceeacb0f9ba2fec9e0c"
-
-"jquery@2 - 3", jquery@>=1.10, jquery@>=1.5, jquery@>=1.7, jquery@^3.2.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+"jquery@2 - 3", jquery@3.2.1, jquery@>=1.10, jquery@>=1.5, jquery@>=1.7:
+  version "3.2.1"
+  resolved "http://registry.npm.taobao.org/jquery/download/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
 "jquery@^1.7 || ^2.0", jquery@^2.1.2:
   version "2.2.4"
@@ -4527,9 +4527,15 @@ mochawesome@^3.0.2:
     strip-ansi "^4.0.0"
     uuid "^3.0.1"
 
+<<<<<<< HEAD
 moment@2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.16.0.tgz#f38f2c97c9889b0ee18fc6cc392e1e443ad2da8e"
+=======
+moment@2.19.4:
+  version "2.19.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.4.tgz#17e5e2c6ead8819c8ecfad83a0acccb312e94682"
+>>>>>>> 69ac968db8c218733abdd189abbfbae9677687d1
 
 moment@^2.9.0:
   version "2.22.1"

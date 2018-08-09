@@ -3,7 +3,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}<span class="color-gray">{{ 'course.task.preview.content_title'|trans }}:</span> {{ task.title }}{% endblock %}
+{% block title %}<span class="color-gray">{{ 'course.task.preview.content_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}:</span> {{ task.title }}{% endblock %}
 
 {% do script(['app/js/task/preview/index.js']) %}
 

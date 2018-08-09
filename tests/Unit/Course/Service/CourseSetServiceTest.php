@@ -4,7 +4,6 @@ namespace Tests\Unit\Course\Service;
 
 use Biz\BaseTestCase;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -18,7 +17,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === count($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
 
         $course = array_shift($courses);
         $this->assertEquals('freeMode', $course['learnMode']);
@@ -35,7 +34,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
 
         $course = array_shift($courses);
         $this->assertEquals('lockMode', $course['learnMode']);
@@ -51,7 +50,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
     }
 
     public function testCreateLiveOpen()
@@ -64,7 +63,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
     }
 
     public function testCreateOpen()
@@ -77,7 +76,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
     }
 
     /**
@@ -118,22 +117,6 @@ class CourseSetServiceTest extends BaseTestCase
         $created['serializeMode'] = 'none';
         $updated = $this->getCourseSetService()->updateCourseSet($created['id'], $created);
         $this->assertEquals($created['title'], $updated['title']);
-    }
-
-    public function testUpdateDetail()
-    {
-        $courseSet = array(
-            'title' => '新课程开始！',
-            'type' => 'normal',
-        );
-        $created = $this->getCourseSetService()->createCourseSet($courseSet);
-
-        $created['summary'] = 'this is summary <script ...';
-        $created['goals'] = array(1);
-        $created['audiences'] = array(1);
-
-        $updated = $this->getCourseSetService()->updateCourseSetDetail($created['id'], $created);
-        $this->assertEquals($updated['summary'], 'this is summary ');
     }
 
     public function testChangeCover()

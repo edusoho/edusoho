@@ -1,0 +1,24 @@
+<li id="chapter-{{lesson.id}}" class="task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}} clearfix">
+  <div class="chapter-item clearfix">
+    <div class="item-line"></div>
+    <div class="item-content">
+      <span class="lesson-unpublish-status js-lesson-unpublish-status {% if lesson.status == 'published' %}hidden{% endif %}">
+      {{'course.plan_task.task_unpublished'|trans}}</span>
+
+      <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not lesson.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
+
+      {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':lesson.number, '%title%':lesson.title|sub_text(30)})|raw }}
+    </div>
+    <div class="item-actions">
+      <a class="cd-mr24 js-create-task-btn" href="javascript:;" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
+        <i class="cd-icon cd-icon-add" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top" ></i>
+      </a>
+
+     {% include 'lesson-manage/normal/lesson-manage.html.twig' %}
+    </div>
+  </div>
+  <ul class="js-lesson-box task-manage-lesson-tasks">
+    {% include 'lesson-manage/normal/tasks.html.twig' with {
+      tasks: lesson.tasks|default() } %}
+  </ul>
+</li>

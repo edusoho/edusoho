@@ -2,63 +2,17 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Biz\CloudPlatform\CloudAPIFactory;
-use Symfony\Component\HttpFoundation\Request;
-
 class WeChatAppController extends BaseController
 {
     public function indexAction()
     {
-        $mpSdk = $this->getMpService()->getMpSdk();
-        if ($mpSdk->getCurrentMpRequest()) {
-            return $this->forward('AppBundle:Admin/WeChatApp:requestSuccess', array());
-        }
+        $wechatAppStatus = $this->getWeChatAppService()->getWeChatAppStatus();
 
-        return $this->render('admin/wechat-app/index.html.twig', array(
-            'isNoneLevel' => $this->isNoneLevel(),
-        ));
+        return $this->render('admin/wechat-app/index.html.twig', $wechatAppStatus);
     }
 
-    public function requestAction(Request $request)
+    protected function getWeChatAppService()
     {
-        if ($this->isNoneLevel()) {
-            return $this->render('admin/wechat-app/request-fail.html.twig', array());
-        }
-
-        $mpSdk = $this->getMpService()->getMpSdk();
-        if ($mpSdk->getCurrentMpRequest()) {
-            return $this->forward('AppBundle:Admin/WeChatApp:requestSuccess', array());
-        }
-
-        if ($request->isMethod('POST')) {
-            $fields = $request->request->all();
-            $mpSdk->sendMpRequest($fields);
-
-            return $this->redirect($this->generateUrl('admin_wechat_app_request'));
-        }
-
-        return $this->render('admin/wechat-app/request.html.twig', array());
-    }
-
-    protected function isNoneLevel()
-    {
-        $me = $this->createApi()->get('/me');
-
-        return empty($me['level']) || 'none' == $me['level'];
-    }
-
-    protected function createApi($node = 'root')
-    {
-        return CloudAPIFactory::create($node);
-    }
-
-    public function requestSuccessAction()
-    {
-        return $this->render('admin/wechat-app/request-success.html.twig', array());
-    }
-
-    public function getMpService()
-    {
-        return $this->createService('Mp:MpService');
+        return $this->createService('WeChat:WeChatAppService');
     }
 }

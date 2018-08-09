@@ -41,11 +41,29 @@ class DeviceToolkit
         if (isset($_SERVER['HTTP_ACCEPT'])) {
             // 如果只支持wml并且不支持html那一定是移动设备
             // 如果支持wml和html但是wml在html之前则是移动设备
-            if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
+            if ((false !== strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml')) && (false === strpos($_SERVER['HTTP_ACCEPT'], 'text/html') || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public static function getMobileDeviceType($userAgent)
+    {
+        $userAgent = strtolower($userAgent);
+
+        $ios = array('iphone', 'ipad', 'ipod');
+        foreach ($ios as $keyword) {
+            if (strpos($userAgent, $keyword) > -1) {
+                return 'ios';
+            }
+        }
+
+        if (strpos($userAgent, 'Android') > -1) {
+            return 'android';
+        }
+
+        return 'unknown';
     }
 }

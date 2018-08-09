@@ -68,7 +68,7 @@
       <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{ 'course_set.course.task_list'|trans }}</h3>
+            <h3 class="panel-title">{{ 'course_set.course.task_list'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</h3>
           </div>
           <div class="panel-body">
             {% if tasks %}
@@ -76,7 +76,7 @@
                 {% for task in tasks %}
                   <li class="media">
                     <div class="media-body"><a
-                        href="{{ path('course_set_archive_task',{ courseSetId: courseSet.id, taskId: task.id }) }}">{{ 'course_set.course.taskNumber'|trans({'%number%': task.number,'%title%': task.title })|raw }}</a>
+                        href="{{ path('course_set_archive_task',{ courseSetId: courseSet.id, taskId: task.id }) }}">{{ 'course_set.course.taskNumber'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title })|raw }}</a>
                     </div>
                   </li>
                 {% endfor %}

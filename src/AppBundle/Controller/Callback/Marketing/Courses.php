@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Util\CourseTitleUtils;
 
 class Courses extends MarketingBase
 {
@@ -53,7 +54,7 @@ class Courses extends MarketingBase
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
         $results = array();
         foreach ($courses  as $courseId => $course) {
-            if ($course['status'] != 'published' || $course['originPrice'] < 1) {
+            if ('published' != $course['status'] || $course['originPrice'] < 1) {
                 continue;
             }
             $courseSet = $courseSets[$course['courseSetId']];
@@ -63,7 +64,7 @@ class Courses extends MarketingBase
             if (!empty($courseCover)) {
                 $result['cover'] = $this->getWebExtension()->getFurl($courseCover);
             }
-            $result['title'] = $this->fillName($course, $courseSet);
+            $result['title'] = CourseTitleUtils::getDisplayedTitle($course);
             $results[] = $result;
             if (count($results) >= 5) {
                 break;
@@ -123,23 +124,12 @@ class Courses extends MarketingBase
         return $users;
     }
 
-    private function fillName($course, $courseSet)
-    {
-        if ($course['title'] == '默认教学计划') {
-            $name = "《{$courseSet['title']}》";
-        } else {
-            $name = "课程《{$courseSet['title']}》的教学计划:{$course['title']}";
-        }
-
-        return $name;
-    }
-
     private function filterCourse($course, $courseSet, $activity)
     {
         $result = array();
         $result['source_id'] = $course['id'];
         $result['source_link'] = $this->generateUrl('course_show', array('id' => $course['id']));
-        $result['name'] = $this->fillName($course, $courseSet);
+        $result['name'] = CourseTitleUtils::getDisplayedTitle($course);
         $courseCover = $courseSet['cover'] ? $courseSet['cover']['large'] : '';
         if (!empty($courseCover)) {
             $result['cover'] = $this->getWebExtension()->getFurl($courseCover);

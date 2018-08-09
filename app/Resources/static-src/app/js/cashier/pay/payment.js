@@ -2,6 +2,7 @@ import Api from 'common/api';
 import 'store';
 import notify from 'common/notify';
 import ConfirmModal from './confirm';
+require('app/common/xxtea.js');
 
 export default class BasePayment {
 
@@ -79,7 +80,7 @@ export default class BasePayment {
       coinAmount: postParams.coinAmount,
       amount: postParams.amount,
       openid: postParams.openid,
-      payPassword: postParams.payPassword
+      payPassword: window.XXTEA.encryptToBase64(postParams.payPassword, 'EduSoho'),
     };
 
     params = this.customParams(params);

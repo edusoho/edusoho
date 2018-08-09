@@ -1,14 +1,17 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{'course.order.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'orders' %}
+{% set course_side_nav = 'orders' %}
+{% block main_heading_class %}course-main-header{% endblock %}
 
 {% do script(['libs/bootstrap-datetimepicker.js', 'app/js/course-manage/order/index.js']) %}
 
-{% block main %}
-  <div class="panel panel-default">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
-    <div class="panel-body">
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav,btnGroup:1} %}
+{% endblock %}
+
+{% block main_body %}
+    <div>
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="orderItemType" value="course">
         <input type="hidden" name="order_item_target_ids[]" value="{{ course.id }}">
@@ -50,7 +53,7 @@
             <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
           </div>
 
-          <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+          <button class="cd-btn cd-btn-primary">{{'form.btn.search'|trans}}</button>
         </div>
         <input type="hidden" name="courseId" value="{{ course.id }}">
       </form>
@@ -59,5 +62,4 @@
       </table>
       {{ web_macro.paginator(paginator) }}
     </div>
-  </div>
 {% endblock %}

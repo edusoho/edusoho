@@ -1,6 +1,9 @@
+import Detail from './detail';
+
 export default class Base {
-  constructor() {
+  constructor(element) {
     this.init();
+    this.detail = new Detail(element);
   }
 
   init() {
@@ -9,11 +12,15 @@ export default class Base {
   }
 
   initValidator() {
-    const $form = $('#courseset-form');
+    const self = this;
+    const $form = $('#title').closest('form');
+    let $oldSummary = $('#courseset-summary-field').val();
     const validator = $form.validate({
+      currentDom: '#courseset-base-submit',
+      ajax: true,
       rules: {
         title: {
-          maxlength: 100,
+          maxlength: 60,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -23,6 +30,7 @@ export default class Base {
           course_title: true
         },
         subtitle: {
+          maxlength: 50,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -32,15 +40,49 @@ export default class Base {
           course_title: true
         }
       },
-    });
-    $('#courseset-base-submit').click((event) => {
-      if (validator.form()) {
-        $(event.currentTarget).button('loading');
-        $form.submit();
+      submitHandler: function(form){
+        let $form = $(form);
+        let settings = this.settings;
+        let $btn = $(settings.currentDom);
+        let $isCoursesSummaryEmpty = $form.data('value');
+        let $newSummary = $('#courseset-summary-field').val();
+        if (!$btn.length) {
+          $btn = $(form).find('[type="submit"]');
+        }
+        if ($isCoursesSummaryEmpty == 1 && $newSummary != '' && $newSummary != $oldSummary) {
+          cd.confirm({
+            title: Translator.trans('course_set.manage.operation_hint'),
+            content: Translator.trans('course_set.manage.courseset_summary_operation_hint'),
+            okText: Translator.trans('site.confirm'),
+            cancelText: Translator.trans('site.cancel'),
+          }).on('ok', () => {
+            self.savePost(form, settings);
+          });
+        } else {
+          self.savePost(form, settings);
+        }
+      },
+      submitSuccess: (data) => {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
+        window.location.reload();
       }
     });
   }
 
+  savePost(form, settings) {
+    let $form = $(form);
+    let $btn = $(settings.currentDom);
+    $btn.button('loading');
+    $.post($form.attr('action'), $form.serializeArray(), (data) => {
+      $btn.button('reset');
+      settings.submitSuccess(data);
+    }).error((data) => {
+      $btn.button('reset');
+      settings.submitError(data);
+    });
+  }
+
+  // 通用标签选择组件
   initTags() {
     const $tags = $('#tags');
     $tags.select2({
@@ -78,6 +120,9 @@ export default class Base {
       },
       formatResult (item) {
         return item.name;
+      },
+      formatNoMatches: function() {
+        return Translator.trans('validate.tag_required_not_found_hint');
       },
       formatSearching: function() {
         return Translator.trans('site.searching_hint');

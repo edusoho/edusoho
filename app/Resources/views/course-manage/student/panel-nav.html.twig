@@ -1,4 +1,4 @@
-<ul class="nav nav-pills mbl">
+<ul class="cd-tabs mbl">
   <li {% if panelNav == 'manage' %}class="active" {% endif %}>
     <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{ 'course.members_manage.official_student'|trans }}</a>
   </li>

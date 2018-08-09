@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Biz\Course\Util\CourseTitleUtils;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class CourseProduct extends Product implements OrderStatusCallback
@@ -33,7 +34,7 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $this->title = $this->courseSet['title'].'-'.$course['title'];
+        $this->title = CourseTitleUtils::getDisplayedTitle($course);
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
@@ -50,7 +51,7 @@ class CourseProduct extends Product implements OrderStatusCallback
             throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
         }
 
-        if ($access['code'] !== AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS !== $access['code']) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
     }

@@ -20,10 +20,12 @@ class DeveloperSettingController extends BaseController
             'cloud_file_server' => '',
             'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
             'cloud_api_event_server' => empty($storageSetting['cloud_api_event_server']) ? '' : $storageSetting['cloud_api_event_server'],
+            'cloud_api_es_op_server' => empty($storageSetting['cloud_api_es_op_server']) ? '' : $storageSetting['cloud_api_es_op_server'],
             'cloud_api_im_server' => '',
             'app_api_url' => '',
             'cloud_sdk_cdn' => '',
             'hls_encrypted' => '1',
+            'mp_service_url' => 'http://mp-service.qiqiuyun.net',
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -37,6 +39,7 @@ class DeveloperSettingController extends BaseController
             $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
             $storageSetting['cloud_api_im_server'] = $developerSetting['cloud_api_im_server'];
+            $storageSetting['cloud_api_es_op_server'] = $developerSetting['cloud_api_es_op_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
@@ -110,8 +113,13 @@ class DeveloperSettingController extends BaseController
         try {
             $fileSystem = new Filesystem();
             $devLockFile = $this->container->getParameter('kernel.root_dir').'/data/dev.lock';
+            $ignoreDeleteDevLockFile = $this->container->getParameter('kernel.root_dir').'/data/ignoreDeleteDevLock';
             if ($developerSetting['debug']) {
                 $fileSystem->touch($devLockFile);
+            } else {
+                if (!$fileSystem->exists($ignoreDeleteDevLockFile)) {
+                    $fileSystem->remove($devLockFile);
+                }
             }
         } catch (\Exception $e) {
             //可能线上环境的dev.lock被人加过，导致权限问题无法删除

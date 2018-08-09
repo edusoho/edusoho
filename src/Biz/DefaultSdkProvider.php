@@ -42,9 +42,19 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
 
+        $biz['qiQiuYunSdk.esOp'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, $that->getESopConfig($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getESopService();
+            }
+
+            return $service;
+        };
+
         $biz['qiQiuYunSdk.mp'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $that->generateSdk($biz, array());
+            $sdk = $that->generateSdk($biz, $that->getMpConfig($biz));
             if (!empty($sdk)) {
                 $service = $sdk->getMpService();
             }
@@ -92,6 +102,25 @@ class DefaultSdkProvider implements ServiceProviderInterface
         return array('drp' => array('host' => $hostUrl));
     }
 
+    public function getESopConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (!empty($developerSetting['cloud_api_es_op_server'])) {
+            $urlSegs = explode('://', $developerSetting['cloud_api_es_op_server']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return array('esop' => array('host' => $hostUrl));
+    }
+
     public function getXAPIConfig(Biz $biz)
     {
         $settingService = $biz->service('System:SettingService');
@@ -113,5 +142,22 @@ class DefaultSdkProvider implements ServiceProviderInterface
                 'school_version' => System::VERSION,
             ),
         );
+    }
+
+    public function getMpConfig(Biz $biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+        if (isset($developerSetting['mp_service_url']) && !empty($developerSetting['mp_service_url'])) {
+            $urlSegs = explode('://', $developerSetting['mp_service_url']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return array('mp' => array('host' => $hostUrl));
     }
 }

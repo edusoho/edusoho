@@ -7,7 +7,7 @@
   {% if task.isOptional %}
     {{ 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) }}
   {% else %}
-    {{ 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) }}
+    {{ 'course.catalogue.task_status.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNumber%':task.number, '%taskTitle%':task.title}) }}
   {% endif %}
 {% endblock %}
 
