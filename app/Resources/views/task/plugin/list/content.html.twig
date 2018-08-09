@@ -52,7 +52,7 @@
           <span class="right-menu mouse-leave">{activityLength}
             <i class="es-icon {getMetaIcon} ml5"></i>
           </span>
-          <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans}}</span>
+          <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans({'%taskName%':'{title}'})}}</span>
         </tmp>
 
         <tmp hide-if="{isTaskLocked}">
