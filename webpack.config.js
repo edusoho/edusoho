@@ -30,7 +30,8 @@ module.exports = {
     'select2': ['libs/select2/index.js'],
     'handlebars': ['handlebars'],
     'fullcalendar': ['libs/fullcalendar/index.js'],
-    'ltc-sdk': ['libs/ltc-sdk/index.js']
+    'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
+    'ltc-sdk-server': ['libs/ltc-sdk-server/index.js']
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',

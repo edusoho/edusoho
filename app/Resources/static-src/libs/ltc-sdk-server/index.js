@@ -5,7 +5,7 @@
 import Api from './api';
 import * as components from './component';
 
-class LtcSDK {
+class LtcSDKServer {
   constructor() {
     this.options = {};
     this.handler = {};
@@ -29,6 +29,30 @@ class LtcSDK {
     }
 
     this.isVerify = true;
+  }
+
+  getMessenger() {
+    const on = (channel = 'task-events', callback) => {
+      window.addEventListener('message', (e) => {
+        if (e.data.channel === channel) {
+          if (typeof callback === 'function') {
+            callback(e.data)
+          }
+        }
+      });
+    };
+
+    const emit = (data, origin = '*') => {
+      window.parent.postMessage(
+        Object.assign({channel: 'activity-events'}, data),
+        origin
+      );
+    };
+
+    return {
+      emit,
+      on
+    }
   }
 
   verify() {
@@ -63,32 +87,8 @@ class LtcSDK {
       components
     );
   }
-
-  getMessenger() {
-    const on = (channel = 'task-events', callback) => {
-      window.addEventListener('message', (e) => {
-        if (e.data.channel === channel) {
-          if (typeof callback === 'function') {
-            callback(e.data)
-          }
-        }
-      });
-    }
-
-    const emit = (data, origin = '*') => {
-      window.parent.postMessage(
-        Object.assign({channel: 'activity-events'}, data), 
-        origin
-      );
-    }
-    
-    return {
-      emit,
-      on
-    }
-  }
 }
 
-let ltcsdk = new LtcSDK();
+let ltcsdk = new LtcSDKServer();
 
 module.exports = window.ltcsdk = ltcsdk;
