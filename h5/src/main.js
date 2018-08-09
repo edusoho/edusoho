@@ -53,9 +53,14 @@ Api.getSettings({
     type: 'wap'
   }
 }).then(res => {
-  if (!parseInt(res.enabled)) {
+  if (parseInt(res.enabled, 10)) {
     // 如果没有开通微网校，则跳回老版本网校 TODO
-    window.location.href = location.origin + location.hash.match(/#.*\?/g)[0].slice(1, -1);
+    const hashStr = location.hash.match(/#.*\?/g);
+    if (hashStr) {
+      window.location.href = location.origin + location.hash.match(/#.*\?/g)[0].slice(1, -1);
+      return;
+    }
+    window.location.href = location.origin;
     return;
   }
 
