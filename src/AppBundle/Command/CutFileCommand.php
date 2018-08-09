@@ -50,7 +50,7 @@ class CutFileCommand extends BaseCommand
             }
             $output->writeln('<info>生成edusoho_init_'.$num.'.sql</info>');
             if (!$isEmpty) {
-                $num++;
+                ++$num;
             }
         }
 
