@@ -100,7 +100,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
         element: $('.js-down-loading-more')[0],
         handler: function(direction) {
           if (direction == 'down') {
-            if (self._isLastPage) {
+            if (self._isLastPage || self._canNotDisplayMore()) {
               waypoint.disable();
             } else {
               waypoint.disable();
@@ -221,6 +221,10 @@ export default class ESInfiniteCachedScroll extends Emitter {
       return currentData[paramName];
     }
     return param;
+  }
+
+  _canNotDisplayMore() {
+    return this._currentPage != 1 && $('.js-only-display-one-page').length != 0;
   }
 
   _removeUnNeedNodes(tempNode) {

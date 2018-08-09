@@ -11,7 +11,7 @@ class DynUrlToolkit
      * @return
      *  返回动态页面地址
      *  动态页面地址必须提前在 biz内定义好， 如
-     *  $biz['course-manage/create-modal']['one-to-one'] = 'plugins/course-manage/create-modal/one-to-one.html.twig'，
+     *  $biz['template_extension.one-to-one']['course-manage/create-modal'] = 'plugins/course-manage/create-modal/one-to-one.html.twig'，
      *  如果此方法的参数
      *  $baseUrl = 'course-manage/create-modal.html.twig'
      *  $params = array('type' => 'one-to-one')
