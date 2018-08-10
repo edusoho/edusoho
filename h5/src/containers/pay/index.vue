@@ -99,7 +99,7 @@ export default {
           app_pay: 'Y'
         }
       }).then(res => {
-        window.location.href = this.payWay ===  'Alipay_LegacyH5' ? res.payUrl: res.paymentUrl
+        window.location.href = this.payWay ===  'Alipay_LegacyH5' ? res.payUrl: res.mwebUrl
       })
     },
     isWeixinBrowser (){
