@@ -107,7 +107,7 @@ class activity_doc extends Biz\Activity\Config\Activity
         return $activity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         $docActivities = $this->getDocActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($docActivities, 'mediaId');

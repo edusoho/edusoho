@@ -77,7 +77,7 @@ class activity_download extends \Biz\Activity\Config\Activity
         return $this->getDownloadActivityDao()->get($id);
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         return $this->getDownloadActivityDao()->findByIds($ids);
     }

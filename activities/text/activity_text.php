@@ -8,7 +8,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
 use text\dao\text_activity_dao;
 
-
 class activity_text extends Biz\Activity\Config\Activity
 {
     public function get($targetId)
@@ -16,7 +15,7 @@ class activity_text extends Biz\Activity\Config\Activity
         return $this->getTextActivityDao()->get($targetId);
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         return $this->getTextActivityDao()->findByIds($ids);
     }

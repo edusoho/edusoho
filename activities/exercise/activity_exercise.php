@@ -2,7 +2,6 @@
 
 require_once 'dao/exercise_activity_dao.php';
 
-use exercise\dao\exercise_activity_dao;
 use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 
@@ -18,7 +17,7 @@ class activity_exercise extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'exercise');
     }
@@ -131,7 +130,7 @@ class activity_exercise extends Activity
             return false;
         }
 
-        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] === 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+        if (!empty($exercise['passedCondition']) && 'submit' === $exercise['passedCondition']['type'] && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 

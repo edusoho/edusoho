@@ -17,14 +17,14 @@ class activity_ppt extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
 
-        if ($ppt['finishType'] === 'time') {
+        if ('time' === $ppt['finishType']) {
             $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
             $result /= 60;
 
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if ($ppt['finishType'] === 'end') {
+        if ('end' === $ppt['finishType']) {
             $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
             return !empty($log);
@@ -114,7 +114,7 @@ class activity_ppt extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getPptActivityDao()->findByIds($targetIds);
     }
