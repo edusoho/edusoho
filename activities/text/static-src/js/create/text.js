@@ -7,8 +7,9 @@ export default class Text {
   }
 
   async _init() {
-    this.sdk = window.ltcsdk.config();
+    this.sdk = window.ltcsdkclient.config();
     this.sdkUi = this.sdk.getUi();
+    this.messager = window.ltcsdkclient.getMessenger();
 
     await this._inItStep2form();
     this._inItStep3form();
@@ -46,6 +47,7 @@ export default class Text {
       validator
     });
     this._contentCache = $content.val();
+    this.messager.emit({message: '富文本加载成功'});
   }
 
   _lanuchAutoSave() {

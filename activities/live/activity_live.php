@@ -3,7 +3,6 @@
 require_once 'dao/live_activity_dao.php';
 
 use Biz\Activity\Config\Activity;
-use live\dao\live_activity_dao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\LiveActivityService;
@@ -99,7 +98,7 @@ class activity_live extends Activity
         return $this->getLiveActivityService()->getLiveActivity($targetId);
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         return $this->getLiveActivityService()->findLiveActivitiesByIds($targetIds);
     }

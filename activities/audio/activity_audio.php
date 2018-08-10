@@ -94,7 +94,7 @@ class activity_audio extends Activity
         return $audioActivity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         $audioActivities = $this->getAudioActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($audioActivities, 'mediaId');

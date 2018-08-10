@@ -104,4 +104,4 @@ class LtcSDKClient {
 
 let ltcsdk = new LtcSDKClient();
 
-module.exports = window.ltcsdk = ltcsdk;
+module.exports = window.ltcsdkclient = ltcsdk;

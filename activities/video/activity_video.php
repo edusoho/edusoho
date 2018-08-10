@@ -125,7 +125,7 @@ class activity_video extends Biz\Activity\Config\Activity
         return $videoActivity;
     }
 
-    public function find($ids)
+    public function find($ids, $showCloud = 1)
     {
         $videoActivities = $this->getVideoActivityDao()->findByIds($ids);
         $mediaIds = ArrayToolkit::column($videoActivities, 'mediaId');

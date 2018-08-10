@@ -105,7 +105,7 @@ class activity_flash extends Activity
         return $flashActivity;
     }
 
-    public function find($targetIds)
+    public function find($targetIds, $showCloud = 1)
     {
         $flashActivities = $this->getFlashActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($flashActivities, 'mediaId');
