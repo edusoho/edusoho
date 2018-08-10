@@ -178,8 +178,6 @@ class TagServiceImpl extends BaseService implements TagService
         $tag = $this->setTagOrg($tag);
         $tag = $this->getTagDao()->create($tag);
 
-        $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
-
         return $tag;
     }
 
@@ -209,8 +207,6 @@ class TagServiceImpl extends BaseService implements TagService
                 )
             );
         }
-
-        $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
 
         return $tagGroup;
     }

@@ -115,8 +115,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->getArticleDao()->create($article);
 
-        $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
-
         $this->dispatchEvent('article.create', new Event($article, array('tagIds' => $tagIds, 'userId' => $user['id'])));
 
         return $article;
@@ -342,7 +340,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $files = ArrayToolkit::index($files, 'id');
 
         foreach ($data as $key => $value) {
-            if ($key == 'origin') {
+            if ('origin' == $key) {
                 $file = $this->getFileService()->getFileObject($value['id']);
                 $file = $this->getFileService()->uploadFile('article', $file);
                 $data[$key]['file'] = $file;
@@ -454,7 +452,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             $article['tagIds'] = array();
         }
 
-        if ($mode == 'add') {
+        if ('add' == $mode) {
             $article['status'] = 'published';
             $article['userId'] = $user->id;
         }

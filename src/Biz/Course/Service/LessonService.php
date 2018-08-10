@@ -2,12 +2,20 @@
 
 namespace Biz\Course\Service;
 
+use Biz\System\Annotation\Log;
+
 interface LessonService
 {
     public function getLesson($lessonId);
 
     public function countLessons($conditions);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="create_lesson",message="创建课时",targetType="course_task",param="result")
+     */
     public function createLesson($fields);
 
     public function updateLesson($lessonId, $fields);

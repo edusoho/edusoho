@@ -75,7 +75,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             $this->getLogService()->error('marker', 'mediaId_notExist', '视频文件不存在！');
         }
 
-        if (!isset($fields['second']) || $fields['second'] == '') {
+        if (!isset($fields['second']) || '' == $fields['second']) {
             throw $this->createInvalidArgumentException('Field Second Required');
         }
 
@@ -84,7 +84,6 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             'second' => $fields['second'],
         );
         $marker = $this->getMarkerDao()->create($marker);
-        $this->getLogService()->info('marker', 'create', "增加驻点#{$marker['id']}");
         $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
 
         return $question;
@@ -135,7 +134,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         $uploadMode = $this->getSettingService()->get('storage');
 
-        if ($uploadMode['upload_mode'] == 'local') {
+        if ('local' == $uploadMode['upload_mode']) {
             //TODO 翻译？！！
             throw $this->createAccessDeniedException('请到我的教育云开启云视频！');
         }

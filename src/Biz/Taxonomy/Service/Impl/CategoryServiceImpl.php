@@ -248,8 +248,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->setCategoryOrg($category);
         $category = $this->getCategoryDao()->create($category);
 
-        $this->getLogService()->info('category', 'create', "添加分类 {$category['name']}(#{$category['id']})", $category);
-
         return $category;
     }
 

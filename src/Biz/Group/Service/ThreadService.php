@@ -2,6 +2,8 @@
 
 namespace Biz\Group\Service;
 
+use Biz\System\Annotation\Log;
+
 // TODO refactor. use Thread.
 interface ThreadService
 {
@@ -27,6 +29,12 @@ interface ThreadService
 
     public function getThreadsByIds($ids);
 
+    /**
+     * @param $thread
+     *
+     * @return mixed
+     * @Log(level="info",module="group",action="create_thread",message="新增话题",targetType="groups_thread",param="result")
+     */
     public function addThread($thread);
 
     public function updateThread($id, $fields);

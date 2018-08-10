@@ -106,24 +106,26 @@ class LogController extends BaseController
 
                     if (isset($transConfig['getValue'])) {
                         foreach ($transConfig['getValue'] as $key => $value) {
-                            if (!array_key_exists($value, $logData)) {
+                            $transJsonDataValue = $this->getArrayValueByConventKey($value, $logData);
+                            if (false === $transJsonDataValue) {
                                 $log['shouldShowTemplate'] = false;
                                 $log['shouldShowModal'] = false;
                                 continue;
                             }
-                            $transJsonData[$key] = $logData[$value];
+                            $transJsonData[$key] = $transJsonDataValue;
                         }
                     }
                     if (isset($transConfig['generateUrl'])) {
                         foreach ($transConfig['generateUrl'] as $key => $urlConfig) {
                             $urlParam = array();
                             foreach ($urlConfig['param'] as $param => $value) {
-                                if (!array_key_exists($value, $logData)) {
+                                $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
+                                if (false === $urlParamValue) {
                                     $log['shouldShowTemplate'] = false;
                                     $log['shouldShowModal'] = false;
                                     continue 2;
                                 }
-                                $urlParam[$param] = $logData[$value];
+                                $urlParam[$param] = $urlParamValue;
                             }
 
                             $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
@@ -136,6 +138,27 @@ class LogController extends BaseController
         }
 
         return $logs;
+    }
+
+    private function getArrayValueByConventKey($keyName, $targetArray)
+    {
+        $keys = explode('.', $keyName);
+        $data = '';
+        foreach ($keys as $key) {
+            if (empty($data)) {
+                if (!array_key_exists($key, $targetArray)) {
+                    return false;
+                }
+                $data = $targetArray[$key];
+            } else {
+                if (!array_key_exists($key, $data)) {
+                    return false;
+                }
+                $data = $data[$key];
+            }
+        }
+
+        return $data;
     }
 
     private function tryTrans($module, $action, $message, $prefix = '')

@@ -8135,6 +8135,7 @@ log.module.content: 资讯内容
 log.module.notify: 通知
 log.module.sms: 短信
 log.module.tag: 标签
+log.module.tagGroup: 标签组
 log.module.system: 系统设置
 log.module.crontab: 定时任务
 log.module.marker: 驻点
@@ -8330,6 +8331,17 @@ log.action.template.course.create_lesson: 新建了课时《<a href="%url%" targ
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
+log.action.template.content.create: 新建了<strong class="color-success">内容</strong> 《%title%》
+log.action.template.upload_file.create: 上传了<strong class="color-success">文件</strong> 《%title%》
+log.action.template.article.create: 新建了<strong class="color-success">文章</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.tag.create: 新建了<strong class="color-success">标签</strong> 《%title%》
+log.action.template.tagGroup.create: 新建了<strong class="color-success">标签组</strong> 《%title%》
+log.action.template.announcement.create: 新建了<strong class="color-success">公告</strong> 《%title%》
+log.action.template.open_course.create_course: 新建了<strong class="color-success">公开课</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.open_course.add_lesson: 新建了公开课课时 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.group.create_thread: 新建了<strong class="color-success">小组话题</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.marker.create: 新建了<strong class="color-success">驻点</strong> 《%title%》
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>

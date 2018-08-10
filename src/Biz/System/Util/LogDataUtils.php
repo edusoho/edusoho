@@ -128,12 +128,12 @@ class LogDataUtils
                         '%url%' => array(
                             'path' => 'course_show',
                             'param' => array(
-                                'id' => 'courseId',
+                                'id' => '0.courseId',
                             ),
                         ),
                     ),
                     'getValue' => array(
-                        '%title%' => 'title',
+                        '%title%' => '0.title',
                     ),
                 ),
                 'add_task' => array(
@@ -175,6 +175,114 @@ class LogDataUtils
                     ),
                     'getValue' => array(
                         '%title%' => 'showTitle',
+                    ),
+                ),
+            ),
+            'category' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
+            ),
+            'content' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+            ),
+            'upload_file' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'filename',
+                    ),
+                ),
+            ),
+            'article' => array(
+                'create' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'article_detail',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+            ),
+            'tag' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
+            ),
+            'tagGroup' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
+            ),
+            'announcement' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'content',
+                    ),
+                ),
+            ),
+            'open_course' => array(
+                'create_course' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'open_course_show',
+                            'param' => array(
+                                'courseId' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'add_lesson' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'open_course_show',
+                            'param' => array(
+                                'courseId' => 'courseId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+            ),
+            'group' => array(
+                'create_thread' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'group_thread_show',
+                            'param' => array(
+                                'id' => 'groupId',
+                                'threadId' => 'id',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+            ),
+            'marker' => array(
+                'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'stem',
                     ),
                 ),
             ),

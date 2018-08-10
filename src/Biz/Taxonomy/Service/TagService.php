@@ -2,6 +2,8 @@
 
 namespace Biz\Taxonomy\Service;
 
+use Biz\System\Annotation\Log;
+
 interface TagService
 {
     //tag_owner
@@ -49,8 +51,20 @@ interface TagService
 
     public function isTagGroupNameAvailable($name, $exclude = null);
 
+    /**
+     * @param $tag
+     *
+     * @return mixed
+     * @Log(level="info",module="tag",action="create",message="添加标签",targetType="tag",param="result")
+     */
     public function addTag(array $tag);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(level="info",module="tagGroup",action="create",message="添加标签组",targetType="tag_group",param="result")
+     */
     public function addTagGroup($fields);
 
     public function updateTag($id, array $fields);

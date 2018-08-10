@@ -167,7 +167,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->hideThings($thread['content'], $thread['id']);
         $this->dispatchEvent('group.thread.create', $thread);
-        $this->getLogService()->info('group', 'create_thread', "新增话题 {$thread['title']}({$thread['id']})");
 
         return $thread;
     }

@@ -2,6 +2,8 @@
 
 namespace Biz\Task\Service;
 
+use Biz\System\Annotation\Log;
+
 interface TaskService
 {
     const LEARN_TIME_STEP = 60;
@@ -16,6 +18,12 @@ interface TaskService
 
     public function preCreateTaskCheck($task);
 
+    /**
+     * @param $task
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="add_task",message="添加任务",targetType="course_task",param="result")
+     */
     public function createTask($task);
 
     public function batchCreateTasks($tasks);

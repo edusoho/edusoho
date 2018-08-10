@@ -2,6 +2,8 @@
 
 namespace Biz\OpenCourse\Service;
 
+use Biz\System\Annotation\Log;
+
 interface OpenCourseService
 {
     const LIVE_OPEN_TYPE = 'liveOpen';
@@ -24,6 +26,12 @@ interface OpenCourseService
      */
     public function countCourses($conditions);
 
+    /**
+     * @param $course
+     *
+     * @return mixed
+     * @Log(level="info",module="open_course",action="create_course",message="创建公开课",targetType="open_course",param="result")
+     */
     public function createCourse($course);
 
     public function updateCourse($id, $fields);
@@ -69,6 +77,12 @@ interface OpenCourseService
      */
     public function countLessons($conditions);
 
+    /**
+     * @param $lesson
+     *
+     * @return mixed
+     * @Log(level="info",module="open_course",action="add_lesson",message="添加公开课时",targetType="open_course",param="result")
+     */
     public function createLesson($lesson);
 
     public function updateLesson($courseId, $lessonId, $fields);

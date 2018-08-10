@@ -3,6 +3,7 @@
 namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Biz\System\Annotation\Log;
 
 // TODO refactor.
 interface UploadFileService
@@ -25,6 +26,12 @@ interface UploadFileService
 
     public function initUpload($params);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files",param="result")
+     */
     public function finishedUpload($params);
 
     public function moveFile($targetType, $targetId, $originalFile = null, $data = array());
@@ -61,6 +68,16 @@ interface UploadFileService
 
     public function searchFileCount($conditions);
 
+    /**
+     * @param $targetType
+     * @param $targetId
+     * @param array             $fileInfo
+     * @param string            $implemtor
+     * @param UploadedFile|null $originalFile
+     *
+     * @return mixed
+     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files",param="result")
+     */
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);
 
     public function renameFile($id, $newFilename);

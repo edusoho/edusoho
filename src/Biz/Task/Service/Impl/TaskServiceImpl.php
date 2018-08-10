@@ -87,7 +87,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
-            $this->getLogService()->info('course', 'add_task', "添加任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
 

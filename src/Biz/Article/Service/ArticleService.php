@@ -4,6 +4,7 @@ namespace Biz\Article\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Biz\System\Annotation\Log;
 
 interface ArticleService
 {
@@ -41,6 +42,12 @@ interface ArticleService
 
     public function countArticles($conditions);
 
+    /**
+     * @param $article
+     *
+     * @return mixed
+     * @Log(level="info",module="article",action="create",message="创建文章",targetType="article",param="result")
+     */
     public function createArticle($article);
 
     public function updateArticle($id, $article);

@@ -65,8 +65,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->getOpenCourseMemberDao()->create($member);
 
-        $this->getLogService()->info('open_course', 'create_course', "创建公开课《{$course['title']}》(#{$course['id']})");
-
         return $course;
     }
 
@@ -567,7 +565,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
-        $this->getLogService()->info('open_course', 'add_lesson', "添加公开课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent('open.course.lesson.create', array('lesson' => $lesson));
 
         return $lesson;

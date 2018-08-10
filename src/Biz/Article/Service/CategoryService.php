@@ -2,6 +2,8 @@
 
 namespace Biz\Article\Service;
 
+use Biz\System\Annotation\Log;
+
 interface CategoryService
 {
     public function getCategory($id);
@@ -28,6 +30,12 @@ interface CategoryService
 
     public function isCategoryCodeAvailable($code, $exclude = null);
 
+    /**
+     * @param $category
+     *
+     * @return mixed
+     * @Log(level="info",module="category",action="create",message="添加栏目",targetType="article_category",param="result")
+     */
     public function createCategory(array $category);
 
     public function updateCategory($id, array $fields);

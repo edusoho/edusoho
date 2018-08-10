@@ -2,6 +2,8 @@
 
 namespace Biz\Marker\Service;
 
+use Biz\System\Annotation\Log;
+
 interface MarkerService
 {
     public function getMarker($id);
@@ -16,6 +18,12 @@ interface MarkerService
 
     public function updateMarker($id, $fields);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(level="info",module="marker",action="create",message="增加驻点",targetType="marker",param="result")
+     */
     public function addMarker($mediaId, $fields);
 
     public function deleteMarker($id);

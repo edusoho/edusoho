@@ -79,8 +79,8 @@ class ContentServiceImpl extends BaseService implements ContentService
         }
 
         // if(isset($content['body'])){
-  //           $content['body'] = $this->purifyHtml($content['body']);
-  //       }
+        //           $content['body'] = $this->purifyHtml($content['body']);
+        //       }
 
         $tagIds = empty($content['tagIds']) ? array() : $content['tagIds'];
 
@@ -89,7 +89,6 @@ class ContentServiceImpl extends BaseService implements ContentService
         $content = $this->getContentDao()->create($content);
 
         $this->dispatchEvent('content.create', new Event(array('contentId' => $content['id'], 'userId' => $user['id'], 'tagIds' => $tagIds)));
-        $this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
 
         return $content;
     }

@@ -53,7 +53,6 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->commit();
 
             $this->dispatchEvent('course.lesson.create', new Event($lesson));
-            $this->getLogService()->info('course', 'create_lesson', "创建课时(#{$lesson['id']})", $lesson);
 
             return array($lesson, $task);
         } catch (\Exception $exception) {
