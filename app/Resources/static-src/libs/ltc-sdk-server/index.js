@@ -32,7 +32,7 @@ class LtcSDKServer {
   }
 
   getMessenger() {
-    const on = (channel = 'task-events', callback) => {
+    const on = (channel = 'activity-events', callback) => {
       window.addEventListener('message', (e) => {
         if (e.data.channel === channel) {
           if (typeof callback === 'function') {
@@ -44,7 +44,7 @@ class LtcSDKServer {
 
     const emit = (data, origin = '*') => {
       window.parent.postMessage(
-        Object.assign({channel: 'activity-events'}, data),
+        Object.assign({channel: 'task-events'}, data),
         origin
       );
     };
@@ -91,4 +91,4 @@ class LtcSDKServer {
 
 let ltcsdk = new LtcSDKServer();
 
-module.exports = window.ltcsdk = ltcsdk;
+module.exports = window.ltcsdkserver = ltcsdk;
