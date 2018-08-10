@@ -44,7 +44,7 @@ class TradeFactory
                 $tradeInstance = new WeChatPayH5Trade();
                 break;
             case 'WechatPay_JsH5':
-                $tradeInstance = new WeChatPayJsH5Trade();
+                $tradeInstance = new WechatPayJsH5Trade();
                 break;
             case 'Alipay_LegacyH5':
                 $tradeInstance = new AlipayLegacyH5Trade();

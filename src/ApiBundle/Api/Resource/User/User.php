@@ -80,7 +80,7 @@ class User extends AbstractResource
 
         //校验验证码,基于token，默认10次机会
         $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
-        if ($status != BizSms::STATUS_SUCCESS) {
+        if (BizSms::STATUS_SUCCESS != $status) {
             throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
 
@@ -90,14 +90,16 @@ class User extends AbstractResource
         }
 
         $registeredWay = DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent'));
-        $user = $this->getAuthService()->register(array(
+        $user = array(
             'mobile' => $fields['mobile'],
             'emailOrMobile' => $fields['mobile'],
             'nickname' => $nickname,
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHttpRequest()->getHost()),
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getHttpRequest()->getClientIp(),
-        ));
+        );
+        file_put_contents('test.log', json_encode($user).PHP_EOL, FILE_APPEND);
+        $user = $this->getAuthService()->register($user);
         $user['token'] = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
         return $user;
