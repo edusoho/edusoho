@@ -10,8 +10,10 @@ class WeChatPayH5Trade extends BaseTrade
 
     public function getCustomResponse($trade)
     {
+        $returnUrl = $this->generateUrl('cashier_pay_return_for_h5', array('payment' => 'wechat'), true);
+
         return array(
-            'mwebUrl' => $trade['platform_created_result']['mweb_url'],
+            'mwebUrl' => $trade['platform_created_result']['mweb_url'].'&redirect_url='.$returnUrl,
             'paymentForm' => array(),
             'paymentHtml' => '',
             'paymentUrl' => $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $trade['trade_sn']), true),
