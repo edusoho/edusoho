@@ -2,11 +2,11 @@
   <div class="login">
     <span class='login-title'>登录账号</span>
     <img class='login-avatarimg' src="" />
-    <van-field v-model="username" 
+    <van-field v-model="username"
       class="login-input e-input"
       placeholder="邮箱/手机/用户名"/>
 
-    <van-field v-model="password" 
+    <van-field v-model="password"
       type="password"
       class="login-input e-input"
       :error-message="errorMessage.password"
