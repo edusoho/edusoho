@@ -116,7 +116,8 @@ export default {
   methods: {
     ...mapActions([
       'addUser',
-      'sendSmsCenter'
+      'sendSmsCenter',
+      'userLogin'
     ]),
     validateMobileOrPsw(type = 'mobile') {
       const ele = this.registerInfo[type];
@@ -136,15 +137,12 @@ export default {
     },
     handleSubmit() {
       const password = this.registerInfo.encrypt_password;
-
+      const usertel = this.registerInfo.mobile;
       if(this.submitFlag) {
-        const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
+        const encrypt = window.XXTEA.encryptToBase64(password, 'lvliujie.st.edusoho.cn');
         this.registerInfo.encrypt_password = encrypt;
-        this.registerInfo.encrypt_password
-          = window.XXTEA.encryptToBase64(password, window.location.host);
         this.submitFlag = false;
       }
-
       this.addUser(this.registerInfo)
       .then(res => {
         Toast.success({
@@ -152,9 +150,15 @@ export default {
           message: '注册成功'
         });
         var jumpToLogin = () => {
-          this.$router.push({name: 'login'});
+          this.$router.push({name: 'find'});
         }
         setTimeout(jumpToLogin, 2000);
+      })
+      .then(() => {
+        this.userLogin({
+          username: usertel,
+          password: password
+        })
       })
       .catch(err => {
         Toast.fail(err.message);
