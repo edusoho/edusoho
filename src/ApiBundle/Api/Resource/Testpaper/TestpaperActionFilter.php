@@ -15,6 +15,8 @@ class TestpaperActionFilter extends Filter
             foreach ($data['items'] as $questionType => &$questions) {
                 $questions = array_values($questions);
                 foreach ($questions as &$question) {
+                    unset($question['answer']);
+                    unset($question['analysis']);
                     $itemFilter = new TestpaperItemFilter();
                     $itemFilter->filter($question);
                 }

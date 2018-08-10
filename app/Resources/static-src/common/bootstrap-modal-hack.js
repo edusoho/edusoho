@@ -29,7 +29,12 @@
   $('.modal').on('click.modal-pagination', '.pagination a', function(e) {
     e.preventDefault();
     let $modal = $(e.delegateTarget);
-    $.get($(this).attr('href'), function(html) {
+    const url = $(this).attr('href');
+    const limitHref = 'javascript:;';
+    if (url === limitHref || typeof url === 'undefined') {
+      return;
+    }
+    $.get(url, function(html) {
       $modal.html(html);
     });
   });

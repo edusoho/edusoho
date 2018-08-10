@@ -54,6 +54,7 @@ site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.plan: 计划
 site.default.more: More
 site.default.manage: Config
 site.default.none: None
@@ -1078,8 +1079,8 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
-course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
-course.members_manage.add_failed_tips: 计划未发布，不可添加学员
+course.members_manage.import_failed_tips: 'Import student failed, the %type% is not published'
+course.members_manage.add_failed_tips: %type%未发布，不可添加学员
 course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
@@ -3340,7 +3341,7 @@ my.teaching.open_course.recommend_setting.live: Live
 my.teaching.open_course.recommend_setting.task_number: '%taskName% %task_number%'
 my.teaching.open_course.recommend_setting.save_btn: Save
 my.teaching.open_course.recommend_setting.course_empty: 'Add a course firstly'
-my.teaching.open_course.teachers_setting.title: 'Teachers Settings'
+my.teaching.open_course.teachers_setting.title: 'Teachers Manage'
 my.teaching.open_course.teachers_setting.is_added: 'Added teacher'
 my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 'Only the users with teacher authority could be added'
 my.teaching.open_course.student_setting.manage_btn: Manage

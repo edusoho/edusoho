@@ -65,7 +65,7 @@ class CourseExtension extends \Twig_Extension
         return $this->getCourseService()->getCourse($id);
     }
 
-    public function taskListJsonData($courseItems)
+    public function taskListJsonData($courseItems, $showOptional = false)
     {
         if (empty($courseItems)) {
             return json_encode(array());
@@ -73,7 +73,7 @@ class CourseExtension extends \Twig_Extension
 
         $results = array();
         foreach ($courseItems as $item) {
-            if (!('task' == $item['itemType'] && $item['isOptional'])) {
+            if ($showOptional || !('task' == $item['itemType'] && $item['isOptional'])) {
                 $default = array(
                     'lock' => '',
                     'status' => '',

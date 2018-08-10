@@ -81,7 +81,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $process['start_time'] = $this->getMillisecond();
         $this->updateWaitingJobsToAcquired();
         do {
-            $result = $this->runAcquiredJobs($initProcess['id']);
+            $result = $this->runAcquiredJobs($initProcess);
             $peakMemory = !function_exists('memory_get_peak_usage') ? 0 : memory_get_peak_usage();
             $currentTime = $this->getMillisecond();
             $processUsedTime = (int) (($currentTime - $process['start_time']) / 1000);
@@ -93,14 +93,15 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $this->updateJobProcess($initProcess['id'], $process);
     }
 
-    protected function runAcquiredJobs($processId)
+    protected function runAcquiredJobs($initProcess)
     {
         $result = '';
         $jobFired = $this->triggerJob();
         if (empty($jobFired)) {
             return false;
         }
-        $process['process_id'] = $processId;
+        $process['process_id'] = $initProcess['id'];
+        $process['pid'] = $initProcess['pid'];
         $process['start_time'] = $this->getMillisecond();
         $jobInstance = $this->createJobInstance($jobFired);
         try {
@@ -366,6 +367,8 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             'status',
             'message',
             'trace',
+            'process_id',
+            'pid',
         ));
 
         if (!empty($jobFired['id'])) {
