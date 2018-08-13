@@ -1,18 +1,27 @@
 {% do script(['libs/ltc-sdk-client.js', 'textactivity/js/create/index.js'], 300) %}
 {% set activity = activityContext.activity %}
 {% set draft = activityContext.courseDraft %}
-<div class="form-group">
 
+<form class="form-horizontal" id="step2-form" >
+  <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+      </div>
+      <div class="col-sm-10">
+        <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+      </div>
+  </div>
+  <div class="form-group">
     <div class="col-sm-2 control-label">
-        <label for="text-content-field" class="control-label-required">{{ 'course.plan_task.activity_manage.text'|trans }}</label>
+      <label for="text-content-field" class="control-label-required">{{ 'course.plan_task.activity_manage.text'|trans }}</label>
     </div>
     <div class="col-sm-10">
-        {% if draft %}
+      {% if draft %}
         <a id="see-draft-btn" class="link-primary text-12 js-continue-edit" data-content="{{ draft.content }}">
             {{'course.plan_task.activity_manage.text_tips'|trans}}
         </a>
-        {% endif %}
-        <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"
+      {% endif %}
+      <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"
                   data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
                   data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
                   data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
@@ -21,4 +30,5 @@
         {{ activity.content|default('') }}
       </textarea>
     </div>
-</div>
+  </div>
+</form>
