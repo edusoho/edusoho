@@ -117,6 +117,11 @@ const config = [
     name: 'getSettings',
     url: '/settings/{type}',
     method: 'GET'
+  }, {
+    // 获取微信支付信息
+    name: 'getTrade',
+    url: 'trades/{tradesSn}',
+    method: 'GET'
   }
 ];
 

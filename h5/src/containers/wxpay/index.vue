@@ -26,6 +26,7 @@ export default {
   data () {
     return {
       detail: {},
+      apiRequestCount: 0
     };
   },
   computed: {
@@ -52,7 +53,7 @@ export default {
           data.platformCreatedResult,
           (res) => {
             if (res.err_msg == 'get_brand_wcpay_request:ok') {
-              this.$router.push({ path: data.paidSuccessUrlH5 });
+              this.getTradeInfo();
             } else {
               if (res.err_msg == 'get_brand_wcpay_request:fail') {
                 alert('支付失败');
@@ -65,6 +66,26 @@ export default {
         );
       })
     },
+    getTradeInfo() {
+      // 轮询问检测微信内支付是否支付成功
+      Api.getTrade({
+        query: {
+          tradesSn: this.detail.sn
+        }
+      }).then((res) => {
+        if (this.apiRequestCount >= 20) {
+
+        }
+        if (res.isPaid) {
+          this.$router.push({ path: res.paidSuccessUrlH5 });
+          return;
+        }
+        setTimeout(() => {
+          this.apiRequestCount ++;
+          this.getTradeInfo();
+        },200)
+      })
+    }
   }
 }
 </script>

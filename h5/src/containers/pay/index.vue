@@ -13,7 +13,7 @@
         </div>
         <div class="payWay">
           <div :class="['payWay__item', {'payWay__item--selected': selected}]"
-            v-show="paySettings.alipayEnabled"
+            v-show="paySettings.alipayEnabled && !inWechat"
             @click="payWay = 'Alipay_LegacyH5';selected = true">
             <div class="right"></div>
             <i></i>
@@ -29,8 +29,8 @@
         </div>
       </div>
     </div>
-    <div class="payPage__payBtn" @click="handlePay">
-      立即支付
+    <div :class="['payPage__payBtn', {'disabled': !validPayWay}]" @click="handlePay">
+      {{ validPayWay ? '立即支付' : '无可用支付方式'}}
     </div>
   </div>
 </template>
@@ -53,6 +53,10 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading
     }),
+    validPayWay() {
+      return this.paySettings.wxpayEnabled ||
+        (this.paySettings.alipayEnabled && !this.inWechat);
+    }
   },
   async created () {
     this.paySettings = await Api.getSettings({
@@ -84,7 +88,9 @@ export default {
   },
   methods: {
     handlePay () {
-      const isWxPay = this.payWay === 'WechatPay_H5' && this.isWeixinBrowser()
+      if (!validPayWay) return
+
+      const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat
       if (isWxPay) {
         window.location.href = `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
           `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;

@@ -75,5 +75,8 @@
     background: #408FFB;
     font-family: PingFangSC-Regular;
     font-size: 18px;
+    &.disabled {
+      background: #919191;
+    }
   }
 }
