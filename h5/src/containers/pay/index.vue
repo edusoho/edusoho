@@ -46,7 +46,7 @@ export default {
       payWay: 'Alipay_LegacyH5', // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
       selected: true,
       paySettings: {},
-      inWechat: this.isWeixinBrowser()
+      inWechat: this.isWeixinBrowser(),
     };
   },
   computed: {
@@ -105,11 +105,32 @@ export default {
           app_pay: 'Y'
         }
       }).then(res => {
+        if (this.inWechat) {
+          this.getTradeInfo();
+          return;
+        }
         window.location.href = this.payWay ===  'Alipay_LegacyH5' ? res.payUrl: res.mwebUrl
       })
     },
     isWeixinBrowser (){
       return /micromessenger/.test(navigator.userAgent.toLowerCase())
+    },
+    getTradeInfo() {
+      // 轮询问检测微信内支付是否支付成功
+      Api.getTrade({
+        query: {
+          tradesSn: this.detail.sn
+        }
+      }).then((res) => {
+        if (res.isPaid) {
+          this.$router.push({ path: res.paidSuccessUrlH5 });
+          return;
+        }
+        setTimeout(() => {
+          this.apiRequestCount ++;
+          this.getTradeInfo();
+        },200)
+      })
     }
   }
 }
