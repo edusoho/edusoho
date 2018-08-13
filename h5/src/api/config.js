@@ -120,7 +120,7 @@ const config = [
   }, {
     // 获取微信支付信息
     name: 'getTrade',
-    url: 'trades/{tradesSn}',
+    url: '/trades/{tradesSn}',
     method: 'GET'
   }
 ];

@@ -85,6 +85,7 @@ export default {
         this.detail = Object.assign({}, res)
       })
     }
+    this.$router.push({ path: '/h5cashier/pay/success?trade_sn=2018081312500839199' });
   },
   methods: {
     handlePay () {
@@ -105,9 +106,8 @@ export default {
           app_pay: 'Y'
         }
       }).then(res => {
-        if (this.inWechat) {
-          this.getTradeInfo();
-          return;
+        if (this.payWay === 'WechatPay_H5') {
+          this.getTradeInfo(res.tradeSn);
         }
         window.location.href = this.payWay ===  'Alipay_LegacyH5' ? res.payUrl: res.mwebUrl
       })
@@ -115,11 +115,11 @@ export default {
     isWeixinBrowser (){
       return /micromessenger/.test(navigator.userAgent.toLowerCase())
     },
-    getTradeInfo() {
+    getTradeInfo(tradeSn) {
       // 轮询问检测微信内支付是否支付成功
       Api.getTrade({
         query: {
-          tradesSn: this.detail.sn
+          tradesSn: tradeSn,
         }
       }).then((res) => {
         if (res.isPaid) {
@@ -127,9 +127,8 @@ export default {
           return;
         }
         setTimeout(() => {
-          this.apiRequestCount ++;
-          this.getTradeInfo();
-        },200)
+          this.getTradeInfo(tradeSn);
+        },2000)
       })
     }
   }
