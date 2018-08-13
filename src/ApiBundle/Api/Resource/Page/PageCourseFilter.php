@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemFilter;
+use ApiBundle\Api\Resource\Course\CourseMemberFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageCourseFilter extends Filter
@@ -12,7 +13,7 @@ class PageCourseFilter extends Filter
         'id', 'title', 'courseSetTitle',
     );
     protected $publicFields = array(
-        'access', 'learnMode', 'learnedNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses',
+        'access', 'learnMode', 'learnedNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member',
     );
 
     protected function publicFields(&$data)
@@ -40,6 +41,14 @@ class PageCourseFilter extends Filter
         $data['allowAnonymousPreview'] = $allowAnonymousPreview;
         $data['courseItems'] = $courseItems;
         $data['courses'] = $courses;
+
+        $member = $data['member'];
+        if (!empty($member)) {
+            $courseMemberFilter = new CourseMemberFilter();
+            $courseMemberFilter->setMode(Filter::PUBLIC_MODE);
+            $courseMemberFilter->filter($data);
+            $data['member'] = $member;
+        }
     }
 
     private function convertToLeadingItems($originItems, $onlyPublishTask = false)
