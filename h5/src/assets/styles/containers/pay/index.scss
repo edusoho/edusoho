@@ -37,6 +37,14 @@
           padding: vw(12) vw(22);
           background: #FFFFFF;
           margin-right: 10px;
+          .correct {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 2.4vw;
+            margin: 0.3vw;
+            z-index: 5;
+          }
         }
         .payWay__item--selected {
           position: relative;
@@ -52,14 +60,14 @@
             width: 0;
             height: 0;
           }
-          i {
-            &::before {
-              position: absolute;
-              top: 0;
-              right: 0;
-              content: '\2713';
-            }
-          }
+          // i {
+          //   &::before {
+          //     position: absolute;
+          //     top: 0;
+          //     right: 0;
+          //     content: '\2713';
+          //   }
+          // }
         }
       }
     }

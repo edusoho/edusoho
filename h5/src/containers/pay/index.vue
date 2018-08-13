@@ -15,15 +15,15 @@
           <div :class="['payWay__item', {'payWay__item--selected': selected}]"
             v-show="paySettings.alipayEnabled && !inWechat"
             @click="payWay = 'Alipay_LegacyH5';selected = true">
+            <img class="correct" src="static/images/correct.png">
             <div class="right"></div>
-            <i></i>
             <img src="static/images/zfb.png">
           </div>
           <div :class="['payWay__item', {'payWay__item--selected': !selected}]"
             v-show="paySettings.wxpayEnabled"
             @click="payWay = 'WechatPay_H5'; selected = false">
+            <img class="correct" src="static/images/correct.png">
             <div class="right"></div>
-            <i></i>
             <img src="static/images/wx.png">
           </div>
         </div>
