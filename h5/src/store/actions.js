@@ -30,7 +30,7 @@ export const addUser = ({ commit }, data) =>
     Api.addUser({
       data
     }).then(res => {
-      commit(types.ADD_USER);
+      commit(types.ADD_USER, res);
       resolve(res);
       return res;
     }).catch(err => reject(err));
