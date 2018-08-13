@@ -33,6 +33,7 @@
         display: flex;
         // justify-content: space-around;
         .payWay__item {
+          position: relative;
           border: 1px solid #F5F5F5;
           padding: vw(12) vw(22);
           background: #FFFFFF;
@@ -47,7 +48,6 @@
           }
         }
         .payWay__item--selected {
-          position: relative;
           border-color: #408FFB;
           font-size: 14px;
           color: #FFFFFF;

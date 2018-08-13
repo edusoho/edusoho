@@ -106,9 +106,12 @@ export default {
         }
       }).then(res => {
         if (this.payWay === 'WechatPay_H5') {
-          this.getTradeInfo(res.tradeSn);
+          this.getTradeInfo(res.tradeSn).then(() => {
+            window.location.href = res.mwebUrl
+          });
+          return;
         }
-        window.location.href = this.payWay ===  'Alipay_LegacyH5' ? res.payUrl: res.mwebUrl
+        window.location.href = res.payUrl
       })
     },
     isWeixinBrowser (){
@@ -116,7 +119,7 @@ export default {
     },
     getTradeInfo(tradeSn) {
       // 轮询问检测微信内支付是否支付成功
-      Api.getTrade({
+      return Api.getTrade({
         query: {
           tradesSn: tradeSn,
         }
