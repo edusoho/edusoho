@@ -46,7 +46,7 @@ interface ArticleService
      * @param $article
      *
      * @return mixed
-     * @Log(level="info",module="article",action="create",message="创建文章",targetType="article",param="result")
+     * @Log(level="info",module="article",action="create",message="创建文章",targetType="article")
      */
     public function createArticle($article);
 

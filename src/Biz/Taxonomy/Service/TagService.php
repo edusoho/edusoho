@@ -55,7 +55,7 @@ interface TagService
      * @param $tag
      *
      * @return mixed
-     * @Log(level="info",module="tag",action="create",message="添加标签",targetType="tag",param="result")
+     * @Log(level="info",module="tag",action="create",message="添加标签",targetType="tag")
      */
     public function addTag(array $tag);
 
@@ -63,7 +63,7 @@ interface TagService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="tagGroup",action="create",message="添加标签组",targetType="tag_group",param="result")
+     * @Log(level="info",module="tagGroup",action="create",message="添加标签组",targetType="tag_group")
      */
     public function addTagGroup($fields);
 

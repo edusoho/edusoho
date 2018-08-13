@@ -18,7 +18,7 @@ interface ContentService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="content",action="create",message="创建内容",targetType="content",param="result")
+     * @Log(level="info",module="content",action="create",message="创建内容",targetType="content")
      */
     public function createContent($content);
 

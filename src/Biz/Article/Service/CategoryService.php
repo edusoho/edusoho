@@ -34,7 +34,7 @@ interface CategoryService
      * @param $category
      *
      * @return mixed
-     * @Log(level="info",module="category",action="create",message="添加栏目",targetType="article_category",param="result")
+     * @Log(level="info",module="category",action="create",message="添加栏目",targetType="article_category")
      */
     public function createCategory(array $category);
 

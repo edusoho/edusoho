@@ -123,7 +123,7 @@ interface CourseSetService
      * @param $courseSet
      *
      * @return mixed
-     * @Log(level="info",module="course",action="create",message="创建课程",targetType="courseSet",param="result")
+     * @Log(level="info",module="course",action="create",message="创建课程",targetType="courseSet")
      */
     public function createCourseSet($courseSet);
 

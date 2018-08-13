@@ -22,7 +22,7 @@ interface TaskService
      * @param $task
      *
      * @return mixed
-     * @Log(level="info",module="course",action="add_task",message="添加任务",targetType="course_task",param="result")
+     * @Log(level="info",module="course",action="add_task",message="添加任务",targetType="course_task")
      */
     public function createTask($task);
 

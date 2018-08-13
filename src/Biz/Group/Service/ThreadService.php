@@ -33,7 +33,7 @@ interface ThreadService
      * @param $thread
      *
      * @return mixed
-     * @Log(level="info",module="group",action="create_thread",message="新增话题",targetType="groups_thread",param="result")
+     * @Log(level="info",module="group",action="create_thread",message="新增话题",targetType="groups_thread")
      */
     public function addThread($thread);
 

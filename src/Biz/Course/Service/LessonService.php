@@ -14,7 +14,7 @@ interface LessonService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="course",action="create_lesson",message="创建课时",targetType="course_task",param="result")
+     * @Log(level="info",module="course",action="create_lesson",message="创建课时",targetType="course_task")
      */
     public function createLesson($fields);
 

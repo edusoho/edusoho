@@ -22,7 +22,7 @@ interface MarkerService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="marker",action="create",message="增加驻点",targetType="marker",param="result")
+     * @Log(level="info",module="marker",action="create",message="增加驻点",targetType="marker")
      */
     public function addMarker($mediaId, $fields);
 

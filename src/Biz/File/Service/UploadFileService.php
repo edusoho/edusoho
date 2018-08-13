@@ -30,7 +30,7 @@ interface UploadFileService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files",param="result")
+     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files")
      */
     public function finishedUpload($params);
 
@@ -76,7 +76,7 @@ interface UploadFileService
      * @param UploadedFile|null $originalFile
      *
      * @return mixed
-     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files",param="result")
+     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files")
      */
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);
 

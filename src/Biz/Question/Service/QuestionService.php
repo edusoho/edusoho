@@ -2,6 +2,8 @@
 
 namespace Biz\Question\Service;
 
+use Biz\System\Annotation\Log;
+
 interface QuestionService
 {
     public function get($id);
@@ -14,6 +16,12 @@ interface QuestionService
 
     public function updateCopyQuestionsSubCount($parentId, $subCount);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete_question",message="创建内容",targetType="content",format="[{ 'className':'Question:QuestionService','funcName':'get','param':['id']}]")
+     */
     public function delete($id);
 
     public function deleteSubQuestions($parentId);

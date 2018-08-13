@@ -32,6 +32,14 @@ class LogReader
             $methods = $reflectInterface->getMethods();
             foreach ($methods as $method) {
                 $annotation = $annotationReader->getMethodAnnotation($method, '\Biz\System\Annotation\Log');
+
+                $ReflectionFunc = new \ReflectionMethod($interfaceName, $method->name);
+                $parameters = $ReflectionFunc->getParameters();
+                $params = array();
+                foreach ($parameters as $parameter) {
+                    $params[] = $parameter->name;
+                }
+
                 if (empty($annotation)) {
                     $interceptorData[$method->getName()] = array();
                     continue;
@@ -44,7 +52,8 @@ class LogReader
                 $log['targetId'] = $annotation->getTargetId();
                 $log['action'] = $annotation->getAction();
                 $log['message'] = $annotation->getMessage();
-                $log['param'] = $annotation->getParam();
+                $log['format'] = $annotation->getFormat();
+                $log['param'] = $params;
                 $interceptorData[$method->getName()] = $log;
             }
         }

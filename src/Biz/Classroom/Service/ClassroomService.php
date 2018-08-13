@@ -78,7 +78,7 @@ interface ClassroomService
      * @param $classroom
      *
      * @return mixed
-     * @Log(level="info",module="classroom",action="create",message="创建班级",targetType="classroom",param="result")
+     * @Log(level="info",module="classroom",action="create",message="创建班级",targetType="classroom")
      */
     public function addClassroom($classroom);
 

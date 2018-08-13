@@ -47,11 +47,20 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             $targetId = $log['targetId'];
             $module = $log['module'];
             $action = $log['action'];
-            $context = $args;
-            if (isset($log['param'])) {
-                if ('result' == $log['param']) {
-                    $context = $result;
+            $formats = $log['format'];
+            $param = $log['param'];
+            $context = $result;
+            if (!empty($formats)) {
+                $formatReturn = $result;
+                $formats = str_replace("'", '"', $formats);
+                $formats = json_decode($formats, true);
+                foreach ($formats as $format) {
+                    $service = $this->biz->service($format['className']);
+                    $funcName = $format['funcName'];
+                    $arguments = $this->getArrayValue($log['param'], $format['param'], $args);
+                    $formatReturn = $service->$funcName($arguments[0]);
                 }
+                $context = $formatReturn;
             }
             $message = $log['message'];
             $this->getLogService()->$level($module, $action, $message, $context);
@@ -61,6 +70,20 @@ class AnnotationLogInterceptor extends AbstractInterceptor
     public function getInterceptorData()
     {
         return $this->interceptorData;
+    }
+
+    private function getArrayValue($array, $index, $args)
+    {
+        $returnArray = array();
+        foreach ($index as $value) {
+            foreach ($array as $k => $v) {
+                if ($v == $value) {
+                    $returnArray[] = $args[$k];
+                }
+            }
+        }
+
+        return $returnArray;
     }
 
     /**

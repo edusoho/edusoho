@@ -30,7 +30,7 @@ interface OpenCourseService
      * @param $course
      *
      * @return mixed
-     * @Log(level="info",module="open_course",action="create_course",message="创建公开课",targetType="open_course",param="result")
+     * @Log(level="info",module="open_course",action="create_course",message="创建公开课",targetType="open_course")
      */
     public function createCourse($course);
 
@@ -81,7 +81,7 @@ interface OpenCourseService
      * @param $lesson
      *
      * @return mixed
-     * @Log(level="info",module="open_course",action="add_lesson",message="添加公开课时",targetType="open_course",param="result")
+     * @Log(level="info",module="open_course",action="add_lesson",message="添加公开课时",targetType="open_course")
      */
     public function createLesson($lesson);
 

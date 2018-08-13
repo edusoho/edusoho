@@ -39,6 +39,8 @@ class Log
 
     private $param;
 
+    private $format;
+
     public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
@@ -117,6 +119,11 @@ class Log
         return $this->param;
     }
 
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
     public function setMessage($message)
     {
         $this->message = $message;
@@ -150,5 +157,10 @@ class Log
     public function setParam($param)
     {
         $this->param = $param;
+    }
+
+    public function setFormat($format)
+    {
+        $this->format = $format;
     }
 }

@@ -16,7 +16,7 @@ interface AnnouncementService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="announcement",action="create",message="创建公告",targetType="announcement",param="result")
+     * @Log(level="info",module="announcement",action="create",message="创建公告",targetType="announcement")
      */
     public function createAnnouncement($fields);
 
