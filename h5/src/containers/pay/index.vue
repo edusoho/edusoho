@@ -122,7 +122,7 @@ export default {
         }
       }).then((res) => {
         if (res.isPaid) {
-          window.location.href = location.origin + res.paidSuccessUrlH5
+          window.location.href = window.location.origin + res.paidSuccessUrlH5
           return;
         }
         setTimeout(() => {

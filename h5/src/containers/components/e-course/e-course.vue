@@ -57,15 +57,15 @@
     },
     methods: {
       onClick(e) {
-        const name = this.type === 'order'? 'order' : 'course';
-        const id = this.course.id || this.course.targetId || this.order.id;
+        const name = this.type === 'order' ? 'order' : 'course';
+        const id = this.course.id || this.course.targetId || this.order.targetId;
         if (e.target.tagName === 'SPAN') {
           console.log(e.target.tagName);
-        } else {
-          this.$router.push({
-            path: `/${name}/${id}`,
-          });
+          return;
         }
+        this.$router.push({
+          path: `/course/${id}`,
+        });
       }
     }
   }
