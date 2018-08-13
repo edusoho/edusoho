@@ -11,6 +11,7 @@
 <script>
 import Api from '@/api'
 import Swipe from '@admin/containers/components/e-swipe/e-swipe.vue';
+import 'vue-swipe/dist/vue-swipe.css';
 
 export default {
   components: {
