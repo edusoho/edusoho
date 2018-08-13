@@ -8,10 +8,15 @@
     </e-panel>
 
     <ul class="course-detail__plan">
-      <li v-for="(item, index) in items" 
-        @click="handleClick(item, index)" 
+      <li v-for="(item, index) in items"
+        @click="handleClick(item, index)"
         :class="{ active: item.active }">{{item.title}}</li>
     </ul>
+
+    <div class="course-detail__validity">
+      <div>学习有效期<span class="validity dark">永久有效</span></div>
+      <div v-if="details.buyExpiryTime != 0" class="mt5">购买截止日期<span class="validity orange">{{ details.buyExpiryTime }}</span></div>
+    </div>
   </div>
 </template>
 <script>

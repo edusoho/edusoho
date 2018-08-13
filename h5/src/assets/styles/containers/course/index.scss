@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     margin-left: vw(10);
-    
+
     > span:last-child {
       color: #71777d;
       line-height: vw(24);
@@ -86,7 +86,6 @@
       opacity: 1;
     }
   }
-
 
   // head component
   &__head {
@@ -145,6 +144,19 @@
           font-size: vw(16);
         }
       }
+    }
+  }
+
+  &__validity {
+    padding: 0 vw(20);
+    margin-bottom: vw(15);
+    font-size: vw(14);
+    @extend .grey;
+    .validity {
+      margin-left: vw(20);
+    }
+    .orange {
+      color: #FF9800;
     }
   }
 
