@@ -85,7 +85,6 @@ export default {
         this.detail = Object.assign({}, res)
       })
     }
-    this.$router.push({ path: '/h5cashier/pay/success?trade_sn=2018081312500839199' });
   },
   methods: {
     handlePay () {
@@ -123,7 +122,7 @@ export default {
         }
       }).then((res) => {
         if (res.isPaid) {
-          this.$router.push({ path: res.paidSuccessUrlH5 });
+          window.location.href = location.origin + res.paidSuccessUrlH5
           return;
         }
         setTimeout(() => {
