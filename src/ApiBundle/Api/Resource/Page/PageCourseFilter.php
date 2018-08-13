@@ -18,6 +18,13 @@ class PageCourseFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        $member = $data['member'];
+        if (!empty($member)) {
+            $courseMemberFilter = new CourseMemberFilter();
+            $courseMemberFilter->setMode(Filter::PUBLIC_MODE);
+            $courseMemberFilter->filter($member);
+        }
+
         $courseItems = $this->convertToLeadingItems($data['courseItems'], true);
         foreach ($courseItems as &$courseItem) {
             $courseItemFilter = new CourseItemFilter();
@@ -40,15 +47,8 @@ class PageCourseFilter extends Filter
         $data['learnedNum'] = $learnedNum;
         $data['allowAnonymousPreview'] = $allowAnonymousPreview;
         $data['courseItems'] = $courseItems;
+        $data['member'] = $member;
         $data['courses'] = $courses;
-
-        $member = $data['member'];
-        if (!empty($member)) {
-            $courseMemberFilter = new CourseMemberFilter();
-            $courseMemberFilter->setMode(Filter::PUBLIC_MODE);
-            $courseMemberFilter->filter($data);
-            $data['member'] = $member;
-        }
     }
 
     private function convertToLeadingItems($originItems, $onlyPublishTask = false)
