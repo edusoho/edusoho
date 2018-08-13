@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     handlePay () {
-      if (!validPayWay) return
+      if (!this.validPayWay) return
 
       const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat
       if (isWxPay) {
