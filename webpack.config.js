@@ -85,6 +85,14 @@ module.exports = {
     },
     {
       name: 'jquery-validation/dist/jquery.validate.js'
+    },
+    {
+      name: 'bootstrap',
+      ignore: [
+        'grunt/**',
+        'js/**',
+        'less/**',
+      ]
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin}',

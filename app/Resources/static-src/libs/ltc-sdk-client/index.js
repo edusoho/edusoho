@@ -28,13 +28,13 @@ class LtcSDKClient {
     });
   }
 
-  async loadCss() {
+  async loadCss(url = 'bootstrap-css') {
     await this.initResourceList();
 
     let link = document.createElement('link');
     link.type = 'text/css';
     link.rel = 'stylesheet';
-    link.href = this.resourceList['codeage-design-css'];
+    link.href = this.resourceList[url];
     let head = document.getElementsByTagName('head')[0];
     head.appendChild(link);
   }
