@@ -51,3 +51,15 @@ function discountCountdown() {
   }
 }
 
+const fixButtonPosition = () => {
+  const $target = $('.js-course-detail-info');
+  const height = $target.height();
+  const $btn = $('.js-course-header-operation');
+  if (height >  240) {
+    $btn.removeClass('course-detail-info__btn');
+  }
+};
+
+$(document).ready(() => {
+  fixButtonPosition();
+});

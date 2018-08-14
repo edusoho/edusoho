@@ -1,7 +1,7 @@
 import { isEmpty } from 'common/utils';
 import 'waypoints/lib/jquery.waypoints.min';
 import Emitter from 'common/es-event-emitter';
-
+import { debounce } from 'app/common/widget/debounce';
 /** 
  * 伪分页，从缓存中读取数据，数据结构格式见 构造方法
  *   例子见 app/Resources/static-src/app/js/courseset/show/index.js
@@ -41,7 +41,6 @@ import Emitter from 'common/es-event-emitter';
      <!-- 当页面上看到此节点时，会自动显示下一页 -->
      <div class="js-down-loading-more" style="min-height: 1px"></div>
  */
-
 export default class ESInfiniteCachedScroll extends Emitter {
   /**
    * @param options  
@@ -75,6 +74,8 @@ export default class ESInfiniteCachedScroll extends Emitter {
               <i class="es-icon es-icon-undone-check color-{color} left-menu"></i> // 实际显示的节点
             </div>
         'displayAllImmediately': false,  //没有分页刷新功能，直接显示全部
+        'afterFirstLoad': function, //加载第一页后，会做的操作
+        'displayItem': {'key': 'taskId', 'value': '123'}, //显示指定数据项，第一页没有，则自动展开n页直到显示该项为止
    *  }
    */
   constructor(options) {
@@ -98,9 +99,10 @@ export default class ESInfiniteCachedScroll extends Emitter {
         element: $('.js-down-loading-more')[0],
         handler: function(direction) {
           if (direction == 'down') {
-            if (self._isLastPage) {
+            if (self._isLastPage || self._canNotDisplayMore()) {
               waypoint.disable();
             } else {
+              self._scrollToBottom();
               waypoint.disable();
               self._displayCurrentPageDataAndSwitchToNext();
               Waypoint.refreshAll();
@@ -123,6 +125,16 @@ export default class ESInfiniteCachedScroll extends Emitter {
       this._pageSize = this._options['pageSize'] ? this._options['pageSize'] : 25;
     }
 
+    this._afterFirstLoad = this._options['afterFirstLoad'] ? this._options['afterFirstLoad'] : null;
+    this._isFirstLoad = true;
+
+    if (this._options['displayItem']) {
+      this._displayItemDisplayed = false;
+      this._displayItem = this._options['displayItem'];
+    } else {
+      this._displayItemDisplayed = true;
+      this._displayItem = null;
+    }
     this._isLastPage = false;
   }
 
@@ -131,6 +143,18 @@ export default class ESInfiniteCachedScroll extends Emitter {
     if (!this._isLastPage) {
       this._currentPage++;
     }
+
+    if (this._isFirstLoad) {
+      if (!this._displayItemDisplayed) {
+        this._displayCurrentPageDataAndSwitchToNext();
+      } else {
+        this._isFirstLoad = false;
+        if (this._afterFirstLoad) {
+          this._afterFirstLoad();
+        }
+      }
+    }
+
   }
 
   _displayData() {
@@ -140,6 +164,13 @@ export default class ESInfiniteCachedScroll extends Emitter {
     let startIndex = this._getStartIndex();
     for (let index = 0; index < this._pageSize; index++) {
       let data = this._options['data'][index + startIndex];
+      if (!this._displayItemDisplayed) {
+        let key = this._displayItem['key'];
+        let value = this._displayItem['value'];
+        if (data[key] == value) {
+          this._displayItemDisplayed = true;
+        }
+      }
       if (!isEmpty(data)) {
         this._generateSingleCachedData(data);
       } else {
@@ -147,6 +178,26 @@ export default class ESInfiniteCachedScroll extends Emitter {
       }
     }
   }
+
+  _scrollToBottom() {
+    const self = this;
+    const $target = $('.js-sidebar-pane');
+    if (!$target.length) {
+      return;
+    }
+    const $targetDom = $target[0];
+    const sidebarHight = $target.height();
+    const scrollHight = $targetDom.scrollHeight;
+    const scrollTop = $targetDom.scrollTop;
+    if (self._afterFirstLoad) {
+      $targetDom.addEventListener('scroll', debounce(() => {
+        if (scrollTop + sidebarHight >= scrollHight && !this._isLastPage) {
+          self._displayCurrentPageDataAndSwitchToNext();
+        }
+      }, 500, true));
+    }
+  }
+
 
   _generateSingleCachedData(data) {
     let clonedHtml = $(this._options['dataTemplateNode']).html();
@@ -190,6 +241,10 @@ export default class ESInfiniteCachedScroll extends Emitter {
       return currentData[paramName];
     }
     return param;
+  }
+
+  _canNotDisplayMore() {
+    return this._currentPage != 1 && $('.js-only-display-one-page').length != 0;
   }
 
   _removeUnNeedNodes(tempNode) {

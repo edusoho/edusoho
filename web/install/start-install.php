@@ -30,6 +30,7 @@ $functionName($init_data);
 
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Crontab\SystemCrontabInitializer;
 
 function check_installed()
 {
@@ -191,6 +192,7 @@ function install_step3($init_data = 0)
 
             $initializer->initFolders();
             $initializer->initLockFile();
+            SystemCrontabInitializer::init();
             $biz['db']->commit();
             header('Location: start-install.php?step=4');
             exit();
