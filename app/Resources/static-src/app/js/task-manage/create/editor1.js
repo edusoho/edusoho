@@ -27,7 +27,6 @@ class Editor {
     this.finishUrl = '';
     this._init();
     this._initEvent();
-
   }
 
   _initEvent() {
@@ -276,7 +275,6 @@ class Editor {
   _rendSubmit(show) {
     show ? $('#course-tasks-submit').removeClass('hidden') : $('#course-tasks-submit').addClass('hidden');
   }
-
 }
 
 

@@ -10,43 +10,59 @@ class LtcSDKClient {
       children: [],
       type: 'child'
     });
-
-    this.init();
+    this.resource = {};
   }
 
   
-  init() {
-    this.messenger.sendToParent('init');
-    this.messenger.on('initResourceList', function(value) {
-      alert('子页面收到父页面消息');
+  initResourceList() {
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      if (self.resourceList) {
+        resolve();
+      }
+      self.messenger.sendToParent('init');
+      self.messenger.on('initResourceList', function(data) {
+        self.resourceList = data;
+        resolve();
+      });
     });
   }
 
-  load(urls) {
-    let promises = [];
+  async loadCss() {
+    await this.initResourceList();
 
-    urls.forEach(function(value) {
-      let promise = new Promise(function(resolve, reject) {
-        var script = document.createElement('script');
+    let link = document.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+    link.href = this.resourceList['codeage-design-css'];
+    let head = document.getElementsByTagName('head')[0];
+    head.appendChild(link);
+  }
 
-        script.src = value;
+  async load(...urls) {
+    let self = this;
+    await self.initResourceList();
+    for (let value of urls) {
+      await new Promise(function(resolve, reject) {
+        if (self.resource[value]) {
+          resolve(value);
+        }
+
+        let script = document.createElement('script');
+        script.src = self.resourceList[value];
         script.addEventListener('load', function() {
-          resolve(script);
+          resolve(value);
+          self.resource[value] = true;
         }, false);
 
         script.addEventListener('error', function() {
-          reject(script);
+          reject(value);
         }, false);
 
         document.body.appendChild(script);
       });
-
-      promises.push(promise);
-    });
-
-    
-    Promise.all(promises)
-  }
+    }
+  };
 
   config(options) {
     let DEFAULTS = {
@@ -64,7 +80,6 @@ class LtcSDKClient {
   }
 }
 
-let ltcsdk = new LtcSDKClient();
+let ltc = new LtcSDKClient();
 
-module.exports = window.ltcsdkcLtcSDKClientlient = ltcsdk;
-
+module.exports = window.ltc = ltc;

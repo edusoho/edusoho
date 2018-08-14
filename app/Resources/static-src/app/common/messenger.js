@@ -4,7 +4,6 @@ import Emitter from 'component-emitter';
 export default class EsMessenger extends Emitter {
   constructor(options) {
     super();
-
     this.name = options.name;
     this.project = options.project;
     this.children = options.children;

@@ -17,7 +17,6 @@ class LtcSDKServer {
 
   event() {
     this.messenger.on('init', ()=> {
-      alert('父页面收到子页面消息');
       this.messenger.sendToChild({id: 'task-create-content-iframe'}, 'initResourceList', this.resource);
     });
   }
