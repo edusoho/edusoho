@@ -1,3 +1,2 @@
-import Text from './text';
-
-new Text();
+// import Text from './text';
+// new Text();

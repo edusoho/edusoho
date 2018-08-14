@@ -51,8 +51,9 @@ class ActivityExtension extends \Twig_Extension
         };
 
         return json_encode(array(
-            'base' => $cdn.'/static-dist/libs/base.js',
-            'common' => $cdn.'/static-dist/app/js/common.js',
+            'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
+            'codeage-design-css' => $cdn.'/libs/codeages-design/dist/codeages-design.css',
+            'codeage-design-js' => $cdn.'/libs/codeages-design/dist/codeages-design.js',
             'validate' => $cdn.'/static-dist/libs/jquery-validation.js',
             // 'uploader' => $cdn.'asdf',
             // 'player' => 'a',

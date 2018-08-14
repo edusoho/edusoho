@@ -4,26 +4,21 @@ import EsMessenger from 'app/common/messenger';
 class LtcSDKServer {
   constructor() {
     this.options = {};
-    this.handler = {};
-    this.isVerify = false;
     this.resource = $.parseJSON($('#ltc-source-list').text());
-    this.messenger = null;
-  }
-
-  getMessenger(children = []) {
-
-   return (this.messenger === null) ? new EsMessenger({
+    this.messenger = new EsMessenger({
       name: 'parent',
       project: 'LtcProject',
-      children: children,
+      children: [$('#task-create-content-iframe')[0]],
       type: 'parent'
-    }) : this.messenger;
-   }
+    });
 
-  verify() {
-    if (!this.isVerify) {
-      throw new Error('请先调用config方法，验证身份');
-    }
+    this.event();
+  }
+
+  event() {
+    this.messenger.on('init', ()=> {
+      this.messenger.sendToChild('init', this.resource);
+    });
   }
 
   config(options) {
@@ -37,7 +32,6 @@ class LtcSDKServer {
   }
 
   getApi(options) {
-    this.verify();
     return Api(options);
   }
 }

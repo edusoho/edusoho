@@ -2,16 +2,25 @@ import Api from './api';
 import EsMessenger from 'app/common/messenger';
 
 class LtcSDKClient {
-  constructor() {
+  constructor() {alert
     this.options = {};
-    this.handler = {};
-    this.isVerify = false;
-    this.messenger = null;
+    this.messenger =  new EsMessenger({
+      name: 'partner',
+      project: 'LtcProject',
+      children: [],
+      type: 'child'
+    });
+
     this.init();
   }
 
-  inti() {
-    // 初始化资源路径
+  
+  init() {
+    this.messenger.sendToParent('init');
+    this.messenger.on('init', function(value) {
+      console.log(value);
+      alert();
+    });
   }
 
   load(urls) {
@@ -38,15 +47,6 @@ class LtcSDKClient {
 
     
     Promise.all(promises)
-  }
-
-  getMessenger() {
-    return (this.messenger === null) ? new EsMessenger({
-      name: 'partner',
-      project: 'LtcProject',
-      children: [],
-      type: 'child'
-    }) : this.messenger;
   }
 
   config(options) {

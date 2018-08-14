@@ -72,9 +72,19 @@ module.exports = {
     },
     {
       name: 'easy-pie-chart/dist/jquery.easypiechart.js',
+    },
+    {
+      name: 'jquery/dist/jquery.min.js',
+    },
+    {
+      name: 'codeages-design',
+      ignore: [
+        'node_modules/**',
+        'src/**',
+      ]
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin}',
   isESlint: false,
   baseName: 'libs/base,libs/ltc-sdk',
-}
+};

@@ -30,7 +30,6 @@ export default class EsMessenger extends Emitter {
       this.emit(msg.eventName, msg.args);
     });
     this.messenger = messenger;
-
   }
 
   sendToParent(eventName, args) {
