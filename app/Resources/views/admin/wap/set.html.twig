@@ -9,10 +9,10 @@
   <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label>{{'admin.wap_setting'|trans}}</label>
+        <label>版本选择</label>
       </div>
       <div class="controls col-md-7 radios">
-        {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, wapSetting.enabled) }}
+        {{ radios('version', {'2':'新版'|trans, '1':'旧版'|trans,'0':'关闭'|trans}, wapSetting.version) }}
         {{ 'admin.wap_setting.hint'|trans|raw }}
       </div>
     </div>
