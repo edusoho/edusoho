@@ -90,14 +90,19 @@ class Course extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
-        $courses = $this->service('Course:CourseService')->searchCourses(
-            $conditions,
-            $sort,
-            $offset,
-            $limit
-        );
 
-        $total = $this->service('Course:CourseService')->searchCourseCount($conditions);
+        if (array_key_exists('recommendedSeq', $sort)) {
+            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
+        } else {
+            $courses = $this->getCourseService()->searchCourses(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
+        $total = $this->getCourseService()->searchCourseCount($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
