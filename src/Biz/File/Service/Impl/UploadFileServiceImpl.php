@@ -369,8 +369,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $result = $this->getUploadFileDao()->deleteByGlobalId($globalId);
 
-        $this->getLogService()->info('upload_file', 'delete', "删除文件globalId (#{$globalId})", $file);
-
         return $result;
     }
 
@@ -760,7 +758,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $this->dispatchEvent('upload.file.delete', $file);
-        $this->getLogService()->info('upload_file', 'delete', "删除文件(#{$id})", $file);
 
         return $result;
     }

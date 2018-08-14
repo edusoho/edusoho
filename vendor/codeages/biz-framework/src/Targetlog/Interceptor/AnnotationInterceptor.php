@@ -35,24 +35,67 @@ class AnnotationInterceptor extends AbstractInterceptor
     }
 
     /**
+     * @param $funcName
      * @param $args
+     *
+     * @return array
      */
-    public function exec($funcName, $args, $result)
+    public function beforeExec($funcName, $args)
+    {
+        $result = array();
+        if (!empty($this->interceptorData[$funcName])) {
+            $log = $this->interceptorData[$funcName];
+            $formats = $log['format'];
+            if (!empty($formats)) {
+                $formats = str_replace("'", '"', $formats);
+                $formats = json_decode($formats, true);
+                if (isset($formats['before'])) {
+                    $format = $formats['before'];
+                    $service = $this->biz->service($format['className']);
+                    $formatFuncName = $format['funcName'];
+                    $arguments = $this->getArrayValue($log['funcParam'], $format['param'], $args);
+                    $formatReturn = $service->$formatFuncName($arguments[0]);
+                    $result = $formatReturn;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $funcName
+     * @param $args
+     * @param $result
+     * @param array $beforeResult
+     */
+    public function afterExec($funcName, $args, $result, $beforeResult = array())
     {
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
             $currentUser = $this->biz['user'];
-            $levelId = $log['levelId'];
+            $level = $log['level'];
             $targetType = $log['targetType'];
             $targetId = $log['targetId'];
-            $context = $args;
-            if (isset($log['param'])) {
-                if ('result' == $log['param']) {
-                    $context = $result;
+            $module = $log['module'];
+            $action = $log['action'];
+            $formats = $log['format'];
+            $context = empty($beforeResult) ? $result : $beforeResult;
+            if (!empty($formats)) {
+                $formatReturn = $result;
+                $formats = str_replace("'", '"', $formats);
+                $formats = json_decode($formats, true);
+                if (isset($formats['after'])) {
+                    $format = $formats['after'];
+                    $service = $this->biz->service($format['className']);
+                    $formatFuncName = $format['funcName'];
+                    $arguments = $this->getArrayValue($log['funcParam'], $format['param'], $args);
+                    $formatReturn = $service->$formatFuncName($arguments[0]);
                 }
+                $context = $formatReturn;
             }
             $message = $log['message'];
-            $this->getTargetlogService()->log($levelId, $targetType, $targetId, $message, $context);
+            $this->getLogService()->$level($module, $action, $message, $context);
         }
     }
 

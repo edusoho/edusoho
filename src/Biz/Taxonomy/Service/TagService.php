@@ -71,8 +71,20 @@ interface TagService
 
     public function updateTagGroup($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="tag",action="delete",message="删除标签",targetType="tag",format="{'before':{ 'className':'Taxonomy:TagService','funcName':'getTag','param':['id']}}")
+     */
     public function deleteTag($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="tagGroup",action="delete",message="删除标签组",targetType="tag_group",format="{'before':{ 'className':'Taxonomy:TagService','funcName':'getTagGroup','param':['id']}}")
+     */
     public function deleteTagGroup($id);
 
     public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);

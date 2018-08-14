@@ -38,6 +38,12 @@ interface UploadFileService
 
     public function setFileProcessed($params);
 
+    /**
+     * @param $globalId
+     *
+     * @return mixed
+     * @Log(level="info",module="upload_file",action="delete",message="删除文件",targetType="upload_files",format="{'before':{ 'className':'File:UploadFileService','funcName':'getFileByGlobalId','param':['globalId']}}")
+     */
     public function deleteByGlobalId($globalId);
 
     public function reconvertFile($id, $options = array());
@@ -82,6 +88,12 @@ interface UploadFileService
 
     public function renameFile($id, $newFilename);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="upload_file",action="delete",message="删除文件",targetType="upload_files",format="{'before':{ 'className':'File:UploadFileService','funcName':'getFile','param':['id']}}")
+     */
     public function deleteFile($id);
 
     public function deleteFiles(array $ids);

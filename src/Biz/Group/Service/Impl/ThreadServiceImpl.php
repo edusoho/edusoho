@@ -439,7 +439,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'threadNum', -1);
         $this->dispatchEvent('group.thread.delete', $thread);
-        $this->getLogService()->info('group', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
     public function updatePost($id, $fields)

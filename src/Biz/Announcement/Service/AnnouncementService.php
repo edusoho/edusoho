@@ -22,5 +22,11 @@ interface AnnouncementService
 
     public function updateAnnouncement($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="announcement",action="delete",message="删除公告",targetType="announcement",format="{'before':{ 'className':'Announcement:AnnouncementService','funcName':'getAnnouncement','param':['id']}}")
+     */
     public function deleteAnnouncement($id);
 }

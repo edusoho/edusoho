@@ -133,7 +133,6 @@ class ContentServiceImpl extends BaseService implements ContentService
         $this->getContentDao()->delete($id);
 
         $this->dispatchEvent('content.delete', $id);
-        $this->getLogService()->info('content', 'delete', "内容#{$id}永久删除");
     }
 
     public function publishContent($id)

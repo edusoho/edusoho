@@ -20,7 +20,7 @@ interface QuestionService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_question",message="创建内容",targetType="content",format="[{ 'className':'Question:QuestionService','funcName':'get','param':['id']}]")
+     * @Log(level="info",module="course",action="delete_question",message="删除题目",targetType="question",format="{'before':{ 'className':'Question:QuestionService','funcName':'get','param':['id']}}")
      */
     public function delete($id);
 

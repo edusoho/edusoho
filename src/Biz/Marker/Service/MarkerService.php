@@ -26,6 +26,12 @@ interface MarkerService
      */
     public function addMarker($mediaId, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="marker",action="delete",message="删除驻点",targetType="marker",format="{'before':{ 'className':'Marker:MarkerService','funcName':'getMarker','param':['id']}}")
+     */
     public function deleteMarker($id);
 
     public function canManageMarker($lessonUserId);

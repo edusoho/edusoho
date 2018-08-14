@@ -8324,24 +8324,42 @@ log.action.template.course.publish: 发布了<strong class="color-success">课�
 log.action.template.course.close: 关闭了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
-log.action.template.course.delete_thread: 删除了<strong class="color-success">话题</strong> %title%
+log.action.template.course.delete_thread: 删除了话题 %title%
 log.action.template.course.create_course: 新建了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_course: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_lesson: 新建了课时《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.delete_question: 删除了题目《%title%》
+log.action.template.course.delete_testpaper: 删除了试卷《%title%》
+log.action.template.course.delete_lesson: 删除了课时《%title%》
+log.action.template.course.delete: 删除了课程《%title%》
+log.action.template.course.delete_chapter: 删除了章节《%title%》
+log.action.template.course.delete_review: 删除了评价《%title%》
+log.action.template.course.delete_task: 删除了任务《%title%》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》
 log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
+log.action.template.category.delete: 删除了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.content.create: 新建了<strong class="color-success">内容</strong> 《%title%》
+log.action.template.content.delete: 删除了<strong class="color-success">内容</strong> 《%title%》
 log.action.template.upload_file.create: 上传了<strong class="color-success">文件</strong> 《%title%》
+log.action.template.upload_file.delete: 删除了<strong class="color-success">文件</strong> 《%title%》
 log.action.template.article.create: 新建了<strong class="color-success">文章</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.tag.create: 新建了<strong class="color-success">标签</strong> 《%title%》
+log.action.template.tag.delete: 删除了<strong class="color-success">标签</strong> 《%title%》
 log.action.template.tagGroup.create: 新建了<strong class="color-success">标签组</strong> 《%title%》
+log.action.template.tagGroup.delete: 删除了<strong class="color-success">标签组</strong> 《%title%》
 log.action.template.announcement.create: 新建了<strong class="color-success">公告</strong> 《%title%》
+log.action.template.announcement.delete: 删除了<strong class="color-success">公告</strong> 《%title%》
 log.action.template.open_course.create_course: 新建了<strong class="color-success">公开课</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.open_course.add_lesson: 新建了公开课课时 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.open_course.delete_course: 删除了<strong class="color-success">公开课</strong> 《%title%》
 log.action.template.group.create_thread: 新建了<strong class="color-success">小组话题</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.group.delete_thread: 删除了<strong class="color-success">小组话题</strong> 《%title%》
 log.action.template.marker.create: 新建了<strong class="color-success">驻点</strong> 《%title%》
+log.action.template.marker.delete: 删除了<strong class="color-success">驻点</strong> 《%title%》
+log.action.template.marker.delete_question: 删除了<strong class="color-success">驻点</strong>问题 《%title%》
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>

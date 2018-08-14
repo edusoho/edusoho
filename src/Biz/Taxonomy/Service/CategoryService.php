@@ -44,6 +44,12 @@ interface CategoryService
 
     public function updateCategory($id, array $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="category",action="delete",message="删除分类",targetType="category",format="{'before':{ 'className':'Taxonomy:CategoryService','funcName':'getCategory','param':['id']}}")
+     */
     public function deleteCategory($id);
 
     public function getGroup($id);

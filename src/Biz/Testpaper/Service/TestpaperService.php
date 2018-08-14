@@ -3,6 +3,7 @@
 namespace Biz\Testpaper\Service;
 
 use Biz\Testpaper\Builder\TestpaperBuilder;
+use Biz\System\Annotation\Log;
 
 interface TestpaperService
 {
@@ -18,6 +19,13 @@ interface TestpaperService
 
     public function updateTestpaper($id, $fields);
 
+    /**
+     * @param $id
+     * @param bool $quietly
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete_testpaper",message="删除试卷",targetType="testpaper_v8",format="{'before':{ 'className':'Testpaper:TestpaperService','funcName':'getTestpaper','param':['id']}}")
+     */
     public function deleteTestpaper($id, $quietly = false);
 
     public function deleteTestpapers($ids);

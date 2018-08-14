@@ -231,8 +231,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         foreach ($ids as $id) {
             $this->getCategoryDao()->delete($id);
         }
-
-        $this->getLogService()->info('category', 'delete', "删除栏目{$category['name']}(#{$id})");
     }
 
     protected function _filterCategoryFields($fields)

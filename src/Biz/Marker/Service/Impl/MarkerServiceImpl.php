@@ -98,7 +98,6 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         $this->getMarkerDao()->delete($id);
-        $this->getLogService()->info('marker', 'delete', "驻点#{$id}永久删除");
 
         return true;
     }

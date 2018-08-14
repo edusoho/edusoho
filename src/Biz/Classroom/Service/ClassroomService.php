@@ -68,6 +68,12 @@ interface ClassroomService
 
     public function canLearnClassroom($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="classroom",action="delete",message="删除班级",targetType="classroom",format="{'before':{ 'className':'Classroom:ClassroomService','funcName':'getClassroom','param':['id']}}")
+     */
     public function deleteClassroom($id);
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit);

@@ -40,6 +40,12 @@ interface CategoryService
 
     public function updateCategory($id, array $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="category",action="delete",message="删除栏目",targetType="article_category",format="{'before':{ 'className':'Article:CategoryService','funcName':'getCategory','param':['id']}}")
+     */
     public function deleteCategory($id);
 
     public function findCategoriesCountByParentId($parentId);

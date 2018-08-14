@@ -35,9 +35,51 @@ class AnnotationLogInterceptor extends AbstractInterceptor
     }
 
     /**
+     * @param $funcName
      * @param $args
+     *
+     * @return array
      */
-    public function exec($funcName, $args, $result)
+    public function beforeExec($funcName, $args)
+    {
+        $result = array();
+        if (!empty($this->interceptorData[$funcName])) {
+            $log = $this->interceptorData[$funcName];
+            $formats = $log['format'];
+            if (!empty($formats)) {
+                $formats = str_replace("'", '"', $formats);
+                $formats = json_decode($formats, true);
+                if (isset($formats['before'])) {
+                    $format = $formats['before'];
+                    $service = $this->biz->service($format['className']);
+                    $formatFuncName = $format['funcName'];
+                    $arguments = $this->getArrayValue($log['funcParam'], $format['param'], $args);
+                    $argumentNum = count($arguments);
+                    file_put_contents('/home/kz/test/test', serialize($arguments).PHP_EOL, FILE_APPEND);
+                    if (1 == $argumentNum) {
+                        $formatReturn = $service->$formatFuncName($arguments[0]);
+                    } elseif (2 == $argumentNum) {
+                        $formatReturn = $service->$formatFuncName($arguments[0], $arguments[1]);
+                    } elseif (3 == $argumentNum) {
+                        $formatReturn = $service->$formatFuncName($arguments[0], $arguments[1], $arguments[2]);
+                    } else {
+                        $formatReturn = array();
+                    }
+                    $result = $formatReturn;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $funcName
+     * @param $args
+     * @param $result
+     * @param array $beforeResult
+     */
+    public function afterExec($funcName, $args, $result, $beforeResult = array())
     {
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
@@ -48,22 +90,23 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             $module = $log['module'];
             $action = $log['action'];
             $formats = $log['format'];
-            $param = $log['param'];
-            $context = $result;
+            $context = empty($beforeResult) ? $result : $beforeResult;
             if (!empty($formats)) {
-                $formatReturn = $result;
                 $formats = str_replace("'", '"', $formats);
                 $formats = json_decode($formats, true);
-                foreach ($formats as $format) {
+                if (isset($formats['after'])) {
+                    $format = $formats['after'];
                     $service = $this->biz->service($format['className']);
-                    $funcName = $format['funcName'];
-                    $arguments = $this->getArrayValue($log['param'], $format['param'], $args);
-                    $formatReturn = $service->$funcName($arguments[0]);
+                    $formatFuncName = $format['funcName'];
+                    $arguments = $this->getArrayValue($log['funcParam'], $format['param'], $args);
+                    $formatReturn = $service->$formatFuncName($arguments[0]);
+                    $context = $formatReturn;
                 }
-                $context = $formatReturn;
             }
             $message = $log['message'];
-            $this->getLogService()->$level($module, $action, $message, $context);
+            if (!empty($context)) {
+                $this->getLogService()->$level($module, $action, $message, $context);
+            }
         }
     }
 

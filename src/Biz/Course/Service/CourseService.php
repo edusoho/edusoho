@@ -58,6 +58,13 @@ interface CourseService
 
     public function updateChapter($courseId, $chapterId, $fields);
 
+    /**
+     * @param $courseId
+     * @param $chapterId
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete_chapter",message="删除章节",targetType="course_chapter",format="{'before':{ 'className':'Course:CourseService','funcName':'getChapter','param':['courseId','chapterId']}}")
+     */
     public function deleteChapter($courseId, $chapterId);
 
     public function findChaptersByCourseId($courseId);
@@ -70,6 +77,12 @@ interface CourseService
 
     public function updateCourseStatistics($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete_course",message="删除计划",targetType="course_v8",format="{'before':{ 'className':'Course:CourseService','funcName':'getCourse','param':['id']}}")
+     */
     public function deleteCourse($id);
 
     public function closeCourse($id);

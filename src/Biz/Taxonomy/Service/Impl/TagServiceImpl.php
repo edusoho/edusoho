@@ -316,7 +316,6 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getTagDao()->delete($id);
 
         $this->dispatchEvent('tag.delete', array('tagId' => $id));
-        $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
     public function deleteTagGroup($id)
@@ -324,8 +323,6 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getTagGroupDao()->delete($id);
 
         $this->getTagGroupTagDao()->deleteByGroupId($id);
-
-        $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
 
     public function deleteTagOwnerRelationsByOwner(array $owner)

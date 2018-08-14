@@ -240,8 +240,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getLiveReplayService()->deleteReplaysByCourseId($id, 'liveOpen');
         }
 
-        $this->getLogService()->info('open_course', 'delete_course', "删除公开课《{$course['title']}》(#{$course['id']})");
-
         $this->dispatchEvent('open.course.delete', $course);
 
         return true;

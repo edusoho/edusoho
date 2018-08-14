@@ -154,6 +154,12 @@ interface CourseSetService
 
     public function changeCourseSetCover($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete",message="删除课程",targetType="course_set_v8",format="{'before':{ 'className':'Question:QuestionService','funcName':'get','param':['id']}}")
+     */
     public function deleteCourseSet($id);
 
     /**

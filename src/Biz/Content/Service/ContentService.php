@@ -26,6 +26,12 @@ interface ContentService
 
     public function trashContent($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="content",action="delete",message="删除内容",targetType="upload_files",format="{'before':{ 'className':'Content:ContentService','funcName':'getContent','param':['id']}}")
+     */
     public function deleteContent($id);
 
     public function isAliasAvaliable($alias);

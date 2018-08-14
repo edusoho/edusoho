@@ -114,11 +114,6 @@ class Log
         return $this->targetId;
     }
 
-    public function getParam()
-    {
-        return $this->param;
-    }
-
     public function getFormat()
     {
         return $this->format;
@@ -152,11 +147,6 @@ class Log
     public function setModule($module)
     {
         $this->module = $module;
-    }
-
-    public function setParam($param)
-    {
-        $this->param = $param;
     }
 
     public function setFormat($format)

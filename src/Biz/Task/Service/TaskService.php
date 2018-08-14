@@ -42,6 +42,12 @@ interface TaskService
 
     public function unpublishTask($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete_task",message="删除任务",targetType="course_task",format="{'before':{ 'className':'Task:TaskService','funcName':'getTask','param':['id']}}")
+     */
     public function deleteTask($id);
 
     public function deleteTasksByCategoryId($courseId, $categoryId);

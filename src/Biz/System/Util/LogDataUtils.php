@@ -149,6 +149,41 @@ class LogDataUtils
                         '%title%' => 'title',
                     ),
                 ),
+                'delete_question' => array(
+                    'getValue' => array(
+                        '%title%' => 'stem',
+                    ),
+                ),
+                'delete_testpaper' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
+                'delete_lesson' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'delete_chapter' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'delete_review' => array(
+                    'getValue' => array(
+                        '%title%' => 'content',
+                    ),
+                ),
+                'delete_task' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'classroom' => array(
                 'create' => array(
@@ -177,9 +212,19 @@ class LogDataUtils
                         '%title%' => 'showTitle',
                     ),
                 ),
+                'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'category' => array(
                 'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
+                'delete' => array(
                     'getValue' => array(
                         '%title%' => 'name',
                     ),
@@ -191,9 +236,19 @@ class LogDataUtils
                         '%title%' => 'title',
                     ),
                 ),
+                'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'upload_file' => array(
                 'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'filename',
+                    ),
+                ),
+                'delete' => array(
                     'getValue' => array(
                         '%title%' => 'filename',
                     ),
@@ -220,6 +275,11 @@ class LogDataUtils
                         '%title%' => 'name',
                     ),
                 ),
+                'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
             ),
             'tagGroup' => array(
                 'create' => array(
@@ -227,9 +287,19 @@ class LogDataUtils
                         '%title%' => 'name',
                     ),
                 ),
+                'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
+                    ),
+                ),
             ),
             'announcement' => array(
                 'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'content',
+                    ),
+                ),
+                'delete' => array(
                     'getValue' => array(
                         '%title%' => 'content',
                     ),
@@ -262,6 +332,11 @@ class LogDataUtils
                         '%title%' => 'title',
                     ),
                 ),
+                'delete_course' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'group' => array(
                 'create_thread' => array(
@@ -278,9 +353,24 @@ class LogDataUtils
                         '%title%' => 'title',
                     ),
                 ),
+                'delete_thread' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
             ),
             'marker' => array(
                 'create' => array(
+                    'getValue' => array(
+                        '%title%' => 'stem',
+                    ),
+                ),
+                'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'stem',
+                    ),
+                ),
+                'delete_question' => array(
                     'getValue' => array(
                         '%title%' => 'stem',
                     ),

@@ -36,6 +36,12 @@ interface OpenCourseService
 
     public function updateCourse($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(level="info",module="open_course",action="delete_course",message="删除公开课",targetType="open_course",format="{'before':{ 'className':'OpenCourse:OpenCourseService','funcName':'getCourse','param':['id']}}")
+     */
     public function deleteCourse($id);
 
     public function waveCourse($id, $field, $diff);

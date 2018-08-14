@@ -26,6 +26,13 @@ interface LessonService
 
     public function unpublishLesson($courseId, $lessonId);
 
+    /**
+     * @param $courseId
+     * @param $lessonId
+     *
+     * @return mixed
+     * @Log(level="info",module="course",action="delete_lesson",message="删除课时",targetType="course_task",format="{'before':{ 'className':'Course:LessonService','funcName':'getLesson','param':['lessonId']}}")
+     */
     public function deleteLesson($courseId, $lessonId);
 
     public function isLessonCountEnough($courseId);

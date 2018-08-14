@@ -35,9 +35,9 @@ class LogReader
 
                 $ReflectionFunc = new \ReflectionMethod($interfaceName, $method->name);
                 $parameters = $ReflectionFunc->getParameters();
-                $params = array();
+                $funcParam = array();
                 foreach ($parameters as $parameter) {
-                    $params[] = $parameter->name;
+                    $funcParam[] = $parameter->name;
                 }
 
                 if (empty($annotation)) {
@@ -53,7 +53,7 @@ class LogReader
                 $log['action'] = $annotation->getAction();
                 $log['message'] = $annotation->getMessage();
                 $log['format'] = $annotation->getFormat();
-                $log['param'] = $params;
+                $log['funcParam'] = $funcParam;
                 $interceptorData[$method->getName()] = $log;
             }
         }

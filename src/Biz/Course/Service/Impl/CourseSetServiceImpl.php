@@ -571,8 +571,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($subCourseSets)) {
             throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
         }
-        $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
-
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
 
         $this->dispatchEvent('course-set.delete', new Event($courseSet));

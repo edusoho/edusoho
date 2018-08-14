@@ -541,7 +541,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->delete($id);
-        $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
 
         $this->dispatchEvent('classroom.delete', $classroom);
 

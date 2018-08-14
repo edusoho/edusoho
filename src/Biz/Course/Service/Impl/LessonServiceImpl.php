@@ -142,8 +142,6 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $this->dispatchEvent('course.lesson.delete', new Event($lesson));
 
-        $this->getLogService()->info('course', 'delete_lesson', "删除课时(#{$lessonId})", $lesson);
-
         return true;
     }
 
