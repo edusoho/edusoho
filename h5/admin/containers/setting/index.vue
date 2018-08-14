@@ -1,10 +1,11 @@
 <template>
   <div class="setting-page">
-    <img class="find-head-img" src="/static/images/find_head_url.jpg" alt="">
+    <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
     <van-nav-bar :title="title" class="nav-bar"/>
-    <div class="find-page__part" v-for="part in parts"></div>
-    <swipe></swipe>
-    <img class="find-footer-img" src="/static/images/find_bottom.jpg" alt="">
+    <div class="find-page__part" v-for="part in parts">
+      <swipe :slides="part.data"></swipe>
+    </div>
+    <img class="find-footer-img" src="static/images/find_bottom.jpg" alt="">
   </div>
 </template>
 
