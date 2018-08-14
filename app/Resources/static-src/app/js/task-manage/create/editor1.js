@@ -10,6 +10,8 @@ class Editor {
     this.$element = $modal;
     this.$task_manage_content = $('#task-create-content');
     this.$task_manage_finish = $('#task-create-finish');
+    this.$task_manage_content_iframe = $('#task-create-content-iframe');
+    this.$task_manage_finish_iframe = $('#task-create-finish-iframe');
     this.$task_manage_type = $('#task-create-type');
     this.$frame = null;
     this.$iframe_body = null;
@@ -25,6 +27,7 @@ class Editor {
     this.finishUrl = '';
     this._init();
     this._initEvent();
+
   }
 
   _initEvent() {
@@ -157,8 +160,7 @@ class Editor {
   }
 
   _initContentIframe() {
-    let html = '<iframe class="' + this.content_iframe_name + '" id="' + this.content_iframe_name + '" name="' + this.content_iframe_name + '" scrolling="no" src="' + this.contentUrl + '"></iframe>';
-    this.$task_manage_content.html(html).show();
+    this.$task_manage_content_iframe.attr('src', this.contentUrl);
     this.$frame = $('#' + this.content_iframe_name).iFrameResize();
     let loadiframe = () => {
       this.content_loaded = true;
@@ -174,8 +176,7 @@ class Editor {
   }
 
   _initFinishIframe() {
-    let html = '<iframe class="' + this.finish_iframe_name + '" id="' + this.finish_iframe_name + '" name="' + this.finish_iframe_name + '" scrolling="no" src="' + this.finishUrl + '"></iframe>';
-    this.$task_manage_finish.html(html).show();
+    this.$task_manage_finish_iframe.attr('src', this.finishUrl);
     this.$frame = $('#' + this.finish_iframe_name).iFrameResize();
     let loadiframe = () => {
       this.finish_loaded = true;
@@ -261,6 +262,7 @@ class Editor {
     (step === 1) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
     (step === 2) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
     (step === 3) ? this.$task_manage_finish.removeClass('hidden') : this.$task_manage_finish.addClass('hidden');
+    console.log(step);
   }
 
   _renderNext(show) {
