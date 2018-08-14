@@ -68,7 +68,8 @@ export default {
     },
     initPlayer(player) {
       const media = player.media;
-      const playerSDKUri = `//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=${~~(Date.now()/1000/60)}`;
+      const playerSDKUri = '//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v='
+       + (Date.now()/1000/60);
 
       loadScript(playerSDKUri, (err) => {
       if (err) throw err;

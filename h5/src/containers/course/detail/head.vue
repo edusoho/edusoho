@@ -1,10 +1,10 @@
 <template>
   <div class="course-detail__head">
-    <div class="course-detail__head--img" 
+    <div class="course-detail__head--img"
       v-show="sourceType === 'img'">
       <img :src="courseSet.cover.large" alt="">
     </div>
-    <div id="course-detail__head--video" 
+    <div id="course-detail__head--video"
       ref="video"
       v-show="['video', 'audio'].includes(sourceType)">
     </div>
@@ -84,8 +84,9 @@ export default {
     loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
 
-        const scrptSrc = `//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?
-          v=${Date.now() / 1000 / 60}`; // Cache SDK for 1 min.
+        const scrptSrc = '//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
+          + (Date.now() / 1000 / 60);
+          // Cache SDK for 1 min.
 
         return new Promise((resolve, reject) => {
           loadScript(scrptSrc, (err) => {
