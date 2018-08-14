@@ -2,10 +2,10 @@ import Api from './api';
 import EsMessenger from 'app/common/messenger';
 
 class LtcSDKClient {
-  constructor() {alert
+  constructor() {
     this.options = {};
     this.messenger =  new EsMessenger({
-      name: 'task-create-content-iframe',
+      name: self.frameElement.getAttribute('id'),
       project: 'LtcProject',
       children: [],
       type: 'child'
@@ -67,3 +67,4 @@ class LtcSDKClient {
 let ltcsdk = new LtcSDKClient();
 
 module.exports = window.ltcsdkcLtcSDKClientlient = ltcsdk;
+
