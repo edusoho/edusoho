@@ -4,6 +4,7 @@
 // import '!style-loader!css-loader!less-loader!codeages-design/src/less/codeages-design.less';
 import Api from './api';
 import * as components from './component';
+import EsMessenger from 'app/common/messenger';
 
 class LtcSDKClient {
   constructor() {
@@ -38,40 +39,14 @@ class LtcSDKClient {
   }
 
   getMessenger() {
-    //监听父页面的请求
-    /**
-     *
-     * @param channel
-     * @param callback
-     * 监听跨域页面的
-     */
-    const on = (channel = 'task-events', callback) => {
-      window.addEventListener('message', (e) => {
-        if (e.data.channel === channel) {
-          if (typeof callback === 'function') {
-            callback(e.data)
-          }
-        }
-      });
-    };
 
-    /**
-     *
-     * @param data
-     * @param origin
-     * 向跨域页面发送请求
-     */
-    const emit = (data, origin = '*') => {
-      window.parent.postMessage(
-        Object.assign({channel: 'activity-events'}, data),
-        origin
-      );
-    };
-
-    return {
-      emit,
-      on
-    }
+    let messenger = new EsMessenger({
+      name: 'partner',
+      project: 'LtcProject',
+      children: [],
+      type: 'child'
+    });
+    return messenger;
   }
 
   config(options) {
