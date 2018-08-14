@@ -159,18 +159,8 @@ class ContentServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->mockBiz(
-            'System:LogService',
-            array(
-                array(
-                    'functionName' => 'info',
-                    'withParams' => array('content', 'delete', '内容#111永久删除'),
-                ),
-            )
-        );
         $this->getContentService()->deleteContent(111);
         $this->getContentDao()->shouldHaveReceived('delete');
-        $this->getLogService()->shouldHaveReceived('info');
     }
 
     public function testPublishContent()
