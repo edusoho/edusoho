@@ -82,6 +82,9 @@ module.exports = {
         'node_modules/**',
         'src/**',
       ]
+    },
+    {
+      name: 'jquery-validation/dist/jquery.validate.js'
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin}',
