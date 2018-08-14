@@ -22,6 +22,7 @@ class Editor {
     this.content_loaded = false;
     this.finish_loaded = false;
     this.contentUrl = '';
+    this.finishUrl = '';
     this._init();
     this._initEvent();
   }
@@ -41,7 +42,8 @@ class Editor {
     this._inItStep1form();
     this._renderContent(this.step);
     if (this.mode == 'edit') {
-      this.contentUrl = this.$task_manage_type.data('editorStep2Url');
+      this.contentUrl = this.$task_manage_type.data('contentUrl');
+      this.finishUrl = this.$task_manage_type.data('finishUrl');
       this.step = 2;
       this._switchPage();
     }
@@ -72,6 +74,7 @@ class Editor {
     let type = $this.data('type');
     $('[name="mediaType"]').val(type);
     this.contentUrl = $this.data('contentUrl');
+    this.finishUrl = $this.data('finishUrl');
     this.content_loaded = this.type === type;
     this.type = type;
     this._onNext(event);
@@ -163,28 +166,28 @@ class Editor {
       this.iframe_jQuery = this.$frame[0].contentWindow.$;
       this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
       this._rendButton(2);
-      this.$iframe_body.find('#step2-form').data('validator', validator);
-      this.$iframe_body.find('#step3-form').data('validator', validator);
+      // this.$iframe_body.find('#step2-form').data('validator', validator);
+      // this.$iframe_body.find('#step3-form').data('validator', validator);
       console.log({'loaded':new Date().toLocaleTimeString()});
     };
     this.$frame.load(loadAnimation(loadiframe, this.$task_manage_content));
   }
 
   _initFinishIframe() {
-    let html = '<iframe class="' + this.finish_iframe_name + '" id="' + this.finish_iframe_name + '" name="' + this.finish_iframe_name + '" scrolling="no" src="' + this.contentUrl + '"></iframe>';
+    let html = '<iframe class="' + this.finish_iframe_name + '" id="' + this.finish_iframe_name + '" name="' + this.finish_iframe_name + '" scrolling="no" src="' + this.finishUrl + '"></iframe>';
     this.$task_manage_finish.html(html).show();
     this.$frame = $('#' + this.finish_iframe_name).iFrameResize();
     let loadiframe = () => {
       this.finish_loaded = true;
-      let validator = {};
-      this.iframe_jQuery = this.$frame[0].contentWindow.$;
-      this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
+      // let validator = {};
+      // this.iframe_jQuery = this.$frame[0].contentWindow.$;
+      // this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
       this._rendButton(3);
       // this.$iframe_body.find('#step2-form').data('validator', validator);
       // this.$iframe_body.find('#step3-form').data('validator', validator);
       console.log({'loaded':new Date().toLocaleTimeString()});
     };
-    this.$frame.load(loadAnimation(loadiframe, this.$task_manage_finish));
+    // this.$frame.load(loadAnimation(loadiframe, this.$task_manage_finish));
   }
 
   _inItStep1form() {
@@ -203,18 +206,18 @@ class Editor {
   }
 
   _validator(step) {
-    let validator = null;
-
-    if (step === 1) {
-      validator = $('#step1-form').data('validator');
-    } else if (this.content_loaded) {
-      var $from = this.$iframe_body.find('#step' + step + '-form');
-      validator = this.iframe_jQuery.data($from[0], 'validator');
-    }
-
-    if (validator && !validator.form()) {
-      return false;
-    }
+    // let validator = null;
+    //
+    // if (step === 1) {
+    //   validator = $('#step1-form').data('validator');
+    // } else if (this.content_loaded) {
+    //   var $from = this.$iframe_body.find('#step' + step + '-form');
+    //   validator = this.iframe_jQuery.data($from[0], 'validator');
+    // }
+    //
+    // if (validator && !validator.form()) {
+    //   return false;
+    // }
     return true;
   }
 
@@ -242,11 +245,11 @@ class Editor {
   }
 
   _rendStepIframe(step) {
-    if (!this.content_loaded || !this.$iframe_body) {
-      return;
-    }
-    (step === 2) ? this.$iframe_body.find('.js-step2-view').addClass('active') : this.$iframe_body.find('.js-step2-view').removeClass('active');
-    (step === 3) ? this.$iframe_body.find('.js-step3-view').addClass('active') : this.$iframe_body.find('.js-step3-view').removeClass('active');
+    // if (!this.content_loaded || !this.$iframe_body) {
+    //   return;
+    // }
+    // (step === 2) ? this.$iframe_body.find('.js-step2-view').addClass('active') : this.$iframe_body.find('.js-step2-view').removeClass('active');
+    // (step === 3) ? this.$iframe_body.find('.js-step3-view').addClass('active') : this.$iframe_body.find('.js-step3-view').removeClass('active');
   }
 
   _renderStep(step) {
@@ -256,7 +259,8 @@ class Editor {
 
   _renderContent(step) {
     (step === 1) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
-    (step !== 1) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
+    (step === 2) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
+    (step === 3) ? this.$task_manage_finish.removeClass('hidden') : this.$task_manage_finish.addClass('hidden');
   }
 
   _renderNext(show) {

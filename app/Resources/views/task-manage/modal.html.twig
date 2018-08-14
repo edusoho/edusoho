@@ -7,6 +7,8 @@
     {% if mode == 'edit' %}
       data-editor-type="{{ currentType }}"
       data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
+      data-content-url="{{ path('course_manage_activity_content_modal', {activityId:task.activityId, type: task.type, courseId:course.id}) }}"
+      data-finish-url="{{ path('course_manage_activity_finish_modal', {activityId:task.activityId, type: task.type, courseId:course.id}) }}"
       data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
     {% elseif mode == 'create' %}
       {% if categoryId|default('0') %}
@@ -21,7 +23,8 @@
           {% for type, meta in activity_metas() %}
             <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if task.type|default(null)==  type %} active {% endif %}"
                 data-role="activityType" data-type="{{ type }}"
-                data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
+                data-content-url="{{ path('course_manage_activity_content_modal', {activityId:0, type: type, courseId:course.id}) }}"
+                data-finish-url="{{ path('course_manage_activity_finish_modal', {activityId:0, type: type, courseId:course.id}) }}">
               <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}>
                 <i class="{{ meta.icon }}"></i>
                 {{ meta.name|trans }}
