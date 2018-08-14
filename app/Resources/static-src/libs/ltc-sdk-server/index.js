@@ -4,12 +4,14 @@
 // import '!style-loader!css-loader!less-loader!codeages-design/src/less/codeages-design.less';
 import Api from './api';
 import * as components from './component';
+import EsMessenger from 'app/common/messenger';
 
 class LtcSDKServer {
   constructor() {
     this.options = {};
     this.handler = {};
     this.isVerify = false;
+    this.messenger = null;
   }
 
   passport() {
@@ -31,29 +33,15 @@ class LtcSDKServer {
     this.isVerify = true;
   }
 
-  getMessenger() {
-    const on = (channel = 'activity-events', callback) => {
-      window.addEventListener('message', (e) => {
-        if (e.data.channel === channel) {
-          if (typeof callback === 'function') {
-            callback(e.data)
-          }
-        }
-      });
-    };
+  getMessenger(children = []) {
 
-    const emit = (data, origin = '*') => {
-      window.parent.postMessage(
-        Object.assign({channel: 'task-events'}, data),
-        origin
-      );
-    };
-
-    return {
-      emit,
-      on
-    }
-  }
+   return (this.messenger === null) ? new EsMessenger({
+      name: 'parent',
+      project: 'LtcProject',
+      children: children,
+      type: 'parent'
+    }) : this.messenger;
+   }
 
   verify() {
     if (!this.isVerify) {

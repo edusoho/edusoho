@@ -15,7 +15,7 @@ class Editor {
     this.$iframe_body = null;
     this.iframe_jQuery = null;
     this.content_iframe_name = 'task-create-content-iframe';
-    this.finish_iframe_name = 'task-create-content-iframe';
+    this.finish_iframe_name = 'task-create-finish-iframe';
     this.mode = this.$task_manage_type.data('editorMode');
     this.type = this.$task_manage_type.data('editorType');
     this.step = 1;

@@ -11,6 +11,7 @@ class LtcSDKClient {
     this.options = {};
     this.handler = {};
     this.isVerify = false;
+    this.messenger = null;
   }
 
   passport() {
@@ -40,13 +41,12 @@ class LtcSDKClient {
 
   getMessenger() {
 
-    let messenger = new EsMessenger({
+    return (this.messenger === null) ? new EsMessenger({
       name: 'partner',
       project: 'LtcProject',
       children: [],
       type: 'child'
-    });
-    return messenger;
+    }) : this.messenger;
   }
 
   config(options) {
