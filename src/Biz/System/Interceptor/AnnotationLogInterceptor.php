@@ -105,7 +105,9 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             }
             $message = $log['message'];
             if (!empty($context)) {
-                $this->getLogService()->$level($module, $action, $message, $context);
+                if (is_array($context)) {
+                    $this->getLogService()->$level($module, $action, $message, $context);
+                }
             }
         }
     }
