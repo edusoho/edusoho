@@ -62,14 +62,14 @@ class ActivityController extends BaseController
         );
     }
 
-    public function contentModalAction($activityId = 0, $type, $courseId)
+    public function contentModalAction($type, $courseId, $activityId = 0)
     {
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId, true);
         } else {
             $activity = array(
                 'id' => $activityId,
-                'mediaType' => $type,
+                ' ' => $type,
                 'fromCourseId' => $courseId,
             );
         }
