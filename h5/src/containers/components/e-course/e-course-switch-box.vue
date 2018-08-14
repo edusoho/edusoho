@@ -80,7 +80,8 @@
           query: {
             id: this.order.id,
             source: 'order',
-            sn: this.order.sn
+            sn: this.order.sn,
+            targetId: this.order.targetId
           }
         });
       }

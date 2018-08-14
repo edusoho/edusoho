@@ -64,12 +64,12 @@ export default {
         type: 'payment'
       }
     })
-    const { source, id, sn } = this.$route.query;
+    const { source, id, sn, targetId } = this.$route.query;
     if (source !== 'order') {
       Api.createOrder({
         data: {
           targetType: 'course',
-          targetId: this.$route.query.id,
+          targetId: id,
           isOrderCreate: 1
         }
       }).then(res => {
@@ -82,6 +82,11 @@ export default {
           sn
         }
       }).then(res => {
+        if (res.status === 'success' && targetId) {
+          this.$router.push({
+            path: `/course/${targetId}`,
+          })
+        }
         this.detail = Object.assign({}, res)
       })
     }
