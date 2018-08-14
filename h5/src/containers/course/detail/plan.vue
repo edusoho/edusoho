@@ -14,7 +14,7 @@
     </ul>
 
     <div class="course-detail__validity">
-      <div>学习有效期<span class="validity dark">永久有效</span></div>
+      <div><span class="mr20">学习有效期</span><span class="dark" v-html="learnExpiry"></span></div>
       <div v-if="details.buyExpiryTime != 0" class="mt5">购买截止日期<span class="validity orange">{{ details.buyExpiryTime }}</span></div>
     </div>
   </div>
@@ -51,7 +51,35 @@ export default {
     ...mapState('course', {
       details: state => state.details,
       selectedPlanId: state => state.selectedPlanId
-    })
+    }),
+    learnExpiry() {
+      const memberInfo = this.details.member;
+      const learnExpiryData = this.details.learningExpiryDate;
+      const expiryMode = this.details.learningExpiryDate.expiryMode;
+
+      if (!memberInfo) {
+        switch (expiryMode) {
+          case 'forever':
+            return ('永久有效');
+            break;
+          case 'end_date':
+            return ( this.details.learningExpiryDate.expiryEndDate.slice(0, 10) + '之前可学习');
+            break;
+          case 'days':
+            return (this.details.learningExpiryDate.expiryDays + '天内可学习');
+            break;
+          case 'date':
+            const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
+            const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
+            return (
+              '<div class = "mt5">' + '开课日期：' + startDateStr
+              + '&nbsp;&nbsp;&nbsp;' + '截止日期：' + endDateStr + '</div>');
+            break;
+        }
+      } else {
+        return( memberInfo.deadline.slice(0, 10) + '之前可学习');
+      }
+    }
   },
   methods: {
     ...mapActions ('course', [
