@@ -15,8 +15,10 @@ class MeNickname extends AbstractResource
     /**
      * @ResponseFilter(class="ApiBundle\Api\Resource\Me\MeFilter", mode="simple")
      */
-    public function update(ApiRequest $request, $nickname)
+    //portal暂时无用，仅用来匹配patch method
+    public function update(ApiRequest $request, $portal)
     {
+        $nickname = $request->request->get('nickname');
         $this->checkNickname($nickname);
         $this->getAuthService()->changeNickname($this->getCurrentUser()->getId(), $nickname);
 
