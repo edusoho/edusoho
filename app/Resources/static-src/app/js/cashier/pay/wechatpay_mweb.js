@@ -6,4 +6,8 @@ export default class WechatPayMweb extends BasePayment {
     this.checkOrderStatus();
     location.href = res.mwebUrl;
   }
+
+  startInterval() {
+    return true;
+  }
 }

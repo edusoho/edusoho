@@ -136,6 +136,14 @@ class WechatController extends PaymentController
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn'])));
     }
 
+    public function returnForH5Action(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
+
+        return $this->redirect($this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $trade['trade_sn'])));
+    }
+
     public function notifyAction(Request $request, $payment)
     {
         $result = $this->getPayService()->notifyPaid($payment, $request->getContent());

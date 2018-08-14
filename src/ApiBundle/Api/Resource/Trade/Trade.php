@@ -23,6 +23,7 @@ class Trade extends AbstractResource
         return array(
             'isPaid' => 'paid' === $trade['status'],
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
+            'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $tradeSn)),
         );
     }
 

@@ -375,6 +375,7 @@ cloud_search:
 settings:
     path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
+    h5: true
 
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
@@ -591,6 +592,7 @@ my_homework_list:
 my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
+    h5: true
 
 my_order_refunds:
     path: /my/order_refunds
@@ -1048,6 +1050,18 @@ cashier_pay_notify:
 cashier_pay_return_for_app:
     path: /callback/{payment}/return_for_app
     defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
+
+cashier_redirect_for_h5:
+    path:   /h5cashier/redirect
+    defaults: { _controller: AppBundle:Cashier/CashierH5:redirect }
+
+cashier_pay_success_for_h5:
+    path:   /h5cashier/pay/success
+    defaults: { _controller: AppBundle:Cashier/CashierH5:success }
+
+cashier_pay_return_for_h5:
+    path: /callback/{payment}/return_for_h5
+    defaults: { _controller: AppBundle:Cashier/Callback:returnForH5}
 
 cashier_pay_return:
     path: /callback/{payment}/return
@@ -1783,6 +1797,7 @@ course_manage_change_lesson_show_status:
 course_set_explore:
    path:  /course/explore/{category}
    defaults: { _controller: AppBundle:Explore:courseSets, category:'' }
+   h5: true
 
 live_course_set_explore:
     path:  /live
@@ -1954,6 +1969,7 @@ course_manage_items_sort:
 my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: AppBundle:My/Course:learning }
+    h5: true
 
 my_courses_learned:
     path: /my/courses/learned
@@ -2907,6 +2923,7 @@ coupon_check:
 my_course_show:
     path:  /my/course/{id}/{tab}
     defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }
+    h5: true
 
 course_member_expired:
     path:  /course/{id}/member/expired
