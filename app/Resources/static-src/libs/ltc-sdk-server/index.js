@@ -8,7 +8,7 @@ class LtcSDKServer {
     this.messenger = new EsMessenger({
       name: 'parent',
       project: 'LtcProject',
-      children: [$('#task-create-content-iframe')[0]],
+      children: [document.getElementById('task-create-content-iframe')],
       type: 'parent'
     });
 
@@ -17,7 +17,8 @@ class LtcSDKServer {
 
   event() {
     this.messenger.on('init', ()=> {
-      this.messenger.sendToChild('init', this.resource);
+      alert('父页面收到子页面消息');
+      this.messenger.sendToChild({id: 'task-create-content-iframe'}, 'initResourceList', this.resource);
     });
   }
 

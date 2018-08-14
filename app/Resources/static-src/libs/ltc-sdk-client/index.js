@@ -5,7 +5,7 @@ class LtcSDKClient {
   constructor() {alert
     this.options = {};
     this.messenger =  new EsMessenger({
-      name: 'partner',
+      name: 'task-create-content-iframe',
       project: 'LtcProject',
       children: [],
       type: 'child'
@@ -17,9 +17,8 @@ class LtcSDKClient {
   
   init() {
     this.messenger.sendToParent('init');
-    this.messenger.on('init', function(value) {
-      console.log(value);
-      alert();
+    this.messenger.on('initResourceList', function(value) {
+      alert('子页面收到父页面消息');
     });
   }
 
@@ -67,4 +66,4 @@ class LtcSDKClient {
 
 let ltcsdk = new LtcSDKClient();
 
-module.exports = window.ltcsdkclient = ltcsdk;
+module.exports = window.ltcsdkcLtcSDKClientlient = ltcsdk;
