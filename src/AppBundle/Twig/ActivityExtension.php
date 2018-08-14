@@ -55,11 +55,11 @@ class ActivityExtension extends \Twig_Extension
             'codeage-design-css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
             'codeage-design-js' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
             'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
-            'bootstrap-css' => '/static-dist/libs/bootstrap/dist/css/bootstrap.css',
-            'bootstrap-js' => '/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
+            'bootstrap-css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
+            'bootstrap-js' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
+            'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
             // 'uploader' => $cdn.'asdf',
             // 'player' => 'a',
-            // 'edtior' => 'asdf'
         ));
     }
 
