@@ -10,6 +10,37 @@ class LtcSDKClient {
     this.options = {};
     this.handler = {};
     this.isVerify = false;
+    this.init();
+  }
+
+  inti() {
+    // 初始化资源路径
+  }
+
+  load(urls) {
+    let promises = [];
+
+    urls.forEach(function(value) {
+      let promise = new Promise(function(resolve, reject) {
+        var script = document.createElement('script');
+
+        script.src = value;
+        script.addEventListener('load', function() {
+          resolve(script);
+        }, false);
+
+        script.addEventListener('error', function() {
+          reject(script);
+        }, false);
+
+        document.body.appendChild(script);
+      });
+
+      promises.push(promise);
+    });
+
+    
+    Promise.all(promises)
   }
 
   passport() {

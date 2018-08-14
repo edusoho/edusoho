@@ -3,13 +3,14 @@
 // import * as cd from 'codeages-design';
 // import '!style-loader!css-loader!less-loader!codeages-design/src/less/codeages-design.less';
 import Api from './api';
-import * as components from './component';
+// import * as components from './component';
 
 class LtcSDKServer {
   constructor() {
     this.options = {};
     this.handler = {};
     this.isVerify = false;
+    this.resource = $.parseJSON($('#ltc-source-list').text());
   }
 
   passport() {
@@ -79,14 +80,14 @@ class LtcSDKServer {
     return Api(options);
   }
 
-  getUi() {
-    this.verify();
-    return Object.assign(
-      {}, 
-      // cd, 
-      components
-    );
-  }
+  // getUi() {
+  //   this.verify();
+  //   return Object.assign(
+  //     {}, 
+  //     // cd, 
+  //     components
+  //   );
+  // }
 }
 
 let ltcsdk = new LtcSDKServer();
