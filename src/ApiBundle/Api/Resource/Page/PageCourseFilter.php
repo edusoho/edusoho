@@ -13,7 +13,7 @@ class PageCourseFilter extends Filter
         'id', 'title', 'courseSetTitle',
     );
     protected $publicFields = array(
-        'access', 'learnMode', 'learnedNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member',
+        'access', 'learnMode', 'learnedNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType',
     );
 
     protected function publicFields(&$data)
@@ -25,7 +25,7 @@ class PageCourseFilter extends Filter
             $courseMemberFilter->filter($member);
         }
 
-        $courseItems = $this->convertToLeadingItems($data['courseItems'], true);
+        $courseItems = $this->convertToLeadingItems($data['courseItems'], $data['courseType'], false);
         foreach ($courseItems as &$courseItem) {
             $courseItemFilter = new CourseItemFilter();
             $courseItemFilter->setMode(Filter::PUBLIC_MODE);
@@ -51,32 +51,34 @@ class PageCourseFilter extends Filter
         $data['courses'] = $courses;
     }
 
-    private function convertToLeadingItems($originItems, $onlyPublishTask = false)
+    private function convertToLeadingItems($originItems, $courseType, $onlyPublishTask = false)
     {
         $newItems = array();
-        $number = 1;
         foreach ($originItems as $originItem) {
             $item = array();
             if ('task' == $originItem['itemType']) {
                 $item['type'] = 'task';
                 $item['seq'] = $originItem['seq'];
-                $item['number'] = strval($number++);
+                $item['number'] = $originItem['number'];
                 $item['title'] = $originItem['title'];
+                $item['status'] = $originItem['status'];
                 $item['task'] = $originItem;
                 $newItems[] = $item;
                 continue;
             }
 
             if ('chapter' == $originItem['itemType'] && 'lesson' == $originItem['type']) {
-                foreach ($originItem['tasks'] as $task) {
-                    $item['type'] = 'task';
-                    $item['seq'] = $task['seq'];
-                    $item['number'] = strval($number);
-                    $item['title'] = $task['title'];
-                    $item['task'] = $task;
-                    $newItems[] = $item;
+                if ('default' == $courseType) {
+                    foreach ($originItem['tasks'] as $task) {
+                        $item['type'] = 'task';
+                        $item['seq'] = $task['seq'];
+                        $item['number'] = $task['number'];
+                        $item['title'] = $task['title'];
+                        $item['status'] = $task['status'];
+                        $item['task'] = $task;
+                        $newItems[] = $item;
+                    }
                 }
-                ++$number;
                 continue;
             }
 
@@ -84,6 +86,7 @@ class PageCourseFilter extends Filter
             $item['seq'] = $originItem['seq'];
             $item['number'] = $originItem['number'];
             $item['title'] = $originItem['title'];
+            $item['status'] = $originItem['status'];
             $item['task'] = null;
             $newItems[] = $item;
         }
