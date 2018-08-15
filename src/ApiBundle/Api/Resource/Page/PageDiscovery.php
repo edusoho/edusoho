@@ -43,7 +43,7 @@ class PageDiscovery extends AbstractResource
             array(
                 'type' => 'course_list',
                 'moduleType' => 'recommendedCourseList',
-                'data' => array('title' => '推荐课程', 'items' => $recommendedCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => '-recommendedSeq'),
+                'data' => array('title' => '推荐课程', 'items' => $recommendedCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => 'recommendedSeq'),
                 ),
             ),
         );

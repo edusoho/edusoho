@@ -15,11 +15,11 @@ class PageDiscoveryFilter extends Filter
         if ('slide_show' == $data['type']) {
             $this->getFullPath($data['data']);
         }
-        $courseSetFilter = new CourseFilter();
-        $courseSetFilter->setMode(Filter::PUBLIC_MODE);
+        $courseFilter = new CourseFilter();
+        $courseFilter->setMode(Filter::PUBLIC_MODE);
         if ('course_list' == $data['type']) {
             foreach ($data['data']['items'] as &$course) {
-                $courseSetFilter->filter($course);
+                $courseFilter->filter($course);
             }
         }
     }
