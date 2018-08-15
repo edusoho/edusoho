@@ -139,7 +139,7 @@ export default {
       const password = this.registerInfo.encrypt_password;
       const usertel = this.registerInfo.mobile;
       if(this.submitFlag) {
-        const encrypt = window.XXTEA.encryptToBase64(password, 'lvliujie.st.edusoho.cn');
+        const encrypt = window.XXTEA.encryptToBase64(password, 'window.location.host');
         this.registerInfo.encrypt_password = encrypt;
         this.submitFlag = false;
       }
@@ -155,6 +155,7 @@ export default {
         setTimeout(jumpToLogin, 2000);
       })
       .then(() => {
+        console.log(22222)
         this.userLogin({
           username: usertel,
           password: password
