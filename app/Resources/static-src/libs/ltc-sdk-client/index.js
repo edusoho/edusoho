@@ -13,23 +13,8 @@ class LtcSDKClient {
     this.resource = {};
   }
 
-  
-  initResourceList() {
-    let self = this;
-    return new Promise(function(resolve, reject) {
-      if (self.resourceList) {
-        resolve();
-      }
-      self.messenger.sendToParent('init');
-      self.messenger.on('initResourceList', function(data) {
-        self.resourceList = data;
-        resolve();
-      });
-    });
-  }
-
   async loadCss(url = 'bootstrap-css') {
-    await this.initResourceList();
+    await this._initResourceList();
 
     let link = document.createElement('link');
     link.type = 'text/css';
@@ -41,7 +26,7 @@ class LtcSDKClient {
 
   async load(...urls) {
     let self = this;
-    await self.initResourceList();
+    await self._initResourceList();
     for (let value of urls) {
       await new Promise(function(resolve, reject) {
         if (self.resource[value]) {
@@ -75,8 +60,30 @@ class LtcSDKClient {
     return this;
   }
 
+  on(eventName, args) {
+    this.messenger.on(eventName, args);
+  }
+
+  emit(eventName, args) {
+    this.messenger.sendToParent(eventName, args);
+  }
+
   getApi(options) {
     return Api(options);
+  }
+
+  _initResourceList() {
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      if (self.resourceList) {
+        resolve();
+      }
+      self.messenger.sendToParent('init');
+      self.messenger.on('initResourceList', function(data) {
+        self.resourceList = data;
+        resolve();
+      });
+    });
   }
 }
 

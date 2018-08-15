@@ -21,6 +21,14 @@ class LtcSDKServer {
     });
   }
 
+  on(eventName, args) {
+    this.messenger.on(eventName, args);
+  }
+
+  emitChild(id, eventName, args) {
+    this.messenger.sendToChild({id: id}, eventName, args);
+  }
+
   config(options) {
     let DEFAULTS = {
       apiList: [],

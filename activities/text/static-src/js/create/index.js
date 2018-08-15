@@ -22,16 +22,13 @@ load.then(function(){
   });
   
   editor.on('change', () => {
-    console.log('change');
     $(DEFAULTS.target).val(editor.getData());
     if (DEFAULTS.validator) {
       DEFAULTS.validator.form();
     }
   });
 
-  //fix ie11 中文输入
   editor.on('blur', () => {
-    console.log('blur');
     $(DEFAULTS.target).val(editor.getData());
     if (DEFAULTS.validator) {
       DEFAULTS.validator.form();
