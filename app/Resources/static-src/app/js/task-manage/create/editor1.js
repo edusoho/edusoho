@@ -54,6 +54,14 @@ class Editor {
     $('#course-tasks-submit').click(event => this._onSave(event));
     $('#course-tasks-next').click(event => this._onNext(event));
     $('#course-tasks-prev').click(event => this._onPrev(event));
+    window.ltcsdkserver.messenger.on('returnActivity', (msg) => {
+      if (!msg.valid) {
+        this.contentData = false;
+        return ;
+      }
+      this.contentData = msg.data;
+      this._doNext();
+    });
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
     } else {
@@ -73,22 +81,21 @@ class Editor {
   }
 
   _onNext(e) {
+    if (this.step === 3) {
+      return;
+    }
+
     if (this.step === 2) {
       this.contentData = true;
       window.ltcsdkserver.messenger.sendToChild({id: 'task-create-content-iframe'}, 'getActivity', {} );
-      window.ltcsdkserver.messenger.on('returnActivity', (msg) => {
-        console.log(msg.valid);
-        if (!msg.valid) {
-          this.contentData = false;
-          return ;
-        }
-        this.contentData = msg.data;
-      });
-
-      if (!this.contentData) {
-        return ;
-      }
     }
+
+    if (this.step === 1) {
+      this._doNext();
+    }
+  }
+
+  _doNext() {
     this.step += 1;
     this._switchPage();
     this.$element.trigger('afterNext');
@@ -122,7 +129,6 @@ class Editor {
       window.ltcsdkserver.messenger.sendToChild({id: 'task-create-content-iframe'}, 'getActivity', {} );
       window.ltcsdkserver.messenger.on('returnActivity', (msg) => {
         if (!msg.valid) {
-          console.log(msg);
           this.contentData = false;
           return;
         }
@@ -136,7 +142,6 @@ class Editor {
       window.ltcsdkserver.messenger.sendToChild({id: 'task-create-finish-iframe'}, 'getFinishCondition', {} );
       window.ltcsdkserver.messenger.on('returnFinishCondition', (msg) => {
         if (!msg.valid) {
-          console.log(msg);
           this.finishData = false;
           return;
         }

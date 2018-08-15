@@ -4,23 +4,6 @@
 window.ltc.loadCss();
 let load = window.ltc.load('jquery', 'validate', 'editor');
 load.then(function(){
-  $.fn.serializeObject = function()
-  {
-    let o = {};
-    let a = this.serializeArray();
-    $.each(a, function() {
-      if (o[this.name]) {
-        if (!o[this.name].push) {
-          o[this.name] = [o[this.name]];
-        }
-        o[this.name].push(this.value || '');
-      } else {
-        o[this.name] = this.value || '';
-      }
-    });
-    return o;
-  };
-
   let $content = $('#text-content-field');
   let editor = CKEDITOR.replace('text-content-field', {
     toolbar: 'Task',
@@ -58,7 +41,9 @@ load.then(function(){
   
 
   window.ltc.on('getActivity', (msg) => {
-    window.ltc.messenger.sendToParent('returnActivity', {valid:true,data:$('#step2-form')});
+    if (validate.form()) {
+      window.ltc.emit('returnActivity', {valid:true,data:$('#step2-form').serializeObject()});
+    }
   });
 
 }).catch(function(e){
