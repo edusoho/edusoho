@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\File;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Content\FileException;
-use Symfony\Component\HttpFoundation\File\File as FileBoject;
+use Symfony\Component\HttpFoundation\File\File as FileObject;
 
 class File extends AbstractResource
 {
@@ -40,7 +40,7 @@ class File extends AbstractResource
             $filePath = $this->biz['topxia.upload.public_directory'].'/tmp/'.$user['id'].'_'.time().'.'.$result[2];
             file_put_contents($filePath, base64_decode(str_replace($result[1], '', $str)));
 
-            return new FileBoject($filePath);
+            return new FileObject($filePath);
         }
 
         return null;
