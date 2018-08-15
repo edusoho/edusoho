@@ -40,7 +40,7 @@ class Setting extends AbstractResource
         $wapSetting = $this->getSettingService()->get('wap', array('version' => 0));
 
         return array(
-            'version' => $wapSetting['version'],
+            'version' => empty($wapSetting['version']) ? array('version' => 0) : $wapSetting['version'],
         );
     }
 
