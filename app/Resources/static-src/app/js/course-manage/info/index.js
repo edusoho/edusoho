@@ -273,48 +273,53 @@ class CourseInfo {
 
     //截止日期，有效天数
     $('input[name="deadlineType"]').on('change', (event) => {
-      if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
-        $('#deadlineType-date').removeClass('hidden');
-        $('#deadlineType-days').addClass('hidden');
-
-      } else {
-        $('#deadlineType-date').addClass('hidden');
-        $('#deadlineType-days').removeClass('hidden');
-      }
-      $(event.target).closest('.form-group').removeClass('has-error');
-      $(event.target).closest('.form-group').find('.course-mangae-info__input').removeClass('form-control-error');
+      const $date = $('#deadlineType-date');
+      const $days = $('#deadlineType-days');
+      const $targetItem = $(event.target).closest('.form-group');
+      $targetItem.removeClass('has-error');
+      $targetItem.find('.js-expiry-input').removeClass('form-control-error');
       $('.jq-validate-error').remove();
+      if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+        $date.removeClass('hidden');
+        $days.addClass('hidden');
+      } else {
+        $date.addClass('hidden');
+        $days.removeClass('hidden');
+      }
       this.commonExpiryMode(true);
     });
 
     $('input[name="expiryMode"]').on('change', (event) => {
       const $expiryDays = $('#expiry-days');
       const $expiryDate = $('#expiry-date');
-      $(event.target).closest('.form-group').removeClass('has-error');
-      if ($('input[name="expiryMode"]:checked').val() == 'date') {
-        $expiryDays.removeClass('hidden').addClass('hidden');
-        $expiryDate.removeClass('hidden');
-        $('.js-course-manage-expiry-tip').removeClass('ml0');
-      } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
-        $expiryDate.removeClass('hidden').addClass('hidden');
-        $expiryDays.removeClass('hidden');
-        $('.js-course-manage-expiry-tip').removeClass('ml0');
-      } else {
-        $expiryDate.removeClass('hidden').addClass('hidden');
-        $expiryDays.removeClass('hidden').addClass('hidden');
-        $('.js-course-manage-expiry-tip').addClass('ml0');
-      }
-      console.log($(event.target).closest('.form-group').find('.course-mangae-info__input'));
-      $(event.target).closest('.form-group').find('.course-mangae-info__input').removeClass('form-control-error');
+      const $tip = $('.js-course-manage-expiry-tip');
+      const checkValue = $('input[name="expiryMode"]:checked').val();
+      const $targetItem = $(event.target).closest('.form-group');
+      $targetItem.removeClass('has-error');
+      $targetItem.find('.js-expiry-input').removeClass('form-control-error');
       $('.jq-validate-error').remove();
+      if (checkValue === 'date') {
+        $expiryDays.addClass('hidden');
+        $expiryDate.removeClass('hidden');
+        $tip.removeClass('ml0');
+      } else if (checkValue === 'days') {
+        $expiryDate.addClass('hidden');
+        $expiryDays.removeClass('hidden');
+        $tip.removeClass('ml0');
+      } else {
+        $expiryDate.addClass('hidden');
+        $expiryDays.addClass('hidden');
+        $tip.addClass('ml0');
+      }
       this.commonExpiryMode(true);
     });
 
     $('input[name="enableBuyExpiryTime"]').on('change', (event) => {
+      const $buyExpiryTime = $('#buyExpiryTime');
       if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
-        $('#buyExpiryTime').addClass('hidden');
+        $buyExpiryTime.addClass('hidden');
       } else {
-        $('#buyExpiryTime').removeClass('hidden');
+        $buyExpiryTime.removeClass('hidden');
       }
       this.initenableBuyExpiry();
     });
@@ -330,9 +335,8 @@ class CourseInfo {
     let $expiryDays = $('[name="expiryDays"]');
     let $expiryStartDate = $('[name="expiryStartDate"]');
     let $expiryEndDate = $('[name="expiryEndDate"]');
-    let expiryMode = $('[name="expiryMode"]:checked').val();
     let $deadlineType = $('[name="deadlineType"]:checked');
-
+    let expiryMode = $('[name="expiryMode"]:checked').val();
     this.elementRemoveRules($deadline);
     this.elementRemoveRules($expiryDays);
     this.elementRemoveRules($expiryStartDate);
@@ -342,7 +346,7 @@ class CourseInfo {
     case 'days':
       if ($deadlineType.val() === 'end_date') {
         if (flag) {
-          $deadline.on('focus', (event) => {
+          $deadline.on('focus', () => {
             this.elementAddRules($deadline, this.getDeadlineEndDateRules());
           });
         } else {
@@ -352,7 +356,7 @@ class CourseInfo {
         return;
       }
       if (flag) {
-        $expiryDays.on('focus', (event) => {
+        $expiryDays.on('focus', () => {
           this.elementAddRules($expiryDays, this.getExpiryDaysRules());
         });
       } else {
@@ -362,10 +366,10 @@ class CourseInfo {
       break;
     case 'date':
       if (flag) {
-        $expiryStartDate.on('focus', (event) => {
+        $expiryStartDate.on('focus', () => {
           this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
         });
-        $expiryEndDate.on('focus', (event) => {
+        $expiryEndDate.on('focus', () => {
           this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
         });
       } else {
