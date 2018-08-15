@@ -94,7 +94,7 @@
 
       requestCourses(setting) {
         this.isRequestCompile = false;
-        const config = Object.assign(setting, this.selectedData);
+        const config = Object.assign(this.selectedData, setting);
         return Api.getCourseList({
           params: config
         }).then((data) => {
