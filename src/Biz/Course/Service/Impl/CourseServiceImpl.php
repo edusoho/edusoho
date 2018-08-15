@@ -2121,6 +2121,52 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit)
+    {
+        $conditions['recommended'] = 1;
+        $recommendCount = $this->searchCourseCount($conditions);
+        $recommendAvailable = $recommendCount - $offset;
+        $courses = array();
+
+        if ($recommendAvailable >= $limit) {
+            $courses = $this->searchCourses(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
+        if ($recommendAvailable <= 0) {
+            $conditions['recommended'] = 0;
+            $courses = $this->searchCourses(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                abs($recommendAvailable),
+                $limit
+            );
+        }
+
+        if ($recommendAvailable > 0 && $recommendAvailable < $limit) {
+            $courses = $this->searchCourses(
+                $conditions,
+                $sort,
+                $offset,
+                $recommendAvailable
+            );
+            $conditions['recommended'] = 0;
+            $coursesTemp = $this->searchCourses(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                0,
+                $limit - $recommendAvailable
+            );
+            $courses = array_merge($courses, $coursesTemp);
+        }
+
+        return $courses;
+    }
+
     public function sortByCourses($courses)
     {
         usort($courses, function ($a, $b) {

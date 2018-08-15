@@ -184,6 +184,8 @@ interface CourseService
 
     public function searchCourseCount($conditions);
 
+    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
+
     public function sortCourseItems($courseId, $ids);
 
     public function analysisCourseDataByTime($startTime, $endTime);
