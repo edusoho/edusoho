@@ -53,7 +53,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
                 if (!empty($log['funcParam'])) {
                     $formatParam = $this->getFormatParam($args, $log);
                     $formatFuncName = $this->getFormatFuncName($formatFuncName, $log);
-                    $formatReturn = $this->getFormatReturn($service, $formatFuncName, $formatParam);
+                    $formatReturn = $this->getFormatReturn($service, $formatFuncName, $formatParam, $log);
                 }
                 $result = $formatReturn;
             }
@@ -147,7 +147,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         return $formatFuncName;
     }
 
-    private function getFormatReturn($service, $formatFuncName, $formatParam)
+    private function getFormatReturn($service, $formatFuncName, $formatParam, $log)
     {
         $formatReturn = array();
         try {
