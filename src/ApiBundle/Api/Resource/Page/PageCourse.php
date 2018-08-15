@@ -17,7 +17,7 @@ class PageCourse extends AbstractResource
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
-        $course['learnedNum'] = empty($member) ? 0 : $member['learnedNum'];
+        $course['learnedCompulsoryTaskNum'] = empty($member) ? 0 : $member['learnedCompulsoryTaskNum'];
         $course['member'] = $member;
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
@@ -25,6 +25,7 @@ class PageCourse extends AbstractResource
         $course['courseItems'] = $this->getCourseService()->findCourseItems($courseId);
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
+        $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
 
         return $course;
     }
@@ -47,5 +48,10 @@ class PageCourse extends AbstractResource
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    private function getLearningDataAnalysisService()
+    {
+        return $this->service('Course:LearningDataAnalysisService');
     }
 }
