@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-class WechatPayJsTrade extends BaseTrade
+class WechatPayJsH5Trade extends BaseTrade
 {
     protected $payment = 'wechat';
 
