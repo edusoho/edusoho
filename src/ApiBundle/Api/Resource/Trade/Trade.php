@@ -54,6 +54,7 @@ class Trade extends AbstractResource
                         'tradeSn' => $order['trade_sn'],
                         'isPaid' => true,
                         'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
+                        'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $order['trade_sn'])),
                     );
                 } else {
                     $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
