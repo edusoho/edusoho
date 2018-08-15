@@ -98,7 +98,6 @@ class User extends AbstractResource
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getHttpRequest()->getClientIp(),
         );
-        file_put_contents('test.log', json_encode($user).PHP_EOL, FILE_APPEND);
         $user = $this->getAuthService()->register($user);
         $user['token'] = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
