@@ -19,7 +19,7 @@ import { Toast } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import store from '@/store';
-
+import { Dialog } from 'vant';
 export default {
   data() {
     return {
@@ -67,12 +67,17 @@ export default {
       }
     },
     logout() {
-      this.$store.commit(types.USER_LOGIN, {
-        token: '',
-        user: {}
-      });
-      this.$router.push({
-        name: 'my'
+      Dialog.confirm({
+        title: '退出登录',
+        message: '确定要退出登录吗？'
+      }).then(() => {
+        this.$store.commit(types.USER_LOGIN, {
+          token: '',
+          user: {}
+        });
+        this.$router.push({
+          name: 'my'
+        })
       })
     },
     onRead(file) {
