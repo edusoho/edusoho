@@ -42,6 +42,9 @@
         courseList: [],
         offset: 0,
         limit: 10,
+        type: 'all',
+        categoryId: 0,
+        sort: 'recommendedSeq',
         queryForm: {
           courseType: 'type',
           category: 'categoryId',
@@ -121,6 +124,13 @@
       transform(obj) {
         let config = {};
         const arr = Object.keys(obj);
+        if (!arr.length) {
+          return {
+            categoryId: this.categoryId,
+            type: this.type,
+            sort: this.sort,
+          }
+        }
         arr.forEach((current, index) => {
           config[this.queryForm[current]] = obj[current];
         });
@@ -131,7 +141,7 @@
     created() {
       this.selectedData = this.transform(this.$route.query);
       // 合并参数
-      const config = Object.assign(this.transform(this.$route.query), {
+      const config = Object.assign(this.selectedData, {
             offset: this.offset,
             limit: this.limit
           });
