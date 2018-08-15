@@ -7,9 +7,9 @@
       <div class="e-course__right pull-left">
         <div class="e-course__title text-overflow">{{ title }}</div>
         <div class="e-course__project text-overflow">
-          <span v-if="teachPlan && teachPlan !== '默认教学计划'">{{ teachPlan }}</span>
+          <span v-if="teachPlan">{{ teachPlan }}</span>
         </div>
-        <switchBox :type="type" :course="course" :order="order" :learnedNum="course.learnedNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
+        <switchBox :type="type" :course="course" :order="order" :studentNum="course.studentNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
       </div>
     </div>
   </div>
@@ -45,10 +45,12 @@
         return this.course.courseSet ? this.course.courseSet.cover.middle : this.order.cover.middle
       },
       title() {
-        return this.course.courseSet ? this.course.courseSet.title : this.order.title
+        return this.course.courseSetTitle
+          || (this.course.courseSet ? this.course.courseSet.title : '')
+          || this.order.title;
       },
       teachPlan() {
-        if (this.course.title || this.course.title === '') {
+        if (this.course.title) {
           return this.course.title
         } else {
           return false

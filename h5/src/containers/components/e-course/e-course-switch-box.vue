@@ -7,7 +7,7 @@
         <p class="price" v-if="!isFree">¥ {{ course.price }}</p>
       </span>
       <span class="switch-box__state">
-        <p>{{ course.courseSet.studentNum }}人在学</p>
+        <p>{{ course.studentNum }}人在学</p>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
     computed: {
       rate() {
         if (!parseInt(this.course.publishedTaskNum)) return 0;
-        return parseInt((this.course.learnedNum/this.course.publishedTaskNum)*100)
+        return parseInt(this.course.progress.percent)
       }
     },
     methods: {

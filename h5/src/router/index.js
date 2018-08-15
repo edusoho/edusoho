@@ -11,7 +11,6 @@ Vue.use(Router);
 const routes = [
   {
     path: '/',
-    name: 'home',
     meta: {
       title: ''
     },
@@ -77,7 +76,7 @@ const routes = [
     path: '/course/explore',
     name: 'more',
     meta: {
-      title: '所有课程'
+      title: ''
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/index.vue')
   }, {

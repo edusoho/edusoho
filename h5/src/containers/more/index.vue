@@ -22,6 +22,8 @@
   import treeSelect from '../components/e-tree-select/e-tree-select.vue';
   import lazyLoading from '../components/e-lazy-loading/e-lazy-loading.vue';
   import emptyCourse from '../learning/emptyCourse/emptyCourse.vue';
+  import { mapMutations } from 'vuex';
+  import * as types from '@/store/mutation-types';
 
   export default {
     components: {
@@ -66,6 +68,9 @@
       }
     },
     methods: {
+      ...mapMutations({
+        setNavbarTitle: types.SET_NAVBAR_TITLE
+      }),
       setQuery(value) {
         this.selectedData = value;
       },
@@ -87,7 +92,7 @@
       requestCourses(setting) {
         this.isRequestCompile = false;
         const config = Object.assign(setting, this.selectedData);
-        return Api.getCourseSets({
+        return Api.getCourseList({
           params: config
         }).then((data) => {
           data.data.forEach(element => {
@@ -141,7 +146,10 @@
             text: '全部',
             type: 'all'
           });
-          this.selectItems = data;
+          const items = Object.values(data)
+          items.pop();
+          this.selectItems = items;
+          this.setNavbarTitle(data.title)
         });
       // 根据筛选条件获取相应课程
       // this.requestCourses(config)

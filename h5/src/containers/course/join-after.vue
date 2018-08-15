@@ -1,13 +1,13 @@
 <template>
   <div class="join-after">
-    <detail-head 
+    <detail-head
       :courseSet="details.courseSet"></detail-head>
-    
-    <van-tabs 
-      v-model="active" 
+
+    <van-tabs
+      v-model="active"
       class="after-tabs"
       @click="onTabClick">
-      <van-tab v-for="item in tabs" 
+      <van-tab v-for="item in tabs"
         :title="item" :key="item"></van-tab>
     </van-tabs>
 
@@ -40,7 +40,7 @@
         <div class="segmentation"></div>
 
         <!-- 教师介绍 -->
-        <teacher 
+        <teacher
           class="teacher"
           :teacherInfo="details.teachers"></teacher>
       </template>
@@ -66,8 +66,7 @@ export default {
     progress () {
       if(!Number(this.details.publishedTaskNum)) return '0%';
 
-      return (this.details.learnedNum /
-        this.details.publishedTaskNum).toFixed(2)*100+'%';
+      return (this.details.progress.percent).toFixed(2)+'%';
     },
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,

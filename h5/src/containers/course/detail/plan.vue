@@ -3,7 +3,7 @@
     <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
         <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
-        <span>{{ details.courseSet.studentNum }}人在学</span>
+        <span>{{ details.studentNum }}人在学</span>
       </div>
     </e-panel>
 
