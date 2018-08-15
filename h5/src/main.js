@@ -53,7 +53,7 @@ Api.getSettings({
     type: 'wap'
   }
 }).then(res => {
-  if (!parseInt(res.enabled, 10)) {
+  if (parseInt(res.version) !== 2) {
     // 如果没有开通微网校，则跳回老版本网校 TODO
     const hashStr = location.hash;
     const getPathNameByHash = hash => {
