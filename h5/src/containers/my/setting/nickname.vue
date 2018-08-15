@@ -23,11 +23,17 @@ export default {
   },
   computed: {
     btnDisable() {
-      return this.nickname.length <= 0;
+      return (this.nickname.length === 0) || (!this.confirmFlag);
     },
     ...mapState({
       isLoading: state => state.isLoading
     })
+  },
+  created() {
+    const name = this.$route.query.nickname;
+    if (name) {
+      this.nickname = name
+    }
   },
   watch: {
     nickname() {
