@@ -5,7 +5,7 @@
       <span class="my_setting-title title-18">{{item.name}}</span>
       <div class="my_setting-content">
         <img :src="item.info" alt="" v-if="!index" class="my_setting-avatar">
-        <span  v-if="index">{{item.info}}</span>
+        <span v-if="index">{{item.info}}</span>
         <img src="static/images/more.png" alt="" class="my_setting-more">
       </div>
       <van-uploader :after-read="onRead" v-if="!index"></van-uploader>
@@ -56,7 +56,10 @@ export default {
           break;
         case 1:
           this.$router.push({
-            name: 'setting_nickname'
+            name: 'setting_nickname',
+            query: {
+              nickname: (this.user.nickname == '') ? '' : (this.user.nickname)
+            }
           });
           break;
         case 2:

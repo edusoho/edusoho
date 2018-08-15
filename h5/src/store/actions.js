@@ -50,7 +50,7 @@ export const sendSmsCenter = ({ commit }, data) =>
 export const setNickname = ({ commit }, { nickname }) =>
   new Promise((resolve, reject) => {
     Api.setNickname({
-      query: {
+      data: {
         nickname
       }
     }).then(res => {

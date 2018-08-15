@@ -48,7 +48,7 @@ const config = [
   }, {
     // 修改昵称
     name: 'setNickname',
-    url: '/me/nickname/{nickname}',
+    url: '/me/nicknames/h5',
     method: 'PATCH'
   }, {
     // 上传文件
