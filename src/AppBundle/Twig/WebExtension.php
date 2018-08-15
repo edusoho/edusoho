@@ -201,7 +201,7 @@ class WebExtension extends \Twig_Extension
     {
         $wapSetting = $this->getSetting('wap', array('version' => 0));
 
-        if (1 != $wapSetting['version']) {
+        if (empty($wapSetting['version'])) {
             return false;
         }
 

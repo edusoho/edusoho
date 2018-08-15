@@ -6036,6 +6036,11 @@ admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
+admin.wap_setting.version_select: 'version select'
+admin.wap_setting.new: New
+admin.wap_setting.old: Old
+admin.wap_setting.off: Off
+
 
 admin.payment_setting.open_help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
 admin.payment_setting.close_help.tips: 'Tip: Closing the payment function will result in users of the school cannot be purchased.'
