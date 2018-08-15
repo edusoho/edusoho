@@ -71,8 +71,8 @@ export default {
         resId: media.resId,
         user: {},
         playlist: media.url,
-        autoplay: true,
-        poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
+        autoplay: true
+        // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
 
       this.$store.commit('UPDATE_LOADING_STATUS', true);
