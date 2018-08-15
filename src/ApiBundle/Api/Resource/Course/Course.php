@@ -81,20 +81,28 @@ class Course extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
+        if (isset($conditions['type']) && 'all' == $conditions['type']) {
+            unset($conditions['type']);
+        }
         $conditions['status'] = 'published';
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
-        $courses = $this->service('Course:CourseService')->searchCourses(
-            $conditions,
-            $sort,
-            $offset,
-            $limit
-        );
 
-        $total = $this->service('Course:CourseService')->searchCourseCount($conditions);
+        if (array_key_exists('recommendedSeq', $sort)) {
+            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
+        } else {
+            $courses = $this->getCourseService()->searchCourses(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
+        $total = $this->getCourseService()->searchCourseCount($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

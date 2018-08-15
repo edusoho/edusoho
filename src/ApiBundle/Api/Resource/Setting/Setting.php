@@ -15,13 +15,33 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('register', 'payment', 'vip', 'magic', 'course'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $method = "get${type}";
 
         return $this->$method();
+    }
+
+    public function getSite()
+    {
+        $siteSetting = $this->getSettingService()->get('site');
+
+        return array(
+            'name' => $siteSetting['name'],
+            'url' => $siteSetting['url'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
+        );
+    }
+
+    public function getWap()
+    {
+        $wapSetting = $this->getSettingService()->get('wap', array('enabled' => 1));
+
+        return array(
+            'enabled' => $wapSetting['enabled'],
+        );
     }
 
     public function getRegister()
@@ -96,6 +116,18 @@ class Setting extends AbstractResource
         return array(
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
+        );
+    }
+
+    public function getCdn()
+    {
+        $cdn = $this->getSettingService()->get('cdn');
+
+        return array(
+            'enabled' => empty($cdn['enabled']) ? false : true,
+            'defaultUrl' => empty($cdn['defaultUrl']) ? '' : $cdn['defaultUrl'],
+            'userUrl' => empty($cdn['userUrl']) ? '' : $cdn['userUrl'],
+            'contentUrl' => empty($cdn['contentUrl']) ? '' : $cdn['contentUrl'],
         );
     }
 

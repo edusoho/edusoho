@@ -2096,6 +2096,83 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $liveCourses;
     }
 
+    public function fillCourseTryLookVideo($courses)
+    {
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']) && 'published' === $course['status'];
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
+            //返回有云视频任务的课程
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+
+            foreach ($courses as &$course) {
+                if (!empty($activities[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+
+        return $courses;
+    }
+
+    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit)
+    {
+        $conditions['recommended'] = 1;
+        $recommendCount = $this->searchCourseCount($conditions);
+        $recommendAvailable = $recommendCount - $offset;
+        $courses = array();
+
+        if ($recommendAvailable >= $limit) {
+            $courses = $this->searchCourses(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
+        if ($recommendAvailable <= 0) {
+            $conditions['recommended'] = 0;
+            $courses = $this->searchCourses(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                abs($recommendAvailable),
+                $limit
+            );
+        }
+
+        if ($recommendAvailable > 0 && $recommendAvailable < $limit) {
+            $courses = $this->searchCourses(
+                $conditions,
+                $sort,
+                $offset,
+                $recommendAvailable
+            );
+            $conditions['recommended'] = 0;
+            $coursesTemp = $this->searchCourses(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                0,
+                $limit - $recommendAvailable
+            );
+            $courses = array_merge($courses, $coursesTemp);
+        }
+
+        return $courses;
+    }
+
     public function sortByCourses($courses)
     {
         usort($courses, function ($a, $b) {

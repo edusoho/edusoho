@@ -62,4 +62,6 @@ interface BlockService
      *               );
      */
     public function getContentsByCodes(array $codes);
+
+    public function getPosters();
 }

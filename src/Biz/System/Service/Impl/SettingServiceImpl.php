@@ -23,6 +23,46 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
+    /**
+     * @param $name
+     * @param null $default
+     *
+     * @return array|mixed|null
+     *                          get single node setting; eg: 'site.name.test' => get('site')['name']['test']
+     */
+    public function node($name, $default = null)
+    {
+        $names = explode('.', $name);
+
+        $name = array_shift($names);
+
+        if (empty($name)) {
+            return $default;
+        }
+
+        $value = $this->get($name);
+
+        if (!isset($value)) {
+            return $default;
+        }
+
+        if (empty($names)) {
+            return $value;
+        }
+
+        $result = $value;
+
+        foreach ($names as $name) {
+            if (!isset($result[$name])) {
+                return $default;
+            }
+
+            $result = $result[$name];
+        }
+
+        return $result;
+    }
+
     public function get($name, $default = array())
     {
         if (is_null($this->cached)) {
