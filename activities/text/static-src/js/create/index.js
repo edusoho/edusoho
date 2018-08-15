@@ -31,19 +31,31 @@ load.then(function(){
     height: 300,
   });
   
+  let validate = $('#step2-form').validate({
+    rules: {
+      title: {
+        required: true,
+        maxlength: 50,
+        trim: true,
+        course_title: true,
+      },
+      content: {
+        required: true,
+        trim: true,
+      },
+    },
+  });
+
   editor.on('change', () => {
-    // $(DEFAULTS.target).val(editor.getData());
-    // if (DEFAULTS.validator) {
-    //   DEFAULTS.validator.form();
-    // }
+    $content.val(editor.getData());
+    validate.form();
   });
 
   editor.on('blur', () => {
-    // $(DEFAULTS.target).val(editor.getData());
-    // if (DEFAULTS.validator) {
-    //   DEFAULTS.validator.form();
-    // }
+    $content.val(editor.getData());
+    validate.form();
   });
+  
 
   window.ltc.on('getActivity', (msg) => {
     window.ltc.messenger.sendToParent('returnActivity', {valid:true,data:$('#step2-form')});
