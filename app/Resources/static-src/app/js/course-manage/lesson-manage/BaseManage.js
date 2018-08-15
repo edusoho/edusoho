@@ -75,8 +75,11 @@ export default class Manage {
       break;
     }
     case 'task':
+    {
       this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
+      this._triggerAsTaskNumUpdated($elm);
       break;
+    }
     case 'lesson':
     {
       let $unit = this.$element.find('#chapter-' + this.position);
@@ -121,8 +124,8 @@ export default class Manage {
         if ('task' == $this.data('type') && $parent.siblings().length == 0) {
           $parent.closest('.js-task-manage-lesson').remove();
         }
+        self._triggerAsTaskNumUpdated($parent, true);
         $parent.remove();
-
         self.handleEmptyShow();
         self._flushTaskNumber();
         $.post($this.data('url'), function(data) {
@@ -331,5 +334,31 @@ export default class Manage {
 
   afterAddItem($elm) {
     console.log('afterAddItem');
+  }
+
+  /*
+   * @param $elm 新增或删除的任务节点，必须已经在dom节点内
+   * @param isDeleted 如果是删除操作，值为true, 删除操作时，先隐藏再删除（即2个节点时，就要隐藏了）
+   */
+  _triggerAsTaskNumUpdated($elm, isDeleted) {
+    let container = $elm.parents('.js-lesson-container');
+    let lessonBox = container.find('.js-lesson-box');
+    let taskCount = lessonBox.find('.js-task-manage-item').length;
+
+    // 删除操作时，先隐藏再删除（即2个节点时，就要隐藏了）
+    let hiddenCount = 1;
+    if (isDeleted) {
+      hiddenCount = 2;
+    }
+
+    if (taskCount > hiddenCount) { // 多任务课时显示任务
+      lessonBox.removeClass('hidden');
+      container.find('.displayWhenMulTasks').removeClass('hidden');
+      container.find('.displayWhenSingleTask').addClass('hidden');
+    } else { // 单任务课时不显示任务
+      lessonBox.addClass('hidden');
+      container.find('.displayWhenMulTasks').addClass('hidden');
+      container.find('.displayWhenSingleTask').removeClass('hidden');
+    }
   }
 }
