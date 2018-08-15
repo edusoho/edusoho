@@ -33,12 +33,12 @@ class CourseTaskMedia extends AbstractResource
         $ssl = $request->getHttpRequest()->isSecure() ? true : false;
         $preview = $request->query->get('preview');
         if ($preview) {
-            $course = $this->getCourseService()->getCourse($courseId);
             $task = $this->getTaskService()->getTask($taskId);
+            $course = $this->getCourseService()->getCourse($task['courseId']);
             $this->checkPreview($course, $task);
         } else {
-            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
             $task = $this->getTaskService()->tryTakeTask($taskId);
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
