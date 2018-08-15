@@ -101,7 +101,7 @@ class WechatController extends PaymentController
         $params['openid'] = $openid;
         $params = http_build_query($params);
 
-        return $this->redirect('/h5/#/weixin_pay?'.$params);
+        return $this->redirect('/h5/index.html#/weixin_pay?'.$params);
     }
 
     public function wechatAppMwebTradeAction(Request $request)
