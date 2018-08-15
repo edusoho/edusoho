@@ -792,7 +792,7 @@ course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
 course.course_member_count: '%studentsNum% students'
-course.activity: Activity
+course.activity: %taskName%
 course.plan: 课程计划
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'

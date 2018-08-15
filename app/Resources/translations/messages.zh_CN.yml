@@ -910,7 +910,7 @@ course.announcement.default_content: >
 course.students_count: >
   <span class="mhs">%studentsNum%</span>人加入学习
 course.course_member_count: %studentsNum%人
-course.activity: 活动
+course.activity: %taskName%
 course.praise: 好评课程
 course.plan: 课程计划
 course.teaching_plan: 教学计划
