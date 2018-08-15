@@ -30,7 +30,7 @@ interface OpenCourseService
      * @param $course
      *
      * @return mixed
-     * @Log(level="info",module="open_course",action="create_course",message="创建公开课",targetType="open_course")
+     * @Log(module="open_course",action="create_course")
      */
     public function createCourse($course);
 
@@ -40,7 +40,7 @@ interface OpenCourseService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="open_course",action="delete_course",message="删除公开课",targetType="open_course",format="{'before':{ 'className':'OpenCourse:OpenCourseService','funcName':'getCourse','param':['id']}}")
+     * @Log(module="open_course",action="delete_course")
      */
     public function deleteCourse($id);
 
@@ -87,7 +87,7 @@ interface OpenCourseService
      * @param $lesson
      *
      * @return mixed
-     * @Log(level="info",module="open_course",action="add_lesson",message="添加公开课时",targetType="open_course")
+     * @Log(module="open_course",action="add_lesson")
      */
     public function createLesson($lesson);
 
@@ -95,6 +95,11 @@ interface OpenCourseService
 
     public function waveCourseLesson($id, $field, $diff);
 
+    /**
+     * @param $id
+     * @return mixed
+     * @Log(module="open_course",action="delete_lesson")
+     */
     public function deleteLesson($id);
 
     public function getLessonItems($courseId);

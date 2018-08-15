@@ -33,7 +33,7 @@ interface ThreadService
      * @param $thread
      *
      * @return mixed
-     * @Log(level="info",module="group",action="create_thread",message="新增话题",targetType="groups_thread")
+     * @Log(module="group",action="create_thread")
      */
     public function addThread($thread);
 
@@ -47,7 +47,7 @@ interface ThreadService
      * @param $threadId
      *
      * @return mixed
-     * @Log(level="info",module="group",action="delete_thread",message="删除话题",targetType="groups_thread",format="{'before':{ 'className':'Group:ThreadService','funcName':'getThread','param':['threadId']}}")
+     * @Log(module="group",action="delete_thread")
      */
     public function deleteThread($threadId);
 

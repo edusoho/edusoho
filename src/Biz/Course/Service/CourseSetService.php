@@ -123,7 +123,7 @@ interface CourseSetService
      * @param $courseSet
      *
      * @return mixed
-     * @Log(level="info",module="course",action="create",message="创建课程",targetType="courseSet")
+     * @Log(module="course",action="create")
      */
     public function createCourseSet($courseSet);
 
@@ -158,7 +158,7 @@ interface CourseSetService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete",message="删除课程",targetType="course_set_v8",format="{'before':{ 'className':'Question:QuestionService','funcName':'get','param':['id']}}")
+     * @Log(module="course",action="delete")
      */
     public function deleteCourseSet($id);
 

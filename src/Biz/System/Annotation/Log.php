@@ -39,7 +39,7 @@ class Log
 
     private $param;
 
-    private $format;
+    private $funcName;
 
     public function __construct(array $data)
     {
@@ -114,9 +114,14 @@ class Log
         return $this->targetId;
     }
 
-    public function getFormat()
+    public function getParam()
     {
-        return $this->format;
+        return $this->param;
+    }
+
+    public function getFuncName()
+    {
+        return $this->funcName;
     }
 
     public function setMessage($message)
@@ -149,8 +154,13 @@ class Log
         $this->module = $module;
     }
 
-    public function setFormat($format)
+    public function setParam($param)
     {
-        $this->format = $format;
+        $this->param = $param;
+    }
+
+    public function setFuncName($funcName)
+    {
+        $this->funcName = $funcName;
     }
 }

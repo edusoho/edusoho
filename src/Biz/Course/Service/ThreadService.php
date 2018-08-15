@@ -26,7 +26,9 @@ interface ThreadService
     public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
 
     /**
-     * 创建话题.
+     * @param $thread
+     * @return mixed
+     * @Log(module="course",action="create_thread")
      */
     public function createThread($thread);
 
@@ -36,7 +38,7 @@ interface ThreadService
      * @param $threadId
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_thread",message="删除话题",targetType="course_thread",format="{'before':{ 'className':'Course:ThreadService','funcName':'getThreadByThreadId','param':['threadId']}}")
+     * @Log(module="course",action="delete_thread",funcName="getThreadByThreadId")
      */
     public function deleteThread($threadId);
 

@@ -22,7 +22,7 @@ interface MarkerService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="marker",action="create",message="增加驻点",targetType="marker")
+     * @Log(module="marker",action="create")
      */
     public function addMarker($mediaId, $fields);
 
@@ -30,7 +30,7 @@ interface MarkerService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="marker",action="delete",message="删除驻点",targetType="marker",format="{'before':{ 'className':'Marker:MarkerService','funcName':'getMarker','param':['id']}}")
+     * @Log(module="marker",action="delete")
      */
     public function deleteMarker($id);
 

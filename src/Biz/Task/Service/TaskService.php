@@ -22,7 +22,7 @@ interface TaskService
      * @param $task
      *
      * @return mixed
-     * @Log(level="info",module="course",action="add_task",message="添加任务",targetType="course_task")
+     * @Log(module="course",action="add_task")
      */
     public function createTask($task);
 
@@ -46,7 +46,7 @@ interface TaskService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_task",message="删除任务",targetType="course_task",format="{'before':{ 'className':'Task:TaskService','funcName':'getTask','param':['id']}}")
+     * @Log(module="course",action="delete_task")
      */
     public function deleteTask($id);
 

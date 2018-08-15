@@ -28,6 +28,7 @@ class ServiceProxy
                 try {
                     $beforeResult = $this->interceptors[$interceptorName]->beforeExec($funcName, $arguments);
                 } catch (\Exception $exception) {
+                    throw $exception;
                 }
             }
         }

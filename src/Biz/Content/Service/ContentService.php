@@ -18,7 +18,7 @@ interface ContentService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="content",action="create",message="创建内容",targetType="content")
+     * @Log(module="content",action="create")
      */
     public function createContent($content);
 
@@ -30,7 +30,7 @@ interface ContentService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="content",action="delete",message="删除内容",targetType="upload_files",format="{'before':{ 'className':'Content:ContentService','funcName':'getContent','param':['id']}}")
+     * @Log(module="content",action="delete")
      */
     public function deleteContent($id);
 

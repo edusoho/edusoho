@@ -63,6 +63,11 @@ class LogDataUtils
                         '%title%' => 'showTitle',
                     ),
                 ),
+                'delete_course' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
                 'add_student' => array(
                     'generateUrl' => array(
                         '%url%' => array(
@@ -90,6 +95,11 @@ class LogDataUtils
                     'getValue' => array(
                         '%title%' => 'title',
                         '%nickname%' => 'nickname',
+                    ),
+                ),
+                'create_thread' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
                     ),
                 ),
                 'delete_thread' => array(
@@ -149,9 +159,19 @@ class LogDataUtils
                         '%title%' => 'title',
                     ),
                 ),
+                'add_question' => array(
+                    'getValue' => array(
+                        '%title%' => 'stem',
+                    ),
+                ),
                 'delete_question' => array(
                     'getValue' => array(
                         '%title%' => 'stem',
+                    ),
+                ),
+                'add_testpaper' => array(
+                    'getValue' => array(
+                        '%title%' => 'name',
                     ),
                 ),
                 'delete_testpaper' => array(
@@ -165,6 +185,11 @@ class LogDataUtils
                     ),
                 ),
                 'delete' => array(
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'create_chapter' => array(
                     'getValue' => array(
                         '%title%' => 'title',
                     ),
@@ -328,6 +353,11 @@ class LogDataUtils
                             ),
                         ),
                     ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                    ),
+                ),
+                'delete_lesson' => array(
                     'getValue' => array(
                         '%title%' => 'title',
                     ),

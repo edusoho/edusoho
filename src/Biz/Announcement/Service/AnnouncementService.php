@@ -16,7 +16,7 @@ interface AnnouncementService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="announcement",action="create",message="创建公告",targetType="announcement")
+     * @Log(module="announcement",action="create")
      */
     public function createAnnouncement($fields);
 
@@ -26,7 +26,7 @@ interface AnnouncementService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="announcement",action="delete",message="删除公告",targetType="announcement",format="{'before':{ 'className':'Announcement:AnnouncementService','funcName':'getAnnouncement','param':['id']}}")
+     * @Log(module="announcement",action="delete")
      */
     public function deleteAnnouncement($id);
 }

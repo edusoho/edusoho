@@ -30,7 +30,7 @@ interface UploadFileService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files")
+     * @Log(module="upload_file",action="create")
      */
     public function finishedUpload($params);
 
@@ -42,7 +42,7 @@ interface UploadFileService
      * @param $globalId
      *
      * @return mixed
-     * @Log(level="info",module="upload_file",action="delete",message="删除文件",targetType="upload_files",format="{'before':{ 'className':'File:UploadFileService','funcName':'getFileByGlobalId','param':['globalId']}}")
+     * @Log(module="upload_file",action="delete",funcName="getFileByGlobalId")
      */
     public function deleteByGlobalId($globalId);
 
@@ -82,7 +82,7 @@ interface UploadFileService
      * @param UploadedFile|null $originalFile
      *
      * @return mixed
-     * @Log(level="info",module="upload_file",action="create",message="新增文件",targetType="upload_files")
+     * @Log(module="upload_file",action="create")
      */
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);
 
@@ -92,7 +92,7 @@ interface UploadFileService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="upload_file",action="delete",message="删除文件",targetType="upload_files",format="{'before':{ 'className':'File:UploadFileService','funcName':'getFile','param':['id']}}")
+     * @Log(module="upload_file",action="delete")
      */
     public function deleteFile($id);
 

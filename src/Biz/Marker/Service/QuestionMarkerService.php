@@ -26,7 +26,7 @@ interface QuestionMarkerService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="marker",action="delete_question",message="删除驻点问题",targetType="question_marker",format="{'before':{ 'className':'Marker:QuestionMarkerService','funcName':'getQuestionMarker','param':['id']}}")
+     * @Log(module="marker",action="delete_question")
      */
     public function deleteQuestionMarker($id);
 

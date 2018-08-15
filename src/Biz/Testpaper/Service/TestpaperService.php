@@ -13,6 +13,11 @@ interface TestpaperService
 
     public function findTestpapersByIdsAndType($ids, $type);
 
+    /**
+     * @param $fields
+     * @return mixed
+     * @Log(module="course",action="add_testpaper")
+     */
     public function createTestpaper($fields);
 
     public function batchCreateTestpaper($testpapers);
@@ -24,7 +29,7 @@ interface TestpaperService
      * @param bool $quietly
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_testpaper",message="删除试卷",targetType="testpaper_v8",format="{'before':{ 'className':'Testpaper:TestpaperService','funcName':'getTestpaper','param':['id']}}")
+     * @Log(module="course",action="delete_testpaper")
      */
     public function deleteTestpaper($id, $quietly = false);
 

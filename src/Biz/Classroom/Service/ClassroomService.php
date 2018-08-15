@@ -72,7 +72,7 @@ interface ClassroomService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="classroom",action="delete",message="删除班级",targetType="classroom",format="{'before':{ 'className':'Classroom:ClassroomService','funcName':'getClassroom','param':['id']}}")
+     * @Log(module="classroom",action="delete")
      */
     public function deleteClassroom($id);
 
@@ -84,7 +84,7 @@ interface ClassroomService
      * @param $classroom
      *
      * @return mixed
-     * @Log(level="info",module="classroom",action="create",message="创建班级",targetType="classroom")
+     * @Log(module="classroom",action="create")
      */
     public function addClassroom($classroom);
 

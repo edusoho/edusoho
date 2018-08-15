@@ -34,7 +34,7 @@ interface CategoryService
      * @param $category
      *
      * @return mixed
-     * @Log(level="info",module="category",action="create",message="添加栏目",targetType="article_category")
+     * @Log(module="category",action="create")
      */
     public function createCategory(array $category);
 
@@ -44,7 +44,7 @@ interface CategoryService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="category",action="delete",message="删除栏目",targetType="article_category",format="{'before':{ 'className':'Article:CategoryService','funcName':'getCategory','param':['id']}}")
+     * @Log(module="category",action="delete")
      */
     public function deleteCategory($id);
 

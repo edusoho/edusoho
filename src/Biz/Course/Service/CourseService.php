@@ -39,7 +39,7 @@ interface CourseService
      * @param $course
      *
      * @return mixed
-     * @Log(level="info",module="course",action="create_course",message="创建计划任务",targetType="course")
+     * @Log(module="course",action="create_course")
      */
     public function createCourse($course);
 
@@ -54,6 +54,11 @@ interface CourseService
 
     public function getChapter($courseId, $chapterId);
 
+    /**
+     * @param $chapter
+     * @return mixed
+     * @Log(module="course",action="create_chapter")
+     */
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);
@@ -63,7 +68,7 @@ interface CourseService
      * @param $chapterId
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_chapter",message="删除章节",targetType="course_chapter",format="{'before':{ 'className':'Course:CourseService','funcName':'getChapter','param':['courseId','chapterId']}}")
+     * @Log(module="course",action="delete_chapter")
      */
     public function deleteChapter($courseId, $chapterId);
 
@@ -81,7 +86,7 @@ interface CourseService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_course",message="删除计划",targetType="course_v8",format="{'before':{ 'className':'Course:CourseService','funcName':'getCourse','param':['id']}}")
+     * @Log(module="course",action="delete_course")
      */
     public function deleteCourse($id);
 

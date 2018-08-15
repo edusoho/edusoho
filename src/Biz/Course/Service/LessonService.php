@@ -14,7 +14,7 @@ interface LessonService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="course",action="create_lesson",message="创建课时",targetType="course_task")
+     * @Log(module="course",action="create_lesson")
      */
     public function createLesson($fields);
 
@@ -31,7 +31,7 @@ interface LessonService
      * @param $lessonId
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_lesson",message="删除课时",targetType="course_task",format="{'before':{ 'className':'Course:LessonService','funcName':'getLesson','param':['lessonId']}}")
+     * @Log(module="course",action="delete_lesson",param="lessonId")
      */
     public function deleteLesson($courseId, $lessonId);
 

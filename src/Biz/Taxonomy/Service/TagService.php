@@ -55,7 +55,7 @@ interface TagService
      * @param $tag
      *
      * @return mixed
-     * @Log(level="info",module="tag",action="create",message="添加标签",targetType="tag")
+     * @Log(module="tag",action="create")
      */
     public function addTag(array $tag);
 
@@ -63,7 +63,7 @@ interface TagService
      * @param $fields
      *
      * @return mixed
-     * @Log(level="info",module="tagGroup",action="create",message="添加标签组",targetType="tag_group")
+     * @Log(module="tagGroup",action="create")
      */
     public function addTagGroup($fields);
 
@@ -75,7 +75,7 @@ interface TagService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="tag",action="delete",message="删除标签",targetType="tag",format="{'before':{ 'className':'Taxonomy:TagService','funcName':'getTag','param':['id']}}")
+     * @Log(module="tag",action="delete")
      */
     public function deleteTag($id);
 
@@ -83,7 +83,7 @@ interface TagService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="tagGroup",action="delete",message="删除标签组",targetType="tag_group",format="{'before':{ 'className':'Taxonomy:TagService','funcName':'getTagGroup','param':['id']}}")
+     * @Log(module="tagGroup",action="delete")
      */
     public function deleteTagGroup($id);
 

@@ -24,7 +24,7 @@ interface ReviewService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_review",message="删除评价",targetType="course_review",format="{'before':{ 'className':'Course:ReviewService','funcName':'getReview','param':['id']}}")
+     * @Log(module="course",action="delete_review")
      */
     public function deleteReview($id);
 

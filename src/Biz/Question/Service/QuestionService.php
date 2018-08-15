@@ -8,6 +8,11 @@ interface QuestionService
 {
     public function get($id);
 
+    /**
+     * @param $fields
+     * @return mixed
+     * @Log(module="course",action="add_question")
+     */
     public function create($fields);
 
     public function batchCreateQuestions($questions);
@@ -20,7 +25,7 @@ interface QuestionService
      * @param $id
      *
      * @return mixed
-     * @Log(level="info",module="course",action="delete_question",message="删除题目",targetType="question",format="{'before':{ 'className':'Question:QuestionService','funcName':'get','param':['id']}}")
+     * @Log(module="course",action="delete_question",funcName="get")
      */
     public function delete($id);
 
