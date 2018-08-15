@@ -3,12 +3,12 @@
     <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
         <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
-        <span>{{ details.courseSet.studentNum }}人在学</span>
+        <span>{{ details.studentNum }}人在学</span>
       </div>
     </e-panel>
 
     <ul class="course-detail__plan">
-      <li v-for="(item, index) in items"
+      <li v-if="item.title" v-for="(item, index) in items"
         @click="handleClick(item, index)"
         :class="{ active: item.active }">{{item.title}}</li>
     </ul>

@@ -7,7 +7,7 @@
     <courseItem v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
-      :course="trans(course)"
+      :course="course"
     ></courseItem>
   </van-list>
 </template>
@@ -65,21 +65,6 @@
       onLoad() {
         // 通知父组件请求数据并更新courseList
         if (this.isRequestCompile) this.$emit('needRequest');
-      },
-      trans(value) {
-        if (this.isMorePage) {
-          const course = Object.assign({}, value);
-          course.courseSet = {
-            title: course.title,
-            id: course.defaultCourseID,
-            cover: course.cover,
-            studentNum: course.studentNum
-          };
-          course.title = '';
-          course.price = course.minCoursePrice
-          return course;
-        }
-        return value;
       }
     }
   }
