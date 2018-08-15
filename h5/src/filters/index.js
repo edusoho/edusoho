@@ -15,33 +15,34 @@ const filters = [
   },
   {
     name: 'taskType',
-    handler(type) {
+    handler(task) {
+      if (task.status !== 'published') {
+        return '敬请期待';
+      }
+      const type = task.type;
       switch (type) {
         case 'video':
-          type = '视频';
-          break;
+          return '视频';
         case 'audio':
-          type = '音频';
-          break;
+          return '音频';
         case 'live':
-          type = '直播';
-          break;
+          return '直播';
         case 'text':
-          type = '图文';
-          break;
+          return '图文';
         case 'ppt':
         case 'doc':
-          type = '文档';
-          break;
+          return '文档';
         default:
-          type = '暂不支持此类型';
+          return '暂不支持此类型';
       }
-      return type;
     }
   },
   {
     name: 'filterTask',
     handler(task) {
+      if (task.status !== 'published') {
+        return '';
+      }
       switch (task.type) {
         case 'video':
         case 'audio':

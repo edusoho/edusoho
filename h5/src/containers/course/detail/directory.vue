@@ -24,7 +24,7 @@
               <span class="lesson-cell__number">{{ task | filterNumber }}</span>
               <div class="lesson-cell__content" @click="lessonCellClick(task)">
                 <span>{{ task.title }}</span>
-                <span>{{ task.task.type | taskType }}{{ task.task | filterTask }}</span>
+                <span>{{ task.task | taskType }}{{ task.task | filterTask }}</span>
               </div>
               <div :class="['lesson-cell__status', task.status]">
                 {{ filterTaskStatus(task) }}
@@ -189,6 +189,10 @@
         //join after click
       },
       showTypeDetail (task) {
+        if (task.status !== 'published') {
+          Toast('敬请期待');
+          return;
+        }
         switch(task.type) {
           case 'video':
             if (task.mediaSource == 'self') {
