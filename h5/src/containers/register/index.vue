@@ -10,6 +10,7 @@
         maxLength="11"
         :error-message="errorMessage.mobile"
         @blur="validateMobileOrPsw('mobile')"
+        @keyup="validatedChecker()"
       />
 
       <van-field
@@ -38,7 +39,7 @@
           slot="button"
           size="small"
           type="primary"
-          :disabled="count.codeBtnDisable"
+          :disabled="count.codeBtnDisable || !validated.mobile"
           @click="handleSendSms">
           发送验证码
           <span v-show="count.showCount">({{ count.num }})</span>
@@ -96,6 +97,10 @@ export default {
         mobile: '',
         encrypt_password: ''
       },
+      validated: {
+        mobile: false,
+        encrypt_password: false
+      },
       count: {
         showCount: false,
         num: 120,
@@ -130,6 +135,12 @@ export default {
 
       this.errorMessage[type] = !rule.validator(ele)
         ? rule.message: '';
+    },
+    validatedChecker() {
+      const mobile = this.registerInfo.mobile;
+      const rule = rulesConfig['mobile'];
+
+      this.validated.mobile = rule.validator(mobile);
     },
     handleSmsSuccess(token) {
       this.registerInfo.dragCaptchaToken = token;
