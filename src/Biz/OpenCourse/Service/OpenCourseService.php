@@ -97,6 +97,7 @@ interface OpenCourseService
 
     /**
      * @param $id
+     *
      * @return mixed
      * @Log(module="open_course",action="delete_lesson")
      */

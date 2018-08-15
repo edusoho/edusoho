@@ -27,6 +27,7 @@ interface ThreadService
 
     /**
      * @param $thread
+     *
      * @return mixed
      * @Log(module="course",action="create_thread")
      */

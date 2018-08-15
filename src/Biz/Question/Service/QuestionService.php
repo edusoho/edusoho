@@ -10,6 +10,7 @@ interface QuestionService
 
     /**
      * @param $fields
+     *
      * @return mixed
      * @Log(module="course",action="add_question")
      */

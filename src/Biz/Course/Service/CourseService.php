@@ -56,6 +56,7 @@ interface CourseService
 
     /**
      * @param $chapter
+     *
      * @return mixed
      * @Log(module="course",action="create_chapter")
      */
