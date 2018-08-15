@@ -2,36 +2,33 @@
 // new Text();
 
 window.ltc.loadCss();
+
 let load = window.ltc.load('jquery', 'validate', 'editor');
 load.then(function(){
-  const DEFAULTS = {
-    element: '#text-content-field',
-    fileSingleSizeLimit: 2,
-    height: 300,
-    target: '[name="content"]',
-    validator: ''
-  };
-
-  let editor = CKEDITOR.replace(DEFAULTS.element.replace('#', ''), {
+  let $content = $('#text-content-field');
+  let editor = CKEDITOR.replace('text-content-field', {
     toolbar: 'Task',
-    fileSingleSizeLimit: DEFAULTS.fileSingleSizeLimit,
-    filebrowserImageUploadUrl: $(DEFAULTS.element).data('imageUploadUrl'),
-    filebrowserFlashUploadUrl: $(DEFAULTS.element).data('flashUploadUrl'),
+    fileSingleSizeLimit: 2,
+    filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
+    filebrowserFlashUploadUrl: $content.data('flashUploadUrl'),
     allowedContent: true,
-    height: DEFAULTS.height,
+    height: 300,
   });
   
   editor.on('change', () => {
-    $(DEFAULTS.target).val(editor.getData());
-    if (DEFAULTS.validator) {
-      DEFAULTS.validator.form();
-    }
+    // $(DEFAULTS.target).val(editor.getData());
+    // if (DEFAULTS.validator) {
+    //   DEFAULTS.validator.form();
+    // }
   });
 
   editor.on('blur', () => {
-    $(DEFAULTS.target).val(editor.getData());
-    if (DEFAULTS.validator) {
-      DEFAULTS.validator.form();
-    }
+    // $(DEFAULTS.target).val(editor.getData());
+    // if (DEFAULTS.validator) {
+    //   DEFAULTS.validator.form();
+    // }
   });
+
+  window.ltc.emit('iFrameResize');
+}).catch(function(e){
 });

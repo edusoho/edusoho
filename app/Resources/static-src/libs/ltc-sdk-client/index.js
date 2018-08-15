@@ -60,11 +60,12 @@ class LtcSDKClient {
     return this;
   }
 
-  on(eventName, args) {
+  on(eventName, args='') {
     this.messenger.on(eventName, args);
   }
 
-  emit(eventName, args) {
+  emit(eventName, args='') {
+    alert();
     this.messenger.sendToParent(eventName, args);
   }
 

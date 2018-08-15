@@ -19,6 +19,10 @@ class LtcSDKServer {
     this.messenger.on('init', ()=> {
       this.messenger.sendToChild({id: 'task-create-content-iframe'}, 'initResourceList', this.resource);
     });
+
+    this.on('iFrameResize', () => {
+      alert(123123);
+    })
   }
 
   on(eventName, args) {
