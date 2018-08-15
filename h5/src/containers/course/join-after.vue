@@ -66,7 +66,7 @@ export default {
     progress () {
       if(!Number(this.details.publishedTaskNum)) return '0%';
 
-      return (this.details.progress.percent).toFixed(2)+'%';
+      return parseInt(this.details.progress.percent)+'%';
     },
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,
