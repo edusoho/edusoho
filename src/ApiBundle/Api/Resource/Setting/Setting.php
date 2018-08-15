@@ -37,10 +37,10 @@ class Setting extends AbstractResource
 
     public function getWap()
     {
-        $wapSetting = $this->getSettingService()->get('wap', array('enabled' => 1));
+        $wapSetting = $this->getSettingService()->get('wap', array('version' => 0));
 
         return array(
-            'enabled' => $wapSetting['enabled'],
+            'version' => $wapSetting['version'],
         );
     }
 

@@ -7394,6 +7394,11 @@ admin.wap_setting.hint: >
   <p class="help-block">开启后，网校在手机浏览器和微信上默认使用微网校进行显示</p>
   <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
   <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
+admin.wap_setting.version_select: 版本选择
+admin.wap_setting.new: 新版
+admin.wap_setting.old: 旧版
+admin.wap_setting.off: 关闭
+
 
 admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
 admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致网校用户无法购买商品。

@@ -199,8 +199,9 @@ class WebExtension extends \Twig_Extension
 
     public function isShowMobilePage()
     {
-        $wapSetting = $this->getSetting('wap', array());
-        if (empty($wapSetting['enabled'])) {
+        $wapSetting = $this->getSetting('wap', array('version' => 0));
+
+        if (empty($wapSetting['version'])) {
             return false;
         }
 
