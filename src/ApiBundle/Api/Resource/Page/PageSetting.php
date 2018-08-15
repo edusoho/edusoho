@@ -29,6 +29,7 @@ class PageSetting extends AbstractResource
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         return array(
+            'title' => '所有课程'
             array(
                 'type' => 'category',
                 'moduleType' => 'tree',
