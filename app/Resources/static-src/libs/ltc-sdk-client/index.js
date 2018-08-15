@@ -1,5 +1,6 @@
 import Api from './api';
 import EsMessenger from 'app/common/messenger';
+const resources = require('./resource.js');
 require('libs/iframe-resizer-contentWindow.js');
 
 class LtcSDKClient {
@@ -37,6 +38,9 @@ class LtcSDKClient {
         let script = document.createElement('script');
         script.src = self.resourceList[value];
         script.addEventListener('load', function() {
+          if (resources['init_'+value]) {
+            resources['init_'+value]();
+          }
           resolve(value);
           self.resource[value] = true;
         }, false);
@@ -67,7 +71,7 @@ class LtcSDKClient {
 
   emit(eventName, args={}) {
     args = Object.assign({
-      iframeName: self.frameElement.getAttribute('id'),
+      iframeId: self.frameElement.getAttribute('id'),
     }, args);
     this.messenger.sendToParent(eventName, args);
   }
@@ -91,6 +95,4 @@ class LtcSDKClient {
   }
 }
 
-let ltc = new LtcSDKClient();
-
-module.exports = window.ltc = ltc;
+module.exports = window.ltc = new LtcSDKClient();
