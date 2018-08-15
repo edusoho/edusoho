@@ -68,6 +68,7 @@ export default class Base {
     let validator = $form.validate({
       currentDom: '#course-create-btn',
       ajax: true,
+      scrollFocus: true,
       rules: {
         title: {
           required: true,

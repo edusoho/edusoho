@@ -88,6 +88,7 @@ class CourseInfo {
     this.validator = $form.validate({
       currentDom: '#course-submit',
       ajax: true,
+      scrollFocus: true,
       groups: {
         date: 'expiryStartDate expiryEndDate'
       },
