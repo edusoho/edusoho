@@ -8,7 +8,7 @@ class LtcSDKServer {
     this.messenger = new EsMessenger({
       name: 'parent',
       project: 'LtcProject',
-      children: [document.getElementById('task-create-content-iframe')],
+      children: [document.getElementById('task-create-content-iframe'),document.getElementById('task-create-finish-iframe')],
       type: 'parent'
     });
 
@@ -18,11 +18,8 @@ class LtcSDKServer {
   event() {
     this.messenger.on('init', ()=> {
       this.messenger.sendToChild({id: 'task-create-content-iframe'}, 'initResourceList', this.resource);
+      this.messenger.sendToChild({id: 'task-create-finish-iframe'}, 'initResourceList', this.resource);
     });
-
-    this.on('iFrameResize', () => {
-      alert(123123);
-    })
   }
 
   on(eventName, args) {

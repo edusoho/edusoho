@@ -2,7 +2,6 @@
 // new Text();
 
 window.ltc.loadCss();
-
 let load = window.ltc.load('jquery', 'validate', 'editor');
 load.then(function(){
   let $content = $('#text-content-field');
@@ -29,6 +28,10 @@ load.then(function(){
     // }
   });
 
-  window.ltc.emit('iFrameResize');
+  window.ltc.on('next', (msg) => {
+    window.ltc.messenger.sendToParent('nextReturn', {success:true,data:[{'name': 'finishDetail','value': '123456'}]});
+  });
+
 }).catch(function(e){
+
 });

@@ -1,11 +1,12 @@
 import Api from './api';
 import EsMessenger from 'app/common/messenger';
+require('libs/iframe-resizer-contentWindow.js');
 
 class LtcSDKClient {
   constructor() {
     this.options = {};
     this.messenger =  new EsMessenger({
-      name: 'task-create-content-iframe',
+      name: self.frameElement.getAttribute('id'),
       project: 'LtcProject',
       children: [],
       type: 'child'
@@ -60,12 +61,14 @@ class LtcSDKClient {
     return this;
   }
 
-  on(eventName, args='') {
+  on(eventName, args={}) {
     this.messenger.on(eventName, args);
   }
 
-  emit(eventName, args='') {
-    alert();
+  emit(eventName, args={}) {
+    args = Object.assign({
+      iframeName: self.frameElement.getAttribute('id'),
+    }, args);
     this.messenger.sendToParent(eventName, args);
   }
 
