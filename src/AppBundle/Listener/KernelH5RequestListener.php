@@ -44,7 +44,7 @@ class KernelH5RequestListener
         }
 
         $wapSetting = $this->getSettingService()->get('wap');
-        if (2 != $wapSetting['version']) {
+        if (empty($wapSetting['version']) || 2 != $wapSetting['version']) {
             return;
         }
 
