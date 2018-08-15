@@ -32,11 +32,10 @@
       {% endif %}
 
       <div class="cd-mt16 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
-        <input autocomplete="off" class="form-control course-mangae-info__input cd-mr8" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
+        <input autocomplete="off" class="form-control course-mangae-info__input cd-mr8" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
       </div>
-
       <div class="cd-mt16 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}" id="deadlineType-days">
-        <input class="form-control course-mangae-info__input cd-mr8" type="text" id="expiryDays" name="expiryDays" value="{{ course.expiryDays|default(1) }}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>
+        <input class="form-control course-mangae-info__input cd-mr8" type="text" id="expiryDays" name="expiryDays" value="{% if course.expiryDays|default(1) %}{{ course.expiryDays|default(1) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>
         {{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}
       </div>
     </div>
