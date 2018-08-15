@@ -8102,11 +8102,11 @@ my.reward_point.mall.search_hint: 输入标题关键字
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 加入学习时间
-task.learn_data_detail.finishedTime: 完成活动时间
+task.learn_data_detail.finishedTime: 完成%taskName%时间
 task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
 task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
-task.learn_data_detail.learnTime: 活动学习时长（分）
+task.learn_data_detail.learnTime: %taskName%学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
 task.learn_data_detail.finished_rate: 完成率
 task.learn_data_detail.contact_information: 联系方式
