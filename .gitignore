@@ -56,7 +56,6 @@ chunk-manifest.json
 deployment-config.json
 .webpack-watch.log
 /web/MP_*
-/web/h5
 /h5
 yarn-error.log
 /mochawesome-report/*
