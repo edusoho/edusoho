@@ -25,6 +25,8 @@ class Editor {
     this.finish_loaded = false;
     this.contentUrl = '';
     this.finishUrl = '';
+    this.contentData = null;
+    this.finishData = null;
     this._init();
     this._initEvent();
   }
@@ -52,8 +54,21 @@ class Editor {
   }
 
   _onNext(e) {
-    if (this.step === 3 || !this._validator(this.step)) {
-      return;
+    if (this.step === 2) {
+      this.contentData = true;
+      window.ltcsdkserver.messenger.sendToChild({id: 'task-create-content-iframe'}, 'next', {action: 'needData'} );
+      window.ltcsdkserver.messenger.on('nextReturn', (msg) => {
+        console.log(msg.success);
+        if (!msg.success) {
+          this.contentData = false;
+          return ;
+        }
+        this.contentData = msg.data;
+      });
+
+      if (!this.contentData) {
+        return ;
+      }
     }
     this.step += 1;
     this._switchPage();
@@ -62,7 +77,7 @@ class Editor {
 
   _onPrev() {
     // 第二页可以上一步
-    if (this.step === 1 || (this.step == 3 && !this._validator(this.step))) {
+    if (this.step === 1) {
       return;
     }
 
@@ -83,14 +98,44 @@ class Editor {
   }
 
   _onSave(event) {
-    if (!this._validator(this.step)) {
-      return;
+    if (this.step === 2) {
+      this.contentData = true;
+      window.ltcsdkserver.messenger.sendToChild({id: 'task-create-content-iframe'}, 'next', {action: 'needData'} );
+      window.ltcsdkserver.messenger.on('nextReturn', (msg) => {
+        if (!msg.success) {
+          console.log(msg);
+          this.contentData = false;
+          return;
+        }
+        this.contentData = msg.data;
+        this._postData(event);
+      });
     }
 
+    if (this.step === 3) {
+      this.finishData = true;
+      window.ltcsdkserver.messenger.sendToChild({id: 'task-create-finish-iframe'}, 'next', {action: 'needData'} );
+      window.ltcsdkserver.messenger.on('nextReturn', (msg) => {
+        if (!msg.success) {
+          console.log(msg);
+          this.finishData = false;
+          return;
+        }
+        this.finishData = msg.data;
+        this._postData(event);
+      });
+    }
+  }
+
+  _postData(event) {
     $(event.currentTarget).attr('disabled', 'disabled').button('loading');
     let postData = $('#step1-form').serializeArray()
-      .concat(this.$iframe_body.find('#step2-form').serializeArray())
-      .concat(this.$iframe_body.find('#step3-form').serializeArray());
+      .concat(this.contentData)
+      .concat(this.finishData);
+
+    console.log($('#step1-form').serializeArray());
+    console.log(this.contentData);
+    console.log(this.finishData);
 
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
@@ -145,7 +190,6 @@ class Editor {
   _switchPage() {
     this._renderStep(this.step);
     this._renderContent(this.step);
-    this._rendStepIframe(this.step);
     this._rendButton(this.step);
     if (this.step == 2 && !this.content_loaded) {
       console.log({'loading':new Date().toLocaleTimeString()});
@@ -163,12 +207,7 @@ class Editor {
     this.$frame = $('#' + this.content_iframe_name).iFrameResize();
     let loadiframe = () => {
       this.content_loaded = true;
-      let validator = {};
-      this.iframe_jQuery = this.$frame[0].contentWindow.$;
-      this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
       this._rendButton(2);
-      // this.$iframe_body.find('#step2-form').data('validator', validator);
-      // this.$iframe_body.find('#step3-form').data('validator', validator);
       console.log({'loaded':new Date().toLocaleTimeString()});
     };
     this.$frame.load(loadAnimation(loadiframe, this.$task_manage_content));
@@ -179,15 +218,10 @@ class Editor {
     this.$frame = $('#' + this.finish_iframe_name).iFrameResize();
     let loadiframe = () => {
       this.finish_loaded = true;
-      // let validator = {};
-      // this.iframe_jQuery = this.$frame[0].contentWindow.$;
-      // this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
       this._rendButton(3);
-      // this.$iframe_body.find('#step2-form').data('validator', validator);
-      // this.$iframe_body.find('#step3-form').data('validator', validator);
       console.log({'loaded':new Date().toLocaleTimeString()});
     };
-    // this.$frame.load(loadAnimation(loadiframe, this.$task_manage_finish));
+    this.$frame.load(loadAnimation(loadiframe, this.$task_manage_finish));
   }
 
   _inItStep1form() {
@@ -242,14 +276,6 @@ class Editor {
       this._renderNext(false);
       this._renderPrev(true);
     }
-  }
-
-  _rendStepIframe(step) {
-    // if (!this.content_loaded || !this.$iframe_body) {
-    //   return;
-    // }
-    // (step === 2) ? this.$iframe_body.find('.js-step2-view').addClass('active') : this.$iframe_body.find('.js-step2-view').removeClass('active');
-    // (step === 3) ? this.$iframe_body.find('.js-step3-view').addClass('active') : this.$iframe_body.find('.js-step3-view').removeClass('active');
   }
 
   _renderStep(step) {

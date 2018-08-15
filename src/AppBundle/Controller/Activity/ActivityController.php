@@ -69,7 +69,7 @@ class ActivityController extends BaseController
         } else {
             $activity = array(
                 'id' => $activityId,
-                ' ' => $type,
+                'mediaType' => $type,
                 'fromCourseId' => $courseId,
             );
         }

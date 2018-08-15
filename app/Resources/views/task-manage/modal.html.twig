@@ -23,8 +23,8 @@
           {% for type, meta in activity_metas() %}
             <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if task.type|default(null)==  type %} active {% endif %}"
                 data-role="activityType" data-type="{{ type }}"
-                data-content-url="{{ path('course_manage_activity_content_modal', {activityId:0, type: type, courseId:course.id}) }}"
-                data-finish-url="{{ path('course_manage_activity_finish_modal', {activityId:0, type: type, courseId:course.id}) }}">
+                data-content-url="{{ path('course_manage_activity_content_modal', {activityId:0, 'type': type, courseId:course.id}) }}"
+                data-finish-url="{{ path('course_manage_activity_finish_modal', {activityId:0, 'type': type, courseId:course.id}) }}">
               <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}>
                 <i class="{{ meta.icon }}"></i>
                 {{ meta.name|trans }}
