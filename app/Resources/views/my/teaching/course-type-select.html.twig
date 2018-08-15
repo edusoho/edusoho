@@ -12,5 +12,6 @@
     <li class="{% if filter == 'live' %}active{% endif %}"><a href="{{path('my_teaching_course_sets', {filter:'live'}) }}">{{'my.teaching.course_set.live'|trans}}</a></li>
     <li class="{% if filter == 'open' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'open'}) }}">{{'my.teaching.open_course.normal'|trans}}</a></li>
     <li class="{% if filter == 'liveOpen' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'liveOpen'}) }}">{{'my.teaching.open_course.live'|trans}}</a></li>
+    {{ slot('my.teaching.menu', {'side_nav': side_nav}) }}
   </ul>
 </div>

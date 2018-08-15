@@ -17,6 +17,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Biz\Course\Util\CourseTitleUtils;
 
 class GenerateNotificationHandler
 {
@@ -58,12 +59,12 @@ class GenerateNotificationHandler
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 
         foreach ((array) $courses as $key => $course) {
-            if ($course['parentId'] != 0) {
+            if (0 != $course['parentId']) {
                 continue;
             }
             $message = array(
                 'courseId' => $course['id'],
-                'courseTitle' => $course['title'],
+                'courseTitle' => CourseTitleUtils::getDisplayedTitle($course),
                 'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']),
             );
             $this->courseOverduePush($user, $message);
@@ -143,10 +144,10 @@ class GenerateNotificationHandler
             return false;
         }
         $vipSetting = $this->getSettingService()->get('vip', array());
-        if (array_key_exists('deadlineNotify', $vipSetting) && $vipSetting['deadlineNotify'] == 1) {
+        if (array_key_exists('deadlineNotify', $vipSetting) && 1 == $vipSetting['deadlineNotify']) {
             $vip = $this->getVipService()->getMemberByUserId($user['id']);
             $currentTime = time();
-            if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
+            if (1 != $vip['deadlineNotified'] && $currentTime < $vip['deadline']
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
                 $message = array('endtime' => date('Y-m-d', $vip['deadline']), 'levelId' => $vip['levelId']);

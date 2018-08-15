@@ -26,7 +26,7 @@ class CourseController extends CourseBaseController
 
         $courseItems = array();
         if ($isMarketingPage) {
-            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 25));
+            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 10000));
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -245,7 +245,7 @@ class CourseController extends CourseBaseController
             $conditions,
             array('seq' => 'DESC', 'createdTime' => 'ASC'),
             0,
-            10
+            PHP_INT_MAX
         );
 
         return $this->render(

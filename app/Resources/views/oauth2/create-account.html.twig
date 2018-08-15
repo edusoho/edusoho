@@ -10,8 +10,11 @@
 
 {% block panel_body %}
 
-  {% if oauthUser.mode != 'closed' %}
+  {% if inviteUser|default() %}
+    <div class="alert alert-info alert-sm">{{'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
+  {% endif %}
 
+  {% if oauthUser.mode != 'closed' %}
     {% if oauthUser.accountType == "email" %} {% set accountType = 'user.oauth.login_by_email'|trans %}{% else %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% endif %}
     <div class="third-party-user-section clearfix">
         <div class="cd-mb24 pull-left cd-mr16">
@@ -53,6 +56,15 @@
               <span class="js-time-left"></span>
               <span class="js-fetch-btn-text">{{ 'user.oauth.register.send_sms'|trans }}</span>
             </button>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if (setting('invite.invite_code_setting')|default(0) == 1) and not inviteUser|default() %}
+        <div class="form-group cd-form-group">
+          <label class="control-label" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
+          <div class="controls">
+            <input type="text" name="invitedCode" id="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
           </div>
         </div>
       {% endif %}
