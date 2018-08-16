@@ -40,8 +40,10 @@ load.then(function(){
   });
   
 
-  window.ltc.on('next', (msg) => {
-    window.ltc.messenger.sendToParent('nextReturn', {success:true,data:[{'name': 'finishDetail','value': '123456'}]});
+  window.ltc.on('getActivity', (msg) => {
+    if (validate.form()) {
+      window.ltc.emit('returnActivity', {valid:true,data:$('#step2-form').serializeObject()});
+    }
   });
 
 }).catch(function(e){

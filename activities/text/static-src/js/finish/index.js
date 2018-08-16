@@ -2,7 +2,7 @@
 window.ltc.loadCss();
 let load = window.ltc.load('jquery', 'validate');
 load.then(function(){
-  window.ltc.messenger.on('next', (msg) => {
-    window.ltc.messenger.sendToParent('nextReturn', {success:true,data:[{'name': 'title','value': '123456'}]});
+  window.ltc.messenger.on('getFinishCondition', (msg) => {
+    window.ltc.messenger.sendToParent('returnFinishCondition', {valid:true,data:$('#step3-form').serializeObject()});
   });
 });
