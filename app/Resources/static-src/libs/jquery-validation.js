@@ -9,7 +9,6 @@ $.validator.setDefaults({
   ignore: '',
   ajax: false,
   currentDom: null,
-  scrollFocus: false,
   highlight: function(element, errorClass, validClass) {
     let $row = $(element).addClass('form-control-error').closest('.form-group').addClass('has-error');
     $row.find('.help-block').hide();
@@ -31,13 +30,9 @@ $.validator.setDefaults({
     }
   },
   invalidHandler: function(data, validator) {
-    const flag = validator.settings.scrollFocus;
-    if (!flag) return;
     const errorNum = validator.numberOfInvalids();
     if (errorNum) {
-      $('html, body').animate({
-        scrollTop: $(validator.errorList[0].element).offset().top
-      }, 500);
+      $(validator.errorList[0].element).focus();
     }
     console.log(data);
   },

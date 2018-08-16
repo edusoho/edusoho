@@ -18,7 +18,6 @@ export default class Base {
     const validator = $form.validate({
       currentDom: '#courseset-base-submit',
       ajax: true,
-      scrollFocus: true,
       rules: {
         title: {
           maxlength: 60,
