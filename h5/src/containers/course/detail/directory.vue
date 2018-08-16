@@ -252,6 +252,7 @@
                 courseId: this.selectedPlanId,
                 taskId: task.id,
                 type: task.type,
+                title: task.title,
                 replay,
               }
             })
