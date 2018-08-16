@@ -320,7 +320,8 @@ export default class Manage {
   }
 
   /*
-   * 单任务课时才有预览课时的功能，实际上预览的是任务
+   * 单任务课时才有预览课时的功能，实际上预览的是任务，同样编辑课时的功能实际上是编辑任务
+   * 多任务课时才有重命名课时的功能
    */
   _initLessonTaskAction() {
     let btnRelations = { //key为显示的按钮，点击后，实际上点击的value中的按钮
