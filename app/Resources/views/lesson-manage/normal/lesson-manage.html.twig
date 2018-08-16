@@ -8,11 +8,7 @@
   {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %}  <!-- 单任务课时，不显示任务 -->
   
   {% set task = lesson.tasks[0] %}
-  {% if not shouldDisplayTask %}
-    {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, customTitle: customTitle, isLesson: true} %}
-  {% else %}
-    {{customTitle|raw}}
-  {% endif %}
+  {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, customTitle: customTitle, isLesson: true, shouldDisplayTaskAsLesson: shouldDisplayTask} %}
 </div>
 <div class="item-actions">
   <a class="cd-mr24 js-create-task-btn" href="javascript:;" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
@@ -35,25 +31,36 @@
           {{'course.plan_task.unpublish_btn'|trans}}
         </a>
       </li>
+
+      <li class="hidden">
+        <a href="javascript:;" class="js-hidden-lesson-rename-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {lessonId:lesson.id,courseId:task.courseId}) }}"></a>
+      </li>
+      <li class="hidden">
+        <a href="javascript:;" class="js-hidden-lesson-edit-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:'{taskId}',courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}"></a>
+      </li>
+      <li class="hidden">
+        <a href="javascript:;" class="js-hidden-lesson-preview-btn" data-url="{{ path('course_task_show', {id:'{taskId}',courseId:task.courseId,preview:1}) }}" target="_blank"></a>
+      </li>
+
       {% if shouldDisplayTask %}
-        <li>
-            <a href="javascript:;" class="displayWhenMulTasks" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {courseId:course.id, lessonId:lesson.id}) }}">{{ 'course.lesson_manage.rename'|trans }}</a>
+        <li class="displayWhenMulTasks">
+            <a href="javascript:;" class="js-lesson-rename-btn">{{ 'course.lesson_manage.rename'|trans }}</a>
         </li>
-        <li>
-            <a href="javascript:;" class="displayWhenSingleTask hidden" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}">{{ 'course.manage.edit_lesson'|trans }}</a>
+        <li class="displayWhenSingleTask hidden">
+            <a href="javascript:;" class="js-lesson-edit-btn" >{{ 'course.manage.edit_lesson'|trans }}</a>
         </li>
-        <li>
-            <a href="javascript:;" class="displayWhenSingleTask hidden" data-toggle="modal" data-target="#modal" data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}">{{ 'course.manage.preview_lesson'|trans }}</a>
+        <li class="displayWhenSingleTask hidden">
+            <a href="javascript:;" class="js-lesson-preview-btn">{{ 'course.manage.preview_lesson'|trans }}</a>
         </li>
       {% else %}
-        <li>
-            <a href="javascript:;" class="displayWhenMulTasks hidden" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {courseId:course.id, lessonId:lesson.id}) }}">{{ 'course.lesson_manage.rename'|trans }}</a>
+        <li class="displayWhenMulTasks hidden">
+            <a href="javascript:;" class="js-lesson-rename-btn">{{ 'course.lesson_manage.rename'|trans }}</a>
         </li>
-        <li>
-            <a href="javascript:;" class="displayWhenSingleTask" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}">{{ 'course.manage.edit_lesson'|trans }}</a>
+        <li class="displayWhenSingleTask">
+            <a href="javascript:;" class="js-lesson-edit-btn">{{ 'course.manage.edit_lesson'|trans }}</a>
         </li>
-        <li>
-            <a href="javascript:;" class="displayWhenSingleTask" data-toggle="modal" data-target="#modal" data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}">{{ 'course.manage.preview_lesson'|trans }}</a>
+        <li class="displayWhenSingleTask">
+            <a href="javascript:;" class="js-lesson-preview-btn">{{ 'course.manage.preview_lesson'|trans }}</a>
         </li>
       {% endif %}
       <li>

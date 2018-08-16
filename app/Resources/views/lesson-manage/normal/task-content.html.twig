@@ -1,7 +1,7 @@
 {% set activity = task.activity|default() %}
 {% set file = task.activity.ext.file|default(null) %}
 
-<i class="es-icon {{ activity_metas(activity.mediaType).icon }} mrs {{isLesson|default(false)?'displayWhenSingleTask':''}}" data-role="task"></i>
+<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'displayWhenSingleTask js-lesson-icon ':''}}" data-role="task"></i>
 
 {% if displayAllInfo|default(false) %}
   {% if not task.isOptional %}

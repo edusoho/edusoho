@@ -26,6 +26,7 @@ export default class Manage {
     this._publish();
     this._createTask();
     this._optional();
+    this._initLessonTaskAction();
   }
 
   _collapse() {
@@ -77,7 +78,8 @@ export default class Manage {
     case 'task':
     {
       this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
-      this._triggerAsTaskNumUpdated($elm);
+      let container = $elm.parents('.js-lesson-container');
+      this._triggerAsTaskNumUpdated(container);
       break;
     }
     case 'lesson':
@@ -124,8 +126,9 @@ export default class Manage {
         if ('task' == $this.data('type') && $parent.siblings().length == 0) {
           $parent.closest('.js-task-manage-lesson').remove();
         }
-        self._triggerAsTaskNumUpdated($parent, true);
+        let container = $parent.parents('.js-lesson-container');
         $parent.remove();
+        self._triggerAsTaskNumUpdated(container);
         self.handleEmptyShow();
         self._flushTaskNumber();
         $.post($this.data('url'), function(data) {
@@ -316,6 +319,39 @@ export default class Manage {
     });
   }
 
+  /*
+   * 单任务课时才有预览课时的功能，实际上预览的是任务
+   */
+  _initLessonTaskAction() {
+    let btnRelations = { //key为显示的按钮，点击后，实际上点击的value中的按钮
+      'js-lesson-preview-btn': 'js-hidden-lesson-preview-btn',
+      'js-lesson-edit-btn': 'js-hidden-lesson-edit-btn',
+      'js-lesson-rename-btn': 'js-hidden-lesson-rename-btn',
+    };
+
+    for (const displayedEleClass in btnRelations) {
+      let actualClickedEleClass = btnRelations[displayedEleClass];
+      $('.' + displayedEleClass).click(
+        function() {
+          let container = $(this).parents('.js-lesson-container');
+
+          let taskIdStr = container.find('.js-task-manage-item').attr('id');
+          //格式为 task-{taskId}
+
+          let taskId = taskIdStr.split('-')[1]; // 第二部分即为taskId
+          let jsActionBtn = container.find('.' + actualClickedEleClass);
+          let updatedUrl = jsActionBtn.data('url').replace('%7BtaskId%7D', taskId);
+          jsActionBtn.data('url', updatedUrl);
+          if (jsActionBtn.data('toggle')) {
+            jsActionBtn.click();
+          } else {
+            window.open(jsActionBtn.data('url'), '_blank');
+          }
+        }
+      );
+    }
+  }
+
   toggleOptional($target, self, info) {
     const $parentLi = $target.closest('.task-manage-item');
     const $dom = $parentLi.find(info.class);
@@ -338,28 +374,44 @@ export default class Manage {
 
   /*
    * 如果课时下有多任务，显示任务，如果单任务，不显示任务
-   * @param $elm 新增或删除的任务节点，必须已经在dom节点内
+   * @param container 新增或删除的任务节点所在的js-lesson-container节点
    * @param isDeleted 如果是删除操作，值为true, 删除操作时，先隐藏再删除（即2个节点时，就要隐藏了）
    */
-  _triggerAsTaskNumUpdated($elm, isDeleted) {
-    let container = $elm.parents('.js-lesson-container');
+  _triggerAsTaskNumUpdated(container) {
     let lessonBox = container.find('.js-lesson-box');
-    let taskCount = lessonBox.find('.js-task-manage-item').length;
+    let isMulTasks = lessonBox.find('.js-task-manage-item').length > 1;
 
-    // 删除操作时，先隐藏再删除（即2个节点时，就要隐藏了）
-    let hiddenCount = 1;
-    if (isDeleted) {
-      hiddenCount = 2;
-    }
-
-    if (taskCount > hiddenCount) { // 多任务课时显示任务
+    if (isMulTasks) { // 多任务课时显示任务, 同时课时上会少一些按钮
       lessonBox.removeClass('hidden');
       container.find('.displayWhenMulTasks').removeClass('hidden');
       container.find('.displayWhenSingleTask').addClass('hidden');
-    } else { // 单任务课时不显示任务
+    } else { // 单任务课时不显示任务, 同时课时上会多一些按钮
       lessonBox.addClass('hidden');
       container.find('.displayWhenMulTasks').addClass('hidden');
       container.find('.displayWhenSingleTask').removeClass('hidden');
+    }
+
+    this._triggerLessonIconAsTaskNumUpdated(container, isMulTasks);
+  }
+
+  _triggerLessonIconAsTaskNumUpdated(container, isMulTasks) {
+    let lessonIconBtn = container.find('.js-lesson-icon');
+    let classList = '';
+    if (isMulTasks) {
+      classList = lessonIconBtn[0].classList;
+    } else {
+      classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
+    }
+
+    for (let index = 0; index < classList.length; index++) {
+      const className = classList[index];
+      if (className.startsWith('es-icon-')) {
+        if (isMulTasks) {
+          lessonIconBtn.removeClass(className);
+        } else if (!lessonIconBtn.hasClass(className)) {
+          lessonIconBtn.addClass(className);
+        }
+      }
     }
   }
 }
