@@ -59,6 +59,10 @@ export default {
           } else {
             this.playUrl = res.roomUrl;
           }
+          return;
+        }
+        if (res.error) {
+          Toast.fail(res.error.message);
         }
       }).catch(err => {
         Toast.fail(err.message);
@@ -73,6 +77,9 @@ export default {
       }).then(res =>{
         if(res.no) {
           this.getLiveUrl(taskId, res.no)
+        }
+        if (res.error) {
+          Toast.fail(res.error.message);
         }
       }).catch(err => {
         Toast.fail(err.message);
@@ -95,6 +102,9 @@ export default {
           } else {
             Toast('获取直播失败')
           }
+        }
+        if (res.error) {
+          Toast.fail(res.error.message);
         }
       }).catch(err => {
         Toast.fail(err.message);
