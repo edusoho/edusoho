@@ -57,7 +57,7 @@ export default {
           if (res.url.indexOf('/error/') > -1) {
             Toast('暂无回放');
           } else {
-            this.playUrl = res.roomUrl;
+            this.playUrl = res.url;
           }
           return;
         }
