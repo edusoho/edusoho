@@ -5,7 +5,7 @@
 
 {% if displayAllInfo|default(false) %}
   {% if not task.isOptional %}
-    {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ task.number }}</span>：
+    {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
   {% endif %}
   {{ task.title|sub_text(30) }}
 {% endif %} 

@@ -240,15 +240,15 @@ export default class Manage {
   }
 
   _sortUnitNumber() {
-    // 排序 节 的序号
-    let num;
-    this.$element.find('.js-task-manage-chapter').each(function() {
-      let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
-      num = 1;
-      $unit.each(function() {
-        $(this).find('.number').text(num++);
-      });
-    });
+    $('.js-lesson-container').each(
+      function() {
+        $(this).find('.js-lesson-box .number').each(
+          function(index) {
+            $(this).text((index + 1));
+          }
+        );
+      }
+    );
   }
 
   _publish() {
