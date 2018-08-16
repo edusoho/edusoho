@@ -1,5 +1,4 @@
 import Intro from './intro';
-import Detail from 'app/js/courseset-manage/base/detail';
 import { initTags } from 'app/js/courseset-manage/base/tag';
 
 class CourseInfo {
@@ -16,6 +15,7 @@ class CourseInfo {
     this.setService();
     this.taskPriceSetting();
     this.setIntroPosition();
+    this.initCkeditor();
   }
 
   setIntroPosition() {
@@ -121,7 +121,7 @@ class CourseInfo {
         },
         summary: {
           ckeditor_maxlength: 10000,
-        }
+        },
       },
       messages: {
         originPrice: Translator.trans('validate_old.positive_currency.message'),
@@ -211,16 +211,38 @@ class CourseInfo {
     if ($('#tags').length) {
       initTags();
     }
-    if ($('#courseset-summary-field').length) {
-      new Detail('#courseset-summary-field');
-    } else {
-      this.saveForm();
-    }
+
+
+    this.saveForm();
   }
+
+  initCkeditor() {
+    const $summaryField = $('#courseset-summary-field');
+    const summaryLength = $summaryField.length;
+    if (!summaryLength) {
+      return;
+    }
+    let self = this;
+    self.editor = CKEDITOR.replace('summary', {
+      allowedContent: true,
+      toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: this.uploadUrl
+    });
+
+    self.editor.on('blur', () => {
+      $summaryField.val(self.editor.getData());
+    });
+  }
+
 
   saveForm() {
     $('#course-submit').on('click', (event) => {
       this.commonExpiryMode();
+      const $summaryField = $('#courseset-summary-field');
+      if ($summaryField.length) {
+        $summaryField.val(this.editor.getData());
+      }
       if (this.validator.form()) {
         $('#course-info-form').submit();
       }
@@ -271,15 +293,13 @@ class CourseInfo {
     });
 
 
-    //截止日期，有效天数
+    // 截止日期，有效天数
     $('input[name="deadlineType"]').on('change', (event) => {
       const $date = $('#deadlineType-date');
       const $days = $('#deadlineType-days');
-      const $targetItem = $(event.target).closest('.form-group');
-      $targetItem.removeClass('has-error');
-      $targetItem.find('.js-expiry-input').removeClass('form-control-error');
-      $('.jq-validate-error').remove();
-      if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+      const checkValue = $('input[name="deadlineType"]:checked').val();
+      this.removeErrorTip(event);
+      if (checkValue === 'end_date') {
         $date.removeClass('hidden');
         $days.addClass('hidden');
       } else {
@@ -289,15 +309,13 @@ class CourseInfo {
       this.commonExpiryMode(true);
     });
 
+    // 有效期的选项
     $('input[name="expiryMode"]').on('change', (event) => {
       const $expiryDays = $('#expiry-days');
       const $expiryDate = $('#expiry-date');
-      const $tip = $('.js-course-manage-expiry-tip');
       const checkValue = $('input[name="expiryMode"]:checked').val();
-      const $targetItem = $(event.target).closest('.form-group');
-      $targetItem.removeClass('has-error');
-      $targetItem.find('.js-expiry-input').removeClass('form-control-error');
-      $('.jq-validate-error').remove();
+      this.removeErrorTip(event);
+      const $tip = $('.js-course-manage-expiry-tip');
       if (checkValue === 'date') {
         $expiryDays.addClass('hidden');
         $expiryDate.removeClass('hidden');
@@ -328,6 +346,14 @@ class CourseInfo {
       this.validator.element($(event.target));
     });
 
+  }
+
+
+  removeErrorTip(event) {
+    const $targetItem = $(event.target).closest('.form-group');
+    $targetItem.removeClass('has-error');
+    $targetItem.find('.js-expiry-input').removeClass('form-control-error');
+    $('.jq-validate-error').remove();
   }
 
   commonExpiryMode(flag) {
