@@ -36,7 +36,9 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     handleLive() {
-      const { courseId, taskId, type, replay } = this.$route.query;
+      const { taskId, replay, title } = this.$route.query;
+      this.setNavbarTitle(title)
+
       if (replay) {
         this.getReplayUrl(taskId)
         return;
