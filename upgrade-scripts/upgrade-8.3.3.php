@@ -95,17 +95,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
-        $this->updateCoursePriceFields();
         $this->toggleSiteTrace();
-    }
-
-    protected function updateCoursePriceFields()
-    {
-        $connection = $this->getConnection();
-        $connection->exec("
-            UPDATE course_v8 cv SET cv.isFree=1,cv.originPrice=0 WHERE cv.isFree=0 AND cv.price=0 AND cv.originPrice>0 AND EXISTS (SELECT * FROM course_set_v8 csv WHERE csv.id=cv.courseSetId AND csv.discountId=0)
-        ");
-        return 1;
     }
 
     protected function generateIndex($step, $page)
