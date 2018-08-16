@@ -19,7 +19,7 @@ class WechatPayJsH5Trade extends BaseTrade
     {
         $result = array(
             'platformCreatedResult' => $trade['platform_created_result'],
-            'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $trade['trade_sn'])),
+            'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $trade['trade_sn']), true),
         );
 
         return $result;
