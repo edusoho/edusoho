@@ -12,14 +12,14 @@
           <span class="sum__price">¥ <span class="num">{{ detail.pay_amount | toMoney }}</span></span>
         </div>
         <div class="payWay">
-          <div :class="['payWay__item', {'payWay__item--selected': selected}]"
+          <div :class="['payWay__item', {'payWay__item--selected': payWay === 'Alipay_LegacyH5'}]"
             v-show="paySettings.alipayEnabled && !inWechat"
             @click="payWay = 'Alipay_LegacyH5';selected = true">
             <img class="correct" src="static/images/correct.png">
             <div class="right"></div>
             <img src="static/images/zfb.png">
           </div>
-          <div :class="['payWay__item', {'payWay__item--selected': !selected}]"
+          <div :class="['payWay__item', {'payWay__item--selected': payWay === 'WechatPay_H5'}]"
             v-show="paySettings.wxpayEnabled"
             @click="payWay = 'WechatPay_H5'; selected = false">
             <img class="correct" src="static/images/correct.png">
@@ -43,7 +43,8 @@ export default {
   data () {
     return {
       detail: {},
-      payWay: 'Alipay_LegacyH5', // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
+      // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
+      payWay: '',
       selected: true,
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
@@ -64,6 +65,11 @@ export default {
         type: 'payment'
       }
     })
+    if (this.paySettings.alipayEnabled && !this.inWechat) {
+      this.payWay = 'Alipay_LegacyH5';
+    } else if (this.paySettings.wxpayEnabled) {
+      this.payWay = 'WechatPay_H5';
+    }
     const { source, id, sn, targetId } = this.$route.query;
     if (source !== 'order') {
       Api.createOrder({
