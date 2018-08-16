@@ -106,6 +106,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
         $wapSetting['version'] = empty($wapSetting['enabled']) ? 0 : $wapSetting['enabled'];
+        $this->getSettingService()->set('wap', $wapSetting);
     }
 
     protected function generateIndex($step, $page)
