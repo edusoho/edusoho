@@ -37,7 +37,7 @@ class PageDiscovery extends AbstractResource
             array(
                 'type' => 'course_list',
                 'moduleType' => 'hotCourseList',
-                'data' => array('title' => '热门课程', 'items' => $hotCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => '-hitNum'),
+                'data' => array('title' => '热门课程', 'items' => $hotCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => '-studentNum'),
                 ),
             ),
             array(
@@ -53,11 +53,11 @@ class PageDiscovery extends AbstractResource
 
     protected function findCoursesAndCourseSetsBySort($sort)
     {
-        $conditions = array('parentId' => 0, 'status' => 'published', 'excludeTypes' => array('reservation'));
+        $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
         if (array_key_exists('recommendedSeq', $sort)) {
             $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, 0, 4);
         } else {
-            $courses = $this->getCourseService()->searchCourses($conditions, $sort, 0, 4);
+            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, 0, 4);
         }
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

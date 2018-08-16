@@ -61,7 +61,7 @@ class PageSetting extends AbstractResource
                         'text' => '推荐',
                     ),
                     array(
-                        'type' => '-hitNum',
+                        'type' => '-studentNum',
                         'text' => '热门',
                     ),
                     array(
