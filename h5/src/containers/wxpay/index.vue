@@ -52,7 +52,8 @@ export default {
           data.platformCreatedResult,
           (res) => {
             if (res.err_msg == 'get_brand_wcpay_request:ok') {
-              this.$router.push({ path: data.paidSuccessUrlH5 });
+              location.href = data.paidSuccessUrlH5;
+              // this.$router.push({ path: data.paidSuccessUrlH5 });
             } else {
               if (res.err_msg == 'get_brand_wcpay_request:fail') {
                 alert('支付失败');
