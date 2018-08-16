@@ -3,24 +3,24 @@
     <div class="e-drag-section">
       <div class="e-drag-img">
         <img :src="imgInfo.url" alt="" ref="dragImgBg">
-        <img :src="imgInfo.jigsaw" alt="" 
-          class="e-drag-img__dragable" 
+        <img :src="imgInfo.jigsaw" alt=""
+          class="e-drag-img__dragable"
           :style="{ left: `${dragState.currentLeft}px` }">
       </div>
 
       <div class="e-drag-bar" ref="bar">
         <span>{{tips}}</span>
-        <div class="e-drag-bar__mask" 
+        <div class="e-drag-bar__mask"
           :style="{ width: `${dragState.maskWidth}px` }"></div>
-        <div class="e-drag-btn" 
+        <div class="e-drag-btn"
           ref="dragBtn"
           @touchend="handletTouchEnd"
-          @touchmove="handleTouchMove" 
+          @touchmove="handleTouchMove"
           :style="{ left: `${dragState.currentLeft}px`}">
           <img src="static/images/drag.png" alt="">
         </div>
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -50,7 +50,8 @@ export default {
         currentLeft: 0,
         btnWidth: 0,
         maskWidth: 0
-      }
+      },
+      dragToEnd: false,
     }
   },
   created() {
@@ -95,7 +96,11 @@ export default {
     //   })
     // },
     handletTouchEnd() {
-      if(this.dragState.currentLeft) {
+      if (this.dragToEnd) {
+        return;
+      }
+      if (this.dragState.currentLeft) {
+        this.dragToEnd = true;
         Api.dragValidate({
           query: {
             token: this.getToken()
@@ -111,6 +116,9 @@ export default {
       }
     },
     handleTouchMove(e) {
+      if (this.dragToEnd) {
+        return;
+      }
       e.preventDefault();
 
       const dragBtn = this.$refs.dragBtn;

@@ -24,6 +24,7 @@
 
       <e-drag
         v-if="dragEnable"
+        :key="dragKey"
         :info="registerInfo"
         @success="handleSmsSuccess"></e-drag>
 
@@ -49,11 +50,11 @@
       <van-button type="default"
         class="primary-btn mb20"
         :disabled="btnDisable"
-        @click="handleSubmit">同意服务协议并注册</van-button>
+        @click="handleSubmit">注册</van-button>
 
-      <div class="login-bottom ">
+      <!-- <div class="login-bottom ">
         请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
-      </div>
+      </div> -->
 
       <!-- 一期不做 -->
       <!-- <div class="register-social">
@@ -87,6 +88,7 @@ export default {
         type: 'register'
       },
       dragEnable: false,
+      dragKey: 0,
       submitFlag: true,
       options: [{
         model: 'email'
@@ -182,23 +184,34 @@ export default {
         this.countDown();
       })
       .catch(err => {
-        err.code == 4030303
-          ? this.dragEnable = true
-          : Toast.fail(err.message);
+        switch(err.code) {
+          case 4030301:
+          case 4030302:
+            this.dragKey ++;
+            this.registerInfo.dragCaptchaToken = '';
+            this.registerInfo.smsToken = '';
+            Toast.fail(err.message);
+          case 4030303:
+            this.dragEnable = true
+            Toast.fail(err.message);
+            break;
+        }
       });
     },
     // 倒计时
     countDown() {
       this.count.showCount = true;
       this.count.codeBtnDisable = true;
+      this.count.num = 120;
 
       const timer = setInterval(() => {
-        this.count.num--;
         if(this.count.num <= 0) {
-          this.codeBtnDisable = false;
+          this.count.codeBtnDisable = false;
+          this.count.showCount = false
           clearInterval(timer);
           return;
         }
+        this.count.num--;
       }, 1000);
     }
   }
