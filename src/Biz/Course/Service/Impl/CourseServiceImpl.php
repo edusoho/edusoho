@@ -1406,6 +1406,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function searchWithJoinTableConditions($conditions, $sort, $start, $limit, $columns = array())
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+        $orderBy = $this->_prepareCourseOrderBy($sort);
+
+        return $this->getCourseDao()->searchWithJoinTableConditions($conditions, $orderBy, $start, $limit, $columns);
+    }
+
     // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
@@ -1897,6 +1905,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countWithJoinTableConditions($conditions)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getCourseDao()->countWithJoinTableConditions($conditions);
+    }
+
     public function countCourses(array $conditions)
     {
         return $this->getCourseDao()->count($conditions);
@@ -2130,12 +2145,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit)
     {
         $conditions['recommended'] = 1;
-        $recommendCount = $this->searchCourseCount($conditions);
+        $recommendCount = $this->countWithJoinTableConditions($conditions);
         $recommendAvailable = $recommendCount - $offset;
         $courses = array();
 
         if ($recommendAvailable >= $limit) {
-            $courses = $this->searchCourses(
+            $courses = $this->searchWithJoinTableConditions(
                 $conditions,
                 $sort,
                 $offset,
@@ -2145,7 +2160,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($recommendAvailable <= 0) {
             $conditions['recommended'] = 0;
-            $courses = $this->searchCourses(
+            $courses = $this->searchWithJoinTableConditions(
                 $conditions,
                 array('createdTime' => 'DESC'),
                 abs($recommendAvailable),
@@ -2154,14 +2169,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($recommendAvailable > 0 && $recommendAvailable < $limit) {
-            $courses = $this->searchCourses(
+            $courses = $this->searchWithJoinTableConditions(
                 $conditions,
                 $sort,
                 $offset,
                 $recommendAvailable
             );
             $conditions['recommended'] = 0;
-            $coursesTemp = $this->searchCourses(
+            $coursesTemp = $this->searchWithJoinTableConditions(
                 $conditions,
                 array('createdTime' => 'DESC'),
                 0,

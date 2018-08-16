@@ -85,6 +85,7 @@ class Course extends AbstractResource
             unset($conditions['type']);
         }
         $conditions['status'] = 'published';
+        $conditions['courseSetStatus'] = 'published';
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
 
@@ -94,15 +95,14 @@ class Course extends AbstractResource
         if (array_key_exists('recommendedSeq', $sort)) {
             $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
         } else {
-            $courses = $this->getCourseService()->searchCourses(
+            $courses = $this->getCourseService()->searchWithJoinTableConditions(
                 $conditions,
                 $sort,
                 $offset,
                 $limit
             );
         }
-
-        $total = $this->getCourseService()->searchCourseCount($conditions);
+        $total = $this->getCourseService()->countWithJoinTableConditions($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
