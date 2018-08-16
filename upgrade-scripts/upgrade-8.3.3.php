@@ -96,6 +96,16 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $this->toggleSiteTrace();
+        $this->updateWapSetting();
+    }
+
+    public function updateWapSetting()
+    {
+        $wapSetting = $this->getSettingService()->get('wap');
+        if (isset($wapSetting['version'])) {
+            return;
+        }
+        $wapSetting['version'] = empty($wapSetting['enabled']) ? 0 : $wapSetting['enabled'];
     }
 
     protected function generateIndex($step, $page)
