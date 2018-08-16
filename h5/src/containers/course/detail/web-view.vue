@@ -13,6 +13,7 @@ import loadScript from 'load-script';
 import Api from '@/api';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
+import { Toast } from 'vant';
 
 export default {
   data () {
@@ -30,7 +31,10 @@ export default {
     })
   },
   async mounted () {
-    const player = await Api.getMedia(this.getParams());
+    const player = await Api.getMedia(this.getParams()).catch(err => {
+      Toast(err.message);
+      return Promise.reject(err);
+    });
     if (['ppt', 'doc'].includes(this.media)) {
       this.initPlayer(player)
     } else {
