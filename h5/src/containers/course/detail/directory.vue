@@ -68,7 +68,7 @@
     },
     filters:{
       filterNumber(task) {
-        return task.task.number
+        return task.task.isOptional === '1' ? '选修' : task.task.number
       }
     },
     watch: {
