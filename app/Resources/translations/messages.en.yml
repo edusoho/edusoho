@@ -6036,7 +6036,7 @@ admin.invite_setting.invite_infomation_template: 'Invitation templates'
 admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
-admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
+admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/article/892" target="_blank">【查看教程】</a></p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old

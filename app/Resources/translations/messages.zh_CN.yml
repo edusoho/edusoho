@@ -7393,6 +7393,7 @@ admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
   <p class="help-block">开启后，网校在手机浏览器和微信上默认使用微网校进行显示</p>
   <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
+  <p class="help-block">首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/article/892" target="_blank">【查看教程】</a></p>
   <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
 admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版
