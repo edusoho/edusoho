@@ -1,12 +1,12 @@
 <template>
   <div class="course-detail__head">
     <div class="course-detail__head--img"
-      v-show="sourceType === 'img'">
+      v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
     </div>
     <div id="course-detail__head--video"
       ref="video"
-      v-show="['video', 'audio'].includes(sourceType)">
+      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus">
     </div>
   </div>
 </template>
@@ -14,8 +14,14 @@
 import loadScript from 'load-script';
 import { mapState } from 'vuex';
 import Api from '@/api'
+import { Toast } from 'vant';
 
 export default {
+  data() {
+    return {
+      isEncryptionPlus: false
+    };
+  },
   props: {
     courseSet: {
       type: Object,
@@ -63,7 +69,12 @@ export default {
     async initPlayer (){
       this.$refs.video && (this.$refs.video.innerHTML = '');
 
-      const player = await Api.getMedia(this.getParams());
+      const player = await Api.getMedia(this.getParams())
+      this.isEncryptionPlus = player.media.isEncryptionPlus;
+      if (player.media.isEncryptionPlus) {
+        Toast('该浏览器不支持云视频播放，请下载App')
+        return;
+      }
 
       const media = player.media;
       const options = {
