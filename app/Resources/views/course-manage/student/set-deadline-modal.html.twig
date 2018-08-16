@@ -28,7 +28,7 @@
         </div>
     	</div>
     </div>
-    <div class="row form-group">
+    <div class="row form-group cd-mb32">
       <div class="col-sm-2 control-label">
         <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
       </div>
@@ -40,7 +40,7 @@
           {{ select_options(dict('waveType'), app.request.query.get('waveType')) }}
         </select>
       </div>
-      <div class="col-sm-4 controls">
+      <div class="col-sm-4 controls expiry-date-change">
         <input type="text" id="day" name="day" value="0" data-url="{{path('course_set_manage_course_students_deadline_batch_day_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
