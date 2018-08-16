@@ -46,7 +46,7 @@
         {{ 'course.plan_task.start_time'|trans }}<input class="form-control cd-ml16 cd-mr32 course-mangae-info__input js-expiry-input" id="expiryStartDate" type="text" name="expiryStartDate" value="{% if course.expiryStartDate|default(0) == 0 %}{{'now'|date('Y-m-d')}}{% else %}{{ course.expiryStartDate|default('now'|date('Y-m-d')) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.plan_task.end_time'|trans }}<input class="form-control cd-ml16 course-mangae-info__input js-expiry-input" type="text" id="expiryEndDate" name="expiryEndDate" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %} >
       </div>
     </div>
-    <div class="course-mangae-info__tip js-course-manage-expiry-tip {% if course.expiryMode|default('days') == 'forever' %} ml0 {% endif %}">{{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}</div>
+    <div class="course-mangae-info__tip js-expiry-tip {% if course.expiryMode|default('days') == 'forever' %} ml0 {% endif %}">{{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}</div>
   </div>
 </div>
 {% if setting('magic.lesson_watch_limit') %}

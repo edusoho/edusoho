@@ -1668,12 +1668,11 @@ course.plan_overview: 数据概览
 course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
   在
-  <input class="form-control width-150" id="deadline" name="deadline" value="">
+  <input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">
   前，学员可进行学习。
 course.plan_task.expiry_days_learn_tips: >
   从加入当天起，在
-  <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"
-  value="1">
+  <input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">
   天内可进行学习。
 course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
