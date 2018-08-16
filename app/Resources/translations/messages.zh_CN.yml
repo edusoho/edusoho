@@ -2547,6 +2547,7 @@ classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
+classroom.student_add_tips: 班级未发布,不可添加学员
 classroom.member: 正式学员
 classroom.auditor: 旁听生
 classroom.exit_record: 退出记录

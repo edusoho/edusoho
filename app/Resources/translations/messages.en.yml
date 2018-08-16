@@ -2207,6 +2207,7 @@ classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
 classroom.student_import_tips: 'Cannot import students into unpublished class.'
+classroom.student_add_tips: 'Cannot add students into unpublished class.'
 classroom.member: Student
 classroom.auditor: Auditor
 classroom.exit_record: 'Quit record'
