@@ -134,18 +134,8 @@ class ContentServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->mockBiz(
-            'System:LogService',
-            array(
-                array(
-                    'functionName' => 'info',
-                    'withParams' => array('content', 'trash', '内容#111移动到回收站'),
-                ),
-            )
-        );
         $this->getContentService()->trashContent(111);
         $this->getContentDao()->shouldHaveReceived('update');
-        $this->getLogService()->shouldHaveReceived('info');
     }
 
     public function testDeleteContent()
@@ -174,18 +164,8 @@ class ContentServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->mockBiz(
-            'System:LogService',
-            array(
-                array(
-                    'functionName' => 'info',
-                    'withParams' => array('content', 'publish', '内容#111发布'),
-                ),
-            )
-        );
         $this->getContentService()->publishContent(111);
         $this->getContentDao()->shouldHaveReceived('update');
-        $this->getLogService()->shouldHaveReceived('info');
     }
 
     public function testIsAliasAvaliable()
