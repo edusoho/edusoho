@@ -14,8 +14,14 @@
     </ul>
 
     <div class="course-detail__validity">
-      <div><span class="mr20">学习有效期</span><span class="dark" v-html="learnExpiry"></span></div>
-      <div v-if="details.buyExpiryTime != 0" class="mt5">购买截止日期<span class="validity orange">{{ details.buyExpiryTime }}</span></div>
+      <div>
+        <span class="mr20">学习有效期</span>
+        <span class="dark" v-html="learnExpiry"></span>
+      </div>
+      <div v-if="details.buyExpiryTime != 0" class="mt5">
+        <span class="mr20">购买截止日期</span>
+        <span class="validity orange">{{ details.buyExpiryTime | filterTime }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +35,15 @@ export default {
     return {
       items: [],
       isFree: false
+    }
+  },
+  filters:{
+    filterTime(time) {
+      const fullDate = new Date(time);
+      const year = fullDate.getFullYear();
+      const month = `0${fullDate.getMonth()}`.slice(-2);
+      const date = `0${fullDate.getDate()}`.slice(-2);
+      return `${year}-${month}-${date}`;
     }
   },
   watch: {
