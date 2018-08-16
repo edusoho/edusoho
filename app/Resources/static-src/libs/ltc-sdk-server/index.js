@@ -5,20 +5,43 @@ class LtcSDKServer {
   constructor() {
     this.options = {};
     this.resource = $.parseJSON($('#ltc-source-list').text());
+    this.childrenList = this.getChildrenList();
+
     this.messenger = new EsMessenger({
       name: 'parent',
       project: 'LtcProject',
-      children: [document.getElementById('task-create-content-iframe'),document.getElementById('task-create-finish-iframe')],
+      children: this.getChildren(),
       type: 'parent'
     });
 
     this.event();
   }
 
+  getChildrenList() {
+    let childs = [];
+    ['task-create-content-iframe', 'task-create-finish-iframe', 'task-content-iframe'].forEach(function(value){
+      if ($('#'+value).length > 0) {
+        childs.push(value);
+      }
+    });
+
+    return childs;
+  }
+
+  getChildren() {
+    let childs = [];
+    this.childrenList.forEach(function(value){
+      childs.push(document.getElementById(value));
+    });
+
+    return childs;
+  }
+
   event() {
     this.messenger.on('init', ()=> {
-      this.messenger.sendToChild({id: 'task-create-content-iframe'}, 'initResourceList', this.resource);
-      this.messenger.sendToChild({id: 'task-create-finish-iframe'}, 'initResourceList', this.resource);
+      this.childrenList.forEach((value) => {
+        this.emitChild(value, 'initResourceList', this.resource);
+      })
     });
   }
 

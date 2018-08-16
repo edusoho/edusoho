@@ -1,15 +1,30 @@
-{% extends 'activity-layout.html.twig' %}
-
-{% block head_scripts %}
-  {{ parent() }}
-  <base target="_blank">
-{% endblock %}
-
-{% do script(['libs/ltc-sdk-client.js', 'libs/perfect-scrollbar.js', 'textactivity/js/show/index.js'], 300) %}
-
-{% set enableCopy  = setting('course.copy_enabled') %}
-{% block body %}
-  <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ enableCopy }}">
-    <div class="text-activity-content">{{ activity.content|raw }}</div>
-  </div>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Picture and text task display page</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <style>
+      .text-activity-content{
+        padding-top: 20px;
+        padding-bottom: 20px;
+        text-align: justify;
+        width: 992px;
+        margin: auto;
+        color: rgba(0,0,0,.56);
+        line-height: 1.6;
+        word-wrap: break-word;
+      }
+    </style>
+    <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ setting('course.copy_enabled') }}">
+      <div class="text-activity-content">
+        {{ activity.content|raw }}
+      </div>
+    </div>
+    <script src="/static-dist/libs/ltc-sdk-client.js"></script>
+    <script src="/static-dist/textactivity/js/show/index.js"></script>
+  </body>
+</html>

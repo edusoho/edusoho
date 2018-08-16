@@ -86,6 +86,7 @@ class LtcSDKClient {
       if (self.resourceList) {
         resolve();
       }
+
       self.messenger.sendToParent('init');
       self.messenger.on('initResourceList', function(data) {
         self.resourceList = data;

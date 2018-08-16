@@ -58,6 +58,7 @@ class ActivityExtension extends \Twig_Extension
             'bootstrap-css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
             'bootstrap-js' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
             'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
+            'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
             // 'uploader' => $cdn.'asdf',
             // 'player' => 'a',
         ));
