@@ -212,8 +212,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $category = $this->getCategoryDao()->update($id, $fields);
 
-        $this->getLogService()->info('category', 'update', "编辑栏目 {$category['name']}(#{$id})", $fields);
-
         return $category;
     }
 

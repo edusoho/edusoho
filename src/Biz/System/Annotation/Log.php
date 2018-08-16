@@ -41,6 +41,8 @@ class Log
 
     private $funcName;
 
+    private $serviceName = '';
+
     public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
@@ -124,6 +126,11 @@ class Log
         return $this->funcName;
     }
 
+    public function getServiceName()
+    {
+        return $this->serviceName;
+    }
+
     public function setMessage($message)
     {
         $this->message = $message;
@@ -162,5 +169,10 @@ class Log
     public function setFuncName($funcName)
     {
         $this->funcName = $funcName;
+    }
+
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
     }
 }

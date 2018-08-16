@@ -75,6 +75,13 @@ interface CourseService
 
     public function findChaptersByCourseId($courseId);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_course",param="id")
+     */
     public function updateCourse($id, $fields);
 
     public function updateCourseMarketing($id, $fields);
@@ -299,6 +306,14 @@ interface CourseService
     public function appendReservationConditions($conditions);
 
     //修改课程基础信息
+
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_course",funcName="getCourse",param="id")
+     */
     public function updateBaseInfo($id, $fields);
 
     /**

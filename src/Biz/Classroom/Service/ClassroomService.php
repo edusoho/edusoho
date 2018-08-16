@@ -25,6 +25,13 @@ interface ClassroomService
 
     public function getClassroom($id);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="classroom",action="update")
+     */
     public function updateClassroom($id, $fields);
 
     public function batchUpdateOrg($classroomIds, $orgCode);

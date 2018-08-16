@@ -8194,6 +8194,7 @@ log.action.course.unlock_course: 解除课程同步
 log.action.course.create_course: 创建教学计划
 log.action.course.update_course: 修改教学计划
 log.action.course.delete_course: 删除教学计划
+log.action.course.update_draft: 更新草稿
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -8278,6 +8279,7 @@ log.action.group.create_thread: 新增话题
 log.action.group.delete_thread: 删除话题
 log.action.group.close_thread: 关闭话题
 log.action.group.open_thread: 开启话题
+log.action.group.update_thread: 更新话题
 log.action.sms.sms_forget_password: 登录密码重置
 log.action.sms.sms_user_pay: 使用网站余额支付
 log.action.sms.sms_forget_pay_password: 支付密码重置
@@ -8334,6 +8336,7 @@ log.action.template.course.close: 关闭了<strong class="color-success">课程<
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
 log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
 log.action.template.course.delete_thread: 删除了话题《%title%》
 log.action.template.course.create_course: 新建了教学计划《<a href="%url%" target="_blank">%title%</a>》
@@ -8350,28 +8353,54 @@ log.action.template.course.create_chapter: 新建了章节《%title%》
 log.action.template.course.delete_chapter: 删除了章节《%title%》
 log.action.template.course.delete_review: 删除了评价《%title%》
 log.action.template.course.delete_task: 删除了任务《%title%》
+log.action.template.course.update_task: 更新了任务《%title%》
+log.action.template.course.update_draft: 更新了草稿《%title%》
+log.action.template.course.recommend: 推荐了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.cancel_recommend: 取消了推荐<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》
 log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.delete: 删除了<strong class="color-success">分类</strong> 《%title%》
+log.action.template.category.update: 修改了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.content.create: 新建了<strong class="color-success">内容</strong> 《%title%》
 log.action.template.content.delete: 删除了<strong class="color-success">内容</strong> 《%title%》
+log.action.template.content.update: 更新了<strong class="color-success">内容</strong> 《%title%》
+log.action.template.content.publish: 发布了<strong class="color-success">内容</strong> 《%title%》
+log.action.template.content.trash: 將<strong class="color-success">内容</strong> 《%title%》移动到回收站
 log.action.template.upload_file.create: 上传了<strong class="color-success">文件</strong> 《%title%》
 log.action.template.upload_file.delete: 删除了<strong class="color-success">文件</strong> 《%title%》
 log.action.template.article.create: 新建了<strong class="color-success">文章</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.article.update: 修改了<strong class="color-success">文章</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.article.update_property: 设置了<strong class="color-success">文章属性</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.article.cancel_property: 取消了<strong class="color-success">文章属性</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.article.trash: 將<strong class="color-success">文章</strong> 《%title%》移动到回收站
+log.action.template.article.removeThumb: 删除了<strong class="color-success">文章</strong> 《%title%》的缩略图
+log.action.template.article.publish: 发布了<strong class="color-success">文章</strong> 《%title%》
+log.action.template.article.unpublish: 取消发布了<strong class="color-success">文章</strong> 《%title%》
 log.action.template.tag.create: 新建了<strong class="color-success">标签</strong> 《%title%》
 log.action.template.tag.delete: 删除了<strong class="color-success">标签</strong> 《%title%》
+log.action.template.tag.update: 修改了<strong class="color-success">标签</strong> 《%title%》
 log.action.template.tagGroup.create: 新建了<strong class="color-success">标签组</strong> 《%title%》
 log.action.template.tagGroup.delete: 删除了<strong class="color-success">标签组</strong> 《%title%》
+log.action.template.tagGroup.update: 修改了<strong class="color-success">标签组</strong> 《%title%》
 log.action.template.announcement.create: 新建了<strong class="color-success">公告</strong> 《%title%》
 log.action.template.announcement.delete: 删除了<strong class="color-success">公告</strong> 《%title%》
 log.action.template.open_course.create_course: 新建了<strong class="color-success">公开课</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.open_course.update_course: 更新了<strong class="color-success">公开课</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.open_course.add_lesson: 新建了公开课课时 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.open_course.delete_lesson: 删除了公开课课时 《%title%》
+log.action.template.open_course.update_lesson: 更新了公开课课时 《%title%》
 log.action.template.open_course.delete_course: 删除了<strong class="color-success">公开课</strong> 《%title%》
+log.action.template.open_course.pulish_course: 发布了<strong class="color-success">公开课</strong> 《%title%》
+log.action.template.open_course.update_picture: 更新了<strong class="color-success">公开课</strong> 《%title%》的图片
+log.action.template.open_course.update_teacher: 更新了<strong class="color-success">公开课</strong> 《%title%》的教师
+log.action.template.open_course.close_course: 关闭了<strong class="color-success">公开课</strong> 《%title%》
 log.action.template.group.create_thread: 新建了<strong class="color-success">小组话题</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.group.update_thread: 修改了<strong class="color-success">小组话题</strong> 《%title%》
 log.action.template.group.delete_thread: 删除了<strong class="color-success">小组话题</strong> 《%title%》
+log.action.template.group.open_thread: 开启了<strong class="color-success">小组话题</strong> 《%title%》
+log.action.template.group.close_thread: 关闭了<strong class="color-success">小组话题</strong> 《%title%》
 log.action.template.marker.create: 新建了<strong class="color-success">驻点</strong> 《%title%》
 log.action.template.marker.delete: 删除了<strong class="color-success">驻点</strong> 《%title%》
 log.action.template.marker.delete_question: 删除了<strong class="color-success">驻点</strong>问题 《%title%》
@@ -8413,6 +8442,10 @@ log.attr.course.update_course.tryLookable: 是否开启视频试看
 log.attr.course.update_course.tryLookable.0: 关闭
 log.attr.course.update_course.tryLookable.1: 开启
 log.attr.course.update_course.tryLookLength: 试看时长
+log.attr.course.update_course.serializeMode: 连载状态
+log.attr.course.update_course.serializeMode.none: 非连载课程
+log.attr.course.update_course.serializeMode.serialized: 更新中
+log.attr.course.update_course.serializeMode.finished: 已完结
 log.attr.classroom.title: 名称
 log.attr.classroom.about: 简介
 log.attr.classroom.showable: 班级展示
@@ -8434,6 +8467,8 @@ log.attr.classroom.expiryValue: 有效期
 log.attr.classroom.smallPicture: 小图
 log.attr.classroom.middlePicture: 中图
 log.attr.classroom.largePicture: 大图
+log.attr.open_course.title: 标题
+log.attr.open_course.about: 简介
 
 cashflow.title: 名称
 cashflow.sn: 流水号

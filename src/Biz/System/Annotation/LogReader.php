@@ -52,7 +52,11 @@ class LogReader
                 $log['param'] = $annotation->getParam();
                 $log['funcName'] = $annotation->getFuncName();
                 $log['funcParam'] = $funcParam;
-                $log['service'] = $nameSpaceKey.':'.$name;
+                if (!empty($annotation->getServiceName())) {
+                    $log['service'] = $annotation->getServiceName();
+                } else {
+                    $log['service'] = $nameSpaceKey.':'.$name;
+                }
                 $interceptorData[$method->getName()] = $log;
             }
         }

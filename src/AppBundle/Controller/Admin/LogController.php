@@ -92,6 +92,7 @@ class LogController extends BaseController
     private function logsSetUrlParamsJson($logs)
     {
         $transConfigs = LogDataUtils::getTransConfig();
+        $getValueConfig = LogDataUtils::getValueConfig();
         foreach ($logs as &$log) {
             $transJsonData = array();
             $logData = $log['data'];
@@ -104,16 +105,19 @@ class LogController extends BaseController
                     $log['shouldShowTemplate'] = true;
                     $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
 
-                    if (isset($transConfig['getValue'])) {
-                        foreach ($transConfig['getValue'] as $key => $value) {
-                            $transJsonDataValue = $this->getArrayValueByConventKey($value, $logData);
-                            if (false === $transJsonDataValue) {
-                                $log['shouldShowTemplate'] = false;
-                                $log['shouldShowModal'] = false;
-                                continue;
-                            }
-                            $transJsonData[$key] = $transJsonDataValue;
+                    if (!empty($transConfig['getValue'])) {
+                        $getValue = $transConfig['getValue'];
+                    } else {
+                        $getValue = $getValueConfig;
+                    }
+                    foreach ($getValue as $key => $value) {
+                        $transJsonDataValue = $this->getArrayValueByConventKey($value, $logData);
+                        if (false === $transJsonDataValue) {
+                            $log['shouldShowTemplate'] = false;
+                            $log['shouldShowModal'] = false;
+                            continue;
                         }
+                        $transJsonData[$key] = $transJsonDataValue;
                     }
                     if (isset($transConfig['generateUrl'])) {
                         foreach ($transConfig['generateUrl'] as $key => $urlConfig) {
@@ -142,19 +146,28 @@ class LogController extends BaseController
 
     private function getArrayValueByConventKey($keyName, $targetArray)
     {
-        $keys = explode('.', $keyName);
         $data = '';
-        foreach ($keys as $key) {
-            if (empty($data)) {
-                if (!array_key_exists($key, $targetArray)) {
-                    return false;
+        if (is_array($keyName)) {
+            foreach ($keyName as $key) {
+                if (array_key_exists($key, $targetArray)) {
+                    $data = $targetArray[$key];
+                    break;
                 }
-                $data = $targetArray[$key];
-            } else {
-                if (!array_key_exists($key, $data)) {
-                    return false;
+            }
+        } else {
+            $keys = explode('.', $keyName);
+            foreach ($keys as $key) {
+                if (empty($data)) {
+                    if (!array_key_exists($key, $targetArray)) {
+                        return false;
+                    }
+                    $data = $targetArray[$key];
+                } else {
+                    if (!array_key_exists($key, $data)) {
+                        return false;
+                    }
+                    $data = $data[$key];
                 }
-                $data = $data[$key];
             }
         }
 

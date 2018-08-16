@@ -30,6 +30,13 @@ interface TaskService
 
     public function preUpdateTaskCheck($taskId, $fields);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_task",param="id")
+     */
     public function updateTask($id, $fields);
 
     public function updateSeq($id, $fields);

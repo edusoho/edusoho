@@ -27,7 +27,6 @@ use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use AppBundle\Common\TimeMachine;
-use Biz\System\Util\LogDataUtils;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -305,8 +304,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $fields = $this->fillOrgId($fields);
 
-        $classroomChangeFields = LogDataUtils::serializeClassroom($classroom, $fields);
-
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
@@ -328,21 +325,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom' => $classroom,
             'fields' => $arguments,
         )));
-        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})", $classroomChangeFields);
 
         return $classroom;
-    }
-
-    private function getChangeFields($classroom, $fields)
-    {
-        $changeFields = array();
-        foreach ($fields as $key => $value) {
-            if ($classroom[$key] != $value) {
-                $changeFields[$key] = $classroom[$key];
-            }
-        }
-
-        return $changeFields;
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)

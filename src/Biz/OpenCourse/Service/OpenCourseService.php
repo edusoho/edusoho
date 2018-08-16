@@ -34,6 +34,13 @@ interface OpenCourseService
      */
     public function createCourse($course);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_course",param="id")
+     */
     public function updateCourse($id, $fields);
 
     /**
@@ -50,12 +57,31 @@ interface OpenCourseService
 
     public function unFavoriteCourse($courseId);
 
+    /**
+     * @param $courseId
+     * @param $data
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_picture",funcName="getCourse",param="courseId")
+     */
     public function changeCoursePicture($courseId, $data);
 
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="open_course",action="pulish_course",funcName="getCourse")
+     */
     public function publishCourse($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="open_course",action="close_course",funcName="getCourse")
+     */
     public function closeCourse($id);
 
     public function tryManageOpenCourse($courseId);
@@ -91,6 +117,14 @@ interface OpenCourseService
      */
     public function createLesson($lesson);
 
+    /**
+     * @param $courseId
+     * @param $lessonId
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_lesson",funcName="getCourseLesson",param="courseId,lessonId")
+     */
     public function updateLesson($courseId, $lessonId, $fields);
 
     public function waveCourseLesson($id, $field, $diff);
@@ -152,6 +186,13 @@ interface OpenCourseService
 
     public function deleteMember($id);
 
+    /**
+     * @param $courseId
+     * @param $teachers
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_teacher",funcName="getCourse",param="courseId")
+     */
     public function setCourseTeachers($courseId, $teachers);
 
     public function getTodayOpenLiveCourseNumber();

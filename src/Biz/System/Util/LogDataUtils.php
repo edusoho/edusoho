@@ -20,9 +20,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'update' => array(
                     'generateUrl' => array(
@@ -32,9 +29,6 @@ class LogDataUtils
                                 'id' => 'id',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
-                        '%title%' => 'showTitle',
                     ),
                 ),
                 'create_course' => array(
@@ -46,9 +40,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'update_course' => array(
                     'generateUrl' => array(
@@ -59,14 +50,8 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'showTitle',
-                    ),
                 ),
                 'delete_course' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'add_student' => array(
                     'generateUrl' => array(
@@ -98,14 +83,8 @@ class LogDataUtils
                     ),
                 ),
                 'create_thread' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'delete_thread' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'publish' => array(
                     'generateUrl' => array(
@@ -116,9 +95,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'close' => array(
                     'generateUrl' => array(
@@ -128,9 +104,6 @@ class LogDataUtils
                                 'id' => 'id',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
-                        '%title%' => 'title',
                     ),
                 ),
                 'create_lesson' => array(
@@ -155,59 +128,44 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
+                ),
+                'update_teacher' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'course_show',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
                     ),
                 ),
                 'add_question' => array(
-                    'getValue' => array(
-                        '%title%' => 'stem',
-                    ),
                 ),
                 'delete_question' => array(
-                    'getValue' => array(
-                        '%title%' => 'stem',
-                    ),
                 ),
                 'add_testpaper' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
                 ),
                 'delete_testpaper' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
                 ),
                 'delete_lesson' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'create_chapter' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'delete_chapter' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'delete_review' => array(
-                    'getValue' => array(
-                        '%title%' => 'content',
-                    ),
                 ),
                 'delete_task' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
+                ),
+                'update_task' => array(
+                ),
+                'recommend' => array(
+                ),
+                'cancel_recommend' => array(
+                ),
+                'update_draft' => array(
                 ),
             ),
             'classroom' => array(
@@ -220,9 +178,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'update' => array(
                     'generateUrl' => array(
@@ -233,50 +188,34 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'showTitle',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
             ),
             'category' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
+                ),
+                'update' => array(
                 ),
             ),
             'content' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
+                ),
+                'update' => array(
+                ),
+                'trash' => array(
+                ),
+                'publish' => array(
                 ),
             ),
             'upload_file' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'filename',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'filename',
-                    ),
                 ),
             ),
             'article' => array(
@@ -289,45 +228,66 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
+                ),
+                'update' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'article_detail',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
                     ),
+                ),
+                'update_property' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'article_detail',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                ),
+                'cancel_property' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'article_detail',
+                            'param' => array(
+                                'id' => 'id',
+                            ),
+                        ),
+                    ),
+                ),
+                'trash' => array(
+                ),
+                'removeThumb' => array(
+                ),
+                'publish' => array(
+                ),
+                'unpublish' => array(
                 ),
             ),
             'tag' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
+                ),
+                'update' => array(
                 ),
             ),
             'tagGroup' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'name',
-                    ),
+                ),
+                'update' => array(
                 ),
             ),
             'announcement' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'content',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'content',
-                    ),
                 ),
             ),
             'open_course' => array(
@@ -340,9 +300,20 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
+                ),
+                'update_course' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'open_course_show',
+                            'param' => array(
+                                'courseId' => 'id',
+                            ),
+                        ),
                     ),
+                ),
+                'pulish_course' => array(
+                ),
+                'close_course' => array(
                 ),
                 'add_lesson' => array(
                     'generateUrl' => array(
@@ -353,19 +324,16 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
+                ),
+                'update_lesson' => array(
+                ),
+                'update_picture' => array(
                 ),
                 'delete_lesson' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
                 ),
                 'delete_course' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
+                ),
+                'update_teacher' => array(
                 ),
             ),
             'group' => array(
@@ -379,32 +347,39 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
+                ),
+                'update_thread' => array(
                 ),
                 'delete_thread' => array(
-                    'getValue' => array(
-                        '%title%' => 'title',
-                    ),
+                ),
+                'open_thread' => array(
+                ),
+                'close_thread' => array(
                 ),
             ),
             'marker' => array(
                 'create' => array(
-                    'getValue' => array(
-                        '%title%' => 'stem',
-                    ),
                 ),
                 'delete' => array(
-                    'getValue' => array(
-                        '%title%' => 'stem',
-                    ),
                 ),
                 'delete_question' => array(
-                    'getValue' => array(
-                        '%title%' => 'stem',
-                    ),
                 ),
+            ),
+        );
+
+        return $config;
+    }
+
+    public static function getValueConfig()
+    {
+        $config = array(
+            '%title%' => array(
+                'showTitle',
+                'title',
+                'name',
+                'content',
+                'filename',
+                'stem',
             ),
         );
 
@@ -420,6 +395,9 @@ class LogDataUtils
             ),
             'classroom' => array(
                 'update',
+            ),
+            'open_course' => array(
+                'update_course',
             ),
         );
         if (array_key_exists($module, $showModals)) {
@@ -445,13 +423,10 @@ class LogDataUtils
         return $message;
     }
 
-    public static function getChangeFields()
+    public static function serializeChanges($oldData, $newData)
     {
-    }
-
-    public static function serializeCourse($oldCourse, $fields)
-    {
-        $changeFields = ArrayToolkit::changes($oldCourse, $fields);
+        $newData = self::serializeUnsetChanges($newData);
+        $changeFields = ArrayToolkit::changes($oldData, $newData);
         $config = array(
             'buyExpiryTime' => array(
                 'timeConvent',
@@ -466,42 +441,37 @@ class LogDataUtils
 
         $changeFields = self::serializeData($config, $changeFields);
 
-        $changeFields['id'] = $oldCourse['id'];
-        $changeFields['showTitle'] = $oldCourse['title'];
+        $changeFields['id'] = $oldData['id'];
+        $changeFields['showTitle'] = self::getShowTitle($oldData);
 
         return $changeFields;
     }
 
-    public static function serializeCourseSet($courseSet, $fields)
+    private function serializeUnsetChanges($newData)
     {
-        $changeFields = ArrayToolkit::changes($courseSet, $fields);
         $config = array(
-            'expiryValue' => array(
-                'timeConvent',
-            ),
+            'createdTime',
+            'updatedTime',
         );
+        foreach ($config as $value) {
+            if (isset($newData[$value])) {
+                unset($newData[$value]);
+            }
+        }
 
-        $changeFields = self::serializeData($config, $changeFields);
-        $changeFields['id'] = $courseSet['id'];
-        $changeFields['showTitle'] = $courseSet['title'];
-
-        return $changeFields;
+        return $newData;
     }
 
-    public static function serializeClassroom($classroom, $fields)
+    private function getShowTitle($oldData)
     {
-        $changeFields = ArrayToolkit::changes($classroom, $fields);
-        $config = array(
-            'expiryValue' => array(
-                'timeConvent',
-            ),
-        );
+        $showTitle = '';
+        if (isset($oldData['title'])) {
+            $showTitle = $oldData['title'];
+        } elseif (isset($oldData['name'])) {
+            $showTitle = $oldData['name'];
+        }
 
-        $changeFields = self::serializeData($config, $changeFields);
-        $changeFields['id'] = $classroom['id'];
-        $changeFields['showTitle'] = $classroom['title'];
-
-        return $changeFields;
+        return $showTitle;
     }
 
     private function serializeData($config, $changeFields)

@@ -37,10 +37,29 @@ interface ThreadService
      */
     public function addThread($thread);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="group",action="update_thread",param="id")
+     */
     public function updateThread($id, $fields);
 
+    /**
+     * @param $threadId
+     *
+     * @return mixed
+     * @Log(module="group",action="close_thread",funcName="getThread")
+     */
     public function closeThread($threadId);
 
+    /**
+     * @param $threadId
+     *
+     * @return mixed
+     * @Log(module="group",action="open_thread",funcName="getThread")
+     */
     public function openThread($threadId);
 
     /**

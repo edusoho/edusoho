@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Context\AbstractInterceptor;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Targetlog\Annotation\Log;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\System\Util\LogDataUtils;
 
 class AnnotationLogInterceptor extends AbstractInterceptor
 {
@@ -47,12 +48,11 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
             $service = $this->biz->service($log['service']);
-            $formatFuncName = $this->getGetFuncName($funcName);
+            $formatFuncName = $this->getFormatFuncName($funcName, $log);
             if (false !== $formatFuncName) {
                 $formatReturn = array();
                 if (!empty($log['funcParam'])) {
                     $formatParam = $this->getFormatParam($args, $log);
-                    $formatFuncName = $this->getFormatFuncName($formatFuncName, $log);
                     $formatReturn = $this->getFormatReturn($service, $formatFuncName, $formatParam, $log);
                 }
                 $result = $formatReturn;
@@ -75,18 +75,15 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             $module = $log['module'];
             $action = $log['action'];
             $context = empty($beforeResult) ? $result : $beforeResult;
-//            if (!empty($formats)) {
-//                $formats = str_replace("'", '"', $formats);
-//                $formats = json_decode($formats, true);
-//                if (isset($formats['after'])) {
-//                    $format = $formats['after'];
-//                    $service = $this->biz->service($format['className']);
-//                    $formatFuncName = $format['funcName'];
-//                    $arguments = $this->getArrayValue($log['funcParam'], $format['param'], $args);
-//                    $formatReturn = $service->$formatFuncName($arguments[0]);
-//                    $context = $formatReturn;
-//                }
-//            }
+
+            if ('update' == $this->getFuncType($action) && !empty($beforeResult)) {
+                $service = $this->biz->service($log['service']);
+                $formatParam = $this->getFormatParam($args, $log);
+                $formatFuncName = $this->getFormatFuncName($funcName, $log);
+                $formatReturn = $this->getFormatReturn($service, $formatFuncName, $formatParam, $log);
+                $courseChangeFields = LogDataUtils::serializeChanges($beforeResult, $formatReturn);
+                $context = $courseChangeFields;
+            }
             $message = ServiceKernel::instance()->trans('log.action.'.$module.'.'.$action, array(), null, null);
             if (!empty($context)) {
                 if (is_array($context)) {
@@ -101,16 +98,38 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         return $this->interceptorData;
     }
 
-    private function getGetFuncName($funcName)
+    private function getFormatFuncName($funcName, $log)
     {
-        $keyArray = array('delete', 'update');
-        foreach ($keyArray as $key) {
-            if (false !== strpos($funcName, $key)) {
-                return str_replace($key, 'get', $funcName);
+        $formatFuncName = false;
+        if (!empty($log['funcName'])) {
+            $formatFuncName = $log['funcName'];
+        } else {
+            $keyArray = array('delete', 'update');
+            foreach ($keyArray as $key) {
+                if (false !== strpos($funcName, $key)) {
+                    $formatFuncName = str_replace($key, 'get', $funcName);
+                    break;
+                }
             }
         }
 
-        return false;
+        return $formatFuncName;
+    }
+
+    private function getFuncType($action)
+    {
+        $config = array(
+            'add' => 'create',
+            'create' => 'create',
+            'delete' => 'delete',
+        );
+        foreach ($config as $key => $value) {
+            if (false !== strpos($action, $key)) {
+                return $value;
+            }
+        }
+
+        return 'update';
     }
 
     private function getFuncNeedParams($funcParams, $indexs, $args)
@@ -136,15 +155,6 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         }
 
         return $formatParam;
-    }
-
-    private function getFormatFuncName($formatFuncName, $log)
-    {
-        if (!empty($log['funcName'])) {
-            $formatFuncName = $log['funcName'];
-        }
-
-        return $formatFuncName;
     }
 
     private function getFormatReturn($service, $formatFuncName, $formatParam, $log)

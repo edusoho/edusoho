@@ -38,6 +38,13 @@ interface CategoryService
      */
     public function createCategory(array $category);
 
+    /**
+     * @param $id
+     * @param array $fields
+     *
+     * @return mixed
+     * @Log(module="category",action="update")
+     */
     public function updateCategory($id, array $fields);
 
     /**

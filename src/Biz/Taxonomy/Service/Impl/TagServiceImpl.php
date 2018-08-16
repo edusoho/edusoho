@@ -259,8 +259,6 @@ class TagServiceImpl extends BaseService implements TagService
         $fields = ArrayToolkit::parts($fields, array('name'));
         $this->filterTagFields($fields, $tag);
 
-        $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
-
         return $this->getTagDao()->update($id, $fields);
     }
 
@@ -289,8 +287,6 @@ class TagServiceImpl extends BaseService implements TagService
         }
 
         $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
-
-        $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$updatedTagGroup['name']}(#{$id})");
 
         return $updatedTagGroup;
     }

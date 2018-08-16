@@ -67,8 +67,22 @@ interface TagService
      */
     public function addTagGroup($fields);
 
+    /**
+     * @param $id
+     * @param array $fields
+     *
+     * @return mixed
+     * @Log(module="tag",action="update",param="id")
+     */
     public function updateTag($id, array $fields);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="tagGroup",action="update",param="id")
+     */
     public function updateTagGroup($id, $fields);
 
     /**

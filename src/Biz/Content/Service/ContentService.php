@@ -22,9 +22,30 @@ interface ContentService
      */
     public function createContent($content);
 
+    /**
+     * @param $id
+     * @param $content
+     *
+     * @return mixed
+     * @Log(module="content",action="update",param="id")
+     */
     public function updateContent($id, $content);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="content",action="trash",funcName="getContent")
+     */
     public function trashContent($id);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="content",action="publish",funcName="getContent")
+     */
+    public function publishContent($id);
 
     /**
      * @param $id

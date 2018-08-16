@@ -151,8 +151,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         unset($courseFields['tags']);
 
-        $this->getLogService()->info('open_course', 'update_course', "更新公开课《{$course['title']}》(#{$course['id']})的信息", $courseFields);
-
         $updatedCourse = $this->getOpenCourseDao()->update($course['id'], $courseFields);
 
         $this->dispatchEvent('open.course.update', array('argument' => $fields, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
@@ -264,7 +262,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $course = $this->updateCourse($id, array('status' => 'published'));
         $this->dispatchEvent('open.course.publish', $course);
-        $this->getLogService()->info('open_course', 'pulish_course', "发布公开课《{$course['title']}》(#{$course['id']})");
 
         return array('result' => true, 'course' => $course);
     }
@@ -277,7 +274,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException();
         }
 
-        $this->getLogService()->info('open_course', 'close_course', "关闭公开课《{$course['title']}》(#{$course['id']})");
         $this->dispatchEvent('open.course.close', $course);
 
         return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
@@ -359,8 +355,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         );
 
         $this->_deleteNotUsedPictures($course);
-
-        $this->getLogService()->info('open_course', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
 
         $update_picture = $this->getOpenCourseDao()->update($courseId, $fields);
 
@@ -626,8 +620,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $updatedLesson['fields'] = $lesson;
         $this->dispatchEvent('open.course.lesson.update', array('lesson' => $updatedLesson, 'sourceLesson' => $lesson));
-
-        $this->getLogService()->info('open_course', 'update_lesson', "更新公开课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
         return $updatedLesson;
     }
@@ -926,8 +918,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $visibleTeacherIds[] = $member['userId'];
             }
         }
-
-        $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
 
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->updateCourse($courseId, $fields);
