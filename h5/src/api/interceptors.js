@@ -27,6 +27,12 @@ axios.interceptors.response.use(res => {
   return res.data;
 }, error => {
   store.commit('UPDATE_LOADING_STATUS', false);
+  console.log(error);
+  if (!error.response) {
+    return Promise.reject({
+      message: '请求中断'
+    });
+  }
   switch (error.response.status) {
     case 401:
       const code = error.response.data.error.code;
