@@ -195,7 +195,7 @@
         }
         switch(task.type) {
           case 'video':
-            if (task.mediaSource == 'self') {
+            if (task.mediaSource === 'self') {
               this.setSourceType({
                 sourceType: 'video',
                 taskId: task.id
@@ -219,6 +219,40 @@
                 courseId: this.selectedPlanId,
                 taskId: task.id,
                 type: task.type
+              }
+            })
+            break;
+          case 'live':
+            const nowDate = new Date()
+            const endDate = new Date(task.endTime * 1000)
+            const startDate = new Date(task.startTime * 1000)
+            let replay = false
+            if (nowDate > endDate) {
+              if (task.activity.replayStatus == 'videoGenerated') {
+                if (task.mediaSource === 'self') {
+                  this.setSourceType({
+                    sourceType: 'video',
+                    taskId: task.id
+                  })
+                } else {
+                  Toast('暂不支持此类型');
+                }
+                return;
+              } else if (task.activity.replayStatus == 'ungenerated') {
+                Toast('暂无回放');
+                return
+              } else {
+                replay = true
+              }
+            }
+
+            this.$router.push({
+              name: 'live',
+              query: {
+                courseId: this.selectedPlanId,
+                taskId: task.id,
+                type: task.type,
+                replay,
               }
             })
             break;

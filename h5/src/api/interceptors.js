@@ -9,7 +9,9 @@ const statusCode = {
 };
 
 axios.interceptors.request.use(config => {
-  config.headers.Accept = 'application/vnd.edusoho.v2+json';
+  if (config.name.indexOf('Live') === -1) {
+    config.headers.Accept = 'application/vnd.edusoho.v2+json';
+  }
   config.headers.SessionIgnore = 1;
 
   if (store.state.token) {

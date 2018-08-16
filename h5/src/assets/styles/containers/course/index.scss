@@ -91,7 +91,7 @@
   &__head {
     height: vw(210);
     background-color: #DCDBDC;
-    
+
     &--img {
       >img {
         // height: vw(210);
@@ -223,5 +223,11 @@
     img {
       max-width: 100%;
     }
+  }
+}
+
+.live-view {
+  #player {
+    height: 100vh;
   }
 }
