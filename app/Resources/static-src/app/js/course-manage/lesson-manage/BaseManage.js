@@ -337,6 +337,7 @@ export default class Manage {
   }
 
   /*
+   * 如果课时下有多任务，显示任务，如果单任务，不显示任务
    * @param $elm 新增或删除的任务节点，必须已经在dom节点内
    * @param isDeleted 如果是删除操作，值为true, 删除操作时，先隐藏再删除（即2个节点时，就要隐藏了）
    */
