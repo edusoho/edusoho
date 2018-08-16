@@ -93,6 +93,7 @@ class Course extends AbstractResource
         $sort = $this->getSort($request);
 
         if (array_key_exists('recommendedSeq', $sort)) {
+            $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
             $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
         } else {
             $courses = $this->getCourseService()->searchWithJoinTableConditions(
