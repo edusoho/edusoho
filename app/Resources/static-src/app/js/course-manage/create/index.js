@@ -48,7 +48,6 @@ class Creator {
     });
   }
 
-  // 初始化日期组件
   initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({

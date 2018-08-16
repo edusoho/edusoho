@@ -214,7 +214,6 @@ class CourseInfo {
       initTags();
     }
 
-
     this.saveForm();
   }
 
