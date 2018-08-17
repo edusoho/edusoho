@@ -376,7 +376,6 @@ export default class Manage {
   /*
    * 如果课时下有多任务，显示任务，如果单任务，不显示任务
    * @param container 新增或删除的任务节点所在的js-lesson-container节点
-   * @param isDeleted 如果是删除操作，值为true, 删除操作时，先隐藏再删除（即2个节点时，就要隐藏了）
    */
   _triggerAsTaskNumUpdated(container) {
     let lessonBox = container.find('.js-lesson-box');
@@ -399,8 +398,10 @@ export default class Manage {
     let lessonIconBtn = container.find('.js-lesson-icon');
     let classList = '';
     if (isMulTasks) {
+      //多任务时，删除课时节点上的任务图标，如图文的图标
       classList = lessonIconBtn[0].classList;
     } else {
+      //单任务时，课时节点上显示任务的图标
       classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
     }
 
