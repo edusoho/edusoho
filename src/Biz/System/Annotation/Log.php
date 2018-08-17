@@ -19,12 +19,6 @@ class Log
 
     /**
      * @var
-     * LOG INFO
-     */
-    private $message;
-
-    /**
-     * @var
      * same to TargetLogService level
      */
     private $level;
@@ -33,15 +27,13 @@ class Log
 
     private $module;
 
-    private $targetType;
-
-    private $targetId = 0;
-
     private $param;
 
     private $funcName;
 
     private $serviceName = '';
+
+    private $postfix = '';
 
     public function __construct(array $data)
     {
@@ -91,11 +83,6 @@ class Log
         return $this->module;
     }
 
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
     public function getLevel()
     {
         return $this->level;
@@ -104,16 +91,6 @@ class Log
     public function getAction()
     {
         return $this->action;
-    }
-
-    public function getTargetType()
-    {
-        return $this->targetType;
-    }
-
-    public function getTargetId()
-    {
-        return $this->targetId;
     }
 
     public function getParam()
@@ -131,9 +108,9 @@ class Log
         return $this->serviceName;
     }
 
-    public function setMessage($message)
+    public function getPostfix()
     {
-        $this->message = $message;
+        return $this->postfix;
     }
 
     public function setLevel($level)
@@ -144,16 +121,6 @@ class Log
     public function setAction($action)
     {
         $this->action = $action;
-    }
-
-    public function setTargetType($targetType)
-    {
-        $this->targetType = $targetType;
-    }
-
-    public function setTargetId($targetId)
-    {
-        $this->targetId = $targetId;
     }
 
     public function setModule($module)
@@ -174,5 +141,10 @@ class Log
     public function setServiceName($serviceName)
     {
         $this->serviceName = $serviceName;
+    }
+
+    public function setPostfix($postfix)
+    {
+        $this->postfix = $postfix;
     }
 }

@@ -8218,6 +8218,25 @@ log.action.system.email_send_check: 邮件自检
 log.action.system.setting_email_change: 更变邮箱
 log.action.system.setting_email-verify: 邮箱验证
 log.action.system.update_settings: 更新设置
+log.action.system.update_settings.site: 更新站点设置
+log.action.system.update_settings.theme: 更新主题设置
+log.action.system.update_settings.mailer: 更新邮件设置
+log.action.system.update_settings.cloud_email_crm: 更新云邮件设置
+log.action.system.update_settings.consult: 更新客服设置
+log.action.system.update_settings.esBar: 更新侧边栏设置
+log.action.system.update_settings.default: 更新默认设置
+log.action.system.update_settings.security: 更新安全设置
+log.action.system.update_settings.login_bind: 更新登录设置
+log.action.system.update_settings.user_partner: 更新用户中心设置
+log.action.system.update_settings.auth: 更新用户设置
+log.action.system.update_settings.course: 更新课程设置
+log.action.system.update_settings.message: 更新私信设置
+log.action.system.update_settings.course_default: 更新课程默认设置
+log.action.system.update_settings.questions: 更新题库设置
+log.action.system.update_settings.classroom: 更新班级设置
+log.action.system.update_settings.article: 更新资讯设置
+log.action.system.update_settings.group: 更新小组设置
+log.action.system.update_settings.invite: 更新邀请注册设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -8404,6 +8423,25 @@ log.action.template.group.close_thread: 关闭了<strong class="color-success">�
 log.action.template.marker.create: 新建了<strong class="color-success">驻点</strong> 《%title%》
 log.action.template.marker.delete: 删除了<strong class="color-success">驻点</strong> 《%title%》
 log.action.template.marker.delete_question: 删除了<strong class="color-success">驻点</strong>问题 《%title%》
+log.action.template.system.update_settings.site: 更新了<strong class="color-success">系统设置</strong>的站点设置
+log.action.template.system.update_settings.theme: 更新了<strong class="color-success">系统设置</strong>的主题设置
+log.action.template.system.update_settings.cloud_email_crm: 更新了<strong class="color-success">系统设置</strong>的云邮件设置
+log.action.template.system.update_settings.mailer: 更新了<strong class="color-success">系统设置</strong>的邮件设置
+log.action.template.system.update_settings.consult: 更新了<strong class="color-success">系统设置</strong>的客服设置
+log.action.template.system.update_settings.esBar: 更新了<strong class="color-success">系统设置</strong>的侧边栏设置
+log.action.template.system.update_settings.default: 更新了<strong class="color-success">系统设置</strong>的默认设置
+log.action.template.system.update_settings.security: 更新了<strong class="color-success">系统设置</strong>的安全设置
+log.action.template.system.update_settings.login_bind: 更新了<strong class="color-success">系统设置</strong>的登录设置
+log.action.template.system.update_settings.user_partner: 更新了<strong class="color-success">系统设置</strong>的用户中心设置
+log.action.template.system.update_settings.auth: 更新了<strong class="color-success">系统设置</strong>的用户设置
+log.action.template.system.update_settings.course: 更新了<strong class="color-success">系统设置</strong>的课程设置
+log.action.template.system.update_settings.message: 更新了<strong class="color-success">系统设置</strong>的私信设置
+log.action.template.system.update_settings.course_default: 更新了<strong class="color-success">系统设置</strong>的课程默认设置
+log.action.template.system.update_settings.questions: 更新了<strong class="color-success">系统设置</strong>的题库设置
+log.action.template.system.update_settings.classroom: 更新了<strong class="color-success">系统设置</strong>的班级设置
+log.action.template.system.update_settings.article: 更新了<strong class="color-success">系统设置</strong>的资讯设置
+log.action.template.system.update_settings.group: 更新了<strong class="color-success">系统设置</strong>的小组设置
+log.action.template.system.update_settings.invite: 更新了<strong class="color-success">系统设置</strong>的邀请注册设置
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -8469,6 +8507,260 @@ log.attr.classroom.middlePicture: 中图
 log.attr.classroom.largePicture: 大图
 log.attr.open_course.title: 标题
 log.attr.open_course.about: 简介
+log.attr.system.update_settings.site.name: 网站名称
+log.attr.system.update_settings.site.slogan: 网站副标题
+log.attr.system.update_settings.site.url: 网站域名
+log.attr.system.update_settings.site.logo: 网站LOGO
+log.attr.system.update_settings.site.favicon: 浏览器图标
+log.attr.system.update_settings.site.seo_keywords: SEO关键词
+log.attr.system.update_settings.site.seo_description: SEO描述信息
+log.attr.system.update_settings.site.master_email: 管理员邮箱地址
+log.attr.system.update_settings.site.copyright: 课程内容版权方
+log.attr.system.update_settings.site.icp: ICP备案号
+log.attr.system.update_settings.site.analytics: 统计分析代码
+log.attr.system.update_settings.site.status: 站点状态
+log.attr.system.update_settings.site.status.open: 开放
+log.attr.system.update_settings.site.status.closed: 关闭
+log.attr.system.update_settings.site.closed_note: 网站关闭公告
+log.attr.system.update_settings.theme.name: 名称
+log.attr.system.update_settings.theme.version: 主题版本
+log.attr.system.update_settings.theme.date: 发布时间
+log.attr.system.update_settings.theme.thumb: 图片
+log.attr.system.update_settings.theme.uri: 路由
+log.attr.system.update_settings.esBar.enabled: 是否开启
+log.attr.system.update_settings.esBar.enabled.1: 开启
+log.attr.system.update_settings.esBar.enabled.0: 关闭
+log.attr.system.update_settings.cloud_email_crm: 云邮件
+log.attr.system.update_settings.cloud_email_crm.status: 状态
+log.attr.system.update_settings.cloud_email_crm.status.enable: 启用
+log.attr.system.update_settings.cloud_email_crm.status.disable: 关闭
+log.attr.system.update_settings.mailer.use_cloud_email_crm: 使用云邮件
+log.attr.system.update_settings.mailer.enabled: 邮件发送
+log.attr.system.update_settings.mailer.send_email.status.1: 开启
+log.attr.system.update_settings.mailer.send_email.status.0: 关闭
+log.attr.system.update_settings.mailer.host: 服务器地址
+log.attr.system.update_settings.mailer.port: SMTP端口号
+log.attr.system.update_settings.mailer.username: SMTP用户名
+log.attr.system.update_settings.mailer.password: SMTP密码
+log.attr.system.update_settings.mailer.from: 发信人地址
+log.attr.system.update_settings.mailer.name: 发信人名称
+log.attr.system.update_settings.default.articleShareContent: 资讯分享内容
+log.attr.system.update_settings.default.courseShareContent: 课程分享内容
+log.attr.system.update_settings.default.groupShareContent: 小组分享内容
+log.attr.system.update_settings.default.classroomShareContent: 班级分享内容
+log.attr.system.update_settings.default.defaultAvatar: 是否使用自定义默认头像
+log.attr.system.update_settings.default.defaultAvatar.1: 是
+log.attr.system.update_settings.default.defaultAvatar.0: 否
+log.attr.system.update_settings.default.avatar.png: 自定义默认头像
+log.attr.system.update_settings.security.safe_iframe_domains: 白名单域名
+log.attr.system.update_settings.login_bind.login_limit: 用户登录限制
+log.attr.system.update_settings.login_bind.login_limit.1: 开启
+log.attr.system.update_settings.login_bind.login_limit.0: 关闭
+log.attr.system.update_settings.login_bind.enabled: 第三方登录
+log.attr.system.update_settings.login_bind.enabled.1: 开启
+log.attr.system.update_settings.login_bind.enabled.0: 关闭
+log.attr.system.update_settings.login_bind.temporary_lock_enabled: 用户登录保护
+log.attr.system.update_settings.login_bind.temporary_lock_enabled.1: 开启
+log.attr.system.update_settings.login_bind.temporary_lock_enabled.0: 关闭
+log.attr.system.update_settings.login_bind.weibo_enabled: 微博登录接口
+log.attr.system.update_settings.login_bind.weibo_enabled.1: 开启
+log.attr.system.update_settings.login_bind.weibo_enabled.0: 关闭
+log.attr.system.update_settings.login_bind.weibo_key: 微博App Key
+log.attr.system.update_settings.login_bind.weibo_secret: 微博App Secret
+log.attr.system.update_settings.login_bind.qq_enabled: QQ 登录接口
+log.attr.system.update_settings.login_bind.qq_enabled.1: 开启
+log.attr.system.update_settings.login_bind.qq_enabled.0: 关闭
+log.attr.system.update_settings.login_bind.qq_key: QQ App Key
+log.attr.system.update_settings.login_bind.qq_secret: QQ App Secret
+log.attr.system.update_settings.login_bind.weixinweb_enabled: 微信网页登录接口
+log.attr.system.update_settings.login_bind.weixinweb_enabled.1: 开启
+log.attr.system.update_settings.login_bind.weixinweb_enabled.0: 关闭
+log.attr.system.update_settings.login_bind.weixinweb_key: 微信网页登录 App Key
+log.attr.system.update_settings.login_bind.weixinweb_secret: 微信网页登录 App Secret
+log.attr.system.update_settings.login_bind.weixinmob_enabled: 微信内分享登录接口
+log.attr.system.update_settings.login_bind.weixinmob_enabled.1: 开启
+log.attr.system.update_settings.login_bind.weixinmob_enabled.0: 关闭
+log.attr.system.update_settings.login_bind.weixinmob_key: 微信内分享登录 App Key
+log.attr.system.update_settings.login_bind.weixinmob_secret: 微信内分享登录 App Secret
+log.attr.system.update_settings.login_bind.weixinmob_mp_secret: MP文件验证码
+log.attr.system.update_settings.login_bind.verify_code: 验证代码
+log.attr.system.update_settings.login_bind.temporary_lock_allowed_times: 用户连续输入错误密码多少次数，将暂时封禁用户
+log.attr.system.update_settings.login_bind.ip_temporary_lock_allowed_times: 同一IP连续输入错误密码多少次数，将暂时封禁IP
+log.attr.system.update_settings.login_bind.temporary_lock_minutes: 经过的多少分钟，解锁用户/IP
+log.attr.system.update_settings.user_partner.mode: 用户中心
+log.attr.system.update_settings.user_partner.email_filter: 过滤邮箱地址清单
+log.attr.system.update_settings.user_partner.partner_config: 用户中心设置
+log.attr.system.update_settings.user_partner.nickname_enabled: 用户修改用户名
+log.attr.system.update_settings.user_partner.nickname_enabled.1: 开启
+log.attr.system.update_settings.user_partner.nickname_enabled.0: 关闭
+log.attr.system.update_settings.user_partner.avatar_alert: 加入计划或班级要求设置头像
+log.attr.system.update_settings.user_partner.avatar_alert.open: 开启
+log.attr.system.update_settings.user_partner.avatar_alert.close: 关闭
+log.attr.system.update_settings.auth.fill_userinfo_after_login: 登录后填写个人资料
+log.attr.system.update_settings.auth.fill_userinfo_after_login.1: 开启
+log.attr.system.update_settings.auth.fill_userinfo_after_login.0: 关闭
+log.attr.system.update_settings.auth.registerSort: 登录后要填写的个人资料字段
+log.attr.system.update_settings.course.buy_fill_userinfo: 购买课程或班级时填写个人资料
+log.attr.system.update_settings.course.buy_fill_userinfo.1: 开启
+log.attr.system.update_settings.course.buy_fill_userinfo.0: 关闭
+log.attr.system.update_settings.course.userinfoFields: 购买课程或班级时要填写的个人资料字段
+log.attr.system.update_settings.message.studentToStudent: 是否允许学员给学员发送私信
+log.attr.system.update_settings.message.studentToStudent.1: 是
+log.attr.system.update_settings.message.studentToStudent.0: 否
+log.attr.system.update_settings.message.studentToTeacher: 是否允许学员给教师发送私信
+log.attr.system.update_settings.message.studentToTeacher.1: 是
+log.attr.system.update_settings.message.studentToTeacher.0: 否
+log.attr.system.update_settings.message.teacherToStudent: 是否教师给学员发送私信
+log.attr.system.update_settings.message.teacherToStudent.1: 是
+log.attr.system.update_settings.message.teacherToStudent.0: 否
+log.attr.system.update_settings.course.chapter_name: 设置"章"名称
+log.attr.system.update_settings.course.part_name: 设置"节"名称
+log.attr.system.update_settings.course.welcome_message_enabled: 给新学员发送欢迎私信
+log.attr.system.update_settings.course.welcome_message_enabled.1: 开启
+log.attr.system.update_settings.course.welcome_message_enabled.0: 关闭
+log.attr.system.update_settings.course.welcome_message_body: 欢迎私信内容
+log.attr.system.update_settings.course.relatedCourses: 课程详情页显示相关课程
+log.attr.system.update_settings.course.relatedCourses.1: 开启
+log.attr.system.update_settings.course.relatedCourses.0: 关闭
+log.attr.system.update_settings.course.teacher_manage_marketing: 允许教师管理基础设置
+log.attr.system.update_settings.course.teacher_manage_marketing.1: 开启
+log.attr.system.update_settings.course.teacher_manage_marketing.0: 关闭
+log.attr.system.update_settings.course.teacher_search_order: 允许教师查询课程订单
+log.attr.system.update_settings.course.teacher_search_order.1: 开启
+log.attr.system.update_settings.course.teacher_search_order.0: 关闭
+log.attr.system.update_settings.course.teacher_manage_student: 允许教师添加/移除学员
+log.attr.system.update_settings.course.teacher_manage_student.1: 开启
+log.attr.system.update_settings.course.teacher_manage_student.0: 关闭
+log.attr.system.update_settings.course.teacher_export_student: 允许教师导出学员资料
+log.attr.system.update_settings.course.teacher_export_student.1: 开启
+log.attr.system.update_settings.course.teacher_export_student.0: 关闭
+log.attr.system.update_settings.course.explore_default_orderBy: 课程列表页默认排序
+log.attr.system.update_settings.course.explore_default_orderBy.latest: 最新
+log.attr.system.update_settings.course.explore_default_orderBy.hotSeq: 最热
+log.attr.system.update_settings.course.explore_default_orderBy.recommendedSeq: 推荐
+log.attr.system.update_settings.course.copy_enabled: 图文、文档任务防复制
+log.attr.system.update_settings.course.copy_enabled.1: 开启
+log.attr.system.update_settings.course.copy_enabled.0: 关闭
+log.attr.system.update_settings.course.testpaperCopy_enabled: 试卷防复制
+log.attr.system.update_settings.course.testpaperCopy_enabled.1: 开启
+log.attr.system.update_settings.course.testpaperCopy_enabled.0: 关闭
+log.attr.system.update_settings.course.allowAnonymousPreview: 免费试看/免费任务允许未登录用户观看
+log.attr.system.update_settings.course.allowAnonymousPreview.1: 允许
+log.attr.system.update_settings.course.allowAnonymousPreview.0: 不允许
+log.attr.system.update_settings.course.show_student_num_enabled: 课程中允许显示课程人数
+log.attr.system.update_settings.course.show_student_num_enabled.1: 开启
+log.attr.system.update_settings.course.show_student_num_enabled.0: 关闭
+log.attr.system.update_settings.course_default.chapter_name: 设置"章"名称
+log.attr.system.update_settings.course_default.part_name: 设置"节"名称
+log.attr.system.update_settings.course_default.welcome_message_enabled: 给新学员发送欢迎私信
+log.attr.system.update_settings.course_default.welcome_message_enabled.1: 开启
+log.attr.system.update_settings.course_default.welcome_message_enabled.0: 关闭
+log.attr.system.update_settings.course_default.welcome_message_body: 欢迎私信内容
+log.attr.system.update_settings.course_default.relatedCourses: 课程详情页显示相关课程
+log.attr.system.update_settings.course_default.relatedCourses.1: 开启
+log.attr.system.update_settings.course_default.relatedCourses.0: 关闭
+log.attr.system.update_settings.course_default.teacher_manage_marketing: 允许教师管理基础设置
+log.attr.system.update_settings.course_default.teacher_manage_marketing.1: 开启
+log.attr.system.update_settings.course_default.teacher_manage_marketing.0: 关闭
+log.attr.system.update_settings.course_default.teacher_search_order: 允许教师查询课程订单
+log.attr.system.update_settings.course_default.teacher_search_order.1: 开启
+log.attr.system.update_settings.course_default.teacher_search_order.0: 关闭
+log.attr.system.update_settings.course_default.teacher_manage_student: 允许教师添加/移除学员
+log.attr.system.update_settings.course_default.teacher_manage_student.1: 开启
+log.attr.system.update_settings.course_default.teacher_manage_student.0: 关闭
+log.attr.system.update_settings.course_default.teacher_export_student: 允许教师导出学员资料
+log.attr.system.update_settings.course_default.teacher_export_student.1: 开启
+log.attr.system.update_settings.course_default.teacher_export_student.0: 关闭
+log.attr.system.update_settings.course_default.explore_default_orderBy: 课程列表页默认排序
+log.attr.system.update_settings.course_default.explore_default_orderBy.latest: 最新
+log.attr.system.update_settings.course_default.explore_default_orderBy.hotSeq: 最热
+log.attr.system.update_settings.course_default.explore_default_orderBy.recommendedSeq: 推荐
+log.attr.system.update_settings.course_default.copy_enabled: 图文、文档任务防复制
+log.attr.system.update_settings.course_default.copy_enabled.1: 开启
+log.attr.system.update_settings.course_default.copy_enabled.0: 关闭
+log.attr.system.update_settings.course_default.testpaperCopy_enabled: 试卷防复制
+log.attr.system.update_settings.course_default.testpaperCopy_enabled.1: 开启
+log.attr.system.update_settings.course_default.testpaperCopy_enabled.0: 关闭
+log.attr.system.update_settings.course_default.allowAnonymousPreview: 免费试看/免费任务允许未登录用户观看
+log.attr.system.update_settings.course_default.allowAnonymousPreview.1: 允许
+log.attr.system.update_settings.course_default.allowAnonymousPreview.0: 不允许
+log.attr.system.update_settings.course_default.show_student_num_enabled: 课程中允许显示课程人数
+log.attr.system.update_settings.course_default.show_student_num_enabled.1: 开启
+log.attr.system.update_settings.course_default.show_student_num_enabled.0: 关闭
+log.attr.system.update_settings.default.chapter_name: 设置"章"名称
+log.attr.system.update_settings.default.part_name: 设置"节"名称
+log.attr.system.update_settings.default.welcome_message_enabled: 给新学员发送欢迎私信
+log.attr.system.update_settings.default.welcome_message_enabled.1: 开启
+log.attr.system.update_settings.default.welcome_message_enabled.0: 关闭
+log.attr.system.update_settings.default.welcome_message_body: 欢迎私信内容
+log.attr.system.update_settings.default.relatedCourses: 课程详情页显示相关课程
+log.attr.system.update_settings.default.relatedCourses.1: 开启
+log.attr.system.update_settings.default.relatedCourses.0: 关闭
+log.attr.system.update_settings.default.teacher_manage_marketing: 允许教师管理基础设置
+log.attr.system.update_settings.default.teacher_manage_marketing.1: 开启
+log.attr.system.update_settings.default.teacher_manage_marketing.0: 关闭
+log.attr.system.update_settings.default.teacher_search_order: 允许教师查询课程订单
+log.attr.system.update_settings.default.teacher_search_order.1: 开启
+log.attr.system.update_settings.default.teacher_search_order.0: 关闭
+log.attr.system.update_settings.default.teacher_manage_student: 允许教师添加/移除学员
+log.attr.system.update_settings.default.teacher_manage_student.1: 开启
+log.attr.system.update_settings.default.teacher_manage_student.0: 关闭
+log.attr.system.update_settings.default.teacher_export_student: 允许教师导出学员资料
+log.attr.system.update_settings.default.teacher_export_student.1: 开启
+log.attr.system.update_settings.default.teacher_export_student.0: 关闭
+log.attr.system.update_settings.default.explore_default_orderBy: 课程列表页默认排序
+log.attr.system.update_settings.default.explore_default_orderBy.latest: 最新
+log.attr.system.update_settings.default.explore_default_orderBy.hotSeq: 最热
+log.attr.system.update_settings.default.explore_default_orderBy.recommendedSeq: 推荐
+log.attr.system.update_settings.default.copy_enabled: 图文、文档任务防复制
+log.attr.system.update_settings.default.copy_enabled.1: 开启
+log.attr.system.update_settings.default.copy_enabled.0: 关闭
+log.attr.system.update_settings.default.testpaperCopy_enabled: 试卷防复制
+log.attr.system.update_settings.default.testpaperCopy_enabled.1: 开启
+log.attr.system.update_settings.default.testpaperCopy_enabled.0: 关闭
+log.attr.system.update_settings.default.allowAnonymousPreview: 免费试看/免费任务允许未登录用户观看
+log.attr.system.update_settings.default.allowAnonymousPreview.1: 允许
+log.attr.system.update_settings.default.allowAnonymousPreview.0: 不允许
+log.attr.system.update_settings.default.show_student_num_enabled: 课程中允许显示课程人数
+log.attr.system.update_settings.default.show_student_num_enabled.1: 开启
+log.attr.system.update_settings.default.show_student_num_enabled.0: 关闭
+log.attr.system.update_settings.default.defaultCoursePicture: 是否使用自定义课程默认图片
+log.attr.system.update_settings.default.defaultCoursePicture.1: 是
+log.attr.system.update_settings.default.defaultCoursePicture.0: 否
+log.attr.system.update_settings.default.course.png: 图片
+log.attr.system.update_settings.questions.testpaper_answers_show_mode: 交卷后答案以及解析的显示
+log.attr.system.update_settings.questions.testpaper_answers_show_mode.hide: 不显示
+log.attr.system.update_settings.questions.testpaper_answers_show_mode.reviewed: 全部批阅完成后一起显示
+log.attr.system.update_settings.questions.testpaper_answers_show_mode.submitted: 交卷后显示答案和解析
+log.attr.system.update_settings.classroom.name: 班级称谓设置
+log.attr.system.update_settings.classroom.discount_buy: 课程重合时抵扣购买
+log.attr.system.update_settings.classroom.discount_buy.1: 是
+log.attr.system.update_settings.classroom.discount_buy.0: 否
+log.attr.system.update_settings.classroom.explore_default_orderBy: 班级列表页默认排序
+log.attr.system.update_settings.classroom.explore_default_orderBy.createdTime: 最新
+log.attr.system.update_settings.classroom.explore_default_orderBy.hotSeq: 最热
+log.attr.system.update_settings.classroom.explore_default_orderBy.recommendedSeq: 推荐
+log.attr.system.update_settings.article.name: 频道名称
+log.attr.system.update_settings.article.pageNums: 列表每页资讯数
+log.attr.system.update_settings.group.group_show: 首页显示小组信息
+log.attr.system.update_settings.group.group_show.1: 显示
+log.attr.system.update_settings.group.group_show.0: 不显示
+log.attr.system.update_settings.group.threadTime_range: 最热话题的时间范围
+log.attr.system.update_settings.group.threadTime_range.1: 天
+log.attr.system.update_settings.group.threadTime_range.7: 周
+log.attr.system.update_settings.group.threadTime_range.14: 两周
+log.attr.system.update_settings.group.threadTime_range.30: 月
+
+log.attr.system.update_settings.invite.invite_code_setting: 邀请码设置
+log.attr.system.update_settings.invite.invite_code_setting.1: 开启
+log.attr.system.update_settings.invite.invite_code_setting.0: 关闭
+log.attr.system.update_settings.invite.promoted_user_value: 被邀请人注册奖励
+log.attr.system.update_settings.invite.promote_user_value: 邀请人邀请奖励
+log.attr.system.update_settings.invite.get_coupon_setting: 被邀请人有消费行为后才能获得优惠券
+log.attr.system.update_settings.invite.get_coupon_setting.1: 开启
+log.attr.system.update_settings.invite.get_coupon_setting.0: 关闭
+log.attr.system.update_settings.invite.deadline: 优惠券有效时间
+log.attr.system.update_settings.invite.inviteInfomation_template: 邀请信息模板
 
 cashflow.title: 名称
 cashflow.sn: 流水号

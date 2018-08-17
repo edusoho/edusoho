@@ -3,7 +3,6 @@
 namespace Biz\System\Util;
 
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\ArrayToolkit;
 
 class LogDataUtils
 {
@@ -365,6 +364,46 @@ class LogDataUtils
                 'delete_question' => array(
                 ),
             ),
+            'system' => array(
+                'update_settings.site' => array(
+                ),
+                'update_settings.theme' => array(
+                ),
+                'update_settings.cloud_email_crm' => array(
+                ),
+                'update_settings.mailer' => array(
+                ),
+                'update_settings.consult' => array(
+                ),
+                'update_settings.esBar' => array(
+                ),
+                'update_settings.default' => array(
+                ),
+                'update_settings.security' => array(
+                ),
+                'update_settings.login_bind' => array(
+                ),
+                'update_settings.user_partner' => array(
+                ),
+                'update_settings.auth' => array(
+                ),
+                'update_settings.course' => array(
+                ),
+                'update_settings.message' => array(
+                ),
+                'update_settings.course_default' => array(
+                ),
+                'update_settings.questions' => array(
+                ),
+                'update_settings.classroom' => array(
+                ),
+                'update_settings.article' => array(
+                ),
+                'update_settings.group' => array(
+                ),
+                'update_settings.invite' => array(
+                ),
+            ),
         );
 
         return $config;
@@ -399,6 +438,26 @@ class LogDataUtils
             'open_course' => array(
                 'update_course',
             ),
+            'system' => array(
+                'update_settings.site',
+                'update_settings.theme',
+                'update_settings.cloud_email_crm',
+                'update_settings.mailer',
+                'update_settings.esBar',
+                'update_settings.default',
+                'update_settings.security',
+                'update_settings.login_bind',
+                'update_settings.user_partner',
+                'update_settings.auth',
+                'update_settings.course',
+                'update_settings.message',
+                'update_settings.course_default',
+                'update_settings.questions',
+                'update_settings.classroom',
+                'update_settings.article',
+                'update_settings.group',
+                'update_settings.invite',
+            ),
         );
         if (array_key_exists($module, $showModals)) {
             if (in_array($action, $showModals[$module])) {
@@ -426,7 +485,10 @@ class LogDataUtils
     public static function serializeChanges($oldData, $newData)
     {
         $newData = self::serializeUnsetChanges($newData);
-        $changeFields = ArrayToolkit::changes($oldData, $newData);
+        $changeFields = self::arrayChanges($oldData, $newData);
+        if (empty($changeFields['before']) && empty($changeFields['after'])) {
+            return array();
+        }
         $config = array(
             'buyExpiryTime' => array(
                 'timeConvent',
@@ -437,14 +499,34 @@ class LogDataUtils
             'expiryEndDate' => array(
                 'timeConvent',
             ),
+            'password' => array(
+                'passwordSetBlank',
+            ),
         );
 
         $changeFields = self::serializeData($config, $changeFields);
 
-        $changeFields['id'] = $oldData['id'];
-        $changeFields['showTitle'] = self::getShowTitle($oldData);
+        $changeFields = self::getShowField($changeFields, $oldData);
 
         return $changeFields;
+    }
+
+    private function arrayChanges(array $before = array(), array $after)
+    {
+        $changes = array('before' => array(), 'after' => array());
+
+        foreach ($after as $key => $value) {
+            if (!isset($before[$key])) {
+                $before[$key] = '';
+            }
+
+            if ($value != $before[$key]) {
+                $changes['before'][$key] = $before[$key];
+                $changes['after'][$key] = $value;
+            }
+        }
+
+        return $changes;
     }
 
     private function serializeUnsetChanges($newData)
@@ -460,6 +542,24 @@ class LogDataUtils
         }
 
         return $newData;
+    }
+
+    private function getShowField($changeFields, $oldData)
+    {
+        $changeFields['id'] = self::getShowId($oldData);
+        $changeFields['showTitle'] = self::getShowTitle($oldData);
+
+        return $changeFields;
+    }
+
+    private function getShowId($oldData)
+    {
+        $showId = '';
+        if (isset($oldData['id'])) {
+            $showId = $oldData['id'];
+        }
+
+        return $showId;
     }
 
     private function getShowTitle($oldData)
@@ -517,5 +617,14 @@ class LogDataUtils
         }
 
         return $time;
+    }
+
+    private function passwordSetBlank($password)
+    {
+        if (!empty($password)) {
+            $password = '******';
+        }
+
+        return $password;
     }
 }

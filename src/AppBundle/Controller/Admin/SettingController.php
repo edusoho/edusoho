@@ -350,7 +350,6 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mailer', $mailer);
             $mailerWithoutPassword = $mailer;
             $mailerWithoutPassword['password'] = '******';
-            $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
             $this->setFlashMessage('success', 'site.save.success');
         }
 

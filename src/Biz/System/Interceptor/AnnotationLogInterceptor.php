@@ -73,7 +73,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
             $module = $log['module'];
-            $action = $log['action'];
+            $action = $this->getActionValue($args, $log);
             $context = empty($beforeResult) ? $result : $beforeResult;
 
             if ('update' == $this->getFuncType($action) && !empty($beforeResult)) {
@@ -155,6 +155,31 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         }
 
         return $formatParam;
+    }
+
+    private function getActionValue($args, $log)
+    {
+        $action = $log['action'];
+        if (!empty($log['postfix'])) {
+            $postfix = $this->getPostfixValue($args, $log);
+            if (!empty($postfix)) {
+                $action .= '.'.$postfix;
+            }
+        }
+
+        return $action;
+    }
+
+    private function getPostfixValue($args, $log)
+    {
+        $postfixValue = '';
+        if (!empty($log['param'])) {
+            $params = explode(',', $log['param']);
+            $postfix = $this->getFuncNeedParams($log['funcParam'], $params, $args);
+            $postfixValue = implode('.', $postfix);
+        }
+
+        return $postfixValue;
     }
 
     private function getFormatReturn($service, $formatFuncName, $formatParam, $log)

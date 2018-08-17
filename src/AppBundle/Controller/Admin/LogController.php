@@ -59,14 +59,8 @@ class LogController extends BaseController
         foreach ($data as $message => $fieldChange) {
             if (is_array($fieldChange)) {
                 $key = LogDataUtils::trans($message, $log['module'], $log['action']);
-                if (!isset($fieldChange['old'])) {
-                    $fieldChange['old'] = '';
-                }
-                if (!isset($fieldChange['new'])) {
-                    $fieldChange['new'] = '';
-                }
-                $fieldChange['old'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['old'], $message);
-                $fieldChange['new'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['new'], $message);
+
+                $fieldChange = self::getStrChangeFiled($log['module'], $log['action'], $fieldChange, $message);
 
                 $showData[$key] = $fieldChange;
             }
@@ -172,6 +166,31 @@ class LogController extends BaseController
         }
 
         return $data;
+    }
+
+    private function getStrChangeFiled($module, $action, $fieldChange, $message)
+    {
+        if (!isset($fieldChange['old'])) {
+            $fieldChange['old'] = '';
+        }
+        if (!isset($fieldChange['new'])) {
+            $fieldChange['new'] = '';
+        }
+
+        $fieldChange['old'] = $this->getTransField($module, $action, $fieldChange['old'], $message);
+        $fieldChange['new'] = $this->getTransField($module, $action, $fieldChange['new'], $message);
+
+        return $fieldChange;
+    }
+
+    private function getTransField($module, $action, $field, $message)
+    {
+        if (is_array($field)) {
+            $field = json_encode($field);
+        }
+        $field = $this->tryTrans($module, $action, $field, $message);
+
+        return $field;
     }
 
     private function tryTrans($module, $action, $message, $prefix = '')

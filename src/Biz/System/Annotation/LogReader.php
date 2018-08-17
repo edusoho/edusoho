@@ -50,6 +50,7 @@ class LogReader
                 $log['module'] = $annotation->getModule();
                 $log['action'] = $annotation->getAction();
                 $log['param'] = $annotation->getParam();
+                $log['postfix'] = $annotation->getPostfix();
                 $log['funcName'] = $annotation->getFuncName();
                 $log['funcParam'] = $funcParam;
                 if (!empty($annotation->getServiceName())) {
