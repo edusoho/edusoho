@@ -1,49 +1,30 @@
 import loadAnimation from 'common/load-animation';
-import 'jquery-sortable';
 import notify from 'common/notify';
-import Intro from 'app/js/courseset-manage/intro';
-
-$.fn.serializeObject = function()
-{
-  let o = {};
-  let a = this.serializeArray();
-  $.each(a, function() {
-    if (o[this.name]) {
-      if (!o[this.name].push) {
-        o[this.name] = [o[this.name]];
-      }
-      o[this.name].push(this.value || '');
-    } else {
-      o[this.name] = this.value || '';
-    }
-  });
-  return o;
-};
-
-
 
 class Editor {
   constructor($modal) {
     this.$element = $modal;
-    this.$task_manage_content = $('#task-create-content');
-    this.$task_manage_finish = $('#task-create-finish');
-    this.$task_manage_content_iframe = $('#task-create-content-iframe');
-    this.$task_manage_finish_iframe = $('#task-create-finish-iframe');
-    this.$task_manage_type = $('#task-create-type');
-    this.$frame = null;
-    this.$iframe_body = null;
-    this.iframe_jQuery = null;
-    this.content_iframe_name = 'task-create-content-iframe';
-    this.finish_iframe_name = 'task-create-finish-iframe';
-    this.mode = this.$task_manage_type.data('editorMode');
-    this.type = this.$task_manage_type.data('editorType');
     this.step = 1;
-    this.content_loaded = false;
-    this.finish_loaded = false;
-    this.contentUrl = '';
-    this.finishUrl = '';
-    this.contentData = null;
-    this.finishData = null;
+    let $taskType = $('#task-create-type');
+    this.taskConfig = {
+      type: $taskType.data('editorType'),
+      mode: $taskType.data('editorMode'),
+      contentUrl: $taskType.data('contentUrl'),
+      finishUrl: $taskType.data('finishUrl'),
+      saveUrl: $taskType.data('saveUrl'),
+    };
+
+    this.$taskType = $taskType;
+    this.$taskContent = $('#task-create-content');
+    this.$taskFinish = $('#task-create-finish');
+
+    this.$contentIframe = $('#task-create-content-iframe');
+    this.$finishIframe = $('#task-create-finish-iframe');
+    $('#task-create-content-iframe, #task-create-finish-iframe').iFrameResize();
+
+    this.contentData = {};
+    this.finishData = {};
+
     this._init();
     this._initEvent();
   }
@@ -52,45 +33,49 @@ class Editor {
     $('#course-tasks-submit').click(event => this._onSave(event));
     $('#course-tasks-next').click(event => this._onNext(event));
     $('#course-tasks-prev').click(event => this._onPrev(event));
-    window.ltcsdkserver.messenger.on('returnActivity', (msg) => {
-      if (!msg.valid) {
-        this.contentData = false;
-        return ;
-      }
-      this.contentData = msg.data;
-      this._doNext();
-    });
+
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
-    } else {
-      $('.delete-task').click(event => this._onDelete(event));
     }
+
+    // window.ltc.messenger.on('returnActivity', (msg) => {
+    //   if (!msg.valid) {
+    //     this.contentData = false;
+    //     return ;
+    //   }
+    //   this.contentData = msg.data;
+    //   this._doNext();
+    // });
   }
 
   _init() {
     this._inItStep1form();
-    this._renderContent(this.step);
-    if (this.mode == 'edit') {
-      this.contentUrl = this.$task_manage_type.data('contentUrl');
-      this.finishUrl = this.$task_manage_type.data('finishUrl');
-      this.step = 2;
+    if ('edit' == this.taskConfig.mode) {
+      //编辑的时候，跳转到第二步
+      this._doNext();
+    } else {
+      //创建时候，渲染第一步页面
       this._switchPage();
     }
   }
 
   _onNext(e) {
-    if (this.step === 3) {
-      return;
-    }
-
-    if (this.step === 2) {
-      this.contentData = true;
-      window.ltcsdkserver.messenger.sendToChild({id: 'task-create-content-iframe'}, 'getActivity', {} );
-    }
-
     if (this.step === 1) {
       this._doNext();
     }
+
+    if (this.step === 2) {
+      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
+    }
+  }
+
+  _onPrev() {
+    if (1 === this.step) {
+      return;
+    }
+    this.step -= 1;
+
+    this._switchPage();
   }
 
   _doNext() {
@@ -99,35 +84,23 @@ class Editor {
     this.$element.trigger('afterNext');
   }
 
-  _onPrev() {
-    // 第二页可以上一步
-    if (this.step === 1) {
-      return;
-    }
-
-    this.step -= 1;
-    this._switchPage();
-  }
-
   _onSetType(event) {
     let $this = $(event.currentTarget).addClass('active');
     $this.siblings().removeClass('active');
     let type = $this.data('type');
     $('[name="mediaType"]').val(type);
-    this.contentUrl = $this.data('contentUrl');
-    this.finishUrl = $this.data('finishUrl');
-    this.content_loaded = this.type === type;
+    this.taskConfig.contentUrl = $this.data('contentUrl');
+    this.taskConfig.finishUrl = $this.data('finishUrl');
     this.type = type;
     this._onNext(event);
   }
 
   _onSave(event) {
     if (this.step === 2) {
-      this.contentData = true;
-      window.ltcsdkserver.messenger.sendToChild({id: 'task-create-content-iframe'}, 'getActivity', {} );
-      window.ltcsdkserver.messenger.on('returnActivity', (msg) => {
+      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
+      window.ltc.on('returnActivity', (msg) => {
         if (!msg.valid) {
-          this.contentData = false;
+          this.contentData = {};
           return;
         }
         this.contentData = msg.data;
@@ -136,11 +109,10 @@ class Editor {
     }
 
     if (this.step === 3) {
-      this.finishData = true;
-      window.ltcsdkserver.messenger.sendToChild({id: 'task-create-finish-iframe'}, 'getFinishCondition', {} );
-      window.ltcsdkserver.messenger.on('returnFinishCondition', (msg) => {
+      window.ltc.emitChild('task-create-finish-iframe', 'getFinishCondition');
+      window.ltc.on('returnFinishCondition', (msg) => {
         if (!msg.valid) {
-          this.finishData = false;
+          this.finishData = {};
           return;
         }
         this.finishData = msg.data;
@@ -151,20 +123,14 @@ class Editor {
 
   _postData(event) {
     $(event.currentTarget).attr('disabled', 'disabled').button('loading');
-    let postData = Object.assign($('#step1-form').serializeObject(), this.contentData, this.finishData)
+    let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), this.contentData, this.finishData);
 
-
-    console.log($('#step1-form').serializeArray());
-    console.log(this.contentData);
-    console.log(this.finishData);
-
-    $.post(this.$task_manage_type.data('saveUrl'), postData)
+    $.post(this.taskConfig['saveUrl'], postData)
       .done((response) => {
         this.$element.modal('hide');
         if (response) {
           $('#sortable-list').trigger('addItem', response);
         }
-        // this.initIntro();
       })
       .fail((response) => {
         let msg = '';
@@ -177,72 +143,48 @@ class Editor {
       });
   }
 
-  initIntro() {
-    setTimeout(function() {
-      if($('.js-settings-list').length === 1) {
-        let intro = new Intro();
-        intro.initTaskDetailIntro('.js-settings-list');
-      }
-    }, 500);
-  }
-
-  _onDelete(event) {
-    let $btn = $(event.currentTarget);
-    let url = $btn.data('url');
-    if (url === undefined) {
-      return;
-    }
-    if (!confirm(Translator.trans(Translator.trans('task_manage.delete_hint')))) {
-      return;
-    }
-    $.post(url)
-      .then((response) => {
-        notify('success', Translator.trans('task_manage.delete_success_hint'));
-        this.$element.modal('hide');
-
-
-        document.location.reload();
-      })
-      .fail(error => {
-        notify('warning', Translator.trans('task_manage.delete_failed_hint'));
-      });
-  }
-
   _switchPage() {
-    this._renderStep(this.step);
-    this._renderContent(this.step);
-    this._rendButton(this.step);
-    if (this.step == 2 && !this.content_loaded) {
-      console.log({'loading':new Date().toLocaleTimeString()});
+    this._renderStep();
+    this._renderContent();
+    if (1 == this.step) {
+      this._rendButton(1);
+    }
+    if (2 == this.step) {
       this._initContentIframe();
     }
-
-    if (this.step == 3 && !this.finish_loaded) {
-      console.log({'loading':new Date().toLocaleTimeString()});
+    if (3 == this.step) {
       this._initFinishIframe();
     }
   }
 
   _initContentIframe() {
-    this.$task_manage_content_iframe.attr('src', this.contentUrl);
-    this.$frame = $('#' + this.content_iframe_name).iFrameResize();
-    let loadiframe = () => {
-      this.content_loaded = true;
+    if (!this.taskConfig.contentUrl) {
+      return;
+    }
+
+    if (this.$contentIframe.attr('src') != this.taskConfig.contentUrl) {
+      this.$contentIframe.attr('src', this.taskConfig.contentUrl);
+      this.$contentIframe.load(loadAnimation(() => {
+        this._rendButton(2);
+      }, this.$taskContent));
+    } else {
       this._rendButton(2);
-      console.log({'loaded':new Date().toLocaleTimeString()});
-    };
-    this.$frame.load(loadAnimation(loadiframe, this.$task_manage_content));
+    }
   }
 
   _initFinishIframe() {
-    this.$task_manage_finish_iframe.attr('src', this.finishUrl);
-    this.$frame = $('#' + this.finish_iframe_name).iFrameResize();
-    let loadiframe = () => {
-      this.finish_loaded = true;
+    if (!this.taskConfig.finishUrl) {
+      return;
+    }
+    if (this.$finishIframe.attr('src') != this.taskConfig.finishUrl) {
+      this.$finishIframe.attr('src', this.taskConfig.finishUrl);
+  
+      this.$finishIframe.load(loadAnimation(() => {
+        this._rendButton(3);
+      }, this.$taskFinish));
+    } else {
       this._rendButton(3);
-      console.log({'loaded':new Date().toLocaleTimeString()});
-    };
-    this.$frame.load(loadAnimation(loadiframe, this.$task_manage_finish));
+    }
   }
 
   _inItStep1form() {
@@ -260,69 +202,57 @@ class Editor {
     $step1_form.data('validator', validator);
   }
 
-  _validator(step) {
-    // let validator = null;
-    //
-    // if (step === 1) {
-    //   validator = $('#step1-form').data('validator');
-    // } else if (this.content_loaded) {
-    //   var $from = this.$iframe_body.find('#step' + step + '-form');
-    //   validator = this.iframe_jQuery.data($from[0], 'validator');
-    // }
-    //
-    // if (validator && !validator.form()) {
-    //   return false;
-    // }
-    return true;
-  }
-
   _rendButton(step) {
-    if (step === 1) {
-      this._renderPrev(false);
-      this._rendSubmit(false);
-      this._renderNext(true);
-    } else if (step === 2) {
-      this._renderPrev(true);
+    if (1 === step) {
+      this.$element.find('.modal-footer').children().addClass('hidden');
+    }
+    if (2=== step) {
       if (this.mode === 'edit') {
-        this._renderPrev(false);
+        this.$element.find('#course-tasks-prev').addClass('hidden').siblings().removeClass('hidden');
+      } else {
+        this.$element.find('.modal-footer').children().removeClass('hidden');
       }
-      if (!this.content_loaded) {
-        this._rendSubmit(false);
-        this._renderNext(false);
-        return;
-      }
-      this._rendSubmit(true);
-      this._renderNext(true);
-    } else if (step === 3) {
-      this._renderNext(false);
-      this._renderPrev(true);
+    }
+
+    if (3 === step) {
+      this.$element.find('#course-tasks-next').addClass('hidden').siblings().removeClass('hidden');
     }
   }
 
-  _renderStep(step) {
-    $('#task-create-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
-    $('#task-create-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
+  _renderStep() {
+    if (!this.$setp) {
+      this.$step = $('#task-create-step');
+    }
+    let $currentSetp = this.$step.find('li').eq(this.step - 1);
+    $currentSetp.addClass('doing').prev().addClass('done').removeClass('doing');
+    $currentSetp.next().removeClass('doing').removeClass('done');
   }
 
-  _renderContent(step) {
-    (step === 1) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
-    (step === 2) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
-    (step === 3) ? this.$task_manage_finish.removeClass('hidden') : this.$task_manage_finish.addClass('hidden');
-    console.log(step);
+  _renderContent() {
+    let content = {
+      1: this.$taskType,
+      2: this.$taskContent,
+      3: this.$taskFinish,
+    };
+    content[this.step].removeClass('hidden').siblings('div').addClass('hidden');
   }
 
-  _renderNext(show) {
-    show ? $('#course-tasks-next').removeClass('hidden').removeAttr('disabled') : $('#course-tasks-next').addClass('hidden');
-  }
+  _getFormSerializeObject($e) {
+    let o = {};
+    let a = $e.serializeArray();
+    $.each(a, function() {
+      if (o[this.name]) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
+    });
 
-  _renderPrev(show) {
-    show ? $('#course-tasks-prev').removeClass('hidden') : $('#course-tasks-prev').addClass('hidden');
-  }
-
-  _rendSubmit(show) {
-    show ? $('#course-tasks-submit').removeClass('hidden') : $('#course-tasks-submit').addClass('hidden');
+    return o;
   }
 }
-
 
 export default Editor;

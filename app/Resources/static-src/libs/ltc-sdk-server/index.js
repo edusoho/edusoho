@@ -68,6 +68,4 @@ class LtcSDKServer {
   }
 }
 
-let ltcsdk = new LtcSDKServer();
-
-module.exports = window.ltcsdkserver = ltcsdk;
+module.exports = window.ltc = new LtcSDKServer();
