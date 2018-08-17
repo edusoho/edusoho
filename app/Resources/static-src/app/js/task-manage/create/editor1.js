@@ -38,14 +38,23 @@ class Editor {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
     }
 
-    // window.ltc.messenger.on('returnActivity', (msg) => {
-    //   if (!msg.valid) {
-    //     this.contentData = false;
-    //     return ;
-    //   }
-    //   this.contentData = msg.data;
-    //   this._doNext();
-    // });
+    window.ltc.on('returnActivity', (msg) => {
+      if (!msg.valid) {
+        this.contentData = {};
+        return;
+      }
+      this.contentData = msg.data;
+      this._doNext();
+    });
+
+    window.ltc.on('returnFinishCondition', (msg) => {
+      if (!msg.valid) {
+        this.finishData = {};
+        return;
+      }
+      this.finishData = msg.data;
+      this._postData(event);
+    });
   }
 
   _init() {
@@ -62,10 +71,11 @@ class Editor {
   _onNext(e) {
     if (this.step === 1) {
       this._doNext();
+      return;
     }
-
     if (this.step === 2) {
       window.ltc.emitChild('task-create-content-iframe', 'getActivity');
+      return;
     }
   }
 
@@ -74,7 +84,6 @@ class Editor {
       return;
     }
     this.step -= 1;
-
     this._switchPage();
   }
 
@@ -97,27 +106,13 @@ class Editor {
 
   _onSave(event) {
     if (this.step === 2) {
-      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
-      window.ltc.on('returnActivity', (msg) => {
-        if (!msg.valid) {
-          this.contentData = {};
-          return;
-        }
-        this.contentData = msg.data;
-        this._postData(event);
-      });
+      
+      return;
     }
 
     if (this.step === 3) {
       window.ltc.emitChild('task-create-finish-iframe', 'getFinishCondition');
-      window.ltc.on('returnFinishCondition', (msg) => {
-        if (!msg.valid) {
-          this.finishData = {};
-          return;
-        }
-        this.finishData = msg.data;
-        this._postData(event);
-      });
+      return;
     }
   }
 
@@ -146,6 +141,7 @@ class Editor {
   _switchPage() {
     this._renderStep();
     this._renderContent();
+
     if (1 == this.step) {
       this._rendButton(1);
     }
