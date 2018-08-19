@@ -98,7 +98,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
                 } else {
                     $item['isSingleTaskLesson'] = false;
                 }
-            } else if ('lesson' == $item['itemType']) {
+            } elseif ('lesson' == $item['itemType']) {
                 $lessonInfo = $lessonInfos[$item['id']];
                 if ($lessonInfo['isSingleTaskLesson']) {
                     unset($items[$key]);
@@ -111,6 +111,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         });
 
         $items = TaskItemNumUtils::resetNum($items);
+
         return array(array_values($items), $this->getNextOffsetSeq($items));
     }
 

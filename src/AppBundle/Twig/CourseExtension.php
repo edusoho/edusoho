@@ -99,7 +99,7 @@ class CourseExtension extends \Twig_Extension
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
-                    'isSingleTaskLesson' => empty($item['isSingleTaskLesson'])?false:$item['isSingleTaskLesson'],
+                    'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                 );
             }
         }

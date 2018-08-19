@@ -10,11 +10,11 @@ class TaskItemNumUtils
     public static function resetNum($items)
     {
         $lessonTaskNums = array(); //key 为 lessonId, value为 taskNum
-        
+
         foreach ($items as &$item) {
             if ('task' == $item['itemType'] && empty($item['isSingleTaskLesson'])) {
                 if (isset($lessonTaskNums[$item['categoryId']])) {
-                    $lessonTaskNums[$item['categoryId']] ++;
+                    ++$lessonTaskNums[$item['categoryId']];
                 } else {
                     $lessonTaskNums[$item['categoryId']] = 1;
                 }
