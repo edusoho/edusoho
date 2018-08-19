@@ -18,8 +18,17 @@ class PagedCourseLesson {
   }
 
   _init(options) {
-    let defaultOptions = {
-      'data': this._toJson($('.js-hidden-data').html()),
+    let finalOptions = $.extend(this._getDefaultOptions(), options);
+    new ESInfiniteCachedScroll(finalOptions);
+
+    if (this._displayAllImmediately) {
+      this._destroyPaging();
+    }
+  }
+
+  _getDefaultOptions() {
+    return {
+      'data': this._toJson($('.js-hidden-cached-data').html()),
 
       'context': {
         'course': this._toJson($('.js-hidden-course-info').html()),
@@ -38,6 +47,10 @@ class PagedCourseLesson {
           return 'unit' == data.itemType;
         },
 
+        'isLesson': function(data, context) {
+          return 'lesson' == data.itemType;
+        },
+
         'isTask': function(data, context) {
           return 'task' == data.itemType;
         },
@@ -50,8 +63,16 @@ class PagedCourseLesson {
           return Translator.trans('course.unit', { part_name: context.i18n.i18nUnitName, number: data.number, title: data.title });
         },
 
+        'getLessonName': function(data, context) {
+          return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: data.number, title: data.title });
+        },
+
         'getTaskName': function(data, context) {
-          return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
+          if (data.isSingleTaskLesson) {
+            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: data.number, title: data.title });
+          } else {
+            return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
+          }
         },
 
         'hasWatchLimitRemaining': function(data, context) {
@@ -75,6 +96,15 @@ class PagedCourseLesson {
             classNames += ' es-icon-iccheckcircleblack24px color-primary';
           }
           return classNames;
+        },
+
+        'lessonContainerClass': function(data, context) {
+          let containerClass = 'color-gray bg-gray-lighter';
+          if (context.isTask(data, context)) {
+            return data.isSingleTaskLesson ? containerClass : '';
+          } else if (context.isLesson(data, context)) {
+            return containerClass;
+          }
         },
 
         'isTaskLocked': function(data, context) {
@@ -139,19 +169,12 @@ class PagedCourseLesson {
 
       'dataTemplateNode': '.js-infinite-item-template'
     };
-
-    let finalOptions = $.extend(defaultOptions, options);
-    new ESInfiniteCachedScroll(finalOptions);
-
-    if (this._displayAllImmediately) {
-      this._destroyPaging();
-    }
   }
 
   _destroyPaging() {
     let removedClasses = [
       'js-infinite-item-template',
-      'js-hidden-data',
+      'js-hidden-cached-data',
       'js-hidden-course-info',
       'js-hidden-i18n',
       'js-hidden-activity-metas',

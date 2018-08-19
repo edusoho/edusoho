@@ -400,6 +400,7 @@ course.buy.price_free_hint: Go study
 
 course.chapter: '%chapter_name% %number% : %title%'
 course.unit: '%part_name% %number% : %title%'
+course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%TaskName%.%taskNumber%:%taskTitle%'
 
 course.thread_replay_failed_hint: Posted reply failed, please try again

@@ -11,7 +11,12 @@
       <span class="title">{getUnitName}</span>
     </li>
 
-    <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} mouse-control infinite-item">
+    <li class="task-item infinite-item {lessonContainerClass}"
+      display-if="{isLesson}">
+      <span class="title">{getLessonName}</span>
+    </li>
+
+    <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} {lessonContainerClass} mouse-control infinite-item">
       <i class="{taskClass}"></i>
       
       <a display-if="{isPublishedTaskUnlocked}" class="title"

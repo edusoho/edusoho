@@ -12,7 +12,12 @@
     <span class="title">{getUnitName}</span>
   </li>
 
-  <li class="task-item task-content mouse-control infinite-item"
+  <li class="task-item infinite-item {lessonContainerClass}"
+    display-if="{isLesson}">
+    <span class="title">{getLessonName}</span>
+  </li>
+
+  <li class="task-item task-content mouse-control infinite-item {lessonContainerClass}"
       display-if="{isTask}">
     <i display-if="{isTaskLocked}" class="{taskClass}" data-toggle="tooltip" data-trigger="hover" 
       data-placement="top" title="{{ 'course.task.lock_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}">
