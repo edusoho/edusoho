@@ -49,7 +49,8 @@ load.then(function(){
   //接口访问例子
   window.ltc.api({
     "name" : "getCourse",
-    "params" : {"id":1}
+    "queryParams" : {"type":"course"},
+    "pathParams" : {"id":1}
   },(result) => {
     console.log(result);
   })

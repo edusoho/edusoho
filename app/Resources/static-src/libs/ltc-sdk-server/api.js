@@ -18,14 +18,17 @@ const api = {};
 let instance;
 
 apiData.map(item => {
-  api[item.name] = ({ params, data } = { params: {} }) => {
-    const url = pathMatch(item.path, params);
+  api[item.name] = ({ pathParams, data, queryParams } = { pathParams: {} }) => {
+    const url = pathMatch(item.path, pathParams);
     const options = {
       url: url
     };
 
     if (data) {
       options["data"] = data;
+    }
+    if (queryParams) {
+      options["params"] = queryParams;
     }
 
     return instance(options);
