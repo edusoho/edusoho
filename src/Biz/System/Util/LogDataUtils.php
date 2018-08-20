@@ -3,6 +3,7 @@
 namespace Biz\System\Util;
 
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Course\Util\CourseTitleUtils;
 
 class LogDataUtils
 {
@@ -50,8 +51,6 @@ class LogDataUtils
                         ),
                     ),
                 ),
-                'delete_course' => array(
-                ),
                 'add_student' => array(
                     'generateUrl' => array(
                         '%url%' => array(
@@ -80,10 +79,6 @@ class LogDataUtils
                         '%title%' => 'title',
                         '%nickname%' => 'nickname',
                     ),
-                ),
-                'create_thread' => array(
-                ),
-                'delete_thread' => array(
                 ),
                 'publish' => array(
                     'generateUrl' => array(
@@ -138,34 +133,6 @@ class LogDataUtils
                         ),
                     ),
                 ),
-                'add_question' => array(
-                ),
-                'delete_question' => array(
-                ),
-                'add_testpaper' => array(
-                ),
-                'delete_testpaper' => array(
-                ),
-                'delete_lesson' => array(
-                ),
-                'delete' => array(
-                ),
-                'create_chapter' => array(
-                ),
-                'delete_chapter' => array(
-                ),
-                'delete_review' => array(
-                ),
-                'delete_task' => array(
-                ),
-                'update_task' => array(
-                ),
-                'recommend' => array(
-                ),
-                'cancel_recommend' => array(
-                ),
-                'update_draft' => array(
-                ),
             ),
             'classroom' => array(
                 'create' => array(
@@ -187,34 +154,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                ),
-                'delete' => array(
-                ),
-            ),
-            'category' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
-                'update' => array(
-                ),
-            ),
-            'content' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
-                'update' => array(
-                ),
-                'trash' => array(
-                ),
-                'publish' => array(
-                ),
-            ),
-            'upload_file' => array(
-                'create' => array(
-                ),
-                'delete' => array(
                 ),
             ),
             'article' => array(
@@ -258,36 +197,6 @@ class LogDataUtils
                         ),
                     ),
                 ),
-                'trash' => array(
-                ),
-                'removeThumb' => array(
-                ),
-                'publish' => array(
-                ),
-                'unpublish' => array(
-                ),
-            ),
-            'tag' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
-                'update' => array(
-                ),
-            ),
-            'tagGroup' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
-                'update' => array(
-                ),
-            ),
-            'announcement' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
             ),
             'open_course' => array(
                 'create_course' => array(
@@ -310,10 +219,6 @@ class LogDataUtils
                         ),
                     ),
                 ),
-                'pulish_course' => array(
-                ),
-                'close_course' => array(
-                ),
                 'add_lesson' => array(
                     'generateUrl' => array(
                         '%url%' => array(
@@ -323,16 +228,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                ),
-                'update_lesson' => array(
-                ),
-                'update_picture' => array(
-                ),
-                'delete_lesson' => array(
-                ),
-                'delete_course' => array(
-                ),
-                'update_teacher' => array(
                 ),
             ),
             'group' => array(
@@ -346,30 +241,6 @@ class LogDataUtils
                             ),
                         ),
                     ),
-                ),
-                'update_thread' => array(
-                ),
-                'delete_thread' => array(
-                ),
-                'open_thread' => array(
-                ),
-                'close_thread' => array(
-                ),
-            ),
-            'marker' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
-                'delete_question' => array(
-                ),
-            ),
-            'role' => array(
-                'create' => array(
-                ),
-                'delete' => array(
-                ),
-                'update' => array(
                 ),
             ),
             'user' => array(
@@ -388,72 +259,6 @@ class LogDataUtils
                         '%title%' => 'email',
                     ),
                 ),
-                'verifiedMobile-changed' => array(
-                ),
-                'email-changed' => array(
-                ),
-                'update' => array(
-                ),
-                'nickname_change' => array(
-                ),
-                'avatar-changed' => array(
-                ),
-                'change_role' => array(
-                ),
-                'lock' => array(
-                ),
-                'unlock' => array(
-                ),
-            ),
-            'system' => array(
-                'update_settings.site' => array(
-                ),
-                'update_settings.theme' => array(
-                ),
-                'update_settings.cloud_email_crm' => array(
-                ),
-                'update_settings.mailer' => array(
-                ),
-                'update_settings.consult' => array(
-                ),
-                'update_settings.esBar' => array(
-                ),
-                'update_settings.default' => array(
-                ),
-                'update_settings.security' => array(
-                ),
-                'update_settings.login_bind' => array(
-                ),
-                'update_settings.user_partner' => array(
-                ),
-                'update_settings.auth' => array(
-                ),
-                'update_settings.course' => array(
-                ),
-                'update_settings.message' => array(
-                ),
-                'update_settings.course_default' => array(
-                ),
-                'update_settings.questions' => array(
-                ),
-                'update_settings.classroom' => array(
-                ),
-                'update_settings.article' => array(
-                ),
-                'update_settings.group' => array(
-                ),
-                'update_settings.invite' => array(
-                ),
-                'update_settings.payment' => array(
-                ),
-                'update_settings.coin' => array(
-                ),
-                'update_settings.refund' => array(
-                ),
-                'update_settings.blacklist_ip' => array(
-                ),
-                'update_settings.post_num_rules' => array(
-                ),
             ),
         );
 
@@ -466,6 +271,7 @@ class LogDataUtils
             '%title%' => array(
                 'showTitle',
                 'title',
+                'courseSetTitle',
                 'name',
                 'content',
                 'filename',
@@ -482,12 +288,16 @@ class LogDataUtils
             'course' => array(
                 'update',
                 'update_course',
+                'update_thread',
             ),
             'classroom' => array(
                 'update',
             ),
             'open_course' => array(
                 'update_course',
+            ),
+            'thread' => array(
+                'update',
             ),
             'user' => array(
                 'verifiedMobile-changed',
@@ -608,6 +418,7 @@ class LogDataUtils
         $config = array(
             'createdTime',
             'updatedTime',
+            'updateTime',
             'coin_picture_50_50',
             'coin_picture_30_30',
             'coin_picture_20_20',
@@ -647,6 +458,9 @@ class LogDataUtils
             $showTitle = $oldData['email'];
         } elseif (isset($oldData['title'])) {
             $showTitle = $oldData['title'];
+            if (empty($oldData['title']) && !empty($oldData['courseSetTitle'])) {
+                $showTitle = CourseTitleUtils::getDisplayedTitle($oldData);
+            }
         } elseif (isset($oldData['name'])) {
             $showTitle = $oldData['name'];
         }

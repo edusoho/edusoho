@@ -8151,6 +8151,7 @@ log.module.announcement: 公告
 log.module.open_course: 公开课
 log.module.live: 直播
 log.module.role: 角色
+log.module.thread: 话题
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8173,6 +8174,7 @@ log.action.course.delete_chapter: 删除章节
 log.action.course.delete_favorite: 删除收藏
 log.action.course.delete_note: 删除笔记
 log.action.course.create_thread: 创建话题
+log.action.course.update_thread: 更新话题
 log.action.course.delete_thread: 删除话题
 log.action.course.delete_review: 删除评价
 log.action.course.delete_announcement: 删除公告
@@ -8223,6 +8225,9 @@ log.action.user.password-reset: 重置密码邮件发送
 log.action.role.create: 创建角色
 log.action.role.update: 更新角色
 log.action.role.delete: 删除角色
+log.action.thread.create: 创建话题
+log.action.thread.update: 更新话题
+log.action.thread.delete: 删除话题
 log.action.system.email_send_check: 邮件自检
 log.action.system.setting_email_change: 更变邮箱
 log.action.system.setting_email-verify: 邮箱验证
@@ -8371,6 +8376,7 @@ log.action.template.course.add_student: 在教学计划《<a href="%url%" target
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
 log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
+log.action.template.course.update_thread: 更新了话题《%title%》
 log.action.template.course.delete_thread: 删除了话题《%title%》
 log.action.template.course.create_course: 新建了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_course: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》
@@ -8451,6 +8457,9 @@ log.action.template.user.avatar-changed: 更新了<strong class="color-success">
 log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> 《%title%》的用户组
 log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> 《%title%》
 log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> 《%title%》
+log.action.template.thread.create: 新建了<strong class="color-success">话题</strong> 《%title%》
+log.action.template.thread.update: 更新了<strong class="color-success">话题</strong> 《%title%》
+log.action.template.thread.delete: 删除了<strong class="color-success">话题</strong> 《%title%》
 log.action.template.system.update_settings.site: 更新了<strong class="color-success">系统设置</strong>的站点设置
 log.action.template.system.update_settings.theme: 更新了<strong class="color-success">系统设置</strong>的主题设置
 log.action.template.system.update_settings.cloud_email_crm: 更新了<strong class="color-success">系统设置</strong>的云邮件设置
@@ -8517,6 +8526,8 @@ log.attr.course.update_course.serializeMode: 连载状态
 log.attr.course.update_course.serializeMode.none: 非连载课程
 log.attr.course.update_course.serializeMode.serialized: 更新中
 log.attr.course.update_course.serializeMode.finished: 已完结
+log.attr.course.update_thread.title: 标题
+log.attr.course.update_thread.content: 内容
 log.attr.classroom.title: 名称
 log.attr.classroom.about: 简介
 log.attr.classroom.showable: 班级展示
@@ -8572,6 +8583,8 @@ log.attr.user.lock.locked.0: 解禁
 log.attr.user.unlock.locked: 禁用状态
 log.attr.user.unlock.locked.1: 禁用
 log.attr.user.unlock.locked.0: 解禁
+log.attr.thread.update.title: 标题
+log.attr.thread.update.content: 内容
 log.attr.system.update_settings.site.name: 网站名称
 log.attr.system.update_settings.site.slogan: 网站副标题
 log.attr.system.update_settings.site.url: 网站域名

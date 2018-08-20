@@ -91,48 +91,50 @@ class LogController extends BaseController
             $transJsonData = array();
             $logData = $log['data'];
             $log['urlParamsJson'] = array();
-            $log['shouldShowModal'] = false;
-            $log['shouldShowTemplate'] = false;
+            $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
+            $log['shouldShowTemplate'] = true;
+
+            $getValue = $getValueConfig;
+            $getGenerateUrl = array();
+
             if (array_key_exists($log['module'], $transConfigs)) {
                 if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
                     $transConfig = $transConfigs[$log['module']][$log['action']];
-                    $log['shouldShowTemplate'] = true;
-                    $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
-
                     if (!empty($transConfig['getValue'])) {
                         $getValue = $transConfig['getValue'];
-                    } else {
-                        $getValue = $getValueConfig;
-                    }
-                    foreach ($getValue as $key => $value) {
-                        $transJsonDataValue = $this->getArrayValueByConventKey($value, $logData);
-                        if (false === $transJsonDataValue) {
-                            $log['shouldShowTemplate'] = false;
-                            $log['shouldShowModal'] = false;
-                            continue;
-                        }
-                        $transJsonData[$key] = $transJsonDataValue;
-                    }
-                    if (isset($transConfig['generateUrl'])) {
-                        foreach ($transConfig['generateUrl'] as $key => $urlConfig) {
-                            $urlParam = array();
-                            foreach ($urlConfig['param'] as $param => $value) {
-                                $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
-                                if (false === $urlParamValue) {
-                                    $log['shouldShowTemplate'] = false;
-                                    $log['shouldShowModal'] = false;
-                                    continue 2;
-                                }
-                                $urlParam[$param] = $urlParamValue;
-                            }
-
-                            $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
-                        }
                     }
 
-                    $log['urlParamsJson'] = $transJsonData;
+                    if (!empty($transConfig['generateUrl'])) {
+                        $getGenerateUrl = $transConfig['generateUrl'];
+                    }
                 }
             }
+
+            foreach ($getValue as $key => $value) {
+                $transJsonDataValue = $this->getArrayValueByConventKey($value, $logData);
+                if (false === $transJsonDataValue) {
+                    $log['shouldShowTemplate'] = false;
+                    $log['shouldShowModal'] = false;
+                    continue;
+                }
+                $transJsonData[$key] = $transJsonDataValue;
+            }
+
+            foreach ($getGenerateUrl as $key => $urlConfig) {
+                $urlParam = array();
+                foreach ($urlConfig['param'] as $param => $value) {
+                    $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
+                    if (false === $urlParamValue) {
+                        $log['shouldShowTemplate'] = false;
+                        $log['shouldShowModal'] = false;
+                        continue 2;
+                    }
+                    $urlParam[$param] = $urlParamValue;
+                }
+                $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
+            }
+
+            $log['urlParamsJson'] = $transJsonData;
         }
 
         return $logs;
@@ -144,8 +146,10 @@ class LogController extends BaseController
         if (is_array($keyName)) {
             foreach ($keyName as $key) {
                 if (array_key_exists($key, $targetArray)) {
-                    $data = $targetArray[$key];
-                    break;
+                    if (!empty($targetArray[$key])) {
+                        $data = $targetArray[$key];
+                        break;
+                    }
                 }
             }
         } else {
@@ -277,5 +281,15 @@ class LogController extends BaseController
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

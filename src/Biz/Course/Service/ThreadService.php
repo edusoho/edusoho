@@ -33,6 +33,14 @@ interface ThreadService
      */
     public function createThread($thread);
 
+    /**
+     * @param $courseId
+     * @param $threadId
+     * @param $thread
+     *
+     * @return mixed
+     * @Log(module="course",action="update_thread",funcName="getThreadByThreadId",param="threadId")
+     */
     public function updateThread($courseId, $threadId, $thread);
 
     /**
