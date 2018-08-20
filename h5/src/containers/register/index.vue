@@ -41,7 +41,7 @@
           size="small"
           type="primary"
           :disabled="count.codeBtnDisable || !validated.mobile"
-          @click="handleSendSms">
+          @click="clickSmsBtn">
           发送验证码
           <span v-show="count.showCount">({{ count.num }})</span>
           </van-button>
@@ -176,6 +176,9 @@ export default {
       .catch(err => {
         Toast.fail(err.message);
       });
+    },
+    clickSmsBtn() {
+      this.dragEnable = true
     },
     handleSendSms() {
       this.sendSmsCenter(this.registerInfo)
