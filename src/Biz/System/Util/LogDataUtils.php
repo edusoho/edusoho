@@ -364,6 +364,47 @@ class LogDataUtils
                 'delete_question' => array(
                 ),
             ),
+            'role' => array(
+                'create' => array(
+                ),
+                'delete' => array(
+                ),
+                'update' => array(
+                ),
+            ),
+            'user' => array(
+                'password-changed' => array(
+                    'getValue' => array(
+                        '%title%' => 'email',
+                    ),
+                ),
+                'pay-password-changed' => array(
+                    'getValue' => array(
+                        '%title%' => 'email',
+                    ),
+                ),
+                'password-security-answers' => array(
+                    'getValue' => array(
+                        '%title%' => 'email',
+                    ),
+                ),
+                'verifiedMobile-changed' => array(
+                ),
+                'email-changed' => array(
+                ),
+                'update' => array(
+                ),
+                'nickname_change' => array(
+                ),
+                'avatar-changed' => array(
+                ),
+                'change_role' => array(
+                ),
+                'lock' => array(
+                ),
+                'unlock' => array(
+                ),
+            ),
             'system' => array(
                 'update_settings.site' => array(
                 ),
@@ -403,6 +444,16 @@ class LogDataUtils
                 ),
                 'update_settings.invite' => array(
                 ),
+                'update_settings.payment' => array(
+                ),
+                'update_settings.coin' => array(
+                ),
+                'update_settings.refund' => array(
+                ),
+                'update_settings.blacklist_ip' => array(
+                ),
+                'update_settings.post_num_rules' => array(
+                ),
             ),
         );
 
@@ -438,6 +489,13 @@ class LogDataUtils
             'open_course' => array(
                 'update_course',
             ),
+            'user' => array(
+                'verifiedMobile-changed',
+                'email-changed',
+                'update',
+                'nickname_change',
+                'change_role',
+            ),
             'system' => array(
                 'update_settings.site',
                 'update_settings.theme',
@@ -457,6 +515,11 @@ class LogDataUtils
                 'update_settings.article',
                 'update_settings.group',
                 'update_settings.invite',
+                'update_settings.payment',
+                'update_settings.coin',
+                'update_settings.refund',
+                'update_settings.blacklist_ip',
+                'update_settings.post_num_rules',
             ),
         );
         if (array_key_exists($module, $showModals)) {
@@ -534,6 +597,10 @@ class LogDataUtils
         $config = array(
             'createdTime',
             'updatedTime',
+            'coin_picture_50_50',
+            'coin_picture_30_30',
+            'coin_picture_20_20',
+            'coin_picture_10_10',
         );
         foreach ($config as $value) {
             if (isset($newData[$value])) {
@@ -565,7 +632,9 @@ class LogDataUtils
     private function getShowTitle($oldData)
     {
         $showTitle = '';
-        if (isset($oldData['title'])) {
+        if (isset($oldData['email'])) {
+            $showTitle = $oldData['email'];
+        } elseif (isset($oldData['title'])) {
             $showTitle = $oldData['title'];
         } elseif (isset($oldData['name'])) {
             $showTitle = $oldData['name'];

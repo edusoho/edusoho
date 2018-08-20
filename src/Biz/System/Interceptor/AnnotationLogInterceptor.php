@@ -76,7 +76,10 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             $action = $this->getActionValue($args, $log);
             $context = empty($beforeResult) ? $result : $beforeResult;
 
-            if ('update' == $this->getFuncType($action) && !empty($beforeResult)) {
+            if ('update' == $this->getFuncType($action)) {
+                if (empty($beforeResult)) {
+                    $beforeResult = array();
+                }
                 $service = $this->biz->service($log['service']);
                 $formatParam = $this->getFormatParam($args, $log);
                 $formatFuncName = $this->getFormatFuncName($funcName, $log);
@@ -118,6 +121,9 @@ class AnnotationLogInterceptor extends AbstractInterceptor
 
     private function getFuncType($action)
     {
+        if (false !== strpos($action, 'password')) {
+            return 'password';
+        }
         $config = array(
             'add' => 'create',
             'create' => 'create',

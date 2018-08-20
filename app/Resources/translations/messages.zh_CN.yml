@@ -8150,6 +8150,7 @@ log.module.question_plus: 题库增强版
 log.module.announcement: 公告
 log.module.open_course: 公开课
 log.module.live: 直播
+log.module.role: 角色
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8198,11 +8199,16 @@ log.action.course.update_draft: 更新草稿
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
+log.action.user.update: 修改
 log.action.user.send_email_verify: 邮箱验证
 log.action.user.nickname_change: 修改昵称
 log.action.user.password-changed: 重置密码
 log.action.user.pay-password-changed: 重置支付密码
+log.action.user.password-security-answers: 设置安全问题
 log.action.user.verifiedMobile-changed: 重置手机
+log.action.user.email-changed: 重置邮箱
+log.action.user.avatar-changed: 修改头像
+log.action.user.change_role: 修改用户组
 log.action.user.change_role: 修改角色
 log.action.user.unbind: 解绑用户
 log.action.user.login_success: 登录成功
@@ -8214,6 +8220,9 @@ log.action.user.cancel_recommend: 取消推荐用户
 log.action.user.approved: 实名认证成功
 log.action.user.approval_fail: 实名认证失败
 log.action.user.password-reset: 重置密码邮件发送
+log.action.role.create: 创建角色
+log.action.role.update: 更新角色
+log.action.role.delete: 删除角色
 log.action.system.email_send_check: 邮件自检
 log.action.system.setting_email_change: 更变邮箱
 log.action.system.setting_email-verify: 邮箱验证
@@ -8237,6 +8246,11 @@ log.action.system.update_settings.classroom: 更新班级设置
 log.action.system.update_settings.article: 更新资讯设置
 log.action.system.update_settings.group: 更新小组设置
 log.action.system.update_settings.invite: 更新邀请注册设置
+log.action.system.update_settings.payment: 更新帐务设置
+log.action.system.update_settings.coin: 更新虚拟币设置
+log.action.system.update_settings.refund: 更新退款设置
+log.action.system.update_settings.blacklist_ip: 更新黑名单设置
+log.action.system.update_settings.post_num_rules: 更新发贴设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -8423,6 +8437,20 @@ log.action.template.group.close_thread: 关闭了<strong class="color-success">�
 log.action.template.marker.create: 新建了<strong class="color-success">驻点</strong> 《%title%》
 log.action.template.marker.delete: 删除了<strong class="color-success">驻点</strong> 《%title%》
 log.action.template.marker.delete_question: 删除了<strong class="color-success">驻点</strong>问题 《%title%》
+log.action.template.role.create: 新建了<strong class="color-success">角色</strong> 《%title%》
+log.action.template.role.update: 更新了<strong class="color-success">角色</strong> 《%title%》
+log.action.template.role.delete: 删除了<strong class="color-success">角色</strong> 《%title%》
+log.action.template.user.password-changed: 重置了<strong class="color-success">用户</strong> 《%title%》的密码
+log.action.template.user.pay-password-changed: 重置了<strong class="color-success">用户</strong> 《%title%》的支付密码
+log.action.template.user.password-security-answers: 设置了<strong class="color-success">用户</strong> 《%title%》的安全问题
+log.action.template.user.verifiedMobile-changed: 重置了<strong class="color-success">用户</strong> 《%title%》绑定的手机
+log.action.template.user.email-changed: 重置了<strong class="color-success">用户</strong> 《%title%》绑定的邮箱
+log.action.template.user.update: 更新了<strong class="color-success">用户</strong> 《%title%》的资料
+log.action.template.user.nickname_change: 更新了<strong class="color-success">用户</strong> 《%title%》的昵称
+log.action.template.user.avatar-changed: 更新了<strong class="color-success">用户</strong> 《%title%》的头像
+log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> 《%title%》的用户组
+log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> 《%title%》
+log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> 《%title%》
 log.action.template.system.update_settings.site: 更新了<strong class="color-success">系统设置</strong>的站点设置
 log.action.template.system.update_settings.theme: 更新了<strong class="color-success">系统设置</strong>的主题设置
 log.action.template.system.update_settings.cloud_email_crm: 更新了<strong class="color-success">系统设置</strong>的云邮件设置
@@ -8442,6 +8470,11 @@ log.action.template.system.update_settings.classroom: 更新了<strong class="co
 log.action.template.system.update_settings.article: 更新了<strong class="color-success">系统设置</strong>的资讯设置
 log.action.template.system.update_settings.group: 更新了<strong class="color-success">系统设置</strong>的小组设置
 log.action.template.system.update_settings.invite: 更新了<strong class="color-success">系统设置</strong>的邀请注册设置
+log.action.template.system.update_settings.payment: 更新了<strong class="color-success">系统设置</strong>的帐务设置
+log.action.template.system.update_settings.coin: 更新了<strong class="color-success">系统设置</strong>的虚拟币设置
+log.action.template.system.update_settings.refund: 更新了<strong class="color-success">系统设置</strong>的退款设置
+log.action.template.system.update_settings.blacklist_ip: 更新了<strong class="color-success">系统设置</strong>的黑名单设置
+log.action.template.system.update_settings.post_num_rules: 更新了<strong class="color-success">系统设置</strong>的发贴设置
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -8507,6 +8540,38 @@ log.attr.classroom.middlePicture: 中图
 log.attr.classroom.largePicture: 大图
 log.attr.open_course.title: 标题
 log.attr.open_course.about: 简介
+log.attr.user.verifiedMobile: 手机
+log.attr.user.email: 邮箱
+log.attr.user.update.title: 头衔
+log.attr.user.update.truename: 真实姓名
+log.attr.user.update.gender: 性别
+log.attr.user.update.gender.male: 男
+log.attr.user.update.gender.female: 女
+log.attr.user.update.qq: QQ
+log.attr.user.update.signature: 个人签名
+log.attr.user.update.about: 自我介绍
+log.attr.user.update.company: 公司
+log.attr.user.update.job: 职业
+log.attr.user.update.weibo: 微博
+log.attr.user.update.weixin: 微信
+log.attr.user.update.site: 个人空间
+log.attr.user.update.isQQPublic: QQ号是否公开
+log.attr.user.update.isQQPublic.1: 是
+log.attr.user.update.isQQPublic.0: 否
+log.attr.user.update.isWeixinPublic: 微信号是否公开
+log.attr.user.update.isWeixinPublic.1: 是
+log.attr.user.update.isWeixinPublic.0: 否
+log.attr.user.update.isWeiboPublic: 微博号是否公开
+log.attr.user.update.isWeiboPublic.1: 是
+log.attr.user.update.isWeiboPublic.0: 否
+log.attr.user.nickname_change.nickname: 用户名
+log.attr.user.change_role.roles: 用户组
+log.attr.user.lock.locked: 禁用状态
+log.attr.user.lock.locked.1: 禁用
+log.attr.user.lock.locked.0: 解禁
+log.attr.user.unlock.locked: 禁用状态
+log.attr.user.unlock.locked.1: 禁用
+log.attr.user.unlock.locked.0: 解禁
 log.attr.system.update_settings.site.name: 网站名称
 log.attr.system.update_settings.site.slogan: 网站副标题
 log.attr.system.update_settings.site.url: 网站域名
@@ -8750,7 +8815,6 @@ log.attr.system.update_settings.group.threadTime_range.1: 天
 log.attr.system.update_settings.group.threadTime_range.7: 周
 log.attr.system.update_settings.group.threadTime_range.14: 两周
 log.attr.system.update_settings.group.threadTime_range.30: 月
-
 log.attr.system.update_settings.invite.invite_code_setting: 邀请码设置
 log.attr.system.update_settings.invite.invite_code_setting.1: 开启
 log.attr.system.update_settings.invite.invite_code_setting.0: 关闭
@@ -8761,6 +8825,49 @@ log.attr.system.update_settings.invite.get_coupon_setting.1: 开启
 log.attr.system.update_settings.invite.get_coupon_setting.0: 关闭
 log.attr.system.update_settings.invite.deadline: 优惠券有效时间
 log.attr.system.update_settings.invite.inviteInfomation_template: 邀请信息模板
+log.attr.system.update_settings.payment.enabled: 支付功能
+log.attr.system.update_settings.payment.enabled.1: 开启
+log.attr.system.update_settings.payment.enabled.0: 关闭
+log.attr.system.update_settings.payment.alipay_enabled: 支付宝支付功能
+log.attr.system.update_settings.payment.alipay_enabled.1: 开启
+log.attr.system.update_settings.payment.alipay_enabled.0: 关闭
+log.attr.system.update_settings.payment.alipay_key: 支付宝PID
+log.attr.system.update_settings.payment.alipay_secret: 支付宝MD5密钥
+log.attr.system.update_settings.payment.alipay_account: 支付宝账户
+log.attr.system.update_settings.payment.wxpay_enabled: 微信支付功能
+log.attr.system.update_settings.payment.wxpay_enabled.1: 开启
+log.attr.system.update_settings.payment.wxpay_enabled.0: 关闭
+log.attr.system.update_settings.payment.wxpay_appid: 微信AppID
+log.attr.system.update_settings.payment.wxpay_secret: 微信AppSecret
+log.attr.system.update_settings.payment.wxpay_mp_secret: MP文件验证码
+log.attr.system.update_settings.payment.wxpay_account: 微信商户号
+log.attr.system.update_settings.payment.wxpay_key: 微信商户平台API密钥
+log.attr.system.update_settings.payment.llpay_enabled: 连连支付功能
+log.attr.system.update_settings.payment.llpay_enabled.1: 开启
+log.attr.system.update_settings.payment.llpay_enabled.0: 关闭
+log.attr.system.update_settings.payment.llpay_key: 连连商户帐号
+log.attr.system.update_settings.payment.llpay_accessKey: 连连公钥
+log.attr.system.update_settings.payment.llpay_secretKey: 连连密钥
+log.attr.system.update_settings.payment.disabled_message: 支付关闭时的提示信息
+log.attr.system.update_settings.coin.coin_name: 虚拟币名称
+log.attr.system.update_settings.coin.coin_content: 虚拟币说明
+log.attr.system.update_settings.coin.coin_picture: 虚拟币图片
+log.attr.system.update_settings.coin.cash_model: 虚拟币汇率设置
+log.attr.system.update_settings.coin.cash_model.currency: 用于标价
+log.attr.system.update_settings.coin.cash_model.deduction: 用于抵扣
+log.attr.system.update_settings.coin.coin_enabled: 是否开启虚拟币支付
+log.attr.system.update_settings.coin.coin_enabled.1: 开启
+log.attr.system.update_settings.coin.coin_enabled.0: 关闭
+log.attr.system.update_settings.coin.price_type: 支付货币
+log.attr.system.update_settings.coin.price_type.Coin: 虚拟币
+log.attr.system.update_settings.coin.price_type.RMB: 人民币
+log.attr.system.update_settings.coin.cash_rate: 虚拟币汇率设置
+log.attr.system.update_settings.refund.maxRefundDays: 退款期限
+log.attr.system.update_settings.refund.applyNotification: 退款申请通知
+log.attr.system.update_settings.refund.successNotification: 退款审核通过通知
+log.attr.system.update_settings.refund.failedNotification: 退款审核未通过通知
+log.attr.system.update_settings.blacklist_ip.ips: IP黑名单
+log.attr.system.update_settings.post_num_rules.rules: 发贴设置
 
 cashflow.title: 名称
 cashflow.sn: 流水号
