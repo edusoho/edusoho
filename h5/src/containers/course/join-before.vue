@@ -112,12 +112,17 @@
           :(scrollTop >= tops.directoryTop ? 2 : 1);
       },
       handleJoin(){
+        const endDate = this.details.learningExpiryDate.expiryEndDate;
+        const endDateStamp = new Date(endDate).getTime();
+        const todayStamp = new Date().getTime();
+        let isPast = todayStamp < endDateStamp;
+
         if (!this.$store.state.token) {
           this.$router.push({ name: 'login' });
           return;
         }
 
-        if (Number(this.details.buyable)) {
+        if (Number(this.details.buyable) && isPast) {
           if (+this.details.price) {
             this.$router.push({
               path: `/order/${this.details.id}`
