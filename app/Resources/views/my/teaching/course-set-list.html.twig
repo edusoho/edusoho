@@ -4,11 +4,7 @@
 {% endblock %}
 
 {% block coursesetTitle %}
-  {% if courseSet.status == 'published' %}
-    <a class="cd-link-major" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
-  {% else %}
-    <a class="cd-link-major" href="{{ path('course_show', {id: courseSet.defaultCourseId, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
-  {% endif %}
+  <a class="cd-link-major" target="_blank" href="{{ courseSet.redirect_path }}">{{ courseSet.title }}</a>
 {% endblock %}
 
 {% block courseTitle %}

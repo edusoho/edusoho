@@ -63,7 +63,7 @@
         {% endif %}
 
         {% if courseSet.status != 'published' %}
-          <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a><button class="cd-btn cd-btn-primary cd-ml16 js-courseset-publish-btn" id="step-4"  data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
+          <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a><button class="cd-btn cd-btn-primary cd-ml16 js-courseset-publish-btn" id="step-4"  data-next-url="{{ basepath }}" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
         {% endif %}
       {% endblock %}
 
