@@ -116,6 +116,7 @@
         const endDateStamp = new Date(endDate).getTime();
         const todayStamp = new Date().getTime();
         let isPast = todayStamp < endDateStamp;
+        endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
 
         if (!this.$store.state.token) {
           this.$router.push({ name: 'login' });
