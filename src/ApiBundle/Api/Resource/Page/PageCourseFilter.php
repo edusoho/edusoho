@@ -13,7 +13,7 @@ class PageCourseFilter extends Filter
         'id', 'title', 'courseSetTitle',
     );
     protected $publicFields = array(
-        'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress',
+        'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable',
     );
 
     protected function publicFields(&$data)
