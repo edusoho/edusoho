@@ -117,14 +117,16 @@
           return;
         }
 
-        if (+this.details.price) {
-          this.$router.push({
-            path: `/order/${this.details.id}`
-          });
-        } else {
-          this.joinCourse({
-            id: this.details.id
-          });
+        if (Number(this.details.buyable)) {
+          if (+this.details.price) {
+            this.$router.push({
+              path: `/order/${this.details.id}`
+            });
+          } else {
+            this.joinCourse({
+              id: this.details.id
+            });
+          }
         }
       }
     },
