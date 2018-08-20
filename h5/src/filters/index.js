@@ -129,6 +129,12 @@ const filters = [
         case 'paid':
           status = '已付款';
           break;
+        case 'refunding':
+          status = '已付款';
+          break;
+        case 'fail':
+          status = '已付款';
+          break;
         default:
       }
       return status;

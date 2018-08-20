@@ -72,11 +72,11 @@ export default {
     initDragCaptcha() {
       Api.dragCaptcha().then(res => {
         this.imgInfo = { ...res };
-
         Object.assign(this.dragState, {
           currentLeft: 0,
-          maskWidth: 0
+          maskWidth: 0,
         })
+        this.dragToEnd = false;
       })
     },
     // sendSmsCenter() {
