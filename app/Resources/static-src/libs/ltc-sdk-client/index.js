@@ -88,7 +88,7 @@ class LtcSDKClient {
 
     let uuid = this._getUuid();
 
-    this.emit('getApi', {"name":options.name,"params":options.params,'uuid':uuid});
+    this.emit('getApi', Object.assign(options,{uuid:uuid}));
     this.once('returnApi', (results) => {
       if (results.uuid === uuid) {
         callback(results);
