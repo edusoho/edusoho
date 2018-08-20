@@ -15,7 +15,30 @@ fi
 echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
 git pull
 app/console trans:dump-js
-echo "生成翻译静态资源文件"
+echo "生成静态资源文件"
+
+# 生成h5静态资源文件
+h5repertory="edusoho-h5/index.html";
+if [ ! -f "$h5repertory" ]; then
+git clone git@coding.codeages.net:edusoho/edusoho-h5.git;
+fi
+
+cd edusoho-h5;
+git pull;
+echo "输入要打包的h5版本号,不输入就是 master分支";
+read LINE; 
+if ['' == "$LINE"]; then
+git checkout master;
+else
+git checkout release/$LINE;
+fi
+
+rm -rf node_modules;
+yarn;
+npm run build;
+cp  -rf ./dist/* ./../web/h5/;
+cd ../
+echo "h5静态资源生成成功";
 
 # pull the last version of repository from scripts
 echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)
