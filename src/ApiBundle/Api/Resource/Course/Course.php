@@ -86,6 +86,7 @@ class Course extends AbstractResource
         }
         $conditions['status'] = 'published';
         $conditions['courseSetStatus'] = 'published';
+        $conditions['parentId'] = isset($conditions['parentId']) ? $conditions['parentId'] : 0;
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
 
