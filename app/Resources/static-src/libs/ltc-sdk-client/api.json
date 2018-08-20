@@ -1,14 +1,6 @@
 {
-  "api": [
-    {
-      "name": "getCourse",
-      "path": "/api/course_sets/:id",
-      "method": "GET"
-    },
-    {
-      "name": "getAnnouncements",
-      "method": "GET",
-      "path": "/api/announcements"
-    }
+  "apiList": [
+    "getCourse",
+    "getAnnouncement"
   ]
 }
