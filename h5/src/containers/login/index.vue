@@ -15,13 +15,14 @@
     <div class="login-bottom">
       <!-- <router-link to="/register" class='login-account'>找回密码</router-link> -->
       还没有注册帐号？
-      <router-link to="/register" class='login-account'>立即注册</router-link>
+      <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex';
 import { Toast } from 'vant';
+import Api from '@/api'
 
 export default {
   data() {
@@ -32,6 +33,13 @@ export default {
         password: ''
       }
     }
+  },
+  async created () {
+    this.registerSettings = await Api.getSettings({
+      query: {
+        type: 'register'
+      }
+    });
   },
   computed: {
     btnDisable() {
@@ -58,6 +66,15 @@ export default {
         setTimeout(jumpAction, 2000);
       }).catch(err => {
         Toast.fail(err.message);
+      })
+    },
+    jumpRegister() {
+      if (this.registerSettings.mode == 'closed') {
+        Toast('网校未开启手机注册，请联系管理员');
+        return;
+      }
+      this.$router.push({
+        name: 'register'
       })
     }
   }
