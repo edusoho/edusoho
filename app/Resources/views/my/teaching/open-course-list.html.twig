@@ -5,9 +5,9 @@
 
 {% block btn %}
   {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
-    <a class="cd-btn cd-btn-ghost-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{ 'course.manage_btn'|trans }}</a>
+    <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('open_course_manage', {id:course.id}) }}">{{ 'course.manage_btn'|trans }}</a>
   {% elseif 'ROLE_TEACHER' in app.user.roles %}
-    <a class="cd-btn cd-btn-ghost-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'my.teaching.open_course.view_btn'|trans}}</a>
+    <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('open_course_manage', {id:course.id}) }}">{{'my.teaching.open_course.view_btn'|trans}}</a>
   {% endif %}
 {% endblock %}
 
