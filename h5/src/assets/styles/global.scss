@@ -12,8 +12,10 @@ a {
   text-decoration: none;
 }
 
-.clearfix {
-  clear: both;
+.clearfix:after {
+  content:"";
+  display: block;
+  clear:both;
 }
 
 .pull-left {
