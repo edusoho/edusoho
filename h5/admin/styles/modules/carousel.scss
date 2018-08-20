@@ -1,0 +1,42 @@
+.setting-carousel {
+  position: relative;
+}
+
+.carousel-allocate {
+  position: absolute;
+  top: 0;
+  left: 105%;
+  background: #FAFAFA;
+  border: 1px solid #E1E1E1;
+  border-radius: 4px;
+  width: 400px;
+  min-height: 246px;
+  padding: 15px;
+}
+
+.carousel-allocate .title {
+  font-size: 14px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #E1E1E1;
+}
+
+.carousel-item-setting {
+  border: 1px solid #E1E1E1;
+  background-color: #fff;
+  height: 106px;
+  padding: 15px 10px;
+}
+
+.add-img {
+  float: left;
+  background-color: #f5f5f5;
+  line-height: 76px;
+  text-align: center;
+  width: 144px;
+  margin-right: 10px;
+}
+
+.add-title {
+  margin-top: 6px;
+  margin-bottom: 15px;
+}
