@@ -82,7 +82,7 @@ class LtcSDKClient {
 
   api(options,callback) {
 
-    if (!this.inArray(options.name,apiList)) {
+    if (apiList.indexOf(options.name) === -1) {
       return false;
     }
 
@@ -116,15 +116,6 @@ class LtcSDKClient {
   }
   _getUuid() {
     return (this._s4()+this._s4()+"-"+this._s4()+"-"+this._s4()+"-"+this._s4()+"-"+this._s4()+this._s4()+this._s4());
-  }
-
-  inArray(search,array) {
-    for(let i in array) {
-      if(array[i]===search) {
-        return true;
-      }
-    }
-    return false;
   }
 }
 
