@@ -43,6 +43,21 @@ class LtcSDKServer {
         this.emitChild(value, 'initResourceList', this.resource);
       })
     });
+
+    this.messenger.on('getApi', (msg) => {
+      let apiName = msg.name;
+      let self= this;
+      let options = {
+        headers: {'Accept': 'application/vnd.edusoho.v2+json'},
+      };
+      eval("self.getApi(options)."+apiName+"(msg)").then(response => {
+        let results = response.data;
+        results.uuid = msg.uuid;
+        this.emitChild(msg.iframeId, "returnApi", results);
+      }, error => {
+        console.log(error);
+      });
+    })
   }
 
   off(eventName) {

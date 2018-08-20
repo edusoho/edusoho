@@ -1,7 +1,7 @@
-import Api from './api';
 import EsMessenger from 'app/common/messenger';
 const resources = require('./resource.js');
 require('libs/iframe-resizer-contentWindow.js');
+const apiList = [...require("./api.json").apiList];
 
 class LtcSDKClient {
   constructor() {
@@ -80,8 +80,20 @@ class LtcSDKClient {
     this.messenger.sendToParent(eventName, args);
   }
 
-  getApi(options) {
-    return Api(options);
+  api(options,callback) {
+
+    if (!this.inArray(options.name,apiList)) {
+      return false;
+    }
+
+    let uuid = this._getUuid();
+
+    this.emit('getApi', {"name":options.name,"params":options.params,'uuid':uuid});
+    this.once('returnApi', (results) => {
+      if (results.uuid === uuid) {
+        callback(results);
+      }
+    });
   }
 
   _initResourceList() {
@@ -97,6 +109,22 @@ class LtcSDKClient {
         resolve();
       });
     });
+  }
+
+  _s4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  }
+  _getUuid() {
+    return (this._s4()+this._s4()+"-"+this._s4()+"-"+this._s4()+"-"+this._s4()+"-"+this._s4()+this._s4()+this._s4());
+  }
+
+  inArray(search,array) {
+    for(let i in array) {
+      if(array[i]===search) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
