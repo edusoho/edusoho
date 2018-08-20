@@ -15,7 +15,7 @@
 
     <!-- 课程介绍 -->
     <e-panel title="课程介绍" ref="about" class="about">
-      <div v-html="details.courseSet.summary"></div>
+      <div v-html="summary"></div>
     </e-panel>
     <div class="segmentation"></div>
 
@@ -29,7 +29,6 @@
     <!-- 课程目录 -->
     <directory ref="directory" 
       :courseItems="details.courseItems"></directory>
-    
     <e-footer @click.native="handleJoin">
       {{details.access.code | filterJoinStatus}}</e-footer>
   </div>
@@ -66,7 +65,10 @@
     computed: {
       ...mapState('course', {
         details: state => state.details
-      })
+      }),
+      summary () {
+        return  this.details.summary ? this.details.summary : this.details.courseSet.summary;
+      }
     },
     mounted() {
       const refs = this.$refs;
