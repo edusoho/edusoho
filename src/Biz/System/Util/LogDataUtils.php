@@ -548,6 +548,8 @@ class LogDataUtils
     public static function serializeChanges($oldData, $newData)
     {
         $newData = self::serializeUnsetChanges($newData);
+        $oldData = self::initArray($oldData);
+        $newData = self::initArray($newData);
         $changeFields = self::arrayChanges($oldData, $newData);
         if (empty($changeFields['before']) && empty($changeFields['after'])) {
             return array();
@@ -572,6 +574,15 @@ class LogDataUtils
         $changeFields = self::getShowField($changeFields, $oldData);
 
         return $changeFields;
+    }
+
+    private function initArray($array)
+    {
+        if (!is_array($array)) {
+            $array = array($array);
+        }
+
+        return $array;
     }
 
     private function arrayChanges(array $before = array(), array $after)
