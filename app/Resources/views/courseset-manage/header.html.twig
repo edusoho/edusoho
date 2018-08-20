@@ -36,7 +36,7 @@
     <div class="courseset-manage-header-info">
       <div class="courseset-manage-header-info__title text-overflow" {% if courseSet.title|length > 21 %}data-toggle="tooltip" title="{{ courseSet.title }}" data-container="body" {% endif %}>
         {% block coursesetTitle %}
-          <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title }}</a>
+          <span class="cd-dark-major">{{ courseSet.title }}</span>
         {% endblock %}
       </div>
       {% block courseType %}

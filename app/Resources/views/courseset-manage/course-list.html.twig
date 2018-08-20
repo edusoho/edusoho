@@ -4,7 +4,7 @@
 
 {% block title %}
   {% if hasMulCourses %}
-    <a class="cd-link-major" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
+    <a class="cd-link-major" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}" target="_blank">
       {{ course.title }}
     </a>
   {% endif %}
@@ -31,7 +31,7 @@
           </a>
           <ul class="dropdown-menu courses-operation-dropdown">
             <li>
-              <a href="{{ path('course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">{% if course.status|default('') == 'published' %}{{ 'course.check.plan'|trans }}{% else %}{{ 'course.preview.plan'|trans }}{% endif %}</a>
+              <a href={% if course.status|default('') == 'published' %}"{{basepath}}"{% else %}"{{ path('course_show', { id: course.id, previewAs: 'member' }) }}"{% endif %} target="_blank">{% if course.status|default('') == 'published' %}{{ 'course.check.plan'|trans }}{% else %}{{ 'course.preview.plan'|trans }}{% endif %}</a>
             </li>
             {% if course.status|default('') == 'published' %}
               <li>

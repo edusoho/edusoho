@@ -11,5 +11,13 @@
   {% endif %}
 {% endblock %}
 
+{% block coursesetTitle %}
+  {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+    <a class="cd-link-major" href="{{ path('open_course_manage', {id:course.id}) }}">{{ course.title }}</a>
+  {% elseif 'ROLE_TEACHER' in app.user.roles %}
+    <a class="cd-link-major" href="{{ path('open_course_manage', {id:course.id}) }}">{{ course.title }}</a>
+  {% endif %}
+{% endblock %}
+
 {% block liveTag %}
 {% endblock %}
