@@ -1,7 +1,7 @@
 {% set activity = task.activity|default() %}
 {% set file = task.activity.ext.file|default(null) %}
 
-<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'displayWhenSingleTask js-lesson-icon ':''}}" data-role="task"></i>
+<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
 
 {% if displayAllInfo|default(false) %}
   {% if not task.isOptional %}
@@ -14,7 +14,7 @@
   {{customTitle|raw}}
 {% endif %}
 
-<tmp class="{{isLesson|default(false)?'displayWhenSingleTask':''}}">
+<tmp class="{{isLesson|default(false)?'js-display-when-single-task':''}}">
   {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
     <span class="cd-tag cd-tag-red ml5">{{'course.plan_task.convert_failed'|trans}}</span>
   {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}

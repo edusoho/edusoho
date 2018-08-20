@@ -43,23 +43,23 @@
       </li>
 
       {% if shouldDisplayTask %}
-        <li class="displayWhenMulTasks">
+        <li class="js-display-when-mul-tasks">
             <a href="javascript:;" class="js-lesson-rename-btn">{{ 'course.lesson_manage.rename'|trans }}</a>
         </li>
-        <li class="displayWhenSingleTask hidden">
+        <li class="js-display-when-single-task hidden">
             <a href="javascript:;" class="js-lesson-edit-btn" >{{ 'course.manage.edit_lesson'|trans }}</a>
         </li>
-        <li class="displayWhenSingleTask hidden">
+        <li class="js-display-when-single-task hidden">
             <a href="javascript:;" class="js-lesson-preview-btn">{{ 'course.manage.preview_lesson'|trans }}</a>
         </li>
       {% else %}
-        <li class="displayWhenMulTasks hidden">
+        <li class="js-display-when-mul-tasks hidden">
             <a href="javascript:;" class="js-lesson-rename-btn">{{ 'course.lesson_manage.rename'|trans }}</a>
         </li>
-        <li class="displayWhenSingleTask">
+        <li class="js-display-when-single-task">
             <a href="javascript:;" class="js-lesson-edit-btn">{{ 'course.manage.edit_lesson'|trans }}</a>
         </li>
-        <li class="displayWhenSingleTask">
+        <li class="js-display-when-single-task">
             <a href="javascript:;" class="js-lesson-preview-btn">{{ 'course.manage.preview_lesson'|trans }}</a>
         </li>
       {% endif %}
