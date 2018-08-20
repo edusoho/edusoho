@@ -34,8 +34,10 @@ git checkout release/$LINE;
 fi
 
 rm -rf node_modules;
+rm -rf dist/*;
 yarn;
 npm run build;
+rm -rf ./../web/h5/*;
 cp  -rf ./dist/* ./../web/h5/;
 cd ../
 echo "h5静态资源生成成功";
