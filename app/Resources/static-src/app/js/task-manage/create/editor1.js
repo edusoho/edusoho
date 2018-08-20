@@ -1,5 +1,4 @@
 import loadAnimation from 'common/load-animation';
-import notify from 'common/notify';
 
 class Editor {
   constructor($modal) {
@@ -30,30 +29,37 @@ class Editor {
   }
 
   _initEvent() {
-    $('#course-tasks-submit').click(event => this._onSave(event));
+    $('#course-tasks-submit').click(event => this._onSave());
     $('#course-tasks-next').click(event => this._onNext(event));
     $('#course-tasks-prev').click(event => this._onPrev(event));
 
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
     }
-
+    if (window.t) {
+      return;
+    }
+    window.t = true;
+    let self = this;
     window.ltc.on('returnActivity', (msg) => {
       if (!msg.valid) {
-        this.contentData = {};
+        self.contentData = {};
         return;
       }
-      this.contentData = msg.data;
-      this._doNext();
+      self.contentData = msg.data;
+      console.log( self.actionType );
+      // 第二步的时候，可以下一步，也可以保存，都会触发数据校验
+      // 返回数据时，通过标记符，知道下一步还是保存数据
+      self.actionType == 'next' ? self._doNext() : self._postData();
     });
 
     window.ltc.on('returnFinishCondition', (msg) => {
       if (!msg.valid) {
-        this.finishData = {};
+        self.finishData = {};
         return;
       }
-      this.finishData = msg.data;
-      this._postData(event);
+      self.finishData = msg.data;
+      self._postData();
     });
   }
 
@@ -68,12 +74,13 @@ class Editor {
     }
   }
 
-  _onNext(e) {
+  _onNext() {
     if (this.step === 1) {
       this._doNext();
       return;
     }
     if (this.step === 2) {
+      this.actionType = 'next';
       window.ltc.emitChild('task-create-content-iframe', 'getActivity');
       return;
     }
@@ -104,9 +111,10 @@ class Editor {
     this._onNext(event);
   }
 
-  _onSave(event) {
+  _onSave() {
     if (this.step === 2) {
-      
+      this.actionType = 'save';
+      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
       return;
     }
 
@@ -116,8 +124,7 @@ class Editor {
     }
   }
 
-  _postData(event) {
-    $(event.currentTarget).attr('disabled', 'disabled').button('loading');
+  _postData() {
     let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), this.contentData, this.finishData);
 
     $.post(this.taskConfig['saveUrl'], postData)
@@ -128,12 +135,6 @@ class Editor {
         }
       })
       .fail((response) => {
-        let msg = '';
-        let errorResponse = JSON.parse(response.responseText);
-        if (errorResponse.error && errorResponse.error.message) {
-          msg = errorResponse.error.message;
-        }
-        notify('warning', Translator.trans('task_manage.edit_error_hint') + ':' + msg);
         $('#course-tasks-submit').attr('disabled', null);
       });
   }
@@ -203,7 +204,8 @@ class Editor {
       this.$element.find('.modal-footer').children().addClass('hidden');
     }
     if (2=== step) {
-      if (this.mode === 'edit') {
+      if (this.taskConfig.mode === 'edit') {
+
         this.$element.find('#course-tasks-prev').addClass('hidden').siblings().removeClass('hidden');
       } else {
         this.$element.find('.modal-footer').children().removeClass('hidden');
@@ -230,7 +232,9 @@ class Editor {
       2: this.$taskContent,
       3: this.$taskFinish,
     };
-    content[this.step].removeClass('hidden').siblings('div').addClass('hidden');
+    if (content[this.step]) {
+      content[this.step].removeClass('hidden').siblings('div').addClass('hidden');
+    }
   }
 
   _getFormSerializeObject($e) {

@@ -65,6 +65,10 @@ class LtcSDKClient {
     return this;
   }
 
+  once(eventName, args={}) {
+    this.messenger.once(eventName, args);
+  }
+
   on(eventName, args={}) {
     this.messenger.on(eventName, args);
   }
@@ -88,7 +92,7 @@ class LtcSDKClient {
       }
 
       self.messenger.sendToParent('init');
-      self.messenger.on('initResourceList', function(data) {
+      self.messenger.once('initResourceList', function(data) {
         self.resourceList = data;
         resolve();
       });

@@ -45,8 +45,16 @@ class LtcSDKServer {
     });
   }
 
+  off(eventName) {
+    this.messenger.off(eventName);
+  }
+
   on(eventName, args) {
     this.messenger.on(eventName, args);
+  }
+
+  once(eventName, args) {
+    this.messenger.once(eventName, args);
   }
 
   emitChild(id, eventName, args) {
