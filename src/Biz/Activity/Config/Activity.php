@@ -4,6 +4,7 @@ namespace Biz\Activity\Config;
 
 use Biz\Activity\Listener\Listener;
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\Exception\UnexpectedValueException;
@@ -162,14 +163,9 @@ abstract class Activity
         return $biz['user'];
     }
 
-    protected function getWebExtension()
-    {
-        return $this->getBiz()->offsetGet('web.twig.extension');
-    }
-
     protected function setting($name, $default = null)
     {
-        return $this->getWebExtension()->getSetting($name, $default);
+        return $this->getSettingService()->node($name, $default);
     }
 
     /**
@@ -178,6 +174,14 @@ abstract class Activity
     final protected function getBiz()
     {
         return $this->biz;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     /**
