@@ -20,7 +20,7 @@ class PageDiscovery extends AbstractResource
         }
 
         $hotCourses = $this->findCoursesAndCourseSetsBySort(
-            array('hitNum' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC')
+            array('studentNum' => 'DESC', 'hitNum' => 'DESC', 'id' => 'DESC')
         );
         $recommendedCourses = $this->findCoursesAndCourseSetsBySort(
             array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'id' => 'DESC')
