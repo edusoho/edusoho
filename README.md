@@ -22,11 +22,3 @@ EduSoho是杭州阔知网络科技有限公司推出的开源、免费的互联�
 
 * [官网招聘页](http://www.edusoho.com/abouts/joinus)
 * [拉勾网招聘页](http://www.lagou.com/gongsi/7868.html)
-
-master 
-
-[![build](http://coding.codeages.net/edusoho/edusoho/badges/master/build.svg)](http://coding.codeages.net/edusoho/edusoho/commits/master) 
-
-develop 
-
-[![build](http://coding.codeages.net/edusoho/edusoho/badges/develop/build.svg)](http://coding.codeages.net/edusoho/edusoho/commits/develop) 

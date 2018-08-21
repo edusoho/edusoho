@@ -15,6 +15,7 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\Player\Service\PlayerService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -198,8 +199,9 @@ class WebExtension extends \Twig_Extension
 
     public function isShowMobilePage()
     {
-        $wapSetting = $this->getSetting('wap', array());
-        if (empty($wapSetting['enabled'])) {
+        $wapSetting = $this->getSetting('wap', array('version' => 0));
+
+        if (empty($wapSetting['version'])) {
             return false;
         }
 
@@ -1465,35 +1467,7 @@ class WebExtension extends \Twig_Extension
 
     public function getSetting($name, $default = null)
     {
-        $names = explode('.', $name);
-
-        $name = array_shift($names);
-
-        if (empty($name)) {
-            return $default;
-        }
-
-        $value = $this->createService('System:SettingService')->get($name);
-
-        if (!isset($value)) {
-            return $default;
-        }
-
-        if (empty($names)) {
-            return $value;
-        }
-
-        $result = $value;
-
-        foreach ($names as $name) {
-            if (!isset($result[$name])) {
-                return $default;
-            }
-
-            $result = $result[$name];
-        }
-
-        return $result;
+        return $this->createService('System:SettingService')->node($name, $default);
     }
 
     public function getOrderPayment($order, $default = null)
@@ -1758,12 +1732,7 @@ class WebExtension extends \Twig_Extension
 
     public function isHiddenVideoHeader($isHidden = false)
     {
-        $storage = $this->getSetting('storage');
-        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
-            return false;
-        }
-
-        return true;
+        return $this->getPlayerService()->isHiddenVideoHeader($isHidden);
     }
 
     public function canSendMessage($userId)
@@ -1823,5 +1792,13 @@ class WebExtension extends \Twig_Extension
         }
 
         return $arrays;
+    }
+
+    /**
+     * @return PlayerService
+     */
+    protected function getPlayerService()
+    {
+        return $this->createService('Player:PlayerService');
     }
 }

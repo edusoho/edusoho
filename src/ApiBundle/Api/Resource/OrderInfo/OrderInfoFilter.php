@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 
 use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Util\AssetHelper;
 
 class OrderInfoFilter extends Filter
 {
@@ -12,10 +13,11 @@ class OrderInfoFilter extends Filter
         $data['availableCoupons'] = array_values($data['availableCoupons']);
         $couponFilter = new CouponFilter();
         $couponFilter->filters($data['availableCoupons']);
-
+        $this->updateFullPath($data);
         $orderInfo = array(
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
+            'cover' => $data['cover'],
             'totalPrice' => strval($data['totalPrice']),
             'title' => $data['title'],
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],
@@ -42,14 +44,21 @@ class OrderInfoFilter extends Filter
             return 0;
         }
 
-        if ($data['priceType'] == 'Coin') {
+        if ('Coin' == $data['priceType']) {
             return 1;
         }
 
-        if (!empty($data['coinPayAmount']) && $data['cashRate'] != 0 && $data['maxRate'] == 100) {
+        if (!empty($data['coinPayAmount']) && 0 != $data['cashRate'] && 100 == $data['maxRate']) {
             return 1;
         }
 
         return 0;
+    }
+
+    protected function updateFullPath(&$data)
+    {
+        $data['cover']['small'] = AssetHelper::getFurl(empty($data['cover']['small']) ? '' : $data['cover']['small'], $data['targetType'].'.png');
+        $data['cover']['middle'] = AssetHelper::getFurl(empty($data['cover']['middle']) ? '' : $data['cover']['middle'], $data['targetType'].'.png');
+        $data['cover']['large'] = AssetHelper::getFurl(empty($data['cover']['large']) ? '' : $data['cover']['large'], $data['targetType'].'.png');
     }
 }

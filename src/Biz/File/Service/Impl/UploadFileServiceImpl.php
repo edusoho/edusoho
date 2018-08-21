@@ -186,6 +186,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return false;
     }
 
+    public function sharePublic($id)
+    {
+        return $this->getUploadFileDao()->update($id, array('isPublic' => 1));
+    }
+
+    public function unsharePublic($id)
+    {
+        return $this->getUploadFileDao()->update($id, array('isPublic' => 0));
+    }
+
     public function getDownloadMetas($id, $ssl = false)
     {
         $file = $this->getUploadFileDao()->get($id);
@@ -434,17 +444,17 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array('error' => 'course_not_exist', 'message' => sprintf('文件%s所属的课程已删除。', $id));
         }
 
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+        if (!empty($file['convertParams']['convertor']) && 'HLSEncryptedVideo' == $file['convertParams']['convertor']) {
             return array('error' => 'already_converted', 'message' => sprintf('文件%s已转换', $id));
         }
 
         $fileNeedUpdateFields = array();
 
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSVideo') {
+        if (!empty($file['convertParams']['convertor']) && 'HLSVideo' == $file['convertParams']['convertor']) {
             $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
             $file['convertParams']['hlsKey'] = $this->generateKey(16);
 
-            if ($file['convertParams']['videoQuality'] == 'low') {
+            if ('low' == $file['convertParams']['videoQuality']) {
                 $file['convertParams']['videoQuality'] = 'normal';
                 $file['convertParams']['video'] = array('440k', '640k', '1000K');
             }

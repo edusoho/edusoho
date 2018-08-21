@@ -63,10 +63,10 @@ class Live extends Activity
 
     public function copy($activity, $config = array())
     {
-        $biz = $this->getBiz();
+        $user = $this->getCurrentUser();
         $live = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
         if (empty($config['refLiveroom'])) {
-            $activity['fromUserId'] = $biz['user']['id'];
+            $activity['fromUserId'] = $user['id'];
             unset($activity['id']);
             unset($activity['startTime']);
             unset($activity['endTime']);
