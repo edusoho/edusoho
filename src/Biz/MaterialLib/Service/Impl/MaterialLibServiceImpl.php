@@ -84,9 +84,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function batchShare($ids)
     {
         foreach ($ids as $key => $id) {
-            $fields = array('isPublic' => '1');
-
-            $this->getUploadFileService()->update($id, $fields);
+            $this->getUploadFileService()->sharePublic($id);
         }
 
         return array('success' => true);
@@ -94,9 +92,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function unShare($id)
     {
-        $fields = array('isPublic' => '0');
-
-        $this->getUploadFileService()->update($id, $fields);
+        $this->getUploadFileService()->unsharePublic($id);
 
         return array('success' => true);
     }

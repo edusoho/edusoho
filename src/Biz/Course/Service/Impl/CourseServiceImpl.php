@@ -1406,6 +1406,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function searchWithJoinTableConditions($conditions, $sort, $start, $limit, $columns = array())
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+        $orderBy = $this->_prepareCourseOrderBy($sort);
+
+        return $this->getCourseDao()->searchWithJoinTableConditions($conditions, $orderBy, $start, $limit, $columns);
+    }
+
     // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
@@ -1897,6 +1905,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countWithJoinTableConditions($conditions)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getCourseDao()->countWithJoinTableConditions($conditions);
+    }
+
     public function countCourses(array $conditions)
     {
         return $this->getCourseDao()->count($conditions);
@@ -2094,6 +2109,83 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $liveCourses;
+    }
+
+    public function fillCourseTryLookVideo($courses)
+    {
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']) && 'published' === $course['status'];
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return 'published' === $tasks[$activity['id']]['status'];
+            });
+            //返回有云视频任务的课程
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+
+            foreach ($courses as &$course) {
+                if (!empty($activities[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+
+        return $courses;
+    }
+
+    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit)
+    {
+        $conditions['recommended'] = 1;
+        $recommendCount = $this->countWithJoinTableConditions($conditions);
+        $recommendAvailable = $recommendCount - $offset;
+        $courses = array();
+
+        if ($recommendAvailable >= $limit) {
+            $courses = $this->searchWithJoinTableConditions(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
+        if ($recommendAvailable <= 0) {
+            $conditions['recommended'] = 0;
+            $courses = $this->searchWithJoinTableConditions(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                abs($recommendAvailable),
+                $limit
+            );
+        }
+
+        if ($recommendAvailable > 0 && $recommendAvailable < $limit) {
+            $courses = $this->searchWithJoinTableConditions(
+                $conditions,
+                $sort,
+                $offset,
+                $recommendAvailable
+            );
+            $conditions['recommended'] = 0;
+            $coursesTemp = $this->searchWithJoinTableConditions(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                0,
+                $limit - $recommendAvailable
+            );
+            $courses = array_merge($courses, $coursesTemp);
+        }
+
+        return $courses;
     }
 
     public function sortByCourses($courses)
