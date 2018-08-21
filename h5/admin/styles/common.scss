@@ -2,6 +2,23 @@
   font-size: 18px;
 }
 
+.text-12 {
+  font-size: 12px;
+}
+
 .f-left {
   float: left;
+}
+
+.btn-gray {
+  background-color: $grey-light;
+  border-radius: 2px;
+  color: $grey;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    background-color: darken($grey-light, 8%);
+  }
 }

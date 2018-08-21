@@ -2,29 +2,39 @@
   position: relative;
 }
 
+.carousel-image img {
+  width: 100%;
+  height: 200px;
+}
+
 .carousel-allocate {
   position: absolute;
   top: 0;
   left: 105%;
   background: #FAFAFA;
-  border: 1px solid #E1E1E1;
+  border: 1px solid $grey-light;
   border-radius: 4px;
   width: 400px;
-  min-height: 246px;
   padding: 15px;
 }
 
 .carousel-allocate .title {
   font-size: 14px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #E1E1E1;
+  margin-bottom: 15px;
+  border-bottom: 1px solid $grey-light;
 }
 
-.carousel-item-setting {
-  border: 1px solid #E1E1E1;
+.carousel-item {
+  border: 1px solid $grey-light;
   background-color: #fff;
-  height: 106px;
   padding: 15px 10px;
+  margin-bottom: 15px;
+}
+
+.btn-add-item {
+  line-height: 44px;
+  font-size: 14px;
 }
 
 .add-img {
@@ -40,3 +50,19 @@
   margin-top: 6px;
   margin-bottom: 15px;
 }
+
+.add-title input {
+  font-size: 12px;
+  height: 24px;
+  border-radius: 2px;
+  border: 1px solid $grey-light;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.btn-choose-course {
+  font-size: 12px;
+  height: 24px;
+}
+
+
