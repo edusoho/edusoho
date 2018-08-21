@@ -95,8 +95,7 @@ class Homework extends Activity
 
     public function isFinished($activityId)
     {
-        $biz = $this->getBiz();
-        $user = $biz['user'];
+        $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'homework');
