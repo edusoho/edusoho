@@ -69,8 +69,11 @@ class ParserProxy
         if ('youku' == $video['mediaSource']) {
             $class = __NAMESPACE__.'\\ItemParser\\YoukuVideoItemParser';
             $parser = new $class();
+        } elseif ('qq' == $video['mediaSource']) {
+            $class = __NAMESPACE__.'\\ItemParser\\QQVideoItemParser';
+            $parser = new $class();
         } else {
-            throw ParserException::PARSER_NOT_SUPPORT();
+            return $video;
         }
 
         return $parser->prepareMediaUriForMobile($video, $httpSchema);
