@@ -1580,6 +1580,14 @@ course_manage_activity_manage_custom_route:
     defaults: { _controller: AppBundle:Activity/Activity:customManageRoute }
     methods: [POST]
 
+course_manage_activity_content_modal:
+    path: /course/{courseId}/manage/activity_{type}/{activityId}/content_modal
+    defaults: { _controller: AppBundle:Activity/Activity:contentModal }
+
+course_manage_activity_finish_modal:
+    path: /course/{courseId}/manage/activity_{type}/{activityId}/finish_modal
+    defaults: { _controller: AppBundle:Activity/Activity:finishModal }
+
 course_activity_learning_custom_route:
     path: /course/{courseId}/task/{taskId}/learning
     defaults: { _controller: AppBundle:Activity/Activity:customLearningRoute }

@@ -1,23 +1,39 @@
-<div class=" form-group">
-    <div class="col-sm-2 control-label">
-        <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
-    </div>
-    <div class="col-sm-4 form-control-static">
-        {{'course.plan_task.activity_manage.doc.watch_time'|trans}}
-        <input type="hidden" id="condition-select" name="finishType">
-        {#<select class="form-control" id="condition-select" name="finishType">
-        <option value="time" {% if text.finishType|default('end') == 'time' %}selected{% endif %}>观看时长</option>
-    </select>#}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script src="/static-dist/libs/ltc-sdk-client.js"></script>
+<div class="tab-content" id="iframe-content">
+    <div class="tab-pane js-course-tasks-pane active js-step2-view">
+        <form class="form-horizontal" id="step3-form" >
+            <div class=" form-group">
+                <div class="col-sm-2 control-label">
+                    <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+                </div>
+                <div class="col-sm-4 form-control-static">
+                    {{'course.plan_task.activity_manage.doc.watch_time'|trans}}
+                    <input type="hidden" id="condition-select" name="finishType">
+                </div>
+            </div>
+            <div class=" form-group" id="condition-group">
+                <div class="col-sm-2 control-label">
+                    <label for="finishDetail">{{ 'course.plan_task.activity_manage.doc.watch_time_at_least'|trans }}</label>
+                </div>
+                <div class="col-sm-4">
+                    <input id="finishDetail" class="form-control" type="text" name="finishDetail" value="{{ activity.ext.finishDetail|default(1) }}">
+                </div>
+                <div class="col-sm-4">
+                    <p class="form-control-static">{{'site.date.minute'|trans}}</p>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
-<div class=" form-group" id="condition-group">
-    <div class="col-sm-2 control-label">
-        <label for="finishDetail">{{ 'course.plan_task.activity_manage.doc.watch_time_at_least'|trans }}</label>
-    </div>
-    <div class="col-sm-4">
-        <input id="finishDetail" class="form-control" type="text" name="finishDetail" value="{{ activity.ext.finishDetail|default(1) }}">
-    </div>
-    <div class="col-sm-4">
-        <p class="form-control-static">{{'site.date.minute'|trans}}</p>
-    </div>
-</div>
+<script src="/static-dist/textactivity/js/finish/index.js"></script>
+</body>
+</html>

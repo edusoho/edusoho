@@ -38,8 +38,6 @@ class ActivityController extends BaseController
 
     public function updateAction($id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id, true);
-
         return $this->render(
             'activity/create.html.twig',
             array(
@@ -64,15 +62,33 @@ class ActivityController extends BaseController
         );
     }
 
-    public function contentModalAction($activity)
+    public function contentModalAction($type, $courseId, $activityId = 0)
     {
+        if (!empty($activityId)) {
+            $activity = $this->getActivityService()->getActivity($activityId, true);
+        } else {
+            $activity = array(
+                'id' => $activityId,
+                'mediaType' => $type,
+                'fromCourseId' => $courseId,
+            );
+        }
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);
     }
 
-    public function finishModalAction($activity)
+    public function finishModalAction($activityId = 0, $type, $courseId)
     {
+        if (!empty($activityId)) {
+            $activity = $this->getActivityService()->getActivity($activityId, true);
+        } else {
+            $activity = array(
+                'id' => $activityId,
+                'mediaType' => $type,
+                'fromCourseId' => $courseId,
+            );
+        }
         $container = $this->get('activity_runtime_container');
 
         return $container->finish($activity);

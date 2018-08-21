@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function QiQiuYun\SDK\json_decode;
 
 class ActivityExtension extends \Twig_Extension
 {
@@ -37,7 +38,30 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('activity_meta', array($this, 'getActivityMeta')),
             new \Twig_SimpleFunction('activity_metas', array($this, 'getActivityMeta')),
             new \Twig_SimpleFunction('can_free_activity_types', array($this, 'getCanFreeActivityTypes')),
+            new \Twig_SimpleFunction('ltc_source_list', array($this, 'findLtcSourceList')),
         );
+    }
+
+    public function findLtcSourceList()
+    {
+        $cdnSetting = $this->getSettingService()->get('cdn');
+        $cdn = '';
+        if (!empty($cdnSetting) && !empty($cdnSetting['enabled'])) {
+            $cdn = empty($cdnSetting['defaultUrl']) ? '' : $cdnSetting['defaultUrl'];
+        };
+
+        return json_encode(array(
+            'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
+            'codeage-design-css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
+            'codeage-design-js' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
+            'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
+            'bootstrap-css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
+            'bootstrap-js' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
+            'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
+            'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
+            // 'uploader' => $cdn.'asdf',
+            // 'player' => 'a',
+        ));
     }
 
     public function getActivityMeta($type = null)
@@ -124,5 +148,13 @@ class ActivityExtension extends \Twig_Extension
         }
 
         return $types;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

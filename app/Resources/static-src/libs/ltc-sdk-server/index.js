@@ -1,64 +1,83 @@
-// import 'babel-polyfill';
-// import 'jquery';
-// import * as cd from 'codeages-design';
-// import '!style-loader!css-loader!less-loader!codeages-design/src/less/codeages-design.less';
 import Api from './api';
-import * as components from './component';
+import EsMessenger from 'app/common/messenger';
 
 class LtcSDKServer {
   constructor() {
     this.options = {};
-    this.handler = {};
-    this.isVerify = false;
+    this.resource = $.parseJSON($('#ltc-source-list').text());
+    this.childrenList = this.getChildrenList();
+
+    this.messenger = new EsMessenger({
+      name: 'parent',
+      project: 'LtcProject',
+      children: this.getChildren(),
+      type: 'parent'
+    });
+
+    this.event();
   }
 
-  passport() {
-    // 需替换成真实的验证机制
-    // if (this.options.appId == '123456') {
-    //   console.log('验证成功');
-    // } else {
-    //   throw new Error('验证身份失败');
-    // }
-  
-    if (this.options.apiList instanceof Array) {
-      this.options.apiList.forEach((item) => {
-        if (!this[item]) {
-          throw new Error('不存在 ' + item + ' 接口');
-        }
+  getChildrenList() {
+    let childs = [];
+    ['task-create-content-iframe', 'task-create-finish-iframe', 'task-content-iframe'].forEach(function(value){
+      if ($('#'+value).length > 0) {
+        childs.push(value);
+      }
+    });
+
+    return childs;
+  }
+
+  getChildren() {
+    let childs = [];
+    this.childrenList.forEach(function(value){
+      childs.push(document.getElementById(value));
+    });
+
+    return childs;
+  }
+
+  event() {
+    this.messenger.on('init', ()=> {
+      this.childrenList.forEach((value) => {
+        this.emitChild(value, 'initResourceList', this.resource);
+      })
+    });
+
+    this.messenger.on('getApi', (msg) => {
+      let apiName = msg.name;
+      let self= this;
+      let options = {
+        headers: {
+          'Accept': 'application/vnd.edusoho.v2+json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+        },
+      };
+      eval("self.getApi(options)."+apiName+"(msg)").then(response => {
+        let results = response.data;
+        results.uuid = msg.uuid;
+        this.emitChild(msg.iframeId, "returnApi", results);
+      }, error => {
+        console.log(error);
       });
-    }
-
-    this.isVerify = true;
+    })
   }
 
-  getMessenger() {
-    const on = (channel = 'activity-events', callback) => {
-      window.addEventListener('message', (e) => {
-        if (e.data.channel === channel) {
-          if (typeof callback === 'function') {
-            callback(e.data)
-          }
-        }
-      });
-    };
-
-    const emit = (data, origin = '*') => {
-      window.parent.postMessage(
-        Object.assign({channel: 'task-events'}, data),
-        origin
-      );
-    };
-
-    return {
-      emit,
-      on
-    }
+  off(eventName) {
+    this.messenger.off(eventName);
   }
 
-  verify() {
-    if (!this.isVerify) {
-      throw new Error('请先调用config方法，验证身份');
-    }
+  on(eventName, args) {
+    this.messenger.on(eventName, args);
+  }
+
+  once(eventName, args) {
+    this.messenger.once(eventName, args);
+  }
+
+  emitChild(id, eventName, args) {
+    this.messenger.sendToChild({id: id}, eventName, args);
   }
 
   config(options) {
@@ -66,29 +85,14 @@ class LtcSDKServer {
       apiList: [],
       appId: null,
     }
-
     Object.assign(this.options, DEFAULTS, options);
-  
-    this.passport();
-  
+
     return this;
   }
 
   getApi(options) {
-    this.verify();
     return Api(options);
-  }
-
-  getUi() {
-    this.verify();
-    return Object.assign(
-      {}, 
-      // cd, 
-      components
-    );
   }
 }
 
-let ltcsdk = new LtcSDKServer();
-
-module.exports = window.ltcsdkserver = ltcsdk;
+module.exports = window.ltc = new LtcSDKServer();
