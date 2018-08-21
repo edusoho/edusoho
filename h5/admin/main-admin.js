@@ -46,23 +46,10 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 
-Api.getSettings({
-  query: {
-    type: 'wap'
-  }
-}).then(res => {
-  if (!res.enabled) {
-    // 如果没有开通微网校，则跳回老版本网校 TODO
-    window.location.href = axios.defaults.baseURL || 'http://zyc.st.edusoho.cn/';
-    return;
-  }
-
-  new Vue({
-    el: '#app-admin',
-    router,
-    store,
-    components: { Admin },
-    template: '<Admin/>'
-  });
+new Vue({
+  el: '#app-admin',
+  router,
+  store,
+  components: { Admin },
+  template: '<Admin/>'
 });
-
