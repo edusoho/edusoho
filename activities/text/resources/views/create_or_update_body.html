@@ -24,6 +24,9 @@
                     <label for="text-content-field" class="control-label-required">{{ 'course.plan_task.activity_manage.text'|trans }}</label>
                 </div>
                 <div class="col-sm-10">
+                  <a id="see-draft-btn" class="link-primary text-12 js-continue-edit hidden" data-content="">
+                    {{'course.plan_task.activity_manage.text_tips'|trans}}
+                  </a>
                     <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"
                               data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
                               data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"

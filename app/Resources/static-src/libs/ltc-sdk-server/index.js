@@ -48,7 +48,11 @@ class LtcSDKServer {
       let apiName = msg.name;
       let self= this;
       let options = {
-        headers: {'Accept': 'application/vnd.edusoho.v2+json'},
+        headers: {
+          'Accept': 'application/vnd.edusoho.v2+json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+        },
       };
       eval("self.getApi(options)."+apiName+"(msg)").then(response => {
         let results = response.data;
