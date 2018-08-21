@@ -6,7 +6,6 @@ import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
-import { Swipe, SwipeItem } from 'vue-swipe';
 
 import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
@@ -30,8 +29,6 @@ import {
 Vue.component('van-nav-bar', NavBar);
 Vue.component('van-tabbar', Tabbar);
 Vue.component('van-tabbar-item', TabbarItem);
-Vue.component('swipe', Swipe);
-Vue.component('swipe-item', SwipeItem);
 Vue.component('van-list', List);
 Vue.component('van-button', Button);
 Vue.component('van-tab', Tab);
