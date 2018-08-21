@@ -1,6 +1,8 @@
 {
   "apiList": [
     "getCourse",
-    "getAnnouncement"
+    "getAnnouncement",
+    "getCourseDraft",
+    "saveCourseDraft"
   ]
 }

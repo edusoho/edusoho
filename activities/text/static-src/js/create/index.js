@@ -4,6 +4,10 @@
 window.ltc.loadCss();
 let load = window.ltc.load('jquery', 'validate', 'editor');
 load.then(function(){
+  let originTitle,contentCache = '';
+  let courseId = $('#task-create-content', parent.document).data('courseId');
+  let activityId = $('#task-create-content', parent.document).data('activityId');
+  let draftId = 0;
   let $content = $('#text-content-field');
   let editor = CKEDITOR.replace('text-content-field', {
     toolbar: 'Task',
@@ -49,42 +53,48 @@ load.then(function(){
     }
   });
 
-
-  //接口访问例子
-  window.ltc.api({
-    "name" : "getCourse",
-    "queryParams" : {"type":"course"},
-    "pathParams" : {"id":1}
-  },(result) => {
-    console.log(result);
-  })
-
-
   function _lanuchAutoSave() {
-    console.log(111);
     const $title = $('#modal .modal-title', parent.document);
-    this._originTitle = $title.text();
+    originTitle = $title.text();
     setInterval(() => {
       _saveDraft();
     }, 5000);
   }
+  window.ltc.api({
+    "name" : "getCourseDraft",
+    "queryParams" : {courseId:courseId,activityId:activityId},
+    "pathParams" : {id:draftId}
+  }, (result) => {
+    if (result.content) {
+      draftId = result.id;
+      $('.js-continue-edit').removeClass('hidden');
+      $('.js-continue-edit').on('click', (event) => {
+        const $btn = $(event.currentTarget);
+        const content = result.content;
+        editor.setData(content);
+        $btn.remove();
+      });
+    }
+  });
 
   function _saveDraft() {
-    console.log(1111);
-    const content = this.editor.getData();
-    const needSave = content !== this._contentCache;
+    const content = editor.getData();
+    const needSave = content !== contentCache;
     if (!needSave) {
       return;
     }
-    const $content = $('[name="content"]');
-    $.post($content.data('saveDraftUrl'), { content: content })
-      .done(() => {
-        const date = new Date(); //日期对象
-        const $title = $('#modal .modal-title', parent.document);
-        const now = Translator.trans('site.date_format_his', {'hours': date.getHours(), 'minutes': date.getMinutes(), 'seconds': date.getSeconds()});
-        $title.text(this._originTitle + Translator.trans('activity.text_manage.save_draft_hint', { createdTime: now }));
-        this._contentCache = content;
-      });
+
+    window.ltc.api({
+      "name": "saveCourseDraft",
+      "data": {courseId:courseId,activityId:activityId,content:content}
+    }, (result) => {
+      const date = new Date(); //日期对象
+      const $title = $('#modal .modal-title', parent.document);
+      const now = date.getHours()+"点"+date.getMinutes()+"分"+date.getSeconds()+"秒";
+      // const now = Translator.trans('site.date_format_his', {'hours': date.getHours(), 'minutes': date.getMinutes(), 'seconds': date.getSeconds()});
+      $title.text("草稿已于"+now+"保存");
+      contentCache = content;
+    })
   }
 
 }).catch(function(e){

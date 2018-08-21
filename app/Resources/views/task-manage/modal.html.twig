@@ -45,3 +45,14 @@
     </form>
   </div>
 {% endblock %}
+
+{% block task_create_content %}
+  <div id="task-create-content"  data-course-id="{{ course.id|default(0) }}" data-activity-id="{{ task.activityId|default(0) }}" class="task-create-content hidden">
+    <iframe src="" scrolling="no" class="task-create-content-iframe" id="task-create-content-iframe" name="task-create-content-iframe" frameborder="0"></iframe>
+  </div>
+{% endblock %}
+{% block task_create_finish %}
+  <div id="task-create-finish" class="task-create-finish hidden">
+    <iframe src="" scrolling="no" class="task-create-finish-iframe" id="task-create-finish-iframe" name="task-create-finish-iframe" frameborder="0"></iframe>
+  </div>
+{% endblock %}

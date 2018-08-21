@@ -9,6 +9,16 @@
       "name": "getAnnouncements",
       "method": "GET",
       "path": "/api/announcements"
+    },
+    {
+      "name": "getCourseDraft",
+      "method": "GET",
+      "path": "/api/course_draft/:id"
+    },
+    {
+      "name": "saveCourseDraft",
+      "method": "POST",
+      "path": "/api/course_draft"
     }
   ]
 }

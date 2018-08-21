@@ -20,8 +20,10 @@ let instance;
 apiData.map(item => {
   api[item.name] = ({ pathParams, data, queryParams } = { pathParams: {} }) => {
     const url = pathMatch(item.path, pathParams);
+    const method = item.method;
     const options = {
-      url: url
+      url: url,
+      method: method
     };
 
     if (data) {
