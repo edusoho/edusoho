@@ -36,30 +36,25 @@ class Editor {
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
     }
-    if (window.t) {
-      return;
-    }
-    window.t = true;
-    let self = this;
+
     window.ltc.on('returnActivity', (msg) => {
       if (!msg.valid) {
-        self.contentData = {};
+        this.contentData = {};
         return;
       }
-      self.contentData = msg.data;
-      console.log( self.actionType );
+      this.contentData = msg.data;
       // 第二步的时候，可以下一步，也可以保存，都会触发数据校验
       // 返回数据时，通过标记符，知道下一步还是保存数据
-      self.actionType == 'next' ? self._doNext() : self._postData();
+      this.actionType == 'next' ? this._doNext() : this._postData();
     });
 
     window.ltc.on('returnFinishCondition', (msg) => {
       if (!msg.valid) {
-        self.finishData = {};
+        this.finishData = {};
         return;
       }
-      self.finishData = msg.data;
-      self._postData();
+      this.finishData = msg.data;
+      this._postData();
     });
   }
 

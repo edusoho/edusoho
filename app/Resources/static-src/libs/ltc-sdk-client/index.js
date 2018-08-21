@@ -1,4 +1,4 @@
-import EsMessenger from 'app/common/messenger';
+import EsMessenger from 'jay-post-message';
 const resources = require('./resource.js');
 require('libs/iframe-resizer-contentWindow.js');
 const apiList = [...require("./api.json").apiList];
