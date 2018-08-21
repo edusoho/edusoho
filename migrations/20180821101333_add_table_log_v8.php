@@ -38,6 +38,8 @@ class AddTableLogV8 extends Migration
      */
     public function down()
     {
-
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+        $connection->exec('DROP TABLE IF EXISTS `log_v8`;');
     }
 }
