@@ -134,7 +134,7 @@ class Lesson extends BaseResource
             }
         } else {
             $proxy = new ParserProxy();
-            $lesson = $proxy->prepareMediaUriForMobile($lesson);
+            $lesson = $proxy->prepareMediaUriForMobile($lesson, $this->getSchema());
         }
 
         return $lesson;

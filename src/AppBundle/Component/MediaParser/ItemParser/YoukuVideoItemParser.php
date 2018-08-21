@@ -77,16 +77,4 @@ class YoukuVideoItemParser extends AbstractItemParser
             'name' => '优酷视频',
         );
     }
-
-    // public function detect($url)
-    // {
-    //     $matched = preg_match($this->patterns['p1'], $url);
-    //     if ($matched) {
-    //         return true;
-    //     }
-    //     $matched = preg_match($this->patterns['p2'], $url);
-    //     if ($matched) {
-    //         return true;
-    //     }
-    // }
 }

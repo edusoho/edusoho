@@ -65,6 +65,15 @@ abstract class AbstractParser
         return $video;
     }
 
+    public function prepareMediaUriForMobile($video, $httpSchema)
+    {
+        $result = $this->prepareMediaUri($video);
+        $defaultParsedInfo = $this->getDefaultParsedInfo();
+        $result['mediaSource'] = $defaultParsedInfo['source'];
+        $result['mediaUri'] = $httpSchema.$result['mediaUri'];
+        $result['hlsEncryption'] = true;
+    }
+
     abstract protected function parseForWebUrl($parsedInfo, $url);
 
     /**

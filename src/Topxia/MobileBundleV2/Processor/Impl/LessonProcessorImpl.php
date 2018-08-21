@@ -584,7 +584,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         } else {
             $proxy = new ParserProxy();
-            $lesson = $proxy->prepareMediaUriForMobile($lesson);
+            $lesson = $proxy->prepareMediaUriForMobile($lesson, $this->getSchema());
         }
 
         return $lesson;

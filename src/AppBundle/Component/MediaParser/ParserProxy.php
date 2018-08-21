@@ -64,7 +64,7 @@ class ParserProxy
         return $parser->prepareMediaUri($video);
     }
 
-    public function prepareMediaUriForMobile($video)
+    public function prepareMediaUriForMobile($video, $httpSchema = '')
     {
         if ('youku' == $video['mediaSource']) {
             $class = __NAMESPACE__.'\\ItemParser\\YoukuVideoItemParser';
@@ -73,6 +73,6 @@ class ParserProxy
             throw ParserException::PARSER_NOT_SUPPORT();
         }
 
-        return $parser->prepareMediaUri($video);
+        return $parser->prepareMediaUriForMobile($video, $httpSchema);
     }
 }
