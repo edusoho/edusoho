@@ -35,12 +35,6 @@ class Log
 
     private $targetId = 0;
 
-    private $param;
-
-    private $funcName;
-
-    private $serviceName = '';
-
     public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
@@ -109,21 +103,6 @@ class Log
         return $this->targetId;
     }
 
-    public function getParam()
-    {
-        return $this->param;
-    }
-
-    public function getFuncName()
-    {
-        return $this->funcName;
-    }
-
-    public function getServiceName()
-    {
-        return $this->serviceName;
-    }
-
     public function setMessage($message)
     {
         $this->message = $message;
@@ -147,20 +126,5 @@ class Log
     public function setTargetId($targetId)
     {
         $this->targetId = $targetId;
-    }
-
-    public function setParam($param)
-    {
-        $this->param = $param;
-    }
-
-    public function setFuncName($funcName)
-    {
-        $this->funcName = $funcName;
-    }
-
-    public function setServiceName($serviceName)
-    {
-        $this->serviceName = $serviceName;
     }
 }
