@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script src="/static-dist/libs/ltc-sdk-client.js"></script>
+<div class="tab-content" id="iframe-content">
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step3-form" >
+      <div class=" form-group">
+        <div class="col-sm-2 control-label">
+          <label>{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+        </div>
+        <div class="col-sm-4">
+          <select id="finish-condition" name="finishType" class="form-control">
+            {% set finishType = activity.ext.finishType|default('end') %}
+            <option value="end" {% if finishType == 'end' %} selected {% endif %}>{{'course.plan_task.activity_manage.video.last'|trans}}</option>
+            <option value="time" {% if finishType == 'time' %} selected {% endif %}>{{'course.plan_task.activity_manage.video.learn_time'|trans}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class=" form-group hidden viewLength">
+        <div class="col-sm-2 control-label">
+          <label>{{ 'course.plan_task.activity_manage.ppt.lear_at_least_time'|trans }}</label>
+        </div>
+        <div class="col-sm-4 controls">
+          <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{% if activity.ext.finishDetail|default(1) != 0  %}{{ activity.ext.finishDetail|default(1) }}{% else %}1{% endif %}">
+        </div>
+        <div class="col-sm-4 controls">
+          <p class="form-control-static">{{'site.date.minute'|trans}}</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="/static-dist/textactivity/js/finish/index.js"></script>
+</body>
+</html>
