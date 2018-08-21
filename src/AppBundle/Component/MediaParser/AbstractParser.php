@@ -72,6 +72,7 @@ abstract class AbstractParser
         $result['mediaSource'] = $defaultParsedInfo['source'];
         $result['mediaUri'] = $httpSchema.$result['mediaUri'];
         $result['hlsEncryption'] = true;
+        return $result;
     }
 
     abstract protected function parseForWebUrl($parsedInfo, $url);
