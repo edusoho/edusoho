@@ -43,8 +43,6 @@ load.then(function(){
     validate.form();
   });
 
-  console.log(111234);
-
   _lanuchAutoSave();
 
   window.ltc.on('getActivity', (msg) => {
