@@ -1,5 +1,5 @@
 import Api from './api';
-import EsMessenger from 'app/common/messenger';
+import EsMessenger from 'jay-post-message';
 
 class LtcSDKServer {
   constructor() {
