@@ -6,7 +6,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Component\MediaParser\ParserProxy;
 
 class VideoController extends BaseActivityController implements ActivityActionInterface
 {
@@ -136,16 +135,6 @@ class VideoController extends BaseActivityController implements ActivityActionIn
         }
 
         return $this->createJsonResponse(array('status' => 'ok'));
-    }
-
-    private function prepareMediaUri($video)
-    {
-        if ('self' != $video['mediaSource']) {
-            $proxy = new ParserProxy();
-            $video = $proxy->prepareMediaUriForPc($video);
-        }
-
-        return $video;
     }
 
     private function prepareContext($request, $course, $activity, $task)
