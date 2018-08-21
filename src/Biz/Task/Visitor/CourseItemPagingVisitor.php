@@ -58,7 +58,6 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             )
         */
         $lessonInfos = array();
-
         foreach ($items as $key => &$item) {
             if ('chapter' == $item['type'] || 'unit' == $item['type']) {
                 $item['itemType'] = $item['type'];

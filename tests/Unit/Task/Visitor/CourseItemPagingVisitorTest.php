@@ -72,7 +72,6 @@ class CourseItemPagingVisitorTest extends BaseTestCase
             'direction' => 'up',
             'limit' => 1,
             'offsetSeq' => 1,
-            'offsetTaskId' => 2,
         ));
 
         for ($i = 0; $i < 5; ++$i) {
@@ -102,8 +101,8 @@ class CourseItemPagingVisitorTest extends BaseTestCase
 
         $result = $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
         $this->assertEquals(1, count($result[0]));
-        $this->assertEquals(2, $result[1]);
-        $this->assertEquals(2, $result[0][0]['id']);
+        $this->assertEquals(1, $result[1]);
+        $this->assertEquals(1, $result[0][0]['id']);
     }
 
     /**
