@@ -2,8 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-use Biz\User\Service\UserService;
-
 class WechatPayJsTrade extends BaseTrade
 {
     protected $payment = 'wechat';
@@ -15,13 +13,5 @@ class WechatPayJsTrade extends BaseTrade
         return array(
             'open_id' => $params['openid'],
         );
-    }
-
-    /**
-     * @return UserService
-     */
-    private function getUserService()
-    {
-        return $this->biz->service('User:UserService');
     }
 }
