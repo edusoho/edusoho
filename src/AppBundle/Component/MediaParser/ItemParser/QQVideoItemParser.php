@@ -29,12 +29,12 @@ class QQVideoItemParser extends AbstractItemParser
         } else {
             $response = $this->fetchUrl($url);
             if (200 != $response['code']) {
-                throw new ParserException('获取QQ视频页面信息失败');
+                throw ParserException::PARSED_FAILED_QQ();
             }
             $matched = preg_match('/VIDEO_INFO.*?[\"]?vid[\"]?\s*:\s*"(\w+?)"/s', $response['content'], $matches);
 
             if (empty($matched)) {
-                throw new ParserException('解析QQ视频ID失败');
+                throw ParserException::PARSED_FAILED_QQ();
             }
 
             $vid = $matches[1];
