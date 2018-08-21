@@ -70,8 +70,9 @@ abstract class AbstractParser
         $result = $this->prepareMediaUri($video);
         $defaultParsedInfo = $this->getDefaultParsedInfo();
         $result['mediaSource'] = $defaultParsedInfo['source'];
-        $result['mediaUri'] = $httpSchema.$result['mediaUri'];
+        $result['mediaUri'] = $httpSchema.':'.$result['mediaUri'];
         $result['hlsEncryption'] = true;
+
         return $result;
     }
 
