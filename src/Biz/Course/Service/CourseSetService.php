@@ -159,6 +159,7 @@ interface CourseSetService
 
     public function updateCourseSetTeacherIds($id, $teacherIds);
 
+    /*
     public function changeCourseSetCover($id, $fields);
 
     /**

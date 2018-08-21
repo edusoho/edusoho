@@ -99,8 +99,20 @@ interface ClassroomService
 
     public function findClassroomsByLikeTitle($title);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="close",funcName="getClassroom")
+     */
     public function closeClassroom($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="publish",funcName="getClassroom")
+     */
     public function publishClassroom($id);
 
     /**
@@ -188,8 +200,21 @@ interface ClassroomService
 
     public function unlockStudent($classroomId, $userId);
 
+    /**
+     * @param $id
+     * @param $number
+     *
+     * @return mixed
+     * @Log(module="classroom",action="recommend",funcName="getClassroom")
+     */
     public function recommendClassroom($id, $number);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="cancel_recommend",funcName="getClassroom")
+     */
     public function cancelRecommendClassroom($id);
 
     public function tryAdminClassroom($classroomId);

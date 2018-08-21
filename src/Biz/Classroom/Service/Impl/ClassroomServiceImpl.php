@@ -1752,12 +1752,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             )
         );
 
-        $this->getLogService()->info(
-            'classroom',
-            'recommend',
-            "推荐班级《{$classroom['title']}》(#{$classroom['id']}),序号为{$number}"
-        );
-
         return $classroom;
     }
 
@@ -1772,12 +1766,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedTime' => 0,
                 'recommendedSeq' => 100,
             )
-        );
-
-        $this->getLogService()->info(
-            'classroom',
-            'cancel_recommend',
-            "取消推荐班级《{$classroom['title']}》(#{$classroom['id']})"
         );
 
         return $classroom;

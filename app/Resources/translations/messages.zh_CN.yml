@@ -8273,6 +8273,8 @@ log.action.classroom.update_picture: 更新图片
 log.action.classroom.remove_student: 移除学员
 log.action.classroom.recommend: 推荐班级
 log.action.classroom.cancel_recommend: 取消推荐
+log.action.classroom.publish: 发布班级
+log.action.classroom.close: 关闭推荐
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -8369,6 +8371,7 @@ log.action.live.delete_live_activity: 删除直播活动
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.update_picture: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》的图片
 log.action.template.course.publish: 发布了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.close: 关闭了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
@@ -8399,6 +8402,10 @@ log.action.template.course.cancel_recommend: 取消了推荐<strong class="color
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》
+log.action.template.classroom.publish: 发布了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.close: 关闭了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.recommend: 推荐了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.cancel_recommend: 取消推荐了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.delete: 删除了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.update: 修改了<strong class="color-success">分类</strong> 《%title%》
@@ -8549,8 +8556,11 @@ log.attr.classroom.expiryValue: 有效期
 log.attr.classroom.smallPicture: 小图
 log.attr.classroom.middlePicture: 中图
 log.attr.classroom.largePicture: 大图
+log.attr.classroom.courseNum: 课程数
+log.attr.classroom.lessonNum: 课时数
 log.attr.open_course.title: 标题
 log.attr.open_course.about: 简介
+log.attr.open_course.lessonNum: 课时数
 log.attr.user.verifiedMobile: 手机
 log.attr.user.email: 邮箱
 log.attr.user.update.title: 头衔

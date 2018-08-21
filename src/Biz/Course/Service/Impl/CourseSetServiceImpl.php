@@ -543,12 +543,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
 
-        $this->getLogService()->info(
-            'course',
-            'update_picture',
-            "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片",
-            $covers
-        );
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;

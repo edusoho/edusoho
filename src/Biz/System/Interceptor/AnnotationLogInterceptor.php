@@ -179,8 +179,8 @@ class AnnotationLogInterceptor extends AbstractInterceptor
     private function getPostfixValue($args, $log)
     {
         $postfixValue = '';
-        if (!empty($log['param'])) {
-            $params = explode(',', $log['param']);
+        if (!empty($log['postfix'])) {
+            $postfixs = explode(',', $log['postfix']);
             $postfix = $this->getFuncNeedParams($log['funcParam'], $params, $args);
             $postfixValue = implode('.', $postfix);
         }

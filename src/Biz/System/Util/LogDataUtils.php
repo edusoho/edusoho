@@ -458,7 +458,7 @@ class LogDataUtils
             $showTitle = $oldData['email'];
         } elseif (isset($oldData['title'])) {
             $showTitle = $oldData['title'];
-            if (empty($oldData['title']) && !empty($oldData['courseSetTitle'])) {
+            if (isset($oldData['courseSetTitle'])) {
                 $showTitle = CourseTitleUtils::getDisplayedTitle($oldData);
             }
         } elseif (isset($oldData['name'])) {
