@@ -20,7 +20,8 @@ abstract class AbstractParser
                 }
 
                 $iframeSrc = $segs[1]; //获取src内容
-                $urlSuffix = '//'.explode('//', $iframeSrc)[1];
+                $srcContentSegs = explode('//', $iframeSrc);
+                $urlSuffix = '//'.srcContentSegs[1];
                 $isSuccess = true;
             }
         } catch (\Exception $e) {
