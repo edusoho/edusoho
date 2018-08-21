@@ -6,6 +6,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Component\MediaParser\ParserProxy;
 
 class VideoController extends BaseActivityController implements ActivityActionInterface
 {
@@ -169,30 +170,8 @@ class VideoController extends BaseActivityController implements ActivityActionIn
     private function prepareMediaUri($video)
     {
         if ('self' != $video['mediaSource']) {
-            if ('youku' == $video['mediaSource']) {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
-                if ($matched) {
-                    $video['mediaUri'] = "//player.youku.com/embed/{$matches[1]}";
-                    $video['mediaSource'] = 'iframe';
-                }
-            } elseif ('tudou' == $video['mediaSource']) {
-                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
-                if ($matched) {
-                    $video['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $video['mediaSource'] = 'iframe';
-                }
-            } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
-                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
-                if ($matched) {
-                    $video['mediaUri'] = $matches[2];
-                }
-            } elseif ('qqvideo' == $video['mediaSource']) {
-                $video['mediaUri'] = str_replace('static.video.qq.com', 'imgcache.qq.com/tencentvideo_v1/playerv3', $video['mediaUri']);
-                $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
-                if ($matched) {
-                    $video['mediaUri'] = $matches[2];
-                }
-            }
+            $proxy = new ParserProxy();
+            $video = $proxy->prepareMediaUriForPc($video);
         }
 
         return $video;

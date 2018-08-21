@@ -6,9 +6,74 @@ abstract class AbstractParser
 {
     protected $mockedSender = null;
 
-    abstract public function parse($url);
+    public function parse($url)
+    {
+        $isSuccess = false;
+        $urlSuffix = null;
+        try {
+            if (false !== strpos($url, '<iframe')) {
+                $urlSegs = explode('src=', $url);
+                $strAfterSrc = $urlSegs[1]; // 获取src 后面的内容
+                $segs = explode('\'', $strAfterSrc);
+                if (count($segs) < 2) { //说明不是以单引号分割
+                    $segs = explode('"', $strAfterSrc);
+                }
 
-    abstract public function detect($url);
+                $iframeSrc = $segs[1]; //获取src内容
+                $urlSuffix = '//'.explode('//', $iframeSrc)[1];
+                $isSuccess = true;
+            }
+        } catch (\Exception $e) {
+            $isSuccess = false;
+        }
+
+        $parsedInfo = $this->getDefaultParsedInfo();
+        $parsedInfo['type'] = 'video';
+
+        if ($isSuccess) {
+            $parsedInfo['files'] = array(
+                array(
+                    'url' => $urlSuffix,
+                ),
+            );
+
+            return $parsedInfo;
+        } else {
+            return $this->parseForWebUrl($parsedInfo, $url);
+        }
+    }
+
+    public function detect($url)
+    {
+        foreach ($this->getUrlPrefixes() as $urlPrefix) {
+            if (false !== strpos($url, $urlPrefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function prepareMediaUri($video)
+    {
+        if ($this->detect($video['mediaUri'])) {
+            $video = $this->convertMediaUri($video);
+            $video['mediaSource'] = 'iframe';
+        }
+
+        return $video;
+    }
+
+    abstract protected function parseForWebUrl($parsedInfo, $url);
+
+    /**
+     * 格式为数组，所给的url包含任何一个 urlPrefix，视为当前parser
+     */
+    abstract protected function getUrlPrefixes();
+
+    abstract protected function convertMediaUri($video);
+
+    abstract protected function getDefaultParsedInfo();
 
     protected function fetchUrl($url)
     {

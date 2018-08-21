@@ -7116,6 +7116,12 @@ exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
 exception.user_lock: User account is locked, please contact system administrator.
 
+exception.parsed.failed.netease: 获取网易公开课视频信息失败
+exception.parsed.failed.letv: 获取乐视视频信息失败
+exception.parsed.failed.qq: 获取QQ视频信息失败
+exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parser.not.support: 不支持该视频类型
+
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 

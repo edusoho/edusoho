@@ -6,6 +6,7 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Silex\Application;
 use AppBundle\Common\SettingToolkit;
+use AppBundle\Component\MediaParser\ParserProxy;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,7 +23,7 @@ class Lesson extends BaseResource
         $access = $this->getCourseService()->canLearnTask($task['id']);
 
         $isTrail = false;
-        if (!($access['code'] == AccessorInterface::SUCCESS || $isTrail = $access['code'] == 'allow_trial')) {
+        if (!(AccessorInterface::SUCCESS == $access['code'] || $isTrail = 'allow_trial' == $access['code'])) {
             return $this->error($access['code'], $access['msg']);
         }
 
@@ -32,7 +33,7 @@ class Lesson extends BaseResource
         $lesson = array_shift($lesson);
 
         //直播回放
-        if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
+        if ('live' == $lesson['type'] && 'videoGenerated' == $lesson['replayStatus']) {
             $lesson['type'] = 'video';
         }
 
@@ -99,11 +100,11 @@ class Lesson extends BaseResource
             return $this->error('not_ppt', '文件不存在');
         }
 
-        if ($file['convertStatus'] == 'error') {
+        if ('error' == $file['convertStatus']) {
             return $this->error('not_ppt', 'PPT文档转换失败，请到课程文件管理中，重新转换');
         }
 
-        if ($file['convertStatus'] != 'success') {
+        if ('success' != $file['convertStatus']) {
             return $this->error('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等');
         }
 
@@ -123,11 +124,11 @@ class Lesson extends BaseResource
             return $this->error('not_document', '文件不存在');
         }
 
-        if ($file['convertStatus'] == 'error') {
+        if ('error' == $file['convertStatus']) {
             return $this->error('not_document', '文档转换失败，请联系管理员');
         }
 
-        if ($file['convertStatus'] != 'success') {
+        if ('success' != $file['convertStatus']) {
             return $this->error('not_document', '文档还在转换中，还不能查看，请稍等');
         }
 
@@ -216,15 +217,15 @@ class Lesson extends BaseResource
             $watchTimeLimit = $course['tryLookLength'] * 60;
         }
 
-        if ($mediaSource == 'self') {
+        if ('self' == $mediaSource) {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
-                if ($file['storage'] == 'cloud') {
+                if ('cloud' == $file['storage']) {
                     $lesson['mediaConvertStatus'] = $file['convertStatus'];
 
-                    if (isset($file['processAudioStatus']) && $file['processAudioStatus'] == 'ok') {
+                    if (isset($file['processAudioStatus']) && 'ok' == $file['processAudioStatus']) {
                         if (!empty($file['audioMetas2']) && !empty($file['audioMetas2']['sd']['key'])) {
                             $data = array(
                                 'id' => $file['id'],
@@ -294,7 +295,7 @@ class Lesson extends BaseResource
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
                         } else {
-                            if ($file['type'] == 'video') {
+                            if ('video' == $file['type']) {
                                 $key = null;
                             } else {
                                 $key = $file['hashId'];
@@ -320,24 +321,9 @@ class Lesson extends BaseResource
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } elseif ($mediaSource == 'youku') {
-            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-            if ($matched) {
-                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-            } else {
-                $lesson['mediaUri'] = '';
-            }
-        } elseif ($mediaSource == 'tudou') {
-            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-            if ($matched) {
-                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-            } else {
-                $lesson['mediaUri'] = '';
-            }
         } else {
-            $lesson['mediaUri'] = $mediaUri;
+            $proxy = new ParserProxy();
+            $lesson = $proxy->prepareMediaUriForMobile($lesson);
         }
 
         return $lesson;
@@ -390,7 +376,7 @@ class Lesson extends BaseResource
 
     protected function hasRemainTime($task, $taskType)
     {
-        if ('video' != $task['type'] || $taskType == 'live') {
+        if ('video' != $task['type'] || 'live' == $taskType) {
             return false;
         }
 

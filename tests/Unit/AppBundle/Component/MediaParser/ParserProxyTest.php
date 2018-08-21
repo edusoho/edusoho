@@ -51,15 +51,6 @@ class ParserProxyTest extends BaseTestCase
         $kernel->setParameterBag($parameterBag);
     }
 
-    /**
-     * @expectedException \AppBundle\Component\MediaParser\ParseException
-     */
-    public function testParseAlbum()
-    {
-        $proxy = new ParserProxy();
-        $video = $proxy->parseAlbum('http://v.163.com/special/M941471K5_M9414FGNS.html');
-    }
-
     public function testParserNotFoundException()
     {
         $proxy = new ParserProxy();

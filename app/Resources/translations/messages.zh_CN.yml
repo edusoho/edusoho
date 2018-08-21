@@ -8435,6 +8435,12 @@ exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
 exception.user_lock: 账户被封禁，请联系管理员
 
+exception.parsed.failed.netease: 获取网易公开课视频信息失败
+exception.parsed.failed.letv: 获取乐视视频信息失败
+exception.parsed.failed.qq: 获取QQ视频信息失败
+exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parser.not.support: 不支持该视频类型
+
 lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
