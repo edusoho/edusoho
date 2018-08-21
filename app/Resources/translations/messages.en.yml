@@ -1766,6 +1766,7 @@ file_chooser.import_link.import_btn_submiting: 'Please wait'
 file_chooser.import_video.mediaUri: 'Medial url：'
 file_chooser.import_video.input_placeholder: 'Open online course from Youku, Tencent, Netease is now suported'
 file_chooser.import_video.not_support_tips: 'Videos from Tencent and Netease  is not supported on mobile'
+file_chooser.import_video.not_support_tips2: Videos from Tencent and Youku could be imported by 'Copy Common Codes' (It appears when moving mouse on the 'Share' button)
 file_chooser.materiallib_choose.from_upload: 'From upload'
 file_chooser.materiallib_choose.from_share: 'From share'
 file_chooser.materiallib_choose.from_public: 'Public resources'
