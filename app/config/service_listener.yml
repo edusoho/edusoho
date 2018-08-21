@@ -11,6 +11,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
 
+    kernel.listener.kernel_h5_request_listener:
+        class: AppBundle\Listener\KernelH5RequestListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:254 }
+
     kernel.listener.kernel_response_listener:
         class: AppBundle\Listener\KernelResponseListener
         arguments:    ['@service_container']

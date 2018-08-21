@@ -81,20 +81,30 @@ class Course extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
+        if (isset($conditions['type']) && 'all' == $conditions['type']) {
+            unset($conditions['type']);
+        }
         $conditions['status'] = 'published';
+        $conditions['courseSetStatus'] = 'published';
+        $conditions['parentId'] = isset($conditions['parentId']) ? $conditions['parentId'] : 0;
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
-        $courses = $this->service('Course:CourseService')->searchCourses(
-            $conditions,
-            $sort,
-            $offset,
-            $limit
-        );
 
-        $total = $this->service('Course:CourseService')->searchCourseCount($conditions);
+        if (array_key_exists('recommendedSeq', $sort)) {
+            $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
+            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
+        } else {
+            $courses = $this->getCourseService()->searchWithJoinTableConditions(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+        $total = $this->getCourseService()->countWithJoinTableConditions($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

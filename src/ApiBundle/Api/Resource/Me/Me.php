@@ -12,14 +12,25 @@ class Me extends AbstractResource
     public function get(ApiRequest $request)
     {
         $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $user = array_merge($profile, $user);
         $this->appendUser($user);
 
         return $user;
     }
 
-    private function appendUser(&$user)
+    public function update(ApiRequest $request)
+    {
+        $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+        $fields = $request->request->all();
+        if (isset($fields['avatarId'])) {
+            $user = $this->getUserService()->changeAvatarByFileId($user['id'], $fields['avatarId']);
+        }
+        $this->getUserService()->updateUserProfile($user['id'], $fields, false);
+        $this->appendUser($user);
+
+        return $user;
+    }
+
+    protected function appendUser(&$user)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($profile, $user);
@@ -39,14 +50,10 @@ class Me extends AbstractResource
             }
         }
 
-
         return $user;
     }
 
-    /**
-     * @return UserService
-     */
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->service('User:UserService');
     }

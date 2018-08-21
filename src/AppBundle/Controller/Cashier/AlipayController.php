@@ -25,6 +25,15 @@ class AlipayController extends PaymentController
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), true));
     }
 
+    public function returnForH5Action(Request $request, $payment)
+    {
+        $data = $request->query->all();
+        $data['platform_type'] = 'Wap';
+        $this->getPayService()->notifyPaid($payment, $data);
+
+        return $this->redirect($this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $data['out_trade_no']), true));
+    }
+
     public function returnForAppAction(Request $request)
     {
         $data = $request->query->all();

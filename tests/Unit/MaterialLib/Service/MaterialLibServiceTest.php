@@ -119,12 +119,12 @@ class MaterialLibServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'update',
+                    'functionName' => 'sharePublic',
                 ),
             )
         );
         $result = $this->getMaterialLibService()->batchShare(array(3, 4));
-        $this->getUploadFileService()->shouldHaveReceived('update');
+        $this->getUploadFileService()->shouldHaveReceived('sharePublic');
         $this->assertArrayEquals($result, array('success' => true));
     }
 
@@ -134,12 +134,12 @@ class MaterialLibServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'update',
+                    'functionName' => 'unsharePublic',
                 ),
             )
         );
         $result = $this->getMaterialLibService()->unShare(3);
-        $this->getUploadFileService()->shouldHaveReceived('update');
+        $this->getUploadFileService()->shouldHaveReceived('unsharePublic');
         $this->assertArrayEquals($result, array('success' => true));
     }
 
