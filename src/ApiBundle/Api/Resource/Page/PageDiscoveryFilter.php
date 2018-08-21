@@ -27,7 +27,7 @@ class PageDiscoveryFilter extends Filter
     // protected function getFullPath(&$data)
     // {
     //     foreach ($data as &$items) {
-            
+
     //         $items['image'] = AssetHelper::uriForPath($items['image']);
     //         $items['link']['url'] = empty($items['link']['url']) ? AssetHelper::uriForPath('') : $items['link']['url'];
     //     }

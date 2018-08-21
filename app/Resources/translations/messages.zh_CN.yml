@@ -2012,6 +2012,7 @@ file_chooser.import_link.import_btn_submiting: 正在导入，请稍等
 file_chooser.import_video.mediaUri: 原地址：
 file_chooser.import_video.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
 file_chooser.import_video.not_support_tips: 腾讯和网易的视频不支持手机端播放
+file_chooser.import_video.not_support_tips2: 优酷和腾讯视频额外支持“复制通用代码”导入（鼠标移到视频页面的“分享”上出现）
 file_chooser.materiallib_choose.from_upload: 来自上传
 file_chooser.materiallib_choose.from_share: 来自分享
 file_chooser.materiallib_choose.from_public: 公共资料
@@ -8450,6 +8451,12 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 
 exception.user_lock: 账户被封禁，请联系管理员
+
+exception.parsed.failed.netease: 获取网易公开课视频信息失败
+exception.parsed.failed.letv: 获取乐视视频信息失败
+exception.parsed.failed.qq: 获取QQ视频信息失败
+exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parser.not.support: 不支持该视频类型
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个

@@ -2,28 +2,26 @@
 
 namespace AppBundle\Component\MediaParser\ItemParser;
 
-use AppBundle\Component\MediaParser\ParseException;
+use AppBundle\Component\MediaParser\ParserException;
 
 class NeteaseOpenCourseItemParser extends AbstractItemParser
 {
-    public function parse($url)
+    protected function parseForWebUrl($item, $url)
     {
         $response = $this->fetchUrl($url);
 
         if (200 != $response['code']) {
-            throw new ParseException('获取网易公开课视频信息失败');
+            throw ParserException::PARSED_FAILED_NETEASE();
         }
 
         $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'\s*\+\s*\'(.*?)\'\s*\+\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?appsrc\s*:\s*\'(.*?)\'.*?src\s*:\s*\'(.*?)\'/s', $response['content'], $matches);
 
         if (!$matched) {
-            throw new ParseException('解析网易公开课视频信息失败');
+            throw ParserException::PARSED_FAILED_NETEASE();
         }
 
         $item['id'] = $matches[1];
         $item['uuid'] = 'NeteaseOpenCourse:'.$item['id'];
-        $item['type'] = 'video';
-        $item['source'] = 'NeteaseOpenCourse';
         $item['name'] = iconv('gbk', 'utf-8', $matches[5]);
         $item['page'] = $url;
         $item['pictures'] = array(
@@ -39,13 +37,26 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
         return $item;
     }
 
-    public function detect($url)
+    protected function getUrlPrefixes()
     {
-        $matched = preg_match('/^(http|https)\:\/\/v\.163\.com\/movie\/.+?\.html/s', $url);
-        if (!$matched) {
-            $matched = preg_match('/^(http|https)\:\/\/open\.163\.com\/movie\/.+?\.html/s', $url);
+        return array('v.163.com/movie/', 'open.163.com/movie/');
+    }
+
+    protected function convertMediaUri($video)
+    {
+        $matched = preg_match('/^(http|https):(\S*)/s', $video['mediaUri'], $matches);
+        if ($matched) {
+            $video['mediaUri'] = $matches[2];
         }
 
-        return $matched;
+        return $video;
+    }
+
+    protected function getDefaultParsedInfo()
+    {
+        return array(
+            'source' => 'NeteaseOpenCourse',
+            'name' => '网易公开课视频',
+        );
     }
 }

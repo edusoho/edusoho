@@ -9,7 +9,7 @@ use AppBundle\Common\ReflectionUtils;
 class LetvYunItemParserTest extends BaseTestCase
 {
     /**
-     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     * @expectedException \AppBundle\Component\MediaParser\ParserException
      */
     public function testParseWithError()
     {

@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class FileFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'uri', 'size', 'createdTime'
+        'id', 'uri', 'size', 'createdTime',
     );
 
     protected function simpleFields(&$data)

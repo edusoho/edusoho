@@ -17,6 +17,6 @@ class SettingException extends AbstractException
     public $messages = array(
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enbale',
-        4030803 => 'exception.setting.forbidden_setting_nickname'
+        4030803 => 'exception.setting.forbidden_setting_nickname',
     );
 }
