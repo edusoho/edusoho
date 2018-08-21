@@ -1,9 +1,15 @@
 .setting-page {
+  position: relative;
   border: 1px solid #e1e1e1;
   margin: 50px;
   width: 375px;
   height: 667px;
   .find-head-img {
     vertical-align: top;
+  }
+  .find-footer-img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 }
