@@ -50,13 +50,4 @@ class ParserProxyTest extends BaseTestCase
 
         $kernel->setParameterBag($parameterBag);
     }
-
-    public function testParserNotFoundException()
-    {
-        $proxy = new ParserProxy();
-        $result = ReflectionUtils::invokeMethod($proxy, 'createParserNotFoundException', array('exc'));
-
-        $this->assertEquals('AppBundle\Component\MediaParser\ParserNotFoundException', get_class($result));
-        $this->assertEquals('exc', $result->getMessage());
-    }
 }
