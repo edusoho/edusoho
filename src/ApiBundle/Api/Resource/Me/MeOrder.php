@@ -30,6 +30,7 @@ class MeOrder extends AbstractResource
             $order['cover'] = count($covers) ? $covers : array('middle' => '');
             $order['targetType'] = $product->targetType;
             $order['targetId'] = $product->targetId;
+            $order['targetUrl'] = $this->generateUrl($product->successUrl[0], $product->successUrl[1], true);
         }
         $total = $this->getOrderService()->countOrders($conditions);
 

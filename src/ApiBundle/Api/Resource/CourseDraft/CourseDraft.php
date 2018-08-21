@@ -32,7 +32,7 @@ class CourseDraft extends AbstractResource
         $course = $this->getCourseService()->tryManageCourse($params['courseId']);
         $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($course['id'], $params['activityId'], $user['id']);
 
-        return $draft;
+        return empty($draft) ? null : $draft;
     }
 
     /**

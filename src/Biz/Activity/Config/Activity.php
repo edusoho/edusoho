@@ -5,6 +5,7 @@ namespace Biz\Activity\Config;
 use AppBundle\Common\Exception\UnexpectedValueException;
 use Biz\Activity\Listener\Listener;
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\DaoProxy;
@@ -159,12 +160,32 @@ class Activity
         return new InvalidArgumentException($message);
     }
 
+    protected function getCurrentUser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user'];
+    }
+
+    protected function setting($name, $default = null)
+    {
+        return $this->getSettingService()->node($name, $default);
+    }
+
     /**
      * @return Biz
      */
     final protected function getBiz()
     {
         return $this->biz;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     /**

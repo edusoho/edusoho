@@ -129,6 +129,59 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
     }
 
+    public function searchWithJoinTableConditions($conditions, $orderBys, $start, $limit)
+    {
+        $builder = $this->createJoinQueryBuilder($conditions)
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->select($this->table.'.*');
+
+        $declares = $this->declares();
+
+        foreach ($orderBys ?: array() as $order => $sort) {
+            $this->checkOrderBy($order, $sort, $declares['orderbys']);
+            $builder->addOrderBy($this->table.'.'.$order, $sort);
+        }
+
+        return $builder->execute()->fetchAll();
+    }
+
+    public function countWithJoinTableConditions($conditions)
+    {
+        $builder = $this->createJoinQueryBuilder($conditions)
+            ->select('COUNT(*)');
+
+        return (int) $builder->execute()->fetchColumn(0);
+    }
+
+    protected function createJoinQueryBuilder($conditions)
+    {
+        $builder = parent::createQueryBuilder($conditions);
+        $builder->innerJoin($this->table, 'course_set_v8', 'csv', 'csv.id = '.$this->table.'.courseSetId');
+
+        $joinConditions = array(
+            'csv.status = :courseSetStatus',
+        );
+
+        foreach ($joinConditions as $condition) {
+            $builder->andWhere($condition);
+        }
+
+        return $builder;
+    }
+
+    private function checkOrderBy($order, $sort, $allowOrderBys)
+    {
+        if (!in_array($order, $allowOrderBys, true)) {
+            throw $this->createDaoException(
+                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
+            );
+        }
+        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+        }
+    }
+
     public function declares()
     {
         return array(
@@ -154,50 +207,50 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
-                'id = :id',
-                'courseSetId = :courseSetId',
-                'courseSetId IN (:courseSetIds)',
-                'updatedTime >= :updatedTime_GE',
-                'status = :status',
-                'type = :type',
-                'price = :price',
-                'price > :price_GT',
-                'price >= :price_GE',
-                'originPrice > :originPrice_GT',
-                'originPrice >= :originPrice_GE',
-                'originPrice = :originPrice',
-                'coinPrice > :coinPrice_GT',
-                'coinPrice = :coinPrice',
-                'originCoinPrice > :originCoinPrice_GT',
-                'originCoinPrice = :originCoinPrice',
-                'title LIKE :titleLike',
-                'courseSetTitle LIKE :courseSetTitleLike',
-                'userId = :userId',
-                'recommended = :recommended',
-                'createdTime >= :startTime',
-                'createdTime < :endTime',
-                'rating > :ratingGreaterThan',
-                'vipLevelId >= :vipLevelIdGreaterThan',
-                'vipLevelId = :vipLevelId',
-                'categoryId = :categoryId',
-                'smallPicture = :smallPicture',
-                'categoryId IN ( :categoryIds )',
-                'vipLevelId IN ( :vipLevelIds )',
-                'parentId = :parentId',
-                'parentId > :parentId_GT',
-                'parentId IN ( :parentIds )',
-                'id NOT IN ( :excludeIds )',
-                'id IN ( :courseIds )',
-                'id IN ( :ids)',
-                'locked = :locked',
-                'lessonNum > :lessonNumGT',
-                'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode',
-                'buyable = :buyable',
-                'concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
-                'type NOT IN (:excludeTypes)',
-                'type IN (:types)',
-                'courseType = :courseType',
+                'course_v8.id = :id',
+                'course_v8.courseSetId = :courseSetId',
+                'course_v8.courseSetId IN (:courseSetIds)',
+                'course_v8.updatedTime >= :updatedTime_GE',
+                'course_v8.status = :status',
+                'course_v8.type = :type',
+                'course_v8.price = :price',
+                'course_v8.price > :price_GT',
+                'course_v8.price >= :price_GE',
+                'course_v8.originPrice > :originPrice_GT',
+                'course_v8.originPrice >= :originPrice_GE',
+                'course_v8.originPrice = :originPrice',
+                'course_v8.coinPrice > :coinPrice_GT',
+                'course_v8.coinPrice = :coinPrice',
+                'course_v8.originCoinPrice > :originCoinPrice_GT',
+                'course_v8.originCoinPrice = :originCoinPrice',
+                'course_v8.title LIKE :titleLike',
+                'course_v8.courseSetTitle LIKE :courseSetTitleLike',
+                'course_v8.userId = :userId',
+                'course_v8.recommended = :recommended',
+                'course_v8.createdTime >= :startTime',
+                'course_v8.createdTime < :endTime',
+                'course_v8.rating > :ratingGreaterThan',
+                'course_v8.vipLevelId >= :vipLevelIdGreaterThan',
+                'course_v8.vipLevelId = :vipLevelId',
+                'course_v8.categoryId = :categoryId',
+                'course_v8.smallPicture = :smallPicture',
+                'course_v8.categoryId IN ( :categoryIds )',
+                'course_v8.vipLevelId IN ( :vipLevelIds )',
+                'course_v8.parentId = :parentId',
+                'course_v8.parentId > :parentId_GT',
+                'course_v8.parentId IN ( :parentIds )',
+                'course_v8.id NOT IN ( :excludeIds )',
+                'course_v8.id IN ( :courseIds )',
+                'course_v8.id IN ( :ids)',
+                'course_v8.locked = :locked',
+                'course_v8.lessonNum > :lessonNumGT',
+                'course_v8.orgCode = :orgCode',
+                'course_v8.orgCode LIKE :likeOrgCode',
+                'course_v8.buyable = :buyable',
+                'course_v8.concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
+                'course_v8.type NOT IN (:excludeTypes)',
+                'course_v8.type IN (:types)',
+                'course_v8.courseType = :courseType',
             ),
             'wave_cahceable_fields' => array('hitNum'),
         );

@@ -47,6 +47,7 @@ class OrderInfo extends AbstractResource
         $orderInfo = array(
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
+            'cover' => $product->cover,
             'title' => $product->title,
             'maxRate' => $product->maxRate,
             'unitType' => $product->unit,
