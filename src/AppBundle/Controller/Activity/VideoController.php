@@ -12,15 +12,16 @@ class VideoController extends BaseActivityController implements ActivityActionIn
 {
     public function showAction(Request $request, $activity)
     {
-        $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
-        $watchStatus = $this->getWatchStatus($activity);
+        $type = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $video = $type->get($activity['mediaId']);
+        $watchStatus = $type->getWatchStatus($activity);
         if ('error' === $watchStatus['status']) {
             return $this->render('activity/video/limit.html.twig', array(
                 'watchStatus' => $watchStatus,
             ));
         }
 
-        $video = $this->prepareMediaUri($video);
+        $video = $type->prepareMediaUri($video);
 
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
@@ -32,8 +33,9 @@ class VideoController extends BaseActivityController implements ActivityActionIn
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $course = $this->getCourseService()->getCourse($task['courseId']);
+        $type = $this->getActivityService()->getActivityConfig($activity['mediaType']);
 
-        $activity['ext'] = $this->prepareMediaUri($activity['ext']);
+        $activity['ext'] = $type->prepareMediaUri($activity['ext']);
         $context = $this->prepareContext($request, $course, $activity, $task);
 
         return $this->render('activity/video/preview.html.twig', array(
@@ -116,38 +118,6 @@ class VideoController extends BaseActivityController implements ActivityActionIn
         return $this->createService('Task:TaskResultService');
     }
 
-    /**
-     * get the information if the video can be watch.
-     *
-     * @param $task
-     */
-    protected function getWatchStatus($activity)
-    {
-        $user = $this->getCurrentUser();
-        $watchTime = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
-
-        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-        $watchStatus = array('status' => 'ok');
-        if ($course['watchLimit'] > 0 && $this->setting('magic.lesson_watch_limit')) {
-            //只有视频课程才限制观看时长
-            if (empty($course['watchLimit']) || 'video' !== $activity['mediaType']) {
-                return array('status' => 'ignore');
-            }
-
-            $watchLimitTime = $activity['length'] * $course['watchLimit'];
-            if (empty($watchTime)) {
-                return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
-            }
-            if ($watchTime < $watchLimitTime) {
-                return array('status' => 'ok', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
-            }
-
-            return array('status' => 'error', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
-        }
-
-        return $watchStatus;
-    }
-
     public function watchAction(Request $request, $courseId, $id)
     {
         $user = $this->getCurrentUser();
@@ -159,7 +129,8 @@ class VideoController extends BaseActivityController implements ActivityActionIn
 
         $isLimit = $this->setting('magic.lesson_watch_limit');
         if ($isLimit) {
-            $watchStatus = $this->getWatchStatus($activity);
+            $type = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+            $watchStatus = $type->getWatchStatus($activity);
 
             return $this->createJsonResponse($watchStatus);
         }
