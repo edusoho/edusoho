@@ -22,7 +22,8 @@ const createLintingRule = () => ({
 module.exports = {
     context: path.resolve(__dirname, '../../'),
     entry: {
-        'app-admin': './admin/main-admin.js'
+        'app-admin': './admin/main-admin.js',
+        common: ['vue', 'vuex', 'vue-router', 'axios']
     },
     output: {
         path: config.build.assetsRootAdmin,
