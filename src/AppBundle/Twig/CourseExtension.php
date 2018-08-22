@@ -6,6 +6,7 @@ use AppBundle\Util\AvatarAlert;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Util\CourseTitleUtils;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -55,6 +56,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_un_multi_courseset', array($this, 'isUnMultiCourseSet')),
             new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
             new \Twig_SimpleFunction('get_course_title', array($this, 'getCourseTitle')),
+            new \Twig_SimpleFunction('get_formated_course_title', array($this, 'getFormatedCourseTitle')),
             new \Twig_SimpleFunction('task_list_json_data', array($this, 'taskListJsonData')),
         );
     }
@@ -137,6 +139,11 @@ class CourseExtension extends \Twig_Extension
     public function getCourseTitle($course)
     {
         return empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
+    }
+
+    public function getFormatedCourseTitle($course)
+    {
+        return CourseTitleUtils::getDisplayedTitle($course);
     }
 
     public function getCourseDailyTasksNum($courseId)

@@ -174,6 +174,7 @@ file: File
 operation: Action
 file.download.start: File download
 file.download.finish: File download complete
+come.from: Come from
 date.year: Year
 date.month: Month
 date.day: Day
@@ -3199,7 +3200,6 @@ my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Discussion
 my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
 my.teaching.course_set.thread_empty: "student has not published any discussion in your course\n"
-my.teaching.testpaper.target_course: "from the course of \n"
 my.teaching.testpaper.course_task: Program
 my.teaching.testpaper.start_test_time: 'Test starts at'
 my.teaching.testpaper.checking: 'Is marking'
