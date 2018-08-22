@@ -23,6 +23,7 @@ class Trade extends AbstractResource
         return array(
             'isPaid' => 'paid' === $trade['status'],
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
+            'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $tradeSn)),
         );
     }
 
@@ -53,6 +54,7 @@ class Trade extends AbstractResource
                         'tradeSn' => $order['trade_sn'],
                         'isPaid' => true,
                         'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
+                        'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $order['trade_sn'])),
                     );
                 } else {
                     $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
@@ -109,7 +111,7 @@ class Trade extends AbstractResource
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
         if (!isset($params['app_pay'])) {
-            $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
+            $params['app_pay'] = isset($params['appPay']) && 'N' == $params['appPay'] ? 'N' : 'Y';
         }
         if (isset($params['payPassword'])) {
             $params['payPassword'] = \XXTEA::decrypt(base64_decode($params['payPassword']), 'EduSoho');
@@ -117,11 +119,6 @@ class Trade extends AbstractResource
 
         if (isset($params['unencryptedPayPassword'])) {
             $params['payPassword'] = $params['unencryptedPayPassword'];
-        }
-
-        if ('Alipay_LegacyWap' == $params['gateway']) {
-            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }
     }
 

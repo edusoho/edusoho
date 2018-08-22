@@ -229,7 +229,7 @@ EOF;
         $supportsTrailingSlash = $supportsRedirections && (!$methods || in_array('HEAD', $methods));
 
         if (!count($compiledRoute->getPathVariables()) && false !== preg_match('#^(.)\^(?P<url>.*?)\$\1#', $compiledRoute->getRegex(), $m)) {
-            if ($supportsTrailingSlash && substr($m['url'], -1) === '/') {
+            if ($supportsTrailingSlash && '/' === substr($m['url'], -1)) {
                 $conditions[] = sprintf("rtrim(\$pathinfo, '/') === %s", var_export(rtrim(str_replace('\\', '', $m['url']), '/'), true));
                 $hasTrailingSlash = true;
             } else {
@@ -321,6 +321,12 @@ EOF;
             $permission = '';
         }
 
+        if (method_exists($route, 'getH5')) {
+            $h5 = $route->getH5();
+        } else {
+            $h5 = false;
+        }
+
         // optimize parameters array
         if ($matches || $hostMatches) {
             $vars = array();
@@ -334,11 +340,11 @@ EOF;
             $code .= sprintf(
                 "            return \$this->mergeDefaults(array_replace(%s), %s);\n",
                 implode(', ', $vars),
-                str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_permission' => $permission)), true)));
+                str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_permission' => $permission, '_h5' => $h5)), true)));
         } elseif ($route->getDefaults()) {
-            $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name), array('_permission' => $permission)), true)));
+            $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name), array('_permission' => $permission, '_h5' => $h5)), true)));
         } else {
-            $code .= sprintf("            return array('_route' => '%s','_permission' => %s);\n", $name, var_export($permission, true));
+            $code .= sprintf("            return array('_route' => '%s','_permission' => %s,'_h5' => %s);\n", $name, var_export($permission, true), var_export($h5, true));
         }
         $code .= "        }\n";
 

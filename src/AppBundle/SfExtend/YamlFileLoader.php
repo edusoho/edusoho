@@ -28,7 +28,7 @@ use Biz\Role\Util\PermissionBuilder;
 class YamlFileLoader extends FileLoader
 {
     private static $availableKeys = array(
-        'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'permissions',
+        'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'permissions', 'h5',
     );
     private $yamlParser;
 
@@ -127,8 +127,9 @@ class YamlFileLoader extends FileLoader
         $methods = isset($config['methods']) ? $config['methods'] : array();
 
         $permissions = $this->getPermissions($name, $config);
+        $h5 = $this->getH5($name, $config);
 
-        $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $permissions);
+        $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $permissions, $h5);
         $collection->add($name, $route);
     }
 
@@ -153,6 +154,11 @@ class YamlFileLoader extends FileLoader
         }
 
         return $permissions;
+    }
+
+    protected function getH5($name, $config)
+    {
+        return isset($config['h5']) ? $config['h5'] : false;
     }
 
     /**
