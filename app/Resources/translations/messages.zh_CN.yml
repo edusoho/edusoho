@@ -8275,6 +8275,7 @@ log.action.classroom.recommend: 推荐班级
 log.action.classroom.cancel_recommend: 取消推荐
 log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭推荐
+log.action.classroom.update_head_teacher: 修改班主任
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -8406,6 +8407,12 @@ log.action.template.classroom.publish: 发布了<strong class="color-success">�
 log.action.template.classroom.close: 关闭了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.recommend: 推荐了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.cancel_recommend: 取消推荐了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.update_picture: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的封面
+log.action.template.classroom.update_head_teacher: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的班主任
+log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
+log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
+log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.delete: 删除了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.update: 修改了<strong class="color-success">分类</strong> 《%title%》
@@ -8558,6 +8565,8 @@ log.attr.classroom.middlePicture: 中图
 log.attr.classroom.largePicture: 大图
 log.attr.classroom.courseNum: 课程数
 log.attr.classroom.lessonNum: 课时数
+log.attr.classroom.price: 价格
+log.attr.classroom.service: 服务
 log.attr.open_course.title: 标题
 log.attr.open_course.about: 简介
 log.attr.open_course.lessonNum: 课时数

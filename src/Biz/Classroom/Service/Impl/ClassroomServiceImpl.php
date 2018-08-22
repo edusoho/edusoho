@@ -238,10 +238,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                         $course['id']
                     );
                     $newCourseIds[] = $newCourse['id'];
+
+                    $infoData = array(
+                        'classroomId' => $classroom['id'],
+                        'title' => $classroom['title'],
+                        'courseSetId' => $newCourse['id'],
+                        'courseSetTitle' => $newCourse['title'],
+                    );
+
                     $this->getLogService()->info(
                         'classroom',
                         'add_course',
-                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})"
+                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})",
+                        $infoData
                     );
                 }
 
@@ -624,13 +633,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteNotUsedPictures($classroom);
 
-        $this->getLogService()->info(
-            'classroom',
-            'update_picture',
-            "更新课程《{$classroom['title']}》(#{$classroom['id']})图片",
-            $fields
-        );
-
         return $this->updateClassroom($id, $fields);
     }
 
@@ -691,10 +693,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
+                $infoData = array(
+                    'classroomId' => $classroom['id'],
+                    'title' => $classroom['title'],
+                    'courseSetId' => $course['id'],
+                    'courseSetTitle' => $course['courseSetTitle'],
+                );
+
                 $this->getLogService()->info(
                     'classroom',
                     'delete_course',
-                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})"
+                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})",
+                    $infoData
                 );
 
                 $this->dispatchEvent(
@@ -789,10 +799,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
         $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
 
+        $infoData = array(
+            'classroomId' => $classroom['id'],
+            'title' => $classroom['title'],
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'classroom',
             'remove_student',
-            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            $infoData
         );
 
         $this->dispatchEvent(
@@ -998,10 +1016,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
             }
 
+            $infoData = array(
+                'classroomId' => $classroom['id'],
+                'title' => $classroom['title'],
+                'userId' => $user['id'],
+                'nickname' => $user['nickname'],
+                'remark' => $params['remark'],
+            );
+
             $this->getLogService()->info(
                 'classroom',
                 'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}"
+                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}",
+                $infoData
             );
             $this->commit();
 

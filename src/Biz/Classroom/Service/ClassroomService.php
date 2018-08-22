@@ -138,6 +138,13 @@ interface ClassroomService
     // 内部方法
     public function updateClassroomTeachers($id);
 
+    /**
+     * @param $id
+     * @param $data
+     *
+     * @return mixed
+     * @Log(module="classroom",action="update_picture",funcName="getClassroom",param="id")
+     */
     public function changePicture($id, $data);
 
     public function isCourseInClassroom($courseId, $classroomId);
@@ -172,6 +179,13 @@ interface ClassroomService
 
     public function becomeAssistant($classroomId, $userId);
 
+    /**
+     * @param $classroomId
+     * @param $userId
+     *
+     * @return mixed
+     * @Log(module="classroom",action="update_head_teacher",funcName="getClassroom",param="classroomId")
+     */
     public function addHeadTeacher($classroomId, $userId);
 
     public function updateAssistants($classroomId, $userIds);

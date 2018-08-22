@@ -155,6 +155,63 @@ class LogDataUtils
                         ),
                     ),
                 ),
+                'add_student' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'classroom_show',
+                            'param' => array(
+                                'id' => 'classroomId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                        '%nickname%' => 'nickname',
+                        '%remark%' => 'remark',
+                    ),
+                ),
+                'remove_student' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'classroom_show',
+                            'param' => array(
+                                'id' => 'classroomId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                        '%nickname%' => 'nickname',
+                    ),
+                ),
+                'add_course' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'classroom_show',
+                            'param' => array(
+                                'id' => 'classroomId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                        '%courseSetTitle%' => 'courseSetTitle',
+                    ),
+                ),
+                'delete_course' => array(
+                    'generateUrl' => array(
+                        '%url%' => array(
+                            'path' => 'classroom_show',
+                            'param' => array(
+                                'id' => 'classroomId',
+                            ),
+                        ),
+                    ),
+                    'getValue' => array(
+                        '%title%' => 'title',
+                        '%courseSetTitle%' => 'courseSetTitle',
+                    ),
+                ),
             ),
             'article' => array(
                 'create' => array(
