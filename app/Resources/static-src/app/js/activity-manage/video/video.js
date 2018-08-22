@@ -3,17 +3,16 @@ import SubtitleDialog from 'app/js/activity-manage/video/subtitle/dialog';
 
 export default class Video {
   constructor() {
-    this.context = window.ltc.getContext();
     this.showChooseContent();
     this.initStep2form();
+    this.isInitStep3from();
     this.autoValidatorLength();
     this.initfileChooser();
     this.hideSubtitleWidget();
-    this.initEvent();
   }
 
   hideSubtitleWidget() {
-    let subtitleWidget = $('#video-subtitle-form-group');
+    var subtitleWidget = $('#video-subtitle-form-group');
     $('[role="presentation"] a[href!="#import-video-panel"]').click(function () {
       subtitleWidget.show();
     });
@@ -29,8 +28,25 @@ export default class Video {
     });
   }
 
+  displayFinishCondition(source) {
+    console.log(source);
+    if (source === 'self') {
+      $('#finish-condition option[value=end]').removeAttr('disabled');
+      $('#finish-condition option[value=end]').text(Translator.trans('activity.video_manage.finish_detail'));
+    } else {
+      $('#finish-condition option[value=end]').text(Translator.trans('activity.video_manage.other_finish_detail'));
+      $('#finish-condition option[value=end]').attr('disabled', 'disabled');
+      $('#finish-condition option[value=time]').attr('selected', false);
+      $('#finish-condition option[value=time]').attr('selected', true);
+      $('.viewLength').removeClass('hidden');
+      this.initStep3from();
+    }
+  }
+
   initStep2form() {
-    $('#step2-form').validate({
+    var $step2_form = $('#step2-form');
+    var validator = $step2_form.data('validator');
+    $step2_form.validate({
       groups: {
         date: 'minute second'
       },
@@ -57,11 +73,33 @@ export default class Video {
         'ext[mediaSource]': Translator.trans('activity.video_manage.media_error_hint'),
       }
     });
+    $step2_form.data('validator', validator);
+  }
+
+  initStep3from() {
+    var $step3_forom = $('#step3-form');
+    var validator = $step3_forom.data('validator');
+    $step3_forom.validate({
+      rules: {
+        'ext[finishDetail]': {
+          required: true,
+          positive_integer: true,
+          max: 300,
+          min: 1,
+        }
+      },
+      messages: {
+        'ext[finishDetail]': {
+          required: Translator.trans('activity.video_manage.length_required_error_hint'),
+        }
+      }
+    });
+    $step3_forom.data('validator', validator);
   }
 
   autoValidatorLength() {
     $('.js-length').blur(function () {
-      let validator = $('#step2-form').data('validator')
+      let validator = $('#step2-form').data('validator');
       if (validator && validator.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
@@ -70,12 +108,20 @@ export default class Video {
     });
   }
 
-  initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+  isInitStep3from() {
+    // 完成条件是观看时长的情况
+    if ($('#finish-condition').children('option:selected').val() === 'time') {
+      $('.viewLength').removeClass('hidden');
+      this.initStep3from();
+    }
+
+    $('#finish-condition').on('change', (event) => {
+      if (event.target.value == 'time') {
+        $('.viewLength').removeClass('hidden');
+        this.initStep3from();
+      } else {
+        $('.viewLength').addClass('hidden');
+        $('input[name="ext[finishDetail]"]').rules('remove');
       }
     });
   }
@@ -85,13 +131,15 @@ export default class Video {
     //字幕组件
     const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
     const onSelectFile = file => {
+      this.displayFinishCondition(file.source);
       FileChooser.closeUI();
+
       let placeMediaAttr = (file) => {
         if (file.length !== 0 && file.length !== undefined) {
           let $minute = $('#minute');
           let $second = $('#second');
           let $length = $('#length');
-
+          
           let length = parseInt(file.length);
           let minute = parseInt(length / 60);
           let second = length % 60;

@@ -1,15 +1,10 @@
-{#{% extends 'layout.html.twig' %}#}
-{#{% do script(['libs/jquery-validation.js','libs/iframe-resizer-contentWindow.js',], 500) %}#}
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','libs/iframe-resizer-contentWindow.js'], 500) %}
 
-{#{% block body %}#}
-  {#<div class="tab-content" id="iframe-content">#}
-    {#<div class="tab-pane js-course-tasks-pane active js-step2-view">#}
-      {#{% block activity_content %}#}
-      {#{% endblock %}#}
-    {#</div>#}
-    {#<div class="tab-pane js-course-tasks-pane js-step3-view">#}
-      {#{% block activity_finish %}#}
-      {#{% endblock %}#}
-    {#</div>#}
-  {#</div>#}
-{#{% endblock %}#}
+{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %} {{ 'task-iframe-body' }}{% endblock %}
+{% block body %}
+  <div class="tab-content" id="iframe-content">
+    {% block activity_step %}
+    {% endblock %}
+  </div>
+{% endblock %}

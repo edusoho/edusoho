@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Page Title</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-<script src="/static-dist/libs/ltc-sdk-client.js"></script>
-<div class="tab-content" id="iframe-content">
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/perfect-scrollbar.js', 'videoactivity/js/finish/index.js']) %}
+{% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step3-form" >
       <div class=" form-group">
@@ -37,7 +29,4 @@
       </div>
     </form>
   </div>
-</div>
-<script src="/static-dist/textactivity/js/finish/index.js"></script>
-</body>
-</html>
+{% endblock %}
