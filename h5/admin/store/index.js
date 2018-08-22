@@ -4,7 +4,6 @@ import Vue from 'vue';
 import * as getters from './getters';
 import * as actions from './actions';
 import mutations from './mutations';
-import course from './modules/course';
 
 Vue.use(Vuex);
 
@@ -22,8 +21,5 @@ export default new Vuex.Store({
   state,
   getters,
   actions,
-  mutations,
-  modules: {
-    course
-  }
+  mutations
 });
