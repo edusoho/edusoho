@@ -10,8 +10,8 @@
           <img class='carousel-img' :src="part.image"/>
           <span v-show="!part.image"><i class="text-18">+</i> 添加图片</span>
         </van-uploader>
-        <div class="add-title f-left">标题：<input type="text" placeholder="请输入标题"></div>
-        <div class="f-left">链接：<button class="btn-gray btn-choose-course">选择课程</button></div>
+        <div class="add-title pull-left">标题：<input type="text" placeholder="请输入标题"></div>
+        <div class="pull-left">链接：<button class="btn-gray btn-choose-course">选择课程</button></div>
       </div>
       <div class="btn-gray btn-add-item" @click="addItem">添加一个轮播图</div>
     </div>
