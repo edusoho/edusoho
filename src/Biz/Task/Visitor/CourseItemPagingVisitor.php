@@ -74,7 +74,6 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
                 if (!isset($lessonInfos[$lessonId])) {
                     $lessonInfos[$lessonId] = array();
                 }
-
                 if (isset($lessonInfos[$lessonId]['isSingleTaskLesson'])) {
                     $lessonInfos[$lessonId]['isSingleTaskLesson'] = false;
                 } else {

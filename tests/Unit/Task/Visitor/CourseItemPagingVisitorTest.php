@@ -19,12 +19,7 @@ class CourseItemPagingVisitorTest extends BaseTestCase
         $this->assertNull($result[1]);
         $this->assertEmpty($result[0]);
 
-        $visitor = new CourseItemPagingVisitor($this->getBiz(), $courseId, array(
-            'direction' => 'down',
-            'limit' => 1,
-            'offsetSeq' => 1,
-            'offsetTaskId' => 1,
-        ));
+        $visitor = new CourseItemPagingVisitor($this->getBiz(), $courseId, array());
 
         for ($i = 0; $i < 5; ++$i) {
             $chapter = $this->getChapterDao()->create(array(
@@ -48,12 +43,13 @@ class CourseItemPagingVisitorTest extends BaseTestCase
                 'seq' => $i,
                 'createdUserId' => 1,
                 'activityId' => $activity['id'],
+                'status' => 'published',
             ));
         }
         $result = $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
 
-        $this->assertEquals(1, count($result[0]));
-        $this->assertEquals(1, $result[1]);
+        $this->assertEquals(5, count($result[0]));
+        $this->assertNull($result[1]);
     }
 
     public function testVisitNormalStrategy()
@@ -92,6 +88,7 @@ class CourseItemPagingVisitorTest extends BaseTestCase
                 'seq' => $i,
                 'createdUserId' => 1,
                 'activityId' => $activity['id'],
+                'status' => 'published',
             ));
         }
 
