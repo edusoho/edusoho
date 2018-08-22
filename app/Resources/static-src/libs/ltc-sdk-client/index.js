@@ -92,11 +92,9 @@ class LtcSDKClient {
 
     let uuid = this._getUuid();
 
-    this.emit('getApi', Object.assign(options,{uuid:uuid}));
-    this.once('returnApi', (results) => {
-      if (results.uuid === uuid) {
-        callback(results);
-      }
+    this.emit('getApi', Object.assign(options, {uuid:uuid}));
+    this.once(`returnApi_${uuid}`, (results) => {
+      callback(results);
     });
   }
 
@@ -111,6 +109,7 @@ class LtcSDKClient {
       self.messenger.once('initResourceList', function(data) {
         self.resource = data['resource'];
         self.context = data['context'];
+        document.documentElement.lang = self.context.lang;
         resolve();
       });
     });

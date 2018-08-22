@@ -109,7 +109,7 @@ exports.validate = function() {
 }
 
 
-exports.init_jquery = () => {
+exports.jquery = () => {
   $.fn.serializeObject = function()
   {
     let o = {};
