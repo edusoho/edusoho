@@ -48,6 +48,10 @@ class Editor {
       this.actionType == 'next' ? this._doNext() : this._postData();
     });
 
+    window.ltc.on('getContentData', (msg) => {
+      window.ltc.emitChild(msg.iframeId, 'returnContentData', this.contentData);
+    });
+
     window.ltc.on('returnFinishCondition', (msg) => {
       if (!msg.valid) {
         this.finishData = {};
