@@ -285,4 +285,20 @@ class ArrayToolkitTest extends BaseTestCase
             array_shift($result)
         );
     }
+
+    public function testIsTwoArraySameValues()
+    {
+        $compared = array('a', 'b', 'c');
+
+        $sameArr1 = array('b', 'c', 'a');
+        $sameArr2 = array('k1' => 'b', 'k2' => 'c', 'k3' => 'a');
+
+        $diffArr3 = array('a', 'b', 'c', 'd');
+        $diffArr4 = array('a', 'b', 'd');
+
+        $this->assertTrue(ArrayToolkit::isTwoArraySameValues($compared, $sameArr1));
+        $this->assertTrue(ArrayToolkit::isTwoArraySameValues($compared, $sameArr2));
+        $this->assertFalse(ArrayToolkit::isTwoArraySameValues($compared, $diffArr3));
+        $this->assertFalse(ArrayToolkit::isTwoArraySameValues($compared, $diffArr4));
+    }
 }
