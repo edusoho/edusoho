@@ -34,20 +34,18 @@ export default {
               type: 'url',
               // url: 'http://zyc.st.edusoho.cn'
             }
-          },
-          {
-            image: 'http://zyc.st.edusoho.cn/themes/jianmo/img/banner_app.jpg',
-            link: {
-              type: 'url',
-              // url: 'http://zyc.st.edusoho.cn'
-            }
           }
         ],
       }]
     }
   },
   created() {
-    Api.saveDraftDate()
+    Api.saveDraftDate({
+      query: {
+        portal: 'h5',
+        type : 'discovery'
+      }
+    })
     .then((data) => {
       console.log(data)
       this.parts = data;
