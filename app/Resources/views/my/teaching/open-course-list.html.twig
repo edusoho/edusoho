@@ -4,12 +4,12 @@
 {% endblock %}
 
 {% block btn %}
+  <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a>
   {% if course.status != 'published' %}
-    <a class="cd-btn cd-btn-ghost-default cd-mr16" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'course.preview.course'|trans }}</a>
+    <a class="cd-btn cd-btn-ghost-default" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'course.preview.course'|trans }}</a>
   {% else %}
-    <a class="cd-btn cd-btn-ghost-default cd-mr16" href="{{ path('open_course_show',{courseId:course.id}) }}" target="_blank">{{'my.learning.course.watch'|trans}}</a>
+    <a class="cd-btn cd-btn-ghost-default" href="{{ path('open_course_show',{courseId:course.id}) }}" target="_blank">{{'my.learning.course.watch'|trans}}</a>
   {% endif %}
-  <a class="cd-btn cd-btn-ghost-primary" href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a>
 {% endblock %}
 
 {% block coursesetTitle %}

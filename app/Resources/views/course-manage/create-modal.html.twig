@@ -49,7 +49,7 @@
           </label>
           <div class="col-sm-8 cd-radio-group mb0">
             {{ cd_radios('learnMode', { 'freeMode': 'course.teaching_plan.free'|trans, 'lockMode': 'course.teaching_plan.locked'|trans }, course.learnMode|default('freeMode')) }}
-            <div class="cd-text-sm cd-dark-assist">{{'course.teaching_plan.create.create_tips'|trans}}</div>
+            <div class="cd-text-sm course-mangae-info__tip">{{'course.teaching_plan.create.create_tips'|trans}}</div>
           </div>
         </div>
 
@@ -99,7 +99,7 @@
                     value="">
                   </div>
                 </div>
-                <div class="cd-text-sm cd-dark-assist course-mangae-info__tip js-info-tip ml0">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
+                <div class="cd-text-sm course-mangae-info__tip js-info-tip ml0">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
             </div>
           </div>
       </form>
