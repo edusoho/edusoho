@@ -15,58 +15,54 @@ class LtcSDKClient {
     this.loadResource = [];
   }
 
-  async loadCss(url = 'bootstrap-css') {
-    await this._initResourceList();
+  createScript(value, resolve, reject) {
+    let script = document.createElement('script');
+    script.src = this.resource[value];
+    script.addEventListener('load', () => {
+      if (resources[value]) {
+        resources[value]();
+      }
+      resolve(value);
+      this.loadResource[value] = true;
+    }, false);
 
+    script.addEventListener('error', function() {
+      reject(value);
+    }, false);
+
+    document.body.appendChild(script);
+  }
+
+  createCss(value, resolve) {
     let link = document.createElement('link');
     link.type = 'text/css';
     link.rel = 'stylesheet';
-    link.href = this.resource[url];
+    link.href = this.resource[value];
     let head = document.getElementsByTagName('head')[0];
     head.appendChild(link);
+
+    resolve();
   }
 
   async load(...urls) {
     let self = this;
-    await self._initResourceList();
+    await self._init();
     for (let value of urls) {
       await new Promise(function(resolve, reject) {
         if (self.loadResource[value]) {
           resolve(value);
         }
-
-        let script = document.createElement('script');
-        script.src = self.resource[value];
-        script.addEventListener('load', function() {
-          if (resources[value]) {
-            resources[value]();
-          }
-          resolve(value);
-          self.loadResource[value] = true;
-        }, false);
-
-        script.addEventListener('error', function() {
-          reject(value);
-        }, false);
-
-        document.body.appendChild(script);
+        value.indexOf('.css') >=0 ?  self.createCss(value, resolve) : self.createScript(value, resolve, reject);
       });
     }
   };
 
-  config(options) {
-    let DEFAULTS = {
-      apiList: [],
-      appId: null,
-    }
-
-    Object.assign(this.options, DEFAULTS, options);
-  
-    return this;
+  getContext() {
+    return this.serverData['context'];
   }
 
-  getContext() {
-    return this.context;
+  getEditorConfig() {
+    return this.serverData['editorConfig'];
   }
 
   once(eventName, args={}) {
@@ -92,25 +88,24 @@ class LtcSDKClient {
 
     let uuid = this._getUuid();
 
-    this.emit('getApi', Object.assign(options,{uuid:uuid}));
-    this.once('returnApi', (results) => {
-      if (results.uuid === uuid) {
-        callback(results);
-      }
+    this.emit('getApi', Object.assign(options, {uuid:uuid}));
+    this.once(`returnApi_${uuid}`, (results) => {
+      callback(results);
     });
   }
 
-  async _initResourceList() {
+  async _init() {
     let self = this;
     return new Promise(function(resolve, reject) {
-      if (self.resource) {
+      if (self.serverData) {
         resolve();
       }
 
       self.messenger.sendToParent('init');
       self.messenger.once('initResourceList', function(data) {
+        self.serverData = data;
         self.resource = data['resource'];
-        self.context = data['context'];
+        document.documentElement.lang = data['context']['lang'];
         resolve();
       });
     });

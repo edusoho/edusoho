@@ -4,7 +4,7 @@ import EsMessenger from 'jay-post-message';
 class LtcSDKServer {
   constructor() {
     this.options = {};
-    this.resource = $.parseJSON($('#ltc-source-list').text());
+    this.resource = this._getResource();
     this.childrenList = this.getChildrenList();
 
     this.messenger = new EsMessenger({
@@ -15,6 +15,14 @@ class LtcSDKServer {
     });
 
     this.event();
+  }
+
+  _getResource() {
+    let resource = $.parseJSON($('#ltc-source-list').text());
+    resource.context.lang = document.documentElement.lang;
+    resource.context.csrf = $('meta[name=csrf-token]').attr('content');
+
+    return resource;
   }
 
   getChildrenList() {
@@ -56,8 +64,7 @@ class LtcSDKServer {
 
       this.getApi(options)[apiName](msg).then(response => {
         let results = response.data;
-        results.uuid = msg.uuid;
-        this.emitChild(msg.iframeId, "returnApi", results);
+        this.emitChild(msg.iframeId, `returnApi_${msg.uuid}`, results);
       }, error => {
         console.log(error);
       });
