@@ -1,0 +1,12 @@
+config:
+    course:
+        course_manage:
+            create:
+                course_manage_info:
+                    templateParam:
+                        %url%:
+                            type: url
+                            path: course_set_show
+                            param:
+                                id: id
+                        

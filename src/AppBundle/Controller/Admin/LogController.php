@@ -54,10 +54,29 @@ class LogController extends BaseController
     {
         $log = $request->query->get('log');
         $data = $log['data'];
+        $modalShowFields = array();
         $showData = array();
 
+        $transConfigs = LogDataUtils::getLogConfig();
+        if (array_key_exists($log['module'], $transConfigs)) {
+            if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
+                $transConfig = $transConfigs[$log['module']][$log['action']];
+
+                if (array_key_exists('modalField', $transConfig)) {
+                    $modalShowFields = $transConfig['modalField'];
+                }
+            }
+        }
+
+        if ('all' == $modalShowFields) {
+            $modalShowFields = array();
+            foreach ($data as $message => $fieldChange) {
+                $modalShowFields[] = $message;
+            }
+        }
+
         foreach ($data as $message => $fieldChange) {
-            if (is_array($fieldChange)) {
+            if (is_array($fieldChange) && in_array($message, $modalShowFields)) {
                 $key = LogDataUtils::trans($message, $log['module'], $log['action']);
 
                 $fieldChange = self::getStrChangeFiled($log['module'], $log['action'], $fieldChange, $message);
@@ -85,53 +104,55 @@ class LogController extends BaseController
 
     private function logsSetUrlParamsJson($logs)
     {
-        $transConfigs = LogDataUtils::getTransConfig();
-        $getValueConfig = LogDataUtils::getValueConfig();
+//        $transConfigs = LogDataUtils::getLogConfig();
+        $transConfigs = LogDataUtils::getYmlConfig();
+        $getValueDefaultConfig = LogDataUtils::getLogDefaultConfig();
         foreach ($logs as &$log) {
             $transJsonData = array();
             $logData = $log['data'];
             $log['urlParamsJson'] = array();
-            $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
+            $log['shouldShowModal'] = false;
             $log['shouldShowTemplate'] = true;
 
-            $getValue = $getValueConfig;
-            $getGenerateUrl = array();
+            $templateParam = $getValueDefaultConfig;
 
             if (array_key_exists($log['module'], $transConfigs)) {
                 if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
                     $transConfig = $transConfigs[$log['module']][$log['action']];
-                    if (!empty($transConfig['getValue'])) {
-                        $getValue = $transConfig['getValue'];
-                    }
 
-                    if (!empty($transConfig['generateUrl'])) {
-                        $getGenerateUrl = $transConfig['generateUrl'];
+                    if (array_key_exists('templateParam', $transConfig)) {
+                        $templateParam = $transConfig['templateParam'];
+                    }
+                    if (array_key_exists('modalField', $transConfig)) {
+                        $log['shouldShowModal'] = true;
                     }
                 }
             }
 
-            foreach ($getValue as $key => $value) {
-                $transJsonDataValue = $this->getArrayValueByConventKey($value, $logData);
-                if (false === $transJsonDataValue) {
-                    $log['shouldShowTemplate'] = false;
-                    $log['shouldShowModal'] = false;
-                    continue;
-                }
-                $transJsonData[$key] = $transJsonDataValue;
-            }
-
-            foreach ($getGenerateUrl as $key => $urlConfig) {
-                $urlParam = array();
-                foreach ($urlConfig['param'] as $param => $value) {
-                    $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
-                    if (false === $urlParamValue) {
+            foreach ($templateParam as $key => $paramConfig) {
+                if (!is_array($paramConfig) || !array_key_exists('type', $paramConfig)) {
+                    $transJsonDataValue = $this->getArrayValueByConventKey($paramConfig, $logData);
+                    if (false === $transJsonDataValue) {
                         $log['shouldShowTemplate'] = false;
                         $log['shouldShowModal'] = false;
-                        continue 2;
+                        continue;
                     }
-                    $urlParam[$param] = $urlParamValue;
+                    $transJsonData[$key] = $transJsonDataValue;
+                } else {
+                    if ('url' == $paramConfig['type']) {
+                        $urlParam = array();
+                        foreach ($paramConfig['param'] as $param => $value) {
+                            $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
+                            if (false === $urlParamValue) {
+                                $log['shouldShowTemplate'] = false;
+                                $log['shouldShowModal'] = false;
+                                continue 2;
+                            }
+                            $urlParam[$param] = $urlParamValue;
+                        }
+                        $transJsonData[$key] = $this->generateUrl($paramConfig['path'], $urlParam);
+                    }
                 }
-                $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
             }
 
             $log['urlParamsJson'] = $transJsonData;

@@ -4,16 +4,108 @@ namespace Biz\System\Util;
 
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Course\Util\CourseTitleUtils;
+use AppBundle\Common\PluginVersionToolkit;
+use Symfony\Component\Yaml\Yaml;
 
 class LogDataUtils
 {
-    public static function getTransConfig()
+    public static function getYmlConfig()
+    {
+        $config = array();
+
+        $paths = self::getPermissionConfig();
+
+        $permissions = array();
+        foreach ($paths as $path) {
+            if (!file_exists($path)) {
+                continue;
+            }
+            $menus = Yaml::parse(file_get_contents($path));
+            if (empty($menus)) {
+                continue;
+            }
+
+            $menus = self::loadPermissionsFromConfig($menus);
+            $permissions = array_merge($permissions, $menus);
+        }
+
+        if (array_key_exists('config', $permissions)) {
+            $config = $permissions['config'];
+        }
+
+        return $config;
+    }
+
+    protected function loadPermissionsFromConfig($parents)
+    {
+        $menus = array();
+
+        foreach ($parents as $key => $value) {
+            $value['code'] = $key;
+            $menus[$key] = $value;
+
+            if (isset($value['children'])) {
+                $childrenMenu = $value['children'];
+
+                unset($value['children']);
+
+                foreach ($childrenMenu as $childKey => $childValue) {
+                    $childValue['parent'] = $key;
+                    $menus = array_merge($menus, $this->loadPermissionsFromConfig(array($childKey => $childValue)));
+                }
+            }
+        }
+
+        return $menus;
+    }
+
+    private function getPermissionConfig()
+    {
+        $configPaths = array();
+
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+        $files = array(
+            $rootDir.'/../src/AppBundle/Resources/config/log_modules.yml',
+            $rootDir.'/../src/CustomBundle/Resources/config/log_modules.yml',
+        );
+
+        foreach ($files as $filepath) {
+            if (is_file($filepath)) {
+                $configPaths[] = $filepath;
+            }
+        }
+
+        $count = self::getAppService()->findAppCount();
+        $apps = self::getAppService()->findApps(0, $count);
+
+        foreach ($apps as $app) {
+            if ('plugin' != $app['type']) {
+                continue;
+            }
+
+            if ('MAIN' !== $app['code'] && $app['protocol'] < 3) {
+                continue;
+            }
+
+            if (!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
+                continue;
+            }
+
+            $code = ucfirst($app['code']);
+            $configPaths[] = "{$rootDir}/../plugins/{$code}Plugin/Resources/config/log_modules.yml";
+        }
+
+        return $configPaths;
+    }
+
+    public static function getLogConfig()
     {
         $config = array(
             'course' => array(
                 'create' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_set_show',
                             'param' => array(
                                 'id' => 'id',
@@ -22,18 +114,21 @@ class LogDataUtils
                     ),
                 ),
                 'update' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_set_show',
                             'param' => array(
                                 'id' => 'id',
                             ),
                         ),
                     ),
+                    'modalField' => 'all',
                 ),
                 'create_course' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => 'id',
@@ -42,47 +137,51 @@ class LogDataUtils
                     ),
                 ),
                 'update_course' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => 'id',
                             ),
                         ),
                     ),
+                    'modalField' => 'all',
+                ),
+                'update_thread' => array(
+                    'modalField' => 'all',
                 ),
                 'add_student' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => 'courseId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
                         '%title%' => 'title',
                         '%nickname%' => 'nickname',
                         '%remark%' => 'remark',
                     ),
                 ),
                 'remove_student' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => 'courseId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
                         '%title%' => 'title',
                         '%nickname%' => 'nickname',
                     ),
                 ),
                 'publish' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_set_show',
                             'param' => array(
                                 'id' => 'id',
@@ -91,8 +190,9 @@ class LogDataUtils
                     ),
                 ),
                 'close' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_set_show',
                             'param' => array(
                                 'id' => 'id',
@@ -101,21 +201,21 @@ class LogDataUtils
                     ),
                 ),
                 'create_lesson' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => '0.courseId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
-                        '%title%' => '0.title',
+                        '%title%' => 'title',
                     ),
                 ),
                 'add_task' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => 'courseId',
@@ -124,8 +224,9 @@ class LogDataUtils
                     ),
                 ),
                 'update_teacher' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'course_show',
                             'param' => array(
                                 'id' => 'id',
@@ -136,8 +237,9 @@ class LogDataUtils
             ),
             'classroom' => array(
                 'create' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'id',
@@ -146,68 +248,66 @@ class LogDataUtils
                     ),
                 ),
                 'update' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'id',
                             ),
                         ),
                     ),
+                    'modalField' => 'all',
                 ),
                 'add_student' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'classroomId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
                         '%title%' => 'title',
                         '%nickname%' => 'nickname',
                         '%remark%' => 'remark',
                     ),
                 ),
                 'remove_student' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'classroomId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
                         '%title%' => 'title',
                         '%nickname%' => 'nickname',
                     ),
                 ),
                 'add_course' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'classroomId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
                         '%title%' => 'title',
                         '%courseSetTitle%' => 'courseSetTitle',
                     ),
                 ),
                 'delete_course' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'classroom_show',
                             'param' => array(
                                 'id' => 'classroomId',
                             ),
                         ),
-                    ),
-                    'getValue' => array(
                         '%title%' => 'title',
                         '%courseSetTitle%' => 'courseSetTitle',
                     ),
@@ -215,8 +315,9 @@ class LogDataUtils
             ),
             'article' => array(
                 'create' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'article_detail',
                             'param' => array(
                                 'id' => 'id',
@@ -225,8 +326,9 @@ class LogDataUtils
                     ),
                 ),
                 'update' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'article_detail',
                             'param' => array(
                                 'id' => 'id',
@@ -235,8 +337,9 @@ class LogDataUtils
                     ),
                 ),
                 'update_property' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'article_detail',
                             'param' => array(
                                 'id' => 'id',
@@ -245,8 +348,9 @@ class LogDataUtils
                     ),
                 ),
                 'cancel_property' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'article_detail',
                             'param' => array(
                                 'id' => 'id',
@@ -257,8 +361,9 @@ class LogDataUtils
             ),
             'open_course' => array(
                 'create_course' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'open_course_show',
                             'param' => array(
                                 'courseId' => 'id',
@@ -267,18 +372,21 @@ class LogDataUtils
                     ),
                 ),
                 'update_course' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'open_course_show',
                             'param' => array(
                                 'courseId' => 'id',
                             ),
                         ),
                     ),
+                    'modalField' => 'all',
                 ),
                 'add_lesson' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'open_course_show',
                             'param' => array(
                                 'courseId' => 'courseId',
@@ -289,8 +397,9 @@ class LogDataUtils
             ),
             'group' => array(
                 'create_thread' => array(
-                    'generateUrl' => array(
+                    'templateParam' => array(
                         '%url%' => array(
+                            'type' => 'url',
                             'path' => 'group_thread_show',
                             'param' => array(
                                 'id' => 'groupId',
@@ -300,21 +409,112 @@ class LogDataUtils
                     ),
                 ),
             ),
+            'thread' => array(
+                'update' => array(
+                    'modalField' => 'all',
+                ),
+            ),
             'user' => array(
                 'password-changed' => array(
-                    'getValue' => array(
-                        '%title%' => 'email',
+                    'templateParam' => array(
+                        '%title%' => 'title',
                     ),
                 ),
                 'pay-password-changed' => array(
-                    'getValue' => array(
-                        '%title%' => 'email',
+                    'templateParam' => array(
+                        '%title%' => 'title',
                     ),
                 ),
                 'password-security-answers' => array(
-                    'getValue' => array(
-                        '%title%' => 'email',
+                    'templateParam' => array(
+                        '%title%' => 'title',
                     ),
+                ),
+                'verifiedMobile-changed' => array(
+                    'modalField' => 'all',
+                ),
+                'email-changed' => array(
+                    'modalField' => 'all',
+                ),
+                'update' => array(
+                    'modalField' => 'all',
+                ),
+                'nickname_change' => array(
+                    'modalField' => 'all',
+                ),
+                'change_role' => array(
+                    'modalField' => 'all',
+                ),
+            ),
+            'system' => array(
+                'update_settings.site' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.theme' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.cloud_email_crm' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.mailer' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.esBar' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.default' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.security' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.login_bind' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.user_partner' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.auth' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.course' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.message' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.course_default' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.questions' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.classroom' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.article' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.group' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.invite' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.payment' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.coin' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.refund' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.blacklist_ip' => array(
+                    'modalField' => 'all',
+                ),
+                'update_settings.post_num_rules' => array(
+                    'modalField' => 'all',
                 ),
             ),
         );
@@ -322,7 +522,7 @@ class LogDataUtils
         return $config;
     }
 
-    public static function getValueConfig()
+    public static function getLogDefaultConfig()
     {
         $config = array(
             '%title%' => array(
@@ -337,65 +537,6 @@ class LogDataUtils
         );
 
         return $config;
-    }
-
-    public static function shouldShowModal($module, $action)
-    {
-        $showModals = array(
-            'course' => array(
-                'update',
-                'update_course',
-                'update_thread',
-            ),
-            'classroom' => array(
-                'update',
-            ),
-            'open_course' => array(
-                'update_course',
-            ),
-            'thread' => array(
-                'update',
-            ),
-            'user' => array(
-                'verifiedMobile-changed',
-                'email-changed',
-                'update',
-                'nickname_change',
-                'change_role',
-            ),
-            'system' => array(
-                'update_settings.site',
-                'update_settings.theme',
-                'update_settings.cloud_email_crm',
-                'update_settings.mailer',
-                'update_settings.esBar',
-                'update_settings.default',
-                'update_settings.security',
-                'update_settings.login_bind',
-                'update_settings.user_partner',
-                'update_settings.auth',
-                'update_settings.course',
-                'update_settings.message',
-                'update_settings.course_default',
-                'update_settings.questions',
-                'update_settings.classroom',
-                'update_settings.article',
-                'update_settings.group',
-                'update_settings.invite',
-                'update_settings.payment',
-                'update_settings.coin',
-                'update_settings.refund',
-                'update_settings.blacklist_ip',
-                'update_settings.post_num_rules',
-            ),
-        );
-        if (array_key_exists($module, $showModals)) {
-            if (in_array($action, $showModals[$module])) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static function trans($message, $module, $action)
@@ -577,5 +718,15 @@ class LogDataUtils
         }
 
         return $password;
+    }
+
+    protected function getAppService()
+    {
+        return self::getServiceKernel()->createService('CloudPlatform:AppService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
