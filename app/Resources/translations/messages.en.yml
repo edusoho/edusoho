@@ -5591,7 +5591,7 @@ admin.login_connect.verifcation_code: 'Validation code'
 admin.login_connect.verifcation_code.help_block: 'When applying for third-party logon interface, you will be asked to verify your site domain name. Please copy and paste the validation code here, then submit.'
 admin.user_center.admin_sync_btn: 'Administrator account synchronization'
 admin.user_center.user_center.title: 'User Center'
-admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1'
+admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1/X3.2'
 admin.user_center.user_center.uc_connect.help_block: 'Tip: Due to discuz use mysql_connect connection, high version php has been abandoned, it is recommended not to fill in mysql, Leave it blank'
 admin.user_center.user_center.config_error: 'The configuration file <strong>%path%</strong> not be writable，please open this file and correct it.'
 admin.user_center.Configration: Configuration
