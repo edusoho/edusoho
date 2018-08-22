@@ -68,11 +68,7 @@ class CourseItemPagingVisitorTest extends BaseTestCase
     public function testStartPaging()
     {
         $courseId = 1;
-        $visitor = new CourseItemPagingVisitor($this->getBiz(), $courseId, array(
-            'direction' => 'up',
-            'limit' => 1,
-            'offsetSeq' => 1,
-        ));
+        $visitor = new CourseItemPagingVisitor($this->getBiz(), $courseId, array());
 
         for ($i = 0; $i < 5; ++$i) {
             $chapter = $this->getChapterDao()->create(array(
@@ -100,8 +96,8 @@ class CourseItemPagingVisitorTest extends BaseTestCase
         }
 
         $result = $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
-        $this->assertEquals(1, count($result[0]));
-        $this->assertEquals(1, $result[1]);
+        $this->assertEquals(5, count($result[0]));
+        $this->assertNull($result[1]);
         $this->assertEquals(1, $result[0][0]['id']);
     }
 
