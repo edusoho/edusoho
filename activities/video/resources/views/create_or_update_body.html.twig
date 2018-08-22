@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js','app/js/activity-manage/video/index.js']) %}
+{% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'videoactivity/js/create/index.js']) %}
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form" >
@@ -48,7 +48,7 @@
           </div>
           <div class="col-sm-offset-2 help-block">
             <p style="margin-left:10px;">
-              {{'course.plan_task.activity_manage.video.mcode_convert_tips'|trans|raw}}
+              {{'course.plan_task.activity_manage.video.code_convert_tips'|trans|raw}}
             </p>
           </div>
 
@@ -57,5 +57,4 @@
       {% endif %}
     </form>
   </div>
-  {#<script src="/static-dist/videoactivity/js/create/index.js"></script>#}
 {% endblock %}
