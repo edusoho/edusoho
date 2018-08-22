@@ -239,6 +239,7 @@ file: 文件
 operation: 操作
 file.download.start: 文件下载中
 file.download.finish: 文件下载完成
+come.from: 来自
 
 #日期通用
 date.year: 年
@@ -3823,7 +3824,6 @@ my.teaching.course_set.question_empty: >
 my.teaching.course_set.thread_empty: >
   您的课程中还没有学员发表话题...
 
-my.teaching.testpaper.target_course: 来自课程
 my.teaching.testpaper.course_task: 计划
 my.teaching.testpaper.start_test_time: 开始考试时间
 my.teaching.testpaper.checking: 正在批阅
@@ -4150,7 +4150,6 @@ my.learning.homework.check_finish: 已批阅
 my.learning.homework.check_reviewing: 批阅中
 my.learning.homework.target_course: >
   来自课程<a class="link-primary" href="%showUrl%" target="_blank">《%courseTitle%》</a>
-my.learning.homework.course_plan: 计划
 my.learning.homework.begin_time: 开始时间
 my.learning.homework.checking: 正在批阅
 my.learning.homework.right_question_count: >
