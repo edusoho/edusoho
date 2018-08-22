@@ -3,6 +3,7 @@
     "getCourse",
     "getAnnouncement",
     "getCourseDraft",
-    "saveCourseDraft"
+    "saveCourseDraft",
+    "getActivity"
   ]
 }

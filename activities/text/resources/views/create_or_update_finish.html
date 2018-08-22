@@ -13,14 +13,16 @@
         <form class="form-horizontal" id="step3-form" >
             <div class=" form-group">
                 <div class="col-sm-2 control-label">
-                    <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+                    <label for="condition-select">
+                      {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
+                    </label>
                 </div>
                 <div class="col-sm-4 form-control-static">
                     {{'course.plan_task.activity_manage.doc.watch_time'|trans}}
                     <input type="hidden" id="condition-select" name="finishType">
                 </div>
             </div>
-            <div class=" form-group" id="condition-group">
+            <div class="form-group" id="condition-group">
                 <div class="col-sm-2 control-label">
                     <label for="finishDetail">{{ 'course.plan_task.activity_manage.doc.watch_time_at_least'|trans }}</label>
                 </div>

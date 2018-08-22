@@ -19,6 +19,11 @@
       "name": "saveCourseDraft",
       "method": "POST",
       "path": "/api/course_draft"
+    },
+    {
+      "name": "getActivity",
+      "method": "GET",
+      "path": "/api/activities/:id"
     }
   ]
 }
