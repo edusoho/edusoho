@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function QiQiuYun\SDK\json_decode;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ActivityExtension extends \Twig_Extension
 {
@@ -61,15 +62,20 @@ class ActivityExtension extends \Twig_Extension
         return json_encode(array(
             'resource' => array(
                 'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
-                'codeage-design-css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
-                'codeage-design-js' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
+                'codeage-design.css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
+                'codeage-design' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
                 'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
-                'bootstrap-css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
-                'bootstrap-js' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
+                'bootstrap.css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
+                'bootstrap' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
                 'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
                 'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
             ),
             'context' => $context,
+            'editorConfig' => array(
+                'filebrowserImageUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUpoadToken('course'))),
+                'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload',  array('token' => $this->getWebExtension()->makeUpoadToken('course', 'flash'))),
+                'imageDownloadUrl' => $this->generateUrl('editor_download',  array('token' => $this->getWebExtension()->makeUpoadToken('course')))
+            ),
             // 'uploader' => $cdn.'asdf',
             // 'player' => 'a',
         ));
@@ -177,5 +183,15 @@ class ActivityExtension extends \Twig_Extension
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('web.twig.extension');
+    }
+
+    protected function generateUrl($route, $parameters) 
+    {
+        return $this->container->get('router')->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>text finish</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -14,23 +14,27 @@
             <div class=" form-group">
                 <div class="col-sm-2 control-label">
                     <label for="condition-select">
-                      {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
+                      完成条件
                     </label>
                 </div>
                 <div class="col-sm-4 form-control-static">
-                    {{'course.plan_task.activity_manage.doc.watch_time'|trans}}
+                    观看时长
                     <input type="hidden" id="condition-select" name="finishType">
                 </div>
             </div>
             <div class="form-group" id="condition-group">
                 <div class="col-sm-2 control-label">
-                    <label for="finishDetail">{{ 'course.plan_task.activity_manage.doc.watch_time_at_least'|trans }}</label>
+                    <label for="finishDetail">
+                      至少观看
+                    </label>
                 </div>
                 <div class="col-sm-4">
-                    <input id="finishDetail" class="form-control" type="text" name="finishDetail" value="{{ activity.ext.finishDetail|default(1) }}">
+                    <input id="finishDetail" class="form-control" type="text" name="finishDetail" value="">
                 </div>
                 <div class="col-sm-4">
-                    <p class="form-control-static">{{'site.date.minute'|trans}}</p>
+                    <p class="form-control-static">
+                      分
+                    </p>
                 </div>
             </div>
         </form>

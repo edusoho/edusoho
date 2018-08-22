@@ -126,4 +126,23 @@ exports.jquery = () => {
     });
     return o;
   };
+
+  $(document).ajaxSend(function (a, b, c) {
+    if (c.type === 'POST') {
+      b.setRequestHeader('X-CSRF-Token', window.ltc.getContext().csrf);
+    }
+  });
 };
+
+exports.editor = () => {
+  window.ltc.editor = (value) => {
+    $(`#${value}`).data('imageDownloadUrl', window.ltc.getEditorConfig()['imageDownloadUrl'])
+    
+    return CKEDITOR.replace(value, Object.assign({
+      toolbar: 'Task',
+      fileSingleSizeLimit: 2,
+      allowedContent: true,
+      height: 300,
+    }, window.ltc.getEditorConfig()));
+  }
+}

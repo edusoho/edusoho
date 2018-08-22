@@ -1,5 +1,4 @@
-window.ltc.loadCss();
-var load = window.ltc.load('jquery', 'validate', 'editor');
+var load = window.ltc.load('bootstrap.css', 'jquery', 'validate', 'editor');
 load.then(function(){
   var context = window.ltc.getContext();
   var contentCache = '',
@@ -42,15 +41,7 @@ load.then(function(){
   }
 
   function _init() {
-    editor = CKEDITOR.replace('text-content-field', {
-      toolbar: 'Task',
-      fileSingleSizeLimit: 2,
-      filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
-      filebrowserFlashUploadUrl: $content.data('flashUploadUrl'),
-      allowedContent: true,
-      height: 300,
-    });
-    
+    editor = window.ltc.editor('text-content-field');
     validate = $('#step2-form').validate({
       rules: {
         title: {
@@ -90,10 +81,9 @@ load.then(function(){
           id: context.activityId
         }
       }, function(result) {
-        console.log('getActivity');
-        console.log(result);
-        editor.setData(result['content']);
         $('#title').val(result['title']);
+        $content.val(result['content']);
+        editor.setData(result['content']);
       });
     }
     
@@ -104,8 +94,6 @@ load.then(function(){
         id: draftId
       }
     }, function(result){
-      console.log('getCourseDraft');
-      console.log(result);
       if (result.content) {
         draftId = result.id;
         $('.js-continue-edit').removeClass('hidden');

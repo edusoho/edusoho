@@ -20,6 +20,7 @@ class LtcSDKServer {
   _getResource() {
     let resource = $.parseJSON($('#ltc-source-list').text());
     resource.context.lang = document.documentElement.lang;
+    resource.context.csrf = $('meta[name=csrf-token]').attr('content');
 
     return resource;
   }
