@@ -53,8 +53,9 @@ class LogReader
                 $log['postfix'] = $annotation->getPostfix();
                 $log['funcName'] = $annotation->getFuncName();
                 $log['funcParam'] = $funcParam;
-                if (!empty($annotation->getServiceName())) {
-                    $log['service'] = $annotation->getServiceName();
+                $serviceName = $annotation->getServiceName();
+                if (!empty($serviceName)) {
+                    $log['service'] = $serviceName;
                 } else {
                     $log['service'] = $nameSpaceKey.':'.$name;
                 }
