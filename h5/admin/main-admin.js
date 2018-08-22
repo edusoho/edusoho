@@ -53,9 +53,15 @@ Api.getSettings({
     type: 'wap'
   }
 }).then(res => {
-  if (!res.enabled) {
+  if (parseInt(res.version, 10) !== 2) {
     // 如果没有开通微网校，则跳回老版本网校 TODO
-    window.location.href = axios.defaults.baseURL || 'http://zyc.st.edusoho.cn/';
+    const hashStr = location.hash;
+    const getPathNameByHash = hash => {
+      const hasQuery = hash.indexOf('?');
+      if (hasQuery === -1) return hash.slice(1);
+      return hash.match(/#.*\?/g)[0].slice(1, -1);
+    };
+    window.location.href = location.origin + getPathNameByHash(hashStr);
     return;
   }
 
