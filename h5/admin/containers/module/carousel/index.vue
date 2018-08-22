@@ -46,6 +46,16 @@ export default {
       }]
     }
   },
+  created() {
+    Api.saveDraftDate()
+    .then((data) => {
+      console.log(data)
+      this.parts = data;
+    })
+    .catch((err) => {
+      console.log(err, 'error');
+    });
+  },
   methods: {
     onRead(file) {
       this.parts[0].data[0].image = file.content;

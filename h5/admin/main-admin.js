@@ -48,29 +48,10 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 
-Api.getSettings({
-  query: {
-    type: 'wap'
-  }
-}).then(res => {
-  if (parseInt(res.version, 10) !== 2) {
-    // 如果没有开通微网校，则跳回老版本网校 TODO
-    const hashStr = location.hash;
-    const getPathNameByHash = hash => {
-      const hasQuery = hash.indexOf('?');
-      if (hasQuery === -1) return hash.slice(1);
-      return hash.match(/#.*\?/g)[0].slice(1, -1);
-    };
-    window.location.href = location.origin + getPathNameByHash(hashStr);
-    return;
-  }
-
-  new Vue({
-    el: '#app-admin',
-    router,
-    store,
-    components: { Admin },
-    template: '<Admin/>'
-  });
+new Vue({
+  el: '#app-admin',
+  router,
+  store,
+  components: { Admin },
+  template: '<Admin/>'
 });
-

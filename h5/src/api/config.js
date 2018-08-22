@@ -137,6 +137,11 @@ const config = [
     name: 'getLiveReplayUrl',
     url: '/lessons/{taskId}/replay',
     method: 'GET'
+  }, {
+    // 后台配置保存草稿数据
+    name: 'saveDraftDate',
+    url: '/pages/h5/settings/{type}/draft',
+    method: 'GET'
   }
 ];
 
