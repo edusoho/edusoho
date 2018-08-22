@@ -42,8 +42,9 @@ class ActivityExtension extends \Twig_Extension
         );
     }
 
-    public function findLtcSource($taskId)
+    public function findLtcSource($courseId, $taskId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
         $cdnSetting = $this->getSettingService()->get('cdn');
         $cdn = '';
         if (!empty($cdnSetting) && !empty($cdnSetting['enabled'])) {
@@ -51,10 +52,10 @@ class ActivityExtension extends \Twig_Extension
         };
         $task = $this->getTaskService()->getTask($taskId);
         $context = array(
-            'courseId' => $task['courseId'],
-            'courseSetId' => $task['fromCourseSetId'],
-            'taskId' => $task['id'],
-            'activityId' => $task['activityId'],
+            'courseId' => $course['id'],
+            'courseSetId' => $course['courseSetId'],
+            'taskId' => empty($task) ? 0 : $task['id'],
+            'activityId' => empty($task) ? 0 :$task['activityId'],
         );
 
         return json_encode(array(
@@ -171,5 +172,10 @@ class ActivityExtension extends \Twig_Extension
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
