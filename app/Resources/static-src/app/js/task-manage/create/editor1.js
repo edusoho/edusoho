@@ -162,7 +162,6 @@ class Editor {
       this.$contentIframe.attr('src', this.taskConfig.contentUrl);
       this.$contentIframe.load(loadAnimation(() => {
         this._rendButton(2);
-        this.$contentIframe.contents().find('body').addClass('task-iframe-body');
       }, this.$taskContent));
     } else {
       this._rendButton(2);
@@ -178,7 +177,6 @@ class Editor {
   
       this.$finishIframe.load(loadAnimation(() => {
         this._rendButton(3);
-        this.$finishIframe.contents().find('body').addClass('task-iframe-body');
       }, this.$taskFinish));
     } else {
       this._rendButton(3);
