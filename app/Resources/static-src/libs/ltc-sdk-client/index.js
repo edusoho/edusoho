@@ -12,7 +12,7 @@ class LtcSDKClient {
       children: [],
       type: 'child'
     });
-    this.resource = {};
+    this.loadResource = [];
   }
 
   async loadCss(url = 'bootstrap-css') {
@@ -21,7 +21,7 @@ class LtcSDKClient {
     let link = document.createElement('link');
     link.type = 'text/css';
     link.rel = 'stylesheet';
-    link.href = this.resourceList[url];
+    link.href = this.resource[url];
     let head = document.getElementsByTagName('head')[0];
     head.appendChild(link);
   }
@@ -31,18 +31,18 @@ class LtcSDKClient {
     await self._initResourceList();
     for (let value of urls) {
       await new Promise(function(resolve, reject) {
-        if (self.resource[value]) {
+        if (self.loadResource[value]) {
           resolve(value);
         }
 
         let script = document.createElement('script');
-        script.src = self.resourceList[value];
+        script.src = self.resource[value];
         script.addEventListener('load', function() {
-          if (resources['init_'+value]) {
-            resources['init_'+value]();
+          if (resources[value]) {
+            resources[value]();
           }
           resolve(value);
-          self.resource[value] = true;
+          self.loadResource[value] = true;
         }, false);
 
         script.addEventListener('error', function() {
@@ -63,6 +63,10 @@ class LtcSDKClient {
     Object.assign(this.options, DEFAULTS, options);
   
     return this;
+  }
+
+  getContext() {
+    return this.context;
   }
 
   once(eventName, args={}) {
@@ -96,16 +100,17 @@ class LtcSDKClient {
     });
   }
 
-  _initResourceList() {
+  async _initResourceList() {
     let self = this;
     return new Promise(function(resolve, reject) {
-      if (self.resourceList) {
+      if (self.resource) {
         resolve();
       }
 
       self.messenger.sendToParent('init');
       self.messenger.once('initResourceList', function(data) {
-        self.resourceList = data;
+        self.resource = data['resource'];
+        self.context = data['context'];
         resolve();
       });
     });

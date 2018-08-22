@@ -9,20 +9,44 @@
   <body>
     <script src="/static-dist/libs/ltc-sdk-client.js"></script>
     <style>
+      body, html {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 0;
+        font-size: 14px;
+        color: rgba(0,0,0,.56);
+        font-weight: 400;
+        font-family: Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;
+      }
+
+      b, strong {
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0 0 10px;
+      }
+
       .text-activity-content{
         padding-top: 20px;
         padding-bottom: 20px;
         text-align: justify;
         width: 992px;
         margin: auto;
-        color: rgba(0,0,0,.56);
         line-height: 1.6;
         word-wrap: break-word;
+      }
+
+      @media (max-width:1090px) {
+        .iframe-parent-content .text-activity-content {
+          padding-left:20px;
+          padding-right:20px;
+        }
       }
     </style>
     <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ setting('course.copy_enabled') }}">
       <div class="text-activity-content">
-        {{ activity.content|raw }}
       </div>
     </div>
     <script src="/activities/text/static-dist/js/show/index.js"></script>
