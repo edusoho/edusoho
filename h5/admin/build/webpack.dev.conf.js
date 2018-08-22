@@ -25,7 +25,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         clientLogLevel: 'warning',
         historyApiFallback: {
             rewrites: [
-                { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'admin.html') },
+                { from: /.*/, to: path.posix.join(config.dev.assetsPublicPathAdmin, 'admin.html') },
             ],
         },
         hot: true,
@@ -37,7 +37,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         overlay: config.dev.errorOverlay
             ? { warnings: false, errors: true }
             : false,
-        publicPath: config.dev.assetsPublicPath,
+        publicPath: config.dev.assetsPublicPathAdmin,
         proxy: config.dev.proxyTable,
         quiet: true, // necessary for FriendlyErrorsPlugin
         watchOptions: {

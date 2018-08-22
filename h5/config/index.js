@@ -9,6 +9,8 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/h5/',
+    assetsPublicPathAdmin: '/admin/',
+
     proxyTable: {
       '/api': {
         // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
@@ -51,14 +53,15 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../dist/h5/index.html'),
     indexAdmin: path.resolve(__dirname, '../dist/admin/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../dist/h5'),
     assetsRootAdmin: path.resolve(__dirname, '../dist/admin'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/h5/',
+    assetsPublicPathAdmin: '/admin/',
 
     /**
      * Source Maps

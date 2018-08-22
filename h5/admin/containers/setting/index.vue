@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import Api from '@/api'
 import Carousel from '@admin/containers/module/carousel/index.vue';
 
 export default {

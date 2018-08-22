@@ -22,15 +22,15 @@ const createLintingRule = () => ({
 module.exports = {
     context: path.resolve(__dirname, '../../'),
     entry: {
-        'app-admin': './admin/main-admin.js',
+        app: './admin/main-admin.js',
         common: ['vue', 'vuex', 'vue-router', 'axios']
     },
     output: {
         path: config.build.assetsRootAdmin,
         filename: '[name].js',
         publicPath: process.env.NODE_ENV === 'production'
-            ? config.build.assetsPublicPath
-            : config.dev.assetsPublicPath
+            ? config.build.assetsPublicPathAdmin
+            : config.dev.assetsPublicPathAdmin
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
