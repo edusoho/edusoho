@@ -5,9 +5,8 @@
   "author": "GrowthCoder <hdu_gaoting@126.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "admin-dev": "webpack-dev-server --inline --progress --config admin/build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "dev:h5": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev:admin": "webpack-dev-server --inline --progress --config admin/build/webpack.dev.conf.js",
     "lint": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs",
     "build": "npm run build:admin && npm run build:h5",
     "build:h5": "node build/build.js",
