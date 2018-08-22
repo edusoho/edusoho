@@ -3859,6 +3859,12 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
+jay-post-message@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/jay-post-message/-/jay-post-message-1.0.0.tgz#79dcc556acd8a61abeb644b61eb77c5d9a14c216"
+  dependencies:
+    component-emitter "^1.2.1"
+
 jquery-base64@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/jquery-base64/-/jquery-base64-1.0.0.tgz#154933ed4afff94a9e2fd8f821d7c837c202cb19"

@@ -38,27 +38,37 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('activity_meta', array($this, 'getActivityMeta')),
             new \Twig_SimpleFunction('activity_metas', array($this, 'getActivityMeta')),
             new \Twig_SimpleFunction('can_free_activity_types', array($this, 'getCanFreeActivityTypes')),
-            new \Twig_SimpleFunction('ltc_source_list', array($this, 'findLtcSourceList')),
+            new \Twig_SimpleFunction('ltc_source', array($this, 'findLtcSource')),
         );
     }
 
-    public function findLtcSourceList()
+    public function findLtcSource($taskId)
     {
         $cdnSetting = $this->getSettingService()->get('cdn');
         $cdn = '';
         if (!empty($cdnSetting) && !empty($cdnSetting['enabled'])) {
             $cdn = empty($cdnSetting['defaultUrl']) ? '' : $cdnSetting['defaultUrl'];
         };
+        $task = $this->getTaskService()->getTask($taskId);
+        $context = array(
+            'courseId' => $task['courseId'],
+            'courseSetId' => $task['fromCourseSetId'],
+            'taskId' => $task['id'],
+            'activityId' => $task['activityId'],
+        );
 
         return json_encode(array(
-            'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
-            'codeage-design-css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
-            'codeage-design-js' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
-            'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
-            'bootstrap-css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
-            'bootstrap-js' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
-            'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
-            'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
+            'resource' => array(
+                'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
+                'codeage-design-css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
+                'codeage-design-js' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
+                'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
+                'bootstrap-css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
+                'bootstrap-js' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
+                'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
+                'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
+            ),
+            'context' => $context,
             // 'uploader' => $cdn.'asdf',
             // 'player' => 'a',
         ));
@@ -156,5 +166,10 @@ class ActivityExtension extends \Twig_Extension
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }

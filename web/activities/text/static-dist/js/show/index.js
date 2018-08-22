@@ -1,8 +1,16 @@
-
-window.ltc.loadCss();
-
-let load = window.ltc.load('jquery', 'scrollbar');
+var load = window.ltc.load('jquery', 'scrollbar');
 load.then(function(){
+  var context = window.ltc.getContext();
+  window.ltc.api({
+    name: 'getActivity',
+    pathParams: {
+      id: context.activityId
+    }
+  }, function(result) {
+    var $content = $(result['content']);
+    $('.text-activity-content').append($content);
+  });
+
   $('#text-activity').perfectScrollbar();
   $('#text-activity').perfectScrollbar('update');
   

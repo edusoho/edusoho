@@ -1,5 +1,5 @@
 import Api from './api';
-import EsMessenger from 'app/common/messenger';
+import EsMessenger from 'jay-post-message';
 
 class LtcSDKServer {
   constructor() {
@@ -46,7 +46,6 @@ class LtcSDKServer {
 
     this.messenger.on('getApi', (msg) => {
       let apiName = msg.name;
-      let self= this;
       let options = {
         headers: {
           'Accept': 'application/vnd.edusoho.v2+json',
@@ -54,7 +53,8 @@ class LtcSDKServer {
           'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
         },
       };
-      eval("self.getApi(options)."+apiName+"(msg)").then(response => {
+
+      this.getApi(options)[apiName](msg).then(response => {
         let results = response.data;
         results.uuid = msg.uuid;
         this.emitChild(msg.iframeId, "returnApi", results);

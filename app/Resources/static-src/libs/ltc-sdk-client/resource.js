@@ -1,4 +1,4 @@
-exports.init_validate = function() {
+exports.validate = function() {
   $.extend($.validator.messages, {
     required: '请输入%display%',
     remote: '请修正此字段',

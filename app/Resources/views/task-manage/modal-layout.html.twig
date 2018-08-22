@@ -21,7 +21,7 @@
         {{'course.plan_task.activity_manage.choose_teach_way'|trans|raw }}
       </li>
       <li>
-        {{'course.plan_task.activity_manage.setup_content'|trans|raw }}
+        {{'course.plan_task.activity_manage.setup_content'|trans|raw }}activities/text/resources/views/create_or_update_finish.html
       </li>
       <li>
         {{'course.plan_task.activity_manage.setup_finish_condition'|trans|raw }}
@@ -42,5 +42,5 @@
   <button id="course-tasks-next" type="submit" class="btn btn-default hidden">{{ 'form.btn.next'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-primary hidden"
           data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-{% include 'activity/ltc-server/js-loader.html.twig' %}
+{% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id} %}
 {% endblock %}
