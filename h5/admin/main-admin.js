@@ -9,7 +9,7 @@ import EdusohoUI from '@/components';
 import VueCropper from 'vue-cropper';
 
 import 'vant/lib/vant-css/index.css';
-// import '@/assets/styles/main.scss';
+import '@/assets/styles/main.scss';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
 
