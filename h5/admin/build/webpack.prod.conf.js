@@ -65,7 +65,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         new HtmlWebpackPlugin({
             filename: process.env.NODE_ENV === 'testing'
                 ? 'admin.html'
-                : config.build.index,
+                : config.build.indexAdmin,
             template: 'admin.html',
             inject: true,
             minify: {
@@ -82,6 +82,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         new webpack.HashedModuleIdsPlugin(),
         // enable scope hoisting
         new webpack.optimize.ModuleConcatenationPlugin(),
+        // vue, vuex, vue-router, axios 打包 保证 hash 不变
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['common']
+        }),
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
