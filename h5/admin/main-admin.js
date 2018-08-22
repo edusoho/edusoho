@@ -6,6 +6,7 @@ import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
+import VueCropper from 'vue-cropper';
 
 import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
@@ -41,6 +42,7 @@ Vue.use(filters);
 Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
+Vue.use(VueCropper);
 
 Vue.config.productionTip = false;
 
