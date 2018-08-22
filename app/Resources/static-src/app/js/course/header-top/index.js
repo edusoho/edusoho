@@ -28,8 +28,8 @@ function bindOperation($needHideBtn, $needShowBtn) {
     $.post(url)
       .done((success) => {
         if (!success) return;
-        $needShowBtn.show();
-        $needHideBtn.hide();
+        $needShowBtn.removeClass('hidden');
+        $needHideBtn.addClass('hidden');
       });
   });
 }
