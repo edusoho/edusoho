@@ -794,7 +794,7 @@ course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
 course.course_member_count: '%studentsNum% students'
-course.activity: Activity
+course.activity: %taskName%
 course.plan: 课程计划
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
@@ -946,7 +946,7 @@ course.members_manage.official_student.detail.total_days: 'Learned days'
 course.members_manage.official_student.detail.total_time: 'Learned time'
 course.members_manage.official_student.detail.per_day_time: 'Average Learn time per day'
 course.members_manage.official_student.detail.create_question: Q&A
-course.members_manage.official_student.detail.join_activity: Activities
+course.members_manage.official_student.detail.join_activity: %taskName%
 course.members_manage.official_student.detail.create_article: Discussions
 course.members_manage.official_student.detail.reply_article: Replies
 course.members_manage.official_student.detail.status.unfinished: Unfinished
@@ -1036,10 +1036,8 @@ course.dashboard: 'Learn data'
 course.dashboard.content_title: 'Course Learn data'
 course.dashboard.course_dashboard: 'Data overview'
 course.dashboard.success_rate: '%taskName% finish rate'
-course.dashboard.study_detail: 'Task detail'
 course.dashboard.study_detail.name: '%taskName% name'
 course.dashboard.study_detail.per_study_time: 'Average Learn time(mintue)'
-course.dashboard.study_detail.per_study_time_tips: 'Task time: From start time to finish time of the task.  average  task time:average task time of students'
 course.dashboard.study_detail.audio_time: 'Video and audio duration(mintue)'
 course.dashboard.study_detail.audio_time_tips: 'Video and audio duration only support cloud and local videos and audios'
 course.dashboard.study_detail.per_audio_time: 'Average watch time of videos and audios(mintue)'
@@ -1055,9 +1053,6 @@ course.dashboard.study_detail.audio: (audio)
 course.dashboard.study_detail.testpaper: '(test paper)'
 course.dashboard.study_detail.ppt: （ppt）
 course.dashboard.study_detail.detail.username: Username
-course.dashboard.study_detail.detail.join_time: 'Task token time'
-course.dashboard.study_detail.detail.finish_time: 'Task finish time'
-course.dashboard.study_detail.detail.task_learn_time: 'Task Learn time(minute)'
 course.dashboard.study_detail.detail.audio_learn_time: 'Watch time of videos and audios(mintue)'
 course.dashboard.study_detail.detail.score: 'Score of latest test'
 course.dashboard.stunents_numbers: Students
@@ -1068,7 +1063,7 @@ course.dashboard.notes_numbers: Notes
 course.dashboard.questions_numbers: Questions
 course.dashboard.discussions_numbers: Discussions
 course.dashboard.free_view_numbers: Free view times
-course.dashboard.free_view_numbers_tips: Include free task and free view task,update at markets setting
+course.dashboard.free_view_numbers_tips: Include free %taskName% and free view task,update at markets setting
 course.dashboard.student_trend: Student trend
 course.dashboard.student_trend_seven_days: week
 course.dashboard.student_trend_thirty_days: month
@@ -1414,7 +1409,7 @@ course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
-course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in task, are you sure to close?'
+course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, are you sure to close?'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
@@ -1656,7 +1651,7 @@ course.plan_task.activity_manage.live.start_time: 'Start time'
 course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live class.'
 course.plan_task.activity_manage.live.live_time: 'Duration'
 course.plan_task.activity_manage.live.info: 'Description'
-course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live event may lead to later students can not participate, can only watch the playback.'
+course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live %taskName% may lead to later students can not participate, can only watch the playback.'
 course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 'Learn to the last page'
 course.plan_task.activity_manage.ppt.time: 'Learn duration'
