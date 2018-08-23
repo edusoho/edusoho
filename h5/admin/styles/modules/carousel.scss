@@ -19,9 +19,12 @@
   position: absolute;
   top: 0;
   left: 105%;
-  background: #FAFAFA;
+  padding: 15px;
+  width: 400px;
   border: 1px solid $grey-light;
   border-radius: 4px;
+  background: #FAFAFA;
+  box-sizing: border-box;
   width: 400px;
   padding: 15px;
   .title {
@@ -31,6 +34,7 @@
     border-bottom: 1px solid $grey-light;
   }
 }
+
 
 .carousel-item {
   border: 1px solid $grey-light;
