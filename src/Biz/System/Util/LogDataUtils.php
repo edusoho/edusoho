@@ -11,8 +11,6 @@ class LogDataUtils
 {
     public static function getYmlConfig()
     {
-        $config = array();
-
         $paths = self::getConfigPath();
         $permissions = array();
         foreach ($paths as $path) {
@@ -30,7 +28,7 @@ class LogDataUtils
         return $permissions;
     }
 
-    private function getConfigPath()
+    private static function getConfigPath()
     {
         $configPaths = array();
 
@@ -131,7 +129,7 @@ class LogDataUtils
         return $changeFields;
     }
 
-    private function initArray($array)
+    private static function initArray($array)
     {
         if (!is_array($array)) {
             $array = array($array);
@@ -140,7 +138,7 @@ class LogDataUtils
         return $array;
     }
 
-    private function arrayChanges(array $before = array(), array $after)
+    private static function arrayChanges(array $before = array(), array $after)
     {
         $changes = array('before' => array(), 'after' => array());
 
@@ -158,7 +156,7 @@ class LogDataUtils
         return $changes;
     }
 
-    private function serializeUnsetChanges($newData)
+    private static function serializeUnsetChanges($newData)
     {
         $config = array(
             'createdTime',
@@ -178,7 +176,7 @@ class LogDataUtils
         return $newData;
     }
 
-    private function getShowField($changeFields, $oldData)
+    private static function getShowField($changeFields, $oldData)
     {
         $changeFields['id'] = self::getShowId($oldData);
         $changeFields['showTitle'] = self::getShowTitle($oldData);
@@ -186,7 +184,7 @@ class LogDataUtils
         return $changeFields;
     }
 
-    private function getShowId($oldData)
+    private static function getShowId($oldData)
     {
         $showId = '';
         if (isset($oldData['id'])) {
@@ -196,7 +194,7 @@ class LogDataUtils
         return $showId;
     }
 
-    private function getShowTitle($oldData)
+    private static function getShowTitle($oldData)
     {
         $showTitle = '';
         if (isset($oldData['email'])) {
@@ -213,7 +211,7 @@ class LogDataUtils
         return $showTitle;
     }
 
-    private function serializeData($config, $changeFields)
+    private static function serializeData($config, $changeFields)
     {
         $data = array();
         $oldData = $changeFields['before'];
@@ -249,7 +247,7 @@ class LogDataUtils
         );
     }
 
-    private function timeConvent($time)
+    private static function timeConvent($time)
     {
         if ($time > 10000) {
             $time = date('Y-m-d H:i:s', $time);
@@ -258,7 +256,7 @@ class LogDataUtils
         return $time;
     }
 
-    private function passwordSetBlank($password)
+    private static function passwordSetBlank($password)
     {
         if (!empty($password)) {
             $password = '******';
@@ -267,12 +265,12 @@ class LogDataUtils
         return $password;
     }
 
-    protected function getAppService()
+    private static function getAppService()
     {
         return self::getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
-    protected function getServiceKernel()
+    private static function getServiceKernel()
     {
         return ServiceKernel::instance();
     }
