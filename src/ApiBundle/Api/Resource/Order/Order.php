@@ -29,6 +29,9 @@ class Order extends AbstractResource
             $product->setPickedDeduct($params);
             $order = $this->getOrderFacadeService()->create($product);
 
+            if (!empty($params['isOrderCreate'])) {
+                return $order;
+            }
             // 优惠卷全额抵扣
             if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
                 return array(

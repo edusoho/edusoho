@@ -1,0 +1,104 @@
+@h5-primary: #408FFB;
+
+.h5-color-primary {
+  color: @h5-primary;
+}
+
+.h5-find-body {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 0 20px;
+  min-height: 480px;
+  .setting-nav-tab {
+    border: none;
+    margin-bottom: 44px;
+    >li.active >a {
+      color: @h5-primary;
+      border: none;
+      border-bottom: 1px solid @h5-primary;
+    }
+    >li >a {
+      color: #313131;
+      border: none;
+      margin-right: 0;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  .h5-tab-content {
+    position: relative;
+    .h5-text-content {
+      color: #616161;
+      letter-spacing: 1px;
+      padding: 40px 80px;
+      .title {
+        font-size: 30px;
+        margin-bottom: 15px;
+        letter-spacing: 3px;
+      }
+      .feature-info {
+        padding-left: 0;
+        margin-bottom: 25px;
+        li {
+          margin-bottom: 10px;
+          margin-left: -3px;
+          font-size: 16px;
+        }
+      }
+    }
+    .find-bg-plate {
+      position: absolute;
+      right: 80px;
+      top: 10px;
+      width: 400px;
+      height: auto;
+    }
+    #site-page {
+      .site-img-content {
+        .site-default-img {
+          float: left;
+          width: 225px;
+          height: auto;
+          margin-right: 35px;
+          margin-left: 35px;
+          margin: 0 38px 30px;
+        }
+      }
+      .h5-radios {
+        label {
+          width: 33.33%;
+          text-align: center;
+          input {
+            margin-right: 3px;
+          }
+        }
+      }
+      .help-block-container {
+        background-color: #f5f5f5;
+        padding: 14px 20px;
+        border-radius: 2px;
+        margin-top: 25px;
+        margin: 25px 44px 0;
+      }
+    }
+    .btn-h5-open {
+      display: inline-block;
+      background-image: linear-gradient(90deg, #408FFB 0%, #5FBAFF 100%);
+      border-radius: 2px;
+      margin-left: 2px;
+      line-height: 36px;
+      width: 135px;
+      text-align: center;
+      color: #fff;
+    }
+    .btn-h5-save {
+      background-color: @h5-primary;
+      border-radius: 2px;
+      color: #fff;
+      width: 90px;
+      margin: 30px 0;
+      &:hover {
+        background-color: darken(@h5-primary, 8%);
+      }
+    }
+  }
+}

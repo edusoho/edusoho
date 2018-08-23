@@ -10,9 +10,9 @@
     <div class="cd-mb24 clearfix">
       <div class="pull-right">
         <div class="js-sort-group hidden-xs">
-          <a class="cd-btn cd-btn-primary cd-mr16 js-create-plan" {% if courses|length > 9 %} disabled data-toggle="tooltip" data-placement="top" title={{ 'course.teaching_plan.create.max_plan_number'|trans }} {% else %}data-toggle="modal" data-target="#modal"
+          <a class="cd-btn cd-btn-primary js-create-plan" {% if courses|length > 9 %} disabled data-toggle="tooltip" data-placement="top" title={{ 'course.teaching_plan.create.max_plan_number'|trans }} {% else %}data-toggle="modal" data-target="#modal"
             data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}" {% endif %}>{{ 'course.teaching_plan.create'|trans }}</a>
-          {% if hasMulCourses %}<button class="cd-btn cd-btn-default js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
+          {% if hasMulCourses %}<button class="cd-btn cd-btn-default cd-ml16 js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
         </div>
         <div class="js-sort-group hidden-xs hide">
           <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>

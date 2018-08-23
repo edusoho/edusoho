@@ -102,7 +102,7 @@ class ExploreController extends BaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
-        $courses = $this->fillCourseTryLookVideo($courses);
+        $courses = $this->getCourseService()->fillCourseTryLookVideo($courses);
 
         $tryLookVideoCourses = array_filter($courses, function ($course) {
             return !empty($course['tryLookVideo']);
@@ -495,42 +495,5 @@ class ExploreController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @param $courses
-     * @param $course
-     *
-     * @return mixed
-     */
-    protected function fillCourseTryLookVideo($courses)
-    {
-        if (!empty($courses)) {
-            $tryLookAbleCourses = array_filter($courses, function ($course) {
-                return !empty($course['tryLookable']) && 'published' === $course['status'];
-            });
-            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
-            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
-            $activityIds = ArrayToolkit::column($activities, 'id');
-            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
-            $tasks = ArrayToolkit::index($tasks, 'activityId');
-
-            $activities = array_filter($activities, function ($activity) use ($tasks) {
-                return $tasks[$activity['id']]['status'] === 'published';
-            });
-            //返回有云视频任务的课程
-            $activities = ArrayToolkit::index($activities, 'fromCourseId');
-
-            foreach ($courses as &$course) {
-                if (!empty($activities[$course['id']])) {
-                    $course['tryLookVideo'] = 1;
-                } else {
-                    $course['tryLookVideo'] = 0;
-                }
-            }
-            unset($course);
-        }
-
-        return $courses;
     }
 }

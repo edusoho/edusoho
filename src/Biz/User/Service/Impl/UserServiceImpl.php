@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Biz\Content\FileException;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -401,6 +402,68 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->update($userId, $fields);
 
         return UserSerialize::unserialize($user);
+    }
+
+    public function changeAvatarByFileId($userId, $fileId)
+    {
+        if (empty($fileId)) {
+            throw FileException::FILE_NOT_FOUND();
+        }
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        $options = $this->createImgCropOptions($naturalSize, $scaledSize);
+        $record = $this->getFileService()->getFile($fileId);
+        if (empty($record)) {
+            throw FileException::FILE_NOT_FOUND();
+        }
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
+
+        $filePaths = FileToolKit::cropImages($parsed['fullpath'], $options);
+
+        $fields = array();
+        foreach ($filePaths as $key => $filePath) {
+            $file = $this->getFileService()->uploadFile('user', new File($filePath));
+            $fields[] = array(
+                'type' => $key,
+                'id' => $file['id'],
+            );
+        }
+
+        if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
+            $fields[] = array(
+                'type' => 'origin',
+                'id' => $record['id'],
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record['uri']);
+        }
+
+        if (empty($fields)) {
+            throw FileException::FILE_HANDLE_ERROR();
+        }
+
+        return $this->changeAvatar($userId, $fields);
+    }
+
+    private function createImgCropOptions($naturalSize, $scaledSize)
+    {
+        $options = array();
+
+        $options['x'] = 0;
+        $options['y'] = 0;
+        $options['x2'] = $scaledSize->getWidth();
+        $options['y2'] = $scaledSize->getHeight();
+        $options['w'] = $naturalSize->getWidth();
+        $options['h'] = $naturalSize->getHeight();
+
+        $options['imgs'] = array();
+        $options['imgs']['large'] = array(200, 200);
+        $options['imgs']['medium'] = array(120, 120);
+        $options['imgs']['small'] = array(48, 48);
+        $options['width'] = $naturalSize->getWidth();
+        $options['height'] = $naturalSize->getHeight();
+
+        return $options;
     }
 
     public function updateUserUpdatedTime($id)

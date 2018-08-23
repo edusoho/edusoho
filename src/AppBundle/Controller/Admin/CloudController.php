@@ -22,7 +22,7 @@ class CloudController extends BaseController
 
     public function accessWechatAction(Request $request)
     {
-        return $this->redirectUrl('product_mps_detail', array('type' => 'microprogram'));
+        return $this->redirectUrl('product_marketing_detail', array('type' => 'microprogram'));
     }
 
     public function rechargeAction(Request $request)

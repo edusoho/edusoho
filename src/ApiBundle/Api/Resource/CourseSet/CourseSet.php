@@ -41,6 +41,9 @@ class CourseSet extends AbstractResource
         $conditions['parentId'] = 0;
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
+        if (isset($conditions['type']) && 'all' == $conditions['type']) {
+            unset($conditions['type']);
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);

@@ -12,9 +12,9 @@ export default class LessonManage {
 
   bindEvent() {
     this.$item.on('click', '.js-publish-lesson-btn', (event) => this.publishLesson(event));
-    this.$item.on('click', '.js-unpublish-lesson-btn', () => this.cancelPublishLesson(event));
-    this.$item.on('click', '.js-delete-lesson-btn', () => this.deleteLesson(event));
-    $('.js-lesson-create-btn').on('click', () => this.createLesson(event));
+    this.$item.on('click', '.js-unpublish-lesson-btn', (event) => this.cancelPublishLesson(event));
+    this.$item.on('click', '.js-delete-lesson-btn', (event) => this.deleteLesson(event));
+    $('.js-lesson-create-btn').on('click', (event) => this.createLesson(event));
   }
 
   publishLesson(event) {

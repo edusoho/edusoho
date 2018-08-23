@@ -102,8 +102,7 @@ class Testpaper extends Activity
 
     public function isFinished($activityId)
     {
-        $biz = $this->getBiz();
-        $user = $biz['user'];
+        $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
