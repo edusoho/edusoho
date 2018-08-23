@@ -302,18 +302,11 @@ class ArrayToolkit
     /**
      * 判断2个数组，是否值是相同的 （不同key, 相同value视为相同）
      */
-    public static function isTwoArraySameValues($arr1, $arr2)
+    public static function isSameValues($arr1, $arr2)
     {
-        if (count($arr1) != count($arr2)) {
-            return false;
-        }
+        sort($arr1);
+        sort($arr2);
 
-        foreach ($arr1 as $value) {
-            if (!in_array($value, $arr2)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $arr1 == $arr2;
     }
 }

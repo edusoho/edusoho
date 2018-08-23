@@ -286,7 +286,7 @@ class ArrayToolkitTest extends BaseTestCase
         );
     }
 
-    public function testIsTwoArraySameValues()
+    public function testIsSameValues()
     {
         $compared = array('a', 'b', 'c');
 
@@ -296,9 +296,9 @@ class ArrayToolkitTest extends BaseTestCase
         $diffArr3 = array('a', 'b', 'c', 'd');
         $diffArr4 = array('a', 'b', 'd');
 
-        $this->assertTrue(ArrayToolkit::isTwoArraySameValues($compared, $sameArr1));
-        $this->assertTrue(ArrayToolkit::isTwoArraySameValues($compared, $sameArr2));
-        $this->assertFalse(ArrayToolkit::isTwoArraySameValues($compared, $diffArr3));
-        $this->assertFalse(ArrayToolkit::isTwoArraySameValues($compared, $diffArr4));
+        $this->assertTrue(ArrayToolkit::isSameValues($compared, $sameArr1));
+        $this->assertTrue(ArrayToolkit::isSameValues($compared, $sameArr2));
+        $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr3));
+        $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr4));
     }
 }
