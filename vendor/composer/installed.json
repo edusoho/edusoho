@@ -297,6 +297,64 @@
         "description": "CSSTidy is a CSS minifier"
     },
     {
+        "name": "codeages/biz-framework",
+        "version": "v0.9.28",
+        "version_normalized": "0.9.28.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "aad3ae9eeb50426bf427349069d5977556a5ca02"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/aad3ae9eeb50426bf427349069d5977556a5ca02",
+            "reference": "aad3ae9eeb50426bf427349069d5977556a5ca02",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/symfony-lock-lite": "^1.0",
+            "davedevelopment/phpmig": "~1.2",
+            "doctrine/annotations": "~1.2",
+            "doctrine/common": "~2.4",
+            "doctrine/dbal": "~2.4",
+            "monolog/monolog": "^1.20",
+            "mtdowling/cron-expression": "~1.2",
+            "php": "^5.3|^7.0",
+            "pimple/pimple": "~3.2",
+            "symfony/console": "~2.8|~3.0",
+            "symfony/event-dispatcher": "~2.8|~3.0",
+            "symfony/finder": "~2.8|~3.0",
+            "symfony/polyfill-php55": "^1.4",
+            "webpatser/laravel-uuid": "~2.0"
+        },
+        "require-dev": {
+            "mockery/mockery": "^0.9.9",
+            "phpunit/phpunit": "^4.8|^5.7|^6.0"
+        },
+        "suggest": {
+            "ramsey/uuid": "Dao UUID primary key feature need this package."
+        },
+        "time": "2018-08-06T02:49:06+00:00",
+        "bin": [
+            "bin/biz"
+        ],
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            },
+            "files": [
+                "src/functions.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
+    },
+    {
         "name": "codeages/biz-order-pay",
         "version": "v0.1.23",
         "version_normalized": "0.1.23.0",
@@ -424,17 +482,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.2.25",
-        "version_normalized": "0.2.25.0",
+        "version": "v0.2.26",
+        "version_normalized": "0.2.26.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "ec3bd2f9526c647903d5fc47c79f4721366dd161"
+            "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/ec3bd2f9526c647903d5fc47c79f4721366dd161",
-            "reference": "ec3bd2f9526c647903d5fc47c79f4721366dd161",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
+            "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
             "shasum": ""
         },
         "require": {
@@ -446,7 +504,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2018-07-04T07:00:48+00:00",
+        "time": "2018-07-31T11:48:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -5582,62 +5640,5 @@
             "security",
             "xxtea"
         ]
-    },
-    {
-        "name": "codeages/biz-framework",
-        "version": "v0.9.27",
-        "version_normalized": "0.9.27.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "90e35a62d79353c05b97d58302b54b43ff3dbd05"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/90e35a62d79353c05b97d58302b54b43ff3dbd05",
-            "reference": "90e35a62d79353c05b97d58302b54b43ff3dbd05",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/symfony-lock-lite": "^1.0",
-            "davedevelopment/phpmig": "~1.2",
-            "doctrine/annotations": "~1.2",
-            "doctrine/dbal": "~2.4",
-            "monolog/monolog": "^1.20",
-            "mtdowling/cron-expression": "~1.2",
-            "php": "^5.3|^7.0",
-            "pimple/pimple": "~3.2",
-            "symfony/console": "~2.8|~3.0",
-            "symfony/event-dispatcher": "~2.8|~3.0",
-            "symfony/finder": "~2.8|~3.0",
-            "symfony/polyfill-php55": "^1.4",
-            "webpatser/laravel-uuid": "~2.0"
-        },
-        "require-dev": {
-            "mockery/mockery": "^0.9.9",
-            "phpunit/phpunit": "^4.8|^5.7|^6.0"
-        },
-        "suggest": {
-            "ramsey/uuid": "Dao UUID primary key feature need this package."
-        },
-        "time": "2018-07-10T01:35:01+00:00",
-        "bin": [
-            "bin/biz"
-        ],
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            },
-            "files": [
-                "src/functions.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
     }
 ]

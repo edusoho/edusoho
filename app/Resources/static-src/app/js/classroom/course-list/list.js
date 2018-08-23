@@ -24,7 +24,7 @@ export default class CourseList {
       var self = this;
       $.get($target.data('lessonUrl'), { 'visibility': 0 }, function(html) {
         $parent.append(html);
-        new PagedCourseLesson({ displayAllImmediately: true });
+        new PagedCourseLesson();
         self._lessonListShow($parent.siblings('.js-course-detail-content'));
       });
     }

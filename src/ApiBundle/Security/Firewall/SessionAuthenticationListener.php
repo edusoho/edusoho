@@ -22,10 +22,9 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
         if (null !== $this->getTokenStorage()->getToken()) {
             return;
         }
-
+        $sessionIgnore = $request->headers->get('SessionIgnore', false);
         $session = $this->container->get('session');
-
-        if (null === $session || null === $token = $session->get($this->sessionKey)) {
+        if ((bool) $sessionIgnore || null === $session || null === $token = $session->get($this->sessionKey)) {
             return;
         }
 
@@ -80,7 +79,6 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
             } catch (UnsupportedUserException $e) {
                 // let's try the next user provider
             } catch (UsernameNotFoundException $e) {
-
                 return null;
             }
         }
@@ -94,8 +92,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
     private function getUserProviders()
     {
         return array(
-            $this->container->get('topxia.user_provider')
+            $this->container->get('topxia.user_provider'),
         );
     }
-
 }

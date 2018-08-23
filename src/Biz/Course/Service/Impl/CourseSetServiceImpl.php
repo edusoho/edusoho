@@ -1133,17 +1133,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $fields['tags'] = $tagIds;
             }
         }
-
-        $fields = array_filter(
-            $fields,
-            function ($value) {
-                if ('' === $value || null === $value) {
-                    return false;
-                }
-
-                return true;
+        foreach ($fields as $key => $value) {
+            if (in_array($key, array('summary', 'subtitle'))) {
+                continue;
             }
-        );
+            if ('' === $value || null === $value) {
+                unset($fields[$key]);
+            }
+        }
 
         if (!empty($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);

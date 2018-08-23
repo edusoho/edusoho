@@ -54,6 +54,7 @@ site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.plan: 计划
 site.default.more: More
 site.default.manage: Config
 site.default.none: None
@@ -1078,8 +1079,8 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
-course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
-course.members_manage.add_failed_tips: 计划未发布，不可添加学员
+course.members_manage.import_failed_tips: 'Import student failed, the %type% is not published'
+course.members_manage.add_failed_tips: %type%未发布，不可添加学员
 course.order: 'Order statistic'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
@@ -1765,6 +1766,7 @@ file_chooser.import_link.import_btn_submiting: 'Please wait'
 file_chooser.import_video.mediaUri: 'Medial url：'
 file_chooser.import_video.input_placeholder: 'Open online course from Youku, Tencent, Netease is now suported'
 file_chooser.import_video.not_support_tips: 'Videos from Tencent and Netease  is not supported on mobile'
+file_chooser.import_video.not_support_tips2: Videos from Tencent and Youku could be imported by 'Copy Common Codes' (It appears when moving mouse on the 'Share' button)
 file_chooser.materiallib_choose.from_upload: 'From upload'
 file_chooser.materiallib_choose.from_share: 'From share'
 file_chooser.materiallib_choose.from_public: 'Public resources'
@@ -3343,7 +3345,7 @@ my.teaching.open_course.recommend_setting.live: Live
 my.teaching.open_course.recommend_setting.task_number: '%taskName% %task_number%'
 my.teaching.open_course.recommend_setting.save_btn: Save
 my.teaching.open_course.recommend_setting.course_empty: 'Add a course firstly'
-my.teaching.open_course.teachers_setting.title: 'Teachers Settings'
+my.teaching.open_course.teachers_setting.title: 'Teachers Manage'
 my.teaching.open_course.teachers_setting.is_added: 'Added teacher'
 my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 'Only the users with teacher authority could be added'
 my.teaching.open_course.student_setting.manage_btn: Manage
@@ -6040,7 +6042,12 @@ admin.invite_setting.invite_infomation_template: 'Invitation templates'
 admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
-admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
+admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/article/892" target="_blank">【查看教程】</a></p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
+admin.wap_setting.version_select: 'version select'
+admin.wap_setting.new: New
+admin.wap_setting.old: Old
+admin.wap_setting.off: Off
+
 
 admin.payment_setting.open_help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
 admin.payment_setting.close_help.tips: 'Tip: Closing the payment function will result in users of the school cannot be purchased.'
@@ -7190,13 +7197,32 @@ exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.user.not_found: 找不到该用户！
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
+exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
 
 exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
+
+
+exception.file.not_found: 文件不存在
+exception.file.group_invalid: 文件组无效
+exception.file.not_upload: 文件未上传
+exception.file.handle_error: 文件处理错误
+
+exception.user.update_nickname_error: 昵称修改异常
+exception.user.nickname_invalid: 昵称格式错误
+exception.user.nickname_existed: 昵称已存在
+
 exception.user_lock: User account is locked, please contact system administrator.
+
+exception.parsed.failed.netease: 获取网易公开课视频信息失败
+exception.parsed.failed.letv: 获取乐视视频信息失败
+exception.parsed.failed.qq: 获取QQ视频信息失败
+exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parser.not.support: 不支持该视频类型
 
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
 
 course.unname_title: unname course
+

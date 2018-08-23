@@ -24,7 +24,7 @@ class VideoImport extends Chooser {
       return;
     }
 
-    if (!/^[a-zA-z]+:\/\/[^\s]*$/.test(url)) {
+    if (!/^<iframe[\s\S]*$/.test(url) && !/^[a-zA-z]+:\/\/[^\s]*$/.test(url)) {
       alert(Translator.trans('activity.video_manage.true_address_input'));
       return;
     }
@@ -41,9 +41,7 @@ class VideoImport extends Chooser {
       };
       self._onChange(media);
       $urlInput.val('');
-    }, 'json').error(function(jqXHR, textStatus, errorThrown) {
-      alert(Translator.trans('activity.video_manage.video_validate_error_hint'));
-    }).always(function() {
+    }, 'json').always(function() {
       $btn.button('reset');
     });
 

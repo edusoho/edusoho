@@ -60,6 +60,7 @@ site.default.doing: 进行中
 site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
+site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
 site.default.none: 无
@@ -1217,8 +1218,8 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
-course.members_manage.import_failed_tips: 计划未发布,不可导入学员
-course.members_manage.add_failed_tips: 计划未发布，不可添加学员
+course.members_manage.import_failed_tips: %type%未发布,不可导入学员
+course.members_manage.add_failed_tips: %type%未发布，不可添加学员
 course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
@@ -2011,6 +2012,7 @@ file_chooser.import_link.import_btn_submiting: 正在导入，请稍等
 file_chooser.import_video.mediaUri: 原地址：
 file_chooser.import_video.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
 file_chooser.import_video.not_support_tips: 腾讯和网易的视频不支持手机端播放
+file_chooser.import_video.not_support_tips2: 优酷和腾讯视频额外支持“复制通用代码”导入（鼠标移到视频页面的“分享”上出现）
 file_chooser.materiallib_choose.from_upload: 来自上传
 file_chooser.materiallib_choose.from_share: 来自分享
 file_chooser.materiallib_choose.from_public: 公共资料
@@ -4029,7 +4031,7 @@ my.teaching.open_course.recommend_setting.live: 直播
 my.teaching.open_course.recommend_setting.task_number: 第%task_number%%taskName%
 my.teaching.open_course.recommend_setting.save_btn: 保存修改
 my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
-my.teaching.open_course.teachers_setting.title: 教师设置
+my.teaching.open_course.teachers_setting.title: 教师管理
 my.teaching.open_course.teachers_setting.is_added: 已添加教师
 my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加有教师权限的用户
 my.teaching.open_course.student_setting.manage_btn: 管理
@@ -7394,9 +7396,13 @@ admin.invite_setting.discount_coupon_setting: 元面值抵价优惠券 （可用
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
-  <p class="help-block">开启后，网校在手机浏览器和微信上默认使用微网校进行显示</p>
-  <p class="help-block">关闭后，使用网页响应式的方式进行显示</p>
-  <p class="help-block">注意：切换app下载地址时，需要重新保存</p>
+  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/article/892" target="_blank">【查看教程】</a></p>
+  <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
+admin.wap_setting.version_select: 版本选择
+admin.wap_setting.new: 新版微网校
+admin.wap_setting.old: 旧版微网校
+admin.wap_setting.off: 关闭
+
 
 admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
 admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致网校用户无法购买商品。
@@ -8506,14 +8512,33 @@ exception.sms.code_invalid: 短信验证码错误
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
+exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
 
 exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+
+
+exception.file.not_found: 文件不存在
+exception.file.group_invalid: 文件组无效
+exception.file.not_upload: 文件未上传
+exception.file.handle_error: 文件处理
+
+exception.user.update_nickname_error: 昵称修改异常
+exception.user.nickname_invalid: 昵称格式错误
+exception.user.nickname_existed: 昵称已存在
+
 exception.user_lock: 账户被封禁，请联系管理员
+
+exception.parsed.failed.netease: 获取网易公开课视频信息失败
+exception.parsed.failed.letv: 获取乐视视频信息失败
+exception.parsed.failed.qq: 获取QQ视频信息失败
+exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parser.not.support: 不支持该视频类型
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 course.unname_title: 未命名计划
+

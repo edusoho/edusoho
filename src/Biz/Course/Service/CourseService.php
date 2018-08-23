@@ -189,7 +189,13 @@ interface CourseService
 
     public function searchCourses($conditions, $sort, $start, $limit, $columns = array());
 
+    public function searchWithJoinTableConditions($conditions, $sort, $start, $limit, $columns = array());
+
     public function searchCourseCount($conditions);
+
+    public function countWithJoinTableConditions($conditions);
+
+    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
 
     public function sortCourseItems($courseId, $ids);
 
@@ -278,6 +284,8 @@ interface CourseService
      *    （如果已经存在 excludeTypes 属性，则额外新增，非替换）
      */
     public function appendReservationConditions($conditions);
+
+    public function fillCourseTryLookVideo($courses);
 
     //修改课程基础信息
     public function updateBaseInfo($id, $fields);

@@ -10,7 +10,6 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Router;
 
 abstract class BaseTrade
 {
@@ -62,6 +61,7 @@ abstract class BaseTrade
             'platform' => $this->payment,
             'platform_type' => $this->platformType,
             'app_pay' => isset($params['app_pay']) ? $params['app_pay'] : '',
+            'wap_pay' => isset($params['wap_pay']) ? $params['wap_pay'] : '',
             'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => $this->payment), true),
             'return_url' => isset($params['return_url']) ? $params['return_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
             'show_url' => isset($params['show_url']) ? $params['show_url'] : '',
@@ -86,9 +86,8 @@ abstract class BaseTrade
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
-        $trade = $this->getPayService()->createTrade($tradeFields);
 
-        return $trade;
+        return $this->getPayService()->createTrade($tradeFields);
     }
 
     public function getCustomFields($params)

@@ -960,6 +960,40 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals(1, $result);
     }
 
+    public function testSharePublic()
+    {
+        $file = array('id' => 1, 'isPublic' => 1);
+        $this->mockBiz('File:UploadFileDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => $file,
+                    'runTimes' => 1,
+                ),
+            )
+        );
+
+        $result = $this->getUploadFileService()->sharePublic($file['id']);
+        $this->assertEquals($file['isPublic'], $result['isPublic']);
+    }
+
+    public function testUnsharePublic()
+    {
+        $file = array('id' => 1, 'isPublic' => 0);
+        $this->mockBiz('File:UploadFileDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => $file,
+                    'runTimes' => 1,
+                ),
+            )
+        );
+
+        $result = $this->getUploadFileService()->unsharePublic($file['id']);
+        $this->assertEquals($file['isPublic'], $result['isPublic']);
+    }
+
     protected function createUser($user)
     {
         $userInfo = array();

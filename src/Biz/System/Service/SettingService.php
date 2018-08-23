@@ -10,6 +10,8 @@ interface SettingService
 
     public function get($name, $default = null);
 
+    public function node($name, $default = null);
+
     public function delete($name);
 
     public function deleteByNamespaceAndName($namespace, $name);

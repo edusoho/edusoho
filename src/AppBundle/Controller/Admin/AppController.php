@@ -37,9 +37,9 @@ class AppController extends BaseController
             $value['code'] = strtolower($value['code']);
             $apps[$key]['code'] = $value['code'];
 
-            if ($value['type'] == 'theme') {
+            if ('theme' == $value['type']) {
                 $theme[] = $value;
-            } elseif ($value['type'] == 'app') {
+            } elseif ('app' == $value['type']) {
                 $app[] = $value;
             }
         }
@@ -63,7 +63,7 @@ class AppController extends BaseController
             'allApp' => $app,
             'installedApps' => $installedApps,
             'type' => $postStatus,
-            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null,
+            'appTypeChoices' => ('hidden' == $showType) ? 'installedApps' : null,
         ));
     }
 
@@ -99,7 +99,7 @@ class AppController extends BaseController
             $appsInstalled[$key]['installed'] = 1;
             $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
 
-            if ($key != 'MAIN') {
+            if ('MAIN' != $key) {
                 if (in_array($key, array('vip', 'coupon'))) {
                     $key = ucfirst($appItem);
                 } else {
@@ -120,9 +120,9 @@ class AppController extends BaseController
         $plugin = array();
 
         foreach ($apps as $key => $value) {
-            if ($value['type'] == 'theme') {
+            if ('theme' == $value['type']) {
                 $theme[] = $value;
-            } elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {
+            } elseif ('plugin' == $value['type'] || 'app' == $value['type']) {
                 $plugin[] = $value;
             }
         }

@@ -11,13 +11,13 @@ class OperationSettingController extends BaseController
     public function wapSetAction(Request $request)
     {
         $defaultWapSetting = array(
-            'enabled' => 1,
+            'version' => 1,
         );
 
         if ($request->isMethod('POST')) {
             $wapSetting = $request->request->all();
             $wapSetting = ArrayToolkit::parts($wapSetting, array(
-                'enabled',
+                'version',
             ));
 
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
