@@ -175,6 +175,7 @@ file: File
 operation: Action
 file.download.start: File download
 file.download.finish: File download complete
+come.from: Come from
 date.year: Year
 date.month: Month
 date.day: Day
@@ -793,7 +794,7 @@ course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
 course.course_member_count: '%studentsNum% students'
-course.activity: Activity
+course.activity: %taskName%
 course.plan: 课程计划
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
@@ -945,7 +946,7 @@ course.members_manage.official_student.detail.total_days: 'Learned days'
 course.members_manage.official_student.detail.total_time: 'Learned time'
 course.members_manage.official_student.detail.per_day_time: 'Average Learn time per day'
 course.members_manage.official_student.detail.create_question: Q&A
-course.members_manage.official_student.detail.join_activity: Activities
+course.members_manage.official_student.detail.join_activity: %taskName%
 course.members_manage.official_student.detail.create_article: Discussions
 course.members_manage.official_student.detail.reply_article: Replies
 course.members_manage.official_student.detail.status.unfinished: Unfinished
@@ -1035,10 +1036,8 @@ course.dashboard: 'Learn data'
 course.dashboard.content_title: 'Course Learn data'
 course.dashboard.course_dashboard: 'Data overview'
 course.dashboard.success_rate: '%taskName% finish rate'
-course.dashboard.study_detail: 'Task detail'
 course.dashboard.study_detail.name: '%taskName% name'
 course.dashboard.study_detail.per_study_time: 'Average Learn time(mintue)'
-course.dashboard.study_detail.per_study_time_tips: 'Task time: From start time to finish time of the task.  average  task time:average task time of students'
 course.dashboard.study_detail.audio_time: 'Video and audio duration(mintue)'
 course.dashboard.study_detail.audio_time_tips: 'Video and audio duration only support cloud and local videos and audios'
 course.dashboard.study_detail.per_audio_time: 'Average watch time of videos and audios(mintue)'
@@ -1054,9 +1053,6 @@ course.dashboard.study_detail.audio: (audio)
 course.dashboard.study_detail.testpaper: '(test paper)'
 course.dashboard.study_detail.ppt: （ppt）
 course.dashboard.study_detail.detail.username: Username
-course.dashboard.study_detail.detail.join_time: 'Task token time'
-course.dashboard.study_detail.detail.finish_time: 'Task finish time'
-course.dashboard.study_detail.detail.task_learn_time: 'Task Learn time(minute)'
 course.dashboard.study_detail.detail.audio_learn_time: 'Watch time of videos and audios(mintue)'
 course.dashboard.study_detail.detail.score: 'Score of latest test'
 course.dashboard.stunents_numbers: Students
@@ -1067,7 +1063,7 @@ course.dashboard.notes_numbers: Notes
 course.dashboard.questions_numbers: Questions
 course.dashboard.discussions_numbers: Discussions
 course.dashboard.free_view_numbers: Free view times
-course.dashboard.free_view_numbers_tips: Include free task and free view task,update at markets setting
+course.dashboard.free_view_numbers_tips: Include free %taskName% and free view task,update at markets setting
 course.dashboard.student_trend: Student trend
 course.dashboard.student_trend_seven_days: week
 course.dashboard.student_trend_thirty_days: month
@@ -1413,7 +1409,7 @@ course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
-course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in task, are you sure to close?'
+course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, are you sure to close?'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
@@ -1496,8 +1492,8 @@ course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 course.plan_overview: 'Data Overview'
 
 course.plan_task: Lessons
-course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
-course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
+course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">.'
+course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Config
@@ -1655,7 +1651,7 @@ course.plan_task.activity_manage.live.start_time: 'Start time'
 course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live class.'
 course.plan_task.activity_manage.live.live_time: 'Duration'
 course.plan_task.activity_manage.live.info: 'Description'
-course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live event may lead to later students can not participate, can only watch the playback.'
+course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live %taskName% may lead to later students can not participate, can only watch the playback.'
 course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 'Learn to the last page'
 course.plan_task.activity_manage.ppt.time: 'Learn duration'
@@ -2208,6 +2204,7 @@ classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
 classroom.student_import_tips: 'Cannot import students into unpublished class.'
+classroom.student_add_tips: 'Cannot add students into unpublished class.'
 classroom.member: Student
 classroom.auditor: Auditor
 classroom.exit_record: 'Quit record'
@@ -3201,7 +3198,6 @@ my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Discussion
 my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
 my.teaching.course_set.thread_empty: "student has not published any discussion in your course\n"
-my.teaching.testpaper.target_course: "from the course of \n"
 my.teaching.testpaper.course_task: Program
 my.teaching.testpaper.start_test_time: 'Test starts at'
 my.teaching.testpaper.checking: 'Is marking'
@@ -5591,7 +5587,7 @@ admin.login_connect.verifcation_code: 'Validation code'
 admin.login_connect.verifcation_code.help_block: 'When applying for third-party logon interface, you will be asked to verify your site domain name. Please copy and paste the validation code here, then submit.'
 admin.user_center.admin_sync_btn: 'Administrator account synchronization'
 admin.user_center.user_center.title: 'User Center'
-admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1'
+admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1/X3.2'
 admin.user_center.user_center.uc_connect.help_block: 'Tip: Due to discuz use mysql_connect connection, high version php has been abandoned, it is recommended not to fill in mysql, Leave it blank'
 admin.user_center.user_center.config_error: 'The configuration file <strong>%path%</strong> not be writable，please open this file and correct it.'
 admin.user_center.Configration: Configuration

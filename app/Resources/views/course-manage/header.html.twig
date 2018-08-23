@@ -19,7 +19,7 @@
   <div class="course-manage-header-info">
     <h1 class="course-manage-header-info__title text-overflow" {% if course.title|length > 10 %}data-toggle="tooltip" data-container="body" title="{{ course.title }}" {% endif %}>
       {% block title %}
-        <a class="cd-link-major" href="{{basepath}}">{{ course.title }}</a>
+        <span class="cd-dark-major">{{ course.title }}</span>
       {% endblock %}
     </h1>
     <div class="course-manage-header-info__type">
@@ -40,6 +40,8 @@
           data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
           data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
           data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
+      {% else %}
+        <a class="cd-btn cd-btn-default" target="_blank" href="{{basepath}}">{{ 'course.check.plan'|trans }}</a>
       {% endif %}
     </div>
   {% endblock %}

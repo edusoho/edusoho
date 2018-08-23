@@ -298,4 +298,15 @@ class ArrayToolkit
 
         return array_replace(array_flip($orderArray), $array);
     }
+
+    /**
+     * 判断2个数组，是否值是相同的 （不同key, 相同value视为相同）
+     */
+    public static function isSameValues($arr1, $arr2)
+    {
+        sort($arr1);
+        sort($arr2);
+
+        return $arr1 == $arr2;
+    }
 }

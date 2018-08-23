@@ -1,17 +1,13 @@
 <tr>
-  <td>
-    <a class="link-primary" href="{% if status == 'reviewing' %}{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id}) }}{% elseif status == 'finished' %}{{ path('testpaper_result_show', {resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
-    <br>
-    <small class="color-gray">
-      {% if courseSet|default(null) %}
-        {{ 'my.teaching.testpaper.target_course'|trans }}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">《{{courseSet.title|default('')}}》</a> •
-      {% endif %}
-      {% if course|default(null) %}
-        {{ 'my.teaching.testpaper.course_task'|trans }}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>
-      {% endif %}
-    </small>
-    <small class="color-gray mhs">•</small>
-    <small class="color-gray">{{'my.teaching.testpaper.detail'|trans({'%score%':testpaper.score,'%itemCount%':testpaper.itemCount})}}</small>
+  <td width="55%" class="vertical-middle">
+    {{ testpaper.name|plain_text(60) }}
+    <div>
+      <small class="color-gray">
+        {{ 'come.from'|trans }}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{get_formated_course_title(course)}}》</a>
+      </small>
+      <small class="color-gray mhs">•</small>
+      <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{'my.teaching.testpaper.detail'|trans({'%score%':testpaper.score,'%itemCount%':testpaper.itemCount})}}</small>
+    </div>
   </td>
   <td width="20%" class="vertical-middle">
     {{ web_macro.user_link(student) }} <br>

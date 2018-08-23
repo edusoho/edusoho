@@ -4,11 +4,7 @@
 {% endblock %}
 
 {% block coursesetTitle %}
-  {% if courseSet.status == 'published' %}
-    <a class="cd-link-major" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
-  {% else %}
-    <a class="cd-link-major" href="{{ path('course_show', {id: courseSet.defaultCourseId, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
-  {% endif %}
+  <a class="cd-link-major" target="_blank" href="{{ courseSet.redirect_path }}">{{ courseSet.title }}</a>
 {% endblock %}
 
 {% block courseTitle %}
@@ -19,7 +15,12 @@
 {% endblock %}
 
 {% block btn %}
-  <a class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
+  <a class="cd-btn cd-btn-ghost-primary cd-mr16" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
+  {% if courseSet.status != 'published' %}
+    <a class="cd-btn cd-btn-ghost-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
+  {% else %}
+    <a class="cd-btn cd-btn-ghost-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{'my.learning.course.watch'|trans}}</a>
+  {% endif %}
 {% endblock %}
 
 {% block close %}

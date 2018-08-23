@@ -239,6 +239,7 @@ file: 文件
 operation: 操作
 file.download.start: 文件下载中
 file.download.finish: 文件下载完成
+come.from: 来自
 
 #日期通用
 date.year: 年
@@ -911,7 +912,7 @@ course.announcement.default_content: >
 course.students_count: >
   <span class="mhs">%studentsNum%</span>人加入学习
 course.course_member_count: %studentsNum%人
-course.activity: 活动
+course.activity: %taskName%
 course.praise: 好评课程
 course.plan: 课程计划
 course.teaching_plan: 教学计划
@@ -1072,7 +1073,7 @@ course.members_manage.official_student.detail.total_days: 累计学习天数
 course.members_manage.official_student.detail.total_time: 学习时长
 course.members_manage.official_student.detail.per_day_time: 日均学习时长
 course.members_manage.official_student.detail.create_question: 发起提问
-course.members_manage.official_student.detail.join_activity: 参加活动
+course.members_manage.official_student.detail.join_activity: 参加%taskName%
 course.members_manage.official_student.detail.create_article: 发起话题
 course.members_manage.official_student.detail.reply_article: 回复话题
 course.members_manage.official_student.detail.status.unfinished: 未完成
@@ -1174,10 +1175,8 @@ course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
 course.dashboard.success_rate: %taskName%完成率
-course.dashboard.study_detail: 活动学习详情
 course.dashboard.study_detail.name: %taskName%名
 course.dashboard.study_detail.per_study_time: 平均学习时长(分)
-course.dashboard.study_detail.per_study_time_tips: 活动学习时长：从活动开始到活动完成的耗时，活动平均学习时长：每个学员的活动学习时长的平均数
 course.dashboard.study_detail.audio_time: 音视频时长(分)
 course.dashboard.study_detail.audio_time_tips: 音视频的实际时长，仅支持云视频和本地音视频
 course.dashboard.study_detail.per_audio_time: 音视频平均观看时长(分)
@@ -1193,9 +1192,6 @@ course.dashboard.study_detail.audio: （音频）
 course.dashboard.study_detail.testpaper: （试卷）
 course.dashboard.study_detail.ppt: （ppt）
 course.dashboard.study_detail.detail.username: 用户名
-course.dashboard.study_detail.detail.join_time: 加入活动时间
-course.dashboard.study_detail.detail.finish_time: 完成活动时间
-course.dashboard.study_detail.detail.task_learn_time: 活动学习时长（分）
 course.dashboard.study_detail.detail.audio_learn_time: 音视频学习时长（分）
 course.dashboard.study_detail.detail.score: 最近考试得分
 course.dashboard.stunents_numbers: 计划学员数
@@ -1206,7 +1202,7 @@ course.dashboard.notes_numbers: 笔记数
 course.dashboard.questions_numbers: 提问数
 course.dashboard.discussions_numbers: 话题数
 course.dashboard.free_view_numbers: 免费试看数
-course.dashboard.free_view_numbers_tips: 观看免费活动和试看视频的总次数
+course.dashboard.free_view_numbers_tips: 观看免费%taskName%和试看视频的总次数
 course.dashboard.student_trend: 学员趋势
 course.dashboard.student_trend_seven_days: 7天
 course.dashboard.student_trend_thirty_days: 30天
@@ -1579,7 +1575,7 @@ course.testpaper_manage.publish_btn: 发布试卷
 course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
 course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
-course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被活动引用，真的要关闭吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，真的要关闭吗？
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
@@ -1668,12 +1664,11 @@ course.plan_overview: 数据概览
 course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
   在
-  <input class="form-control width-150" id="deadline" name="deadline" value="">
+  <input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">
   前，学员可进行学习。
 course.plan_task.expiry_days_learn_tips: >
   从加入当天起，在
-  <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"
-  value="1">
+  <input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">
   天内可进行学习。
 course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
@@ -1854,7 +1849,7 @@ course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
 course.plan_task.activity_manage.live.info: 直播说明
-course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。
+course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
@@ -2549,6 +2544,7 @@ classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
+classroom.student_add_tips: 班级未发布,不可添加学员
 classroom.member: 正式学员
 classroom.auditor: 旁听生
 classroom.exit_record: 退出记录
@@ -3823,7 +3819,6 @@ my.teaching.course_set.question_empty: >
 my.teaching.course_set.thread_empty: >
   您的课程中还没有学员发表话题...
 
-my.teaching.testpaper.target_course: 来自课程
 my.teaching.testpaper.course_task: 计划
 my.teaching.testpaper.start_test_time: 开始考试时间
 my.teaching.testpaper.checking: 正在批阅
@@ -4150,7 +4145,6 @@ my.learning.homework.check_finish: 已批阅
 my.learning.homework.check_reviewing: 批阅中
 my.learning.homework.target_course: >
   来自课程<a class="link-primary" href="%showUrl%" target="_blank">《%courseTitle%》</a>
-my.learning.homework.course_plan: 计划
 my.learning.homework.begin_time: 开始时间
 my.learning.homework.checking: 正在批阅
 my.learning.homework.right_question_count: >
@@ -6847,7 +6841,7 @@ admin.login_connect.verifcation_code: 验证代码
 admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
-admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1/X3.2的用户中心
 admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
 admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
@@ -8112,11 +8106,11 @@ my.reward_point.mall.search_hint: 输入标题关键字
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 加入学习时间
-task.learn_data_detail.finishedTime: 完成活动时间
+task.learn_data_detail.finishedTime: 完成%taskName%时间
 task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
 task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
-task.learn_data_detail.learnTime: 活动学习时长（分）
+task.learn_data_detail.learnTime: %taskName%学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
 task.learn_data_detail.finished_rate: 完成率
 task.learn_data_detail.contact_information: 联系方式
