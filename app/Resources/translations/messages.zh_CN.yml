@@ -8274,7 +8274,7 @@ log.action.classroom.remove_student: 移除学员
 log.action.classroom.recommend: 推荐班级
 log.action.classroom.cancel_recommend: 取消推荐
 log.action.classroom.publish: 发布班级
-log.action.classroom.close: 关闭推荐
+log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
