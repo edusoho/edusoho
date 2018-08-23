@@ -61,7 +61,6 @@ class LogController extends BaseController
         if (array_key_exists($log['module'], $transConfigs)) {
             if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
                 $transConfig = $transConfigs[$log['module']][$log['action']];
-
                 if (array_key_exists('modalField', $transConfig)) {
                     $modalShowFields = $transConfig['modalField'];
                 }
@@ -78,9 +77,7 @@ class LogController extends BaseController
         foreach ($data as $message => $fieldChange) {
             if (is_array($fieldChange) && in_array($message, $modalShowFields)) {
                 $key = LogDataUtils::trans($message, $log['module'], $log['action']);
-
                 $fieldChange = self::getStrChangeFiled($log['module'], $log['action'], $fieldChange, $message);
-
                 $showData[$key] = $fieldChange;
             }
         }
@@ -104,7 +101,6 @@ class LogController extends BaseController
 
     private function logsSetUrlParamsJson($logs)
     {
-//        $transConfigs = LogDataUtils::getLogConfig();
         $transConfigs = LogDataUtils::getYmlConfig();
         $getValueDefaultConfig = LogDataUtils::getLogDefaultConfig();
         foreach ($logs as &$log) {
