@@ -15,16 +15,52 @@ class PageSetting extends AbstractResource
      */
     public function get(ApiRequest $request, $portal, $type)
     {
-        if (!in_array($type, array('course'))) {
+        if (!in_array($type, array('courseCondition', 'discovery'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
+        $mode = $request->query->get('mode', 'published');
+        $method = 'get'.ucfirst($type);
 
-        $method = "get${type}";
-
-        return $this->$method();
+        return $this->$method($portal, $mode);
     }
 
-    protected function getCourse()
+    /**
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
+    public function add(ApiRequest $request, $portal)
+    {
+        $type = $request->query->get('type');
+        if (!in_array($type, array('courseCondition', 'discovery'))) {
+            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        $mode = $request->query->get('mode', 'draft');
+        $content = $request->request->all();
+        $method = 'add'.ucfirst($type);
+
+        return $this->$method($portal, $mode, $content);
+    }
+
+    protected function addDiscovery($portal, $mode = 'draft', $content = array())
+    {
+        return $this->getSettingService()->set("{$portal}-{$mode}-discovery", $content);
+    }
+
+    protected function addCourseCondition($portal, $mode = 'draft', $content = array())
+    {
+        return $this->getSettingService()->set("{$portal}-{$mode}-courseCondition", $content);
+    }
+
+    protected function getDiscovery($portal, $mode = 'published')
+    {
+        $user = $this->getCurrentUser();
+        if ('draft' == $mode && !$user->isAdmin()) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return $this->getSettingService()->get("{$portal}-{$mode}-discovery", array());
+    }
+
+    protected function getCourseCondition($portal, $mode = 'published')
     {
         $group = $this->getCategoryService()->getGroupByCode('course');
 
@@ -76,5 +112,10 @@ class PageSetting extends AbstractResource
     protected function getCategoryService()
     {
         return $this->service('Taxonomy:CategoryService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }
