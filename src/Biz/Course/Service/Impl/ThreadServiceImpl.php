@@ -33,6 +33,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
     }
 
+    public function getThreadByThreadId($threadId)
+    {
+        $thread = $this->getThreadDao()->get($threadId);
+
+        if (empty($thread)) {
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+        }
+
+        return $thread;
+    }
+
     public function getThread($courseId, $threadId)
     {
         $thread = $this->getThreadDao()->get($threadId);
@@ -240,12 +251,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadDao()->delete($threadId);
 
         $this->dispatchEvent('course.thread.delete', new Event($thread));
-
-        $infoData = array(
-            'title' => $thread['title'],
-        );
-
-        $this->getLogService()->info('course', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})", $infoData);
     }
 
     public function stickThread($courseId, $threadId)

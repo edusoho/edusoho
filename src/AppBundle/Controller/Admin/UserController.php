@@ -238,7 +238,6 @@ class UserController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
                 $this->setFlashMessage('danger', 'user.settings.profile.unable_change_bind_mobile');
             }

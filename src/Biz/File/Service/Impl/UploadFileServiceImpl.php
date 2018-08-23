@@ -315,8 +315,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'length' => isset($result['length']) ? $result['length'] : 0,
             ));
 
-            $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
-
             $this->getLogger()->info("finishedUpload 添加文件：#{$file['id']}");
 
             if ('headLeader' == $file['targetType']) {
@@ -370,8 +368,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $result = $this->getUploadFileDao()->deleteByGlobalId($globalId);
-
-        $this->getLogService()->info('upload_file', 'delete', "删除文件globalId (#{$globalId})", $file);
 
         return $result;
     }
@@ -434,17 +430,17 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array('error' => 'course_not_exist', 'message' => sprintf('文件%s所属的课程已删除。', $id));
         }
 
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+        if (!empty($file['convertParams']['convertor']) && 'HLSEncryptedVideo' == $file['convertParams']['convertor']) {
             return array('error' => 'already_converted', 'message' => sprintf('文件%s已转换', $id));
         }
 
         $fileNeedUpdateFields = array();
 
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSVideo') {
+        if (!empty($file['convertParams']['convertor']) && 'HLSVideo' == $file['convertParams']['convertor']) {
             $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
             $file['convertParams']['hlsKey'] = $this->generateKey(16);
 
-            if ($file['convertParams']['videoQuality'] == 'low') {
+            if ('low' == $file['convertParams']['videoQuality']) {
                 $file['convertParams']['videoQuality'] = 'normal';
                 $file['convertParams']['video'] = array('440k', '640k', '1000K');
             }
@@ -724,7 +720,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->create($file);
 
             $this->dispatchEvent('upload.file.add', array('file' => $file));
-            $this->getLogService()->info('upload_file', 'create', "添加文件(#{$file['id']})", $file);
             $this->getLogger()->info("addFile 添加文件：#{$file['id']}");
 
             $this->commit();
@@ -763,7 +758,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $this->dispatchEvent('upload.file.delete', $file);
-        $this->getLogService()->info('upload_file', 'delete', "删除文件(#{$id})", $file);
 
         return $result;
     }

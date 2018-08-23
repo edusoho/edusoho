@@ -19,12 +19,6 @@ class Log
 
     /**
      * @var
-     * LOG INFO
-     */
-    private $message;
-
-    /**
-     * @var
      * same to TargetLogService level
      */
     private $level;
@@ -33,9 +27,13 @@ class Log
 
     private $module;
 
-    private $targetType;
+    private $param;
 
-    private $targetId = 0;
+    private $funcName;
+
+    private $serviceName = '';
+
+    private $postfix = '';
 
     public function __construct(array $data)
     {
@@ -85,11 +83,6 @@ class Log
         return $this->module;
     }
 
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
     public function getLevel()
     {
         return $this->level;
@@ -100,19 +93,24 @@ class Log
         return $this->action;
     }
 
-    public function getTargetType()
+    public function getParam()
     {
-        return $this->targetType;
+        return $this->param;
     }
 
-    public function getTargetId()
+    public function getFuncName()
     {
-        return $this->targetId;
+        return $this->funcName;
     }
 
-    public function setMessage($message)
+    public function getServiceName()
     {
-        $this->message = $message;
+        return $this->serviceName;
+    }
+
+    public function getPostfix()
+    {
+        return $this->postfix;
     }
 
     public function setLevel($level)
@@ -125,18 +123,28 @@ class Log
         $this->action = $action;
     }
 
-    public function setTargetType($targetType)
-    {
-        $this->targetType = $targetType;
-    }
-
-    public function setTargetId($targetId)
-    {
-        $this->targetId = $targetId;
-    }
-
     public function setModule($module)
     {
         $this->module = $module;
+    }
+
+    public function setParam($param)
+    {
+        $this->param = $param;
+    }
+
+    public function setFuncName($funcName)
+    {
+        $this->funcName = $funcName;
+    }
+
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
+    }
+
+    public function setPostfix($postfix)
+    {
+        $this->postfix = $postfix;
     }
 }

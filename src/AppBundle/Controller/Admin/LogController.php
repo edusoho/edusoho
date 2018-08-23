@@ -54,20 +54,30 @@ class LogController extends BaseController
     {
         $log = $request->query->get('log');
         $data = $log['data'];
+        $modalShowFields = array();
         $showData = array();
 
-        foreach ($data as $message => $fieldChange) {
-            if (is_array($fieldChange)) {
-                $key = LogDataUtils::trans($message, $log['module'], $log['action']);
-                if (!isset($fieldChange['old'])) {
-                    $fieldChange['old'] = '';
+        $transConfigs = LogDataUtils::getYmlConfig();
+        if (array_key_exists($log['module'], $transConfigs)) {
+            if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
+                $transConfig = $transConfigs[$log['module']][$log['action']];
+                if (array_key_exists('modalField', $transConfig)) {
+                    $modalShowFields = $transConfig['modalField'];
                 }
-                if (!isset($fieldChange['new'])) {
-                    $fieldChange['new'] = '';
-                }
-                $fieldChange['old'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['old'], $message);
-                $fieldChange['new'] = $this->tryTrans($log['module'], $log['action'], $fieldChange['new'], $message);
+            }
+        }
 
+        if ('all' == $modalShowFields) {
+            $modalShowFields = array();
+            foreach ($data as $message => $fieldChange) {
+                $modalShowFields[] = $message;
+            }
+        }
+
+        foreach ($data as $message => $fieldChange) {
+            if (is_array($fieldChange) && in_array($message, $modalShowFields)) {
+                $key = LogDataUtils::trans($message, $log['module'], $log['action']);
+                $fieldChange = self::getStrChangeFiled($log['module'], $log['action'], $fieldChange, $message);
                 $showData[$key] = $fieldChange;
             }
         }
@@ -91,51 +101,130 @@ class LogController extends BaseController
 
     private function logsSetUrlParamsJson($logs)
     {
-        $transConfigs = LogDataUtils::getTransConfig();
+        $transConfigs = LogDataUtils::getYmlConfig();
+        $getValueDefaultConfig = LogDataUtils::getLogDefaultConfig();
         foreach ($logs as &$log) {
             $transJsonData = array();
             $logData = $log['data'];
             $log['urlParamsJson'] = array();
             $log['shouldShowModal'] = false;
-            $log['shouldShowTemplate'] = false;
+            $log['shouldShowTemplate'] = true;
+
+            $templateParam = array();
+
             if (array_key_exists($log['module'], $transConfigs)) {
                 if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
                     $transConfig = $transConfigs[$log['module']][$log['action']];
-                    $log['shouldShowTemplate'] = true;
-                    $log['shouldShowModal'] = LogDataUtils::shouldShowModal($log['module'], $log['action']);
 
-                    if (isset($transConfig['getValue'])) {
-                        foreach ($transConfig['getValue'] as $key => $value) {
-                            if (!array_key_exists($value, $logData)) {
+                    if (array_key_exists('templateParam', $transConfig)) {
+                        $templateParam = array_merge($getValueDefaultConfig, $transConfig['templateParam']);
+                    }
+                    if (array_key_exists('modalField', $transConfig)) {
+                        $log['shouldShowModal'] = true;
+                    }
+                }
+            }
+
+            $templateParam = $this->getDefaultTemplateConfig($templateParam, $getValueDefaultConfig);
+
+            foreach ($templateParam as $key => $paramConfig) {
+                if (!is_array($paramConfig) || !array_key_exists('type', $paramConfig)) {
+                    $transJsonDataValue = $this->getArrayValueByConventKey($paramConfig, $logData);
+                    if (false === $transJsonDataValue) {
+                        $log['shouldShowTemplate'] = false;
+                        $log['shouldShowModal'] = false;
+                        continue;
+                    }
+                    $transJsonData[$key] = $transJsonDataValue;
+                } else {
+                    if ('url' == $paramConfig['type']) {
+                        $urlParam = array();
+                        foreach ($paramConfig['param'] as $param => $value) {
+                            $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
+                            if (false === $urlParamValue) {
                                 $log['shouldShowTemplate'] = false;
                                 $log['shouldShowModal'] = false;
-                                continue;
+                                continue 2;
                             }
-                            $transJsonData[$key] = $logData[$value];
+                            $urlParam[$param] = $urlParamValue;
                         }
+                        $transJsonData[$key] = $this->generateUrl($paramConfig['path'], $urlParam);
                     }
-                    if (isset($transConfig['generateUrl'])) {
-                        foreach ($transConfig['generateUrl'] as $key => $urlConfig) {
-                            $urlParam = array();
-                            foreach ($urlConfig['param'] as $param => $value) {
-                                if (!array_key_exists($value, $logData)) {
-                                    $log['shouldShowTemplate'] = false;
-                                    $log['shouldShowModal'] = false;
-                                    continue 2;
-                                }
-                                $urlParam[$param] = $logData[$value];
-                            }
+                }
+            }
 
-                            $transJsonData[$key] = $this->generateUrl($urlConfig['path'], $urlParam);
-                        }
+            $log['urlParamsJson'] = $transJsonData;
+        }
+
+        return $logs;
+    }
+
+    private function getDefaultTemplateConfig($templateParam, $defaultConfig)
+    {
+        foreach ($defaultConfig as $key => $value) {
+            if (!array_key_exists($key, $templateParam)) {
+                $templateParam[$key] = $value;
+            }
+        }
+
+        return $templateParam;
+    }
+
+    private function getArrayValueByConventKey($keyName, $targetArray)
+    {
+        $data = '';
+        if (is_array($keyName)) {
+            foreach ($keyName as $key) {
+                if (array_key_exists($key, $targetArray)) {
+                    if (!empty($targetArray[$key])) {
+                        $data = $targetArray[$key];
+                        break;
                     }
-
-                    $log['urlParamsJson'] = $transJsonData;
+                }
+            }
+        } else {
+            $keys = explode('.', $keyName);
+            foreach ($keys as $key) {
+                if (empty($data)) {
+                    if (!array_key_exists($key, $targetArray)) {
+                        return false;
+                    }
+                    $data = $targetArray[$key];
+                } else {
+                    if (!array_key_exists($key, $data)) {
+                        return false;
+                    }
+                    $data = $data[$key];
                 }
             }
         }
 
-        return $logs;
+        return $data;
+    }
+
+    private function getStrChangeFiled($module, $action, $fieldChange, $message)
+    {
+        if (!isset($fieldChange['old'])) {
+            $fieldChange['old'] = '';
+        }
+        if (!isset($fieldChange['new'])) {
+            $fieldChange['new'] = '';
+        }
+
+        $fieldChange['old'] = $this->getTransField($module, $action, $fieldChange['old'], $message);
+        $fieldChange['new'] = $this->getTransField($module, $action, $fieldChange['new'], $message);
+
+        return $fieldChange;
+    }
+
+    private function getTransField($module, $action, $field, $message)
+    {
+        if (is_array($field)) {
+            $field = json_encode($field);
+        }
+        $field = $this->tryTrans($module, $action, $field, $message);
+
+        return $field;
     }
 
     private function tryTrans($module, $action, $message, $prefix = '')
@@ -222,5 +311,15 @@ class LogController extends BaseController
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

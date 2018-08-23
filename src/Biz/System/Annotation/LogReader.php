@@ -30,20 +30,35 @@ class LogReader
         foreach ($interfaces as $interfaceName => $interfaceObj) {
             $reflectInterface = new \ReflectionClass($interfaceName);
             $methods = $reflectInterface->getMethods();
+            $nameSpaceKey = self::getServiceNameSpaceKey($reflectInterface->getNamespaceName());
+            $name = self::getServiceName($interfaceName);
             foreach ($methods as $method) {
                 $annotation = $annotationReader->getMethodAnnotation($method, '\Biz\System\Annotation\Log');
+
+                $ReflectionFunc = new \ReflectionMethod($interfaceName, $method->name);
+                $parameters = $ReflectionFunc->getParameters();
+                $funcParam = array();
+                foreach ($parameters as $parameter) {
+                    $funcParam[] = $parameter->name;
+                }
+
                 if (empty($annotation)) {
                     $interceptorData[$method->getName()] = array();
                     continue;
                 }
                 $log = array();
-                $log['level'] = $annotation->getLevel();
-                $log['levelId'] = $annotation->getLevelId();
                 $log['module'] = $annotation->getModule();
-                $log['targetType'] = $annotation->getTargetType();
-                $log['targetId'] = $annotation->getTargetId();
                 $log['action'] = $annotation->getAction();
-                $log['message'] = $annotation->getMessage();
+                $log['param'] = $annotation->getParam();
+                $log['postfix'] = $annotation->getPostfix();
+                $log['funcName'] = $annotation->getFuncName();
+                $log['funcParam'] = $funcParam;
+                $serviceName = $annotation->getServiceName();
+                if (!empty($serviceName)) {
+                    $log['service'] = $serviceName;
+                } else {
+                    $log['service'] = $nameSpaceKey.':'.$name;
+                }
                 $interceptorData[$method->getName()] = $log;
             }
         }
@@ -87,5 +102,28 @@ class LogReader
         $filepath = $this->cacheDirectory.DIRECTORY_SEPARATOR.$filename;
 
         return $filepath;
+    }
+
+    protected function getServiceNameSpaceKey($nameSpace)
+    {
+        $array = explode('\\', $nameSpace);
+        foreach ($array as $key => $value) {
+            if ('Service' == $value) {
+                return $array[$key - 1];
+            }
+        }
+
+        return $nameSpace;
+    }
+
+    protected function getServiceName($name)
+    {
+        $array = explode('\\', $name);
+        $count = count($array);
+        if ($count > 1) {
+            return $array[$count - 1];
+        }
+
+        return $name;
     }
 }

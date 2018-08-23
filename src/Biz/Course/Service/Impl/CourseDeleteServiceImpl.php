@@ -52,7 +52,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteCourseSetMaterial($courseSetId)
     {
         $this->getMaterialService()->deleteMaterialsByCourseSetId($courseSetId, 'course');
-        $this->getLogService()->info('course', 'delete_material', "删除课程(#{$courseSetId})的资料");
     }
 
     protected function deleteCourseSetCourse($courseSetId)
@@ -176,19 +175,16 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getSettingService()->set('operation_course_grids', array('courseIds' => implode(',', $courseIds)));
         $this->getSettingService()->set('operation_mobile', $operationMobile);
         $this->getSettingService()->set('mobile', $mobile);
-        $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
     }
 
     protected function deleteCourseMaterial($courseId)
     {
         $this->getMaterialService()->deleteMaterialsByCourseId($courseId, 'course');
-        $this->getLogService()->info('course', 'delete_material', "删除计划(#{$courseId})下的资料");
     }
 
     protected function deleteCourseChapter($courseId)
     {
         $this->getChapterDao()->deleteChaptersByCourseId($courseId);
-        $this->getLogService()->info('course', 'delete_chapter', "删除计划(#{$courseId})下的章节");
     }
 
     protected function deleteTask($courseId)
@@ -197,7 +193,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         if (!empty($tasks)) {
             $this->getTaskDao()->deleteByCourseId($courseId);
             foreach ($tasks as $task) {
-                $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
                 //delete activity
                 $this->getActivityService()->deleteActivity($task['activityId']);
                 $this->deleteJob($task);
@@ -208,18 +203,16 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteTaskResult($courseId)
     {
         $this->getTaskResultDao()->deleteByCourseId($courseId);
-        $this->getLogService()->info('course', 'delete_taskLearn', "删除计划(#{$courseId})下的全部任务学习记录");
     }
 
     protected function deleteCourseMember($courseId)
     {
         $this->getMemberDao()->deleteByCourseId($courseId);
-        $this->getLogService()->info('course', 'delete_member', "删除计划(#{$courseId})下的学员");
     }
 
     protected function deleteJob($task)
     {
-        if ($task['type'] != 'live') {
+        if ('live' != $task['type']) {
             return;
         }
         //当前系统已不存在这个job PushNotificationOneHourJob_lesson_taskId
@@ -227,14 +220,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$task['id']);
         $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_task_'.$task['id']);
         $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_task_'.$task['id']);
-
-        $this->getLogService()->info('course', 'delete_course_job', '删除直播任务的推送及发送短信的定时任务');
     }
 
     protected function deleteCourseJob($courseId)
     {
         $this->getCourseJobDao()->deleteByTypeAndCourseId('refresh_learning_progress', $courseId);
-        $this->getLogService()->info('course', 'delete_course_job', "删除计划(#{$courseId})下的更新学员学习进度的job");
     }
 
     protected function deleteCourseNote($courseId)
@@ -248,28 +238,22 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getNoteLikeDao()->deleteByNoteId($note['id']);
         }
         $this->getNoteDao()->deleteByCourseId($courseId);
-
-        $this->getLogService()->info('course', 'delete_note', "删除计划(#{$courseId})下的笔记");
     }
 
     protected function deleteCourseThread($courseId)
     {
         $this->getThreadPostDao()->deleteByCourseId($courseId);
         $this->getThreadDao()->deleteByCourseId($courseId);
-
-        $this->getLogService()->info('course', 'delete_thread', "删除计划(#{$courseId})下的话题及回复");
     }
 
     protected function deleteCourseReview($courseId)
     {
         $this->getReviewDao()->deleteByCourseId($courseId);
-        $this->getLogService()->info('course', 'delete_review', "删除计划(#{$courseId})下的评价");
     }
 
     protected function deleteCourseFavorite($courseId)
     {
         $this->getFavoriteDao()->deleteByCourseId($courseId);
-        $this->getLogService()->info('course', 'delete_course_favorite', "删除关于计划(#{$courseId})下的收藏");
     }
 
     public function deleteCourseAnnouncement($courseId)
@@ -282,22 +266,17 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         foreach ($announcements as $announcement) {
             $this->getAnnouncementService()->deleteAnnouncement($announcement['id']);
         }
-
-        $this->getLogService()->info('course', 'delete_announcement', "删除计划(#{$courseId})下的公告");
     }
 
     protected function deleteCourseStatus($courseId)
     {
         $this->getStatusService()->deleteStatusesByCourseId($courseId);
-        $this->getLogService()->info('course', 'delete_status', "删除计划(#{$courseId})的学员动态");
     }
 
     protected function deleteCourseCoversation($courseId)
     {
         $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course');
         $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course-push');
-
-        $this->getLogService()->info('course', 'delete_coversation', "删除计划(#{$courseId})的会话");
     }
 
     /**

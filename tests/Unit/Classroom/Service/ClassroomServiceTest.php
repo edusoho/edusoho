@@ -226,22 +226,8 @@ class ClassroomServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->mockBiz(
-            'System:LogService',
-            array(
-                array(
-                    'functionName' => 'info',
-                    'withParams' => array(
-                        'classroom',
-                        'recommend',
-                        '推荐班级《title》(#1),序号为11',
-                    ),
-                ),
-            )
-        );
         $result = $this->getClassroomService()->recommendClassroom(1, 11);
 
-        $this->getLogService()->shouldHaveReceived('info');
         $this->assertEquals(array('id' => 1, 'recommended' => 1, 'title' => 'title'), $result);
     }
 
@@ -279,22 +265,8 @@ class ClassroomServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->mockBiz(
-            'System:LogService',
-            array(
-                array(
-                    'functionName' => 'info',
-                    'withParams' => array(
-                        'classroom',
-                        'cancel_recommend',
-                        '取消推荐班级《title》(#1)',
-                    ),
-                ),
-            )
-        );
         $result = $this->getClassroomService()->cancelRecommendClassroom(1, 11);
 
-        $this->getLogService()->shouldHaveReceived('info');
         $this->assertEquals(array('id' => 1, 'recommended' => 0, 'title' => 'title'), $result);
     }
 

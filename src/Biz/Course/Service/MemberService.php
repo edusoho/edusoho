@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Service;
 
+use Biz\System\Annotation\Log;
+
 interface MemberService
 {
     const MAX_TEACHER = 100;
@@ -57,6 +59,13 @@ interface MemberService
 
     public function setDefaultTeacher($courseId);
 
+    /**
+     * @param $courseId
+     * @param $teachers
+     *
+     * @return mixed
+     * @Log(module="course",action="update_teacher",serviceName="Course:CourseService",funcName="getCourse",param="courseId")
+     */
     public function setCourseTeachers($courseId, $teachers);
 
     public function cancelTeacherInAllCourses($userId);
@@ -134,7 +143,7 @@ interface MemberService
     public function countPostsByCourseIdAndUserId($courseId, $userId);
 
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus');
-    
+
     public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus');
 
     public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date);
