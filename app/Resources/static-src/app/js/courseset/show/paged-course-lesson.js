@@ -64,7 +64,19 @@ class PagedCourseLesson {
         },
 
         'getLessonName': function(data, context) {
-          return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: data.number, title: data.title });
+          if (data['isOptional']) {
+            return data.title;
+          } else {
+            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: data.number, title: data.title });
+          }
+        },
+
+        /*
+         * 如果是多任务课时，任务上不显示选修，因为课时上已经显示选修了
+         * 单任务课时，则直接在任务上显示选修（单任务课时时，只显示一条记录，以任务记录为主，附加了课时信息）
+         */
+        'isTreatedAsTaskOptional': function(data, context) {
+          return data['isOptional'] && (data['itemType'] != 'task' || data['isSingleTaskLesson']);
         },
 
         'getTaskName': function(data, context) {

@@ -13,7 +13,12 @@
 
     <li class="task-item infinite-item {lessonContainerClass}"
       display-if="{isLesson}">
-      <span class="title">{getLessonName}</span>
+      <span class="title">
+        <tmp display-if="{isOptional}">
+          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+        </tmp>
+        {getLessonName}
+      </span>
     </li>
 
     <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} {lessonContainerClass} mouse-control infinite-item">
@@ -21,7 +26,7 @@
       
       <a display-if="{isPublishedTaskUnlocked}" class="title"
           href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
-        <tmp display-if="{isOptional}">
+        <tmp display-if="{isTreatedAsTaskOptional}">
           <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
 
