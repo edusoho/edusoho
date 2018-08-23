@@ -57,7 +57,8 @@ class LogController extends BaseController
         $modalShowFields = array();
         $showData = array();
 
-        $transConfigs = LogDataUtils::getLogConfig();
+//        $transConfigs = LogDataUtils::getLogConfig();
+        $transConfigs = LogDataUtils::getYmlConfig();
         if (array_key_exists($log['module'], $transConfigs)) {
             if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
                 $transConfig = $transConfigs[$log['module']][$log['action']];
@@ -114,7 +115,7 @@ class LogController extends BaseController
             $log['shouldShowModal'] = false;
             $log['shouldShowTemplate'] = true;
 
-            $templateParam = $getValueDefaultConfig;
+            $templateParam = array();
 
             if (array_key_exists($log['module'], $transConfigs)) {
                 if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
@@ -128,6 +129,8 @@ class LogController extends BaseController
                     }
                 }
             }
+
+            $templateParam = $this->getDefaultTemplateConfig($templateParam, $getValueDefaultConfig);
 
             foreach ($templateParam as $key => $paramConfig) {
                 if (!is_array($paramConfig) || !array_key_exists('type', $paramConfig)) {
@@ -159,6 +162,17 @@ class LogController extends BaseController
         }
 
         return $logs;
+    }
+
+    private function getDefaultTemplateConfig($templateParam, $defaultConfig)
+    {
+        foreach ($defaultConfig as $key => $value) {
+            if (!array_key_exists($key, $templateParam)) {
+                $templateParam[$key] = $value;
+            }
+        }
+
+        return $templateParam;
     }
 
     private function getArrayValueByConventKey($keyName, $targetArray)
