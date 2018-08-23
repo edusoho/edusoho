@@ -14,7 +14,6 @@ class LogDataUtils
         $config = array();
 
         $paths = self::getConfigPath();
-
         $permissions = array();
         foreach ($paths as $path) {
             if (!file_exists($path)) {
@@ -28,11 +27,7 @@ class LogDataUtils
             $permissions = array_merge($permissions, $menus);
         }
 
-        if (array_key_exists('config', $permissions)) {
-            $config = $permissions['config'];
-        }
-
-        return $config;
+        return $permissions;
     }
 
     private function getConfigPath()

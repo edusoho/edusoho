@@ -117,7 +117,7 @@ class LogController extends BaseController
                     $transConfig = $transConfigs[$log['module']][$log['action']];
 
                     if (array_key_exists('templateParam', $transConfig)) {
-                        $templateParam = $transConfig['templateParam'];
+                        $templateParam = array_merge($getValueDefaultConfig, $transConfig['templateParam']);
                     }
                     if (array_key_exists('modalField', $transConfig)) {
                         $log['shouldShowModal'] = true;
