@@ -2,6 +2,8 @@
 
 namespace Biz\Classroom\Service;
 
+use Biz\System\Annotation\Log;
+
 interface ClassroomService
 {
     /**
@@ -23,6 +25,13 @@ interface ClassroomService
 
     public function getClassroom($id);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="classroom",action="update")
+     */
     public function updateClassroom($id, $fields);
 
     public function batchUpdateOrg($classroomIds, $orgCode);
@@ -66,20 +75,44 @@ interface ClassroomService
 
     public function canLearnClassroom($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="delete")
+     */
     public function deleteClassroom($id);
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit);
 
     public function countClassrooms($condtions);
 
+    /**
+     * @param $classroom
+     *
+     * @return mixed
+     * @Log(module="classroom",action="create")
+     */
     public function addClassroom($classroom);
 
     public function findClassroomByTitle($title);
 
     public function findClassroomsByLikeTitle($title);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="close",funcName="getClassroom")
+     */
     public function closeClassroom($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="publish",funcName="getClassroom")
+     */
     public function publishClassroom($id);
 
     /**
@@ -105,6 +138,13 @@ interface ClassroomService
     // 内部方法
     public function updateClassroomTeachers($id);
 
+    /**
+     * @param $id
+     * @param $data
+     *
+     * @return mixed
+     * @Log(module="classroom",action="update_picture",funcName="getClassroom",param="id")
+     */
     public function changePicture($id, $data);
 
     public function isCourseInClassroom($courseId, $classroomId);
@@ -139,6 +179,13 @@ interface ClassroomService
 
     public function becomeAssistant($classroomId, $userId);
 
+    /**
+     * @param $classroomId
+     * @param $userId
+     *
+     * @return mixed
+     * @Log(module="classroom",action="update_head_teacher",funcName="getClassroom",param="classroomId")
+     */
     public function addHeadTeacher($classroomId, $userId);
 
     public function updateAssistants($classroomId, $userIds);
@@ -167,8 +214,21 @@ interface ClassroomService
 
     public function unlockStudent($classroomId, $userId);
 
+    /**
+     * @param $id
+     * @param $number
+     *
+     * @return mixed
+     * @Log(module="classroom",action="recommend",funcName="getClassroom")
+     */
     public function recommendClassroom($id, $number);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="classroom",action="cancel_recommend",funcName="getClassroom")
+     */
     public function cancelRecommendClassroom($id);
 
     public function tryAdminClassroom($classroomId);

@@ -42,8 +42,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->create($fields);
 
-        //$this->getLogService()->info('course', 'add_testpaper', "新增试卷(#{$testpaper['id']})", $testpaper);
-
         return $testpaper;
     }
 
@@ -92,7 +90,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
         $this->deleteItemsByTestId($testpaper['id']);
 
-        $this->getLogService()->info('course', 'delete_testpaper', "删除试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.delete', $testpaper);
 
         return $result;

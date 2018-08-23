@@ -27,7 +27,6 @@ use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use AppBundle\Common\TimeMachine;
-use Biz\System\Util\LogDataUtils;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -213,13 +212,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent('classroom.create', $classroom);
 
-        $infoData = array(
-            'id' => $classroom['id'],
-            'title' => $classroom['title'],
-        );
-
-        $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})", $infoData);
-
         return $classroom;
     }
 
@@ -246,10 +238,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                         $course['id']
                     );
                     $newCourseIds[] = $newCourse['id'];
+
+                    $infoData = array(
+                        'classroomId' => $classroom['id'],
+                        'title' => $classroom['title'],
+                        'courseSetId' => $newCourse['id'],
+                        'courseSetTitle' => $newCourse['title'],
+                    );
+
                     $this->getLogService()->info(
                         'classroom',
                         'add_course',
-                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})"
+                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})",
+                        $infoData
                     );
                 }
 
@@ -312,8 +313,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $fields = $this->fillOrgId($fields);
 
-        $classroomChangeFields = LogDataUtils::serializeClassroom($classroom, $fields);
-
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
@@ -335,21 +334,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom' => $classroom,
             'fields' => $arguments,
         )));
-        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})", $classroomChangeFields);
 
         return $classroom;
-    }
-
-    private function getChangeFields($classroom, $fields)
-    {
-        $changeFields = array();
-        foreach ($fields as $key => $value) {
-            if ($classroom[$key] != $value) {
-                $changeFields[$key] = $classroom[$key];
-            }
-        }
-
-        return $changeFields;
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
@@ -548,7 +534,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->delete($id);
-        $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
 
         $this->dispatchEvent('classroom.delete', $classroom);
 
@@ -648,13 +633,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteNotUsedPictures($classroom);
 
-        $this->getLogService()->info(
-            'classroom',
-            'update_picture',
-            "更新课程《{$classroom['title']}》(#{$classroom['id']})图片",
-            $fields
-        );
-
         return $this->updateClassroom($id, $fields);
     }
 
@@ -715,10 +693,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
+                $infoData = array(
+                    'classroomId' => $classroom['id'],
+                    'title' => $classroom['title'],
+                    'courseSetId' => $course['id'],
+                    'courseSetTitle' => $course['courseSetTitle'],
+                );
+
                 $this->getLogService()->info(
                     'classroom',
                     'delete_course',
-                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})"
+                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})",
+                    $infoData
                 );
 
                 $this->dispatchEvent(
@@ -813,10 +799,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
         $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
 
+        $infoData = array(
+            'classroomId' => $classroom['id'],
+            'title' => $classroom['title'],
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'classroom',
             'remove_student',
-            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            $infoData
         );
 
         $this->dispatchEvent(
@@ -1022,10 +1016,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
             }
 
+            $infoData = array(
+                'classroomId' => $classroom['id'],
+                'title' => $classroom['title'],
+                'userId' => $user['id'],
+                'nickname' => $user['nickname'],
+                'remark' => $params['remark'],
+            );
+
             $this->getLogService()->info(
                 'classroom',
                 'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}"
+                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}",
+                $infoData
             );
             $this->commit();
 
@@ -1776,12 +1779,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             )
         );
 
-        $this->getLogService()->info(
-            'classroom',
-            'recommend',
-            "推荐班级《{$classroom['title']}》(#{$classroom['id']}),序号为{$number}"
-        );
-
         return $classroom;
     }
 
@@ -1796,12 +1793,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedTime' => 0,
                 'recommendedSeq' => 100,
             )
-        );
-
-        $this->getLogService()->info(
-            'classroom',
-            'cancel_recommend',
-            "取消推荐班级《{$classroom['title']}》(#{$classroom['id']})"
         );
 
         return $classroom;

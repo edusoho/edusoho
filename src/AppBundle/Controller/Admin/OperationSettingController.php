@@ -52,7 +52,6 @@ class OperationSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $articleSetting = $request->request->all();
             $this->getSettingService()->set('article', $articleSetting);
-            $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
