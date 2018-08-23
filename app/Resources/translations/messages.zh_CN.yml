@@ -1664,12 +1664,11 @@ course.plan_overview: 数据概览
 course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
   在
-  <input class="form-control width-150" id="deadline" name="deadline" value="">
+  <input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">
   前，学员可进行学习。
 course.plan_task.expiry_days_learn_tips: >
   从加入当天起，在
-  <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"
-  value="1">
+  <input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">
   天内可进行学习。
 course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
@@ -2545,6 +2544,7 @@ classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
+classroom.student_add_tips: 班级未发布,不可添加学员
 classroom.member: 正式学员
 classroom.auditor: 旁听生
 classroom.exit_record: 退出记录

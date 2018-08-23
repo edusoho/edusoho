@@ -8,10 +8,10 @@
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_member_deadline', { classroomId:classroom.id, userId:user.id }) }}">
   {% if classroom.status == 'published' %}
     <div class="row form-group">
-      <div class="col-md-2 control-label">
+      <div class="col-sm-2 control-label width-100">
         <label for="classroom-title">{{'classroom.title_label'|trans}}</label>
       </div>
-      <div class="col-md-7 controls">
+      <div class="col-sm-7 controls">
         <div style="margin-top: 7px;">
           {{ classroom.title }}
           </div>
@@ -19,10 +19,10 @@
     </div>
 
     <div class="row form-group">
-      <div class="col-md-2 control-label">
+      <div class="col-sm-2 control-label width-100">
         <label for="student-nickname">{{ 'classroom.student'|trans }} {{'classroom.username'|trans}}</label>
       </div>
-      <div class="col-md-7 controls">
+      <div class="col-sm-7 controls">
         <div style="margin-top: 7px;">
           {{ user.nickname|default() }}
           </div>
@@ -30,10 +30,10 @@
     </div>
 
     <div class="row form-group">
-      <div class="col-md-2 control-label">
+      <div class="col-sm-2 control-label width-100">
         <label for="set-more-expiryday">{{'classroom.expiry_mode'|trans}}</label>
       </div>
-      <div class="col-md-7 controls">
+      <div class="col-sm-7 controls">
         <input type="text" id="student_deadline" name="deadline" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
         <div class="help-block">
         {{ 'classroom.set_expiry_mode_tips'|trans }}
