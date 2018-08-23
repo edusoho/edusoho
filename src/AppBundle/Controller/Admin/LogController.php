@@ -57,7 +57,6 @@ class LogController extends BaseController
         $modalShowFields = array();
         $showData = array();
 
-//        $transConfigs = LogDataUtils::getLogConfig();
         $transConfigs = LogDataUtils::getYmlConfig();
         if (array_key_exists($log['module'], $transConfigs)) {
             if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
