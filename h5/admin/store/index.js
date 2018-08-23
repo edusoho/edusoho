@@ -9,11 +9,7 @@ Vue.use(Vuex);
 
 const state = {
   isLoading: false,
-  token: null,
   user: {},
-  smsToken: '',
-  settings: {},
-  title: ''
 };
 
 

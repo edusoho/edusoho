@@ -84,21 +84,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         new webpack.optimize.ModuleConcatenationPlugin(),
         // vue, vuex, vue-router, axios 打包 保证 hash 不变
         new webpack.optimize.CommonsChunkPlugin({
-            names: ['common']
-        }),
-        // split vendor js into its own file
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks (module) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(__dirname, '../../node_modules')
-                    ) === 0
-                )
-            }
+            names: ['vendor']
         }),
         // extract webpack runtime and module manifest to its own file in order to
         // prevent vendor hash from being updated whenever app bundle is updated

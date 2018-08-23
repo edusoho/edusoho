@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Api from '@/api';
+import Api from '@admin/api'
 import item from './item';
 
 export default {

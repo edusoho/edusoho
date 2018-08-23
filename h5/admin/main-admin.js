@@ -3,13 +3,11 @@ import axios from 'axios';
 import router from '@admin/router';
 // import filters from '@/filters';
 import utils from '@/utils';
-// import store from '@/store';
-// import plugins from '@/plugins';
+import store from '@admin/store';
 import EdusohoUI from '@/components';
-import VueCropper from 'vue-cropper';
+// import VueCropper from 'vue-cropper';
 
 import 'vant/lib/vant-css/index.css';
-import '@/assets/styles/main.scss';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
 
@@ -23,7 +21,6 @@ import {
   // TabbarItem,
   // List,
   // Field,
-  // Loading,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -35,13 +32,11 @@ Vue.component('van-uploader', Uploader);
 // Vue.component('van-tab', Tab);
 // Vue.component('van-tabs', Tabs);
 // Vue.component('van-field', Field);
-// Vue.component('van-loading', Loading);
 
 // Vue.use(filters);
-// Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
-Vue.use(VueCropper);
+// Vue.use(VueCropper);
 
 Vue.config.productionTip = false;
 
