@@ -23,6 +23,9 @@ export default {
       query: {
         portal: 'h5',
         type : 'discovery'
+      },
+      params: {
+        mode: 'draft'
       }
     })
     .then((data) => {
