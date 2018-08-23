@@ -9,7 +9,8 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type"></e-course>
+      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type" :feedback="feedback">
+      </e-course>
     </div>
   </div>
 </template>
@@ -22,7 +23,11 @@
     props: {
       courseList: {
         type: Object,
-        default: {}
+        default: {},
+      },
+      feedback: {
+        type: Boolean,
+        default: true,
       }
     },
     components: {
@@ -36,6 +41,9 @@
     },
     methods: {
       jumpTo(source) {
+        if (!this.feedback) {
+          return;
+        }
         this.$router.push({
           name: 'more',
           query: {...this.source}

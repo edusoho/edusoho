@@ -1,6 +1,7 @@
 .course-item-setting {
   background: #fff;
-  padding: 30px;
+  padding: 30px 58px 30px 30px;
+  border: 1px solid #E1E1E1;
 }
 
 .course-item-setting__section {
@@ -14,6 +15,13 @@
     }
     &-right {
       margin-left: 70px;
+      .el-select {
+        width: 100%;
+      }
+      &__item {
+        display: inline-block;
+        width: 96px;
+      }
     }
   }
 }

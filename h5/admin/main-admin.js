@@ -10,14 +10,12 @@ import Admin from '@admin/App-admin';
 // import VueCropper from 'vue-cropper';
 
 import {
-  // Button,
-  // Select,
+  Select,
   Input
 } from 'element-ui';
 
 Vue.component(Input.name, Input);
-// Vue.component(Button.name, Button);
-// Vue.component(Select.name, Select);
+Vue.component(Select.name, Select);
 
 Vue.use(utils);
 // Vue.use(VueCropper);
