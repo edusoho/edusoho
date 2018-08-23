@@ -6,7 +6,7 @@
     <div class="carousel-allocate">
       <header class="title">轮播图设置</header>
       <div v-for="(item, index) in parts[0].data">
-        <item :item="item" :index="index" :key="index"></item>
+        <item :item="item" :index="index" :key="index" v-on:selected="selected"></item>
       </div>
       <div class="btn-gray btn-add-item" @click="addItem">添加一个轮播图</div>
     </div>
@@ -43,27 +43,14 @@ export default {
     }
   },
   created() {
-    // Api.saveDraftDate({
-    //   query: {
-    //     portal: 'h5',
-    //     type : 'discovery'
-    //   }
-    // })
-    // .then((data) => {
-    //   console.log(data)
-    //   this.parts = data;
-    // })
-    // .catch((err) => {
-    //   console.log(err, 'error');
-    // });
     this.addItem();
   },
   methods: {
     addItem() {
       this.parts[0].data.push(JSON.parse(JSON.stringify(this.defaultItem)));
     },
-    selected(part) {
-      this.imgAdress = part.image;
+    selected(selected) {
+      this.isActive = selected;
     }
   }
 }

@@ -27,6 +27,8 @@
       selected(item) {
         this.imgAdress = item.image;
         this.isActive = true;
+        const miaomiaomiao = true;
+        this.$emit('selected', miaomiaomiao);
       }
     }
   }

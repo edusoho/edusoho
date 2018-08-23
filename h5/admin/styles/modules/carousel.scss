@@ -2,9 +2,17 @@
   position: relative;
 }
 
-.carousel-image img {
-  width: 100%;
-  height: 200px;
+.carousel-image {
+  font-size: 0;
+  img {
+    width: 100%;
+    height: 200px;
+  }
+  &.active {
+    border: 1px dashed $primary-color;
+    margin-left: -1px;
+    margin-right: -1px;
+  }
 }
 
 .carousel-allocate {
@@ -16,13 +24,12 @@
   border-radius: 4px;
   width: 400px;
   padding: 15px;
-}
-
-.carousel-allocate .title {
-  font-size: 14px;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid $grey-light;
+  .title {
+    font-size: 14px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid $grey-light;
+  }
 }
 
 .carousel-item {
@@ -30,10 +37,9 @@
   background-color: #fff;
   padding: 15px 10px;
   margin-bottom: 15px;
-}
-
-.carousel-item.active {
-  border: 1px solid $primary-color;
+  &.active {
+    border: 1px solid $primary-color;
+  }
 }
 
 .btn-add-item {
@@ -59,15 +65,14 @@
 .add-title {
   margin-top: 6px;
   margin-bottom: 14px;
-}
-
-.add-title input {
-  font-size: 12px;
-  height: 24px;
-  border-radius: 2px;
-  border: 1px solid $grey-light;
-  padding: 0 4px;
-  box-sizing: border-box;
+  input {
+    font-size: 12px;
+    height: 24px;
+    border-radius: 2px;
+    border: 1px solid $grey-light;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
 }
 
 .btn-choose-course {
