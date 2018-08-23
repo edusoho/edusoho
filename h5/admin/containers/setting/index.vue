@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import Api from '@admin/api';
 import Carousel from '@admin/containers/module/carousel/index.vue';
 import Course from '@admin/containers/module/course/index.vue';
 
@@ -16,6 +17,21 @@ export default {
   components: {
     'carousel': Carousel,
     'course': Course,
+  },
+  created() {
+    Api.saveDraftDate({
+      query: {
+        portal: 'h5',
+        type : 'discovery'
+      }
+    })
+    .then((data) => {
+      console.log(data)
+      this.parts = data;
+    })
+    .catch((err) => {
+      console.log(err, 'error');
+    });
   },
   data() {
     return  {

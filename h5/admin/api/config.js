@@ -2,7 +2,7 @@ const config = [
   {
     // 后台配置保存草稿数据
     name: 'saveDraftDate',
-    url: '/pages/{portal}/settings/{type}/draft',
+    url: '/pages/{portal}/settings/{type}?mode=draft',
     method: 'POST'
   }
 ];

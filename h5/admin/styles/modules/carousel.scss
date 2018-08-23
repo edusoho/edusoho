@@ -32,6 +32,10 @@
   margin-bottom: 15px;
 }
 
+.carousel-item.active {
+  border: 1px solid $primary-color;
+}
+
 .btn-add-item {
   line-height: 44px;
   font-size: 14px;
