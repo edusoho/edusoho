@@ -77,6 +77,10 @@
     .qrcode-popover {
       line-height: 22px;
     }
+    .course-operation__icon {
+      margin-right: 6px;
+      vertical-align: text-bottom;
+    }
   }
   
   .course-operation--normal {
@@ -174,7 +178,7 @@
           font-weight: 500;
         }
         &.course-detail-gray--market {
-          margin: 0 24px 16px 0;
+          margin-left: 0;
           padding: 16px 0 16px 16px;
           @media(min-width: @screen-xs-max) {
             background-color: @bg-color;
@@ -275,18 +279,48 @@
 }
 
 .course-detail-info__title {
-  margin-bottom: 12px;
+  @media (min-width: @screen-sm-max) {
+    margin-right: 76px;
+  }
+  margin-right: 56px;
+  margin-bottom: 14px;
   color: @gray-darker;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
-  line-height: 22px;
+  line-height: 24px;
+}
+
+.course-detail-info__text {
+  @media (min-width: @screen-sm-max) {
+    padding-right: 24px;
+  }
 }
 
 .course-detail-info__subtitle {
+  @media (min-width: @screen-sm-max) {
+    margin-right: 76px;
+  }
   line-height: 1;
   &:hover {
     cursor: pointer;
   }
+}
+
+.course-detail-info__manage {
+  position: absolute;
+  top: 0;
+  @media (min-width: @screen-sm-max) {
+    right: 24px;
+  }
+  right: 0;
+  border: 2px solid #ececec;
+  padding: 2.5px 4px;
+  i {
+    font-size: 16px;
+  }
+  font-size: 12px;
+  font-weight: 500;
+  color: @tip-color;
 }
 
 .course-detail__label {
@@ -545,7 +579,7 @@
 }
 
 .course-detail-info__btn {
-  @media(min-width: @screen-lg-min) {
+  @media(min-width: @screen-sm-min) {
     position: absolute;
     bottom: 0;
     padding-right: 24px;
