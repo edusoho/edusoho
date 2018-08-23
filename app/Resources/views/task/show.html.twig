@@ -115,6 +115,6 @@
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
     {% include 'event_report.html.twig' with{ 'eventName':'task.view', 'subjectType':'courseMember', 'subjectId': course.id, 'eventReportParams':{}} %}
-    {% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id}%}
+    {% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id, courseId: task.courseId}%}
 
 {% endblock %}
