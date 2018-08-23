@@ -1,41 +1,19 @@
 import Vue from 'vue';
 import axios from 'axios';
 import router from '@admin/router';
-// import filters from '@/filters';
 import utils from '@/utils';
 import store from '@admin/store';
 import EdusohoUI from '@/components';
-// import VueCropper from 'vue-cropper';
 
-import 'vant/lib/vant-css/index.css';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
+// import filters from '@/filters';
+// import VueCropper from 'vue-cropper';
 
-import {
-  NavBar,
-  Uploader
-  // Button,
-  // Tab,
-  // Tabs,
-  // Tabbar,
-  // TabbarItem,
-  // List,
-  // Field,
-} from 'vant';
-// 按需引入组件
-Vue.component('van-nav-bar', NavBar);
-Vue.component('van-uploader', Uploader);
-// Vue.component('van-tabbar', Tabbar);
-// Vue.component('van-tabbar-item', TabbarItem);
-// Vue.component('van-list', List);
-// Vue.component('van-button', Button);
-// Vue.component('van-tab', Tab);
-// Vue.component('van-tabs', Tabs);
-// Vue.component('van-field', Field);
 
-// Vue.use(filters);
 Vue.use(utils);
 Vue.use(EdusohoUI);
+// Vue.use(filters);
 // Vue.use(VueCropper);
 
 Vue.config.productionTip = false;
@@ -45,7 +23,7 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app-admin',
   router,
-  // store,
+  store,
   components: { Admin },
   template: '<Admin/>'
 });
