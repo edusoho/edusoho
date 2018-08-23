@@ -9,14 +9,8 @@ const statusCode = {
 };
 
 axios.interceptors.request.use(config => {
-  if (config.name.indexOf('Live') === -1) {
-    config.headers.Accept = 'application/vnd.edusoho.v2+json';
-  }
-  config.headers.SessionIgnore = 1;
+  config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
-  if (store.state.token) {
-    config.headers['X-Auth-Token'] = store.state.token;
-  }
   store.commit('UPDATE_LOADING_STATUS', true);
 
   return config;
@@ -31,15 +25,7 @@ axios.interceptors.response.use(res => {
   switch (error.response.status) {
     case 401:
       const code = error.response.data.error.code;
-      // token过期的情况
-      if (code === statusCode.EXPIRED_CREDENTIAL) {
-        store.commit(types.USER_LOGOUT);
 
-        router.replace({
-          name: 'login',
-          query: { redirect: router.currentRoute.name }
-        });
-      }
       break;
     default:
       break;
