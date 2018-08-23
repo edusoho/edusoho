@@ -11,6 +11,8 @@ const statusCode = {
 axios.interceptors.request.use(config => {
   config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
+  config.headers['X-Auth-Token'] = 'kj1fbzhktw0c0osccgg8sswkcgks08g';
+
   store.commit('UPDATE_LOADING_STATUS', true);
 
   return config;
