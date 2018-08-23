@@ -22,7 +22,7 @@ class File extends AbstractResource
         }
 
         $group = $request->request->get('group', null);
-        if (!in_array($group, array('tmp', 'user', 'course'))) {
+        if (!in_array($group, array('tmp', 'user', 'course', 'system'))) {
             throw FileException::FILE_GROUP_INVALID();
         }
 
