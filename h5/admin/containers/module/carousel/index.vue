@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import Api from '@admin/api'
 
 export default {
 
