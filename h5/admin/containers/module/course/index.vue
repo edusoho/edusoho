@@ -6,11 +6,36 @@
     <div class="carousel-allocate course-allocate">
       <header class="title">课程列表设置</header>
       <div class="carousel-item-setting course-item-setting clearfix">
-        <div><label for="" class="add-title">列表名称：<input type="text" placeHolder="请输入列表名称"></label></div>
-        <div><label for="" class="add-title">课程来源：<input type="text" placeHolder="请输入列表名称"></label></div>
-        <div><label for="" class="add-title">课程分类：<input type="text" placeHolder="请选择分类"></label></div>
-        <div><label for="" class="add-title">排列顺序：<input type="text" placeHolder="请输入列表名称"></label></div>
-        <div><label for="" class="add-title">显示个数：<input type="text" placeHolder="请输入列表名称"></label></div>
+        <div class="course-item-setting__section">
+          <p class="pull-left section-left">列表名称：</p>
+          <div class="section-right">
+            <el-input size="mini" v-model="input" placeholder="请输入列表名称"></el-input>
+          </div>
+        </div>
+        <div class="course-item-setting__section mtl">
+          <p class="pull-left section-left">课程来源：</p>
+          <div class="section-right">
+            <el-input size="mini" v-model="input" placeholder="请输入内容"></el-input>
+          </div>
+        </div>
+        <div class="course-item-setting__section mtl">
+          <p class="pull-left section-left">课程分类：</p>
+          <div class="section-right">
+            <el-input size="mini" v-model="input" placeholder="请选择分类"></el-input>
+          </div>
+        </div>
+        <div class="course-item-setting__section mtl">
+          <p class="pull-left section-left">排列顺序：</p>
+          <div class="section-right">
+            <el-input size="mini" v-model="input" placeholder="请输入内容"></el-input>
+          </div>
+        </div>
+        <div class="course-item-setting__section mtl">
+          <p class="pull-left section-left">显示个数：</p>
+          <div class="section-right">
+            <el-input size="mini" v-model="input" placeholder="请选择个数"></el-input>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,6 +49,7 @@ export default {
   },
   data() {
     return  {
+      input: '',
     }
   }
 }

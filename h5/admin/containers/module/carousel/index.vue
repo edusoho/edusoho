@@ -6,10 +6,10 @@
     <div class="carousel-allocate">
       <header class="title">轮播图设置</header>
       <div class="carousel-item clearfix" v-for="(part, index) in parts[0].data" @click="selected(part)">
-        <van-uploader :after-read="onRead" class="add-img">
+        <!-- <van-uploader :after-read="onRead" class="add-img">
           <img class='carousel-img' :src="part.image"/>
           <span v-show="!part.image"><i class="text-18">+</i> 添加图片</span>
-        </van-uploader>
+        </van-uploader> -->
         <div class="add-title pull-left">标题：<input type="text" placeholder="请输入标题"></div>
         <div class="pull-left">链接：<button class="btn-gray btn-choose-course">选择课程</button></div>
       </div>

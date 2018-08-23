@@ -1,3 +1,4 @@
+
 .text-18 {
   font-size: 18px;
 }
@@ -17,4 +18,94 @@
   &:hover {
     background-color: darken($grey-light, 8%);
   }
+}
+
+/**
+ * 通用属性
+ */
+
+.mts {margin-top: 5px;}
+.mtm {margin-top: 10px;}
+.mtl {margin-top: 20px;}
+
+.mrs {margin-right: 5px;}
+.mrm {margin-right: 10px;}
+.mrl {margin-right: 20px;}
+
+.mbs {margin-bottom: 5px;}
+.mbm {margin-bottom: 10px;}
+.mbl {margin-bottom: 20px;}
+
+.mls {margin-left: 5px;}
+.mlm {margin-left: 10px;}
+.mll {margin-left: 20px;}
+
+.mhs {margin-left: 5px; margin-right: 5px;}
+.mhm {margin-left: 10px; margin-right: 10px;}
+.mhl {margin-left: 20px; margin-right: 20px;}
+
+.mvs {margin-top: 5px; margin-bottom: 5px;}
+.mvm {margin-top: 10px; margin-bottom: 10px;}
+.mvl {margin-top: 20px; margin-bottom: 20px;}
+
+
+.pts {padding-top: 5px;}
+.ptm {padding-top: 10px;}
+.ptl {padding-top: 20px;}
+
+.prs {padding-right: 5px;}
+.prm {padding-right: 10px;}
+.prl {padding-right: 20px;}
+
+.pbs {padding-bottom: 5px;}
+.pbm {padding-bottom: 10px;}
+.pbl {padding-bottom: 20px;}
+
+.pls {padding-left: 5px;}
+.plm {padding-left: 10px;}
+.pll {padding-left: 20px;}
+
+.phs {padding-left: 5px; padding-right: 5px;}
+.phm {padding-left: 10px; padding-right: 10px;}
+.phl {padding-left: 20px; padding-right: 20px;}
+
+.pvs {padding-top: 5px; padding-bottom: 5px;}
+.pvm {padding-top: 10px; padding-bottom: 10px;}
+.pvl {padding-top: 20px; padding-bottom: 20px;}
+
+.tac {text-align: center; }
+.tal {text-align: left; }
+.tar {text-align: right; }
+
+.fss {font-size: 10px;}
+.fsn {font-size: 12px;}
+.fsm {font-size: 14px;}
+.fsl {font-size: 16px;}
+.fsxl {font-size: 18px;}
+
+.text-small {
+  font-size: 10px;
+}
+
+.text-normal {
+  font-size: 12px;
+}
+
+.text-medium {
+  font-size: 14px;
+}
+
+.text-large {
+  font-size: 16px;
+}
+
+.text-xlarge {
+  font-size: 18px;
+}
+
+.ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

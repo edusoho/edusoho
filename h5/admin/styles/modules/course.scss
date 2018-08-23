@@ -2,3 +2,18 @@
   background: #fff;
   padding: 30px;
 }
+
+.course-item-setting__section {
+  overflow: hidden;
+  .section {
+    &-left {
+      display: inline;
+      margin: 0;
+      line-height: 28px;
+      font-size: 14px;
+    }
+    &-right {
+      margin-left: 70px;
+    }
+  }
+}

@@ -3,17 +3,23 @@ import axios from 'axios';
 import router from '@admin/router';
 import utils from '@/utils';
 import store from '@admin/store';
-import EdusohoUI from '@/components';
 
+import 'element-ui/lib/theme-chalk/index.css';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
-// import filters from '@/filters';
 // import VueCropper from 'vue-cropper';
 
+import {
+  // Button,
+  // Select,
+  Input
+} from 'element-ui';
+
+Vue.component(Input.name, Input);
+// Vue.component(Button.name, Button);
+// Vue.component(Select.name, Select);
 
 Vue.use(utils);
-Vue.use(EdusohoUI);
-// Vue.use(filters);
 // Vue.use(VueCropper);
 
 Vue.config.productionTip = false;
