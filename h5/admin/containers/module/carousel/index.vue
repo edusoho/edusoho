@@ -46,6 +46,9 @@ export default {
   },
   created() {
     this.addItem();
+    if (this.activeItemIndex == 0) {
+      this.isActive = true;
+    }
   },
   methods: {
     addItem() {
