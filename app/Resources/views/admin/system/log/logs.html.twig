@@ -61,8 +61,11 @@
   <span class="mrl">
     {{ 'admin.system_log.log_num'|trans({'%itemCount%':paginator.itemCount})|raw }}
   </span>
+  <span class="mrl">
+    {{ 'admin.system_log.show_system_user'|trans}}
+  </span>
   <label for="switch-operation" class="switch{% if hasSystemOperation == 0 %} checked{% endif %}">
-    <input type="checkbox" name="operation" value="" id="switch-operation" data-toggle="switch" {% if hasSystemOperation == 1 %} data-url="{{ path('admin_logs', {hasSystemOperation: 0}) }}" {% else %} data-url="{{ path('admin_logs', {hasSystemOperation: 1}) }}" {% endif %}>
+    <input type="checkbox" name="operation" value="" id="switch-operation" data-toggle="switch" {% if hasSystemOperation == 1 %} data-url="{{ path('admin_logs', {hasSystemOperation: 1}) }}" {% else %} data-url="{{ path('admin_logs', {hasSystemOperation: 0}) }}" {% endif %}>
   </label>
 </p>
 
