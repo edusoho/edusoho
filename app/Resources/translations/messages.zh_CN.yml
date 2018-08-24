@@ -1446,6 +1446,7 @@ course.activity.testpaper: 考试
 course.activity.homework: 作业
 course.activity.exercise: 练习
 course.activity.download: 下载资料
+course.activity.text: 图文
 course.task_toolbar.tasks: 目录
 course.task_toolbar.notes: 笔记
 course.task_toolbar.questions: 问答

@@ -10,7 +10,7 @@ services:
 
     activity_config_manager:
         class: AppBundle\Component\Activity\ActivityConfigManager
-        arguments: ['%kernel.cache_dir%', '%kernel.root_dir%', '%kernel.debug%']
+        arguments: ['%kernel.cache_dir%', '%edusoho.activities_dir%', '%kernel.debug%']
 
     user.online_track:
         class: AppBundle\Component\Track\UserOnlineTrack
