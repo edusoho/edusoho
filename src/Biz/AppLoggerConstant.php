@@ -60,7 +60,19 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const USER = 'user';
     /**
-     * [$ORDER 订单].
+     * [$USER 用户].
+     *
+     * @var string
+     */
+    const ROLE = 'role';
+    /**
+     * [$ROLE 身份].
+     *
+     * @var string
+     */
+    const THREAD = 'thread';
+    /**
+     * [@THREAD 话题].
      *
      * @var string
      */
@@ -139,6 +151,12 @@ class AppLoggerConstant implements LoggerConstantInterface
      *
      * @var string
      */
+    const TAG_GROUP = 'tagGroup';
+    /**
+     * [@TAG_GROUP 标签组].
+     *
+     * @var string
+     */
     const ANNOUNCEMENT = 'announcement';
 
     /**
@@ -168,14 +186,19 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'add_task',
                 'update_task',
                 'delete_task',
+                'create_lesson',
+                'delete_lesson',
                 'add_student',
                 'remove_student',
                 'update_teacher',
                 'cancel_teachers_all',
                 'delete_taskLearn',
+                'create_chapter',
                 'delete_chapter',
                 'delete_favorite',
                 'delete_note',
+                'create_thread',
+                'update_thread',
                 'delete_thread',
                 'delete_review',
                 'delete_announcement',
@@ -195,17 +218,24 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'sync_when_task_delete',
                 'clone_course_set',
                 'unlock_course',
+                'create_course',
+                'update_course',
+                'delete_course',
+                'update_draft',
             ),
 
             self::USER => array(
                 'exportCsv',
                 'add',
-                'edit',
+                'update',
                 'send_email_verify',
                 'nickname_change',
                 'password-changed',
                 'pay-password-changed',
+                'password-security-answers',
                 'verifiedMobile-changed',
+                'email-changed',
+                'avatar-changed',
                 'change_role',
                 'unbind',
                 'login_success',
@@ -218,19 +248,54 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'approval_fail',
                 'password-reset',
             ),
+            self::ROLE => array(
+                'create',
+                'update',
+                'delete',
+            ),
+            self::THREAD => array(
+                'create',
+                'update',
+                'delete',
+            ),
             self::SYSTEM => array(
                 'email_send_check',
                 'setting_email_change',
                 'setting_email-verify',
-                'update_settings',
                 'questions_settings',
                 'customerServiceSetting',
                 'setting_userCenter',
                 'update_block',
                 'update_app_version',
+                'update_settings.site',
+                'update_settings.theme',
+                'update_settings.mailer',
+                'update_settings.cloud_email_crm',
+                'update_settings.consult',
+                'update_settings.esBar',
+                'update_settings.default',
+                'update_settings.security',
+                'update_settings.login_bind',
+                'update_settings.user_partner',
+                'update_settings.auth',
+                'update_settings.course',
+                'update_settings.message',
+                'update_settings.course_default',
+                'update_settings.questions',
+                'update_settings.classroom',
+                'update_settings.article',
+                'update_settings.group',
+                'update_settings.invite',
+                'update_settings.payment',
+                'update_settings.coin',
+                'update_settings.refund',
+                'update_settings.blacklist_ip',
+                'update_settings.post_num_rules',
+                'update_settings.cloud_consult',
             ),
             self::CLASSROOM => array(
                 'create',
+                'update',
                 'delete',
                 'add_course',
                 'add_student',
@@ -241,6 +306,9 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'remove_student',
                 'recommend',
                 'cancel_recommend',
+                'publish',
+                'close',
+                'update_head_teacher',
             ),
             self::ARTICLE => array(
                 'update_settings',
@@ -280,7 +348,6 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'delete',
                 'publish',
             ),
-
             self::CRONTAB => array(
                 'job_start',
                 'job_end',
@@ -300,6 +367,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             ),
             self::GROUP => array(
                 'create_thread',
+                'update_thread',
                 'delete_thread',
                 'close_thread',
                 'open_thread',
@@ -327,12 +395,18 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'update',
                 'delete',
             ),
+            self::TAG_GROUP => array(
+                'create',
+                'update',
+                'delete',
+            ),
             self::COIN => array(
                 'update_settings',
                 'add_coin',
                 'deduct_coin',
             ),
             self::ANNOUNCEMENT => array(
+                'create',
                 'delete',
             ),
             self::OPEN_COURSE => array(
@@ -365,6 +439,8 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::SYSTEM,
             self::COURSE,
             self::USER,
+            self::ROLE,
+            self::THREAD,
             self::ORDER,
             self::CLASSROOM,
             self::GROUP,
@@ -373,6 +449,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::UPLOAD_FILE,
             self::CATEGORY,
             self::TAG,
+            self::TAG_GROUP,
             self::ARTICLE,
             self::CONTENT,
             self::ANNOUNCEMENT,
