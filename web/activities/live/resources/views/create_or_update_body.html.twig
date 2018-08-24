@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['libs/ltc-sdk-client.js','libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
+{% do script(['libs/ltc-sdk-client.js','libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','liveactivity/js/manage/index.js']) %}
 
 {% if activity.id|default(false) %}
     {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:activity.fromCourseId, activityId: activity.id}) %}
