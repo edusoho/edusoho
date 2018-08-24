@@ -41,7 +41,6 @@ load.then(function(){
   }
 
   function _init() {
-    debugger;
     editor = window.ltc.editor('text-content-field');
     validate = $('#step2-form').validate({
       rules: {
@@ -84,8 +83,25 @@ load.then(function(){
       }, function(result) {
         $('#title').val(result['title']);
         $content.val(result['content']);
-        console.log(result['content']);
-        editor.setData(result['content']);
+        // status的四种状态unloaded, unloaded, ready, destroyed
+        // 当status == ready的时候不执行
+        editor.on('instanceReady', function( event ){
+          editor.setData(result['content'], {
+            callback: function() {
+              console.log(editor.status);
+            }
+          });
+        });
+        // 当status == ready的时候执行
+        if (editor.status === 'ready') {
+          console.log($content.val());
+          debugger;
+          editor.setData(result['content'], {
+            callback: function() {
+              console.log(editor.status);
+            }
+          });
+        }
       });
     }
     
