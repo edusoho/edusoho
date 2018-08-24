@@ -13,9 +13,11 @@ class LogController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (isset($conditions['hasSystemOperation']) && 0 == $conditions['hasSystemOperation']) {
-            $systemUser = $this->getUserService()->getUserByType('system');
-            $conditions['exceptedUserId'] = $systemUser['id'];
+        $systemUser = $this->getUserService()->getUserByType('system');
+        $conditions['exceptedUserId'] = $systemUser['id'];
+
+        if (isset($conditions['hasSystemOperation']) && 1 == $conditions['hasSystemOperation']) {
+            unset($conditions['exceptedUserId']);
         }
 
         $paginator = new Paginator(
@@ -46,7 +48,7 @@ class LogController extends BaseController
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
-            'hasSystemOperation' => empty($conditions['exceptedUserId']) ? 1 : 0,
+            'hasSystemOperation' => empty($conditions['exceptedUserId']) ? 0 : 1,
         ));
     }
 

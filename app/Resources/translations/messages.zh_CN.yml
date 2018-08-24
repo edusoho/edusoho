@@ -7206,6 +7206,7 @@ admin.system_log.module: 业务模块
 admin.system_log.time: 操作时间
 admin.system_log.ip: IP地址
 admin.system_log.log_num: 共 <strong class="inflow-num">%itemCount%</strong> 条数据
+admin.system_log.show_system_user: 是否显示系统用户
 
 # 管理员帐号同步
 admin.admin_sync.content_title: 管理员帐号同步
