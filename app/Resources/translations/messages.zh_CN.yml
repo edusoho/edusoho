@@ -8258,6 +8258,15 @@ log.action.system.update_settings.refund: 更新退款设置
 log.action.system.update_settings.blacklist_ip: 更新黑名单设置
 log.action.system.update_settings.post_num_rules: 更新发贴设置
 log.action.system.update_settings.cloud_consult: 更新云问答设置
+log.action.system.update_settings.storage: 更新云视频设置
+log.action.system.update_settings.live-course: 更新直播课程设置
+log.action.system.update_settings.cloud_sms: 更新云短信设置
+log.action.system.update_settings.cloud_search: 更新云搜索设置
+log.action.system.update_settings.app_im: 更新云聊天设置
+log.action.system.update_settings.cloud_attachment: 更新云附件设置
+log.action.system.update_settings._app_last_check: 更新应用检测设置
+log.action.system.update_settings.siteTrace: 更新站点追踪设置
+log.action.system.update_settings.xapi: 更新数据实验室设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -8501,6 +8510,15 @@ log.action.template.system.update_settings.refund: 更新了<strong class="color
 log.action.template.system.update_settings.blacklist_ip: 更新了<strong class="color-success">系统设置</strong>的黑名单设置
 log.action.template.system.update_settings.post_num_rules: 更新了<strong class="color-success">系统设置</strong>的发贴设置
 log.action.template.system.update_settings.cloud_consult: 更新了<strong class="color-success">系统设置</strong>的云问答设置
+log.action.template.system.update_settings.storage: 更新了<strong class="color-success">系统设置</strong>的云视频设置
+log.action.template.system.update_settings.live-course: 更新了<strong class="color-success">系统设置</strong>的直播课程设置
+log.action.template.system.update_settings.cloud_sms: 更新了<strong class="color-success">系统设置</strong>的云短信设置
+log.action.template.system.update_settings.cloud_search: 更新了<strong class="color-success">系统设置</strong>的云搜索设置
+log.action.template.system.update_settings.app_im: 更新了<strong class="color-success">系统设置</strong>的云聊天设置
+log.action.template.system.update_settings.cloud_attachment: 更新了<strong class="color-success">系统设置</strong>的云附件设置
+log.action.template.system.update_settings._app_last_check: 更新了<strong class="color-success">系统设置</strong>的应用检测设置
+log.action.template.system.update_settings.siteTrace: 更新了<strong class="color-success">系统设置</strong>的站点追踪设置
+log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -8700,6 +8718,11 @@ log.attr.system.update_settings.auth.fill_userinfo_after_login: 登录后填写�
 log.attr.system.update_settings.auth.fill_userinfo_after_login.1: 开启
 log.attr.system.update_settings.auth.fill_userinfo_after_login.0: 关闭
 log.attr.system.update_settings.auth.registerSort: 登录后要填写的个人资料字段
+log.attr.system.update_settings.auth.register_mode: 用户注册模式
+log.attr.system.update_settings.auth.register_mode.email: 邮箱注册
+log.attr.system.update_settings.auth.register_mode.mobile: 手机注册
+log.attr.system.update_settings.auth.register_mode.email_or_mobile: 邮箱或手机注册
+log.attr.system.update_settings.auth.register_mode.closed: 关闭
 log.attr.system.update_settings.course.buy_fill_userinfo: 购买课程或班级时填写个人资料
 log.attr.system.update_settings.course.buy_fill_userinfo.1: 开启
 log.attr.system.update_settings.course.buy_fill_userinfo.0: 关闭
@@ -8750,6 +8773,9 @@ log.attr.system.update_settings.course.allowAnonymousPreview.0: 不允许
 log.attr.system.update_settings.course.show_student_num_enabled: 课程中允许显示课程人数
 log.attr.system.update_settings.course.show_student_num_enabled.1: 开启
 log.attr.system.update_settings.course.show_student_num_enabled.0: 关闭
+log.attr.system.update_settings.course.live_course_enabled: 直播设置
+log.attr.system.update_settings.course.live_course_enabled.1: 开启
+log.attr.system.update_settings.course.live_course_enabled.0: 关闭
 log.attr.system.update_settings.course_default.chapter_name: 设置"章"名称
 log.attr.system.update_settings.course_default.part_name: 设置"节"名称
 log.attr.system.update_settings.course_default.welcome_message_enabled: 给新学员发送欢迎私信
@@ -8906,6 +8932,113 @@ log.attr.system.update_settings.post_num_rules.rules: 发贴设置
 log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled: 云问答开关
 log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled.1: 开启
 log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled.0: 关闭
+log.attr.system.update_settings.storage.upload_mode: 视频存储方式
+log.attr.system.update_settings.storage.upload_mode.local: 本地
+log.attr.system.update_settings.storage.upload_mode.cloud: 云视频
+log.attr.system.update_settings.storage.support_mobile: 手机浏览器安全性设置
+log.attr.system.update_settings.storage.support_mobile.0: 加密模式
+log.attr.system.update_settings.storage.support_mobile.1: 普通模式
+log.attr.system.update_settings.storage.video_quality: 视频转码画质
+log.attr.system.update_settings.storage.video_quality.low: 流畅
+log.attr.system.update_settings.storage.video_quality.normal: 标准
+log.attr.system.update_settings.storage.video_quality.high: 精细
+log.attr.system.update_settings.storage.video_audio_quality: 视频转码音质
+log.attr.system.update_settings.storage.video_audio_quality.low: 流畅
+log.attr.system.update_settings.storage.video_audio_quality.normal: 标准
+log.attr.system.update_settings.storage.video_audio_quality.high: 精细
+log.attr.system.update_settings.storage.enable_playback_rates: 倍速播放
+log.attr.system.update_settings.storage.enable_playback_rates.0: 开启
+log.attr.system.update_settings.storage.enable_playback_rates.1: 关闭
+log.attr.system.update_settings.storage.video_auto_play: 倍速播放
+log.attr.system.update_settings.storage.video_auto_play.true: 开启
+log.attr.system.update_settings.storage.video_auto_play.false: 关闭
+log.attr.system.update_settings.storage.video_header: 云视频片头
+log.attr.system.update_settings.storage.video_header.1: 开启
+log.attr.system.update_settings.storage.video_header.0: 关闭
+log.attr.system.update_settings.storage.video_watermark: 视频水印
+log.attr.system.update_settings.storage.video_watermark.2: 开启内嵌水印
+log.attr.system.update_settings.storage.video_watermark.1: 开启播放器水印
+log.attr.system.update_settings.storage.video_watermark.0: 关闭
+log.attr.system.update_settings.storage.video_watermark_image: 播放器水印图片
+log.attr.system.update_settings.storage.video_embed_watermark_image: 视频内嵌水印图片
+log.attr.system.update_settings.storage.video_fingerprint: 云视频指纹
+log.attr.system.update_settings.storage.video_fingerprint.1: 开启
+log.attr.system.update_settings.storage.video_fingerprint.0: 关闭
+log.attr.system.update_settings.storage.video_fingerprint_time: 云视频指纹显示时长
+log.attr.system.update_settings.storage.enable_hls_encryption_plus: 云视频防盗增强
+log.attr.system.update_settings.storage.enable_hls_encryption_plus.1: 开启
+log.attr.system.update_settings.storage.enable_hls_encryption_plus.0: 关闭
+log.attr.system.update_settings.live-course.live_course_enabled: 直播设置
+log.attr.system.update_settings.live-course.live_course_enabled.1: 开启
+log.attr.system.update_settings.live-course.live_course_enabled.0: 关闭
+log.attr.system.update_settings.cloud_sms.sms_enabled: 云短信设置
+log.attr.system.update_settings.cloud_sms.sms_enabled.1: 开启
+log.attr.system.update_settings.cloud_sms.sms_enabled.0: 关闭
+log.attr.system.update_settings.cloud_sms.sms_classroom_publish: 新班级发布
+log.attr.system.update_settings.cloud_sms.sms_classroom_publish.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_classroom_publish.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_course_publish: 新课程发布
+log.attr.system.update_settings.cloud_sms.sms_course_publish.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_course_publish.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_normal_lesson_publish: 学习任务发布通知（普通课程）
+log.attr.system.update_settings.cloud_sms.sms_normal_lesson_publish.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_normal_lesson_publish.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_live_lesson_publish: 学习任务发布通知（直播）
+log.attr.system.update_settings.cloud_sms.sms_live_lesson_publish.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_live_lesson_publish.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_live_play_one_day: 直播开播前通知（提前1天）
+log.attr.system.update_settings.cloud_sms.sms_live_play_one_day.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_live_play_one_day.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_homework_check: 作业完成批阅
+log.attr.system.update_settings.cloud_sms.sms_homework_check.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_homework_check.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_testpaper_check: 试卷完成批阅
+log.attr.system.update_settings.cloud_sms.sms_testpaper_check.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_testpaper_check.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_order_pay_success: 订单购买回执
+log.attr.system.update_settings.cloud_sms.sms_order_pay_success.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_order_pay_success.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_course_buy_notify: 课程购买回执
+log.attr.system.update_settings.cloud_sms.sms_course_buy_notify.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_course_buy_notify.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_classroom_buy_notify: 班级购买回执
+log.attr.system.update_settings.cloud_sms.sms_classroom_buy_notify.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_classroom_buy_notify.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_vip_buy_notify: 会员购买回执
+log.attr.system.update_settings.cloud_sms.sms_vip_buy_notify.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_vip_buy_notify.off: 关闭
+log.attr.system.update_settings.cloud_sms.sms_coin_buy_notify: 虚拟币充值回执
+log.attr.system.update_settings.cloud_sms.sms_coin_buy_notify.on: 开启
+log.attr.system.update_settings.cloud_sms.sms_coin_buy_notify.off: 关闭
+log.attr.system.update_settings.cloud_search.search_enabled: 云搜索设置
+log.attr.system.update_settings.cloud_search.search_enabled.1: 开启
+log.attr.system.update_settings.cloud_search.search_enabled.0: 关闭
+log.attr.system.update_settings.app_im.enabled: 云聊天设置
+log.attr.system.update_settings.app_im.enabled.1: 开启
+log.attr.system.update_settings.app_im.enabled.0: 关闭
+log.attr.system.update_settings.cloud_attachment.enable: 云聊天设置
+log.attr.system.update_settings.cloud_attachment.enable.1: 开启
+log.attr.system.update_settings.cloud_attachment.enable.0: 关闭
+log.attr.system.update_settings.cloud_attachment.article: 资讯
+log.attr.system.update_settings.cloud_attachment.article.1: 开启
+log.attr.system.update_settings.cloud_attachment.article.0: 关闭
+log.attr.system.update_settings.cloud_attachment.course: 课程讨论区
+log.attr.system.update_settings.cloud_attachment.course.1: 开启
+log.attr.system.update_settings.cloud_attachment.course.0: 关闭
+log.attr.system.update_settings.cloud_attachment.classroom: 班级话题
+log.attr.system.update_settings.cloud_attachment.classroom.1: 开启
+log.attr.system.update_settings.cloud_attachment.classroom.0: 关闭
+log.attr.system.update_settings.cloud_attachment.group: 小组
+log.attr.system.update_settings.cloud_attachment.group.1: 开启
+log.attr.system.update_settings.cloud_attachment.group.0: 关闭
+log.attr.system.update_settings.cloud_attachment.question: 试题
+log.attr.system.update_settings.cloud_attachment.question.1: 开启
+log.attr.system.update_settings.cloud_attachment.question.0: 关闭
+log.attr.system.update_settings.cloud_attachment.fileSize: 附件大小
+log.attr.system.update_settings.xapi.enabled: 数据实验室设置
+log.attr.system.update_settings.xapi.enabled.1: 开启
+log.attr.system.update_settings.xapi.enabled.0: 关闭
+log.attr.system.update_settings.xapi.enabled.: 关闭
 
 cashflow.title: 名称
 cashflow.sn: 流水号

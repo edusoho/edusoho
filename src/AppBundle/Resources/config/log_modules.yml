@@ -296,5 +296,20 @@ system:
         modalField: all
     update_settings.cloud_consult:
         modalField:
-            0: cloud_consult_setting_enabled
+          [cloud_consult_setting_enabled]
+    update_settings.storage:
+        modalField:
+            ["upload_mode","support_mobile","video_quality","video_audio_quality","video_audio_quality","enable_playback_rates","video_auto_play","video_header","video_watermark","video_embed_watermark_image","video_fingerprint","video_fingerprint_time","enable_hls_encryption_plus",]
+    update_settings.live-course:
+        modalField: all
+    update_settings.cloud_sms:
+        modalField: all
+    update_settings.cloud_search:
+        modalField: all
+    update_settings.app_im:
+        modalField: all
+    update_settings.cloud_attachment:
+        modalField: all
+    update_settings.xapi:
+        modalField: all
 
