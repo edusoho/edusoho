@@ -17,7 +17,7 @@ class PageSetting extends AbstractResource
      */
     public function get(ApiRequest $request, $portal, $type)
     {
-        $mode = $request->query->get('mode');
+        $mode = $request->query->get('mode', 'published');
 
         if (!in_array($mode, array('draft', 'published'))) {
             throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
