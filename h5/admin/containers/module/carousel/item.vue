@@ -11,7 +11,7 @@
       <img class="carousel-img" :src="item.image">
       <span v-show="!item.image"><i class="text-18">+</i> 添加图片</span>
     </el-upload>
-    <i class="h5-icon h5-icon-cuowu1 icon-delete" @click="handleRemove"></i>
+    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index)">
     <div class="add-title pull-left">标题：<input type="text" placeholder="请输入标题"></div>
     <div class="pull-left">链接：<button class="btn-gray btn-choose-course">选择课程</button></div>
   </div>
@@ -24,7 +24,7 @@
     props: ['item', 'index', 'active'],
     data() {
       return {
-        // activeIndex: 0,
+        activeIndex: 0,
       };
     },
     methods: {
@@ -40,8 +40,9 @@
           this.item.image = data.uri;
           this.$emit('selected',
           {
+            selectIndex: this.activeIndex,
             activeStatus: true,
-            imageUrl: this.item.image
+            imageUrl: data.uri
           }
         );
           console.log(data)
@@ -53,6 +54,7 @@
       selected(item, index) {
         this.imgAdress = item.image;
         const activeStatus = this.isActive;
+        this.activeIndex = index;
         this.$emit('selected',
           {
             selectIndex: index,
@@ -61,8 +63,16 @@
           }
         );
       },
-      handleRemove(e) {
-        e.target.parentNode.remove();
+      handleRemove(index) {
+        if (index) {
+          this.$emit('selected', {imageUrl: ''});
+          this.$el.remove();
+        } else {
+          this.$message({
+            message: '至少要留一张轮播图',
+            type: 'warning'
+          });
+        }
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;

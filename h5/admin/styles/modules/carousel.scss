@@ -1,9 +1,9 @@
 .setting-carousel {
   position: relative;
 
-  .carousel-image {
+  .carousel-image-container {
     font-size: 0;
-    img {
+    .carousel-image {
       width: 100%;
       height: 200px;
     }
@@ -76,8 +76,10 @@
 
   .icon-delete {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -9px;
+    right: -9px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
     color: $primary-color;
   }

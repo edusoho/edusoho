@@ -12,6 +12,7 @@ import Admin from '@admin/App-admin';
 import {
   Select,
   Button,
+  Message,
   Upload,
   Input,
   Radio,
@@ -29,6 +30,8 @@ Vue.use(Cascader);
 
 Vue.use(utils);
 // Vue.use(VueCropper);
+
+Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false;
 
