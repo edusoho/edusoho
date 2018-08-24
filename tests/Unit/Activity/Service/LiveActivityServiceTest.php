@@ -49,8 +49,9 @@ class LiveActivityServiceTest extends BaseTestCase
         $savedActivity['startTime'] = time() + 2000;
         $savedActivity['endTime'] = time() + 5000;
         $updatedData = array('length' => 100, 'endTime' => time() + 100000);
-        $updatedActivity = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
+        list($updatedActivity, $updatedData) = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
         $this->assertEquals($savedActivity['liveId'], $updatedActivity['liveId']);
+        $this->assertEquals(array_merge($savedActivity, $updatedData), $updatedData);
     }
 
     public function testDelete()
@@ -215,10 +216,7 @@ class LiveActivityServiceTest extends BaseTestCase
     {
         $service = $this->createService('Activity:LiveActivityService');
         //mock client
-        $class = new \ReflectionClass(get_class($service));
-        $clientProp = $class->getProperty('client');
-        $clientProp->setAccessible(true);
-        $clientProp->setValue($service, new MockEdusohoLiveClient());
+        ReflectionUtils::setProperty($service, 'client', new MockEdusohoLiveClient());
 
         return $service;
     }

@@ -87,7 +87,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
-            $this->getLogService()->info('course', 'add_task', "添加任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
 
@@ -161,10 +160,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})", array(
-                'oldTask' => $oldTask,
-                'task' => $task,
-            ));
             $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
 
             if ('download' == $task['type']) {
@@ -305,7 +300,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         try {
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
 
-            $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
             $this->commit();

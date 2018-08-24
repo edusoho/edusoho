@@ -2,6 +2,8 @@
 
 namespace Biz\Marker\Service;
 
+use Biz\System\Annotation\Log;
+
 interface QuestionMarkerService
 {
     public function getQuestionMarker($id);
@@ -20,6 +22,12 @@ interface QuestionMarkerService
 
     public function updateQuestionMarker($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="marker",action="delete_question")
+     */
     public function deleteQuestionMarker($id);
 
     public function sortQuestionMarkers(array $ids);

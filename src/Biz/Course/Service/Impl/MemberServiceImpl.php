@@ -96,10 +96,20 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
             }
 
+            $infoData = array(
+                'courseSetId' => $courseSet['id'],
+                'courseId' => $course['id'],
+                'title' => $course['title'],
+                'userId' => $user['id'],
+                'nickname' => $user['nickname'],
+                'remark' => $data['remark'],
+            );
+
             $this->getLogService()->info(
                 'course',
                 'add_student',
-                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
+                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}",
+                $infoData
             );
             $this->commit();
 
@@ -136,10 +146,18 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $infoData = array(
+            'courseId' => $course['id'],
+            'title' => $course['title'],
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            $infoData
         );
 
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
@@ -442,7 +460,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getMemberDao()->batchCreate($teacherMembers);
         $this->updateCourseTeacherIds($courseId, $teachers);
-        $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
         $addTeachers = array_values(array_diff($userIds, $existTeacherIds));
         $this->dispatchEvent('course.teachers.update', new Event($course, array(
             'teachers' => $teachers,

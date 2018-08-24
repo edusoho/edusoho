@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class LogDaoImpl extends GeneralDaoImpl implements LogDao
 {
-    protected $table = 'log';
+    protected $table = 'log_v8';
 
     public function declares()
     {
@@ -25,6 +25,7 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
                 'createdTime < :endDateTime',
                 'createdTime >= :startDateTime_GE',
                 'userId IN ( :userIds )',
+                'userId != :exceptedUserId',
             ),
         );
     }

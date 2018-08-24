@@ -154,7 +154,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'monolog.permission' => 0666,
         ));
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
-        $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
+        $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider(), array('targetlog.interceptor_enable' => false));
+        $biz->register(new \Biz\System\LogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
         $biz->register(new \Biz\DefaultSdkProvider());
 
