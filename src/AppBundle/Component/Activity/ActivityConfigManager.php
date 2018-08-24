@@ -11,10 +11,8 @@ class ActivityConfigManager
 
     private $activitiesConfig;
 
-    public function __construct($cacheDir, $kernelDir, $isDebug)
+    public function __construct($cacheDir, $activitiesRootDir, $isDebug)
     {
-        $activitiesRootDir = implode(DIRECTORY_SEPARATOR, array($kernelDir, '..', 'activities'));
-
         $this->cachePath = implode(DIRECTORY_SEPARATOR, array($cacheDir, 'activities.php'));
         $activitiesConfig = new ConfigCache($this->cachePath, $isDebug);
 

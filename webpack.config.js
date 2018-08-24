@@ -98,4 +98,5 @@ module.exports = {
   extryCssName: '{main,header,bootstrap,mobile,admin}',
   isESlint: false,
   baseName: 'libs/base,libs/ltc-sdk',
+  activitiesDir: 'web/activities',
 };
