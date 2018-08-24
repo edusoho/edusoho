@@ -2,9 +2,9 @@
 
 namespace AppBundle\Twig;
 
+use Biz\MaterialLib\Service\MaterialLibService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use function QiQiuYun\SDK\json_decode;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ActivityExtension extends \Twig_Extension
@@ -40,7 +40,13 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('activity_metas', array($this, 'getActivityMeta')),
             new \Twig_SimpleFunction('can_free_activity_types', array($this, 'getCanFreeActivityTypes')),
             new \Twig_SimpleFunction('ltc_source', array($this, 'findLtcSource')),
+            new \Twig_SimpleFunction('flash_player', array($this, 'flashPlayer')),
         );
+    }
+
+    public function flashPlayer($globalId, $ssl)
+    {
+        return $this->getMaterialLibService()->player($globalId, $ssl);
     }
 
     public function findLtcSource($courseId, $taskId)
@@ -50,13 +56,13 @@ class ActivityExtension extends \Twig_Extension
         $cdn = '';
         if (!empty($cdnSetting) && !empty($cdnSetting['enabled'])) {
             $cdn = empty($cdnSetting['defaultUrl']) ? '' : $cdnSetting['defaultUrl'];
-        };
+        }
         $task = $this->getTaskService()->getTask($taskId);
         $context = array(
             'courseId' => $course['id'],
             'courseSetId' => $course['courseSetId'],
             'taskId' => empty($task) ? 0 : $task['id'],
-            'activityId' => empty($task) ? 0 :$task['activityId'],
+            'activityId' => empty($task) ? 0 : $task['activityId'],
         );
 
         return json_encode(array(
@@ -73,8 +79,8 @@ class ActivityExtension extends \Twig_Extension
             'context' => $context,
             'editorConfig' => array(
                 'filebrowserImageUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUpoadToken('course'))),
-                'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload',  array('token' => $this->getWebExtension()->makeUpoadToken('course', 'flash'))),
-                'imageDownloadUrl' => $this->generateUrl('editor_download',  array('token' => $this->getWebExtension()->makeUpoadToken('course')))
+                'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUpoadToken('course', 'flash'))),
+                'imageDownloadUrl' => $this->generateUrl('editor_download', array('token' => $this->getWebExtension()->makeUpoadToken('course'))),
             ),
             // 'uploader' => $cdn.'asdf',
             // 'player' => 'a',
@@ -185,12 +191,20 @@ class ActivityExtension extends \Twig_Extension
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
+    protected function getMaterialLibService()
+    {
+        return $this->biz->service('MaterialLib:MaterialLibService');
+    }
+
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
     }
 
-    protected function generateUrl($route, $parameters) 
+    protected function generateUrl($route, $parameters)
     {
         return $this->container->get('router')->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
