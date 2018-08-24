@@ -1,9 +1,11 @@
 .setting-course {
-  cursor: pointer;
-  &.active {
-    border: 1px dashed $primary-color;
-    margin-left: -1px;
-    margin-right: -1px;
+  .find-page__part {
+    cursor: pointer;
+    &.active {
+      border: 1px dashed $primary-color;
+      margin-left: -1px;
+      margin-right: -1px;
+    }
   }
 }
 
