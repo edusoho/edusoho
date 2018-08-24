@@ -197,8 +197,8 @@ class LogDataUtils
     private static function getShowTitle($oldData)
     {
         $showTitle = '';
-        if (isset($oldData['email'])) {
-            $showTitle = $oldData['email'];
+        if (isset($oldData['nickname'])) {
+            $showTitle = $oldData['nickname'];
         } elseif (isset($oldData['title'])) {
             $showTitle = $oldData['title'];
             if (isset($oldData['courseSetTitle'])) {
