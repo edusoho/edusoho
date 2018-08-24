@@ -1,7 +1,7 @@
 <template>
   <div class="setting-carousel setting-course">
     <div class="find-page__part">
-      <e-course-list :courseList="courseList"></e-course-list>
+      <e-course-list :courseList="courseList" :feedback="false"></e-course-list>
     </div>
     <div class="carousel-allocate course-allocate">
       <header class="title">课程列表设置</header>
@@ -15,10 +15,8 @@
         <div class="course-item-setting__section mtl">
           <p class="pull-left section-left">课程来源：</p>
           <div class="section-right">
-            <el-select v-model="value" placeholder="请选择分类" size="mini">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+            <el-radio v-model="radio" label="1">课程分类</el-radio>
+            <el-radio v-model="radio" label="2">自定义</el-radio>
           </div>
         </div>
         <div class="course-item-setting__section mtl">
@@ -72,6 +70,7 @@ export default {
       input: '',
       options: [],
       value: '',
+      radio: '1',
       courseList: {
         "title": "热门课程",
         "items": [{

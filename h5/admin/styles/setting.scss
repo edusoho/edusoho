@@ -1,9 +1,10 @@
 .setting-page {
   position: relative;
+  box-sizing: border-box;
   border: 1px solid #e1e1e1;
-  margin: 50px;
   width: 375px;
   height: 667px;
+  margin: 50px;
   .find-navbar {
     position: relative;
     background-color: #212121;

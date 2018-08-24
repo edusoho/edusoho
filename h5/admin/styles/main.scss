@@ -1,8 +1,12 @@
 @import './color.scss';
 @import './common.scss';
+@import '../../src/assets/styles/global.scss';
+@import '../../src/assets/fonts/iconfont.css';
+
+@import '../../src/assets/styles/mixins.scss';
+@import '../../src/assets/styles/modules/e-course/index.scss';
+@import '../../src/assets/styles/modules/e-course-lists/index.scss';
+
 @import './setting.scss';
 @import './modules/carousel.scss';
 @import './modules/course.scss';
-@import '../../src/assets/styles/global.scss';
-@import '../../src/assets/fonts/iconfont.css';
-@import '../../src/assets/styles/containers/course/index.scss';
