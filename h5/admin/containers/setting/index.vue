@@ -1,9 +1,9 @@
 <template>
   <div class="setting-page">
     <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
-    <van-nav-bar :title="title" class="nav-bar"/>
-    <div></div>
-    <carousel></carousel>
+    <!-- <van-nav-bar :title="title" class="nav-bar"/> -->
+    <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>EduSoho 微网校</div>
+    <!-- <carousel></carousel> -->
     <course></course>
     <img class="find-footer-img" src="static/images/find_bottom.jpg" alt="">
   </div>

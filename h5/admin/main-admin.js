@@ -11,12 +11,16 @@ import Admin from '@admin/App-admin';
 
 import {
   Select,
+  Button,
+  Upload,
   Input
 } from 'element-ui';
 
-Vue.component(Input.name, Input);
-Vue.component(Select.name, Select);
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Button);
 
+Vue.use(Upload);
 Vue.use(utils);
 // Vue.use(VueCropper);
 

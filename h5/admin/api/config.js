@@ -4,6 +4,10 @@ const config = [
     name: 'saveDraftDate',
     url: '/pages/{portal}/settings/{type}',
     method: 'GET'
+  }, {
+    name: 'uploadFile',
+    url: '/api/files',
+    method: 'POST'
   }
 ];
 

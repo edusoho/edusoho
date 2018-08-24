@@ -4,6 +4,21 @@
   margin: 50px;
   width: 375px;
   height: 667px;
+  .find-navbar {
+    position: relative;
+    background-color: #212121;
+    text-align: center;
+    line-height: 56px;
+    color: #fff;
+    font-size: 18px;
+    margin-left: -1px;
+    margin-right: -1px;
+    i {
+      position: absolute;
+      top: 0;
+      left: 15px;
+    }
+  }
   .find-head-img {
     vertical-align: top;
   }
