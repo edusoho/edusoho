@@ -41,6 +41,7 @@ load.then(function(){
   }
 
   function _init() {
+    debugger;
     editor = window.ltc.editor('text-content-field');
     validate = $('#step2-form').validate({
       rules: {
@@ -83,6 +84,7 @@ load.then(function(){
       }, function(result) {
         $('#title').val(result['title']);
         $content.val(result['content']);
+        console.log(result['content']);
         editor.setData(result['content']);
       });
     }
