@@ -159,6 +159,7 @@ class Editor {
     }
 
     if (this.$contentIframe.attr('src') != this.taskConfig.contentUrl) {
+      this.$contentIframe.hide();
       this.$contentIframe.attr('src', this.taskConfig.contentUrl);
       this.$contentIframe.load(loadAnimation(() => {
         this._rendButton(2);
@@ -173,8 +174,8 @@ class Editor {
       return;
     }
     if (this.$finishIframe.attr('src') != this.taskConfig.finishUrl) {
+      this.$finishIframe.hide();
       this.$finishIframe.attr('src', this.taskConfig.finishUrl);
-  
       this.$finishIframe.load(loadAnimation(() => {
         this._rendButton(3);
       }, this.$taskFinish));
