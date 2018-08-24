@@ -72,11 +72,31 @@ class PagedCourseLesson {
         },
 
         /*
-         * 如果是多任务课时，任务上不显示选修，因为课时上已经显示选修了
-         * 单任务课时，则直接在任务上显示选修（单任务课时时，只显示一条记录，以任务记录为主，附加了课时信息）
+         * 选修或未发布状态下，
+         *   业务逻辑：课时上面显示选修或敬请期待（未发布需要显示敬请期待），任务不显示选修或敬请期待
+         *   技术逻辑：
+         *     单任务课时，课时本身不显示选修或敬请期待，任务显示选修或敬请期待（页面上的课时，实际上是任务，只是套了一些课时的属性）
+         *     多任务课时，课时本身显示选修或敬请期待，任务不显示选修或敬请期待
          */
-        'isTreatedAsTaskOptional': function(data, context) {
-          return data['isOptional'] && (data['itemType'] != 'task' || data['isSingleTaskLesson']);
+        'isItemDisplayedAsOptionalOrUnpublished': function(data, context) {
+          return context.isItemDisplayedAsOptional(data, context) ||
+            context.isItemDisplayedAsUnpublished(data, context);
+        },
+
+        /**
+         * 见 isItemDisplayedAsOptionalOrPublished 描述
+         */
+        'isItemDisplayedAsOptional': function(data, context) {
+          return data['isOptional'] && context.isLessonNode(data, context);
+        },
+
+        'isItemDisplayedAsUnpublished': function(data, context) {
+          return !context.isPublished(data, context) && context.isLessonNode(data, context);
+        },
+
+        'isLessonNode': function(data, context) {
+          return (data['itemType'] == 'task' && data['isSingleTaskLesson']) ||
+            (data['itemType'] == 'lesson' && !data['isSingleTaskLesson']);
         },
 
         'getTaskName': function(data, context) {

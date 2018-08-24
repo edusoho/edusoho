@@ -15,6 +15,10 @@
   <li class="task-item infinite-item {lessonContainerClass}"
     display-if="{isLesson}">
     <span class="title">{getLessonName}</span>
+
+    <tmp display-if="{isItemDisplayedAsUnpublished}">
+      <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
+    </tmp>
   </li>
 
   <li class="task-item task-content mouse-control infinite-item {lessonContainerClass}"
