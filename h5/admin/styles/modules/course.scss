@@ -1,3 +1,12 @@
+.setting-course {
+  cursor: pointer;
+  &.active {
+    border: 1px dashed $primary-color;
+    margin-left: -1px;
+    margin-right: -1px;
+  }
+}
+
 .course-item-setting {
   background: #fff;
   padding: 30px 58px 30px 30px;
@@ -14,6 +23,7 @@
       font-size: 14px;
     }
     &-right {
+      height: 30px;
       margin-left: 70px;
       line-height: 28px;
       .el-select {

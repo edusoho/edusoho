@@ -14,7 +14,8 @@ import {
   Button,
   Upload,
   Input,
-  Radio
+  Radio,
+  Option,
 } from 'element-ui';
 
 Vue.use(Input);
@@ -22,6 +23,7 @@ Vue.use(Select);
 Vue.use(Button);
 Vue.use(Upload);
 Vue.use(Radio);
+Vue.use(Option);
 
 Vue.use(utils);
 // Vue.use(VueCropper);
