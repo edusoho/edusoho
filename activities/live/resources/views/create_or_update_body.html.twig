@@ -1,7 +1,8 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js','libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
 {% if activity.id|default(false) %}
-    {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:activity.fromCourseId, taskId:taskId}) %}
+    {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:activity.fromCourseId, activityId: activity.id}) %}
 {% else %}
     {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:activity.fromCourseId}) %}
 {% endif %}
@@ -9,12 +10,36 @@
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+        <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+        </div>
+      </div>
+
+      {% set roomTypes = get_live_room_type() %}
+      {% if roomTypes %}
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label for="roomType">{{ 'course.live_activity.room_type'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+            <select class="form-control width-input" name="roomType" {% if not canUpdateRoomType|default(1) %}disabled{% endif %}>
+              {% for key, roomType in roomTypes if roomTypes %}
+                <option value="{{ key }}" {% if activity.ext.roomType|default('large') == key %}selected{% endif %}>{{ roomType|trans }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      {% endif %}
       <div class="form-group expiry-day-js">
           <div class="col-sm-2 control-label">
               <label for="startTime" class="control-label-required">{{ 'course.plan_task.activity_manage.live.start_time'|trans }}</label>
           </div>
           <div class="col-sm-10">
-              <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
+              <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ path('client_time_check') }}">
               {% if not activity.ext.roomCreated|default(true) %}
                   <div class="color-warning">{{'course.plan_task.activity_manage.live.create_tips'|trans}}</div>
               {% endif %}
@@ -43,18 +68,4 @@
       </div>
     </form>
   </div>
-
-{% endblock %}
-
-{% block activity_finish %}
-    <div class="form-group">
-        <div class="col-sm-2 control-label">
-            <label for="condition">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
-        </div>
-        <div class="col-sm-10">
-            <p class="form-control-static">{{'course.plan_task.activity_manage.live.join_tips'|trans}}</p>
-        </div>
-    </div>
-
-    {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 {% endblock %}

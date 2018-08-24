@@ -3,7 +3,6 @@ import SubtitleDialog from 'app/js/activity-manage/video/subtitle/dialog';
 
 export default class Video {
   constructor() {
-    this.context = window.ltc.getContext();
     this.showChooseContent();
     this.initStep2form();
     this.autoValidatorLength();

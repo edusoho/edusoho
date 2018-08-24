@@ -1631,7 +1631,7 @@ course_manage_task_pre_create_check:
     methods: [POST]
 
 course_manage_task_pre_update_check:
-    path:  /course/{courseId}/task/{taskId}/pre_update_check
+    path:  /course/{courseId}/activity/{activityId}/pre_update_check
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 
