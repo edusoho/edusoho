@@ -1,5 +1,4 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
 {% if activity.id|default(false) %}
     {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:activity.fromCourseId, taskId:taskId}) %}
@@ -7,39 +6,44 @@
     {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:activity.fromCourseId}) %}
 {% endif %}
 
-{% block activity_content %}
-    <div class="form-group expiry-day-js">
-        <div class="col-sm-2 control-label">
-            <label for="startTime" class="control-label-required">{{ 'course.plan_task.activity_manage.live.start_time'|trans }}</label>
-        </div>
-        <div class="col-sm-10">
-            <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
-            {% if not activity.ext.roomCreated|default(true) %}
-                <div class="color-warning">{{'course.plan_task.activity_manage.live.create_tips'|trans}}</div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2 control-label">
-            <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.live.live_time'|trans }}</label>
-        </div>
-        <div class="col-sm-10">
-            <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ checkUrl }}">{{'site.date.minute'|trans}}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2 control-label">
-            <label for="text-content-field" class="style1">{{ 'course.plan_task.activity_manage.live.info'|trans }}</label>
-        </div>
-        <div class="col-sm-10">
-      <textarea class="form-control type-hidden" id="text-content-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
-      >{{ activity.remark|default('') }}</textarea>
-            {% set course=data('Course',{'courseId':activity.fromCourseId}) %}
-            {% if course.expiryMode=='days' %}
-                <p class="help-block color-warning">{{'course.plan_task.activity_manage.live.expiry_tips'|trans}}</p>
-            {% endif %}
-        </div>
-    </div>
+{% block activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form" >
+      <div class="form-group expiry-day-js">
+          <div class="col-sm-2 control-label">
+              <label for="startTime" class="control-label-required">{{ 'course.plan_task.activity_manage.live.start_time'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+              <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
+              {% if not activity.ext.roomCreated|default(true) %}
+                  <div class="color-warning">{{'course.plan_task.activity_manage.live.create_tips'|trans}}</div>
+              {% endif %}
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="col-sm-2 control-label">
+              <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.live.live_time'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+              <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ checkUrl }}">{{'site.date.minute'|trans}}
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="col-sm-2 control-label">
+              <label for="text-content-field" class="style1">{{ 'course.plan_task.activity_manage.live.info'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+        <textarea class="form-control type-hidden" id="text-content-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+        >{{ activity.remark|default('') }}</textarea>
+              {% set course=data('Course',{'courseId':activity.fromCourseId}) %}
+              {% if course.expiryMode=='days' %}
+                  <p class="help-block color-warning">{{'course.plan_task.activity_manage.live.expiry_tips'|trans}}</p>
+              {% endif %}
+          </div>
+      </div>
+    </form>
+  </div>
+
 {% endblock %}
 
 {% block activity_finish %}
@@ -51,4 +55,6 @@
             <p class="form-control-static">{{'course.plan_task.activity_manage.live.join_tips'|trans}}</p>
         </div>
     </div>
+
+    {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 {% endblock %}
