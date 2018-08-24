@@ -231,7 +231,18 @@ user:
     email-changed:
         modalField: all
     update:
-        modalField: all
+        modalField:
+            0: title
+            1: truename
+            2: gender
+            3: qq
+            4: signature
+            5: about
+            6: company
+            7: job
+            8: weibo
+            9: weixin
+            10: site
     nickname_change:
         modalField: all
     change_role:
@@ -283,4 +294,7 @@ system:
         modalField: all
     update_settings.post_num_rules:
         modalField: all
+    update_settings.cloud_consult:
+        modalField:
+            0: cloud_consult_setting_enabled
 
