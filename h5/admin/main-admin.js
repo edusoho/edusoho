@@ -16,6 +16,8 @@ import {
   Input,
   Radio,
   Option,
+  Autocomplete,
+  Tree,
 } from 'element-ui';
 
 Vue.use(Input);
@@ -24,6 +26,8 @@ Vue.use(Button);
 Vue.use(Upload);
 Vue.use(Radio);
 Vue.use(Option);
+Vue.use(Autocomplete);
+Vue.use(Tree);
 
 Vue.use(utils);
 // Vue.use(VueCropper);

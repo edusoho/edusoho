@@ -25,7 +25,7 @@
         <div class="course-item-setting__section mtl">
           <p class="pull-left section-left">课程分类：</p>
           <div class="section-right">
-            <el-input size="mini" v-model="category" :focus="focused" readOnly placeholder="请输入列表名称"></el-input>
+            <el-input v-if="radio === 'category'" size="mini" v-model="category" :focus="focused" readOnly placeholder="请输入列表名称"></el-input>
             <div v-show="radio === 'custom'">
               <button>选择课程</button>
             </div>
@@ -157,9 +157,9 @@ export default {
             "subtitle": "",
             "summary": "",
             "cover": {
-              "large": "http://www.esdev.com/files/default/2018/06-25/16350154c47d811726.jpg",
-              "middle": "http://www.esdev.com/files/default/2018/06-25/16350154cac6482938.jpg",
-              "small": "http://www.esdev.com/files/default/2018/06-25/16350154d005583117.jpg"
+              "large": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
+              "middle": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
+              "small": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg"
             },
             "studentNum": "0",
             "discount": "10.00",
@@ -231,9 +231,9 @@ export default {
             "subtitle": "",
             "summary": "",
             "cover": {
-              "large": "http://www.esdev.com/files/default/2018/06-25/16350154c47d811726.jpg",
-              "middle": "http://www.esdev.com/files/default/2018/06-25/16350154cac6482938.jpg",
-              "small": "http://www.esdev.com/files/default/2018/06-25/16350154d005583117.jpg"
+              "large": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
+              "middle": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
+              "small": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg"
             },
             "studentNum": "0",
             "discount": "10.00",
