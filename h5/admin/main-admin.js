@@ -12,6 +12,7 @@ import Admin from '@admin/App-admin';
 import {
   Button,
   // Select,
+  Message,
   Upload,
   Input
 } from 'element-ui';
@@ -22,6 +23,8 @@ Vue.component(Button.name, Button);
 Vue.use(Upload);
 Vue.use(utils);
 // Vue.use(VueCropper);
+
+Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false;
 

@@ -1,8 +1,8 @@
 <template>
   <div class="setting-carousel">
-    <div class="carousel-image" :class="{ active: isActive }">
-      <img v-bind:src="updateImg" alt="">
-      <i class="h5-icon h5-icon-cuowu1 icon-delete" @click="handleRemove"></i>
+    <div class="carousel-image-container" :class="{ active: isActive }">
+      <img v-bind:src="updateImg" class="carousel-image">
+      <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
     </div>
     <div class="carousel-allocate">
       <header class="title">轮播图设置</header>
@@ -56,8 +56,8 @@ export default {
       this.imgAdress = selected.imageUrl;
       this.activeItemIndex = selected.selectIndex;
     },
-    handleRemove(e) {
-      e.target.parentNode.remove();
+    handleRemove() {
+      this.$el.remove();
     },
   }
 }
