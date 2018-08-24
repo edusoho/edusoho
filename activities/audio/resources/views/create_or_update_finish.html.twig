@@ -1,0 +1,22 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% set mediaType = activity.mediaType|default('audio') %}
+{% set fileType = 'audio' %}
+{% do script(['libs/ltc-sdk-client.js','audioactivity/js/finish/index.js']) %}
+{% block  activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step3-form" >
+      <div class=" form-group">
+        <div class="col-sm-2 control-label">
+          <label>{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+        </div>
+        <div class="col-sm-4 form-control-static">
+          {{'course.plan_task.activity_manage.audio.finish'|trans}}
+          <input type="hidden" id="finish-condition" name="condition">
+          {#<select id="finish-condition" name="condition" class="form-control">
+            <option value="">听完音频</option>
+          </select>#}
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
