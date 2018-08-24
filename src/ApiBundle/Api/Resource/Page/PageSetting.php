@@ -22,7 +22,7 @@ class PageSetting extends AbstractResource
         if (!in_array($mode, array('draft', 'published'))) {
             throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
         }
-
+        $type = 'course' == $type ? 'courseCondition' : $type;
         if (!in_array($type, array('courseCondition', 'discovery'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
