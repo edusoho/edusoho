@@ -7001,6 +7001,7 @@ log.action.system.update_settings.coin: 更新虚拟币设置
 log.action.system.update_settings.refund: 更新退款设置
 log.action.system.update_settings.blacklist_ip: 更新黑名单设置
 log.action.system.update_settings.post_num_rules: 更新发贴设置
+log.action.system.update_settings.cloud_consult: 更新云问答设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -7245,6 +7246,7 @@ log.action.template.system.update_settings.coin: 更新了<strong class="color-s
 log.action.template.system.update_settings.refund: 更新了<strong class="color-success">系统设置</strong>的退款设置
 log.action.template.system.update_settings.blacklist_ip: 更新了<strong class="color-success">系统设置</strong>的黑名单设置
 log.action.template.system.update_settings.post_num_rules: 更新了<strong class="color-success">系统设置</strong>的发贴设置
+log.action.template.system.update_settings.cloud_consult: 更新了<strong class="color-success">系统设置</strong>的云问答设置
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -7647,6 +7649,9 @@ log.attr.system.update_settings.refund.successNotification: 退款审核通过�
 log.attr.system.update_settings.refund.failedNotification: 退款审核未通过通知
 log.attr.system.update_settings.blacklist_ip.ips: IP黑名单
 log.attr.system.update_settings.post_num_rules.rules: 发贴设置
+log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled: 云问答开关
+log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled.1: 开启
+log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled.0: 关闭
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
