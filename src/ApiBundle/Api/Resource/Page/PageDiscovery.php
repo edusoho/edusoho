@@ -18,74 +18,67 @@ class PageDiscovery extends AbstractResource
         if (!in_array($portal, array('h5', 'miniprogram'))) {
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
-
-        $hotCourses = $this->findCoursesAndCourseSetsBySort(
-            array('studentNum' => 'DESC', 'hitNum' => 'DESC', 'id' => 'DESC')
-        );
-        $recommendedCourses = $this->findCoursesAndCourseSetsBySort(
-            array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'id' => 'DESC')
-        );
-
-        $posters = $this->getBlockService()->getPosters();
-
-        $result = array(
-            array(
-                'type' => 'slide_show',
-                'moduleType' => 'slide',
-                'data' => $posters,
-            ),
-            array(
-                'type' => 'course_list',
-                'moduleType' => 'hotCourseList',
-                'data' => array('title' => '热门课程', 'items' => $hotCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => '-studentNum'),
-                ),
-            ),
-            array(
-                'type' => 'course_list',
-                'moduleType' => 'recommendedCourseList',
-                'data' => array('title' => '推荐课程', 'items' => $recommendedCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => 'recommendedSeq'),
-                ),
-            ),
-        );
-
-        return $result;
+        $params = $request->query->all();
+        $settingName = "{$portal}-published-discovery";
+        if (!empty($params['preview'])) {
+            $token = $this->getTokenService()->verifyToken('qrcode_url', $token);
+            if (empty($token)) {
+                throw new \Exception('Error Processing Request', 1);
+            }
+            $user = $this->getUserService()->getUser($token['userId']);
+            if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+                throw new \Exception('Error Processing Request', 1);
+            }
+            $settingName = "{$portal}-draft-discovery";
+        }
+        $settings = $this->getSettingService()->get($settingName);
+        foreach ($settings as &$setting) {
+            if ('course_list' == $setting['type'] && 'condition' == $setting['data']['sourceType']) {
+                $setting['data']['items'] = $this->searchCourseByConditions($setting['data']);
+            }
+        }
     }
 
-    protected function findCoursesAndCourseSetsBySort($sort)
+    protected function searchCourseByConditions($params)
     {
         $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
-        if (array_key_exists('recommendedSeq', $sort)) {
-            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, 0, 4);
-        } else {
-            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, 0, 4);
+        $sort = $this->getSortByStr($params['sort']);
+        $limit = empty($params['limit']) ? 4 : $params['limit'];
+        $conditions['categoryId'] = $params['categoryId'];
+        $conditions['startTime'] = $params['startTime'];
+        $conditions['endTime'] = $params['endTime'];
+        if ('createdTime' == $sort[0]) {
+            $courses = $this->getCourseService()->searchWithJoinTableConditions(
+                $conditions,
+                $sort,
+                0,
+                $params['limit']
+            );
         }
+
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
         return $courses;
     }
 
-    /**
-     * @return \Biz\Course\Service\CourseService
-     */
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
     }
 
-    /**
-     * @return \Biz\Course\Service\CourseSetService
-     */
-    protected function getCourseSetService()
+    protected function getSettingService()
     {
-        return $this->service('Course:CourseSetService');
+        return $this->service('System:SettingService');
     }
 
-    /**
-     * @return \Biz\Content\Service\BlockService
-     */
-    protected function getBlockService()
+    protected function getTokenService()
     {
-        return $this->service('Content:BlockService');
+        return $this->service('User:TokenService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
