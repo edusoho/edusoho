@@ -84,6 +84,15 @@ class Course extends AbstractResource
         if (isset($conditions['type']) && 'all' == $conditions['type']) {
             unset($conditions['type']);
         }
+
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = $conditions['title'];
+        }
+
+        if (isset($conditions['courseSetTitle'])) {
+            $conditions['courseSetTitleLike'] = $conditions['courseSetTitle'];
+        }
+
         $conditions['status'] = 'published';
         $conditions['courseSetStatus'] = 'published';
         $conditions['parentId'] = isset($conditions['parentId']) ? $conditions['parentId'] : 0;
