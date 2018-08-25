@@ -40,6 +40,12 @@
               <el-button type="info" size="mini">选择课程</el-button>
             </div>
           </div>
+          <draggable v-model="courseItems" class="section__course-container">
+            <div class="section__course-item" v-for="(courseItem, index) in courseItems" :key="courseItem.id">
+              <div class="section__course-item__title text-overflow">{{ courseItem.title }}</div>
+              <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
+            </div>
+          </draggable>
         </div>
         <!-- 排列顺序 -->
         <div class="course-item-setting__section mtl">
@@ -64,7 +70,7 @@
           <p class="pull-left section-left">显示个数：</p>
           <div class="section-right">
             <el-select v-model="maxNum" placeholder="请选择个数" size="mini">
-              <el-option v-for="item in maxNumOptions" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
           </div>
@@ -75,32 +81,30 @@
 </template>
 <script>
 import courseList from '@/containers/components/e-course-list/e-course-list.vue';
+import draggable from 'vuedraggable';
+
 
 export default {
   components: {
     'e-course-list': courseList,
+    draggable,
   },
   data() {
     return {
-      maxNumOptions: [
+      maxNumOptions: [1,2,3,4,5,6,7,8],
+      maxNum: 1,
+      courseItems: [
         {
-        value: 1,
-        label: 1,
+          id: 1,
+          title: '好饿好饿好饿，我真的好饿我真的好饿我真的好饿'
         }, {
-          value: 2,
-          label: 2,
+          id: 2,
+          title: '好饿好饿好饿，我也真的好饿'
         }, {
-          value: 3,
-          label: 3,
-        }, {
-          value: 4,
-          label: 4,
-        }, {
-          value: 5,
-          label: 5,
+          id: 3,
+          title: '+1'
         }
       ],
-      maxNum: 1,
       sortSelected: '加入最多',
       sortOptions: [
         {
@@ -310,14 +314,20 @@ export default {
           label: '组件交互文档'
         }]
       }],
-      date: '近7天',
+      date: '最近7天',
       dateOptions: [
         {
           value: '7',
-          label: '近7天',
+          label: '最近7天',
         }, {
           value: '30',
-          label: '近30天',
+          label: '最近30天',
+        },  {
+          value: '90',
+          label: '最近90天',
+        },  {
+          value: 'all',
+          label: '历史所有',
         }
       ],
       radio: 'custom',
@@ -481,6 +491,10 @@ export default {
     }
   },
   methods: {
+    // 删除自定义课程
+    deleteCourse(index) {
+      this.courseItems.splice(index, 1);
+    }
   }
 }
 

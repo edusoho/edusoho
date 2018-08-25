@@ -11,7 +11,7 @@
 
 .course-item-setting {
   background: #fff;
-  padding: 30px 58px 30px 30px;
+  padding: 30px;
   border: 1px solid #E1E1E1;
 }
 
@@ -25,8 +25,8 @@
       font-size: 14px;
     }
     &-right {
-      height: 30px;
       margin-left: 70px;
+      width: 212px;
       line-height: 28px;
       .el-select {
         width: 100%;
@@ -34,6 +34,32 @@
       &__item {
         display: inline-block;
         width: 96px;
+      }
+    }
+    &__course-container {
+      margin-top: 15px;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+    &__course-item {
+      box-sizing: border-box;
+      color: $primary-color;
+      height: 40px;
+      padding: 13px 0;
+      line-height: 14px;
+      cursor: move;
+      &__title {
+        display: inline-block;
+        width: 240px;
+        font-size: 14px;
+      }
+      &__icon-delete {
+        color: #bdc2c6;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      &:not(:first-child) {
+        border-top: 1px solid #e1e1e1;
       }
     }
   }
