@@ -38,6 +38,10 @@
       type: {
         type: String,
         default: 'price'
+      },
+      feedback: {
+        type: Boolean,
+        default: true,
       }
     },
     computed: {
@@ -59,6 +63,9 @@
     },
     methods: {
       onClick(e) {
+        if (!this.feedback) {
+          return;
+        }
         const isOrder = this.type === 'order';
         const id = this.course.id || this.course.targetId;
         if (e.target.tagName === 'SPAN') {

@@ -10,17 +10,24 @@ import Admin from '@admin/App-admin';
 // import VueCropper from 'vue-cropper';
 
 import {
+  Select,
   Button,
-  // Select,
   Message,
   Upload,
-  Input
+  Input,
+  Radio,
+  Option,
+  Cascader,
 } from 'element-ui';
 
-Vue.component(Input.name, Input);
-Vue.component(Button.name, Button);
-// Vue.component(Select.name, Select);
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Button);
 Vue.use(Upload);
+Vue.use(Radio);
+Vue.use(Option);
+Vue.use(Cascader);
+
 Vue.use(utils);
 // Vue.use(VueCropper);
 
