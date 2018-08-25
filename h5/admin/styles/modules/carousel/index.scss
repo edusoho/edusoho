@@ -58,13 +58,14 @@
       .add-title {
         margin-top: 6px;
         margin-bottom: 14px;
-        input {
-          font-size: 12px;
+        .el-input {
+          width: auto;
+        }
+        .el-input__inner {
           height: 24px;
           border-radius: 2px;
           border: 1px solid $grey-light;
           padding: 0 4px;
-          box-sizing: border-box;
         }
       }
       .btn-choose-course {

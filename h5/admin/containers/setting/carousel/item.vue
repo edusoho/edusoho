@@ -4,15 +4,13 @@
       class="add-img"
       action="string"
       :http-request="uploadImg"
-      :on-preview="handlePictureCardPreview"
-      :on-remove="handleRemove"
       :show-file-list="false"
       >
       <img class="carousel-img" :src="item.image">
       <span v-show="!item.image"><i class="text-18">+</i> 添加图片</span>
     </el-upload>
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index)">
-    <div class="add-title pull-left">标题：<input type="text" placeholder="请输入标题"></div>
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="input" placeholder="请输入标题"></el-input></div>
     <div class="pull-left">链接：<button class="btn-gray btn-choose-course">选择课程</button></div>
   </div>
 </template>
@@ -25,6 +23,7 @@
     data() {
       return {
         activeIndex: 0,
+        input: ''
       };
     },
     methods: {
