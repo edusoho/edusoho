@@ -2,7 +2,7 @@
   <div class="e-course-list">
     <div class="e-course-list__header">
       <div class="clearfix">
-        <span class="e-course-list__list-title">{{ courseList.title }}</span>
+        <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
         <span class="e-course-list__more">
           <span class="more-text pull-left" @click="jumpTo(courseList.source)">更多</span>
         </span>

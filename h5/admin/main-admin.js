@@ -18,6 +18,7 @@ import {
   Radio,
   Option,
   Cascader,
+  Dialog,
 } from 'element-ui';
 
 Vue.use(Input);
@@ -27,6 +28,7 @@ Vue.use(Upload);
 Vue.use(Radio);
 Vue.use(Option);
 Vue.use(Cascader);
+Vue.use(Dialog);
 
 Vue.use(utils);
 // Vue.use(VueCropper);

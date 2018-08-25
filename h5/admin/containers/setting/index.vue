@@ -11,8 +11,8 @@
 
 <script>
 import Api from '@admin/api';
-import Carousel from '@admin/containers/module/carousel/index.vue';
-import Course from '@admin/containers/module/course/index.vue';
+import Carousel from './carousel';
+import Course from './course';
 
 export default {
   components: {

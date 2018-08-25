@@ -1,3 +1,25 @@
 .el-cascader {
   width: 100%;
 }
+
+
+.el-dialog {
+  &__header {
+    padding-bottom: 0;
+  }
+  &__body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  &__footer {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    text-align: center;
+  }
+
+  .el-button {
+    +.el-button {
+      margin-left: 20px;
+    }
+  }
+}

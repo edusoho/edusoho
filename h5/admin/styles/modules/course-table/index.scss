@@ -1,0 +1,41 @@
+.course-table {
+  border: 1px solid #E1E1E1;
+  box-sizing: border-box;
+  line-height: 40px;
+  &__th {
+    background: #f5f5f5;
+    font-weight: bold;
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  &__td {
+    display: inline-block;
+  }
+  &__tr {
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    &:not(:first-child) {
+      .tr-content {
+        border-top: 1px solid #f5f5f5;
+      }
+    }
+    .tr-content {
+      height: 40px;
+      cursor: move;
+    }
+  }
+  .td-col {
+    &-3 {
+      width: 25%;
+    }
+    &-5 {
+      width: 41.66%;
+    }
+  }
+  .delete {
+    color: $primary-color;
+    cursor: pointer;
+  }
+}

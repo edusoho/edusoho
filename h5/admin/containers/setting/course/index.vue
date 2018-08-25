@@ -77,17 +77,20 @@
         </div>
       </div>
     </div>
+    <course-modal></course-modal>
   </div>
 </template>
 <script>
-import courseList from '@/containers/components/e-course-list/e-course-list.vue';
 import draggable from 'vuedraggable';
+import courseList from '@/containers/components/e-course-list/e-course-list';
+import courseModal from './modal/course-modal'
 
 
 export default {
   components: {
     'e-course-list': courseList,
     draggable,
+    courseModal
   },
   data() {
     return {
