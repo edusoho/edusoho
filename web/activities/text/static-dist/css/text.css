@@ -81,3 +81,19 @@ p {
   padding-right: 20px;
   border-right-width: 5px;
 }
+
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px,1px,1px,1px);
+}
+
+.activity-link {
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.activity-link:hover {
+  text-decoration: none;
+}
