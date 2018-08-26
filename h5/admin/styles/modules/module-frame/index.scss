@@ -2,10 +2,12 @@
   position: relative;
   &__preview {
     cursor: pointer;
+    border: 1px solid #fff;
     &.active {
       border: 1px dashed $primary-color;
-      margin-left: -1px;
-      margin-right: -1px;
+    }
+    &:hover {
+      border: 1px solid $primary-color;
     }
   }
   &__setting {

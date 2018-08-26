@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <carousel v-if="module.type === moduleType.slideShow" :active="active"></carousel>
-    <course v-if="module.type === moduleType.courseList" :active="active"></course>
+  <div @click="activeModule">
+    <carousel v-if="module.type === moduleType.slideShow"
+              :active="isActive" ></carousel>
+    <course v-if="module.type === moduleType.courseList"
+            :active="isActive"></course>
   </div>
 </template>
 
@@ -24,6 +26,18 @@ export default {
       default: true,
     },
   },
+  computed: {
+    isActive: {
+      get() {
+        return this.active;
+      },
+      set() {
+        this.$emit('activeModule', {
+          moduleId: this.module.moduleType
+        });
+      }
+    }
+  },
   data () {
     return {
       moduleType: {
@@ -31,6 +45,11 @@ export default {
         courseList: 'course_list',
         poster: 'poster'
       }
+    }
+  },
+  methods: {
+    activeModule() {
+      this.isActive = true;
     }
   }
 }
