@@ -13,6 +13,14 @@ const routes = [
       title: '后台配置'
     },
     component: () => import(/* webpackChunkName: "setting" */'@admin/containers/setting/index.vue')
+  },
+  {
+    path: '/preview',
+    name: 'preview',
+    meta: {
+      title: '发现页预览'
+    },
+    component: () => import(/* webpackChunkName: "setting" */'@admin/containers/preview/index.vue')
   }
 ];
 
