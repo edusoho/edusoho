@@ -77,8 +77,7 @@
         </div>
       </div>
     </div>
-    <course-modal :key="modalKey"
-                  :visible="modalVisible"
+    <course-modal :visible="modalVisible"
                   :courseList="courseSets"
                   @visibleChange="modalVisibleHandler"
                   @sort="getSortedCourses"></course-modal>
@@ -98,7 +97,6 @@ export default {
   },
   data() {
     return {
-      modalKey: 0,
       modalVisible: false,
       maxNumOptions: [1,2,3,4,5,6,7,8],
       maxNum: 1,
@@ -507,10 +505,6 @@ export default {
       this.courseSets = courses;
     },
     modalVisibleHandler(visible) {
-      // console.log(visible, 888)
-      // if (visible) {
-      //   this.modalKey ++;
-      // }
       this.modalVisible = visible;
     },
     openModal() {

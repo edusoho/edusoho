@@ -17,7 +17,7 @@
           placeholder="搜索课程"></el-input>
       </div>
     </div>
-    <course-table :courseList="courseSets" @sort="getSortedCourses"></course-table>
+    <course-table :key="tableKey" :courseList="courseSets" @sort="getSortedCourses"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
       <el-button class="text-medium" size="small" @click="modalVisible = false">取 消</el-button>
       <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
@@ -45,6 +45,7 @@ export default {
   },
   data () {
     return {
+      tableKey: 0,
       keyWord: '',
       courseSets: this.courseList,
     }
@@ -57,6 +58,16 @@ export default {
       set(visible) {
         this.$emit('visibleChange', visible);
       }
+    }
+  },
+  watch: {
+    visible(val) {
+      if (!val) {
+        return;
+      }
+      // 重置 table 数据，重置 table 生命周期
+      this.courseSets = this.courseList;
+      this.tableKey ++;
     }
   },
   methods: {

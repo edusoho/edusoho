@@ -34,7 +34,7 @@ export default {
     courseList: {
       type: Array,
       default: [],
-    }
+    },
   },
   data () {
     return {
@@ -78,7 +78,6 @@ export default {
         return;
       }
       this.courseSets.splice(index, 1);
-      console.log('deleted')
     }
   }
 }
