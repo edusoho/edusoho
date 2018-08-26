@@ -94,8 +94,6 @@ load.then(function(){
         });
         // 当status == ready的时候执行
         if (editor.status === 'ready') {
-          console.log($content.val());
-          debugger;
           editor.setData(result['content'], {
             callback: function() {
               console.log(editor.status);
