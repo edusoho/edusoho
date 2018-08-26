@@ -7,7 +7,6 @@ import store from '@admin/store';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
-// import VueCropper from 'vue-cropper';
 
 import {
   Select,
@@ -31,7 +30,6 @@ Vue.use(Cascader);
 Vue.use(Dialog);
 
 Vue.use(utils);
-// Vue.use(VueCropper);
 
 Vue.prototype.$message = Message;
 
