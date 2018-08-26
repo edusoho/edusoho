@@ -1,9 +1,9 @@
 <template>
-  <div class="setting-carousel setting-course">
-    <div class="find-page__part active">
+  <div class="moudle-frame setting-course">
+    <div class="find-page__part" :class="{ active: isActive }">
       <e-course-list :courseList="courseList" :maxNum="maxNum" :feedback="false"></e-course-list>
     </div>
-    <div class="carousel-allocate course-allocate">
+    <div class="moudle-frame__setting course-allocate" v-show="isActive">
       <header class="title">课程列表设置</header>
       <div class="carousel-item-setting course-item-setting clearfix">
         <!-- 列表名称 -->
@@ -94,6 +94,20 @@ export default {
     'e-course-list': courseList,
     draggable,
     courseModal
+  },
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    isActive: {
+      get() {
+        return this.active;
+      },
+      set() {}
+    }
   },
   data() {
     return {
@@ -376,9 +390,9 @@ export default {
             "subtitle": "",
             "summary": "",
             "cover": {
-              "large": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
-              "middle": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
-              "small": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg"
+              "large": "http://lvliujie.st.edusoho.cn/files/course/2018/08-08/09393022a5e0329364.png",
+              "middle": "http://lvliujie.st.edusoho.cn/files/course/2018/08-08/09393022a5e0329364.png",
+              "small": "http://lvliujie.st.edusoho.cn/files/course/2018/08-08/09393022a5e0329364.png"
             },
             "studentNum": "0",
             "discount": "10.00",
@@ -450,9 +464,9 @@ export default {
             "subtitle": "",
             "summary": "",
             "cover": {
-              "large": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
-              "middle": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg",
-              "small": "http://t5.edusoho.cn/files/course/2017/02-23/104632835c59950208.jpg"
+              "large": "http://lvliujie.st.edusoho.cn/files/course/2018/08-08/09393022a5e0329364.png",
+              "middle": "http://lvliujie.st.edusoho.cn/files/course/2018/08-08/09393022a5e0329364.png",
+              "small": "http://lvliujie.st.edusoho.cn/files/course/2018/08-08/09393022a5e0329364.png"
             },
             "studentNum": "0",
             "discount": "10.00",

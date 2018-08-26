@@ -3,7 +3,7 @@
     <div class="course-table__th">
       <span class="course-table__td"
         v-for="(item, index) in head"
-        :class="tdWidth(item.col)"
+        :class="tdClass(item.col)"
         :key="index">{{ item.title }}</span>
     </div>
 
@@ -12,9 +12,9 @@
         <div class="tr-content">
           <span class="course-table__td text-overflow"
             v-for="(item, index) in head"
-            :class="[tdWidth(item.col), head[index].label === 'delete' ? 'delete': '' ]"
+            :class="[ tdClass(item.col), { 'delete': head[index].label === 'delete' }]"
             @click="deleteItem(head[index].label === 'delete', courseIndex)">
-            {{ course[head[index].label] || '移除' }}{{ index === 1 ? '元' : ''}}
+            {{ course[head[index].label] || '移除' }}{{ head[index].label === 'price' ? '元' : ''}}
           </span>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    tdWidth(ratio) {
+    tdClass(ratio) {
       return `td-col-${ratio}`
     },
     deleteItem(isDeleteBtn, index) {

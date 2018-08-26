@@ -1,6 +1,4 @@
 .setting-carousel {
-  position: relative;
-
   .carousel-image-container {
     font-size: 0;
     .carousel-image {
@@ -15,15 +13,6 @@
   }
 
   .carousel-allocate {
-    position: absolute;
-    top: 0;
-    left: 105%;
-    padding: 15px;
-    width: 400px;
-    border: 1px solid $grey-light;
-    border-radius: 4px;
-    background: #FAFAFA;
-    box-sizing: border-box;
     .title {
       font-size: 14px;
       padding-bottom: 15px;

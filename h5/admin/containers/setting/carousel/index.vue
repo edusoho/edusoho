@@ -1,10 +1,10 @@
 <template>
-  <div class="setting-carousel">
+  <div class="moudle-frame setting-carousel">
     <div class="carousel-image-container" :class="{ active: isActive }">
       <img v-bind:src="updateImg" class="carousel-image">
       <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
     </div>
-    <div class="carousel-allocate">
+    <div class="moudle-frame__setting carousel-allocate" v-show="isActive">
       <header class="title">轮播图设置</header>
       <div v-for="(item, index) in parts[0].data">
         <item :item="item" :index="index" :active="activeItemIndex" v-on:selected="selected"></item>
@@ -24,7 +24,6 @@ export default {
   },
   data() {
     return  {
-      isActive: false,
       activeItemIndex: 0,
       defaultItem: {
         image: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
@@ -39,16 +38,25 @@ export default {
       }]
     }
   },
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
+    isActive: {
+      get() {
+        return this.active;
+      },
+      set() {}
+    },
     updateImg() {
       return this.imgAdress
-    }
+    },
   },
   created() {
     this.addItem();
-    if (this.activeItemIndex == 0) {
-      this.isActive = true;
-    }
   },
   methods: {
     addItem() {

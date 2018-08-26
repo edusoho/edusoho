@@ -19,7 +19,7 @@
     </div>
     <course-table :key="tableKey" :courseList="courseSets" @sort="getSortedCourses"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
-      <el-button class="text-medium" size="small" @click="modalVisible = false">取 消</el-button>
+      <el-button class="text-medium btn-border-primary" size="small" @click="modalVisible = false">取 消</el-button>
       <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
     </span>
   </el-dialog>

@@ -20,7 +20,7 @@ const routes = [
     meta: {
       title: '发现页预览'
     },
-    component: () => import(/* webpackChunkName: "setting" */'@admin/containers/preview/index.vue')
+    component: () => import(/* webpackChunkName: "preview" */'@admin/containers/preview/index.vue')
   }
 ];
 

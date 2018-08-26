@@ -3,7 +3,7 @@
   box-sizing: border-box;
   border: 1px solid #e1e1e1;
   width: 375px;
-  height: 667px;
+  // height: 667px;
   margin: 50px;
   .find-navbar {
     position: relative;
@@ -23,11 +23,15 @@
   .find-head-img {
     vertical-align: top;
   }
+  .find-body {
+    padding-bottom: 50px;
+  }
   .find-footer {
     position: absolute;
     bottom: 0;
     height: 50px;
     width: 100%;
+    background-color: #fff;
     border-top: 1px solid #e1e1e1;
     &-item {
       display: inline-block;
