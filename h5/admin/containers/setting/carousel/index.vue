@@ -8,10 +8,16 @@
     <div slot="setting" class="carousel-allocate">
       <header class="title">轮播图设置</header>
       <div v-for="(item, index) in parts[0].data">
-        <item :item="item" :index="index" :active="activeItemIndex" v-on:selected="selected"></item>
+        <item :item="item" :index="index" :active="activeItemIndex"
+              @selected="selected" @chooseCourse="openModal"></item>
       </div>
-      <div class="btn-gray btn-add-item" @click="addItem">添加一个轮播图</div>
+      <el-button class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
     </div>
+
+    <course-modal slot="modal" :visible="modalVisible"
+                  :courseList="courseSets"
+                  @visibleChange="modalVisibleHandler"
+                  @sort="getSortedCourses"></course-modal>
   </module-frame>
 </template>
 
@@ -19,15 +25,19 @@
 import Api from '@admin/api';
 import item from './item';
 import moduleFrame from '../module-frame'
+import courseModal from '../course/modal/course-modal'
 
 export default {
   components: {
     item,
     moduleFrame,
+    courseModal,
   },
   data() {
     return  {
       activeItemIndex: 0,
+      modalVisible: false,
+      courseSets: [],
       defaultItem: {
         image: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
         link: {
@@ -71,6 +81,15 @@ export default {
     },
     handleRemove() {
       this.$el.remove();
+    },
+    getSortedCourses(courses) {
+      this.courseSets = courses;
+    },
+    modalVisibleHandler(visible) {
+      this.modalVisible = visible;
+    },
+    openModal() {
+      this.modalVisible = true;
     },
   }
 }

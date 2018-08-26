@@ -18,6 +18,14 @@
   }
 
   .el-button {
+    &--info {
+      color: red;
+      border-color: #e1e1e1;
+      background: #e1e1e1;
+      &:hover {
+        background: #909399;
+      }
+    }
     &--default {
       font-weight: normal;
       &:hover {
@@ -36,6 +44,18 @@
     }
     +.el-button {
       margin-left: 20px;
+    }
+  }
+}
+
+.el-button {
+  &--info {
+    color: #616161;
+    border-color: #e1e1e1;
+    background: #e1e1e1;
+    &:hover {
+      border-color: darken(#e1e1e1, 20%);
+      background: darken(#e1e1e1, 20%);
     }
   }
 }

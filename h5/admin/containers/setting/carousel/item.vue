@@ -11,7 +11,7 @@
     </el-upload>
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index)">
     <div class="add-title pull-left">标题：<el-input size="mini" v-model="input" placeholder="请输入标题"></el-input></div>
-    <div class="pull-left">链接：<button class="btn-gray btn-choose-course">选择课程</button></div>
+    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal">选择课程</el-button></div>
   </div>
 </template>
 
@@ -77,6 +77,9 @@
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
+      openModal() {
+        this.$emit('chooseCourse');
+      }
     }
   }
 

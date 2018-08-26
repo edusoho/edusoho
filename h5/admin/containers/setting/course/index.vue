@@ -28,7 +28,7 @@
           <div class="section-right">
             <!-- <el-input size="mini" v-model="category" placeholder="请输入列表名称"> -->
             <el-cascader
-              v-if="radio === 'category'"
+              v-show="radio === 'category'"
               size="mini"
               placeholder="请输入列表名称"
               :options="categoryOptions"
@@ -41,7 +41,7 @@
               <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
             </div>
           </div>
-          <draggable v-model="courseSets" class="section__course-container">
+          <draggable v-show="radio === 'custom'" v-model="courseSets" class="section__course-container">
             <div class="section__course-item" v-for="(courseItem, index) in courseSets" :key="index">
               <div class="section__course-item__title text-overflow">{{ courseItem.title }}</div>
               <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
