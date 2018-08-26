@@ -9,6 +9,7 @@ Vue.use(Vuex);
 
 const state = {
   isLoading: false,
+  categories: [],
   user: {},
 };
 

@@ -8,6 +8,10 @@ const config = [
     name: 'uploadFile',
     url: '/api/files',
     method: 'POST'
+  }, {
+    name: 'getCategories',
+    url: '/categories/{groupCode}',
+    method: 'GET'
   }
 ];
 

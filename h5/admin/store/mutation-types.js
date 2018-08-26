@@ -1,2 +1,5 @@
 // 全局
 export const UPDATE_LOADING_STATUS = 'UPDATE_LOADING_STATUS';
+
+// 课程分类
+export const GET_CATEGORIES = 'GET_CATEGORIES';

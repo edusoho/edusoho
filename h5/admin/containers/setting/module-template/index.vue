@@ -1,9 +1,10 @@
 <template>
   <div @click="activeModule">
     <carousel v-if="module.type === moduleType.slideShow"
-              :active="isActive" ></carousel>
+              :active="isActive"></carousel>
     <course v-if="module.type === moduleType.courseList"
-            :active="isActive"></course>
+            :active="isActive"
+            :moduleData="module"></course>
   </div>
 </template>
 
