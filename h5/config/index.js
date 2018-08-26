@@ -9,7 +9,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/h5/',
-    assetsPublicPathAdmin: '/admin/',
+    assetsPublicPathAdmin: '/h5/admin/',
 
     proxyTable: {
       '/api': {
@@ -61,7 +61,7 @@ module.exports = {
     assetsRootAdmin: path.resolve(__dirname, '../dist/admin'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/h5/',
-    assetsPublicPathAdmin: '/admin/',
+    assetsPublicPathAdmin: '/h5/admin/',
 
     /**
      * Source Maps

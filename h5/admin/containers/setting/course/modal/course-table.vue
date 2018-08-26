@@ -7,7 +7,7 @@
         :key="index">{{ item.title }}</span>
     </div>
 
-    <draggable class="mts mbs" v-model="courseSets">
+    <draggable v-model="courseSets">
       <div class="course-table__tr" v-for="(course, courseIndex) in courseSets" :key="courseIndex">
         <div class="tr-content">
           <span class="course-table__td text-overflow"
