@@ -19,7 +19,6 @@
     "element-ui": "^2.4.6",
     "vant": "^1.1.5",
     "vue": "^2.5.2",
-    "vue-cropper": "^0.3.6",
     "vue-router": "^3.0.1",
     "vuedraggable": "^2.16.0",
     "vuex": "^2.3.1"
