@@ -18,6 +18,18 @@
   }
 
   .el-button {
+    &--default {
+      border-color: $primary-color;
+      color: $primary-color;
+      font-weight: normal;
+    }
+    &--primary {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      &:hover{
+        background-color: #66b1ff;
+      }
+    }
     +.el-button {
       margin-left: 20px;
     }

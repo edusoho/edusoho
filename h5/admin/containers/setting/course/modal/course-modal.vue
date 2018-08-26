@@ -2,7 +2,8 @@
   <el-dialog
     :visible.sync="dialogVisible"
     width="90%"
-    :before-close="handleClose">
+    :before-close="handleClose"
+    :close-on-click-modal="false">
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择课程</span>
       <span class="header__subtitle">仅显示已发布课程</span>
@@ -17,9 +18,9 @@
       </div>
     </div>
     <course-table></course-table>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">保 存</el-button>
+    <span slot="footer" class="course-modal__footer dialog-footer">
+      <el-button class="text-medium" size="small" @click="dialogVisible = false">取 消</el-button>
+      <el-button class="text-medium" type="primary" size="small" @click="dialogVisible = false">保 存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -44,6 +45,7 @@ export default {
   methods: {
     handleClose() {
       console.log('handleClose')
+      return;
     },
   }
 }

@@ -7,14 +7,14 @@
         :key="index">{{ item.title }}</span>
     </div>
 
-    <draggable v-model="courseSets">
+    <draggable class="mts mbs" v-model="courseSets">
       <div class="course-table__tr" v-for="(course, courseIndex) in courseSets" :key="courseIndex">
         <div class="tr-content">
           <span class="course-table__td text-overflow"
             v-for="(item, index) in head"
             :class="[tdWidth(item.col), head[index].label === 'delete' ? 'delete': '' ]"
             @click="deleteItem(head[index].label === 'delete', courseIndex)">
-            {{ course[head[index].label] || '移除' }}
+            {{ course[head[index].label] || '移除' }}{{ index === 1 ? '元' : ''}}
           </span>
         </div>
       </div>
