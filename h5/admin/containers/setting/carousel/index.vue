@@ -3,7 +3,7 @@
     <module-frame :isActive="isActive">
       <div slot="preview" class="carousel-image-container">
         <img v-bind:src="updateImg" class="carousel-image">
-        <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
+        <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()">
       </div>
 
       <div slot="setting" class="carousel-allocate">
@@ -69,7 +69,6 @@ export default {
       this.parts[0].data.push(JSON.parse(JSON.stringify(this.defaultItem)));
     },
     selected(selected) {
-      this.isActive = selected.activeStatus;
       this.imgAdress = selected.imageUrl;
       this.activeItemIndex = selected.selectIndex;
     },
