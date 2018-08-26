@@ -1,21 +1,18 @@
 <template>
-  <div class="setting-carousel">
-    <module-frame :isActive="isActive">
-      <div slot="preview" class="carousel-image-container">
-        <img v-bind:src="updateImg" class="carousel-image">
-        <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()">
-      </div>
+  <module-frame containerClass="setting-carousel" :isActive="isActive">
+    <div slot="preview" class="carousel-image-container">
+      <img v-bind:src="updateImg" class="carousel-image">
+      <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
+    </div>
 
-      <div slot="setting" class="carousel-allocate">
-        <header class="title">轮播图设置</header>
-        <div v-for="(item, index) in parts[0].data">
-          <item :item="item" :index="index" :active="activeItemIndex" v-on:selected="selected"></item>
-        </div>
-        <div class="btn-gray btn-add-item" @click="addItem">添加一个轮播图</div>
+    <div slot="setting" class="carousel-allocate">
+      <header class="title">轮播图设置</header>
+      <div v-for="(item, index) in parts[0].data">
+        <item :item="item" :index="index" :active="activeItemIndex" v-on:selected="selected"></item>
       </div>
-    </module-frame>
-
-  </div>
+      <div class="btn-gray btn-add-item" @click="addItem">添加一个轮播图</div>
+    </div>
+  </module-frame>
 </template>
 
 <script>

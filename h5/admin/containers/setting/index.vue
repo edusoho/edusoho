@@ -4,9 +4,9 @@
     <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>EduSoho 微网校</div>
 
     <div class="find-body">
-      <setting-module v-for="(module, index) in modules"
+      <setting-template v-for="(module, index) in modules"
                       :module="module" :active="isActive(module)"
-                      :key="index"></setting-module>
+                      :key="index"></setting-template>
     </div>
 
     <div class="find-footer">
@@ -23,11 +23,11 @@
 <script>
 import items from '@/utils/footer-config'
 import Api from '@admin/api';
-import settingModule from './setting-module';
+import settingTemplate from './module-template';
 
 export default {
   components: {
-    settingModule
+    settingTemplate
   },
   data() {
     return {
@@ -218,7 +218,7 @@ export default {
           }
         },
       ],
-      currentModule: 'slide-1',
+      currentModule: 'courseList-1',
       items,
     }
   },
