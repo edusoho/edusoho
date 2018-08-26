@@ -16,3 +16,27 @@ export const getCategories = ({ commit }) => {
   })
 };
 
+
+export const getDraft = ({ commit }, { portal, type, mode }) => {
+  return Api.getDraft({
+    query: {
+      portal,
+      type,
+    },
+    params: {
+      mode
+    }
+  })
+}
+
+export const saveDraft = ({ commit }, { portal, type, mode, data }) => {
+  return Api.saveDraft({
+    params: {
+      type,
+      mode,
+    },
+    query: { portal },
+    data,
+  })
+}
+

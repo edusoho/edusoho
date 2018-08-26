@@ -1,9 +1,16 @@
 const config = [
   {
     // 后台配置保存草稿数据
-    name: 'saveDraftDate',
+    name: 'getDraft',
     url: '/pages/{portal}/settings/{type}',
     method: 'GET'
+  }, {
+    name: 'saveDraft',
+    url: '/pages/{portal}/settings',
+    method: 'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
   }, {
     name: 'uploadFile',
     url: '/api/files',
