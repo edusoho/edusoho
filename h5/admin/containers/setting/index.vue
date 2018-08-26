@@ -218,7 +218,7 @@ export default {
           }
         },
       ],
-      currentModule: 'courseList-1',
+      currentModule: 'slide-1',
       items,
     }
   },

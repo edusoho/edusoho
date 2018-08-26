@@ -5,20 +5,9 @@
       width: 100%;
       height: 200px;
     }
-    &.active {
-      border: 1px dashed $primary-color;
-      margin-left: -1px;
-      margin-right: -1px;
-    }
   }
 
   .carousel-allocate {
-    .title {
-      font-size: 14px;
-      padding-bottom: 15px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid $grey-light;
-    }
     .carousel-item {
       position: relative;
       border: 1px solid $grey-light;

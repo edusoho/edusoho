@@ -1,5 +1,13 @@
-.moudle-frame {
+.module-frame {
   position: relative;
+  &__preview {
+    cursor: pointer;
+    &.active {
+      border: 1px dashed $primary-color;
+      margin-left: -1px;
+      margin-right: -1px;
+    }
+  }
   &__setting {
     position: absolute;
     top: 0;
@@ -10,5 +18,11 @@
     border-radius: 4px;
     background: #FAFAFA;
     box-sizing: border-box;
+    .title {
+      font-size: 14px;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid $grey-light;
+    }
   }
 }

@@ -1,99 +1,105 @@
 <template>
-  <div class="moudle-frame setting-course">
-    <div class="find-page__part" :class="{ active: isActive }">
-      <e-course-list :courseList="courseList" :maxNum="maxNum" :feedback="false"></e-course-list>
-    </div>
-    <div class="moudle-frame__setting course-allocate" v-show="isActive">
-      <header class="title">课程列表设置</header>
-      <div class="carousel-item-setting course-item-setting clearfix">
-        <!-- 列表名称 -->
-        <div class="course-item-setting__section">
-          <p class="pull-left section-left">列表名称：</p>
-          <div class="section-right">
-            <el-input size="mini" v-model="courseList.title" placeholder="请输入列表名称" clearable></el-input>
-          </div>
-        </div>
-        <!-- 课程来源 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">课程来源：</p>
-          <div class="section-right">
-            <el-radio v-model="radio" label="category">课程分类</el-radio>
-            <el-radio v-model="radio" label="custom">自定义</el-radio>
-          </div>
-        </div>
-        <!-- 课程分类 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">课程分类：</p>
-          <div class="section-right">
-            <!-- <el-input size="mini" v-model="category" placeholder="请输入列表名称"> -->
-            <el-cascader
-              v-if="radio === 'category'"
-              size="mini"
-              placeholder="请输入列表名称"
-              :options="categoryOptions"
-              v-model="category"
-              filterable
-              change-on-select
-            ></el-cascader>
-            </el-input>
-            <div v-show="radio === 'custom'">
-              <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
+  <div class="setting-course">
+    <module-frame :isActive="isActive">
+      <div slot="preview" class="find-page__part">
+        <e-course-list :courseList="courseList" :maxNum="maxNum" :feedback="false"></e-course-list>
+      </div>
+
+      <div slot="setting" class="course-allocate">
+        <header class="title">课程列表设置</header>
+        <div class="course-item-setting clearfix">
+          <!-- 列表名称 -->
+          <div class="course-item-setting__section">
+            <p class="pull-left section-left">列表名称：</p>
+            <div class="section-right">
+              <el-input size="mini" v-model="courseList.title" placeholder="请输入列表名称" clearable></el-input>
             </div>
           </div>
-          <draggable v-model="courseSets" class="section__course-container">
-            <div class="section__course-item" v-for="(courseItem, index) in courseSets" :key="index">
-              <div class="section__course-item__title text-overflow">{{ courseItem.title }}</div>
-              <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
+          <!-- 课程来源 -->
+          <div class="course-item-setting__section mtl">
+            <p class="pull-left section-left">课程来源：</p>
+            <div class="section-right">
+              <el-radio v-model="radio" label="category">课程分类</el-radio>
+              <el-radio v-model="radio" label="custom">自定义</el-radio>
             </div>
-          </draggable>
-        </div>
-        <!-- 排列顺序 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">排列顺序：</p>
-          <div class="section-right">
-            <div class="section-right__item pull-left">
-              <el-select v-model="sortSelected" placeholder="排列顺讯" size="mini">
-                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+          </div>
+          <!-- 课程分类 -->
+          <div class="course-item-setting__section mtl">
+            <p class="pull-left section-left">课程分类：</p>
+            <div class="section-right">
+              <!-- <el-input size="mini" v-model="category" placeholder="请输入列表名称"> -->
+              <el-cascader
+                v-if="radio === 'category'"
+                size="mini"
+                placeholder="请输入列表名称"
+                :options="categoryOptions"
+                v-model="category"
+                filterable
+                change-on-select
+              ></el-cascader>
+              </el-input>
+              <div v-show="radio === 'custom'">
+                <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
+              </div>
+            </div>
+            <draggable v-model="courseSets" class="section__course-container">
+              <div class="section__course-item" v-for="(courseItem, index) in courseSets" :key="index">
+                <div class="section__course-item__title text-overflow">{{ courseItem.title }}</div>
+                <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
+              </div>
+            </draggable>
+          </div>
+          <!-- 排列顺序 -->
+          <div class="course-item-setting__section mtl">
+            <p class="pull-left section-left">排列顺序：</p>
+            <div class="section-right">
+              <div class="section-right__item pull-left">
+                <el-select v-model="sortSelected" placeholder="排列顺讯" size="mini">
+                  <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="section-right__item pull-right">
+                <el-select v-model="date" placeholder="时间区间" size="mini">
+                  <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+          </div>
+          <!-- 显示个数 -->
+          <div class="course-item-setting__section mtl">
+            <p class="pull-left section-left">显示个数：</p>
+            <div class="section-right">
+              <el-select v-model="maxNum" placeholder="请选择个数" size="mini">
+                <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
                 </el-option>
               </el-select>
             </div>
-            <div class="section-right__item pull-right">
-              <el-select v-model="date" placeholder="时间区间" size="mini">
-                <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-          </div>
-        </div>
-        <!-- 显示个数 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">显示个数：</p>
-          <div class="section-right">
-            <el-select v-model="maxNum" placeholder="请选择个数" size="mini">
-              <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
           </div>
         </div>
       </div>
-    </div>
-    <course-modal :visible="modalVisible"
-                  :courseList="courseSets"
-                  @visibleChange="modalVisibleHandler"
-                  @sort="getSortedCourses"></course-modal>
+
+      <course-modal slot="modal" :visible="modalVisible"
+                    :courseList="courseSets"
+                    @visibleChange="modalVisibleHandler"
+                    @sort="getSortedCourses"></course-modal>
+    </module-frame>
   </div>
 </template>
 <script>
 import draggable from 'vuedraggable';
 import courseList from '@/containers/components/e-course-list/e-course-list';
 import courseModal from './modal/course-modal'
+import moduleFrame from '../module-frame'
 
 
 export default {
   components: {
     'e-course-list': courseList,
     draggable,
-    courseModal
+    courseModal,
+    moduleFrame,
   },
   props: {
     active: {
