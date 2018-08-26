@@ -1,9 +1,10 @@
 .course-modal {
   &__header {
     padding-bottom: 15px;
-    border-bottom: 1px solid #919191;
+    border-bottom: 1px solid #e1e1e1;
     .header {
       &__title {
+        font-weight: bold;
       }
       &__subtitle {
         margin-left: 10px;
@@ -24,6 +25,11 @@
       &__input {
         width: 300px;
       }
+    }
+  }
+  &__footer {
+    .el-button {
+      width: 90px;
     }
   }
 }

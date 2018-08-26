@@ -1,8 +1,9 @@
 <template>
   <el-dialog
-    :visible.sync="dialogVisible"
     width="90%"
-    :before-close="handleClose">
+    :visible.sync="modalVisible"
+    :before-close="beforeCloseHandler"
+    :close-on-click-modal="false">
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择课程</span>
       <span class="header__subtitle">仅显示已发布课程</span>
@@ -16,10 +17,10 @@
           placeholder="搜索课程"></el-input>
       </div>
     </div>
-    <course-table></course-table>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">保 存</el-button>
+    <course-table :courseList="courseSets" @sort="getSortedCourses"></course-table>
+    <span slot="footer" class="course-modal__footer dialog-footer">
+      <el-button class="text-medium" size="small" @click="modalVisible = false">取 消</el-button>
+      <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -33,18 +34,44 @@ export default {
     courseTable,
   },
   props: {
-
+    courseList: {
+      type: Array,
+      default: [],
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+    }
   },
   data () {
     return {
-      dialogVisible: true,
-      keyWord: ''
+      keyWord: '',
+      courseSets: this.courseList,
+    }
+  },
+  computed: {
+    modalVisible: {
+      get() {
+        return this.visible;
+      },
+      set(visible) {
+        this.$emit('visibleChange', visible);
+      }
     }
   },
   methods: {
-    handleClose() {
-      console.log('handleClose')
+    getSortedCourses(courses) {
+      this.courseSets = courses;
     },
+    beforeCloseHandler() {
+      // todo
+
+      this.modalVisible = false;
+    },
+    saveHandler() {
+      this.$emit('sort', this.courseSets);
+      this.modalVisible = false;
+    }
   }
 }
 </script>
