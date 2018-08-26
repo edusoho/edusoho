@@ -30,6 +30,12 @@ export default {
   components: {
     draggable,
   },
+  props: {
+    courseList: {
+      type: Array,
+      default: [],
+    }
+  },
   data () {
     return {
       head: [
@@ -51,29 +57,24 @@ export default {
           label: 'delete',
         }
       ],
-      courseSets: [
-        {
-          title: '如何干一个产品经理, 如何干一个产品经理, 如何干一个产品经理如何干一个产品经理如何干一个产品经理',
-          price: '3333.00', // 价格显示原价
-          createTime: '2018-06-02 15:00',
-        }, {
-          title: '如何干一个程序员',
-          price: '3.30',
-          createTime: '2018-06-02 15:00',
-        }, {
-          title: '如何干一个测试',
-          price: '0.01',
-          createTime: '2018-06-02 15:00',
-        }
-      ]
+    }
+  },
+  computed: {
+    courseSets: {
+      get() {
+        return this.courseList;
+      },
+      set(courses) {
+        this.$emit('sort', courses);
+      }
     }
   },
   methods: {
     tdWidth(ratio) {
       return `td-col-${ratio}`
     },
-    deleteItem(bool, index) {
-      if (!bool) {
+    deleteItem(isDeleteBtn, index) {
+      if (!isDeleteBtn) {
         return;
       }
       this.courseSets.splice(index, 1);

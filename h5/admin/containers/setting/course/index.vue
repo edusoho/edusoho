@@ -37,11 +37,11 @@
             ></el-cascader>
             </el-input>
             <div v-show="radio === 'custom'">
-              <el-button type="info" size="mini">选择课程</el-button>
+              <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
             </div>
           </div>
-          <draggable v-model="courseItems" class="section__course-container">
-            <div class="section__course-item" v-for="(courseItem, index) in courseItems" :key="courseItem.id">
+          <draggable v-model="courseSets" class="section__course-container">
+            <div class="section__course-item" v-for="(courseItem, index) in courseSets" :key="index">
               <div class="section__course-item__title text-overflow">{{ courseItem.title }}</div>
               <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
             </div>
@@ -77,7 +77,11 @@
         </div>
       </div>
     </div>
-    <course-modal></course-modal>
+    <course-modal :key="modalKey"
+                  :visible="modalVisible"
+                  :courseList="courseSets"
+                  @visibleChange="modalVisibleHandler"
+                  @sort="getSortedCourses"></course-modal>
   </div>
 </template>
 <script>
@@ -94,18 +98,23 @@ export default {
   },
   data() {
     return {
+      modalKey: 0,
+      modalVisible: false,
       maxNumOptions: [1,2,3,4,5,6,7,8],
       maxNum: 1,
-      courseItems: [
+      courseSets: [
         {
-          id: 1,
-          title: '好饿好饿好饿，我真的好饿我真的好饿我真的好饿'
+          title: '如何干一个产品经理, 如何干一个产品经理, 如何干一个产品经理如何干一个产品经理如何干一个产品经理',
+          price: '3333.00', // 价格显示原价
+          createTime: '2018-06-02 15:00',
         }, {
-          id: 2,
-          title: '好饿好饿好饿，我也真的好饿'
+          title: '如何干一个程序员',
+          price: '3.30',
+          createTime: '2018-06-02 15:00',
         }, {
-          id: 3,
-          title: '+1'
+          title: '如何干一个测试',
+          price: '0.01',
+          createTime: '2018-06-02 15:00',
         }
       ],
       sortSelected: '加入最多',
@@ -494,9 +503,22 @@ export default {
     }
   },
   methods: {
+    getSortedCourses(courses) {
+      this.courseSets = courses;
+    },
+    modalVisibleHandler(visible) {
+      // console.log(visible, 888)
+      // if (visible) {
+      //   this.modalKey ++;
+      // }
+      this.modalVisible = visible;
+    },
+    openModal() {
+      this.modalVisible = true;
+    },
     // 删除自定义课程
     deleteCourse(index) {
-      this.courseItems.splice(index, 1);
+      this.courseSets.splice(index, 1);
     }
   }
 }

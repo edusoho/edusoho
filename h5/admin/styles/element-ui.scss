@@ -19,9 +19,13 @@
 
   .el-button {
     &--default {
-      border-color: $primary-color;
-      color: $primary-color;
       font-weight: normal;
+      &:hover {
+        border-color: $primary-color;
+        color: $primary-color;
+        font-weight: normal;
+        background-color: #fff;
+      }
     }
     &--primary {
       background-color: $primary-color;
