@@ -35,7 +35,8 @@ course:
                 path: course_show
                 param:
                     id: id
-        modalField: all
+        modalField:
+            ["title", "subtitle", "originPrice", "buyExpiryTime", "expiryMode", "expiryDays", "expiryStartDate", "expiryEndDate", "enableFinish", "enableAudio", "buyable", "tryLookable", "tryLookLength", "serializeMode"]
     update_thread:
         modalField: all
     add_student:
@@ -264,7 +265,6 @@ system:
     update_settings.mailer:
         modalField:
             ["use_cloud_email_crm", "enabled", "send_email", "host", "port", "username", "password", "from", "name"]
-
     update_settings.esBar:
         modalField: all
     update_settings.default:

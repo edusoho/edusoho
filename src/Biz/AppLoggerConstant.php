@@ -307,7 +307,6 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'add_student',
                 'delete_course',
                 'delete_review',
-                'delete_thread',
                 'update_picture',
                 'remove_student',
                 'recommend',

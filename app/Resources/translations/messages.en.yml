@@ -7024,7 +7024,6 @@ log.action.classroom.add_course: 添加课程
 log.action.classroom.add_student: 添加学员
 log.action.classroom.delete_course: 移除课程
 log.action.classroom.delete_review: 删除评价
-log.action.classroom.delete_thread: 删除话题
 log.action.classroom.update_picture: 更新图片
 log.action.classroom.remove_student: 移除学员
 log.action.classroom.recommend: 推荐班级
