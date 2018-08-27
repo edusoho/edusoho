@@ -81,24 +81,24 @@ class PageSetting extends AbstractResource
 
     protected function removeDiscovery($portal, $mode = 'draft')
     {
-        return $this->getSettingService()->delete("{$portal}-{$mode}-discovery");
+        return $this->getSettingService()->delete("{$portal}_{$mode}_discovery");
     }
 
     protected function removeCourseCondition($portal, $mode = 'draft')
     {
-        return $this->getSettingService()->delete("{$portal}-{$mode}-courseCondition");
+        return $this->getSettingService()->delete("{$portal}_{$mode}_courseCondition");
     }
 
     protected function addDiscovery($portal, $mode = 'draft', $content = array())
     {
-        $this->getSettingService()->set("{$portal}-{$mode}-discovery", $content);
+        $this->getSettingService()->set("{$portal}_{$mode}_discovery", $content);
 
         return $this->getDiscovery($portal, $mode);
     }
 
     protected function addCourseCondition($portal, $mode = 'draft', $content = array())
     {
-        $this->getSettingService()->set("{$portal}-{$mode}-courseCondition", $content);
+        $this->getSettingService()->set("{$portal}_{$mode}_courseCondition", $content);
 
         return $this->getCourseCondition($portal, $mode);
     }
@@ -110,9 +110,9 @@ class PageSetting extends AbstractResource
             throw new AccessDeniedHttpException();
         }
 
-        $discoverySetting = $this->getSettingService()->get("{$portal}-{$mode}-discovery", array());
+        $discoverySetting = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
         if (empty($discoverySetting)) {
-            $discoverySetting = $this->getSettingService()->get("{$portal}-published-discovery", array());
+            $discoverySetting = $this->getSettingService()->get("{$portal}_published_discovery", array());
         }
 
         return $discoverySetting;
