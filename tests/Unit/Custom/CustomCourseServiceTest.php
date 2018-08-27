@@ -11,9 +11,12 @@ class CustomCourseServiceTest extends BaseTestCase
 {
     public function testOverwriteService()
     {
+        /**
+         * ServiceProxy
+         */
         $courseService = $this->createService('Course:CourseService');
 
-        $this->assertInstanceOf(get_class(new CourseServiceImpl($this->getBiz())), $courseService);
+        $this->assertInstanceOf(get_class(new CourseServiceImpl($this->getBiz())), $courseService->getClass());
     }
 
     public function testOverwriteDao()

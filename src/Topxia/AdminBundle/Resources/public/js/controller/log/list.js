@@ -25,6 +25,10 @@ define(function(require, exports, module) {
 				$('#log-action').html(html);
 			});
 		});
+
+		$('[data-toggle="switch"]').on('click', function() {
+			window.location.href = $(this).data('url');
+		})
 	};
 
 });

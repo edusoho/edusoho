@@ -191,8 +191,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $category = $this->getCategoryDao()->create($category);
 
-        $this->getLogService()->info('category', 'create', "添加栏目 {$category['name']}(#{$category['id']})", $category);
-
         return $category;
     }
 
@@ -214,8 +212,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $category = $this->getCategoryDao()->update($id, $fields);
 
-        $this->getLogService()->info('category', 'update', "编辑栏目 {$category['name']}(#{$id})", $fields);
-
         return $category;
     }
 
@@ -233,8 +229,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         foreach ($ids as $id) {
             $this->getCategoryDao()->delete($id);
         }
-
-        $this->getLogService()->info('category', 'delete', "删除栏目{$category['name']}(#{$id})");
     }
 
     protected function _filterCategoryFields($fields)

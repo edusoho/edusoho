@@ -22,7 +22,6 @@ class SettingController extends BaseController
         if ('POST' === $request->getMethod()) {
             $setting = $request->request->get('setting', array());
             $this->getSettingService()->set('post_num_rules', $setting);
-            $this->getLogService()->info('system', 'update_settings', '更新PostNumSetting设置', $setting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -200,8 +199,6 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', '更新站点LOGO', array('logo' => $site['logo']));
-
         $response = array(
             'path' => $site['logo'],
             'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo']),
@@ -223,8 +220,6 @@ class SettingController extends BaseController
         if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
-
-        $this->getLogService()->info('system', 'update_settings', '移除站点LOGO');
 
         return $this->createJsonResponse(true);
     }
@@ -316,8 +311,6 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', '移除站点浏览器图标');
-
         return $this->createJsonResponse(true);
     }
 
@@ -350,7 +343,6 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mailer', $mailer);
             $mailerWithoutPassword = $mailer;
             $mailerWithoutPassword['password'] = '******';
-            $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -495,10 +487,6 @@ class SettingController extends BaseController
                 $whiteListIps['ips'] = array_filter(explode(' ', $purifiedWhiteIps));
                 $settingService->set('whitelist_ip', $whiteListIps);
             }
-
-            $logService->info('system', 'update_settings', '更新IP黑名单/白名单',
-                array('blacklist_ip' => $blackListIps['ips'],
-                      'whitelist_ip' => $whiteListIps['ips'], ));
 
             $this->setFlashMessage('success', 'site.save.success');
         }

@@ -3,10 +3,13 @@
 namespace Biz\User\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Biz\System\Annotation\Log;
 
 interface UserService
 {
     public function getUser($id, $lock = false);
+
+    public function getUserAndProfile($id);
 
     public function initSystemUsers();
 
@@ -55,10 +58,31 @@ interface UserService
      */
     public function batchUpdateOrg($userIds, $orgCode);
 
+    /**
+     * @param $userId
+     * @param $nickname
+     *
+     * @return mixed
+     * @Log(module="user",action="nickname_change",funcName="getUser",param="userId")
+     */
     public function changeNickname($userId, $nickname);
 
+    /**
+     * @param $userId
+     * @param $email
+     *
+     * @return mixed
+     * @Log(module="user",action="email-changed",funcName="getUser",param="userId")
+     */
     public function changeEmail($userId, $email);
 
+    /**
+     * @param $userId
+     * @param $data
+     *
+     * @return mixed
+     * @Log(module="user",action="avatar-changed",funcName="getUser",param="userId")
+     */
     public function changeAvatar($userId, $data);
 
     public function isNicknameAvaliable($nickname);
@@ -71,6 +95,13 @@ interface UserService
 
     public function rememberLoginSessionId($id, $sessionId);
 
+    /**
+     * @param $userId
+     * @param $newPayPassword
+     *
+     * @return mixed
+     * @Log(module="user",action="pay-password-changed",funcName="getUser",param="userId")
+     */
     public function changePayPassword($userId, $newPayPassword);
 
     public function verifyPayPassword($id, $payPassword);
@@ -79,6 +110,13 @@ interface UserService
 
     public function isMobileUnique($mobile);
 
+    /**
+     * @param $id
+     * @param $mobile
+     *
+     * @return mixed
+     * @Log(module="user",action="verifiedMobile-changed",funcName="getUser",param="id")
+     */
     public function changeMobile($id, $mobile);
 
     /**
@@ -86,6 +124,7 @@ interface UserService
      *
      * @param [integer] $id       用户ID
      * @param [string]  $password 新密码
+     * @Log(module="user",action="password-changed",funcName="getUser",param="id")
      */
     public function changePassword($id, $password);
 
@@ -94,6 +133,7 @@ interface UserService
      *
      * @param [integer] $id          用户ID
      * @param [string]  $rawPassword 新原始密码
+     * @Log(module="user",action="raw-password-changed",funcName="getUser",param="id")
      */
     public function changeRawPassword($id, $rawPassword);
 
@@ -128,6 +168,13 @@ interface UserService
 
     public function checkLoginForbidden($userId, $ip);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="user",action="update",funcName="getUserAndProfile",param="id")
+     */
     public function updateUserProfile($id, $fields);
 
     public function getUserProfile($id);
@@ -140,6 +187,13 @@ interface UserService
 
     public function searchApprovalsCount(array $conditions);
 
+    /**
+     * @param $id
+     * @param array $roles
+     *
+     * @return mixed
+     * @Log(module="user",action="change_role",funcName="getUser",param="id")
+     */
     public function changeUserRoles($id, array $roles);
 
     /**
@@ -162,8 +216,20 @@ interface UserService
      */
     public function deleteToken($type, $token);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="user",action="lock",funcName="getUser",param="id")
+     */
     public function lockUser($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="user",action="unlock",funcName="getUser",param="id")
+     */
     public function unlockUser($id);
 
     public function promoteUser($id, $number);
