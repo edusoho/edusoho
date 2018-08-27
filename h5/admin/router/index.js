@@ -25,7 +25,7 @@ const routes = [
 ];
 
 const env = process.env.NODE_ENV;
-
+console.log('process.env', env);
 // csrfToken 赋值
 if (!store.state.csrfToken && env === 'production') {
   console.log(window.parent.document)
