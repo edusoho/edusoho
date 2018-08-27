@@ -93,7 +93,7 @@ export default {
     },
     moduleData: {
       type: Object,
-      default: [],
+      default: {},
     },
   },
   computed: {
