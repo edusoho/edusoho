@@ -14,7 +14,7 @@ class AddTableLogV8 extends Migration
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统日志ID',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作人ID',
               `module` varchar(32) NOT NULL COMMENT '日志所属模块',
-              `action` varchar(32) NOT NULL COMMENT '日志所属操作类型',
+              `action` varchar(50) NOT NULL COMMENT '日志所属操作类型',
               `message` text NOT NULL COMMENT '日志内容',
               `data` text COMMENT '日志数据',
               `ip` varchar(255) NOT NULL COMMENT '日志记录IP',
