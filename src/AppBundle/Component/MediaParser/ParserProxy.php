@@ -46,22 +46,26 @@ class ParserProxy
         throw ParserException::PARSER_NOT_SUPPORT();
     }
 
-    public function prepareMediaUriForPc($video)
+    public function prepareMediaUri($video)
     {
-        if ('youku' == $video['mediaSource']) {
-            $class = __NAMESPACE__.'\\ItemParser\\YoukuVideoItemParser';
-            $parser = new $class();
-        } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
-            $class = __NAMESPACE__.'\\ItemParser\\NeteaseOpenCourseItemParser';
-            $parser = new $class();
-        } elseif ('qqvideo' == $video['mediaSource']) {
-            $class = __NAMESPACE__.'\\ItemParser\\QQVideoItemParser';
-            $parser = new $class();
-        } else {
-            throw ParserException::PARSER_NOT_SUPPORT();
+        if ('self' != $video['mediaSource']) {
+            if ('youku' == $video['mediaSource']) {
+                $class = __NAMESPACE__.'\\ItemParser\\YoukuVideoItemParser';
+                $parser = new $class();
+            } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
+                $class = __NAMESPACE__.'\\ItemParser\\NeteaseOpenCourseItemParser';
+                $parser = new $class();
+            } elseif ('qqvideo' == $video['mediaSource']) {
+                $class = __NAMESPACE__.'\\ItemParser\\QQVideoItemParser';
+                $parser = new $class();
+            } else {
+                throw ParserException::PARSER_NOT_SUPPORT();
+            }
+
+            return $parser->prepareMediaUri($video);
         }
 
-        return $parser->prepareMediaUri($video);
+        return $video;
     }
 
     public function prepareMediaUriForMobile($video, $httpSchema = '')
