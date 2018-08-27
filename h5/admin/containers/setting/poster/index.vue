@@ -1,9 +1,52 @@
 <template>
     <module-frame containerClass="setting-poster" :isActive="isActive">
         <div slot="preview" class="poster-image-container">
-            <img v-bind:src="updateImg" class="poster-image">
+            <img v-bind:src="this.imgAdress" class="poster-image">
             <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
         </div>
+        <div slot="setting" class="poster-allocate">
+            <header class="title">图片广告设置</header>
+            <div class="poster-item-setting clearfix">
+                <div class="poster-item-setting__section">
+                    <p class="pull-left section-left">广告图片：</p>
+                    <div class="section-right">
+                    <el-upload
+                            class="image-uploader"
+                            action="string"
+                            :http-request="uploadImg"
+                            :show-file-list="false"
+                    >
+                        <!--<img class="carousel-img">-->
+                        <span><i class="text-18">+</i> 添加图片</span>
+                    </el-upload>
+                    </div>
+                </div>
+
+                <div class="poster-item-setting__section mtl">
+                    <p class="pull-left section-left">链接：</p>
+                    <div class="section-right">
+                        <el-radio label="condition">站内课程</el-radio>
+                        <el-radio label="custom">自定义链接</el-radio>
+                    </div>
+                </div>
+
+                <div class="poster-item-setting__section mtl">
+                    <p class="pull-left section-left">课程名称：</p>
+                    <div class="section-right">
+                        <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
+                    </div>
+                </div>
+
+                <div class="poster-item-setting__section mtl">
+                    <p class="pull-left section-left">自适应手机屏幕：</p>
+                    <div class="section-right">
+                        <el-radio label="condition">开启</el-radio>
+                        <el-radio label="custom">关闭</el-radio>
+                    </div>
+                </div>
+
+            </div>
+         </div>
     </module-frame>
 </template>
 
@@ -16,20 +59,8 @@ export default {
     },
     data() {
         return  {
-            activeItemIndex: 0,
             modalVisible: false,
-            courseSets: [],
-            defaultItem: {
-                image: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
-                link: {
-                    type: 'url',
-                    url: 'http://zyc.st.edusoho.cn'
-                }
-            },
             imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
-            parts: [{
-                data:[],
-            }]
         }
     },
     props: {
@@ -37,6 +68,9 @@ export default {
             type: Boolean,
             default: false,
         },
+        moduleData: {
+            type: Object
+        }
     },
     computed: {
         isActive: {
@@ -45,20 +79,41 @@ export default {
             },
             set() {}
         },
-        updateImg() {
-            return this.imgAdress
-        },
+        copyModuleData: {
+            get() {
+                return this.moduleData.data;
+            },
+            set() {}
+        }
     },
-    created() {
-        this.addItem();
+    mounted() {
     },
     methods: {
-        addItem() {
-            this.parts[0].data.push(JSON.parse(JSON.stringify(this.defaultItem)));
+        uploadImg(item) {
+            let formData = new FormData()
+            formData.append('file', item.file)
+            formData.append('group', 'system')
+
+            Api.uploadFile({
+                data: formData
+            })
+                .then((data) => {
+                    this.item.image = data.uri;
+                    this.$emit('selected',
+                        {
+                            selectIndex: this.activeIndex,
+                            activeStatus: true,
+                            imageUrl: data.uri
+                        }
+                    );
+                    console.log(data)
+                })
+                .catch((err) => {
+                    console.log(err, 'error');
+                });
         },
         selected(selected) {
             this.imgAdress = selected.imageUrl;
-            this.activeItemIndex = selected.selectIndex;
         },
         handleRemove() {
             this.$el.remove();

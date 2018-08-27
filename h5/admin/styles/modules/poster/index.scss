@@ -5,4 +5,72 @@
       width: 100%;
     }
   }
+
+  .poster-item-setting {
+    background: #fff;
+    padding: 30px;
+    border: 1px solid #E1E1E1;
+  }
+   .poster-item-setting__section {
+      overflow: hidden;
+      .section {
+        &-left {
+          display: inline;
+          margin: 0;
+          line-height: 28px;
+          font-size: 14px;
+        }
+        &-right {
+          margin-left: 70px;
+          width: 212px;
+          line-height: 28px;
+          .el-select {
+            width: 100%;
+          }
+          &__item {
+            display: inline-block;
+            width: 96px;
+          }
+          .el-radio+.el-radio {
+            margin-left: 12px;
+          }
+        }
+        &__course-item {
+          box-sizing: border-box;
+          color: $primary-color;
+          height: 40px;
+          padding: 13px 0;
+          line-height: 14px;
+          cursor: move;
+          &__title {
+            display: inline-block;
+            width: 240px;
+            font-size: 14px;
+          }
+          &__icon-delete {
+            color: #bdc2c6;
+            font-size: 16px;
+            cursor: pointer;
+          }
+          &:not(:first-child) {
+            border-top: 1px solid #e1e1e1;
+          }
+        }
+
+      }
+     .image-uploader {
+       width: 230px;
+       height: 119px;
+       background: #f5f5f5;
+       text-align: center;
+
+       span {
+         font-size: 16px;
+         color: #919191;
+         letter-spacing: 0;
+         line-height: 119px;
+       }
+     }
+    }
 }
+
