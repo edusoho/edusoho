@@ -186,6 +186,8 @@ interface CourseService
 
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit);
 
+    public function searchByRatingAndTimeZone($conditions, $start, $limit);
+
     public function searchCourseCount($conditions);
 
     public function countWithJoinTableConditions($conditions);

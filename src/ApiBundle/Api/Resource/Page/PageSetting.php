@@ -117,7 +117,7 @@ class PageSetting extends AbstractResource
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
-                // $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
+                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
                 $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
                 $conditions['startTime'] = $timeRange['startTime'];
                 $conditions['endTime'] = $timeRange['endTime'];
@@ -132,16 +132,19 @@ class PageSetting extends AbstractResource
 
     public function getCourseByConditions($conditions, $sort, $start, $limit)
     {
+        $courses = array();
         if (array_key_exists('studentNum', $sort)) {
             $courses = $this->getCourseService()->searchByStudentNumAndTimeZone($conditions, $start, $limit);
         }
 
         if (array_key_exists('createdTime', $sort)) {
+            unset($conditions['startTime']);
+            unset($conditions['endTime']);
             $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, $start, $limit);
         }
 
         if (array_key_exists('rating', $sort)) {
-            $courses = $this->getCourseService()->searchByRatingAndTimeZone($conditions, $sort, $start, $limit);
+            $courses = $this->getCourseService()->searchByRatingAndTimeZone($conditions, $start, $limit);
         }
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
@@ -151,8 +154,11 @@ class PageSetting extends AbstractResource
 
     protected function getTimeZoneByLastDays($lastDays)
     {
-        if (!is_numeric($lastDays) || $lastDays <= 0) {
+        if (!is_numeric($lastDays) || $lastDays < 0) {
             throw new BadRequestHttpException('LastDays is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        if (empty($lastDays)) {
+            return array('startTime' => 0, 'endTime' => PHP_INT_MAX);
         }
 
         return array('startTime' => strtotime(date('Y-m-d', time() - $lastDays * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
