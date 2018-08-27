@@ -14,12 +14,9 @@
     <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
       <el-tag
         class="courseLink"
-        v-for="tag in tags"
-        :key="tag.name"
         closable
         :disable-transitions="true"
         @close="handleClose"
-        :type="tag.type"
         v-show="linkTextShow">
         <span class="text-content ellipsis">{{courseLinkText}}</span>
       </el-tag>
@@ -37,11 +34,7 @@
         activeIndex: 0,
         input: '',
         title: '',
-        linkTextShow: false,
-        tags: [{
-          name: '',
-          type: '',
-        }]
+        linkTextShow: false
       };
     },
     watch: {
@@ -77,9 +70,7 @@
             selectIndex: this.activeIndex,
             activeStatus: true,
             imageUrl: data.uri
-          }
-        );
-          console.log(data)
+          });
         })
         .catch((err) => {
           console.log(err, 'error');
@@ -109,7 +100,6 @@
             type: 'warning'
           });
         }
-        console.log('length',index, length)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
@@ -118,8 +108,8 @@
       openModal() {
         this.$emit('chooseCourse');
       },
-      handleClose(tag) {
-        this.tags.splice(this.tags.indexOf(tag), 1);
+      handleClose() {
+        this.$emit('removeCourseLink');
         this.linkTextShow = false;
       },
     }

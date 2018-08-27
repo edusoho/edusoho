@@ -10,7 +10,7 @@
       <header class="title">轮播图设置</header>
       <div v-for="(item, index) in parts[0].data">
         <item :item="item" :index="index" :active="activeItemIndex" :itemNum="itemNum" :courseSets="courseSets"
-          @selected="selected" @chooseCourse="openModal" @inputChange="inputChange" @remove="itemRemove"></item>
+          @selected="selected" @chooseCourse="openModal" @inputChange="inputChange" @remove="itemRemove" @removeCourseLink="removeCourseLink"></item>
       </div>
       <el-button class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
     </div>
@@ -85,6 +85,7 @@ export default {
       this.activeItemIndex = selected.selectIndex;
     },
     handleRemove() {
+      this.parts[0].data.splice(0, this.parts[0].data.length);
       this.$el.remove();
     },
     getSortedCourses(courses) {
@@ -97,12 +98,14 @@ export default {
       this.modalVisible = true;
     },
     inputChange(inputChange) {
-      this.title = inputChange.title
+      this.title = inputChange.title;
     },
     itemRemove(remove) {
       this.imgAdress = remove.imageUrl;
       this.parts[0].data.splice(remove.index, 1);
-      console.log(this.parts[0].data)
+    },
+    removeCourseLink() {
+      this.courseSets = this.courseSets.splice(1, 1);
     }
   }
 }
