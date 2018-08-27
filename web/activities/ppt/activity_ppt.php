@@ -111,7 +111,10 @@ class activity_ppt extends Activity
 
     public function get($targetId)
     {
-        return $this->getPptActivityDao()->get($targetId);
+        $activity = $this->getPptActivityDao()->get($targetId);
+        $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+
+        return $activity;
     }
 
     public function find($targetIds, $showCloud = 1)
@@ -139,4 +142,13 @@ class activity_ppt extends Activity
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
+
+    /**
+     * @return \Biz\File\Service\UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
+
 }
