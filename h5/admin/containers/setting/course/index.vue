@@ -34,7 +34,7 @@
           </div>
           <draggable v-show="copyModuleData.data.sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">
             <div class="section__course-item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
-              <div class="section__course-item__title text-overflow">{{ courseItem.title }}</div>
+              <div class="section__course-item__title text-overflow">{{ courseItem.courseSetTitle }}</div>
               <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
             </div>
           </draggable>

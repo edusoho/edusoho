@@ -27,6 +27,13 @@
       cursor: move;
     }
   }
+  &__empty {
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #919191;
+    text-align: center;
+  }
   .td-col {
     &-3 {
       width: 25%;
