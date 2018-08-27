@@ -1,7 +1,7 @@
 <template>
     <module-frame containerClass="setting-poster" :isActive="isActive">
         <div slot="preview" class="poster-image-container">
-            <img v-bind:src="this.imgAdress" class="poster-image">
+            <img v-bind:src="this.copyModuleData.image.uri" class="poster-image">
             <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
         </div>
         <div slot="setting" class="poster-allocate">
@@ -11,13 +11,17 @@
                     <p class="pull-left section-left">广告图片：</p>
                     <div class="section-right">
                     <el-upload
-                            class="image-uploader"
                             action="string"
                             :http-request="uploadImg"
                             :show-file-list="false"
                     >
-                        <img v-show="this.copyModuleData.image.uri" :src="this.copyModuleData.image.uri" class="poster-img">
-                        <span><i class="text-18">+</i> 添加图片</span>
+                        <div class="image-uploader">
+                            <img v-show="this.copyModuleData.image.uri" :src="this.copyModuleData.image.uri" class="poster-img">
+                            <div class="uploader-mask" v-show="!this.copyModuleData.image.uri">
+                                <span ><i class="text-18">+</i> 添加图片</span>
+                            </div>
+                        </div>
+
                     </el-upload>
                     </div>
                 </div>
