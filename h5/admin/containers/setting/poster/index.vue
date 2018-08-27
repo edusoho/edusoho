@@ -16,7 +16,7 @@
                             :http-request="uploadImg"
                             :show-file-list="false"
                     >
-                        <!--<img class="carousel-img">-->
+                        <img v-show="this.copyModuleData.image.uri" :src="this.copyModuleData.image.uri" class="poster-img">
                         <span><i class="text-18">+</i> 添加图片</span>
                     </el-upload>
                     </div>
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import Api from '@admin/api';
 import moduleFrame from '../module-frame'
 
 export default {
@@ -60,7 +61,7 @@ export default {
     data() {
         return  {
             modalVisible: false,
-            imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
+            imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg'
         }
     },
     props: {
@@ -87,39 +88,26 @@ export default {
         }
     },
     mounted() {
+        console.log(this.copyModuleData)
     },
     methods: {
         uploadImg(item) {
             let formData = new FormData()
             formData.append('file', item.file)
             formData.append('group', 'system')
-
             Api.uploadFile({
                 data: formData
             })
                 .then((data) => {
-                    this.item.image = data.uri;
-                    this.$emit('selected',
-                        {
-                            selectIndex: this.activeIndex,
-                            activeStatus: true,
-                            imageUrl: data.uri
-                        }
-                    );
+                    this.copyModuleData.image = data;
                     console.log(data)
                 })
                 .catch((err) => {
                     console.log(err, 'error');
                 });
         },
-        selected(selected) {
-            this.imgAdress = selected.imageUrl;
-        },
         handleRemove() {
             this.$el.remove();
-        },
-        getSortedCourses(courses) {
-            this.courseSets = courses;
         },
         modalVisibleHandler(visible) {
             this.modalVisible = visible;
