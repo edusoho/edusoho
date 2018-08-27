@@ -1,7 +1,7 @@
 <template>
     <module-frame containerClass="setting-poster" :isActive="isActive">
         <div slot="preview" class="poster-image-container">
-            <div class="poster-image-mask">
+            <div class="poster-image-mask" v-show="!this.copyModuleData.image.uri">
                 <h5>广告图片</h5>
             </div>
             <img v-bind:src="this.copyModuleData.image.uri" class="poster-image">
@@ -40,7 +40,15 @@
                 <div class="poster-item-setting__section mtl">
                     <p class="pull-left section-left">课程名称：</p>
                     <div class="section-right">
-                        <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
+                        <el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
+                        <el-tag
+                                class="courseLink"
+                                closable
+                                :disable-transitions="true"
+                                @close="handleClose"
+                                v-show="linkTextShow">
+                            <span class="text-content ellipsis">{{courseLinkText}}</span>
+                        </el-tag>
                     </div>
                 </div>
 
@@ -54,21 +62,32 @@
 
             </div>
          </div>
+        <course-modal slot="modal" :visible="modalVisible" limit=1
+                      :courseList="courseSets"
+                      @visibleChange="modalVisibleHandler"
+                      @sort="getSortedCourses">
+        </course-modal>
     </module-frame>
 </template>
 
 <script>
 import Api from '@admin/api';
 import moduleFrame from '../module-frame'
+import courseModal from '../course/modal/course-modal';
+
 
 export default {
     components: {
         moduleFrame,
+        courseModal
     },
     data() {
         return  {
             modalVisible: false,
-            imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg'
+            imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
+            courseSets: [],
+            linkTextShow: false
+
         }
     },
     props: {
@@ -92,6 +111,13 @@ export default {
                 return this.moduleData.data;
             },
             set() {}
+        },
+        courseLinkText() {
+            if (!this.courseSets[0]) {
+                return;
+            }
+            this.linkTextShow = true;
+            return this.courseSets[0] ? this.courseSets[0].courseSetTitle :'';
         }
     },
     mounted() {
@@ -121,6 +147,16 @@ export default {
         },
         openModal() {
             this.modalVisible = true;
+        },
+        getSortedCourses(courses) {
+            this.courseSets = courses;
+        },
+        removeCourseLink() {
+            this.courseSets = this.courseSets.splice(1, 1);
+        },
+        handleClose() {
+            this.removeCourseLink();
+            this.linkTextShow = false;
         },
     }
 }
