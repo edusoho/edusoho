@@ -146,6 +146,30 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $builder->execute()->fetchAll();
     }
 
+    // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc
+
+    //其他条件和limit分页待添加
+    public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
+    {
+        $courseSql = 'SELECT * FROM course_v8 WHERE 1=1 ';
+        $params = array();
+        if (!empty($conditions['categoryIds'])) {
+            $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
+            $courseSql .= " AND categoryId IN ($marks)";
+            $params = array_merge($params, $conditions['categoryIds']);
+        }
+        $courseMemberSql = 'SELECT courseId,count(id) co FROM course_member WHERE 1=1 ';
+        if (!empty($conditions['endTime'])) {
+            $courseMemberSql .= ' AND createdTime > ? AND createdTime < ? ';
+            $params[] = $conditions['startTime'];
+            $params[] = $conditions['endTime'];
+        }
+        $courseMemberSql .= ' GROUP BY courseId';
+        $sql = "SELECT cv.* FROM ($courseSql) cv INNER JOIN ($courseMemberSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC";
+
+        return $this->db()->fetchAll($sql, $params) ?: array();
+    }
+
     public function countWithJoinTableConditions($conditions)
     {
         $builder = $this->createJoinQueryBuilder($conditions)

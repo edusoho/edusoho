@@ -110,12 +110,52 @@ class PageSetting extends AbstractResource
             throw new AccessDeniedHttpException();
         }
 
-        $discoverySetting = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
-        if (empty($discoverySetting)) {
-            $discoverySetting = $this->getSettingService()->get("{$portal}_published_discovery", array());
+        $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
+        if (empty($discoverySettings)) {
+            $discoverySettings = $this->getSettingService()->get("{$portal}_published_discovery", array());
+        }
+        foreach ($discoverySettings as &$discoverySetting) {
+            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+                $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
+                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
+                $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+                $conditions['startTime'] = $timeRange['startTime'];
+                $conditions['endTime'] = $timeRange['endTime'];
+                $sort = $this->getSortByStr($discoverySetting['data']['sort']);
+                $limit = empty($discoverySetting['data']['sourceType']) ? 4 : $discoverySetting['data']['sourceType'];
+                $discoverySetting['data']['items'] = $this->getCourseByConditions($conditions, $sort, 0, $limit);
+            }
         }
 
-        return $discoverySetting;
+        return $discoverySettings;
+    }
+
+    public function getCourseByConditions($conditions, $sort, $start, $limit)
+    {
+        if (array_key_exists('studentNum', $sort)) {
+            $courses = $this->getCourseService()->searchByStudentNumAndTimeZone($conditions, $sort, $start, $limit);
+        }
+
+        if (array_key_exists('createdTime', $sort)) {
+            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, $start, $limit);
+        }
+
+        if (array_key_exists('rating', $sort)) {
+            $courses = $this->getCourseService()->searchByRatingAndTimeZone($conditions, $sort, $start, $limit);
+        }
+        $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
+        $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
+
+        return $courses;
+    }
+
+    protected function getTimeZoneByLastDays($lastDays)
+    {
+        if (!is_numeric($lastDays) || $lastDays <= 0) {
+            throw new BadRequestHttpException('LastDays is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        return array('startTime' => strtotime(date('Y-m-d', time() - $lastDays * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
     }
 
     protected function getCourseCondition($portal, $mode = 'published')
@@ -172,8 +212,13 @@ class PageSetting extends AbstractResource
         return $this->service('Taxonomy:CategoryService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->service('System:SettingService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
