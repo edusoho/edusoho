@@ -10,6 +10,10 @@ export const publish = (element, info) => {
         cancelText: Translator.trans('site.cancel')
       }).on('ok', () => {
         const nextUrl = $target.data('nextUrl');
+        if (nextUrl) {
+          const link = `<a class="js-link-to-market" href="${nextUrl}" target="_blank"></a>`;
+          $('.js-origin-header').append(link);
+        }
         $.post($target.data('url'), (data) => {
           if (data.success) {
             cd.message({
@@ -17,8 +21,7 @@ export const publish = (element, info) => {
               message: Translator.trans(info.success),
             }).on('close', () => {
               if (nextUrl) {
-                const link = window.open('', '_blank');
-                link.location = nextUrl;
+                $('.js-link-to-market')[0].click();
               }
               location.reload();
             });
