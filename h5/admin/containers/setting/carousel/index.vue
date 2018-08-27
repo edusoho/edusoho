@@ -3,29 +3,31 @@
     <div slot="preview" class="carousel-image-container">
       <img v-bind:src="updateImg" class="carousel-image">
       <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
+      <div class="carousel-title">{{this.title}}</div>
     </div>
 
     <div slot="setting" class="carousel-allocate">
       <header class="title">轮播图设置</header>
       <div v-for="(item, index) in parts[0].data">
-        <item :item="item" :index="index" :active="activeItemIndex"
-              @selected="selected" @chooseCourse="openModal"></item>
+        <item :item="item" :index="index" :active="activeItemIndex" :itemNum="itemNum"
+              @selected="selected" @chooseCourse="openModal" @inputChange="inputChange" @itemRemove="itemRemove"></item>
       </div>
       <el-button class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
     </div>
 
     <course-modal slot="modal" :visible="modalVisible"
-                  :courseList="courseSets"
-                  @visibleChange="modalVisibleHandler"
-                  @sort="getSortedCourses"></course-modal>
+      :courseList="courseSets"
+      @visibleChange="modalVisibleHandler"
+      @sort="getSortedCourses">
+    </course-modal>
   </module-frame>
 </template>
 
 <script>
 import Api from '@admin/api';
 import item from './item';
-import moduleFrame from '../module-frame'
-import courseModal from '../course/modal/course-modal'
+import moduleFrame from '../module-frame';
+import courseModal from '../course/modal/course-modal';
 
 export default {
   components: {
@@ -38,6 +40,8 @@ export default {
       activeItemIndex: 0,
       modalVisible: false,
       courseSets: [],
+      title: '',
+      itemNum: 0,
       defaultItem: {
         image: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
         link: {
@@ -74,6 +78,7 @@ export default {
   methods: {
     addItem() {
       this.parts[0].data.push(JSON.parse(JSON.stringify(this.defaultItem)));
+      this.itemNum = this.parts[0].data.length;
     },
     selected(selected) {
       this.imgAdress = selected.imageUrl;
@@ -91,6 +96,14 @@ export default {
     openModal() {
       this.modalVisible = true;
     },
+    inputChange(inputChange) {
+      this.title = inputChange.title
+    },
+    itemRemove(itemRemove) {
+      this.imgAdress = itemRemove.imageUrl;
+      this.parts[0].data.splice(itemRemove.index, 1);
+      console.log(this.parts[0].data)
+    }
   }
 }
 </script>

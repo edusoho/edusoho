@@ -9,9 +9,11 @@
       <img class="carousel-img" :src="item.image">
       <span v-show="!item.image"><i class="text-18">+</i> 添加图片</span>
     </el-upload>
-    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index)">
-    <div class="add-title pull-left">标题：<el-input size="mini" v-model="input" placeholder="请输入标题"></el-input></div>
-    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal">选择课程</el-button></div>
+    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="title" placeholder="请输入标题" clearable></el-input></div>
+    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="linkTextShow">选择课程</el-button>
+      <el-input class="courseLink" size="mini" clearable></el-input>
+    </div>
   </div>
 </template>
 
@@ -19,12 +21,22 @@
   import Api from '@admin/api';
 
   export default {
-    props: ['item', 'index', 'active'],
+    props: ['item', 'index', 'active', 'itemNum'],
     data() {
       return {
         activeIndex: 0,
-        input: ''
+        input: '',
+        title: '',
+        linkTextShow: false,
       };
+    },
+    watch: {
+      title(){
+        this.$emit('inputChange',
+        {
+          title: this.title,
+        })
+      }
     },
     methods: {
       uploadImg(item) {
@@ -62,16 +74,19 @@
           }
         );
       },
-      handleRemove(index) {
-        if (index) {
-          this.$emit('selected', {imageUrl: ''});
-          this.$el.remove();
+      handleRemove(index, length) {
+        if (length > 1) {
+          this.$emit('itemRemove', {
+            imageUrl: '',
+            index: index
+          });
         } else {
           this.$message({
             message: '至少要留一张轮播图',
             type: 'warning'
           });
         }
+        console.log('length',index, length)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
