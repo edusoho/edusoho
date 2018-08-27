@@ -9,6 +9,9 @@ class Qrcode extends AbstractResource
 {
     public function get(ApiRequest $request, $route)
     {
+        if (!in_array($route, array('homepage'))) {
+            throw new BadRequestHttpException('Route is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
         $params = $this->fillParams($request->query->all());
         $user = $this->getCurrentUser();
         $url = $this->generateUrl($route, $params, true);
@@ -27,7 +30,6 @@ class Qrcode extends AbstractResource
 
         return array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
-            'token' => $token['token'],
         );
     }
 

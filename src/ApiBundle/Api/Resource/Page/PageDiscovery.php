@@ -37,6 +37,8 @@ class PageDiscovery extends AbstractResource
                 $setting['data']['items'] = $this->searchCourseByConditions($setting['data']);
             }
         }
+
+        return $settings;
     }
 
     protected function searchCourseByConditions($params)
@@ -52,7 +54,7 @@ class PageDiscovery extends AbstractResource
                 $conditions,
                 $sort,
                 0,
-                $params['limit']
+                $limit
             );
         }
 
