@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Resource\Course\CourseFilter;
+use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
 {
@@ -45,7 +47,7 @@ class PageSetting extends AbstractResource
             throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         $type = $request->query->get('type');
-        if (!in_array($type, array('courseCondition', 'discovery'))) {
+        if (!in_array($type, array('discovery'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -67,7 +69,7 @@ class PageSetting extends AbstractResource
         if ('draft' != $mode) {
             throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
         }
-        if (!in_array($type, array('courseCondition', 'discovery'))) {
+        if (!in_array($type, array('discovery'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -77,11 +79,6 @@ class PageSetting extends AbstractResource
         $method = 'remove'.ucfirst($type);
 
         return $this->$method($portal, $mode);
-    }
-
-    protected function removeDiscovery($portal, $mode = 'draft')
-    {
-        return $this->getSettingService()->delete("{$portal}_{$mode}_discovery");
     }
 
     protected function removeCourseCondition($portal, $mode = 'draft')
@@ -94,13 +91,6 @@ class PageSetting extends AbstractResource
         $this->getSettingService()->set("{$portal}_{$mode}_discovery", $content);
 
         return $this->getDiscovery($portal, $mode);
-    }
-
-    protected function addCourseCondition($portal, $mode = 'draft', $content = array())
-    {
-        $this->getSettingService()->set("{$portal}_{$mode}_courseCondition", $content);
-
-        return $this->getCourseCondition($portal, $mode);
     }
 
     protected function getDiscovery($portal, $mode = 'published')
@@ -151,6 +141,11 @@ class PageSetting extends AbstractResource
         }
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
+        foreach ($courses as &$course) {
+            $courseFilter = new CourseFilter();
+            $courseFilter->setMode(Filter::PUBLIC_MODE);
+            $courseFilter->filter($course);
+        }
 
         return $courses;
     }
