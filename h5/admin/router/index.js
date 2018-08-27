@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import store from '@/store';
+import store from '@admin/store';
 import * as types from '@admin/store/mutation-types';
 import Router from 'vue-router';
 
@@ -24,13 +24,16 @@ const routes = [
   }
 ];
 
-// 页面刷新，store数据会被清掉，需对token、user重新赋值
-if (!store.state.csrfToken) {
-  const csrfTag = document.getElementsByTagName('meta')['csrf-token'];
+const env = process.env.NODE_ENV;
+
+// csrfToken 赋值
+if (!store.state.csrfToken && env === 'production') {
+  console.log(window.parent.document)
+  const csrfTag = window.parent.document.getElementsByTagName('meta')['csrf-token'];
   if (csrfTag && csrfTag.content) {
     store.commit(types.GET_CSRF_TOKEN, csrfTag.content);
   } else {
-    // new Error('csrfToken 不存在');
+    new Error('csrfToken 不存在');
   }
 }
 

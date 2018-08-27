@@ -58,7 +58,6 @@ export default {
       type: 'discovery',
       mode: 'draft',
     }).then((res) => {
-      console.log(res, 888);
       this.modules = res;
     })
 
