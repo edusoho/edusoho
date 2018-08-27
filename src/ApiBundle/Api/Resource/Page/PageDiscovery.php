@@ -19,7 +19,7 @@ class PageDiscovery extends AbstractResource
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         $params = $request->query->all();
-        $settingName = "{$portal}-published-discovery";
+        $settingName = "{$portal}_published_discovery";
         if (!empty($params['preview'])) {
             $token = $this->getTokenService()->verifyToken('qrcode_url', $token);
             if (empty($token)) {
@@ -29,39 +29,57 @@ class PageDiscovery extends AbstractResource
             if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
                 throw new \Exception('Error Processing Request', 1);
             }
-            $settingName = "{$portal}-draft-discovery";
+            $settingName = "{$portal}_draft_discovery";
         }
-        $settings = $this->getSettingService()->get($settingName);
-        foreach ($settings as &$setting) {
-            if ('course_list' == $setting['type'] && 'condition' == $setting['data']['sourceType']) {
-                $setting['data']['items'] = $this->searchCourseByConditions($setting['data']);
+        $discoverySettings = $this->getSettingService()->get($settingName);
+        foreach ($discoverySettings as &$discoverySetting) {
+            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+                if (!empty($discoverySetting['data']['lastDays'])) {
+                    $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
+                    $conditions['startTime'] = $timeRange['startTime'];
+                    $conditions['endTime'] = $timeRange['endTime'];
+                }
+
+                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
+                $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+                $sort = $this->getSortByStr($discoverySetting['data']['sort']);
+                $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
+                $discoverySetting['data']['items'] = $this->getCourseByConditions($conditions, $sort, 0, $limit);
             }
         }
 
-        return $settings;
+        return $discoverySettings;
     }
 
-    protected function searchCourseByConditions($params)
+    public function getCourseByConditions($conditions, $sort, $start, $limit)
     {
-        $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
-        $sort = $this->getSortByStr($params['sort']);
-        $limit = empty($params['limit']) ? 4 : $params['limit'];
-        $conditions['categoryId'] = $params['categoryId'];
-        $conditions['startTime'] = $params['startTime'];
-        $conditions['endTime'] = $params['endTime'];
-        if ('createdTime' == $sort[0]) {
-            $courses = $this->getCourseService()->searchWithJoinTableConditions(
-                $conditions,
-                $sort,
-                0,
-                $limit
-            );
+        $courses = array();
+        if (array_key_exists('studentNum', $sort)) {
+            $courses = $this->getCourseService()->searchByStudentNumAndTimeZone($conditions, $start, $limit);
         }
 
+        if (array_key_exists('createdTime', $sort)) {
+            unset($conditions['startTime']);
+            unset($conditions['endTime']);
+            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, $start, $limit);
+        }
+
+        if (array_key_exists('rating', $sort)) {
+            $courses = $this->getCourseService()->searchByRatingAndTimeZone($conditions, $start, $limit);
+        }
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
         return $courses;
+    }
+
+    protected function getTimeZoneByLastDays($lastDays)
+    {
+        if (!is_numeric($lastDays) || $lastDays <= 0) {
+            throw new BadRequestHttpException('LastDays is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        return array('startTime' => strtotime(date('Y-m-d', time() - $lastDays * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
     }
 
     protected function getCourseService()
