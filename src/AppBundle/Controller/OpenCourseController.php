@@ -560,13 +560,15 @@ class OpenCourseController extends BaseOpenCourseController
                 $lesson['convertStatus'] = empty($file['convertStatus']) ? 'none' : $file['convertStatus'];
                 $lesson['storage'] = $file['storage'];
             }
-        } elseif ('liveOpen' == $lesson['type']) {
+        } else {
+            $proxy = new ParserProxy();
+            $lesson = $proxy->prepareYoukuMediaUri($lesson);
+        }
+
+        if ('liveOpen' == $lesson['type']) {
             if ($lesson['startTime'] > time()) {
                 $lesson['startTimeLeft'] = $lesson['startTime'] - time();
             }
-        } else {
-            $proxy = new ParserProxy();
-            $lesson = $proxy->prepareMediaUri($lesson);
         }
 
         return $lesson;

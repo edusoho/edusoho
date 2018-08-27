@@ -6,6 +6,8 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ParserProxy
 {
+    private $mockedParser = null;
+
     public function parseItem($url)
     {
         $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'TudouVideo');
@@ -33,8 +35,7 @@ class ParserProxy
         }
 
         foreach ($parsers as $parserName) {
-            $class = __NAMESPACE__."\\ItemParser\\{$parserName}ItemParser";
-            $parser = new $class();
+            $parser = $this->createParser("{$parserName}ItemParser");
 
             if (!$parser->detect($url)) {
                 continue;
@@ -50,14 +51,11 @@ class ParserProxy
     {
         if ('self' != $video['mediaSource']) {
             if ('youku' == $video['mediaSource']) {
-                $class = __NAMESPACE__.'\\ItemParser\\YoukuVideoItemParser';
-                $parser = new $class();
+                $parser = $this->createParser('YoukuVideoItemParser');
             } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
-                $class = __NAMESPACE__.'\\ItemParser\\NeteaseOpenCourseItemParser';
-                $parser = new $class();
+                $parser = $this->createParser('NeteaseOpenCourseItemParser');
             } elseif ('qqvideo' == $video['mediaSource']) {
-                $class = __NAMESPACE__.'\\ItemParser\\QQVideoItemParser';
-                $parser = new $class();
+                $parser = $this->createParser('QQVideoItemParser');
             } else {
                 throw ParserException::PARSER_NOT_SUPPORT();
             }
@@ -68,18 +66,36 @@ class ParserProxy
         return $video;
     }
 
+    public function prepareYoukuMediaUri($video)
+    {
+        if ('youku' == $video['mediaSource']) {
+            return $this->prepareMediaUri($video);
+        }
+
+        return $video;
+    }
+
     public function prepareMediaUriForMobile($video, $httpSchema = '')
     {
         if ('youku' == $video['mediaSource']) {
-            $class = __NAMESPACE__.'\\ItemParser\\YoukuVideoItemParser';
-            $parser = new $class();
+            $parser = $this->createParser('YoukuVideoItemParser');
         } elseif ('qq' == $video['mediaSource']) {
-            $class = __NAMESPACE__.'\\ItemParser\\QQVideoItemParser';
-            $parser = new $class();
+            $parser = $this->createParser('QQVideoItemParser');
         } else {
             return $video;
         }
 
         return $parser->prepareMediaUriForMobile($video, $httpSchema);
+    }
+
+    private function createParser($parserName)
+    {
+        if (empty($this->mockedParser)) {
+            $class = __NAMESPACE__.'\\ItemParser\\'.$parserName;
+
+            return new $class();
+        }
+
+        return $this->mockedParser;
     }
 }
