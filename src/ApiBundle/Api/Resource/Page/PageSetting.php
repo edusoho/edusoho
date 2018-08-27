@@ -116,11 +116,14 @@ class PageSetting extends AbstractResource
         }
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
-                $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
+                if (!empty($discoverySetting['data']['lastDays'])) {
+                    $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
+                    $conditions['startTime'] = $timeRange['startTime'];
+                    $conditions['endTime'] = $timeRange['endTime'];
+                }
+
                 $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
                 $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
-                $conditions['startTime'] = $timeRange['startTime'];
-                $conditions['endTime'] = $timeRange['endTime'];
                 $sort = $this->getSortByStr($discoverySetting['data']['sort']);
                 $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
                 $discoverySetting['data']['items'] = $this->getCourseByConditions($conditions, $sort, 0, $limit);
@@ -154,11 +157,8 @@ class PageSetting extends AbstractResource
 
     protected function getTimeZoneByLastDays($lastDays)
     {
-        if (!is_numeric($lastDays) || $lastDays < 0) {
+        if (!is_numeric($lastDays) || $lastDays <= 0) {
             throw new BadRequestHttpException('LastDays is error', null, ErrorCode::INVALID_ARGUMENT);
-        }
-        if (empty($lastDays)) {
-            return array('startTime' => 0, 'endTime' => PHP_INT_MAX);
         }
 
         return array('startTime' => strtotime(date('Y-m-d', time() - $lastDays * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
