@@ -4,6 +4,19 @@
     .poster-image {
       width: 100%;
     }
+    .poster-image-mask {
+      min-width: 100%;
+      height: 194px;
+      background-color: #e1e1e1;
+      h5 {
+        font-size: 26px;
+        color: #919191;
+        letter-spacing: 0;
+        text-align: center;
+        line-height: 194px;
+        margin: 0;
+      }
+    }
   }
 
   .poster-item-setting {

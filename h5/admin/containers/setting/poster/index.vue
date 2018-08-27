@@ -1,6 +1,9 @@
 <template>
     <module-frame containerClass="setting-poster" :isActive="isActive">
         <div slot="preview" class="poster-image-container">
+            <div class="poster-image-mask">
+                <h5>广告图片</h5>
+            </div>
             <img v-bind:src="this.copyModuleData.image.uri" class="poster-image">
             <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
         </div>
