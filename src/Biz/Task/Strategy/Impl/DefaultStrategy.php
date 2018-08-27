@@ -117,7 +117,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             }
 
             if ('lesson' == $task['mode']) {
-                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
+                $lessonCount = $this->getCourseLessonService()->countLessons(array('id' => $task['categoryId']));
+                if ($lessonCount > 0) {
+                    $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
+                }
             }
 
             $this->biz['db']->commit();

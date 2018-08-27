@@ -23,6 +23,7 @@ use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use AppBundle\Common\TimeMachine;
+use Biz\Course\Util\CourseTitleUtils;
 
 /**
  * Class MemberServiceImpl
@@ -99,7 +100,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $infoData = array(
                 'courseSetId' => $courseSet['id'],
                 'courseId' => $course['id'],
-                'title' => $course['title'],
+                'title' => CourseTitleUtils::getDisplayedTitle($course),
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
                 'remark' => $data['remark'],
@@ -148,7 +149,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $infoData = array(
             'courseId' => $course['id'],
-            'title' => $course['title'],
+            'title' => CourseTitleUtils::getDisplayedTitle($course),
             'userId' => $user['id'],
             'nickname' => $user['nickname'],
         );
