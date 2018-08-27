@@ -18,6 +18,7 @@ import {
   Option,
   Cascader,
   Dialog,
+  Tag,
   Autocomplete,
 } from 'element-ui';
 
@@ -29,6 +30,7 @@ Vue.use(Radio);
 Vue.use(Option);
 Vue.use(Cascader);
 Vue.use(Dialog);
+Vue.use(Tag);
 Vue.use(Autocomplete);
 
 Vue.use(utils);

@@ -5,8 +5,19 @@
 
     <div class="find-body">
       <module-template v-for="(module, index) in modules"
-                      :module="module" :active="isActive(module)"
-                      :key="index" @activeModule="activeModule"></module-template>
+        :module="module" :active="isActive(module)"
+        :key="index" @activeModule="activeModule">
+      </module-template>
+    </div>
+
+    <div class="find-section clearfix">
+      <div class="section-title">点击添加组件</div>
+      <el-button class="find-section-item" type="" size="medium"
+        v-for="item in moduleItems"
+        @click="addModuleItem"
+        :key="item.type">
+        {{ item.name }}
+      </el-button>
     </div>
 
     <div class="find-footer">
@@ -36,6 +47,11 @@ export default {
       modules: [],
       currentModule: 'slide-1',
       items,
+      moduleItems: [
+        { name: '轮播图' },
+        { name: '课程列表' },
+        { name: '图片广告' }
+      ]
     }
   },
   computed: {
@@ -75,6 +91,8 @@ export default {
     },
     activeModule({ moduleId }) {
       this.currentModule = moduleId;
+    },
+    addModuleItem() {
     }
   }
 }

@@ -7,11 +7,20 @@
       :show-file-list="false"
       >
       <img class="carousel-img" :src="item.image">
-      <span v-show="!item.image"><i class="text-18">+</i> 添加图片</span>
+      <span v-show="!item.image"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
-    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index)">
-    <div class="add-title pull-left">标题：<el-input size="mini" v-model="input" placeholder="请输入标题"></el-input></div>
-    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal">选择课程</el-button></div>
+    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="title" placeholder="请输入标题" clearable></el-input></div>
+    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
+      <el-tag
+        class="courseLink"
+        closable
+        :disable-transitions="true"
+        @close="handleClose"
+        v-show="linkTextShow">
+        <span class="text-content ellipsis">{{courseLinkText}}</span>
+      </el-tag>
+    </div>
   </div>
 </template>
 
@@ -19,12 +28,31 @@
   import Api from '@admin/api';
 
   export default {
-    props: ['item', 'index', 'active'],
+    props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
     data() {
       return {
         activeIndex: 0,
-        input: ''
+        input: '',
+        title: '',
+        linkTextShow: false
       };
+    },
+    watch: {
+      title(){
+        this.$emit('inputChange',
+        {
+          title: this.title,
+        })
+      }
+    },
+    computed: {
+      courseLinkText() {
+        if (!this.courseSets[0]) {
+          return;
+        }
+        this.linkTextShow = true;
+        return this.courseSets[0] ? this.courseSets[0].courseSetTitle :'';
+      }
     },
     methods: {
       uploadImg(item) {
@@ -42,9 +70,7 @@
             selectIndex: this.activeIndex,
             activeStatus: true,
             imageUrl: data.uri
-          }
-        );
-          console.log(data)
+          });
         })
         .catch((err) => {
           console.log(err, 'error');
@@ -62,10 +88,12 @@
           }
         );
       },
-      handleRemove(index) {
-        if (index) {
-          this.$emit('selected', {imageUrl: ''});
-          this.$el.remove();
+      handleRemove(index, length) {
+        if (length > 1) {
+          this.$emit('remove', {
+            imageUrl: '',
+            index: index
+          });
         } else {
           this.$message({
             message: '至少要留一张轮播图',
@@ -79,7 +107,11 @@
       },
       openModal() {
         this.$emit('chooseCourse');
-      }
+      },
+      handleClose() {
+        this.$emit('removeCourseLink');
+        this.linkTextShow = false;
+      },
     }
   }
 

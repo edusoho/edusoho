@@ -1,46 +1,3 @@
-
-.text-18 {
-  font-size: 18px;
-}
-
-.text-12 {
-  font-size: 12px;
-}
-
-.btn-gray {
-  background-color: $grey-light;
-  border-radius: 2px;
-  color: $grey;
-  border: none;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
-  &:hover {
-    background-color: darken($grey-light, 8%);
-  }
-}
-
-.btn-border-primary {
-  border: 1px solid $primary-color;
-  color: $primary-color;
-  &:hover {
-    border: 1px solid darken($primary-color, 8%);
-    background-color: $primary-color;
-    color: #fff;
-  }
-}
-
-.btn-primary {
-  background-color: $primary-color;
-  border: 1px solid $primary-color;
-  color: #fff;
-  &:hover {
-    color: #fff;
-    border: 1px solid darken($primary-color, 8%);
-    background-color: darken($primary-color, 8%);
-  }
-}
-
 /**
  * 通用属性
  */
@@ -129,4 +86,38 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.btn-gray {
+  background-color: $grey-light;
+  border-radius: 2px;
+  color: $grey;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    background-color: darken($grey-light, 8%);
+  }
+}
+
+.btn-border-primary {
+  border: 1px solid $primary-color;
+  color: $primary-color;
+  &:hover {
+    border: 1px solid darken($primary-color, 8%);
+    background-color: $primary-color;
+    color: #fff;
+  }
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  border: 1px solid $primary-color;
+  color: #fff;
+  &:hover {
+    color: #fff;
+    border: 1px solid darken($primary-color, 8%);
+    background-color: darken($primary-color, 8%);
+  }
 }
