@@ -5,8 +5,9 @@
 
     <div class="find-body">
       <module-template v-for="(module, index) in modules"
-                      :module="module" :active="isActive(module)"
-                      :key="index" @activeModule="activeModule"></module-template>
+        :module="module" :active="isActive(module)"
+        :key="index" @activeModule="activeModule">
+      </module-template>
     </div>
 
     <div class="find-footer">
