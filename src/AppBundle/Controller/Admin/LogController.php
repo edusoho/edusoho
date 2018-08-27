@@ -201,7 +201,14 @@ class LogController extends BaseController
             }
         }
 
+        $data = $this->deleteHTMLCode($data);
+
         return $data;
+    }
+
+    private function deleteHTMLCode($str)
+    {
+        return strip_tags($str);
     }
 
     private function getStrChangeFiled($module, $action, $fieldChange, $message)

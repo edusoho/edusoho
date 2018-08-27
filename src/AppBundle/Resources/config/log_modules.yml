@@ -14,6 +14,13 @@ course:
                 param:
                     id: id
         modalField: all
+    update_picture:
+        templateParam:
+            %url%:
+                type: url
+                path: course_set_show
+                param:
+                    id: id
     create_course:
         templateParam:
             %url%:
@@ -255,7 +262,9 @@ system:
     update_settings.cloud_email_crm:
         modalField: all
     update_settings.mailer:
-        modalField: all
+        modalField:
+            ["use_cloud_email_crm", "enabled", "send_email", "host", "port", "username", "password", "from", "name"]
+
     update_settings.esBar:
         modalField: all
     update_settings.default:
@@ -296,7 +305,7 @@ system:
         modalField: all
     update_settings.cloud_consult:
         modalField:
-          [cloud_consult_setting_enabled]
+            [cloud_consult_setting_enabled]
     update_settings.storage:
         modalField:
             ["upload_mode","support_mobile","video_quality","video_audio_quality","video_audio_quality","enable_playback_rates","video_auto_play","video_header","video_watermark","video_embed_watermark_image","video_fingerprint","video_fingerprint_time","enable_hls_encryption_plus",]

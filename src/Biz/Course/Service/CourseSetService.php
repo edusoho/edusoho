@@ -159,6 +159,13 @@ interface CourseSetService
 
     public function updateCourseSetTeacherIds($id, $teacherIds);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_picture",funcName="getCourseSet",param="id")
+     */
     public function changeCourseSetCover($id, $fields);
 
     /**

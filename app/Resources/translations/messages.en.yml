@@ -6997,14 +6997,14 @@ log.action.system.update_settings.classroom: 更新班级设置
 log.action.system.update_settings.article: 更新资讯设置
 log.action.system.update_settings.group: 更新小组设置
 log.action.system.update_settings.invite: 更新邀请注册设置
-log.action.system.update_settings.payment: 更新帐务设置
+log.action.system.update_settings.payment: 更新账务设置
 log.action.system.update_settings.coin: 更新虚拟币设置
 log.action.system.update_settings.refund: 更新退款设置
 log.action.system.update_settings.blacklist_ip: 更新黑名单设置
 log.action.system.update_settings.post_num_rules: 更新发贴设置
 log.action.system.update_settings.cloud_consult: 更新云问答设置
 log.action.system.update_settings.storage: 更新云视频设置
-log.action.system.update_settings.live-course: 更新直播课程设置
+log.action.system.update_settings.live-course: 更新直播设置
 log.action.system.update_settings.cloud_sms: 更新云短信设置
 log.action.system.update_settings.cloud_search: 更新云搜索设置
 log.action.system.update_settings.app_im: 更新云聊天设置
@@ -7251,14 +7251,14 @@ log.action.template.system.update_settings.classroom: 更新了<strong class="co
 log.action.template.system.update_settings.article: 更新了<strong class="color-success">系统设置</strong>的资讯设置
 log.action.template.system.update_settings.group: 更新了<strong class="color-success">系统设置</strong>的小组设置
 log.action.template.system.update_settings.invite: 更新了<strong class="color-success">系统设置</strong>的邀请注册设置
-log.action.template.system.update_settings.payment: 更新了<strong class="color-success">系统设置</strong>的帐务设置
+log.action.template.system.update_settings.payment: 更新了<strong class="color-success">系统设置</strong>的账务设置
 log.action.template.system.update_settings.coin: 更新了<strong class="color-success">系统设置</strong>的虚拟币设置
 log.action.template.system.update_settings.refund: 更新了<strong class="color-success">系统设置</strong>的退款设置
 log.action.template.system.update_settings.blacklist_ip: 更新了<strong class="color-success">系统设置</strong>的黑名单设置
 log.action.template.system.update_settings.post_num_rules: 更新了<strong class="color-success">系统设置</strong>的发贴设置
 log.action.template.system.update_settings.cloud_consult: 更新了<strong class="color-success">系统设置</strong>的云问答设置
 log.action.template.system.update_settings.storage: 更新了<strong class="color-success">系统设置</strong>的云视频设置
-log.action.template.system.update_settings.live-course: 更新了<strong class="color-success">系统设置</strong>的直播课程设置
+log.action.template.system.update_settings.live-course: 更新了<strong class="color-success">系统设置</strong>的直播设置
 log.action.template.system.update_settings.cloud_sms: 更新了<strong class="color-success">系统设置</strong>的云短信设置
 log.action.template.system.update_settings.cloud_search: 更新了<strong class="color-success">系统设置</strong>的云搜索设置
 log.action.template.system.update_settings.app_im: 更新了<strong class="color-success">系统设置</strong>的云聊天设置
@@ -7401,6 +7401,8 @@ log.attr.system.update_settings.cloud_email_crm.status.enable: 启用
 log.attr.system.update_settings.cloud_email_crm.status.disable: 关闭
 log.attr.system.update_settings.mailer.use_cloud_email_crm: 使用云邮件
 log.attr.system.update_settings.mailer.enabled: 邮件发送
+log.attr.system.update_settings.mailer.enabled.1: 开启
+log.attr.system.update_settings.mailer.enabled.0: 关闭
 log.attr.system.update_settings.mailer.send_email.status.1: 开启
 log.attr.system.update_settings.mailer.send_email.status.0: 关闭
 log.attr.system.update_settings.mailer.host: 服务器地址

@@ -264,7 +264,6 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'setting_email-verify',
                 'questions_settings',
                 'customerServiceSetting',
-                'setting_userCenter',
                 'update_block',
                 'update_app_version',
                 'update_settings.site',
@@ -298,8 +297,6 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'update_settings.cloud_search',
                 'update_settings.app_im',
                 'update_settings.cloud_attachment',
-                'update_settings._app_last_check',
-                'update_settings.siteTrace',
                 'update_settings.xapi',
             ),
             self::CLASSROOM => array(
