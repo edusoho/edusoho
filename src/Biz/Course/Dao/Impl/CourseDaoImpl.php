@@ -143,7 +143,56 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
             $builder->addOrderBy($this->table.'.'.$order, $sort);
         }
 
-        return $builder->execute()->fetchAll();
+        $result = $builder->execute()->fetchAll();
+
+        return $result;
+    }
+
+    // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc
+
+    //其他条件和limit分页待添加
+    public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $courseSql = "SELECT c.* FROM course_v8 c INNER JOIN course_set_v8 csv on c.courseSetId = csv.id WHERE c.parentId=0 AND c.status='published' AND c.type NOT IN ('reservation') AND csv.status='published' ";
+        $params = array();
+        if (!empty($conditions['categoryIds'])) {
+            $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
+            $courseSql .= " AND c.categoryId IN ($marks)";
+            $params = array_merge($params, $conditions['categoryIds']);
+        }
+        $courseMemberSql = 'SELECT courseId,count(id) co FROM course_member WHERE 1=1 ';
+        if (!empty($conditions['endTime'])) {
+            $courseMemberSql .= ' AND createdTime > ? AND createdTime < ? ';
+            $params[] = $conditions['startTime'];
+            $params[] = $conditions['endTime'];
+        }
+        $courseMemberSql .= ' GROUP BY courseId';
+        $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseMemberSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
+
+        return $this->db()->fetchAll($sql, $params) ?: array();
+    }
+
+    public function searchByRatingAndTimeZone($conditions, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $courseSql = "SELECT c.* FROM course_v8 c INNER JOIN course_set_v8 csv on c.courseSetId = csv.id WHERE c.parentId=0 AND c.status='published' AND c.type NOT IN ('reservation') AND csv.status='published' ";
+        $params = array();
+        if (!empty($conditions['categoryIds'])) {
+            $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
+            $courseSql .= " AND c.categoryId IN ($marks)";
+            $params = array_merge($params, $conditions['categoryIds']);
+        }
+        $courseReviewSql = 'SELECT courseId,avg(rating) co FROM course_review WHERE 1=1 ';
+        if (!empty($conditions['endTime'])) {
+            $courseReviewSql .= ' AND createdTime > ? AND createdTime < ? ';
+            $params[] = $conditions['startTime'];
+            $params[] = $conditions['endTime'];
+        }
+        $courseReviewSql .= ' GROUP BY courseId';
+        $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseReviewSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
+
+        return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
     public function countWithJoinTableConditions($conditions)

@@ -1414,6 +1414,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->searchWithJoinTableConditions($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getCourseDao()->searchByStudentNumAndTimeZone($conditions, $start, $limit);
+    }
+
+    public function searchByRatingAndTimeZone($conditions, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getCourseDao()->searchByRatingAndTimeZone($conditions, $start, $limit);
+    }
+
     // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
