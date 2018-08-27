@@ -6,5 +6,8 @@ export default {
   },
   [types.GET_CATEGORIES](state, payload) {
     state.categories = payload;
-  }
+  },
+  [types.GET_CSRF_TOKEN](state, payload) {
+    state.csrfToken = payload;
+  },
 };

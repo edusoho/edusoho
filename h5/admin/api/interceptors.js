@@ -12,6 +12,7 @@ axios.interceptors.request.use(config => {
   config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
   config.headers['X-Auth-Token'] = 'kj1fbzhktw0c0osccgg8sswkcgks08g';
+  config.headers['X-CSRF-Token'] = store.state.csrfToken;
 
   store.commit('UPDATE_LOADING_STATUS', true);
 

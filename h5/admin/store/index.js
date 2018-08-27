@@ -11,6 +11,7 @@ const state = {
   isLoading: false,
   categories: [],
   user: {},
+  csrfToken: '',
 };
 
 

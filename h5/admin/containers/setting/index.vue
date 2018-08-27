@@ -49,7 +49,7 @@ export default {
     //   data: this.modules,
     //   portal: 'h5',
     //   type: 'discovery',
-    //   mode: 'published',
+    //   mode: 'draft',
     // })
 
     // 读取设置
@@ -58,6 +58,7 @@ export default {
       type: 'discovery',
       mode: 'draft',
     }).then((res) => {
+      console.log(res, 888);
       this.modules = res;
     })
 
