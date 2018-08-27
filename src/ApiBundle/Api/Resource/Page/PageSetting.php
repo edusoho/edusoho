@@ -117,12 +117,12 @@ class PageSetting extends AbstractResource
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
-                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
+                // $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
                 $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
                 $conditions['startTime'] = $timeRange['startTime'];
                 $conditions['endTime'] = $timeRange['endTime'];
                 $sort = $this->getSortByStr($discoverySetting['data']['sort']);
-                $limit = empty($discoverySetting['data']['sourceType']) ? 4 : $discoverySetting['data']['sourceType'];
+                $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
                 $discoverySetting['data']['items'] = $this->getCourseByConditions($conditions, $sort, 0, $limit);
             }
         }
@@ -133,7 +133,7 @@ class PageSetting extends AbstractResource
     public function getCourseByConditions($conditions, $sort, $start, $limit)
     {
         if (array_key_exists('studentNum', $sort)) {
-            $courses = $this->getCourseService()->searchByStudentNumAndTimeZone($conditions, $sort, $start, $limit);
+            $courses = $this->getCourseService()->searchByStudentNumAndTimeZone($conditions, $start, $limit);
         }
 
         if (array_key_exists('createdTime', $sort)) {

@@ -151,11 +151,12 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     //其他条件和limit分页待添加
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
     {
-        $courseSql = 'SELECT * FROM course_v8 WHERE 1=1 ';
+        $this->filterStartLimit($start, $limit);
+        $courseSql = "SELECT c.* FROM course_v8 c INNER JOIN course_set_v8 csv on c.courseSetId = csv.id WHERE c.parentId=0 AND c.status='published' AND c.type NOT IN ('reservation') AND csv.status='published' ";
         $params = array();
         if (!empty($conditions['categoryIds'])) {
             $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
-            $courseSql .= " AND categoryId IN ($marks)";
+            $courseSql .= " AND c.categoryId IN ($marks)";
             $params = array_merge($params, $conditions['categoryIds']);
         }
         $courseMemberSql = 'SELECT courseId,count(id) co FROM course_member WHERE 1=1 ';
@@ -165,7 +166,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
             $params[] = $conditions['endTime'];
         }
         $courseMemberSql .= ' GROUP BY courseId';
-        $sql = "SELECT cv.* FROM ($courseSql) cv INNER JOIN ($courseMemberSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC";
+        $sql = "SELECT cv.* FROM ($courseSql) cv INNER JOIN ($courseMemberSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC LIMIT $limit";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
