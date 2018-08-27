@@ -81,15 +81,7 @@
     }
   }
 
-  .icon-delete {
-    position: absolute;
-    top: -9px;
-    right: -9px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    color: $primary-color;
-  }
+
 
   .btn-add-item {
     height: 44px;
@@ -98,3 +90,12 @@
   }
 }
 
+.icon-delete {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  color: $primary-color;
+}

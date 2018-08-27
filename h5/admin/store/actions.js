@@ -5,43 +5,41 @@ export const updateLoading = ({ commit }, { isLoading }) => {
   commit(types.UPDATE_LOADING_STATUS, { isLoading });
 };
 
-export const getCategories = ({ commit }) => {
-  return Api.getCategories({
+export const getCategories = ({ commit }) => Api.getCategories({
     query: {
       groupCode: 'course'
     }
   }).then((res) => {
     commit(types.GET_CATEGORIES, res);
     return res;
-  })
-};
+  });
 
 
 export const getDraft = ({ commit }, { portal, type, mode }) => {
   return Api.getDraft({
     query: {
       portal,
-      type,
+      type
     },
     params: {
       mode
     }
-  })
-}
+  });
+};
 
 export const saveDraft = ({ commit }, { portal, type, mode, data }) => {
   return Api.saveDraft({
     params: {
       type,
-      mode,
+      mode
     },
     query: { portal },
-    data,
-  })
-}
+    data
+  });
+};
 
 export const getCourseList = ({ commit }, params) => {
   return Api.getCourseList({
-    params,
-  })
-}
+    params
+  });
+};
