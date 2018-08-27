@@ -45,7 +45,7 @@
         }
       }
       .add-title {
-        margin-top: 6px;
+        margin-top: 3px;
         margin-bottom: 14px;
         .el-input {
           width: auto;
@@ -57,12 +57,21 @@
       }
       .courseLink {
         width: 138px;
-        .el-input__inner {
-          padding-left: 0;
-          padding-right: 28px;
-          border: none;
-          color: $primary-color;
-          font-size: 14px;
+        height: auto;
+        line-height: 1;
+        padding-left: 0;
+        margin-left: -3px;
+        background: none;
+        border: none;
+        font-size: 14px;
+        .text-content {
+          position: relative;
+          top: 2px;
+          display: inline-block;
+          max-width: 9em;
+        }
+        .el-icon-close {
+          right: -2px;
         }
       }
       .btn-choose-course {

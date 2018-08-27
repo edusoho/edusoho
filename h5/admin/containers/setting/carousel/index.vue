@@ -3,19 +3,19 @@
     <div slot="preview" class="carousel-image-container">
       <img v-bind:src="updateImg" class="carousel-image">
       <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
-      <div class="carousel-title">{{this.title}}</div>
+      <div class="carousel-title ellipsis">{{this.title}}</div>
     </div>
 
     <div slot="setting" class="carousel-allocate">
       <header class="title">轮播图设置</header>
       <div v-for="(item, index) in parts[0].data">
-        <item :item="item" :index="index" :active="activeItemIndex" :itemNum="itemNum"
-              @selected="selected" @chooseCourse="openModal" @inputChange="inputChange" @itemRemove="itemRemove"></item>
+        <item :item="item" :index="index" :active="activeItemIndex" :itemNum="itemNum" :courseSets="courseSets"
+          @selected="selected" @chooseCourse="openModal" @inputChange="inputChange" @remove="itemRemove"></item>
       </div>
       <el-button class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
     </div>
 
-    <course-modal slot="modal" :visible="modalVisible"
+    <course-modal slot="modal" :visible="modalVisible" limit=1
       :courseList="courseSets"
       @visibleChange="modalVisibleHandler"
       @sort="getSortedCourses">
@@ -99,9 +99,9 @@ export default {
     inputChange(inputChange) {
       this.title = inputChange.title
     },
-    itemRemove(itemRemove) {
-      this.imgAdress = itemRemove.imageUrl;
-      this.parts[0].data.splice(itemRemove.index, 1);
+    itemRemove(remove) {
+      this.imgAdress = remove.imageUrl;
+      this.parts[0].data.splice(remove.index, 1);
       console.log(this.parts[0].data)
     }
   }

@@ -11,8 +11,18 @@
     </el-upload>
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
     <div class="add-title pull-left">标题：<el-input size="mini" v-model="title" placeholder="请输入标题" clearable></el-input></div>
-    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="linkTextShow">选择课程</el-button>
-      <el-input class="courseLink" size="mini" clearable></el-input>
+    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
+      <el-tag
+        class="courseLink"
+        v-for="tag in tags"
+        :key="tag.name"
+        closable
+        :disable-transitions="true"
+        @close="handleClose"
+        :type="tag.type"
+        v-show="linkTextShow">
+        <span class="text-content ellipsis">{{courseLinkText}}</span>
+      </el-tag>
     </div>
   </div>
 </template>
@@ -21,13 +31,17 @@
   import Api from '@admin/api';
 
   export default {
-    props: ['item', 'index', 'active', 'itemNum'],
+    props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
     data() {
       return {
         activeIndex: 0,
         input: '',
         title: '',
         linkTextShow: false,
+        tags: [{
+          name: '',
+          type: '',
+        }]
       };
     },
     watch: {
@@ -36,6 +50,15 @@
         {
           title: this.title,
         })
+      }
+    },
+    computed: {
+      courseLinkText() {
+        if (!this.courseSets[0]) {
+          return;
+        }
+        this.linkTextShow = true;
+        return this.courseSets[0] ? this.courseSets[0].courseSetTitle :'';
       }
     },
     methods: {
@@ -76,7 +99,7 @@
       },
       handleRemove(index, length) {
         if (length > 1) {
-          this.$emit('itemRemove', {
+          this.$emit('remove', {
             imageUrl: '',
             index: index
           });
@@ -94,7 +117,11 @@
       },
       openModal() {
         this.$emit('chooseCourse');
-      }
+      },
+      handleClose(tag) {
+        this.tags.splice(this.tags.indexOf(tag), 1);
+        this.linkTextShow = false;
+      },
     }
   }
 
