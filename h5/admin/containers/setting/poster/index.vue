@@ -1,10 +1,10 @@
 <template>
     <module-frame containerClass="setting-poster" :isActive="isActive">
-        <div slot="preview" class="poster-image-container">
-            <div class="poster-image-mask" v-show="!this.copyModuleData.image.uri">
+        <div slot="preview" :class="'poster-image-container ' +  imageMode ">
+            <div class="poster-image-mask" v-show="!copyModuleData.image.uri">
                 <h5>广告图片</h5>
             </div>
-            <img v-bind:src="this.copyModuleData.image.uri" class="poster-image">
+            <img v-bind:src="copyModuleData.image.uri" class="poster-image">
             <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
         </div>
         <div slot="setting" class="poster-allocate">
@@ -19,8 +19,8 @@
                             :show-file-list="false"
                     >
                         <div class="image-uploader">
-                            <img v-show="this.copyModuleData.image.uri" :src="this.copyModuleData.image.uri" class="poster-img">
-                            <div class="uploader-mask" v-show="!this.copyModuleData.image.uri">
+                            <img v-show="copyModuleData.image.uri" :src="copyModuleData.image.uri" class="poster-img">
+                            <div class="uploader-mask" v-show="!copyModuleData.image.uri">
                                 <span ><i class="text-18">+</i> 添加图片</span>
                             </div>
                         </div>
@@ -32,12 +32,12 @@
                 <div class="poster-item-setting__section mtl">
                     <p class="pull-left section-left">链接：</p>
                     <div class="section-right">
-                        <el-radio label="condition">站内课程</el-radio>
-                        <el-radio label="custom">自定义链接</el-radio>
+                        <el-radio v-model="copyModuleData.link.type" label="course">站内课程</el-radio>
+                        <el-radio v-model="copyModuleData.link.type" label="url">自定义链接</el-radio>
                     </div>
                 </div>
 
-                <div class="poster-item-setting__section mtl">
+                <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'course'">
                     <p class="pull-left section-left">课程名称：</p>
                     <div class="section-right">
                         <el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
@@ -52,11 +52,17 @@
                     </div>
                 </div>
 
+                <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'url'">
+                    <p class="pull-left section-left">输入链接：</p>
+                    <div class="section-right">
+                        <el-input size="mini" v-model="copyModuleData.link.url" placeholder="请输入自定义链接" clearable></el-input>
+                    </div>
+                </div>
                 <div class="poster-item-setting__section mtl">
                     <p class="pull-left section-left">自适应手机屏幕：</p>
                     <div class="section-right">
-                        <el-radio label="condition">开启</el-radio>
-                        <el-radio label="custom">关闭</el-radio>
+                        <el-radio v-model="imageMode" label="responsive">开启</el-radio>
+                        <el-radio v-model="imageMode" label="size-fit">关闭</el-radio>
                     </div>
                 </div>
 
@@ -86,8 +92,8 @@ export default {
             modalVisible: false,
             imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
             courseSets: [],
-            linkTextShow: false
-
+            linkTextShow: false,
+            imageMode: 'responsive'
         }
     },
     props: {
