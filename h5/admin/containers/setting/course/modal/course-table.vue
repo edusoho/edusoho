@@ -14,16 +14,19 @@
             v-for="(item, index) in head"
             :class="[ tdClass(item.col), { 'delete': head[index].label === 'delete' }]"
             @click="deleteItem(head[index].label === 'delete', courseIndex)">
-            {{ course[head[index].label] || '移除' }}{{ head[index].label === 'price' ? '元' : ''}}
+            {{ getContext(course, head[index].label) }}
           </span>
         </div>
       </div>
+
     </draggable>
+    <div v-show="!courseSets.length" class="course-table__empty">暂无数据</div>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
+import { formatTime } from '@/utils/date-toolkit.js';
 
 export default {
   name: 'course-table',
@@ -42,7 +45,7 @@ export default {
         {
           col: 5,
           title: '课程名称',
-          label: 'title',
+          label: 'courseSetTitle',
         }, {
           col: 3,
           title: '商品价格',
@@ -50,7 +53,7 @@ export default {
         }, {
           col: 3,
           title: '创建时间',
-          label: 'createTime',
+          label: 'createdTime',
         }, {
           col: 0,
           title: '操作',
@@ -78,6 +81,17 @@ export default {
         return;
       }
       this.courseSets.splice(index, 1);
+    },
+    getContext(course, label) {
+      if (label === 'price') {
+        return `${course[label]}元`;
+      } else if (label === 'createdTime') {
+        const date = new Date(course[label]);
+        return formatTime(date);
+      } else if (label === 'delete') {
+        return `移除`;
+      }
+      return course[label];
     }
   }
 }

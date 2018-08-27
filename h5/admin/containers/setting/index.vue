@@ -25,7 +25,7 @@
 import items from '@/utils/footer-config'
 import Api from '@admin/api';
 import moduleTemplate from './module-template';
- import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -50,7 +50,7 @@ export default {
     //   data: this.modules,
     //   portal: 'h5',
     //   type: 'discovery',
-    //   mode: 'published'
+    //   mode: 'published',
     // })
 
     // 读取设置

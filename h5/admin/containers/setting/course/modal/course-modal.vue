@@ -11,10 +11,20 @@
     <div class="course-modal__body">
       <div class="search__container"">
         <span class="search__label"">选择课程：</span>
+
         <!-- 接口字段 courseSetTitle -->
-        <el-input class="search__input" clearable
-          size="medium" v-model="keyWord"
-          placeholder="搜索课程"></el-input>
+        <el-autocomplete
+          size="medium"
+          v-model="keyWord"
+          placeholder="搜索课程"
+          class="inline-input search__input"
+          :value-key="'courseSetTitle'"
+          :clearable="true"
+          :autofocus="true"
+          :trigger-on-focus="false"
+          :fetch-suggestions="searchHandler"
+          @select="selectHandler"
+        ></el-autocomplete>
       </div>
     </div>
     <course-table :key="tableKey" :courseList="courseSets" @sort="getSortedCourses"></course-table>
@@ -27,6 +37,7 @@
 
 <script>
 import courseTable from './course-table'
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'course-modal',
@@ -41,13 +52,18 @@ export default {
     visible: {
       type: Boolean,
       default: false,
-    }
+    },
+    limit: {
+      default: '',
+    },
   },
   data () {
     return {
       tableKey: 0,
       keyWord: '',
+      cacheResult: {},
       courseSets: this.courseList,
+      courseListIds: [],
     }
   },
   computed: {
@@ -66,13 +82,29 @@ export default {
         return;
       }
       // 重置 table 数据，重置 table 生命周期
-      this.courseSets = this.courseList;
       this.tableKey ++;
-    }
+      this.courseSets = this.courseList;
+      this.restoreListIds();
+
+      this.keyWord = '';
+    },
+  },
+  created() {
+    this.restoreListIds();
   },
   methods: {
+    ...mapActions([
+      'getCourseList'
+    ]),
+    restoreListIds() {
+      this.courseListIds = [];
+      for (let i = 0; i < this.courseSets.length; i++) {
+        this.courseListIds.push(this.courseSets[i].id);
+      }
+    },
     getSortedCourses(courses) {
       this.courseSets = courses;
+      this.restoreListIds();
     },
     beforeCloseHandler() {
       // todo
@@ -82,6 +114,39 @@ export default {
     saveHandler() {
       this.$emit('sort', this.courseSets);
       this.modalVisible = false;
+    },
+    selectHandler(item) {
+      const exccedLimit = this.courseSets.length >= window.parseInt(this.limit, 10);
+
+      if (exccedLimit) {
+        this.$message({
+          message: `当前最多选择${this.limit}个`,
+          type: 'warning'
+        });
+        return;
+      }
+      if (this.courseListIds.includes(item.id)) {
+        this.$message({
+          message: '重复添加了哦',
+          type: 'warning'
+        });
+        return;
+      }
+      this.courseListIds.push(item.id)
+      // 不使用push 操作, 避免改变props, 父组件导致页面更新
+      this.courseSets = [...this.courseSets, item];
+    },
+    searchHandler(queryString, cb) {
+      if (this.cacheResult[queryString]) {
+        cb(this.cacheResult[queryString])
+        return;
+      }
+      this.getCourseList({
+        courseSetTitle: queryString
+      }).then(res => {
+        this.cacheResult[queryString] = res.data;
+        cb(res.data);
+      })
     }
   }
 }

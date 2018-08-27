@@ -40,3 +40,8 @@ export const saveDraft = ({ commit }, { portal, type, mode, data }) => {
   })
 }
 
+export const getCourseList = ({ commit }, params) => {
+  return Api.getCourseList({
+    params,
+  })
+}
