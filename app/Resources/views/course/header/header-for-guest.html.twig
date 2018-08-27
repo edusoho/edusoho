@@ -207,7 +207,7 @@
           {# 分享图标功能设置 #}
           <li class="es-share top mrl">
             <a class="dropdown-toggle cd-link-assist" href="javascript:;" data-toggle="dropdown">
-              <i class="es-icon es-icon-share course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.share'|trans }}</span>
+              <i class="es-icon es-icon-share course-operation__icon vertical-top"></i><span class="cd-text-sm cd-text-medium">{{ 'course.share'|trans }}</span>
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
           </li>
@@ -215,11 +215,11 @@
           {# 收藏图标设置 #}
           {% if marketingPage %}
             <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}">
-              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
+              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon vertical-top"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
               </a>
             </li>
             <li class="js-favorite-btn mrl {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}">
-              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favoriteoutline course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.follow'|trans }}</span>
+              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favoriteoutline course-operation__icon vertical-top"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.follow'|trans }}</span>
               </a>
             </li>
           {% endif %}
