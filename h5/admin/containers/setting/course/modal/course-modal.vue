@@ -52,7 +52,10 @@ export default {
     visible: {
       type: Boolean,
       default: false,
-    }
+    },
+    limit: {
+      default: '',
+    },
   },
   data () {
     return {
@@ -113,6 +116,15 @@ export default {
       this.modalVisible = false;
     },
     selectHandler(item) {
+      const exccedLimit = this.courseSets.length >= window.parseInt(this.limit, 10);
+
+      if (exccedLimit) {
+        this.$message({
+          message: `当前最多选择${this.limit}个`,
+          type: 'warning'
+        });
+        return;
+      }
       if (this.courseListIds.includes(item.id)) {
         this.$message({
           message: '重复添加了哦',

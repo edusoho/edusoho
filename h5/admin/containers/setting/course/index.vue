@@ -69,7 +69,12 @@
         </div>
       </div>
     </div>
-    <course-modal slot="modal" :visible="modalVisible" :courseList="copyModuleData.data.items" @visibleChange="modalVisibleHandler" @sort="getSortedCourses"></course-modal>
+    <course-modal slot="modal"
+                  :visible="modalVisible"
+                  :limit="copyModuleData.data.limit"
+                  :courseList="copyModuleData.data.items"
+                  @visibleChange="modalVisibleHandler"
+                  @sort="getSortedCourses"></course-modal>
   </module-frame>
 </template>
 <script>
