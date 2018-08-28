@@ -126,6 +126,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         }
         $config = array(
             'add' => 'create',
+            'generate' => 'create',
             'create' => 'create',
             'delete' => 'delete',
         );

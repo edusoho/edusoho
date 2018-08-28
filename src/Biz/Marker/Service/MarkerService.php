@@ -30,7 +30,6 @@ interface MarkerService
      * @param $id
      *
      * @return mixed
-     * @Log(module="marker",action="delete")
      */
     public function deleteMarker($id);
 

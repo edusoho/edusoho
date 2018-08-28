@@ -126,12 +126,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
 
-        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_activity', "修改直播活动（#{$activity['id']}, #{$liveActivity['id']}）", array(
-            'preActivity' => $activity,
-            'preLiveActivity' => $preLiveActivity,
-            'newLiveActivity' => $liveActivity,
-        ));
-
         $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
 
         return array($liveActivity, $fields);
@@ -165,7 +159,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
             $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId']);
-            $this->getLogService()->info(AppLoggerConstant::LIVE, 'delete_live_activity', "删除直播活动（#{$liveActivity['id']}）", $liveActivity);
         }
     }
 
