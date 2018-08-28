@@ -23,8 +23,22 @@
   .find-head-img {
     vertical-align: top;
   }
-  .find-body {
-    padding-bottom: 50px;
+  .find-section {
+    padding: 15px 9px;
+    background: #F5F5F5;
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #E1E1E1;
+    font-size: 14px;
+    box-sizing: border-box;
+    .section-title {
+      margin-left: 7px;
+    }
+    .find-section-item {
+      float: left;
+      margin: 15px 7.5px 0;
+      width: 103px;
+      background-color: #fff;
+    }
   }
   .find-footer {
     position: absolute;

@@ -48,11 +48,11 @@
         margin-top: 3px;
         margin-bottom: 14px;
         .el-input {
-          width: auto;
+          width: 144px;
         }
         .el-input__inner {
           border-radius: 2px;
-          padding: 0 4px;
+          padding-left: 4px;
         }
       }
       .courseLink {
@@ -81,15 +81,7 @@
     }
   }
 
-  .icon-delete {
-    position: absolute;
-    top: -9px;
-    right: -9px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    color: $primary-color;
-  }
+
 
   .btn-add-item {
     height: 44px;
@@ -98,3 +90,12 @@
   }
 }
 
+.icon-delete {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  color: $primary-color;
+}

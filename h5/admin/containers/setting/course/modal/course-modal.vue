@@ -9,8 +9,8 @@
       <span class="header__subtitle">仅显示已发布课程</span>
     </div>
     <div class="course-modal__body">
-      <div class="search__container"">
-        <span class="search__label"">选择课程：</span>
+      <div class="search__container">
+        <span class="search__label">选择课程：</span>
 
         <!-- 接口字段 courseSetTitle -->
         <el-autocomplete

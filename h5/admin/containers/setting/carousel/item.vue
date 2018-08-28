@@ -7,7 +7,7 @@
       :show-file-list="false"
       >
       <img class="carousel-img" :src="item.image">
-      <span v-show="!item.image"><i class="text-18">+</i> 添加图片</span>
+      <span v-show="!item.image"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
     <div class="add-title pull-left">标题：<el-input size="mini" v-model="title" placeholder="请输入标题" clearable></el-input></div>
