@@ -1,0 +1,35 @@
+.log-operation .switch {
+  position: relative;
+  border-radius: 20px;
+  height: 20px;
+  width: 40px;
+  background: #ccc;
+  background: rgba(0, 0, 0, .32);
+  transition: all 0.3s ease;
+  vertical-align: middle;
+}
+.log-operation .switch.checked {
+  background: #428bca;
+  transition: all 0.3s ease;
+}
+.log-operation .switch.checked:before {
+  left: 22px;
+  transition: all 0.3s ease;
+}
+.log-operation .switch:before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+.log-operation .switch:hover {
+  cursor: pointer;
+}
+.log-operation .switch input {
+  display: none;
+}

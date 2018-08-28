@@ -4,6 +4,7 @@ namespace Biz\Article\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Biz\System\Annotation\Log;
 
 interface ArticleService
 {
@@ -41,8 +42,21 @@ interface ArticleService
 
     public function countArticles($conditions);
 
+    /**
+     * @param $article
+     *
+     * @return mixed
+     * @Log(module="article",action="create")
+     */
     public function createArticle($article);
 
+    /**
+     * @param $id
+     * @param $article
+     *
+     * @return mixed
+     * @Log(module="article",action="update")
+     */
     public function updateArticle($id, $article);
 
     public function batchUpdateOrg($articleIds, $orgCode);
@@ -58,6 +72,7 @@ interface ArticleService
      * @throws NotFoundException
      *
      * @return int
+     * @Log(module="article",action="update_property",funcName="getArticle",param="id")
      */
     public function setArticleProperty($id, $property);
 
@@ -68,6 +83,7 @@ interface ArticleService
      * @throws NotFoundException
      *
      * @return int
+     * @Log(module="article",action="cancel_property",funcName="getArticle",param="id")
      */
     public function cancelArticleProperty($id, $property);
 
@@ -77,6 +93,7 @@ interface ArticleService
      * @param $id
      *
      * @throws NotFoundException
+     * @Log(module="article",action="trash",funcName="getArticle")
      */
     public function trashArticle($id);
 
@@ -102,6 +119,12 @@ interface ArticleService
      */
     public function deleteArticlesByIds(array $ids);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="article",action="removeThumb",funcName="getArticle")
+     */
     public function removeArticlethumb($id);
 
     /**
@@ -127,8 +150,20 @@ interface ArticleService
 
     public function count($articleId, $field, $diff);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="article",action="publish",funcName="getArticle")
+     */
     public function publishArticle($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="article",action="unpublish",funcName="getArticle")
+     */
     public function unpublishArticle($id);
 
     public function changeIndexPicture($options);

@@ -12,6 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Dao\CacheStrategy;
 use Codeages\Biz\Framework\Dao\ArrayStorage;
+use Codeages\Biz\Framework\Service\ServiceProxy;
 
 class Biz extends Container
 {
@@ -26,6 +27,7 @@ class Biz extends Container
 
         $biz['debug'] = false;
         $biz['logger'] = null;
+        $biz['interceptors'] = new \ArrayObject();
         $biz['migration.directories'] = new \ArrayObject();
         $biz['console.commands'] = new \ArrayObject();
 
@@ -56,9 +58,9 @@ class Biz extends Container
 
         $biz['autoload.object_maker.service'] = function ($biz) {
             return function ($namespace, $name) use ($biz) {
-                $class = "{$namespace}\\Service\\Impl\\{$name}Impl";
+                $className = "{$namespace}\\Service\\Impl\\{$name}Impl";
 
-                return new $class($biz);
+                return new ServiceProxy($biz, $className);
             };
         };
 

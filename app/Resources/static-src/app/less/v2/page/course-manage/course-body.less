@@ -79,7 +79,7 @@
 }
 .courseset-manage-body__tip {
   margin-top: 8px;
-  color: @cd-dark-assist;
+  color: @tip-color;
   font-size: 12px;
   line-height: 1;
 }
@@ -101,7 +101,7 @@
 }
 
 .courses-manage-list {
-  padding-left: 0;
+  padding-left: 6px;
   list-style: none;
 }
 
@@ -143,7 +143,7 @@
     @media (min-width: @screen-sm-min) {
       line-height: 1;
     }
-    color: @cd-dark-assist;
+    color: @tip-color;
   }
 
 }
@@ -201,7 +201,7 @@
   margin-top: 8px;
   font-size: 12px;
   line-height: 1;
-  color: @cd-dark-assist;
+  color: @tip-color;
 }
 
 .course-mangae-info__group {
@@ -293,4 +293,10 @@
 
 .live-course-rule {
   margin-left: -6px;
+}
+
+.expiry-date-change {
+  .form-error-message {
+    position: absolute;
+  }
 }

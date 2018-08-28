@@ -262,10 +262,15 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $adjustDeduct;
     }
 
-    public function addDealer(ProductDealerService $dealer)
+    public function addDealer($dealer)
     {
         if (empty($this->dealers)) {
             $this->dealers = array();
+        }
+
+        $class = $dealer->getClass();
+        if (!($class instanceof ProductDealerService)) {
+            throw $this->createInvalidArgumentException('参数dealer非ProductDealerService实例');
         }
 
         $this->dealers[] = $dealer;

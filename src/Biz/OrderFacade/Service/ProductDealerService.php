@@ -7,7 +7,7 @@ use Biz\OrderFacade\Product\Product;
 interface ProductDealerService
 {
     /**
-     * @params $cookies 可供 dealBeforeCreateProduct 使用
+     * @param $cookies 可供 dealBeforeCreateProduct 使用
      */
     public function setParams($cookies = array());
 

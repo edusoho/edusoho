@@ -363,20 +363,10 @@ class ArticleServiceTest extends BaseTestCase
                 ),
             )
         );
-        $this->mockBiz(
-            'System:LogService',
-            array(
-                array(
-                    'functionName' => 'info',
-                    'withParams' => array('article', 'removeThumb', '文章#1removeThumb'),
-                ),
-            )
-        );
         $result = $this->getArticleService()->removeArticlethumb(1);
 
         $this->getFileService()->shouldHaveReceived('deleteFileByUri', array('thumb'));
         $this->getFileService()->shouldHaveReceived('deleteFileByUri', array('originalThumb'));
-        $this->getLogService()->shouldHaveReceived('info');
     }
 
     public function testDeleteArticle()

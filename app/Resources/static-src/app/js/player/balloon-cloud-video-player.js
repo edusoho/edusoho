@@ -54,7 +54,7 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     if (self.options.enablePlaybackRates) {
       extConfig = Object.assign(extConfig, {
-        playbackRates: ['1.0', '1.25', '1.5']
+        playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0']
       });
     }
 

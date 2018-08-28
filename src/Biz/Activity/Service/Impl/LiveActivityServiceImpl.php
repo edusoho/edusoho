@@ -75,7 +75,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->create($liveActivity);
     }
 
-    public function updateLiveActivity($id, &$fields, $activity)
+    public function updateLiveActivity($id, $fields, $activity)
     {
         $preLiveActivity = $liveActivity = $this->getLiveActivityDao()->get($id);
 
@@ -134,7 +134,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
 
-        return $liveActivity;
+        return array($liveActivity, $fields);
     }
 
     public function updateLiveStatus($id, $status)

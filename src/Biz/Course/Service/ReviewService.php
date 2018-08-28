@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Service;
 
+use Biz\System\Annotation\Log;
+
 interface ReviewService
 {
     public function getReview($id);
@@ -18,6 +20,12 @@ interface ReviewService
 
     public function saveReview($fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_review")
+     */
     public function deleteReview($id);
 
     public function countRatingByCourseId($courseId);
