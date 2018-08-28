@@ -118,6 +118,22 @@ export default {
       }
     }
   },
+  watch: {
+    copyModuleData: {
+      handler(data) {
+        this.$emit('updateModule', data);
+      },
+      deep: true,
+    },
+    categoryId: {
+      handler(value) {
+        if (!value.length) {
+          return;
+        }
+        this.moduleData.data.categoryId = value[0];
+      }
+    }
+  },
   data() {
     return {
       modalVisible: false,

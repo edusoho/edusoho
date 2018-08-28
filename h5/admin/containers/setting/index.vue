@@ -6,7 +6,9 @@
     <div class="find-body">
       <module-template v-for="(module, index) in modules"
         :module="module" :active="isActive(module)"
-        :key="index" @activeModule="activeModule">
+        :key="index"
+        @activeModule="activeModule"
+        @updateModule="updateHandler($event, index)">
       </module-template>
     </div>
 
@@ -59,7 +61,7 @@ export default {
       type: 'discovery',
       mode: 'draft',
     }).then((res) => {
-      this.modules = res;
+      this.modules = Object.values(res);
     })
 
     // 获得课程分类列表
@@ -76,6 +78,9 @@ export default {
     },
     activeModule({ moduleId }) {
       this.currentModule = moduleId;
+    },
+    updateHandler(data, index) {
+      console.log(data, 888);
     }
   }
 }

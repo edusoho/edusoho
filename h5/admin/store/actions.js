@@ -1,5 +1,6 @@
 import * as types from '@admin/store/mutation-types';
 import Api from '@admin/api';
+import treeEndTool from '@/utils/tree-end-tool';
 
 export const updateLoading = ({ commit }, { isLoading }) => {
   commit(types.UPDATE_LOADING_STATUS, { isLoading });
@@ -11,8 +12,11 @@ export const getCategories = ({ commit }) => {
       groupCode: 'course'
     }
   }).then((res) => {
-    commit(types.GET_CATEGORIES, res);
-    return res;
+    const formatedRes = treeEndTool(res, 'children', (child) => {
+      child = undefined;
+    })
+    commit(types.GET_CATEGORIES, formatedRes);
+    return formatedRes;
   })
 };
 

@@ -1,10 +1,12 @@
 <template>
   <div @click="activeModule">
     <carousel v-if="module.type === moduleType.slideShow"
-              :active="isActive"></carousel>
+              :active="isActive"
+              @updateModule="updateHandler"></carousel>
     <course v-if="module.type === moduleType.courseList"
             :active="isActive"
-            :moduleData="module"></course>
+            :moduleData="module"
+            @updateModule="updateHandler"></course>
   </div>
 </template>
 
@@ -51,6 +53,9 @@ export default {
   methods: {
     activeModule() {
       this.isActive = true;
+    },
+    updateHandler(data) {
+      this.$emit('updateModule', data);
     }
   }
 }
