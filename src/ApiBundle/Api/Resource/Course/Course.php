@@ -100,7 +100,7 @@ class Course extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
 
-        $courses = $this->getCourseService()->searchCoursesBySort($conditions, $sort, $offset, $limit);
+        $courses = $this->getCourseService()->searchBySort($conditions, $sort, $offset, $limit);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
