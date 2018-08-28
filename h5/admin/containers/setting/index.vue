@@ -35,6 +35,7 @@
 </template>
 <script>
 import items from '@/utils/footer-config'
+import ObjectArray2ObjectByKey from '@/utils/array2object';
 import Api from '@admin/api';
 import moduleTemplate from './module-template';
 import { mapMutations, mapState, mapActions } from 'vuex';
@@ -62,14 +63,6 @@ export default {
     }
   },
   created() {
-    // 保存设置
-    // this.saveDraft({
-    //   data: this.modules,
-    //   portal: 'h5',
-    //   type: 'discovery',
-    //   mode: 'draft',
-    // })
-
     // 读取设置
     this.getDraft({
       portal: 'h5',
@@ -98,6 +91,17 @@ export default {
       console.log(data, 888);
     },
     addModuleItem() {
+    },
+    save(mode) {
+      // 保存设置
+      const data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+
+      this.saveDraft({
+        data,
+        mode,
+        portal: 'h5',
+        type: 'discovery',
+      })
     }
   }
 }
