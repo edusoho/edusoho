@@ -2,7 +2,6 @@
   <module-frame containerClass="setting-carousel" :isActive="isActive">
     <div slot="preview" class="carousel-image-container">
       <img v-bind:src="copyModuleData.data[activeItemIndex].image.uri" class="carousel-image">
-      <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
       <div class="carousel-title ellipsis">{{copyModuleData.data[activeItemIndex].title}}</div>
     </div>
 
@@ -95,10 +94,6 @@ export default {
     selected(selected) {
       this.imgAdress = selected.imageUrl;
       this.activeItemIndex = selected.selectIndex;
-    },
-    handleRemove() {
-      // this.parts[0].data.splice(0, this.parts[0].data.length);
-      this.$el.remove();
     },
     getSortedCourses(courses) {
       this.courseSets = courses;
