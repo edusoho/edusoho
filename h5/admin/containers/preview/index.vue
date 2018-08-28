@@ -5,7 +5,7 @@
       <iframe class="preview-iframe" src="http://localhost:8011/" frameborder="0"></iframe>
       <div class="code-container">
         <div class="code-item">
-          <img class="code-img" src="static/images/code_default.png">
+          <img class="code-img" :src="qrcode">
           <div>手机扫码预览</div>
         </div>
         <el-button class="mrs btn-border-primary btn-common" @click="edit">返回编辑</el-button>
@@ -16,18 +16,35 @@
 </template>
 
 <script>
-import Api from '@admin/api'
+import { mapActions } from 'vuex';
+
 
 export default {
   data() {
     return  {
-
+      qrcode: '',
     }
   },
   computed: {
 
   },
+  created() {
+    const { preview, times, duration } = this.$route.query;
+    console.log(preview, times, duration)
+    this.getQrcode({
+      preview,
+      times,
+      duration,
+      route: 'homepage',
+    }).then(res => {
+      console.log(res);
+      this.qrcode = res.img;
+    });
+  },
   methods: {
+    ...mapActions([
+      'getQrcode'
+    ]),
     edit() {
       this.$router.push({
         name: 'admin'

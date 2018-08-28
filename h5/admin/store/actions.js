@@ -20,22 +20,33 @@ export const getCategories = ({ commit }) => Api.getCategories({
 export const getDraft = ({ commit }, { portal, type, mode }) => Api.getDraft({
   query: {
     portal,
-    type
+    type,
   },
   params: {
-    mode
+    mode,
   }
 });
 
 export const saveDraft = ({ commit }, { portal, type, mode, data }) => Api.saveDraft({
   params: {
     type,
-    mode
+    mode,
   },
   query: { portal },
-  data
+  data,
 });
 
 export const getCourseList = ({ commit }, params) => Api.getCourseList({
   params
+});
+
+export const getQrcode = ({ commit }, { route, preview, times, duration }) => Api.getQrcode({
+  query: {
+    route,
+  },
+  params: {
+    preview,
+    times,
+    duration,
+  },
 });

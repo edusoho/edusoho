@@ -48,7 +48,7 @@ import moduleDefault from '@admin/utils/module-default-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import Api from '@admin/api';
 import moduleTemplate from './module-template';
-import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -103,7 +103,7 @@ export default {
       return index === this.currentModuleIndex;
     },
     activeModule(index) {
-      this.currentModuleIndex = index === this.currentModuleIndex ? -1 : index;
+      this.currentModuleIndex = index;
     },
     updateHandler(data, index) {
       console.log(data, index, 'updateHandler');
@@ -117,7 +117,9 @@ export default {
     },
     save(mode, needTrans = true) {
       // 保存设置
+      const isPublish = mode === 'published';
       let data = this.modules;
+
       if (needTrans) {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
@@ -128,7 +130,14 @@ export default {
         portal: 'h5',
         type: 'discovery',
       }).then(() => {
-        this.$router.push({ name: 'preview' })
+        this.$router.push({
+          name: 'preview',
+          query: {
+            times: 1,
+            preview: isPublish ? 0 : 1,
+            duration: 60 * 5,
+          }
+        });
       })
     }
   }

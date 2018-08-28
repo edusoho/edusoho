@@ -7,12 +7,13 @@ const config = [
   }, {
     // 后台配置保存
     name: 'saveDraft',
-    url: '/pages/{portal}/settings',
-    method: 'POST',
     headers:{
       'Content-Type': 'application/json'
     },
+    url: '/pages/{portal}/settings',
+    method: 'POST',
   }, {
+    // 上传文件
     name: 'uploadFile',
     url: '/api/files',
     method: 'POST'
@@ -26,7 +27,13 @@ const config = [
     name: 'getCourseList',
     url: '/courses',
     method: 'GET',
-  },
+  }, {
+    // 获得二维码
+    name: 'getQrcode',
+    url: '/qrcode/{route}',
+    method: 'GET',
+    // noPrefix: true,
+  }
 ];
 
 export default config;

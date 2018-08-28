@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel-item clearfix" :class="active === index ? 'active' : ''" @click="selected(item, index)">
+  <div class="carousel-item clearfix" :class="{active: active === index}" @click="selected(index)">
     <el-upload
       class="add-img"
       action="string"
@@ -31,7 +31,7 @@
     props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
     data() {
       return {
-        activeIndex: 0,
+        activeIndex: this.active,
         input: '',
         linkTextShow: false
       };
@@ -75,8 +75,8 @@
           console.log(err, 'error');
         });
       },
-      selected(item, index) {
-        this.imgAdress = item.image.uri;
+      selected(index) {
+        this.imgAdress = this.item.image.uri;
         const activeStatus = this.isActive;
         this.activeIndex = index;
         this.$emit('selected',

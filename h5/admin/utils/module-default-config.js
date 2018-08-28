@@ -1,5 +1,5 @@
 export default {
-  slideShow: {
+  slideShow: Object.assign({}, {
     type: 'slide_show',
     moduleType: '',
     data: [{
@@ -11,8 +11,8 @@ export default {
         url: ''
       }
     }]
-  },
-  courseList: {
+  }),
+  courseList: Object.assign({}, {
     type: 'course_list',
     moduleType: '',
     data: {
@@ -24,8 +24,8 @@ export default {
       limit: '4',
       items: []
     }
-  },
-  poster: {
+  }),
+  poster: Object.assign({}, {
     type: 'poster',
     moduleType: '',
     data: {
@@ -36,5 +36,5 @@ export default {
         url: ''
       }
     }
-  }
+  })
 }

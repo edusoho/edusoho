@@ -86,10 +86,11 @@
 }
 
 .setting-button-group {
-  margin: 50px;
+  width: 790px;
+  margin: 50px 0;
   text-align: center;
   line-height: 54px;
-  box-shadow: 0 -2px 6px 0 rgba(0,0,0,0.10);
+  box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.1);
   &__button {
     width: 90px;
     height: 30px;
