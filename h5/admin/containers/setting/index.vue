@@ -43,6 +43,7 @@
 </template>
 <script>
 import items from '@/utils/footer-config'
+import moduleDefault from '@admin/utils/module-default-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import Api from '@admin/api';
 import moduleTemplate from './module-template';
@@ -60,52 +61,15 @@ export default {
       items,
       moduleItems: [{
           name: '轮播图',
-          default: {
-            "type": "slide_show",
-            "moduleType": "",
-            "data": [{
-              "title": "",
-              "image": {},
-              "link": {
-                "type": "url",
-                "target": null,
-                "url": ""
-              }
-            }]
-          }
+          default: moduleDefault.slideShow,
         },
         {
           name: '课程列表',
-          default: {
-            "type": "course_list",
-            "moduleType": "",
-            "data":
-            {
-              "title": "",
-              "sourceType": "condition",
-              "categoryId": "0",
-              "sort": "-studentNum",
-              "lastDays": "0",
-              "limit": "4",
-              "items": []
-            }
-          }
+          default: moduleDefault.courseList,
         },
         {
           name: '图片广告',
-          default: {
-            "type": "poster",
-            "moduleType": "",
-            "data":
-            {
-              "image": {},
-              "link": {
-                "type": "url",
-                "target": null,
-                "url": ""
-              }
-            }
-          }
+          default: moduleDefault.poster,
         }
       ]
     }
@@ -148,9 +112,9 @@ export default {
     },
     save(mode, needTrans = true) {
       // 保存设置
-      const data = this.modules;
+      let data = this.modules;
       if (needTrans) {
-        const data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+        data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
 
       this.saveDraft({

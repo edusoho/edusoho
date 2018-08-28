@@ -6,11 +6,11 @@
       :http-request="uploadImg"
       :show-file-list="false"
       >
-      <img class="carousel-img" :src="item.image">
-      <span v-show="!item.image"><i class="text-xlarge">+</i> 添加图片</span>
+      <img class="carousel-img" :src="item.image.uri">
+      <span v-show="!item.image.uri"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
-    <div class="add-title pull-left">标题：<el-input size="mini" v-model="title" placeholder="请输入标题" clearable></el-input></div>
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input></div>
     <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
       <el-tag
         class="courseLink"
@@ -33,7 +33,6 @@
       return {
         activeIndex: 0,
         input: '',
-        title: '',
         linkTextShow: false
       };
     },
@@ -64,7 +63,7 @@
           data: formData
         })
         .then((data) => {
-          this.item.image = data.uri;
+          this.item.image.uri = data.uri;
           this.$emit('selected',
           {
             selectIndex: this.activeIndex,
@@ -77,14 +76,14 @@
         });
       },
       selected(item, index) {
-        this.imgAdress = item.image;
+        this.imgAdress = item.image.uri;
         const activeStatus = this.isActive;
         this.activeIndex = index;
         this.$emit('selected',
           {
             selectIndex: index,
             activeStatus: true,
-            imageUrl: this.item.image
+            imageUrl: this.item.image.uri
           }
         );
       },
