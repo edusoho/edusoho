@@ -1414,6 +1414,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->searchWithJoinTableConditions($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function getCourseByConditions($conditions, $sort, $start, $limit)
+    {
+        $courses = array();
+        if (array_key_exists('studentNum', $sort)) {
+            $courses = $this->searchByStudentNumAndTimeZone($conditions, $start, $limit);
+        }
+
+        if (array_key_exists('createdTime', $sort)) {
+            unset($conditions['startTime']);
+            unset($conditions['endTime']);
+            $courses = $this->searchWithJoinTableConditions($conditions, $sort, $start, $limit);
+        }
+
+        if (array_key_exists('rating', $sort)) {
+            $courses = $this->searchByRatingAndTimeZone($conditions, $start, $limit);
+        }
+
+        return $courses;
+    }
+
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);

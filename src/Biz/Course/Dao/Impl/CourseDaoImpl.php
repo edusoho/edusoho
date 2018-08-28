@@ -148,9 +148,8 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $result;
     }
 
-    // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc
+    // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc LIMIT 0,8
 
-    //其他条件和limit分页待添加
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
