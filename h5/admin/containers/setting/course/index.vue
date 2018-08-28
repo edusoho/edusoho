@@ -74,7 +74,7 @@
                   :limit="copyModuleData.data.limit"
                   :courseList="copyModuleData.data.items"
                   @visibleChange="modalVisibleHandler"
-                  @sort="getSortedCourses"></course-modal>
+                  @updateCourses="getUpdatedCourses"></course-modal>
   </module-frame>
 </template>
 <script>
@@ -171,7 +171,7 @@ export default {
     }
   },
   methods: {
-    getSortedCourses(courses) {
+    getUpdatedCourses(courses) {
       this.copyModuleData.data.items = courses;
     },
     modalVisibleHandler(visible) {

@@ -2,24 +2,26 @@
   <div>
     <div class="setting-page">
       <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
-      <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>EduSoho 微网校</div>
+      <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>微网校</div>
 
+      <!-- 操作预览区域 -->
       <div class="find-body">
         <module-template v-for="(module, index) in modules"
           :module="module" :active="isActive(index)"
           :key="index"
           :index="index"
           @activeModule="activeModule"
-          @updateModule="updateHandler($event, index)"
+          @updateModule="updateModule($event, index)"
           @removeModule="removeModule($event, index)">
         </module-template>
       </div>
 
+      <!-- 底部添加组件按钮 -->
       <div class="find-section clearfix">
         <div class="section-title">点击添加组件</div>
         <el-button class="find-section-item" type="" size="medium"
           v-for="(item, index) in moduleItems"
-          @click="addModuleItem(item.default)"
+          @click="addModule(item.default)"
           :key="index">
           {{ item.name }}
         </el-button>
@@ -36,7 +38,9 @@
       </div>
     </div>
 
+    <!-- 发布预览按钮 -->
     <div class="setting-button-group">
+      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="reset()">重 置</el-button>
       <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="save('draft')">预 览</el-button>
       <el-button class="setting-button-group__button text-medium" type="primary" size="mini" @click="save('published')">发 布</el-button>
     </div>
@@ -81,17 +85,10 @@ export default {
     }
   },
   created() {
-    // 读取设置
-    this.getDraft({
-      portal: 'h5',
-      type: 'discovery',
-      mode: 'published',
-    }).then((res) => {
-      this.modules = Object.values(res);
-    })
+    this.reset();
 
     // 获得课程分类列表
-    this.getCategories()
+    this.getCategories();
   },
   methods: {
     ...mapActions([
@@ -105,18 +102,31 @@ export default {
     activeModule(index) {
       this.currentModuleIndex = index;
     },
-    updateHandler(data, index) {
-      console.log(data, index, 'updateHandler');
+    updateModule(data, index) {
+      console.log(data, index, 'updateModule');
     },
     removeModule(data, index) {
       console.log(data, index, 'removeModule');
       this.modules.splice(index, 1);
     },
-    addModuleItem(item) {
-      this.modules.push(item);
+    addModule(item) {
+      this.currentModuleIndex = this.modules.length;
+      console.log('addModule')
+      this.modules[this.currentModuleIndex] = {...item};
+      // this.modules.push({...item});
+    },
+    reset() {
+      // 重置配置
+      this.getDraft({
+        portal: 'h5',
+        type: 'discovery',
+        mode: 'published',
+      }).then((res) => {
+        this.modules = Object.values(res);
+      })
     },
     save(mode, needTrans = true) {
-      // 保存设置
+      // 保存配置
       const isPublish = mode === 'published';
       let data = this.modules;
 

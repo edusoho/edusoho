@@ -1,18 +1,18 @@
 export default {
-  slideShow: Object.assign({}, {
+  slideShow: {
     type: 'slide_show',
     moduleType: '',
     data: [{
       title: '',
       image: {},
       link: {
-        type: 'url',
+        type: 'course',
         target: null,
         url: ''
       }
     }]
-  }),
-  courseList: Object.assign({}, {
+  },
+  courseList: {
     type: 'course_list',
     moduleType: '',
     data: {
@@ -24,17 +24,17 @@ export default {
       limit: '4',
       items: []
     }
-  }),
-  poster: Object.assign({}, {
+  },
+  poster: {
     type: 'poster',
     moduleType: '',
     data: {
       image: {},
       link: {
         type: 'url',
-        target: null,
+        target: {},
         url: ''
       }
     }
-  })
+  }
 }

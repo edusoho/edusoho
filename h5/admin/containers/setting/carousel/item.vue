@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel-item clearfix" :class="{active: active === index}" @click="selected(index)">
+  <div class="carousel-item clearfix" :class="{ active: active === index }" @click="selected(index)">
     <el-upload
       class="add-img"
       action="string"
@@ -9,8 +9,9 @@
       <img class="carousel-img" :src="item.image.uri" v-show="item.image.uri">
       <span v-show="!item.image.uri"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
-    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
-    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input></div>
+    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove($event, index, itemNum)">
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input>
+    </div>
     <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
       <el-tag
         class="courseLink"
@@ -18,7 +19,7 @@
         :disable-transitions="true"
         @close="handleClose"
         v-show="linkTextShow">
-        <span class="text-content ellipsis">{{courseLinkText}}</span>
+        <span class="text-content ellipsis">{{ linkTextShow }}</span>
       </el-tag>
     </div>
   </div>
@@ -32,25 +33,24 @@
     data() {
       return {
         activeIndex: this.active,
-        input: '',
-        linkTextShow: false
       };
     },
-    watch: {
-      title(){
-        this.$emit('inputChange',
-        {
-          title: this.title,
-        })
-      }
-    },
     computed: {
-      courseLinkText() {
-        if (!this.courseSets[0]) {
-          return;
+      linkTextShow() {
+        return this.item.link.target && this.item.link.target.title;
+      },
+    },
+    watch: {
+      courseSets(sets) {
+        console.log(sets, 'courseSets')
+        if (sets.length) {
+          this.item.link.target = {
+            id: sets[0].id,
+            title: sets[0].title
+          }
+        } else {
+          this.item.link.target = {};
         }
-        this.linkTextShow = true;
-        return this.courseSets[0] ? this.courseSets[0].courseSetTitle :'';
       }
     },
     methods: {
@@ -67,7 +67,6 @@
           this.$emit('selected',
           {
             selectIndex: this.activeIndex,
-            activeStatus: true,
             imageUrl: data.uri
           });
         })
@@ -77,22 +76,18 @@
       },
       selected(index) {
         this.imgAdress = this.item.image.uri;
-        const activeStatus = this.isActive;
         this.activeIndex = index;
         this.$emit('selected',
           {
             selectIndex: index,
-            activeStatus: true,
             imageUrl: this.item.image.uri
           }
         );
       },
-      handleRemove(index, length) {
+      handleRemove(e, index, length) {
+        e.stopPropagation();
         if (length > 1) {
-          this.$emit('remove', {
-            imageUrl: '',
-            index: index
-          });
+          this.$emit('remove', index);
         } else {
           this.$message({
             message: '至少要留一张轮播图',
@@ -108,8 +103,7 @@
         this.$emit('chooseCourse');
       },
       handleClose() {
-        this.$emit('removeCourseLink');
-        this.linkTextShow = false;
+        this.$emit('removeCourseLink', this.index);
       },
     }
   }

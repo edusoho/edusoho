@@ -68,7 +68,7 @@ export default {
         return this.courseList;
       },
       set(courses) {
-        this.$emit('sort', courses);
+        this.$emit('updateCourses', courses);
       }
     }
   },

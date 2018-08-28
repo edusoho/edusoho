@@ -70,7 +70,7 @@
         <course-modal slot="modal" :visible="modalVisible" limit=1
                       :courseList="courseSets"
                       @visibleChange="modalVisibleHandler"
-                      @sort="getSortedCourses">
+                      @UpdatedCourses="getUpdatedCourses">
         </course-modal>
     </module-frame>
 </template>
@@ -125,8 +125,13 @@ export default {
             return this.courseSets[0] ? this.courseSets[0].courseSetTitle :'';
         }
     },
-    mounted() {
-        console.log(this.copyModuleData)
+    watch: {
+        copyModuleData: {
+            handler(data) {
+                this.$emit('updateModule', data);
+            },
+            deep: true,
+        },
     },
     methods: {
         uploadImg(item) {
@@ -150,7 +155,7 @@ export default {
         openModal() {
             this.modalVisible = true;
         },
-        getSortedCourses(courses) {
+        getUpdatedCourses(courses) {
             this.courseSets = courses;
         },
         removeCourseLink() {
