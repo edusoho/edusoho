@@ -137,13 +137,13 @@ export default {
             Api.uploadFile({
                 data: formData
             })
-                .then((data) => {
-                    this.copyModuleData.image = data;
-                    console.log(data)
-                })
-                .catch((err) => {
-                    console.log(err, 'error');
-                });
+            .then((data) => {
+                this.copyModuleData.image = data;
+                console.log(data)
+            })
+            .catch((err) => {
+                console.log(err, 'error');
+            });
         },
         handleRemove() {
             this.$el.remove();
