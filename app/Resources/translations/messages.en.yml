@@ -7265,6 +7265,7 @@ log.action.template.system.update_settings.cloud_attachment: 更新了<strong cl
 log.action.template.system.update_settings._app_last_check: 更新了<strong class="color-success">系统设置</strong>的应用检测设置
 log.action.template.system.update_settings.siteTrace: 更新了<strong class="color-success">系统设置</strong>的站点追踪设置
 log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
+log.action.template.order.adjust_price: 修改了<strong class="color-success">订单</strong> 《%title%》的价格
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -7788,6 +7789,7 @@ log.attr.system.update_settings.xapi.enabled: 数据实验室设置
 log.attr.system.update_settings.xapi.enabled.1: 开启
 log.attr.system.update_settings.xapi.enabled.0: 关闭
 log.attr.system.update_settings.xapi.enabled.: 关闭
+log.attr.order.pay_amount: 价格（分）
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

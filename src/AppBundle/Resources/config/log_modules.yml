@@ -321,4 +321,7 @@ system:
         modalField: all
     update_settings.xapi:
         modalField: all
-
+order:
+    adjust_price:
+        modalField:
+            ["pay_amount"]
