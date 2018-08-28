@@ -77,6 +77,23 @@
           font-size: 16px;
           cursor: pointer;
         }
+        .courseLink {
+          height: auto;
+          line-height: 1;
+          padding-left: 0;
+          background: none;
+          border: none;
+          font-size: 14px;
+          .text-content {
+            position: relative;
+            top: 2px;
+            display: inline-block;
+            max-width: 15em;
+          }
+          .el-icon-close {
+            right: -2px;
+          }
+        }
         &:not(:first-child) {
           border-top: 1px solid #e1e1e1;
         }
