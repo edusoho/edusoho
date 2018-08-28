@@ -111,6 +111,9 @@ class LogController extends BaseController
             $log['urlParamsJson'] = array();
             $log['shouldShowModal'] = false;
             $log['shouldShowTemplate'] = true;
+            if (empty($logData)) {
+                continue;
+            }
 
             $templateParam = array();
 
