@@ -1,6 +1,6 @@
 {% extends 'activity/content-layout.html.twig' %}
 
-{% do script(['libs/perfect-scrollbar.js','app/js/activity/download/index.js']) %}
+{% do script(['libs/perfect-scrollbar.js','downloadactivity/js/show/index.js']) %}
 
 {% block body %}
     {% set materials = find_materials_by_activity_id_and_source(activity.id, 'coursematerial') %}

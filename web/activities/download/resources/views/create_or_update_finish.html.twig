@@ -1,0 +1,20 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% set optionalDefault = 1 %}
+{% do script(['libs/ltc-sdk-client.js', 'downloadactivity/js/finish/index.js']) %}
+{% block  activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step3-form" >
+      <div class=" form-group">
+        <div class="col-sm-2 control-label">
+          <label>{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+        </div>
+        <div class="col-sm-4 form-control-static">
+          {{'course.plan_task.activity_manage.download.downloaded_tips'|trans}}
+          <select class="form-control hidden" id="finish-condition" name="condition" >
+            <option value="downloaded">{{'course.plan_task.activity_manage.download.downloaded_tips'|trans}}</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
