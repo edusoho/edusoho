@@ -9,7 +9,7 @@
       <img class="carousel-img" :src="item.image.uri" v-show="item.image.uri">
       <span v-show="!item.image.uri"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
-    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
+    <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove($event, index, itemNum)">
     <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input></div>
     <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
       <el-tag
@@ -67,7 +67,6 @@
           this.$emit('selected',
           {
             selectIndex: this.activeIndex,
-            activeStatus: true,
             imageUrl: data.uri
           });
         })
@@ -77,22 +76,18 @@
       },
       selected(item, index) {
         this.imgAdress = item.image.uri;
-        const activeStatus = this.isActive;
         this.activeIndex = index;
         this.$emit('selected',
           {
             selectIndex: index,
-            activeStatus: true,
             imageUrl: this.item.image.uri
           }
         );
       },
-      handleRemove(index, length) {
+      handleRemove(e, index, length) {
+        e.stopPropagation();
         if (length > 1) {
-          this.$emit('remove', {
-            imageUrl: '',
-            index: index
-          });
+          this.$emit('remove');
         } else {
           this.$message({
             message: '至少要留一张轮播图',

@@ -103,7 +103,7 @@ export default {
       return index === this.currentModuleIndex;
     },
     activeModule(index) {
-      this.currentModuleIndex = index === this.currentModuleIndex ? -1 : index;
+      this.currentModuleIndex = index;
     },
     updateHandler(data, index) {
       console.log(data, index, 'updateHandler');

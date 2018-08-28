@@ -20,7 +20,7 @@
           @remove="itemRemove"
           @removeCourseLink="removeCourseLink"></item>
       </div>
-      <el-button class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
+      <el-button class="btn-add-item" type="info" size="medium" @click="addItem" v-show="addBtnShow">添加一个轮播图</el-button>
     </div>
 
     <course-modal slot="modal" :visible="modalVisible" limit=1
@@ -48,6 +48,7 @@ export default {
     return  {
       activeItemIndex: 0,
       modalVisible: false,
+      addBtnShow: true,
       courseSets: [],
       title: '',
       itemNum: 0,
@@ -88,14 +89,12 @@ export default {
   },
   methods: {
     addItem() {
-      if (this.itemNum < 5) {
-        this.copyModuleData.data.push(moduleDefault.slideShow.data[0])
-        this.itemNum = this.copyModuleData.data.length;
-      } else {
-        this.$message({
-          message: '最多可以添加五张轮播图',
-          type: 'warning'
-        });
+      let itemLength = this.copyModuleData.data.length;
+      this.copyModuleData.data.push(moduleDefault.slideShow.data[0])
+      this.itemNum = itemLength;
+      if (itemLength == 4) {
+        this.addBtnShow = false;
+        return;
       }
     },
     selected(selected) {
@@ -115,9 +114,9 @@ export default {
       this.copyModuleData.data[this.activeItemIndex].title = inputChange.title;
     },
     itemRemove(remove) {
-      console.log(remove)
-      this.imgAdress = remove.imageUrl;
-      this.copyModuleData.data.splice(remove.index, 1);
+      this.copyModuleData.data.splice(this.activeItemIndex, 1);
+      this.itemNum = this.copyModuleData.data.length;
+      this.activeItemIndex = this.activeItemIndex - 1;
     },
     removeCourseLink() {
       this.courseSets = this.courseSets.splice(1, 1);
