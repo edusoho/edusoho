@@ -85,14 +85,6 @@ class Course extends AbstractResource
             unset($conditions['type']);
         }
 
-        if (isset($conditions['title'])) {
-            $conditions['titleLike'] = $conditions['title'];
-        }
-
-        if (isset($conditions['courseSetTitle'])) {
-            $conditions['courseSetTitleLike'] = $conditions['courseSetTitle'];
-        }
-
         $conditions['status'] = 'published';
         $conditions['courseSetStatus'] = 'published';
         $conditions['parentId'] = isset($conditions['parentId']) ? $conditions['parentId'] : 0;
@@ -106,14 +98,14 @@ class Course extends AbstractResource
             $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
             $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
         } else {
-            $courses = $this->getCourseService()->searchWithJoinTableConditions(
+            $courses = $this->getCourseService()->searchWithJoinCourseSet(
                 $conditions,
                 $sort,
                 $offset,
                 $limit
             );
         }
-        $total = $this->getCourseService()->countWithJoinTableConditions($conditions);
+        $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

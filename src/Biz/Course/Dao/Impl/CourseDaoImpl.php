@@ -129,9 +129,9 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
     }
 
-    public function searchWithJoinTableConditions($conditions, $orderBys, $start, $limit)
+    public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit)
     {
-        $builder = $this->createJoinQueryBuilder($conditions)
+        $builder = $this->createJoinCourseSetQueryBuilder($conditions)
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->select($this->table.'.*');
@@ -142,10 +142,17 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($this->table.'.'.$order, $sort);
         }
-
         $result = $builder->execute()->fetchAll();
 
         return $result;
+    }
+
+    public function countWithJoinCourseSet($conditions)
+    {
+        $builder = $this->createJoinCourseSetQueryBuilder($conditions)
+            ->select('COUNT(*)');
+
+        return (int) $builder->execute()->fetchColumn(0);
     }
 
     // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc LIMIT 0,8
@@ -192,42 +199,6 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseReviewSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
-    }
-
-    public function countWithJoinTableConditions($conditions)
-    {
-        $builder = $this->createJoinQueryBuilder($conditions)
-            ->select('COUNT(*)');
-
-        return (int) $builder->execute()->fetchColumn(0);
-    }
-
-    protected function createJoinQueryBuilder($conditions)
-    {
-        $builder = parent::createQueryBuilder($conditions);
-        $builder->innerJoin($this->table, 'course_set_v8', 'csv', 'csv.id = '.$this->table.'.courseSetId');
-
-        $joinConditions = array(
-            'csv.status = :courseSetStatus',
-        );
-
-        foreach ($joinConditions as $condition) {
-            $builder->andWhere($condition);
-        }
-
-        return $builder;
-    }
-
-    private function checkOrderBy($order, $sort, $allowOrderBys)
-    {
-        if (!in_array($order, $allowOrderBys, true)) {
-            throw $this->createDaoException(
-                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
-            );
-        }
-        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
-            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
-        }
     }
 
     public function declares()
@@ -334,5 +305,33 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         }
 
         return $builder;
+    }
+
+    protected function createJoinCourseSetQueryBuilder($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions);
+        $builder->innerJoin($this->table, 'course_set_v8', 'csv', 'csv.id = '.$this->table.'.courseSetId');
+
+        $joinConditions = array(
+            'csv.status = :courseSetStatus',
+        );
+
+        foreach ($joinConditions as $condition) {
+            $builder->andWhere($condition);
+        }
+
+        return $builder;
+    }
+
+    private function checkOrderBy($order, $sort, $allowOrderBys)
+    {
+        if (!in_array($order, $allowOrderBys, true)) {
+            throw $this->createDaoException(
+                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
+            );
+        }
+        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+        }
     }
 }

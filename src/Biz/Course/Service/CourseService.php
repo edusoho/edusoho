@@ -182,7 +182,7 @@ interface CourseService
 
     public function searchCourses($conditions, $sort, $start, $limit, $columns = array());
 
-    public function searchWithJoinTableConditions($conditions, $sort, $start, $limit, $columns = array());
+    public function searchWithJoinCourseSet($conditions, $sort, $start, $limit, $columns = array());
 
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit);
 
@@ -190,7 +190,7 @@ interface CourseService
 
     public function searchCourseCount($conditions);
 
-    public function countWithJoinTableConditions($conditions);
+    public function countWithJoinCourseSet($conditions);
 
     public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
 
