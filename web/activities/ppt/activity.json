@@ -18,7 +18,6 @@
     "content": "create_or_update_content.html.twig",
     "finish": "create_or_update_finish.html.twig",
     "show": "show.html.twig",
-    "update": "create_or_update.html.twig",
     "finish_tip": "finish_tip.html.twig"
   }
 }
