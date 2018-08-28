@@ -177,11 +177,20 @@ class Editor {
       this.$finishIframe.hide();
       this.$finishIframe.attr('src', this.taskConfig.finishUrl);
       this.$finishIframe.load(loadAnimation(() => {
+        this._sendContent();
         this._rendButton(3);
       }, this.$taskFinish));
     } else {
+      this._sendContent();
       this._rendButton(3);
     }
+  }
+
+  _sendContent() {
+    window.ltc.once('returnValidate',  (msg) => {
+      window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
+    });
+    window.ltc.emitChild('task-create-content-iframe', 'getValidate');
   }
 
   _inItStep1form() {

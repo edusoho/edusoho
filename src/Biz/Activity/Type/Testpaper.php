@@ -19,7 +19,11 @@ class Testpaper extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperActivityService()->getActivity($targetId);
+        $activity = $this->getTestpaperActivityService()->getActivity($targetId);
+        $testPaper = $this->getTestpaperService()->getTestpaper( $activity['mediaId']);
+        $activity['testpaper'] = $testPaper;
+
+        return $activity;
     }
 
     public function find($ids, $showCloud = 1)

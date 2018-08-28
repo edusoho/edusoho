@@ -3,6 +3,7 @@
 require_once 'dao/testpaper_activity_dao.php';
 
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
 
 class activity_testpaper extends Activity
 {
@@ -15,7 +16,11 @@ class activity_testpaper extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperActivityService()->getActivity($targetId);
+        $activity = $this->getTestpaperActivityService()->getActivity($targetId);
+        $testPaper = $this->getTestpaperService()->getTestpaper( $activity['mediaId']);
+        $activity['testpaper'] = $testPaper;
+
+        return $activity;
     }
 
     public function find($ids, $showCloud = 1)
