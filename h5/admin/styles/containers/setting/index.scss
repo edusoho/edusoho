@@ -83,3 +83,12 @@
     }
   }
 }
+
+.setting-button-group {
+  margin: 50px;
+  text-align: center;
+  &__button {
+    width: 90px;
+    height: 30px;
+  }
+}

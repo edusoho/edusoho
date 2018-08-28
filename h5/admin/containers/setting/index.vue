@@ -1,36 +1,43 @@
 <template>
-  <div class="setting-page">
-    <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
-    <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>EduSoho 微网校</div>
+  <div>
+    <div class="setting-page">
+      <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
+      <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>EduSoho 微网校</div>
 
-    <div class="find-body">
-      <module-template v-for="(module, index) in modules"
-        :module="module" :active="isActive(index)"
-        :key="index"
-        :index="index"
-        @activeModule="activeModule"
-        @updateModule="updateHandler($event, index)">
-      </module-template>
-    </div>
-
-    <div class="find-section clearfix">
-      <div class="section-title">点击添加组件</div>
-      <el-button class="find-section-item" type="" size="medium"
-        v-for="(item, index) in moduleItems"
-        @click="addModuleItem(item.default)"
-        :key="index">
-        {{ item.name }}
-      </el-button>
-    </div>
-
-    <div class="find-footer">
-      <div class="find-footer-item" v-for="item in items"
-          :class="{ active: item.name === 'find' }"
-          :style="footerItemStyle"
-          :key="item.type">
-        <img class="find-footer-item__icon" :src="item.name === 'find' ? item.active : item.normal" />
-        <span class="find-footer-item__text">{{ item.type }}</span>
+      <div class="find-body">
+        <module-template v-for="(module, index) in modules"
+          :module="module" :active="isActive(index)"
+          :key="index"
+          :index="index"
+          @activeModule="activeModule"
+          @updateModule="updateHandler($event, index)">
+        </module-template>
       </div>
+
+      <div class="find-section clearfix">
+        <div class="section-title">点击添加组件</div>
+        <el-button class="find-section-item" type="" size="medium"
+          v-for="(item, index) in moduleItems"
+          @click="addModuleItem(item.default)"
+          :key="index">
+          {{ item.name }}
+        </el-button>
+      </div>
+
+      <div class="find-footer">
+        <div class="find-footer-item" v-for="item in items"
+            :class="{ active: item.name === 'find' }"
+            :style="footerItemStyle"
+            :key="item.type">
+          <img class="find-footer-item__icon" :src="item.name === 'find' ? item.active : item.normal" />
+          <span class="find-footer-item__text">{{ item.type }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="setting-button-group">
+      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="save('draft')">预 览</el-button>
+      <el-button class="setting-button-group__button text-medium" type="primary" size="mini" @click="save('published')">发 布</el-button>
     </div>
   </div>
 </template>
@@ -151,6 +158,8 @@ export default {
         mode,
         portal: 'h5',
         type: 'discovery',
+      }).then(() => {
+        this.$router.push({ name: 'preview' })
       })
     }
   }
