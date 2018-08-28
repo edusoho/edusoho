@@ -10,6 +10,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Common\TimeMachine;
 
 class Course extends AbstractResource
 {
@@ -90,21 +91,16 @@ class Course extends AbstractResource
         $conditions['parentId'] = isset($conditions['parentId']) ? $conditions['parentId'] : 0;
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
+        if (!empty($conditions['lastDays'])) {
+            $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
+            $conditions['otherStartTime'] = $timeRange['startTime'];
+            $conditions['otherEndTime'] = $timeRange['endTime'];
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
 
-        if (array_key_exists('recommendedSeq', $sort)) {
-            $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
-            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
-        } else {
-            $courses = $this->getCourseService()->searchWithJoinCourseSet(
-                $conditions,
-                $sort,
-                $offset,
-                $limit
-            );
-        }
+        $courses = $this->getCourseService()->searchCoursesBySort($conditions, $sort, $offset, $limit);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));

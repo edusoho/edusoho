@@ -109,15 +109,15 @@ class PageSetting extends AbstractResource
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 if (!empty($discoverySetting['data']['lastDays'])) {
                     $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
-                    $conditions['startTime'] = $timeRange['startTime'];
-                    $conditions['endTime'] = $timeRange['endTime'];
+                    $conditions['otherStartTime'] = $timeRange['startTime'];
+                    $conditions['otherEndTime'] = $timeRange['endTime'];
                 }
 
                 $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
                 $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
                 $sort = $this->getSortByStr($discoverySetting['data']['sort']);
                 $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
-                $courses = $this->getCourseService()->getCourseByConditions($conditions, $sort, 0, $limit);
+                $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
                 $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
                 $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
                 foreach ($courses as &$course) {

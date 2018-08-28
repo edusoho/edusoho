@@ -1414,24 +1414,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->searchWithJoinCourseSet($conditions, $orderBy, $start, $limit, $columns);
     }
 
-    public function getCourseByConditions($conditions, $sort, $start, $limit)
+    public function searchBySort($conditions, $sort, $start, $limit)
     {
-        $courses = array();
-        if (array_key_exists('studentNum', $sort)) {
-            $courses = $this->searchByStudentNumAndTimeZone($conditions, $start, $limit);
+        if (array_key_exists('studentNum', $sort) && array_key_exists('otherEndTime', $conditions)) {
+            return $this->searchByStudentNumAndTimeZone($conditions, $start, $limit);
         }
 
-        if (array_key_exists('createdTime', $sort)) {
-            unset($conditions['startTime']);
-            unset($conditions['endTime']);
-            $courses = $this->searchWithJoinCourseSet($conditions, $sort, $start, $limit);
+        if (array_key_exists('rating', $sort) && array_key_exists('otherEndTime', $conditions)) {
+            return $this->searchByRatingAndTimeZone($conditions, $start, $limit);
         }
 
-        if (array_key_exists('rating', $sort)) {
-            $courses = $this->searchByRatingAndTimeZone($conditions, $start, $limit);
+        if (array_key_exists('recommendedSeq', $sort)) {
+            $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
+
+            return $this->searchByRecommendedSeq($conditions, $sort, $offset, $limit);
         }
 
-        return $courses;
+        return $this->searchWithJoinCourseSet($conditions, $sort, $start, $limit);
     }
 
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
@@ -2176,7 +2175,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
-    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit)
+    public function searchByRecommendedSeq($conditions, $sort, $offset, $limit)
     {
         $conditions['recommended'] = 1;
         $recommendCount = $this->countWithJoinCourseSet($conditions);
