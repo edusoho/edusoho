@@ -10,7 +10,8 @@
           :key="index"
           :index="index"
           @activeModule="activeModule"
-          @updateModule="updateHandler($event, index)">
+          @updateModule="updateHandler($event, index)"
+          @removeModule="removeModule($event, index)">
         </module-template>
       </div>
 
@@ -102,10 +103,14 @@ export default {
       return index === this.currentModuleIndex;
     },
     activeModule(index) {
-      this.currentModuleIndex = index;
+      this.currentModuleIndex = index === this.currentModuleIndex ? -1 : index;
     },
     updateHandler(data, index) {
-      console.log(data, 888);
+      console.log(data, index, 'updateHandler');
+    },
+    removeModule(data, index) {
+      console.log(data, index, 'removeModule');
+      this.modules.splice(index, 1);
     },
     addModuleItem(item) {
       this.modules.push(item);

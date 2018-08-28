@@ -5,7 +5,6 @@
                 <h5>广告图片</h5>
             </div>
             <img v-bind:src="copyModuleData.image.uri" class="poster-image">
-            <img class="icon-delete" src="static/images/delete.png" @click="handleRemove()" v-show="isActive">
         </div>
         <div slot="setting" class="poster-allocate">
             <header class="title">图片广告设置</header>
@@ -144,9 +143,6 @@ export default {
             .catch((err) => {
                 console.log(err, 'error');
             });
-        },
-        handleRemove() {
-            this.$el.remove();
         },
         modalVisibleHandler(visible) {
             this.modalVisible = visible;
