@@ -1,0 +1,24 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% set mediaType = activity.mediaType|default('audio') %}
+{% set fileType = 'audio' %}
+{% do script(['libs/ltc-sdk-client.js','audioactivity/js/finish/index.js']) %}
+{% block  activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step3-form" >
+      <div class="row form-group">
+        <div class="col-sm-2 control-label">
+          <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+        </div>
+        <div class="col-xs-4 form-control-static">
+          {{'course.plan_task.activity_manage.homework.submit'|trans}}
+          <select class="form-control hidden" id="condition-select" name="finishCondition">
+            {{ select_options({'submit':'course.plan_task.activity_manage.homework.submit'|trans}, homework.finishCondition['type']|default('score')) }}
+          </select>
+          <input type="hidden" name="finishScore" value="{{ homework.finishCondition['score']|default('0') }}" />
+          <input type="hidden" name="mediaType" value="homework" />
+
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
