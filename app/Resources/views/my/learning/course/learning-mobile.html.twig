@@ -27,13 +27,13 @@
                   <span class="tag-live"></span>
                 </span>
               {% endif %}
-              {{ lazy_img(filepath(course_set_cover(courseSet, 'middle'), 'course.png'), 'img-responsive', courseSet.title) }}
+              <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'small'), 'courseSet.png') }}">
             </a>
           </div>
           <div class="course-info">
             <div class="title">
               <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-                 {{course.title}}
+                 {{ get_formated_course_title(course) }}
               </a>
             </div>
             <div class="metas clearfix">
