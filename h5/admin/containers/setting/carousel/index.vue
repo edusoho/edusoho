@@ -89,8 +89,15 @@ export default {
   },
   methods: {
     addItem() {
-      this.copyModuleData.data.push(moduleDefault.slideShow.data[0])
-      this.itemNum = this.copyModuleData.data.length;
+      if (this.itemNum < 5) {
+        this.copyModuleData.data.push(moduleDefault.slideShow.data[0])
+        this.itemNum = this.copyModuleData.data.length;
+      } else {
+        this.$message({
+          message: '最多可以添加五张轮播图',
+          type: 'warning'
+        });
+      }
     },
     selected(selected) {
       this.imgAdress = selected.imageUrl;

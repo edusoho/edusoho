@@ -6,7 +6,7 @@
       :http-request="uploadImg"
       :show-file-list="false"
       >
-      <img class="carousel-img" :src="item.image.uri">
+      <img class="carousel-img" :src="item.image.uri" v-show="item.image.uri">
       <span v-show="!item.image.uri"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove(index, itemNum)">
