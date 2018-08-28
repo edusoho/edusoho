@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\Player\Service\PlayerService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -41,12 +42,23 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_free_activity_types', array($this, 'getCanFreeActivityTypes')),
             new \Twig_SimpleFunction('ltc_source', array($this, 'findLtcSource')),
             new \Twig_SimpleFunction('flash_player', array($this, 'flashPlayer')),
+            new \Twig_SimpleFunction('doc_player', array($this, 'docPlayer')),
         );
     }
 
     public function flashPlayer($globalId, $ssl)
     {
         return $this->getMaterialLibService()->player($globalId, $ssl);
+    }
+
+    public function docPlayer($doc, $ssl)
+    {
+        list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
+
+        return array(
+            'error' => $error,
+            'result' => $result,
+        );
     }
 
     public function findLtcSource($courseId, $taskId)
@@ -189,6 +201,14 @@ class ActivityExtension extends \Twig_Extension
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return PlayerService
+     */
+    protected function getPlayerService()
+    {
+        return $this->biz->service('Player:PlayerService');
     }
 
     /**
