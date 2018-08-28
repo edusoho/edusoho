@@ -5,8 +5,9 @@
 
     <div class="find-body">
       <module-template v-for="(module, index) in modules"
-        :module="module" :active="isActive(module)"
+        :module="module" :active="isActive(index)"
         :key="index"
+        :index="index"
         @activeModule="activeModule"
         @updateModule="updateHandler($event, index)">
       </module-template>
@@ -15,9 +16,9 @@
     <div class="find-section clearfix">
       <div class="section-title">点击添加组件</div>
       <el-button class="find-section-item" type="" size="medium"
-        v-for="item in moduleItems"
-        @click="addModuleItem"
-        :key="item.type">
+        v-for="(item, index) in moduleItems"
+        @click="addModuleItem(item.default)"
+        :key="index">
         {{ item.name }}
       </el-button>
     </div>
@@ -48,12 +49,57 @@ export default {
     return {
       title: 'EduSoho 微网校',
       modules: [],
-      currentModule: 'slide-1',
+      currentModuleIndex: '0',
       items,
-      moduleItems: [
-        { name: '轮播图' },
-        { name: '课程列表' },
-        { name: '图片广告' }
+      moduleItems: [{
+          name: '轮播图',
+          default: {
+            "type": "slide_show",
+            "moduleType": "",
+            "data": [{
+              "title": "",
+              "image": {},
+              "link": {
+                "type": "url",
+                "target": null,
+                "url": ""
+              }
+            }]
+          }
+        },
+        {
+          name: '课程列表',
+          default: {
+            "type": "course_list",
+            "moduleType": "",
+            "data":
+            {
+              "title": "",
+              "sourceType": "condition",
+              "categoryId": "0",
+              "sort": "-studentNum",
+              "lastDays": "0",
+              "limit": "4",
+              "items": []
+            }
+          }
+        },
+        {
+          name: '图片广告',
+          default: {
+            "type": "poster",
+            "moduleType": "",
+            "data":
+            {
+              "image": {},
+              "link": {
+                "type": "url",
+                "target": null,
+                "url": ""
+              }
+            }
+          }
+        }
       ]
     }
   },
@@ -76,21 +122,23 @@ export default {
     this.getCategories()
   },
   methods: {
-    ...mapActions ([
+    ...mapActions([
       'getCategories',
       'saveDraft',
       'getDraft',
     ]),
-    isActive(module) {
-      return module.moduleType === this.currentModule;
+    isActive(index) {
+      return index === this.currentModuleIndex;
     },
-    activeModule({ moduleId }) {
-      this.currentModule = moduleId;
+    activeModule(index) {
+      this.currentModuleIndex = index;
     },
     updateHandler(data, index) {
       console.log(data, 888);
     },
-    addModuleItem() {},
+    addModuleItem(item) {
+      this.modules.push(item);
+    },
     save(mode, needTrans = true) {
       // 保存设置
       const data = this.modules;

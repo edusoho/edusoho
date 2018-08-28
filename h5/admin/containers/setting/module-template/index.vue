@@ -33,6 +33,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    index: {
+      type: Number,
+      default: 0,
+    },
   },
   computed: {
     isActive: {
@@ -40,9 +44,7 @@ export default {
         return this.active;
       },
       set() {
-        this.$emit('activeModule', {
-          moduleId: this.module.moduleType
-        });
+        this.$emit('activeModule', this.index);
       }
     }
   },
