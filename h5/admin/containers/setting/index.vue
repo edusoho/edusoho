@@ -67,7 +67,7 @@ export default {
     this.getDraft({
       portal: 'h5',
       type: 'discovery',
-      mode: 'draft',
+      mode: 'published',
     }).then((res) => {
       this.modules = Object.values(res);
     })
@@ -90,11 +90,13 @@ export default {
     updateHandler(data, index) {
       console.log(data, 888);
     },
-    addModuleItem() {
-    },
-    save(mode) {
+    addModuleItem() {},
+    save(mode, needTrans = true) {
       // 保存设置
-      const data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+      const data = this.modules;
+      if (needTrans) {
+        const data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+      }
 
       this.saveDraft({
         data,
