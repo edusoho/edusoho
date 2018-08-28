@@ -7680,6 +7680,7 @@ log.attr.system.update_settings.post_num_rules.rules: 发贴设置
 log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled: 云问答开关
 log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled.1: 开启
 log.attr.system.update_settings.cloud_consult.cloud_consult_setting_enabled.0: 关闭
+log.attr.system.update_settings.cloud_consult.cloud_consult_expired_time: 云问答到期时间
 log.attr.system.update_settings.storage.upload_mode: 视频存储方式
 log.attr.system.update_settings.storage.upload_mode.local: 本地
 log.attr.system.update_settings.storage.upload_mode.cloud: 云视频
