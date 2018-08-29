@@ -38,7 +38,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $subtitle = $this->getSubtitleDao()->get($id);
         $fileId = $subtitle['subtitleId'];
         $file = $this->getUploadFileService()->getFile($fileId);
-        if (empty($file) || $file['type'] != 'subtitle') {
+        if (empty($file) || 'subtitle' != $file['type']) {
             throw $this->createNotFoundException("subtitleUploadFile{#$fileId} not found");
         }
 
@@ -84,6 +84,24 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         return true;
     }
 
+    public function setSubTitleUrls($lesson, $ssl = false)
+    {
+        $subTitles = $this->findSubtitlesByMediaId($lesson['mediaId'], $ssl);
+
+        $subTitleUrls = array();
+        foreach ($subTitles as $subTitle) {
+            if ('success' == $subTitle['convertStatus']) {
+                $subTitleUrls[] = $subTitle['url'];
+            }
+        }
+
+        if (empty($subTitleUrls)) {
+            $lesson['subTitleUrls'] = $subTitleUrls;
+        }
+
+        return $lesson;
+    }
+
     protected function fillMetas($subtitles, $ssl = false)
     {
         $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
@@ -91,7 +109,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
         $files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
         foreach ($files as $file) {
-            if (!($file['type'] == 'subtitle' || $file['targetType'] == 'subtitle')) {
+            if (!('subtitle' == $file['type'] || 'subtitle' == $file['targetType'])) {
                 continue;
             }
             $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
