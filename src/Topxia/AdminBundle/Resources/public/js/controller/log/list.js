@@ -16,6 +16,10 @@ define(function(require, exports, module) {
 			$(this).hide().parent().find('.show-data').show().end().find('.data').hide();
 		});
 
+		$("#switch-operation").on('click', function() {
+			var $form = $('#search-form');
+			$form.submit();
+		});
 
 		$("#log-module").change(function() {
 			var url = $('#log-action').data('url');
