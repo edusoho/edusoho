@@ -1,0 +1,31 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% do script(['libs/ltc-sdk-client.js', 'libs/jquery-nouislider.js','testpaperactivity/js/finish/index.js'], 300) %}
+
+{% block activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step3-view">
+    <form class="form-horizontal" id="step3-form" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+        </div>
+        <div class="col-xs-4 controls">
+          <select class="form-control" id="condition-select" name="condition">
+              {{ select_options({'score':'course.plan_task.activity_manage.testpaper.pass'|trans,'submit':'course.plan_task.activity_manage.testpaper.submit'|trans}, activity.ext.finishCondition['type']|default('score')) }}
+          </select>
+          <input type="hidden" name="finishScore" value="{{ activity.ext.finishCondition['finishScore']|default('0') }}" />
+          <input type="hidden" name="mediaType" value="testpaper" />
+        </div>
+      </div>
+
+      <div class="form-group js-score-form-group {% if activity.ext.finishCondition.type|default(null) == 'submit' %}hidden{% endif %}">
+        <div class="col-sm-offset-2 col-sm-8 color-gray">
+          <span>0</span>
+          <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
+          </div>
+          <span class="js-score-total"></span>{{'site.question.attr.score.unit'|trans}}
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

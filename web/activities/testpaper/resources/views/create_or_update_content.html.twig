@@ -1,0 +1,91 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% do script(['libs/ltc-sdk-client.js', 'libs/bootstrap-datetimepicker.js','testpaperactivity/js/manage/index.js'], 300) %}
+
+{% block activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form">
+      {% set course = get_course(activity.fromCourseId) %}
+      {% set testpapers = find_course_set_testpapers(course.courseSetId) %}
+      {% set features = get_features() %}
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+        </div>
+      </div>
+      <div class="form-group">
+          <div class="col-sm-2 control-label">
+              <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper'|trans}}</label>
+          </div>
+          <div class="col-sm-10 controls">
+              <select id="testpaper-media" class="form-control" name="mediaId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+                  <option value="">{{ 'course.plan_task.activity_manage.testpaper.choose'|trans }}</option>
+                  {% for testpaper in testpapers if testpaper %}
+                      <option value="{{ testpaper.id }}" {% if testpaper.id == activity.ext.mediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>
+                  {% endfor %}
+              </select>
+              {% if testpapers is empty %}
+                  <div class="help-block color-danger">
+                      {{'course.plan_task.activity_manage.testpaper.create'|trans({'%testpaperUrl%':path('course_set_manage_testpaper',{id:course.courseSetId})})|raw}}
+                  </div>
+              {% else %}
+                  <div class="help-block">{{'course.plan_task.activity_manage.testpaper.empty_tips'|trans}}</div>
+              {% endif %}
+          </div>
+      </div>
+
+      <div class="form-group" id="questionItemShowDiv" style="display:none;">
+          <div class="col-sm-2 control-label"></div>
+          <div class="col-sm-10 controls" id="questionItemShowTable"></div>
+      </div>
+
+      <div class="form-group">
+          <div class="col-sm-2 control-label"><label for="length">{{'course.plan_task.activity_manage.testpaper.time_limit'|trans}}</label></div>
+          <div class="col-sm-10 controls radios">
+              <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0)}}"> {{'site.date.minute'|trans}}
+              <div class="help-block">{{'course.plan_task.activity_manage.testpaper.time_length_tips'|trans}}</div>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <div class="col-sm-2 control-label"><label>{{'course.plan_task.activity_manage.testpaper.times'|trans}}</label></div>
+          <div class="col-sm-10 controls radios">
+              {{ radios('doTimes', {'0':'course.plan_task.activity_manage.testpaper.times.always'|trans, '1':'course.plan_task.activity_manage.testpaper.times.once'|trans}, activity.ext.doTimes|default('normal')) }}
+          </div>
+      </div>
+
+      <div class="form-group" {% if activity.ext.doTimes|default('0') == 1 %}style="display:none;" {% endif %}>
+          <div class="col-sm-2 control-label"><label for="lesson-redo-interval-field">{{'course.plan_task.activity_manage.testpaper.redo_interval'|trans}}</label></div>
+          <div class="col-sm-10 controls">
+              <input id="lesson-redo-interval-field" class="form-control inline-block width-150" type="text" name="redoInterval" value="{{ activity.ext.redoInterval|default('0') }}"> {{'site.date.hour'|trans}}
+              <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'course.plan_task.activity_manage.testpaper.redo_interval_tips'|trans}}"></i>
+              <div class="help-block">{{'course.plan_task.activity_manage.testpaper.time_limit_tips'|trans}}</div>
+          </div>
+      </div>
+
+      <div class="form-group starttime-check-div" {% if activity.ext.doTimes|default('0') == 0 %}style="display:none;" {% endif %}>
+          <div class="col-sm-2 control-label">
+              <label for="startTime">{{'course.plan_task.activity_manage.testpaper.start_time'|trans}}</label>
+          </div>
+          <div class="col-sm-10 controls radios">
+              {{ radios('testMode', {'normal':'course.plan_task.activity_manage.testpaper.mode.always'|trans, 'realTime':'course.plan_task.activity_manage.testpaper.mode.realTime'|trans}, activity.ext.testMode|default('normal')) }}
+          </div>
+          <div class="col-sm-10 mtm starttime-input pull-right {% if activity.ext.testMode|default('normal') == 'normal' %} hidden {% endif %}">
+              <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" autocomplete="off" value="{% if activity|default(null) and activity.startTime|default(0) != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" >
+          </div>
+      </div>
+    </form>
+  </div>
+  {% if 'lesson_credit' in features %}
+      <div class="form-group">
+          <div class="col-sm-2 control-label"><label for="lesson-title-field">{{'course.plan_task.activity_manage.testpaper.mode.require_credit'|trans}}</label></div>
+          <div class="col-sm-10 controls">
+              <input class="form-control widt-input width-150" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'site.data.score'|trans}}
+              <div class="help-block">{{'course.plan_task.activity_manage.testpaper.mode.require_credit_tips'|trans}}</div>
+          </div>
+      </div>
+  {% endif %}
+{% endblock %}
