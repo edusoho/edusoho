@@ -24,10 +24,9 @@
       'e-swipe': swipe,
       'e-poster': poster,
     },
-    data () {
+    data() {
       return {
         parts: [],
-        coursesList: [],
       };
     },
     computed: {
@@ -37,8 +36,8 @@
     },
     created() {
       Api.discoveries()
-        .then((data) => {
-          this.parts = data;
+        .then((res) => {
+          this.parts = Object.values(res);
         })
         .catch((err) => {
           console.log(err, 'error');

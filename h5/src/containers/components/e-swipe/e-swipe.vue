@@ -5,13 +5,13 @@
         <!-- course -->
         <div class="item-container" v-if="slide.link.type === 'course'">
           <div @click="jumpTo(slide.link.id)">
-            <img v-bind:src="slide.image">
+            <img v-bind:src="slide.image.uri">
           </div>
         </div>
         <!-- url -->
         <div class="item-container" v-if="slide.link.type === 'url'">
           <a v-bind:href="slide.link.url">
-            <img v-bind:src="slide.image">
+            <img v-bind:src="slide.image.uri">
           </a>
         </div>
       </van-swipe-item>
