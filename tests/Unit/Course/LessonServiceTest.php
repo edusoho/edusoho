@@ -410,7 +410,7 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1),
+                'returnValue' => array('id' => 1, 'title' => 'test', 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1),
             ),
             array(
                 'functionName' => 'findByCopyId',
@@ -458,7 +458,7 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0),
+                'returnValue' => array('id' => 1, 'title' => 'test', 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0),
             ),
             array(
                 'functionName' => 'findByCopyId',
