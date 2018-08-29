@@ -5,7 +5,7 @@
   {% set currentOrgCode = orgCode|default(app.user.orgCode) %}
   {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : currentOrgCode }) %}
   <div class="course-title form-group">
-    <div class="col-md-2 controls-label text-lg">
+    <div class="mlm course-org-title controls-label text-lg">
       <div class="course-piece title">
         {{'site.org'|trans}}
       </div>
