@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\User\UserException;
 
 class PageDiscovery extends AbstractResource
 {
@@ -23,21 +24,19 @@ class PageDiscovery extends AbstractResource
         if (!empty($params['preview'])) {
             $token = $this->getTokenService()->verifyToken('qrcode_url', $token);
             if (empty($token)) {
-                throw new \Exception('Error Processing Request', 1);
+                throw UserException::PERMISSION_DENIED();
             }
             $user = $this->getUserService()->getUser($token['userId']);
             if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-                throw new \Exception('Error Processing Request', 1);
+                throw UserException::PERMISSION_DENIED();
             }
             $mode = 'draft';
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
-                $courses = $discoverySetting['data']['items'];
-                $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
-                $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
-                $discoverySetting['data']['items'] = $courses;
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
             }
         }
 

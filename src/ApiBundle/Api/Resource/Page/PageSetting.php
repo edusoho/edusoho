@@ -97,15 +97,13 @@ class PageSetting extends AbstractResource
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
-                $courses = $discoverySetting['data']['items'];
-                $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
-                $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
-                foreach ($courses as &$course) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+                foreach ($discoverySetting['data']['items'] as &$course) {
                     $courseFilter = new CourseFilter();
                     $courseFilter->setMode(Filter::PUBLIC_MODE);
                     $courseFilter->filter($course);
                 }
-                $discoverySetting['data']['items'] = $courses;
             }
         }
 
