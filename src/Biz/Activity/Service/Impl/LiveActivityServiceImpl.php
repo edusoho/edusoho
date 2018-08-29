@@ -40,10 +40,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'mediaId' => $liveActivity['id'],
             'mediaType' => 'live',
         );
-        $orderBy = 'endTime';
-        $start = 0;
-        $limit = 1;
-        $activities = $this->getActivityDao()->search($conditions, $orderBy, $start, $limit);
+        $activities = $this->getActivityDao()->search($conditions, array('endTime' => 'DESC'), 0, 1);
         if (empty($activities)) {
             throw $this->createNotFoundException('无此直播活动');
         }
