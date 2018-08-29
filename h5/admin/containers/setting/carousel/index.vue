@@ -126,7 +126,7 @@ export default {
       this.copyModuleData.data.splice(index, 1);
     },
     removeCourseLink(index) {
-      this.courseSets[index].splice(1, 1);
+      this.copyModuleData.data[index].link.target = '';
     }
   }
 }
