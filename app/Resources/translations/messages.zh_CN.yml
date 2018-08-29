@@ -8153,6 +8153,8 @@ log.module.open_course: 公开课
 log.module.live: 直播
 log.module.role: 角色
 log.module.thread: 话题
+log.module.mobile: 手机客户端
+log.module.wap: 微网校
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
