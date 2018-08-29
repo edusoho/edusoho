@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Activity\Dao\ActivityDao;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -27,6 +28,28 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function findLiveActivitiesByIds($ids)
     {
         return $this->getLiveActivityDao()->findByIds($ids);
+    }
+
+    public function findActivityByLiveActivityId($id)
+    {
+        $liveActivity = $this->getLiveActivityDao()->get($id);
+        if (empty($liveActivity)) {
+            throw $this->createNotFoundException('无此直播');
+        }
+        $conditions = array(
+            'mediaId' => $liveActivity['id'],
+            'mediaType' => 'live',
+        );
+        $activities = $this->getActivityDao()->search($conditions, array('endTime' => 'DESC'), 0, 1);
+        if (empty($activities)) {
+            throw $this->createNotFoundException('无此直播活动');
+        }
+        if (!isset($activities[0])) {
+            throw $this->createNotFoundException('无此直播活动');
+        }
+        $activity = array_merge($activities[0], $liveActivity);
+
+        return $activity;
     }
 
     public function createLiveActivity($activity, $ignoreValidation = false)
@@ -126,12 +149,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
 
-        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_activity', "修改直播活动（#{$activity['id']}, #{$liveActivity['id']}）", array(
-            'preActivity' => $activity,
-            'preLiveActivity' => $preLiveActivity,
-            'newLiveActivity' => $liveActivity,
-        ));
-
         $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
 
         return array($liveActivity, $fields);
@@ -165,7 +182,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
             $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId']);
-            $this->getLogService()->info(AppLoggerConstant::LIVE, 'delete_live_activity', "删除直播活动（#{$liveActivity['id']}）", $liveActivity);
         }
     }
 
@@ -300,5 +316,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
     }
 }

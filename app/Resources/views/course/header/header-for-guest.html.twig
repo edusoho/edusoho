@@ -74,7 +74,7 @@
         
         {% if onDiscount %}
           <div class="cd-mb8">
-            <span class="course-detail__label">{{ 'course.activity'|trans }}</span>
+            <span class="course-detail__label">{{ 'plugin.acitivity'|trans }}</span>
             <span class="text-12 color-warning">
               <b class="hidden-xs course-detail-activity-title">{{ course.discount.name|sub_text(10) }}</b><span class="cd-text-medium cd-ml16" id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}></span><i class="es-icon es-icon-accesstime text-14 mls cd-text-medium"></i>
             <span>

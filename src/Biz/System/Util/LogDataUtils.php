@@ -78,6 +78,7 @@ class LogDataUtils
                 'content',
                 'filename',
                 'stem',
+                'subject',
             ),
         );
 
@@ -115,6 +116,9 @@ class LogDataUtils
                 'timeConvent',
             ),
             'expiryEndDate' => array(
+                'timeConvent',
+            ),
+            'expiryValue' => array(
                 'timeConvent',
             ),
             'password' => array(
