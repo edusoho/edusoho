@@ -94,7 +94,7 @@ const filters = [
           code = '课程不可加入';
           break;
         case 'course.buy_expired':
-          code = '购买有效期已过 ';
+          code = '购买有效期已过';
           break;
         case 'course.expired':
           code = '学习有效期已过';
