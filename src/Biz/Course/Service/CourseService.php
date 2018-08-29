@@ -98,8 +98,21 @@ interface CourseService
      */
     public function deleteCourse($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close_course",funcName="getCourse")
+     */
     public function closeCourse($id);
 
+    /**
+     * @param $id
+     * @param bool $withTasks
+     *
+     * @return mixed
+     * @Log(module="course",action="publish_course",funcName="getCourse",param="id")
+     */
     public function publishCourse($id, $withTasks = false);
 
     /**

@@ -1100,11 +1100,18 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         foreach ($tasks as $task) {
             $newTask = $this->getTaskDao()->update($task['id'], array('isOptional' => $isOptional));
+            if (1 == $isOptional) {
+                $action = 'task_set_optional';
+            } else {
+                $action = 'task_unset_optional';
+            }
 
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})的选修状态", array(
-                'oldTask' => $task,
-                'task' => $newTask,
-            ));
+            $infoData = array(
+                'courseId' => $task['courseId'],
+                'title' => $task['title'],
+            );
+
+            $this->getLogService()->info('course', $action, "更新任务《{$task['title']}》的选修状态", $infoData);
             $this->dispatchEvent('course.task.updateOptional', new Event($newTask, $task));
         }
     }
