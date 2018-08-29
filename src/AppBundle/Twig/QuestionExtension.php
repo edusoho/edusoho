@@ -27,8 +27,7 @@ class QuestionExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('find_question_num_group_by_', array($this, 'getQuestionTypes')),
-            new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate')),
+            new \Twig_SimpleFunction('find_question_num_by_course_id', array($this, 'getQuestionTypes')),
         );
     }
 
