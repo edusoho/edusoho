@@ -1427,7 +1427,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (array_key_exists('recommendedSeq', $sort)) {
             $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
 
-            return $this->searchByRecommendedSeq($conditions, $sort, $offset, $limit);
+            return $this->searchByRecommendedSeq($conditions, $sort, $start, $limit);
         }
 
         return $this->searchWithJoinCourseSet($conditions, $sort, $start, $limit);
