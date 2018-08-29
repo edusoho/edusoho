@@ -7265,6 +7265,9 @@ log.action.template.system.update_settings.cloud_attachment: 更新了<strong cl
 log.action.template.system.update_settings._app_last_check: 更新了<strong class="color-success">系统设置</strong>的应用检测设置
 log.action.template.system.update_settings.siteTrace: 更新了<strong class="color-success">系统设置</strong>的站点追踪设置
 log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
+log.action.template.live.update_live_activity: 更新了<strong class="color-success">直播</strong>活动 《%title%》
+log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
+log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.order.adjust_price: 修改了<strong class="color-success">订单</strong> 《%title%》的价格
 
 log.field.detail: 详情
