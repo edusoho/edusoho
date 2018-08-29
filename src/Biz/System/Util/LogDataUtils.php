@@ -78,6 +78,7 @@ class LogDataUtils
                 'content',
                 'filename',
                 'stem',
+                'subject',
             ),
         );
 
