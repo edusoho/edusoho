@@ -3,6 +3,12 @@
 {% block js %}
 {% endblock %}
 
+{% block coursesetImg %}
+  <a target="_blank" href="{{ courseSet.redirect_path }}">
+    <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+  </a>
+{% endblock %}
+
 {% block coursesetTitle %}
   <a class="cd-link-major" target="_blank" href="{{ courseSet.redirect_path }}">{{ courseSet.title }}</a>
 {% endblock %}

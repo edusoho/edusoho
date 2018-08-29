@@ -3,6 +3,12 @@
 {% block js %}
 {% endblock %}
 
+{% block coursesetImg %}
+  <a href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">
+    <img class="courseset-manage-header__img" src="{{ filepath(course.largePicture, 'course.png') }}" />
+  </a>
+{% endblock %}
+
 {% block btn %}
   <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a>
   {% if course.status != 'published' %}
