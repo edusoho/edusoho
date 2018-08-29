@@ -27,6 +27,13 @@ export default class Homework {
         this.validator2.form();
       }
     });
+    window.ltc.on('getActivity', function(msg){
+      let validator = $('#step2-form').data('validator');
+      console.log(validator);
+      if (validator && validator.form()) {
+        window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
   }
 
   initCkeditor(validator) {

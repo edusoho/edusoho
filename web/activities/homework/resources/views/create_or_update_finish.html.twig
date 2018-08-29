@@ -1,7 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% set mediaType = activity.mediaType|default('audio') %}
-{% set fileType = 'audio' %}
-{% do script(['libs/ltc-sdk-client.js','audioactivity/js/finish/index.js']) %}
+{% set homework = activity.ext|default(null) %}
+{% do script(['libs/ltc-sdk-client.js','homeworkactivity/js/finish/index.js']) %}
 {% block  activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step3-form" >
