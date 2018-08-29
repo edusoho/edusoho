@@ -37,6 +37,34 @@ course:
                     id: id
         modalField:
             ["title", "subtitle", "originPrice", "buyExpiryTime", "expiryMode", "expiryDays", "expiryStartDate", "expiryEndDate", "enableFinish", "enableAudio", "buyable", "tryLookable", "tryLookLength", "serializeMode"]
+    publish_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+    close_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+    lesson_set_optional:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    lesson_unset_optional:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
     update_thread:
         modalField: all
     add_student:
@@ -79,6 +107,13 @@ course:
                     id: 0.courseId
             %title%: 0.title
     add_task:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    update_task_optional:
         templateParam:
             %url%:
                 type: url
@@ -321,7 +356,21 @@ system:
         modalField: all
     update_settings.xapi:
         modalField: all
+    update_settings.wap:
+        modalField: all
+    update_settings.mobile:
+        modalField:
+            ["enabled", "about", "logo"]
+    update_settings.meCount:
+        notDisplay: 1
+    update_settings.magic:
+        notDisplay: 1
 order:
     adjust_price:
         modalField:
             ["pay_amount"]
+live:
+    generate_live_replay:
+        templateParam:
+            %title%: 0.subject
+

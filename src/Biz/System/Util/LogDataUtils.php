@@ -85,6 +85,21 @@ class LogDataUtils
         return $config;
     }
 
+    public static function getUnDisplayModuleAction()
+    {
+        $config = self::getYmlConfig();
+        $returnActions = array();
+        foreach ($config as $module => $actions) {
+            foreach ($actions as $action => $format) {
+                if (array_key_exists('notDisplay', $format) && 1 == $format['notDisplay']) {
+                    $returnActions[] = $action;
+                }
+            }
+        }
+
+        return $returnActions;
+    }
+
     public static function trans($message, $module, $action)
     {
         $prefixs = self::getTransPrefix($module, $action);
@@ -119,6 +134,9 @@ class LogDataUtils
                 'timeConvent',
             ),
             'expiryValue' => array(
+                'timeConvent',
+            ),
+            'cloud_consult_expired_time' => array(
                 'timeConvent',
             ),
             'password' => array(

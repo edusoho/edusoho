@@ -67,7 +67,6 @@ class SettingController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
 
-            $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
             $this->setFlashMessage('success', 'site.save.success');
         }
         try {
@@ -152,8 +151,6 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', '更新网校$type图片', array($type => $mobile[$type]));
-
         $response = array(
             'path' => $mobile[$type],
             'url' => $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
@@ -168,8 +165,6 @@ class SettingController extends BaseController
         $setting[$type] = '';
 
         $this->getSettingService()->set('mobile', $setting);
-
-        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
 
         return $this->createJsonResponse(true);
     }
