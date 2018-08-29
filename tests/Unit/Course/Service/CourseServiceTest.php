@@ -871,28 +871,28 @@ class CourseServiceTest extends BaseTestCase
     }
 
     //recommendCount=2,offset=0,limit=2，整页都是推荐课程
-    public function testSearchCourseByRecommendedSeqCondition1()
+    public function testSearchByRecommendedSeqCondition1()
     {
         $this->createRecommendCourses();
-        $result = $this->getCourseService()->searchCourseByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 0, 2);
+        $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 0, 2);
         $this->assertEquals('课程标题1', $result[0]['courseSetTitle']);
         $this->assertEquals('课程标题2', $result[1]['courseSetTitle']);
     }
 
     //recommendCount=2,offset=2,limit=2，整页都不是推荐课程
-    public function testSearchCourseByRecommendedSeqCondition2()
+    public function testSearchByRecommendedSeqCondition2()
     {
         $this->createRecommendCourses();
-        $result = $this->getCourseService()->searchCourseByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 2, 2);
+        $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 2, 2);
         $this->assertEquals('课程标题4', $result[0]['courseSetTitle']);
         $this->assertEquals('课程标题5', $result[1]['courseSetTitle']);
     }
 
     //recommendCount=2,offset=1,limit=2，既有推荐也有非推荐课程
-    public function testSearchCourseByRecommendedSeqCondition3()
+    public function testSearchByRecommendedSeqCondition3()
     {
         $this->createRecommendCourses();
-        $result = $this->getCourseService()->searchCourseByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 1, 2);
+        $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 1, 2);
         $this->assertEquals('课程标题2', $result[0]['courseSetTitle']);
         $this->assertEquals('课程标题4', $result[1]['courseSetTitle']);
     }
