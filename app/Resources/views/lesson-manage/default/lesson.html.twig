@@ -14,7 +14,23 @@
 
       <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not task.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% if not task.isOptional %}
-        {{'course.lesson'|trans}}<span class="number mls">{{ lesson.number }}</span>：
+        {% if course['isShowUnpublish']|default(false) %}
+          {% set displayedLessonNum = lesson.number %}
+        {% else %}
+          {% if lesson.status == 'published' %}
+            {% set displayedLessonNum = lesson.published_number %}
+          {% else %}
+            {% set displayedLessonNum = '' %}
+          {% endif %}
+        {% endif %}
+
+        {% if displayedLessonNum != '' %}
+          {{'course.lesson'|trans}}
+        {% endif %}
+        <span class="number mls">{{ displayedLessonNum }}</span>
+        {% if displayedLessonNum != '' %}
+          ：
+        {% endif %}
       {% endif %}
       {{ lesson.title|sub_text(30) }}
 
