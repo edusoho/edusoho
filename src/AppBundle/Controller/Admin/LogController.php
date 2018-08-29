@@ -16,8 +16,10 @@ class LogController extends BaseController
         $systemUser = $this->getUserService()->getUserByType('system');
         $conditions['exceptedUserId'] = $systemUser['id'];
 
+        $hasSystemOperation = 0;
         if (isset($conditions['hasSystemOperation']) && 1 == $conditions['hasSystemOperation']) {
             unset($conditions['exceptedUserId']);
+            $hasSystemOperation = 1;
         }
 
         $conditions['excludeActions'] = LogDataUtils::getUnDisplayModuleAction();
@@ -54,7 +56,7 @@ class LogController extends BaseController
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
-            'hasSystemOperation' => empty($conditions['exceptedUserId']) ? 0 : 1,
+            'hasSystemOperation' => $hasSystemOperation,
         ));
     }
 
