@@ -1,7 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 {% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'videoactivity/js/create/index.js']) %}
 {% block activity_step %}
-{{ dump(activity) }}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form" >
       <div class="form-group">
