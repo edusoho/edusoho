@@ -20,10 +20,10 @@ class LogController extends BaseController
             unset($conditions['exceptedUserId']);
         }
 
-        $conditions['actions'] = LogDataUtils::getUnDisplayModuleAction();
+        $conditions['notExcludeActions'] = LogDataUtils::getUnDisplayModuleAction();
 
         if (isset($conditions['showAllLog']) && 1 == $conditions['showAllLog']) {
-            unset($conditions['actions']);
+            unset($conditions['notExcludeActions']);
         }
 
         $paginator = new Paginator(

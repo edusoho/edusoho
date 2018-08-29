@@ -1100,11 +1100,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         foreach ($tasks as $task) {
             $newTask = $this->getTaskDao()->update($task['id'], array('isOptional' => $isOptional));
-            if (1 == $isOptional) {
-                $action = 'task_set_optional';
-            } else {
-                $action = 'task_unset_optional';
-            }
+
+            $action = 1 == $isOptional ? 'task_set_optional' : 'task_unset_optional';
 
             $infoData = array(
                 'courseId' => $task['courseId'],
