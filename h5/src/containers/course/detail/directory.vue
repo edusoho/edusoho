@@ -26,7 +26,7 @@
                 <span>{{ task.title }}</span>
                 <span>{{ task.task | taskType }}{{ task.task | filterTask }}</span>
               </div>
-              <div :class="['lesson-cell__status', task.status]">
+              <div :class="['lesson-cell__status', details.member ? '' : task.status]">
                 {{ filterTaskStatus(task) }}
               </div>
             </div>
@@ -138,9 +138,9 @@
         return '';
       },
       filterTaskStatus (task){
-        if (task.status === 'is-tryLook') {
+        if (!this.details.member && task.status === 'is-tryLook') {
           return '试看';
-        } else if (task.status === 'is-free') {
+        } else if (!this.details.member && task.status === 'is-free') {
           return '免费';
         }
 
