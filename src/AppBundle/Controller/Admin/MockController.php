@@ -101,7 +101,7 @@ class MockController extends BaseController
                     time() + 3600 * 24 * 30
                 );
             }
-            $result = array('X-Auth-Token:' => $token);
+            $result = array('X-Auth-Token' => $token);
         } else {
             $result = $this->sendApiVersion3($params);
         }
