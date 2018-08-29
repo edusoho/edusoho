@@ -84,7 +84,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         return true;
     }
 
-    public function setSubtitleUrls($lesson, $ssl = false)
+    public function setSubtitlesUrls($lesson, $ssl = false)
     {
         $subtitles = $this->findSubtitlesByMediaId($lesson['mediaId'], $ssl);
 
@@ -96,7 +96,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         }
 
         if (!empty($subtitlesUrls)) {
-            $lesson['subtitleUrls'] = $subtitlesUrls;
+            $lesson['subtitlesUrls'] = $subtitlesUrls;
         }
 
         return $lesson;

@@ -21,7 +21,12 @@ interface SubtitleService
      *
      * @param $lesson
      *
-     * @return 返回 $lesson, $lesson 中额外有 subtitleUrls 属性
+     * @return 返回 $lesson, $lesson 中额外有 subtitlesUrls 属性
+     *                如  array(
+     *                ...
+     *                'audioUri': '....',
+     *                'subtitlesUrls': ['url1', 'url2']
+     *                )
      */
-    public function setSubtitleUrls($lesson, $ssl = false);
+    public function setSubtitlesUrls($lesson, $ssl = false);
 }

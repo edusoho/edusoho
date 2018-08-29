@@ -291,7 +291,7 @@ class Lesson extends BaseResource
                         }
 
                         $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
-                        $lesson = $this->getSubtitleService()->setSubtitleUrls($lesson, $this->isSsl());
+                        $lesson = $this->getSubtitleService()->setSubtitlesUrls($lesson, $this->isSsl());
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
