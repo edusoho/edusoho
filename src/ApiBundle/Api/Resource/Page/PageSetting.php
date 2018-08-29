@@ -95,7 +95,7 @@ class PageSetting extends AbstractResource
             throw new AccessDeniedHttpException();
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
-        foreach ($discoverySettings as $discoverySetting) {
+        foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 $courses = $discoverySetting['data']['items'];
                 $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));

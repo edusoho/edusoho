@@ -7,7 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use AppBundle\Common\TimeMachine;
 
 class PageDiscovery extends AbstractResource
 {
@@ -20,7 +19,7 @@ class PageDiscovery extends AbstractResource
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         $params = $request->query->all();
-        $settingName = "{$portal}_published_discovery";
+        $mode = 'published';
         if (!empty($params['preview'])) {
             $token = $this->getTokenService()->verifyToken('qrcode_url', $token);
             if (empty($token)) {
@@ -30,22 +29,12 @@ class PageDiscovery extends AbstractResource
             if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
                 throw new \Exception('Error Processing Request', 1);
             }
-            $settingName = "{$portal}_draft_discovery";
+            $mode = 'draft';
         }
-        $discoverySettings = $this->getSettingService()->get($settingName);
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
-                if (!empty($discoverySetting['data']['lastDays'])) {
-                    $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
-                    $conditions['otherStartTime'] = $timeRange['startTime'];
-                    $conditions['otherEndTime'] = $timeRange['endTime'];
-                }
-
-                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
-                $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
-                $sort = $this->getSortByStr($discoverySetting['data']['sort']);
-                $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
-                $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
+                $courses = $discoverySetting['data']['items'];
                 $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
                 $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
                 $discoverySetting['data']['items'] = $courses;
@@ -60,9 +49,9 @@ class PageDiscovery extends AbstractResource
         return $this->service('Course:CourseService');
     }
 
-    protected function getSettingService()
+    protected function getH5SettingService()
     {
-        return $this->service('System:SettingService');
+        return $this->service('System:H5SettingService');
     }
 
     protected function getTokenService()
