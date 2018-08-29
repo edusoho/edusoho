@@ -11,6 +11,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
+use AppBundle\Common\TimeMachine;
 
 class PageSetting extends AbstractResource
 {
@@ -107,56 +108,28 @@ class PageSetting extends AbstractResource
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 if (!empty($discoverySetting['data']['lastDays'])) {
-                    $timeRange = $this->getTimeZoneByLastDays($discoverySetting['data']['lastDays']);
-                    $conditions['startTime'] = $timeRange['startTime'];
-                    $conditions['endTime'] = $timeRange['endTime'];
+                    $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
+                    $conditions['otherStartTime'] = $timeRange['startTime'];
+                    $conditions['otherEndTime'] = $timeRange['endTime'];
                 }
 
                 $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
                 $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
                 $sort = $this->getSortByStr($discoverySetting['data']['sort']);
                 $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
-                $discoverySetting['data']['items'] = $this->getCourseByConditions($conditions, $sort, 0, $limit);
+                $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
+                $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
+                $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
+                foreach ($courses as &$course) {
+                    $courseFilter = new CourseFilter();
+                    $courseFilter->setMode(Filter::PUBLIC_MODE);
+                    $courseFilter->filter($course);
+                }
+                $discoverySetting['data']['items'] = $courses;
             }
         }
 
         return $discoverySettings;
-    }
-
-    public function getCourseByConditions($conditions, $sort, $start, $limit)
-    {
-        $courses = array();
-        if (array_key_exists('studentNum', $sort)) {
-            $courses = $this->getCourseService()->searchByStudentNumAndTimeZone($conditions, $start, $limit);
-        }
-
-        if (array_key_exists('createdTime', $sort)) {
-            unset($conditions['startTime']);
-            unset($conditions['endTime']);
-            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, $start, $limit);
-        }
-
-        if (array_key_exists('rating', $sort)) {
-            $courses = $this->getCourseService()->searchByRatingAndTimeZone($conditions, $start, $limit);
-        }
-        $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
-        $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
-        foreach ($courses as &$course) {
-            $courseFilter = new CourseFilter();
-            $courseFilter->setMode(Filter::PUBLIC_MODE);
-            $courseFilter->filter($course);
-        }
-
-        return $courses;
-    }
-
-    protected function getTimeZoneByLastDays($lastDays)
-    {
-        if (!is_numeric($lastDays) || $lastDays <= 0) {
-            throw new BadRequestHttpException('LastDays is error', null, ErrorCode::INVALID_ARGUMENT);
-        }
-
-        return array('startTime' => strtotime(date('Y-m-d', time() - $lastDays * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
     }
 
     protected function getCourseCondition($portal, $mode = 'published')
