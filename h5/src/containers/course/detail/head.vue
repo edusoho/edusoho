@@ -34,7 +34,8 @@ export default {
       selectedPlanId: state => state.selectedPlanId,
       taskId: state => state.taskId,
       details: state => state.details,
-      joinStatus: state => state.joinStatus
+      joinStatus: state => state.joinStatus,
+      user: state => state.user,
     })
   },
   watch: {
@@ -50,16 +51,7 @@ export default {
   },
   methods: {
     getParams () {
-      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
-
-      return canTryLookable ? {
-        query: {
-          courseId: this.selectedPlanId,
-          taskId: this.taskId
-        }, params: {
-          preview: 1
-        }
-      } : {
+      return {
         query: {
           courseId: this.selectedPlanId,
           taskId: this.taskId
@@ -70,19 +62,21 @@ export default {
       this.$refs.video && (this.$refs.video.innerHTML = '');
 
       const player = await Api.getMedia(this.getParams())
+      // 试看判断
+      // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+
       this.isEncryptionPlus = player.media.isEncryptionPlus;
       if (player.media.isEncryptionPlus) {
         Toast('该浏览器不支持云视频播放，请下载App')
         return;
       }
-
       const media = player.media;
       const options = {
         id: 'course-detail__head--video',
-        resId: media.resId,
-        user: {},
+        user: this.user,
         playlist: media.url,
         autoplay: true
+        // resId: media.resId,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
 
