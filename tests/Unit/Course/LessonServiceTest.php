@@ -402,7 +402,7 @@ class LessonServiceTest extends BaseTestCase
     {
         $this->mockCourseManage();
 
-        $lesson = array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0);
+        $lesson = array('id' => 1, 'title' => 'test', 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 0);
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
@@ -450,7 +450,7 @@ class LessonServiceTest extends BaseTestCase
     {
         $this->mockCourseManage();
 
-        $lesson = array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1);
+        $lesson = array('id' => 1, 'title' => 'test', 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0, 'isOptional' => 1);
         $this->mockBiz('Course:CourseChapterDao', array(
             array(
                 'functionName' => 'get',
