@@ -4,7 +4,7 @@
     <e-loading v-if="isLoading"></e-loading>
     <detail-head
       :courseSet="details.courseSet"></detail-head>
-    
+
     <directory
       :hiddeTitle=true
       :courseItems="details.courseItems"

@@ -51,7 +51,15 @@ export default {
   },
   methods: {
     getParams () {
-      return {
+      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+      return canTryLookable ? {
+        query: {
+          courseId: this.selectedPlanId,
+          taskId: this.taskId
+        }, params: {
+          preview: 1
+        }
+      } : {
         query: {
           courseId: this.selectedPlanId,
           taskId: this.taskId
