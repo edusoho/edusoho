@@ -21,7 +21,7 @@ interface SubtitleService
      *
      * @param $lesson
      *
-     * @return 返回 $lesson, $lesson 中额外有 subTitleUrls 属性
+     * @return 返回 $lesson, $lesson 中额外有 subtitleUrls 属性
      */
-    public function setSubTitleUrls($lesson, $ssl = false);
+    public function setSubtitleUrls($lesson, $ssl = false);
 }

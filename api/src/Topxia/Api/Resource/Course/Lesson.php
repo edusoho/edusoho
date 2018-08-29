@@ -291,7 +291,7 @@ class Lesson extends BaseResource
                         }
 
                         $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
-                        $lesson = $this->getSubTitleService()->setSubTitleUrls($lesson);
+                        $lesson = $this->getSubtitleService()->setSubtitleUrls($lesson);
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
@@ -455,5 +455,10 @@ class Lesson extends BaseResource
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    protected function getSubtitleService()
+    {
+        return $this->createService('Subtitle:SubtitleService');
     }
 }
