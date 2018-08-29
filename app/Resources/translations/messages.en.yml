@@ -6909,8 +6909,12 @@ log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
 log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
+log.action.course.task_set_optional: 任务设置选修
+log.action.course.task_unset_optional: 任务设置必修
 log.action.course.create_lesson: 创建课时
 log.action.course.delete_lesson: 删除课时
+log.action.course.lesson_set_optional: 课时设置选修
+log.action.course.lesson_unset_optional: 课时设置必修
 log.action.course.add_student: 添加课程学员
 log.action.course.remove_student: 移除课程学员
 log.action.course.update_teacher: 更新课程教师
@@ -6944,6 +6948,8 @@ log.action.course.unlock_course: 解除课程同步
 log.action.course.create_course: 创建教学计划
 log.action.course.update_course: 修改教学计划
 log.action.course.delete_course: 删除教学计划
+log.action.course.publish_course: 发布教学计划
+log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
@@ -7013,6 +7019,8 @@ log.action.system.update_settings.cloud_attachment: 更新云附件设置
 log.action.system.update_settings._app_last_check: 更新应用检测设置
 log.action.system.update_settings.siteTrace: 更新站点追踪设置
 log.action.system.update_settings.xapi: 更新数据实验室设置
+log.action.system.update_settings.mobile: 更新移动客户端设置
+log.action.system.update_settings.wap: 更新WAP设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -7141,13 +7149,19 @@ log.action.template.course.delete_thread: 删除了话题《%title%》
 log.action.template.course.create_course: 新建了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_course: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.delete_course: 删除了教学计划《%title%》
+log.action.template.course.publish_course: 发布了教学计划《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.close_course: 关闭了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_lesson: 新建了课时《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.task_set_optional: 將任务《<a href="%url%" target="_blank">%title%</a>》设置选修
+log.action.template.course.task_unset_optional: 將任务《<a href="%url%" target="_blank">%title%</a>》设置必修
 log.action.template.course.add_question: 新建了题目《%title%》
 log.action.template.course.delete_question: 删除了题目《%title%》
 log.action.template.course.add_testpaper: 新建了试卷《%title%》
 log.action.template.course.delete_testpaper: 删除了试卷《%title%》
 log.action.template.course.delete_lesson: 删除了课时《%title%》
+log.action.template.course.lesson_set_optional: 將课时《<a href="%url%" target="_blank">%title%</a>》设置选修
+log.action.template.course.lesson_unset_optional: 將课时《<a href="%url%" target="_blank">%title%</a>》设置必修
 log.action.template.course.create_chapter: 新建了章节《%title%》
 log.action.template.course.delete_chapter: 删除了章节《%title%》
 log.action.template.course.delete_review: 删除了评价《%title%》
@@ -7266,6 +7280,8 @@ log.action.template.system.update_settings.cloud_attachment: 更新了<strong cl
 log.action.template.system.update_settings._app_last_check: 更新了<strong class="color-success">系统设置</strong>的应用检测设置
 log.action.template.system.update_settings.siteTrace: 更新了<strong class="color-success">系统设置</strong>的站点追踪设置
 log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
+log.action.template.system.update_settings.mobile: 更新了<strong class="color-success">系统设置</strong>的移动客户端设置
+log.action.template.system.update_settings.wap: 更新了<strong class="color-success">系统设置</strong>的WAP设置
 log.action.template.live.update_live_activity: 更新了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
 log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》
@@ -7338,6 +7354,7 @@ log.attr.classroom.largePicture: 大图
 log.attr.classroom.courseNum: 课程数
 log.attr.classroom.lessonNum: 课时数
 log.attr.open_course.lessonNum: 课时数
+log.attr.open_course.studentNum: 学生数
 log.attr.open_course.title: 标题
 log.attr.open_course.about: 简介
 log.attr.classroom.price: 价格
@@ -7793,6 +7810,17 @@ log.attr.system.update_settings.xapi.enabled: 数据实验室设置
 log.attr.system.update_settings.xapi.enabled.1: 开启
 log.attr.system.update_settings.xapi.enabled.0: 关闭
 log.attr.system.update_settings.xapi.enabled.: 关闭
+log.attr.system.update_settings.mobile.enabled: 是否开启客户端
+log.attr.system.update_settings.mobile.enabled.1: 开启
+log.attr.system.update_settings.mobile.enabled.0: 关闭
+log.attr.system.update_settings.mobile.about: 网校简介
+log.attr.system.update_settings.mobile.logo: 网校LOGO
+log.attr.system.update_settings.wap.version: 站点页设置
+log.attr.system.update_settings.wap.version.2: 新版微网校
+log.attr.system.update_settings.wap.version.1: 旧版微网校
+log.attr.system.update_settings.wap.version.0: 关闭
+log.attr.system.update_settings.wap.about: 网校简介
+log.attr.system.update_settings.wap.logo: 网校LOGO
 log.attr.order.pay_amount: 价格（分）
 
 course.to_be.biz.user.first: 需要先申请为商业用户!

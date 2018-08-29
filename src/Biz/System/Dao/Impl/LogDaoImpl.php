@@ -19,6 +19,7 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
             'conditions' => array(
                 'module = :module',
                 'action = :action',
+                'action NOT IN ( :notExcludeActions )',
                 'level = :level',
                 'userId = :userId',
                 'createdTime > :startDateTime',

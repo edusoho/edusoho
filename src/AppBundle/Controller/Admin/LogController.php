@@ -20,6 +20,12 @@ class LogController extends BaseController
             unset($conditions['exceptedUserId']);
         }
 
+        $conditions['notExcludeActions'] = LogDataUtils::getUnDisplayModuleAction();
+
+        if (isset($conditions['showAllLog']) && 1 == $conditions['showAllLog']) {
+            unset($conditions['notExcludeActions']);
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getLogService()->searchLogCount($conditions),
