@@ -17,7 +17,7 @@ class activity_testpaper extends Activity
     public function get($targetId)
     {
         $activity = $this->getTestpaperActivityService()->getActivity($targetId);
-        $testPaper = $this->getTestpaperService()->getTestpaper( $activity['mediaId']);
+        $testPaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         $activity['testpaper'] = $testPaper;
 
         return $activity;
