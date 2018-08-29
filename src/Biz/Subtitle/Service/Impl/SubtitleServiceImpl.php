@@ -91,12 +91,12 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $subtitlesUrls = array();
         foreach ($subtitles as $subtitle) {
             if ('success' == $subtitle['convertStatus']) {
-                $subtitles[] = $subtitle['url'];
+                $subtitlesUrls[] = $subtitle['url'];
             }
         }
 
-        if (empty($subtitles)) {
-            $lesson['subtitleUrls'] = $subtitleUrls;
+        if (!empty($subtitlesUrls)) {
+            $lesson['subtitleUrls'] = $subtitlesUrls;
         }
 
         return $lesson;
