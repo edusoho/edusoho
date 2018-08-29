@@ -2,7 +2,6 @@
 
 namespace Biz\OrderFacade\Service\Impl;
 
-use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Currency;
@@ -236,14 +235,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         if (!MathToolkit::isEqual($order['pay_amount'], $newPayAmount)) {
             $adjustDeduct = $this->getWorkflowService()->adjustPrice($orderId, $newPayAmount);
-
-            $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(
-                'title' => $adjustDeduct['order']['title'],
-                'orderId' => $orderId,
-                'oldPrice' => MathToolkit::simple($newPayAmount + $adjustDeduct['deduct_amount'], 0.01),
-                'newPrice' => MathToolkit::simple($newPayAmount, 0.01),
-                'adjust_amount' => MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01),
-            ));
 
             return $adjustDeduct;
         }

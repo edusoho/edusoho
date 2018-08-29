@@ -593,10 +593,18 @@ class MemberServiceImpl extends BaseService implements MemberService
             )
         );
 
+        $infoData = array(
+            'courseId' => $course['id'],
+            'title' => CourseTitleUtils::getDisplayedTitle($course),
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})",
+            $infoData
         );
     }
 
@@ -830,10 +838,18 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $removeMember = $this->getUserService()->getUser($member['userId']);
 
+        $infoData = array(
+            'courseId' => $course['id'],
+            'title' => CourseTitleUtils::getDisplayedTitle($course),
+            'userId' => $removeMember['id'],
+            'nickname' => $removeMember['nickname'],
+        );
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
+            $infoData
         );
         $this->dispatchEvent(
             'course.quit',

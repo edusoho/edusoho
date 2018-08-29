@@ -117,6 +117,9 @@ class LogDataUtils
             'expiryEndDate' => array(
                 'timeConvent',
             ),
+            'expiryValue' => array(
+                'timeConvent',
+            ),
             'password' => array(
                 'passwordSetBlank',
             ),
