@@ -53,6 +53,11 @@
         }
       }
     },
+    watch: {
+      isActive(value) {
+        this.$emit('selectToggled', value);
+      }
+    },
     methods: {
       toggle(item, index) {
         if(isNaN(index)) {
