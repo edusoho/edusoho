@@ -1406,12 +1406,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
-    public function searchWithJoinTableConditions($conditions, $sort, $start, $limit, $columns = array())
+    public function searchWithJoinCourseSet($conditions, $sort, $start, $limit, $columns = array())
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy = $this->_prepareCourseOrderBy($sort);
 
-        return $this->getCourseDao()->searchWithJoinTableConditions($conditions, $orderBy, $start, $limit, $columns);
+        return $this->getCourseDao()->searchWithJoinCourseSet($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    public function searchBySort($conditions, $sort, $start, $limit)
+    {
+        if (array_key_exists('studentNum', $sort) && array_key_exists('otherEndTime', $conditions)) {
+            return $this->searchByStudentNumAndTimeZone($conditions, $start, $limit);
+        }
+
+        if (array_key_exists('rating', $sort) && array_key_exists('otherEndTime', $conditions)) {
+            return $this->searchByRatingAndTimeZone($conditions, $start, $limit);
+        }
+
+        if (array_key_exists('recommendedSeq', $sort)) {
+            $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
+
+            return $this->searchByRecommendedSeq($conditions, $sort, $offset, $limit);
+        }
+
+        return $this->searchWithJoinCourseSet($conditions, $sort, $start, $limit);
     }
 
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
@@ -1919,11 +1938,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
-    public function countWithJoinTableConditions($conditions)
+    public function countWithJoinCourseSet($conditions)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        return $this->getCourseDao()->countWithJoinTableConditions($conditions);
+        return $this->getCourseDao()->countWithJoinCourseSet($conditions);
     }
 
     public function countCourses(array $conditions)
@@ -2156,15 +2175,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
-    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit)
+    public function searchByRecommendedSeq($conditions, $sort, $offset, $limit)
     {
         $conditions['recommended'] = 1;
-        $recommendCount = $this->countWithJoinTableConditions($conditions);
+        $recommendCount = $this->countWithJoinCourseSet($conditions);
         $recommendAvailable = $recommendCount - $offset;
         $courses = array();
 
         if ($recommendAvailable >= $limit) {
-            $courses = $this->searchWithJoinTableConditions(
+            $courses = $this->searchWithJoinCourseSet(
                 $conditions,
                 $sort,
                 $offset,
@@ -2174,7 +2193,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($recommendAvailable <= 0) {
             $conditions['recommended'] = 0;
-            $courses = $this->searchWithJoinTableConditions(
+            $courses = $this->searchWithJoinCourseSet(
                 $conditions,
                 array('createdTime' => 'DESC'),
                 abs($recommendAvailable),
@@ -2183,14 +2202,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($recommendAvailable > 0 && $recommendAvailable < $limit) {
-            $courses = $this->searchWithJoinTableConditions(
+            $courses = $this->searchWithJoinCourseSet(
                 $conditions,
                 $sort,
                 $offset,
                 $recommendAvailable
             );
             $conditions['recommended'] = 0;
-            $coursesTemp = $this->searchWithJoinTableConditions(
+            $coursesTemp = $this->searchWithJoinCourseSet(
                 $conditions,
                 array('createdTime' => 'DESC'),
                 0,

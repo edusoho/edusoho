@@ -57,7 +57,7 @@ class PageDiscovery extends AbstractResource
         if (array_key_exists('recommendedSeq', $sort)) {
             $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, 0, 4);
         } else {
-            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, 0, 4);
+            $courses = $this->getCourseService()->searchWithJoinCourseSet($conditions, $sort, 0, 4);
         }
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

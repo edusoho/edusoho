@@ -129,9 +129,9 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
     }
 
-    public function searchWithJoinTableConditions($conditions, $orderBys, $start, $limit)
+    public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit)
     {
-        $builder = $this->createJoinQueryBuilder($conditions)
+        $builder = $this->createJoinCourseSetQueryBuilder($conditions)
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->select($this->table.'.*');
@@ -142,32 +142,28 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($this->table.'.'.$order, $sort);
         }
-
         $result = $builder->execute()->fetchAll();
 
         return $result;
     }
 
-    // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc
+    public function countWithJoinCourseSet($conditions)
+    {
+        $builder = $this->createJoinCourseSetQueryBuilder($conditions)
+            ->select('COUNT(*)');
 
-    //其他条件和limit分页待添加
+        return (int) $builder->execute()->fetchColumn(0);
+    }
+
+    // select cv.* from  (SELECT * FROM course_v8 WHERE 1=1)  cv inner join (select courseId,count(*) co from course_member where createdtime > 1534694400 and createdTime< 1535385600 group by courseId) cm on cv.id=cm.courseId order by cm.co desc LIMIT 0,8
+
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $courseSql = "SELECT c.* FROM course_v8 c INNER JOIN course_set_v8 csv on c.courseSetId = csv.id WHERE c.parentId=0 AND c.status='published' AND c.type NOT IN ('reservation') AND csv.status='published' ";
         $params = array();
-        if (!empty($conditions['categoryIds'])) {
-            $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
-            $courseSql .= " AND c.categoryId IN ($marks)";
-            $params = array_merge($params, $conditions['categoryIds']);
-        }
-        $courseMemberSql = 'SELECT courseId,count(id) co FROM course_member WHERE 1=1 ';
-        if (!empty($conditions['endTime'])) {
-            $courseMemberSql .= ' AND createdTime > ? AND createdTime < ? ';
-            $params[] = $conditions['startTime'];
-            $params[] = $conditions['endTime'];
-        }
-        $courseMemberSql .= ' GROUP BY courseId';
+        $courseSql = $this->getCourseSql($conditions, $params);
+        $courseMemberSql = $this->getCourseMemberSql($conditions, $params);
+
         $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseMemberSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
@@ -176,59 +172,13 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function searchByRatingAndTimeZone($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $courseSql = "SELECT c.* FROM course_v8 c INNER JOIN course_set_v8 csv on c.courseSetId = csv.id WHERE c.parentId=0 AND c.status='published' AND c.type NOT IN ('reservation') AND csv.status='published' ";
         $params = array();
-        if (!empty($conditions['categoryIds'])) {
-            $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
-            $courseSql .= " AND c.categoryId IN ($marks)";
-            $params = array_merge($params, $conditions['categoryIds']);
-        }
-        $courseReviewSql = 'SELECT courseId,avg(rating) co FROM course_review WHERE 1=1 ';
-        if (!empty($conditions['endTime'])) {
-            $courseReviewSql .= ' AND createdTime > ? AND createdTime < ? ';
-            $params[] = $conditions['startTime'];
-            $params[] = $conditions['endTime'];
-        }
-        $courseReviewSql .= ' GROUP BY courseId';
+        $courseSql = $this->getCourseSql($conditions, $params);
+        $courseReviewSql = $this->getCourseReviewSql($conditions, $params);
+
         $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseReviewSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
-    }
-
-    public function countWithJoinTableConditions($conditions)
-    {
-        $builder = $this->createJoinQueryBuilder($conditions)
-            ->select('COUNT(*)');
-
-        return (int) $builder->execute()->fetchColumn(0);
-    }
-
-    protected function createJoinQueryBuilder($conditions)
-    {
-        $builder = parent::createQueryBuilder($conditions);
-        $builder->innerJoin($this->table, 'course_set_v8', 'csv', 'csv.id = '.$this->table.'.courseSetId');
-
-        $joinConditions = array(
-            'csv.status = :courseSetStatus',
-        );
-
-        foreach ($joinConditions as $condition) {
-            $builder->andWhere($condition);
-        }
-
-        return $builder;
-    }
-
-    private function checkOrderBy($order, $sort, $allowOrderBys)
-    {
-        if (!in_array($order, $allowOrderBys, true)) {
-            throw $this->createDaoException(
-                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
-            );
-        }
-        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
-            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
-        }
     }
 
     public function declares()
@@ -335,5 +285,109 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         }
 
         return $builder;
+    }
+
+    protected function createJoinCourseSetQueryBuilder($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions);
+        $builder->innerJoin($this->table, 'course_set_v8', 'csv', 'csv.id = '.$this->table.'.courseSetId');
+
+        $joinConditions = array(
+            'csv.status = :courseSetStatus',
+        );
+
+        foreach ($joinConditions as $condition) {
+            $builder->andWhere($condition);
+        }
+
+        return $builder;
+    }
+
+    protected function getCourseSql($conditions, &$params)
+    {
+        $courseSql = 'SELECT c.* FROM course_v8 c INNER JOIN course_set_v8 csv on c.courseSetId = csv.id WHERE 1=1 ';
+
+        if (isset($conditions['parentId'])) {
+            $courseSql .= ' AND c.parentId = ? ';
+            $params[] = $conditions['parentId'];
+        }
+
+        if (isset($conditions['status'])) {
+            $courseSql .= ' AND c.status = ? ';
+            $params[] = $conditions['status'];
+        }
+
+        if (isset($conditions['excludeTypes'])) {
+            $marks = str_repeat('?,', count($conditions['excludeTypes']) - 1).'?';
+            $courseSql .= " AND c.type NOT IN ($marks)";
+            $params = array_merge($params, $conditions['excludeTypes']);
+        }
+
+        if (isset($conditions['courseSetStatus'])) {
+            $courseSql .= ' AND csv.status = ? ';
+            $params[] = $conditions['courseSetStatus'];
+        }
+
+        if (!empty($conditions['categoryIds'])) {
+            $marks = str_repeat('?,', count($conditions['categoryIds']) - 1).'?';
+            $courseSql .= " AND c.categoryId IN ($marks)";
+            $params = array_merge($params, $conditions['categoryIds']);
+        }
+
+        if (isset($conditions['type'])) {
+            $courseSql .= ' AND c.type = ? ';
+            $params[] = $conditions['type'];
+        }
+
+        if (isset($conditions['title'])) {
+            $courseSql .= ' AND c.title LIKE ? ';
+            $params[] = "%{$conditions['title']}%";
+        }
+
+        if (isset($conditions['courseSetTitle '])) {
+            $courseSql .= ' AND c.courseSetTitle  LIKE ? ';
+            $params[] = "%{$conditions['courseSetTitle ']}%";
+        }
+
+        return $courseSql;
+    }
+
+    protected function getCourseMemberSql($conditions, &$params)
+    {
+        $courseMemberSql = 'SELECT courseId,count(id) co FROM course_member WHERE 1=1 ';
+
+        if (!empty($conditions['outerEndTime'])) {
+            $courseMemberSql .= ' AND createdTime > ? AND createdTime < ? ';
+            $params[] = $conditions['outerStartTime'];
+            $params[] = $conditions['outerEndTime'];
+        }
+        $courseMemberSql .= ' GROUP BY courseId';
+
+        return $courseMemberSql;
+    }
+
+    public function getCourseReviewSql($conditions, &$params)
+    {
+        $courseReviewSql = 'SELECT courseId,avg(rating) co FROM course_review WHERE 1=1 ';
+        if (!empty($conditions['outerEndTime'])) {
+            $courseReviewSql .= ' AND createdTime > ? AND createdTime < ? ';
+            $params[] = $conditions['outerStartTime'];
+            $params[] = $conditions['outerEndTime'];
+        }
+        $courseReviewSql .= ' GROUP BY courseId';
+
+        return $courseReviewSql;
+    }
+
+    private function checkOrderBy($order, $sort, $allowOrderBys)
+    {
+        if (!in_array($order, $allowOrderBys, true)) {
+            throw $this->createDaoException(
+                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
+            );
+        }
+        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+        }
     }
 }
