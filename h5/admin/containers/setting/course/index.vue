@@ -7,23 +7,23 @@
       <header class="title">课程列表设置</header>
       <div class="course-item-setting clearfix">
         <!-- 列表名称 -->
-        <div class="course-item-setting__section">
-          <p class="pull-left section-left">列表名称：</p>
+        <div class="course-item-setting__section clearfix">
+          <p class="pull-left section-left required-option">列表名称：</p>
           <div class="section-right">
             <el-input size="mini" v-model="copyModuleData.data.title" placeholder="请输入列表名称" clearable></el-input>
           </div>
         </div>
         <!-- 课程来源 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">课程来源：</p>
+        <div class="course-item-setting__section mtl clearfix">
+          <p class="pull-left section-left required-option">课程来源：</p>
           <div class="section-right">
             <el-radio v-model="copyModuleData.data.sourceType" label="condition">课程分类</el-radio>
             <el-radio v-model="copyModuleData.data.sourceType" label="custom">自定义</el-radio>
           </div>
         </div>
         <!-- 课程分类 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">课程分类：</p>
+        <div class="course-item-setting__section mtl clearfix">
+          <p class="pull-left section-left required-option">课程分类：</p>
           <div class="section-right">
             <!-- <el-input size="mini" v-model="categoryId" placeholder="请输入列表名称"> -->
             <el-cascader v-show="copyModuleData.data.sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryId" filterable change-on-select></el-cascader>
@@ -40,8 +40,8 @@
           </draggable>
         </div>
         <!-- 排列顺序 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">排列顺序：</p>
+        <div class="course-item-setting__section mtl clearfix">
+          <p class="pull-left section-left required-option">排列顺序：</p>
           <div class="section-right">
             <div class="section-right__item pull-left">
               <el-select v-model="sortSelected" placeholder="排列顺讯" size="mini">
@@ -58,8 +58,8 @@
           </div>
         </div>
         <!-- 显示个数 -->
-        <div class="course-item-setting__section mtl">
-          <p class="pull-left section-left">显示个数：</p>
+        <div class="course-item-setting__section mtl clearfix">
+          <p class="pull-left section-left required-option">显示个数：</p>
           <div class="section-right">
             <el-select v-model="copyModuleData.data.limit" placeholder="请选择个数" size="mini">
               <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">

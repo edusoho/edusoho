@@ -6,7 +6,8 @@
   }
 
   .course-item-setting__section {
-    overflow: hidden;
+    // overflow: hidden;
+    position: relative;
     .section {
       &-left {
         display: inline;
