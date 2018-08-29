@@ -1,6 +1,6 @@
 <template>
   <div class="e-promotion">
-    <img class="e-promotion__img" v-bind:src="promotion.image" @click="jumpTo(link.id)">
+    <img class="e-promotion__img" v-bind:src="promotion.image.uri" @click="jumpTo(link.id)">
   </div>
 </template>
 
@@ -19,9 +19,14 @@
     },
     methods: {
       jumpTo(courseId) {
-        this.$router.push({
-          path: `/course/${courseId}`
-        });
+        const imgLink = this.promotion.link.type;
+        if (imgLink == 'course') {
+          this.$router.push({
+            path: `/course/${courseId}`
+          });
+        } else {
+          window.location.href = this.promotion.link.url;
+        }
       }
     }
   }
