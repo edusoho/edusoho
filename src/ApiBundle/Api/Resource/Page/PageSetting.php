@@ -11,7 +11,6 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
-use AppBundle\Common\TimeMachine;
 
 class PageSetting extends AbstractResource
 {
@@ -82,11 +81,6 @@ class PageSetting extends AbstractResource
         return $this->$method($portal, $mode);
     }
 
-    protected function removeCourseCondition($portal, $mode = 'draft')
-    {
-        return $this->getSettingService()->delete("{$portal}_{$mode}_courseCondition");
-    }
-
     protected function addDiscovery($portal, $mode = 'draft', $content = array())
     {
         $this->getSettingService()->set("{$portal}_{$mode}_discovery", $content);
@@ -100,24 +94,10 @@ class PageSetting extends AbstractResource
         if ('draft' == $mode && !$user->isAdmin()) {
             throw new AccessDeniedHttpException();
         }
-
-        $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
-        if (empty($discoverySettings)) {
-            $discoverySettings = $this->getSettingService()->get("{$portal}_published_discovery", array());
-        }
-        foreach ($discoverySettings as &$discoverySetting) {
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
+        foreach ($discoverySettings as $discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
-                if (!empty($discoverySetting['data']['lastDays'])) {
-                    $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
-                    $conditions['otherStartTime'] = $timeRange['startTime'];
-                    $conditions['otherEndTime'] = $timeRange['endTime'];
-                }
-
-                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
-                $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
-                $sort = $this->getSortByStr($discoverySetting['data']['sort']);
-                $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
-                $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
+                $courses = $discoverySetting['data']['items'];
                 $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
                 $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
                 foreach ($courses as &$course) {
@@ -134,56 +114,7 @@ class PageSetting extends AbstractResource
 
     protected function getCourseCondition($portal, $mode = 'published')
     {
-        $group = $this->getCategoryService()->getGroupByCode('course');
-
-        return array(
-            'title' => '所有课程',
-            array(
-                'type' => 'category',
-                'moduleType' => 'tree',
-                'text' => '分类',
-                'data' => $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], 0),
-            ),
-            array(
-                'type' => 'courseType',
-                'moduleType' => 'normal',
-                'text' => '课程类型',
-                'data' => array(
-                    array(
-                        'type' => 'normal',
-                        'text' => '课程',
-                    ),
-                    array(
-                        'type' => 'live',
-                        'text' => '直播',
-                    ),
-                ),
-            ),
-            array(
-                'type' => 'sort',
-                'moduleType' => 'normal',
-                'text' => '课程类型',
-                'data' => array(
-                    array(
-                        'type' => 'recommendedSeq',
-                        'text' => '推荐',
-                    ),
-                    array(
-                        'type' => '-studentNum',
-                        'text' => '热门',
-                    ),
-                    array(
-                        'type' => '-createdTime',
-                        'text' => '最新',
-                    ),
-                ),
-            ),
-        );
-    }
-
-    protected function getCategoryService()
-    {
-        return $this->service('Taxonomy:CategoryService');
+        return $this->getH5SettingService()->getCourseCondition($portal, $mode);
     }
 
     protected function getSettingService()
@@ -191,8 +122,8 @@ class PageSetting extends AbstractResource
         return $this->service('System:SettingService');
     }
 
-    protected function getCourseService()
+    protected function getH5SettingService()
     {
-        return $this->service('Course:CourseService');
+        return $this->service('System:H5SettingService');
     }
 }
