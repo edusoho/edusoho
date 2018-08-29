@@ -7,7 +7,7 @@
         <div class="directory-list__item-chapter"
           @click="item.show = !item.show"
           v-if="item.type === 'chapter'">
-          <span>第{{ item.number }}章：{{ item.title }}</span>
+          <span class="text-overflow">第{{ item.number }}章：{{ item.title }}</span>
           <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"></i>
         </div>
 
