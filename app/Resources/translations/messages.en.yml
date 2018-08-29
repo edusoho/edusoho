@@ -353,6 +353,7 @@ plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
 plugin.discount: Discount
+plugin.acitivity: Acitivity
 plugin.coupon: Coupon
 plugin.coupon.minus: Deduction
 plugin.coupon.minus_tips: 'Coupon for deduct %rate% CNY'
