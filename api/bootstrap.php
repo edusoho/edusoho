@@ -2,9 +2,12 @@
 
 date_default_timezone_set('UTC');
 
-require_once __DIR__.'/../vendor/autoload.php';
+$loader = require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
 define('RUNTIME_ENV', 'API');
 define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '/../app');
