@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Activity\Dao\ActivityDao;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -27,6 +28,31 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function findLiveActivitiesByIds($ids)
     {
         return $this->getLiveActivityDao()->findByIds($ids);
+    }
+
+    public function findActivityByLiveActivityId($id)
+    {
+        $liveActivity = $this->getLiveActivityDao()->get($id);
+        if (empty($liveActivity)) {
+            throw $this->createNotFoundException('无此直播');
+        }
+        $conditions = array(
+            'mediaId' => $liveActivity['id'],
+            'mediaType' => 'live',
+        );
+        $orderBy = 'endTime';
+        $start = 0;
+        $limit = 1;
+        $activities = $this->getActivityDao()->search($conditions, $orderBy, $start, $limit);
+        if (empty($activities)) {
+            throw $this->createNotFoundException('无此直播活动');
+        }
+        if (!isset($activities[0])) {
+            throw $this->createNotFoundException('无此直播活动');
+        }
+        $activity = array_merge($activities[0], $liveActivity);
+
+        return $activity;
     }
 
     public function createLiveActivity($activity, $ignoreValidation = false)
@@ -293,5 +319,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
     }
 }

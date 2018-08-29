@@ -18,7 +18,7 @@ interface LiveActivityService
      * @param $activity
      *
      * @return mixed
-     * @Log(module="live",action="update_live_activity",param="id")
+     * @Log(module="live",action="update_live_activity",funcName="findActivityByLiveActivityId",param="id")
      */
     public function updateLiveActivity($id, $fields, $activity);
 
@@ -28,7 +28,7 @@ interface LiveActivityService
      * @param $id
      *
      * @return mixed
-     * @Log(module="live",action="delete_live_activity")
+     * @Log(module="live",action="delete_live_activity",funcName="findActivityByLiveActivityId")
      */
     public function deleteLiveActivity($id);
 
