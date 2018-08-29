@@ -17,10 +17,10 @@ define(function(require, exports, module) {
 		});
 
 		$("#switch-operation").on('click', function() {
-			var hasSystemOperation = $('#hasSystemOperation');
-			var hasSystemOperationValue = hasSystemOperation.val();
+			var $hasSystemOperation = $('#hasSystemOperation');
+			var hasSystemOperationValue = $hasSystemOperation.val();
 			var hasSystemOperationNewValue = hasSystemOperationValue == 1 ? 0 : 1;
-			hasSystemOperation.val(hasSystemOperationNewValue);
+			$hasSystemOperation.val(hasSystemOperationNewValue);
 			var $form = $('#search-form');
 			$form.submit();
 		});
