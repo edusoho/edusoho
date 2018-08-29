@@ -17,9 +17,9 @@ define(function(require, exports, module) {
 		});
 
 		$("#switch-operation").on('click', function() {
-			var hasSystemOperation = document.getElementById('hasSystemOperation');
-			var hasSystemOperation_value = hasSystemOperation.value == 1 ? 0 : 1;
-			$("#hasSystemOperation").val(hasSystemOperation_value);
+			var hasSystemOperation = $('#hasSystemOperation').val();
+			var hasSystemOperation_value = hasSystemOperation == 1 ? 0 : 1;
+			$('#hasSystemOperation').val(hasSystemOperation_value);
 			var $form = $('#search-form');
 			$form.submit();
 		});
