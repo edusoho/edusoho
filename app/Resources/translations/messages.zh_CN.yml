@@ -947,7 +947,7 @@ course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
 course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
-  <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天的晚上24点整
+  <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
 course.teaching_plan.expiry_date.real_time: >
   <b>固定周期：</b>有固定的学习开始日期和结束日期
 course.teaching_plan.expiry_date.overdue_tips: 过期后无法继续学习，系统会在到期前10天提醒学员。

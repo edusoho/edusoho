@@ -4,9 +4,9 @@
 {% endblock %}
 
 <div class="courseset-manage-header cd-mb32 clearfix">
-  <a href="{{ path('open_course_show', {courseId:course.id}) }}">
+  {% block coursesetImg %}
     <img class="courseset-manage-header__img" src="{{ filepath(course.largePicture, 'course.png') }}" />
-  </a>
+  {% endblock %}
 
   {% if course.status =='closed' %}
     <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
