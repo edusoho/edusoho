@@ -885,7 +885,7 @@ class CourseServiceTest extends BaseTestCase
         $this->createRecommendCourses();
         $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 2, 2);
         $this->assertEquals('课程标题4', $result[0]['courseSetTitle']);
-        $this->assertEquals('课程标题5', $result[1]['courseSetTitle']);
+        $this->assertEquals('课程标题4', $result[1]['courseSetTitle']);
     }
 
     //recommendCount=2,offset=1,limit=2，既有推荐也有非推荐课程
@@ -944,7 +944,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getCourseSetService()->publishCourseSet($courseSet['id']);
 
         $courseSetFields = array(
-            'title' => '课程标题5',
+            'title' => '课程标题4',
             'type' => 'normal',
         );
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
