@@ -1,8 +1,10 @@
 <template>
   <div class="preview-container">
     <div class="image-container clearfix">
-      <img class="phone-img" src="static/images/phone_shell.png">
-      <iframe class="preview-iframe" src="http://localhost:8011/" frameborder="0"></iframe>
+      <div class="phone-img">
+        <img  src="static/images/phone_shell.png">
+        <iframe class="preview-iframe" src="http://localhost:8011?preview=1" frameborder="0"></iframe>
+      </div>
       <div class="code-container">
         <div class="code-item">
           <img class="code-img" :src="qrcode">
