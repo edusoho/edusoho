@@ -564,8 +564,6 @@ class AppServiceImpl extends BaseService implements AppService
 
             $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
 
-            $this->trySystemCrontabInitializer($package);
-
             if (isset($info['index'])) {
                 goto last;
             }
@@ -601,6 +599,8 @@ class AppServiceImpl extends BaseService implements AppService
 
         last :
             $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
+
+        $this->trySystemCrontabInitializer($package);
 
         if (empty($info)) {
             $result = $errors;
