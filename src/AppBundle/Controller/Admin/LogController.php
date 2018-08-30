@@ -60,6 +60,39 @@ class LogController extends BaseController
         ));
     }
 
+    public function oldAction(Request $request)
+    {
+        $conditions = $request->query->all();
+
+        $paginator = new Paginator(
+            $request,
+            $this->getLogService()->searchOldLogCount($conditions),
+            30
+        );
+
+        $logs = $this->getLogService()->searchOldLogs(
+            $conditions,
+            'created',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $users = $this->setSystemUserName($users);
+
+        $modules = $this->getLogService()->getModules();
+        $module = isset($conditions['module']) ? $conditions['module'] : '';
+        $actions = $this->getLogService()->getActionsByModule($module);
+
+        return $this->render('admin/system/log/logs-old.html.twig', array(
+            'logs' => $logs,
+            'paginator' => $paginator,
+            'users' => $users,
+            'modules' => $modules,
+            'actions' => $actions,
+        ));
+    }
+
     public function logFieldChangeAction(Request $request)
     {
         $log = $request->query->get('log');
@@ -284,9 +317,9 @@ class LogController extends BaseController
             'nickname' => $nickname,
         );
         $orderBy = array('createdTime' => 'ASC');
-        $existsUser = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 10);
+        $users = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 10);
 
-        return $this->createJsonResponse($existsUser);
+        return $this->createJsonResponse($users);
     }
 
     public function prodAction(Request $request)

@@ -7393,7 +7393,7 @@ admin.invite_setting.discount_coupon_setting: 元面值抵价优惠券 （可用
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
-  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/article/892" target="_blank">【查看教程】</a></p>
+  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
   <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
 admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版微网校
@@ -8488,17 +8488,17 @@ log.action.template.marker.delete_question: 删除了<strong class="color-succes
 log.action.template.role.create: 新建了<strong class="color-success">角色</strong> 《%title%》
 log.action.template.role.update: 更新了<strong class="color-success">角色</strong> 《%title%》
 log.action.template.role.delete: 删除了<strong class="color-success">角色</strong> 《%title%》
-log.action.template.user.password-changed: 重置了<strong class="color-success">用户</strong> 《%title%》的密码
-log.action.template.user.pay-password-changed: 重置了<strong class="color-success">用户</strong> 《%title%》的支付密码
-log.action.template.user.password-security-answers: 设置了<strong class="color-success">用户</strong> 《%title%》的安全问题
-log.action.template.user.verifiedMobile-changed: 重置了<strong class="color-success">用户</strong> 《%title%》绑定的手机
-log.action.template.user.email-changed: 重置了<strong class="color-success">用户</strong> 《%title%》绑定的邮箱
-log.action.template.user.update: 更新了<strong class="color-success">用户</strong> 《%title%》的资料
-log.action.template.user.nickname_change: 更新了<strong class="color-success">用户</strong> 《%title%》的昵称
-log.action.template.user.avatar-changed: 更新了<strong class="color-success">用户</strong> 《%title%》的头像
-log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> 《%title%》的用户组
-log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> 《%title%》
-log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> 《%title%》
+log.action.template.user.password-changed: 重置了<strong class="color-success">用户</strong> %title%的密码
+log.action.template.user.pay-password-changed: 重置了<strong class="color-success">用户</strong> %title%的支付密码
+log.action.template.user.password-security-answers: 设置了<strong class="color-success">用户</strong> %title%的安全问题
+log.action.template.user.verifiedMobile-changed: 重置了<strong class="color-success">用户</strong> %title%绑定的手机
+log.action.template.user.email-changed: 重置了<strong class="color-success">用户</strong> %title%绑定的邮箱
+log.action.template.user.update: 更新了<strong class="color-success">用户</strong> %title%的资料
+log.action.template.user.nickname_change: 更新了<strong class="color-success">用户</strong> %title%的昵称
+log.action.template.user.avatar-changed: 更新了<strong class="color-success">用户</strong> %title%的头像
+log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> %title%的用户组
+log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> %title%
+log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> %title%
 log.action.template.thread.create: 新建了<strong class="color-success">话题</strong> 《%title%》
 log.action.template.thread.update: 更新了<strong class="color-success">话题</strong> 《%title%》
 log.action.template.thread.delete: 删除了<strong class="color-success">话题</strong> 《%title%》

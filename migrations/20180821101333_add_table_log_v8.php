@@ -31,6 +31,11 @@ class AddTableLogV8 extends Migration
 
         $container = $this->getContainer();
         $container['db']->exec($sql);
+
+        $container['db']->exec('ALTER TABLE `log_v8` ADD INDEX `module` (`module`);');
+        $container['db']->exec('ALTER TABLE `log_v8` ADD INDEX `action` (`action`);');
+        $container['db']->exec('ALTER TABLE `log_v8` ADD INDEX `level` (`level`);');
+        $container['db']->exec('ALTER TABLE `log_v8` ADD INDEX `createdTime` (`createdTime`);');
     }
 
     /**

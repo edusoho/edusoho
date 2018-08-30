@@ -287,8 +287,8 @@ t.add("course_manage.lesson_dashboard.task_finished", "\u5df2\u5b66\u5b8c", "js"
 t.add("course_manage.lesson_dashboard.task_learning", "\u5b66\u4e60\u4e2d", "js", "zh_CN");
 t.add("course_manage.course_overview.student_increase_num", "\u65b0\u589e\u5b66\u5458", "js", "zh_CN");
 t.add("course_manage.course_overview.try_view_increase_num", "\u514d\u8d39\u8bd5\u770b\u6570", "js", "zh_CN");
-t.add("course_manage.student_expiryday_extend_success_hint", "\u589e\u52a0%name%\u6709\u6548\u671f\u64cd\u4f5c\u6210\u529f!", "js", "zh_CN");
-t.add("course_manage.student_expiryday_extend_failed_hint", "\u589e\u52a0%name%\u6709\u6548\u671f\u64cd\u4f5c\u5931\u8d25!", "js", "zh_CN");
+t.add("course_manage.student_expiryday_extend_success_hint", "\u4fee\u6539%name%\u6709\u6548\u671f\u64cd\u4f5c\u6210\u529f!", "js", "zh_CN");
+t.add("course_manage.student_expiryday_extend_failed_hint", "\u4fee\u6539%name%\u6709\u6548\u671f\u64cd\u4f5c\u5931\u8d25!", "js", "zh_CN");
 t.add("course_manage.student_expiryday_extend_error_hint_day", "\u51cf\u5c11\u5929\u6570\u8d85\u51fa\u6700\u5927\u53ef\u51cf\u5c11\u6570", "js", "zh_CN");
 t.add("course_manage.student_expiryday_extend_error_hint_date", "\u65e5\u671f\u4e0d\u5f97\u65e9\u4e8e\u5f53\u524d\u65f6\u95f4\u6216\u4efb\u4f55\u4e00\u4e2a\u5b66\u5458\u7684\u6709\u6548\u671f\u622a\u6b62\u65e5", "js", "zh_CN");
 t.add("course_manage.student_remark_validate_error_hint", "\u5907\u6ce8\u5b57\u6570\u4e0d\u8d85\u8fc780", "js", "zh_CN");
