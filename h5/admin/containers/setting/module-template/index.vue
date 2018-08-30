@@ -50,6 +50,7 @@ export default {
         return this.active;
       },
       set() {
+        if (this.active) return;
         this.$emit('activeModule', this.index);
       }
     }
