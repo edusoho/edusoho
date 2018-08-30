@@ -31,7 +31,7 @@
           </a>
           <ul class="dropdown-menu courses-operation-dropdown">
             <li>
-              <a href={% if course.status|default('') == 'published' %}"{{basepath}}"{% else %}"{{ path('course_show', { id: course.id, previewAs: 'member' }) }}"{% endif %} target="_blank">{% if course.status|default('') == 'published' %}{{ 'course.check.plan'|trans }}{% else %}{{ 'course.preview.plan'|trans }}{% endif %}</a>
+              <a href={% if course.status|default('') == 'published' %}"{{basepath}}"{% else %}"{{ path('course_show', { id: course.id, previewAs: 'guest' }) }}"{% endif %} target="_blank">{% if course.status|default('') == 'published' %}{{ 'course.check.plan'|trans }}{% else %}{{ 'course.preview.plan'|trans }}{% endif %}</a>
             </li>
             {% if course.status|default('') == 'published' %}
               <li>
