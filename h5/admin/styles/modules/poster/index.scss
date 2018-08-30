@@ -1,6 +1,11 @@
 .setting-poster {
   .poster-image-container {
     font-size: 0;
+    &.responsive {
+      .poster-image {
+        width: 100%;
+      }
+    }
     &.size-fit {
       text-align: center;
       .poster-image {

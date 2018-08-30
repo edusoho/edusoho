@@ -2,17 +2,18 @@
   <div class="e-swipe">
     <van-swipe>
       <van-swipe-item v-for="(slide, index) in slides" :key="index">
-        <!-- course -->
-        <div class="item-container" v-if="slide.link.type === 'course'">
-          <div @click="jumpTo(slide.link.id)">
+        <div class="item-container">
+          <!-- course -->
+          <div v-if="slide.link.type === 'course'" @click="jumpTo(slide.link.id)">
             <img v-bind:src="slide.image.uri">
           </div>
-        </div>
-        <!-- url -->
-        <div class="item-container" v-if="slide.link.type === 'url'">
-          <a v-bind:href="slide.link.url">
+          <!-- url -->
+          <a v-if="slide.link.type === 'url'" v-bind:href="slide.link.url">
             <img v-bind:src="slide.image.uri">
           </a>
+          <div class="text-overflow item-container__title">{{ slide.title }}</div>
+        </div>
+        <div class="item-container">
         </div>
       </van-swipe-item>
     </van-swipe>

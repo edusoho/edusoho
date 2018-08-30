@@ -1,6 +1,12 @@
 .e-swipe {
   img {
     width: 100%;
-    height: vw(150);
+    height: vw(200);
+  }
+}
+.item-container {
+  &__title {
+    position: absolute;
+    bottom: 0;
   }
 }
