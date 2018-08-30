@@ -7,14 +7,16 @@
   {% if not task.isOptional %}
     {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
   {% endif %}
-  {{ task.title|sub_text(30) }}
+  <span class="js-task-title">
+    {{ task.title|sub_text(30) }}
+  </span>
 {% endif %} 
 
 {% if customTitle|default('') != '' %}
   {{customTitle|raw}}
 {% endif %}
 
-<tmp class="{{isLesson|default(false)?'displayWhenSingleTask':''}}">
+<span class="{{isLesson|default(false)?'displayWhenSingleTask':''}}">
   {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
     <span class="cd-tag cd-tag-red ml5">{{'course.plan_task.convert_failed'|trans}}</span>
   {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
@@ -35,4 +37,4 @@
       （{{ activity.length|activity_length_format(activity.mediaType) }}）</span>
     {% endif %}
   {% endif %}
-</tmp>
+</span>

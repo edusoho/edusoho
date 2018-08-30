@@ -304,6 +304,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->beginTransaction();
         try {
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+            $this->updateTaskName($task);
 
             $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
@@ -1298,5 +1299,19 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /*
+     * 所属课时只有一个任务时，修改任务名称，改为课时名称
+     */
+    private function updateTaskName($task)
+    {
+        $leftTaskCount = $this->countTasks(array('categoryId' => $task['categoryId']));
+        if (1 == $leftTaskCount) {
+            $leftTasks = $this->searchTasks(array('categoryId' => $task['categoryId']), array('id' => 'asc'), 0, 1);
+            $actualTask = $leftTasks[0];
+            $chapter = $this->getCourseService()->getChapter($task['courseId'], $task['categoryId']);
+            $this->getTaskDao()->update($actualTask['id'], array('title' => $chapter['title']));
+        }
     }
 }

@@ -1722,7 +1722,7 @@ course.plan_task.convert_failed: 转码失败
 course.plan_task.which_chapter: >
   </i>第<span class="number">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>
 course.plan_task.which_lesson: >
-  </i>课时<span class="number">%chapterNumber%</span>：<span class="title">%title%</span>
+  </i>课时<span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>
 course.plan_task.create_btn: 添加
 course.plan_task.create_part: >
   添加%partName%
