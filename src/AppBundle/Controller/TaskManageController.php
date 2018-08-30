@@ -157,6 +157,7 @@ class TaskManageController extends BaseController
         $course = $this->tryManageCourse($courseId);
         $task = $this->getTaskService()->getTask($id);
         $taskMode = $request->query->get('type');
+        $customTitle = $request->query->get('customTitle', '');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
         }
@@ -184,6 +185,7 @@ class TaskManageController extends BaseController
             'task-manage/modal.html.twig',
             array(
                 'mode' => 'edit',
+                'customTitle' => $customTitle,
                 'currentType' => $activity['mediaType'],
                 'course' => $course,
                 'courseSet' => $courseSet,
