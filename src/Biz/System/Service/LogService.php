@@ -66,6 +66,8 @@ interface LogService
      */
     public function searchLogCount($conditions);
 
+    public function searchOldLogCount($conditions);
+
     public function analysisLoginNumByTime($startTime, $endTime);
 
     public function analysisLoginDataByTime($startTime, $endTime);

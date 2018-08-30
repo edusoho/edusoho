@@ -90,6 +90,13 @@ class LogServiceImpl extends BaseService implements LogService
         return $this->getLogDao()->count($conditions);
     }
 
+    public function searchOldLogCount($conditions)
+    {
+        $conditions = $this->prepareSearchConditions($conditions);
+
+        return $this->getLogOldDao()->count($conditions);
+    }
+
     protected function addLog($level, $module, $action, $message, array $data = null)
     {
         $user = $this->getCurrentUser();
