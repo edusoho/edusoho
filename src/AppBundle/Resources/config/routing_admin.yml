@@ -1027,6 +1027,9 @@ admin_logs_action_dicts:
 admin_logs_username_match:
     path:  /setting/logs/usernameMatchUsers
     defaults: { _controller: AppBundle:Admin/Log:usernameMatchUsers }
+admin_logs_old:
+    path:  /setting/logs/old
+    defaults: { _controller: AppBundle:Admin/Log:old }
 
 admin_cloud_access:
     path:  /cloud/access

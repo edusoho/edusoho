@@ -10,7 +10,7 @@ class ServiceProxy
     private $className;
     private $class;
     private $interceptors;
-    private $interceptorDatas;
+    private $interceptorDatas = array();
 
     public function __construct(Biz $biz, $className)
     {
