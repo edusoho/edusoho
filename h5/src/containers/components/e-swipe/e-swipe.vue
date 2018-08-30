@@ -1,6 +1,6 @@
 <template>
   <div class="e-swipe">
-    <van-swipe>
+    <van-swipe :autoplay="2000">
       <van-swipe-item v-for="(slide, index) in slides" :key="index">
         <div class="item-container">
           <!-- course -->
@@ -12,8 +12,6 @@
             <img v-bind:src="slide.image.uri">
           </a>
           <div class="text-overflow item-container__title">{{ slide.title }}</div>
-        </div>
-        <div class="item-container">
         </div>
       </van-swipe-item>
     </van-swipe>
