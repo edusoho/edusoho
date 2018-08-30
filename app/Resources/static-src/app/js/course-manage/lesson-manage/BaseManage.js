@@ -64,37 +64,37 @@ export default class Manage {
     }
     //添加章节课时
     switch (this.type) {
-    case 'chapter':
-    {
-      let $position = this.$element.find('#chapter-' + this.position);
-      let $last = $position.nextUntil('.js-task-manage-chapter').last();
-      if (0 == $last.length) {
-        $position.after($elm);
-      } else {
-        $last.after($elm);
-      }
-      break;
-    }
-    case 'task':
-    {
-      this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
-      let container = $elm.parents('.js-lesson-container');
-      this._triggerAsTaskNumUpdated(container);
-      break;
-    }
-    case 'lesson':
-    {
-      let $unit = this.$element.find('#chapter-' + this.position);
-      let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
-      if (0 == $lesson.length) {
-        $unit.after($elm);
-      } else {
-        $lesson.after($elm);
-      }
-      break;
-    }
-    default:
-      this.$element.append($elm);
+      case 'chapter':
+        {
+          let $position = this.$element.find('#chapter-' + this.position);
+          let $last = $position.nextUntil('.js-task-manage-chapter').last();
+          if (0 == $last.length) {
+            $position.after($elm);
+          } else {
+            $last.after($elm);
+          }
+          break;
+        }
+      case 'task':
+        {
+          this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
+          let container = $elm.parents('.js-lesson-container');
+          this._triggerAsTaskNumUpdated(container);
+          break;
+        }
+      case 'lesson':
+        {
+          let $unit = this.$element.find('#chapter-' + this.position);
+          let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+          if (0 == $lesson.length) {
+            $unit.after($elm);
+          } else {
+            $lesson.after($elm);
+          }
+          break;
+        }
+      default:
+        this.$element.append($elm);
     }
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -260,15 +260,15 @@ export default class Manage {
     this.$element.on('click', '.js-unpublish-item', (event) => {
       const $target = $(event.target);
       info.success = Translator.trans('course.manage.task_unpublish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':',
-      this.toggleOptional($target, self, info);
+        info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':',
+        this.toggleOptional($target, self, info);
     });
 
     this.$element.on('click', '.js-publish-item', (event) => {
       const $target = $(event.target);
       info.success = Translator.trans('course.manage.task_publish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':',
-      this.toggleOptional($target, self, info);
+        info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':',
+        this.toggleOptional($target, self, info);
     });
   }
 
@@ -389,6 +389,7 @@ export default class Manage {
       lessonBox.addClass('hidden');
       container.find('.js-display-when-mul-tasks').addClass('hidden');
       container.find('.js-display-when-single-task').removeClass('hidden');
+      container.find('.js-task-title').html(container.find('.js-lesson-title').html());
     }
 
     this._triggerLessonIconAsTaskNumUpdated(container, isMulTasks);
@@ -410,7 +411,7 @@ export default class Manage {
       if (className.startsWith('es-icon-')) {
         if (isMulTasks) {
           lessonIconBtn.removeClass(className);
-        } else if (!lessonIconBtn.hasClass(className)) {
+        } else {
           lessonIconBtn.addClass(className);
         }
       }
