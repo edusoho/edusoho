@@ -1,5 +1,77 @@
-{% include 'activity/activity-form-layout.html.twig' %}
+{% extends 'activity/activity-form-layout.html.twig' %}
 
-{% block activity_step %}
-
+{% set course = get_course(activity.fromCourseId) %}
+{% set exercise = activity.ext|default(null) %}
+{% set range = exercise.metas.range|default(null)|parse_exercise_range %}
+{% if range.courseId|default(0) != 0 %}
+  {% set courseTasks = get_course_tasks(range.courseId, {'typesNotIn':['testpaper', 'homework', 'exercise']}) %}
 {% endif %}
+{% do script(['libs/ltc-sdk-client.js', 'exerciseactivity/js/create/index.js'],300) %}
+{% block activity_step %}
+<div class="tab-pane js-course-tasks-pane active js-step2-view">
+  <form class="form-horizontal" id="step2-form" >
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+      </div>
+      <div class="col-sm-10">
+        <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label for="questionCount" class="control-label-required">{{'course.plan_task.exercise.question_numbers'|trans}}</label>
+      </div>
+      <div class="col-sm-10 controls">
+        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ exercise.itemCount|default(1) }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'course.plan_task.exercise.question_sourse'|trans}}</label>
+      <div class="col-sm-10 controls radios">
+        <select class="form-control width-150" name="range[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:activity.fromCourseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
+          <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.course'|trans}}</option>
+          <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
+        </select>
+        <select class="form-control width-150" {% if not courseTasks|default(null) %}style="display:none;"{% endif %} name="range[lessonId]" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
+          <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>
+          {% for task in courseTasks|default([]) if task %}
+            <option value="{{ task.id }}" {% if range.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label"><label>{{'course.plan_task.exercise.difficulty'|trans}}</label></div>
+      <div class="col-sm-10 controls">
+        <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty"  data-url="{{ path('course_set_manage_show_tasks',{courseSetId:activity.fromCourseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
+          {{ select_options(dict('difficulty'), exercise.metas.difficulty|default('0'),{'0':'course.plan_task.exercise.default_difficulty'|trans}) }}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label class="control-label-required">{{'course.plan_task.exercise.question_type_range'|trans}}</label>
+      </div>
+      <div class="col-sm-10 controls">
+        {% set questionRange = exercise.metas.questionTypes|default(null) %}
+        {% set questionTypes = getQuestionTypes() %}
+        {% set questionNums = find_question_num_by_course_set_id(activity.fromCourseSetId) %}
+        {% for questionType,name in questionTypes %}
+          {% set questionNum = questionNums[questionType]|default(null) %}
+          <label class="checkbox-inline ml0 width-200 js-question-type">
+            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in questionRange %} checked=checked {% endif %}>{{ name }}
+            （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':questionNum.questionNum|default(0)})|raw }}）
+
+          </label>
+        {% endfor %}
+        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:course.id}) }}" />
+        <p class="help-block mtl">{{'course.plan_task.exercise.question_type_range_tips'|trans}}</p>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
