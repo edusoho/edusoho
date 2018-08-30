@@ -2,18 +2,19 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-class TestPaperResultDataTag  extends BaseDataTag
+class TestPaperResultDataTag extends BaseDataTag
 {
     public function getData(array $arguments)
     {
         $user = $this->getCurrentUser();
         $this->checkArguments($arguments, array(
             'activityId',
-            'testpaperId'
+            'testpaperId',
         ));
 
         $activity = $this->getActivityService()->getActivity($arguments['activityId'], false);
-        return $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $arguments['testpaperId'], $activity['fromCourseId'], $activity['id'], 'testpaper');
+
+        return $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $arguments['testpaperId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
     }
 
     public function getTestpaperService()
