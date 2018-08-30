@@ -14,6 +14,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if (empty($discoverySettings)) {
             $discoverySettings = $this->getSettingService()->get("{$portal}_published_discovery", array());
         }
+        //草稿和发布的设置都为空时获取第一版的默认设置
+        if (empty($discoverySettings)) {
+            $discoverySettings = $this->getDefaultDiscovery($portal);
+        }
+
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 if (!empty($discoverySetting['data']['lastDays'])) {
@@ -105,6 +110,65 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return array();
     }
 
+    public function getDefaultDiscovery($portal)
+    {
+        $posters = $this->getBlockService()->getPosters();
+        $slides = array();
+        foreach ($posters as $poster) {
+            $slide = array(
+                'title' => '',
+                'image' => array(
+                    'id' => 0,
+                    'uri' => $poster['image'],
+                    'size' => '',
+                    'createdTime' => 0,
+                ),
+                'link' => array(
+                    'type' => 'url',
+                    'target' => null,
+                    'url' => $poster['link']['url'],
+                ),
+            );
+            $slides[] = $slide;
+        }
+
+        $result = array(
+            'slide-1' => array(
+                'type' => 'slide_show',
+                'moduleType' => 'slide-1',
+                'data' => $slides,
+            ),
+            'courseList-1' => array(
+                'type' => 'course_list',
+                'moduleType' => 'courseList-1',
+                'data' => array(
+                    'title' => '热门课程',
+                    'sourceType' => 'condition',
+                    'categoryId' => 0,
+                    'sort' => '-studentNum',
+                    'lastDays' => 0,
+                    'limit' => 4,
+                    'items' => array(),
+                ),
+            ),
+            'courseList-2' => array(
+                'type' => 'course_list',
+                'moduleType' => 'courseList-2',
+                'data' => array(
+                    'title' => '推荐课程',
+                    'sourceType' => 'condition',
+                    'categoryId' => 0,
+                    'sort' => 'recommendedSeq',
+                    'lastDays' => 0,
+                    'limit' => 4,
+                    'items' => array(),
+                ),
+            ),
+        );
+
+        return $result;
+    }
+
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
@@ -118,5 +182,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    protected function getBlockService()
+    {
+        return $this->biz->service('Content:BlockService');
     }
 }
