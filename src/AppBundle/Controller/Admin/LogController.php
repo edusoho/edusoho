@@ -66,7 +66,7 @@ class LogController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getLogService()->searchLogCount($conditions),
+            $this->getLogService()->searchOldLogCount($conditions),
             30
         );
 
