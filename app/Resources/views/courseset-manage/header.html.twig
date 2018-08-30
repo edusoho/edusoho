@@ -12,9 +12,9 @@
   {% endblock %}
   <div class="clearfix js-origin-header-content {% if couserNum|default(0) > 1 and foldType|default(0) == 1 %}courseset-manage-opacity {% endif %}">
     {# 课程封面 #}
-    <a href="{{basepath}}">
+    {% block coursesetImg %}
       <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
-    </a>
+    {% endblock %}
 
     {% set publishUrl = publishUrl|default(path('course_set_manage_publish', {id:courseSet.id})) %}
 
@@ -36,7 +36,7 @@
     <div class="courseset-manage-header-info">
       <div class="courseset-manage-header-info__title text-overflow" {% if courseSet.title|length > 21 %}data-toggle="tooltip" title="{{ courseSet.title }}" data-container="body" {% endif %}>
         {% block coursesetTitle %}
-          <a class="cd-link-major" href="{{basepath}}">{{ courseSet.title }}</a>
+          <span class="cd-dark-major">{{ courseSet.title }}</span>
         {% endblock %}
       </div>
       {% block courseType %}

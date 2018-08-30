@@ -2,6 +2,8 @@
 
 namespace AppBundle\Common;
 
+use Codeages\Biz\Framework\Service\ServiceProxy;
+
 /**
  * 使用方法可参考　ReflectionUtilsTest.php
  */
@@ -14,7 +16,13 @@ class ReflectionUtils
      */
     public static function invokeMethod($classObj, $methodName, $args = null)
     {
-        $classPackName = get_class($classObj);
+        if ($classObj instanceof ServiceProxy) {
+            $classPackName = $classObj->getClassName();
+            $classObj = $classObj->getClass();
+        } else {
+            $classPackName = get_class($classObj);
+        }
+
         $class = new \ReflectionClass($classPackName);
         $method = $class->getmethod($methodName);
         $method->setAccessible(true);
@@ -35,7 +43,12 @@ class ReflectionUtils
      */
     public static function setProperty($classObj, $propertyName, $propertyValue)
     {
-        $classPackName = get_class($classObj);
+        if ($classObj instanceof ServiceProxy) {
+            $classPackName = $classObj->getClassName();
+            $classObj = $classObj->getClass();
+        } else {
+            $classPackName = get_class($classObj);
+        }
         $class = new \ReflectionClass($classPackName);
         $property = $class->getProperty($propertyName);
         $property->setAccessible(true);
@@ -46,7 +59,12 @@ class ReflectionUtils
 
     public static function getProperty($classObj, $propertyName)
     {
-        $classPackName = get_class($classObj);
+        if ($classObj instanceof ServiceProxy) {
+            $classPackName = $classObj->getClassName();
+            $classObj = $classObj->getClass();
+        } else {
+            $classPackName = get_class($classObj);
+        }
         $class = new \ReflectionClass($classPackName);
         $property = $class->getProperty($propertyName);
         $property->setAccessible(true);
@@ -61,7 +79,12 @@ class ReflectionUtils
      */
     public static function setStaticProperty($classObj, $propertyName, $propertyValue)
     {
-        $classPackName = get_class($classObj);
+        if ($classObj instanceof ServiceProxy) {
+            $classPackName = $classObj->getClassName();
+            $classObj = $classObj->getClass();
+        } else {
+            $classPackName = get_class($classObj);
+        }
         $class = new \ReflectionClass($classPackName);
         $property = $class->getProperty($propertyName);
         $property->setAccessible(true);

@@ -58,6 +58,10 @@
   .cd-radio {
     min-width: 90px;
   }
+  .form-error-message {
+    position: absolute;
+    font-size: 12px;
+  }
 }
 
 .courseset-manage-padding {
@@ -79,7 +83,7 @@
 }
 .courseset-manage-body__tip {
   margin-top: 8px;
-  color: @cd-dark-assist;
+  color: @tip-color;
   font-size: 12px;
   line-height: 1;
 }
@@ -101,7 +105,7 @@
 }
 
 .courses-manage-list {
-  padding-left: 0;
+  padding-left: 6px;
   list-style: none;
 }
 
@@ -143,7 +147,7 @@
     @media (min-width: @screen-sm-min) {
       line-height: 1;
     }
-    color: @cd-dark-assist;
+    color: @tip-color;
   }
 
 }
@@ -170,6 +174,7 @@
       }
     }
     .form-error-message  {
+      position: absolute;
       font-size: 12px;
     }
   }
@@ -201,7 +206,7 @@
   margin-top: 8px;
   font-size: 12px;
   line-height: 1;
-  color: @cd-dark-assist;
+  color: @tip-color;
 }
 
 .course-mangae-info__group {
@@ -217,6 +222,9 @@
 .course-mangae-info__input {
   width: 128px;
   display: inline-block;
+  &[disabled] {
+    color: @tip-color;
+  }
 }
 
 .course-mangae-info__help {
@@ -256,7 +264,7 @@
   position: relative;
   margin-left: -24px;
   margin-top: 16px;
-  padding: 12px 0 24px 24px;
+  padding: 12px 0 28px 24px;
   max-width: 496px;
   background-color: @gray-lighter;
   .border-radius;
@@ -293,4 +301,10 @@
 
 .live-course-rule {
   margin-left: -6px;
+}
+
+.expiry-date-change {
+  .form-error-message {
+    position: absolute;
+  }
 }

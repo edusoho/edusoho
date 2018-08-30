@@ -53,7 +53,6 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->commit();
 
             $this->dispatchEvent('course.lesson.create', new Event($lesson));
-            $this->getLogService()->info('course', 'create_lesson', "创建课时(#{$lesson['id']})", $lesson);
 
             return array($lesson, $task);
         } catch (\Exception $exception) {
@@ -143,8 +142,6 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $this->dispatchEvent('course.lesson.delete', new Event($lesson));
 
-        $this->getLogService()->info('course', 'delete_lesson', "删除课时(#{$lessonId})", $lesson);
-
         return true;
     }
 
@@ -180,7 +177,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 1);
 
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
-            $this->getLogService()->info('course', 'course.lesson.update', "课时设置选修(#{$lesson['id']})", $lesson);
+            $this->getLogService()->info('course', 'lesson_set_optional', "课时设置选修《{$lesson['title']}》", $lesson);
 
             $this->commit();
 
@@ -207,7 +204,12 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 0);
 
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
-            $this->getLogService()->info('course', 'course.lesson.update', "课时设置取消选修(#{$lesson['id']})", $lesson);
+
+            $infoData = array(
+                'courseId' => $lesson['courseId'],
+                'title' => $lesson['title'],
+            );
+            $this->getLogService()->info('course', 'lesson_unset_optional', "课时设置必修《{$lesson['title']}》", $infoData);
 
             $this->commit();
 

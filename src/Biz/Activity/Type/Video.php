@@ -177,12 +177,9 @@ class Video extends Activity
 
     public function prepareMediaUri($video)
     {
-        if ('self' != $video['mediaSource']) {
-            $proxy = new ParserProxy();
-            $video = $proxy->prepareMediaUriForPc($video);
-        }
+        $proxy = new ParserProxy();
 
-        return $video;
+        return $proxy->prepareMediaUri($video);
     }
 
     public function findWithoutCloudFiles($targetIds)

@@ -87,7 +87,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
-            $this->getLogService()->info('course', 'add_task', "添加任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
 
@@ -161,10 +160,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})", array(
-                'oldTask' => $oldTask,
-                'task' => $task,
-            ));
             $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
 
             if ('download' == $task['type']) {
@@ -306,7 +301,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
             $this->updateTaskName($task);
 
-            $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
             $this->commit();
@@ -468,7 +462,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 continue;
             }
             if ($preTask['isOptional']) {
-                $canLearnTask = true;
+                continue;
             }
             if ('live' === $preTask['type']) {
                 if (time() > $preTask['endTime']) {
@@ -1108,10 +1102,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         foreach ($tasks as $task) {
             $newTask = $this->getTaskDao()->update($task['id'], array('isOptional' => $isOptional));
 
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})的选修状态", array(
-                'oldTask' => $task,
-                'task' => $newTask,
-            ));
+            $action = 1 == $isOptional ? 'task_set_optional' : 'task_unset_optional';
+
+            $infoData = array(
+                'courseId' => $task['courseId'],
+                'title' => $task['title'],
+            );
+
+            $this->getLogService()->info('course', $action, "更新任务《{$task['title']}》的选修状态", $infoData);
             $this->dispatchEvent('course.task.updateOptional', new Event($newTask, $task));
         }
     }

@@ -60,7 +60,6 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
-            $this->getLogService()->info('admin/system/', 'update_settings', '更新课程设置', $courseSetting);
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->createJsonResponse(true);
@@ -82,7 +81,6 @@ class CourseSettingController extends BaseController
             $defaultSetting = array_merge($defaultSetting, array('defaultCoursePicture' => $courseDefaultSetting));
 
             $this->getSettingService()->set('default', $defaultSetting);
-            $this->getLogService()->info('admin/system/', 'update_settings', '更新课程默认图片设置', $defaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('admin_setting_course_avatar'));
@@ -154,7 +152,6 @@ class CourseSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
-            $this->getLogService()->info('admin/system/', 'questions_settings', '更新题库设置', $questionsSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 

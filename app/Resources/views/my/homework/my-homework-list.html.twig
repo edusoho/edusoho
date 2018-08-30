@@ -27,12 +27,9 @@
                   <td width="55%">
                     {{ task.title|default(paperResult.paperName)|plain_text(60) }}
                     <div>
-                      {% if courseSet|default(null) %}
-                        <small class="color-gray">{{'my.learning.homework.target_course'|trans({'%showUrl%':path('course_show', {id: courseSet.defaultCourseId}),'%courseTitle%':courseSet.title})|raw}}</small>
-                      {% endif %}
-                      {% if course|default(null) %}
-                        <small class="color-gray">{{'my.learning.homework.course_plan'|trans}}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
-                      {% endif %}
+                      <small class="color-gray">
+                        {{ 'come.from'|trans }}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{get_formated_course_title(course)}}》</a>
+                      </small>
                       <small class="color-gray mhs">•</small>
                       <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{ paperResult.beginTime|date('site.date_format'|trans) }}</small>
                     </div>

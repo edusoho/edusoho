@@ -2,6 +2,8 @@
 
 namespace Biz\OpenCourse\Service;
 
+use Biz\System\Annotation\Log;
+
 interface OpenCourseService
 {
     const LIVE_OPEN_TYPE = 'liveOpen';
@@ -24,10 +26,29 @@ interface OpenCourseService
      */
     public function countCourses($conditions);
 
+    /**
+     * @param $course
+     *
+     * @return mixed
+     * @Log(module="open_course",action="create_course")
+     */
     public function createCourse($course);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_course",param="id")
+     */
     public function updateCourse($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="open_course",action="delete_course")
+     */
     public function deleteCourse($id);
 
     public function waveCourse($id, $field, $diff);
@@ -36,12 +57,31 @@ interface OpenCourseService
 
     public function unFavoriteCourse($courseId);
 
+    /**
+     * @param $courseId
+     * @param $data
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_picture",funcName="getCourse",param="courseId")
+     */
     public function changeCoursePicture($courseId, $data);
 
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="open_course",action="pulish_course",funcName="getCourse")
+     */
     public function publishCourse($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="open_course",action="close_course",funcName="getCourse")
+     */
     public function closeCourse($id);
 
     public function tryManageOpenCourse($courseId);
@@ -69,12 +109,32 @@ interface OpenCourseService
      */
     public function countLessons($conditions);
 
+    /**
+     * @param $lesson
+     *
+     * @return mixed
+     * @Log(module="open_course",action="add_lesson")
+     */
     public function createLesson($lesson);
 
+    /**
+     * @param $courseId
+     * @param $lessonId
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_lesson",funcName="getCourseLesson",param="courseId,lessonId")
+     */
     public function updateLesson($courseId, $lessonId, $fields);
 
     public function waveCourseLesson($id, $field, $diff);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="open_course",action="delete_lesson")
+     */
     public function deleteLesson($id);
 
     public function getLessonItems($courseId);
@@ -126,6 +186,13 @@ interface OpenCourseService
 
     public function deleteMember($id);
 
+    /**
+     * @param $courseId
+     * @param $teachers
+     *
+     * @return mixed
+     * @Log(module="open_course",action="update_teacher",funcName="getCourse",param="courseId")
+     */
     public function setCourseTeachers($courseId, $teachers);
 
     public function getTodayOpenLiveCourseNumber();
