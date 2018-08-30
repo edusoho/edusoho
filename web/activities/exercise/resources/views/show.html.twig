@@ -1,25 +1,11 @@
-{% extends 'layout.html.twig' %}
-
-{% block body %}
-    <div  class="modal show iframe-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body task-state-modal">
-                    <div class="title font-blod">
-                        <i class="es-icon es-icon-xinxi color-info"></i>
-                        {{'course.plan_task.activity_manage.exercise.info'|trans}}
-                    </div>
-                    <div class="content">
-                        <div class="text-16">
-                            {{'course.plan_task.activity_manage.exercise.info_tips'|trans({'%itemCount%':exercise.itemCount})|raw}}
-                        </div>
-                    </div>
-                    <div class="text-right mt20">
-                        <a class="btn btn-primary" href="{{ path('exercise_start_do',{lessonId:activity.id,exerciseId:exercise.id})}}">{{'course.plan_task.activity_manage.exercise.start_btn'|trans}}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-backdrop in"></div>
-{% endblock %}
+{% set exercise = activity.ext %}
+{% if app.request.get('preview') == 1 %}
+  {% include '@activity/exercise/resources/views/show/preview.html.twig' %}
+{% else %}
+  {% set testpaperResult = data('TestPaperResult', {activityId: activity.id ,testpaperId: activity.mediaId}) %}
+  {% if not testpaperResult  or (testpaperResult.status == 'doing' and  not testpaperResult.updateTime) %}
+    {% include('@activity/exercise/resources/views/show/index.html.twig') %}
+  {% elseif testpaperResult and  testpaperResult.status == 'finished' %}
+    {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}
+  {% endif %}
+{% endif %}
