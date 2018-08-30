@@ -83,8 +83,7 @@ class AnnotationInterceptor extends AbstractInterceptor
             $context = empty($beforeResult) ? $result : $beforeResult;
             if (!empty($formats)) {
                 $formatReturn = $result;
-                $formats = str_replace("'", '"', $formats);
-                $formats = json_decode($formats, true);
+                $formats = json_decode(str_replace("'", '"', $formats), true);
                 if (isset($formats['after'])) {
                     $format = $formats['after'];
                     $service = $this->biz->service($format['className']);

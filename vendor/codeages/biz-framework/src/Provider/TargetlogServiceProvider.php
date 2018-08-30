@@ -17,11 +17,15 @@ class TargetlogServiceProvider implements ServiceProviderInterface
             return new TableCommand($biz);
         };
 
+        $biz['targetlog.options'] = array(
+            'cache_directory' => ''
+        );
+
         $biz['service_targetlog.annotation_reader'] = function ($biz) {
             if ($biz['debug']) {
                 $cacheDirectory = null;
             } else {
-                $cacheDirectory = $biz['cache_directory'].DIRECTORY_SEPARATOR.'service_targetlog_interceptor_data';
+                $cacheDirectory = $biz['targetlog.options']['cache_directory'].DIRECTORY_SEPARATOR.'service_targetlog_interceptor_data';
             }
 
             return new LogReader($cacheDirectory);
