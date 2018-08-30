@@ -55,6 +55,34 @@ class LogServiceImpl extends BaseService implements LogService
         return $logs;
     }
 
+    public function searchOldLogs($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->prepareSearchConditions($conditions);
+
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('id' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('id' => 'ASC');
+                    break;
+                default:
+                    throw $this->createServiceException('参数sort不正确。');
+                    break;
+            }
+        }
+
+        $logs = $this->getLogOldDao()->search($conditions, $sort, $start, $limit);
+
+        foreach ($logs as &$log) {
+            $log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
+            unset($log);
+        }
+
+        return $logs;
+    }
+
     public function searchLogCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
@@ -162,6 +190,14 @@ class LogServiceImpl extends BaseService implements LogService
     protected function getLogDao()
     {
         return $this->createDao('System:LogDao');
+    }
+
+    /**
+     * @return LogDao
+     */
+    protected function getLogOldDao()
+    {
+        return $this->createDao('System:LogOldDao');
     }
 
     /**

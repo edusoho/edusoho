@@ -49,6 +49,8 @@ interface LogService
      */
     public function searchLogs($conditions, $sort, $start, $limit);
 
+    public function searchOldLogs($conditions, $sort, $start, $limit);
+
     /**
      * 根据指定搜索条件返回该条数。
      *                 如array(

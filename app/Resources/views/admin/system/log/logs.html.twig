@@ -54,7 +54,7 @@
 
   <div class="form-group">
     {% set url = path('admin_logs_username_match') ~ '?nickname={{query}}' %}
-    <input class="form-control quicksearch" id="nickname" name="nickname" data-role="item-input" placeholder="{{'admin.system_log.username_placeholder'|trans}}" data-url='{{url}}' value="{{app.request.query.get('nickname')}}">
+    <input class="form-control quicksearch width-input-medium-important" id="nickname" name="nickname" data-role="item-input" placeholder="{{'admin.system_log.username_placeholder'|trans}}" data-url='{{url}}' value="{{app.request.query.get('nickname')}}">
   </div>
 
   <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
@@ -66,6 +66,10 @@
     </span>
     <label for="switch-operation" class="switch{% if hasSystemOperation == 1 %} checked{% endif %}">
       <input type="checkbox" name="operation" value="" id="switch-operation">
+    </label>
+
+    <label class="mrl">
+      <a href='{{path("admin_logs_old")}}' target="_blank" >查看历史日志</a>
     </label>
   </p>
 
