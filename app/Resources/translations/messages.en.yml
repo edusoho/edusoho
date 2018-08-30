@@ -825,7 +825,7 @@ course.teaching_plan.create.operation: Action
 course.teaching_plan.edit.copy: 'Copy %title% and create a new program'
 course.teaching_plan.expiry_date: 'Expiry date'
 course.teaching_plan.expiry_date.not_change_tips: 'Tip: Expiry date can not be edited once the plan being created.'
-course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student enroll in the course to 24 o'clock of the last day.\n"
+course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student enroll in the course to 23:59 o'clock of the last day.\n"
 course.teaching_plan.expiry_date.real_time: '<b>fixed time:</b>course started and finished at fixed time'
 course.teaching_plan.expiry_date.overdue_tips: 'Student can not study if expired. System will inform the student 10 days before expired.'
 course.teaching_plan.expiry_date.forever_mode: Permanet
