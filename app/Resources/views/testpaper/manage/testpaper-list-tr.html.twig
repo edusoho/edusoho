@@ -34,7 +34,7 @@
           <li><a class="open-testpaper" href="javascript:" title="{{'course.testpaper_manage.publish_tips'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_set_manage_testpaper_publish', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon--check-circle mrm"></span> {{'course.testpaper_manage.publish_btn'|trans}}</a></li>
         {% endif %}
         {% if testpaper.status == 'open' %}
-          <li><a class="close-testpaper" href="javascript:" title="{% if testpaperActivities[testpaper.id]|default(null) %}{{'course.testpaper_manage.testpaper_quoted_close_tips'|trans({'%taskName%':setting('course.task_name')})}}{% else %}{{'course.testpaper_manage.close_tips'|trans({'%name%': testpaper.name })}}{% endif %}" data-url="{{ path('course_set_manage_testpaper_close', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-close01 mrm"></span> {{'course.testpaper_manage.close_btn'|trans}}</a></li>
+          <li><a class="close-testpaper" href="javascript:" title="{% if testpaperActivities[testpaper.id]|default(null) %}{{'course.testpaper_manage.testpaper_quoted_close_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}{% else %}{{'course.testpaper_manage.close_tips'|trans({'%name%': testpaper.name })}}{% endif %}" data-url="{{ path('course_set_manage_testpaper_close', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-close01 mrm"></span> {{'course.testpaper_manage.close_btn'|trans}}</a></li>
         {% endif %}
 
         {% if testpaper.status == 'draft' %}

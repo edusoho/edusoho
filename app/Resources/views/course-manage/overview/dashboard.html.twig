@@ -23,7 +23,7 @@
         {% endif %}
     </span>
         <div class="title">{{ 'course.dashboard.free_view_numbers'|trans }}
-            <span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'course.dashboard.free_view_numbers_tips'|trans({'%taskName%':setting('course.task_name')})}}">
+            <span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'course.dashboard.free_view_numbers_tips'|trans({'%taskName%':setting('course.task_name')}|default('admin.setting_course.task'|trans))}}">
             </span>
         </div>
     </div>
