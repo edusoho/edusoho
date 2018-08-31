@@ -63,7 +63,7 @@
           data: formData
         })
         .then((data) => {
-          this.item.image.uri = data.uri;
+          this.item.image = data;
           this.$emit('selected',
           {
             selectIndex: this.activeIndex,
