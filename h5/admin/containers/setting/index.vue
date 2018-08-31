@@ -22,7 +22,7 @@
         <div class="section-title">点击添加组件</div>
         <el-button class="find-section-item" type="" size="medium"
           v-for="(item, index) in moduleItems"
-          @click="addModule(item.default)"
+          @click="addModule(index)"
           :key="index">
           {{ item.name }}
         </el-button>
@@ -104,20 +104,24 @@ export default {
       this.currentModuleIndex = index;
     },
     updateModule(data, index) {
-      // console.log(data, index, 'updateModule');
+      console.log('updateModule');
     },
     removeModule(data, index) {
-      // console.log(data, index, 'removeModule');
+      console.log('removeModule');
       this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
     },
-    addModule(item) {
-      this.modules.push(Object.assign({}, item));
+    addModule(index) {
+      console.log('addModule')
+      // 需要一个深拷贝对象
+      const defaultString = JSON.stringify(this.moduleItems[index].default);
+      const defaultCopied = JSON.parse(defaultString);
+
+      this.modules.push(defaultCopied);
       this.currentModuleIndex =  Math.max(this.modules.length - 1, 0);
-      console.log('addModule', item, this.currentModuleIndex, this.modules)
     },
     reset() {
-      // 重置配置
+      // 重置配置／读取配置
       this.getDraft({
         portal: 'h5',
         type: 'discovery',
@@ -131,6 +135,7 @@ export default {
       const isPublish = mode === 'published';
       let data = this.modules;
 
+      // 如果已经是对象就不用转换
       if (needTrans) {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
