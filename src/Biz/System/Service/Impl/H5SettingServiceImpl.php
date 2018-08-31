@@ -34,6 +34,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
                 $discoverySetting['data']['items'] = $courses;
             }
+
+            if (in_array($discoverySetting['type'], array('poster', 'slide_show')) && 'target' == $discoverySetting['data']['link']['type']) {
+                $link = $discoverySetting['data']['link'];
+                $course = $this->getCourseService()->getCourse($link['target']['id']);
+                if (empty($course)) {
+                    $link['type'] = 'url';
+                    $link['target'] = null;
+                    $link['url'] = '';
+                }
+            }
         }
 
         return $discoverySettings;
