@@ -69,7 +69,7 @@ class CourseExtension extends \Twig_Extension
 
         $results = array();
         foreach ($courseItems as $item) {
-            if ($showOptional || !('task' == $item['itemType'] && $item['isOptional'])) {
+            if ($showOptional || !$this->isOptionalTaskLesson($item)) {
                 $default = array(
                     'lock' => '',
                     'status' => '',
@@ -101,6 +101,7 @@ class CourseExtension extends \Twig_Extension
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
+                    'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                 );
             }
         }
@@ -367,5 +368,10 @@ class CourseExtension extends \Twig_Extension
     protected function getActivityExtension()
     {
         return $this->container->get('web.twig.activity_extension');
+    }
+
+    private function isOptionalTaskLesson($item)
+    {
+        return in_array($item['itemType'], array('task', 'lesson')) && $item['isOptional'];
     }
 }

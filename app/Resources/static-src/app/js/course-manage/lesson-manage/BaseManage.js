@@ -383,12 +383,12 @@ export default class Manage {
 
     if (isMulTasks) { // 多任务课时显示任务, 同时课时上会少一些按钮
       lessonBox.removeClass('hidden');
-      container.find('.displayWhenMulTasks').removeClass('hidden');
-      container.find('.displayWhenSingleTask').addClass('hidden');
+      container.find('.js-display-when-mul-tasks').removeClass('hidden');
+      container.find('.js-display-when-single-task').addClass('hidden');
     } else { // 单任务课时不显示任务, 同时课时上会多一些按钮
       lessonBox.addClass('hidden');
-      container.find('.displayWhenMulTasks').addClass('hidden');
-      container.find('.displayWhenSingleTask').removeClass('hidden');
+      container.find('.js-display-when-mul-tasks').addClass('hidden');
+      container.find('.js-display-when-single-task').removeClass('hidden');
       container.find('.js-task-title').html(container.find('.js-lesson-title').html());
     }
 
