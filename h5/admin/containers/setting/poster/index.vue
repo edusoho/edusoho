@@ -1,6 +1,6 @@
 <template>
   <module-frame containerClass="setting-poster" :isActive="isActive">
-    <div slot="preview" :class="'poster-image-container ' +  imageMode ">
+    <div slot="preview" :class="'poster-image-container ' +  imageMode[copyModuleData.responsive]">
       <div class="poster-image-mask" v-show="!copyModuleData.image.uri">
         <h5>广告图片</h5>
       </div>
@@ -48,8 +48,8 @@
         <div class="poster-item-setting__section mtl">
           <p class="pull-left section-left">自适应手机屏幕：</p>
           <div class="section-right">
-            <el-radio v-model="imageMode" label="responsive">开启</el-radio>
-            <el-radio v-model="imageMode" label="size-fit">关闭</el-radio>
+            <el-radio v-model="copyModuleData.responsive" label="1">开启</el-radio>
+            <el-radio v-model="copyModuleData.responsive" label="0">关闭</el-radio>
           </div>
         </div>
       </div>
@@ -78,7 +78,10 @@ export default {
       imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
       courseSets: [],
       linkTextShow: false,
-      imageMode: 'responsive'
+      imageMode: [
+        'responsive',
+        'size-fit',
+      ],
     }
   },
   props: {
