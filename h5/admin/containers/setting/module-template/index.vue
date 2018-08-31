@@ -43,6 +43,10 @@ export default {
       type: Number,
       default: 0,
     },
+    moduleKey: {
+      type: String,
+      default: 'demo-1',
+    },
   },
   computed: {
     isActive: {
@@ -54,6 +58,14 @@ export default {
         this.$emit('activeModule', this.index);
       }
     }
+  },
+  created() {
+    // 每个模块唯一值
+    this.module.moduleType = this.moduleKey;
+  },
+  updated() {
+    // 每个模块唯一值
+    this.module.moduleType = this.moduleKey;
   },
   data () {
     return {
