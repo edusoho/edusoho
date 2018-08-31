@@ -8545,6 +8545,8 @@ log.action.template.order.adjust_price: 修改了<strong class="color-success">�
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
+log.show.old.logs: 查看历史日志
+log.show.old.logs.tips: 8.3.3版本之前的系统日志记录可以在「历史日志」中查看。
 
 log.attr.course.update.title: 课程标题
 log.attr.course.update.subtitle: 课程副标题

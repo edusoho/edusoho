@@ -22,32 +22,52 @@ class LogReader
         if ($cache) {
             return $cache;
         }
-        $annotationReader = new AnnotationReader();
-        $annotationReader::addGlobalIgnoredName('before');
         $reflectClass = new \ReflectionClass($service);
         $interfaces = $reflectClass->getInterfaces();
 
+        $interceptorData = $this->handleInterface($interfaces);
+
+        $this->saveCache($service, $interceptorData);
+
+        return $interceptorData;
+    }
+
+    protected function handleInterface($interfaces)
+    {
+        $annotationReader = new AnnotationReader();
+        $annotationReader::addGlobalIgnoredName('before');
+        $interceptorData = array();
         foreach ($interfaces as $interfaceName => $interfaceObj) {
             $reflectInterface = new \ReflectionClass($interfaceName);
             $methods = $reflectInterface->getMethods();
-            foreach ($methods as $method) {
-                $annotation = $annotationReader->getMethodAnnotation($method, 'Codeages\Biz\Framework\TargetLog\Annotation\Log');
-                if (empty($annotation)) {
-                    $interceptorData[$method->getName()] = array();
-                    continue;
-                }
-                $log = array();
-                $log['level'] = $annotation->getLevel();
-                $log['levelId'] = $annotation->getLevelId();
-                $log['targetType'] = $annotation->getTargetType();
-                $log['targetId'] = $annotation->getTargetId();
-                $log['action'] = $annotation->getAction();
-                $log['message'] = $annotation->getMessage();
-                $interceptorData[$method->getName()] = $log;
+            $getInterceptorData = $this->getInterceptorData($annotationReader, $methods);
+            if (!empty($getInterceptorData)) {
+                $interceptorData = array_merge($interceptorData, $getInterceptorData);
             }
         }
 
-        $this->saveCache($service, $interceptorData);
+        return $interceptorData;
+    }
+
+    protected function getInterceptorData($annotationReader, $methods)
+    {
+        $interceptorData = array();
+        foreach ($methods as $method) {
+            $annotation = $annotationReader->getMethodAnnotation($method, 'Codeages\Biz\Framework\TargetLog\Annotation\Log');
+            if (empty($annotation)) {
+                $interceptorData[$method->getName()] = array();
+                continue;
+            }
+            $log = array(
+                'level' => $annotation->getLevel(),
+                'levelId' => $annotation->getLevelId(),
+                'targetType' => $annotation->getTargetType(),
+                'targetId' => $annotation->getTargetId(),
+                'action' => $annotation->getAction(),
+                'message' => $annotation->getMessage(),
+            );
+            $interceptorData[$method->getName()] = $log;
+        }
 
         return $interceptorData;
     }

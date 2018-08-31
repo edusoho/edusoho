@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b24dbd9d3fdd1c31873a9497e8ab8af7",
+    "content-hash": "f20035ccf84ab234f2fb955acf15bac6",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.28",
+            "version": "v0.9.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "aad3ae9eeb50426bf427349069d5977556a5ca02"
+                "reference": "0c91ad520b8675dbb54affe96eb56556ca0142f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/aad3ae9eeb50426bf427349069d5977556a5ca02",
-                "reference": "aad3ae9eeb50426bf427349069d5977556a5ca02",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/0c91ad520b8675dbb54affe96eb56556ca0142f4",
+                "reference": "0c91ad520b8675dbb54affe96eb56556ca0142f4",
                 "shasum": ""
             },
             "require": {
@@ -345,7 +345,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-08-06T02:49:06+00:00"
+            "time": "2018-08-30T10:45:46+00:00"
         },
         {
             "name": "codeages/biz-order-pay",

@@ -59,19 +59,21 @@
 
   <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
 
-  <p class="text-muted log-operation mtl">
+  <div class="text-muted log-operation mtl">
 
-    <span class="mrl">
-      {{ 'admin.system_log.show_system_user'|trans}}
-    </span>
-    <label for="switch-operation" class="switch{% if hasSystemOperation == 1 %} checked{% endif %}">
-      <input type="checkbox" name="operation" value="" id="switch-operation">
-    </label>
+    {#是否显示系统用户操作按钮 8.3.4隐藏#}
+    {#<span class="mrl">#}
+      {#{{ 'admin.system_log.show_system_user'|trans}}#}
+    {#</span>#}
+    {#<label for="switch-operation" class="switch{% if hasSystemOperation == 1 %} checked{% endif %}">#}
+      {#<input type="checkbox" name="operation" value="" id="switch-operation">#}
+    {#</label>#}
 
     <label class="mrl">
-      <a href='{{path("admin_logs_old")}}' target="_blank" >查看历史日志</a>
+      <a class="mts pull-left" href='{{path("admin_logs_old")}}' target="_blank" >{{'log.show.old.logs'|trans}}</a>
+      {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'log.show.old.logs.tips'|trans, placement: 'right'} %}
     </label>
-  </p>
+  </div>
 
 </form>
 
