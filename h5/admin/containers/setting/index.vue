@@ -9,6 +9,7 @@
         <module-template v-for="(module, index) in modules"
           :module="module" :active="isActive(index)"
           :key="index"
+          :moduleKey="`${module.type}-${index}`"
           :index="index"
           @activeModule="activeModule"
           @updateModule="updateModule($event, index)"
@@ -103,17 +104,17 @@ export default {
       this.currentModuleIndex = index;
     },
     updateModule(data, index) {
-      console.log(data, index, 'updateModule');
+      // console.log(data, index, 'updateModule');
     },
     removeModule(data, index) {
-      console.log(data, index, 'removeModule');
+      // console.log(data, index, 'removeModule');
+      this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
     },
     addModule(item) {
-      this.currentModuleIndex = this.modules.length;
-      console.log('addModule')
-      this.modules[this.currentModuleIndex] = {...item};
-      // this.modules.push({...item});
+      this.modules.push(Object.assign({}, item));
+      this.currentModuleIndex =  Math.max(this.modules.length - 1, 0);
+      console.log('addModule', item, this.currentModuleIndex, this.modules)
     },
     reset() {
       // 重置配置

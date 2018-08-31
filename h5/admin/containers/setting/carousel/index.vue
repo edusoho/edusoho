@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     addItem() {
-      this.copyModuleData.data.push(Object.assign(moduleDefault.slideShow.data[0]))
+      this.copyModuleData.data.push(Object.assign({}, moduleDefault.slideShow.data[0]))
     },
     selected(selected) {
       this.activeItemIndex = selected.selectIndex;
