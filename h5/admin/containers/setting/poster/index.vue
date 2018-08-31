@@ -33,8 +33,8 @@
         <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'course'">
           <p class="pull-left section-left">课程名称：</p>
           <div class="section-right">
-            <el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
-            <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="linkTextShow">
+            <el-button type="info" size="mini" @click="openModal" v-show="!courseLinkText">选择课程</el-button>
+            <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
               <span class="text-content ellipsis">{{courseLinkText}}</span>
             </el-tag>
           </div>
@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @UpdatedCourses="getUpdatedCourses">
+    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses">
     </course-modal>
   </module-frame>
 </template>
@@ -77,7 +77,6 @@ export default {
       modalVisible: false,
       imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
       courseSets: [],
-      linkTextShow: false,
       imageMode: [
         'responsive',
         'size-fit',
@@ -107,11 +106,9 @@ export default {
       set() {}
     },
     courseLinkText() {
-      if (!this.courseSets[0]) {
-        return;
-      }
-      this.linkTextShow = true;
-      return this.courseSets[0] ? this.courseSets[0].courseSetTitle : '';
+      if (!this.courseSets[0]) return
+
+      return this.courseSets[0] ? this.courseSets[0].title || this.courseSets[0].courseSetTitle : '';
     }
   },
   watch: {
@@ -146,9 +143,15 @@ export default {
     },
     getUpdatedCourses(courses) {
       this.courseSets = courses;
+      if (!courses.length) return;
+
+      this.moduleData.data.link.target = {
+        id: courses[0].id,
+        title: courses[0].title || courses[0].courseSetTitle,
+      };
     },
     removeCourseLink() {
-      this.courseSets = this.courseSets.splice(1, 1);
+      this.courseSets = [];
     },
     handleClose() {
       this.removeCourseLink();

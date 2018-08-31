@@ -1,3 +1,33 @@
 .module-template {
   position: relative;
 }
+
+.icon-delete {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  color: $primary-color;
+}
+
+.courseLink {
+  width: 138px;
+  height: auto;
+  line-height: 1;
+  padding-left: 0;
+  margin-left: -3px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  .text-content {
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    max-width: 9em;
+  }
+  .el-icon-close {
+    right: -2px;
+  }
+}

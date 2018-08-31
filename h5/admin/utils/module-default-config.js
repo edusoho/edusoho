@@ -34,7 +34,8 @@ export default {
         type: 'course',
         target: {},
         url: ''
-      }
+      },
+      responsive: '1',
     }
   }
 }
