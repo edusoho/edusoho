@@ -40,17 +40,18 @@
           </draggable>
         </div>
         <!-- 排列顺序 -->
-        <div class="course-item-setting__section mtl clearfix">
+        <div class="course-item-setting__section mtl clearfix"
+          v-show="copyModuleData.data.sourceType === 'condition'">
           <p class="pull-left section-left required-option">排列顺序：</p>
           <div class="section-right">
             <div class="section-right__item pull-left">
-              <el-select v-model="sortSelected" placeholder="排列顺讯" size="mini">
+              <el-select v-model="copyModuleData.data.sort" placeholder="顺序" size="mini">
                 <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
-            <div class="section-right__item pull-right">
-              <el-select v-model="date" placeholder="时间区间" size="mini">
+            <div class="section-right__item pull-right" v-show="showDateOptions">
+              <el-select v-model="copyModuleData.data.lastDays" placeholder="时间区间" size="mini">
                 <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -101,53 +102,22 @@ export default {
       default: {},
     },
   },
-  computed: {
-    ...mapState(['categories']),
-    isActive: {
-      get() {
-        return this.active;
-      },
-      set() {}
-    },
-    copyModuleData: {
-      get() {
-        return this.moduleData;
-      },
-      set() {
-        console.log('changed copyModuleData')
-      }
-    }
-  },
-  watch: {
-    copyModuleData: {
-      handler(data) {
-        this.$emit('updateModule', data);
-      },
-      deep: true,
-    },
-    categoryId: {
-      handler(value) {
-        if (!value.length) {
-          return;
-        }
-        this.moduleData.data.categoryId = value[0];
-      }
-    }
-  },
   data() {
     return {
       modalVisible: false,
       limitOptions: [1, 2, 3, 4, 5, 6, 7, 8],
-      sortSelected: '加入最多',
       sortOptions: [{
-        value: '加入最多',
+        value: '-studentNum',
         label: '加入最多'
       }, {
-        value: '最近创建',
+        value: '-createdTime',
         label: '最近创建'
       }, {
-        value: '评价最高',
-        label: '评价最高'
+        value: '-rating',
+        label: '评价最高',
+      }, {
+        value: 'recommendedSeq',
+        label: '推荐课程',
       }],
       cascaderProps: {
         label: 'name',
@@ -165,9 +135,60 @@ export default {
         value: '90',
         label: '最近90天',
       }, {
-        value: 'all',
+        value: '0',
         label: '历史所有',
       }],
+    }
+  },
+  computed: {
+    ...mapState(['categories']),
+    isActive: {
+      get() {
+        return this.active;
+      },
+      set() {}
+    },
+    copyModuleData: {
+      get() {
+        return this.moduleData;
+      },
+      set() {
+        console.log('changed copyModuleData')
+      }
+    },
+    mmdata() {
+      return this.moduleData.data;
+    },
+    showDateOptions() {
+      const isNewCreated = this.moduleData.data.sort === this.sortOptions[1].value
+      const isRecommend = this.moduleData.data.sort === this.sortOptions[3].value;
+      if (isNewCreated || isRecommend) {
+        // 如果是 最新创建 或 推荐课程 时间区间为所有
+        this.moduleData.data.lastDays = '0';
+      }
+      return !isNewCreated && !isRecommend;
+    }
+  },
+  watch: {
+    mmdata: {
+      handler() {
+        console.log('sortChange')
+      },
+      deep: true,
+    },
+    copyModuleData: {
+      handler(data) {
+        this.$emit('updateModule', data);
+      },
+      deep: true,
+    },
+    categoryId: {
+      handler(value) {
+        if (!value.length) {
+          return;
+        }
+        this.moduleData.data.categoryId = value[0];
+      },
     }
   },
   methods: {

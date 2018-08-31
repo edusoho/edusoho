@@ -19,7 +19,7 @@ export default {
       title: '',
       sourceType: 'condition',
       categoryId: '0',
-      sort: '-studentNum',
+      sort: 'recommendedSeq',
       lastDays: '0',
       limit: '4',
       items: []
@@ -31,7 +31,7 @@ export default {
     data: {
       image: {},
       link: {
-        type: 'url',
+        type: 'course',
         target: {},
         url: ''
       }

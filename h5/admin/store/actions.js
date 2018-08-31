@@ -12,6 +12,7 @@ export const getCategories = ({ commit }) => Api.getCategories({
   }
 }).then((res) => {
   const formatedRes = treeEndTool(res, 'children')
+  formatedRes.unshift({id: '0', children: null, name: '全部'});
   commit(types.GET_CATEGORIES, formatedRes);
   return formatedRes;
 })
