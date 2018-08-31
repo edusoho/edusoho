@@ -39,7 +39,6 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $link = $discoverySetting['data']['link'];
                 $course = $this->getCourseService()->getCourse($link['target']['id']);
                 if (empty($course)) {
-                    $link['type'] = 'url';
                     $link['target'] = null;
                     $link['url'] = '';
                 }
