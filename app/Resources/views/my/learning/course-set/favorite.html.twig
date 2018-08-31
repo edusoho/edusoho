@@ -3,6 +3,7 @@
 {% block title %}{{'my.learning.course.favorited'|trans}} - {{ parent() }}{% endblock %}
 
 {% set tab_nav = 'favorited' %}
+{% do script(['libs/echo-js.js','app/js/my/learn/my-course/index.js'])%}
 
 {% block main %}
 

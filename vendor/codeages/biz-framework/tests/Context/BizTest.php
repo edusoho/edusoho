@@ -60,7 +60,7 @@ class BizTest extends TestCase
         $biz = new Biz();
         $biz['autoload.aliases']['Example'] = 'Tests\Example';
         $service = $biz->service('Example:ExampleService');
-        $this->assertInstanceOf('Tests\Example\Service\ExampleService', $service);
+        $this->assertInstanceOf('Tests\Example\Service\ExampleService', $service->getClass());
         $this->assertEquals($service, $biz['@Example:ExampleService']);
 
         $biz = new Biz();

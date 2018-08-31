@@ -26,7 +26,6 @@ class OperationSettingController extends BaseController
             if (empty($result['error'])) {
                 $this->getSettingService()->set('meCount', $result);
             }
-            $this->getLogService()->info('system', 'update_settings', '更新WAP设置', $wapSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -52,7 +51,6 @@ class OperationSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $articleSetting = $request->request->all();
             $this->getSettingService()->set('article', $articleSetting);
-            $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 

@@ -8,6 +8,7 @@ use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
+use AppBundle\Common\DeviceToolkit;
 
 class LogServiceImpl extends BaseService implements LogService
 {
@@ -54,11 +55,46 @@ class LogServiceImpl extends BaseService implements LogService
         return $logs;
     }
 
+    public function searchOldLogs($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->prepareSearchConditions($conditions);
+
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('id' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('id' => 'ASC');
+                    break;
+                default:
+                    throw $this->createServiceException('参数sort不正确。');
+                    break;
+            }
+        }
+
+        $logs = $this->getLogOldDao()->search($conditions, $sort, $start, $limit);
+
+        foreach ($logs as &$log) {
+            $log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
+            unset($log);
+        }
+
+        return $logs;
+    }
+
     public function searchLogCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
         return $this->getLogDao()->count($conditions);
+    }
+
+    public function searchOldLogCount($conditions)
+    {
+        $conditions = $this->prepareSearchConditions($conditions);
+
+        return $this->getLogOldDao()->count($conditions);
     }
 
     protected function addLog($level, $module, $action, $message, array $data = null)
@@ -73,6 +109,10 @@ class LogServiceImpl extends BaseService implements LogService
                 'data' => empty($data) ? '' : json_encode($data),
                 'userId' => $user['id'],
                 'ip' => $user['currentIp'],
+                'browser' => DeviceToolkit::getBrowse(),
+                'operatingSystem' => DeviceToolkit::getOperatingSystem(),
+                'device' => DeviceToolkit::isMobileClient() ? 'mobile' : 'computer',
+                'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
                 'createdTime' => time(),
                 'level' => $level,
             )
@@ -157,6 +197,14 @@ class LogServiceImpl extends BaseService implements LogService
     protected function getLogDao()
     {
         return $this->createDao('System:LogDao');
+    }
+
+    /**
+     * @return LogDao
+     */
+    protected function getLogOldDao()
+    {
+        return $this->createDao('System:LogOldDao');
     }
 
     /**

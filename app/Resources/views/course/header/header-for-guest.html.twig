@@ -56,10 +56,16 @@
             {{ course.title }}
           {% endif %}
         </div>
+        {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
+        {% if canManage %}
+          <a class="btn btn-default btn-xs course-detail-info__manage" href="{% if page_type|default('guest') == 'member' %}{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}{% else %}{{ path('course_set_manage_base', {id: course.courseSetId}) }}{% endif %}">
+            <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.default.manage'|trans }}
+          </a>
+        {% endif %}
         {% if courseSet.subtitle %}
-          <p class="course-detail-info__subtitle text-overflow subtitle cd-text-sm cd-mb16">
-            <span data-toggle="tooltip" data-container="body" data-placement="top"
-            data-trigger="hover" title="{{courseSet.subtitle}}">{{ courseSet.subtitle }}</span>
+          <p class="course-detail-info__subtitle text-overflow subtitle cd-text-sm cd-mb16" data-toggle="tooltip" data-container="body" data-placement="top"
+            data-trigger="hover" title="{{courseSet.subtitle}}">
+            <span >{{ courseSet.subtitle }}</span>
           </p>
         {% endif %}
         <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
@@ -68,7 +74,7 @@
         
         {% if onDiscount %}
           <div class="cd-mb8">
-            <span class="course-detail__label">{{ 'course.activity'|trans }}</span>
+            <span class="course-detail__label">{{ 'plugin.acitivity'|trans }}</span>
             <span class="text-12 color-warning">
               <b class="hidden-xs course-detail-activity-title">{{ course.discount.name|sub_text(10) }}</b><span class="cd-text-medium cd-ml16" id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}></span><i class="es-icon es-icon-accesstime text-14 mls cd-text-medium"></i>
             <span>
@@ -156,20 +162,18 @@
           <ul class="clearfix">
             <!--营销页显示-->
             {% if marketingPage %}
-              <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
-                  {% if not isUserFavorite %}style="display: none" {% endif %}>
+              <li class="js-unfavorite-btn {% if not isUserFavorite %}hidden{% endif %}" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}">
                 <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
                   data-trigger="hover">
-                  <i class="es-icon es-icon-bookmark color-primary"></i>
+                  <i class="es-icon es-icon-favorite color-primary"></i>
                   <br/>
                   {{ 'course.status.followed'|trans }}
                 </a>
               </li>
-              <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
-                  {% if isUserFavorite %}style="display: none"{% endif %}>
+              <li class="js-favorite-btn {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}">
                 <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
                   data-trigger="hover">
-                  <i class="es-icon es-icon-bookmarkoutline"></i>
+                  <i class="es-icon es-icon-favoriteoutline"></i>
                   <br/>
                   {{ 'course.status.follow'|trans }}
                 </a>
@@ -193,58 +197,37 @@
 
       <div class="course-detail-info__btn js-course-header-operation">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
-          <li class="es-qrcode top hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
-             <a class="btn btn-default btn-xs" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'site.qrcode_tips'|trans }}"><i class="es-icon es-icon-saoyisao"></i></a>
+          <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+            <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
             <span class="qrcode-popover">
               <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
             </span>
           </li>
-          <!--营销页显示-->
-          {# 收藏图标设置 #}
-          {% if marketingPage %}
-            <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
-                {% if not isUserFavorite %}style="display: none" {% endif %}>
-              <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
-                data-trigger="hover"> <i class="es-icon es-icon-bookmark color-primary"></i>
-              </a>
-            </li>
-            <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
-                {% if isUserFavorite %}style="display: none"{% endif %}>
-              <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
-                data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline"></i>
-              </a>
-            </li>
-          {% endif %}
+
           {# 分享图标功能设置 #}
-          <li class="es-share top">
-            <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
-              <i class="es-icon es-icon-share"></i>
+          <li class="es-share es-share-item top mrl">
+            <a class="dropdown-toggle cd-link-assist" href="javascript:;" data-toggle="dropdown">
+              <i class="es-icon es-icon-share course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.share'|trans }}</span>
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
           </li>
+          <!--营销页显示-->
+          {# 收藏图标设置 #}
+          {% if marketingPage %}
+            <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}">
+              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
+              </a>
+            </li>
+            <li class="js-favorite-btn mrl {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}">
+              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favoriteoutline course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.follow'|trans }}</span>
+              </a>
+            </li>
+          {% endif %}
+
 
           {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
           {# 课程管理图标功能 #}
-          {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
-          {% if canManage %}
-            <li>
-              {% if page_type|default('guest') == 'member' %}
-                <a class="btn btn-default btn-xs "
-                  href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
-                  data-toggle="tooltip" data-placement="top" title="{{ 'course.course_manage'|trans }}"
-                  data-trigger="hover">
-                  <i class="es-icon es-icon-setting"></i>
-                </a>
-              {% else %}
-                <a class="btn btn-default btn-xs "
-                  href="{{ path('course_set_manage_base', {id: course.courseSetId}) }}"
-                  data-toggle="tooltip" data-placement="top" data-container="body" title="{{ 'course.course_manage'|trans }}"
-                  data-trigger="hover">
-                  <i class="es-icon es-icon-setting"></i>
-                </a>
-              {% endif %}
-            </li>
-          {% endif %}
+         
           {% block course_member_exit %}{% endblock %}
         </ul>
         <div class="text-right buy-btn-group course-operation-btn">

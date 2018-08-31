@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource\OpenCourse;
 use Topxia\Api\Resource\BaseResource;
 use Biz\File\Service\UploadFileService;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Component\MediaParser\ParserProxy;
 
 class Lesson extends BaseResource
 {
@@ -55,12 +56,12 @@ class Lesson extends BaseResource
         $mediaSource = $lesson['mediaSource'];
         $mediaUri = $lesson['mediaUri'];
 
-        if ($mediaSource == 'self') {
+        if ('self' == $mediaSource) {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
-                if ($file['storage'] == 'cloud') {
+                if ('cloud' == $file['storage']) {
                     $lesson['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -105,7 +106,7 @@ class Lesson extends BaseResource
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
                         } else {
-                            if ($file['type'] == 'video') {
+                            if ('video' == $file['type']) {
                                 $key = null;
                             } else {
                                 $key = $file['hashId'];
@@ -131,24 +132,9 @@ class Lesson extends BaseResource
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } elseif ($mediaSource == 'youku') {
-            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-            if ($matched) {
-                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-            } else {
-                $lesson['mediaUri'] = '';
-            }
-        } elseif ($mediaSource == 'tudou') {
-            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-            if ($matched) {
-                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-            } else {
-                $lesson['mediaUri'] = '';
-            }
         } else {
-            $lesson['mediaUri'] = $mediaUri;
+            $proxy = new ParserProxy();
+            $lesson = $proxy->prepareMediaUriForMobile($lesson, $this->getSchema());
         }
 
         return $lesson;
@@ -156,10 +142,11 @@ class Lesson extends BaseResource
 
     protected function getHeadLeaderInfo()
     {
-        $storage = $this->getSettingService()->get("storage");
+        $storage = $this->getSettingService()->get('storage');
 
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header']) {
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+
             return $file;
         }
 

@@ -18,18 +18,18 @@ classroomStatus: classroom.status
       {{ web_macro.flash_messages() }}
       <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
         <div class="row form-group">
-          <div class="col-md-2 control-label">
+          <div class="col-sm-2 control-label">
             <label class="control-label-required" for="title" >{{ 'classroom.name_label'|trans }}</label>
           </div>
-          <div class="controls col-md-8">
+          <div class="controls col-sm-8">
             <input name="title" type="text" id="title" class="form-control" value="{{ classroom.title }}"/>
           </div>
         </div>
         <div class="row form-group">
-          <div class="col-md-2 control-label">
+          <div class="col-sm-2 control-label">
             <label>{{ 'classroom.about'|trans }}</label>
           </div>
-          <div class="controls col-md-8">
+          <div class="controls col-sm-8">
             <textarea name="about" class="form-control" rows="6"
             data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
             data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
@@ -38,8 +38,8 @@ classroomStatus: classroom.status
           </div>
         </div>
         <div class="form-group">
-          <label class="col-md-2 control-label">{{ 'classroom.tag_label'|trans }}</label>
-          <div class="col-md-8 controls">
+          <label class="col-sm-2 control-label">{{ 'classroom.tag_label'|trans }}</label>
+          <div class="col-sm-8 controls">
             <input type="text" id="classroom_tags" name="tags"  class="width-full select2-offscreen"
               tabindex="-1" value="{{ tags|join(',') }}"
               data-explain="{{ 'classroom.tag_tips'|trans }}">
@@ -47,10 +47,10 @@ classroomStatus: classroom.status
           </div>
         </div>
         <div class="row form-group">
-          <div class="col-md-2 control-label">
+          <div class="col-sm-2 control-label">
             <label>{{ 'classroom.show_label'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}</label>
           </div>
-          <div class="col-md-8 controls radios">
+          <div class="col-sm-8 controls radios">
             <label>
               <input id="showable-open" type="radio" name="showable" value="1" data-showable="{{ classroom.showable }}"> {{ 'classroom.open_radio'|trans }}
             </label>
@@ -62,10 +62,10 @@ classroomStatus: classroom.status
 
         </div>
         <div class="row form-group" id='buyable'>
-          <div class="col-md-2 control-label">
+          <div class="col-sm-2 control-label">
             <label>{{ setting("classroom.name")|default("classroom"|trans) }}{{ 'classroom.buy_label'|trans }}</label>
           </div>
-          <div class="col-md-8 controls radios">
+          <div class="col-sm-8 controls radios">
             <label>
               <input id="buyable-open" type="radio" name="buyable" value="1" data-buyable="{{ classroom.buyable }}"> {{ 'classroom.open_radio'|trans }}
             </label>
@@ -75,9 +75,9 @@ classroomStatus: classroom.status
             <div class="help-block">{{ 'classroom.buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}</div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-md-2 control-label">{{'classroom.expiry_mode_label'|trans}}</label>
-          <div class="col-md-8 controls radios">
+        <div class="form-group cd-mb16">
+          <label class="col-sm-2 control-label">{{'classroom.expiry_mode_label'|trans}}</label>
+          <div class="col-sm-8 controls radios">
             {% if classroom.status == 'draft' %}
               <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode }}">
               {{ radios('expiryMode', {'date':'classroom.expiry_mode_end_date'|trans, 'days':'classroom.expiry_mode_days'|trans,'forever':'classroom.expiry_mode_forever'|trans}, classroom.expiryMode|default('forever')) }}
@@ -85,11 +85,12 @@ classroomStatus: classroom.status
               {{ radios('expiryMode', {'date':'classroom.expiry_mode_end_date'|trans, 'days':'classroom.expiry_mode_days'|trans,'forever':'classroom.expiry_mode_forever'|trans}, classroom.expiryMode|default('forever'), 'disabled') }}
               <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode|default('forever') }}">
             {% endif %}
+            <a href="{{ path('classroom_expiry_date_rule') }}" target="_blank">{{'classroom.watch_expiry_mode_rile'|trans}}</a>
             <div class="color-warning">{{ 'classroom.expiry_mode.first_publish_tips'|trans }}</div>
           </div>
         </div>
         <div class="form-group expiry-value-js {% if classroom.expiryMode|default('forever') == 'forever' %} hidden {% endif %}">
-          <div class="col-md-offset-2 col-md-4 controls">
+          <div class="col-sm-offset-2 col-sm-10 controls">
             <input type="text" id="classroom_expiryValue" name="expiryValue"
               value="{% if classroom.expiryMode|default('forever') == 'date' %}{{ classroom.expiryValue|date('Y-m-d') }}{% else %}{{ classroom.expiryValue }}{% endif %}"
               class="form-control width-input width-input-large">
@@ -103,14 +104,10 @@ classroomStatus: classroom.status
               {% if classroom.expiryMode|default('forever') == 'date' %}  {{ date_help }}{% elseif  classroom.expiryMode|default('forever') == 'days' %}{{ days_help }} {% endif %}
             </div>
           </div>
-          <div class="col-md-6 js-course-rule">
-            <p class="alert-warning"></p>
-            <a href="{{ path('classroom_expiry_date_rule') }}" target="_blank">{{'classroom.watch_expiry_mode_rile'|trans}}</a>
-          </div>
         </div>
         <div class="form-group">
-          <label class="col-md-2 control-label">{{ 'classroom.category'|trans }}</label>
-          <div class="col-md-8 controls">
+          <label class="col-sm-2 control-label">{{ 'classroom.category'|trans }}</label>
+          <div class="col-sm-8 controls">
             <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
               {{ select_options(category_choices('classroom'), classroom.categoryId, {0:'classroom.category'|trans}) }}
 
@@ -120,8 +117,8 @@ classroomStatus: classroom.status
         </div>
         {% include 'org/org-tree-select-webpack.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
         <div class="row form-group">
-          <div class="col-md-2 control-label"></div>
-          <div class="controls col-md-8">
+          <div class="col-sm-2 control-label"></div>
+          <div class="controls col-sm-8">
             <button class="btn btn-primary" id="classroom-save">{{ 'form.btn.submit'|trans }}</button>
           </div>
         </div>

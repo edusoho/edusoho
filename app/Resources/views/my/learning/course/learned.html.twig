@@ -3,6 +3,7 @@
 {% block title %}{{ 'my.learning.course.learned'|trans }} - {{ parent() }}{% endblock %}
 
 {% set tab_nav = 'learned' %}
+{% do script(['libs/echo-js.js','app/js/my/learn/my-course/index.js'])%}
 
 {% block main %}
   <div class="panel panel-default panel-col">

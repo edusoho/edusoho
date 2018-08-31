@@ -51,21 +51,97 @@ class ParserProxyTest extends BaseTestCase
         $kernel->setParameterBag($parameterBag);
     }
 
-    /**
-     * @expectedException \AppBundle\Component\MediaParser\ParseException
-     */
-    public function testParseAlbum()
+    public function testPrepareMediaUriWithSelf()
     {
+        $video = array('mediaSource' => 'self');
         $proxy = new ParserProxy();
-        $video = $proxy->parseAlbum('http://v.163.com/special/M941471K5_M9414FGNS.html');
+        $result = $proxy->prepareMediaUri($video);
+        $this->assertArrayEquals($video, $result);
     }
 
-    public function testParserNotFoundException()
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParserException
+     */
+    public function testPrepareMediaUriWithUnsupportedParser()
     {
         $proxy = new ParserProxy();
-        $result = ReflectionUtils::invokeMethod($proxy, 'createParserNotFoundException', array('exc'));
+        $proxy->prepareMediaUri(array('mediaSource' => 'test'));
+    }
 
-        $this->assertEquals('AppBundle\Component\MediaParser\ParserNotFoundException', get_class($result));
-        $this->assertEquals('exc', $result->getMessage());
+    public function testPrepareMediaUriWithNeteaseOpenCourse()
+    {
+        $video = array('mediaSource' => 'NeteaseOpenCourse');
+
+        $mockedParser = $this->mockBiz(
+            'youkuParser',
+            array(
+                array(
+                    'functionName' => 'prepareMediaUri',
+                    'withParams' => array($video),
+                    'returnValue' => array('url' => 'NeteaseOpenCourseUrl'),
+                ),
+            )
+        );
+        $proxy = new ParserProxy();
+        ReflectionUtils::setProperty($proxy, 'mockedParser', $mockedParser);
+
+        $result = $proxy->prepareMediaUri($video);
+
+        $this->assertEquals('NeteaseOpenCourseUrl', $result['url']);
+    }
+
+    public function testPrepareMediaUriWithQqVideo()
+    {
+        $video = array('mediaSource' => 'qqvideo');
+
+        $mockedParser = $this->mockBiz(
+            'youkuParser',
+            array(
+                array(
+                    'functionName' => 'prepareMediaUri',
+                    'withParams' => array($video),
+                    'returnValue' => array('url' => 'qqvideoUrl'),
+                ),
+            )
+        );
+        $proxy = new ParserProxy();
+        ReflectionUtils::setProperty($proxy, 'mockedParser', $mockedParser);
+
+        $result = $proxy->prepareMediaUri($video);
+
+        $this->assertEquals('qqvideoUrl', $result['url']);
+    }
+
+    public function testPrepareYoukuMediaUri()
+    {
+        $video = array('mediaSource' => 'youku');
+
+        $mockedParser = $this->mockBiz(
+            'youkuParser',
+            array(
+                array(
+                    'functionName' => 'prepareMediaUri',
+                    'withParams' => array($video),
+                    'returnValue' => array('url' => 'youkuUrl'),
+                ),
+            )
+        );
+        $proxy = new ParserProxy();
+        ReflectionUtils::setProperty($proxy, 'mockedParser', $mockedParser);
+
+        $result = $proxy->prepareYoukuMediaUri($video);
+
+        $this->assertEquals('youkuUrl', $result['url']);
+    }
+
+    public function testPrepareYoukuMediaUriWithSelf()
+    {
+        $video = array('mediaSource' => 'self');
+
+        $proxy = new ParserProxy();
+
+        $result = $proxy->prepareYoukuMediaUri($video);
+
+        $this->assertArrayEquals($video, $result);
     }
 }

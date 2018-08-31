@@ -115,8 +115,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->getArticleDao()->create($article);
 
-        $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
-
         $this->dispatchEvent('article.create', new Event($article, array('tagIds' => $tagIds, 'userId' => $user['id'])));
 
         return $article;
@@ -144,8 +142,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $article = $this->getArticleDao()->update($id, $article);
-
-        $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
 
         $event = new Event($article, array(
             'tagIds' => $tagIds,
@@ -249,8 +245,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $propertyVal = 1;
         $this->getArticleDao()->update($id, array("{$property}" => $propertyVal));
 
-        $this->getLogService()->info('article', 'update_property', "文章#{$id},$article[$property]=>{$propertyVal}");
-
         return $propertyVal;
     }
 
@@ -265,8 +259,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $propertyVal = 0;
         $this->getArticleDao()->update($id, array("{$property}" => $propertyVal));
 
-        $this->getLogService()->info('article', 'cancel_property', "文章#{$id},$article[$property]=>{$propertyVal}");
-
         return $propertyVal;
     }
 
@@ -280,7 +272,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->getArticleDao()->update($id, $fields = array('status' => 'trash'));
         $this->dispatchEvent('article.trash', $checkArticle);
-        $this->getLogService()->info('article', 'trash', "文章#{$id}移动到回收站");
     }
 
     public function removeArticlethumb($id)
@@ -294,7 +285,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $this->getArticleDao()->update($id, $fields = array('thumb' => '', 'originalThumb' => ''));
         $this->getFileService()->deleteFileByUri($checkArticle['thumb']);
         $this->getFileService()->deleteFileByUri($checkArticle['originalThumb']);
-        $this->getLogService()->info('article', 'removeThumb', "文章#{$id}removeThumb");
     }
 
     public function deleteArticle($id)
@@ -322,14 +312,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function publishArticle($id)
     {
         $article = $this->getArticleDao()->update($id, $fields = array('status' => 'published'));
-        $this->getLogService()->info('article', 'publish', "文章#{$id}发布");
         $this->dispatchEvent('article.publish', $article);
     }
 
     public function unpublishArticle($id)
     {
         $article = $this->getArticleDao()->update($id, $fields = array('status' => 'unpublished'));
-        $this->getLogService()->info('article', 'unpublish', "文章#{$id}未发布");
         $this->dispatchEvent('article.unpublish', $article);
     }
 
@@ -342,7 +330,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $files = ArrayToolkit::index($files, 'id');
 
         foreach ($data as $key => $value) {
-            if ($key == 'origin') {
+            if ('origin' == $key) {
                 $file = $this->getFileService()->getFileObject($value['id']);
                 $file = $this->getFileService()->uploadFile('article', $file);
                 $data[$key]['file'] = $file;
@@ -454,7 +442,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             $article['tagIds'] = array();
         }
 
-        if ($mode == 'add') {
+        if ('add' == $mode) {
             $article['status'] = 'published';
             $article['userId'] = $user->id;
         }

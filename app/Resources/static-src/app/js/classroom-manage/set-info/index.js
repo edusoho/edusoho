@@ -56,16 +56,18 @@ function initValidator() {
 }
 
 function toggleExpiryValue(expiryMode) {
+  const $expriySetting = $('.expiry-value-js');
   if (!$('[name=\'expiryValue\']').val()) {
     $('[name=\'expiryValue\']').val($('[name=\'expiryValue\']').data(expiryMode));
   }
   elementRemoveRules($('[name=\'expiryValue\']'));
+  $expriySetting.removeClass('has-error').find('.jq-validate-error').remove();
+  $expriySetting.find('input').removeClass('form-control-error');
   switch (expiryMode) {
   case 'days':
     $('[name="expiryValue"]').datetimepicker('remove');
     $('.expiry-value-js .controls > span').removeClass('hidden');
     elementAddRules($('[name="expiryValue"]'),getExpiryModeDaysRules());
-    validator.form();
     break;
   case 'date':
     if($('#classroom_expiryValue').attr('readonly') !== undefined){
@@ -78,10 +80,11 @@ function toggleExpiryValue(expiryMode) {
       format: 'yyyy-mm-dd',
       minView: 'month',
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+    }).on('hide', () => {
+      validator.form();
     });
     $('#classroom_expiryValue').datetimepicker('setStartDate', new Date);
     elementAddRules($('[name="expiryValue"]'),getExpiryModeDateRules());
-    validator.form();
     break;
   default:
     break;
