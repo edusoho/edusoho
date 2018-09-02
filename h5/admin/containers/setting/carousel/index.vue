@@ -4,6 +4,9 @@
       <img class="carousel-image"
         v-show="carouselImage"
         :src="carouselImage">
+      <div class="image-mask" v-show="!carouselImage">
+        轮播图
+      </div>
       <div class="carousel-title ellipsis">{{carouselTitle}}</div>
     </div>
 

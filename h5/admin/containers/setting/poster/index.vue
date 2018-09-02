@@ -1,8 +1,8 @@
 <template>
   <module-frame containerClass="setting-poster" :isActive="isActive">
     <div slot="preview" :class="'poster-image-container ' +  imageMode[copyModuleData.responsive]">
-      <div class="poster-image-mask" v-show="!copyModuleData.image.uri">
-        <h5>广告图片</h5>
+      <div class="image-mask" v-show="!copyModuleData.image.uri">
+        广告图片
       </div>
       <poster :poster="copyModuleData" :feedback="false"></poster>
     </div>

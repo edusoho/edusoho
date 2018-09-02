@@ -120,7 +120,7 @@ export default {
 
       if (exccedLimit) {
         this.$message({
-          message: `当前最多选择${this.limit}个`,
+          message: `当前最多可选 ${this.limit} 个课程`,
           type: 'warning'
         });
         return;
