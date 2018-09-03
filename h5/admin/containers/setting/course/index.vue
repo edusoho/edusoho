@@ -84,6 +84,8 @@ import courseList from '@/containers/components/e-course-list/e-course-list';
 import courseModal from './modal/course-modal'
 import moduleFrame from '../module-frame'
 import { mapMutations, mapState, mapActions } from 'vuex';
+import treeDigger from '@admin/utils/tree-digger';
+
 
 export default {
   components: {
@@ -124,6 +126,7 @@ export default {
         value: 'id',
       },
       categoryId: [this.moduleData.data.categoryId.toString()],
+      categoryDiggered: false,
       date: '最近7天',
       dateOptions: [{
         value: '7',
@@ -181,7 +184,25 @@ export default {
         }
         this.moduleData.data.categoryId = value[0];
       },
-    }
+    },
+    categories: {
+      handler(tree) {
+        if (!tree || this.categoryDiggered) return;
+
+        const categoryExist = false;
+        treeDigger(tree, (children, id) => {
+          if (id) {
+            const categoryExist = (id == this.categoryId);
+          }
+          return children;
+        })
+        this.categoryDiggered = true;
+
+        if (categoryExist) return;
+        this.categoryId = ['0'];
+      },
+      immediate: true,
+    },
   },
   methods: {
     getUpdatedCourses(courses) {

@@ -1,6 +1,6 @@
 import * as types from '@admin/store/mutation-types';
 import Api from '@admin/api';
-import treeEndTool from '@/utils/tree-end-tool';
+import treeDigger from '@admin/utils/tree-digger';
 
 export const updateLoading = ({ commit }, { isLoading }) => {
   commit(types.UPDATE_LOADING_STATUS, { isLoading });
@@ -11,8 +11,13 @@ export const getCategories = ({ commit }) => Api.getCategories({
     groupCode: 'course'
   }
 }).then((res) => {
-  const formatedRes = treeEndTool(res, 'children')
-  formatedRes.unshift({id: '0', children: null, name: '全部'});
+  res.unshift({id: '0', children: undefined, name: '全部'});
+  const formatedRes = treeDigger(res, (children) => {
+    if (!children.length) {
+      children = undefined;
+    }
+    return children;
+  })
   commit(types.GET_CATEGORIES, formatedRes);
   return formatedRes;
 })
