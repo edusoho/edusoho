@@ -130,6 +130,7 @@ export default {
     },
     removeCourseLink(index) {
       this.copyModuleData.data[index].link.target = '';
+      this.courseSets[this.activeItemIndex] = [];
     }
   }
 }
