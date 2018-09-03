@@ -11,6 +11,12 @@ export default class Discuss {
         window.ltc.emit('returnActivity', {valid:true,data: this._serializeArray($('#step2-form'))});
       }
     });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator.form()) {
+        window.ltc.emit('returnValidate', {valid:true});
+      }
+    });
   }
 
   _inItStep2form() {

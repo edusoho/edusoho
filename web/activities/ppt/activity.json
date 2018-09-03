@@ -19,5 +19,15 @@
     "finish": "create_or_update_finish.html.twig",
     "show": "show.html.twig",
     "finish_tip": "finish_tip.html.twig"
-  }
+  },
+  "finish_condition": [
+    {
+      "type": "lastPage",
+      "describe": "course.plan_task.activity_manage.ppt.learn_to_last_page_tips"
+    },
+    {
+      "type": "time",
+      "value": 1
+    }
+  ]
 }

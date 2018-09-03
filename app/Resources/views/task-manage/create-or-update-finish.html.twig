@@ -14,7 +14,7 @@
                 {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
               </label>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 {% if conditions|length == 1 %}form-control-static{% endif %}">
             {% if conditions|length == 1 %}
               {{ selectTips[defaultCondition['type']]|default(defaultCondition['describe']|default(''))|trans }}
               <input type="hidden" id="finish-type" value="{{ defaultCondition['type'] }}" name="finishType">

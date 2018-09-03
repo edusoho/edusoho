@@ -1,5 +1,5 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
-import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
+import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
     showChooserType($('[name="ext[mediaId]"]'));
@@ -11,17 +11,21 @@ export default class Audio {
 
   initEvent() {
     window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      if (this.validate.form()) {
+        window.ltc.emit('returnActivity', {valid:true, data: window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validate.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }
 
   initStep2Form() {
     let $step2_form = $('#step2-form');
-    $step2_form.validate({
+    this.validate = $step2_form.validate({
       groups: {
         nameGroup: 'minute second'
       },
@@ -53,9 +57,8 @@ export default class Audio {
   }
 
   autoValidatorLength() {
-    $('.js-length').blur(function () {
-      let validator = $('#step2-form').data('validator');
-      if (validator && validator.form()) {
+    $('.js-length').blur(() => {
+      if (this.validate.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
         $('#length').val(minute * 60 + second);
