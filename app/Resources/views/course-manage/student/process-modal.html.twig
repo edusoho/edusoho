@@ -83,7 +83,7 @@
 	  </div>
 	  <div class="col-md-3 col-sm-6">
 	    <div class="well">
-	      <p>{{'course.members_manage.official_student.detail.join_activity'|trans}}</p>
+	      <p>{{'course.members_manage.official_student.detail.join_activity'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</p>
 	      <p class="number">{{activityCount}}</p>
 	      <i class="es-icon es-icon-activity"></i>
 	    </div>

@@ -3,6 +3,7 @@
 namespace Biz\Course\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\System\Annotation\Log;
 
 interface CourseSetService
 {
@@ -118,6 +119,12 @@ interface CourseSetService
 
     public function getCourseSet($id);
 
+    /**
+     * @param $courseSet
+     *
+     * @return mixed
+     * @Log(module="course",action="create")
+     */
     public function createCourseSet($courseSet);
 
     /**
@@ -131,6 +138,13 @@ interface CourseSetService
      */
     public function copyCourseSet($classroomId, $courseSetId, $courseId);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update",param="id")
+     */
     public function updateCourseSet($id, $fields);
 
     /**
@@ -145,8 +159,21 @@ interface CourseSetService
 
     public function updateCourseSetTeacherIds($id, $teacherIds);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_picture",funcName="getCourseSet",param="id")
+     */
     public function changeCourseSetCover($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="delete")
+     */
     public function deleteCourseSet($id);
 
     /**
@@ -209,14 +236,39 @@ interface CourseSetService
      */
     public function updateCourseSetStatistics($id, array $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="publish",funcName="getCourseSet")
+     */
     public function publishCourseSet($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close",funcName="getCourseSet")
+     */
     public function closeCourseSet($id);
 
     public function findCourseSetsByParentIdAndLocked($parentId, $locked);
 
+    /**
+     * @param $id
+     * @param $number
+     *
+     * @return mixed
+     * @Log(module="course",action="recommend",funcName="getCourseSet",param="id")
+     */
     public function recommendCourse($id, $number);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="cancel_recommend",funcName="getCourseSet")
+     */
     public function cancelRecommendCourse($id);
 
     /**

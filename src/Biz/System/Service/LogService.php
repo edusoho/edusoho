@@ -49,6 +49,8 @@ interface LogService
      */
     public function searchLogs($conditions, $sort, $start, $limit);
 
+    public function searchOldLogs($conditions, $sort, $start, $limit);
+
     /**
      * 根据指定搜索条件返回该条数。
      *                 如array(
@@ -63,6 +65,8 @@ interface LogService
      * @return int
      */
     public function searchLogCount($conditions);
+
+    public function searchOldLogCount($conditions);
 
     public function analysisLoginNumByTime($startTime, $endTime);
 

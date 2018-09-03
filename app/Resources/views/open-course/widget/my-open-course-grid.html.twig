@@ -1,6 +1,6 @@
 <div class="my-course-item cd-mb40 clearfix">
   <a class="my-course-item__link" href="{{ path('open_course_show', {courseId:course.id}) }}">
-    <img class="my-course-item__picture" src="{{ filepath(course.largePicture, 'course.png') }}">
+    {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'my-course-item__picture', courseSet.title) }}
     <span class="my-course-item__label">
       {% if course.status == 'draft' %}
         <span class="label label-warning">{{'course.status.unpublished'|trans}}</span>

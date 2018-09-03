@@ -3,6 +3,7 @@
 namespace Biz\Course\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\System\Annotation\Log;
 
 interface CourseService
 {
@@ -34,6 +35,12 @@ interface CourseService
 
     public function getFirstCourseByCourseSetId($courseSetId);
 
+    /**
+     * @param $course
+     *
+     * @return mixed
+     * @Log(module="course",action="create_course")
+     */
     public function createCourse($course);
 
     /**
@@ -47,14 +54,34 @@ interface CourseService
 
     public function getChapter($courseId, $chapterId);
 
+    /**
+     * @param $chapter
+     *
+     * @return mixed
+     * @Log(module="course",action="create_chapter")
+     */
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);
 
+    /**
+     * @param $courseId
+     * @param $chapterId
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_chapter")
+     */
     public function deleteChapter($courseId, $chapterId);
 
     public function findChaptersByCourseId($courseId);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_course",param="id")
+     */
     public function updateCourse($id, $fields);
 
     public function updateCourseMarketing($id, $fields);
@@ -63,10 +90,29 @@ interface CourseService
 
     public function updateCourseStatistics($id, $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_course")
+     */
     public function deleteCourse($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close_course",funcName="getCourse")
+     */
     public function closeCourse($id);
 
+    /**
+     * @param $id
+     * @param bool $withTasks
+     *
+     * @return mixed
+     * @Log(module="course",action="publish_course",funcName="getCourse",param="id")
+     */
     public function publishCourse($id, $withTasks = false);
 
     /**
@@ -287,6 +333,14 @@ interface CourseService
     public function fillCourseTryLookVideo($courses);
 
     //修改课程基础信息
+
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_course",funcName="getCourse",param="id")
+     */
     public function updateBaseInfo($id, $fields);
 
     /**

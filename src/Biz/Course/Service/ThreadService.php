@@ -2,12 +2,16 @@
 
 namespace Biz\Course\Service;
 
+use Biz\System\Annotation\Log;
+
 // TODO refactor. use Thread.
 interface ThreadService
 {
     public function searchThreads($conditions, $sort, $start, $limit);
 
     public function countThreads($conditions);
+
+    public function getThreadByThreadId($threadId);
 
     public function getThread($courseId, $threadId);
 
@@ -22,12 +26,29 @@ interface ThreadService
     public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
 
     /**
-     * 创建话题.
+     * @param $thread
+     *
+     * @return mixed
+     * @Log(module="course",action="create_thread")
      */
     public function createThread($thread);
 
+    /**
+     * @param $courseId
+     * @param $threadId
+     * @param $thread
+     *
+     * @return mixed
+     * @Log(module="course",action="update_thread",funcName="getThreadByThreadId",param="threadId")
+     */
     public function updateThread($courseId, $threadId, $thread);
 
+    /**
+     * @param $threadId
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_thread",funcName="getThreadByThreadId")
+     */
     public function deleteThread($threadId);
 
     public function stickThread($courseId, $threadId);

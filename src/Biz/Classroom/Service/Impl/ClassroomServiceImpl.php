@@ -212,8 +212,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent('classroom.create', $classroom);
 
-        $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
-
         return $classroom;
     }
 
@@ -240,10 +238,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                         $course['id']
                     );
                     $newCourseIds[] = $newCourse['id'];
+
+                    $infoData = array(
+                        'classroomId' => $classroom['id'],
+                        'title' => $classroom['title'],
+                        'courseSetId' => $newCourse['id'],
+                        'courseSetTitle' => $newCourse['title'],
+                    );
+
                     $this->getLogService()->info(
                         'classroom',
                         'add_course',
-                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})"
+                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})",
+                        $infoData
                     );
                 }
 
@@ -281,6 +288,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            throw $this->createNotFoundException("Classroom#{$id} Not Found");
+        }
 
         unset($fields['tagIds']);
         $fields = $this->filterClassroomFields($fields);
@@ -319,7 +329,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $arguments['tagIds'] = $tagIds;
 
-        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})");
         $this->dispatchEvent('classroom.update', new Event(array(
             'userId' => $user['id'],
             'classroom' => $classroom,
@@ -460,7 +469,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($classrooms as $classroom) {
             $member = $members[$classroom['id']];
 
-            if ($classroom['expiryValue'] > 0 && 0 == $member['deadlineNotified'] && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
+            if ($classroom['expiryValue'] > 0 && 0 == $member['deadlineNotified'] && $currentTime < $member['deadline'] && (10 * 24 * 680 * 60 + $currentTime) > $member['deadline']) {
                 $shouldNotifyClassrooms[] = $classroom;
                 $shouldNotifyClassroomMembers[] = $member;
             }
@@ -525,7 +534,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->delete($id);
-        $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
 
         $this->dispatchEvent('classroom.delete', $classroom);
 
@@ -562,7 +570,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($addTeacherIds as $userId) {
             if (!empty($addMembers[$userId])) {
-                if ($addMembers[$userId]['role'][0] == 'auditor') {
+                if ('auditor' == $addMembers[$userId]['role'][0]) {
                     $addMembers[$userId]['role'][0] = 'teacher';
                 } else {
                     $addMembers[$userId]['role'][] = 'teacher';
@@ -625,13 +633,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteNotUsedPictures($classroom);
 
-        $this->getLogService()->info(
-            'classroom',
-            'update_picture',
-            "更新课程《{$classroom['title']}》(#{$classroom['id']})图片",
-            $fields
-        );
-
         return $this->updateClassroom($id, $fields);
     }
 
@@ -692,10 +693,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
+                $infoData = array(
+                    'classroomId' => $classroom['id'],
+                    'title' => $classroom['title'],
+                    'courseSetId' => $course['id'],
+                    'courseSetTitle' => $course['courseSetTitle'],
+                );
+
                 $this->getLogService()->info(
                     'classroom',
                     'delete_course',
-                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})"
+                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})",
+                    $infoData
                 );
 
                 $this->dispatchEvent(
@@ -790,10 +799,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
         $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
 
+        $infoData = array(
+            'classroomId' => $classroom['id'],
+            'title' => $classroom['title'],
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'classroom',
             'remove_student',
-            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            $infoData
         );
 
         $this->dispatchEvent(
@@ -897,7 +914,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!empty($member)) {
             $member['orderId'] = $fields['orderId'];
             $member['refundDeadline'] = $fields['refundDeadline'];
-            if ($member['role'][0] != 'auditor') {
+            if ('auditor' != $member['role'][0]) {
                 $member['role'][] = 'student';
                 $member['levelId'] = $fields['levelId'];
                 $member['remark'] = $fields['remark'];
@@ -999,10 +1016,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
             }
 
+            $infoData = array(
+                'classroomId' => $classroom['id'],
+                'title' => $classroom['title'],
+                'userId' => $user['id'],
+                'nickname' => $user['nickname'],
+                'remark' => $params['remark'],
+            );
+
             $this->getLogService()->info(
                 'classroom',
                 'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}"
+                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}",
+                $infoData
             );
             $this->commit();
 
@@ -1146,7 +1172,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMember($classroomId, $userId);
 
             if ($member) {
-                if ($member['role'][0] == 'auditor') {
+                if ('auditor' == $member['role'][0]) {
                     $member['role'][0] = 'headTeacher';
                 } else {
                     $member['role'][] = 'headTeacher';
@@ -1753,12 +1779,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             )
         );
 
-        $this->getLogService()->info(
-            'classroom',
-            'recommend',
-            "推荐班级《{$classroom['title']}》(#{$classroom['id']}),序号为{$number}"
-        );
-
         return $classroom;
     }
 
@@ -1773,12 +1793,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedTime' => 0,
                 'recommendedSeq' => 100,
             )
-        );
-
-        $this->getLogService()->info(
-            'classroom',
-            'cancel_recommend',
-            "取消推荐班级《{$classroom['title']}》(#{$classroom['id']})"
         );
 
         return $classroom;

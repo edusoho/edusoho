@@ -4,9 +4,9 @@
 {% endblock %}
 
 <div class="courseset-manage-header cd-mb32 clearfix">
-  <a href="{{ path('open_course_show', {courseId:course.id}) }}">
+  {% block coursesetImg %}
     <img class="courseset-manage-header__img" src="{{ filepath(course.largePicture, 'course.png') }}" />
-  </a>
+  {% endblock %}
 
   {% if course.status =='closed' %}
     <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
@@ -18,7 +18,9 @@
 
   <div class="courseset-manage-header-info">
     <div class="courseset-manage-header-info__title text-overflow" {% if course.title|length > 21 %}data-toggle="tooltip" title="{{ course.title }}" data-container="body" {% endif %}>
-      <a class="cd-link-major" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+    {% block coursesetTitle %}
+      <span class="cd-dark-major">{{ course.title }}</span>
+    {% endblock %}
     </div>
     {% block liveTag %}
       <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
@@ -38,7 +40,7 @@
   </div>
 
   <div class="courseset-manage-header-data hidden-xs">
-    <span>{{ 'my.teaching.open_course.hit_num'|trans }}</span>
+    <span class="cd-text-medium">{{ 'my.teaching.open_course.hit_num'|trans }}</span>
     <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.hitNum }}</span>{{ 'site.default.times'|trans }}</div>
   </div>
 </div>

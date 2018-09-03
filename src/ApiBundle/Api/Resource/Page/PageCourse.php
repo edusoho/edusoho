@@ -18,7 +18,8 @@ class PageCourse extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
         $course['learnedCompulsoryTaskNum'] = empty($member) ? 0 : $member['learnedCompulsoryTaskNum'];
-        $course['member'] = $member;
+        $isMemberNonExpired = empty($member) ? false : $this->getCourseMemberService()->isMemberNonExpired($course, $member);
+        $course['member'] = $isMemberNonExpired ? $member : null;
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);

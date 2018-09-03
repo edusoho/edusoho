@@ -2,6 +2,8 @@
 
 namespace Biz\Taxonomy\Service;
 
+use Biz\System\Annotation\Log;
+
 interface CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId);
@@ -32,10 +34,29 @@ interface CategoryService
 
     public function isCategoryCodeAvailable($code, $exclude = null);
 
+    /**
+     * @param $category
+     *
+     * @return mixed
+     * @Log(module="category",action="create")
+     */
     public function createCategory(array $category);
 
+    /**
+     * @param $id
+     * @param array $fields
+     *
+     * @return mixed
+     * @Log(module="category",action="update",param="id")
+     */
     public function updateCategory($id, array $fields);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="category",action="delete")
+     */
     public function deleteCategory($id);
 
     public function getGroup($id);

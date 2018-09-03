@@ -262,7 +262,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $oldCourse = $this->tryManageCourse($id);
 
         $this->validatie($id, $fields);
 
@@ -1040,8 +1040,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->dispatchEvent('course.chapter.delete', new Event($deletedChapter));
-
-        $this->getLogService()->info('course', 'delete_chapter', "删除章节(#{$chapterId})", $deletedChapter);
     }
 
     public function getChapter($courseId, $chapterId)
