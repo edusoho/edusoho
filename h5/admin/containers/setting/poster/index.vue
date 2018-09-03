@@ -13,7 +13,12 @@
         <div class="poster-item-setting__section">
           <p class="pull-left section-left">广告图片：</p>
           <div class="section-right">
-            <el-upload action="string" :http-request="uploadImg" :show-file-list="false">
+            <el-upload
+              action="string"
+              accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
+              :http-request="uploadImg"
+              :before-upload="beforeUpload"
+              :show-file-list="false">
               <div class="image-uploader">
                 <img v-show="copyModuleData.image.uri" :src="copyModuleData.image.uri" class="poster-img">
                 <div class="uploader-mask" v-show="!copyModuleData.image.uri">
@@ -120,6 +125,26 @@ export default {
     },
   },
   methods: {
+    beforeUpload(file) {
+      const type = file.type;
+      const size = file.size / 1024 / 1024;
+
+      if (type.indexOf('image') === -1) {
+        this.$message({
+          message: '文件类型仅支持图片格式',
+          type: 'error'
+        });
+        return false;
+      }
+
+      if (size > 2) {
+        this.$message({
+          message: '文件大小不得超过 2 MB',
+          type: 'error'
+        });
+        return false;
+      }
+    },
     uploadImg(item) {
       let formData = new FormData()
       formData.append('file', item.file)
