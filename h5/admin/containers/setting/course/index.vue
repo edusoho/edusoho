@@ -51,7 +51,7 @@
               </el-select>
             </div>
             <div class="section-right__item pull-right" v-show="showDateOptions">
-              <el-select v-model="copyModuleData.data.lastDays" placeholder="时间区间" size="mini">
+              <el-select v-model="copyModuleData.data.lastDays.toString()" placeholder="时间区间" size="mini">
                 <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -123,7 +123,7 @@ export default {
         label: 'name',
         value: 'id',
       },
-      categoryId: [this.moduleData.data.categoryId],
+      categoryId: [this.moduleData.data.categoryId.toString()],
       date: '最近7天',
       dateOptions: [{
         value: '7',
