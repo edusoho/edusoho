@@ -31,6 +31,7 @@ class ActivityExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat')),
             new \Twig_SimpleFilter('activity_visible', array($this, 'isActivityVisible')),
+            new \Twig_SimpleFilter('convert_minute_and_second', array($this, 'convertMinuteAndSecond')),
         );
     }
 
@@ -44,6 +45,17 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('flash_player', array($this, 'flashPlayer')),
             new \Twig_SimpleFunction('doc_player', array($this, 'docPlayer')),
         );
+    }
+
+    public function convertMinuteAndSecond($second)
+    {
+        $result = array();
+        if (!empty($second)) {
+            $result['minute'] = (int) ($second / 60);
+            $result['second'] = (int) ($second % 60);
+        }
+
+        return $result;
     }
 
     public function flashPlayer($globalId, $ssl)

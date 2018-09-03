@@ -22,7 +22,7 @@
             courseId: activity.fromCourseId,
             mediaType: 'flash',
             fileType:'flash',
-            file: flash.media|default(null),
+            file: flash.file|default(null),
             placeholder: 'Flash'
           } %}
           <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
