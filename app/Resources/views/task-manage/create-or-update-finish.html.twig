@@ -36,7 +36,7 @@
               </label>
             </div>
             <div class="col-sm-4">
-              <input class="form-control" id="text" type="text" value="{{ condition['value']}}">
+              <input class="form-control" id="text" type="text" value="{{ activity['finishData']|default(condition['value']) }}">
             </div>
             <div class="col-sm-4">
               <p class="form-control-static">
