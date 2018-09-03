@@ -1,18 +1,24 @@
-let $selectFinish = $('#finish-condition');
+let $selectFinish = $('#finish-type');
 if ($selectFinish.length) {
-  $('#finish-condition').on('change',function() {
-    // switch($(this).)
-    // {
-    // case 1:
-    //   break;
-    // case 2:
-    //   break;
-    // default:
-    // }
+  $selectFinish.on('change',function() {
+    $('#conditions').children().hide();
+    switch($(this).val())
+    {
+    case 'time':
+      $('#conditions-time').show();
+      if (!$('#watchTime').val()) {
+        let $options = $('#finish-type option:selected');
+        $('#watchTime').val($options.data('value'));
+      }
+      break;
+    case 'end':
+      break;
+    default:
+    }
   });
 }
 
-$('#text').on('change', function() {
+$('#watchTime').on('change', function() {
   $('#finish-data').val($(this).val());
   alert($('#finish-data').val());
 

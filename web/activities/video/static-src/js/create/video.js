@@ -29,7 +29,7 @@ export default class Video {
   }
 
   initStep2form() {
-    $('#step2-form').validate({
+    this.validate = $('#step2-form').validate({
       groups: {
         date: 'minute second'
       },
@@ -59,9 +59,8 @@ export default class Video {
   }
 
   autoValidatorLength() {
-    $('.js-length').blur(function () {
-      let validator = $('#step2-form').data('validator')
-      if (validator && validator.form()) {
+    $('.js-length').blur(() => {
+      if (this.validate.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
         $('#length').val(minute * 60 + second);
@@ -70,10 +69,14 @@ export default class Video {
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validate.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
+      }
+    });
+
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validate.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
       }
     });

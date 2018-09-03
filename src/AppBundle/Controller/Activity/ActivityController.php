@@ -81,7 +81,7 @@ class ActivityController extends BaseController
     public function finishModalAction($activityId = 0, $type, $courseId)
     {
         if (!empty($activityId)) {
-            $activity = $this->getActivityService()->getActivity($activityId, true);
+            $activity = $this->getActivityService()->getActivity($activityId);
         } else {
             $activity = array(
                 'id' => $activityId,
@@ -100,9 +100,6 @@ class ActivityController extends BaseController
                 'conditions' => empty($config['finish_condition']) ? array() : $config['finish_condition'],
             )
         );
-        // $container = $this->get('activity_runtime_container');
-
-        // return $container->finish($activity);
     }
 
     public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)
