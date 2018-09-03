@@ -86,26 +86,6 @@ class activity_video extends Biz\Activity\Config\Activity
         return $videoActivity;
     }
 
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        if ('time' === $video['finishType']) {
-            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-            $result /= 60;
-
-            return !empty($result) && $result >= $video['finishDetail'];
-        }
-
-        if ('end' === $video['finishType']) {
-            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
-
-            return !empty($log);
-        }
-
-        return false;
-    }
-
     public function get($id)
     {
         $videoActivity = $this->getVideoActivityDao()->get($id);

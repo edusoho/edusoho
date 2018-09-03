@@ -84,8 +84,24 @@ class Activity
         return true;
     }
 
-    public function isFinished($id)
+    public function isFinished($activityId)
     {
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if ('time' === $activity['finishType']) {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
+            $result /= 60;
+
+            return !empty($result) && $result >= $video['finishDetail'];
+        }
+
+        if ('end' === $video['finishType']) {
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+
+            return !empty($log);
+        }
+
+        return false;
+
         $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($id);
 
         return !empty($log);
