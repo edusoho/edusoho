@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\User\UserException;
 
 class PageDiscovery extends AbstractResource
 {
@@ -18,74 +19,47 @@ class PageDiscovery extends AbstractResource
         if (!in_array($portal, array('h5', 'miniprogram'))) {
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
-
-        $hotCourses = $this->findCoursesAndCourseSetsBySort(
-            array('studentNum' => 'DESC', 'hitNum' => 'DESC', 'id' => 'DESC')
-        );
-        $recommendedCourses = $this->findCoursesAndCourseSetsBySort(
-            array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'id' => 'DESC')
-        );
-
-        $posters = $this->getBlockService()->getPosters();
-
-        $result = array(
-            array(
-                'type' => 'slide_show',
-                'moduleType' => 'slide',
-                'data' => $posters,
-            ),
-            array(
-                'type' => 'course_list',
-                'moduleType' => 'hotCourseList',
-                'data' => array('title' => '热门课程', 'items' => $hotCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => '-studentNum'),
-                ),
-            ),
-            array(
-                'type' => 'course_list',
-                'moduleType' => 'recommendedCourseList',
-                'data' => array('title' => '推荐课程', 'items' => $recommendedCourses, 'source' => array('category' => 0, 'courseType' => 'all', 'sort' => 'recommendedSeq'),
-                ),
-            ),
-        );
-
-        return $result;
-    }
-
-    protected function findCoursesAndCourseSetsBySort($sort)
-    {
-        $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
-        if (array_key_exists('recommendedSeq', $sort)) {
-            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, 0, 4);
-        } else {
-            $courses = $this->getCourseService()->searchWithJoinTableConditions($conditions, $sort, 0, 4);
+        $params = $request->query->all();
+        $mode = 'published';
+        if (!empty($params['preview'])) {
+            $token = $this->getTokenService()->verifyToken('qrcode_url', $token);
+            if (empty($token)) {
+                throw UserException::PERMISSION_DENIED();
+            }
+            $user = $this->getUserService()->getUser($token['userId']);
+            if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+                throw UserException::PERMISSION_DENIED();
+            }
+            $mode = 'draft';
         }
-        $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
-        $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
+        foreach ($discoverySettings as &$discoverySetting) {
+            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+            }
+        }
 
-        return $courses;
+        return $discoverySettings;
     }
 
-    /**
-     * @return \Biz\Course\Service\CourseService
-     */
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
     }
 
-    /**
-     * @return \Biz\Course\Service\CourseSetService
-     */
-    protected function getCourseSetService()
+    protected function getH5SettingService()
     {
-        return $this->service('Course:CourseSetService');
+        return $this->service('System:H5SettingService');
     }
 
-    /**
-     * @return \Biz\Content\Service\BlockService
-     */
-    protected function getBlockService()
+    protected function getTokenService()
     {
-        return $this->service('Content:BlockService');
+        return $this->service('User:TokenService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

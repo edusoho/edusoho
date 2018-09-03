@@ -95,8 +95,11 @@ abstract class AbstractResource
 
     protected function getSort(ApiRequest $request)
     {
-        $sortStr = $request->query->get('sort');
+        return $this->getSortByStr($request->query->get('sort'));
+    }
 
+    protected function getSortByStr($sortStr)
+    {
         if ($sortStr) {
             $explodeSort = explode(',', $sortStr);
 
@@ -104,7 +107,7 @@ abstract class AbstractResource
             foreach ($explodeSort as $part) {
                 $prefix = substr($part, 0, 1);
                 $field = str_replace(self::PREFIX_SORT_DESC, '', $part);
-                if ($prefix == self::PREFIX_SORT_DESC) {
+                if (self::PREFIX_SORT_DESC == $prefix) {
                     $sort[$field] = 'DESC';
                 } else {
                     $sort[$field] = 'ASC';

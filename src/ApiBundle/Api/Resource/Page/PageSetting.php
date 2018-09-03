@@ -6,7 +6,11 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use ApiBundle\Api\Exception\ErrorCode;
+use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Resource\Course\CourseFilter;
+use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
 {
@@ -15,66 +19,109 @@ class PageSetting extends AbstractResource
      */
     public function get(ApiRequest $request, $portal, $type)
     {
-        if (!in_array($type, array('course'))) {
+        $mode = $request->query->get('mode', 'published');
+
+        if (!in_array($mode, array('draft', 'published'))) {
+            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        $type = 'course' == $type ? 'courseCondition' : $type;
+        if (!in_array($type, array('courseCondition', 'discovery'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        $method = "get${type}";
+        if (!in_array($portal, array('h5', 'miniprogram'))) {
+            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        $method = 'get'.ucfirst($type);
 
-        return $this->$method();
+        return $this->$method($portal, $mode);
     }
 
-    protected function getCourse()
+    /**
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
+    public function add(ApiRequest $request, $portal)
     {
-        $group = $this->getCategoryService()->getGroupByCode('course');
+        $mode = $request->query->get('mode');
+        if (!in_array($mode, array('draft', 'published'))) {
+            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        $type = $request->query->get('type');
+        if (!in_array($type, array('discovery'))) {
+            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
 
-        return array(
-            'title' => '所有课程',
-            array(
-                'type' => 'category',
-                'moduleType' => 'tree',
-                'text' => '分类',
-                'data' => $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], 0),
-            ),
-            array(
-                'type' => 'courseType',
-                'moduleType' => 'normal',
-                'text' => '课程类型',
-                'data' => array(
-                    array(
-                        'type' => 'normal',
-                        'text' => '课程',
-                    ),
-                    array(
-                        'type' => 'live',
-                        'text' => '直播',
-                    ),
-                ),
-            ),
-            array(
-                'type' => 'sort',
-                'moduleType' => 'normal',
-                'text' => '课程类型',
-                'data' => array(
-                    array(
-                        'type' => 'recommendedSeq',
-                        'text' => '推荐',
-                    ),
-                    array(
-                        'type' => '-studentNum',
-                        'text' => '热门',
-                    ),
-                    array(
-                        'type' => '-createdTime',
-                        'text' => '最新',
-                    ),
-                ),
-            ),
-        );
+        if (!in_array($portal, array('h5', 'miniprogram'))) {
+            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        $content = $request->request->all();
+        $method = 'add'.ucfirst($type);
+
+        return $this->$method($portal, $mode, $content);
     }
 
-    protected function getCategoryService()
+    /**
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
+    public function remove(ApiRequest $request, $portal, $type)
     {
-        return $this->service('Taxonomy:CategoryService');
+        $mode = $request->query->get('mode');
+        if ('draft' != $mode) {
+            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        if (!in_array($type, array('discovery'))) {
+            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        if (!in_array($portal, array('h5', 'miniprogram'))) {
+            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+        $method = 'remove'.ucfirst($type);
+
+        return $this->$method($portal, $mode);
+    }
+
+    protected function addDiscovery($portal, $mode = 'draft', $content = array())
+    {
+        $this->getSettingService()->set("{$portal}_{$mode}_discovery", $content);
+
+        return $this->getDiscovery($portal, $mode);
+    }
+
+    protected function getDiscovery($portal, $mode = 'published')
+    {
+        $user = $this->getCurrentUser();
+        if ('draft' == $mode && !$user->isAdmin()) {
+            throw new AccessDeniedHttpException();
+        }
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
+        foreach ($discoverySettings as &$discoverySetting) {
+            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+                foreach ($discoverySetting['data']['items'] as &$course) {
+                    $courseFilter = new CourseFilter();
+                    $courseFilter->setMode(Filter::PUBLIC_MODE);
+                    $courseFilter->filter($course);
+                }
+            }
+        }
+
+        return $discoverySettings;
+    }
+
+    protected function getCourseCondition($portal, $mode = 'published')
+    {
+        return $this->getH5SettingService()->getCourseCondition($portal, $mode);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
+    }
+
+    protected function getH5SettingService()
+    {
+        return $this->service('System:H5SettingService');
     }
 }
