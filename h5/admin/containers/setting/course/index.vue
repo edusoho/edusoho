@@ -71,11 +71,11 @@
       </div>
     </div>
     <course-modal slot="modal"
-                  :visible="modalVisible"
-                  :limit="copyModuleData.data.limit"
-                  :courseList="copyModuleData.data.items"
-                  @visibleChange="modalVisibleHandler"
-                  @updateCourses="getUpdatedCourses"></course-modal>
+      :visible="modalVisible"
+      :limit="copyModuleData.data.limit"
+      :courseList="copyModuleData.data.items"
+      @visibleChange="modalVisibleHandler"
+      @updateCourses="getUpdatedCourses"></course-modal>
   </module-frame>
 </template>
 <script>
@@ -159,6 +159,7 @@ export default {
     showDateOptions() {
       const isNewCreated = this.moduleData.data.sort === this.sortOptions[1].value
       const isRecommend = this.moduleData.data.sort === this.sortOptions[3].value;
+
       if (isNewCreated || isRecommend) {
         // 如果是 最新创建 或 推荐课程 时间区间为所有
         this.moduleData.data.lastDays = '0';
@@ -198,5 +199,4 @@ export default {
     }
   }
 }
-
 </script>
