@@ -64,6 +64,7 @@ class ActivityController extends BaseController
 
     public function contentModalAction($type, $courseId, $activityId = 0)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId, true);
         } else {
@@ -71,6 +72,7 @@ class ActivityController extends BaseController
                 'id' => $activityId,
                 'mediaType' => $type,
                 'fromCourseId' => $courseId,
+                'fromCourseSetId' => $course['courseSetId'],
             );
         }
         $container = $this->get('activity_runtime_container');

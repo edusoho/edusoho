@@ -30,7 +30,7 @@ class ActivityExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat')),
-            new \Twig_SimpleFilter('activity_visible', array($this, 'isActivityVisible')),
+            new \Twig_SimpleFilter('convert_minute_and_second', array($this, 'convertMinuteAndSecond')),
         );
     }
 
@@ -43,7 +43,19 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('ltc_source', array($this, 'findLtcSource')),
             new \Twig_SimpleFunction('flash_player', array($this, 'flashPlayer')),
             new \Twig_SimpleFunction('doc_player', array($this, 'docPlayer')),
+            new \Twig_SimpleFunction('activity_visible', array($this, 'isActivityVisible')),
         );
+    }
+
+    public function convertMinuteAndSecond($second)
+    {
+        $result = array();
+        if (!empty($second)) {
+            $result['minute'] = (int) ($second / 60);
+            $result['second'] = (int) ($second % 60);
+        }
+
+        return $result;
     }
 
     public function flashPlayer($globalId, $ssl)
@@ -148,7 +160,7 @@ class ActivityExtension extends \Twig_Extension
     {
         $activities = $this->container->get('extension.manager')->getActivities();
 
-        return call_user_func($activities[$type]['visible'], $courseSet, $course);
+        return isset($activities[$type]) ? call_user_func($activities[$type]['visible'], $courseSet, $course) : false;
     }
 
     public function lengthFormat($len, $type = null)

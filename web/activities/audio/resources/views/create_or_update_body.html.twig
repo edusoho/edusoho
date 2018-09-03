@@ -1,6 +1,7 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 {% set mediaType = activity.mediaType|default('audio') %}
 {% set fileType = 'audio' %}
+{% set length = activity.length|default(0)|convert_minute_and_second %}
 {% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'audioactivity/js/create/index.js']) %}
 {% block  activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
@@ -34,8 +35,8 @@
         </div>
         <div class="col-sm-10">
           <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
-          <input class="form-control width-150 js-length mrs" id="minute" type="text" name="minute" value="{{ activity.minute|default(null) }}">{{ 'site.date.minute'|trans }}
-          <input class="form-control width-150 js-length mhs" id="second" type="text" name="second" value="{{ activity.second|default(null) }}" >{{ 'site.date.second'|trans }}
+          <input class="form-control width-150 js-length mrs" id="minute" type="text" name="minute" value="{{ length.minute|default(null) }}">{{ 'site.date.minute'|trans }}
+          <input class="form-control width-150 js-length mhs" id="second" type="text" name="second" value="{{ length.second|default(null) }}" >{{ 'site.date.second'|trans }}
           <input type="hidden" id="length" name="length" value="{{ activity.length|default(null) }}">
         </div>
       </div>
