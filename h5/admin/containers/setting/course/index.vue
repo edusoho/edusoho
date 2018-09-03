@@ -156,9 +156,6 @@ export default {
         console.log('changed copyModuleData')
       }
     },
-    mmdata() {
-      return this.moduleData.data;
-    },
     showDateOptions() {
       const isNewCreated = this.moduleData.data.sort === this.sortOptions[1].value
       const isRecommend = this.moduleData.data.sort === this.sortOptions[3].value;
@@ -170,12 +167,6 @@ export default {
     }
   },
   watch: {
-    mmdata: {
-      handler() {
-        console.log('sortChange')
-      },
-      deep: true,
-    },
     copyModuleData: {
       handler(data) {
         this.$emit('updateModule', data);
