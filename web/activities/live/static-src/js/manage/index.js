@@ -15,6 +15,12 @@ export default class Live {
         window.ltc.emit('returnActivity', {valid:true,data: this._serializeArray($('#step2-form'))});
       }
     });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator2.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
+      }
+    });
   }
 
   initStep2Form() {

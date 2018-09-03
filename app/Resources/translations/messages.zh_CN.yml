@@ -1853,8 +1853,7 @@ course.plan_task.activity_manage.homework.question_total: >
   作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.live.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
+course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长

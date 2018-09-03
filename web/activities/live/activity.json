@@ -19,5 +19,11 @@
     "finish": "create_or_update_finish.html.twig",
     "show": "show.html.twig",
     "finish_tip": "finish_tip.html.twig"
-  }
+  },
+  "finish_condition": [
+    {
+      "type": "join",
+      "describe": "course.plan_task.activity_manage.live.finished_condition_tips"
+    }
+  ]
 }

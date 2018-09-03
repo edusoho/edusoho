@@ -22,7 +22,7 @@
   },
   "finish_condition": [
     {
-      "type": "lastPage",
+      "type": "end",
       "describe": "course.plan_task.activity_manage.ppt.learn_to_last_page_tips"
     },
     {

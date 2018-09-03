@@ -16,13 +16,13 @@
             </div>
             <div class="col-sm-4 {% if conditions|length == 1 %}form-control-static{% endif %}">
             {% if conditions|length == 1 %}
-              {{ selectTips[defaultCondition['type']]|default(defaultCondition['describe']|default(''))|trans }}
+              {{ defaultCondition['describe']|default(selectTips[defaultCondition['type']]|default(''))|trans }}
               <input type="hidden" id="finish-type" value="{{ defaultCondition['type'] }}" name="finishType">
             {% else %}
               <select id="finish-type" name="finishType" class="form-control">
                 {% for condition in conditions %}
                   <option data-value="{{ condition.value|default('') }}" value="{{ condition.type }}" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %} selected {% endif %}>
-                    {{ selectTips[condition['type']]|default(condition['describe']|default(''))|trans }}
+                    {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
                   </option>
                 {% endfor %}
               </select>
