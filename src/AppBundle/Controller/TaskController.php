@@ -384,10 +384,16 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $container = $this->get('activity_runtime_container');
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $finishTypes = array('time', 'end', 'default');
+        if (!in_array($activity['finishType'], $finishTypes)) {
+            $container = $this->get('activity_runtime_container');
+            return $container->renderRoute($activity, 'finish_tip');            
+        }
 
-        return $container->renderRoute($activity, 'finish_tip');
+        return $this->render('task/finish-tip.html.twig', array(
+            'activity' => $activity
+        ));
     }
 
     /**

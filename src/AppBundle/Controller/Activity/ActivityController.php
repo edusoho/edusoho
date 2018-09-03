@@ -89,9 +89,20 @@ class ActivityController extends BaseController
                 'fromCourseId' => $courseId,
             );
         }
-        $container = $this->get('activity_runtime_container');
 
-        return $container->finish($activity);
+        $activityConfigManage = $this->get('activity_config_manager');
+        $config = $activityConfigManage->getInstalledActivity($type);
+
+        return $this->render(
+            'task-manage/create-or-update-finish.html.twig',
+            array(
+                'activity' => $activity,
+                'conditions' => empty($config['finish_condition']) ? array() : $config['finish_condition'],
+            )
+        );
+        // $container = $this->get('activity_runtime_container');
+
+        // return $container->finish($activity);
     }
 
     public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)

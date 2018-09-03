@@ -21,9 +21,6 @@ class Editor {
     this.$finishIframe = $('#task-create-finish-iframe');
     $('#task-create-content-iframe, #task-create-finish-iframe').iFrameResize();
 
-    this.contentData = {};
-    this.finishData = {};
-
     this._init();
     this._initEvent();
   }
@@ -36,30 +33,6 @@ class Editor {
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
     }
-
-    window.ltc.on('returnActivity', (msg) => {
-      if (!msg.valid) {
-        this.contentData = {};
-        return;
-      }
-      this.contentData = msg.data;
-      // 第二步的时候，可以下一步，也可以保存，都会触发数据校验
-      // 返回数据时，通过标记符，知道下一步还是保存数据
-      this.actionType == 'next' ? this._doNext() : this._postData();
-    });
-
-    window.ltc.on('getContentData', (msg) => {
-      window.ltc.emitChild(msg.iframeId, 'returnContentData', this.contentData);
-    });
-
-    window.ltc.on('returnFinishCondition', (msg) => {
-      if (!msg.valid) {
-        this.finishData = {};
-        return;
-      }
-      this.finishData = msg.data;
-      this._postData();
-    });
   }
 
   _init() {
@@ -78,9 +51,15 @@ class Editor {
       this._doNext();
       return;
     }
+
     if (this.step === 2) {
-      this.actionType = 'next';
-      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
+      window.ltc.emitChild('task-create-content-iframe', 'getValidate');
+      window.ltc.once('returnValidate', (msg) => {
+        if (msg.valid) {
+          this._doNext();
+        }
+      });
+
       return;
     }
   }
@@ -102,6 +81,7 @@ class Editor {
   _onSetType(event) {
     let $this = $(event.currentTarget).addClass('active');
     $this.siblings().removeClass('active');
+    this.$finishIframe.attr('src', '');
     let type = $this.data('type');
     $('[name="mediaType"]').val(type);
     this.taskConfig.contentUrl = $this.data('contentUrl');
@@ -110,22 +90,45 @@ class Editor {
     this._onNext(event);
   }
 
-  _onSave() {
-    if (this.step === 2) {
-      this.actionType = 'save';
-      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
-      return;
-    }
+  async getActivityFinishCondition() {
+    let self = this;
+    return new Promise((resolve,reject) => {
+      if (!self.$finishIframe.attr('src')) {
+        resolve({});
+      }
 
-    if (this.step === 3) {
-      window.ltc.emitChild('task-create-finish-iframe', 'getFinishCondition');
-      return;
-    }
+      window.ltc.emitChild('task-create-finish-iframe', 'getCondition');
+      window.ltc.once('returnCondition', (msg) => {
+        if (!msg.valid) {
+          resolve({});
+          return;
+        }
+
+        resolve(msg.data);
+      });  
+    });
   }
 
-  _postData() {
-    let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), this.contentData, this.finishData);
+  async getActivityContent() {
+    let self = this;
+    return new Promise((resolve,reject) => {
+      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
+      window.ltc.once('returnActivity', (msg) => {
+        if (!msg.valid) {
+          resolve({});
+          return;
+        }
 
+        resolve(msg.data);
+      });      
+    }); 
+  }
+
+  async _onSave() {
+    let content = await this.getActivityContent();
+    let condition = await this.getActivityFinishCondition();
+    console.log(condition);
+    let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
     $.post(this.taskConfig['saveUrl'], postData)
       .done((response) => {
         this.$element.modal('hide');
@@ -187,10 +190,10 @@ class Editor {
   }
 
   _sendContent() {
-    window.ltc.once('returnValidate',  (msg) => {
-      window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
-    });
-    window.ltc.emitChild('task-create-content-iframe', 'getValidate');
+    // window.ltc.once('returnValidate',  (msg) => {
+    //   window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
+    // });
+    // window.ltc.emitChild('task-create-content-iframe', 'getValidate');
   }
 
   _inItStep1form() {

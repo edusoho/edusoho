@@ -1,0 +1,52 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js']) %}
+{% set bodyClass = 'task-iframe-body' %}
+{% block body %}
+  <div class="tab-content" id="iframe-content">
+  {% set selectTips = {'time': 'activity_manage.finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
+  {% set condition = conditions[0] %}
+    <div class="tab-pane js-course-tasks-pane active">
+        <form class="form-horizontal" id="step3-form" >
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              <label for="condition-select">
+                {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
+              </label>
+            </div>
+            <div class="col-sm-4 form-control-static">
+            {% if conditions|length == 1 %}
+              {{ selectTips[condition['type']]|default(condition['describe']|default(''))|trans }}
+              <input type="hidden" id="finish-type" value="{{condition['type']}}" name="finishType">
+            {% else %}
+              <select id="finish-type" name="finishType" class="form-control">
+                {% for condition in conditions %}
+                  <option value="{{ condition.type }}" {% if activity.finishType == condition.type|default() %} selected {% endif %}>
+                    {{ selectTips[condition['type']]|default(condition['describe']|default(''))|trans }}
+                  </option>
+                {% endfor %}
+              </select>
+            {% endif %}
+            </div>
+          </div>
+
+          <div id="condition-time" class="form-group {% if condition['type'] != 'time' %} hide{% endif %}">
+            <div class="col-sm-2 control-label">
+              <label for="finishDetail">
+                至少观看
+              </label>
+            </div>
+            <div class="col-sm-4">
+              <input class="form-control" id="text" type="text" value="{{ condition['value']}}">
+            </div>
+            <div class="col-sm-4">
+              <p class="form-control-static">
+                分
+              </p>
+            </div>
+          </div>
+          
+          <input type="hidden" id="finish-data" name="finishData" value="{{ condition['value'] }}">
+        </form>
+    </div>
+  </div>
+{% endblock %}
