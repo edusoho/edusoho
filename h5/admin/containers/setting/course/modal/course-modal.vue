@@ -18,7 +18,7 @@
           v-model="keyWord"
           placeholder="搜索课程"
           class="inline-input search__input"
-          :value-key="'courseSetTitle'"
+          :value-key="'displayedTitle'"
           :clearable="true"
           :autofocus="true"
           :trigger-on-focus="false"

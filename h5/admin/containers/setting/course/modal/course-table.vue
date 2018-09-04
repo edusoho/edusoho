@@ -45,7 +45,7 @@ export default {
         {
           col: 5,
           title: '课程名称',
-          label: 'courseSetTitle',
+          label: 'displayedTitle',
         }, {
           col: 3,
           title: '商品价格',

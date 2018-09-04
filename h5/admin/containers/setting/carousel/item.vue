@@ -45,7 +45,10 @@
         :disable-transitions="true"
         @close="handleClose"
         v-show="linkTextShow">
-        <span class="text-content ellipsis">{{ linkTextShow }}</span>
+        <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+          <span slot="content">{{linkTextHover}}</span>
+          <span>{{ linkTextShow }}</span>
+        </el-tooltip>
       </el-tag>
     </div>
   </div>
@@ -78,6 +81,9 @@
       linkTextShow() {
         return this.item.link.target && this.item.link.target.title;
       },
+      linkTextHover() {
+        return this.item.link.target && this.item.link.target.displayedTitle;
+      }
     },
     watch: {
       courseSets(sets) {
@@ -85,7 +91,8 @@
         if (sets.length) {
           this.item.link.target = {
             id: sets[0].id,
-            title: sets[0].title
+            title: sets[0].title,
+            displayedTitle: sets[0].displayedTitle
           }
         } else {
           this.item.link.target = {};
