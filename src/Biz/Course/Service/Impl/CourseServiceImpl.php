@@ -2606,7 +2606,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $batchHelper = new BatchUpdateHelper($this->getChapterDao());
 
         foreach ($sortedLessons as $lesson) {
-            if ('published' == $lesson['status']) {
+            if ('published' == $lesson['status'] && !$lesson['isOptional']) {
                 $batchHelper->add('id', $lesson['id'], array('published_number' => $publishedNum));
                 ++$publishedNum;
             } else {
