@@ -45,19 +45,12 @@
       const {preview, token} = this.$route.query
 
       if (preview == 1) {
-        this.$store.commit(types.USER_LOGIN, {
-          token,
-          user: {}
-        });
-
-        Api.draftDiscovery({
+        Api.discoveries({
           params: {
-            mode: 'draft'
+            mode: 'draft',
+            preview: 1,
+            token,
           },
-          query: {
-            type: 'discovery',
-            portal: 'h5',
-          }
         })
           .then((res) => {
             this.parts = Object.values(res);

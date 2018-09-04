@@ -37,7 +37,7 @@
       this.getDraft({
         portal: 'h5',
         type: 'discovery',
-        mode: 'published',
+        mode: 'draft',
       }).then((res) => {
         this.parts = Object.values(res);
       }).catch((err) => {
