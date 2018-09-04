@@ -279,8 +279,13 @@ class ArrayToolkit
 
     /**
      * 根据$orderBy数组的值排序$array
-     * 如
-     * $array = array(1 => array(a,b,c), 2 => array(d,e,f), 3 => array(g,h,i))
+     * 如 $array 为
+     *  array(
+     *      1 => array(a,b,c),
+     *      2 => array(d,e,f),
+     *      3 => array(g,h,i)
+     *  )
+     *
      * $orderArray = array(3,1,2)
      * 排完序后
      * array(3 => array(g,h,i), 1 => array(a,b,c), 3 => array(d,e,f))
@@ -304,12 +309,14 @@ class ArrayToolkit
      * @param $attrName 二维数组内指定的属性
      * @param $ascending  默认为升序
      *
-     * @return 如
-     *             $arr 为 array(
-     *             array('id' => 1, 'name' => 'hello1'),
-     *             array('id' => 2, 'name' => 'hello2'),
-     *             )
-     *             $attrName 为 name, $ascending = false
+     * @return
+     *  如$arr 为
+     *  array(
+     *      array('id' => 1, 'name' => 'hello1'),
+     *      array('id' => 2, 'name' => 'hello2'),
+     *  )
+     *
+     *  $attrName 为 name, $ascending = false
      *
      *  排完序后结果为 array(
      *      array('id' => 2, 'name' => 'hello2'),
