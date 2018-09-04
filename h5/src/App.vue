@@ -31,7 +31,7 @@ export default {
       handler(to) {
         const redirect = to.query.redirect || '';
 
-        this.showLeftArrow = !['my', 'find', 'learning', 'prelogin'].includes(to.name);
+        this.showLeftArrow = !['my', 'find', 'learning', 'prelogin', 'preview'].includes(to.name);
 
         if(redirect === 'learning') {
           this.setNavbarTitle('我的学习')

@@ -21,8 +21,15 @@ const config = [
     method: 'GET'
   },
   {
+    // 首页正式数据
     name: 'discoveries',
     url: '/pages/h5/discoveries',
+    method: 'GET'
+  },
+  {
+    // 后台配置的首页草稿数据
+    name: 'draftDiscovery',
+    url: '/pages/{portal}/settings/{type}',
     method: 'GET'
   },
   {

@@ -24,10 +24,15 @@
       slides: {
         type: Array,
         default: []
-      }
+      },
+      feedback: {
+        type: Boolean,
+        default: true,
+      },
     },
     methods: {
       jumpTo(target) {
+        if (!this.feedback) return;
         if (!target) return;
 
         this.$router.push({

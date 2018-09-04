@@ -38,6 +38,18 @@ export default {
       }
     }
   },
+  created() {
+    const {preview, token} = this.$route.query
+    if (preview == 1) {
+      this.$router.push({
+        name: 'preview',
+        query: {
+          preview,
+          token
+        },
+      })
+    }
+  },
   methods: {
     onChange(index) {
       this.$router.push({
