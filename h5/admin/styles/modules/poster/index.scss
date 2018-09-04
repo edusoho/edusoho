@@ -20,7 +20,8 @@
     border: 1px solid #E1E1E1;
   }
   .poster-item-setting__section {
-    overflow: hidden;
+    // overflow: hidden;
+    position: relative;
     .section {
       &-left {
         display: inline;

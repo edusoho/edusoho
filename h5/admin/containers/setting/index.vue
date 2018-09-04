@@ -9,6 +9,7 @@
         <draggable v-model="modules">
           <module-template v-for="(module, index) in modules"
             :module="module" :active="isActive(index)"
+            :incomplete="isIncomplete(index)"
             :key="index"
             :moduleKey="`${module.type}-${index}`"
             :index="index"
@@ -69,6 +70,7 @@ export default {
       title: 'EduSoho 微网校',
       modules: [],
       currentModuleIndex: '0',
+      incompleteModuleIndex: -1,
       items,
       moduleItems: [{
           name: '轮播图',
@@ -116,11 +118,15 @@ export default {
     isActive(index) {
       return index === this.currentModuleIndex;
     },
+    isIncomplete(index) {
+      return index === this.incompleteModuleIndex;
+    },
     activeModule(index) {
       this.currentModuleIndex = index;
     },
     updateModule(data, index) {
       console.log('updateModule');
+
     },
     removeModule(data, index) {
       console.log('removeModule');
@@ -166,45 +172,101 @@ export default {
         });
       });
     },
+    complete() {
+      const data = this.modules;
+      for (var i = 0; i < data.length; i++) {
+        switch (data[i].type) {
+          // case 'slide_show':
+          //   const slideNum = data[i].data.length;
+          //   for (let num in data[i].data) {
+          //     const imgUri = data[i].data[num].image.uri;
+          //     if (!imgUri) {
+          //       this.incompleteModuleIndex = i;
+          //       this.currentModuleIndex = i;
+          //       this.$message({
+          //         message: '请完善轮播图模块信息！',
+          //         type: 'error'
+          //       });
+          //       return false;
+          //     }
+          //   }
+          // break;
+          case 'course_list':
+            const courseKind = data[i].data.items[0] == undefined ? false : true;
+            console.log('data[i].data.items',data[i].data.items.length)
+            if (!data[i].data.title) {
+              // if (data[i].data.sourceType == 'custom' && !courseKind) {
+              //   courseKind
+              // }
+              this.incompleteModuleIndex = i;
+              this.currentModuleIndex = i;
+              this.$message({
+                message: '请完善课程模块信息！',
+                type: 'error'
+              });
+              return false;
+            }
+            break;
+          case 'poster':
+            const imgUri = data[i].data.image.uri;
+            if (!imgUri) {
+              this.incompleteModuleIndex = i;
+              this.currentModuleIndex = i;
+              this.$message({
+                message: '请完善广告模块信息！',
+                type: 'error'
+              });
+              return false;
+            }
+            break;
+        }
+      }
+    },
     save(mode, needTrans = true) {
       // 保存配置
       const isPublish = mode === 'published';
       let data = this.modules;
+
+      // 判断信息是否完善
+      // this.complete()
+      if(!this.complete()) {
+        return;
+      }
 
       // 如果已经是对象就不用转换
       if (needTrans) {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
 
-      this.saveDraft({
-        data,
-        mode,
-        portal: 'h5',
-        type: 'discovery',
-      }).then(() => {
-        if (isPublish) {
-          this.$message({
-            message: '发布成功',
-            type: 'success'
-          });
-          return;
-        }
+      // this.saveDraft({
+      //   data,
+      //   mode,
+      //   portal: 'h5',
+      //   type: 'discovery',
+      // }).then(() => {
+      //   if (isPublish) {
+      //     this.$message({
+      //       message: '发布成功',
+      //       type: 'success'
+      //     });
+      //     return;
+      //   }
 
-        this.$store.commit(types.UPDATE_DRAFT, data);
-        this.$router.push({
-          name: 'preview',
-          query: {
-            times: 10,
-            preview: isPublish ? 0 : 1,
-            duration: 60 * 5,
-          }
-        });
-      }).catch(err => {
-        this.$message({
-          message: err.message || '发布失败，请重新尝试',
-          type: 'error'
-        });
-      })
+      //   this.$store.commit(types.UPDATE_DRAFT, data);
+      //   this.$router.push({
+      //     name: 'preview',
+      //     query: {
+      //       times: 10,
+      //       preview: isPublish ? 0 : 1,
+      //       duration: 60 * 5,
+      //     }
+      //   });
+      // }).catch(err => {
+      //   this.$message({
+      //     message: err.message || '发布失败，请重新尝试',
+      //     type: 'error'
+      //   });
+      // })
     }
   }
 }

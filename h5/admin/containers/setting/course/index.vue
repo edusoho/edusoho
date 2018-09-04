@@ -1,5 +1,5 @@
 <template>
-  <module-frame containerClass="setting-course" :isActive="isActive">
+  <module-frame containerClass="setting-course" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part">
       <e-course-list :courseList="copyModuleData.data" :limit="copyModuleData.data.limit" :feedback="false"></e-course-list>
     </div>
@@ -15,7 +15,7 @@
         </div>
         <!-- 课程来源 -->
         <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left required-option">课程来源：</p>
+          <p class="pull-left section-left">课程来源：</p>
           <div class="section-right">
             <el-radio v-model="copyModuleData.data.sourceType" label="condition">课程分类</el-radio>
             <el-radio v-model="copyModuleData.data.sourceType" label="custom">自定义</el-radio>
@@ -23,12 +23,12 @@
         </div>
         <!-- 课程分类 -->
         <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left required-option">课程分类：</p>
+          <p class="pull-left section-left">课程分类：</p>
           <div class="section-right">
             <!-- <el-input size="mini" v-model="categoryId" placeholder="请输入列表名称"> -->
             <el-cascader v-show="copyModuleData.data.sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryId" filterable change-on-select></el-cascader>
             </el-input>
-            <div v-show="copyModuleData.data.sourceType === 'custom'">
+            <div class="required-option" v-show="copyModuleData.data.sourceType === 'custom'">
               <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
             </div>
           </div>
@@ -42,7 +42,7 @@
         <!-- 排列顺序 -->
         <div class="course-item-setting__section mtl clearfix"
           v-show="copyModuleData.data.sourceType === 'condition'">
-          <p class="pull-left section-left required-option">排列顺序：</p>
+          <p class="pull-left section-left">排列顺序：</p>
           <div class="section-right">
             <div class="section-right__item pull-left">
               <el-select v-model="copyModuleData.data.sort" placeholder="顺序" size="mini">
@@ -60,7 +60,7 @@
         </div>
         <!-- 显示个数 -->
         <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left required-option">显示个数：</p>
+          <p class="pull-left section-left">显示个数：</p>
           <div class="section-right">
             <el-select v-model="copyModuleData.data.limit" placeholder="请选择个数" size="mini">
               <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
@@ -103,6 +103,10 @@ export default {
       type: Object,
       default: {},
     },
+    incomplete: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
@@ -148,6 +152,12 @@ export default {
     isActive: {
       get() {
         return this.active;
+      },
+      set() {}
+    },
+    isIncomplete: {
+      get() {
+        return this.incomplete;
       },
       set() {}
     },
