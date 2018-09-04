@@ -1,10 +1,19 @@
 <template>
   <div class="find-page">
     <e-loading v-if="isLoading"></e-loading>
-    <div class="find-page__part" v-for="part in parts">
+    <div class="find-page__part" v-for="(part, index) in parts" :key="index">
       <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
-      <e-course-list v-if="part.type == 'course_list'" :courseList="part.data" :feedback="feedback"></e-course-list>
-      <e-poster v-if="part.type == 'poster'" :poster="part.data" :feedback="feedback"></e-poster>
+      <e-course-list
+        v-if="part.type == 'course_list'"
+        :courseList="part.data"
+        :feedback="feedback"
+        :index="index"
+        @fetchCourse="fetchCourse"></e-course-list>
+      <e-poster
+        v-if="part.type == 'poster'"
+        :class="imageMode[part.data.responsive]"
+        :poster="part.data"
+        :feedback="feedback"></e-poster>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"></div>
@@ -34,6 +43,10 @@
     data() {
       return {
         parts: [],
+        imageMode: [
+          'responsive',
+          'size-fit',
+        ],
       };
     },
     computed: {
@@ -45,19 +58,12 @@
       const {preview, token} = this.$route.query
 
       if (preview == 1) {
-        this.$store.commit(types.USER_LOGIN, {
-          token,
-          user: {}
-        });
-
-        Api.draftDiscovery({
+        Api.discoveries({
           params: {
-            mode: 'draft'
+            mode: 'draft',
+            preview: 1,
+            token,
           },
-          query: {
-            type: 'discovery',
-            portal: 'h5',
-          }
         })
           .then((res) => {
             this.parts = Object.values(res);
@@ -75,6 +81,15 @@
         .catch((err) => {
           console.log(err, 'error');
         });
+    },
+    methods: {
+      fetchCourse({params, index}) {
+        Api.getCourseList({params}).then(res => {
+          if (this.sourceType === 'custom') return;
+
+          this.parts[index].data.items = res.data;
+        })
+      }
     },
   }
 </script>

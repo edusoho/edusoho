@@ -74,3 +74,17 @@
     font-size: 14px;
   }
 }
+
+// h5 轮播长度单位复写
+.e-swipe {
+  img {
+    height: auto;
+  }
+}
+
+.item-container {
+  &__title {
+    font-size: 16px;
+    line-height: 40px;
+  }
+}

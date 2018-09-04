@@ -98,16 +98,6 @@ export default {
     // 获得课程分类列表
     this.getCategories();
   },
-  watch: {
-    modules: {
-      handler(value) {
-        // value.for (let i = 0, len = value.length; i < len; i++) {
-        //   Things[i]
-        // }
-        console.log(value.length)
-      }
-    },
-  },
   methods: {
     ...mapActions([
       'getCategories',
@@ -144,10 +134,12 @@ export default {
     },
     load() {
       // 读取草稿配置
+      const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
+
       this.getDraft({
         portal: 'h5',
         type: 'discovery',
-        mode: 'draft',
+        mode,
       }).then((res) => {
         this.modules = Object.values(res);
       })

@@ -1,10 +1,10 @@
 <template>
   <module-frame containerClass="setting-poster" :isActive="isActive" :isIncomplete="isIncomplete">
-    <div slot="preview" :class="'poster-image-container ' +  imageMode[copyModuleData.responsive]">
+    <div slot="preview" class="poster-image-container">
       <div class="image-mask" v-show="!copyModuleData.image.uri">
         广告图片
       </div>
-      <poster :poster="copyModuleData" :feedback="false"></poster>
+      <poster :class="imageMode[copyModuleData.responsive]" :poster="copyModuleData" :feedback="false"></poster>
     </div>
 
     <div slot="setting" class="poster-allocate">

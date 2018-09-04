@@ -2,8 +2,15 @@
   <div class="find-page">
     <div class="find-page__part" v-for="part in parts">
       <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
-      <e-course-list v-if="part.type == 'course_list'" :courseList="part.data" :feedback="feedback"></e-course-list>
-      <e-poster v-if="part.type == 'poster'" :poster="part.data" :feedback="feedback"></e-poster>
+      <e-course-list
+        v-if="part.type == 'course_list'"
+        :courseList="part.data"
+        :feedback="feedback"></e-course-list>
+      <e-poster
+        v-if="part.type == 'poster'"
+        :class="imageMode[part.data.responsive]"
+        :poster="part.data"
+        :feedback="feedback"></e-poster>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"></div>
@@ -31,13 +38,17 @@
     data() {
       return {
         parts: [],
+        imageMode: [
+          'responsive',
+          'size-fit',
+        ],
       };
     },
     created() {
       this.getDraft({
         portal: 'h5',
         type: 'discovery',
-        mode: 'published',
+        mode: 'draft',
       }).then((res) => {
         this.parts = Object.values(res);
       }).catch((err) => {

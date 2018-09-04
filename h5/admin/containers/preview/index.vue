@@ -35,14 +35,13 @@ export default {
   },
   created() {
     const { preview, times, duration } = this.$route.query;
-    console.log(preview, times, duration)
+
     this.getQrcode({
       preview,
       times,
       duration,
       route: 'homepage',
     }).then(res => {
-      console.log(res);
       this.qrcode = res.img;
     });
   },
@@ -53,7 +52,10 @@ export default {
     ]),
     edit() {
       this.$router.push({
-        name: 'admin'
+        name: 'admin',
+        query: {
+          draft: 1
+        },
       })
     },
     publish() {
