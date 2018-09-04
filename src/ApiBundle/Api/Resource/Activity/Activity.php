@@ -3,16 +3,14 @@
 namespace ApiBundle\Api\Resource\Activity;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Activity extends AbstractResource
 {
     /**
-    * @ApiConf(isRequiredAuth=false)
-    */
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId, true);
@@ -21,11 +19,12 @@ class Activity extends AbstractResource
         }
 
         $user = $this->getCurrentUser();
-        if ($this->getCourseMemberService()->isCourseStudent($activity['fromCourseId'], $user['id']) ) {
+        if ($this->getCourseMemberService()->isCourseStudent($activity['fromCourseId'], $user['id'])) {
             return $activity;
         }
-   
+
         $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+
         return  $activity;
     }
 

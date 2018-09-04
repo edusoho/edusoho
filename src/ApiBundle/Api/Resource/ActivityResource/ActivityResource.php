@@ -6,6 +6,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityService;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use ApiBundle\Api\Annotation\Access;
 
@@ -57,13 +59,18 @@ class ActivityResource extends AbstractResource
     {
         $params = $request->request->all();
 
-        if (!ArrayToolkit::requireds($params, array('resourceType'))) {
+        if (!ArrayToolkit::requireds($params, array('resourceType', 'activityId'))) {
             throw new InvalidParameterException('param is wrong!');
+        }
+
+        $activity = $this->getActivityService()->getActivity($params['activityId']);
+        if ($activity['mediaId'] != $resourceId) {
+            throw new AccessDeniedHttpException('activityId wrong!');
         }
 
         $activityConfig = $this->getActivityConfig($params['resourceType']);
 
-        return $activityConfig->update($resourceId, $params);
+        return $activityConfig->update($resourceId, $params, $activity);
     }
 
     /**
@@ -74,5 +81,13 @@ class ActivityResource extends AbstractResource
     private function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
     }
 }

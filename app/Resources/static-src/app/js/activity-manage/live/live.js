@@ -1,6 +1,6 @@
 import { initEditor } from '../editor';
 export default class Live {
-  constructor() {
+  constructor(props) {
     this.$startTime = $('#startTime');
     this._init();
   }
@@ -8,12 +8,6 @@ export default class Live {
   _init() {
     this.initStep2Form();
     this._timePickerHide();
-
-    window.ltc.on('getActivity', (msg) => {
-      if (this.validator2.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data: this._serializeArray($('#step2-form'))});
-      }
-    });
   }
 
   initStep2Form() {
@@ -115,21 +109,5 @@ export default class Live {
     parent.$('#modal', window.parent.document).on('afterNext',function(){
       $starttime.datetimepicker('hide');
     });
-  }
-
-  _serializeArray($e) {
-    let o = {};
-    let a = $e.serializeArray();
-    $.each(a, function() {
-      if (o[this.name]) {
-        if (!o[this.name].push) {
-          o[this.name] = [o[this.name]];
-        }
-        o[this.name].push(this.value || '');
-      } else {
-        o[this.name] = this.value || '';
-      }
-    });
-    return o;
   }
 }

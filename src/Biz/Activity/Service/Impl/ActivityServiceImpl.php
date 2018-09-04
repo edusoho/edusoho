@@ -149,15 +149,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
-
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
-        $materials = $this->getMaterialsFromActivity($fields);
 
-        $media = $activityConfig->create($fields);
+        if(empty($fields['mediaId'])) {
+            $media = $activityConfig->create($fields);
+        }
 
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
         }
+
+        $materials = $this->getMaterialsFromActivity($fields);
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
         $fields = $this->filterFields($fields);
@@ -363,6 +365,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'remark',
                 'mediaId',
                 'mediaType',
+                'mediaId',
                 'content',
                 'length',
                 'fromCourseId',
