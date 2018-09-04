@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js']) %}
+{% do script(['libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js'], 500) %}
 {% set bodyClass = 'task-iframe-body' %}
 {% block body %}
   <div class="tab-content" id="iframe-content">
@@ -45,6 +45,11 @@
                 </p>
               </div>
             </div>
+            {% for condition in conditions %}
+              {% if condition['html']|default() %}
+                {% include("@activity/"~ activity.mediaType ~"/resources/views/" ~ condition['html'])  %}
+              {% endif %}
+            {% endfor %}
           </div>
           <input type="hidden" id="finish-data" name="finishData" value="{{ activity['finishData']|default(defaultCondition['value']|default()) }}">
         </form>

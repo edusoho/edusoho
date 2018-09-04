@@ -20,8 +20,6 @@ if ($selectFinish.length) {
 
 $('#watchTime').on('change', function() {
   $('#finish-data').val($(this).val());
-  alert($('#finish-data').val());
-
 });
 
 window.ltc.on('getCondition', function(msg){

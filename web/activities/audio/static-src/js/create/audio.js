@@ -10,7 +10,7 @@ export default class Audio {
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
+    window.ltc.on('getActivity', (msg) => {
       if (this.validate.form()) {
         window.ltc.emit('returnActivity', {valid:true, data: window.ltc.getFormSerializeObject($('#step2-form'))});
       }
@@ -68,7 +68,6 @@ export default class Audio {
 
   initFileChooser() {
     const fileChooser = new FileChooser();
-    console.log(fileChooser);
     const onSelectFile = file => {
       chooserUiClose();
       let placeMediaAttr = (file) => {

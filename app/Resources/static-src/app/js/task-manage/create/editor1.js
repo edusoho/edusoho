@@ -190,10 +190,10 @@ class Editor {
   }
 
   _sendContent() {
-    // window.ltc.once('returnValidate',  (msg) => {
-    //   window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
-    // });
-    // window.ltc.emitChild('task-create-content-iframe', 'getValidate');
+    window.ltc.once('returnValidate',  (msg) => {
+      window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
+    });
+    window.ltc.emitChild('task-create-content-iframe', 'getValidate');
   }
 
   _inItStep1form() {

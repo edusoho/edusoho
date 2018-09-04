@@ -64,17 +64,6 @@ class activity_text extends Biz\Activity\Config\Activity
         return $this->getTextActivityDao()->update($targetId, $text);
     }
 
-    public function isFinished($activityId)
-    {
-        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-        $result /= 60;
-
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
-
-        return empty($textActivity['finishDetail']) || (!empty($result) && $result >= $textActivity['finishDetail']);
-    }
-
     public function delete($targetId)
     {
         return $this->getTextActivityDao()->delete($targetId);
