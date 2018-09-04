@@ -282,7 +282,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $builder = parent::createQueryBuilder($conditions);
 
         if (isset($conditions['types'])) {
-            $builder->andWhere('type IN ( :types )');
+            $builder->andWhere('course_v8.type IN ( :types )');
         }
 
         return $builder;
