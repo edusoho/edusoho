@@ -293,6 +293,7 @@ export default {
         lastDays: this.lastDays,
         categoryId: this.categoryId,
       }).then(res => {
+        if (this.sourceType === 'custom') return;
         this.copyModuleData.data.items = res.data;
       })
     }
