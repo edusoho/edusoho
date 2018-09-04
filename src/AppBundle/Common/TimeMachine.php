@@ -92,7 +92,7 @@ class TimeMachine
         return array($startTime, $endTime);
     }
 
-    public function getTimeRangeByDays($days)
+    public static function getTimeRangeByDays($days)
     {
         if (!is_numeric($days) || $days <= 0) {
             throw new BadRequestHttpException('days is error', null, ErrorCode::INVALID_ARGUMENT);
