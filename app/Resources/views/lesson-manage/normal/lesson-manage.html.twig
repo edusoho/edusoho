@@ -3,8 +3,29 @@
   {{'course.plan_task.task_unpublished'|trans}}</span>
 
   <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not lesson.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
-  
-  {% set customTitle = 'course.plan_task.which_lesson'|trans({'%chapterNumber%':lesson.number, '%title%':lesson.title|sub_text(30)}) %}
+  {% set displayText = '' %}
+  {% if not lesson.isOptional %}
+    {% if course['isHideUnpublish']|default(false) %}
+      {% if lesson.status == 'published' %}
+        {% set displayedLessonNum = lesson.published_number %}
+      {% else %}
+        {% set displayedLessonNum = '' %}
+      {% endif %}
+    {% else %}
+      {% set displayedLessonNum = lesson.number %}
+    {% endif %}
+
+    {% if displayedLessonNum != '' %}
+      {% set displayText = 'course.lesson'|trans %}
+    {% endif %}
+
+    {% set displayText = displayText ~ '<span class="number mls">' ~ displayedLessonNum ~ '</span>' %}
+    {% if displayedLessonNum != '' %}
+      {% set displayText = displayText ~ '：' %}
+    {% endif %}
+  {% endif %}
+
+  {% set customTitle = displayText ~ lesson.title|sub_text(30) %}
   {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %}  <!-- 单任务课时，不显示任务 -->
   
   {% set task = lesson.tasks[0] %}

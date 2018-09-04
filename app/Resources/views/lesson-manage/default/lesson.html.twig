@@ -13,7 +13,8 @@
       </span>
 
       <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not task.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
-      {% if not task.isOptional %}
+      {% set displayText = '' %}
+      {% if not lesson.isOptional %}
         {% if course['isHideUnpublish']|default(false) %}
           {% if lesson.status == 'published' %}
             {% set displayedLessonNum = lesson.published_number %}
@@ -25,14 +26,16 @@
         {% endif %}
 
         {% if displayedLessonNum != '' %}
-          {{'course.lesson'|trans}}
+          {% set displayText = 'course.lesson'|trans %}
         {% endif %}
-        <span class="number mls">{{ displayedLessonNum }}</span>
+
+        {% set displayText = displayText ~ '<span class="number mls">' ~ displayedLessonNum ~ '</span>' %}
         {% if displayedLessonNum != '' %}
-          ：
+          {% set displayText = displayText ~ '：' %}
         {% endif %}
       {% endif %}
-      {{ lesson.title|sub_text(30) }}
+    
+      {{ displayText|raw }}{{lesson.title|sub_text(30)}}
 
       {% if task.activity.mediaType is same as('live') %}
         {% if not task.activity.ext.roomCreated|default(true) %}
