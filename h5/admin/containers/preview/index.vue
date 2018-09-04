@@ -3,7 +3,7 @@
     <div class="image-container clearfix">
       <div class="phone-img">
         <img  src="static/images/phone_shell.png">
-        <iframe class="preview-iframe" src="http://localhost:8011?preview=1" frameborder="0"></iframe>
+        <mobile-preview class="preview-iframe" :feedback="false"></mobile-preview>
       </div>
       <div class="code-container">
         <div class="code-item">
@@ -19,6 +19,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import mobilePreview from './mobile'
 
 
 export default {
@@ -26,6 +27,9 @@ export default {
     return  {
       qrcode: '',
     }
+  },
+  components: {
+    mobilePreview
   },
   computed: {
 

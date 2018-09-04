@@ -5,6 +5,7 @@ import utils from '@/utils';
 import store from '@admin/store';
 
 import 'element-ui/lib/theme-chalk/index.css';
+import 'vant/lib/vant-css/index.css';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
 
@@ -21,6 +22,14 @@ import {
   Tag,
   Autocomplete,
 } from 'element-ui';
+
+import {
+  Swipe,
+  SwipeItem,
+} from 'vant';
+// 按需引入组件
+Vue.component('van-swipe', Swipe);
+Vue.component('van-swipe-item', SwipeItem);
 
 Vue.use(Input);
 Vue.use(Select);
