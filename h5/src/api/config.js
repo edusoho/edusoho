@@ -27,12 +27,6 @@ const config = [
     method: 'GET'
   },
   {
-    // 后台配置的首页草稿数据
-    name: 'draftDiscovery',
-    url: '/pages/{portal}/settings/{type}',
-    method: 'GET'
-  },
-  {
     name: 'dragCaptcha',
     url: '/drag_captcha',
     method: 'POST'

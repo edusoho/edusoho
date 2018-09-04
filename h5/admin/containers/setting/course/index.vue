@@ -17,22 +17,21 @@
         <div class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left required-option">课程来源：</p>
           <div class="section-right">
-            <el-radio v-model="copyModuleData.data.sourceType" label="condition">课程分类</el-radio>
-            <el-radio v-model="copyModuleData.data.sourceType" label="custom">自定义</el-radio>
+            <el-radio v-model="sourceType" label="condition">课程分类</el-radio>
+            <el-radio v-model="sourceType" label="custom">自定义</el-radio>
           </div>
         </div>
         <!-- 课程分类 -->
         <div class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left required-option">课程分类：</p>
           <div class="section-right">
-            <!-- <el-input size="mini" v-model="categoryId" placeholder="请输入列表名称"> -->
-            <el-cascader v-show="copyModuleData.data.sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryId" filterable change-on-select></el-cascader>
+            <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
             </el-input>
-            <div v-show="copyModuleData.data.sourceType === 'custom'">
+            <div v-show="sourceType === 'custom'">
               <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
             </div>
           </div>
-          <draggable v-show="copyModuleData.data.sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">
+          <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">
             <div class="section__course-item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
               <div class="section__course-item__title text-overflow">{{ courseItem.displayedTitle }}</div>
               <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
@@ -41,17 +40,17 @@
         </div>
         <!-- 排列顺序 -->
         <div class="course-item-setting__section mtl clearfix"
-          v-show="copyModuleData.data.sourceType === 'condition'">
+          v-show="sourceType === 'condition'">
           <p class="pull-left section-left required-option">排列顺序：</p>
           <div class="section-right">
             <div class="section-right__item pull-left">
-              <el-select v-model="copyModuleData.data.sort" placeholder="顺序" size="mini">
+              <el-select v-model="sort" placeholder="顺序" size="mini">
                 <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <div class="section-right__item pull-right" v-show="showDateOptions">
-              <el-select v-model="copyModuleData.data.lastDays.toString()" placeholder="时间区间" size="mini">
+              <el-select v-model="lastDays" placeholder="时间区间" size="mini">
                 <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -62,7 +61,7 @@
         <div class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left required-option">显示个数：</p>
           <div class="section-right">
-            <el-select v-model="copyModuleData.data.limit" placeholder="请选择个数" size="mini">
+            <el-select v-model="limit" placeholder="请选择个数" size="mini">
               <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
@@ -72,7 +71,7 @@
     </div>
     <course-modal slot="modal"
       :visible="modalVisible"
-      :limit="copyModuleData.data.limit"
+      :limit="limit"
       :courseList="copyModuleData.data.items"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses"></course-modal>
@@ -125,9 +124,8 @@ export default {
         label: 'name',
         value: 'id',
       },
-      categoryId: [this.moduleData.data.categoryId.toString()],
+      categoryTempId: [this.moduleData.data.categoryId.toString()],
       categoryDiggered: false,
-      date: '最近7天',
       dateOptions: [{
         value: '7',
         label: '最近7天',
@@ -168,7 +166,47 @@ export default {
         this.moduleData.data.lastDays = '0';
       }
       return !isNewCreated && !isRecommend;
-    }
+    },
+    sourceType: {
+      get() {
+        return this.copyModuleData.data.sourceType;
+      },
+      set(value) {
+        this.copyModuleData.data.sourceType = value;
+      },
+    },
+    sort: {
+      get() {
+        return this.copyModuleData.data.sort;
+      },
+      set(value) {
+        this.copyModuleData.data.sort = value;
+      },
+    },
+    lastDays: {
+      get() {
+        return this.copyModuleData.data.lastDays;
+      },
+      set(value) {
+        this.copyModuleData.data.lastDays = value;
+      },
+    },
+    limit: {
+      get() {
+        return this.copyModuleData.data.limit;
+      },
+      set(value) {
+        this.copyModuleData.data.limit = value;
+      },
+    },
+    categoryId: {
+      get() {
+        return this.copyModuleData.data.categoryId;
+      },
+      set(value) {
+        this.copyModuleData.data.categoryId = value;
+      },
+    },
   },
   watch: {
     copyModuleData: {
@@ -177,7 +215,7 @@ export default {
       },
       deep: true,
     },
-    categoryId: {
+    categoryTempId: {
       handler(value) {
         if (!value.length) {
           return;
@@ -192,19 +230,43 @@ export default {
         const categoryExist = false;
         treeDigger(tree, (children, id) => {
           if (id) {
-            const categoryExist = (id == this.categoryId);
+            const categoryExist = (id == this.categoryTempId);
           }
           return children;
         })
         this.categoryDiggered = true;
 
         if (categoryExist) return;
-        this.categoryId = ['0'];
+        this.categoryTempId = ['0'];
       },
       immediate: true,
     },
+    sort(value) {
+      console.log('sort', value)
+      this.fetchCourse();
+    },
+    limit(value) {
+      console.log('limit', value)
+      this.fetchCourse();
+    },
+    lastDays(value) {
+      console.log('lastDays', value)
+      this.fetchCourse();
+    },
+    categoryId(value) {
+      console.log('categoryId', value)
+      this.fetchCourse();
+    },
+    sourceType(value, oldValue) {
+      console.log('sourceType', value, oldValue)
+      if (value !== oldValue) {
+        this.copyModuleData.data.items = [];
+      }
+      this.fetchCourse();
+    },
   },
   methods: {
+    ...mapActions(['getCourseList']),
     getUpdatedCourses(courses) {
       this.copyModuleData.data.items = courses;
     },
@@ -217,6 +279,18 @@ export default {
     // 删除自定义课程
     deleteCourse(index) {
       this.copyModuleData.data.items.splice(index, 1);
+    },
+    fetchCourse() {
+      console.log('fetchCourse')
+      if (this.sourceType === 'custom') return;
+      this.getCourseList({
+        sort: this.sort,
+        limit: this.limit,
+        lastDays: this.lastDays,
+        categoryId: this.categoryId,
+      }).then(res => {
+        this.copyModuleData.data.items = res.data;
+      })
     }
   }
 }
