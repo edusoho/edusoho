@@ -116,6 +116,7 @@ export default {
       this.courseSets[this.activeItemIndex] = [{
         id: courses[0].id,
         title: courses[0].title || courses[0].courseSetTitle,
+        displayedTitle: courses[0].displayedTitle,
       }];
     },
     modalVisibleHandler(visible) {

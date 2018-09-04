@@ -21,6 +21,7 @@ import {
   Dialog,
   Tag,
   Autocomplete,
+  Tooltip,
 } from 'element-ui';
 
 import {
@@ -41,6 +42,7 @@ Vue.use(Cascader);
 Vue.use(Dialog);
 Vue.use(Tag);
 Vue.use(Autocomplete);
+Vue.use(Tooltip);
 
 Vue.use(utils);
 
