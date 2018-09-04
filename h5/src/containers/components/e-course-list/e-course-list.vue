@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type" :feedback="feedback">
+      <e-course v-for="item in items" :key="item.id" :course="item" :type="type" :feedback="feedback">
       </e-course>
     </div>
   </div>
@@ -17,6 +17,7 @@
 
 <script>
   import course from '../e-course/e-course';
+  import Api from '@/api';
   const url = '/api/plugins/we_chat_app/course';
 
   export default {
@@ -36,8 +37,68 @@
     data() {
       return {
         type: 'price',
-        source: this.courseList.source
+        items: [],
       };
+    },
+    computed: {
+      sourceType: {
+        get() {
+          return this.courseList.sourceType;
+        },
+      },
+      sort: {
+        get() {
+          return this.courseList.sort;
+        },
+      },
+      lastDays: {
+        get() {
+          return this.courseList.lastDays;
+        },
+      },
+      limit: {
+        get() {
+          return this.courseList.limit;
+        },
+      },
+      categoryId: {
+        get() {
+          return this.courseList.categoryId;
+        },
+      },
+    },
+    watch: {
+      sort(value) {
+        console.log('sort', value)
+        this.fetchCourse();
+      },
+      limit(value, oldValue) {
+        console.log('limit', value)
+        if (oldValue > value) {
+          const deleteIndex = value - oldValue
+          this.courseList.items.splice(deleteIndex);
+          return;
+        }
+        this.fetchCourse();
+      },
+      lastDays(value) {
+        console.log('lastDays', value)
+        this.fetchCourse();
+      },
+      categoryId(value) {
+        console.log('categoryId', value)
+        this.fetchCourse();
+      },
+      sourceType(value, oldValue) {
+        console.log('sourceType', value, oldValue)
+        if (value !== oldValue) {
+          this.courseList.items = [];
+        }
+        this.fetchCourse();
+      },
+    },
+    created() {
+      this.fetchCourse();
     },
     methods: {
       jumpTo(source) {
@@ -48,7 +109,26 @@
           name: 'more',
           query: {...this.source}
         });
+      },
+      fetchCourse() {
+        console.log('fetchCourse')
+        if (this.sourceType === 'custom') {
+          this.items = this.courseList.items;
+          return;
+        };
+
+        const params = {
+          sort: this.sort,
+          limit: this.limit,
+          lastDays: this.lastDays,
+          categoryId: this.categoryId,
+        };
+        Api.getCourseList({params}).then(res => {
+          if (this.sourceType === 'custom') return;
+          this.courseList.items = res.data;
+          this.items = res.data;
+        })
       }
-    }
+    },
   }
 </script>

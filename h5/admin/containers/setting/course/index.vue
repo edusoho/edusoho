@@ -241,33 +241,6 @@ export default {
       },
       immediate: true,
     },
-    sort(value) {
-      console.log('sort', value)
-      this.fetchCourse();
-    },
-    limit(value, oldValue) {
-      if (oldValue > value) {
-        const deleteIndex = value - oldValue
-        this.copyModuleData.data.items.splice(deleteIndex);
-        return;
-      }
-      this.fetchCourse();
-    },
-    lastDays(value) {
-      console.log('lastDays', value)
-      this.fetchCourse();
-    },
-    categoryId(value) {
-      console.log('categoryId', value)
-      this.fetchCourse();
-    },
-    sourceType(value, oldValue) {
-      console.log('sourceType', value, oldValue)
-      if (value !== oldValue) {
-        this.copyModuleData.data.items = [];
-      }
-      this.fetchCourse();
-    },
   },
   methods: {
     ...mapActions(['getCourseList']),
@@ -284,19 +257,6 @@ export default {
     deleteCourse(index) {
       this.copyModuleData.data.items.splice(index, 1);
     },
-    fetchCourse() {
-      console.log('fetchCourse')
-      if (this.sourceType === 'custom') return;
-      this.getCourseList({
-        sort: this.sort,
-        limit: this.limit,
-        lastDays: this.lastDays,
-        categoryId: this.categoryId,
-      }).then(res => {
-        if (this.sourceType === 'custom') return;
-        this.copyModuleData.data.items = res.data;
-      })
-    }
   }
 }
 </script>
