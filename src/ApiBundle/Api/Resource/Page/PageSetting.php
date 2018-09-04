@@ -88,6 +88,13 @@ class PageSetting extends AbstractResource
         return $this->getDiscovery($portal, $mode);
     }
 
+    protected function removeDiscovery($portal, $mode = 'draft')
+    {
+        $this->getSettingService()->delete("{$portal}_{$mode}_discovery");
+
+        return array('success' => true);
+    }
+
     protected function getDiscovery($portal, $mode = 'published')
     {
         $user = $this->getCurrentUser();
