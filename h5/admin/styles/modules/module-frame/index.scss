@@ -9,6 +9,9 @@
     &:hover {
       border: 1px solid $primary-color;
     }
+    &.incomplete {
+      border: 1px solid red;
+    }
   }
   &__setting {
     position: absolute;

@@ -2,7 +2,7 @@
   <div class="module-frame" :class="containerClass">
     <!-- 左侧预览区域 -->
     <template>
-      <div class="module-frame__preview" :class="{ active: isActive }">
+      <div class="module-frame__preview" :class="{ active: isActive, incomplete: isIncomplete }">
         <slot name="preview"></slot>
       </div>
     </template>
@@ -29,6 +29,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isIncomplete: {
+      type: Boolean,
+      default: false,
+    }
   },
 }
 </script>
