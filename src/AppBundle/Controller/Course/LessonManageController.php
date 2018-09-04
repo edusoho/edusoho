@@ -26,7 +26,7 @@ class LessonManageController extends BaseController
             $formData['fromCourseSetId'] = $course['courseSetId'];
             $defaultFinishCondition = $this->getDefaultFinishCondition($formData['mediaType']);
 
-            $formData = array_merge($formData, $defaultFinishCondition);
+            $formData = array_merge($defaultFinishCondition, $formData);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
             return $this->getTaskJsonView($course, $task);
