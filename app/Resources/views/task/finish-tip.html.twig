@@ -1,5 +1,6 @@
 {% if activity.finishType == 'time' %}
   {{'activity_manage.finish_tips_time'|trans({'%finishDetail%':activity.finishData})|raw}}
 {% else %}
-  asdf
+{% set condition = conditions[activity.finishType] %}
+  {{ condition.describe|trans }}
 {% endif %}

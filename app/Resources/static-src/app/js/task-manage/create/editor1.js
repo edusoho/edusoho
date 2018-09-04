@@ -127,7 +127,7 @@ class Editor {
   async _onSave() {
     let content = await this.getActivityContent();
     let condition = await this.getActivityFinishCondition();
-    console.log(condition);
+
     let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
     $.post(this.taskConfig['saveUrl'], postData)
       .done((response) => {

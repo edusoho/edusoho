@@ -16,7 +16,6 @@
   },
   "routes": {
     "content": "create_or_update_content.html.twig",
-    "finish": "create_or_update_finish.html.twig",
     "show": "show.html.twig",
     "finish_tip": "finish_tip.html.twig"
   },
@@ -24,10 +23,11 @@
     {
       "type": "score",
       "describe": "course.plan_task.activity_manage.testpaper.pass",
-      "html": "conditions.html.twig"
+      "html": "conditions.html.twig",
+      "value": "0.6"
     },
     {
-      "type": "join",
+      "type": "submit",
       "describe": "course.plan_task.activity_manage.exercise.finished_condition"
     }
   ]

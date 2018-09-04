@@ -49,7 +49,6 @@ class activity_testpaper extends Activity
             'redoInterval' => $ext['redoInterval'],
             'limitedTime' => $ext['limitedTime'],
             'checkType' => $ext['checkType'],
-            'finishCondition' => $ext['finishCondition'],
             'requireCredit' => $ext['requireCredit'],
             'testMode' => $ext['testMode'],
         );
@@ -71,7 +70,6 @@ class activity_testpaper extends Activity
         $ext['redoInterval'] = $sourceExt['redoInterval'];
         $ext['limitedTime'] = $sourceExt['limitedTime'];
         $ext['checkType'] = $sourceExt['checkType'];
-        $ext['finishCondition'] = $sourceExt['finishCondition'];
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
 
@@ -107,7 +105,7 @@ class activity_testpaper extends Activity
         $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $testpaper = $activity['ext']['testpaper'];
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId(
             $user['id'],
@@ -117,22 +115,23 @@ class activity_testpaper extends Activity
             'testpaper'
         );
 
-        if (!$result || empty($testpaperActivity['finishCondition'])) {
+        if (!empty($result)) {
             return false;
         }
 
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && 'submit' === $testpaperActivity['finishCondition']['type']
+            ) && 'submit' === $activity['finishType']
         ) {
             return true;
         }
 
+        $passScore = ceil($testpaper['score'] * $activity['finishData']);
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && 'score' === $testpaperActivity['finishCondition']['type'] && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
+            ) && 'score' === $activity['finishType'] && $result['score'] >= $passScore
         ) {
             return true;
         }
@@ -151,8 +150,6 @@ class activity_testpaper extends Activity
                 'length',
                 'limitedTime',
                 'checkType',
-                'finishCondition',
-                'condition',
                 'finishScore',
                 'requireCredit',
                 'testMode',
@@ -160,16 +157,6 @@ class activity_testpaper extends Activity
         );
 
         $finishCondition = array();
-
-        if (!empty($filterFields['condition'])) {
-            $finishCondition['type'] = $filterFields['condition'];
-            unset($filterFields['condition']);
-        }
-
-        if (isset($filterFields['finishScore'])) {
-            $finishCondition['finishScore'] = $filterFields['finishScore'];
-            unset($filterFields['finishScore']);
-        }
 
         if (isset($filterFields['length'])) {
             $filterFields['limitedTime'] = $filterFields['length'];
@@ -179,8 +166,6 @@ class activity_testpaper extends Activity
         if (isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) {
             $filterFields['testMode'] = 'normal';
         }
-
-        $filterFields['finishCondition'] = empty($filterFields['finishCondition']) ? $finishCondition : $filterFields['finishCondition'];
 
         return $filterFields;
     }
