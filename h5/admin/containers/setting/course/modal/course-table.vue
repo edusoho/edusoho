@@ -18,8 +18,8 @@
           </span>
         </div>
       </div>
-
     </draggable>
+
     <div v-show="!courseSets.length" class="course-table__empty">暂无数据</div>
   </div>
 </template>

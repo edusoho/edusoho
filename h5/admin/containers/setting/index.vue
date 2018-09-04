@@ -6,15 +6,17 @@
 
       <!-- 操作预览区域 -->
       <div class="find-body">
-        <module-template v-for="(module, index) in modules"
-          :module="module" :active="isActive(index)"
-          :key="index"
-          :moduleKey="`${module.type}-${index}`"
-          :index="index"
-          @activeModule="activeModule"
-          @updateModule="updateModule($event, index)"
-          @removeModule="removeModule($event, index)">
-        </module-template>
+        <draggable v-model="modules">
+          <module-template v-for="(module, index) in modules"
+            :module="module" :active="isActive(index)"
+            :key="index"
+            :moduleKey="`${module.type}-${index}`"
+            :index="index"
+            @activeModule="activeModule"
+            @updateModule="updateModule($event, index)"
+            @removeModule="removeModule($event, index)">
+          </module-template>
+        </draggable>
       </div>
 
       <!-- 底部添加组件按钮 -->
@@ -53,11 +55,13 @@ import moduleDefault from '@admin/utils/module-default-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import Api from '@admin/api';
 import moduleTemplate from './module-template';
+import draggable from 'vuedraggable';
 import { mapActions } from 'vuex';
 
 export default {
   components: {
-    moduleTemplate
+    moduleTemplate,
+    draggable
   },
   data() {
     return {

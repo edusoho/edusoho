@@ -1,6 +1,6 @@
 <template>
   <div class="e-poster">
-    <img class="e-poster__img" :src="poster.image.uri" @click="jumpTo(link.id)">
+    <img class="e-poster__img" :src="poster.image.uri" @click="jumpTo(link)">
   </div>
 </template>
 
@@ -22,17 +22,18 @@
       };
     },
     methods: {
-      jumpTo(courseId) {
+      jumpTo(link) {
         if (!this.feedback) return;
 
-        const imgLink = this.poster.link;
-
-        if (imgLink.type == 'course') {
+        if (this.link.type == 'course' && this.link.target) {
           this.$router.push({
-            path: `/course/${courseId}`
+            path: `/course/${this.link.target.id}`
           });
-        } else {
-          window.location.href = imgLink.url;
+          return;
+        }
+        if (this.link.type == 'url') {
+          window.location.href = link.url;
+          return;
         }
       }
     }

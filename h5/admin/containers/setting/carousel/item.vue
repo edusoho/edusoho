@@ -3,6 +3,7 @@
     <el-upload
       class="add-img"
       action="string"
+      accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
       :http-request="uploadImg"
       :before-upload="beforeUpload"
       :show-file-list="false"
@@ -101,6 +102,25 @@
     },
     methods: {
       beforeUpload(file) {
+        const type = file.type;
+        const size = file.size / 1024 / 1024;
+
+        if (type.indexOf('image') === -1) {
+          this.$message({
+            message: '文件类型仅支持图片格式',
+            type: 'error'
+          });
+          return;
+        }
+
+        if (size > 2) {
+          this.$message({
+            message: '文件大小不得超过 2 MB',
+            type: 'error'
+          });
+          return;
+        }
+
         this.dialogVisible = true;
         const reader = new FileReader();
         reader.onload = () => {
@@ -118,6 +138,9 @@
       },
       uploadImg(file) {
         if (!this.imageCropped) return;
+
+        this.imageCropped = false;
+
         let formData = new FormData()
         formData.append('file', file)
         formData.append('group', 'system')
@@ -132,9 +155,17 @@
             selectIndex: this.activeIndex,
             imageUrl: data.uri
           });
+
+          this.$message({
+            message: '图片上传成功',
+            type: 'success'
+          });
         })
         .catch((err) => {
-          console.log(err, 'error');
+          this.$message({
+            message: err.message,
+            type: 'error'
+          });
         });
       },
       selected(index) {

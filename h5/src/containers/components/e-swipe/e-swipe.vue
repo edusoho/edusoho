@@ -4,11 +4,11 @@
       <van-swipe-item v-for="(slide, index) in slides" :key="index">
         <div class="item-container">
           <!-- course -->
-          <div v-if="slide.link.type === 'course'" @click="jumpTo(slide.link.id)">
+          <div v-if="slide.link.type === 'course'" @click="jumpTo(slide.link.target)">
             <img v-bind:src="slide.image.uri">
           </div>
           <!-- url -->
-          <a v-if="slide.link.type === 'url'" v-bind:href="slide.link.url">
+          <a v-if="slide.link.type === 'url'" :href="slide.link.url || 'javascript:;'">
             <img v-bind:src="slide.image.uri">
           </a>
           <div class="text-overflow item-container__title">{{ slide.title }}</div>
@@ -27,9 +27,11 @@
       }
     },
     methods: {
-      jumpTo(courseId) {
+      jumpTo(target) {
+        if (!target) return;
+
         this.$router.push({
-          path: `/course/${courseId}`
+          path: `/course/${target.id}`
         });
       }
     }
