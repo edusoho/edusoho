@@ -1,9 +1,14 @@
 <template>
   <div class="find-page">
     <e-loading v-if="isLoading"></e-loading>
-    <div class="find-page__part" v-for="part in parts">
+    <div class="find-page__part" v-for="(part, index) in parts" :key="index">
       <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
-      <e-course-list v-if="part.type == 'course_list'" :courseList="part.data" :feedback="feedback"></e-course-list>
+      <e-course-list
+        v-if="part.type == 'course_list'"
+        :courseList="part.data"
+        :feedback="feedback"
+        :index="index"
+        @fetchCourse="fetchCourse"></e-course-list>
       <e-poster v-if="part.type == 'poster'" :poster="part.data" :feedback="feedback"></e-poster>
     </div>
     <!-- 垫底的 -->
@@ -68,6 +73,15 @@
         .catch((err) => {
           console.log(err, 'error');
         });
+    },
+    methods: {
+      fetchCourse({params, index}) {
+        Api.getCourseList({params}).then(res => {
+          if (this.sourceType === 'custom') return;
+
+          this.parts[index].data.items = res.data;
+        })
+      }
     },
   }
 </script>

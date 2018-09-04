@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-course" :isActive="isActive">
     <div slot="preview" class="find-page__part">
-      <e-course-list :courseList="copyModuleData.data" :limit="copyModuleData.data.limit" :feedback="false"></e-course-list>
+      <e-course-list :courseList="copyModuleData.data" :feedback="false" @fetchCourse="fetchCourse"></e-course-list>
     </div>
     <div slot="setting" class="course-allocate">
       <header class="title">课程列表设置</header>
@@ -257,6 +257,13 @@ export default {
     deleteCourse(index) {
       this.copyModuleData.data.items.splice(index, 1);
     },
+    fetchCourse({params, index}) {
+      this.getCourseList(params).then(res => {
+        if (this.sourceType === 'custom') return;
+
+        this.moduleData.data.items = res.data;
+      })
+    }
   }
 }
 </script>

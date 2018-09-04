@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-course v-for="item in items" :key="item.id" :course="item" :type="type" :feedback="feedback">
+      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type" :feedback="feedback">
       </e-course>
     </div>
   </div>
@@ -17,8 +17,6 @@
 
 <script>
   import course from '../e-course/e-course';
-  import Api from '@/api';
-  const url = '/api/plugins/we_chat_app/course';
 
   export default {
     props: {
@@ -29,6 +27,10 @@
       feedback: {
         type: Boolean,
         default: true,
+      },
+      index: {
+        type: Number,
+        default: -1,
       }
     },
     components: {
@@ -37,7 +39,6 @@
     data() {
       return {
         type: 'price',
-        items: [],
       };
     },
     computed: {
@@ -111,11 +112,7 @@
         });
       },
       fetchCourse() {
-        console.log('fetchCourse')
-        if (this.sourceType === 'custom') {
-          this.items = this.courseList.items;
-          return;
-        };
+        if (this.sourceType === 'custom') return;
 
         const params = {
           sort: this.sort,
@@ -123,11 +120,10 @@
           lastDays: this.lastDays,
           categoryId: this.categoryId,
         };
-        Api.getCourseList({params}).then(res => {
-          if (this.sourceType === 'custom') return;
-          this.courseList.items = res.data;
-          this.items = res.data;
-        })
+        this.$emit('fetchCourse', {
+          index: this.index,
+          params,
+        });
       }
     },
   }
