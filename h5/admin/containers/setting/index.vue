@@ -138,10 +138,12 @@ export default {
     },
     load() {
       // 读取草稿配置
+      const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
+
       this.getDraft({
         portal: 'h5',
         type: 'discovery',
-        mode: 'draft',
+        mode,
       }).then((res) => {
         this.modules = Object.values(res);
       })

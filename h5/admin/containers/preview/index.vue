@@ -52,7 +52,10 @@ export default {
     ]),
     edit() {
       this.$router.push({
-        name: 'admin'
+        name: 'admin',
+        query: {
+          draft: 1
+        },
       })
     },
     publish() {
