@@ -41,6 +41,8 @@ site.video.quality.normal: 标准
 site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
+site.yes: 是
+site.no: 否
 site.close: 关闭
 site.delete: 删除
 
@@ -703,6 +705,9 @@ page.video_sd.message: 标清
 page.video_shd.message: 超清
 page.video_hd.message: 高清
 
+confirm.oper.tip: 操作确认
+confirm.lesson.hidden.tip.off: 关闭该功能后，未发布的课时将在学员前台进行展示。请确认是否关闭此项功能。
+confirm.lesson.hidden.tip.on: 开启该功能后，未发布的课时将不在学员前台进行展示，课时序号排列将不包含这部分未发布课时。请确认是否开启此项功能。
 confirm.private_message_delete.message: 真的要删除该私信吗？
 notify.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
 confirm.last_private_message_delete.message: 本条信息为最后一条，真的要删除该私信吗？

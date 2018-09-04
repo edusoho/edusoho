@@ -1790,7 +1790,7 @@ course_manage_lesson_unset_optional:
 
 course_manage_change_lesson_show_status:
     path:  /course/{courseId}/manage/change/lesson/show/status
-    defaults: { _controller: AppBundle:Course/CourseManage:showPublish }
+    defaults: { _controller: AppBundle:Course/CourseManage:hidePublish }
     methods: [POST]
 
 #course

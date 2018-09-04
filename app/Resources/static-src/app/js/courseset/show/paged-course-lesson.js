@@ -67,7 +67,7 @@ class PagedCourseLesson {
           if (data['isOptional']) {
             return data.title;
           } else {
-            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: data.number, title: data.title });
+            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
           }
         },
 
@@ -101,7 +101,7 @@ class PagedCourseLesson {
 
         'getTaskName': function(data, context) {
           if (data.isSingleTaskLesson) {
-            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: data.number, title: data.title });
+            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
           } else {
             return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
           }
@@ -196,7 +196,15 @@ class PagedCourseLesson {
 
         'toInt': function(timestampStr) {
           return parseInt(timestampStr, 10);
-        }
+        },
+
+        'getLessonNum': function(data, context) {
+          let lessonNum = data.number;
+          if ('1' == context.course.isHideUnpublish) {
+            lessonNum = data.published_number;
+          }
+          return lessonNum;
+        },
       },
 
       'dataTemplateNode': '.js-infinite-item-template'

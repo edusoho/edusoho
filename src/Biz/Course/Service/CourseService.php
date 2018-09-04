@@ -260,7 +260,7 @@ interface CourseService
 
     public function findLiveCourse($conditions, $userId, $role);
 
-    public function changeShowPublishLesson($courseId, $status);
+    public function changeHidePublishLesson($courseId, $status);
 
     public function countCoursesByCourseSetId($courseSetId);
 

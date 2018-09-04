@@ -3,22 +3,27 @@ export const hiddenUnpublishTask = () => {
     el: '.js-switch'
   }).on('change', (value) => {
     let $ele = $('.js-switch');
-    const url = $ele.data('url');
-    const status = $ele.parent().hasClass('checked') ? 0 : 1;
+    let url = $ele.data('url');
+    let status = $ele.parent().hasClass('checked') ? 1 : 0;
+    let statusStr = $ele.parent().hasClass('checked') ? 'on' : 'off';
 
     cd.confirm({
-      title: Translator.trans('site.data.delete_title_hint', { 'name': name }),
-      content: Translator.trans('site.data.delete_name_hint', { 'name': name }),
-      okText: Translator.trans('site.confirm'),
-      cancelText: Translator.trans('site.close'),
+      title: Translator.trans('confirm.oper.tip'),
+      content: Translator.trans('confirm.lesson.hidden.tip.' + statusStr),
+      okText: Translator.trans('site.yes'),
+      cancelText: Translator.trans('site.no'),
     }).on('ok', () => {
-      $.post(url, { status: status })
+      $.post(url, { 'status': status })
         .success((response) => {
           cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
+          location.reload();
         })
         .error((response) => {
           cd.message({ type: 'danger', message: response.responseJSON.error.message });
         });
+    }).on('cancel', ($modal, modal) => {
+      $ele[0].checked = !$ele[0].checked;
+      $ele.parent().toggleClass('checked');
     });
   });
 };

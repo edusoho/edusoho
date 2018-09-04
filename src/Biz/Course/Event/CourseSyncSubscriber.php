@@ -166,7 +166,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'rewardPoint',
             'taskRewardPoint',
             'maxStudentNum',
-            'isShowUnpublish',
+            'isHideUnpublish',
             'lessonNum',
             'publishLessonNum',
         ));

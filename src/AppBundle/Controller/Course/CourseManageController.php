@@ -1011,10 +1011,10 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function showPublishAction(Request $request, $courseId)
+    public function hidePublishAction(Request $request, $courseId)
     {
         $status = $request->request->get('status', 1);
-        $this->getCourseService()->changeShowPublishLesson($courseId, $status);
+        $this->getCourseService()->changeHidePublishLesson($courseId, $status);
 
         return $this->createJsonResponse(true);
     }

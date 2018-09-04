@@ -14,14 +14,14 @@
 
       <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not task.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% if not task.isOptional %}
-        {% if course['isShowUnpublish']|default(false) %}
-          {% set displayedLessonNum = lesson.number %}
-        {% else %}
+        {% if course['isHideUnpublish']|default(false) %}
           {% if lesson.status == 'published' %}
             {% set displayedLessonNum = lesson.published_number %}
           {% else %}
             {% set displayedLessonNum = '' %}
           {% endif %}
+        {% else %}
+          {% set displayedLessonNum = lesson.number %}
         {% endif %}
 
         {% if displayedLessonNum != '' %}
