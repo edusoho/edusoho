@@ -3,7 +3,6 @@ import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-
 export default class Flash {
   constructor() {
     this.$mediaId = $('[name="mediaId"]');
-    this.validator2 = null;
     this.init();
     this.initEvent();
   }
@@ -14,11 +13,15 @@ export default class Flash {
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validator2.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator2.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }

@@ -4,6 +4,8 @@
     "getAnnouncement",
     "getCourseDraft",
     "saveCourseDraft",
-    "getActivity"
+    "getActivity",
+    "saveActivityResource",
+    "updateActivityResource"
   ]
 }

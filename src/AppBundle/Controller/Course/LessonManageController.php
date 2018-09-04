@@ -24,6 +24,11 @@ class LessonManageController extends BaseController
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
+
+            $activityConfigManager = $this->container->get('activity_config_manager');
+            $finishDefault = $activityConfigManager->getInstalledActivity($formData['mediaType']);
+
+            $formData = array_merge($formData, $finishDefault);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
             return $this->getTaskJsonView($course, $task);
@@ -181,6 +186,20 @@ class LessonManageController extends BaseController
             $taskJsonData['template'],
             $taskJsonData['data']
         ));
+    }
+
+    private function getDefaultFinishCondition($config)
+    {
+        if (empty($config['finish_condition'])) {
+            return array();
+        }
+
+        $condition = $config['finish_condition'];
+
+        return array(
+            'finishType' => empty($condition['type']) ? 'default' : $condition['type'],
+            'value' => empty($condition['value']) ? '1' : $condition['value'],
+        );
     }
 
     /**

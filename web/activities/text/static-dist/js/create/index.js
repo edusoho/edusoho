@@ -1,6 +1,7 @@
 var load = window.ltc.load('bootstrap.css', 'jquery', 'validate', 'editor');
 load.then(function(){
   var context = window.ltc.getContext();
+  var mediaId = 0;
   var contentCache = '',
     draftId = 0,
     $content = $('#text-content-field'),
@@ -67,12 +68,32 @@ load.then(function(){
       validate.form();
     });
 
-    window.ltc.on('getActivity', function(msg){
-      if (validate.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:$('#step2-form').serializeObject()});
-      }
+    window.ltc.on('getValidate', function(msg){
+      window.ltc.emit('returnValidate', {valid: validate.form()});
     });
 
+    window.ltc.on('getActivity', function(msg){
+      if (validate.form()) {
+        if (mediaId !== 0) {
+          window.ltc.api({
+            name: 'updateActivityResource',
+            pathParams: {
+              id: mediaId
+            },
+            data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId, 'activityId': context.activityId}),
+          }, function (result) {
+            window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), result)});
+          });
+        } else {
+          window.ltc.api({
+            name: 'saveActivityResource',
+            data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId}),
+          }, function (result) {
+            window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), result)});
+          });
+        }
+      }
+    });
 
     if (context.activityId) {
       window.ltc.api({
@@ -83,6 +104,7 @@ load.then(function(){
       }, function(result) {
         $('#title').val(result['title']);
         $content.val(result['content']);
+        mediaId = result.mediaId;
         // status的四种状态unloaded, unloaded, ready, destroyed
         // 当status == ready的时候不执行
         editor.on('instanceReady', function( event ){

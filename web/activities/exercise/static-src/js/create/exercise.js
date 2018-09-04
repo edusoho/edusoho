@@ -14,11 +14,15 @@ export default class Exercise {
   }
 
   _initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validator2.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator2.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }
@@ -99,23 +103,6 @@ export default class Exercise {
       }
     });
 
-    $step2_form.data('validator', this.validator2);
-  }
-
-  _inItStep3form() {
-    var $step3_form = $('#step3-form');
-    var validator = $step3_form.validate({
-      onkeyup: false,
-      rules: {
-        finishCondition: {
-          required: true,
-        },
-      },
-      messages: {
-        finishCondition: Translator.trans('activity.exercise_manage.finish_detail_required_error_hint'),
-      }
-    });
-    $step3_form.data('validator', validator);
   }
 
   _setValidateRule() {

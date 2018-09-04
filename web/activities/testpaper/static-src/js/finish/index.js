@@ -3,7 +3,6 @@ class Testpaper {
     this.$form  = $('#step3-form');
     $('#condition-select').on('change',event=>this.changeCondition(event));
     window.ltc.on('getContent', (msg) => {
-      console.log(msg);
       this.initScoreSlider(msg.context.score, msg.context.passScore);
     });
   }

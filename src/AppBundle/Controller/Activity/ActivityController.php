@@ -83,7 +83,7 @@ class ActivityController extends BaseController
     public function finishModalAction($activityId = 0, $type, $courseId)
     {
         if (!empty($activityId)) {
-            $activity = $this->getActivityService()->getActivity($activityId, true);
+            $activity = $this->getActivityService()->getActivity($activityId);
         } else {
             $activity = array(
                 'id' => $activityId,
@@ -91,9 +91,17 @@ class ActivityController extends BaseController
                 'fromCourseId' => $courseId,
             );
         }
-        $container = $this->get('activity_runtime_container');
 
-        return $container->finish($activity);
+        $activityConfigManage = $this->get('activity_config_manager');
+        $config = $activityConfigManage->getInstalledActivity($type);
+
+        return $this->render(
+            'task-manage/create-or-update-finish.html.twig',
+            array(
+                'activity' => $activity,
+                'conditions' => empty($config['finish_condition']) ? array() : $config['finish_condition'],
+            )
+        );
     }
 
     public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)

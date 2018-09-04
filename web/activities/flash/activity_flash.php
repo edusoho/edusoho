@@ -9,17 +9,6 @@ use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class activity_flash extends Activity
 {
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
-
-        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-        $result /= 60;
-
-        return !empty($result) && $result >= $flash['finishDetail'];
-    }
-
     protected function registerListeners()
     {
     }

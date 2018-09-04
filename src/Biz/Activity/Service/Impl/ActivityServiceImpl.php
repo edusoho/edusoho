@@ -370,6 +370,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'fromUserId',
                 'startTime',
                 'endTime',
+                'finishType',
+                'finishData',
             )
         );
 
