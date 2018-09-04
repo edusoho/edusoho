@@ -92,7 +92,7 @@ class Course extends AbstractResource
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
         if (!empty($conditions['lastDays'])) {
-            $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
+            $timeRange = TimeMachine::getTimeRangeByDays($conditions['lastDays']);
             $conditions['otherStartTime'] = $timeRange['startTime'];
             $conditions['otherEndTime'] = $timeRange['endTime'];
         }
