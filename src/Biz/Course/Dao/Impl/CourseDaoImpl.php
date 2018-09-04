@@ -4,6 +4,7 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Codeages\Biz\Framework\Dao\DaoException;
 
 class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 {
@@ -246,7 +247,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.orgCode = :orgCode',
                 'course_v8.orgCode LIKE :likeOrgCode',
                 'course_v8.buyable = :buyable',
-                'course_v8.concat(courseSetTitle, title) like :courseOrCourseSetTitleLike',
+                'concat(course_v8.courseSetTitle, course_v8.title) like :courseOrCourseSetTitleLike',
                 'course_v8.type NOT IN (:excludeTypes)',
                 'course_v8.type IN (:types)',
                 'course_v8.courseType = :courseType',
@@ -389,5 +390,10 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
             throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
+    }
+
+    private function createDaoException($message = '', $code = 0)
+    {
+        return new DaoException($message, $code);
     }
 }
