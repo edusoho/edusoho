@@ -1,6 +1,6 @@
 <div class="my-course-item cd-mb40 clearfix">
   <a class="my-course-item__link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
-    <img class="my-course-item__picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
+    {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'my-course-item__picture', courseSet.title) }}
     {% include 'my/learning/course/courses-block-label.html.twig' %}
   </a>
 

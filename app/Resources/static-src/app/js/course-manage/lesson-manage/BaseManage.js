@@ -389,6 +389,7 @@ export default class Manage {
       lessonBox.addClass('hidden');
       container.find('.js-display-when-mul-tasks').addClass('hidden');
       container.find('.js-display-when-single-task').removeClass('hidden');
+      container.find('.js-task-title').html(container.find('.js-lesson-title').html());
     }
 
     this._triggerLessonIconAsTaskNumUpdated(container, isMulTasks);
@@ -410,7 +411,7 @@ export default class Manage {
       if (className.startsWith('es-icon-')) {
         if (isMulTasks) {
           lessonIconBtn.removeClass(className);
-        } else if (!lessonIconBtn.hasClass(className)) {
+        } else {
           lessonIconBtn.addClass(className);
         }
       }

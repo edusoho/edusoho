@@ -422,8 +422,8 @@ course_manage.lesson_dashboard.task_learning: Learning
 course_manage.course_overview.student_increase_num: Number of students increase
 course_manage.course_overview.try_view_increase_num: Number of try view increase
 
-course_manage.student_expiryday_extend_success_hint: Extend %name% expiration time successful!
-course_manage.student_expiryday_extend_failed_hint: Extend %name% expiration time failed!
+course_manage.student_expiryday_extend_success_hint: Modify %name% expiration time successful!
+course_manage.student_expiryday_extend_failed_hint: Modify %name% expiration time failed!
 course_manage.student_expiryday_extend_error_hint_day: 减少天数超出最大可减少数
 course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间或任何一个学员的有效期截止日
 

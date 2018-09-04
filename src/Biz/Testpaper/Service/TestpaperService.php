@@ -3,6 +3,7 @@
 namespace Biz\Testpaper\Service;
 
 use Biz\Testpaper\Builder\TestpaperBuilder;
+use Biz\System\Annotation\Log;
 
 interface TestpaperService
 {
@@ -12,12 +13,25 @@ interface TestpaperService
 
     public function findTestpapersByIdsAndType($ids, $type);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="add_testpaper")
+     */
     public function createTestpaper($fields);
 
     public function batchCreateTestpaper($testpapers);
 
     public function updateTestpaper($id, $fields);
 
+    /**
+     * @param $id
+     * @param bool $quietly
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_testpaper")
+     */
     public function deleteTestpaper($id, $quietly = false);
 
     public function deleteTestpapers($ids);

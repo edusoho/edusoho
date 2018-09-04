@@ -2,6 +2,8 @@
 
 namespace Biz\Activity\Service;
 
+use Biz\System\Annotation\Log;
+
 interface LiveActivityService
 {
     public function getLiveActivity($id);
@@ -10,10 +12,24 @@ interface LiveActivityService
 
     public function createLiveActivity($activity, $ignoreValidation = false);
 
-    public function updateLiveActivity($id, &$fields, $activity);
+    /**
+     * @param $id
+     * @param $fields
+     * @param $activity
+     *
+     * @return mixed
+     * @Log(module="live",action="update_live_activity",funcName="findActivityByLiveActivityId",param="id")
+     */
+    public function updateLiveActivity($id, $fields, $activity);
 
     public function updateLiveStatus($liveId, $status);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="live",action="delete_live_activity",funcName="findActivityByLiveActivityId")
+     */
     public function deleteLiveActivity($id);
 
     public function createLiveroom($activity);

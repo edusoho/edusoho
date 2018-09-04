@@ -52,7 +52,7 @@
     >{{ activity.remark|default('') }}</textarea>
       {% set course=data('Course',{'courseId':courseId}) %}
       {% if course.expiryMode=='days' %}
-        <p class="help-block color-warning">{{'course.plan_task.activity_manage.live.expiry_tips'|trans}}</p>
+        <p class="help-block color-warning">{{'course.plan_task.activity_manage.live.expiry_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</p>
       {% endif %}
     </div>
   </div>

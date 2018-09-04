@@ -27,8 +27,8 @@
 
   {{ slot('marketing.tool', {'type':'course','targetId':course.id}) }}
 
-  <div class="container">
-    <div class="row">
+  <div class="container cd-container">
+    <div class="row cd-row">
       <div class="col-lg-9 col-md-8 course-detail-content">
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
 

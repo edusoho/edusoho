@@ -29,7 +29,11 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
-  invalidHandler: function(data) {
+  invalidHandler: function(data, validator) {
+    const errorNum = validator.numberOfInvalids();
+    if (errorNum) {
+      $(validator.errorList[0].element).focus();
+    }
     console.log(data);
   },
   submitError: function(data) {

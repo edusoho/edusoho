@@ -33,7 +33,7 @@
           <div class="course-info">
             <div class="title">
               <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-                 {{course.title}}
+                 {{ get_formated_course_title(course) }}
               </a>
             </div>
             <div class="metas clearfix">

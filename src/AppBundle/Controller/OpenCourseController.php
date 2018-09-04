@@ -562,7 +562,7 @@ class OpenCourseController extends BaseOpenCourseController
             }
         } else {
             $proxy = new ParserProxy();
-            $lesson = $proxy->prepareMediaUri($lesson);
+            $lesson = $proxy->prepareYoukuMediaUri($lesson);
         }
 
         if ('liveOpen' == $lesson['type']) {

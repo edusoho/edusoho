@@ -137,7 +137,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->deleteSubQuestions($question['id']);
         }
 
-        $this->getLogService()->info('course', 'delete_question', "删除题目(#{$question['id']})", $question);
         $this->dispatchEvent('question.delete', new Event($question));
 
         return $result;

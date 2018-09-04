@@ -6,8 +6,8 @@
       <tr class="active">
         <th>{{ 'task.learn_data_detail.nickname'|trans }}</th>
         <th>{{ 'task.learn_data_detail.createdTime'|trans }}</th>
-        <th>{{ 'task.learn_data_detail.finishedTime'|trans }}</th>
-        <th>{{ 'task.learn_data_detail.learnTime'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.finishedTime'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</th>
+        <th>{{ 'task.learn_data_detail.learnTime'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</th>
         <th>{{ 'task.learn_data_detail.video_and_audio_learnTime'|trans }}</th>
       </tr>
     </thead>
