@@ -144,7 +144,7 @@ class activity_testpaper extends Activity
         $filterFields = ArrayToolkit::parts(
             $fields,
             array(
-                'mediaId',
+                'testpaperId',
                 'doTimes',
                 'redoInterval',
                 'length',
@@ -156,8 +156,6 @@ class activity_testpaper extends Activity
             )
         );
 
-        $finishCondition = array();
-
         if (isset($filterFields['length'])) {
             $filterFields['limitedTime'] = $filterFields['length'];
             unset($filterFields['length']);
@@ -167,6 +165,9 @@ class activity_testpaper extends Activity
             $filterFields['testMode'] = 'normal';
         }
 
+        $filterFields['mediaId'] = $filterFields['testpaperId'];
+        unset($filterFields['testpaperId']);
+        
         return $filterFields;
     }
 

@@ -21,7 +21,7 @@
               <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper'|trans}}</label>
           </div>
           <div class="col-sm-10 controls">
-              <select id="testpaper-media" class="form-control" name="mediaId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+              <select id="testpaper-media" class="form-control" name="testpaperId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
                   <option value="">{{ 'course.plan_task.activity_manage.testpaper.choose'|trans }}</option>
                   {% for testpaper in testpapers if testpaper %}
                       <option value="{{ testpaper.id }}" {% if testpaper.id == activity.ext.mediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>
