@@ -5,6 +5,7 @@
     "getCourseDraft",
     "saveCourseDraft",
     "getActivity",
+    "getActivityResource",
     "saveActivityResource",
     "updateActivityResource"
   ]
