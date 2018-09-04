@@ -22,7 +22,7 @@ class PageDiscovery extends AbstractResource
         $params = $request->query->all();
         $mode = 'published';
         if (!empty($params['preview'])) {
-            $token = $this->getTokenService()->verifyToken('qrcode_url', $token);
+            $token = $this->getTokenService()->verifyToken('qrcode_url', $params['token']);
             if (empty($token)) {
                 throw UserException::PERMISSION_DENIED();
             }
