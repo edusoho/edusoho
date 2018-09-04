@@ -9,7 +9,11 @@
         :feedback="feedback"
         :index="index"
         @fetchCourse="fetchCourse"></e-course-list>
-      <e-poster v-if="part.type == 'poster'" :poster="part.data" :feedback="feedback"></e-poster>
+      <e-poster
+        v-if="part.type == 'poster'"
+        :class="imageMode[part.data.responsive]"
+        :poster="part.data"
+        :feedback="feedback"></e-poster>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"></div>
@@ -39,6 +43,10 @@
     data() {
       return {
         parts: [],
+        imageMode: [
+          'responsive',
+          'size-fit',
+        ],
       };
     },
     computed: {
