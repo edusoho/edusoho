@@ -2,7 +2,8 @@ let $selectFinish = $('#finish-type');
 if ($selectFinish.length) {
   $selectFinish.on('change',function() {
     $('#conditions').children().hide();
-    switch($(this).val())
+    let val = $(this).val();
+    switch(val)
     {
     case 'time':
       $('#conditions-time').show();
@@ -14,6 +15,7 @@ if ($selectFinish.length) {
     case 'end':
       break;
     default:
+      $selectFinish.trigger('selectChange', val);
     }
   });
 }

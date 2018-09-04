@@ -1,30 +1,21 @@
 class Testpaper {
   constructor() {
     this.$form  = $('#step3-form');
-    $('#condition-select').on('change',event=>this.changeCondition(event));
     window.ltc.on('getContent', (msg) => {
-      this.initScoreSlider(msg.context.score, msg.context.passScore);
+      this.initScoreSlider(msg.context.score);
+    });
+
+    $('#finish-type').on('selectChange', function(e, value){
+      if ('score' == value) {
+        $('#score-condition').show();
+      }
     });
   }
 
-  changeCondition(event) {
-    let $this = $(event.currentTarget);
-    let value = $this.find('option:selected').val();
-    value!='score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
-  }
-
-  getItemsTable(url, testpaperId) {
-    $.post(url, {testpaperId:testpaperId},function(html){
-      $('#questionItemShowTable').html(html);
-      $('#questionItemShowDiv').show();
-    });
-  }
-
-  initScoreSlider(score, passScore) {
+  initScoreSlider(score) {
     $('.js-score-total').text(score);
-    passScore = passScore ? passScore : Math.ceil(score * 0.6);
+    let passScore = parseInt(Math.ceil(score * $('#score-condition').data('pass')));
     score = parseInt(score);
-    passScore = parseInt(passScore);
 
     let scoreSlider = document.getElementById('score-slider');
     let option = {
@@ -37,16 +28,17 @@ class Testpaper {
         'max': score
       }
     };
-    console.log(option);
+
     if(this.scoreSlider) {
       this.scoreSlider.updateOptions(option);
     }else {
       this.scoreSlider = noUiSlider.create(scoreSlider, option);
       scoreSlider.noUiSlider.on('update', function( values, handle ){
-        $('.noUi-tooltip').text(`${(values[handle]/score*100).toFixed(0)}%`);
-        $('.js-score-tooltip').css('left',`${(values[handle]/score*100).toFixed(0)}%`);
+        let rate = values[handle]/score;
+        $('.noUi-tooltip').text(`${(rate*100).toFixed(0)}%`);
+        $('.js-score-tooltip').css('left',`${(rate*100).toFixed(0)}%`);
         $('.js-passScore').text(parseInt(values[handle]));
-        $('input[name="finishScore"]').val(parseInt(values[handle]));
+        $('#finish-data').val(rate.toFixed(5));
       });
     }
     
