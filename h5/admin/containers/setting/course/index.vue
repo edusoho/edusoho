@@ -245,8 +245,12 @@ export default {
       console.log('sort', value)
       this.fetchCourse();
     },
-    limit(value) {
-      console.log('limit', value)
+    limit(value, oldValue) {
+      if (oldValue > value) {
+        const deleteIndex = value - oldValue
+        this.copyModuleData.data.items.splice(deleteIndex);
+        return;
+      }
       this.fetchCourse();
     },
     lastDays(value) {
