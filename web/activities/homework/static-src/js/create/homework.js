@@ -27,11 +27,15 @@ export default class Homework {
         this.validator2.form();
       }
     });
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validator.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }
@@ -66,7 +70,7 @@ export default class Homework {
   }
 
   inItStep2form() {
-    var validator = this.$step2_form.validate({
+    this.validator = this.$step2_form.validate({
       onkeyup: false,
       rules: {
         title: {
@@ -88,10 +92,7 @@ export default class Homework {
         questionLength: Translator.trans('activity.homework_manage.question_required_error_hint'),
       },
     });
-    this.validator2 = validator;
-    this.initCkeditor(validator);
-    this.$step2_form.data('validator', validator);
-
+    this.initCkeditor(this.validator);
   }
 
   setValidateRule() {

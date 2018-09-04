@@ -67,12 +67,15 @@ load.then(function(){
       validate.form();
     });
 
-    window.ltc.on('getActivity', function(msg){
-      if (validate.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:$('#step2-form').serializeObject()});
-      }
+    window.ltc.on('getValidate', function(msg){
+      window.ltc.emit('returnValidate', {valid: validate.form()});
     });
 
+    window.ltc.on('getActivity', function(msg){
+      if (validate.form()) {
+        window.ltc.emit('returnActivity', {valid:true, data:$('#step2-form').serializeObject()});
+      }
+    });
 
     if (context.activityId) {
       window.ltc.api({

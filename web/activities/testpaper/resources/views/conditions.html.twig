@@ -1,0 +1,10 @@
+{% do script(['libs/jquery-nouislider.js','testpaperactivity/js/finish/index.js'], 300) %}
+
+<div class="form-group js-score-form-group" id="score-condition" data-pass="{{ condition.value|default('0.6') }}">
+  <div class="col-sm-offset-2 col-sm-8 color-gray">
+    <span>0</span>
+    <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
+    </div>
+    <span class="js-score-total"></span>{{'site.question.attr.score.unit'|trans}}
+  </div>
+</div>

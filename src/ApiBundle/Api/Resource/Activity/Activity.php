@@ -15,14 +15,18 @@ class Activity extends AbstractResource
     */
     public function get(ApiRequest $request, $activityId)
     {
-       $activity = $this->getActivityService()->getActivity($activityId, true);
-       if (!empty($activity)) {
-            $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
-            return  $activity;
-       }
-       
-       $user = $this->getCurrentUser();
-       return $this->getCourseMemberService()->isCourseStudent($activity['fromCourseId'], $user['id']) ? $activity : array();
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        if (empty($activity)) {
+            return array();
+        }
+
+        $user = $this->getCurrentUser();
+        if ($this->getCourseMemberService()->isCourseStudent($activity['fromCourseId'], $user['id']) ) {
+            return $activity;
+        }
+   
+        $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+        return  $activity;
     }
 
     protected function getActivityService()

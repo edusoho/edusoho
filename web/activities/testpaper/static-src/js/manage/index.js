@@ -15,15 +15,14 @@ class Testpaper {
     this.initStepForm2();
     window.ltc.on('getActivity', (msg) => {
       if (this.validator.form()) {
-        window.ltc.emit('returnActivity', { valid:true, content: {score: $('#testpaper-media').find('option:selected').data('score')}, data:window.ltc.getFormSerializeObject($('#step2-form'))});
+        window.ltc.emit('returnActivity', { valid:true, data: window.ltc.getFormSerializeObject($('#step2-form'))});
       }
     });
 
     window.ltc.on('getValidate', (msg) => {
       if (this.validator.form()) {
         window.ltc.emit('returnValidate', { valid:true, context: {
-          score: $('#testpaper-media').find('option:selected').data('score'),
-          passScore: $('[name="finishScore"]').val(),
+          score: $('#testpaper-media').find('option:selected').data('score')
         }});
       }
     });

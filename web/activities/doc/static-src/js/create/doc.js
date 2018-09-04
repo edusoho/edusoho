@@ -15,18 +15,22 @@ export default class Document {
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validator.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }
 
   initStep2Form() {
     var $step2_form = $('#step2-form');
-    var validator = $step2_form.validate({
+    this.validator = $step2_form.validate({
       rules: {
         title: {
           required: true,
@@ -42,7 +46,6 @@ export default class Document {
         }
       }
     });
-    $step2_form.data('validator', validator);
   }
 
   initFileChooser() {

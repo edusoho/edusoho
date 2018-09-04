@@ -84,11 +84,26 @@ class Activity
         return true;
     }
 
-    public function isFinished($id)
+    public function isFinished($activityId)
     {
-        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($id);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if ('time' === $activity['finishType']) {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
+            $result /= 60;
 
-        return !empty($log);
+            return !empty($result) && $result >= $activity['finishData'];
+        }
+
+        if ('end' === $activity['finishType']) {
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+
+            return !empty($log);
+        }
+
+        if ('default' === $activity['finishType']) {
+            //默认进入，即完成学习
+            return true;
+        }
     }
 
     public function get($targetId)
