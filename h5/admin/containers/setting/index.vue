@@ -8,9 +8,8 @@
       <div class="find-body">
         <draggable v-model="modules">
           <module-template v-for="(module, index) in modules"
-            :module="module" :active="isActive(index)"
-            :key="index" :saveFlag="saveFlag"
-            :moduleKey="`${module.type}-${index}`"
+            :key="index"
+            :saveFlag="saveFlag"
             :index="index"
             :module="module"
             :active="isActive(index)"
