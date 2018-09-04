@@ -3,6 +3,7 @@
 {% set endLeftSeconds = activity.endTime - timestamp() %}
 {% set startLeftSeconds = activity.startTime - timestamp() %}
 {% set replayGuid = activity.ext.liveProvider == 1 ? 'activity.live.replay_guid_1'|trans : 'activity.live.replay_guid'|trans %}
+{% set replays = get_live_replays(activity.id)|default() %}
 
 {% block body %}
   <div class="iframe-parent-content ph20 pv20">
@@ -32,7 +33,7 @@
                     {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
                 </div>
-                {% if activity.isTeacher|default() %}
+                {% if is_teacher(activity.fromCourseId) %}
                   <div class='live-show-item'>
                     {{ replayGuid|raw }}
                   </div>
@@ -42,7 +43,7 @@
               <div class='live-show-item'>
                 <p class="title">{{ 'homepage.live_course.start_time'|trans }}</p>
                 {{ 'my.teaching.open_course.lesson.header.content.tips'|trans }}
-                {{ activity.endTimeFormat }}
+                {{ activity.endTime|date('Y-m-d H:i') }}
                 {{ 'my.teaching.open_course.lesson.header.content.end.tips'|trans }}
               </div>
               <div class='live-show-item'>
@@ -54,7 +55,7 @@
                   {{ 'homepage.live_course.join_btn'|trans }}
                 </a>
               </div>
-              {% if activity.isTeacher|default() %}
+              {% if is_teacher(activity.fromCourseId) %}
               <div class='live-show-item'>
                 {{ replayGuid|raw }}
               </div>
@@ -68,9 +69,9 @@
                     <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
                     {{ activity.remark|raw }}
                 </div>
-                {% if activity.replays %}
+                {% if replays %}
                     <div class='live-show-item'>
-                        {% for btn in activity.replays %}
+                        {% for btn in replays %}
                             <a class="btn btn-primary btn-replays js-replay" data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ btn.url }}"  target='_blank'>
                                 {{ btn.title }}
                             </a>
