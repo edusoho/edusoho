@@ -7,6 +7,8 @@
     {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:activity.fromCourseId}) %}
 {% endif %}
 
+{% set timeDisabled = ( 0 < activity.startTime|default(0) <= timestamp() and activity.ext.roomCreated|default() ) ? 1 : 0 %}
+
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form" >
@@ -39,7 +41,7 @@
               <label for="startTime" class="control-label-required">{{ 'course.plan_task.activity_manage.live.start_time'|trans }}</label>
           </div>
           <div class="col-sm-10">
-              <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('')|date('Y-m-d h:i') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ path('client_time_check') }}">
+              <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{% if activity.startTime|default('') %}{{ activity.startTime|date('Y-m-d H:i') }}{% endif %}" {% if timeDisabled %}disabled{% endif %} data-url="{{ path('client_time_check') }}">
               {% if not activity.ext.roomCreated|default(true) %}
                   <div class="color-warning">{{'course.plan_task.activity_manage.live.create_tips'|trans}}</div>
               {% endif %}

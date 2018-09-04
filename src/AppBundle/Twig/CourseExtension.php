@@ -59,7 +59,18 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_course_title', array($this, 'getCourseTitle')),
             new \Twig_SimpleFunction('task_list_json_data', array($this, 'taskListJsonData')),
             new \Twig_SimpleFunction('get_course_tasks', array($this, 'getCourseTasks')),
+            new \Twig_SimpleFunction('is_teacher', array($this, 'isTeacher')),
         );
+    }
+
+    public function isTeacher($courseId)
+    {
+        $user = $this->biz['user'];
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            return $user->isTeacher();
+        }
+
+        return false;
     }
 
     public function getCourseTasks($courseId, $conditions = array())
@@ -383,5 +394,10 @@ class CourseExtension extends \Twig_Extension
     protected function getActivityExtension()
     {
         return $this->container->get('web.twig.activity_extension');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

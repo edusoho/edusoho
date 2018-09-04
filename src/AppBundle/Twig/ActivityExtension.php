@@ -106,8 +106,6 @@ class ActivityExtension extends \Twig_Extension
                 'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUpoadToken('course', 'flash'))),
                 'imageDownloadUrl' => $this->generateUrl('editor_download', array('token' => $this->getWebExtension()->makeUpoadToken('course'))),
             ),
-            // 'uploader' => $cdn.'asdf',
-            // 'player' => 'a',
         ));
     }
 
