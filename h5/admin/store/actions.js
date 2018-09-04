@@ -33,6 +33,16 @@ export const getDraft = ({ commit }, { portal, type, mode }) => Api.getDraft({
   }
 });
 
+export const deleteDraft = ({ commit }, { portal, type, mode }) => Api.deleteDraft({
+  query: {
+    portal,
+    type,
+  },
+  params: {
+    mode,
+  }
+});
+
 export const saveDraft = ({ commit }, { portal, type, mode, data }) => Api.saveDraft({
   params: {
     type,

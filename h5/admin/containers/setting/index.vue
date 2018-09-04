@@ -43,7 +43,7 @@
 
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
-      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="reset()">重 置</el-button>
+      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="reset">重 置</el-button>
       <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="save('draft')">预 览</el-button>
       <el-button class="setting-button-group__button text-medium" type="primary" size="mini" @click="save('published')">发 布</el-button>
     </div>
@@ -57,6 +57,7 @@ import Api from '@admin/api';
 import moduleTemplate from './module-template';
 import draggable from 'vuedraggable';
 import { mapActions } from 'vuex';
+import * as types from '@admin/store/mutation-types';
 
 export default {
   components: {
@@ -90,7 +91,7 @@ export default {
     }
   },
   created() {
-    this.reset();
+    this.load();
 
     // 获得课程分类列表
     this.getCategories();
@@ -108,6 +109,7 @@ export default {
   methods: {
     ...mapActions([
       'getCategories',
+      'deleteDraft',
       'saveDraft',
       'getDraft',
     ]),
@@ -134,15 +136,35 @@ export default {
       this.modules.push(defaultCopied);
       this.currentModuleIndex =  Math.max(this.modules.length - 1, 0);
     },
-    reset() {
-      // 重置配置／读取配置
+    load() {
+      // 读取草稿配置
       this.getDraft({
         portal: 'h5',
         type: 'discovery',
-        mode: 'published',
+        mode: 'draft',
       }).then((res) => {
         this.modules = Object.values(res);
       })
+    },
+    reset() {
+      // 删除草稿配置配置
+      this.deleteDraft({
+        portal: 'h5',
+        type: 'discovery',
+        mode: 'draft',
+      }).then((res) => {
+        this.$message({
+          message: '重置成功',
+          type: 'success'
+        });
+      }).then(() => {
+        this.load();
+      }).catch(err => {
+        this.$message({
+          message: err.message || '重置失败',
+          type: 'error'
+        });
+      });
     },
     save(mode, needTrans = true) {
       // 保存配置
@@ -160,13 +182,27 @@ export default {
         portal: 'h5',
         type: 'discovery',
       }).then(() => {
+        if (isPublish) {
+          this.$message({
+            message: '发布成功',
+            type: 'success'
+          });
+          return;
+        }
+
+        this.$store.commit(types.UPDATE_DRAFT, data);
         this.$router.push({
           name: 'preview',
           query: {
-            times: 1,
+            times: 10,
             preview: isPublish ? 0 : 1,
             duration: 60 * 5,
           }
+        });
+      }).catch(err => {
+        this.$message({
+          message: err.message || '发布失败，请重新尝试',
+          type: 'error'
         });
       })
     }

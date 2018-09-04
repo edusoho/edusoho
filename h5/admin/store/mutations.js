@@ -10,4 +10,7 @@ export default {
   [types.GET_CSRF_TOKEN](state, payload) {
     state.csrfToken = payload;
   },
+  [types.UPDATE_DRAFT](state, payload) {
+    state.draft = payload;
+  },
 };

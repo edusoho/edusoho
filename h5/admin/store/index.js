@@ -11,6 +11,7 @@ const state = {
   categories: [],
   user: {},
   csrfToken: '',
+  draft: {},
 };
 
 

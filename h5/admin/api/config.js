@@ -13,6 +13,11 @@ const config = [
     url: '/pages/{portal}/settings',
     method: 'POST',
   }, {
+    // 删除后台配置
+    name: 'deleteDraft',
+    url: '/pages/{portal}/settings/{type}',
+    method: 'DELETE',
+  }, {
     // 上传文件
     name: 'uploadFile',
     url: '/api/files',
