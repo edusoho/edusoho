@@ -27,7 +27,7 @@ class LessonManageController extends BaseController
 
             $activityConfigManager = $this->container->get('activity_config_manager');
             $finishDefault = $activityConfigManager->getInstalledActivity($formData['mediaType']);
-            
+
             $formData = array_merge($formData, $finishDefault);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
@@ -198,7 +198,7 @@ class LessonManageController extends BaseController
 
         return array(
             'finishType' => empty($condition['type']) ? 'default' : $condition['type'],
-            'value' =>  empty($condition['value']) ? '1' : $condition['value'],
+            'value' => empty($condition['value']) ? '1' : $condition['value'],
         );
     }
 

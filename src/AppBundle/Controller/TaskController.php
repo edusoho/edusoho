@@ -167,7 +167,7 @@ class TaskController extends BaseController
         $taskCanTryLook = false;
         if ($course['tryLookable'] && 'video' == $task['type']) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                 $taskCanTryLook = true;
             }
         }
@@ -388,14 +388,13 @@ class TaskController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $activityConfigManage = $this->get('activity_config_manager');
         $actvityFinishCondition = $activityConfigManage->getInstalledActivity($activity['mediaType']);
-        
-       
+
         if (!empty($actvityFinishCondition['finish_condition'])) {
             $actvityFinishCondition = ArrayToolkit::index($actvityFinishCondition['finish_condition'], 'type');
             $container = $this->get('activity_runtime_container');
 
             if (!empty($actvityFinishCondition[$activity['finishType']]['finish_tip'])) {
-                return $container->renderRoute($activity, 'finish_tip');   
+                return $container->renderRoute($activity, 'finish_tip');
             }
         }
 
