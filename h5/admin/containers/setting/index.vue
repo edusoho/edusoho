@@ -8,10 +8,11 @@
       <div class="find-body">
         <draggable v-model="modules">
           <module-template v-for="(module, index) in modules"
-            :module="module" :active="isActive(index)"
             :key="index"
-            :moduleKey="`${module.type}-${index}`"
             :index="index"
+            :module="module"
+            :active="isActive(index)"
+            :moduleKey="`${module.type}-${index}`"
             @activeModule="activeModule"
             @updateModule="updateModule($event, index)"
             @removeModule="removeModule($event, index)">
@@ -24,7 +25,7 @@
         <div class="section-title">点击添加组件</div>
         <el-button class="find-section-item" type="" size="medium"
           v-for="(item, index) in moduleItems"
-          @click="addModule(index)"
+          @click="addModule(item, index)"
           :key="index">
           {{ item.name }}
         </el-button>
@@ -50,14 +51,15 @@
   </div>
 </template>
 <script>
-import items from '@/utils/footer-config'
-import moduleDefault from '@admin/utils/module-default-config';
-import ObjectArray2ObjectByKey from '@/utils/array2object';
 import Api from '@admin/api';
+import items from '@/utils/footer-config'
+import * as types from '@admin/store/mutation-types';
+import moduleDefault from '@admin/utils/module-default-config';
+import ModuleCounter from '@admin/utils/module-counter';
+import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import draggable from 'vuedraggable';
 import { mapActions } from 'vuex';
-import * as types from '@admin/store/mutation-types';
 
 export default {
   components: {
@@ -82,7 +84,8 @@ export default {
           name: '图片广告',
           default: moduleDefault.poster,
         }
-      ]
+      ],
+      typeCount: {},
     }
   },
   computed: {
@@ -103,24 +106,44 @@ export default {
       'saveDraft',
       'getDraft',
     ]),
+    moduleCountInit() {
+      // 模块类型计数初始化
+      const typeCount = new ModuleCounter();
+      for (let i = 0, len = this.modules.length; i < len; i++) {
+        typeCount.addByType(this.modules[i].type);
+      }
+      this.typeCount = typeCount;
+    },
     isActive(index) {
       return index === this.currentModuleIndex;
     },
     activeModule(index) {
+      // 激活编辑模块
       this.currentModuleIndex = index;
     },
     updateModule(data, index) {
-      console.log('updateModule');
+      // 更新模块
     },
     removeModule(data, index) {
-      console.log('removeModule');
+      // 删除一个模块
+      this.typeCount.removeByType(data.type);
+
       this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
     },
-    addModule(index) {
-      console.log('addModule')
-      // 需要一个深拷贝对象
-      const defaultString = JSON.stringify(this.moduleItems[index].default);
+    addModule(data, index) {
+      // 新增一个模块
+      this.typeCount.addByType(data.default.type);
+
+      if (this.typeCount.getCounterByType(data.default.type) >= 5) {
+        this.$message({
+          message: '同一类型组件最多添加 5 个',
+          type: 'warning'
+        })
+        return;
+      }
+
+      const defaultString = JSON.stringify(this.moduleItems[index].default); // 需要一个深拷贝对象
       const defaultCopied = JSON.parse(defaultString);
 
       this.modules.push(defaultCopied);
@@ -136,6 +159,7 @@ export default {
         mode,
       }).then((res) => {
         this.modules = Object.values(res);
+        this.moduleCountInit();
       })
     },
     reset() {

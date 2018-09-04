@@ -70,11 +70,9 @@
     },
     watch: {
       sort(value) {
-        console.log('sort', value)
         this.fetchCourse();
       },
       limit(value, oldValue) {
-        console.log('limit', value)
         if (oldValue > value) {
           const deleteIndex = value - oldValue
           this.courseList.items.splice(deleteIndex);
@@ -83,15 +81,12 @@
         this.fetchCourse();
       },
       lastDays(value) {
-        console.log('lastDays', value)
         this.fetchCourse();
       },
       categoryId(value) {
-        console.log('categoryId', value)
         this.fetchCourse();
       },
       sourceType(value, oldValue) {
-        console.log('sourceType', value, oldValue)
         if (value !== oldValue) {
           this.courseList.items = [];
         }
