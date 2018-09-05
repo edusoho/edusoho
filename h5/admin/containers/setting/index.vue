@@ -9,8 +9,8 @@
         <draggable
           v-model="modules"
           :options="{
-            filter: '.module-frame__setting, .find-footer',
-            preventOnFilter: false
+            filter: stopDraggleDoms,
+            preventOnFilter: false,
           }">
           <module-template v-for="(module, index) in modules"
             :key="index"
@@ -99,7 +99,10 @@ export default {
   computed: {
     footerItemStyle() {
       return { width: `${100/items.length}%` }
-    }
+    },
+    stopDraggleDoms() {
+      return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
+    },
   },
   created() {
     this.load();
