@@ -3,12 +3,12 @@ import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/c
 
 export default class Document {
   constructor() {
-    this.$mediaId = $('[name="mediaId"]');
+    this.mediaId = $('#step2-form').data('mediaId');
     this.init();
   }
 
   init() {
-    showChooserType(this.$mediaId);
+    showChooserType(this.mediaId);
     this.initStep2Form();
     this.initFileChooser();
     this.initEvent();
@@ -38,10 +38,10 @@ export default class Document {
           trim: true,
           course_title: true,
         },
-        mediaId: 'required',
+        media: 'required',
       },
       messages: {
-        mediaId: {
+        media: {
           required: Translator.trans('activity.document_manage.media_error_hint')
         }
       }
@@ -53,10 +53,8 @@ export default class Document {
 
     fileChooser.on('select', (file) => {
       chooserUiClose();
-      this.$mediaId.val(file.id);
-      $('#step2-form').valid();
-
       $('[name="media"]').val(JSON.stringify(file));
+      $('#step2-form').valid();
     });
   }
 }
