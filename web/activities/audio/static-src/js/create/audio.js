@@ -12,15 +12,11 @@ export default class Audio {
 
   initEvent() {
     window.ltc.on('getActivity', (msg) => {
-      if (this.validate.form()) {
-        window.ltc.emit('returnActivity', {valid:true, data: window.ltc.getFormSerializeObject($('#step2-form'))});
-      }
+      window.ltc.emit('returnActivity', {valid:this.validate.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
-      if (this.validate.form()) {
-        window.ltc.emit('returnValidate', { valid:true });
-      }
+      window.ltc.emit('returnValidate', { valid: this.validate.form() });
     });
   }
 

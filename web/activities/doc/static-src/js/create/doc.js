@@ -16,15 +16,11 @@ export default class Document {
 
   initEvent() {
     window.ltc.on('getActivity', (msg) => {
-      if (this.validator.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
-      }
+      window.ltc.emit('returnActivity', {valid:this.validator.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
-      if (this.validator.form()) {
-        window.ltc.emit('returnValidate', { valid:true });
-      }
+      window.ltc.emit('returnValidate', { valid: this.validator.form() });
     });
   }
 

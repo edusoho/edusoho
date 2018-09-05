@@ -12,15 +12,11 @@ class PPT {
     this.initFileChooser();
 
     window.ltc.on('getActivity', (msg) => {
-      if (this.validator.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data: this._serializeArray($('#step2-form'))});
-      }
+      window.ltc.emit('returnActivity', {valid:this.validator.form(), data: this._serializeArray($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
-      if (this.validator.form()) {
-        window.ltc.emit('returnValidate', { valid:true });
-      }
+      window.ltc.emit('returnValidate', { valid: this.validator.form() });
     });
   }
 
