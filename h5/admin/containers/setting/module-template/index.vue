@@ -69,21 +69,28 @@ export default {
       }
     },
   },
+  watch: {
+    saveFlag(value, oldValue) {
+      if (value === oldValue) return;
+      this.triggerValidate();
+    }
+  },
   created() {
     // 每个模块唯一值
     this.module.moduleType = this.moduleKey;
+    this.triggerValidate();
   },
   updated() {
     // 每个模块唯一值
     this.module.moduleType = this.moduleKey;
-    this.triggerValidate();
   },
   data () {
     return {
       moduleType: {
         slideShow: 'slide_show',
         courseList: 'course_list',
-        poster: 'poster'
+        poster: 'poster',
+        incomplete: false,
       }
     }
   },
@@ -95,11 +102,9 @@ export default {
       this.triggerValidate();
     },
     triggerValidate() {
-      let incompleteBoolean = true;
-      incompleteBoolean = validate(this.module, this.saveFlag);
+      this.module.incomplete = validate(this.module, this.saveFlag);
       this.$emit('updateModule', {
         updateModule: this.module,
-        incomplete: incompleteBoolean
       });
     },
     handleRemove(data, index) {

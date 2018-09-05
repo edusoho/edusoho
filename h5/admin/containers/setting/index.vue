@@ -135,7 +135,6 @@ export default {
     updateModule(data, index) {
       // 更新模块
       console.log('updateModule');
-      this.incomplete = data.incomplete;
     },
     removeModule(data, index) {
       // 删除一个模块
@@ -199,12 +198,13 @@ export default {
       const isPublish = mode === 'published';
       let data = this.modules;
       this.saveFlag = true;
+      this.validate();
       // 如果已经是对象就不用转换
       if (needTrans) {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
 
-      if (!this.incomplete || !this.saveFlag) {
+      if (!this.incomplete) {
         this.saveDraft({
           data,
           mode,
@@ -235,7 +235,16 @@ export default {
           });
         })
       }
-    }
+    },
+    validate() {
+      for (var i = 0; i < this.modules.length; i++) {
+        if (this.modules[i].incomplete) {
+          this.incomplete = this.modules[i].incomplete
+          return;
+        }
+      }
+      this.incomplete = false;
+    },
   }
 }
 
