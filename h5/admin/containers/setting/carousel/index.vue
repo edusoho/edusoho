@@ -117,7 +117,10 @@ export default {
   },
   methods: {
     addItem() {
-      this.copyModuleData.data.push(Object.assign({}, moduleDefault.slideShow.data[0]))
+      // 需要深拷贝对象
+      const itemString = JSON.stringify(moduleDefault.slideShow.data[0]);
+      const itemObject = JSON.parse(itemString);
+      this.copyModuleData.data.push(itemObject)
     },
     selected(selected) {
       this.activeItemIndex = selected.selectIndex;

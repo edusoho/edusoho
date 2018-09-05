@@ -80,7 +80,7 @@
     },
     computed: {
       linkTextShow() {
-        return this.item.link.target && this.item.link.target.title;
+        return this.item.link.target && this.item.link.target.displayedTitle;
       },
       linkTextHover() {
         return this.item.link.target && this.item.link.target.displayedTitle;

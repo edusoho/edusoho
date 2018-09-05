@@ -91,7 +91,6 @@ export default {
       this.isActive = true;
     },
     updateHandler(data, index) {
-      console.log(index, 'updateHandler')
       this.$emit('updateModule', data);
     },
     handleRemove(data, index) {
