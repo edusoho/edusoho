@@ -76,6 +76,7 @@ export default {
   updated() {
     // 每个模块唯一值
     this.module.moduleType = this.moduleKey;
+    this.triggerValidate();
   },
   data () {
     return {
@@ -90,13 +91,14 @@ export default {
     activeModule() {
       this.isActive = true;
     },
-    updateHandler(data, index) {
+    updateHandler() {
+      this.triggerValidate();
+    },
+    triggerValidate() {
       let incompleteBoolean = true;
-      if (this.saveFlag) {
-        incompleteBoolean = validate(this.module);
-      }
+      incompleteBoolean = validate(this.module, this.saveFlag);
       this.$emit('updateModule', {
-        updateModule: data,
+        updateModule: this.module,
         incomplete: incompleteBoolean
       });
     },
