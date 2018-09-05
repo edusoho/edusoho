@@ -34,11 +34,11 @@ class CourseTaskEvent extends AbstractResource
             $this->start($request, $courseId, $taskId, self::EVENT_START);
         }
 
-        if ($eventName == self::EVENT_DOING) {
+        if (self::EVENT_DOING == $eventName) {
             return $this->doing($request, $courseId, $taskId, $eventName);
         }
 
-        if ($eventName == self::EVENT_FINISH) {
+        if (self::EVENT_FINISH == $eventName) {
             return $this->finish($request, $courseId, $taskId, $eventName);
         }
 
@@ -55,11 +55,18 @@ class CourseTaskEvent extends AbstractResource
         $this->getCourseService()->tryTakeCourse($courseId);
 
         // TODO  API无session，无法与Web端业务一致
-        $result = $this->getTaskService()->trigger($taskId, $eventName, array(
+        $data = array(
             'lastTime' => $request->request->get('lastTime', time()),
-        ));
+        );
 
-        if ($result['status'] == self::EVENT_FINISH) {
+        $watchTime = $request->request->get('watchTime', 0);
+        if (!empty($watchTime)) {
+            $data['events']['watching']['watchTime'] = $watchTime;
+        }
+
+        $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
+
+        if (self::EVENT_FINISH == $result['status']) {
             $nextTask = $this->getTaskService()->getNextTask($taskId);
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
             $completionRate = $progress['percent'];
@@ -83,7 +90,7 @@ class CourseTaskEvent extends AbstractResource
 
         $task = $this->getTaskService()->getTask($taskId);
 
-        if ($task['status'] != 'published') {
+        if ('published' != $task['status']) {
             throw new NotFoundHttpException('Task not publish', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
