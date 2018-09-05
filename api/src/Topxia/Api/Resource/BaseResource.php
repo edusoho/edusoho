@@ -265,6 +265,11 @@ abstract class BaseResource
         return 'http';
     }
 
+    protected function isSsl()
+    {
+        return 'https' == $this->getSchema();
+    }
+
     protected function getCdn($type = 'default')
     {
         $cdn = new CdnUrl();
