@@ -355,7 +355,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     protected function getCourseMemberSql($conditions, &$params)
     {
-        $courseMemberSql = 'SELECT courseId,count(id) co FROM course_member WHERE 1=1 ';
+        $courseMemberSql = "SELECT courseId,count(id) co FROM course_member WHERE role='student' ";
 
         if (!empty($conditions['outerEndTime'])) {
             $courseMemberSql .= ' AND createdTime > ? AND createdTime < ? ';
