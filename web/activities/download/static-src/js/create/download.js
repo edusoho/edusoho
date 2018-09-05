@@ -6,8 +6,8 @@ export default class DownLoad {
   constructor() {
     this.$form = $('#step2-form');
     this.firstName = $('#title').val();
-    this.media = Object.create(null);
-    this.materials = Object.create(null);
+    this.media = {};
+    this.materials = {};
     this.initStep2Form();
     this.initEvent();
     this.initFileChooser();

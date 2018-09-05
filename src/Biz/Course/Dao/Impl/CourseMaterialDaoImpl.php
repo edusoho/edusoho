@@ -15,6 +15,7 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
             'timestamps' => array('createdTime'),
             'orderbys' => array('createdTime'),
             'conditions' => array(
+                'id in (:ids)',
                 'id = :id',
                 'courseId = :courseId',
                 'courseSetId = :courseSetId',
@@ -62,6 +63,11 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
     public function findMaterialsByLessonIdAndSource($lessonId, $source)
     {
         return $this->findByFields(array('lessonId' => $lessonId, 'source' => $source));
+    }
+
+    public function findMaterialsByIds($ids)
+    {
+        return $this->findInField('id', $ids);
     }
 
     public function deleteByCourseSetId($courseSetId, $courseType)
