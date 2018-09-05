@@ -43,6 +43,7 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('ltc_source', array($this, 'findLtcSource')),
             new \Twig_SimpleFunction('flash_player', array($this, 'flashPlayer')),
             new \Twig_SimpleFunction('doc_player', array($this, 'docPlayer')),
+            new \Twig_SimpleFunction('ppt_player', array($this, 'pptPlayer')),
             new \Twig_SimpleFunction('activity_visible', array($this, 'isActivityVisible')),
         );
     }
@@ -66,6 +67,16 @@ class ActivityExtension extends \Twig_Extension
     public function docPlayer($doc, $ssl)
     {
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
+
+        return array(
+            'error' => $error,
+            'result' => $result,
+        );
+    }
+
+    public function pptPlayer($doc, $ssl)
+    {
+        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($doc, $ssl);
 
         return array(
             'error' => $error,
