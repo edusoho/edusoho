@@ -2,7 +2,7 @@
 
 api-version: 3
 api-url: api/courses/1/tasks/1/events/doing
-api-method: GET
+api-method: PATCH
 api-authorized: false
 api-login: true
 api-url-editable: true
