@@ -50,7 +50,7 @@
         <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'url'">
           <p class="pull-left section-left">输入链接：</p>
           <div class="section-right">
-            <el-input size="mini" v-model="copyModuleData.link.url" placeholder="请输入自定义链接" clearable></el-input>
+            <el-input size="mini" v-model="copyModuleData.link.url" placeholder="例如 http://www.eduosho.com" clearable></el-input>
           </div>
         </div>
         <div class="poster-item-setting__section mtl">
