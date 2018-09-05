@@ -1,5 +1,5 @@
 <template>
-  <module-frame containerClass="setting-carousel" :isActive="isActive">
+  <module-frame containerClass="setting-carousel" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="carousel-image-container">
       <img class="carousel-image"
         v-show="carouselImage"
@@ -66,11 +66,21 @@ export default {
       type: Object,
       default: {},
     },
+    incomplete: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     isActive: {
       get() {
         return this.active;
+      },
+      set() {}
+    },
+    isIncomplete: {
+      get() {
+        return this.incomplete;
       },
       set() {}
     },

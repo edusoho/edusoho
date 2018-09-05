@@ -9,6 +9,7 @@
         <draggable v-model="modules">
           <module-template v-for="(module, index) in modules"
             :key="index"
+            :saveFlag="saveFlag"
             :index="index"
             :module="module"
             :active="isActive(index)"
@@ -70,6 +71,7 @@ export default {
     return {
       title: 'EduSoho 微网校',
       modules: [],
+      saveFlag: false,
       currentModuleIndex: '0',
       items,
       moduleItems: [{
@@ -123,6 +125,8 @@ export default {
     },
     updateModule(data, index) {
       // 更新模块
+      // this.saveFlag = false;
+      console.log('updateModule');
     },
     removeModule(data, index) {
       // 删除一个模块
@@ -185,7 +189,7 @@ export default {
       // 保存配置
       const isPublish = mode === 'published';
       let data = this.modules;
-
+      this.saveFlag = true;
       // 如果已经是对象就不用转换
       if (needTrans) {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');

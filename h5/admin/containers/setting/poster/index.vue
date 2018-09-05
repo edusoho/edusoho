@@ -1,5 +1,5 @@
 <template>
-  <module-frame containerClass="setting-poster" :isActive="isActive">
+  <module-frame containerClass="setting-poster" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="poster-image-container">
       <div class="image-mask" v-show="!copyModuleData.image.uri">
         广告图片
@@ -11,7 +11,7 @@
       <header class="title">图片广告设置</header>
       <div class="poster-item-setting clearfix">
         <div class="poster-item-setting__section">
-          <p class="pull-left section-left">广告图片：</p>
+          <p class="pull-left section-left required-option">广告图片：</p>
           <div class="section-right">
             <el-upload
               action="string"
@@ -95,12 +95,22 @@ export default {
     },
     moduleData: {
       type: Object
+    },
+    incomplete: {
+      type: Boolean,
+      default: false,
     }
   },
   computed: {
     isActive: {
       get() {
         return this.active;
+      },
+      set() {}
+    },
+    isIncomplete: {
+      get() {
+        return this.incomplete;
       },
       set() {}
     },
