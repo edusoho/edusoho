@@ -49,8 +49,8 @@ export default {
       default: 'demo-1',
     },
     saveFlag: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      default: 0,
     }
   },
   computed: {
@@ -70,8 +70,8 @@ export default {
     },
   },
   watch: {
-    saveFlag(value, oldValue) {
-      if (value === oldValue) return;
+    saveFlag(value) {
+      if (!value) return;
       this.triggerValidate();
     }
   },
@@ -99,7 +99,6 @@ export default {
       this.isActive = true;
     },
     updateHandler() {
-      this.triggerValidate();
     },
     triggerValidate() {
       this.module.incomplete = validate(this.module, this.saveFlag);

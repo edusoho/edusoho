@@ -76,7 +76,7 @@ export default {
     return {
       title: 'EduSoho 微网校',
       modules: [],
-      saveFlag: false,
+      saveFlag: 0,
       incomplete: true,
       currentModuleIndex: '0',
       items,
@@ -195,46 +195,50 @@ export default {
     },
     save(mode, needTrans = true) {
       // 保存配置
-      const isPublish = mode === 'published';
       let data = this.modules;
-      this.saveFlag = true;
+      const isPublish = mode === 'published';
+
+      this.saveFlag ++;
       this.validate();
       // 如果已经是对象就不用转换
       if (needTrans) {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
 
-      if (!this.incomplete) {
-        this.saveDraft({
-          data,
-          mode,
-          portal: 'h5',
-          type: 'discovery',
-        }).then(() => {
-          if (isPublish) {
-            this.$message({
-              message: '发布成功',
-              type: 'success'
-            });
-            return;
-          }
-
-          this.$store.commit(types.UPDATE_DRAFT, data);
-          this.$router.push({
-            name: 'preview',
-            query: {
-              times: 10,
-              preview: isPublish ? 0 : 1,
-              duration: 60 * 5,
-            }
-          });
-        }).catch(err => {
-          this.$message({
-            message: err.message || '发布失败，请重新尝试',
-            type: 'error'
-          });
-        })
+      if (this.incomplete) {
+        return;
       }
+
+      this.saveDraft({
+        data,
+        mode,
+        portal: 'h5',
+        type: 'discovery',
+      }).then(() => {
+
+        if (isPublish) {
+          this.$message({
+            message: '发布成功',
+            type: 'success'
+          });
+          return;
+        }
+
+        this.$store.commit(types.UPDATE_DRAFT, data);
+        this.$router.push({
+          name: 'preview',
+          query: {
+            times: 10,
+            preview: isPublish ? 0 : 1,
+            duration: 60 * 5,
+          }
+        });
+      }).catch(err => {
+        this.$message({
+          message: err.message || '发布失败，请重新尝试',
+          type: 'error'
+        });
+      })
     },
     validate() {
       for (var i = 0; i < this.modules.length; i++) {
