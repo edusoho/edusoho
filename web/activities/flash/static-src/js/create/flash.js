@@ -2,12 +2,12 @@ import FileChooser from 'app/js/file-chooser/file-choose';
 import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Flash {
   constructor() {
-    this.$mediaId = $('#step2-form').data('mediaId');
+    this.mediaId = $('#step2-form').data('mediaId');
     this.init();
     this.initEvent();
   }
   init() {
-    showChooserType(this.$mediaId);
+    showChooserType(this.mediaId);
     this.initStep2Form();
     this.initFileChooser();
   }
