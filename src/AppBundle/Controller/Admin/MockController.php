@@ -86,7 +86,25 @@ class MockController extends BaseController
         $this->validate();
 
         $params = $request->request->get('data');
-        $result = $this->sendApiVersion3($params);
+
+        if ('generateToken' == $params['apiUrl']) {
+            $apiUserId = empty($params['apiUserId']) ? null : $params['apiUserId'];
+
+            if (!empty($apiUserId)) {
+                $user = $this->getUserService()->getUser($apiUserId);
+                if (empty($user)) {
+                    throw new \RuntimeException('User not found');
+                }
+                $token = $this->getUserService()->makeToken(
+                    MobileBaseController::TOKEN_TYPE,
+                    $user['id'],
+                    time() + 3600 * 24 * 30
+                );
+            }
+            $result = array('X-Auth-Token' => $token);
+        } else {
+            $result = $this->sendApiVersion3($params);
+        }
 
         return $this->createJsonResponse(array('result' => $result));
     }
