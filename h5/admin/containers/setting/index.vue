@@ -196,7 +196,7 @@ export default {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
 
-      if (!this.incomplete) {
+      if (!this.incomplete || !this.saveFlag) {
         this.saveDraft({
           data,
           mode,
