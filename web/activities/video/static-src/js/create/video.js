@@ -110,13 +110,6 @@ export default class Video {
 
       $('[name="ext[mediaSource]"]').val(file.source);
       $('#step2-form').valid();
-      if (file.source == 'self') {
-        $('#ext_mediaId').val(file.id);
-        $('#ext_mediaUri').val('');
-      } else {
-        $('#ext_mediaUri').val(file.uri);
-        $('#ext_mediaId').val(0);
-      }
       //渲染字幕
       subtitleDialog.render(file);
     };
