@@ -49,6 +49,7 @@ class activity_homework extends Activity
             'title' => $homework['name'],
             'description' => $homework['description'],
             'questionIds' => $questionIds,
+            'passedCondition' => $homework['passedCondition'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'fromCourseSetId' => $newActivity['fromCourseSetId'],
             'copyId' => $config['isCopy'] ? $homework['id'] : 0,
@@ -116,7 +117,11 @@ class activity_homework extends Activity
             'fromCourseId',
             'fromCourseSetId',
             'copyId',
+            'passedCondition',
         ));
+        if (!empty($fields['finishType'])) {
+            $filterFields['passedCondition']['type'] = $fields['finishType'];
+        }
 
         $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
