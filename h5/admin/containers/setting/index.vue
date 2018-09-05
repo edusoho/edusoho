@@ -6,7 +6,12 @@
 
       <!-- 操作预览区域 -->
       <div class="find-body">
-        <draggable v-model="modules">
+        <draggable
+          v-model="modules"
+          :options="{
+            filter: '.module-frame__setting',
+            preventOnFilter: false
+          }">
           <module-template v-for="(module, index) in modules"
             :key="index"
             :saveFlag="saveFlag"
