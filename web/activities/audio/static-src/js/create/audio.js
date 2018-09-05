@@ -1,8 +1,9 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
-import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
+import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
-    showChooserType($('[name="ext[mediaId]"]'));
+    let mediaId = $('#step2-form').data('mediaId');
+    showChooserType(mediaId);
     this.initStep2Form();
     this.autoValidatorLength();
     this.initFileChooser();
@@ -10,18 +11,22 @@ export default class Audio {
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validate.form()) {
+        window.ltc.emit('returnActivity', {valid:true, data: window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validate.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }
 
   initStep2Form() {
     let $step2_form = $('#step2-form');
-    $step2_form.validate({
+    this.validate = $step2_form.validate({
       groups: {
         nameGroup: 'minute second'
       },
@@ -34,7 +39,7 @@ export default class Audio {
         },
         minute: 'required unsigned_integer unsigned_integer',
         second: 'required second_range unsigned_integer',
-        'ext[mediaId]': 'required'
+        media: 'required'
       },
       messages: {
         minute: {
@@ -46,16 +51,15 @@ export default class Audio {
           second_range: Translator.trans('activity.audio_manage.second_range_error_hint'),
           unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
         },
-        'ext[mediaId]': Translator.trans('activity.audio_manage.media_error_hint')
+        media: Translator.trans('activity.audio_manage.media_error_hint')
       }
     });
 
   }
 
   autoValidatorLength() {
-    $('.js-length').blur(function () {
-      let validator = $('#step2-form').data('validator');
-      if (validator && validator.form()) {
+    $('.js-length').blur(() => {
+      if (this.validate.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
         $('#length').val(minute * 60 + second);
@@ -65,7 +69,6 @@ export default class Audio {
 
   initFileChooser() {
     const fileChooser = new FileChooser();
-    console.log(fileChooser);
     const onSelectFile = file => {
       chooserUiClose();
       let placeMediaAttr = (file) => {
@@ -87,15 +90,7 @@ export default class Audio {
       };
       placeMediaAttr(file);
 
-      $('[name="ext[mediaId]"]').val(file.source);
       $('#step2-form').valid();
-      if (file.source == 'self') {
-        $('#ext_mediaId').val(file.id);
-        $('#ext_mediaUri').val('');
-      } else {
-        $('#ext_mediaId').val('');
-        $('#ext_mediaUri').val(file.uri);
-      }
     };
     fileChooser.on('select', onSelectFile);
   }

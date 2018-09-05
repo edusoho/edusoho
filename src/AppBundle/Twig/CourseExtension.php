@@ -7,6 +7,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Common\ArrayToolkit;
@@ -57,7 +58,26 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('has_mul_courses', array($this, 'hasMulCourses')),
             new \Twig_SimpleFunction('get_course_title', array($this, 'getCourseTitle')),
             new \Twig_SimpleFunction('task_list_json_data', array($this, 'taskListJsonData')),
+            new \Twig_SimpleFunction('get_course_tasks', array($this, 'getCourseTasks')),
+            new \Twig_SimpleFunction('is_teacher', array($this, 'isTeacher')),
         );
+    }
+
+    public function isTeacher($courseId)
+    {
+        $user = $this->biz['user'];
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            return $user->isTeacher();
+        }
+
+        return false;
+    }
+
+    public function getCourseTasks($courseId, $conditions = array())
+    {
+        $conditions['courseId'] = $courseId;
+
+        return empty($courseId) ? array() : $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
     }
 
     public function getCourse($id)
@@ -351,6 +371,14 @@ class CourseExtension extends \Twig_Extension
     }
 
     /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
+    }
+
+    /**
      * @return
      */
     protected function getUploadFileService()
@@ -366,5 +394,10 @@ class CourseExtension extends \Twig_Extension
     protected function getActivityExtension()
     {
         return $this->container->get('web.twig.activity_extension');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

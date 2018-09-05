@@ -4,7 +4,7 @@
 {% set mediaType = 'flash' %}
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
-    <form class="form-horizontal" id="step2-form" >
+    <form class="form-horizontal" data-media-id="{{ flash.mediaId|default(null) }}" id="step2-form" >
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
@@ -22,10 +22,9 @@
             courseId: activity.fromCourseId,
             mediaType: 'flash',
             fileType:'flash',
-            file: flash.media|default(null),
+            file: flash.file|default(null),
             placeholder: 'Flash'
           } %}
-          <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
         </div>
         <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.flash.play_tips'|trans}}</p>
       </div>

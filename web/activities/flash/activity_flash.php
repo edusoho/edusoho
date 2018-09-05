@@ -9,17 +9,6 @@ use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class activity_flash extends Activity
 {
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
-
-        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-        $result /= 60;
-
-        return !empty($result) && $result >= $flash['finishDetail'];
-    }
-
     protected function registerListeners()
     {
     }
@@ -83,6 +72,15 @@ class activity_flash extends Activity
 
     public function update($targetId, &$fields, $activity)
     {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $media = json_decode($fields['media'], true);
+
+        if (empty($media['id'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $fields['mediaId'] = $media['id'];
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',

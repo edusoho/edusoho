@@ -15,9 +15,20 @@
     "value": "es-icon es-icon-graphicclass"
   },
   "routes": {
-    "create": "create_or_update.html.twig",
+    "content": "create_or_update_content.html.twig",
     "show": "show.html.twig",
-    "update": "create_or_update.html.twig",
     "finish_tip": "finish_tip.html.twig"
-  }
+  },
+  "finish_condition": [
+    {
+      "type": "score",
+      "describe": "course.plan_task.activity_manage.testpaper.pass",
+      "html": "conditions.html.twig",
+      "value": "0.6"
+    },
+    {
+      "type": "submit",
+      "describe": "course.plan_task.activity_manage.exercise.finished_condition"
+    }
+  ]
 }

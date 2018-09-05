@@ -6,15 +6,15 @@ export default class DownLoad {
   constructor() {
     this.$form = $('#step2-form');
     this.firstName = $('#title').val();
-    this.media = Object.create(null);
-    this.materials = Object.create(null);
+    this.media = {};
+    this.materials = {};
     this.initStep2Form();
     this.initEvent();
     this.initFileChooser();
   }
 
   initStep2Form() {
-    let validator2 = this.$form.validate({
+    this.validator2 = this.$form.validate({
       rules: {
         title: {
           required: true,
@@ -37,11 +37,16 @@ export default class DownLoad {
     this.$form.on('click', '.js-video-import', () => this.importLink());
     this.$form.on('click', '.js-add-file-list', () => this.addFile());
     this.$form.on('blur', '#title', (event) => this.changeTitle(event));
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validator2.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+      
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator2.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }

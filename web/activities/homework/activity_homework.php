@@ -111,27 +111,15 @@ class activity_homework extends Activity
 
     protected function filterFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array(
-            'finishCondition',
-        ))
-        ) {
-            throw $this->createInvalidArgumentException('homework fields is invalid');
-        }
-
         $filterFields = ArrayToolkit::parts($fields, array(
             'title',
             'description',
             'questionIds',
             'passedCondition',
-            'finishCondition',
             'fromCourseId',
             'fromCourseSetId',
             'copyId',
         ));
-
-        if (!empty($filterFields['finishCondition'])) {
-            $filterFields['passedCondition']['type'] = $filterFields['finishCondition'];
-        }
 
         $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];

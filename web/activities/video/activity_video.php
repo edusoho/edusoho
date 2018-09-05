@@ -77,12 +77,6 @@ class activity_video extends Biz\Activity\Config\Activity
         }
 
         $video = $this->handleFields($fields);
-
-        if ('time' == $fields['finishType']) {
-            if (empty($fields['finishDetail'])) {
-                throw $this->createAccessDeniedException('finish time can not be empty');
-            }
-        }
         $videoActivity = $this->getVideoActivityDao()->get($activity['mediaId']);
         if (empty($videoActivity)) {
             throw new \Exception('教学活动不存在');
@@ -90,26 +84,6 @@ class activity_video extends Biz\Activity\Config\Activity
         $videoActivity = $this->getVideoActivityDao()->update($activity['mediaId'], $video);
 
         return $videoActivity;
-    }
-
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        if ('time' === $video['finishType']) {
-            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-            $result /= 60;
-
-            return !empty($result) && $result >= $video['finishDetail'];
-        }
-
-        if ('end' === $video['finishType']) {
-            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
-
-            return !empty($log);
-        }
-
-        return false;
     }
 
     public function get($id)
@@ -170,10 +144,7 @@ class activity_video extends Biz\Activity\Config\Activity
         $result['mediaId'] = empty($result['id']) ? 0 : $result['id'];
         $result['mediaSource'] = empty($result['source']) ? '' : $result['source'];
         $result['mediaUri'] = empty($result['uri']) ? '' : $result['uri'];
-
-        $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
-        $result = array_merge($result, $finishInfo);
-        $result = ArrayToolkit::parts($result, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
+        $result = ArrayToolkit::parts($result, array('mediaId', 'mediaUri', 'mediaSource'));
 
         return $result;
     }

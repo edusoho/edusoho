@@ -3,30 +3,34 @@ import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/c
 
 export default class Document {
   constructor() {
-    this.$mediaId = $('[name="mediaId"]');
+    this.mediaId = $('#step2-form').data('mediaId');
     this.init();
   }
 
   init() {
-    showChooserType(this.$mediaId);
+    showChooserType(this.mediaId);
     this.initStep2Form();
     this.initFileChooser();
     this.initEvent();
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validator.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      }
+    });
+
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validator.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
       }
     });
   }
 
   initStep2Form() {
     var $step2_form = $('#step2-form');
-    var validator = $step2_form.validate({
+    this.validator = $step2_form.validate({
       rules: {
         title: {
           required: true,
@@ -34,15 +38,14 @@ export default class Document {
           trim: true,
           course_title: true,
         },
-        mediaId: 'required',
+        media: 'required',
       },
       messages: {
-        mediaId: {
+        media: {
           required: Translator.trans('activity.document_manage.media_error_hint')
         }
       }
     });
-    $step2_form.data('validator', validator);
   }
 
   initFileChooser() {
@@ -50,10 +53,8 @@ export default class Document {
 
     fileChooser.on('select', (file) => {
       chooserUiClose();
-      this.$mediaId.val(file.id);
-      $('#step2-form').valid();
-
       $('[name="media"]').val(JSON.stringify(file));
+      $('#step2-form').valid();
     });
   }
 }

@@ -24,12 +24,30 @@ class LessonManageController extends BaseController
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
+            $defaultFinishCondition = $this->getDefaultFinishCondition($formData['mediaType']);
+
+            $formData = array_merge($defaultFinishCondition, $formData);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
             return $this->getTaskJsonView($course, $task);
         }
 
         return $this->forward('AppBundle:TaskManage:create', array('courseId' => $course['id']));
+    }
+
+    private function getDefaultFinishCondition($mediaType)
+    {
+        $activityConfigManager = $this->get('activity_config_manager');
+        $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
+        if (empty($activityConfig['finish_condition'])) {
+            return array();
+        }
+        $findishCondition = reset($activityConfig['finish_condition']);
+
+        return array(
+            'finishType' => $findishCondition['type'],
+            'finishData' => empty($findishCondition['value']) ? '' : $findishCondition['value'],
+        );
     }
 
     public function batchCreateAction(Request $request, $courseId)

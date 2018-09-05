@@ -66,11 +66,11 @@ class activity_audio extends Activity
         $audioActivityFields = array(
             'mediaId' => $media['id'],
         );
-        $audioActivity = $this->getAudioActivityDao()->get($fields['mediaId']);
+        $audioActivity = $this->getAudioActivityDao()->get($activity['mediaId']);
         if (empty($audioActivity)) {
             throw $this->createNotFoundException('教学活动不存在');
         }
-        $audioActivity = $this->getAudioActivityDao()->update($fields['mediaId'], $audioActivityFields);
+        $audioActivity = $this->getAudioActivityDao()->update($activity['mediaId'], $audioActivityFields);
 
         return $audioActivity;
     }

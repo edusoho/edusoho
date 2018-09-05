@@ -20,7 +20,7 @@
     <form class="form-horizontal" id="step1-form">
       <ul class="form-group task-create-type-list ">
         {% cache courseSet.type ~ '-create-task-activity-metas-' ~ setting('storage.upload_mode', 'local') 1000 %}
-          {% for type, meta in activity_metas() %}
+          {% for type, meta in activity_metas() if activity_visible(type, courseSet, course) %}
             <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if task.type|default(null)==  type %} active {% endif %}"
                 data-role="activityType" data-type="{{ type }}"
                 data-content-url="{{ path('course_manage_activity_content_modal', {activityId:0, 'type': type, courseId:course.id}) }}"
@@ -35,7 +35,6 @@
         <li class="col-xs-12">
           <label for="mediaType" class="hidden">{{'category'|trans}}</label>
           <input name="mediaType" id="mediaType" class="type-hidden">
-          <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
           <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
           <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
           <input class="js-hidden-data" type="hidden" name="courseSetType" id="courseSetType" value="{{ courseSet.type }}">

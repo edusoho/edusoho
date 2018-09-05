@@ -24,12 +24,11 @@ export default class Video {
   showChooseContent() {
     $('#iframe-content').on('click', '.js-choose-trigger', (event) => {
       FileChooser.openUI();
-      $('[name="ext[mediaSource]"]').val(null);
     });
   }
 
   initStep2form() {
-    $('#step2-form').validate({
+    this.validate = $('#step2-form').validate({
       groups: {
         date: 'minute second'
       },
@@ -42,8 +41,7 @@ export default class Video {
         },
         minute: 'required unsigned_integer',
         second: 'required second_range',
-        'ext[mediaSource]': 'required',
-        'ext[finishDetail]': 'unsigned_integer'
+        media: 'required',
       },
       messages: {
         minute: {
@@ -53,15 +51,14 @@ export default class Video {
           required: Translator.trans('activity.video_manage.length_unsigned_integer_error_hint'),
           second_range: Translator.trans('activity.video_manage.second_range_error_hint'),
         },
-        'ext[mediaSource]': Translator.trans('activity.video_manage.media_error_hint'),
+        media: Translator.trans('activity.video_manage.media_error_hint'),
       }
     });
   }
 
   autoValidatorLength() {
-    $('.js-length').blur(function () {
-      let validator = $('#step2-form').data('validator')
-      if (validator && validator.form()) {
+    $('.js-length').blur(() => {
+      if (this.validate.form()) {
         const minute = parseInt($('#minute').val()) | 0;
         const second = parseInt($('#second').val()) | 0;
         $('#length').val(minute * 60 + second);
@@ -70,10 +67,14 @@ export default class Video {
   }
 
   initEvent() {
-    window.ltc.on('getActivity', function(msg){
-      let validator = $('#step2-form').data('validator');
-      console.log(validator);
-      if (validator && validator.form()) {
+    window.ltc.on('getValidate', (msg) => {
+      if (this.validate.form()) {
+        window.ltc.emit('returnValidate', { valid:true });
+      }
+    });
+
+    window.ltc.on('getActivity', (msg) => {
+      if (this.validate.form()) {
         window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
       }
     });
@@ -107,13 +108,6 @@ export default class Video {
 
       $('[name="ext[mediaSource]"]').val(file.source);
       $('#step2-form').valid();
-      if (file.source == 'self') {
-        $('#ext_mediaId').val(file.id);
-        $('#ext_mediaUri').val('');
-      } else {
-        $('#ext_mediaUri').val(file.uri);
-        $('#ext_mediaId').val(0);
-      }
       //渲染字幕
       subtitleDialog.render(file);
     };

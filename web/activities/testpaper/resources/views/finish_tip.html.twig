@@ -1,6 +1,1 @@
-{{'course.plan_task.activity_manage.testpaper.finished_condition_tips'|trans|raw}}
-{% if testpaperActivity.finishCondition.type == 'score' %}
-    {{'course.plan_task.activity_manage.testpaper.finish_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore})}}
-{% else %}
-    {{'course.plan_task.activity_manage.testpaper.submit'|trans}}
-{% endif %}
+{{ 'course.plan_task.activity_manage.testpaper.finish_score'|trans({'%finishScore%': activity.ext.testpaper.score * activity.finishData}) }}
