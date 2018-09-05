@@ -2,7 +2,8 @@ import FileChooser from 'app/js/file-chooser/file-choose';
 import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
-    showChooserType($('[name="ext[mediaId]"]'));
+    let mediaId = $('#step2-form').data('mediaId');
+    showChooserType(mediaId);
     this.initStep2Form();
     this.autoValidatorLength();
     this.initFileChooser();
@@ -38,7 +39,7 @@ export default class Audio {
         },
         minute: 'required unsigned_integer unsigned_integer',
         second: 'required second_range unsigned_integer',
-        'ext[mediaId]': 'required'
+        media: 'required'
       },
       messages: {
         minute: {
@@ -50,7 +51,7 @@ export default class Audio {
           second_range: Translator.trans('activity.audio_manage.second_range_error_hint'),
           unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
         },
-        'ext[mediaId]': Translator.trans('activity.audio_manage.media_error_hint')
+        media: Translator.trans('activity.audio_manage.media_error_hint')
       }
     });
 
@@ -89,15 +90,7 @@ export default class Audio {
       };
       placeMediaAttr(file);
 
-      $('[name="ext[mediaId]"]').val(file.source);
       $('#step2-form').valid();
-      if (file.source == 'self') {
-        $('#ext_mediaId').val(file.id);
-        $('#ext_mediaUri').val('');
-      } else {
-        $('#ext_mediaId').val('');
-        $('#ext_mediaUri').val(file.uri);
-      }
     };
     fileChooser.on('select', onSelectFile);
   }

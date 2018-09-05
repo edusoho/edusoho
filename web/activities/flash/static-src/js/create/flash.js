@@ -2,12 +2,12 @@ import FileChooser from 'app/js/file-chooser/file-choose';
 import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Flash {
   constructor() {
-    this.$mediaId = $('[name="mediaId"]');
+    this.mediaId = $('#step2-form').data('mediaId');
     this.init();
     this.initEvent();
   }
   init() {
-    showChooserType(this.$mediaId);
+    showChooserType(this.mediaId);
     this.initStep2Form();
     this.initFileChooser();
   }
@@ -36,10 +36,10 @@ export default class Flash {
           trim: true,
           course_title: true,
         },
-        mediaId: 'required',
+        media: 'required',
       },
       messages: {
-        mediaId: {
+        media: {
           required: Translator.trans('activity.flash_manage.media_error_hint')
         }
       }
@@ -52,12 +52,8 @@ export default class Flash {
     let fileChooser = new FileChooser();
     fileChooser.on('select', (file) => {
       chooserUiClose();
-      this.$mediaId.val(file.id);
-      $('#step2-form').valid();
       $('[name="media"]').val(JSON.stringify(file));
-      if(this.validator2) {
-        this.validator2.form();
-      }
+      $('#step2-form').valid();
     });
   }
 }
