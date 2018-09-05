@@ -232,6 +232,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'enableFinish',
                 'vipLevelId',
                 'buyExpiryTime',
+                'learnMode',
                 'buyable',
                 'expiryStartDate',
                 'expiryEndDate',
@@ -251,6 +252,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
+
+        if ('draft' == $oldCourse['status']) {
+            $fields['learnMode'] = isset($fields['learnMode']) ? $fields['learnMode'] : $oldCourse['learnMode'];
+        } else {
+            $fields['learnMode'] = $oldCourse['learnMode'];
         }
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
@@ -2122,7 +2129,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $tasks = ArrayToolkit::index($tasks, 'activityId');
 
             $activities = array_filter($activities, function ($activity) use ($tasks) {
-                return $tasks[$activity['id']]['status'] === 'published';
+                return 'published' === $tasks[$activity['id']]['status'];
             });
             //返回有云视频任务的课程
             $activities = ArrayToolkit::index($activities, 'fromCourseId');
