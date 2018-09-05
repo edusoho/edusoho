@@ -9,7 +9,7 @@ const state = {
   taskId: 0 // 任务id
 };
 
-const hasJoinedCourse = course => course.access.code === 'member.member_exist';
+const hasJoinedCourse = course => course.member;
 
 const mutations = {
   [types.GET_COURSE_DETAIL](currentState, payload) {
