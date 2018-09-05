@@ -1,7 +1,7 @@
 # 上报页面停留时长（学习时间）及观看时长（音视频有观看时长）
 
 api-version: 3
-api-url: api/courses/1/tasks/1/events/doing
+api-url: /api/courses/1/tasks/1/events/doing
 api-method: PATCH
 api-authorized: false
 api-login: true

@@ -54,16 +54,13 @@ class CourseTaskEvent extends AbstractResource
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        // TODO  API无session，无法与Web端业务一致
-        $data = array(
-            'lastTime' => $request->request->get('lastTime', time()),
-        );
-
+        $lastTime = $request->request->get('lastTime', time());
         $watchTime = $request->request->get('watchTime', 0);
+
+        $data['lastTime'] = array('lastTime' => $lastTime);
         if (!empty($watchTime)) {
             $data['events']['watching']['watchTime'] = $watchTime;
         }
-
         $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
 
         if (self::EVENT_FINISH == $result['status']) {
