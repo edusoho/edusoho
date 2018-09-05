@@ -40,7 +40,10 @@
           <div class="section-right">
             <el-button type="info" size="mini" @click="openModal" v-show="!courseLinkText">选择课程</el-button>
             <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
-              <span class="text-content ellipsis">{{courseLinkText}}</span>
+              <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+                <span slot="content">{{courseLinkText}}</span>
+                <span>{{ courseLinkText }}</span>
+              </el-tooltip>
             </el-tag>
           </div>
         </div>
@@ -123,7 +126,7 @@ export default {
     courseLinkText() {
       if (!this.courseSets[0]) return
 
-      return this.courseSets[0] ? this.courseSets[0].title || this.courseSets[0].courseSetTitle : '';
+      return this.courseSets[0].displayedTitle;
     }
   },
   watch: {

@@ -10,12 +10,22 @@
     <draggable v-model="courseSets">
       <div class="course-table__tr" v-for="(course, courseIndex) in courseSets" :key="courseIndex">
         <div class="tr-content">
-          <span class="course-table__td text-overflow"
-            v-for="(item, index) in head"
-            :class="[ tdClass(item.col), { 'delete': head[index].label === 'delete' }]"
-            @click="deleteItem(head[index].label === 'delete', courseIndex)">
-            {{ getContext(course, head[index].label) }}
-          </span>
+          <template v-for="(item, index) in head">
+            <span class="course-table__td text-overflow"
+              v-if="head[index].label !== 'displayedTitle'"
+              :class="[ tdClass(item.col), { 'delete': head[index].label === 'delete' }]"
+              @click="deleteItem(head[index].label === 'delete', courseIndex)">
+              {{ getContext(course, head[index].label) }}
+            </span>
+            <el-tooltip
+              v-if="head[index].label === 'displayedTitle'"
+              class="text-content td-col-5"
+              placement="top-start"
+              effect="dark">
+              <span slot="content">{{ getContext(course, head[index].label) }}</span>
+              <span class="course-table__td text-overflow">{{ getContext(course, head[index].label) }}</span>
+            </el-tooltip>
+          </template>
         </div>
       </div>
     </draggable>
