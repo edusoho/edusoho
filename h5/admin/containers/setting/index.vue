@@ -9,7 +9,7 @@
         <draggable
           v-model="modules"
           :options="{
-            filter: '.module-frame__setting',
+            filter: '.module-frame__setting, .find-footer',
             preventOnFilter: false
           }">
           <module-template v-for="(module, index) in modules"
