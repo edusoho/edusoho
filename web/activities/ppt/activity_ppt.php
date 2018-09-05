@@ -93,6 +93,16 @@ class activity_ppt extends Activity
 
     public function update($targetId, &$fields, $activity)
     {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $media = json_decode($fields['media'], true);
+
+        if (empty($media['id'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $fields['mediaId'] = $media['id'];
+
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
@@ -150,5 +160,4 @@ class activity_ppt extends Activity
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
-
 }
