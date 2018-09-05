@@ -57,7 +57,7 @@ class CourseTaskEvent extends AbstractResource
         $lastTime = $request->request->get('lastTime', time());
         $watchTime = $request->request->get('watchTime', 0);
 
-        $data['lastTime'] = array('lastTime' => $lastTime);
+        $data = array('lastTime' => $lastTime);
         if (!empty($watchTime)) {
             $data['events']['watching']['watchTime'] = $watchTime;
         }
