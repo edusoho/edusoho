@@ -38,4 +38,6 @@ export default (data) => {
       return true;
     }
   }
+
+  return false;
 }

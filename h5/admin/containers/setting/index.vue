@@ -77,6 +77,7 @@ export default {
       title: 'EduSoho 微网校',
       modules: [],
       saveFlag: false,
+      incomplete: true,
       currentModuleIndex: '0',
       items,
       moduleItems: [{
@@ -130,8 +131,8 @@ export default {
     },
     updateModule(data, index) {
       // 更新模块
-      // this.saveFlag = false;
       console.log('updateModule');
+      this.incomplete = data.incomplete;
     },
     removeModule(data, index) {
       // 删除一个模块
@@ -200,35 +201,37 @@ export default {
         data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
       }
 
-      this.saveDraft({
-        data,
-        mode,
-        portal: 'h5',
-        type: 'discovery',
-      }).then(() => {
-        if (isPublish) {
-          this.$message({
-            message: '发布成功',
-            type: 'success'
-          });
-          return;
-        }
-
-        this.$store.commit(types.UPDATE_DRAFT, data);
-        this.$router.push({
-          name: 'preview',
-          query: {
-            times: 10,
-            preview: isPublish ? 0 : 1,
-            duration: 60 * 5,
+      if (!this.incomplete) {
+        this.saveDraft({
+          data,
+          mode,
+          portal: 'h5',
+          type: 'discovery',
+        }).then(() => {
+          if (isPublish) {
+            this.$message({
+              message: '发布成功',
+              type: 'success'
+            });
+            return;
           }
-        });
-      }).catch(err => {
-        this.$message({
-          message: err.message || '发布失败，请重新尝试',
-          type: 'error'
-        });
-      })
+
+          this.$store.commit(types.UPDATE_DRAFT, data);
+          this.$router.push({
+            name: 'preview',
+            query: {
+              times: 10,
+              preview: isPublish ? 0 : 1,
+              duration: 60 * 5,
+            }
+          });
+        }).catch(err => {
+          this.$message({
+            message: err.message || '发布失败，请重新尝试',
+            type: 'error'
+          });
+        })
+      }
     }
   }
 }
