@@ -403,7 +403,12 @@ export default class Manage {
       classList = lessonIconBtn[0].classList;
     } else {
       //单任务时，课时节点上显示任务的图标
-      classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
+      let esIcon = container.find('.js-lesson-box').find('.es-icon');
+      if (esIcon.length == 0) {
+        classList = [];
+      } else {
+        classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
+      }
     }
 
     for (let index = 0; index < classList.length; index++) {

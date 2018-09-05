@@ -81,6 +81,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getDefaultCoursesByCourseSetIds($courseSetIds);
     }
 
+    public function setDefaultCourse($courseSetId, $id)
+    {
+        $course = $this->getDefaultCourseByCourseSetId($courseSetId);
+        $this->getCourseDao()->update($course['id'], array('isDefault' => 0, 'courseType' => 'normal'));
+        $this->getCourseDao()->update($id, array('isDefault' => 1, 'courseType' => 'default'));
+    }
+
+    public function getSeqMaxPublishedCourseByCourseSetId($courseSetId)
+    {
+        $courses = $this->searchCourses(
+            array(
+                'courseSetId' => $courseSetId,
+                'status' => 'published',
+            ),
+            array('seq' => 'DESC'),
+            0,
+            1
+        );
+
+        return array_shift($courses);
+    }
+
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
         $courses = $this->searchCourses(
@@ -2123,7 +2145,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $tasks = ArrayToolkit::index($tasks, 'activityId');
 
             $activities = array_filter($activities, function ($activity) use ($tasks) {
-                return $tasks[$activity['id']]['status'] === 'published';
+                return 'published' === $tasks[$activity['id']]['status'];
             });
             //返回有云视频任务的课程
             $activities = ArrayToolkit::index($activities, 'fromCourseId');
