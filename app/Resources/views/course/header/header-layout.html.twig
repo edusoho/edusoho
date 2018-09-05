@@ -10,7 +10,6 @@
     {% endfor %}
     {% if page_type|default('guest') == 'member' %}
       <li><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }} </a></li>
-      <li class="active">{{ course.title }} </li>
     {% else %}
       <li class="active">{{ courseSet.title }} </li>
     {% endif %}

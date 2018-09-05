@@ -255,6 +255,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'enableFinish',
                 'vipLevelId',
                 'buyExpiryTime',
+                'learnMode',
                 'buyable',
                 'expiryStartDate',
                 'expiryEndDate',
@@ -274,6 +275,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
+
+        if ('draft' == $oldCourse['status']) {
+            $fields['learnMode'] = isset($fields['learnMode']) ? $fields['learnMode'] : $oldCourse['learnMode'];
+        } else {
+            $fields['learnMode'] = $oldCourse['learnMode'];
         }
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
