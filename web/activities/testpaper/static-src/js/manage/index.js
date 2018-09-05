@@ -50,7 +50,7 @@ class Testpaper {
           maxlength: 50,
           course_title: true,
         },
-        mediaId: {
+        testpaperId: {
           required: true,
           digits:true
         },
@@ -75,7 +75,7 @@ class Testpaper {
         }
       },
       messages: {
-        mediaId: {
+        testpaperId: {
           required:Translator.trans('activity.testpaper_manage.media_error_hint'),
         },
         redoInterval: {
