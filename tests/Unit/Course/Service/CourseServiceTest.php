@@ -390,10 +390,15 @@ class CourseServiceTest extends BaseTestCase
     {
         $courseSet = $this->createNewCourseSet();
         $course = $this->defaultCourse('course title 1', $courseSet, 0);
-        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->createCourse($course);
 
         $course = $this->defaultCourse('course title 2', $courseSet, 0);
-        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->createCourse($course);
+
+        $this->getCourseService()->publishCourse(1);
+        $this->getCourseService()->publishCourse(2);
+        $this->getCourseService()->publishCourse(3);
+
         $this->getCourseService()->sortCourse($courseSet['id'], array(3, 2, 1));
         $courses = $this->getCourseService()->findCoursesByIds(array(1, 2, 3));
         $this->assertEquals(3, $courses[3]['seq']);
