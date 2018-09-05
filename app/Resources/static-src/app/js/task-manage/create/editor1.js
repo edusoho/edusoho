@@ -80,13 +80,16 @@ class Editor {
 
   _onSetType(event) {
     let $this = $(event.currentTarget).addClass('active');
-    $this.siblings().removeClass('active');
-    this.$finishIframe.attr('src', '');
     let type = $this.data('type');
-    $('[name="mediaType"]').val(type);
-    this.taskConfig.contentUrl = $this.data('contentUrl');
-    this.taskConfig.finishUrl = $this.data('finishUrl');
-    this.type = type;
+    if (this.type != type) {
+      $this.siblings().removeClass('active');
+      this.$finishIframe.attr('src', '');
+      $('[name="mediaType"]').val(type);
+      this.taskConfig.contentUrl = $this.data('contentUrl');
+      this.taskConfig.finishUrl = $this.data('finishUrl');
+      this.type = type;
+    }
+
     this._onNext(event);
   }
 

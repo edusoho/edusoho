@@ -99,6 +99,8 @@ class ActivityCopy extends AbstractEntityCopy
             'length',
             'startTime',
             'endTime',
+            'finishType',
+            'finishData',
         );
     }
 

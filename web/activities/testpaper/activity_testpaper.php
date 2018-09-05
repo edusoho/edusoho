@@ -41,16 +41,17 @@ class activity_testpaper extends Activity
             return null;
         }
 
-        $ext = $this->get($activity['mediaId']);
+        $activity = $this->get($activity['mediaId']);
+        $testpaper = $activity['testpaper'];
 
         $newExt = array(
-            'mediaId' => $config['testId'],
-            'doTimes' => $ext['doTimes'],
-            'redoInterval' => $ext['redoInterval'],
-            'limitedTime' => $ext['limitedTime'],
-            'checkType' => $ext['checkType'],
-            'requireCredit' => $ext['requireCredit'],
-            'testMode' => $ext['testMode'],
+            'testpaperId' => $testpaper['id'],
+            'doTimes' => $activity['doTimes'],
+            'redoInterval' => $activity['redoInterval'],
+            'limitedTime' => $activity['limitedTime'],
+            'checkType' => $activity['checkType'],
+            'requireCredit' => $activity['requireCredit'],
+            'testMode' => $activity['testMode'],
         );
 
         return $this->create($newExt);
@@ -65,7 +66,7 @@ class activity_testpaper extends Activity
             $activity['fromCourseSetId']
         );
 
-        $ext['mediaId'] = $testPaper['id'];
+        $ext['testpaperId'] = $testPaper['id'];
         $ext['doTimes'] = $sourceExt['doTimes'];
         $ext['redoInterval'] = $sourceExt['redoInterval'];
         $ext['limitedTime'] = $sourceExt['limitedTime'];
@@ -167,7 +168,7 @@ class activity_testpaper extends Activity
 
         $filterFields['mediaId'] = $filterFields['testpaperId'];
         unset($filterFields['testpaperId']);
-        
+
         return $filterFields;
     }
 
