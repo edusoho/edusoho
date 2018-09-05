@@ -101,8 +101,9 @@ export default {
     updateHandler() {
     },
     triggerValidate() {
-      this.module.incomplete = validate(this.module, this.saveFlag);
+      const incomplete = validate(this.module, this.saveFlag);
       this.$emit('updateModule', {
+        incomplete,
         updateModule: this.module,
       });
     },

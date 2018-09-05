@@ -50,9 +50,15 @@
 
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
-      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="reset">重 置</el-button>
-      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="save('draft')">预 览</el-button>
-      <el-button class="setting-button-group__button text-medium" type="primary" size="mini" @click="save('published')">发 布</el-button>
+      <el-button
+        class="setting-button-group__button text-medium btn-border-primary"
+        size="mini" @click="reset" :disabled="isLoading">重 置</el-button>
+      <el-button
+        class="setting-button-group__button text-medium btn-border-primary"
+        size="mini" @click="save('draft')" :disabled="isLoading">预 览</el-button>
+      <el-button
+        class="setting-button-group__button text-medium" type="primary"
+        size="mini" @click="save('published')" :disabled="isLoading">发 布</el-button>
     </div>
   </div>
 </template>
@@ -65,7 +71,7 @@ import ModuleCounter from '@admin/utils/module-counter';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import draggable from 'vuedraggable';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
@@ -78,6 +84,7 @@ export default {
       modules: [],
       saveFlag: 0,
       incomplete: true,
+      validateResults: [],
       currentModuleIndex: '0',
       items,
       moduleItems: [{
@@ -97,6 +104,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['isLoading']),
     footerItemStyle() {
       return { width: `${100/items.length}%` }
     },
@@ -134,6 +142,7 @@ export default {
     },
     updateModule(data, index) {
       // 更新模块
+      this.validateResults[index] = data.incomplete;
       console.log('updateModule');
     },
     removeModule(data, index) {
@@ -242,8 +251,8 @@ export default {
     },
     validate() {
       for (var i = 0; i < this.modules.length; i++) {
-        if (this.modules[i].incomplete) {
-          this.incomplete = this.modules[i].incomplete
+        if (this.validateResults[i]) {
+          this.incomplete = this.validateResults[i]
           return;
         }
       }
