@@ -93,8 +93,8 @@ class Course extends AbstractResource
         $conditions['excludeTypes'] = array('reservation');
         if (!empty($conditions['lastDays'])) {
             $timeRange = TimeMachine::getTimeRangeByDays($conditions['lastDays']);
-            $conditions['otherStartTime'] = $timeRange['startTime'];
-            $conditions['otherEndTime'] = $timeRange['endTime'];
+            $conditions['outerStartTime'] = $timeRange['startTime'];
+            $conditions['outerEndTime'] = $timeRange['endTime'];
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
