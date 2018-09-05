@@ -91,7 +91,14 @@ export default {
       this.isActive = true;
     },
     updateHandler(data, index) {
-      this.$emit('updateModule', data);
+      let incompleteBoolean = true;
+      if (this.saveFlag) {
+        incompleteBoolean = validate(this.module);
+      }
+      this.$emit('updateModule', {
+        updateModule: data,
+        incomplete: incompleteBoolean
+      });
     },
     handleRemove(data, index) {
       this.$emit('removeModule', data);
