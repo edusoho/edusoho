@@ -214,7 +214,20 @@ class CourseInfo {
       initTags();
     }
 
+    this.changeStudentNumTip();
+
     this.saveForm();
+  }
+
+  changeStudentNumTip() {
+    const $maxField = $('#maxStudentNum-field');
+    if ($maxField.length > 0) {
+      $maxField.on('blur', () => {
+        if (!this.validator.element($maxField)) {
+          $maxField.parent().siblings('.js-course-rule').find('p').html('');
+        }
+      });
+    }
   }
 
   initCkeditor() {
