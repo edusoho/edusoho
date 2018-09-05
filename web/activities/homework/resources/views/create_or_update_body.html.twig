@@ -14,7 +14,7 @@
       <div class="form-group">
         <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.info'|trans}}</label></div>
         <div class="col-sm-10 controls">
-          <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ homework.description|default('') }}</textarea>
+          <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.ext.description|default('') }}</textarea>
         </div>
       </div>
 
