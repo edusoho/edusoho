@@ -220,6 +220,7 @@ class CourseInfo {
   initCkeditor() {
     const $summaryField = $('#courseset-summary-field');
     const summaryLength = $summaryField.length;
+    const uploadUrl = $summaryField.data('imageUploadUrl');
     if (!summaryLength) {
       return;
     }
@@ -228,7 +229,7 @@ class CourseInfo {
       allowedContent: true,
       toolbar: 'Detail',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: this.uploadUrl
+      filebrowserImageUploadUrl: uploadUrl
     });
 
     self.editor.on('blur', () => {
