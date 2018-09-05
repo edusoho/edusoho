@@ -84,6 +84,7 @@ class CourseExtension extends \Twig_Extension
                 $results[] = array(
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
+                    'published_number' => empty($item['published_number']) ? 0 : $item['published_number'],
                     'title' => $item['title'],
                     'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
                     'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],

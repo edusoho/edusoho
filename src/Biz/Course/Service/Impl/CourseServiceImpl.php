@@ -25,6 +25,7 @@ use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -2261,12 +2262,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
-    public function changeShowPublishLesson($courseId, $status)
+    public function changeHidePublishLesson($courseId, $status)
     {
         $this->tryManageCourse($courseId);
-
-        $course = $this->getCourseDao()->update($courseId, array('isShowUnpublish' => $status));
-
+        $course = $this->getCourseDao()->update($courseId, array('isHideUnpublish' => $status));
+        $this->updateAllLessonsPublishedNum($courseId);
         $this->dispatch('course.change.showPublishLesson', new Event($course));
     }
 
@@ -2610,5 +2610,32 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->tryManageCourse($courseId, $courseSetId);
+    }
+
+    private function updateAllLessonsPublishedNum($courseId)
+    {
+        $lessons = $this->getChapterDao()->search(
+            array('courseId' => $courseId, 'type' => 'lesson'),
+            array(),
+            0,
+            10000
+        );
+
+        $publishedNum = 1;
+
+        $sortedLessons = ArrayToolkit::sortPerArrayValue($lessons, 'seq');
+
+        $batchHelper = new BatchUpdateHelper($this->getChapterDao());
+
+        foreach ($sortedLessons as $lesson) {
+            if ('published' == $lesson['status'] && !$lesson['isOptional']) {
+                $batchHelper->add('id', $lesson['id'], array('published_number' => $publishedNum));
+                ++$publishedNum;
+            } else {
+                $batchHelper->add('id', $lesson['id'], array('published_number' => 0));
+            }
+        }
+
+        $batchHelper->flush();
     }
 }

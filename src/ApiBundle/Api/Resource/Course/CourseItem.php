@@ -87,7 +87,7 @@ class CourseItem extends AbstractResource
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if (!$course['isShowUnpublish']) {
+        if ($course['isHideUnpublish']) {
             return $this->filterUnPublishTask($items);
         }
 
