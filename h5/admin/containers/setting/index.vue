@@ -133,8 +133,6 @@ export default {
     },
     addModule(data, index) {
       // 新增一个模块
-      this.typeCount.addByType(data.default.type);
-
       if (this.typeCount.getCounterByType(data.default.type) >= 5) {
         this.$message({
           message: '同一类型组件最多添加 5 个',
@@ -142,6 +140,7 @@ export default {
         })
         return;
       }
+      this.typeCount.addByType(data.default.type);
 
       const defaultString = JSON.stringify(this.moduleItems[index].default); // 需要一个深拷贝对象
       const defaultCopied = JSON.parse(defaultString);

@@ -9,18 +9,22 @@ class ModuleCounter {
     return this.moduleCounter[type] || 0;
   }
   addByType(type) {
-    if (!(this.moduleCounter[type] >= 0)) {
-      this.moduleCounter[type] = 0
+    const counter = this.moduleCounter[type];
+    if (isNaN(counter) || counter < 0) {
+      this.moduleCounter[type] = 1;
       return 0;
     }
-    return ++this.moduleCounter[type];
+    this.moduleCounter[type] = counter + 1;
+    return this.moduleCounter[type];
   }
   removeByType(type) {
-    if (!(this.moduleCounter[type] >= 0)) {
-      this.moduleCounter[type] = 0
+    const counter = this.moduleCounter[type];
+    if (isNaN(counter) || counter < 0) {
+      this.moduleCounter[type] = 0;
       return 0;
     }
-    return --this.moduleCounter[type];
+    this.moduleCounter[type] = counter - 1;
+    return this.moduleCounter[type];
   }
 }
 
