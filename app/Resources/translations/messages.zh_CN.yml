@@ -1837,7 +1837,7 @@ course.plan_task.activity_manage.exercise.info_tips: >
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.exercise.finished_condition: 提交试卷
+course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
 course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
