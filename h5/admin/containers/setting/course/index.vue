@@ -25,7 +25,7 @@
         <div class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left">课程分类：</p>
           <div class="section-right">
-            <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
+            <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select :expand-trigger="'hover'"></el-cascader>
             </el-input>
             <div class="required-option" v-show="sourceType === 'custom'">
               <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
