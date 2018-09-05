@@ -172,7 +172,6 @@ class LessonManageController extends BaseController
             'fromCourseSetId' => $course['courseSetId'],
             'courseSetType' => 'normal',
             'media' => json_encode(array('source' => 'self', 'id' => $file['id'], 'name' => $file['filename'])),
-            'mediaId' => $file['id'],
             'type' => $file['type'],
             'length' => $file['length'],
             'title' => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
