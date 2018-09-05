@@ -1,6 +1,7 @@
 <template>
   <div class="course-table">
     <div class="course-table__th">
+      <!-- 遍历表头数据 -->
       <span class="course-table__td"
         v-for="(item, index) in head"
         :class="tdClass(item.col)"
@@ -10,6 +11,7 @@
     <draggable v-model="courseSets">
       <div class="course-table__tr" v-for="(course, courseIndex) in courseSets" :key="courseIndex">
         <div class="tr-content">
+          <!-- 遍历表格内数据 -->
           <template v-for="(item, index) in head">
             <span class="course-table__td text-overflow"
               v-if="head[index].label !== 'displayedTitle'"
@@ -19,6 +21,7 @@
             </span>
             <el-tooltip
               v-if="head[index].label === 'displayedTitle'"
+              :disabled="getContext(course, head[index].label).length <= 20"
               class="text-content td-col-5"
               placement="top-start"
               effect="dark">
@@ -80,7 +83,7 @@ export default {
       set(courses) {
         this.$emit('updateCourses', courses);
       }
-    }
+    },
   },
   methods: {
     tdClass(ratio) {
