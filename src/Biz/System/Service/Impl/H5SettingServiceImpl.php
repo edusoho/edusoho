@@ -23,8 +23,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 if (!empty($discoverySetting['data']['lastDays'])) {
                     $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
-                    $conditions['otherStartTime'] = $timeRange['startTime'];
-                    $conditions['otherEndTime'] = $timeRange['endTime'];
+                    $conditions['outerStartTime'] = $timeRange['startTime'];
+                    $conditions['outerEndTime'] = $timeRange['endTime'];
                 }
 
                 $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
