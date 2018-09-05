@@ -1414,11 +1414,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function searchBySort($conditions, $sort, $start, $limit)
     {
-        if (array_key_exists('studentNum', $sort) && array_key_exists('otherEndTime', $conditions)) {
+        if (array_key_exists('studentNum', $sort) && array_key_exists('outerEndTime', $conditions)) {
             return $this->searchByStudentNumAndTimeZone($conditions, $start, $limit);
         }
 
-        if (array_key_exists('rating', $sort) && array_key_exists('otherEndTime', $conditions)) {
+        if (array_key_exists('rating', $sort) && array_key_exists('outerEndTime', $conditions)) {
             return $this->searchByRatingAndTimeZone($conditions, $start, $limit);
         }
 
