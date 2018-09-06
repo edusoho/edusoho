@@ -24,7 +24,6 @@ export default class Video {
   showChooseContent() {
     $('#iframe-content').on('click', '.js-choose-trigger', (event) => {
       FileChooser.openUI();
-      $('[name="ext[mediaSource]"]').val(null);
     });
   }
 
@@ -42,8 +41,7 @@ export default class Video {
         },
         minute: 'required unsigned_integer',
         second: 'required second_range',
-        'ext[mediaSource]': 'required',
-        'ext[finishDetail]': 'unsigned_integer'
+        media: 'required',
       },
       messages: {
         minute: {
@@ -53,7 +51,7 @@ export default class Video {
           required: Translator.trans('activity.video_manage.length_unsigned_integer_error_hint'),
           second_range: Translator.trans('activity.video_manage.second_range_error_hint'),
         },
-        'ext[mediaSource]': Translator.trans('activity.video_manage.media_error_hint'),
+        media: Translator.trans('activity.video_manage.media_error_hint'),
       }
     });
   }

@@ -66,6 +66,9 @@ class LessonManageController extends BaseController
             $formData['mode'] = $mode;
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
 
+            $defaultFinishCondition = $this->getDefaultFinishCondition($formData['mediaType']);
+            $formData = array_merge($defaultFinishCondition, $formData);
+
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
             return $this->getTaskJsonView($course, $task);
@@ -172,7 +175,6 @@ class LessonManageController extends BaseController
             'fromCourseSetId' => $course['courseSetId'],
             'courseSetType' => 'normal',
             'media' => json_encode(array('source' => 'self', 'id' => $file['id'], 'name' => $file['filename'])),
-            'mediaId' => $file['id'],
             'type' => $file['type'],
             'length' => $file['length'],
             'title' => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
