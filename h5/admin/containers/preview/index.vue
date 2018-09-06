@@ -7,8 +7,8 @@
       </div>
       <div class="code-container">
         <div class="code-item">
-          <img class="code-img" :src="qrcode">
-          <div>手机扫码预览</div>
+          <div class="code-img-container"><img class="code-image" :src="qrcode"></div>
+          <div class="help-text">扫描二维码在手机端预览<div>二维码60分钟内首次扫描有效</div></div>
         </div>
         <el-button class="mrs btn-border-primary btn-common" @click="edit">返回编辑</el-button>
         <el-button class="btn-common btn-primary" @click="publish">发布</el-button>

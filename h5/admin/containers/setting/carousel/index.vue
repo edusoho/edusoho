@@ -11,7 +11,8 @@
     </div>
 
     <div slot="setting" class="carousel-allocate">
-      <header class="title">轮播图设置</header>
+      <header class="title">
+        轮播图设置<div class="help-text">建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB</div></header>
       <div v-for="(item, index) in copyModuleData.data" :key="index">
         <item
           :item="item"

@@ -26,6 +26,7 @@
           @select="selectHandler"
         ></el-autocomplete>
       </div>
+      <div class="help-text mbs">拖动课程名称可调整排序</div>
     </div>
     <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">

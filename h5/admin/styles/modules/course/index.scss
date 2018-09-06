@@ -55,14 +55,6 @@
       }
     }
   }
-
-  .course-empty {
-    line-height: 50px;
-    margin: 0 10px 15px;
-    background-color: #f5f5f5;
-    font-size: 14px;
-    text-align: center;
-  }
 }
 
 
@@ -89,6 +81,11 @@
       border-radius: 2px;
       font-size: 10px;
     }
+  }
+  &__empty {
+    line-height: 50px;
+    margin: 0 10px 15px;
+    font-size: 14px;
   }
 }
 

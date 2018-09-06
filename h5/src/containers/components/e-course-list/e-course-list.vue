@@ -12,6 +12,7 @@
       <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type" :feedback="feedback">
       </e-course>
     </div>
+    <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
   </div>
 </template>
 
@@ -66,6 +67,12 @@
         get() {
           return this.courseList.categoryId;
         },
+      },
+      courseItemData: {
+        get() {
+          return !this.courseList.items.length ? true : false;
+        },
+        set() {}
       },
     },
     watch: {

@@ -143,7 +143,7 @@ export default {
     updateModule(data, index) {
       // 更新模块
       this.validateResults[index] = data.incomplete;
-      console.log('updateModule');
+      console.log('updateModule', data);
     },
     removeModule(data, index) {
       // 删除一个模块
