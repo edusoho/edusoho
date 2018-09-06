@@ -59,7 +59,7 @@
           </div>
         </div>
         <!-- 显示个数 -->
-        <div class="course-item-setting__section mtl clearfix">
+        <div v-show="sourceType === 'condition'" class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left">显示个数：</p>
           <div class="section-right">
             <el-select v-model="limit" placeholder="请选择个数" size="mini">
@@ -258,6 +258,9 @@ export default {
       },
       immediate: true,
     },
+    sourceType(value) {
+      this.limit = value === 'condition' ? 4 : 8;
+    }
   },
   methods: {
     ...mapActions(['getCourseList']),
