@@ -38,11 +38,10 @@ class Qrcode extends AbstractResource
         if (empty($params['times']) && empty($params['duration'])) {
             return $params;
         }
-        $user = $this->getCurrentUser();
         $token = $this->getTokenService()->makeToken(
             'qrcode_url',
             array(
-                'userId' => $user['id'],
+                'userId' => 0,
                 'data' => array(),
                 'times' => empty($params['times']) ? 0 : $params['times'],
                 'duration' => empty($params['duration']) ? 0 : $params['duration'],

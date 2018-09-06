@@ -26,10 +26,6 @@ class PageDiscovery extends AbstractResource
             if (empty($token)) {
                 throw UserException::PERMISSION_DENIED();
             }
-            $user = $this->getUserService()->getUser($token['userId']);
-            if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-                throw UserException::PERMISSION_DENIED();
-            }
             $mode = 'draft';
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
