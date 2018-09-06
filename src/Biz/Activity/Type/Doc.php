@@ -95,6 +95,15 @@ class Doc extends Activity
 
     public function update($targetId, &$fields, $activity)
     {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $media = json_decode($fields['media'], true);
+
+        if (empty($media['id'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $fields['mediaId'] = $media['id'];
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
@@ -114,7 +123,6 @@ class Doc extends Activity
     public function get($targetId)
     {
         $activity = $this->getDocActivityDao()->get($targetId);
-
         $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
 
         return $activity;
@@ -127,7 +135,7 @@ class Doc extends Activity
         try {
             $files = $this->getUploadFileService()->findFilesByIds(
                 $mediaIds,
-                $showCloud
+                $showCloud = 1
             );
         } catch (CloudAPIIOException $e) {
             $files = array();
