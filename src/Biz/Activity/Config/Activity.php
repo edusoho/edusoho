@@ -94,13 +94,9 @@ class Activity
             return !empty($result) && $result >= $activity['finishData'];
         }
 
-        if ('end' === $activity['finishType']) {
-            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
-            return !empty($log);
-        }
-
-        return false;
+        return !empty($log);
     }
 
     public function get($targetId)
