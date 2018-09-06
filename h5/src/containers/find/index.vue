@@ -27,6 +27,7 @@
   import * as types from '@/store/mutation-types';
   import Api from '@/api';
   import { mapState } from 'vuex';
+  import { Toast } from 'vant';
 
   export default {
     components: {
@@ -69,7 +70,7 @@
             this.parts = Object.values(res);
           })
           .catch((err) => {
-            console.log(err, 'error');
+            Toast.fail(err.message);
           });
         return;
       }
@@ -79,7 +80,7 @@
           this.parts = Object.values(res);
         })
         .catch((err) => {
-          console.log(err, 'error');
+          Toast.fail(err.message);
         });
     },
     methods: {
