@@ -14,17 +14,13 @@ class Testpaper {
     this.initEvent();
     this.initStepForm2();
     window.ltc.on('getActivity', (msg) => {
-      if (this.validator.form()) {
-        window.ltc.emit('returnActivity', { valid:true, data: window.ltc.getFormSerializeObject($('#step2-form'))});
-      }
+      window.ltc.emit('returnActivity', { valid:this.validator.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
-      if (this.validator.form()) {
-        window.ltc.emit('returnValidate', { valid:true, context: {
-          score: $('#testpaper-media').find('option:selected').data('score')
-        }});
-      }
+      window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
+        score: $('#testpaper-media').find('option:selected').data('score')
+      }});
     });
   }
 

@@ -16,7 +16,7 @@ class Editor {
     this.$taskType = $taskType;
     this.$taskContent = $('#task-create-content');
     this.$taskFinish = $('#task-create-finish');
-
+    this.$taskSubmit = $('#course-tasks-submit');
     this.$contentIframe = $('#task-create-content-iframe');
     this.$finishIframe = $('#task-create-finish-iframe');
     $('#task-create-content-iframe, #task-create-finish-iframe').iFrameResize();
@@ -26,7 +26,7 @@ class Editor {
   }
 
   _initEvent() {
-    $('#course-tasks-submit').click(event => this._onSave());
+    this.$taskSubmit.click(event => this._onSave());
     $('#course-tasks-next').click(event => this._onNext(event));
     $('#course-tasks-prev').click(event => this._onPrev(event));
 
@@ -80,13 +80,16 @@ class Editor {
 
   _onSetType(event) {
     let $this = $(event.currentTarget).addClass('active');
-    $this.siblings().removeClass('active');
-    this.$finishIframe.attr('src', '');
     let type = $this.data('type');
-    $('[name="mediaType"]').val(type);
-    this.taskConfig.contentUrl = $this.data('contentUrl');
-    this.taskConfig.finishUrl = $this.data('finishUrl');
-    this.type = type;
+    if (this.type != type) {
+      $this.siblings().removeClass('active');
+      this.$finishIframe.attr('src', '');
+      $('[name="mediaType"]').val(type);
+      this.taskConfig.contentUrl = $this.data('contentUrl');
+      this.taskConfig.finishUrl = $this.data('finishUrl');
+      this.type = type;
+    }
+
     this._onNext(event);
   }
 
@@ -100,7 +103,7 @@ class Editor {
       window.ltc.emitChild('task-create-finish-iframe', 'getCondition');
       window.ltc.once('returnCondition', (msg) => {
         if (!msg.valid) {
-          resolve({});
+          reject();
           return;
         }
 
@@ -115,7 +118,7 @@ class Editor {
       window.ltc.emitChild('task-create-content-iframe', 'getActivity');
       window.ltc.once('returnActivity', (msg) => {
         if (!msg.valid) {
-          resolve({});
+          reject();
           return;
         }
 
@@ -125,20 +128,28 @@ class Editor {
   }
 
   async _onSave() {
-    let content = await this.getActivityContent();
-    let condition = await this.getActivityFinishCondition();
-
-    let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
-    $.post(this.taskConfig['saveUrl'], postData)
-      .done((response) => {
-        this.$element.modal('hide');
-        if (response) {
-          $('#sortable-list').trigger('addItem', response);
-        }
-      })
-      .fail((response) => {
-        $('#course-tasks-submit').attr('disabled', null);
-      });
+    this.$taskSubmit.attr('disabled', true);
+    let content;
+    await this.getActivityContent().then((data) => {
+      content = data;
+      return this.getActivityFinishCondition();
+    }).then((condition) => {
+      this.$taskSubmit.button('loading');
+      let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
+      $.post(this.taskConfig['saveUrl'], postData)
+        .done((response) => {
+          this.$element.modal('hide');
+          if (response) {
+            $('#sortable-list').trigger('addItem', response);
+          }
+        })
+        .fail((response) => {
+          this.$taskSubmit.button('reset');
+        });
+    }).catch(() => {
+      this.$taskSubmit.attr('disabled', false);
+      this.$taskSubmit.button('reset');
+    })
   }
 
   _switchPage() {

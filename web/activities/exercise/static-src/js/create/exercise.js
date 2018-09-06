@@ -15,15 +15,11 @@ export default class Exercise {
 
   _initEvent() {
     window.ltc.on('getActivity', (msg) => {
-      if (this.validator2.form()) {
-        window.ltc.emit('returnActivity', {valid:true,data:window.ltc.getFormSerializeObject($('#step2-form'))});
-      }
+      window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
-      if (this.validator2.form()) {
-        window.ltc.emit('returnValidate', { valid:true });
-      }
+      window.ltc.emit('returnValidate', {valid: this.validator2.form() });
     });
   }
 

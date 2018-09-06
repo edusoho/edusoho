@@ -100,10 +100,7 @@ class Activity
             return !empty($log);
         }
 
-        if ('default' === $activity['finishType']) {
-            //默认进入，即完成学习
-            return true;
-        }
+        return false;
     }
 
     public function get($targetId)

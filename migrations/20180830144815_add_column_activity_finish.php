@@ -13,11 +13,11 @@ class AddColumnActivityFinish extends Migration
         $db = $container['db'];
 
         if (!$this->isFieldExist('activity', 'finishType')) {
-            $db->exec("ALTER TABLE `activity` ADD COLUMN `finishType`  varchar(64)  NOT NULL DEFAULT 'default' COMMENT '任务完成条件类型';");
+            $db->exec("ALTER TABLE `activity` ADD COLUMN `finishType`  varchar(64)  NOT NULL DEFAULT 'time' COMMENT '任务完成条件类型';");
         }
 
         if (!$this->isFieldExist('activity', 'finishData')) {
-            $db->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '' COMMENT '任务完成条件数据';");
+            $db->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '1' COMMENT '任务完成条件数据';");
         }
     }
 

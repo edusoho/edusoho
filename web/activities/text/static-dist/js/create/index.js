@@ -73,25 +73,28 @@ load.then(function(){
     });
 
     window.ltc.on('getActivity', function(msg){
-      if (validate.form()) {
-        if (mediaId !== 0) {
-          window.ltc.api({
-            name: 'updateActivityResource',
-            pathParams: {
-              id: mediaId
-            },
-            data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId, 'activityId': context.activityId}),
-          }, function (result) {
-            window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), {mediaId: result.id})});
-          });
-        } else {
-          window.ltc.api({
-            name: 'saveActivityResource',
-            data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId}),
-          }, function (result) {
-            window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), {mediaId: result.id})});
-          });
-        }
+      if (!validate.form()) {
+        window.ltc.emit('returnActivity', { valid:false });
+        return;
+      }
+      
+      if (mediaId !== 0) {
+        window.ltc.api({
+          name: 'updateActivityResource',
+          pathParams: {
+            id: mediaId
+          },
+          data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId, 'activityId': context.activityId}),
+        }, function (result) {
+          window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), {mediaId: result.id})});
+        });
+      } else {
+        window.ltc.api({
+          name: 'saveActivityResource',
+          data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId}),
+        }, function (result) {
+          window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), {mediaId: result.id})});
+        });
       }
     });
 

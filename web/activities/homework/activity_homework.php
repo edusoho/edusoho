@@ -50,7 +50,6 @@ class activity_homework extends Activity
             'description' => $homework['description'],
             'questionIds' => $questionIds,
             'passedCondition' => $homework['passedCondition'],
-            'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'fromCourseSetId' => $newActivity['fromCourseSetId'],
             'copyId' => $config['isCopy'] ? $homework['id'] : 0,
@@ -102,7 +101,7 @@ class activity_homework extends Activity
             return false;
         }
 
-        if ('submit' === $homework['passedCondition']['type'] && in_array($result['status'], array('reviewing', 'finished'))) {
+        if ('submit' === $activity['finishType'] && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -115,11 +114,14 @@ class activity_homework extends Activity
             'title',
             'description',
             'questionIds',
-            'passedCondition',
             'fromCourseId',
             'fromCourseSetId',
             'copyId',
+            'passedCondition',
         ));
+        if (!empty($fields['finishType'])) {
+            $filterFields['passedCondition']['type'] = $fields['finishType'];
+        }
 
         $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
