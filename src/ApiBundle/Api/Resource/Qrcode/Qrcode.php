@@ -18,7 +18,7 @@ class Qrcode extends AbstractResource
         $token = $this->getTokenService()->makeToken(
             'qrcode',
             array(
-                'userId' => $user['id'],
+                'userId' => 0,
                 'data' => array(
                     'url' => $url,
                 ),
