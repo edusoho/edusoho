@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
-class CourseItemwithlesson extends CourseItem
+class CourseItemWithLesson extends CourseItem
 {
     protected function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
     {
