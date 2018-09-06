@@ -20,7 +20,7 @@
   },
   "finish_condition": [
     {
-      "type": "join",
+      "type": "submit",
       "describe": "course.plan_task.activity_manage.exercise.finished_condition"
     }
   ]
