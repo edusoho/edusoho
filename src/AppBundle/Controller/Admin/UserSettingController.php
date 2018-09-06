@@ -47,7 +47,7 @@ class UserSettingController extends BaseController
 
         $auth = array_merge($default, $auth);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
 
             if (!isset($defaultSetting['user_name'])) {
@@ -77,7 +77,7 @@ class UserSettingController extends BaseController
                 $authUpdate['welcome_methods'] = array();
             }
 
-            if ($authUpdate['register_protective'] == 'none') {
+            if ('none' == $authUpdate['register_protective']) {
                 $authUpdate['captcha_enabled'] = 0;
             } else {
                 $authUpdate['captcha_enabled'] = 1;
@@ -86,7 +86,6 @@ class UserSettingController extends BaseController
             $auth = array_merge($auth, $authUpdate);
             $this->getSettingService()->set('auth', $auth);
 
-            $this->getLogService()->info('system', 'update_settings', '更新注册设置', $auth);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -104,7 +103,7 @@ class UserSettingController extends BaseController
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $userDefaultSetting = $request->request->all();
 
             $userDefaultSetting = ArrayToolkit::parts($userDefaultSetting, array(
@@ -115,7 +114,6 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', '更新头像设置', $userDefaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -136,7 +134,6 @@ class UserSettingController extends BaseController
             $loginConnect = ArrayToolkit::trim($loginConnect);
             $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', '更新登录设置', $loginConnect);
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
@@ -166,7 +163,7 @@ class UserSettingController extends BaseController
 
         $setting = array_merge($default, $setting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting['mode'] = $data['mode'];
@@ -174,7 +171,7 @@ class UserSettingController extends BaseController
 
             $setting['partner_config']['discuz'] = $data['discuzConfig'];
 
-            if ($setting['mode'] == 'phpwind') {
+            if ('phpwind' == $setting['mode']) {
                 $setting['partner_config']['phpwind'] = $data['phpwind_config'];
                 $phpwindConfig = $data['phpwind_config'];
                 $configDirectory = $this->getParameter('kernel.root_dir').'/config/';
@@ -188,7 +185,6 @@ class UserSettingController extends BaseController
             }
 
             $this->getSettingService()->set('user_partner', $setting);
-            $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -253,7 +249,7 @@ class UserSettingController extends BaseController
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields = ArrayToolkit::index($userFields, 'fieldName');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $courseSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
             $courseSetting['userinfoFields'] = $request->request->get('userinfoFields');
             $courseSetting['userinfoFieldNameArray'] = $request->request->get('userinfoFieldNameArray');
@@ -274,7 +270,6 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('auth', $auth);
 
-            $this->getLogService()->info('system', 'update_settings', '更新用户信息设置', $auth);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -319,7 +314,7 @@ class UserSettingController extends BaseController
             $field['fieldName'] = '日期';
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
 
             if (isset($fields['enabled'])) {
@@ -347,7 +342,7 @@ class UserSettingController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $this->changeUserInfoFields($field, $type = 'delete');
 
             $this->getUserFieldService()->dropField($id);
@@ -373,7 +368,7 @@ class UserSettingController extends BaseController
 
         $this->changeUserInfoFields($field, $type = 'update');
 
-        if ($field == false) {
+        if (false == $field) {
             $this->setFlashMessage('danger', 'admin.setting.user.custom_fileds.empty');
         }
 
@@ -391,7 +386,7 @@ class UserSettingController extends BaseController
         $setting = array_merge($messageSettingDefault, $setting);
         $this->getSettingService()->set('message', $setting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
             $formData = ArrayToolkit::parts($formData, array('studentToStudent', 'studentToTeacher', 'teacherToStudent'));
             $formData = array_merge(array('studentToStudent' => 0, 'studentToTeacher' => 0, 'teacherToStudent' => 0), $formData);
@@ -433,26 +428,26 @@ class UserSettingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         if (isset($auth['registerFieldNameArray'])) {
-            if ($type == 'delete' || ($type == 'update' && !$fieldInfo['enabled'])) {
+            if ('delete' == $type || ('update' == $type && !$fieldInfo['enabled'])) {
                 foreach ($auth['registerFieldNameArray'] as $key => $value) {
                     if ($value == $fieldInfo['fieldName']) {
                         unset($auth['registerFieldNameArray'][$key]);
                     }
                 }
-            } elseif ($type == 'update' && $fieldInfo['enabled']) {
+            } elseif ('update' == $type && $fieldInfo['enabled']) {
                 $auth['registerFieldNameArray'][] = $fieldInfo['fieldName'];
                 $auth['registerFieldNameArray'] = array_unique($auth['registerFieldNameArray']);
             }
         }
 
         if (isset($courseSetting['userinfoFieldNameArray'])) {
-            if ($type == 'delete' || ($type == 'update' && !$fieldInfo['enabled'])) {
+            if ('delete' == $type || ('update' == $type && !$fieldInfo['enabled'])) {
                 foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
                     if ($value == $fieldInfo['fieldName']) {
                         unset($courseSetting['userinfoFieldNameArray'][$key]);
                     }
                 }
-            } elseif ($type == 'update' && $fieldInfo['enabled']) {
+            } elseif ('update' == $type && $fieldInfo['enabled']) {
                 $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
                 $courseSetting['userinfoFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
             }
@@ -482,7 +477,7 @@ class UserSettingController extends BaseController
             $default["{$type}_key"] = '';
             $default["{$type}_secret"] = '';
             $default["{$type}_set_fill_account"] = 0;
-            if ($type == 'weixinmob') {
+            if ('weixinmob' == $type) {
                 $default['weixinmob_mp_secret'] = '';
             }
         }
@@ -492,7 +487,7 @@ class UserSettingController extends BaseController
 
     private function decideEnabledLoginConnect($loginConnect)
     {
-        if ($loginConnect['enabled'] == 0) {
+        if (0 == $loginConnect['enabled']) {
             $loginConnect['weibo_enabled'] = 0;
             $loginConnect['qq_enabled'] = 0;
             $loginConnect['renren_enabled'] = 0;
@@ -507,10 +502,10 @@ class UserSettingController extends BaseController
         }
 
         if ($sum < 1) {
-            if ($loginConnect['enabled'] == 1) {
+            if (1 == $loginConnect['enabled']) {
                 $this->setFlashMessage('danger', 'site.third_party.login.way.no_choose');
             }
-            if ($loginConnect['enabled'] == 0) {
+            if (0 == $loginConnect['enabled']) {
                 $this->setFlashMessage('success', 'site.save.success');
             }
             $loginConnect['enabled'] = 0;

@@ -183,8 +183,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $this->getReviewDao()->delete($id);
 
         $this->dispatchEvent('course.review.delete', new Event($review));
-
-        $this->getLogService()->info('course', 'delete_review', "删除评价#{$id}");
     }
 
     /**

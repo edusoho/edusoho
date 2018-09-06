@@ -46,11 +46,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($id, $fields);
 
-        $this->getLogService()->info(
-            'course',
-            'recommend',
-            "推荐课程《{$courseSet['title']}》(#{$courseSet['id']}),序号为{$number}"
-        );
         $this->dispatchEvent(
             'courseSet.recommend',
             new Event(
@@ -76,7 +71,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields
         );
 
-        $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
         $this->dispatchEvent(
             'courseSet.recommend.cancel',
             new Event(
@@ -387,7 +381,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         //update courseSet defaultId
         $created = $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
-        $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;
     }
@@ -467,9 +460,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->updateCourseSummary($courseSet);
         }
         $this->updateCourseSerializeMode($courseSet, $fields);
+
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
-        $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})");
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -550,12 +543,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
 
-        $this->getLogService()->info(
-            'course',
-            'update_picture',
-            "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片",
-            $covers
-        );
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -568,8 +555,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($subCourseSets)) {
             throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
         }
-        $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
-
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
 
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
@@ -682,7 +667,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->commit();
 
             $this->dispatchEvent('course-set.publish', new Event($courseSet));
-            $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -711,8 +695,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->rollback();
             throw $exception;
         }
-
-        $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }

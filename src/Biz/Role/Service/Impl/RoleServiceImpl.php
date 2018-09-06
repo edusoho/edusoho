@@ -34,8 +34,6 @@ class RoleServiceImpl extends BaseService implements RoleService
             throw new UnexpectedValueException('缺乏必要字段');
         }
 
-        $this->getLogService()->info('role', 'create_role', '新增权限用户组"'.$role['name'].'"', $role);
-
         return $this->getRoleDao()->create($role);
     }
 
@@ -50,7 +48,6 @@ class RoleServiceImpl extends BaseService implements RoleService
 
         $fields['updatedTime'] = time();
         $role = $this->getRoleDao()->update($id, $fields);
-        $this->getLogService()->info('role', 'update_role', '更新权限用户组"'.$role['name'].'"', $role);
 
         return $role;
     }
@@ -60,7 +57,6 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = $this->checkChangeRole($id);
         if (!empty($role)) {
             $this->getRoleDao()->delete($id);
-            $this->getLogService()->info('role', 'delete_role', '删除角色"'.$role['name'].'"', $role);
         }
     }
 

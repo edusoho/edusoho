@@ -47,8 +47,6 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
 
         $fields = $this->_filterDraftFields($fields);
 
-        $this->getLogService()->info('course', 'update_draft', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
-
         return $this->getCourseDraftDao()->update($id, $fields);
     }
 

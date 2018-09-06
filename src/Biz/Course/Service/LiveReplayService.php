@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Service;
 
+use Biz\System\Annotation\Log;
+
 /**
  * 直播回放, lessonId 在type为liveOpen情况下是直播公开课的课时ID, type为live情况下是课程的activity的ID.
  *
@@ -103,5 +105,15 @@ interface LiveReplayService
 
     public function updateReplayShow($showReplayIds, $lessonId);
 
+    /**
+     * @param $liveId
+     * @param $courseId
+     * @param $lessonId
+     * @param $liveProvider
+     * @param $type
+     *
+     * @return mixed
+     * @Log(module="live",action="generate_live_replay",funcName="findReplaysByCourseIdAndLessonId",param="courseId,liveId,type")
+     */
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type);
 }

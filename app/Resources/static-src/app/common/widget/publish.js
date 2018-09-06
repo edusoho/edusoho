@@ -11,7 +11,7 @@ export const publish = (element, info) => {
       }).on('ok', () => {
         $.post($target.data('url'), (data) => {
           if (data.success) {
-            cd.message({ type: 'success', message: Translator.trans(info.success) });
+            cd.message({ type: 'success', message: Translator.trans(info.success), delay: '1000' });
             location.reload();
           } else {
             cd.message({ type: 'danger', message: Translator.trans(info.fail) + ':' + data.message, delay: '5000' });

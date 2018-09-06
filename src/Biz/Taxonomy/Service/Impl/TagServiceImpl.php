@@ -178,8 +178,6 @@ class TagServiceImpl extends BaseService implements TagService
         $tag = $this->setTagOrg($tag);
         $tag = $this->getTagDao()->create($tag);
 
-        $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
-
         return $tag;
     }
 
@@ -209,8 +207,6 @@ class TagServiceImpl extends BaseService implements TagService
                 )
             );
         }
-
-        $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
 
         return $tagGroup;
     }
@@ -263,8 +259,6 @@ class TagServiceImpl extends BaseService implements TagService
         $fields = ArrayToolkit::parts($fields, array('name'));
         $this->filterTagFields($fields, $tag);
 
-        $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
-
         return $this->getTagDao()->update($id, $fields);
     }
 
@@ -294,8 +288,6 @@ class TagServiceImpl extends BaseService implements TagService
 
         $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
 
-        $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$updatedTagGroup['name']}(#{$id})");
-
         return $updatedTagGroup;
     }
 
@@ -320,7 +312,6 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getTagDao()->delete($id);
 
         $this->dispatchEvent('tag.delete', array('tagId' => $id));
-        $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
     public function deleteTagGroup($id)
@@ -328,8 +319,6 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getTagGroupDao()->delete($id);
 
         $this->getTagGroupTagDao()->deleteByGroupId($id);
-
-        $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
 
     public function deleteTagOwnerRelationsByOwner(array $owner)

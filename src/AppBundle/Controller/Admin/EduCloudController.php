@@ -1239,7 +1239,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-open'])) {
             $status = $api->get('/me/email_account');
 
-            if (isset($status['error']) && $status['error']['code'] == 101) {
+            if (isset($status['error']) && 101 == $status['error']['code']) {
                 $site = $this->getSettingService()->get('site', array());
                 $result = $api->post('/email_accounts',
                     array('sender' => isset($site['name']) ? $site['name'] : '我的网校'));
@@ -1615,8 +1615,6 @@ class EduCloudController extends BaseController
             $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
-
-            $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
 
             $this->setCloudLiveLogo($capacity['provider'], $client);
 

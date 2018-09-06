@@ -70,25 +70,23 @@ class Deadline {
   }
 
   initUpdateType() {
-    let updateType = $('[name="updateType"]:checked').val();
-    let $deadline = $('[name="deadline"]');
-    let $day = $('[name="day"]');
+    const updateType = $('[name="updateType"]:checked').val();
+    const $deadline = $('[name="deadline"]');
+    const $day = $('[name="day"]');
     this.elementRemoveRules($deadline);
     this.elementRemoveRules($day);
     switch (updateType) {
     case 'day':
-      $deadline.val('');
+      $deadline.prop('disabled', true).val('');
       this.elementAddRules($day, this.getDayRules());
-      this.validator.form();
       break;
     case 'date':
+      $deadline.prop('disabled', false);
       $day.val(0);
       $('[name="waveType"]').val('plus');
       this.elementAddRules($deadline, this.getDateRules());
-      this.validator.form();
       break;
     default:
-      this.validator.form();
       break;
     }
   }
@@ -100,8 +98,20 @@ class Deadline {
   }
 
   initSelectChange() {
-    $('[name="waveType"]').on('change', (event) => {
-      $('[name="day"]').valid();
+    const $waveType = $('[name="waveType"]');
+    $waveType.on('change', (event) => {
+      if (!this.validator.form()) {
+        $(event.target).css('border-color', '#ed3e3e');
+      }
+    }).on('blur', (event) => {
+      if (!this.validator.form()) {
+        $(event.target).closest('.form-group').addClass('has-error');
+      }
+    });
+    $('[name="day"]').on('blur', (event) => {
+      const flag = this.validator.form();
+      const borderColor = flag ? '#e1e1e1' : '';
+      $waveType.css('border-color', borderColor);
     });
   }
 

@@ -50,7 +50,7 @@
 
 {% macro logLevel(level) %}
     {% if level == 'info' %}
-        <span>{{ 'common.logLevel.info'|trans }}</span>
+        <span class="color-success">{{ 'common.logLevel.info'|trans }}</span>
     {% elseif level == 'warning' %}
         <span class="text-warning">{{ 'common.logLevel.warning'|trans }}</span>
     {% elseif level == 'error' %}
