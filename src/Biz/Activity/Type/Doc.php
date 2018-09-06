@@ -135,7 +135,7 @@ class Doc extends Activity
         try {
             $files = $this->getUploadFileService()->findFilesByIds(
                 $mediaIds,
-                $showCloud = 1
+                $showCloud
             );
         } catch (CloudAPIIOException $e) {
             $files = array();
