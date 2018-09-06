@@ -230,7 +230,8 @@ export default {
         if (!value.length) {
           return;
         }
-        this.moduleData.data.categoryId = value[0];
+        const endIndex = value.length - 1
+        this.moduleData.data.categoryId = value[endIndex];
       },
     },
     categories: {
