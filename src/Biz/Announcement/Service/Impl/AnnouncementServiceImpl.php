@@ -76,7 +76,6 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         $this->getAnnouncementDao()->delete($id);
 
         $content = strip_tags($announcement['content']);
-        $this->getLogService()->info('announcement', 'delete', "删除{$announcement['targetType']}(#{$announcement['targetId']})的公告《{$content}》(#{$announcement['id']})");
 
         $this->dispatchEvent('announcement.delete', $announcement);
 

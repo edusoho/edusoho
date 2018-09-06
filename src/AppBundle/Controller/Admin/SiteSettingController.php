@@ -23,7 +23,6 @@ class SiteSettingController extends BaseController
             $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
 
             $this->getSettingService()->set('security', $security);
-            $this->getLogService()->info('system', 'update_settings', '更新安全设置', $security);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -66,7 +65,6 @@ class SiteSettingController extends BaseController
             $site['analytics'] = $helper->closeTags($site['analytics']);
         }
         $this->getSettingService()->set('site', $site);
-        $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
 
         return $this->createJsonResponse(array(
             'message' => $this->trans('site.save.success'),
@@ -114,7 +112,6 @@ class SiteSettingController extends BaseController
                 $consult['webchatURI'] = $fields[0].'?time='.time();
             }
             $this->getSettingService()->set('consult', $consult);
-            $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -136,7 +133,6 @@ class SiteSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
-            $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -174,8 +170,6 @@ class SiteSettingController extends BaseController
 
         $this->getSettingService()->set('consult', $consult);
 
-        $this->getLogService()->info('system', 'update_settings', '更新微信二维码', array('webchatURI' => $consult['webchatURI']));
-
         $response = array(
             'path' => $consult['webchatURI'],
             'url' => $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
@@ -197,7 +191,6 @@ class SiteSettingController extends BaseController
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
-            $this->getLogService()->info('system', 'update_settings', '更新分享设置', $defaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 

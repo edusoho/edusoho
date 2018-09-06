@@ -325,8 +325,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'length' => isset($result['length']) ? $result['length'] : 0,
             ));
 
-            $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
-
             $this->getLogger()->info("finishedUpload 添加文件：#{$file['id']}");
 
             if ('headLeader' == $file['targetType']) {
@@ -380,8 +378,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $result = $this->getUploadFileDao()->deleteByGlobalId($globalId);
-
-        $this->getLogService()->info('upload_file', 'delete', "删除文件globalId (#{$globalId})", $file);
 
         return $result;
     }
@@ -734,7 +730,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->create($file);
 
             $this->dispatchEvent('upload.file.add', array('file' => $file));
-            $this->getLogService()->info('upload_file', 'create', "添加文件(#{$file['id']})", $file);
             $this->getLogger()->info("addFile 添加文件：#{$file['id']}");
 
             $this->commit();
@@ -773,7 +768,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $this->dispatchEvent('upload.file.delete', $file);
-        $this->getLogService()->info('upload_file', 'delete', "删除文件(#{$id})", $file);
 
         return $result;
     }

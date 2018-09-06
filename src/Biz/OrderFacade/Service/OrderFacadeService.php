@@ -3,6 +3,7 @@
 namespace Biz\OrderFacade\Service;
 
 use Biz\OrderFacade\Product\Product;
+use Biz\System\Annotation\Log;
 
 interface OrderFacadeService
 {
@@ -32,9 +33,16 @@ interface OrderFacadeService
 
     public function sumOrderItemPayAmount($conditions);
 
+    /**
+     * @param $orderId
+     * @param $newPayAmount
+     *
+     * @return mixed
+     * @Log(module="order",action="adjust_price",serviceName="Order:OrderService",funcName="getOrder",param="orderId")
+     */
     public function adjustOrderPrice($orderId, $newPayAmount);
 
     public function getOrderAdjustInfo($order);
 
-    public function addDealer(ProductDealerService $dealer);
+    public function addDealer($dealer);
 }

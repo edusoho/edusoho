@@ -121,12 +121,11 @@ class CourseController extends CourseBaseController
             return false;
         }
 
-        $matchExpreList = array(
-            "/{$host}\/(my\/)?course\/(\d)+/i",
-            "/{$host}\/course_set\/(\d)+\/manage\/(\S)+/i",
-        );
+        $biz = $this->getBiz();
+        $matchExpreList = $biz['course.show_redirect'];
 
         foreach ($matchExpreList as $matchExpre) {
+            $matchExpre = "/{$host}".$matchExpre;
             if (preg_match($matchExpre, $referer)) {
                 return false;
             }

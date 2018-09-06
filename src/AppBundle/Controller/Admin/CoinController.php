@@ -57,7 +57,6 @@ class CoinController extends BaseController
             $coinSettings['coin_content'] = $this->purifyHtml($coinSettings['coin_content'], true);
 
             $this->getSettingService()->set('coin', $coinSettings);
-            $this->getLogService()->info('system', 'update_settings', '更新Coin虚拟币设置', $coinSettingsPosted);
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->settingsRenderedPage($coinSettingsPosted);
@@ -245,13 +244,6 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $this->getLogService()->info(
-            'system',
-            'update_settings',
-            '更新虚拟币图片',
-            array('coin_picture' => $coin['coin_picture'])
-        );
-
         $response = array(
             'path' => $coin['coin_picture'],
             'path_50_50' => $coin['coin_picture_50_50'],
@@ -274,8 +266,6 @@ class CoinController extends BaseController
         $setting['coin_picture'] = '';
 
         $this->getSettingService()->set('coin', $setting);
-
-        $this->getLogService()->info('system', 'update_settings', '移除虚拟币图片');
 
         return $this->createJsonResponse(true);
     }

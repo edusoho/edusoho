@@ -2,8 +2,8 @@
 
 {% set mobile = is_show_mobile_page() %}
 {% set tab_nav = 'learning' %}
-
 {% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['libs/echo-js.js','app/js/my/learn/my-course/index.js'])%}
 
 {% block main %}
 

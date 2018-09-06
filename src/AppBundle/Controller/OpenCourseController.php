@@ -6,6 +6,7 @@ use AppBundle\Common\Paginator;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\MediaParser\ParserProxy;
 use Biz\User\Service\TokenService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -58,7 +59,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $preview = $request->query->get('as');
-        $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
+        $isWxPreview = 'preview' === $request->query->get('as') && 'wx' === $request->query->get('previewType');
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
 
         $tagIds = ArrayToolkit::column($tags, 'id');
@@ -69,7 +70,7 @@ class OpenCourseController extends BaseOpenCourseController
             $template = 'open-course/open-course-show.html.twig';
         }
 
-        if ($preview === 'preview') {
+        if ('preview' === $preview) {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
             return $this->render($template, array(
@@ -114,12 +115,12 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '该课时不存在！');
         }
 
-        if ($lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
+        if ($lesson['mediaId'] && 'self' == $lesson['mediaSource']) {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!$file) {
                 return $this->createJsonResponse(array('mediaError' => '该课时为无效课时，不能播放'));
             }
-        } elseif ($lesson['mediaId'] == 0 && $lesson['mediaSource'] == 'self') {
+        } elseif (0 == $lesson['mediaId'] && 'self' == $lesson['mediaSource']) {
             return $this->createJsonResponse(array('mediaError' => '该课时为无效课时，不能播放'));
         }
 
@@ -133,7 +134,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     public function headerAction(Request $request, $course, $lessonId)
     {
-        $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
+        $isWxPreview = 'preview' === $request->query->get('as') && 'wx' === $request->query->get('previewType');
         if ($isWxPreview || $this->isWxClient()) {
             $template = 'open-course/mobile/open-course-header.html.twig';
         } else {
@@ -143,7 +144,7 @@ class OpenCourseController extends BaseOpenCourseController
         if ($lessonId) {
             $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
 
-            if (!$lesson || ($lesson && $lesson['status'] != 'published')) {
+            if (!$lesson || ($lesson && 'published' != $lesson['status'])) {
                 $lesson = array();
             }
         } else {
@@ -304,7 +305,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
+        $isWxPreview = 'preview' === $request->query->get('as') && 'wx' === $request->query->get('previewType');
         if ($isWxPreview || $this->isWxClient()) {
             $template = 'open-course/mobile/open-course-comment.html.twig';
         } else {
@@ -370,7 +371,7 @@ class OpenCourseController extends BaseOpenCourseController
             throw $this->createAccessDeniedException();
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $member = $this->_memberOperate($request, $id);
 
             $fields = $request->request->all();
@@ -397,7 +398,7 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createJsonResponse($result);
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
             $fields['ip'] = $request->getClientIp();
             $fields['courseId'] = $id;
@@ -417,7 +418,7 @@ class OpenCourseController extends BaseOpenCourseController
             throw $this->createNotFoundException('课时不存在！');
         }
 
-        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+        if ('liveOpen' == $lesson['type'] && 'videoGenerated' == $lesson['replayStatus']) {
             $course = $this->getOpenCourseService()->getCourse($courseId);
             $this->createRefererLog($request, $course);
         }
@@ -466,7 +467,7 @@ class OpenCourseController extends BaseOpenCourseController
             throw $this->createNotFoundException();
         }
 
-        if ($material['source'] == 'opencourselesson' || !$material['lessonId']) {
+        if ('opencourselesson' == $material['source'] || !$material['lessonId']) {
             return $this->createMessageResponse('error', '无权下载该资料');
         }
 
@@ -487,7 +488,7 @@ class OpenCourseController extends BaseOpenCourseController
         if ($user->isLogin()) {
             list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
-            if ($result != 'success') {
+            if ('success' != $result) {
                 return $this->createJsonResponse(array('success' => false, 'message' => $message));
             }
         }
@@ -552,30 +553,19 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $lesson['videoWatermarkEmbedded'] = 0;
 
-        if (($lesson['type'] == 'video' || ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated')) && $lesson['mediaSource'] == 'self') {
+        if (('video' == $lesson['type'] || ('liveOpen' == $lesson['type'] && 'videoGenerated' == $lesson['replayStatus'])) && 'self' == $lesson['mediaSource']) {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if ($file) {
                 $lesson['convertStatus'] = empty($file['convertStatus']) ? 'none' : $file['convertStatus'];
                 $lesson['storage'] = $file['storage'];
             }
-        } elseif ($lesson['mediaSource'] == 'youku') {
-            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-            if ($matched) {
-                $lesson['mediaUri'] = "//player.youku.com/embed/{$matches[1]}";
-                $lesson['mediaSource'] = 'iframe';
-            }
-        } elseif ($lesson['mediaSource'] == 'tudou') {
-            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-            if ($matched) {
-                $lesson['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                $lesson['mediaSource'] = 'iframe';
-            }
+        } else {
+            $proxy = new ParserProxy();
+            $lesson = $proxy->prepareYoukuMediaUri($lesson);
         }
 
-        if ($lesson['type'] == 'liveOpen') {
+        if ('liveOpen' == $lesson['type']) {
             if ($lesson['startTime'] > time()) {
                 $lesson['startTimeLeft'] = $lesson['startTime'] - time();
             }
@@ -588,7 +578,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
-        if (!$course || ($course && $course['status'] != 'published')) {
+        if (!$course || ($course && 'published' != $course['status'])) {
             return false;
         }
 
@@ -655,7 +645,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function autoParagraph($text)
     {
-        if (trim($text) !== '') {
+        if ('' !== trim($text)) {
             $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
             $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
             $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
@@ -675,7 +665,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $replays = array();
 
-        if ($lesson['type'] == 'liveOpen') {
+        if ('liveOpen' == $lesson['type']) {
             $replays = $this->getLiveReplayService()->searchReplays(array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
@@ -703,7 +693,7 @@ class OpenCourseController extends BaseOpenCourseController
             $pageSize
         );
 
-        if (count($currentPageCourses) == 0) {
+        if (0 == count($currentPageCourses)) {
             $start = ($pageSize - $recommendLeft) + ($currentPage - $recommendPage - 2) * $pageSize;
             $limit = $pageSize;
         } elseif (count($currentPageCourses) > 0 && count($currentPageCourses) <= $pageSize) {
@@ -726,7 +716,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $conditions = array('status' => 'published');
 
-        if (!empty($queryParam['fliter']['type']) && $queryParam['fliter']['type'] != 'all') {
+        if (!empty($queryParam['fliter']['type']) && 'all' != $queryParam['fliter']['type']) {
             $conditions['type'] = $queryParam['fliter']['type'];
         }
 
