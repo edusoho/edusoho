@@ -6,7 +6,6 @@
   </div>
 </template>
 <script>
-import loadScript from 'load-script';
 import Api from '@/api';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
