@@ -61,6 +61,7 @@ class CourseTaskEvent extends AbstractResource
         if (!empty($watchTime)) {
             $data['events']['watching']['watchTime'] = $watchTime;
         }
+
         $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
 
         if (self::EVENT_FINISH == $result['status']) {
