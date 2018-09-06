@@ -128,12 +128,13 @@ class Editor {
   }
 
   async _onSave() {
-    this.$taskSubmit.button('loading');
+    this.$taskSubmit.attr('disabled', true);
     let content;
-     await this.getActivityContent().then((data) => {
+    await this.getActivityContent().then((data) => {
       content = data;
       return this.getActivityFinishCondition();
     }).then((condition) => {
+      this.$taskSubmit.button('loading');
       let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
       $.post(this.taskConfig['saveUrl'], postData)
         .done((response) => {
@@ -146,6 +147,7 @@ class Editor {
           this.$taskSubmit.button('reset');
         });
     }).catch(() => {
+      this.$taskSubmit.attr('disabled', false);
       this.$taskSubmit.button('reset');
     })
   }
