@@ -203,51 +203,58 @@ export default {
       });
     },
     save(mode, needTrans = true) {
-      // 保存配置
-      let data = this.modules;
-      const isPublish = mode === 'published';
-
       this.saveFlag ++;
-      this.validate();
-      // 如果已经是对象就不用转换
-      if (needTrans) {
-        data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
-      }
 
-      if (this.incomplete) {
-        return;
-      }
+      // 验证提交配置
+      const validateAndSubmit = () => {
+        let data = this.modules;
+        const isPublish = mode === 'published';
 
-      this.saveDraft({
-        data,
-        mode,
-        portal: 'h5',
-        type: 'discovery',
-      }).then(() => {
+        this.validate();
+        // 如果已经是对象就不用转换
+        if (needTrans) {
+          data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+        }
 
-        if (isPublish) {
-          this.$message({
-            message: '发布成功',
-            type: 'success'
-          });
+        if (this.incomplete) {
           return;
         }
 
-        this.$store.commit(types.UPDATE_DRAFT, data);
-        this.$router.push({
-          name: 'preview',
-          query: {
-            times: 10,
-            preview: isPublish ? 0 : 1,
-            duration: 60 * 5,
+        this.saveDraft({
+          data,
+          mode,
+          portal: 'h5',
+          type: 'discovery',
+        }).then(() => {
+
+          if (isPublish) {
+            this.$message({
+              message: '发布成功',
+              type: 'success'
+            });
+            return;
           }
-        });
-      }).catch(err => {
-        this.$message({
-          message: err.message || '发布失败，请重新尝试',
-          type: 'error'
-        });
-      })
+
+          this.$store.commit(types.UPDATE_DRAFT, data);
+          this.$router.push({
+            name: 'preview',
+            query: {
+              times: 10,
+              preview: isPublish ? 0 : 1,
+              duration: 60 * 5,
+            }
+          });
+        }).catch(err => {
+          this.$message({
+            message: err.message || '发布失败，请重新尝试',
+            type: 'error'
+          });
+        })
+      };
+
+      setTimeout(() => {
+        validateAndSubmit();
+      }, 500); // 点击 预览／发布 时去验证所有组件，会有延迟，目前 low 的解决方法延迟 500ms 判断验证结果
     },
     validate() {
       for (var i = 0; i < this.modules.length; i++) {
