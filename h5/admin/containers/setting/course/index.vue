@@ -2,6 +2,7 @@
   <module-frame containerClass="setting-course" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part">
       <e-course-list :courseList="copyModuleData.data" :feedback="false" @fetchCourse="fetchCourse"></e-course-list>
+      <div v-show="courseItemData" class="course-empty">暂无课程</div>
     </div>
     <div slot="setting" class="course-allocate">
       <header class="title">课程列表设置</header>
@@ -119,7 +120,7 @@ export default {
         label: '最近创建'
       }, {
         value: '-rating',
-        label: '评价最高',
+        label: '评分最高',
       }, {
         value: 'recommendedSeq',
         label: '推荐课程',
@@ -166,6 +167,12 @@ export default {
       set() {
         console.log('changed copyModuleData')
       }
+    },
+    courseItemData: {
+      get() {
+        return !this.moduleData.data.items.length ? true : false;
+      },
+      set() {}
     },
     showDateOptions() {
       const isNewCreated = this.moduleData.data.sort === this.sortOptions[1].value
