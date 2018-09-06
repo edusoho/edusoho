@@ -189,7 +189,7 @@ attachment_list:
 
 attachment_form_fields:
     path: /attachment/{targetType}/{targetId}/formFields
-    defaults: { _controller: AppBundle:Attachment:formFields , targetId:0}
+    defaults: { _controller: AppBundle:Attachment:formFields , targetId: 0}
     methods: [GET]
 
 uploader_entry:
@@ -1136,7 +1136,7 @@ thread_post_reply:
 
 thread_post_subposts:
     path:  /thread/{threadId}/post/{postId}/subposts
-    defaults: { _controller: AppBundle:Thread:subposts, threadId:0 }
+    defaults: { _controller: AppBundle:Thread:subposts, threadId: 0 }
 
 article_post_subposts:
     path:  /article/{targetId}/post/{postId}/subposts
