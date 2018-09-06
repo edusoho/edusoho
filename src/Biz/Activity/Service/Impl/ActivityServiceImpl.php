@@ -151,7 +151,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
 
-        if(empty($fields['mediaId'])) {
+        if (empty($fields['mediaId'])) {
             $media = $activityConfig->create($fields);
         }
 
@@ -424,6 +424,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!empty($fields['media'])) {
             $media = json_decode($fields['media'], true);
+            $media['fileId'] = $media['id'];
+            $media['title'] = $media['name'];
             if (!empty($media['id'])) {
                 return array($media);
             }
