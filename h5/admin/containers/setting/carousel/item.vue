@@ -13,7 +13,7 @@
     </el-upload>
 
     <el-dialog
-      title="提示"
+      title="提示:通过鼠标滚轮缩放图片"
       :visible.sync="dialogVisible"
       width="80%">
       <div class="cropper-container">

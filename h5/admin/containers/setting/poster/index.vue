@@ -8,7 +8,10 @@
     </div>
 
     <div slot="setting" class="poster-allocate">
-      <header class="title">图片广告设置</header>
+      <header class="title">
+        图片广告设置
+        <div class="help-text">建议图片宽度为750px,支持jpg/png/gif格式，图片大小不超过2MB</div>
+      </header>
       <div class="poster-item-setting clearfix">
         <div class="poster-item-setting__section">
           <p class="pull-left section-left required-option">广告图片：</p>
