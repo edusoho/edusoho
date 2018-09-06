@@ -1,4 +1,4 @@
-import { isEmpty } from 'common/utils';
+import { isEmpty , arrayIndex } from 'common/utils';
 import FileChooser from 'app/js/file-chooser/file-choose';
 import { chooserUiOpen } from 'app/js/activity-manage/widget/chooser-ui';
 
@@ -51,7 +51,7 @@ export default class DownLoad {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
     const $materials = $('#materials');
-    this.materials = isEmpty($materials.val()) ? Object.create(null) : JSON.parse($materials.val());
+    this.materials = isEmpty($materials.val()) ? {} :  arrayIndex(JSON.parse($materials.val()), 'fileId');
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
       $materials.val(JSON.stringify(this.materials));
@@ -118,9 +118,16 @@ export default class DownLoad {
     if ($('#verifyLink').val()) {
       this.addLink();
     }
+    let media = {};  
+    if (!isEmpty($media.val())) {
+      media = JSON.parse($media.val());
+      media.fileId = media.id;
+      media.title = media.name;
+    }
 
-    this.media = isEmpty($media.val()) ? Object.create(null) : JSON.parse($media.val());
-    this.materials = isEmpty($materials.val()) ? Object.create(null) : JSON.parse($materials.val());
+    this.media = media;
+    console.log(this.media);
+    this.materials = isEmpty($materials.val()) ? {} : arrayIndex(JSON.parse($materials.val()), 'fileId');
 
     if (isEmpty(this.media)) {
       this.showTip($successTipDom, $errorTipDom, errorTip);
@@ -153,7 +160,7 @@ export default class DownLoad {
   checkExisted() {
     for (let item in this.materials) {
       const materialsItem = this.materials[item];
-      const checkFile = materialsItem.name === this.media.name;
+      const checkFile = materialsItem.title === this.media.title;
       const checkLink = materialsItem.link && (materialsItem.link === this.media.id);
 
       if (checkFile || checkLink) {

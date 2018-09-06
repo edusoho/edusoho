@@ -291,11 +291,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function buildMaterial($material, $activity)
     {
         return array(
-            'fileId' => intval($material['id']),
+            'fileId' => intval($material['fileId']),
             'courseId' => $activity['fromCourseId'],
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId' => $activity['id'],
-            'title' => $material['name'],
+            'title' => $material['title'],
             'description' => empty($material['summary']) ? '' : $material['summary'],
             'userId' => $this->getCurrentUser()->offsetGet('id'),
             'type' => 'course',
