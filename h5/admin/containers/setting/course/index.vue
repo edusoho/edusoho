@@ -195,7 +195,7 @@ export default {
     },
     lastDays: {
       get() {
-        return this.copyModuleData.data.lastDays;
+        return this.copyModuleData.data.lastDays.toString();
       },
       set(value) {
         this.copyModuleData.data.lastDays = value;

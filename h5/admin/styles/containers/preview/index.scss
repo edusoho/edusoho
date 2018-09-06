@@ -1,5 +1,5 @@
 .preview-container {
-  padding: 50px;
+  padding: 0 50px;
   box-sizing: border-box;
   .image-container {
     .phone-img {
@@ -83,7 +83,7 @@
 .preview-iframe {
   position: absolute;
   left: 85px;
-  top: 160px;
+  top: 110px;
   height: 455px;
   width: 260px;
   overflow: auto;
