@@ -37,15 +37,7 @@
         </el-button>
       </div>
 
-      <div class="find-footer">
-        <div class="find-footer-item" v-for="item in items"
-            :class="{ active: item.name === 'find' }"
-            :style="footerItemStyle"
-            :key="item.type">
-          <img class="find-footer-item__icon" :src="item.name === 'find' ? item.active : item.normal" />
-          <span class="find-footer-item__text">{{ item.type }}</span>
-        </div>
-      </div>
+      <find-footer></find-footer>
     </div>
 
     <!-- 发布预览按钮 -->
@@ -64,19 +56,20 @@
 </template>
 <script>
 import Api from '@admin/api';
-import items from '@/utils/footer-config'
 import * as types from '@admin/store/mutation-types';
 import moduleDefault from '@admin/utils/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
+import findFooter from './footer';
 import draggable from 'vuedraggable';
 import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
     moduleTemplate,
-    draggable
+    draggable,
+    findFooter
   },
   data() {
     return {
@@ -86,7 +79,6 @@ export default {
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
-      items,
       moduleItems: [{
           name: '轮播图',
           default: moduleDefault.slideShow,
@@ -105,9 +97,6 @@ export default {
   },
   computed: {
     ...mapState(['isLoading']),
-    footerItemStyle() {
-      return { width: `${100/items.length}%` }
-    },
     stopDraggleDoms() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
     },
