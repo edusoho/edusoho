@@ -31,6 +31,53 @@
       }
     }
   }
+
+  // h5 组件 vw 单位复写
+  .e-course {
+    padding: 0 10px 20px;
+    &__right {
+      width: 40%;
+      margin-left: 10px;
+    }
+    &__title {
+      font-size: 14px;
+    }
+  }
+
+  .e-course-list {
+    &__header {
+      padding: 10px;
+    }
+    &__list-title {
+      font-size: 15px;
+    }
+    &__more {
+      font-size: 14px;
+    }
+  }
+
+  .e-course-switch-box {
+    .switch-box__price {
+      font-size: 12px;
+    }
+  }
+
+  // h5 轮播长度单位复写
+  .item-container {
+    &__title {
+      font-size: 16px;
+      line-height: 30px;
+    }
+  }
+
+  .van-swipe__indicators {
+    bottom: 35px;
+    .van-swipe__indicator {
+      &--active {
+        background-color: $primary-color;
+      }
+    }
+  }
 }
 
 .preview-iframe {
@@ -42,51 +89,4 @@
   overflow: auto;
 }
 
-
-// h5 组件 vw 单位复写
-.e-course {
-  padding: 0 10px 20px;
-  &__right {
-    width: 40%;
-    margin-left: 10px;
-  }
-  &__title {
-    font-size: 14px;
-  }
-}
-
-.e-course-list {
-  &__header {
-    padding: 10px;
-  }
-  &__list-title {
-    font-size: 15px;
-  }
-  &__more {
-    font-size: 14px;
-  }
-}
-
-.e-course-switch-box {
-  .switch-box__price {
-    font-size: 12px;
-  }
-}
-
-// h5 轮播长度单位复写
-.item-container {
-  &__title {
-    font-size: 16px;
-    line-height: 30px;
-  }
-}
-
-.van-swipe__indicators {
-  bottom: 35px;
-  .van-swipe__indicator {
-    &--active {
-      background-color: $primary-color;
-    }
-  }
-}
 
