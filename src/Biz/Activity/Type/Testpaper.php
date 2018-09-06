@@ -45,7 +45,7 @@ class Testpaper extends Activity
         }
 
         $testpaperActivity = $this->get($activity['mediaId']);
-        $testpaper = $activity['testpaper'];
+        $testpaper = $testpaperActivity['testpaper'];
 
         $newExt = array(
             'testpaperId' => $testpaper['id'],
