@@ -7392,6 +7392,7 @@ admin.invite_setting.discount_coupon_setting: 元面值抵价优惠券 （可用
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.hint: >
+  <p class="help-block">新版微网校可使用发现页设置功能。</p>
   <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
   <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
 admin.wap_setting.version_select: 版本选择
