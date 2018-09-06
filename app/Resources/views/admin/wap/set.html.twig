@@ -12,10 +12,10 @@
     <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
       <li class="active">
         <a href="#find-page" data-toggle="tab">
-          发现页设置
+          {{ 'admin.wap_setting.find'|trans|raw }}
         </a>
       </li>
-      <li><a href="#site-page" data-toggle="tab">站点设置</a></li>
+      <li><a href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.site'|trans|raw }}</a></li>
     </ul>
     <div class="tab-content h5-tab-content">
 
@@ -24,14 +24,10 @@
         {% if 2 != wapSetting.version %}
           <div class="h5-text-content">
             <div class="title">
-              <span class="h5-color-primary">微网校</span><span class="text-gray-medium">功能正式上线</span>
+              <span class="h5-color-primary">{{ 'admin.wap_setting.find'|trans|raw }}</span><span class="text-gray-medium">{{ 'admin.wap_setting.online'|trans|raw }}</span>
             </div>
-            <ul class="feature-info">
-              <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
-              <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
-              <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>
-            </ul>
-            <a class="btn-h5-open js-site-set" href="#site-page" data-toggle="tab">去开启微网校</a>
+            <ul class="feature-info">{{ 'admin.wap_setting.function'|trans|raw }}</ul>
+            <a class="btn-h5-open js-site-set" href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
           </div>
           <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/h5/find_plate@2x.png') }}" alt="">
         {% else %}
@@ -44,18 +40,19 @@
         <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
           <div class="site-img-content clearfix">
             <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img@2x.png') }}" alt="新版微网校图片">
+              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}">
               {{radios('version', {'2':'admin.wap_setting.new'|trans},wapSetting.version)}}
             </div>
             <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="旧版微网校图片">
+              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}">
               {{radios('version', {'1':'admin.wap_setting.old'|trans},wapSetting.version)}}
             </div>
             <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img@2x.png') }}" alt="响应式网校图片">
+              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.off'|trans|raw }}">
               {{radios('version', {'0':'admin.wap_setting.off'|trans},wapSetting.version)}}
             </div>
           </div>
+          <div class="help-block-container">{{ 'admin.wap_setting.hint'|trans|raw }}</div>
           <div class="text-center">
             <button type="submit" class="btn btn-h5-save js-site-save">{{'form.btn.save'|trans}}</button>
           </div>
