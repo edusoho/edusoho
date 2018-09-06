@@ -95,8 +95,8 @@ export default class DownLoad {
     let verifyLinkVal = $('#verifyLink').val();
     const data = {
       source: 'link',
-      fileId: verifyLinkVal,
-      title: verifyLinkVal,
+      id: verifyLinkVal,
+      name: verifyLinkVal,
       link: verifyLinkVal,
       summary: $('#file-summary').val(),
       size: 0
