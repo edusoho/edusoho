@@ -480,6 +480,7 @@ class CourseManageController extends BaseController
         $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
