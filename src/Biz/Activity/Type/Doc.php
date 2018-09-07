@@ -82,17 +82,6 @@ class Doc extends Activity
         return $this->getDocActivityDao()->update($doc['id'], $doc);
     }
 
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
-
-        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-        $result /= 60;
-
-        return !empty($result) && $result >= $doc['finishDetail'];
-    }
-
     public function update($targetId, &$fields, $activity)
     {
         if (empty($fields['media'])) {

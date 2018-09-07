@@ -14,27 +14,6 @@ class Ppt extends Activity
     {
     }
 
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
-
-        if ('time' === $ppt['finishType']) {
-            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-            $result /= 60;
-
-            return !empty($result) && $result >= $ppt['finishDetail'];
-        }
-
-        if ('end' === $ppt['finishType']) {
-            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
-
-            return !empty($log);
-        }
-
-        return false;
-    }
-
     public function create($fields)
     {
         if (empty($fields['media'])) {
