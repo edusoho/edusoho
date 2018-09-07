@@ -81,8 +81,8 @@
       },
       limit(value, oldValue) {
         if (oldValue > value) {
-          const deleteIndex = value - oldValue
-          this.courseList.items.splice(deleteIndex);
+          const newItems = this.courseList.items.slice(0, value);
+          this.courseList.items = newItems;
           return;
         }
         this.fetchCourse();
