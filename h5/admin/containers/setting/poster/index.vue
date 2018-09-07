@@ -8,7 +8,10 @@
     </div>
 
     <div slot="setting" class="poster-allocate">
-      <header class="title">图片广告设置</header>
+      <header class="title">
+        图片广告设置
+        <div class="help-text">建议图片宽度为750px,支持jpg/png/gif格式，图片大小不超过2MB</div>
+      </header>
       <div class="poster-item-setting clearfix">
         <div class="poster-item-setting__section">
           <p class="pull-left section-left required-option">广告图片：</p>
@@ -40,14 +43,17 @@
           <div class="section-right">
             <el-button type="info" size="mini" @click="openModal" v-show="!courseLinkText">选择课程</el-button>
             <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
-              <span class="text-content ellipsis">{{courseLinkText}}</span>
+              <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+                <span slot="content">{{courseLinkText}}</span>
+                <span>{{ courseLinkText }}</span>
+              </el-tooltip>
             </el-tag>
           </div>
         </div>
         <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'url'">
           <p class="pull-left section-left">输入链接：</p>
           <div class="section-right">
-            <el-input size="mini" v-model="copyModuleData.link.url" placeholder="请输入自定义链接" clearable></el-input>
+            <el-input size="mini" v-model="copyModuleData.link.url" placeholder="例如 http://www.eduosho.com" clearable></el-input>
           </div>
         </div>
         <div class="poster-item-setting__section mtl">
@@ -123,7 +129,7 @@ export default {
     courseLinkText() {
       if (!this.courseSets[0]) return
 
-      return this.courseSets[0] ? this.courseSets[0].title || this.courseSets[0].courseSetTitle : '';
+      return this.courseSets[0].displayedTitle;
     }
   },
   watch: {

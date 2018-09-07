@@ -22,6 +22,7 @@ import {
   Tag,
   Autocomplete,
   Tooltip,
+  Loading,
 } from 'element-ui';
 
 import {
@@ -32,6 +33,7 @@ import {
 Vue.component('van-swipe', Swipe);
 Vue.component('van-swipe-item', SwipeItem);
 
+Vue.use(Loading);
 Vue.use(Input);
 Vue.use(Select);
 Vue.use(Button);

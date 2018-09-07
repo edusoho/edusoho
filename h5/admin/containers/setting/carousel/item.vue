@@ -13,7 +13,7 @@
     </el-upload>
 
     <el-dialog
-      title="提示"
+      title="提示:通过鼠标滚轮缩放图片"
       :visible.sync="dialogVisible"
       width="80%">
       <div class="cropper-container">
@@ -47,7 +47,7 @@
         @close="handleClose"
         v-show="linkTextShow">
         <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
-          <span slot="content">{{linkTextHover}}</span>
+          <span slot="content">{{linkTextShow}}</span>
           <span>{{ linkTextShow }}</span>
         </el-tooltip>
       </el-tag>
@@ -80,11 +80,8 @@
     },
     computed: {
       linkTextShow() {
-        return this.item.link.target && this.item.link.target.title;
-      },
-      linkTextHover() {
         return this.item.link.target && this.item.link.target.displayedTitle;
-      }
+      },
     },
     watch: {
       courseSets(sets) {

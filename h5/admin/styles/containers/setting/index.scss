@@ -1,11 +1,10 @@
 .setting-page {
   position: relative;
-  margin: 0 20px;
+  margin: 0 20px 250px 20px;
   width: 375px;
   min-height: 667px;
   box-sizing: border-box;
   border: 1px solid #e1e1e1;
-  user-select: none;
   .find-navbar {
     position: relative;
     background-color: #212121;
@@ -45,44 +44,6 @@
       margin: 15px 7.5px 0;
       width: 103px;
       background-color: #fff;
-    }
-  }
-  .find-footer {
-    position: absolute;
-    bottom: 0;
-    height: 50px;
-    width: 100%;
-    background-color: #fff;
-    border-top: 1px solid #e1e1e1;
-    &-item {
-      display: inline-block;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 5px 0;
-      font-size: 12px;
-      color: #929292;
-      &__icon {
-        display: block;
-        height: 25px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      &__text {
-        display: block;
-        text-align: center;
-        line-height: 20px;
-      }
-      &.active {
-        .find-footer-item__text {
-          color: $primary-color;
-        }
-      }
-    }
-    // delete
-    &-img {
-      position: absolute;
-      bottom: 0;
-      left: 0;
     }
   }
 }

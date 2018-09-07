@@ -49,8 +49,8 @@ export default {
       default: 'demo-1',
     },
     saveFlag: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      default: 0,
     }
   },
   computed: {
@@ -69,9 +69,16 @@ export default {
       }
     },
   },
+  watch: {
+    saveFlag(value) {
+      if (!value) return;
+      this.triggerValidate();
+    }
+  },
   created() {
     // 每个模块唯一值
     this.module.moduleType = this.moduleKey;
+    this.triggerValidate();
   },
   updated() {
     // 每个模块唯一值
@@ -82,7 +89,8 @@ export default {
       moduleType: {
         slideShow: 'slide_show',
         courseList: 'course_list',
-        poster: 'poster'
+        poster: 'poster',
+        incomplete: false,
       }
     }
   },
@@ -90,9 +98,14 @@ export default {
     activeModule() {
       this.isActive = true;
     },
-    updateHandler(data, index) {
-      console.log(index, 'updateHandler')
-      this.$emit('updateModule', data);
+    updateHandler() {
+    },
+    triggerValidate() {
+      const incomplete = validate(this.module, this.saveFlag);
+      this.$emit('updateModule', {
+        incomplete,
+        updateModule: this.module,
+      });
     },
     handleRemove(data, index) {
       this.$emit('removeModule', data);

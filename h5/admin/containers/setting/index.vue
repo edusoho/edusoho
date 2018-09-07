@@ -6,7 +6,12 @@
 
       <!-- 操作预览区域 -->
       <div class="find-body">
-        <draggable v-model="modules">
+        <draggable
+          v-model="modules"
+          :options="{
+            filter: stopDraggleDoms,
+            preventOnFilter: false,
+          }">
           <module-template v-for="(module, index) in modules"
             :key="index"
             :saveFlag="saveFlag"
@@ -32,48 +37,48 @@
         </el-button>
       </div>
 
-      <div class="find-footer">
-        <div class="find-footer-item" v-for="item in items"
-            :class="{ active: item.name === 'find' }"
-            :style="footerItemStyle"
-            :key="item.type">
-          <img class="find-footer-item__icon" :src="item.name === 'find' ? item.active : item.normal" />
-          <span class="find-footer-item__text">{{ item.type }}</span>
-        </div>
-      </div>
+      <find-footer></find-footer>
     </div>
 
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
-      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="reset">重 置</el-button>
-      <el-button class="setting-button-group__button text-medium btn-border-primary" size="mini" @click="save('draft')">预 览</el-button>
-      <el-button class="setting-button-group__button text-medium" type="primary" size="mini" @click="save('published')">发 布</el-button>
+      <el-button
+        class="setting-button-group__button text-medium btn-border-primary"
+        size="mini" @click="reset" :disabled="isLoading">重 置</el-button>
+      <el-button
+        class="setting-button-group__button text-medium btn-border-primary"
+        size="mini" @click="save('draft')" :disabled="isLoading">预 览</el-button>
+      <el-button
+        class="setting-button-group__button text-medium" type="primary"
+        size="mini" @click="save('published')" :disabled="isLoading">发 布</el-button>
     </div>
   </div>
 </template>
 <script>
 import Api from '@admin/api';
-import items from '@/utils/footer-config'
 import * as types from '@admin/store/mutation-types';
 import moduleDefault from '@admin/utils/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
+import findFooter from './footer';
 import draggable from 'vuedraggable';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
     moduleTemplate,
-    draggable
+    draggable,
+    findFooter
   },
   data() {
     return {
       title: 'EduSoho 微网校',
       modules: [],
-      saveFlag: false,
+      saveFlag: 0,
+      incomplete: true,
+      validateResults: [],
       currentModuleIndex: '0',
-      items,
       moduleItems: [{
           name: '轮播图',
           default: moduleDefault.slideShow,
@@ -91,9 +96,10 @@ export default {
     }
   },
   computed: {
-    footerItemStyle() {
-      return { width: `${100/items.length}%` }
-    }
+    ...mapState(['isLoading']),
+    stopDraggleDoms() {
+      return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
+    },
   },
   created() {
     this.load();
@@ -125,8 +131,8 @@ export default {
     },
     updateModule(data, index) {
       // 更新模块
-      // this.saveFlag = false;
-      console.log('updateModule');
+      this.validateResults[index] = data.incomplete;
+      console.log('updateModule', data);
     },
     removeModule(data, index) {
       // 删除一个模块
@@ -186,45 +192,68 @@ export default {
       });
     },
     save(mode, needTrans = true) {
-      // 保存配置
-      const isPublish = mode === 'published';
-      let data = this.modules;
-      this.saveFlag = true;
-      // 如果已经是对象就不用转换
-      if (needTrans) {
-        data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
-      }
+      this.saveFlag ++;
 
-      this.saveDraft({
-        data,
-        mode,
-        portal: 'h5',
-        type: 'discovery',
-      }).then(() => {
-        if (isPublish) {
-          this.$message({
-            message: '发布成功',
-            type: 'success'
-          });
+      // 验证提交配置
+      const validateAndSubmit = () => {
+        let data = this.modules;
+        const isPublish = mode === 'published';
+
+        this.validate();
+        // 如果已经是对象就不用转换
+        if (needTrans) {
+          data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+        }
+
+        if (this.incomplete) {
           return;
         }
 
-        this.$store.commit(types.UPDATE_DRAFT, data);
-        this.$router.push({
-          name: 'preview',
-          query: {
-            times: 10,
-            preview: isPublish ? 0 : 1,
-            duration: 60 * 5,
+        this.saveDraft({
+          data,
+          mode,
+          portal: 'h5',
+          type: 'discovery',
+        }).then(() => {
+
+          if (isPublish) {
+            this.$message({
+              message: '发布成功',
+              type: 'success'
+            });
+            return;
           }
-        });
-      }).catch(err => {
-        this.$message({
-          message: err.message || '发布失败，请重新尝试',
-          type: 'error'
-        });
-      })
-    }
+
+          this.$store.commit(types.UPDATE_DRAFT, data);
+          this.$router.push({
+            name: 'preview',
+            query: {
+              times: 10,
+              preview: isPublish ? 0 : 1,
+              duration: 60 * 5,
+            }
+          });
+        }).catch(err => {
+          this.$message({
+            message: err.message || '发布失败，请重新尝试',
+            type: 'error'
+          });
+        })
+      };
+
+      setTimeout(() => {
+        validateAndSubmit();
+      }, 500); // 点击 预览／发布 时去验证所有组件，会有延迟，目前 low 的解决方法延迟 500ms 判断验证结果
+    },
+    validate() {
+      for (var i = 0; i < this.modules.length; i++) {
+        if (this.validateResults[i]) {
+          this.incomplete = this.validateResults[i]
+          return;
+        }
+      }
+      this.incomplete = false;
+    },
   }
 }
 

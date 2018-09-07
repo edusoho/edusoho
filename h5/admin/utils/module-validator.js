@@ -1,11 +1,12 @@
 import Vue from 'vue';
 
-export default (data) => {
+export default (data, startValidate) => {
   // 轮播图
   if (data.type == 'slide_show') {
     for (let num in data.data) {
       const imgUri = data.data[num].image.uri;
       if (!imgUri) {
+        if (!startValidate) return true;
         Vue.prototype.$message({
           message: '请完善轮播图模块信息！',
           type: 'error'
@@ -19,6 +20,7 @@ export default (data) => {
   if (data.type == 'course_list') {
     const courseExist = data.data.items.length;
     if (!data.data.title || (data.data.sourceType == 'custom' && !courseExist)) {
+      if (!startValidate) return true;
       Vue.prototype.$message({
         message: '请完善课程模块信息！',
         type: 'error'
@@ -31,6 +33,7 @@ export default (data) => {
   if (data.type == 'poster') {
     const imgUri = data.data.image.uri;
     if (!imgUri) {
+      if (!startValidate) return true;
       Vue.prototype.$message({
         message: '请完善广告模块信息！',
         type: 'error'
@@ -38,4 +41,6 @@ export default (data) => {
       return true;
     }
   }
+
+  return false;
 }

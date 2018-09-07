@@ -37,3 +37,11 @@
     transform: rotate(45deg);
   }
 }
+
+.e-course__empty {
+  line-height: vw(50);
+  margin: 0 vw(10) vw(15);
+  background-color: #f5f5f5;
+  font-size: vw(14);
+  text-align: center;
+}

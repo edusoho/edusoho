@@ -58,7 +58,7 @@
           </div>
         </div>
         <!-- 显示个数 -->
-        <div class="course-item-setting__section mtl clearfix">
+        <div v-show="sourceType === 'condition'" class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left">显示个数：</p>
           <div class="section-right">
             <el-select v-model="limit" placeholder="请选择个数" size="mini">
@@ -119,7 +119,7 @@ export default {
         label: '最近创建'
       }, {
         value: '-rating',
-        label: '评价最高',
+        label: '评分最高',
       }, {
         value: 'recommendedSeq',
         label: '推荐课程',
@@ -195,7 +195,7 @@ export default {
     },
     lastDays: {
       get() {
-        return this.copyModuleData.data.lastDays;
+        return this.copyModuleData.data.lastDays.toString();
       },
       set(value) {
         this.copyModuleData.data.lastDays = value;
@@ -230,7 +230,8 @@ export default {
         if (!value.length) {
           return;
         }
-        this.moduleData.data.categoryId = value[0];
+        const endIndex = value.length - 1
+        this.moduleData.data.categoryId = value[endIndex];
       },
     },
     categories: {
@@ -251,6 +252,9 @@ export default {
       },
       immediate: true,
     },
+    sourceType(value) {
+      this.limit = value === 'condition' ? 4 : 8;
+    }
   },
   methods: {
     ...mapActions(['getCourseList']),
