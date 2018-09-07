@@ -1,18 +1,17 @@
 <template>
   <div class="e-swipe">
-    <van-swipe>
+    <van-swipe :autoplay="2000">
       <van-swipe-item v-for="(slide, index) in slides" :key="index">
-        <!-- course -->
-        <div class="item-container" v-if="slide.link.type === 'course'">
-          <div @click="jumpTo(slide.link.id)">
-            <img v-bind:src="slide.image">
+        <div class="item-container">
+          <!-- course -->
+          <div v-if="slide.link.type === 'course'" @click="jumpTo(slide.link.target)">
+            <img v-bind:src="slide.image.uri">
           </div>
-        </div>
-        <!-- url -->
-        <div class="item-container" v-if="slide.link.type === 'url'">
-          <a v-bind:href="slide.link.url">
-            <img v-bind:src="slide.image">
+          <!-- url -->
+          <a v-if="slide.link.type === 'url'" :href="slide.link.url || 'javascript:;'">
+            <img v-bind:src="slide.image.uri">
           </a>
+          <div class="text-overflow item-container__title">{{ slide.title }}</div>
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -25,12 +24,19 @@
       slides: {
         type: Array,
         default: []
-      }
+      },
+      feedback: {
+        type: Boolean,
+        default: true,
+      },
     },
     methods: {
-      jumpTo(courseId) {
+      jumpTo(target) {
+        if (!this.feedback) return;
+        if (!target) return;
+
         this.$router.push({
-          path: `/course/${courseId}`
+          path: `/course/${target.id}`
         });
       }
     }

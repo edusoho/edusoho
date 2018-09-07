@@ -16,30 +16,13 @@
 </template>
 
 <script>
+import items from '@/utils/footer-config'
+
 export default {
   data() {
     return {
       active: 0,
-      items: [
-        {
-          name: 'find',
-          type: '发现',
-          normal: 'static/images/explore.png',
-          active: 'static/images/exploreHL.png'
-        },
-        {
-          name: 'learning',
-          type: '学习',
-          normal: 'static/images/learning.png',
-          active: 'static/images/learningHL.png'
-        },
-        {
-          name: 'my',
-          type: '我的',
-          normal: 'static/images/me.png',
-          active: 'static/images/meHL.png'
-        },
-      ],
+      items,
     }
   },
   watch: {
@@ -53,6 +36,18 @@ export default {
           item.name === ( redirect || to.name ) && ( this.active = index );
         })
       }
+    }
+  },
+  created() {
+    const {preview, token} = this.$route.query
+    if (preview == 1) {
+      this.$router.push({
+        name: 'preview',
+        query: {
+          preview,
+          token
+        },
+      })
     }
   },
   methods: {

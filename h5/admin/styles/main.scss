@@ -1,1 +1,12 @@
-@import './setting.scss';
+@import './color.scss';
+@import './common.scss';
+@import './element-ui.scss';
+
+@import '../../src/assets/styles/global.scss';
+@import '../../src/assets/fonts/iconfont.css';
+@import '../../src/assets/styles/mixins.scss';
+
+// containers
+@import './containers/admin.scss';
+@import './containers/setting/index.scss';
+@import './containers/preview/index.scss';

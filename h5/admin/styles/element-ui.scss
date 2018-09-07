@@ -1,0 +1,66 @@
+.el-cascader {
+  width: 100%;
+}
+
+
+.el-dialog {
+  &__header {
+    padding-bottom: 0;
+  }
+  &__body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  &__footer {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    text-align: center;
+  }
+
+  .el-button {
+    &--info {
+      color: red;
+      border-color: #e1e1e1;
+      background: #e1e1e1;
+      &:hover {
+        background: #909399;
+      }
+    }
+    &--default {
+      font-weight: normal;
+      &:hover {
+        border-color: $primary-color;
+        color: $primary-color;
+        font-weight: normal;
+        background-color: #fff;
+      }
+    }
+    &--primary {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      &:hover{
+        background-color: #66b1ff;
+      }
+    }
+    +.el-button {
+      margin-left: 20px;
+    }
+  }
+}
+
+.el-button {
+  &--info {
+    color: #616161;
+    border-color: #e1e1e1;
+    background: #e1e1e1;
+    &:hover {
+      border-color: darken(#e1e1e1, 20%);
+      background: darken(#e1e1e1, 20%);
+    }
+  }
+}
+
+.el-message {
+  top: auto;
+  bottom: 100px;
+}

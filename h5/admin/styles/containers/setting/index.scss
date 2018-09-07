@@ -1,0 +1,64 @@
+.setting-page {
+  position: relative;
+  margin: 0 20px 250px 20px;
+  width: 375px;
+  min-height: 667px;
+  box-sizing: border-box;
+  border: 1px solid #e1e1e1;
+  .find-navbar {
+    position: relative;
+    background-color: #212121;
+    text-align: center;
+    line-height: 56px;
+    color: #fff;
+    font-size: 18px;
+    margin-left: -1px;
+    margin-right: -1px;
+    i {
+      position: absolute;
+      top: 0;
+      left: 15px;
+    }
+  }
+  .find-head-img {
+    width: 375px;
+    vertical-align: top;
+  }
+  .find-body {
+    padding-bottom: 153px;
+  }
+  .find-section {
+    position: absolute;
+    bottom: 50px;
+    box-sizing: border-box;
+    padding: 15px 9px;
+    background: #F5F5F5;
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #E1E1E1;
+    font-size: 14px;
+    .section-title {
+      margin-left: 7px;
+    }
+    .find-section-item {
+      float: left;
+      margin: 15px 7.5px 0;
+      width: 103px;
+      background-color: #fff;
+    }
+  }
+}
+
+.setting-button-group {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  text-align: center;
+  line-height: 54px;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.1);
+  &__button {
+    width: 90px;
+    height: 30px;
+  }
+}

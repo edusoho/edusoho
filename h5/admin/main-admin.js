@@ -1,72 +1,63 @@
 import Vue from 'vue';
 import axios from 'axios';
 import router from '@admin/router';
-import filters from '@/filters';
 import utils from '@/utils';
-import store from '@/store';
-import plugins from '@/plugins';
-import EdusohoUI from '@/components';
+import store from '@admin/store';
 
+import 'element-ui/lib/theme-chalk/index.css';
 import 'vant/lib/vant-css/index.css';
-import '@/assets/styles/main.scss';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';
-import Api from '@/api';
 
 import {
+  Select,
   Button,
-  NavBar,
-  Tab,
-  Tabs,
-  Tabbar,
-  TabbarItem,
+  Message,
+  Upload,
+  Input,
+  Radio,
+  Option,
+  Cascader,
+  Dialog,
+  Tag,
+  Autocomplete,
+  Tooltip,
+  Loading,
+} from 'element-ui';
+
+import {
   Swipe,
   SwipeItem,
-  List,
-  Field,
-  Loading,
-  Uploader
 } from 'vant';
 // 按需引入组件
-Vue.component('van-nav-bar', NavBar);
-Vue.component('van-tabbar', Tabbar);
-Vue.component('van-tabbar-item', TabbarItem);
 Vue.component('van-swipe', Swipe);
 Vue.component('van-swipe-item', SwipeItem);
-Vue.component('van-list', List);
-Vue.component('van-button', Button);
-Vue.component('van-tab', Tab);
-Vue.component('van-tabs', Tabs);
-Vue.component('van-field', Field);
-Vue.component('van-loading', Loading);
-Vue.component('van-uploader', Uploader);
 
-Vue.use(filters);
-Vue.use(plugins);
+Vue.use(Loading);
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Button);
+Vue.use(Upload);
+Vue.use(Radio);
+Vue.use(Option);
+Vue.use(Cascader);
+Vue.use(Dialog);
+Vue.use(Tag);
+Vue.use(Autocomplete);
+Vue.use(Tooltip);
+
 Vue.use(utils);
-Vue.use(EdusohoUI);
+
+Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 
-Api.getSettings({
-  query: {
-    type: 'wap'
-  }
-}).then(res => {
-  if (!res.enabled) {
-    // 如果没有开通微网校，则跳回老版本网校 TODO
-    window.location.href = axios.defaults.baseURL || 'http://zyc.st.edusoho.cn/';
-    return;
-  }
-
-  new Vue({
-    el: '#app-admin',
-    router,
-    store,
-    components: { Admin },
-    template: '<Admin/>'
-  });
+new Vue({
+  el: '#app-admin',
+  router,
+  store,
+  components: { Admin },
+  template: '<Admin/>'
 });
-

@@ -1,0 +1,33 @@
+.module-frame {
+  position: relative;
+  &__preview {
+    cursor: pointer;
+    border: 1px solid #fff;
+    &.active {
+      border: 1px dashed $primary-color;
+    }
+    &:hover {
+      border: 1px solid $primary-color;
+    }
+    &.incomplete {
+      border: 1px solid red;
+    }
+  }
+  &__setting {
+    position: absolute;
+    top: 0;
+    left: 105%;
+    padding: 15px;
+    width: 400px;
+    border: 1px solid $grey-light;
+    border-radius: 4px;
+    background: #FAFAFA;
+    box-sizing: border-box;
+    .title {
+      font-size: 14px;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid $grey-light;
+    }
+  }
+}

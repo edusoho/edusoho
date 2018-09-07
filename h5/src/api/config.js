@@ -21,6 +21,7 @@ const config = [
     method: 'GET'
   },
   {
+    // 首页正式数据
     name: 'discoveries',
     url: '/pages/h5/discoveries',
     method: 'GET'
@@ -136,6 +137,11 @@ const config = [
     // 获取录播地址
     name: 'getLiveReplayUrl',
     url: '/lessons/{taskId}/replay',
+    method: 'GET'
+  }, {
+    // 后台配置保存草稿数据
+    name: 'saveDraftDate',
+    url: '/pages/h5/settings/{type}/draft',
     method: 'GET'
   }
 ];

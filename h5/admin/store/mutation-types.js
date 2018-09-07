@@ -1,0 +1,9 @@
+// 全局
+export const UPDATE_LOADING_STATUS = 'UPDATE_LOADING_STATUS';
+export const GET_CSRF_TOKEN = 'GET_CSRF_TOKEN';
+
+// 课程分类
+export const GET_CATEGORIES = 'GET_CATEGORIES';
+
+// 草稿配置数据
+export const UPDATE_DRAFT = 'UPDATE_DRAFT';

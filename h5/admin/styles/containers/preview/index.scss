@@ -1,0 +1,101 @@
+.preview-container {
+  padding: 0 50px;
+  box-sizing: border-box;
+  .image-container {
+    .phone-img {
+      float: left;
+      margin-right: 60px;
+    }
+    .code-container {
+      float: left;
+      text-align: center;
+      .btn-common {
+        line-height: 32px;
+        padding: 0 30px;
+      }
+    }
+    .code-item {
+      background-color: #fff;
+      padding: 10px 20px 50px;
+      width: 240px;
+      height: 240px;
+      border: 1px solid #E1E1E1;
+      border-radius: 2px;
+      margin-top: 100px;
+      margin-bottom: 30px;
+      .code-img-container {
+        height: 100%;
+        .code-image {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // h5 组件 vw 单位复写
+  .e-course {
+    padding: 0 10px 20px;
+    &__left {
+      img {
+        width: 98px;
+        height: 64px;
+      }
+    }
+    &__right {
+      position: relative;
+      top: -10px;
+      width: 150px;
+      margin-left: 0;
+      transform: scale(0.85);
+    }
+    &__title {
+      font-size: 14px;
+    }
+  }
+
+  .e-course-list {
+    &__header {
+      padding: 10px;
+    }
+    &__list-title {
+      font-size: 15px;
+    }
+    &__more {
+      font-size: 14px;
+    }
+  }
+
+  .e-course-switch-box {
+    .switch-box__price {
+      font-size: 12px;
+    }
+  }
+
+  // h5 轮播长度单位复写
+  .item-container {
+    &__title {
+      font-size: 16px;
+      line-height: 30px;
+    }
+  }
+
+  .van-swipe__indicators {
+    bottom: 35px;
+    .van-swipe__indicator {
+      &--active {
+        background-color: $primary-color;
+      }
+    }
+  }
+}
+
+.preview-iframe {
+  position: absolute;
+  left: 85px;
+  top: 110px;
+  height: 455px;
+  width: 260px;
+  overflow: auto;
+}
+
+

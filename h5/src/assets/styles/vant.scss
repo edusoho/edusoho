@@ -11,3 +11,12 @@
 .van-tabbar--fixed {
   z-index: 10
 }
+
+.van-swipe__indicators {
+  bottom: vw(45);
+  .van-swipe__indicator {
+    &--active {
+      background-color: $primary-color;
+    }
+  }
+}

@@ -72,6 +72,12 @@
 
 .more {
   position: relative;
+  &__still {
+    position: absolute;
+    top: 46px;
+    bottom: 0;
+    overflow: hidden;
+  }
 }
 
 .e-tree-select__background {

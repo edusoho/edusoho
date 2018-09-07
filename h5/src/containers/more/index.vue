@@ -1,9 +1,10 @@
 <template>
-  <div class="more">
+  <div class="more" :class="{ 'more__still': selecting  }">
     <treeSelect
       :selectItems="selectItems"
       v-model="selectedData"
       @selectedChange="setQuery"
+      @selectToggled="toggleHandler"
     ></treeSelect>
     <lazyLoading
       :courseList="courseList"
@@ -45,6 +46,7 @@
         type: 'all',
         categoryId: 0,
         sort: 'recommendedSeq',
+        selecting: false,
         queryForm: {
           courseType: 'type',
           category: 'categoryId',
@@ -136,7 +138,10 @@
         });
         console.log(config, 'arr config');
         return config;
-      }
+      },
+      toggleHandler(value) {
+        this.selecting = value;
+      },
     },
     created() {
       this.selectedData = this.transform(this.$route.query);

@@ -1,6 +1,20 @@
 .e-swipe {
   img {
     width: 100%;
-    height: vw(150);
+    height: vw(200);
+  }
+}
+.item-container {
+  font-size: 0;
+  &__title {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 0 12px;
+    width: 100%;
+    bottom: 0;
+    font-size: vw(16);
+    line-height: vw(40);
+    color: #fff;
+    background: rgba(0,0,0,0.50);
   }
 }
