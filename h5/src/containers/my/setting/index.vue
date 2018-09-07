@@ -27,7 +27,7 @@ export default {
         name: '头像',
         info: '',
       }, {
-        name: '昵称',
+        name: '用户名',
         info: ''
       // }, {
       //   name: '手机',

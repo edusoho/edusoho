@@ -74,7 +74,10 @@ export default {
         return;
       }
       this.$router.push({
-        name: 'register'
+        name: 'register',
+        query: {
+          redirect: this.$route.query.redirect || ''
+        }
       })
     }
   }
