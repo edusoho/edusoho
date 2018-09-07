@@ -7,11 +7,11 @@
 .h5-find-body {
   border-radius: 4px;
   border: 1px solid #ddd;
-  padding: 0 20px;
   min-height: 480px;
   .setting-nav-tab {
     border: none;
-    margin-bottom: 44px;
+    margin-bottom: 30px;
+    padding: 0 20px;
     >li.active >a {
       color: @h5-primary;
       border: none;
@@ -54,22 +54,29 @@
     }
     #site-page {
       .site-img-content {
+        .site-module-container {
+          float: left;
+          width: 33.33%;
+          text-align: center;
+          label {
+            position: relative;
+            z-index: 2;
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            input {
+              margin-right: 3px;
+            }
+          }
+        }
         .site-default-img {
           float: left;
           width: 225px;
           height: auto;
           margin-right: 35px;
           margin-left: 35px;
-          margin: 0 38px 30px;
-        }
-      }
-      .h5-radios {
-        label {
-          width: 33.33%;
-          text-align: center;
-          input {
-            margin-right: 3px;
-          }
+          margin: 0 45px 30px;
         }
       }
       .help-block-container {
@@ -82,11 +89,11 @@
     }
     .btn-h5-open {
       display: inline-block;
+      line-height: 36px;
+      margin-left: 2px;
+      padding: 0 30px;
       background-image: linear-gradient(90deg, #408FFB 0%, #5FBAFF 100%);
       border-radius: 2px;
-      margin-left: 2px;
-      line-height: 36px;
-      width: 135px;
       text-align: center;
       color: #fff;
     }
