@@ -10,6 +10,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Common\TimeMachine;
 
 class Course extends AbstractResource
 {
@@ -84,27 +85,23 @@ class Course extends AbstractResource
         if (isset($conditions['type']) && 'all' == $conditions['type']) {
             unset($conditions['type']);
         }
+
         $conditions['status'] = 'published';
         $conditions['courseSetStatus'] = 'published';
         $conditions['parentId'] = isset($conditions['parentId']) ? $conditions['parentId'] : 0;
         //过滤约排课
         $conditions['excludeTypes'] = array('reservation');
+        if (!empty($conditions['lastDays'])) {
+            $timeRange = TimeMachine::getTimeRangeByDays($conditions['lastDays']);
+            $conditions['outerStartTime'] = $timeRange['startTime'];
+            $conditions['outerEndTime'] = $timeRange['endTime'];
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
 
-        if (array_key_exists('recommendedSeq', $sort)) {
-            $sort = array_merge($sort, array('recommendedTime' => 'DESC', 'id' => 'DESC'));
-            $courses = $this->getCourseService()->searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
-        } else {
-            $courses = $this->getCourseService()->searchWithJoinTableConditions(
-                $conditions,
-                $sort,
-                $offset,
-                $limit
-            );
-        }
-        $total = $this->getCourseService()->countWithJoinTableConditions($conditions);
+        $courses = $this->getCourseService()->searchBySort($conditions, $sort, $offset, $limit);
+        $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

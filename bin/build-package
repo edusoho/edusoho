@@ -58,8 +58,7 @@ fi
 
 rm -rf node_modules;
 rm -rf dist/*;
-# yarn install --production;
-yarn;
+yarn install --production;
 npm run build;
 rm -rf ./../web/h5/*;
 cp  -rf ./dist/* ./../web/h5/;
