@@ -31,7 +31,6 @@ class BookmarkedCourseType extends Type
 
                 $pushStatements[] = $sdk->bookmarked($actor, $object, null, $statement['uuid'], $statement['occur_time'], false);
             } catch (\Exception $e) {
-                throw $e;
                 $this->biz['logger']->error($e->getMessage());
             }
         }

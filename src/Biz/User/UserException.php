@@ -32,6 +32,8 @@ class UserException extends AbstractException
 
     const NICKNAME_EXISTED = 5000113;
 
+    const PERMISSION_DENIED = 4030114;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -45,5 +47,6 @@ class UserException extends AbstractException
         5000111 => 'exception.user.update_nickname_error',
         5000112 => 'exception.user.nickname_invalid',
         5000113 => 'exception.user.nickname_existed',
+        4030114 => 'exception.user.permission_denied',
     );
 }
