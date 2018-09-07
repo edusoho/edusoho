@@ -9,6 +9,8 @@ class EduSohoUpgrade extends AbstractUpdater
 {
     private $userUpdateHelper = null;
 
+    private $pageSize = 3000;
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -76,6 +78,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateDoc',
             'updateText',
             'updateAudio',
+            'updateVideo',
+            'updateFlash',
         );
 
         $funcNames = array();
@@ -187,6 +191,54 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function updateTestPaper($page)
+    {
+        $helper = new BatchUpdateHelper($this->getActivityDao());
+        $start = $this->getStart($page);
+        $countSql = "SELECT * FROM `activity` WHERE `mediaType` = 'testpaper' limit {$start}, 3000";
+        $activities = $this->db()->fetchAll($sql);
+        if (empty($activities)) {
+            return 1;
+        }
+
+        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+        $testpaperActivityIds = implode(',', $testpaperActivityIds);
+        $testpaperActivities = $this->db()->fetchAll("SELECT * FROM `activity_testpaper` where id in ({$ids})");
+        if (empty($testpaperActivities)) {
+            return $page + 1;
+        }
+        $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
+
+        $testpaperIds = ArrayToolkit::column($testpaperActivities, 'mediaId');
+        $testpaperIds = implode(',', $testpaperIds);
+        $testpapers = $this->db()->fetchAll("SELECT * FROM `testpaper` where id in ({$ids})");
+        if (empty($testpapers)) {
+            return $page + 1;
+        }
+        $testpapers = ArrayToolkit::index($testpapers, 'id');
+
+        foreach ($activities as $key => $value) {
+            if (empty($testpaperActivities[$value['mediaId']])) {
+                continue;
+            }
+            $testpaperActivity = $testpaperActivities[$value['mediaId']];
+            if (empty($$testpapers[$testpaperActivity['mediaId']])) {
+                continue;
+            }
+             
+            $testpaper = $testpapers[$testpaperActivity['mediaId']];
+            $finishCondition = json_decode($testpaperActivity['finishCondition']);
+            $param = array(
+                'finishType' => empty($finishCondition['type']) ? 'submit' : $finishCondition['type'],
+                'finishData' => empty($finishCondition['finishScore']) ? '' : round($finishCondition['finishScore'] / $testpaper['score'], 5),
+            );
+            $helper->add('id', $value['id'], $param);
+        }
+        $helper->flush();
+
+        return $page + 1;
+    }
+
     protected function generateIndex($step, $page)
     {
         return $step * 1000000 + $page;
@@ -262,6 +314,11 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->createService('Scheduler:SchedulerService');
     }
 
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
+    }
+
     /**
      * @return \Codeages\Biz\Framework\Scheduler\Dao\JobDao
      */
@@ -276,6 +333,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
+    }
+
+    protected function getStart($page)
+    {
+        return ($page - 1) * $this->pageSize;
     }
 }
 
