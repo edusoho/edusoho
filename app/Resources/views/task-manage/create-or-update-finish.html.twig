@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js'], 500) %}
+{% do script(['libs/jquery-validation.js', 'libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js'], 500) %}
 {% set bodyClass = 'task-iframe-body' %}
 {% block body %}
   <div class="tab-content" id="iframe-content">
@@ -37,7 +37,7 @@
                 </label>
               </div>
               <div class="col-sm-4">
-                <input class="form-control" id="watchTime" type="text" value="{% if activity['finishType']|default() == 'time' %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] == 'time' %}{{ defaultCondition['value']|default('1') }}{% endif %}">
+                <input class="form-control" id="watchTime" type="text"  name="watchTime" value="{% if activity['finishType']|default() == 'time' %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] == 'time' %}{{ defaultCondition['value']|default('1') }}{% endif %}">
               </div>
               <div class="col-sm-4">
                 <p class="form-control-static">
