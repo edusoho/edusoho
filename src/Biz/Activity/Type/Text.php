@@ -30,7 +30,6 @@ class Text extends Activity
         $user = $this->getCurrentUser();
         $text = $this->getTextActivityDao()->get($activity['mediaId']);
         $newText = array(
-            'content' => $text['content'],
             'finishType' => $text['finishType'],
             'finishDetail' => $text['finishDetail'],
             'createdUserId' => $user['id'],
@@ -45,7 +44,6 @@ class Text extends Activity
         $text = $this->getTextActivityDao()->get($activity['mediaId']);
         $text['finishType'] = $sourceText['finishType'];
         $text['finishDetail'] = $sourceText['finishDetail'];
-        $text['content'] = $sourceText['content'];
 
         return $this->getTextActivityDao()->update($text['id'], $text);
     }
@@ -57,7 +55,6 @@ class Text extends Activity
             array(
                 'finishType',
                 'finishDetail',
-                'content',
             )
         );
 
@@ -82,7 +79,6 @@ class Text extends Activity
         $text = ArrayToolkit::parts(
             $fields,
             array(
-                'content',
                 'finishType',
                 'finishDetail',
             )
