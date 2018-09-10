@@ -39,7 +39,7 @@ class MaterialExtension extends \Twig_Extension
         if (empty($activityId)) {
             return array();
         }
-        
+
         return $this->getMaterialService()->findMaterialsByLessonIdAndSource($activityId, $source);
     }
 

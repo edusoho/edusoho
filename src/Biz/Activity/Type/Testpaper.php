@@ -20,8 +20,10 @@ class Testpaper extends Activity
     public function get($targetId)
     {
         $activity = $this->getTestpaperActivityService()->getActivity($targetId);
-        $testPaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
-        $activity['testpaper'] = $testPaper;
+        if ($activity) {
+            $testPaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+            $activity['testpaper'] = $testPaper;
+        }
 
         return $activity;
     }
@@ -77,7 +79,7 @@ class Testpaper extends Activity
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
 
-        return $this->getTestpaperActivityService()->updateActivity($ext['id'], $ext);
+        return $this->update($ext['id'], $ext, $activity);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -118,24 +120,22 @@ class Testpaper extends Activity
             'testpaper'
         );
 
-        if (!empty($result)) {
+        if (empty($result)) {
+            return false;
+        }
+        if (!in_array(
+            $result['status'],
+            array('reviewing', 'finished')
+        )) {
             return false;
         }
 
-        if (in_array(
-                $result['status'],
-                array('reviewing', 'finished')
-            ) && 'submit' === $activity['finishType']
-        ) {
+        if ('submit' === $activity['finishType']) {
             return true;
         }
 
-        $passScore = round(($testpaper['score'] * $activity['finishData']), 0);
-        if (in_array(
-                $result['status'],
-                array('reviewing', 'finished')
-            ) && 'score' === $activity['finishType'] && $result['score'] >= $passScore
-        ) {
+        $passScore = ceil($testpaper['score'] * $activity['finishData']);
+        if ('score' === $activity['finishType'] && $result['score'] >= $passScore) {
             return true;
         }
 
@@ -153,7 +153,6 @@ class Testpaper extends Activity
                 'length',
                 'limitedTime',
                 'checkType',
-                'finishScore',
                 'requireCredit',
                 'testMode',
             )

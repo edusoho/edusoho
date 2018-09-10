@@ -94,7 +94,7 @@ class Activity
             return !empty($result) && $result >= $activity['finishData'];
         } else {
             $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
-            
+
             return !empty($log);
         }
 
