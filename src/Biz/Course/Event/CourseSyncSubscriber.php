@@ -169,6 +169,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'isHideUnpublish',
             'lessonNum',
             'publishLessonNum',
+            'enableAudio',
         ));
         $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
     }
