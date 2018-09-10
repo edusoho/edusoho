@@ -25,11 +25,12 @@ class CourseItem extends AbstractResource
         return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $course, $request->query->get('onlyPublished', 0));
     }
 
-    private function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
+    protected function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
     {
         $courseId = $course['id'];
         $newItems = array();
         $number = 1;
+
         foreach ($originItems as $originItem) {
             $item = array();
             if ('task' == $originItem['itemType']) {
@@ -72,7 +73,7 @@ class CourseItem extends AbstractResource
         return $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
     }
 
-    private function filterUnPublishTask($items)
+    protected function filterUnPublishTask($items)
     {
         foreach ($items as $key => $item) {
             if ('task' == $item['type'] && 'published' != $item['task']['status']) {
@@ -83,11 +84,11 @@ class CourseItem extends AbstractResource
         return array_values($items);
     }
 
-    private function isHiddenUnpublishTasks($items, $courseId)
+    protected function isHiddenUnpublishTasks($items, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if (!$course['isShowUnpublish']) {
+        if ($course['isHideUnpublish']) {
             return $this->filterUnPublishTask($items);
         }
 

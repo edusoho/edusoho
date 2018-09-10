@@ -1,0 +1,40 @@
+{% set activity = task.activity|default() %}
+{% set file = task.activity.ext.file|default(null) %}
+
+<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
+
+{% if displayAllInfo|default(false) %}
+  {% if not task.isOptional %}
+    {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
+  {% endif %}
+  <span class="js-task-title">
+    {{ task.title|sub_text(30) }}
+  </span>
+{% endif %} 
+
+{% if customTitle|default('') != '' %}
+  {{customTitle|raw}}
+{% endif %}
+
+<span class="{{isLesson|default(false)?'js-display-when-single-task':''}}">
+  {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
+    <span class="cd-tag cd-tag-red ml5">{{'course.plan_task.convert_failed'|trans}}</span>
+  {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
+    <span class="cd-tag cd-tag-orange ml5">{{'course.plan_task.converting'|trans}}</span>
+  {% endif %}
+
+  {% if activity.mediaType is same as('live') %}
+    {% if not activity.ext.roomCreated|default(true) %}
+      <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
+    {% elseif activity.endTime < date().timestamp %}
+      <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
+    {% else %}
+      <span class="color-success mls">
+      {{ activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ activity.endTime|date('H:i')|trans }}</span>
+    {% endif %}
+  {% else %}
+    {% if activity.length|activity_length_format(activity.mediaType) %}<span class="mls">
+      （{{ activity.length|activity_length_format(activity.mediaType) }}）</span>
+    {% endif %}
+  {% endif %}
+</span>

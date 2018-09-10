@@ -848,8 +848,7 @@ course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock'
-course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
-course.plan_setup.mode.free_tips: 'Learn freely'
+course.plan_setup.mode.tips: 'Free:Learn freely<br>Lock:Unlock lessons step by step'
 course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
@@ -1539,7 +1538,7 @@ course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
 course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n"
-course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="title">%title%</span>'
+course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.question_placeholder: 'Ask a question'
 course.plan_task.question_title: Title
@@ -1578,6 +1577,7 @@ course.plan_task.activity_manage.preview: 'Preview%taskName%'
 course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
 course.manage.edit_lesson: 编辑课时
+course.manage.preview_lesson: Preview
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名

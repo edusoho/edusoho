@@ -18,8 +18,17 @@ class PagedCourseLesson {
   }
 
   _init(options) {
-    let defaultOptions = {
-      'data': this._toJson($('.js-hidden-data').html()),
+    let finalOptions = $.extend(this._getDefaultOptions(), options);
+    new ESInfiniteCachedScroll(finalOptions);
+
+    if (this._displayAllImmediately) {
+      this._destroyPaging();
+    }
+  }
+
+  _getDefaultOptions() {
+    return {
+      'data': this._toJson($('.js-hidden-cached-data').html()),
 
       'context': {
         'course': this._toJson($('.js-hidden-course-info').html()),
@@ -38,6 +47,10 @@ class PagedCourseLesson {
           return 'unit' == data.itemType;
         },
 
+        'isLesson': function(data, context) {
+          return 'lesson' == data.itemType;
+        },
+
         'isTask': function(data, context) {
           return 'task' == data.itemType;
         },
@@ -50,8 +63,48 @@ class PagedCourseLesson {
           return Translator.trans('course.unit', { part_name: context.i18n.i18nUnitName, number: data.number, title: data.title });
         },
 
+        'getLessonName': function(data, context) {
+          if (data['isOptional']) {
+            return data.title;
+          } else {
+            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
+          }
+        },
+
+        /*
+         * 选修或未发布状态下，
+         *   业务逻辑：课时上面显示选修或敬请期待（未发布需要显示敬请期待），任务不显示选修或敬请期待
+         *   技术逻辑：
+         *     单任务课时，课时本身不显示选修或敬请期待，任务显示选修或敬请期待（页面上的课时，实际上是任务，只是套了一些课时的属性）
+         *     多任务课时，课时本身显示选修或敬请期待，任务不显示选修或敬请期待
+         */
+        'isItemDisplayedAsOptionalOrUnpublished': function(data, context) {
+          return context.isItemDisplayedAsOptional(data, context) ||
+            context.isItemDisplayedAsUnpublished(data, context);
+        },
+
+        /**
+         * 见 isItemDisplayedAsOptionalOrPublished 描述
+         */
+        'isItemDisplayedAsOptional': function(data, context) {
+          return data['isOptional'] && context.isLessonNode(data, context);
+        },
+
+        'isItemDisplayedAsUnpublished': function(data, context) {
+          return !context.isPublished(data, context) && context.isLessonNode(data, context);
+        },
+
+        'isLessonNode': function(data, context) {
+          return (data['itemType'] == 'task' && data['isSingleTaskLesson']) ||
+            (data['itemType'] == 'lesson' && !data['isSingleTaskLesson']);
+        },
+
         'getTaskName': function(data, context) {
-          return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
+          if (data.isSingleTaskLesson) {
+            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
+          } else {
+            return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
+          }
         },
 
         'hasWatchLimitRemaining': function(data, context) {
@@ -75,6 +128,15 @@ class PagedCourseLesson {
             classNames += ' es-icon-iccheckcircleblack24px color-primary';
           }
           return classNames;
+        },
+
+        'lessonContainerClass': function(data, context) {
+          let containerClass = 'color-gray bg-gray-lighter';
+          if (context.isTask(data, context)) {
+            return data.isSingleTaskLesson ? containerClass : '';
+          } else if (context.isLesson(data, context)) {
+            return containerClass;
+          }
         },
 
         'isTaskLocked': function(data, context) {
@@ -134,24 +196,25 @@ class PagedCourseLesson {
 
         'toInt': function(timestampStr) {
           return parseInt(timestampStr, 10);
-        }
+        },
+
+        'getLessonNum': function(data, context) {
+          let lessonNum = data.number;
+          if ('1' == context.course.isHideUnpublish) {
+            lessonNum = data.published_number;
+          }
+          return lessonNum;
+        },
       },
 
       'dataTemplateNode': '.js-infinite-item-template'
     };
-
-    let finalOptions = $.extend(defaultOptions, options);
-    new ESInfiniteCachedScroll(finalOptions);
-
-    if (this._displayAllImmediately) {
-      this._destroyPaging();
-    }
   }
 
   _destroyPaging() {
     let removedClasses = [
       'js-infinite-item-template',
-      'js-hidden-data',
+      'js-hidden-cached-data',
       'js-hidden-course-info',
       'js-hidden-i18n',
       'js-hidden-activity-metas',

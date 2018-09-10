@@ -1,6 +1,6 @@
 {% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
 
-<tmp display-if="{isPublished}">
+<tmp hide-if="{isItemDisplayedAsUnpublished}">
   {% if member %}
     <a hide-if="{isTaskLocked}" class="title" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
@@ -52,7 +52,7 @@
   </span>
 </tmp>
 
-<tmp hide-if="{isPublished}">
+<tmp display-if="{isItemDisplayedAsUnpublished}">
   <span class="title">
     {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
   </span>

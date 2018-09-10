@@ -11,39 +11,53 @@
       <span class="title">{getUnitName}</span>
     </li>
 
-    <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} mouse-control infinite-item">
+    <li class="task-item infinite-item {lessonContainerClass}"
+      display-if="{isLesson}">
+      <span class="title">
+        <tmp display-if="{isOptional}">
+          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+        </tmp>
+        {getLessonName}
+
+        <tmp display-if="{isItemDisplayedAsUnpublished}">
+          <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
+        </tmp>
+      </span>
+    </li>
+
+    <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} {lessonContainerClass} mouse-control infinite-item">
       <i class="{taskClass}"></i>
       
       <a display-if="{isPublishedTaskUnlocked}" class="title"
           href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
-        <tmp display-if="{isOptional}">
+        <tmp display-if="{isItemDisplayedAsOptional}">
           <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
 
-        <tmp hide-if="{isOptional}">
+        <tmp hide-if="{isItemDisplayedAsOptionalOrUnpublished}">
           {getTaskName}
         </tmp>
 
-        <tmp display-if="{isOptional}">
+        <tmp display-if="{isItemDisplayedAsOptionalOrUnpublished}">
           {title}
         </tmp>
       </a>
 
       <div hide-if="{isPublishedTaskUnlocked}" class="title"
             data-url="{{ path('course_task_show', {id: '{taskId}', courseId: course.id}) }}">
-        <tmp display-if="{isOptional}">
+        <tmp display-if="{isItemDisplayedAsOptionalOrUnpublished}">
           <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
 
-        <tmp hide-if="{isOptional}">
+        <tmp hide-if="{isItemDisplayedAsOptionalOrUnpublished}">
           {getTaskName}
         </tmp>
-        <tmp display-if="{isOptional}">
+        <tmp display-if="{isItemDisplayedAsOptionalOrUnpublished}">
           {title}
         </tmp>
       </div>
 
-      <tmp hide-if="{isPublished}">
+      <tmp display-if="{isItemDisplayedAsUnpublished}">
         <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
       </tmp>
       

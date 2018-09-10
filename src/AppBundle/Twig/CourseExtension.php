@@ -95,7 +95,7 @@ class CourseExtension extends \Twig_Extension
 
         $results = array();
         foreach ($courseItems as $item) {
-            if ($showOptional || !('task' == $item['itemType'] && $item['isOptional'])) {
+            if ($showOptional || !$this->isOptionalTaskLesson($item)) {
                 $default = array(
                     'lock' => '',
                     'status' => '',
@@ -110,6 +110,7 @@ class CourseExtension extends \Twig_Extension
                 $results[] = array(
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
+                    'published_number' => empty($item['published_number']) ? 0 : $item['published_number'],
                     'title' => $item['title'],
                     'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
                     'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
@@ -127,6 +128,7 @@ class CourseExtension extends \Twig_Extension
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
+                    'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                 );
             }
         }
@@ -406,5 +408,10 @@ class CourseExtension extends \Twig_Extension
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    private function isOptionalTaskLesson($item)
+    {
+        return in_array($item['itemType'], array('task', 'lesson')) && $item['isOptional'];
     }
 }

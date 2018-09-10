@@ -3,13 +3,17 @@
 
 
 {% block title %}
-  {% if task|default(false) %}
-    {{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+  {% if customTitle|default('') != '' %}
+    {{customTitle}}
   {% else %}
-    {% if categoryId|default(0) %}
-      {{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+    {% if task|default(false) %}
+      {{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
     {% else %}
-      {{ 'course.manage.create_lesson'|trans }}
+      {% if categoryId|default(0) %}
+        {{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+      {% else %}
+        {{ 'course.manage.create_lesson'|trans }}
+      {% endif %}
     {% endif %}
   {% endif %}
 {% endblock %}

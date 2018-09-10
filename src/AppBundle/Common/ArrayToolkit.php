@@ -279,12 +279,15 @@ class ArrayToolkit
 
     /**
      * 根据$orderBy数组的值排序$array
+     * 如 $array 为
+     *  array(
+     *      1 => array(a,b,c),
+     *      2 => array(d,e,f),
+     *      3 => array(g,h,i)
+     *  )
      *
-     * @param
-     * $array = array(1 => array(a,b,c), 2 => array(d,e,f), 3 => array(g,h,i))
      * $orderArray = array(3,1,2)
-     *
-     * @return
+     * 排完序后
      * array(3 => array(g,h,i), 1 => array(a,b,c), 3 => array(d,e,f))
      */
     public static function orderByArray($array, $orderArray)
@@ -297,6 +300,43 @@ class ArrayToolkit
         }
 
         return array_replace(array_flip($orderArray), $array);
+    }
+
+    /**
+     * 根据所给的二维数组进行排序, 按照二维数组内的指定属性排序
+     *
+     * @param $arr  必须为二维数据
+     * @param $attrName 二维数组内指定的属性
+     * @param $ascending  默认为升序
+     *
+     * @return
+     *  如$arr 为
+     *  array(
+     *      array('id' => 1, 'name' => 'hello1'),
+     *      array('id' => 2, 'name' => 'hello2'),
+     *  )
+     *
+     *  $attrName 为 name, $ascending = false
+     *
+     *  排完序后结果为 array(
+     *      array('id' => 2, 'name' => 'hello2'),
+     *      array('id' => 1, 'name' => 'hello1'),
+     *  )
+     */
+    public static function sortPerArrayValue($arr, $attrName, $ascending = true)
+    {
+        usort(
+            $arr,
+            function ($first, $next) use ($ascending, $attrName) {
+                if ($ascending) {
+                    return $first[$attrName] > $next[$attrName] ? 1 : -1;
+                } else {
+                    return $first[$attrName] < $next[$attrName] ? 1 : -1;
+                }
+            }
+        );
+
+        return $arr;
     }
 
     /**
