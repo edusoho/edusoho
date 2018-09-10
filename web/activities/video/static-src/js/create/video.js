@@ -97,8 +97,8 @@ export default class Video {
           file.minute = minute;
           file.second = second;
         }
+        file.id = !file.id ? 0 : file.id;
         $('[name="media"]').val(JSON.stringify(file));
-
       };
       placeMediaAttr(file);
 
