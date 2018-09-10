@@ -1,0 +1,26 @@
+{
+  "name": "course.activity.checkin",
+  "type": "checkin",
+  "description": "",
+  "authors": [
+    {
+      "name": "EduSoho",
+      "email": "edusoho@howzhi.com"
+    }
+  ],
+  "version": "1.0.0",
+  "ltc_version": "1.0.0",
+  "icon": {
+    "type": "font",
+    "value": "es-icon es-icon-graphicclass"
+  },
+  "routes": {
+    "create": "create.html.twig",
+    "update": "create.html.twig",
+    "show": "show.html.twig",
+    "finish_tip": "finish_tip.html.twig",
+    "status": "src/status.php",
+    "sign": "src/sign.php",
+    "signed": "src/signed.php"
+  }
+}

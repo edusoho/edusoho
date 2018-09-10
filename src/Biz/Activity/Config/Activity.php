@@ -2,17 +2,18 @@
 
 namespace Biz\Activity\Config;
 
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Biz\Activity\Listener\Listener;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\Exception\UnexpectedValueException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Dao\DaoProxy;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
-abstract class Activity
+class Activity
 {
     private $biz;
 
@@ -83,9 +84,17 @@ abstract class Activity
         return true;
     }
 
-    public function isFinished($id)
+    public function isFinished($activityId)
     {
-        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($id);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if ('time' === $activity['finishType']) {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
+            $result /= 60;
+
+            return !empty($result) && $result >= $activity['finishData'];
+        }
+
+        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
         return !empty($log);
     }
@@ -118,7 +127,10 @@ abstract class Activity
     /**
      * @return mixed
      */
-    abstract protected function registerListeners();
+    protected function registerListeners()
+    {
+        return array();
+    }
 
     /**
      * @param string $eventName
@@ -198,5 +210,15 @@ abstract class Activity
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @param $realDao
+     *
+     * @return mixed
+     */
+    protected function createDao($realDao)
+    {
+        return new DaoProxy($this->biz, $realDao, $this->biz['dao.metadata_reader'], $this->biz['dao.serializer'], $this->biz['dao.cache.array_storage']);
     }
 }

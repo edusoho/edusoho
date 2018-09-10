@@ -28,8 +28,11 @@ class TaskManageController extends BaseController
         }
     }
 
-    public function preUpdateCheckAction(Request $request, $courseId, $taskId)
+    public function preUpdateCheckAction(Request $request, $courseId, $activityId)
     {
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $taskId = $task['id'];
+
         $task = $request->request->all();
         $task['fromCourseId'] = $courseId;
         try {

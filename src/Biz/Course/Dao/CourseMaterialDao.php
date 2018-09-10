@@ -21,4 +21,6 @@ interface CourseMaterialDao extends GeneralDaoInterface
     public function searchDistinctFileIds($conditions, $orderBys, $start, $limit);
 
     public function countGroupByFileId($conditions);
+
+    public function findMaterialsByIds($ids);
 }

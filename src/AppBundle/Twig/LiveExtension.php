@@ -6,6 +6,7 @@ use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Biz\Course\Service\LiveReplayService;
 
 class LiveExtension extends \Twig_Extension
 {
@@ -32,7 +33,65 @@ class LiveExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_live_finished', array($this, 'isLiveFinished')),
             new \Twig_SimpleFunction('get_live_room_type', array($this, 'getLiveRoomType')),
             new \Twig_SimpleFunction('get_live_account', array($this, 'getLiveAccount')),
+            new \Twig_SimpleFunction('get_live_replays', array($this, 'getLiveReplays')),
         );
+    }
+
+    public function getLiveReplays($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+
+        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+            return array($this->_getLiveVideoReplay($activity));
+        } else {
+            return $this->_getLiveReplays($activity);
+        }
+    }
+
+    protected function _getLiveVideoReplay($activity, $ssl = false)
+    {
+        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+            $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
+
+            return array(
+                'url' => $this->generateUrl('task_live_replay_player', array(
+                    'activityId' => $activity['id'],
+                    'courseId' => $activity['fromCourseId'],
+                )),
+                'title' => $file['filename'],
+            );
+        } else {
+            return array();
+        }
+    }
+
+    protected function _getLiveReplays($activity)
+    {
+        if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
+            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+            $replays = array_filter($replays, function ($replay) {
+                // 过滤掉被隐藏的录播回放
+                return !empty($replay) && !(bool) $replay['hidden'];
+            });
+
+            $self = $this;
+            $replays = array_map(function ($replay) use ($activity, $self) {
+                $replay['url'] = $self->generateUrl('live_activity_replay_entry', array(
+                    'courseId' => $activity['fromCourseId'],
+                    'activityId' => $activity['id'],
+                    'replayId' => $replay['id'],
+                ));
+
+                return $replay;
+            }, $replays);
+        } else {
+            $replays = array();
+        }
+
+        return $replays;
     }
 
     public function canRecord($liveId)
@@ -105,6 +164,11 @@ class LiveExtension extends \Twig_Extension
         return 'live';
     }
 
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
@@ -118,5 +182,10 @@ class LiveExtension extends \Twig_Extension
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }

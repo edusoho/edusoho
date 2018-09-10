@@ -19,7 +19,11 @@ class Testpaper extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperActivityService()->getActivity($targetId);
+        $activity = $this->getTestpaperActivityService()->getActivity($targetId);
+        $testPaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $activity['testpaper'] = $testPaper;
+
+        return $activity;
     }
 
     public function find($ids, $showCloud = 1)
@@ -40,17 +44,17 @@ class Testpaper extends Activity
             return null;
         }
 
-        $ext = $this->get($activity['mediaId']);
+        $testpaperActivity = $this->get($activity['mediaId']);
+        $testpaper = $testpaperActivity['testpaper'];
 
         $newExt = array(
-            'mediaId' => empty($config['testId']) ? 0 : $config['testId'],
-            'doTimes' => $ext['doTimes'],
-            'redoInterval' => $ext['redoInterval'],
-            'limitedTime' => $ext['limitedTime'],
-            'checkType' => $ext['checkType'],
-            'finishCondition' => $ext['finishCondition'],
-            'requireCredit' => $ext['requireCredit'],
-            'testMode' => $ext['testMode'],
+            'testpaperId' => $testpaper['id'],
+            'doTimes' => $testpaperActivity['doTimes'],
+            'redoInterval' => $testpaperActivity['redoInterval'],
+            'limitedTime' => $testpaperActivity['limitedTime'],
+            'checkType' => $testpaperActivity['checkType'],
+            'requireCredit' => $testpaperActivity['requireCredit'],
+            'testMode' => $testpaperActivity['testMode'],
         );
 
         return $this->create($newExt);
@@ -65,12 +69,11 @@ class Testpaper extends Activity
             $activity['fromCourseSetId']
         );
 
-        $ext['mediaId'] = $testPaper['id'];
+        $ext['testpaperId'] = $testPaper['id'];
         $ext['doTimes'] = $sourceExt['doTimes'];
         $ext['redoInterval'] = $sourceExt['redoInterval'];
         $ext['limitedTime'] = $sourceExt['limitedTime'];
         $ext['checkType'] = $sourceExt['checkType'];
-        $ext['finishCondition'] = $sourceExt['finishCondition'];
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
 
@@ -104,33 +107,34 @@ class Testpaper extends Activity
     {
         $user = $this->getCurrentUser();
 
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $testpaper = $activity['ext']['testpaper'];
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId(
             $user['id'],
-            $testpaperActivity['mediaId'],
+            $testpaper['id'],
             $activity['fromCourseId'],
             $activity['id'],
             'testpaper'
         );
 
-        if (!$result || empty($testpaperActivity['finishCondition'])) {
+        if (!empty($result)) {
             return false;
         }
 
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && 'submit' === $testpaperActivity['finishCondition']['type']
+            ) && 'submit' === $activity['finishType']
         ) {
             return true;
         }
 
+        $passScore = ceil($testpaper['score'] * $activity['finishData']);
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && 'score' === $testpaperActivity['finishCondition']['type'] && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
+            ) && 'score' === $activity['finishType'] && $result['score'] >= $passScore
         ) {
             return true;
         }
@@ -143,31 +147,17 @@ class Testpaper extends Activity
         $filterFields = ArrayToolkit::parts(
             $fields,
             array(
-                'mediaId',
+                'testpaperId',
                 'doTimes',
                 'redoInterval',
                 'length',
                 'limitedTime',
                 'checkType',
-                'finishCondition',
-                'condition',
                 'finishScore',
                 'requireCredit',
                 'testMode',
             )
         );
-
-        $finishCondition = array();
-
-        if (!empty($filterFields['condition'])) {
-            $finishCondition['type'] = $filterFields['condition'];
-            unset($filterFields['condition']);
-        }
-
-        if (isset($filterFields['finishScore'])) {
-            $finishCondition['finishScore'] = $filterFields['finishScore'];
-            unset($filterFields['finishScore']);
-        }
 
         if (isset($filterFields['length'])) {
             $filterFields['limitedTime'] = $filterFields['length'];
@@ -178,7 +168,8 @@ class Testpaper extends Activity
             $filterFields['testMode'] = 'normal';
         }
 
-        $filterFields['finishCondition'] = empty($filterFields['finishCondition']) ? $finishCondition : $filterFields['finishCondition'];
+        $filterFields['mediaId'] = $filterFields['testpaperId'];
+        unset($filterFields['testpaperId']);
 
         return $filterFields;
     }

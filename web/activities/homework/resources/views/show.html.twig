@@ -1,0 +1,13 @@
+{% set homework = activity.ext %}
+{% if app.request.get('preview') == 1 %}
+  {% include '@activity/homework/resources/views/show/preview.html.twig' %}
+{% else %}
+  {% set testpaperResult = data('TestPaperResult', {activityId: activity.id ,testpaperId: activity.mediaId}) %}
+  {% if not testpaperResult  or (testpaperResult.status == 'doing' and  not testpaperResult.updateTime) %}
+    {% include('@activity/homework/resources/views/show/index.html.twig') %}
+  {% elseif testpaperResult and  testpaperResult.status == 'finished' %}
+    {{ render(controller('AppBundle:Homework:showResult', {resultId: testpaperResult.id})) }}
+  {% else %}
+    {% include('@activity/homework/resources/views/show/do-homework.html.twig') %}
+  {% endif %}
+{% endif %}

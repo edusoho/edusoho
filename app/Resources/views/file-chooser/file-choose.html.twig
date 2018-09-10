@@ -3,7 +3,7 @@
 {% endif %}
 {% set courseType = courseType|default('course') %}
 
-<input type="hidden" name="media" id="media" value="{{ selectedFile|default('')|json_encode }}">
+<input type="hidden" name="media" id="media" value="{% if file|default(null) %}{{ selectedFile|default()|json_encode }}{% endif %}">
 <div class="file-chooser-bar {% if not file|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ file.filename|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button">

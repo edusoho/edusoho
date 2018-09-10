@@ -149,15 +149,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
-
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
-        $materials = $this->getMaterialsFromActivity($fields, $activityConfig);
 
-        $media = $activityConfig->create($fields);
+        if (empty($fields['mediaId'])) {
+            $media = $activityConfig->create($fields);
+        }
 
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
         }
+
+        $materials = $this->getMaterialsFromActivity($fields);
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
         $fields = $this->filterFields($fields);
@@ -185,7 +187,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
 
-        $materials = $this->getMaterialsFromActivity($fields, $realActivity);
+        $materials = $this->getMaterialsFromActivity($fields);
         if (!empty($materials)) {
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
@@ -289,11 +291,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function buildMaterial($material, $activity)
     {
         return array(
-            'fileId' => intval($material['id']),
+            'fileId' => intval($material['fileId']),
             'courseId' => $activity['fromCourseId'],
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId' => $activity['id'],
-            'title' => $material['name'],
+            'title' => $material['title'],
             'description' => empty($material['summary']) ? '' : $material['summary'],
             'userId' => $this->getCurrentUser()->offsetGet('id'),
             'type' => 'course',
@@ -363,6 +365,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'remark',
                 'mediaId',
                 'mediaType',
+                'mediaId',
                 'content',
                 'length',
                 'fromCourseId',
@@ -370,6 +373,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'fromUserId',
                 'startTime',
                 'endTime',
+                'finishType',
+                'finishData',
             )
         );
 
@@ -411,7 +416,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      *
      * @return array 多维数组
      */
-    public function getMaterialsFromActivity($fields, $activityConfig)
+    public function getMaterialsFromActivity($fields)
     {
         if (!empty($fields['materials'])) {
             return json_decode($fields['materials'], true);
@@ -419,6 +424,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!empty($fields['media'])) {
             $media = json_decode($fields['media'], true);
+            $media['fileId'] = $media['id'];
+            $media['title'] = $media['name'];
             if (!empty($media['id'])) {
                 return array($media);
             }
@@ -489,7 +496,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
 
-        if ($activity['ext']['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus']) {
             return true;
         }
 

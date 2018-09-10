@@ -13,6 +13,7 @@ use Biz\User\Service\TokenService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use AppBundle\Common\ArrayToolkit;
 
 class TaskController extends BaseController
 {
@@ -166,7 +167,7 @@ class TaskController extends BaseController
         $taskCanTryLook = false;
         if ($course['tryLookable'] && 'video' == $task['type']) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                 $taskCanTryLook = true;
             }
         }
@@ -384,11 +385,23 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
-        $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['controller'].':finishCondition';
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activityConfigManage = $this->get('activity_config_manager');
+        $actvityFinishCondition = $activityConfigManage->getInstalledActivity($activity['mediaType']);
 
-        return $this->forward($action, array('activity' => $activity));
+        if (!empty($actvityFinishCondition['finish_condition'])) {
+            $actvityFinishCondition = ArrayToolkit::index($actvityFinishCondition['finish_condition'], 'type');
+            $container = $this->get('activity_runtime_container');
+
+            if (!empty($actvityFinishCondition[$activity['finishType']]['finish_tip'])) {
+                return $container->renderRoute($activity, 'finish_tip');
+            }
+        }
+
+        return $this->render('task/finish-tip.html.twig', array(
+            'activity' => $activity,
+            'conditions' => $actvityFinishCondition,
+        ));
     }
 
     /**

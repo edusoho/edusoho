@@ -97,7 +97,7 @@ class PageCourseFilter extends Filter
     private function filterUnPublishTask($items)
     {
         foreach ($items as $key => $item) {
-            if ('task' == $item['type'] && $item['task']['status'] != 'published') {
+            if ('task' == $item['type'] && 'published' != $item['task']['status']) {
                 unset($items[$key]);
             }
         }

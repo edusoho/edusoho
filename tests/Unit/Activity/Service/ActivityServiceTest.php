@@ -559,18 +559,61 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertArrayHasKey('ext', $activities[0]);
     }
 
-    public function testIsFinished()
+    public function testIsFinishedWithEndType()
     {
         $activity1 = array(
             'title' => 'test activity',
             'mediaType' => 'text',
             'fromCourseId' => 1,
             'fromCourseSetId' => 1,
+            'finishType' => 'end',
+            'finishData' => '',
         );
         $savedActivity1 = $this->getActivityService()->createActivity($activity1);
 
         $result = $this->getActivityService()->isFinished(1);
 
+        $this->assertFalse($result);
+        $this->mockBiz('Activity:ActivityLearnLogService', array(
+            array(
+                'functionName' => 'getMyRecentFinishLogByActivityId',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                    ),
+                ),
+                'withParams' => array(1),
+            ),
+        ));
+
+        $result = $this->getActivityService()->isFinished(1);
+        $this->assertTrue($result);
+    }
+
+    public function testIsFinishedWithTimeType()
+    {
+        $activity1 = array(
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'finishData' => '1',
+        );
+        $savedActivity1 = $this->getActivityService()->createActivity($activity1);
+
+        $result = $this->getActivityService()->isFinished(1);
+
+        $this->assertFalse($result);
+        $this->mockBiz('Task:TaskResultService', array(
+            array(
+                'functionName' => 'getMyLearnedTimeByActivityId',
+                'returnValue' => 100,
+                'withParams' => array(1),
+            ),
+        ));
+
+        $result = $this->getActivityService()->isFinished(1);
         $this->assertTrue($result);
     }
 
@@ -808,15 +851,13 @@ class ActivityServiceTest extends BaseTestCase
     public function testGetMaterialsFromActivity()
     {
         $result1 = $this->getActivityService()->getMaterialsFromActivity(
-            array('materials' => '{"id" : 1}'),
-            'text'
+            array('materials' => '{"id" : 1,"name" : "test.doc"}')
         );
 
         $this->assertEquals(1, $result1['id']);
 
         $result2 = $this->getActivityService()->getMaterialsFromActivity(
-            array('media' => '{"id" : 1}'),
-            'text'
+            array('media' => '{"id" : 1,"name" : "test.doc"}')
         );
 
         $this->assertEquals(1, $result2[0]['id']);
@@ -843,8 +884,8 @@ class ActivityServiceTest extends BaseTestCase
     public function testBuildMaterial()
     {
         $material = array(
-            'id' => 1,
-            'name' => 'material',
+            'fileId' => 1,
+            'title' => 'material',
             'summary' => 'summary',
             'link' => 'www.edusoho.com',
         );

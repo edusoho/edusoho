@@ -82,7 +82,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
     {
         if ('cloud' == $file['storage']) {
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                     $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
                     $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
                     $token = $this->makeToken('hls.playlist', $file['id'], $context);
