@@ -92,11 +92,13 @@ class Activity
             $result /= 60;
 
             return !empty($result) && $result >= $activity['finishData'];
+        } else {
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+
+            return !empty($log);
         }
 
-        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
-
-        return !empty($log);
+        return false;
     }
 
     public function get($targetId)

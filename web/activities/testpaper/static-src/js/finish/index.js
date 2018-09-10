@@ -35,10 +35,11 @@ class Testpaper {
       this.scoreSlider = noUiSlider.create(scoreSlider, option);
       scoreSlider.noUiSlider.on('update', function( values, handle ){
         let rate = values[handle]/score;
-        $('.noUi-tooltip').text(`${(rate*100).toFixed(0)}%`);
-        $('.js-score-tooltip').css('left',`${(rate*100).toFixed(0)}%`);
+        let percentage = (rate*100).toFixed(0);
+        $('.noUi-tooltip').text(`${percentage}%`);
+        $('.js-score-tooltip').css('left',`${percentage}%`);
         $('.js-passScore').text(parseInt(values[handle]));
-        $('#finish-data').val(rate.toFixed(5));
+        $('#finish-data').val(percentage/100);   
       });
     }
     
