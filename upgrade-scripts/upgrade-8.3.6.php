@@ -9,13 +9,12 @@ use QiQiuYun\SDK\HttpClient\Client;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private $userUpdateHelper = null;
+    private $pageSize = 3000;
+
 
     public function __construct($biz)
     {
         parent::__construct($biz);
-
-        $this->userUpdateHelper = new BatchUpdateHelper($this->getUserDao());
         $this->setCourseUpdateHelper();
     }
 
@@ -57,7 +56,191 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
-        $this->updateClassroomCopyCourseEnableAudio();
+        $definedFuncNames = array(
+            'updateClassroomCopyCourseEnableAudio',
+            'addActivityColumn',
+            'updateHomeworkAndExercise',
+            'updatePpt',
+            'updateLive',
+            'updateDownload',
+            'updateDoc',
+            'updateText',
+            'updateAudio',
+            'updateVideo',
+            'updateFlash',
+            'updateDiscuss',
+            'updateTestPaper',
+        );
+
+        $funcNames = array();
+        foreach ($definedFuncNames as $key => $funcName) {
+            $funcNames[$key + 1] = $funcName;
+        }
+
+        if (0 == $index) {
+            $this->logger('info', '开始执行升级脚本');
+            $this->deleteCache();
+
+            return array(
+                'index' => $this->generateIndex(1, 1),
+                'message' => '升级数据...',
+                'progress' => 0,
+            );
+        }
+
+        list($step, $page) = $this->getStepAndPage($index);
+        $method = $funcNames[$step];
+        $page = $this->$method($page);
+
+        if (1 == $page) {
+            ++$step;
+        }
+
+        if ($step <= count($funcNames)) {
+            return array(
+                'index' => $this->generateIndex($step, $page),
+                'message' => '升级数据...',
+                'progress' => 0,
+            );
+        }
+    }
+
+
+    protected function addActivityColumn()
+    {
+        if (!$this->isFieldExist('activity', 'finishType')) {
+            $this->getConnection()->exec("ALTER TABLE `activity` ADD COLUMN `finishType`  varchar(64)  NOT NULL DEFAULT 'time' COMMENT '任务完成条件类型';");
+        }
+
+        if (!$this->isFieldExist('activity', 'finishData')) {
+            $this->getConnection()->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '1' COMMENT '任务完成条件数据';");
+        }
+
+        return 1;
+    }
+
+    protected function updateHomeworkAndExercise($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` a set finishType = 'submit' where `mediaType` in ('exercise', 'homework');");
+
+        return 1;
+    }
+
+    protected function updateDiscuss() 
+    {
+        $this->getConnection()->exec("UPDATE `activity` SET `finishType` = 'join' where mediaType = 'discuss';");
+
+        return 1;
+    }
+
+    protected function updateFlash($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_flash` flash SET `finishData` = flash.finishDetail , a.`finishType`= 'time' where a.mediaId = flash.id and a.`mediaType` = 'flash';");
+
+        return 1;
+    }
+
+    protected function updatePpt($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_ppt` ppt SET `finishData` = ppt.finishDetail , a.`finishType`= ppt.finishType where a.mediaId = ppt.id and a.`mediaType` = 'ppt';");
+
+        return 1;
+    }
+
+    protected function updateLive($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` SET `finishType` = 'join' where mediaType = 'live';");
+
+        return 1;
+    }
+
+    protected function updateDownload($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` SET `finishType` = 'download' where mediaType = 'download';");
+
+        return 1;
+    }
+
+    protected function updateDoc($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_doc` doc SET a.`finishType`= 'time', `finishData` = doc.finishDetail where a.mediaId = doc.id and a.`mediaType` = 'doc';");
+
+        return 1;
+    }
+
+    protected function updateText($page)
+    {
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_text` atext SET a.`finishType`= 'time' , `finishData` = atext.finishDetail where a.mediaId = atext.id and a.`mediaType` = 'text';");
+
+        return 1;
+    }
+
+    protected function updateAudio()
+    {
+        $this->getConnection()->exec("UPDATE `activity` SET `finishType` = 'end' where mediaType = 'audio';");
+        
+        return 1;
+    }
+
+    protected function updateVideo()
+    {
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_video` video SET a.`finishData` = video.finishDetail ,a.`finishType` = video.finishType where a.mediaId = video.id and a.`mediaType` = 'video';");
+        
+        return 1;
+    }
+
+    protected function updateTestPaper($page)
+    {
+        $helper = new BatchUpdateHelper($this->getActivityDao());
+        $start = $this->getStart($page);
+        $sql = "SELECT * FROM `activity` WHERE `mediaType` = 'testpaper' limit {$start}, 3000";
+        $activities = $this->getConnection()->fetchAll($sql);
+        if (empty($activities)) {
+            return 1;
+        }
+
+        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+        $testpaperActivityIds = implode(',', $testpaperActivityIds);
+        $testpaperActivities = $this->getConnection()->fetchAll("SELECT * FROM `activity_testpaper` where id in ({$testpaperActivityIds})");
+        if (empty($testpaperActivities)) {
+            return $page + 1;
+        }
+
+        $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
+
+        $testpaperIds = ArrayToolkit::column($testpaperActivities, 'mediaId');
+        $testpaperIds = implode(',', $testpaperIds);
+
+        $testpapers = $this->getConnection()->fetchAll("SELECT * FROM `testpaper_v8` where id in ({$testpaperIds})");
+
+        if (empty($testpapers)) {
+            return $page + 1;
+        }
+        $testpapers = ArrayToolkit::index($testpapers, 'id');
+
+        foreach ($activities as $key => $value) {
+            if (empty($testpaperActivities[$value['mediaId']])) {
+                continue;
+            }
+            $testpaperActivity = $testpaperActivities[$value['mediaId']];
+  
+            if (empty($testpapers[$testpaperActivity['mediaId']])) {
+                continue;
+            }
+ 
+            $testpaper = $testpapers[$testpaperActivity['mediaId']];
+            $finishCondition = json_decode($testpaperActivity['finishCondition'], true);
+
+            $param = array(
+                'finishType' => empty($finishCondition['type']) ? 'submit' : $finishCondition['type'],
+                'finishData' => empty($finishCondition['finishScore']) ? '' : round($finishCondition['finishScore'] / $testpaper['score'], 5),
+            );
+    
+            $helper->add('id', $value['id'], $param);
+        }
+        $helper->flush();
+
+        return $page + 1;
     }
 
     protected function updateClassroomCopyCourseEnableAudio(){
@@ -69,6 +252,8 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->courseUpdateHelper->flush();
+        
+        return 1;
     }
 
     protected function generateIndex($step, $page)
@@ -115,6 +300,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
+    }
+
     protected function isJobExist($code)
     {
         $sql = "select * from biz_scheduler_job where name='{$code}'";
@@ -136,6 +326,24 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getUserDao()
     {
         return $this->createDao('User:UserDao');
+    }
+
+    protected function deleteCache()
+    {
+        $cachePath = $this->biz['cache_directory'];
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+
+        clearstatcache(true);
+
+        $this->logger('info', '删除缓存');
+
+        return 1;
+    }
+
+    protected function getStart($page)
+    {
+        return ($page - 1) * $this->pageSize;
     }
 
     /**
