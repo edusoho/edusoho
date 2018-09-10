@@ -1,4 +1,4 @@
-{% extends 'activity/activity-form-layout.html.twig' %}
+{% extends 'activity/activity-layout.html.twig' %}
 
 {% set course = get_course(activity.fromCourseId) %}
 {% set exercise = activity.ext|default(null) %}
