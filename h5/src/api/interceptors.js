@@ -32,10 +32,10 @@ axios.interceptors.response.use(res => {
     case 401:
       const code = error.response.data.error.code;
       // token过期的情况
-      if (code === statusCode.EXPIRED_CREDENTIAL) {
+      if (code === statusCode.EXPIRED_CREDENTIAL) { // 待解决：错误码没有同意，这种判断方式需要之后接口错误码同一之后才可用
         store.commit(types.USER_LOGOUT);
 
-        router.replace({
+        router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
           name: 'login',
           query: { redirect: router.currentRoute.name }
         });
