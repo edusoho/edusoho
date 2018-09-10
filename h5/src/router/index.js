@@ -134,16 +134,18 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
     store.dispatch('getGlobalSettings', { type: 'site' })
       .then(res => {
-        if (to.name === 'find') {
+        if (shouldUpdateMetaTitle) {
           to.meta.title = res.name;
         }
         next();
       });
-  } else if (['register', 'login', 'protocol', 'find'].includes(to.name)) {
+  } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
     next();
   } else {
