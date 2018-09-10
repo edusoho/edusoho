@@ -6037,7 +6037,17 @@ admin.invite_setting.invite_infomation_template: 'Invitation templates'
 admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
-admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p><p class="help-block">注意：切换app下载地址时, 需要重新保存</p>'
+admin.wap_setting.find: '发现页设置'
+admin.wap_setting.site: '站点设置'
+admin.wap_setting.online: '功能正式上线'
+admin.wap_setting.open: '去开启新版微网校'
+admin.wap_setting.function:
+  '<li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>'
+admin.wap_setting.hint:  '<p class="help-block">新版微网校可使用发现页设置功能。</p>
+                          <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
+                          <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>'
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
@@ -7898,6 +7908,7 @@ exception.file.handle_error: 文件处理错误
 exception.user.update_nickname_error: 昵称修改异常
 exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
+exception.user.permission_denied: 暂无权限访问
 
 exception.user_lock: User account is locked, please contact system administrator.
 

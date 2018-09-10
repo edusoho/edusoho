@@ -214,12 +214,26 @@ class CourseInfo {
       initTags();
     }
 
+    this.changeStudentNumTip();
+
     this.saveForm();
+  }
+
+  changeStudentNumTip() {
+    const $maxField = $('#maxStudentNum-field');
+    if ($maxField.length > 0) {
+      $maxField.on('blur', () => {
+        if (!this.validator.element($maxField)) {
+          $maxField.parent().siblings('.js-course-rule').find('p').html('');
+        }
+      });
+    }
   }
 
   initCkeditor() {
     const $summaryField = $('#courseset-summary-field');
     const summaryLength = $summaryField.length;
+    const uploadUrl = $summaryField.data('imageUploadUrl');
     if (!summaryLength) {
       return;
     }
@@ -228,7 +242,7 @@ class CourseInfo {
       allowedContent: true,
       toolbar: 'Detail',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: this.uploadUrl
+      filebrowserImageUploadUrl: uploadUrl
     });
 
     self.editor.on('blur', () => {
