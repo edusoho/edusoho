@@ -1,7 +1,6 @@
 var load = window.ltc.load('bootstrap.css', 'jquery', 'validate', 'editor');
 load.then(function(){
   var context = window.ltc.getContext();
-  var mediaId = 0;
   var contentCache = '',
     draftId = 0,
     $content = $('#text-content-field'),
@@ -9,37 +8,8 @@ load.then(function(){
     validate;
 
   _init();
+  _initDraft();
   _lanuchAutoSave();
-
-
-  function _saveDraft() {
-    const content = editor.getData();
-    const needSave = content !== contentCache;
-    if (!needSave) {
-      return;
-    }
-
-    window.ltc.api({
-      name: 'saveCourseDraft',
-      data: {
-        courseId: context.courseId,
-        activityId: context.activityId,
-        content:content
-      }
-    }, function(result) {
-      const date = new Date(); //日期对象
-      const $title = $('#modal .modal-title', parent.document);
-      const now = date.getHours()+'点'+date.getMinutes()+'分'+date.getSeconds()+'秒';
-      $title.text('草稿已于'+now+'保存');
-      contentCache = content;
-    });
-  }
-
-  function _lanuchAutoSave() {
-    setInterval(function(){
-      _saveDraft();
-    }, 5000);
-  }
 
   function _init() {
     editor = window.ltc.editor('text-content-field');
@@ -77,25 +47,8 @@ load.then(function(){
         window.ltc.emit('returnActivity', { valid:false });
         return;
       }
-      
-      if (mediaId !== 0) {
-        window.ltc.api({
-          name: 'updateActivityResource',
-          pathParams: {
-            id: mediaId
-          },
-          data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId, 'activityId': context.activityId}),
-        }, function (result) {
-          window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), {mediaId: result.id})});
-        });
-      } else {
-        window.ltc.api({
-          name: 'saveActivityResource',
-          data:Object.assign($('#step2-form').serializeObject(), {'resourceType': 'text', 'fromCourseId': context.courseId}),
-        }, function (result) {
-          window.ltc.emit('returnActivity', {valid:true, data:Object.assign($('#step2-form').serializeObject(), {mediaId: result.id})});
-        });
-      }
+
+      window.ltc.emit('returnActivity', {valid:true, data:$('#step2-form').serializeObject()});
     });
 
     if (context.activityId) {
@@ -107,38 +60,29 @@ load.then(function(){
         }
       }, function(result) {
         $('#title').val(result['title']);
-        mediaId = result.mediaId;
-        window.ltc.api({
-          name: 'getActivityResource',
-          queryParams: {
-            'resourceType': 'text'
-          },
-          pathParams: {
-            id: mediaId
-          }
-        }, function (result) {
-          $content.val(result['content']);
-          // status的四种状态unloaded, unloaded, ready, destroyed
-          // 当status == ready的时候不执行
-          editor.on('instanceReady', function( event ){
-            editor.setData(result['content'], {
-              callback: function() {
-                console.log(editor.status);
-              }
-            });
+        $content.val(result['content']);
+        // status的四种状态unloaded, unloaded, ready, destroyed
+        // 当status == ready的时候不执行
+        editor.on('instanceReady', function( event ){
+          editor.setData(result['content'], {
+            callback: function() {
+              console.log(editor.status);
+            }
           });
-          // 当status == ready的时候执行
-          if (editor.status === 'ready') {
-            editor.setData(result['content'], {
-              callback: function() {
-                console.log(editor.status);
-              }
-            });
-          }
         });
+        // 当status == ready的时候执行
+        if (editor.status === 'ready') {
+          editor.setData(result['content'], {
+            callback: function() {
+              console.log(editor.status);
+            }
+          });
+        }
       });
     }
-    
+  }
+
+  function _initDraft() {
     window.ltc.api({
       name : 'getCourseDraft',
       queryParams : {courseId:context.courseId, activityId:context.activityId},
@@ -150,12 +94,39 @@ load.then(function(){
         draftId = result.id;
         $('.js-continue-edit').removeClass('hidden');
         $('.js-continue-edit').on('click', function(){
-          const $btn = $(this);
-          const content = result.content;
-          editor.setData(content);
-          $btn.remove();
+          editor.setData(result.content);
+          $(this).remove();
         });
       }
+    });
+  }
+
+  function _lanuchAutoSave() {
+    setInterval(function(){
+      _saveDraft();
+    }, 5000);
+  }
+
+  function _saveDraft() {
+    var content = editor.getData();
+    var needSave = (content !== contentCache);
+    if (!needSave) {
+      return;
+    }
+
+    window.ltc.api({
+      name: 'saveCourseDraft',
+      data: {
+        courseId: context.courseId,
+        activityId: context.activityId,
+        content:content
+      }
+    }, function(result) {
+      var date = new Date(); //日期对象
+      var $title = $('#modal .modal-title', parent.document);
+      var now = date.getHours()+'点'+date.getMinutes()+'分'+date.getSeconds()+'秒';
+      $title.text('草稿已于'+now+'保存');
+      contentCache = content;
     });
   }
 });
