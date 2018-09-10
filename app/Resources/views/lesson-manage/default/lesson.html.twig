@@ -1,6 +1,11 @@
 <li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix">
   {% set tasks = array_index(lesson.tasks, 'mode') %}
-  {% set task = tasks.lesson|default(null) %}
+  {% if count(tasks) == 0 %}
+    {% set task = lesson.tasks[0] %}
+  {% else %}
+    {% set task = tasks.lesson|default(null) %}
+  {% endif %}
+  
 
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
@@ -12,7 +17,7 @@
          {{'course.plan_task.task_unpublished'|trans}}
       </span>
 
-      <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not task.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
+      <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not lesson.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% set displayText = '' %}
       {% if not lesson.isOptional %}
         {% if course['isHideUnpublish']|default(false) %}
