@@ -195,21 +195,6 @@ class VideoTest extends BaseTypeTestCase
         $this->assertEquals(true, $type->materialSupported());
     }
 
-    public function testIsFinished()
-    {
-        $field = $this->mockField();
-        $type = $this->getActivityConfig(self::TYPE);
-        $videoActivity = $type->create($field);
-        $activity = $this->mockSimpleActivity($videoActivity['id']);
-
-        $this->mockBiz('Activity:ActivityService', array(
-            array('functionName' => 'getActivity', 'returnValue' => $activity),
-        ));
-
-        $result = $type->isFinished(1);
-        $this->assertFalse($result);
-    }
-
     /**
      * @param string $finishType
      * @param int    $finishDetail
