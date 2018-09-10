@@ -15,8 +15,10 @@
   import emptyCourse from './emptyCourse/emptyCourse.vue';
   import lazyLoading from '../components/e-lazy-loading/e-lazy-loading.vue';
   import Api from '@/api';
+  import preloginMixin from '@/mixins/preLogin';
 
   export default {
+    mixins: [preloginMixin],
     components: {
       emptyCourse,
       lazyLoading,

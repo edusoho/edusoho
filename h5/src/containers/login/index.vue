@@ -31,7 +31,7 @@ export default {
       password: '',
       errorMessage: {
         password: ''
-      }
+      },
     }
   },
   async created () {
@@ -59,9 +59,9 @@ export default {
           duration: 2000,
           message: '登录成功'
         });
-        const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
+        const redirect = this.$route.query.redirect || 'find';
         var jumpAction = () => {
-          this.$router.push({name: redirect});
+          this.$router.replace({path: redirect});
         }
         setTimeout(jumpAction, 2000);
       }).catch(err => {
