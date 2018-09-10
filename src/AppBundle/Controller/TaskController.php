@@ -389,7 +389,7 @@ class TaskController extends BaseController
         $activityConfigManage = $this->get('activity_config_manager');
         $installedActivity = $activityConfigManage->getInstalledActivity($activity['mediaType']);
 
-        if ($installedActivity) {
+        if ($activityConfigManage->isLtcActivity($activity['mediaType'])) {
             if (!empty($installedActivity['finish_condition'])) {
                 $installedActivity = ArrayToolkit::index($installedActivity['finish_condition'], 'type');
                 $container = $this->get('activity_runtime_container');

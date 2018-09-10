@@ -11,11 +11,20 @@ class ActivityController extends BaseController
 {
     public function showAction($task, $preview)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
+
+        $activityConfigManage = $this->get('activity_config_manager');
+        if ($activityConfigManage->isLtcActivity($activity['mediaType'])) {
+            $container = $this->get('activity_runtime_container');
+            $activity['preview'] = $preview;
+
+            return $container->show($activity);
+        }
+
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
         return $this->forward($actionConfig['controller'].':show', array(
