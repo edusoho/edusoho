@@ -2288,6 +2288,12 @@ es-messenger@latest:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/es-messenger/-/es-messenger-2.3.0.tgz#2466e3a959e83dd25160db0997de78f8efcff052"
 
+es-post-message@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/es-post-message/-/es-post-message-1.0.0.tgz#92b609391ec02f832d7e25ec3fc0ff82dc51a120"
+  dependencies:
+    component-emitter "^1.2.1"
+
 es-swfobject@latest:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/es-swfobject/-/es-swfobject-3.0.0.tgz#daa955a04ce71e7c22461cea5d2dcc738a0e6268"
@@ -3858,12 +3864,6 @@ istanbul@^0.4.5:
     supports-color "^3.1.0"
     which "^1.1.1"
     wordwrap "^1.0.0"
-
-jay-post-message@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/jay-post-message/-/jay-post-message-1.0.0.tgz#79dcc556acd8a61abeb644b61eb77c5d9a14c216"
-  dependencies:
-    component-emitter "^1.2.1"
 
 jquery-base64@^1.0.0:
   version "1.0.0"
