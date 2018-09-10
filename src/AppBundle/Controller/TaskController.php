@@ -392,10 +392,12 @@ class TaskController extends BaseController
         if ($activityConfigManage->isLtcActivity($activity['mediaType'])) {
             if (!empty($installedActivity['routes']['finish_tip'])) {
                 $container = $this->get('activity_runtime_container');
+
                 return $container->renderRoute($activity, 'finish_tip');
             }
 
             $conditions = empty($installedActivity['finish_condition']) ? array() : ArrayToolkit::index($installedActivity['finish_condition'], 'type');
+
             return $this->render('task/finish-tip.html.twig', array(
                 'activity' => $activity,
                 'conditions' => $conditions,
