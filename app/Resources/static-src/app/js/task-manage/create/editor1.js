@@ -32,6 +32,8 @@ class Editor {
 
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
+    } else {
+      $('.delete-task').click(event => this._onDelete(event));
     }
   }
 
@@ -150,6 +152,28 @@ class Editor {
       this.$taskSubmit.attr('disabled', false);
       this.$taskSubmit.button('reset');
     })
+  }
+
+  _onDelete(event) {
+    let $btn = $(event.currentTarget);
+    let url = $btn.data('url');
+    if (url === undefined) {
+      return;
+    }
+    if (!confirm(Translator.trans(Translator.trans('task_manage.delete_hint')))) {
+      return;
+    }
+    $.post(url)
+      .then((response) => {
+        notify('success', Translator.trans('task_manage.delete_success_hint'));
+        this.$element.modal('hide');
+
+
+        document.location.reload();
+      })
+      .fail(error => {
+        notify('warning', Translator.trans('task_manage.delete_failed_hint'));
+      });
   }
 
   _switchPage() {
