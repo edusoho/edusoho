@@ -130,7 +130,7 @@ class Testpaper extends Activity
             return true;
         }
 
-        $passScore = ceil($testpaper['score'] * $activity['finishData']);
+        $passScore = round(($testpaper['score'] * $activity['finishData']), 0);
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
