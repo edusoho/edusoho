@@ -1,4 +1,4 @@
-{% extends 'activity/activity-form-layout.html.twig' %}
+{% extends 'activity/activity-layout.html.twig' %}
 {% set doc = activity.ext|default(null) %}
 {% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'docactivity/js/create/index.js']) %}
 {% block  activity_step %}

@@ -387,21 +387,28 @@ class TaskController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $activityConfigManage = $this->get('activity_config_manager');
-        $actvityFinishCondition = $activityConfigManage->getInstalledActivity($activity['mediaType']);
+        $installedActivity = $activityConfigManage->getInstalledActivity($activity['mediaType']);
 
-        if (!empty($actvityFinishCondition['finish_condition'])) {
-            $actvityFinishCondition = ArrayToolkit::index($actvityFinishCondition['finish_condition'], 'type');
-            $container = $this->get('activity_runtime_container');
+        if ($installedActivity) {
+            if (!empty($installedActivity['finish_condition'])) {
+                $installedActivity = ArrayToolkit::index($installedActivity['finish_condition'], 'type');
+                $container = $this->get('activity_runtime_container');
 
-            if (!empty($actvityFinishCondition[$activity['finishType']]['finish_tip'])) {
-                return $container->renderRoute($activity, 'finish_tip');
+                if (!empty($installedActivity[$activity['finishType']]['finish_tip'])) {
+                    return $container->renderRoute($activity, 'finish_tip');
+                }
             }
+
+            return $this->render('task/finish-tip.html.twig', array(
+                'activity' => $activity,
+                'conditions' => $installedActivity,
+            ));
         }
 
-        return $this->render('task/finish-tip.html.twig', array(
-            'activity' => $activity,
-            'conditions' => $actvityFinishCondition,
-        ));
+        $config = $this->getActivityConfig();
+        $action = $config[$task['type']]['controller'].':finishCondition';
+
+        return $this->forward($action, array('activity' => $activity));
     }
 
     /**

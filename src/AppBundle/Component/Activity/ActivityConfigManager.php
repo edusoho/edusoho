@@ -55,7 +55,7 @@ class ActivityConfigManager
 
     public function getInstalledActivity($type)
     {
-        return $this->activitiesConfig[$type];
+        return empty($this->activitiesConfig[$type]) ? null : $this->activitiesConfig[$type];
     }
 
     public function getInstalledActivities()

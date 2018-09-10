@@ -11,16 +11,17 @@ class ActivityController extends BaseController
 {
     public function showAction($task, $preview)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        $container = $this->get('activity_runtime_container');
-        $activity['preview'] = $preview;
-
-        return $container->show($activity);
+        return $this->forward($actionConfig['controller'].':show', array(
+            'activity' => $activity,
+            'preview' => $preview,
+        ));
     }
 
     public function previewAction($task)
@@ -38,28 +39,22 @@ class ActivityController extends BaseController
 
     public function updateAction($id, $courseId)
     {
-        return $this->render(
-            'activity/create.html.twig',
-            array(
-                'activity' => $activity,
-            )
-        );
+        $activity = $this->getActivityService()->getActivity($id);
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
+
+        return $this->forward($actionConfig['controller'].':edit', array(
+            'id' => $activity['id'],
+            'courseId' => $courseId,
+        ));
     }
 
     public function createAction($type, $courseId)
     {
-        $activity = array(
-            'id' => 0,
-            'mediaType' => $type,
-            'fromCourseId' => $courseId,
-        );
+        $actionConfig = $this->getActivityConfig($type);
 
-        return $this->render(
-            'activity/create.html.twig',
-            array(
-                'activity' => $activity,
-            )
-        );
+        return $this->forward($actionConfig['controller'].':create', array(
+            'courseId' => $courseId,
+        ));
     }
 
     public function contentModalAction($type, $courseId, $activityId = 0)
