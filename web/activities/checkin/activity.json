@@ -18,7 +18,6 @@
     "create": "create.html.twig",
     "update": "create.html.twig",
     "show": "show.html.twig",
-    "finish_tip": "finish_tip.html.twig",
     "status": "src/status.php",
     "sign": "src/sign.php",
     "signed": "src/signed.php"
