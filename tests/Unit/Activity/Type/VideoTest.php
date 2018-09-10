@@ -69,22 +69,6 @@ class VideoTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage finish time can not be empty
-     */
-    public function testUpdateWithFinishTypeTime()
-    {
-        $field = $this->mockField();
-
-        $type = $this->getActivityConfig(self::TYPE);
-        $videoActivity = $type->create($field);
-        $activity = $this->mockSimpleActivity($videoActivity['id']);
-
-        $update = $this->mockField('time', 0, 'self', '', 2);
-        $type->update($videoActivity['id'], $update, $activity);
-    }
-
-    /**
      * @expectedException \Exception
      * @expectedExceptionMessage 教学活动不存在
      */
