@@ -424,9 +424,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!empty($fields['media'])) {
             $media = json_decode($fields['media'], true);
-            $media['fileId'] = $media['id'];
-            $media['title'] = $media['name'];
             if (!empty($media['id'])) {
+                $media['fileId'] = $media['id'];
+                $media['title'] = $media['name'];
                 return array($media);
             }
         }
