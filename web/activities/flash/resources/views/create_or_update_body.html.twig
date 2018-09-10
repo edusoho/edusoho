@@ -1,4 +1,4 @@
-{% extends 'activity/activity-form-layout.html.twig' %}
+{% extends 'activity/activity-layout.html.twig' %}
 {% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'flashactivity/js/create/index.js']) %}
 {% set flash = activity.ext|default(null) %}
 {% set mediaType = 'flash' %}
