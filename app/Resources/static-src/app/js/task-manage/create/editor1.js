@@ -1,4 +1,5 @@
 import loadAnimation from 'common/load-animation';
+import notify from 'common/notify';
 
 class Editor {
   constructor($modal) {
