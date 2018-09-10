@@ -1,14 +1,14 @@
 <template>
   <div class="join-before">
-    <detail-head 
+    <detail-head
       :price="details.price"
       :courseSet="details.courseSet"></detail-head>
 
     <detail-plan></detail-plan>
     <div class="segmentation"></div>
 
-    <van-tabs v-model="active" 
-      @click="onTabClick" 
+    <van-tabs v-model="active"
+      @click="onTabClick"
       :class="tabsClass" ref="tabs">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
@@ -20,14 +20,14 @@
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
-    <teacher 
+    <teacher
       ref="teacher"
       class="teacher"
       :teacherInfo="details.teachers"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
-    <directory ref="directory" 
+    <directory ref="directory"
       :courseItems="details.courseItems"></directory>
     <e-footer @click.native="handleJoin">
       {{details.access.code | filterJoinStatus}}</e-footer>
@@ -40,9 +40,11 @@
   import DetailPlan from './detail/plan';
   import { mapMutations, mapActions, mapState } from 'vuex';
   import * as types from '@/store/mutation-types';
+  import redirectMixin from '@/mixins/saveRedirect';
 
   export default {
     name: 'joinBefore',
+    mixins: [redirectMixin],
     data() {
       return {
         teacherInfo: {},
@@ -121,7 +123,12 @@
         endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
 
         if (!this.$store.state.token) {
-          this.$router.push({ name: 'login' });
+          this.$router.push({
+            name: 'login',
+            query: {
+              redirect: this.redirect
+            }
+          });
           return;
         }
 

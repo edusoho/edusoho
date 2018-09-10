@@ -40,8 +40,10 @@
   import { mapState, mapMutations } from 'vuex';
   import { Toast } from 'vant';
   import * as types from '@/store/mutation-types';
+  import redirectMixin from '@/mixins/saveRedirect';
 
   export default {
+    mixins: [redirectMixin],
     props: {
       courseItems: {
         type: Array,
@@ -150,7 +152,12 @@
         const task = data.task;
         const details = this.details;
 
-        !details.allowAnonymousPreview && this.$route.push({name: 'login'})
+        !details.allowAnonymousPreview && this.$route.push({
+          name: 'login',
+          query: {
+            redirect: this.redirect
+          }
+        });
 
         if (!this.joinStatus
           && Number(details.tryLookable)

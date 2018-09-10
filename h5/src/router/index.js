@@ -75,7 +75,7 @@ const routes = [
   }, {
     path: '/live',
     name: 'live',
-    component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/live-view.vue')
+    component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
   }, {
     path: '/course/explore',
     name: 'more',
@@ -110,7 +110,7 @@ const routes = [
     meta: {
       title: '微信支付'
     },
-    component: () => import(/* webpackChunkName: "pay" */'@/containers/wxpay/index.vue')
+    component: () => import(/* webpackChunkName: "wxpay" */'@/containers/wxpay/index.vue')
   }, {
     path: '/preview',
     name: 'preview',
