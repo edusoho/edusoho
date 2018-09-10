@@ -164,6 +164,15 @@ class FlashTest extends BaseTypeTestCase
 
         $result = $type->isFinished(1);
         $this->assertFalse($result);
+        $this->mockBiz('Task:TaskResultService', array(
+            array(
+                'functionName' => 'getMyLearnedTimeByActivityId',
+                'returnValue' => 100,
+                'withParams' => array(1),
+            ),
+        ));
+        $result = $type->isFinished(1);
+        $this->assertTrue($result);
     }
 
     /**
@@ -199,6 +208,8 @@ class FlashTest extends BaseTypeTestCase
         return array(
             'id' => 1,
             'mediaId' => $mediaId,
+            'finishType' => 'time',
+            'finishData' => 1,
         );
     }
 }

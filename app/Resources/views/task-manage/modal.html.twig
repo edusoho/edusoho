@@ -35,6 +35,7 @@
         <li class="col-xs-12">
           <label for="mediaType" class="hidden">{{'category'|trans}}</label>
           <input name="mediaType" id="mediaType" class="type-hidden">
+          <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
           <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
           <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
           <input class="js-hidden-data" type="hidden" name="courseSetType" id="courseSetType" value="{{ courseSet.type }}">

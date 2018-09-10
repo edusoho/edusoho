@@ -131,7 +131,7 @@ class Exercise extends Activity
             return false;
         }
 
-        if (!empty($exercise['passedCondition']) && 'submit' === $exercise['passedCondition']['type'] && in_array($result['status'], array('reviewing', 'finished'))) {
+        if (!empty($exercise['passedCondition']) && 'submit' === $activity['finishType'] && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -146,7 +146,6 @@ class Exercise extends Activity
             'itemCount',
             'difficulty',
             'questionTypes',
-            'finishCondition',
             'passedCondition',
             'fromCourseId',
             'fromCourseSetId',
@@ -160,6 +159,10 @@ class Exercise extends Activity
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
         $filterFields['lessonId'] = empty($filterFields['lessonId']) ? 0 : $filterFields['lessonId'];
         $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
+
+        if (!empty($fields['finishType'])) {
+            $filterFields['passedCondition']['type'] = $fields['finishType'];
+        }
 
         return $filterFields;
     }
