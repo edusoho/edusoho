@@ -30,7 +30,7 @@ class Editor {
     $('#course-tasks-next').click(event => this._onNext(event));
     $('#course-tasks-prev').click(event => this._onPrev(event));
 
-    if (this.mode != 'edit') {
+    if (this.taskConfig.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
     } else {
       $('.delete-task').click(event => this._onDelete(event));
