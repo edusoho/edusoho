@@ -46,5 +46,5 @@
   <button id="course-tasks-next" type="submit" class="btn btn-default hidden">{{ 'form.btn.next'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-primary hidden"
           data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-{#{% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id|default(0), courseId: course.id} %}#}
+{% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id|default(0), courseId: course.id} %}
 {% endblock %}
