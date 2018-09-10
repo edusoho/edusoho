@@ -150,6 +150,9 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
+
+        $defaultFinishCondition = $this->getDefaultFinishCondition($task['mediaType']);
+        $task = array_merge($defaultFinishCondition, $task);
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
         return $this->getTaskJsonView($task);
@@ -315,6 +318,21 @@ class TaskManageController extends BaseController
     protected function createCourseStrategy($course)
     {
         return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
+    }
+
+    private function getDefaultFinishCondition($mediaType)
+    {
+        $activityConfigManager = $this->get('activity_config_manager');
+        $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
+        if (empty($activityConfig['finish_condition'])) {
+            return array();
+        }
+        $findishCondition = reset($activityConfig['finish_condition']);
+
+        return array(
+            'finishType' => $findishCondition['type'],
+            'finishData' => empty($findishCondition['value']) ? '' : $findishCondition['value'],
+        );
     }
 
     protected function parseTimeFields($fields)
