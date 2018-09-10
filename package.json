@@ -46,7 +46,7 @@
     "es-jcrop": "latest",
     "es-jquery-sortable": "0.9.13-patch1",
     "es-messenger": "latest",
-    "es-post-message": "^1.0.0",
+    "es-post-message": "^1.0.1",
     "es-swfobject": "latest",
     "es5-shim": "4.5.9",
     "es6-promise": "4.0.5",

@@ -2288,9 +2288,9 @@ es-messenger@latest:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/es-messenger/-/es-messenger-2.3.0.tgz#2466e3a959e83dd25160db0997de78f8efcff052"
 
-es-post-message@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/es-post-message/-/es-post-message-1.0.0.tgz#92b609391ec02f832d7e25ec3fc0ff82dc51a120"
+es-post-message@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/es-post-message/-/es-post-message-1.0.1.tgz#54e39d8b0440853e53eb05c87ec89c93b42cbcb7"
   dependencies:
     component-emitter "^1.2.1"
 
