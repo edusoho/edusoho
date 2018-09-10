@@ -249,7 +249,7 @@ class ExerciseTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 1, 'finishType' => 'submit', 'finishData' => ''),
             ),
         ));
     }
