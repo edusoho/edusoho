@@ -8,7 +8,6 @@
 <script>
 import Orders from '../order/orders.vue';
 import User from './user.vue';
-import store from '@/store';
 import { mapState } from 'vuex';
 
 export default {
@@ -21,12 +20,6 @@ export default {
       isLoading: state => state.isLoading
     })
   },
-  beforeRouteEnter(to, from, next) {
-    // 判断是否登录
-    const isLogin = !!store.state.token;
-
-    !isLogin ? next({name: 'prelogin', query: { redirect: to.name }}) : next();
-  }
 }
 </script>
 

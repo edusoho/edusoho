@@ -80,6 +80,6 @@ export default {
         }
       })
     }
-  }
+  },
 }
 </script>
