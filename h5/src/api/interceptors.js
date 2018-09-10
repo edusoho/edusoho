@@ -37,7 +37,7 @@ axios.interceptors.response.use(res => {
 
         router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
           name: 'login',
-          query: { redirect: router.currentRoute.name }
+          query: { redirect: router.currentRoute.fullPath }
         });
       }
       break;
