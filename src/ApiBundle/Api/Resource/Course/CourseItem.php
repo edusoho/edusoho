@@ -105,7 +105,9 @@ class CourseItem extends AbstractResource
                     false
                 );
 
-                $result[$key]['task']['subtitlesUrls'] = $updatedTaskInfo['subtitlesUrls'];
+                if (!empty($updatedTaskInfo['subtitlesUrls'])) {
+                    $result[$key]['task']['subtitlesUrls'] = $updatedTaskInfo['subtitlesUrls'];
+                }
             }
         }
 

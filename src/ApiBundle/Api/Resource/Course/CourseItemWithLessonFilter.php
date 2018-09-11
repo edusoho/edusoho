@@ -12,10 +12,13 @@ class CourseItemWithLessonFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        var_dump($data);
         $tasKFilter = new CourseItemFilter();
-        foreach ($data['tasks'] as &$task) {
-            $tasKFilter->filter($task);
+        if (!empty($data['tasks'])) {
+            foreach ($data['tasks'] as &$task) {
+                $tasKFilter->filter($task);
+            }
+        } else {
+            $tasKFilter->filter($data);
         }
     }
 }
