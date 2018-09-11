@@ -30,7 +30,6 @@ class CourseItem extends AbstractResource
         $courseId = $course['id'];
         $newItems = array();
         $number = 1;
-
         foreach ($originItems as $originItem) {
             $item = array();
             if ('task' == $originItem['itemType']) {
@@ -70,7 +69,9 @@ class CourseItem extends AbstractResource
             $newItems[] = $item;
         }
 
-        return $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
+        $result = $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
+
+        return $this->afterDeal($result);
     }
 
     protected function filterUnPublishTask($items)
@@ -95,11 +96,32 @@ class CourseItem extends AbstractResource
         return $items;
     }
 
+    protected function afterDeal($result)
+    {
+        foreach ($result as $key => $taskItem) {
+            if (!empty($taskItem['task']) && !empty($taskItem['task']['activity'])) {
+                $updatedTaskInfo = $this->getSubtitleService()->setSubtitlesUrls(
+                    $taskItem['task']['activity']['ext'],
+                    false
+                );
+
+                $result[$key]['task']['subtitlesUrls'] = $updatedTaskInfo['subtitlesUrls'];
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @return CourseService
      */
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    private function getSubtitleService()
+    {
+        return $this->service('Subtitle:SubtitleService');
     }
 }
