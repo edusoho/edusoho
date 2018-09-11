@@ -75,8 +75,12 @@ export default {
     }),
     total: {
       get() {
-        return (this.itemData.rate - this.course.totalPrice) > 0
-        ? 0 : Math.abs(this.itemData.rate - this.course.totalPrice);
+        if (this.itemData) {
+          return (this.itemData.rate - this.course.totalPrice) > 0
+          ? 0 : Math.abs(this.itemData.rate - this.course.totalPrice);
+        } else {
+          return this.course.totalPrice;
+        }
       },
       set() {}
     },
