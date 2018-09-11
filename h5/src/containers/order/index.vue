@@ -4,11 +4,15 @@
       <e-loading v-if="isLoading"></e-loading>
       <e-course type="confirmOrder" :order="course" :course="course" v-if="Object.keys(course).length >0"></e-course>
       <div class="order-coupon">
+      <!--   <div class="coupon-column">
+          <span>优惠券</span>
+          <span>0张可用</span>
+        </div> -->
         <van-coupon-cell
           title= "优惠券"
           :chosen-coupon="activeItemIndex"
           @click="showList = true"
-        />
+        >
         </van-coupon-cell>
         <van-popup v-model="showList" position="bottom">
           <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠
@@ -16,7 +20,7 @@
             <i class="h5-icon h5-icon-checked-circle"></i>
           </div>
           <coupon v-for="(item, index) in course.availableCoupons"
-            key="index"
+            :key="index"
             :data="item"
             :index="index"
             :active="activeItemIndex"
@@ -38,7 +42,7 @@
       </div>
       <div class="flex-between-item">
         <span class="mbl">优惠券：</span>
-        <span class="red">-￥ {{ this.itemData.rate}}</span>
+        <span class="red">-￥ {{ couponMoney }}</span>
       </div>
       <div class="flex-between-item">
         <span class="mbl">应付：</span>
@@ -73,17 +77,26 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading
     }),
-    total: {
-      get() {
-        if (this.itemData) {
-          return (this.itemData.rate - this.course.totalPrice) > 0
-          ? 0 : Math.abs(this.itemData.rate - this.course.totalPrice);
-        } else {
-          return this.course.totalPrice;
-        }
-      },
-      set() {}
+    total() {
+      if (!this.itemData) {
+        return this.course.totalPrice;
+      }
+      const minusType = (this.itemData.type === 'minus');
+      const couponRate = this.itemData.rate;
+      const totalNumber = this.course.totalPrice;
+      if (minusType) {
+        return (couponRate - totalNumber) > 0
+        ? 0 : Math.abs(couponRate - totalNumber);
+      }
+      return totalNumber - totalNumber * couponRate * 0.1;
     },
+    couponMoney() {
+      const minusType = (this.itemData.type === 'discount');
+      if (minusType) {
+        return this.course.totalPrice * this.itemData.rate * 0.1;
+      }
+      return this.itemData.rate;
+    }
   },
   created () {
     Api.confirmOrder({
@@ -101,7 +114,10 @@ export default {
       this.$router.push({
         name: 'pay',
         query: {
-          id: this.$route.params.id
+          id: this.$route.params.id,
+        },
+        params: {
+          couponCode: this.itemData.code || ''
         }
       })
     },
@@ -112,8 +128,8 @@ export default {
     chooseItem(data) {
       console.log(data,22)
       this.activeItemIndex = data.index;
-      this.showList = false;
       this.itemData = data.itemData;
+      this.showList = false;
     }
   }
 }

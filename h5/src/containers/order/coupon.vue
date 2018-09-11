@@ -3,7 +3,7 @@
     <!-- 优惠券列表 -->
     <div :class="[{ active: active === index }, 'coupon-item', type]" @click="onChange(index)">
       <div class="coupon-border-box">
-        <div class="rate-number">666<span class="text-14">元</span></div>
+        <div class="rate-number">{{ rate }}<span class="text-14">{{ type=='discount' ? '折' : '元' }}</span></div>
         <div class="coupon-info">
           <div class="title text-overflow">优惠券</div>
           <div class="grey-medium">有效期截止：{{couponEndDate}}</div>
@@ -19,57 +19,43 @@
   export default {
     props: ['data', 'index', 'active'],
     computed: {
-      couponData: {
-        get() {
-          return this.data;
-        },
-        set() {}
+      couponEndDate() {
+        return this.data.deadline.slice(0, 10);
       },
-      couponEndDate: {
-        get() {
-          return this.couponData.deadline.slice(0, 10);
-        },
-        set() {}
-      },
-      couponType: {
-        get() {
-          switch (this.couponData.targetType) {
-            case 'course':
-              return '指定课程'
-              break;
-            case 'classroom':
-              return '指定班级'
-              break;
-            case 'vip':
-              return '会员课程'
-              break;
-            default:
-              return '全部课程'
-              break;
-          }
-        },
-        set() {}
+      couponType() {
+        const couponTextPart = this.data.targetId ? '指定' : '全部';
+        switch (this.data.targetType) {
+          case 'course':
+            return couponTextPart + '课程'
+            break;
+          case 'classroom':
+            return couponTextPart + '班级'
+            break;
+          case 'vip':
+            return couponTextPart + '会员课程'
+            break;
+          default:
+            return '全部'
+            break;
+        }
       },
     },
     data() {
       return {
         activeIndex: this.active,
         discount: this.data.type == 'discount' ? true : false,
-        chosenCoupon: -1,
-        type: this.data.type
+        type: this.data.type,
+        rate: this.data.rate
       }
     },
 
     methods: {
       onChange(index) {
-        console.log(222,this.data);
         this.$emit('chooseItem',
         {
           index: index,
-          itemData: this.couponData
+          itemData: this.data
         })
-        this.chosenCoupon = index;
-        this.active = true;
       },
     }
   }

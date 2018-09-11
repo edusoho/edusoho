@@ -40,24 +40,11 @@
           }
         }
       }
-      .van-cell-group{
-        margin-left: vw(20);
-        border-top: 1px solid #eee;
-        .van-cell {
-          padding: vw(10) vw(15) vw(15) 0;
-          color: #9BA5B0;
-          font-size: vw(14);
-        }
-        &:after {
-          border-width: 0;
-        }
-      }
       .coupon-container {
         background-color: #f5f5f5;
-        padding: vw(20) vw(15);
+        padding: vw(10) vw(15);
         .coupon-item {
           padding: vw(6);
-          margin-bottom: vw(15);
           background-color: #fff;
           .coupon-border-box {
             position: relative;
@@ -99,7 +86,10 @@
             }
           }
           &.discount {
-            .coupon-checked {
+            .coupon-border-box {
+              border-color: $primary-color;
+            }
+            .coupon-checked, .rate-number {
               color: $primary-color;
             }
           }
