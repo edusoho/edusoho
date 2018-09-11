@@ -97,8 +97,8 @@ export default class Video {
           file.minute = minute;
           file.second = second;
         }
-        $('[name="media"]').val(JSON.stringify(file));
 
+        $('[name="media"]').val(JSON.stringify(file));
       };
       placeMediaAttr(file);
 

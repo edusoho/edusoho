@@ -55,7 +55,12 @@ class ActivityConfigManager
 
     public function getInstalledActivity($type)
     {
-        return $this->activitiesConfig[$type];
+        return empty($this->activitiesConfig[$type]) ? null : $this->activitiesConfig[$type];
+    }
+
+    public function isLtcActivity($type)
+    {
+        return empty($this->activitiesConfig[$type]) ? false : true;
     }
 
     public function getInstalledActivities()

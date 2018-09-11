@@ -1,4 +1,4 @@
-{% set condition = conditions[activity.finishType] %}
+{% set condition = conditions[activity.finishType]|default() %}
 
 {% if activity.finishType == 'time' %}
   {{'activity_manage.finish_tips_time'|trans({'%finishDetail%':activity.finishData})|raw}}

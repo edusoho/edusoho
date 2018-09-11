@@ -1,4 +1,4 @@
-{% extends 'activity/activity-form-layout.html.twig' %}
+{% extends 'activity/activity-layout.html.twig' %}
 {% set mediaType = activity.mediaType|default('audio') %}
 {% set fileType = 'audio' %}
 {% set length = activity.length|default(0)|convert_minute_and_second %}

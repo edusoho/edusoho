@@ -155,6 +155,7 @@ class TestpaperController extends BaseController
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,
+            'activity' => $activity,
         ));
     }
 
@@ -252,8 +253,7 @@ class TestpaperController extends BaseController
         }
 
         if ('POST' === $request->getMethod()) {
-            $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
-            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+            $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId'], true);
 
             if ($activity['startTime'] && $activity['startTime'] > time()) {
                 return $this->createJsonResponse(array('result' => false, 'message' => '考试未开始，不能提交！'));
@@ -267,11 +267,11 @@ class TestpaperController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
-            if ($testpaperActivity['finishCondition']['type'] === 'submit') {
+            if ($activity['finishType'] === 'submit') {
                 $response = array('result' => true, 'message' => '');
-            } elseif ($testpaperActivity['finishCondition']['type'] === 'score'
+            } elseif ($activity['finishType'] === 'score'
                 && 'finished' === $paperResult['status']
-                && $paperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+                && $paperResult['score'] >= ceil($activity['finishData'] * $activity['ext']['testpaper']['score'])) {
                 $response = array('result' => true, 'message' => '');
             } else {
                 $response = array('result' => false, 'message' => '');

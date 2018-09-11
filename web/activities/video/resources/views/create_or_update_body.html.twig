@@ -1,4 +1,4 @@
-{% extends 'activity/activity-form-layout.html.twig' %}
+{% extends 'activity/activity-layout.html.twig' %}
 {% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'videoactivity/js/create/index.js']) %}
 {% set length = activity.length|default(0)|convert_minute_and_second %}
 {% block activity_step %}
