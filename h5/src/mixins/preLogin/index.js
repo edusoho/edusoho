@@ -7,6 +7,7 @@ export default {
 
     if (!isLogin) {
       next({ name: 'prelogin', query: { redirect: to.fullPath } });
+      return;
     }
     next();
   }
