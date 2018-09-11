@@ -40,9 +40,11 @@
   import DetailPlan from './detail/plan';
   import { mapMutations, mapActions, mapState } from 'vuex';
   import * as types from '@/store/mutation-types';
+  import redirectMixin from '@/mixins/saveRedirect';
 
   export default {
     name: 'joinBefore',
+    mixins: [redirectMixin],
     data() {
       return {
         teacherInfo: {},
@@ -122,7 +124,12 @@
         endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
 
         if (!this.$store.state.token) {
-          this.$router.push({ name: 'login' });
+          this.$router.push({
+            name: 'login',
+            query: {
+              redirect: this.redirect
+            }
+          });
           return;
         }
 

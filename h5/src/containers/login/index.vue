@@ -3,6 +3,8 @@
     <span class='login-title'>登录账号</span>
     <img class='login-avatarimg' src="" />
     <van-field v-model="username"
+      :autosize="{ maxHeight: 24 }"
+      type="textarea"
       class="login-input e-input"
       placeholder="邮箱/手机/用户名"/>
 
@@ -31,7 +33,7 @@ export default {
       password: '',
       errorMessage: {
         password: ''
-      }
+      },
     }
   },
   async created () {
@@ -59,9 +61,9 @@ export default {
           duration: 2000,
           message: '登录成功'
         });
-        const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
+        const redirect = this.$route.query.redirect || 'find';
         var jumpAction = () => {
-          this.$router.push({name: redirect});
+          this.$router.replace({path: redirect});
         }
         setTimeout(jumpAction, 2000);
       }).catch(err => {
@@ -80,6 +82,6 @@ export default {
         }
       })
     }
-  }
+  },
 }
 </script>

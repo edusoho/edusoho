@@ -64,3 +64,13 @@
   top: auto;
   bottom: 100px;
 }
+
+.el-upload {
+  &:focus {
+    color: #333;
+    border-color: #333;
+  }
+  &.el-upload--text {
+    width: 100%;
+  }
+}

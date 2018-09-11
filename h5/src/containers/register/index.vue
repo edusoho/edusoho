@@ -164,7 +164,7 @@ export default {
         });
         const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
         var jumpToLogin = () => {
-          this.$router.push({name: redirect});
+          this.$router.replace({path: redirect});
         }
         setTimeout(jumpToLogin, 2000);
       })

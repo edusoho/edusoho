@@ -75,7 +75,7 @@ const routes = [
   }, {
     path: '/live',
     name: 'live',
-    component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/live-view.vue')
+    component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
   }, {
     path: '/course/explore',
     name: 'more',
@@ -110,7 +110,7 @@ const routes = [
     meta: {
       title: '微信支付'
     },
-    component: () => import(/* webpackChunkName: "pay" */'@/containers/wxpay/index.vue')
+    component: () => import(/* webpackChunkName: "wxpay" */'@/containers/wxpay/index.vue')
   }, {
     path: '/preview',
     name: 'preview',
@@ -134,16 +134,18 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
     store.dispatch('getGlobalSettings', { type: 'site' })
       .then(res => {
-        if (to.name === 'find') {
+        if (shouldUpdateMetaTitle) {
           to.meta.title = res.name;
         }
         next();
       });
-  } else if (['register', 'login', 'protocol', 'find'].includes(to.name)) {
+  } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
     next();
   } else {
