@@ -72,12 +72,13 @@
           {% if target|default(null) and target.doTimes|default('0') %}
             <span class="color-danger">{{'testpaper.answer.answer_card.one_chance_tips'|trans}}</span>
           {% endif %}
+          
           {% if paperResult|default(null) %}
             <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='
               <div>
                 {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw}}
-              {% if testpaperActivity.finishCondition.type|default(null) == 'score' %}
-                {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0)})|raw}}
+              {% if activity.finishType|default(null) == 'score' %}
+                {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':(paper.score * activity.finishData)|round|default(0)})|raw}}
               {% endif %}
               
               {% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}

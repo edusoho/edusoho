@@ -14,7 +14,7 @@ class Testpaper {
 
   initScoreSlider(score) {
     $('.js-score-total').text(score);
-    let passScore = parseInt(Math.ceil(score * $('#score-condition').data('pass')));
+    let passScore = Math.round(score * $('#score-condition').data('pass'));
     score = parseInt(score);
 
     let scoreSlider = document.getElementById('score-slider');
@@ -33,12 +33,12 @@ class Testpaper {
       this.scoreSlider.updateOptions(option);
     }else {
       this.scoreSlider = noUiSlider.create(scoreSlider, option);
-      scoreSlider.noUiSlider.on('update', function( values, handle ){
+      scoreSlider.noUiSlider.on('update', function(values, handle ){
         let rate = values[handle]/score;
         let percentage = (rate*100).toFixed(0);
         $('.noUi-tooltip').text(`${percentage}%`);
         $('.js-score-tooltip').css('left',`${percentage}%`);
-        $('.js-passScore').text(parseInt(values[handle]));
+        $('.js-passScore').text(Math.round(percentage / 100 * score ));
         $('#finish-data').val(percentage/100);   
       });
     }
