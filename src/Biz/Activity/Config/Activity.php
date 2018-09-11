@@ -198,6 +198,11 @@ class Activity
         return $this->biz->service('System:SettingService');
     }
 
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
+    }
+
     /**
      * @return TaskResultService
      */
