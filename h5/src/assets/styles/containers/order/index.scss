@@ -16,6 +16,16 @@
       border-top: 1px solid #eee;
     }
     .order-coupon {
+      .coupon-column {
+        display: flex;
+        justify-content: space-between;
+        line-height: vw(52);
+        margin-left: vw(20);
+        padding-right: vw(20);
+        color: #9BA5B0;
+        font-size: vw(14);
+        border-top: 1px solid #eee
+      }
       .btn-coupon-exit {
         display: flex;
         justify-content: space-between;
@@ -59,16 +69,20 @@
             }
           }
           .rate-number {
-            line-height: vw(98);
             width: 35%;
+            margin-top: vw(28);
+            padding-left: vw(5);
             text-align: center;
             font-size: vw(32);
             color: #FF9800;
           }
+          .text-26 {
+            font-size: vw(26);
+          }
           .coupon-info {
             width: 65%;
             line-height: vw(20);
-            padding: vw(17);
+            padding: vw(16) vw(13);
             font-size: vw(12);
             overflow: hidden;
             .title {
@@ -99,6 +113,10 @@
             }
           }
         }
+      }
+      .coupon-empty {
+        height: 80vh;
+        text-align: center;
       }
     }
     .gray-dark {
