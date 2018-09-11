@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -141,6 +141,11 @@ class Setting extends AbstractResource
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
             'show_student_num_enabled' => '1',
         );
+    }
+
+    public function getWeixinConfig()
+    {
+        return $this->container->get('web.twig.extension')->weixinConfig();
     }
 
     /**
