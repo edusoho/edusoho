@@ -60,6 +60,12 @@ export default {
           return item;
         });
       }
+    },
+    learnExpiry: {
+      immediate: true,
+      handler(val) {
+        this.$emit('getLearnExpiry', val);
+      }
     }
   },
   computed: {

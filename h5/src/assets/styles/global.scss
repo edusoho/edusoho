@@ -44,6 +44,19 @@ a {
   background: $primary-color;
 }
 
+// text
+.text-12 {
+  font-size: vw(12);
+}
+
+.text-14 {
+  font-size: vw(14);
+}
+
+.text-16 {
+  font-size: vw(16);
+}
+
 // title
 .title-18 {
   font-family: PingFangSC-Medium;
@@ -82,6 +95,9 @@ a {
 }
 .grey {
   color: #b0bdc9;
+}
+.grey-medium {
+  color: #919191;
 }
 
 // font-family
