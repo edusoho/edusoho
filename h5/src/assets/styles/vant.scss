@@ -20,3 +20,21 @@
     }
   }
 }
+
+.van-cell-group{
+  margin-left: vw(20);
+  border-top: 1px solid #eee;
+  .van-cell {
+    padding: vw(10) vw(15) vw(10) 0;
+    color: #9BA5B0;
+    font-size: vw(14);
+  }
+  &:after {
+    border-width: 0;
+  }
+}
+
+.van-popup{
+  max-height: 100%;
+  overflow: auto;
+}
