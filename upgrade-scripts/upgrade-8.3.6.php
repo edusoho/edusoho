@@ -233,7 +233,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $param = array(
                 'finishType' => empty($finishCondition['type']) ? 'submit' : $finishCondition['type'],
-                'finishData' => empty($finishCondition['finishScore']) ? '' : round($finishCondition['finishScore'] / $testpaper['score'], 5),
+                'finishData' => empty($finishCondition['finishScore']) ? 0 : round($finishCondition['finishScore'] / $testpaper['score'], 5),
             );
     
             $helper->add('id', $value['id'], $param);
