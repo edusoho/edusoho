@@ -3,6 +3,8 @@
     <span class='login-title'>登录账号</span>
     <img class='login-avatarimg' src="" />
     <van-field v-model="username"
+      :autosize="{ maxHeight: 24 }"
+      type="textarea"
       class="login-input e-input"
       placeholder="邮箱/手机/用户名"/>
 
