@@ -26,9 +26,9 @@ class ClassroomController extends BaseController
 
         $orderBy = array('createdTime' => 'desc');
 
-        $classrooms = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX);
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX));
-        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        $classroomMembers = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX);
+        $classroomMembers = array_merge($classroomMembers, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX));
+        $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
 
         $conditions = array('classroomIds' => $classroomIds);
 
