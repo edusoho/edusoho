@@ -10,7 +10,7 @@
         {{'site.org'|trans}}
       </div>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-10 course-title-input">
       <select data-role="tree-select" name="orgCode" class="form-control js-org-tree-select">
         <option value={{ currentOrgTree.0.orgCode }}>{{ currentOrgTree.0.name }}</option>
         {% for org in currentOrgTree %}
