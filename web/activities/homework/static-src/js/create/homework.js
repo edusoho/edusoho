@@ -37,10 +37,12 @@ export default class Homework {
   }
 
   initCkeditor(validator) {
+    const height = this.$element.data('status') ? 350 : 200;
     let editor = CKEDITOR.replace('homework-about-field', {
       toolbar: 'Task',
       fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl'),
+      height: height,
     });
     editor.on('change', () => {
       $('#homework-about-field').val(editor.getData());
