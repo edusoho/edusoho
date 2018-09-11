@@ -63,7 +63,11 @@
     methods: {
       onChange(index) {
         console.log(222,this.data);
-        this.$emit('chooseItem', index)
+        this.$emit('chooseItem',
+        {
+          index: index,
+          itemData: this.couponData
+        })
         this.chosenCoupon = index;
         this.active = true;
       },

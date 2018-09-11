@@ -2,7 +2,7 @@
   <div class="order">
     <div class="goods-info">
       <e-loading v-if="isLoading"></e-loading>
-      <e-course type="confirmOrder" :order="course" v-if="Object.keys(course).length >0"></e-course>
+      <e-course type="confirmOrder" :order="course" :course="course" v-if="Object.keys(course).length >0"></e-course>
       <div class="order-coupon">
         <van-coupon-cell
           title= "优惠券"
@@ -30,7 +30,7 @@
         <span class="gray-dark">{{ this.$route.params.validity || '永久有效' }}</span>
       </div>
     </div>
-    <div class="order-accounts">
+    <div class="order-accounts" v-show="itemData">
       <div class="mb20 title-18">结算</div>
       <div class="flex-between-item">
         <span class="mbl">商品价格：</span>
@@ -38,16 +38,16 @@
       </div>
       <div class="flex-between-item">
         <span class="mbl">优惠券：</span>
-        <span class="red">-￥ 3</span>
+        <span class="red">-￥ {{ this.itemData.rate}}</span>
       </div>
       <div class="flex-between-item">
         <span class="mbl">应付：</span>
-        <span class="red">-￥ 13</span>
+        <span class="red">￥ {{ total }}</span>
       </div>
     </div>
     <van-button class="order-submit-bar submit-btn"
         @click="handleSubmit"
-        size="small">应付￥ {{ course.totalPrice }}</van-button>
+        size="small">应付￥ {{ total }}</van-button>
   </div>
 </template>
 <script>
@@ -66,12 +66,20 @@ export default {
       course: {},
       activeItemIndex: -1,
       showList: false,
+      itemData: ''
     }
   },
   computed: {
     ...mapState({
       isLoading: state => state.isLoading
     }),
+    total: {
+      get() {
+        return (this.itemData.rate - this.course.totalPrice) > 0
+        ? 0 : Math.abs(this.itemData.rate - this.course.totalPrice);
+      },
+      set() {}
+    },
   },
   created () {
     Api.confirmOrder({
@@ -80,7 +88,7 @@ export default {
         targetId: this.$route.params.id
       }
     }).then(res => {
-      console.log('res',res)
+      console.log('res', res)
       this.course = Object.assign({}, res)
     })
   },
@@ -97,9 +105,11 @@ export default {
       this.showList = false;
       this.activeItemIndex = -1;
     },
-    chooseItem(index) {
-      this.activeItemIndex = index;
+    chooseItem(data) {
+      console.log(data,22)
+      this.activeItemIndex = data.index;
       this.showList = false;
+      this.itemData = data.itemData;
     }
   }
 }
