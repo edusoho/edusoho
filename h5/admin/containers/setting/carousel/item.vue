@@ -9,6 +9,7 @@
       :show-file-list="false"
       >
       <img class="carousel-img" :src="item.image.uri" v-show="item.image.uri">
+      <div class="carousel-img-mask" v-show="item.image.uri">更换图片</div>
       <span v-show="!item.image.uri"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
 
