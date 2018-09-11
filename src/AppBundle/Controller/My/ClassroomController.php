@@ -24,11 +24,26 @@ class ClassroomController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $classrooms = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX));
+        $orderBy = array('createdTime' => 'desc');
+
+        $classrooms = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX);
+        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX));
         $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
 
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $conditions = array('classroomIds' => $classroomIds);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->countClassrooms($conditions),
+            20
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            $orderBy,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
 
@@ -60,6 +75,7 @@ class ClassroomController extends BaseController
         return $this->render('my/teaching/classroom.html.twig', array(
             'classrooms' => $classrooms,
             'members' => $members,
+            'paginator' => $paginator,
         ));
     }
 
