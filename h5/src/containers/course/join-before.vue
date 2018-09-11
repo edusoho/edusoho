@@ -4,7 +4,7 @@
       :price="details.price"
       :courseSet="details.courseSet"></detail-head>
 
-    <detail-plan></detail-plan>
+    <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
     <div class="segmentation"></div>
 
     <van-tabs v-model="active"
@@ -51,6 +51,7 @@
         tabs: ['课程介绍', '教师介绍', '目录'],
         active: 0,
         tabsClass: '',
+        learnExpiry: '永久有效',
         tops: {
           tabsTop: 0,
           teacherTop: 0,
@@ -135,7 +136,11 @@
         if (Number(this.details.buyable) && isPast) {
           if (+this.details.price) {
             this.$router.push({
-              path: `/order/${this.details.id}`
+              name: 'order',
+              params: {
+                id: this.details.id,
+                validity: this.learnExpiry,
+              }
             });
           } else {
             this.joinCourse({
@@ -143,6 +148,9 @@
             });
           }
         }
+      },
+      getLearnExpiry(val) {
+        this.learnExpiry = val;
       }
     },
     destroyed () {

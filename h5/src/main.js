@@ -23,7 +23,9 @@ import {
   List,
   Field,
   Loading,
-  Uploader
+  Uploader,
+  CouponCell,
+  Popup
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -40,9 +42,11 @@ Vue.component('van-loading', Loading);
 Vue.component('van-uploader', Uploader);
 
 Vue.use(filters);
+Vue.use(Popup);
 Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
+Vue.use(CouponCell);
 
 Vue.config.productionTip = false;
 
