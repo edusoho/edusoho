@@ -41,9 +41,6 @@ export default {
     state.settings = payload;
   },
   [types.SET_NAVBAR_TITLE](state, payload) {
-    if (payload) {
-      localStorage.setItem('navTitle', payload);
-    }
-    state.title = localStorage.getItem('navTitle') || payload;
+    state.title = payload;
   }
 };
