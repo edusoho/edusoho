@@ -140,7 +140,6 @@ export default {
       this.itemData = '';
     },
     chooseItem(data) {
-      console.log(data,22)
       this.activeItemIndex = data.index;
       this.itemData = data.itemData;
       this.showList = false;
