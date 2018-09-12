@@ -57,10 +57,10 @@
         <a href="javascript:;" class="js-hidden-lesson-rename-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {lessonId:lesson.id,courseId:task.courseId}) }}"></a>
       </li>
       <li class="hidden">
-        <a href="javascript:;" class="js-hidden-lesson-edit-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:'{taskId}',courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}"></a>
+        <a href="javascript:;" class="js-hidden-lesson-edit-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}"></a>
       </li>
       <li class="hidden">
-        <a href="javascript:;" class="js-hidden-lesson-preview-btn" data-url="{{ path('course_task_show', {id:'{taskId}',courseId:task.courseId,preview:1}) }}" target="_blank"></a>
+        <a href="javascript:;" class="js-hidden-lesson-preview-btn" data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank"></a>
       </li>
 
       {% if shouldDisplayTask %}
