@@ -113,7 +113,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('activity', 'finishData')) {
-            $this->getConnection()->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '1' COMMENT '任务完成条件数据';");
+            $this->getConnection()->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '0' COMMENT '任务完成条件数据';");
         }
 
         return 1;
@@ -135,14 +135,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function updateFlash($page)
     {
-        $this->getConnection()->exec("UPDATE `activity` a ,`activity_flash` flash SET `finishData` = flash.finishDetail , a.`finishType`= 'time' where a.mediaId = flash.id and a.`mediaType` = 'flash';");
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_flash` flash SET `finishData` = flash.finishDetail , a.`finishType`= 'time' where a.mediaId = flash.id and a.`mediaType` = 'flash' and a.finishData = 0;");
 
         return 1;
     }
 
     protected function updatePpt($page)
     {
-        $this->getConnection()->exec("UPDATE `activity` a ,`activity_ppt` ppt SET `finishData` = ppt.finishDetail , a.`finishType`= ppt.finishType where a.mediaId = ppt.id and a.`mediaType` = 'ppt';");
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_ppt` ppt SET `finishData` = ppt.finishDetail , a.`finishType`= ppt.finishType where a.mediaId = ppt.id and a.`mediaType` = 'ppt' and a.finishData = 0;");
 
         return 1;
     }
@@ -163,14 +163,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function updateDoc($page)
     {
-        $this->getConnection()->exec("UPDATE `activity` a ,`activity_doc` doc SET a.`finishType`= 'time', `finishData` = doc.finishDetail where a.mediaId = doc.id and a.`mediaType` = 'doc';");
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_doc` doc SET a.`finishType`= 'time', `finishData` = doc.finishDetail where a.mediaId = doc.id and a.`mediaType` = 'doc' and a.finishData = 0;");
 
         return 1;
     }
 
     protected function updateText($page)
     {
-        $this->getConnection()->exec("UPDATE `activity` a ,`activity_text` atext SET a.`finishType`= 'time' , `finishData` = atext.finishDetail where a.mediaId = atext.id and a.`mediaType` = 'text';");
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_text` atext SET a.`finishType`= 'time' , `finishData` = atext.finishDetail where a.mediaId = atext.id and a.`mediaType` = 'text' and a.finishData = 0;");
 
         return 1;
     }
@@ -184,7 +184,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function updateVideo()
     {
-        $this->getConnection()->exec("UPDATE `activity` a ,`activity_video` video SET a.`finishData` = video.finishDetail ,a.`finishType` = video.finishType where a.mediaId = video.id and a.`mediaType` = 'video';");
+        $this->getConnection()->exec("UPDATE `activity` a ,`activity_video` video SET a.`finishData` = video.finishDetail ,a.`finishType` = video.finishType where a.mediaId = video.id and a.`mediaType` = 'video' and a.finishData = 0;");
         
         return 1;
     }
