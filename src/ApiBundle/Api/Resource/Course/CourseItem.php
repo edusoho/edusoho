@@ -22,10 +22,16 @@ class CourseItem extends AbstractResource
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
-        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $course, $request->query->get('onlyPublished', 0));
+        return $this->convertToLeadingItems(
+            $this->getCourseService()->findCourseItems($courseId),
+            $course,
+            $request->getHttpRequest()->isSecure(),
+            $request->query->get('fetchSubtitlesUrls', 0),
+            $request->query->get('onlyPublished', 0)
+        );
     }
 
-    protected function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
+    protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $courseId = $course['id'];
         $newItems = array();
@@ -71,7 +77,7 @@ class CourseItem extends AbstractResource
 
         $result = $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
 
-        return $this->afterDeal($result);
+        return $fetchSubtitlesUrls ? $this->afterDeal($result, $isSsl) : $result;
     }
 
     protected function filterUnPublishTask($items)
@@ -96,13 +102,13 @@ class CourseItem extends AbstractResource
         return $items;
     }
 
-    protected function afterDeal($result)
+    protected function afterDeal($result, $isSsl)
     {
         foreach ($result as $key => $taskItem) {
             if (!empty($taskItem['task']) && !empty($taskItem['task']['activity'])) {
                 $updatedTaskInfo = $this->getSubtitleService()->setSubtitlesUrls(
                     $taskItem['task']['activity']['ext'],
-                    false
+                    $isSsl
                 );
 
                 if (!empty($updatedTaskInfo['subtitlesUrls'])) {

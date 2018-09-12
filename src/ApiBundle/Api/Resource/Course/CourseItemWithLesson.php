@@ -6,39 +6,40 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseItemWithLesson extends CourseItem
 {
-    protected function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
+    protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $result = array();
         $lessonInfos = array();
         foreach ($originItems as $item) {
             if ('lesson' == $item['type']) {
+                unset($item['tasks']);
                 $lessonInfos[$item['id']] = $item;
             }
         }
 
-        $convertedItems = parent::convertToLeadingItems($originItems, $course, $onlyPublishTask);
+        $convertedItems = parent::convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask);
         foreach ($convertedItems as $key => $item) {
             if ('task' == $item['type']) {
-                $lessonInfos[$item['task']['categoryId']]['tasks'][] = $item;
+                $lessonId = $item['task']['categoryId'];
+                $lessonInfos[$lessonId]['tasks'][] = $item['task'];
             }
         }
-
-        $lessonInfos = $onlyPublishTask ? $this->filterUnPublishTask($lessonInfos) : $this->isHiddenUnpublishTasks($lessonInfos, $course['id']);
-
-        foreach ($lessonInfos as $lessonInfo) {
-            $convertedItems[] = $lessonInfo;
-        }
-
-        $convertedItems = ArrayToolkit::sortPerArrayValue($convertedItems, 'seq');
+        $lessonInfos = $onlyPublishTask ? $this->filterUnPublishLesson($lessonInfos) : $this->isHiddenUnpublishTasks($lessonInfos, $course['id']);
+        $lessonInfos = ArrayToolkit::index($lessonInfos, 'id');
 
         $result = array();
         $lessonNum = 1;
         foreach ($convertedItems as $key => $item) {
-            if ('task' != $item['type']) {
-                if ('lesson' == $item['type']) {
-                    $item['number'] = $lessonNum;
+            if ('task' == $item['type']) {
+                $lessonId = $item['task']['categoryId'];
+                if (!empty($lessonInfos[$lessonId])) {
+                    $lessonItem = $lessonInfos[$lessonId];
+                    $lessonItem['number'] = $lessonNum;
+                    $result[] = $lessonItem;
                     ++$lessonNum;
+                    unset($lessonInfos[$item['task']['categoryId']]);
                 }
+            } else {
                 $result[] = $item;
             }
         }
@@ -62,9 +63,9 @@ class CourseItemWithLesson extends CourseItem
         $course = $this->getCourseService()->getCourse($courseId);
 
         if ($course['isHideUnpublish']) {
-            return $this->filterUnPublishTask($lessonInfos);
+            return $this->filterUnPublishLesson($lessonInfos);
         }
 
-        return array_values($lessonInfos);
+        return $lessonInfos;
     }
 }
