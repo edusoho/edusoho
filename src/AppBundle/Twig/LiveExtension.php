@@ -8,6 +8,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Biz\Course\Service\LiveReplayService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LiveExtension extends \Twig_Extension
 {
