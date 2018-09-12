@@ -6,8 +6,10 @@
   {% endif %}
 {% set isHideUnpublish = course['isHideUnpublish']|default(false) %}
 
+{% set isShowText = lesson.isOptional or (isHideUnpublish and lesson.status != 'published') %}
+
 <li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix "
-    show-num="{% if task.isOptional or (isHideUnpublish and lesson.status != 'published' ) %}0{% else %}1{% endif %}">
+    show-num="{% if isShowText %}0{% else %}1{% endif %}">
 
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
@@ -32,16 +34,12 @@
         {% set displayedLessonNum = lesson.number %}
       {% endif %}
 
-      {% if displayedLessonNum != '' %}
-        {% set displayText = 'course.lesson'|trans %}
-      {% endif %}
+      {% set displayText = 'course.lesson'|trans %}
 
       {% set displayText = displayText ~ '<span class="number mls">' ~ displayedLessonNum ~ '</span>' %}
-      {% if displayedLessonNum != '' %}
-        {% set displayText = displayText ~ '：' %}
-      {% endif %}
+      {% set displayText = displayText ~ '：' %}
 
-      <span class="display-text {% if lesson.isOptional %}hidden{% endif %}">
+      <span class="display-text {% if isShowText %}hidden{% endif %}">
         {{ displayText|raw }}
       </span>
 
