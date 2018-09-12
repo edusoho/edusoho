@@ -29,7 +29,7 @@
               </div>
               {% if startLeftSeconds < 7200 %}
                 <div class='live-show-item'>
-                  <a target="_blank" class='btn btn-primary js-start-live' href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                  <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
                     {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
                 </div>
@@ -51,7 +51,7 @@
                 {{ activity.remark|raw }}
               </div>
               <div class='live-show-item'>
-                <a target="_blank" class='btn btn-primary js-start-live' href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
                   {{ 'homepage.live_course.join_btn'|trans }}
                 </a>
               </div>
