@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
                         return name+':'+size+'GB'+'  '+per;
                     },
-                    data: [Translator.trans('视频'),Translator.trans('音频'),Translator.trans('图片'),Translator.trans('文档'),Translator.trans('PPT'),Translator.trans('其他')]
+                    data: [Translator.trans('admin.material_lib.video'),Translator.trans('admin.material_lib.audio'),Translator.trans('admin.material_lib.picture'),Translator.trans('admin.material_lib.document'),Translator.trans('PPT'),Translator.trans('admin.material_lib.other')]
                 },
                 series : [
                     {

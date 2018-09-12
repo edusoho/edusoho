@@ -22,7 +22,7 @@ define(function(require, exports, module) {
             $('#course-display .well').html(html);
             $('#course-display').show();
             $modal.modal('hide');
-            Notify.success(Translator.trans('指定班级成功'));
+            Notify.success(Translator.trans('admin.classroom.choose_success_hint'));
         });
 
         $modal.on('hidden.bs.modal', function (e) {

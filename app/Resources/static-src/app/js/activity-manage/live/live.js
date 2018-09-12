@@ -13,7 +13,7 @@ export default class Live {
   initStep2Form() {
     jQuery.validator.addMethod('show_overlap_time_error', function(value, element) {
       return this.optional( element ) || !$(element).data('showError');
-    }, '所选时间已经有直播了，请换个时间');
+    }, Translator.trans('activity.live.overlap_time_notice'));
     let $step2_form = $('#step2-form');
     this.validator2 = $step2_form.validate({
       onkeyup: false,

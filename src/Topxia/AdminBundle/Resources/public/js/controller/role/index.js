@@ -6,15 +6,15 @@ define(function(require, exports, module) {
     	$('.js-delete-role').click(function(){
     		var url = $(this).data('url');
 
-			if(!confirm(Translator.trans('确认删除该角色吗?'))){
+			if(!confirm(Translator.trans('admin.role.delete_hint'))){
 				return;
 			}
 
     		$.post(url).done(function(){
-				Notify.success(Translator.trans('删除角色成功'));
+				Notify.success(Translator.trans('admin.role.delete_success_hint'));
 				document.location.reload();
 			}).fail(function (error) {
-				Notify.danger(Translator.trans('删除该角色失败'));
+				Notify.danger(Translator.trans('admin.role.delete_fail_hint'));
 			});
     	})
 

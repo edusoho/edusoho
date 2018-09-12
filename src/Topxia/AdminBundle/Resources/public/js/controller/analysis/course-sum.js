@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('教学计划总数')],
+                      labels: [Translator.trans('admin.analysis.program_total')],
                       xLabels:"day"
                     });
           }

@@ -18,7 +18,7 @@
                       <a href="{{ path('classroom_show', {id: classroom.id}) }}" class="gray-darker" title="{{ classroom.title }}" target="_blank">{{ classroom.title|plain_text(20) }}</a>
                   </div>
                   <div class="metas">
-                      <span class="classroom-course-num color-gray">共{{ classroom.courseNum }}课</span>
+                      <span class="classroom-course-num color-gray">{{ 'es_bar.study_place.classroom_course_num'|trans({'%courseNum%': classroom.courseNum}) }}</span>
                   </div>
               </div>
           </div>

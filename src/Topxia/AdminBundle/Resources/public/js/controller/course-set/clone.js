@@ -30,7 +30,8 @@ define(function(require, exports, module) {
       return '<div class="modal-dialog ">'
             +   '<div class="modal-content">'
             +     '<div class="modal-header">'
-            +       '<h4 class="modal-title">正在复制课程'
+            +       '<h4 class="modal-title">'
+            +         Translator.trans('admin.course.copying_hint')
             +       '</h4>'
             +     '</div>'
             +     '<div class="modal-body">'
@@ -75,7 +76,7 @@ define(function(require, exports, module) {
       var intervalId = setInterval(function () {
         progress++;
         if (progress <= 99) {
-          progressbar.setProgress(progress, '进度：'+progress+'%');
+          progressbar.setProgress(progress, Translator.trans('admin.course.copying_progress_hint')+progress+'%');
         }
 
       }, 200);

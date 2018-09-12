@@ -22,10 +22,10 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
 
-                    Notify.success(Translator.trans('保存栏目成功！'));
+                    Notify.success(Translator.trans('admin.article.category.save_success_hint'));
                     window.location.reload();
 				}).fail(function() {
-                    Notify.danger(Translator.trans('添加栏目失败，请重试！'));
+                    Notify.danger(Translator.trans('admin.article.category.save_fail_hint'));
                 });
 
             }
@@ -50,7 +50,7 @@ define(function(require, exports, module) {
         });
 
         $modal.find('.delete-category').on('click', function() {
-            if (!confirm(Translator.trans('真的要删除该栏目吗？'))) {
+            if (!confirm(Translator.trans('admin.article.category.delete_hint'))) {
                 return ;
             }
 
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
                 }
                 
             }, 'json').error(function(error) {
-                Notify.danger(Translator.trans('删除栏目失败，请重试！%error%',{error:error.responseJSON.error.message}));
+                Notify.danger(Translator.trans('admin.article.category.delete_failed_hint',{error:error.responseJSON.error.message}));
             });
 
             return false;

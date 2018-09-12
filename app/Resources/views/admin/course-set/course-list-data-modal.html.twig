@@ -13,7 +13,7 @@
       {% endif %}
       <div class="pull-right">
         {% set course = courses[0]|default() %}
-        <a class="btn btn-primary btn-sm task-export" data-prepare-url="{{ path("admin_course_task_data_export_prepare",{courseId: courseId}) }}" data-export-url="{{ path('admin_course_task_data_export',{courseId: courseId}) }}" href="javascript:;">导出课时数据</a>
+        <a class="btn btn-primary btn-sm task-export" data-prepare-url="{{ path("admin_course_task_data_export_prepare",{courseId: courseId}) }}" data-export-url="{{ path('admin_course_task_data_export',{courseId: courseId}) }}" href="javascript:;">{{ 'course.export'|trans }}</a>
       </div>
     </div>
     <div class="table-responsive">

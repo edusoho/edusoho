@@ -7,11 +7,11 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
         $('tbody').on('click', '.delete-btn', function() {
-            if (!confirm(Translator.trans('确定要删除该分类展示吗？'))) return false;
+            if (!confirm(Translator.trans('admin.dictionary.delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {
                 
-                    Notify.success(Translator.trans('删除成功!'));
+                    Notify.success(Translator.trans('admin.dictionary.delete_success_hint'));
                     setTimeout(function(){
                         window.location.reload();
                     }, 500);

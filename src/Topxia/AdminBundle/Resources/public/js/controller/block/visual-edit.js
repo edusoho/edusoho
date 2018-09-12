@@ -46,7 +46,7 @@ define(function(require, exports, module) {
                 $form.data('serialize', $form.serialize());
                 $(window).on('beforeunload',function(){
                     if ($form.serialize() != $form.data('serialize')) {
-                        return Translator.trans('还有没有保存的数据,是否要离开此页面?');
+                        return Translator.trans('admin.block.not_saved_data_hint');
                     }
                 });
 
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                 var $panelGroup = $target.prev('.panel-group');
                 var $panels = $panelGroup.children('.panel.panel-default');
                 if ($panels.length >= $panelGroup.data('count')) {
-                    Notify.danger(Translator.trans('最多只能添加%panelGroup%个!',{panelGroup:$panelGroup.data('count')}));
+                    Notify.danger(Translator.trans('admin.block.add_max_num_hint',{panelGroup:$panelGroup.data('count')}));
                 } else {
                     $model = $($panels[0]).clone();
                     $model.find('input').attr('value', '').val('');
@@ -83,13 +83,13 @@ define(function(require, exports, module) {
 
             },
             onClickRemoveBtn: function(e) {
-                if (confirm(Translator.trans('你确定要删除吗?'))) {
+                if (confirm(Translator.trans('admin.block.delete_tip'))) {
                     var $target = $(e.currentTarget);
                     var $panelGroup = $target.closest('.panel-group');
                     var $parent = $target.closest('.panel.panel-default');
                     var $panels = $panelGroup.children('.panel.panel-default');
                     if ($panels.length == 1) {
-                        Notify.danger(Translator.trans('必须要有一个!'));
+                        Notify.danger(Translator.trans('admin.block.delete_min_num_hint'));
                     } else {
                         $parent.remove();
                         this.refreshIndex($panelGroup);
@@ -125,7 +125,7 @@ define(function(require, exports, module) {
                         }
                     });
 
-                    $(this).find('.webuploader-container').html(Translator.trans('上传'));
+                    $(this).find('.webuploader-container').html(Translator.trans('uploader.title'));
                     var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]");
                     $(this).replaceWith(replace);
                 });
@@ -155,17 +155,17 @@ define(function(require, exports, module) {
                     });
 
                     uploader.on( 'fileQueued', function( file ) {
-                        Notify.info(Translator.trans('正在上传，请稍等！'), 0);
+                        Notify.info(Translator.trans('admin.block.uploading_hint'), 0);
                         uploader.upload();
                     });
 
                     uploader.on( 'uploadSuccess', function( file, response ) {
                         self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
-                        Notify.success(Translator.trans('上传成功！'), 1);
+                        Notify.success(Translator.trans('admin.block.upload_success_hint'), 1);
                    });
 
                     uploader.on( 'uploadError', function( file, response ) {
-                        Notify.danger(Translator.trans('上传失败，请重试！'));
+                        Notify.danger(Translator.trans('admin.block.upload_failed_hint'));
                     });
 
                     var id =$(this).attr('id');
@@ -271,7 +271,7 @@ define(function(require, exports, module) {
             self.closest('.form-group').find('.img-mrl').html(response.url);
             self.closest('.form-group').find(".img-mtl").attr("src",response.url);
             self.closest('.form-group').find(".img-value").val(response.url);
-            Notify.success(Translator.trans('上传成功！'), 1);
+            Notify.success(Translator.trans('admin.block.upload_success_hint'), 1);
         });
     }
 
@@ -283,7 +283,7 @@ define(function(require, exports, module) {
 
         uploader.on('uploadSuccess', function(file, response ) {
             var html = self.closest('.edit-mode-html').find('.html-mrl').append("<p>" + response.url + "</p>");
-            Notify.success(Translator.trans('上传成功！'), 1);
+            Notify.success(Translator.trans('admin.block.upload_success_hint'), 1);
         });
     }
 
@@ -311,8 +311,8 @@ define(function(require, exports, module) {
                         var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   "data[posters][" + index + "]");
                         $(this).replaceWith(replace);
                     });
-                    $(this).find('.poster-btn').text(Translator.trans('海报(%index%)',{index:index+1}));
-                    $(this).find('input[type=hidden]').val(Translator.trans('海报(%index%)',{index:index+1}));
+                    $(this).find('.poster-btn').text(Translator.trans('admin.block.poster',{index:index+1}));
+                    $(this).find('input[type=hidden]').val(Translator.trans('admin.block.poster',{index:index+1}));
                     var nameReplace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   "data[posters][" + index + "]");
                     $(this).replaceWith(nameReplace);
 

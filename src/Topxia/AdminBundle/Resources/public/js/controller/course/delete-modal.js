@@ -19,15 +19,15 @@ define(function(require, exports, module) {
                     if(response.success){
                         $.post($('#delete-btn').data('url'), function(resp){
                             if(resp.code == 0){
-                                Notify.success(Translator.trans('删除课程成功'));
+                                Notify.success(Translator.trans('admin.course.delete_success_hint'));
                                 location.reload();
                             }else{
-                                Notify.success(Translator.trans('删除课程失败：' + resp.message));
+                                Notify.success(Translator.trans('admin.course.delete_failed_hint') + '：' + resp.message);
                             }
                         });
                     }else{
                         $('#delete-form').children('div').addClass('has-error');
-                        $('#delete-form').find('.help-block').show().text(Translator.trans('验证密码错误'));
+                        $('#delete-form').find('.help-block').show().text(Translator.trans('admin.course.delete_course.check_password_fail_hint'));
                     }
                 });
             }
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
             element: '[name=password]',
             required: true,
             rule: 'minlength{min:5} maxlength{max:20}',
-            display:Translator.trans('密码')
+            display:Translator.trans('admin.course.validate_old.password_required_hint')
         });
 	}
 });

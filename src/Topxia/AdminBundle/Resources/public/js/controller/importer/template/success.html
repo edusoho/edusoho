@@ -1,5 +1,5 @@
 <div class="page-header clearfix">
-    <h1 class="pull-left"><%= Translator.trans('步骤2') %></h1>
+    <h1 class="pull-left"><%= Translator.trans('site.step_two') %></h1>
 </div>
 
 <div class="row">
@@ -7,10 +7,10 @@
         <% $.each(checkInfo, function(index, item){  %>
             <div class="col-md-offset-2"><%= item %></div><br>
         <%}) %>
-        <div class="col-md-offset-2"><%= Translator.trans('校验成功！一共包含') %> <b><%= importData.length %></b><%= Translator.trans('信息') %></div><br>
+        <div class="col-md-offset-2"><%= Translator.trans('importer.import_verify_tips_start') %> <b><%= importData.length %></b><%= Translator.trans('site.information') %></div><br>
         <div class="col-md-offset-2">
-            <button type="button" class="btn btn-primary" id="start-import-btn"><%= Translator.trans('确定导入') %></button>
-            <a type="button" class="btn btn-primary" href="#index"><%= Translator.trans('返回') %></a>
+            <button type="button" class="btn btn-primary" id="start-import-btn"><%= Translator.trans('importer.import_confirm_btn') %></button>
+            <a type="button" class="btn btn-primary" href="#index"><%= Translator.trans('importer.import_back_btn') %></a>
         </div>
     </div>
 </div>
