@@ -30,7 +30,7 @@
       <a display-if="{isPublishedTaskUnlocked}" class="title"
           href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
         <tmp display-if="{isItemDisplayedAsOptional}">
-          <span class=" label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
         
         <tmp hide-if="{isItemDisplayedAsOptional}">
