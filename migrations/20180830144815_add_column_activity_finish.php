@@ -17,7 +17,7 @@ class AddColumnActivityFinish extends Migration
         }
 
         if (!$this->isFieldExist('activity', 'finishData')) {
-            $db->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '1' COMMENT '任务完成条件数据';");
+            $db->exec("ALTER TABLE `activity` ADD COLUMN `finishData`  varchar(256)  NOT NULL DEFAULT '0' COMMENT '任务完成条件数据';");
         }
     }
 

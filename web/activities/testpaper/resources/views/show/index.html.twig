@@ -17,10 +17,9 @@
                 {% else %}
                   <div class="text-16 ">
                     {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.itemCount, '%score%':testpaper.score})|raw}}
-                    {% if activity.ext.finishCondition.type|default('score') == 'score' %}
-                      {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':(activity.finishData|default(0.6) * activity.ext.testpaper.score)|round|default(0)})|raw}}
+                    {% if activity.finishType|default('') == 'score' %}
+                      {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%': activity.ext.finishCondition.finishScore })|raw}}
                     {% endif %}
-
                     {% if activity.ext.limitedTime %}
                       <div class="mt5">
                         {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%': activity.ext.limitedTime})|raw}}

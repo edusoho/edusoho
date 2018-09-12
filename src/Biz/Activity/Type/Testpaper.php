@@ -144,6 +144,18 @@ class Testpaper extends Activity
 
     protected function filterFields($fields)
     {
+        if (!empty($fields['finishType'])) {
+            if ($fields['finishType'] == 'score') {
+                $testPaper = $this->getTestpaperService()->getTestpaper($fields['testpaperId']);
+                $fields['finishCondition'] = array(
+                    'type' => 'score',
+                    'finishScore' => empty($fields['finishData']) ? 0 : round($testPaper['score'] * $fields['finishData'], 0),
+                );
+            } else {
+                $fields['finishCondition'] = array();
+            }
+        }
+
         $filterFields = ArrayToolkit::parts(
             $fields,
             array(
@@ -155,6 +167,7 @@ class Testpaper extends Activity
                 'checkType',
                 'requireCredit',
                 'testMode',
+                'finishCondition',
             )
         );
 

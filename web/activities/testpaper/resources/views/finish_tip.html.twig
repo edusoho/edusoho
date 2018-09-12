@@ -1,1 +1,5 @@
-{{ 'course.plan_task.activity_manage.testpaper.finish_score'|trans({'%finishScore%': (activity.ext.testpaper.score * activity.finishData|default(0.6)) | round}) }}
+{% if activity.finishType|default() == 'score'  %}
+  {{ 'course.plan_task.activity_manage.testpaper.finish_score'|trans({'%finishScore%': activity.ext.finishCondition.finishScore|default() }) }}
+{% else %}
+  {{ 'course.plan_task.activity_manage.testpaper.submit'|trans() }}
+{% endif %}
