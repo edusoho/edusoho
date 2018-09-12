@@ -67,6 +67,8 @@ class CourseTaskUpdateSyncJob extends AbstractJob
             'length',
             'startTime',
             'endTime',
+            'finishType',
+            'finishData',
         ));
 
         if (!empty($testpaper)) {
