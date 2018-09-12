@@ -62,7 +62,7 @@
                 {{ replayGuid|raw }}
               </div>
             {% endif %}
-            {% elseif endLeftSeconds < 0 %}
+            {% elseif isFinished %}
                 <div class='live-show-item'>
                     <i class='es-icon es-icon-xinxi color-danger icon-live-end'></i>
                     {{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}
