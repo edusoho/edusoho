@@ -54,7 +54,7 @@
     data() {
       return {
         activeIndex: this.active,
-        discount: this.data.type == 'discount',
+        discount: this.data.type === 'discount',
         type: this.data.type,
       }
     },
