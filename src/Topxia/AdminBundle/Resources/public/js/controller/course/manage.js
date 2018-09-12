@@ -12,7 +12,7 @@ define(function (require, exports, module) {
       $.post($(this).data('url'), function (html) {
         var $tr = $(html);
         $table.find('#' + $tr.attr('id')).replaceWith(html);
-        Notify.success(Translator.trans('课程推荐已取消！'));
+        Notify.success(Translator.trans('admin.course.cancel_recommend_success_hint'));
       });
     });
 
@@ -30,27 +30,27 @@ define(function (require, exports, module) {
 
     $table.on('click', '.close-course', function () {
       var user_name = $(this).data('user');
-      if (!confirm(Translator.trans('您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。'))) return false;
+      if (!confirm(Translator.trans('admin.course.close_course_hint'))) return false;
       $.post($(this).data('url'), function (html) {
         var $tr = $(html);
         $table.find('#' + $tr.attr('id')).replaceWith(html);
-        Notify.success(Translator.trans('课程关闭成功！'));
+        Notify.success(Translator.trans('admin.course.close_success_hint'));
       });
     });
 
     $table.on('click', '.publish-course', function() {
       var studentNum = $(this).closest('tr').next().val();
-      if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
+      if (!confirm(Translator.trans('admin.course.publish_hint'))) return false;
       $.post($(this).data('url'), function(response) {
         if (!response['success'] && response['message']) {
           Notify.danger(response['message']);
         } else {
           var $tr = $(response);
           $table.find('#' + $tr.attr('id')).replaceWith($tr);
-          Notify.success(Translator.trans('课程发布成功！'));
+          Notify.success(Translator.trans('admin.course.publish_success_hint'));
         }
       }).error(function(e) {
-        var res = e.responseJSON.error.message || '未知错误';
+        var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
         Notify.danger(res);
       });
     });
@@ -60,7 +60,7 @@ define(function (require, exports, module) {
       var part_name = $(this).data('part');
       var user_name = $(this).data('user');
       var $this = $(this);
-      if (!confirm(Translator.trans('删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？')))
+      if (!confirm(Translator.trans('admin.course.delete_hint')))
         return;
       var $tr = $this.parents('tr');
       $.post($this.data('url'), function(data) {
@@ -129,7 +129,7 @@ define(function (require, exports, module) {
         },
         multiple: true,
         maximumSelectionSize: 20,
-        placeholder: Translator.trans('请输入标签'),
+        placeholder: Translator.trans('validate.tag_required_hint'),
         width: '162px',
         createSearchChoice: function () {
           return null;

@@ -25,7 +25,7 @@
           </td>
         </tr>
         <tr>
-          <td width="25%">{{ '商品名称'|trans }}</td>
+          <td width="25%">{{ 'order.product_name'|trans }}</td>
           <td width="75%">
             {{ order.title }}
           </td>
@@ -39,7 +39,7 @@
           </td>
         </tr>
         <tr>
-          <td width="25%">{{ '商品价格'|trans }}</td>
+          <td width="25%">{{ 'order.product_price'|trans }}</td>
           <td width="75%">
             <span class="color-warning">{{ order.price_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
           </td>
@@ -64,7 +64,7 @@
                   <a class="es-icon es-icon-help text-normal link-gray"
                      data-toggle="popover" data-trigger="hover"
                      data-placement="left"
-                     data-content="{{ '使用优惠券'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>
+                     data-content="{{ 'order.use_coupon'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>
                 </span>
                 {% endif %}
               </td>
@@ -89,7 +89,7 @@
                   <a class="es-icon es-icon-help text-normal link-gray"
                      data-toggle="popover" data-trigger="hover"
                      data-placement="left"
-                     data-content="{{ '支付流水号'|trans }} {{ paymentTrade.platform_sn }}"></a>
+                     data-content="{{ 'order.platform_sn'|trans }} {{ paymentTrade.platform_sn }}"></a>
                 </span>
               {% endif %}
               {#<span class="text-muted text-sm pull-right">{{ 'order.platform_sn'|trans ~ order.trade_sn }}</span>#}
@@ -103,7 +103,7 @@
             <td width="25%" class="text-muted" style="text-align: right">{{ setting('coin.name', 'finance.coin'|trans) }}</td>
             <td width="75%">
               <span class="text-muted">{{ order.paid_coin_amount|to_coin(0) }}</span>
-              (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|to_coin(0) }}</span> {{ 'site.currency.CNY'|trans }})
+              ({{ 'order.refund.equal'|trans }} <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|to_coin(0) }}</span> {{ 'site.currency.CNY'|trans }})
             </td>
           </tr>
 

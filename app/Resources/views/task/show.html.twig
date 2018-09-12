@@ -59,7 +59,7 @@
                data-toggle="popover"
                data-trigger="hover"
                data-placement="top"
-               data-content='请先学完当前课程'
+               data-content="{{ 'course.task.learning.learning_hint'|trans }}"
              {% endif  %}
               {% if  nextTask|default(null) %}
                 {% if  course.learnMode == 'lockMode'  and taskResult.status != 'finish' %}

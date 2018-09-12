@@ -38,11 +38,11 @@ define(function(require, exports, module) {
             }
             if($('#hidden').val() == 'publish'){
                 $('#notification-operate-publish').button('loading').addClass('disabled');
-                Notify.success(Translator.trans('发布成功！'));
+                Notify.success(Translator.trans('admin.batch_notification.publish_success_hint'));
             }
             else{
                 $('#notification-operate-save').button('loading').addClass('disabled');
-                Notify.success(Translator.trans('保存成功！'));
+                Notify.success(Translator.trans('admin.batch_notification.save_success_hint'));
             }
         });
      }; 

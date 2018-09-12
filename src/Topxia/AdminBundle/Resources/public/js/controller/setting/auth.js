@@ -69,7 +69,7 @@ define(function(require, exports, module) {
         $(".js-email-send-check").addClass('hidden');
       }
       return app.arguments.emailVerified == 1;
-    }, Translator.trans('开启前,请先验证您的邮箱'))
+    }, Translator.trans('admin.setting.auth.email_verified_hint'))
 
     $('.js-email-send-check').on('click', function() {
       $(".js-email-status").removeClass().addClass('alert alert-info js-email-status').html(Translator.trans('正在检测.....'));
@@ -117,7 +117,7 @@ define(function(require, exports, module) {
           $('[data-modle="' + old_modle_value + '"]').addClass("btn-primary");
           modle = old_modle_value;
 
-          Notify.danger(Translator.trans("请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~"));
+          Notify.danger(Translator.trans('admin.user.cloude_sms_enable_hint'));
         }
       }
 

@@ -16,7 +16,7 @@
             {% for task in stats.tasks %}
               <option value="{{ task.id }}" {% if task.id == stats.taskId %}selected="selected"{% endif %}>{{ task.title }}</option>
             {% else %}
-              <option value="0">无任务</option>
+              <option value="0">{{ 'course.question_marker.no_task'|trans }}</option>
             {% endfor %}
           </select>
         </div>
@@ -24,18 +24,19 @@
       <table class="table table-hover table-striped">
         <thead>
         <tr>
-          <th>时间点</th>
-          <th width="32%" >题干</th>
-          <th>参与人数</th>
-          <th>答题次数</th>
-          <th>正确次数</th>
-          <th class="js-sort-btn" style="cursor: pointer">正确率
+          <th>{{ 'course.question_marker.make_time'|trans }}</th>
+          <th width="32%" >{{ 'course.question_marker.stem'|trans }}</th>
+          <th>{{ 'course.question_marker.join_num'|trans }}</th>
+          <th>{{ 'course.question_marker.answer_num'|trans }}</th>
+          <th>{{ 'course.question_marker.right_num'|trans }}</th>
+          <th class="js-sort-btn" style="cursor: pointer">{{ 'question.correct_rate'|trans }}
             <span class="sort-operation">
                 <i class="es-icon es-icon-arrowdropup {% if app.request.query.get('order')=='asc' %} active {% endif %}" data-val="asc"></i>
                 <i class="es-icon es-icon-arrowdropdown {% if app.request.query.get('order')=='desc' %} active {% endif %}" data-val="desc"></i>
               </span>
+          }
           </th>
-          <th>操作</th>
+          <th>{{ 'course.question_marker.operation'|trans }}</th>
 
         </tr>
         </thead>
@@ -48,15 +49,15 @@
             <td>{{ questionMarker.answerNum }}</td>
             <td>{{ questionMarker.rightNum }}</td>
             <td>{{ questionMarker.pct }}%</td>
-            <td><a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_marker_analysis', {courseSetId:course.courseSetId, courseId:course.id, taskId:stats.taskId, questionMarkerId:questionMarker.id}) }}">答题分布</a></td>
+            <td><a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_marker_analysis', {courseSetId:course.courseSetId, courseId:course.id, taskId:stats.taskId, questionMarkerId:questionMarker.id}) }}">{{ 'course.question_marker.btn_question_distribution'|trans }}</a></td>
           </tr>
         {% else %}
-          <tr ><td colspan="7"><div class="empty">该任务下无驻点弹题</div></td></tr>
+          <tr ><td colspan="7"><div class="empty">{{ 'course.question_marker.empty_question_marker_hint'|trans }}</div></td></tr>
         {% endfor %}
         </tbody>
       </table>
       <p class="text-sm">
-        共计<span class="color-primary text-success pls prs">{{ stats.totalAnswerNum }}</span>次答题，<span class="color-primary pls prs">{{ stats.totalUserNum}}</span>人参与答题
+        {{ 'course.question_marker.total_answer_num'|trans({'%totalAnswerNum%': stats.totalAnswerNum})|raw }}，{{ 'course.question_marker.total_user_num'|trans({'%totalUserNum%': stats.totalUserNum})|raw }}
       </p>
     </div>
 {% endblock %}

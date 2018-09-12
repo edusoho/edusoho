@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             $('[name="sms-close"]').click(function() {
                 var registerMode = $('input[name="register-mode"]').val();
                 if (registerMode == 'email_or_mobile' || registerMode == 'mobile') {
-                    Notify.danger(Translator.trans('您启用了手机注册模式，不可关闭短信功能！'));
+                    Notify.danger(Translator.trans('admin.edu_cloud.close_sms_fail_hint'));
                     return false
                 }
             });

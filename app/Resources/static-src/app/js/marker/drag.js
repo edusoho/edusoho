@@ -170,7 +170,7 @@ class Drag {
           $new_scale_blue_item
             .data('url', `/course/${this.courseId}/question/${questionMarkers[j].questionId}/marker/preview`)
             .find('[data-role="sqe-number"]').text(j + 1).end()
-            .find('[data-role="question-type"]').text('单选题').end()
+            .find('[data-role="question-type"]').text(Translator.trans('course.question.type.single_choice')).end()
             .find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ''));
           
           $scale_blue_item.before($new_scale_blue_item);

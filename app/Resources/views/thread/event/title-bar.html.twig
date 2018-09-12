@@ -9,7 +9,7 @@
       </div>
     {% endif %}
     <div class="media-body">
-      <p>{{'thread.other_event.apply.time'|trans}}：{{ thread.startTime|date('Y年m月d日')}} {{'site.date.week'|trans}}{{dict_text('week',thread.startTime|date('N'))}} {{ thread.startTime|date('H:i') }}</p>
+      <p>{{'thread.other_event.apply.time'|trans}}：{{ thread.startTime|date('date.format'|trans)}} {{'site.date.week'|trans}}{{dict_text('week',thread.startTime|date('N'))}} {{ thread.startTime|date('H:i') }}</p>
       {% if thread.location %}
         <p>{{'thread.other_event.apply.location'|trans }} {{thread.location}}</p>
       {% endif %}

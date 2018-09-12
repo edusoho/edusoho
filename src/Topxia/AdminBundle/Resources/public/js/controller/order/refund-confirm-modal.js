@@ -29,7 +29,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: 'input[name=result]',
             required: true,
-            errormessageRequired: Translator.trans('请选择审核结果')
+            errormessageRequired: Translator.trans('admin.order.validate_old.result_input.message')
         });
 
         validator.addItem({

@@ -25,7 +25,7 @@ define(function(require, exports, module) {
         Validator.addRule("fileSize", function(options) {
             var element = $(options.element);
             return element.val() <= 2 * 1024; 
-        }, "当前服务器附件大小上限为2048MB");
+        }, Translator.trans('validate_old.server_upload_attachment_limit.message'));
     }
 
 });

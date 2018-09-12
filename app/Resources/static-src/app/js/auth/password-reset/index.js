@@ -59,7 +59,7 @@ class Reset {
             dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
           }
         }).then((res) => {
-          notify('success', '短信发送成功');
+          notify('success', Translator.trans('notify.sms_send_success.message'));
           $smsCode.removeClass('disabled');
           countDown($('.js-sms-send'), $('#js-fetch-btn-text'), 120);
           self.smsToken = res.smsToken;
@@ -98,7 +98,7 @@ class Reset {
             dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
           }
         }).then((res) => {
-          notify('success', '重置密码邮件已发送');
+          notify('success', Translator.trans('notify.password_reset_email_send_success.message'));
           window.location.href = $('#password-reset-form').data('success') + '?email='+ email;
         }).catch((res) => {
           let code = res.responseJSON.error.code||0;
@@ -181,7 +181,7 @@ class Reset {
             dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
           }
         }).then((res) => {
-          notify('success', '重置密码成功');
+          notify('success', Translator.trans('notify.password_reset_success.message'));
           window.location.href = $('#password-reset-form').data('success') + '?mobile='+ $('#mobile').val();
         });
       }

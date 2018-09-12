@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             element: '#course-picture-field',
             required: true,
             rule: 'maxsize_image',
-            errormessageRequired: Translator.trans('请选择要上传的默认课程图片文件')
+            errormessageRequired: Translator.trans('admin.setting.course_avatar.select_default_pic.message')
         });
 
         var $systemCoursePictureClass = $('#system-course-picture-class');

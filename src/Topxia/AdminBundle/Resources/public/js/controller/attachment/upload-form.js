@@ -3,21 +3,21 @@ define(function(require, exports, module) {
   exports.run = function() {
     $('.js-attachment-list').on('click', '.js-attachment-delete', function() {
       var $this = $(this);
-      var attachment_remove = confirm('确定要删除附件吗?');
+      var attachment_remove = confirm(Translator.trans('admin.attachment.delete_hint'));
       if (attachment_remove) {
         $.post($this.data('url'), function(result) {
 
         }).done(function(result) {
           if (result.msg == 'ok') {
-            Notify.success('附件已删除');
+            Notify.success(Translator.trans('admin.attachment.delete_success_hint'));
             $this.closest('.js-attachment-list').parent().siblings('[data-role="fileId"]').val('');
             $this.closest('.js-attachment-list').parent().find('.js-upload-file').show();
             $this.closest('.js-attachment-list').children().remove();
           } else {
-            Notify.danger('附件删除失败,请稍后再试');
+            Notify.danger(Translator.trans('admin.attachment.delete_failed_hint'));
           }
         }).fail(function(ajaxFailed) {
-          Notify.danger('附件删除失败,请稍后再试');
+          Notify.danger(Translator.trans('admin.attachment.delete_failed_hint'));
         })
       }
     })

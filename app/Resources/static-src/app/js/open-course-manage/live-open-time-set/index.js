@@ -8,9 +8,9 @@ if (!$form.data('update')) {
   $('#live-length-field').attr('disabled', true);
   $('#live-open-course-form-btn').attr('disabled', true);
 
-  $('#starttime-help-block').html('直播已经开始或者结束,无法编辑');
+  $('#starttime-help-block').html(Translator.trans('activity.live.started_or_ended_notice'));
   $('#starttime-help-block').css('color', '#a94442');
-  $('#timelength-help-block').html('直播已经开始或者结束,无法编辑');
+  $('#timelength-help-block').html(Translator.trans('activity.live.started_or_ended_notice'));
   $('#timelength-help-block').css('color', '#a94442');
 } else {
   $('[name=startTime]').attr('disabled', false);

@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('加入学习数')],
+                      labels: [Translator.trans('admin.analysis.join_lesson_total')],
                       xLabels:"day"
                     });
         }
