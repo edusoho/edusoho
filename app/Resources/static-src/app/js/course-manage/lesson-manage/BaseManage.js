@@ -221,9 +221,18 @@ export default class Manage {
     this.sortablelist();
   }
 
+  setShowNum($parentLi) {
+    if($parentLi.attr('show-num') == 0) {
+      $parentLi.attr('show-num', 1);
+    }else {
+      $parentLi.attr('show-num', 0);
+    }
+  }
+
+
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item:not(.js-optional-task)'];
+    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]'];
     for (let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     }
@@ -252,9 +261,11 @@ export default class Manage {
   }
 
   _publish() {
+    let self = this;
     const info = {
       class: '.js-publish-item, .js-delete, .js-lesson-unpublish-status',
       oppositeClas: '.js-unpublish-item',
+      isHideUnPublish: $('#isHideUnPublish').hasClass('checked'),
       flag: false
     };
     this.$element.on('click', '.js-unpublish-item', (event) => {
@@ -357,16 +368,68 @@ export default class Manage {
     const $parentLi = $target.closest('.task-manage-item');
     const $dom = $parentLi.find(info.class);
     const $oppositeDom = $parentLi.find(info.oppositeClas);
+    let isHideUnPublish = $('#isHideUnPublish').hasClass('checked');
     $.post($target.data('url'), (data) => {
+      let setProperty = true;
+
+      if(isHideUnPublish){
+        setProperty = self.chechShouldSetProperty($target, $parentLi);
+      }
+    
       $dom.toggleClass('hidden');
       $oppositeDom.toggleClass('hidden');
-      if (info.flag) {
-        self.sortList();
+
+      if(isHideUnPublish){
+        if(setProperty){
+          const $displayTextDom = $parentLi.find('.display-text');
+          $displayTextDom.toggleClass('hidden');
+          self.setShowNum($parentLi);
+          self.sortList();
+        }
+      }else {
+        if(info.flag){
+          const $displayTextDom = $parentLi.find('.display-text');
+          $displayTextDom.toggleClass('hidden');
+          self.setShowNum($parentLi);
+          self.sortList();
+        }
       }
+
       cd.message({ type: 'success', message: info.success });
     }).fail(function(data) {
       cd.message({ type: 'danger', message: info.danger + data.responseJSON.error.message });
     });
+  }
+
+  chechShouldSetProperty($target, $parentLi){
+    const $publish = $parentLi.find('.js-publish-item');
+    const $setOptional = $parentLi.find('.js-set-optional');
+
+    let hiddenPublish = $publish.hasClass('hidden');
+    let hiddenOptional = $setOptional.hasClass('hidden');
+
+    let setProperty = true;
+
+    if($target.hasClass('js-unpublish-item')){
+      if(hiddenOptional){
+        setProperty = false;
+      }
+    }else if($target.hasClass('js-publish-item')){
+      if(hiddenOptional){
+        setProperty = false;
+      }
+    }else if($target.hasClass('js-set-optional')) {
+      if(!hiddenPublish){
+        setProperty = false;
+      }
+    }else if($target.hasClass('js-unset-optional')) {
+      if(!hiddenPublish){
+        setProperty = false;
+      }
+    }
+
+    return setProperty;
+
   }
 
   afterAddItem($elm) {
