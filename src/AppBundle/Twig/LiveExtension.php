@@ -174,6 +174,11 @@ class LiveExtension extends \Twig_Extension
         return $this->biz->service('Activity:ActivityService');
     }
 
+    protected function getLiveReplayService()
+    {
+        return $this->biz->service('Course:LiveReplayService');
+    }
+
     protected function getLiveCourseService()
     {
         return $this->biz->service('OpenCourse:LiveCourseService');
