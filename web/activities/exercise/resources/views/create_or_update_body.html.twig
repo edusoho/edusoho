@@ -72,6 +72,8 @@
         <p class="help-block mtl">{{'course.plan_task.exercise.question_type_range_tips'|trans}}</p>
       </div>
     </div>
+    <input type="hidden" name="mediaType" value="exercise" />
+    <input type="hidden" name="courseSetId" value="{{activity.fromCourseSetId}}" />
   </form>
 </div>
 {% endblock %}
