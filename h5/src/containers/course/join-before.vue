@@ -139,7 +139,9 @@
               name: 'order',
               params: {
                 id: this.details.id,
-                validity: this.learnExpiry,
+              },
+              query: {
+                expiry: this.learnExpiry
               }
             });
           } else {
