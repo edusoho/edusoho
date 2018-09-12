@@ -34,7 +34,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
         $activity['nowDate'] = time();
 
-        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+        if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
             $activity['replays'] = array($this->_getLiveVideoReplay($activity));
         } else {
             $activity['replays'] = $this->_getLiveReplays($activity);
@@ -172,7 +172,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             if (!empty($eventName)) {
                 $this->getTaskService()->trigger($task['id'], $eventName, $data);
             }
-
+            var_dump($taskResult);
             if ('start' == $taskResult['status']) {
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
                 $this->getTaskService()->finishTaskResult($task['id']);
@@ -273,7 +273,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
     protected function _getLiveVideoReplay($activity, $ssl = false)
     {
-        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+        if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
             $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
 
             return array(
@@ -291,7 +291,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     // Refactor: redesign course_lesson_replay table
     protected function _getLiveReplays($activity)
     {
-        if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
+        if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
             $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);

@@ -7,6 +7,7 @@ use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Biz\Course\Service\LiveReplayService;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiveExtension extends \Twig_Extension
 {
@@ -34,14 +35,28 @@ class LiveExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_live_room_type', array($this, 'getLiveRoomType')),
             new \Twig_SimpleFunction('get_live_account', array($this, 'getLiveAccount')),
             new \Twig_SimpleFunction('get_live_replays', array($this, 'getLiveReplays')),
+            new \Twig_SimpleFunction('fresh_task_learn_stat', array($this, 'freshTaskLearnStat')),
         );
+    }
+
+    public function freshTaskLearnStat(Request $request, $activityId)
+    {
+        $key = 'activity.'.$activityId;
+        $session = $request->getSession();
+        $taskStore = $session->get($key, array());
+        $taskStore['start'] = time();
+        $taskStore['lastTriggerTime'] = 0;
+
+        $session->set($key, $taskStore);
+
+        return true;
     }
 
     public function getLiveReplays($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId, true);
 
-        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+        if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
             return array($this->_getLiveVideoReplay($activity));
         } else {
             return $this->_getLiveReplays($activity);
@@ -50,7 +65,7 @@ class LiveExtension extends \Twig_Extension
 
     protected function _getLiveVideoReplay($activity, $ssl = false)
     {
-        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+        if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
             $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
 
             return array(
@@ -67,7 +82,7 @@ class LiveExtension extends \Twig_Extension
 
     protected function _getLiveReplays($activity)
     {
-        if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
+        if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
             $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
