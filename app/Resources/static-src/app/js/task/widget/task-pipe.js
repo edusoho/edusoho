@@ -1,6 +1,6 @@
-// import postal from 'postal';
-// import 'postal.federation';
-// import 'postal.xframe';
+import postal from 'postal';
+import 'postal.federation';
+import 'postal.xframe';
 
 export default class TaskPipe {
   constructor(element) {
@@ -27,34 +27,26 @@ export default class TaskPipe {
   }
 
   _registerChannel() {
-    // postal.instanceId('task');
+    postal.instanceId('task');
 
-    // postal.fedx.addFilter([
-    //   {
-    //     channel: 'activity-events', //接收 activity iframe的事件
-    //     topic: '#',
-    //     direction: 'in'
-    //   },
-    //   {
-    //     channel: 'task-events',  // 发送事件到activity iframe
-    //     topic: '#',
-    //     direction: 'out'
-    //   }
-    // ]);
+    postal.fedx.addFilter([
+      {
+        channel: 'activity-events', //接收 activity iframe的事件
+        topic: '#',
+        direction: 'in'
+      },
+      {
+        channel: 'task-events',  // 发送事件到activity iframe
+        topic: '#',
+        direction: 'out'
+      }
+    ]);
 
-    // postal.subscribe({
-    //   channel: 'activity-events',
-    //   topic: '#',
-    //   callback: ({event, data}) => {
-    //     this.eventDatas[event] = data;
-    //     this._flush();
-    //   }
-    // });
-
-    window.addEventListener('message', (e) => {
-      console.log('activity-events1', e.data);
-      if (e.data.channel == 'activity-events') {
-        this.eventDatas[e.data.event] = e.data.data;
+    postal.subscribe({
+      channel: 'activity-events',
+      topic: '#',
+      callback: ({event, data}) => {
+        this.eventDatas[event] = data;
         this._flush();
       }
     });
@@ -98,18 +90,11 @@ export default class TaskPipe {
   }
 
   _publishResponse(response) {
-    // postal.publish({
-    //   channel: 'task-events',
-    //   topic: '#',
-    //   data: {event: response.event, data: response.data}
-    // });
-    console.log('task', response);
-    let iframeEl = document.getElementById('task-content-iframe');
-    iframeEl.contentWindow.postMessage({
+    postal.publish({
       channel: 'task-events',
-      event: response.event, 
-      data: response.data
-    }, '*')
+      topic: '#',
+      data: {event: response.event, data: response.data}
+    });
   }
 
   addListener(event, callback) {
