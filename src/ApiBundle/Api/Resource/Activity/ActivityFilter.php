@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType',
     );
 
     protected function publicFields(&$data)
@@ -16,8 +16,8 @@ class ActivityFilter extends Filter
             $data['replayStatus'] = $data['ext']['replayStatus'];
         }
 
-        if (!empty($data['finishDate'])) {
-            $data['finishDetail'] = $data['finishDate'];
+        if (!empty($data['finishData'])) {
+            $data['finishDetail'] = $data['finishData'];
         }
 
         if (!empty($data['ext']) && !empty($data['ext']['file'])) {
