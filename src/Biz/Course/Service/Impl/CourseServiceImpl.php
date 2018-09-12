@@ -1006,6 +1006,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $this->beginTransaction();
             $this->createCourseStrategy($course)->accept(new CourseItemSortingVisitor($this->biz, $courseId, $ids));
+            $this->getLessonService()->updateLessonNumbers($courseId);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
