@@ -25,7 +25,8 @@
             >
           </coupon>
           <div class="coupon-empty" v-show="!(course.availableCoupons && course.availableCoupons.length)">
-            空空如已
+            <img class="empty-img" src='static/images/coupon_empty.png'>
+            <div class="empty-text">暂无优惠券</div>
           </div>
         </van-popup>
       </div>
