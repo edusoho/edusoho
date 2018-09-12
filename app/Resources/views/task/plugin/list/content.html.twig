@@ -27,32 +27,31 @@
 
     <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} {lessonContainerClass} mouse-control infinite-item">
       <i class="{taskClass}"></i>
-      
       <a display-if="{isPublishedTaskUnlocked}" class="title"
           href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
         <tmp display-if="{isItemDisplayedAsOptional}">
-          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+          <span class=" label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
-
-        <tmp hide-if="{isItemDisplayedAsOptionalOrUnpublished}">
+        
+        <tmp hide-if="{isItemDisplayedAsOptional}">
           {getTaskName}
         </tmp>
 
-        <tmp display-if="{isItemDisplayedAsOptionalOrUnpublished}">
+        <tmp display-if="{isItemDisplayedAsOptional}">
           {title}
         </tmp>
       </a>
 
       <div hide-if="{isPublishedTaskUnlocked}" class="title"
             data-url="{{ path('course_task_show', {id: '{taskId}', courseId: course.id}) }}">
-        <tmp display-if="{isItemDisplayedAsOptionalOrUnpublished}">
+        <tmp display-if="{isItemDisplayedAsOptional}">
           <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
 
-        <tmp hide-if="{isItemDisplayedAsOptionalOrUnpublished}">
+        <tmp hide-if="{isItemDisplayedAsOptional}">
           {getTaskName}
         </tmp>
-        <tmp display-if="{isItemDisplayedAsOptionalOrUnpublished}">
+        <tmp display-if="{isItemDisplayedAsOptional}">
           {title}
         </tmp>
       </div>

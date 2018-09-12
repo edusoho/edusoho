@@ -149,6 +149,22 @@ class LessonServiceTest extends BaseTestCase
                 'functionName' => 'findByCopyId',
                 'returnValue' => array(),
             ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
+                'returnValue' => array(),
+            ),
         ));
 
         $result = $this->getCourseLessonService()->publishLesson(1, 1);
@@ -196,6 +212,22 @@ class LessonServiceTest extends BaseTestCase
                 'functionName' => 'findLessonsByCourseId',
                 'returnValue' => array(array('id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0)),
             ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
+                'returnValue' => array(),
+            ),
         ));
 
         $this->getCourseLessonService()->publishLessonByCourseId(1);
@@ -217,6 +249,22 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findByCopyId',
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
                 'returnValue' => array(),
             ),
         ));
@@ -278,6 +326,22 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'batchDelete',
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
                 'returnValue' => array(),
             ),
         ));
@@ -393,6 +457,22 @@ class LessonServiceTest extends BaseTestCase
                 'functionName' => 'get',
                 'returnValue' => $lesson,
             ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
+                'returnValue' => array(),
+            ),
         ));
 
         $this->getCourseLessonService()->setOptional(1, 1);
@@ -414,6 +494,22 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findByCopyId',
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
                 'returnValue' => array(),
             ),
         ));
@@ -462,6 +558,22 @@ class LessonServiceTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findByCopyId',
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'search',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'seq' => 1,
+                        'type' => 'lesson',
+                        'isOptional' => 0,
+                        'status' => 'published',
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'batchUpdate',
                 'returnValue' => array(),
             ),
         ));

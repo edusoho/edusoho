@@ -64,7 +64,7 @@ class PagedCourseLesson {
         },
 
         'getLessonName': function(data, context) {
-          if (data['isOptional']) {
+          if ('1' == data['isOptional']) {
             return data.title;
           } else {
             return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
@@ -87,7 +87,7 @@ class PagedCourseLesson {
          * 见 isItemDisplayedAsOptionalOrPublished 描述
          */
         'isItemDisplayedAsOptional': function(data, context) {
-          return data['isOptional'] && context.isLessonNode(data, context);
+          return '1' == data['isOptional'] && context.isLessonNode(data, context);
         },
 
         'isItemDisplayedAsUnpublished': function(data, context) {
