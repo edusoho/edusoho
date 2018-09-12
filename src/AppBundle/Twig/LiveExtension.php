@@ -7,6 +7,7 @@ use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Biz\Course\Service\LiveReplayService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LiveExtension extends \Twig_Extension
 {
@@ -172,6 +173,11 @@ class LiveExtension extends \Twig_Extension
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
+    }
+
+    protected function getLiveReplayService()
+    {
+        return $this->biz->service('Course:LiveReplayService');
     }
 
     protected function getLiveCourseService()
