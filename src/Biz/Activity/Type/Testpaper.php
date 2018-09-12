@@ -47,16 +47,16 @@ class Testpaper extends Activity
         }
 
         $testpaperActivity = $this->get($activity['mediaId']);
-        $testpaper = $testpaperActivity['testpaper'];
 
         $newExt = array(
-            'testpaperId' => $testpaper['id'],
+            'testpaperId' => empty($config['testId']) ? 0 : $config['testId'],
             'doTimes' => $testpaperActivity['doTimes'],
             'redoInterval' => $testpaperActivity['redoInterval'],
             'limitedTime' => $testpaperActivity['limitedTime'],
             'checkType' => $testpaperActivity['checkType'],
             'requireCredit' => $testpaperActivity['requireCredit'],
             'testMode' => $testpaperActivity['testMode'],
+            'finishCondition' => $testpaperActivity['finishCondition'],
         );
 
         return $this->create($newExt);
@@ -78,6 +78,7 @@ class Testpaper extends Activity
         $ext['checkType'] = $sourceExt['checkType'];
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
+        $ext['finishCondition'] = $sourceExt['finishCondition'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
