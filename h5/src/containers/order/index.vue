@@ -11,7 +11,11 @@
           <span>优惠券</span>
           <span class="red">{{ couponShow }}</span>
         </div>
-        <van-popup v-model="showList" position="bottom">
+        <van-popup v-model="showList" position="bottom" :overlay="false">
+          <van-nav-bar title="优惠券"
+            class="nav-bar"
+            :left-arrow="true"
+            @click-left="disuse"/>
           <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠
             <i class="h5-icon h5-icon-circle"></i>
             <i class="h5-icon h5-icon-checked-circle"></i>
@@ -144,6 +148,7 @@ export default {
       this.showList = false;
       this.activeItemIndex = -1;
       this.itemData = null;
+      this.couponNumber = 0;
     },
     chooseItem(data) {
       this.activeItemIndex = data.index;

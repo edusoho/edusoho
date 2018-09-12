@@ -4,8 +4,9 @@
     <div :class="[{ active: active === index }, 'coupon-item', type]" @click="onChange(index)">
       <div class="coupon-border-box">
         <div :class="['rate-number', { 'text-26': getNuminteger > 1000}]">
-          {{ getNuminteger }}
-          <span class="text-16">.{{getNumPoint}}</span></div>
+          <!-- 下面html片段保持紧贴避免空格 -->
+          {{getNuminteger}}<span class="text-16">.{{getNumPoint}}</span>
+        </div>
         <div class="coupon-info">
           <div class="title text-overflow">优惠券</div>
           <div class="grey-medium">有效期截止：{{ couponEndDate }}</div>
