@@ -78,7 +78,7 @@
               <div>
                 {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw}}
               {% if activity.finishType|default(null) == 'score' %}
-                {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':(paper.score * activity.finishData)|round|default(0)})|raw}}
+                {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%': target.finishCondition.finishScore|default()|raw }) }}
               {% endif %}
               
               {% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}

@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title'
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title',
     );
 
     protected function publicFields(&$data)
@@ -16,17 +16,8 @@ class ActivityFilter extends Filter
             $data['replayStatus'] = $data['ext']['replayStatus'];
         }
 
-        if (!empty($data['ext']) && !empty($data['ext']['finishType'])) {
-            $data['finishType'] = $data['ext']['finishType'];
-        }
-
-        if (!empty($data['ext']) && !empty($data['ext']['finishDetail'])) {
-            $data['finishDetail'] = $data['ext']['finishDetail'];
-        }
-
-        if (!empty($data['ext']) && !empty($data['ext']['finishCondition'])) {
-            $data['finishDetail'] = $data['ext']['finishCondition']['finishScore'];
-            $data['finishType'] = $data['ext']['finishCondition']['type'];
+        if (!empty($data['finishDate'])) {
+            $data['finishDetail'] = $data['finishDate'];
         }
 
         if (!empty($data['ext']) && !empty($data['ext']['file'])) {
@@ -36,6 +27,12 @@ class ActivityFilter extends Filter
         //testpaper module
         if ('testpaper' == $data['mediaType']) {
             if (!empty($data['ext'])) {
+                if (!empty($data['ext']['finishCondition']['finishScore'])) {
+                    $data['finishDetail'] = $data['ext']['finishCondition']['finishScore'];
+                } else {
+                    $data['finishDetail'] = 0;
+                }
+
                 $data['testpaperInfo']['testMode'] = $data['ext']['testMode'];
                 $data['testpaperInfo']['limitTime'] = $data['ext']['limitedTime'];
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval'] * 60; //分钟

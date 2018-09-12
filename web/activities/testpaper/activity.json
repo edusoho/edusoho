@@ -28,7 +28,7 @@
     },
     {
       "type": "submit",
-      "describe": "course.plan_task.activity_manage.exercise.finished_condition"
+      "describe": "course.plan_task.activity_manage.testpaper.submit"
     }
   ]
 }
