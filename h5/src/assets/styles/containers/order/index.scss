@@ -60,23 +60,27 @@
           &:before {
             content: '';
             position: absolute;
-            left: 32.5%;
+            left: 31.8%;
             top: 0;
             width: vw(14);
             height: vw(9);
             border-radius:  0 0 vw(12) vw(12);
             background-color: #f5f5f5;
+            border: vw(3) solid #fff;
+            border-top: none;
             z-index: 3;
           }
           &:after {
             content: '';
             position: absolute;
-            left: 32.5%;
+            left: 31.8%;
             bottom: 0;
             width: vw(14);
             height: vw(9);
             border-radius: vw(12) vw(12) 0 0;
             background-color: #f5f5f5;
+            border: vw(3) solid #fff;
+            border-bottom: none;
             z-index: 3;
           }
           .coupon-border-box {
@@ -169,6 +173,15 @@
       .coupon-empty {
         height: 80vh;
         text-align: center;
+        .empty-img {
+          width: 50%;
+          margin-top: vw(100);
+          margin-bottom: vw(10);
+        }
+        .empty-text {
+          font-size: vw(17);
+          color: #c1c1c1;
+        }
       }
     }
     .gray-dark {
