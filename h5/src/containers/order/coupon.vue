@@ -53,7 +53,7 @@
     data() {
       return {
         activeIndex: this.active,
-        discount: this.data.type == 'discount' ? true : false,
+        discount: this.data.type === 'discount',
         type: this.data.type,
       }
     },

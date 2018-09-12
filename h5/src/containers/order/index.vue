@@ -24,7 +24,7 @@
             @chooseItem="chooseItem"
             >
           </coupon>
-          <div class="coupon-empty" v-show="!(course.availableCoupons && course.availableCoupons.length)">
+          <div class="coupon-empty" v-show="!course.availableCoupons.length">
             <img class="empty-img" src='static/images/coupon_empty.png'>
             <div class="empty-text">暂无优惠券</div>
           </div>
@@ -32,7 +32,7 @@
       </div>
       <div class="order-goods-item">
         <span>学习有效期</span>
-        <span class="gray-dark">{{ this.$route.params.validity || '永久有效' }}</span>
+        <span class="gray-dark">{{ getValidity }}</span>
       </div>
     </div>
     <div class="order-accounts" v-show="itemData">
@@ -68,10 +68,15 @@ export default {
   },
   data () {
     return {
-      course: {},
+      course: {
+        availableCoupons: [],
+        courseSet: {
+          cover: {}
+        }
+      },
       activeItemIndex: -1,
       showList: false,
-      itemData: '',
+      itemData: null,
       couponNumber: 0
     }
   },
@@ -87,29 +92,30 @@ export default {
       const couponRate = this.itemData.rate;
       const totalNumber = this.course.totalPrice;
       if (minusType) {
-        return (couponRate - totalNumber) > 0
-        ? 0 : Math.abs(couponRate - totalNumber);
+        return Math.max(totalNumber - couponRate, 0);
       }
       return totalNumber - totalNumber * couponRate * 0.1;
     },
     couponMoney() {
-      const minusType = (this.itemData.type === 'discount');
-      if (minusType) {
-        const money = this.course.totalPrice * this.itemData.rate * 0.1;
-        this.couponNumber = money;
-        return money;
+      if (!this.itemData) {
+        return;
       }
-      this.couponNumber = this.itemData.rate;
-      return this.itemData.rate;
+      const minusType = (this.itemData.type === 'discount');
+      let money = this.itemData.rate;
+      if (minusType) {
+        money = this.course.totalPrice * this.itemData.rate * 0.1;
+      }
+      this.couponNumber = money;
+      return money;
     },
     couponShow() {
       if (!this.couponNumber) {
-        if (this.course.availableCoupons) {
-          return this.course.availableCoupons.length + '张可用';
-        }
-      } else {
-        return '-￥' + this.couponNumber;
+        return this.course.availableCoupons.length + '张可用';
       }
+      return '-￥' + this.couponNumber;
+    },
+    getValidity() {
+      return this.$route.query.expiry || '永久有效';
     }
   },
   created () {
@@ -119,8 +125,7 @@ export default {
         targetId: this.$route.params.id
       }
     }).then(res => {
-      console.log('res', res)
-      this.course = Object.assign({}, res)
+      this.course = res
     })
   },
   methods: {
@@ -131,14 +136,14 @@ export default {
           id: this.$route.params.id,
         },
         params: {
-          couponCode: this.itemData.code || ''
+          couponCode: this.itemData ? this.itemData.code : ''
         }
       })
     },
     disuse() {
       this.showList = false;
       this.activeItemIndex = -1;
-      this.itemData = '';
+      this.itemData = null;
     },
     chooseItem(data) {
       this.activeItemIndex = data.index;

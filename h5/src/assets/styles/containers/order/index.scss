@@ -50,6 +50,14 @@
           }
         }
       }
+      .van-popup {
+        &>:nth-child(2) {
+          padding-top: vw(30);
+        }
+        &>:nth-last-child(2) {
+          padding-bottom: vw(30);
+        }
+      }
       .coupon-container {
         background-color: #f5f5f5;
         padding: vw(10) vw(15);
@@ -57,62 +65,50 @@
           position: relative;
           padding: vw(6);
           background-color: #fff;
-          &:before {
+          &:before, &:after {
             content: '';
             position: absolute;
             left: 31.8%;
-            top: 0;
             width: vw(14);
             height: vw(9);
-            border-radius:  0 0 vw(12) vw(12);
-            background-color: #f5f5f5;
             border: vw(3) solid #fff;
-            border-top: none;
             z-index: 3;
+            background-color: #f5f5f5;
+          }
+          &:before {
+            top: 0;
+            border-radius:  0 0 vw(12) vw(12);
+            border-top: none;
           }
           &:after {
-            content: '';
-            position: absolute;
-            left: 31.8%;
             bottom: 0;
-            width: vw(14);
-            height: vw(9);
             border-radius: vw(12) vw(12) 0 0;
-            background-color: #f5f5f5;
-            border: vw(3) solid #fff;
             border-bottom: none;
-            z-index: 3;
           }
           .coupon-border-box {
             position: relative;
             display: flex;
             justify-content: space-between;
             border: 1px solid #FF9800;
-            &:before {
+            &:before, &:after {
               content: '';
               position: absolute;
               left: 31%;
-              top: -1px;
               width: vw(18);
               height: vw(9);
-              border-radius:  0 0 vw(11) vw(11);
-              border: 1px solid #FF9800;
-              border-top: none;
               background-color: #fff;
+              border: 1px solid #FF9800;
               z-index: 2;
             }
+            &:before {
+              top: -1px;
+              border-radius:  0 0 vw(11) vw(11);
+              border-top: none;
+            }
             &:after {
-              content: '';
-              position: absolute;
-              left: 31%;
               bottom: -1px;
-              width: vw(18);
-              height: vw(9);
               border-radius: vw(11) vw(11) 0 0;
-              border: 1px solid #FF9800;
               border-bottom: none;
-              background-color: #fff;
-              z-index: 2;
             }
             .coupon-checked {
               position: absolute;
