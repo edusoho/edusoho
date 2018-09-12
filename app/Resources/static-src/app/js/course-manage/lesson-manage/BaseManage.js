@@ -373,7 +373,7 @@ export default class Manage {
       let setProperty = true;
 
       if(isHideUnPublish){
-        setProperty = self.chechShouldSetProperty($target, $parentLi);
+        setProperty = self.checkShouldSetProperty($target, $parentLi);
       }
     
       $dom.toggleClass('hidden');
@@ -401,7 +401,7 @@ export default class Manage {
     });
   }
 
-  chechShouldSetProperty($target, $parentLi){
+  checkShouldSetProperty($target, $parentLi){
     const $publish = $parentLi.find('.js-publish-item');
     const $setOptional = $parentLi.find('.js-set-optional');
 
