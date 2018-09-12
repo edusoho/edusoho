@@ -1,3 +1,4 @@
 {
-    "onlyPublished": "1"
+    "onlyPublished": "1",
+    "fetchSubtitlesUrls" : "1"
 }
