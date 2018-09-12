@@ -18,6 +18,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\MySQLDumper;
 use Biz\Util\PluginUtil;
 use AppBundle\System;
+use Biz\Crontab\SystemCrontabInitializer;
 
 class AppServiceImpl extends BaseService implements AppService
 {
@@ -336,7 +337,7 @@ class AppServiceImpl extends BaseService implements AppService
      */
     protected function checkPluginDepend($package)
     {
-        if ($package['product']['code'] != 'MAIN') {
+        if ('MAIN' != $package['product']['code']) {
             return array();
         }
         $count = $this->getAppDao()->countApps();
@@ -599,6 +600,8 @@ class AppServiceImpl extends BaseService implements AppService
         last :
             $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
 
+        $this->trySystemCrontabInitializer($package);
+
         if (empty($info)) {
             $result = $errors;
             UpgradeLock::unlock();
@@ -738,11 +741,18 @@ class AppServiceImpl extends BaseService implements AppService
         return array();
     }
 
+    private function trySystemCrontabInitializer($package)
+    {
+        if ('MAIN' == $package['product']['code']) {
+            SystemCrontabInitializer::init();
+        }
+    }
+
     private function tryGetProtocolFromFile($package, $packageDir)
     {
         $protocol = 2;
 
-        if ($package['product']['code'] == 'MAIN') {
+        if ('MAIN' == $package['product']['code']) {
             return 3;
         }
 
@@ -831,7 +841,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function getPackageRootDirectory($package, $packageDir)
     {
-        if ($package['product']['code'] == 'MAIN') {
+        if ('MAIN' == $package['product']['code']) {
             return $this->getSystemRootDirectory();
         }
 

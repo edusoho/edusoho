@@ -147,6 +147,10 @@
 
     {% block footer %}
       {{ setting('site.analytics')|raw }}
+
+      {% if setting('siteTrace.enabled')|default(false) %}
+        {{ setting('siteTrace.script')|raw }}
+      {% endif %}
     {% endblock %}
 
     {% block scriptBoot %}

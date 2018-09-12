@@ -14,6 +14,34 @@ use AppBundle\Common\TimeMachine;
 
 class CourseServiceTest extends BaseTestCase
 {
+    public function testSortCourse()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('course title 1', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $course = $this->defaultCourse('course title 2', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->sortCourse($courseSet['id'], array(2, 1));
+        $courses = $this->getCourseService()->findCoursesByIds(array(1, 2));
+        $this->assertEquals(2, $courses[2]['seq']);
+        $this->assertEquals(1, $courses[1]['seq']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testSortCourseAccessDenied()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('course title 1', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $course = $this->defaultCourse('course title 2', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->sortCourse(1, array(2, 1, 4, 5));
+    }
+
     public function testRecommendCourseByCourseSetId()
     {
         TimeMachine::setMockedTime(time());
@@ -343,6 +371,45 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($defaultCourse['title'], $course['title']);
     }
 
+    public function testSetDefaultCourse()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $this->assertNotNull($courseSet);
+
+        $newCourse = $this->defaultCourse('course title 1', $courseSet, 0);
+        $newCourse = $this->getCourseService()->createCourse($newCourse);
+        $this->assertNotNull($newCourse);
+
+        $this->getCourseService()->setDefaultCourse($courseSet['id'], $newCourse['id']);
+
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $this->assertEquals($newCourse['id'], $defaultCourse['id']);
+    }
+
+    public function testGetSeqMaxPublishedCourseByCourseSetId()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('course title 1', $courseSet, 0);
+        $this->getCourseService()->createCourse($course);
+
+        $course = $this->defaultCourse('course title 2', $courseSet, 0);
+        $this->getCourseService()->createCourse($course);
+
+        $this->getCourseService()->publishCourse(1);
+        $this->getCourseService()->publishCourse(2);
+        $this->getCourseService()->publishCourse(3);
+
+        $this->getCourseService()->sortCourse($courseSet['id'], array(3, 2, 1));
+        $courses = $this->getCourseService()->findCoursesByIds(array(1, 2, 3));
+        $this->assertEquals(3, $courses[3]['seq']);
+        $this->assertEquals(2, $courses[2]['seq']);
+        $this->assertEquals(1, $courses[1]['seq']);
+
+        $maxPublishedCourse = $this->getCourseService()->getSeqMaxPublishedCourseByCourseSetId($courseSet['id']);
+
+        $this->assertEquals(3, $maxPublishedCourse['id']);
+    }
+
     public function testCreateCourse()
     {
         $course = $this->defaultCourse('默认教学计划', array('id' => 1));
@@ -456,6 +523,59 @@ class CourseServiceTest extends BaseTestCase
 
         $published = $this->getCourseService()->getCourse($result['id']);
         $this->assertEquals($published['status'], 'published');
+    }
+
+    public function testHasNoTitleForDefaultPlanInMulPlansCourse()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($defaultCourse['id']);
+        $this->assertFalse($hasNoTitle);
+
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($defaultCourse['id']);
+        $this->assertTrue($hasNoTitle);
+    }
+
+    public function testPublishAndSetDefaultCourseType()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $this->assertEquals('', $defaultCourse['title']);
+        $this->assertEquals('draft', $secondCourse['status']);
+
+        $this->getCourseService()->publishAndSetDefaultCourseType($secondCourse['id'], '设置的计划名');
+
+        $updatedDefaultCourse = $this->getCourseService()->getCourse($defaultCourse['id']);
+        $updatedSecondCourse = $this->getCourseService()->getCourse($secondCourse['id']);
+
+        $this->assertEquals('设置的计划名', $updatedDefaultCourse['title']);
+        $this->assertEquals('published', $updatedSecondCourse['status']);
+    }
+
+    public function testHasMulCourses()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $hasMulCourses = $this->getCourseService()->hasMulCourses($defaultCourse['courseSetId']);
+        $this->assertTrue($hasMulCourses);
+
+        $hasMulCourses = $this->getCourseService()->hasMulCourses($defaultCourse['courseSetId'], 1);
+        $this->assertFalse($hasMulCourses);
+    }
+
+    public function testIsCourseSetCoursesSummaryEmpty()
+    {
+        $defaultCourse = $this->createDefaultCourse('', array('id' => 1));
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($defaultCourse['courseSetId']);
+        $this->assertFalse($isCoursesSummaryEmpty);
+
+        $course = $this->getCourseService()->updateCourse(2, array('summary' => '计划简介'));
+        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($defaultCourse['courseSetId']);
+        $this->assertTrue($isCoursesSummaryEmpty);
     }
 
     public function testFindLearnedCoursesByCourseIdAndUserId()
@@ -789,6 +909,111 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals('title', $result[0]['title']);
     }
 
+    //recommendCount=2,offset=0,limit=2，整页都是推荐课程
+    public function testSearchByRecommendedSeqCondition1()
+    {
+        $this->createRecommendCourses();
+        $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 0, 2);
+        $this->assertEquals('课程标题1', $result[0]['courseSetTitle']);
+        $this->assertEquals('课程标题2', $result[1]['courseSetTitle']);
+    }
+
+    //recommendCount=2,offset=2,limit=2，整页都不是推荐课程
+    public function testSearchByRecommendedSeqCondition2()
+    {
+        $this->createRecommendCourses();
+        $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 2, 2);
+        $this->assertEquals('课程标题4', $result[0]['courseSetTitle']);
+        $this->assertEquals('课程标题4', $result[1]['courseSetTitle']);
+    }
+
+    //recommendCount=2,offset=1,limit=2，既有推荐也有非推荐课程
+    public function testSearchByRecommendedSeqCondition3()
+    {
+        $this->createRecommendCourses();
+        $result = $this->getCourseService()->searchByRecommendedSeq(array('status' => 'published', 'courseSetStatus' => 'published'), array('recommendedSeq' => 'ASC'), 1, 2);
+        $this->assertEquals('课程标题2', $result[0]['courseSetTitle']);
+        $this->assertEquals('课程标题4', $result[1]['courseSetTitle']);
+    }
+
+    private function createRecommendCourses()
+    {
+        TimeMachine::setMockedTime(time());
+        $courseSetFields = array(
+            'title' => '课程标题1',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+        $this->getCourseService()->recommendCourseByCourseSetId($courseSet['id'], array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 1,
+        ));
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+        $courseSetFields = array(
+            'title' => '课程标题2',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+        $this->getCourseService()->recommendCourseByCourseSetId($courseSet['id'], array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 2,
+        ));
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+        //课程和计划未发布
+        $courseSetFields = array(
+            'title' => '课程标题3',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+        $this->getCourseService()->recommendCourseByCourseSetId($courseSet['id'], array(
+            'recommended' => 1,
+            'recommendedTime' => TimeMachine::time(),
+            'recommendedSeq' => 3,
+        ));
+
+        $courseSetFields = array(
+            'title' => '课程标题4',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+        $courseSetFields = array(
+            'title' => '课程标题4',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+    }
+
+    public function testCountCourseItems()
+    {
+        $mockedCourseChapterDao = $this->mockBiz('Course:CourseChapterDao', array(
+            array(
+                'functionName' => 'count',
+                'withParams' => array(
+                    array(
+                        'courseId' => 123,
+                        'types' => array('chapter', 'unit'),
+                    ),
+                ),
+                'returnValue' => 2,
+            ),
+        ));
+
+        $courseInfo = array(
+            'id' => 123,
+            'compulsoryTaskNum' => 3,
+        );
+        $result = $this->getCourseService()->countCourseItems($courseInfo);
+
+        $this->assertEquals(5, $result);
+    }
+
     public function testAppendReservationConditionsWithClosed()
     {
         $this->mockBiz('System:SettingService');
@@ -862,15 +1087,23 @@ class CourseServiceTest extends BaseTestCase
         return $user;
     }
 
-    protected function defaultCourse($title, $courseSet)
+    protected function defaultCourse($title, $courseSet, $isDefault = 1)
     {
-        return  array(
+        return array(
             'title' => $title,
             'courseSetId' => $courseSet['id'],
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
-            'courseType' => 'normal',
+            'isDefault' => $isDefault,
+            'courseType' => $isDefault ? 'default' : 'normal',
         );
+    }
+
+    protected function createDefaultCourse($title, $courseSet, $isDefault = 1)
+    {
+        $course = $this->defaultCourse($title, $courseSet, $isDefault);
+
+        return $this->getCourseService()->createCourse($course);
     }
 
     /**

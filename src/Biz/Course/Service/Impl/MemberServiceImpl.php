@@ -22,6 +22,8 @@ use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
+use AppBundle\Common\TimeMachine;
+use Biz\Course\Util\CourseTitleUtils;
 
 /**
  * Class MemberServiceImpl
@@ -95,10 +97,20 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
             }
 
+            $infoData = array(
+                'courseSetId' => $courseSet['id'],
+                'courseId' => $course['id'],
+                'title' => CourseTitleUtils::getDisplayedTitle($course),
+                'userId' => $user['id'],
+                'nickname' => $user['nickname'],
+                'remark' => $data['remark'],
+            );
+
             $this->getLogService()->info(
                 'course',
                 'add_student',
-                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
+                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}",
+                $infoData
             );
             $this->commit();
 
@@ -135,10 +147,18 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $infoData = array(
+            'courseId' => $course['id'],
+            'title' => CourseTitleUtils::getDisplayedTitle($course),
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            $infoData
         );
 
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
@@ -441,7 +461,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getMemberDao()->batchCreate($teacherMembers);
         $this->updateCourseTeacherIds($courseId, $teachers);
-        $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
         $addTeachers = array_values(array_diff($userIds, $existTeacherIds));
         $this->dispatchEvent('course.teachers.update', new Event($course, array(
             'teachers' => $teachers,
@@ -574,10 +593,18 @@ class MemberServiceImpl extends BaseService implements MemberService
             )
         );
 
+        $infoData = array(
+            'courseId' => $course['id'],
+            'title' => CourseTitleUtils::getDisplayedTitle($course),
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+        );
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})",
+            $infoData
         );
     }
 
@@ -612,7 +639,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
-            $endTime = strtotime(date('Y-m-d H:i:s', time())); //系统当前时间
+            $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
         } elseif ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
             $deadline = $course['expiryEndDate'];
@@ -811,10 +838,18 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $removeMember = $this->getUserService()->getUser($member['userId']);
 
+        $infoData = array(
+            'courseId' => $course['id'],
+            'title' => CourseTitleUtils::getDisplayedTitle($course),
+            'userId' => $removeMember['id'],
+            'nickname' => $removeMember['nickname'],
+        );
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
+            $infoData
         );
         $this->dispatchEvent(
             'course.quit',
@@ -1108,22 +1143,76 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
-    public function addMemberExpiryDays($courseId, $userId, $day)
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        $this->getCourseService()->tryManageCourse($courseId);
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
+            foreach ($userIds as $userId) {
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
-        if ($member['deadline'] > 0) {
-            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
-        } else {
-            $deadline = $day * 24 * 60 * 60 + time();
+                $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
+                $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+
+                $this->getMemberDao()->update(
+                    $member['id'],
+                    array(
+                        'deadline' => $deadline,
+                    )
+                );
+            }
+        }
+    }
+
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
+    {
+        $members = $this->searchMembers(
+            array('userIds' => $userIds, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        if ('minus' == $waveType) {
+            $member = array_shift($members);
+            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
+            if ($day > $maxAllowMinusDay) {
+                return false;
+            }
         }
 
-        return $this->getMemberDao()->update(
-            $member['id'],
-            array(
-                'deadline' => $deadline,
-            )
+        return true;
+    }
+
+    public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date)) {
+            foreach ($userIds as $userId) {
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+                $this->getMemberDao()->update(
+                    $member['id'],
+                    array(
+                        'deadline' => $date,
+                    )
+                );
+            }
+        }
+    }
+
+    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
+    {
+        $members = $this->searchMembers(
+            array('userIds' => $userIds, 'courseId' => $courseId),
+            array('deadline' => 'ASC'),
+            0,
+            PHP_INT_MAX
         );
+        $member = array_shift($members);
+        if ($date < $member['deadline'] || time() > $date) {
+            return false;
+        }
+
+        return true;
     }
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
@@ -1164,6 +1253,16 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function findMembersByIds($ids)
     {
         return $this->getMemberDao()->findByIds($ids);
+    }
+
+    public function countStudentMemberByCourseSetId($couseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $couseSetId,
+            'role' => 'student',
+        );
+
+        return $this->getMemberDao()->count($conditions);
     }
 
     protected function createOrder($courseId, $userId, $data)

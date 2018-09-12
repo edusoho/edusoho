@@ -1009,6 +1009,9 @@ admin_optimize_remove_show_progressbar:
 admin_logs:
     path:  /setting/logs
     defaults: { _controller: AppBundle:Admin/Log:index }
+admin_logs_field_change:
+    path:  /setting/logs/logFieldChange
+    defaults: { _controller: AppBundle:Admin/Log:logFieldChange }
 admin_performance:
     path:  /setting/performance
     defaults: { _controller: AppBundle:Admin/Setting:performance }
@@ -1020,6 +1023,13 @@ admin_logs_prod:
 admin_logs_action_dicts:
     path:  /setting/logs/logActions
     defaults: { _controller: AppBundle:Admin/Log:logActions }
+
+admin_logs_username_match:
+    path:  /setting/logs/usernameMatchUsers
+    defaults: { _controller: AppBundle:Admin/Log:usernameMatchUsers }
+admin_logs_old:
+    path:  /setting/logs/old
+    defaults: { _controller: AppBundle:Admin/Log:old }
 
 admin_cloud_access:
     path:  /cloud/access
@@ -2336,11 +2346,11 @@ admin_cloud_data_lab_setting:
 
 admin_cloud_data_lab_setting_enable_modal:
     path: /data/lab/setting/modal/enable
-    defaults: { _controller: AppBundle:Admin/DataLab:enableXapiSetting }
+    defaults: { _controller: AppBundle:Admin/DataLab:enable }
 
 admin_cloud_data_lab_setting_disable_modal:
     path: /data/lab/setting/modal/disable
-    defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }
+    defaults: { _controller: AppBundle:Admin/DataLab:disable }
 
 admin_wechat_app:
     path: /wechat_app

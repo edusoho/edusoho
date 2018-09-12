@@ -1,0 +1,26 @@
+{% extends 'open-course-manage/header.html.twig' %}
+
+{% block js %}
+{% endblock %}
+
+{% block coursesetImg %}
+  <a href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">
+    <img class="courseset-manage-header__img" src="{{ filepath(course.largePicture, 'course.png') }}" />
+  </a>
+{% endblock %}
+
+{% block btn %}
+  <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a>
+  {% if course.status != 'published' %}
+    <a class="cd-btn cd-btn-ghost-default" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'course.preview.course'|trans }}</a>
+  {% else %}
+    <a class="cd-btn cd-btn-ghost-default" href="{{ path('open_course_show',{courseId:course.id}) }}" target="_blank">{{'my.learning.course.watch'|trans}}</a>
+  {% endif %}
+{% endblock %}
+
+{% block coursesetTitle %}
+  <a class="cd-link-major" href="{{ path('open_course_manage', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+{% endblock %}
+
+{% block liveTag %}
+{% endblock %}

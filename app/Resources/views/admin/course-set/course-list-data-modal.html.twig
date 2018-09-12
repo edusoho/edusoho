@@ -19,7 +19,7 @@
     <div class="table-responsive">
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
-            <td>{{'admin.course_manage.statistics.data.name'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.data.name'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</td>
             <td>{{'admin.course_manage.statistics.data.study_number'|trans}}</td>
             <td>{{'admin.course_manage.statistics.data.finished_number'|trans}}</td>
             <td>{{'admin.course_manage.statistics.data.average_study_time'|trans}}</td>

@@ -143,6 +143,7 @@ abstract class BaseResource
         $simple['title'] = $user['title'];
         $simple['roles'] = $user['roles'];
         $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
+        $simple['uuid'] = $user['uuid'];
 
         return $simple;
     }
@@ -262,6 +263,11 @@ abstract class BaseResource
         }
 
         return 'http';
+    }
+
+    protected function isSsl()
+    {
+        return 'https' == $this->getSchema();
     }
 
     protected function getCdn($type = 'default')

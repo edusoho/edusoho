@@ -2,10 +2,18 @@
 
 namespace Biz\Question\Service;
 
+use Biz\System\Annotation\Log;
+
 interface QuestionService
 {
     public function get($id);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="add_question")
+     */
     public function create($fields);
 
     public function batchCreateQuestions($questions);
@@ -14,6 +22,12 @@ interface QuestionService
 
     public function updateCopyQuestionsSubCount($parentId, $subCount);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_question",funcName="get")
+     */
     public function delete($id);
 
     public function deleteSubQuestions($parentId);

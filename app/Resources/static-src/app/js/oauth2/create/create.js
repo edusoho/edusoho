@@ -52,6 +52,13 @@ export default class Create {
           type: 'get',
         }
       },
+      invitedCode: {
+        required: false,
+        reg_inviteCode: true,
+        es_remote: {
+          type: 'get'
+        }
+      },
       password: {
         required: true,
         minlength: 5,
@@ -132,6 +139,7 @@ export default class Create {
         captchaToken: this.captchaToken,
         phrase: $('#captcha_code').val(),
         dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
+        invitedCode: $('#invitedCode').length > 0 ? $('#invitedCode').val() : '',
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {

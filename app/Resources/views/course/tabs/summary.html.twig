@@ -15,52 +15,24 @@
   </div>
 </div>
 
-<div class="es-piece {% if course.goals|default(courseSet.goals) is empty %} hidden {% endif %}">
-  <div class="piece-header">{{ 'course.introduction.course_target'|trans }}</div>
-  <div class="piece-body">
-    <ul class="piece-body-list">
-      {% for  goal in course.goals|default(courseSet.goals) %}
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          {{ goal }}
-        </li>
-      {% else %}
-        <span class="empty">{{ 'course.introduction.course_target_empty'|trans }}</span>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-
-<div class="es-piece {% if course.audiences|default(courseSet.audiences) is empty %} hidden {% endif %}">
-  <div class="piece-header">{{ 'course.introduction.audiences'|trans }}</div>
-  <div class="piece-body">
-    <ul class="piece-body-list">
-      {% for  audience in course.audiences|default(courseSet.audiences) %}
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          {{ audience }}
-        </li>
-      {% else %}
-        <span class="empty">{{ 'course.introduction.audiences_empty'|trans }}</span>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-
 </section>
 
 
-{% if  isMarketingPage|default(null)  and course.taskNum > 0 %}
+{% if  isMarketingPage|default(null)  and course.courseItemNum > 0 %}
 
   <div class="panel panel-default hidden-xs">
     <div class="panel-heading ">
       <h3 class="panel-title">{{ 'course.catalogue.content_title'|trans }}</h3>
     </div>
     <div class="panel-body">
-    {% include dyn_url('course/tabs/tasks.html.twig', {type:course.type}) with {limitCount : 2} %}
-    {% if course.taskNum > 6 %}
-    <div class="text-center pt10 border-top-gray-lighter" >
-       <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="link-dark">{{ 'course.catalogue.view_all_btn'|trans }}</a>
-    </div>
-    {% endif %}
+      {% include dyn_url('course/tabs/tasks.html.twig', {type:course.type}) with {limitCount : 2} %}
+      <div class="js-only-display-one-page"></div>
+
+      {% if course.courseItemNum > 25 %}
+        <div class="text-center pt10 border-top-gray-lighter" >
+          <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="link-dark">{{ 'course.catalogue.view_all_btn'|trans }}</a>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endif %}

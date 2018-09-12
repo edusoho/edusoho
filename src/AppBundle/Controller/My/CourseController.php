@@ -14,6 +14,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Util\CourseTitleUtils;
 
 class CourseController extends CourseBaseController
 {
@@ -202,6 +203,8 @@ class CourseController extends CourseBaseController
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
+        $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
@@ -221,7 +224,7 @@ class CourseController extends CourseBaseController
 
         $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('offsetTaskId' => $offsetTaskId));
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 10000));
 
         return $this->render(
             'course/tabs/tasks.html.twig',

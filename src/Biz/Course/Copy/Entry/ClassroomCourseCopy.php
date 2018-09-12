@@ -34,7 +34,7 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse = $this->filterFields($course);
 
         $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
-        $newCourse['isDefault'] = $course['isDefault'];
+        $newCourse['isDefault'] = 1;
         $modeChange = false;
         $newCourse['parentId'] = $course['id'];
         $newCourse['locked'] = 1; //默认锁定
@@ -42,6 +42,11 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['creator'] = $user['id'];
         $newCourse['status'] = 'published';
         $newCourse['teacherIds'] = array($user['id']);
+        $newCourse['isHideUnpublish'] = $course['isHideUnpublish'];
+        $newCourse['lessonNum'] = $course['lessonNum'];
+        $newCourse['publishLessonNum'] = $course['publishLessonNum'];
+        $newCourse['taskNum'] = $course['taskNum'];
+        $newCourse['compulsoryTaskNum'] = $course['compulsoryTaskNum'];
 
         $newCourse = $this->getCourseDao()->create($newCourse);
 

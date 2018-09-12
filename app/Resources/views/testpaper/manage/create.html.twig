@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
 {% import 'macro.html.twig' as web_macro %}
 
 {% block title %}{{'course.testpaper_manage.create'|trans}} - {{ parent() }}{% endblock %}
@@ -9,10 +9,9 @@
 
 {% block main %}
 
-<div class="panel panel-default panel-col test-creator">
-  <div class="panel-heading clearfix">{{'course.testpaper_manage.create.content_title'|trans}}</div>
+<div class="test-creator">
+  <div class="courseset-manage-body__title">{{'course.testpaper_manage.create.content_title'|trans}}</div>
 
-  <div class="panel-body">
 
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'course.testpaper_manage.create'} %}
 
@@ -32,7 +31,7 @@
 
       <div class="form-group mbm">
         <div class="col-md-8 col-md-offset-2 controls">
-          <button id="testpaper-create-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary" data-role="submit" data-check-url="{{ path('course_set_manage_testpaper_build_check',{courseSetId:courseSet.id,type:'testpaper'})}}">{{'course.testpaper_manage.create.questions_setup.save_btn'|trans}}</button>
+          <button id="testpaper-create-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="cd-btn cd-btn-primary" data-role="submit" data-check-url="{{ path('course_set_manage_testpaper_build_check',{courseSetId:courseSet.id,type:'testpaper'})}}">{{'course.testpaper_manage.create.questions_setup.save_btn'|trans}}</button>
           <a href="{{ path('course_set_manage_testpaper',{id:courseSet.id}) }}" class="btn btn-link  ">{{'form.btn.return'|trans}}</a>
         </div>
       </div>
@@ -41,6 +40,5 @@
 
     </form>
 
-  </div>
 </div>
 {% endblock %}

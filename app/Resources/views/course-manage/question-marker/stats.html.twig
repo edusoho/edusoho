@@ -2,16 +2,14 @@
 
 {% block title %}{{'course.question_marker_statistics'|trans}} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'question_marker' %}
+{% set course_side_nav = 'question_marker' %}
 
 {% do script(['app/js/course-manage/question-marker/index.js'])%}
 
-{% block main %}
-  <div class="panel panel-default panel-col course-data">
-    <div class="panel-heading">
-      {{ 'course.question_marker_statistics'|trans }}
-    </div>
-    <div class="panel-body dashboard-panel">
+{% block page_title %}{{ 'course.question_marker_statistics'|trans }}{% endblock %}
+
+{% block main_body %}
+    <div class="course-data">
       <form class="form-inline well well-sm" action method="get">
         <div class="form-group ">
           <select class="form-control js-switch-lesson width-input-large" data-url="{{ path('course_manage_question_marker', {courseSetId:course.courseSetId, courseId:course.id}) }}">
@@ -62,5 +60,4 @@
         {{ 'course.question_marker.total_answer_num'|trans({'%totalAnswerNum%': stats.totalAnswerNum})|raw }}，{{ 'course.question_marker.total_user_num'|trans({'%totalUserNum%': stats.totalUserNum})|raw }}
       </p>
     </div>
-  </div>
 {% endblock %}

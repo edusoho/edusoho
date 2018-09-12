@@ -2,27 +2,63 @@
 
 {% set menu = 'admin_wap_set' %}
 
+{% do load_script('h5-admin/index.js') %}
+
 {% block main %}
 
   {{ web_macro.flash_messages() }}
 
-  <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label>{{'admin.wap_setting'|trans}}</label>
-      </div>
-      <div class="controls col-md-7 radios">
-        {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, wapSetting.enabled) }}
-        {{ 'admin.wap_setting.hint'|trans|raw }}
-      </div>
-    </div>
+  <div class="h5-find-body">
+    <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
+      <li class="active">
+        <a href="#find-page" data-toggle="tab">
+          {{ 'admin.wap_setting.find'|trans|raw }}
+        </a>
+      </li>
+      <li><a href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.site'|trans|raw }}</a></li>
+    </ul>
+    <div class="tab-content h5-tab-content">
 
-    <div class="row form-group">
-      <div class="col-md-3 control-label"></div>
-      <div class="controls col-md-8">
-        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      {# 发现页设置 #}
+      <div class="tab-pane fade in active" id="find-page">
+        {% if 2 != wapSetting.version %}
+          <div class="h5-text-content">
+            <div class="title">
+              <span class="h5-color-primary">{{ 'admin.wap_setting.find'|trans|raw }}</span><span class="text-gray-medium">{{ 'admin.wap_setting.online'|trans|raw }}</span>
+            </div>
+            <ul class="feature-info">{{ 'admin.wap_setting.function'|trans|raw }}</ul>
+            <a class="btn-h5-open js-site-set" href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
+          </div>
+          <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/h5/find_plate@2x.png') }}" alt="">
+        {% else %}
+          <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+        {% endif %}
+      </div>
+
+      {# 站点页设置 #}
+      <div class="tab-pane fade" id="site-page">
+        <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
+          <div class="site-img-content clearfix">
+            <div class="clearfix site-module-container js-checked-radio">
+              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}">
+              {{radios('version', {'2':'admin.wap_setting.new'|trans},wapSetting.version)}}
+            </div>
+            <div class="clearfix site-module-container js-checked-radio">
+              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}">
+              {{radios('version', {'1':'admin.wap_setting.old'|trans},wapSetting.version)}}
+            </div>
+            <div class="clearfix site-module-container js-checked-radio">
+              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.off'|trans|raw }}">
+              {{radios('version', {'0':'admin.wap_setting.off'|trans},wapSetting.version)}}
+            </div>
+          </div>
+          <div class="help-block-container">{{ 'admin.wap_setting.hint'|trans|raw }}</div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-h5-save js-site-save">{{'form.btn.save'|trans}}</button>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
       </div>
     </div>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </form>
+  </div>
 {% endblock %}

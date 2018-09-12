@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Common\SystemInitializer;
+use Biz\Crontab\SystemCrontabInitializer;
 
 class InitWebsiteCommand extends BaseCommand
 {
@@ -90,6 +91,7 @@ class InitWebsiteCommand extends BaseCommand
 
         $initializer->initFolders();
         $initializer->initLockFile();
+        SystemCrontabInitializer::init();
 
         $this->logger('网校创建成功', $output);
     }

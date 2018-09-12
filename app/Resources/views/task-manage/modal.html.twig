@@ -3,14 +3,18 @@
 {% do script(['libs/jquery-validation.js','libs/iframe-resizer.js','app/js/task-manage/create/index.js']) %}
 
 {% block task_create_type %}
-  <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}"
-      {% if mode == 'edit' %}
-    data-editor-type="{{ currentType }}"
-    data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
-    data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
-  {% elseif mode == 'create' %}
-    data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
-      {% endif %}>
+  <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}" data-course-type="{{ course.type }}"
+    {% if mode == 'edit' %}
+      data-editor-type="{{ currentType }}"
+      data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
+      data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
+    {% elseif mode == 'create' %}
+      {% if categoryId|default('0') %}
+        data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
+      {% else %}
+        data-save-url="{{ path('course_manage_lesson_create', {courseId: course.id}) }}"
+      {% endif %}
+    {% endif %}>
     <form class="form-horizontal" id="step1-form">
       <ul class="form-group task-create-type-list ">
         {% cache courseSet.type ~ '-create-task-activity-metas-' ~ setting('storage.upload_mode', 'local') 1000 %}
@@ -30,7 +34,6 @@
           <input name="mediaType" id="mediaType" class="type-hidden">
           <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
           <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
-          <input class="js-hidden-data" type="hidden" name="chapterId" value="{{ chapterId|default(null) }}">
           <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
           <input class="js-hidden-data" type="hidden" name="courseSetType" id="courseSetType" value="{{ courseSet.type }}">
           <input type="hidden" id="courseExpiryMode" value="{{ course.expiryMode }}">

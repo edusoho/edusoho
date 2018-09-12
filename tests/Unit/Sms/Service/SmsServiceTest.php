@@ -4,7 +4,6 @@ namespace Tests\Unit\Sms\Service;
 
 use Mockery;
 use Biz\BaseTestCase;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsServiceTest extends BaseTestCase
 {
@@ -166,9 +165,9 @@ class SmsServiceTest extends BaseTestCase
     protected function createApiMock($return = null)
     {
         $return = isset($return) ? $return : array('status' => 'ok');
-        $api = CloudAPIFactory::create('root');
-        $mockObject = Mockery::mock($api);
+        $mockObject = Mockery::mock('MockedApi_ddescll2'.rand());
         $mockObject->shouldReceive('post')->times(1)->andReturn($return);
+        $mockObject->shouldReceive('getAccessKey')->andReturn('access_key');
         $this->getSmsService()->setCloudeApi($mockObject);
     }
 

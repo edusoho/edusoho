@@ -26,6 +26,14 @@ class UserException extends AbstractException
 
     const FORBIDDEN_SEND_MESSAGE = 4030110;
 
+    const UPDATE_NICKNAME_ERROR = 5000111;
+
+    const NICKNAME_INVALID = 5000112;
+
+    const NICKNAME_EXISTED = 5000113;
+
+    const PERMISSION_DENIED = 4030114;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -36,5 +44,9 @@ class UserException extends AbstractException
         4030107 => 'exception.user.mobile_registered',
         4030108 => 'exception.user.register_limit',
         4030110 => 'exception.user.message_forbidden',
+        5000111 => 'exception.user.update_nickname_error',
+        5000112 => 'exception.user.nickname_invalid',
+        5000113 => 'exception.user.nickname_existed',
+        4030114 => 'exception.user.permission_denied',
     );
 }

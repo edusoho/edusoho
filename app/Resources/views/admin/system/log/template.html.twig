@@ -1,0 +1,28 @@
+
+
+{% if log.shouldShowTemplate == true %}
+
+  {% set template = ('log.action.template.'~log.module~'.'~log.action)|trans(log.urlParamsJson)|raw %}
+
+  {% if template == ('log.action.template.'~log.module~'.'~log.action) %}
+
+    {{ log.message }}
+
+  {% else %}
+
+    {{ ('log.action.template.'~log.module~'.'~log.action)|trans(log.urlParamsJson)|raw }}
+
+  {% endif %}
+
+  {% if log.shouldShowModal == true %}
+    <a href="#modal" data-toggle="modal" class="btn btn-default btn-sm"
+       data-url="{{path('admin_logs_field_change',{log: log} )}}">
+      {{ 'log.field.detail'|trans }}
+    </a>
+  {% endif %}
+
+{% else %}
+
+  {{ log_trans(log.message, log.data) }}
+
+{% endif %}

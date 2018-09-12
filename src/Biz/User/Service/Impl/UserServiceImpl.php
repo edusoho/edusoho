@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Biz\Content\FileException;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -44,6 +45,18 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->get($id, array('lock' => $lock));
 
         return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserAndProfile($id)
+    {
+        $user = $this->getUserDao()->get($id);
+
+        if (!empty($user)) {
+            $profile = $this->getProfileDao()->get($id);
+            $user = array_merge($user, $profile);
+        }
+
+        return $user;
     }
 
     public function countUsers(array $conditions)
@@ -81,8 +94,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->update($id, $rawPassword);
 
         $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
-
-        $this->getLogService()->info('user', 'password-changed', sprintf('用户%s(ID:%u)重置密码成功', $user['email'], $user['id']));
 
         return true;
     }
@@ -310,7 +321,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         $updatedUser = $this->getUserDao()->update($userId, array('nickname' => $nickname));
         $this->dispatchEvent('user.change_nickname', new Event($updatedUser));
-        $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
     public function changeUserOrg($userId, $orgCode)
@@ -401,6 +411,68 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->update($userId, $fields);
 
         return UserSerialize::unserialize($user);
+    }
+
+    public function changeAvatarByFileId($userId, $fileId)
+    {
+        if (empty($fileId)) {
+            throw FileException::FILE_NOT_FOUND();
+        }
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        $options = $this->createImgCropOptions($naturalSize, $scaledSize);
+        $record = $this->getFileService()->getFile($fileId);
+        if (empty($record)) {
+            throw FileException::FILE_NOT_FOUND();
+        }
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
+
+        $filePaths = FileToolKit::cropImages($parsed['fullpath'], $options);
+
+        $fields = array();
+        foreach ($filePaths as $key => $filePath) {
+            $file = $this->getFileService()->uploadFile('user', new File($filePath));
+            $fields[] = array(
+                'type' => $key,
+                'id' => $file['id'],
+            );
+        }
+
+        if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
+            $fields[] = array(
+                'type' => 'origin',
+                'id' => $record['id'],
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record['uri']);
+        }
+
+        if (empty($fields)) {
+            throw FileException::FILE_HANDLE_ERROR();
+        }
+
+        return $this->changeAvatar($userId, $fields);
+    }
+
+    private function createImgCropOptions($naturalSize, $scaledSize)
+    {
+        $options = array();
+
+        $options['x'] = 0;
+        $options['y'] = 0;
+        $options['x2'] = $scaledSize->getWidth();
+        $options['y2'] = $scaledSize->getHeight();
+        $options['w'] = $naturalSize->getWidth();
+        $options['h'] = $naturalSize->getHeight();
+
+        $options['imgs'] = array();
+        $options['imgs']['large'] = array(200, 200);
+        $options['imgs']['medium'] = array(120, 120);
+        $options['imgs']['small'] = array(48, 48);
+        $options['width'] = $naturalSize->getWidth();
+        $options['height'] = $naturalSize->getHeight();
+
+        return $options;
     }
 
     public function updateUserUpdatedTime($id)
@@ -525,8 +597,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
 
-        $this->getLogService()->info('user', 'password-changed', sprintf('用户%s(ID:%u)重置密码成功', $user['email'], $user['id']));
-
         return true;
     }
 
@@ -550,8 +620,6 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getUserDao()->update($userId, $fields);
-
-        $this->getLogService()->info('user', 'pay-password-changed', sprintf('用户%s(ID:%u)重置支付密码成功', $user['email'], $user['id']));
 
         return true;
     }
@@ -594,8 +662,6 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $this->dispatchEvent('user.change_mobile', new Event($user));
-
-        $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
     }
@@ -1010,7 +1076,6 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->update($id, array('roles' => $roles));
 
         $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
-        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
 
         return UserSerialize::unserialize($user);
     }
@@ -1283,8 +1348,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->update($user['id'], array('locked' => 1));
         $this->dispatchEvent('user.lock', new Event($user));
 
-        $this->getLogService()->info('user', 'lock', sprintf('封禁用户%s(#%u)', $user['nickname'], $user['id']));
-
         return true;
     }
 
@@ -1299,8 +1362,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->update($user['id'], array('locked' => 0));
 
         $this->dispatchEvent('user.unlock', new Event($user));
-
-        $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
         return true;
     }
@@ -2158,7 +2219,7 @@ class UserSerialize
 
     private static function _userRolesSort($user)
     {
-        if (!empty($user['roles'][1]) && $user['roles'][1] == 'ROLE_USER') {
+        if (!empty($user['roles'][1]) && 'ROLE_USER' == $user['roles'][1]) {
             $temp = $user['roles'][1];
             $user['roles'][1] = $user['roles'][0];
             $user['roles'][0] = $temp;

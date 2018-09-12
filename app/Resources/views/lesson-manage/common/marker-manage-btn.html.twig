@@ -1,0 +1,12 @@
+{# 弹题管理按钮 #}
+{% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
+  {% set file = task.activity.ext.file|default(null) %}
+  {% if file.storage|default(null) == 'cloud' %}
+    <li class="mark-manage">
+      <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank">
+      {{'course.plan_task.lesson-marker_btn'|trans}}
+      </a>
+    </li>
+    <li class="divider mark-manage-divider" style="display:none;"></li>
+  {% endif %}
+{% endif %}

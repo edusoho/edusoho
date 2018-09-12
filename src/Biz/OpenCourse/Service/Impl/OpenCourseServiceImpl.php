@@ -65,8 +65,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->getOpenCourseMemberDao()->create($member);
 
-        $this->getLogService()->info('open_course', 'create_course', "创建公开课《{$course['title']}》(#{$course['id']})");
-
         return $course;
     }
 
@@ -78,28 +76,151 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
     }
 
-    public function updateCourse($id, $fields)
+    protected function filterOpenCourseFields($fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'subtitle',
+            'status',
+            'lessonNum',
+            'categoryId',
+            'tags',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'about',
+            'teacherIds',
+            'studentNum',
+            'hitNum',
+            'likeNum',
+            'postNum',
+            'userId',
+            'parentId',
+            'locked',
+            'recommended',
+            'recommendedSeq',
+            'recommendedTime',
+            'createdTime',
+            'updateTime',
+            'orgId',
+            'orgCode',
+            'startTime',
+            'length',
+            'authUrl',
+            'jumpUrl',
+        ));
+
+        return $fields;
+    }
+
+    protected function updateOpenCourse($course, $fields)
     {
         $user = $this->getCurrentUser();
 
-        $argument = $fields;
-        $course = $this->getCourse($id);
+        $courseFields = ArrayToolkit::parts($fields, array(
+            'title',
+            'subtitle',
+            'status',
+            'lessonNum',
+            'categoryId',
+            'tags',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'about',
+            'teacherIds',
+            'studentNum',
+            'hitNum',
+            'likeNum',
+            'postNum',
+            'userId',
+            'parentId',
+            'locked',
+            'recommended',
+            'recommendedSeq',
+            'recommendedTime',
+            'createdTime',
+            'updateTime',
+            'orgId',
+            'orgCode',
+        ));
 
+        $courseFields = $this->_filterCourseFields($courseFields);
+
+        $tagIds = isset($courseFields['tags']) ? $courseFields['tags'] : null;
+
+        unset($courseFields['tags']);
+
+        $updatedCourse = $this->getOpenCourseDao()->update($course['id'], $courseFields);
+
+        $this->dispatchEvent('open.course.update', array('argument' => $fields, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
+
+        return $updatedCourse;
+    }
+
+    protected function shouldUpdateLiveLesson($course, $fields)
+    {
+        return 'liveOpen' == $course['type'] && isset($fields['startTime']) && !empty($fields['startTime']);
+    }
+
+    protected function updateLiveLesson($course, $fields)
+    {
+        $openLiveLesson = $this->searchLessons(
+            array('courseId' => $course['id']),
+            array('startTime' => 'DESC'),
+            0,
+            1
+        );
+        $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
+
+        $liveLessonFields = ArrayToolkit::parts($fields, array(
+            'startTime',
+            'length',
+            'authUrl',
+            'jumpUrl',
+        ));
+
+        $liveLessonFields = array_merge($liveLesson, $liveLessonFields);
+
+        $liveLessonFields['type'] = 'liveOpen';
+        $liveLessonFields['courseId'] = $course['id'];
+        $liveLessonFields['title'] = $course['title'];
+
+        $routes = array(
+            'authUrl' => $fields['authUrl'],
+            'jumpUrl' => $fields['jumpUrl'],
+        );
+        if ($openLiveLesson) {
+            $this->getLiveCourseService()->editLiveRoom($course, $liveLessonFields, $routes);
+            $this->updateLesson(
+                $liveLessonFields['courseId'],
+                $liveLessonFields['id'],
+                $liveLessonFields
+            );
+        } else {
+            $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLessonFields, $routes);
+
+            $liveLessonFields['mediaId'] = $live['id'];
+            $liveLessonFields['liveProvider'] = $live['provider'];
+
+            $this->createLesson($liveLessonFields);
+        }
+    }
+
+    public function updateCourse($id, $fields)
+    {
+        $fields = $this->filterOpenCourseFields($fields);
+
+        $course = $this->getCourse($id);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，更新失败！');
         }
 
-        $fields = $this->_filterCourseFields($fields);
+        $updatedCourse = $this->updateOpenCourse($course, $fields);
 
-        $tagIds = isset($fields['tags']) ? $fields['tags'] : null;
-
-        unset($fields['tags']);
-
-        $this->getLogService()->info('open_course', 'update_course', "更新公开课《{$course['title']}》(#{$course['id']})的信息", $fields);
-
-        $updatedCourse = $this->getOpenCourseDao()->update($id, $fields);
-
-        $this->dispatchEvent('open.course.update', array('argument' => $argument, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        if ($this->shouldUpdateLiveLesson($course, $fields)) {
+            $this->updateLiveLesson($course, $fields);
+        }
 
         return $updatedCourse;
     }
@@ -116,8 +237,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if ('liveOpen' == $course['type']) {
             $this->getLiveReplayService()->deleteReplaysByCourseId($id, 'liveOpen');
         }
-
-        $this->getLogService()->info('open_course', 'delete_course', "删除公开课《{$course['title']}》(#{$course['id']})");
 
         $this->dispatchEvent('open.course.delete', $course);
 
@@ -143,7 +262,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $course = $this->updateCourse($id, array('status' => 'published'));
         $this->dispatchEvent('open.course.publish', $course);
-        $this->getLogService()->info('open_course', 'pulish_course', "发布公开课《{$course['title']}》(#{$course['id']})");
 
         return array('result' => true, 'course' => $course);
     }
@@ -156,7 +274,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException();
         }
 
-        $this->getLogService()->info('open_course', 'close_course', "关闭公开课《{$course['title']}》(#{$course['id']})");
         $this->dispatchEvent('open.course.close', $course);
 
         return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
@@ -238,8 +355,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         );
 
         $this->_deleteNotUsedPictures($course);
-
-        $this->getLogService()->info('open_course', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
 
         $update_picture = $this->getOpenCourseDao()->update($courseId, $fields);
 
@@ -442,7 +557,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
-        $this->getLogService()->info('open_course', 'add_lesson', "添加公开课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent('open.course.lesson.create', array('lesson' => $lesson));
 
         return $lesson;
@@ -506,8 +620,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $updatedLesson['fields'] = $lesson;
         $this->dispatchEvent('open.course.lesson.update', array('lesson' => $updatedLesson, 'sourceLesson' => $lesson));
-
-        $this->getLogService()->info('open_course', 'update_lesson', "更新公开课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
         return $updatedLesson;
     }
@@ -806,8 +918,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $visibleTeacherIds[] = $member['userId'];
             }
         }
-
-        $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
 
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->updateCourse($courseId, $fields);

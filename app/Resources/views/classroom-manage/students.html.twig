@@ -12,10 +12,11 @@
     <a class="btn btn-info btn-sm panel-bar mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}" data-datas-url="{{ path('classroom_manage_student_export_datas', {id:classroom.id,role:role}) }}" data-loading-text="{{'classroom.student_exporting'|trans}}"><i class="glyphicon glyphicon-export"></i> {{'classroom.student_export_auditor'|trans}}</a>
   {% elseif role|default() == 'student' %}
     <div class="panel-bar">
-      <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('classroom_manage_student_create', {id:classroom.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'classroom.add_student_btn'|trans}}</button>
       {% if classroom.status == 'published' %}
+        <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('classroom_manage_student_create', {id:classroom.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'classroom.add_student_btn'|trans}}</button>
         <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
       {% else %}
+        <a class="btn btn-info btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{'classroom.student_add_tips'|trans}}"><i class="glyphicon glyphicon-plus"></i> {{'classroom.add_student_btn'|trans}}</a>
         <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{'classroom.student_import_tips'|trans}}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
       {% endif %}
       <a class="btn btn-info btn-sm mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}" data-datas-url="{{ path('classroom_manage_student_export_datas', {id:classroom.id,role:role}) }}" data-loading-text="{{'classroom.student_exporting'|trans}}"><i class="glyphicon glyphicon-export"></i> {{'classroom.student_export'|trans}}</a>

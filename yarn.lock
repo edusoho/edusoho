@@ -1296,7 +1296,7 @@ caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
 
 capture-stack-trace@^1.0.0:
   version "1.0.1"
-  resolved "http://registry.npm.taobao.org/capture-stack-trace/download/capture-stack-trace-1.0.1.tgz#ed0a1edb87c05d4db1037c5f8f483d8a3b5f0825"
+  resolved "http://registry.npm.taobao.org/capture-stack-trace/download/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
 
 cardinal@^1.0.0:
   version "1.0.0"
@@ -2154,6 +2154,12 @@ es-fullcalendar@3.7.0-patch5:
 es-jcrop@latest:
   version "2.0.5"
   resolved "http://registry.npm.taobao.org/es-jcrop/download/es-jcrop-2.0.5.tgz#68ab9377af369c88600caae147eb9dddafd221dd"
+
+es-jquery-sortable@0.9.13-patch1:
+  version "0.9.13-patch1"
+  resolved "https://registry.npmjs.org/es-jquery-sortable/-/es-jquery-sortable-0.9.13-patch1.tgz#1e952348aa74a630894bf193a01762db798d44c7"
+  dependencies:
+    jquery "^2.1.2"
 
 es-messenger@latest:
   version "2.3.0"
@@ -3567,12 +3573,6 @@ jquery-form@3.50.0:
 jquery-migrate@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/jquery-migrate/-/jquery-migrate-3.0.0.tgz#03f320596fe1a1db09cdcfb74b14571994aad7bb"
-
-jquery-sortable@0.9.13:
-  version "0.9.13"
-  resolved "http://registry.npm.taobao.org/jquery-sortable/download/jquery-sortable-0.9.13.tgz#1cbfb655013a0747370571f06e22f524a00ffba2"
-  dependencies:
-    jquery "^2.1.2"
 
 jquery-validation@1.15.1:
   version "1.15.1"

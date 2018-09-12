@@ -1,0 +1,27 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "cd-modal-dialog" %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/course-manage/title/index.js']) %}
+
+{% block title %}
+  {{ 'course.teaching_plan.default.title'|trans }}
+{% endblock %}
+
+{% block body %}
+  <div id="course-title-editor">
+    <form id="course-title-form" method="post"
+        action="{{path('course_set_manage_course_publish_set_title', {courseSetId: courseSetId, courseId: courseId})}}">
+      <div class="form-group">
+        <label for="planTitle" class="control-label-required">{{ 'course.teaching_plan.default.title.set'|trans }}</label>
+        <input type="text" id="planTitle" name="title" class="form-control">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+      <div class="cd-text-sm course-mangae-info__tip">{{ 'course.teaching_plan.default.title.set.tip'|trans }}</div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button id="course-title-cancel" type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="course-title-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.publish.submiting'|trans }}">{{ 'form.btn.publish'|trans }}</button>
+{% endblock %}

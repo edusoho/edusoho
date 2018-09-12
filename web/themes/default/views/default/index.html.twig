@@ -337,7 +337,7 @@
             <div class="live-course-lesson mbs">
               {% if task %}
                 <span class="text-success fsm mrm">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
-                <span class="text-muted fsm mrm">第{{ task.number }}任务</span>
+                <span class="text-muted fsm mrm">第{{ task.number }}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}</span>
               {% endif %}
             </div>
           {% else %}

@@ -150,38 +150,26 @@
   </fieldset>
 
   <fieldset>
-      <legend>{{ 'admin.setting_course.customer_chapter_section_name'|trans }}</legend>
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label>{{'admin.setting_course.custom_chapter_name'|trans}}</label>
-        </div>
-        <div class="controls col-md-8 radios">
-            {{ radios('custom_chapter_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, courseSetting.custom_chapter_enabled|default(true)) }}
-          <div class="help-block">
-              {{'admin.setting_course.custom_chapter_name_enabled_hint'|trans}}</div>
-        </div>
+    <legend>{{ 'admin.setting_course.customer_chapter_section_name'|trans }}</legend>
+    {# 默认章节为自定义 #}
+    <input type="hidden" name="custom_chapter_enabled" value="1">
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+          <label for="chapter_name">{{'admin.setting_course.task_chapter_name'|trans}}</label>
       </div>
-
-      <div class="{% if not courseSetting.custom_chapter_enabled %}hide{% endif %}" id="show_course_chapter_name">
-        <div class="form-group">
-          <div class="col-md-3 control-label">
-              <label for="chapter_name">{{'admin.setting_course.task_chapter_name'|trans}}</label>
-          </div>
-          <div class="controls col-md-4">
-            <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter') }}">
-          </div>
-        </div>
-
-        <div class="row form-group">
-          <div class="col-md-3 control-label">
-              <label for="part_name">{{'admin.setting_course.task_section_name'|trans}}</label>
-          </div>
-          <div class="controls col-md-4">
-            <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('admin.setting_course.section') }}">
-          </div>
-        </div>
+      <div class="controls col-md-4">
+        <input  type="text" id="chapter_name" name="chapter_name" class="form-control" data-before-value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}">
       </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+          <label for="part_name">{{'admin.setting_course.task_section_name'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input  type="text" id="part_name" name="part_name" class="form-control" data-before-value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}" value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}">
+      </div>
+    </div>
     <div class="alert alert-info deduction text-center">
     <p><strong>
     {{'admin.setting_course.customer_chapter_section_name.tips'|trans}}
@@ -189,6 +177,23 @@
     </div>
 
   </fieldset>
+
+  {#<fieldset>#}
+    {#<legend>{{ 'admin.setting_course.customer_task_name'|trans }}</legend>#}
+    {#<div class="row form-group">#}
+      {#<div class="col-md-3 control-label">#}
+        {#<label for="part_name">{{'admin.setting_course.task_name'|trans}}</label>#}
+      {#</div>#}
+      {#<div class="controls col-md-4">#}
+        {#<input type="text" id="task_name" name="task_name" class="form-control" data-before-value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}" value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}">#}
+      {#</div>#}
+    {#</div>#}
+    {#<div class="alert alert-info deduction text-center">#}
+      {#<p><strong>#}
+          {#{{'admin.setting_course.customer_task_name.tips'|trans}}#}
+        {#</strong></p>#}
+    {#</div>#}
+  {#</fieldset>#}
 
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">

@@ -15,13 +15,33 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('register', 'payment', 'vip', 'magic'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $method = "get${type}";
 
         return $this->$method();
+    }
+
+    public function getSite()
+    {
+        $siteSetting = $this->getSettingService()->get('site');
+
+        return array(
+            'name' => $siteSetting['name'],
+            'url' => $siteSetting['url'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
+        );
+    }
+
+    public function getWap()
+    {
+        $wapSetting = $this->getSettingService()->get('wap', array('version' => 0));
+
+        return array(
+            'version' => empty($wapSetting['version']) ? array('version' => 0) : $wapSetting['version'],
+        );
     }
 
     public function getRegister()
@@ -96,6 +116,30 @@ class Setting extends AbstractResource
         return array(
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
+        );
+    }
+
+    public function getCdn()
+    {
+        $cdn = $this->getSettingService()->get('cdn');
+
+        return array(
+            'enabled' => empty($cdn['enabled']) ? false : true,
+            'defaultUrl' => empty($cdn['defaultUrl']) ? '' : $cdn['defaultUrl'],
+            'userUrl' => empty($cdn['userUrl']) ? '' : $cdn['userUrl'],
+            'contentUrl' => empty($cdn['contentUrl']) ? '' : $cdn['contentUrl'],
+        );
+    }
+
+    public function getCourse()
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        return array(
+            'chapter_name' => empty($courseSetting['chapter_name']) ? '章' : $courseSetting['chapter_name'],
+            'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
+            'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
+            'show_student_num_enabled' => '1',
         );
     }
 

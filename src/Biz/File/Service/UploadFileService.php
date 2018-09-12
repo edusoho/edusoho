@@ -3,6 +3,7 @@
 namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Biz\System\Annotation\Log;
 
 // TODO refactor.
 interface UploadFileService
@@ -19,18 +20,34 @@ interface UploadFileService
 
     public function update($fileId, $fields);
 
+    public function sharePublic($id);
+
+    public function unsharePublic($id);
+
     public function getDownloadMetas($id, $ssl = false);
 
     public function getUploadAuth($params);
 
     public function initUpload($params);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="upload_file",action="create")
+     */
     public function finishedUpload($params);
 
     public function moveFile($targetType, $targetId, $originalFile = null, $data = array());
 
     public function setFileProcessed($params);
 
+    /**
+     * @param $globalId
+     *
+     * @return mixed
+     * @Log(module="upload_file",action="delete",funcName="getFileByGlobalId")
+     */
     public function deleteByGlobalId($globalId);
 
     public function reconvertFile($id, $options = array());
@@ -61,10 +78,26 @@ interface UploadFileService
 
     public function searchFileCount($conditions);
 
+    /**
+     * @param $targetType
+     * @param $targetId
+     * @param array             $fileInfo
+     * @param string            $implemtor
+     * @param UploadedFile|null $originalFile
+     *
+     * @return mixed
+     * @Log(module="upload_file",action="create")
+     */
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);
 
     public function renameFile($id, $newFilename);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="upload_file",action="delete")
+     */
     public function deleteFile($id);
 
     public function deleteFiles(array $ids);

@@ -10,6 +10,7 @@ use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
 use Codeages\Weblib\Auth\SignatureTokenAlgo;
 use Biz\Distributor\Util\DistributorUtil;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class MockController extends BaseController
 {
@@ -22,6 +23,7 @@ class MockController extends BaseController
             'couponExpireDateStr' => 1,
             'tokenExpireDateStr' => $tokenExpireDateStr,
             'typeSamples' => $this->getTypeSamples(),
+            'comment' => $this->getApiBaseComment(),
         ));
     }
 
@@ -84,7 +86,25 @@ class MockController extends BaseController
         $this->validate();
 
         $params = $request->request->get('data');
-        $result = $this->sendApiVersion3($params);
+
+        if ('generateToken' == $params['apiUrl']) {
+            $apiUserId = empty($params['apiUserId']) ? null : $params['apiUserId'];
+
+            if (!empty($apiUserId)) {
+                $user = $this->getUserService()->getUser($apiUserId);
+                if (empty($user)) {
+                    throw new \RuntimeException('User not found');
+                }
+                $token = $this->getUserService()->makeToken(
+                    MobileBaseController::TOKEN_TYPE,
+                    $user['id'],
+                    time() + 3600 * 24 * 30
+                );
+            }
+            $result = array('X-Auth-Token' => $token);
+        } else {
+            $result = $this->sendApiVersion3($params);
+        }
 
         return $this->createJsonResponse(array('result' => $result));
     }
@@ -113,11 +133,22 @@ class MockController extends BaseController
         return $this->getBiz()->service('System:SettingService');
     }
 
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
     private function validate()
     {
-        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost', 'www.edusoho-test1.com', 'chenwei.st.edusoho.cn');
+        $validHosts = array(
+            'local',
+            'dev',
+            'esdev.com',
+            'localhost',
+            'www.edusoho-test1.com',
+        );
         $host = $_SERVER['HTTP_HOST'];
-        if (!in_array($host, $validHosts) && false === strpos($host, '.st.edusoho.cn')) {
+        if (!in_array($host, $validHosts) && false === strpos($host, '.edusoho.cn')) {
             throw new AccessDeniedException($host.'不允许使用此功能！！！');
         }
 
@@ -156,10 +187,24 @@ class MockController extends BaseController
         $apiUrl = $params['apiUrl'];
         $apiMethod = $params['apiMethod'];
         $apiAuthorized = $params['apiAuthorized'];
+        $apiUserId = empty($params['apiUserId']) ? null : $params['apiUserId'];
 
         unset($params['apiUrl']);
         unset($params['apiMethod']);
         unset($params['apiAuthorized']);
+        unset($params['apiUserId']);
+
+        if (!empty($apiUserId)) {
+            $user = $this->getUserService()->getUser($apiUserId);
+            if (empty($user)) {
+                throw new \RuntimeException('User not found');
+            }
+            $token = $this->getUserService()->makeToken(
+                MobileBaseController::TOKEN_TYPE,
+                $user['id'],
+                time() + 3600 * 24 * 30
+            );
+        }
 
         $url = $_SERVER['HTTP_ORIGIN'].$apiUrl;
 
@@ -181,9 +226,10 @@ class MockController extends BaseController
             $token = $this->generateToken($apiUrl, '');
             $headers[] = 'Authorization: Signature '.$token;
             $this->saveMockedToken($token);
+        } elseif (!empty($token)) {
+            $headers[] = 'X-Auth-Token: '.$token;
+            $headers[] = 'User-Agent: CERN-LineMode/2.15 libwww/2.17b3';
         }
-
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         if ('POST' == $apiMethod) {
             curl_setopt($curl, CURLOPT_POST, 1);
@@ -198,12 +244,14 @@ class MockController extends BaseController
         } elseif ('PATCH' == $apiMethod) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+            $headers[] = 'Content-Type: application/json-patch+json';
         } else {
             if (!empty($params)) {
                 $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
 
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
@@ -271,6 +319,14 @@ class MockController extends BaseController
         }
 
         return $typeSamples;
+    }
+
+    private function getApiBaseComment()
+    {
+        $biz = $this->getBiz();
+        $file = $biz['root_directory'].'app/Resources/views/admin/mock/sample-data-comment/comment.md';
+
+        return file_get_contents($file);
     }
 
     private function getApiInfo($docContent)

@@ -3,7 +3,6 @@
 namespace Topxia\Api\Resource;
 
 use Biz\Accessor\AccessorInterface;
-
 use Biz\Course\Service\CourseService;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
@@ -18,7 +17,7 @@ class Exercise extends BaseResource
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
+            if (CourseService::DEFAULT_COURSE_TYPE != $course['courseType']) {
                 return $this->error('404', '该练习不存在!');
             }
 
@@ -54,7 +53,7 @@ class Exercise extends BaseResource
         $exercise['lessonId'] = $activity['id'];
 
         $access = $this->getCourseService()->canLearnCourse($exercise['courseId']);
-        if ($access['code'] !== AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS !== $access['code']) {
             return $this->error($access['code'], $access['msg']);
         }
 
@@ -139,7 +138,7 @@ class Exercise extends BaseResource
                 foreach ($subs as &$sub) {
                     $sub = $this->filterItemFields($sub, $itemSetResults);
                 }
-                
+
                 $item['items'] = $subs;
                 $item['result'] = null;
             }
@@ -153,12 +152,12 @@ class Exercise extends BaseResource
                 if (!empty($itemResult['teacherSay'])) {
                     $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
                 }
-                
+
                 $item['result'] = $itemResult;
             }
 
             unset($item['subs']);
-            
+
             $newItmes[$item['id']] = $item;
         }
 
@@ -178,12 +177,14 @@ class Exercise extends BaseResource
                 unset($value['subItems']);
             }
         }
+
         return $res;
     }
 
     public function filter($res)
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+
         return $res;
     }
 
@@ -193,7 +194,7 @@ class Exercise extends BaseResource
             return array();
         }
 
-        $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId','subs','testResult'));
+        $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs', 'testResult'));
 
         $item['stem'] = $this->filterHtml($item['stem']);
         $item['analysis'] = $this->filterHtml($item['analysis']);
@@ -224,14 +225,15 @@ class Exercise extends BaseResource
             unset($item['result']['score']);
             unset($item['result']['missScore']);
             unset($item['result']['question']);
-            $item['result'] = $item['result'];
+            $item['result'] = empty($item['result']) ? (object) array() : $item['result'];
             if (!empty($item['items'])) {
-                foreach ($item['items'] as &$item) {
-                    $item['result'] = $item['result'];
+                foreach ($item['items'] as &$subItem) {
+                    $subItem['result'] = empty($subItem['result']) ? (object) array() : $subItem['result'];
                 }
             }
         }
         $res['items'] = $items;
+
         return $res;
     }
 
@@ -240,9 +242,10 @@ class Exercise extends BaseResource
         if (empty($itemSetResults)) {
             if ('fill' == $item['type']) {
                 return array_map(function ($answer) {
-                    return "";
+                    return '';
                 }, $item['answer']);
             }
+
             return null;
         }
 
@@ -257,8 +260,10 @@ class Exercise extends BaseResource
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
+
                 return $self->filterHtml($answerValue);
             }, $answer);
+
             return $answer;
         }
 
@@ -280,7 +285,7 @@ class Exercise extends BaseResource
 
     private function getquestionTypeRangeStr(array $questionTypeRange)
     {
-        $questionTypeRangeStr = "";
+        $questionTypeRangeStr = '';
         foreach ($questionTypeRange as $key => $questionType) {
             $questionTypeRangeStr .= "'{$questionType}',";
         }

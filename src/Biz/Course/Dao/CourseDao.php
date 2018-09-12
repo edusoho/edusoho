@@ -37,4 +37,12 @@ interface CourseDao extends GeneralDaoInterface
     public function updateCategoryByCourseSetId($courseSetId, $fields);
 
     public function countGroupByCourseSetIds($courseSetIds);
+
+    public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit);
+
+    public function searchByStudentNumAndTimeZone($conditions, $start, $limit);
+
+    public function searchByRatingAndTimeZone($conditions, $start, $limit);
+
+    public function countWithJoinCourseSet($conditions);
 }

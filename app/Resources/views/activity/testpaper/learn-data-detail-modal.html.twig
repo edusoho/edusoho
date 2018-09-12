@@ -8,7 +8,7 @@
       <tr class="active">
         <th>{{ 'task.learn_data_detail.nickname'|trans }}</th>
         <th>{{ 'task.learn_data_detail.createdTime'|trans }}</th>
-        <th>{{ 'task.learn_data_detail.finishedTime'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.finishedTime'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})  }}</th>
         <th>{{ 'task.learn_data_detail.testpaper_firstUsedTime'|trans }}</th>
         <th>{{ 'task.learn_data_detail.testpaper_firstScore'|trans }}</th>
         <th>{{ 'task.learn_data_detail.testpaper_maxScore'|trans }}</th>

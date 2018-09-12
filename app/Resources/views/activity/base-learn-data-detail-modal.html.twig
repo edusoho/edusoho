@@ -8,9 +8,9 @@
   {% endif %}
 
 {% if task.isOptional == 0 %}
-  {{ 'course.task'|trans }}{{ task.number }}:
+  {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }}:
 {% else %}
-  {{ 'course.optional_task'|trans }}:
+  {{ 'course.optional_task'|trans }}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}:
 {% endif %}
   {{ task.title }}{% block taskType %}{% endblock %}
   {% include 'export/export-btn.html.twig' with

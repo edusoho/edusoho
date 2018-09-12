@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
+use Biz\Task\Util\TaskItemNumUtils;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
@@ -22,7 +23,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
 
     private $paging = array(
         'direction' => 'down',
-        'limit' => 24,
+        'limit' => 25,
         'offsetSeq' => 1,
         'offsetTaskId' => 0,
     );
@@ -49,19 +50,66 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     {
         $items = $this->findItems();
 
+        /*
+            key 为 lessonId, value 为 array(
+                'lesson' => $lesson,
+                'isSingleTaskLesson' => true/false,
+                'taskId' => $taskId, // 单任务课时才有用
+            )
+        */
+        $lessonInfos = array();
         foreach ($items as $key => &$item) {
             if ('chapter' == $item['type'] || 'unit' == $item['type']) {
                 $item['itemType'] = $item['type'];
             } elseif ('lesson' == $item['type']) {
-                unset($items[$key]);
+                $item['itemType'] = $item['type'];
+                if (isset($lessonInfos[$item['id']])) {
+                    $lessonInfos[$item['id']]['lesson'] = $item;
+                } else {
+                    $lessonInfos[$item['id']] = array('lesson' => $item);
+                }
             } else {
                 $item['itemType'] = 'task';
+                $lessonId = $item['categoryId'];
+                if (!isset($lessonInfos[$lessonId])) {
+                    $lessonInfos[$lessonId] = array();
+                }
+                if (isset($lessonInfos[$lessonId]['isSingleTaskLesson'])) {
+                    $lessonInfos[$lessonId]['isSingleTaskLesson'] = false;
+                } else {
+                    $lessonInfos[$lessonId]['isSingleTaskLesson'] = true;
+                    $lessonInfos[$lessonId]['taskId'] = $item['id'];
+                }
+            }
+        }
+
+        foreach ($items as $key => &$item) {
+            if ('task' == $item['itemType']) {
+                $lessonId = $item['categoryId'];
+                $lessonInfo = $lessonInfos[$lessonId];
+                if ($lessonInfo['isSingleTaskLesson']) {
+                    $currentLesson = $lessonInfo['lesson'];
+                    $item['isSingleTaskLesson'] = true;
+                    $item['seq'] = $currentLesson['seq'];
+                    $item['number'] = $currentLesson['number'];
+                    $item['title'] = $currentLesson['title'];
+                    $item['published_number'] = $currentLesson['published_number'];
+                } else {
+                    $item['isSingleTaskLesson'] = false;
+                }
+            } elseif ('lesson' == $item['itemType']) {
+                $lessonInfo = $lessonInfos[$item['id']];
+                if ($lessonInfo['isSingleTaskLesson']) {
+                    unset($items[$key]);
+                }
             }
         }
 
         uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
         });
+
+        $items = TaskItemNumUtils::resetNum($items);
 
         return array(array_values($items), $this->getNextOffsetSeq($items));
     }
@@ -72,7 +120,6 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             list($chapters, $tasks) = $this->findItemsByTaskOffsetId();
         } else {
             $conditions = $this->getConditions();
-
             $chapters = $this->getChapterDao()->search(
                 $conditions,
                 array(),
@@ -112,6 +159,12 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'seq_GT' => $task['seq'],
             'seq_LTE' => $task['seq'] + $downLimit,
         );
+
+        if ($this->isHiddenUnpublishTasks()) {
+            $upConditions['status'] = 'published';
+            $downConditions['status'] = 'published';
+        }
+
         $upChapters = $this->getChapterDao()->search(
             $upConditions,
             array(),
@@ -190,17 +243,28 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             'courseId' => $this->courseId,
         );
 
-        if ('down' == $this->paging['direction']) {
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
+        if ($this->isHiddenUnpublishTasks()) {
+            $conditions['status'] = 'published';
         }
 
-        if ('up' == $this->paging['direction']) {
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] + 1;
-        }
+        // if ('down' == $this->paging['direction']) {
+        //     $conditions['seq_GTE'] = $this->paging['offsetSeq'];
+        //     $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
+        // }
+
+        // if ('up' == $this->paging['direction']) {
+        //     $conditions['seq_LTE'] = $this->paging['offsetSeq'];
+        //     $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] + 1;
+        // }
 
         return $conditions;
+    }
+
+    private function isHiddenUnpublishTasks()
+    {
+        $course = $this->getCourseService()->getCourse($this->courseId);
+
+        return $course['isHideUnpublish'];
     }
 
     /**
@@ -217,6 +281,11 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     private function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 
     /**

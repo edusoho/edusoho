@@ -3,7 +3,6 @@
 namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\LiveReplayService;
@@ -137,10 +136,6 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     {
         try {
             $replayList = $this->createLiveClient()->createReplayList($liveId, '录播回放', $liveProvider);
-            $this->getLogService()->info(AppLoggerConstant::LIVE, 'generate_live_replay', "生成录制回放#{$liveId}", array(
-                'taskId' => $lessonId,
-                'result' => $replayList,
-            ));
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return array();
         }

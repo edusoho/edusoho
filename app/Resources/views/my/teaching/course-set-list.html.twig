@@ -1,0 +1,36 @@
+{% extends 'courseset-manage/header.html.twig' %}
+
+{% block js %}
+{% endblock %}
+
+{% block coursesetImg %}
+  <a target="_blank" href="{{ courseSet.redirect_path }}">
+    <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+  </a>
+{% endblock %}
+
+{% block coursesetTitle %}
+  <a class="cd-link-major" target="_blank" href="{{ courseSet.redirect_path }}">{{ courseSet.title }}</a>
+{% endblock %}
+
+{% block courseTitle %}
+  {{ courseSet.courseNum|default(0) }}
+{% endblock %}
+
+{% block courseType %}
+{% endblock %}
+
+{% block btn %}
+  <a class="cd-btn cd-btn-ghost-primary cd-mr16" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
+  {% if courseSet.status != 'published' %}
+    <a class="cd-btn cd-btn-ghost-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
+  {% else %}
+    <a class="cd-btn cd-btn-ghost-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{'my.learning.course.watch'|trans}}</a>
+  {% endif %}
+{% endblock %}
+
+{% block close %}
+{% endblock %}
+
+{% block fold %}{% endblock %}
+{% block unfold %}{% endblock %}

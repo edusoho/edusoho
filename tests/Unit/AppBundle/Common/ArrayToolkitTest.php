@@ -285,4 +285,38 @@ class ArrayToolkitTest extends BaseTestCase
             array_shift($result)
         );
     }
+
+    public function testSortPerArrayValue()
+    {
+        $sortedBefore = array(
+            array('id' => 1, 'title' => 'course1'),
+            array('id' => 2, 'title' => 'course3'),
+            array('id' => 3, 'title' => 'course2'),
+        );
+
+        $result = ArrayToolkit::sortPerArrayValue($sortedBefore, 'title');
+
+        $this->assertEquals('course1', $result[0]['title']);
+        $this->assertEquals('course3', $result[2]['title']);
+
+        $result = ArrayToolkit::sortPerArrayValue($sortedBefore, 'title', false);
+        $this->assertEquals('course3', $result[0]['title']);
+        $this->assertEquals('course1', $result[2]['title']);
+    }
+
+    public function testIsSameValues()
+    {
+        $compared = array('a', 'b', 'c');
+
+        $sameArr1 = array('b', 'c', 'a');
+        $sameArr2 = array('k1' => 'b', 'k2' => 'c', 'k3' => 'a');
+
+        $diffArr3 = array('a', 'b', 'c', 'd');
+        $diffArr4 = array('a', 'b', 'd');
+
+        $this->assertTrue(ArrayToolkit::isSameValues($compared, $sameArr1));
+        $this->assertTrue(ArrayToolkit::isSameValues($compared, $sameArr2));
+        $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr3));
+        $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr4));
+    }
 }

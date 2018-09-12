@@ -1,5 +1,4 @@
 import '../tab-manage';
-import notify from 'common/notify';
 
 let ids = [];
 let $searchForm = $('.form-search');
@@ -16,7 +15,7 @@ $sure.on('click', function () {
     success: function (response) {
       if (!response['result']) {
         $sure.removeClass('disabled');
-        notify('danger',response['message']);
+        cd.message({ type: 'danger', message: response['message']});
       } else {
         $('.modal').modal('hide');
         window.location.reload();

@@ -1,0 +1,62 @@
+{% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
+
+<tmp hide-if="{isItemDisplayedAsUnpublished}">
+  {% if member %}
+    <a hide-if="{isTaskLocked}" class="title" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
+      {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
+    </a>
+
+    <span display-if="{isTaskLocked}" class="title">
+      {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
+    </span>
+  {% elseif not isOvertime %}
+    <a class="title" href="#modal" data-toggle="modal"
+        data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
+  {% else %}
+    <a class="title" href="javascript:;" data-toggle="modal"
+        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
+  {% endif %}
+
+  {% include 'course/task-list/parts/task-length-template.html.twig' %}
+  <span class="right-menu mouse-enter">
+    {% if not member and not isOvertime and courseSet.status | default('published') == 'published' %}
+      <tmp display-if="{isTaskFree}">
+        <a class="btn btn-primary" href="#modal" data-toggle="modal"
+            data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+            style="margin-top:-6px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
+      </tmp>
+
+      <tmp hide-if="{isTaskFree}">
+        <tmp display-if="{isTaskTryLookable}">
+          <a class="btn btn-warning" href="#modal" data-toggle="modal"
+              data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+              style="margin-top:-6px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
+        </tmp>
+
+        <tmp hide-if="{isTaskTryLookable}">
+          {% if course.parentId|default(0) == 0 %}
+            {% if course.isFree %}
+              <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                  data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+                  style="margin-top:-6px">{{ 'course.catalogue.task.join_btn'|trans }}</a>
+            {% else %}
+              <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                  data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+                  style="margin-top:-6px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
+            {% endif %}
+          {% endif %}
+        </tmp>
+      </tmp>
+    {% endif %}
+  </span>
+</tmp>
+
+<tmp display-if="{isItemDisplayedAsUnpublished}">
+  <span class="title">
+    {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
+  </span>
+  <span class="right-menu color-gray">
+    {{ 'course.catalogue.task_status.looking_forward'|trans }}
+  </span>
+</tmp>

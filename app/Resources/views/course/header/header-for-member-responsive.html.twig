@@ -33,7 +33,7 @@
   </ul>
 </div>
 <div class="text-right buy-btn-group visible-xs visible-sm">
-  <span class="mr20">{{ 'my.course.free_mode_plan.task_progress'|trans }}{{ taskResultCount }} / {{ taskCount }}</span>
+  <span class="mr20">{{ 'my.course.free_mode_plan.task_progress'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}{{ taskResultCount }} / {{ taskCount }}</span>
 
   {% if showLearnBtn|default(1) %}
     {% include 'course/header/free-mode-member-learn-btn.html.twig' %}

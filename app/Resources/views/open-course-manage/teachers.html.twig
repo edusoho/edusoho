@@ -5,27 +5,24 @@
 {% set side_nav = 'teachers' %}
 {% do script(['libs/jquery-validation.js','app/js/course-manage/teachers/index.js']) %}
 
-{% block main %}
-
-<div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'my.teaching.open_course.teachers_setting.title'|trans}}</div>
-  <div class="panel-body">
-    <form id="teachers-form" class="form-horizontal" method="post" >
-      {{ web_macro.flash_messages() }}
-      <div class="form-group" id="teachers-form-group">
-        <div class="col-md-2 control-label"><label>{{'course.teacher_setup.exist_teacher'|trans}}</label></div>
-        <div class="col-md-8 controls">
-          <div id="course-teachers" data-field-name="teachers" data-init-value="{{teacherIds|json_encode}}" data-query-url="{{path('open_course_manage_teachers_match', {id:course.id})}}"></div>
-          <div class="help-block">{{'my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER'|trans}}</div>
-        </div>
+{% block page_title %}
+  {{'my.teaching.open_course.teachers_setting.title'|trans}}
+{% endblock %}
+{% block main_body %}
+  <form id="teachers-form" class="form-horizontal" method="post" >
+    {{ web_macro.flash_messages() }}
+    <div class="form-group" id="teachers-form-group">
+      <div class="col-md-2 control-label"><label>{{'course.teacher_setup.exist_teacher'|trans}}</label></div>
+      <div class="col-md-8 controls">
+        <div id="course-teachers" data-field-name="teachers" data-init-value="{{teacherIds|json_encode}}" data-query-url="{{path('open_course_manage_teachers_match', {id:course.id})}}"></div>
+        <div class="help-block">{{'my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER'|trans}}</div>
       </div>
-      <div class="form-group">
-        <div class="col-md-offset-2 col-md-8 controls">
-          <button type="submit" class="btn btn-fat btn-primary">{{'form.btn.save'|trans}}</button>
-        </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <button type="submit" class="cd-btn cd-btn-primary">{{'form.btn.save'|trans}}</button>
       </div>
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    </form>
-  </div>
-</div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
 {% endblock %}

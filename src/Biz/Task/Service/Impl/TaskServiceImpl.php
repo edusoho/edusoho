@@ -87,7 +87,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
-            $this->getLogService()->info('course', 'add_task', "添加任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
 
@@ -161,10 +160,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})", array(
-                'oldTask' => $oldTask,
-                'task' => $task,
-            ));
             $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
 
             if ('download' == $task['type']) {
@@ -189,7 +184,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ('published' === $task['status']) {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+            return;
         }
 
         if (!$this->canPublish($task['id'])) {
@@ -304,8 +299,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->beginTransaction();
         try {
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+            $this->updateTaskName($task);
 
-            $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
             $this->commit();
@@ -314,6 +309,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
+        }
+    }
+
+    public function deleteTasksByCategoryId($courseId, $categoryId)
+    {
+        $lessonTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($courseId, $categoryId);
+        if (empty($lessonTasks)) {
+            return;
+        }
+        foreach ($lessonTasks as $task) {
+            $this->deleteTask($task['id']);
         }
     }
 
@@ -413,12 +419,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($shouldCalcWatchLimitRemaining) {
                 if ($task['result']) {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                    $task['watchLimitRemaining'] = $task['watchLimitRemaining'] < 0 ? 0 : $task['watchLimitRemaining'];
                 } else {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
                 }
             }
 
-            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['ext']['file']) && $task['ext']['file']['storage'] === 'cloud';
+            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['ext']['file']) && 'cloud' === $task['ext']['file']['storage'];
             if ($isTryLookable) {
                 $task['tryLookable'] = 1;
             } else {
@@ -455,7 +462,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 continue;
             }
             if ($preTask['isOptional']) {
-                $canLearnTask = true;
+                continue;
             }
             if ('live' === $preTask['type']) {
                 if (time() > $preTask['endTime']) {
@@ -468,7 +475,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 }
             }
 
-            $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
+            $isTaskLearned = empty($preTask['result']) ? false : ('finish' === $preTask['result']['status']);
             if ($isTaskLearned) {
                 continue;
             } else {
@@ -809,6 +816,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getTaskByCourseIdAndActivityId($courseId, $activityId);
     }
 
+    public function countTasksByChpaterId($chapterId)
+    {
+        return $this->getTaskDao()->countByChpaterId($chapterId);
+    }
+
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findByChapterId($chapterId);
@@ -1075,6 +1087,33 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $liveCourseNumber;
     }
 
+    public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0)
+    {
+        $lesson = $this->getCourseLessonService()->getLesson($lessonId);
+
+        if (empty($lesson) || 'lesson' != $lesson['type']) {
+            throw $this->createInvalidArgumentException('Argument invalid');
+        }
+
+        $this->getCourseService()->tryManageCourse($lesson['courseId']);
+
+        $tasks = $this->findTasksByChapterId($lessonId);
+
+        foreach ($tasks as $task) {
+            $newTask = $this->getTaskDao()->update($task['id'], array('isOptional' => $isOptional));
+
+            $action = 1 == $isOptional ? 'task_set_optional' : 'task_unset_optional';
+
+            $infoData = array(
+                'courseId' => $task['courseId'],
+                'title' => $task['title'],
+            );
+
+            $this->getLogService()->info('course', $action, "更新任务《{$task['title']}》的选修状态", $infoData);
+            $this->dispatchEvent('course.task.updateOptional', new Event($newTask, $task));
+        }
+    }
+
     /**
      * @return TaskDao
      */
@@ -1168,7 +1207,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         //如果该任务已经完成则忽略其他的条件
-        if (isset($task['result']['status']) && ($task['result']['status'] === 'finish')) {
+        if (isset($task['result']['status']) && ('finish' === $task['result']['status'])) {
             $task['lock'] = false;
         }
 
@@ -1247,11 +1286,30 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->createService('Course:MemberService');
     }
 
+    protected function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
+    }
+
     /**
      * @return SchedulerService
      */
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /*
+     * 所属课时只有一个任务时，修改任务名称，改为课时名称
+     */
+    private function updateTaskName($task)
+    {
+        $leftTaskCount = $this->countTasks(array('categoryId' => $task['categoryId']));
+        if (1 == $leftTaskCount) {
+            $leftTasks = $this->searchTasks(array('categoryId' => $task['categoryId']), array('id' => 'asc'), 0, 1);
+            $actualTask = $leftTasks[0];
+            $chapter = $this->getCourseService()->getChapter($task['courseId'], $task['categoryId']);
+            $this->getTaskDao()->update($actualTask['id'], array('title' => $chapter['title']));
+        }
     }
 }

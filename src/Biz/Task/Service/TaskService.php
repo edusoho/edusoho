@@ -2,6 +2,8 @@
 
 namespace Biz\Task\Service;
 
+use Biz\System\Annotation\Log;
+
 interface TaskService
 {
     const LEARN_TIME_STEP = 60;
@@ -16,12 +18,25 @@ interface TaskService
 
     public function preCreateTaskCheck($task);
 
+    /**
+     * @param $task
+     *
+     * @return mixed
+     * @Log(module="course",action="add_task")
+     */
     public function createTask($task);
 
     public function batchCreateTasks($tasks);
 
     public function preUpdateTaskCheck($taskId, $fields);
 
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="course",action="update_task",param="id")
+     */
     public function updateTask($id, $fields);
 
     public function updateSeq($id, $fields);
@@ -34,7 +49,15 @@ interface TaskService
 
     public function unpublishTask($id);
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="delete_task")
+     */
     public function deleteTask($id);
+
+    public function deleteTasksByCategoryId($courseId, $categoryId);
 
     public function findTasksByCourseId($courseId);
 
@@ -220,4 +243,8 @@ interface TaskService
     public function findPublishedTasksByCourseSetId($courseSetId);
 
     public function getTodayLiveCourseNumber();
+
+    public function countTasksByChpaterId($chapterId);
+
+    public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0);
 }

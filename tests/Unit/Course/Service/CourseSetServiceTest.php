@@ -5,6 +5,7 @@ namespace Tests\Unit\Course\Service;
 use Biz\BaseTestCase;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use AppBundle\Common\ReflectionUtils;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -18,7 +19,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === count($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
 
         $course = array_shift($courses);
         $this->assertEquals('freeMode', $course['learnMode']);
@@ -35,7 +36,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
 
         $course = array_shift($courses);
         $this->assertEquals('lockMode', $course['learnMode']);
@@ -51,7 +52,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
     }
 
     public function testCreateLiveOpen()
@@ -64,7 +65,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
     }
 
     public function testCreateOpen()
@@ -77,7 +78,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(1 === sizeof($courses));
-        $this->assertTrue($courses[0]['isDefault'] == 1);
+        $this->assertTrue(1 == $courses[0]['isDefault']);
     }
 
     /**
@@ -118,22 +119,6 @@ class CourseSetServiceTest extends BaseTestCase
         $created['serializeMode'] = 'none';
         $updated = $this->getCourseSetService()->updateCourseSet($created['id'], $created);
         $this->assertEquals($created['title'], $updated['title']);
-    }
-
-    public function testUpdateDetail()
-    {
-        $courseSet = array(
-            'title' => '新课程开始！',
-            'type' => 'normal',
-        );
-        $created = $this->getCourseSetService()->createCourseSet($courseSet);
-
-        $created['summary'] = 'this is summary <script ...';
-        $created['goals'] = array(1);
-        $created['audiences'] = array(1);
-
-        $updated = $this->getCourseSetService()->updateCourseSetDetail($created['id'], $created);
-        $this->assertEquals($updated['summary'], 'this is summary ');
     }
 
     public function testChangeCover()
@@ -270,6 +255,34 @@ class CourseSetServiceTest extends BaseTestCase
         $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
 
         $this->assertEquals(0, $result['hotSeq']);
+    }
+
+    public function testUpdateCourseSummary()
+    {
+        $courseSet = array(
+            'title' => 'courseSetTitle',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $courseFields = array(
+            'id' => 2,
+            'courseSetId' => $courseSet['id'],
+            'title' => '计划名称',
+            'learnMode' => 'freeMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($courseFields);
+        $firstCourse = $this->getCourseService()->updateCourse(1, array('summary' => '计划简介1'));
+        $secondCourse = $this->getCourseService()->updateCourse(2, array('summary' => '计划简介2'));
+
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSummary', array($courseSet));
+        $result = $this->getCourseService()->getCourse($firstCourse['id']);
+        $this->assertEmpty($result['summary']);
+
+        $result = $this->getCourseService()->getCourse($secondCourse['id']);
+        $this->assertEmpty($result['summary']);
     }
 
     protected function getCourseSetService()
