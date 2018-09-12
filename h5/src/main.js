@@ -24,7 +24,6 @@ import {
   Field,
   Loading,
   Uploader,
-  CouponCell,
   Popup
 } from 'vant';
 // 按需引入组件
@@ -46,7 +45,6 @@ Vue.use(Popup);
 Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
-Vue.use(CouponCell);
 
 Vue.config.productionTip = false;
 

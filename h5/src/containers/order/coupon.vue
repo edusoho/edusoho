@@ -3,11 +3,13 @@
     <!-- 优惠券列表 -->
     <div :class="[{ active: active === index }, 'coupon-item', type]" @click="onChange(index)">
       <div class="coupon-border-box">
-        <div class="rate-number">{{ rate }}<span class="text-14">{{ type=='discount' ? '折' : '元' }}</span></div>
+        <div :class="['rate-number', { 'text-26': getNuminteger > 1000}]">
+          {{ getNuminteger }}
+          <span class="text-16">.{{getNumPoint}}</span></div>
         <div class="coupon-info">
           <div class="title text-overflow">优惠券</div>
-          <div class="grey-medium">有效期截止：{{couponEndDate}}</div>
-          <span class="grey-medium">可用范围：{{couponType}}</span>
+          <div class="grey-medium">有效期截止：{{ couponEndDate }}</div>
+          <span class="grey-medium">可用范围：{{ couponType }}</span>
         </div>
         <i class="h5-icon h5-icon-checked-circle coupon-checked"></i>
       </div>
@@ -39,16 +41,22 @@
             break;
         }
       },
+      getNuminteger() {
+        return parseInt(this.data.rate);
+      },
+      getNumPoint() {
+        const type = this.data.type === 'discount' ? '折' : '元';
+        const number = Number(this.data.rate).toFixed(2).split('.');
+        return number[1] + type;
+      }
     },
     data() {
       return {
         activeIndex: this.active,
         discount: this.data.type == 'discount' ? true : false,
         type: this.data.type,
-        rate: this.data.rate
       }
     },
-
     methods: {
       onChange(index) {
         this.$emit('chooseItem',

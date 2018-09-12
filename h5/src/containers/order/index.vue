@@ -4,16 +4,13 @@
       <e-loading v-if="isLoading"></e-loading>
       <e-course type="confirmOrder" :order="course" :course="course" v-if="Object.keys(course).length >0"></e-course>
       <div class="order-coupon">
-      <!--   <div class="coupon-column">
-          <span>优惠券</span>
-          <span>0张可用</span>
-        </div> -->
-        <van-coupon-cell
-          title= "优惠券"
+        <div class="coupon-column"
           :chosen-coupon="activeItemIndex"
           @click="showList = true"
-        >
-        </van-coupon-cell>
+          >
+          <span>优惠券</span>
+          <span class="red">{{ couponShow }}</span>
+        </div>
         <van-popup v-model="showList" position="bottom">
           <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠
             <i class="h5-icon h5-icon-circle"></i>
@@ -27,6 +24,9 @@
             @chooseItem="chooseItem"
             >
           </coupon>
+          <div class="coupon-empty" v-show="!(course.availableCoupons && course.availableCoupons.length)">
+            空空如已
+          </div>
         </van-popup>
       </div>
       <div class="order-goods-item">
@@ -70,7 +70,8 @@ export default {
       course: {},
       activeItemIndex: -1,
       showList: false,
-      itemData: ''
+      itemData: '',
+      couponNumber: 0
     }
   },
   computed: {
@@ -93,9 +94,21 @@ export default {
     couponMoney() {
       const minusType = (this.itemData.type === 'discount');
       if (minusType) {
-        return this.course.totalPrice * this.itemData.rate * 0.1;
+        const money = this.course.totalPrice * this.itemData.rate * 0.1;
+        this.couponNumber = money;
+        return money;
       }
+      this.couponNumber = this.itemData.rate;
       return this.itemData.rate;
+    },
+    couponShow() {
+      if (!this.couponNumber) {
+        if (this.course.availableCoupons) {
+          return this.course.availableCoupons.length + '张可用';
+        }
+      } else {
+        return '-￥' + this.couponNumber;
+      }
     }
   },
   created () {
@@ -124,9 +137,9 @@ export default {
     disuse() {
       this.showList = false;
       this.activeItemIndex = -1;
+      this.itemData = '';
     },
     chooseItem(data) {
-      console.log(data,22)
       this.activeItemIndex = data.index;
       this.itemData = data.itemData;
       this.showList = false;
