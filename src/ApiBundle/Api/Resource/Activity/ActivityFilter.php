@@ -24,15 +24,13 @@ class ActivityFilter extends Filter
             $data['mediaStorage'] = $data['ext']['file']['storage'];
         }
 
+        if (!empty($data['ext']) && !empty($data['ext']['finishCondition'])) {
+            $data['finishDetail'] = (string) $data['ext']['finishCondition']['finishScore'];
+        }
+
         //testpaper module
         if ('testpaper' == $data['mediaType']) {
             if (!empty($data['ext'])) {
-                if (!empty($data['ext']['finishCondition']['finishScore'])) {
-                    $data['finishDetail'] = $data['ext']['finishCondition']['finishScore'];
-                } else {
-                    $data['finishDetail'] = 0;
-                }
-
                 $data['testpaperInfo']['testMode'] = $data['ext']['testMode'];
                 $data['testpaperInfo']['limitTime'] = $data['ext']['limitedTime'];
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval'] * 60; //分钟
@@ -43,5 +41,15 @@ class ActivityFilter extends Filter
 
         unset($data['ext']);
         unset($data['mediaType']);
+        // 老数据 以下三种类型不返回 完成条件
+        $finishConditionWhiteList = array('audio', 'download', 'live');
+        if (in_array($data['mediaType'], $finishConditionWhiteList)) {
+            unset($data['finishDetail']);
+            unset($data['finishType']);
+        }
+        // 老数据文档
+        if (in_array($data['mediaType'], array('text', 'doc'))) {
+            unset($data['finishType']);
+        }
     }
 }
