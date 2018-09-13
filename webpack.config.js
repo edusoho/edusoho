@@ -22,7 +22,7 @@ module.exports = {
     'jquery-countdown': ['libs/jquery-countdown.js'],
     'jquery-cycle2': ['jquery-cycle2'],
     'excanvas-compiled': ['libs/excanvas-compiled.js'],
-    'echo-js': ['echo-js'],
+    // 'echo-js': ['echo-js'],
     'jquery-blurr': ['jquery-blurr'],
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/jquery-raty.js'],
@@ -73,4 +73,4 @@ module.exports = {
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin}',
-}
+};

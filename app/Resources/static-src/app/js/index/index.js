@@ -1,7 +1,6 @@
 import Swiper from 'swiper';
 import '../teacher/follow-btn';
 
-echo.init();
 
 if ($('.es-poster .swiper-slide').length > 1) {
   var swiper = new Swiper('.es-poster.swiper-container', {
@@ -29,7 +28,6 @@ $('body').on('click', '.js-course-filter', function () {
       text = $btn.find('a').text();
     }
     $('.course-filter .visible-xs .btn').html(text + ' ' + '<span class="caret"></span>');
-    // Lazyload.init();
     echo.init();
   });
 });

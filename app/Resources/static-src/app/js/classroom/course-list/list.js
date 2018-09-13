@@ -6,7 +6,6 @@ export default class CourseList {
     this.$element = $element;
     chapterAnimate();
     this.initEvent();
-    echo.init();
   }
 
   initEvent() {

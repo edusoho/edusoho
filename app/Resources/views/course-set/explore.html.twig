@@ -4,7 +4,7 @@
 {% set bodyClass = 'course-list-page ' %}
 {% set siteNav = 'course/explore' %}
 
-{% do script(['libs/echo-js.js','app/js/course/explore/index.js']) %}
+{% do script(['app/js/course/explore/index.js']) %}
 
 {% block keywords %}
   {{ categoryArray.name|default('category.all_category'|trans) }}
