@@ -80,7 +80,7 @@ export default {
           couponCode: this.$route.params.couponCode
         }
       }).then(res => {
-        this.detail = Object.assign({}, res)
+        this.detail = res
       })
     } else {
       // 从我的订单入口进入
@@ -94,7 +94,7 @@ export default {
             path: `/course/${targetId}`,
           })
         }
-        this.detail = Object.assign({}, res)
+        this.detail = res
       })
     }
   },

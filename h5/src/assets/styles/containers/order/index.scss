@@ -54,10 +54,10 @@
         height: 100%;
         margin-top: vw(30);
         background-color: #f5f5f5;
-        &>:nth-child(3) {
+        .coupon-container:nth-child(3) {
           padding-top: vw(30);
         }
-        &>:nth-last-child(2) {
+        .coupon-container:nth-last-child(2) {
           padding-bottom: vw(30);
         }
       }
