@@ -311,7 +311,7 @@ class ActivityServiceTest extends BaseTestCase
                 ),
                 array(
                     'functionName' => 'getChapter',
-                    'returnValue' => array('id' => 1, 'type' => 'lesson', 'status' => 'create'),
+                    'returnValue' => array('id' => 1, 'type' => 'lesson', 'status' => 'create', 'isOptional' => 0),
                 ),
             )
         );
