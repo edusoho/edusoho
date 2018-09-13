@@ -98,7 +98,7 @@ export default {
       if (minusType) {
         return Math.max(totalNumber - couponRate, 0);
       }
-      return totalNumber - totalNumber * couponRate * 0.1;
+      return Number(totalNumber - totalNumber * couponRate * 0.1).toFixed(2);
     },
     couponMoney() {
       if (!this.itemData) {
@@ -107,7 +107,7 @@ export default {
       const minusType = (this.itemData.type === 'discount');
       let money = this.itemData.rate;
       if (minusType) {
-        money = this.course.totalPrice * this.itemData.rate * 0.1;
+        money = Number(this.course.totalPrice * this.itemData.rate * 0.1).toFixed(2);
       }
       this.couponNumber = money;
       return money;
@@ -134,10 +134,26 @@ export default {
   },
   methods: {
     handleSubmit () {
+      const courseId = this.$route.params.id;
+      if (this.total == 0) {
+        Api.createOrder({
+          data: {
+            targetType: 'course',
+            targetId: courseId,
+            isOrderCreate: 1,
+            couponCode: this.itemData ? this.itemData.code : '',
+          }
+        }).then(() => {
+          this.$router.push({
+            path: `/course/${courseId}`
+          })
+        })
+        return;
+      }
       this.$router.push({
         name: 'pay',
         query: {
-          id: this.$route.params.id,
+          id: courseId,
         },
         params: {
           couponCode: this.itemData ? this.itemData.code : ''
