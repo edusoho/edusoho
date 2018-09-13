@@ -23,7 +23,7 @@
   {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %}  <!-- 单任务课时，不显示任务 -->
 
   {% set task = lesson.tasks[0] %}
-  {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: 1, displayText: displayText, lessonTitle: lesson.title|sub_text(30), isLesson: true, shouldDisplayTaskAsLesson: shouldDisplayTask, isShowText: isShowText} %}
+  {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: 1, displayText: displayText, isLesson: true, shouldDisplayTaskAsLesson: shouldDisplayTask, isShowText: isShowText|default(false)} %}
 </div>
 <div class="item-actions">
   <a class="cd-mr24 js-create-task-btn" href="javascript:;" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
