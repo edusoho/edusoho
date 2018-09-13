@@ -642,7 +642,6 @@ admin:
                             router_params:
                                 type: coin
                             disable: true
-                            router_name: admin_order_refunds
                 admin_coin_user:
                     name: admin.finance.coin_menu
                     children:
