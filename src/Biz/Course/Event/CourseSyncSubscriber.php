@@ -172,12 +172,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'enableAudio',
         ));
         $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
-
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
-        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        foreach ($copiedCourseIds as $copiedCourseId) {
-            $this->getLessonService()->updateLessonNumbers($copiedCourseId);
-        }
     }
 
     public function onCourseTeachersChange(Event $event)
@@ -343,14 +337,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
-    }
-
-    /**
-     * @return LessonService
-     */
-    protected function getLessonService()
-    {
-        return $this->getBiz()->service('Course:LessonService');
     }
 
     /**
