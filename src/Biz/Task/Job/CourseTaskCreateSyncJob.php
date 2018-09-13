@@ -90,6 +90,8 @@ class CourseTaskCreateSyncJob extends AbstractJob
             'startTime' => $activity['startTime'],
             'endTime' => $activity['endTime'],
             'copyId' => $activity['id'],
+            'finishType' => $activity['finishType'],
+            'finishData' => $activity['finishData'],
         );
 
         $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
