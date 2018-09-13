@@ -1775,7 +1775,7 @@ activity_manage.finish_tips:
   <p class="gray-darker mbs">满足以下条件:</p>
 activity_manage.finish_tips_time: >
   至少学习%finishDetail%分钟。
-activity_manage.finish_select_tips_time: 观看时长
+activity_manage.finish_select_tips_time: 学习时长
 activity_manage.finish_select_tips_end: 学习到最后
 
 course.plan_task.activity_manage.finished_condition: 完成条件
