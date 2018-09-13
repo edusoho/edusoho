@@ -178,7 +178,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         foreach ($copiedCourseIds as $copiedCourseId) {
             $this->getLessonService()->updateLessonNumbers($copiedCourseId);
         }
-
     }
 
     public function onCourseTeachersChange(Event $event)

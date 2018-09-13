@@ -86,11 +86,11 @@ class TaskController extends BaseController
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
 
-        if($course['isHideUnpublish']){
+        if ($course['isHideUnpublish']) {
             $chapter = $this->getCourseService()->getChapter($courseId, $task['categoryId']);
             //需要8.3.7重构
             $number = explode('-', $task['number']);
-            $task['number'] = $chapter['published_number'] . '-' . $number[1];
+            $task['number'] = $chapter['published_number'].'-'.$number[1];
         }
 
         return $this->render(
