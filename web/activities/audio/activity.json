@@ -21,7 +21,8 @@
   },
   "finish_condition": [
     {
-      "type": "end"
+      "type": "end",
+      "describe": "course.plan_task.activity_manage.audio.finish"
     }
   ]
 }
