@@ -64,37 +64,37 @@ export default class Manage {
     }
     //添加章节课时
     switch (this.type) {
-    case 'chapter':
-    {
-      let $position = this.$element.find('#chapter-' + this.position);
-      let $last = $position.nextUntil('.js-task-manage-chapter').last();
-      if (0 == $last.length) {
-        $position.after($elm);
-      } else {
-        $last.after($elm);
-      }
-      break;
-    }
-    case 'task':
-    {
-      this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
-      let container = $elm.parents('.js-lesson-container');
-      this._triggerAsTaskNumUpdated(container);
-      break;
-    }
-    case 'lesson':
-    {
-      let $unit = this.$element.find('#chapter-' + this.position);
-      let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
-      if (0 == $lesson.length) {
-        $unit.after($elm);
-      } else {
-        $lesson.after($elm);
-      }
-      break;
-    }
-    default:
-      this.$element.append($elm);
+      case 'chapter':
+        {
+          let $position = this.$element.find('#chapter-' + this.position);
+          let $last = $position.nextUntil('.js-task-manage-chapter').last();
+          if (0 == $last.length) {
+            $position.after($elm);
+          } else {
+            $last.after($elm);
+          }
+          break;
+        }
+      case 'task':
+        {
+          this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
+          let container = $elm.parents('.js-lesson-container');
+          this._triggerAsTaskNumUpdated(container);
+          break;
+        }
+      case 'lesson':
+        {
+          let $unit = this.$element.find('#chapter-' + this.position);
+          let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+          if (0 == $lesson.length) {
+            $unit.after($elm);
+          } else {
+            $lesson.after($elm);
+          }
+          break;
+        }
+      default:
+        this.$element.append($elm);
     }
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -222,9 +222,9 @@ export default class Manage {
   }
 
   setShowNum($parentLi) {
-    if($parentLi.attr('show-num') == 0) {
+    if ($parentLi.attr('show-num') == 0) {
       $parentLi.attr('show-num', 1);
-    }else {
+    } else {
       $parentLi.attr('show-num', 0);
     }
   }
@@ -270,15 +270,15 @@ export default class Manage {
     };
     this.$element.on('click', '.js-unpublish-item', (event) => {
       const $target = $(event.target);
-      info.success = Translator.trans('course.manage.task_unpublish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':',
+      info.success = Translator.trans('course.manage.task_unpublish_success_hint');
+      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':';
       this.toggleOptional($target, self, info);
     });
 
     this.$element.on('click', '.js-publish-item', (event) => {
       const $target = $(event.target);
-      info.success = Translator.trans('course.manage.task_publish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':',
+      info.success = Translator.trans('course.manage.task_publish_success_hint');
+      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':';
       this.toggleOptional($target, self, info);
     });
   }
@@ -343,24 +343,22 @@ export default class Manage {
 
     for (const displayedEleClass in btnRelations) {
       let actualClickedEleClass = btnRelations[displayedEleClass];
-      $('.' + displayedEleClass).click(
-        function() {
-          let container = $(this).parents('.js-lesson-container');
+      $('#sortable-list').on('click', '.' + displayedEleClass, function() {
+        let container = $(this).parents('.js-lesson-container');
 
-          let taskIdStr = container.find('.js-task-manage-item').attr('id');
-          //格式为 task-{taskId}
+        let taskIdStr = container.find('.js-task-manage-item').attr('id');
+        //格式为 task-{taskId}
 
-          let taskId = taskIdStr.split('-')[1]; // 第二部分即为taskId
-          let jsActionBtn = container.find('.' + actualClickedEleClass);
-          let updatedUrl = jsActionBtn.data('url').replace('%7BtaskId%7D', taskId);
-          jsActionBtn.data('url', updatedUrl);
-          if (jsActionBtn.data('toggle')) {
-            jsActionBtn.click();
-          } else {
-            window.open(jsActionBtn.data('url'), '_blank');
-          }
+        let taskId = taskIdStr.split('-')[1]; // 第二部分即为taskId
+        let jsActionBtn = container.find('.' + actualClickedEleClass);
+        let updatedUrl = jsActionBtn.data('url').replace('%7BtaskId%7D', taskId);
+        jsActionBtn.data('url', updatedUrl);
+        if (jsActionBtn.data('toggle')) {
+          jsActionBtn.click();
+        } else {
+          window.open(jsActionBtn.data('url'), '_blank');
         }
-      );
+      });
     }
   }
 
@@ -372,22 +370,22 @@ export default class Manage {
     $.post($target.data('url'), (data) => {
       let setProperty = true;
 
-      if(isHideUnPublish){
+      if (isHideUnPublish) {
         setProperty = self.checkShouldSetProperty($target, $parentLi);
       }
-    
+
       $dom.toggleClass('hidden');
       $oppositeDom.toggleClass('hidden');
 
-      if(isHideUnPublish){
-        if(setProperty){
+      if (isHideUnPublish) {
+        if (setProperty) {
           const $displayTextDom = $parentLi.find('.display-text');
           $displayTextDom.toggleClass('hidden');
           self.setShowNum($parentLi);
           self.sortList();
         }
-      }else {
-        if(info.flag){
+      } else {
+        if (info.flag) {
           const $displayTextDom = $parentLi.find('.display-text');
           $displayTextDom.toggleClass('hidden');
           self.setShowNum($parentLi);
@@ -401,7 +399,7 @@ export default class Manage {
     });
   }
 
-  checkShouldSetProperty($target, $parentLi){
+  checkShouldSetProperty($target, $parentLi) {
     const $publish = $parentLi.find('.js-publish-item');
     const $setOptional = $parentLi.find('.js-set-optional');
 
@@ -410,20 +408,20 @@ export default class Manage {
 
     let setProperty = true;
 
-    if($target.hasClass('js-unpublish-item')){
-      if(hiddenOptional){
+    if ($target.hasClass('js-unpublish-item')) {
+      if (hiddenOptional) {
         setProperty = false;
       }
-    }else if($target.hasClass('js-publish-item')){
-      if(hiddenOptional){
+    } else if ($target.hasClass('js-publish-item')) {
+      if (hiddenOptional) {
         setProperty = false;
       }
-    }else if($target.hasClass('js-set-optional')) {
-      if(!hiddenPublish){
+    } else if ($target.hasClass('js-set-optional')) {
+      if (!hiddenPublish) {
         setProperty = false;
       }
-    }else if($target.hasClass('js-unset-optional')) {
-      if(!hiddenPublish){
+    } else if ($target.hasClass('js-unset-optional')) {
+      if (!hiddenPublish) {
         setProperty = false;
       }
     }

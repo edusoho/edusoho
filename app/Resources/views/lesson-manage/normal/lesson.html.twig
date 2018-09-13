@@ -1,6 +1,6 @@
-{% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %}  <!-- 单任务课时，不显示任务 -->
-
-<li id="chapter-{{lesson.id}}" class="js-lesson-container task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}} clearfix">
+ <li id="chapter-{{lesson.id}}" class="js-lesson-container task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}} clearfix">
+  <!-- 单任务课时，不显示任务 -->
+  {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %} 
   <div class="chapter-item clearfix">
     <div class="item-line"></div>
     {% include 'lesson-manage/normal/lesson-manage.html.twig' with {
