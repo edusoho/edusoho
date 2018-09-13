@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\File\Service\UploadFileService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -205,8 +206,11 @@ class LiveExtension extends \Twig_Extension
         return $this->biz->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->biz->service('File:UploadFileService');
     }
 }
