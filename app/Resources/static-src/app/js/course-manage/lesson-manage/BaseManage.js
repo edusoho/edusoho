@@ -64,37 +64,37 @@ export default class Manage {
     }
     //添加章节课时
     switch (this.type) {
-      case 'chapter':
-        {
-          let $position = this.$element.find('#chapter-' + this.position);
-          let $last = $position.nextUntil('.js-task-manage-chapter').last();
-          if (0 == $last.length) {
-            $position.after($elm);
-          } else {
-            $last.after($elm);
-          }
-          break;
-        }
-      case 'task':
-        {
-          this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
-          let container = $elm.parents('.js-lesson-container');
-          this._triggerAsTaskNumUpdated(container);
-          break;
-        }
-      case 'lesson':
-        {
-          let $unit = this.$element.find('#chapter-' + this.position);
-          let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
-          if (0 == $lesson.length) {
-            $unit.after($elm);
-          } else {
-            $lesson.after($elm);
-          }
-          break;
-        }
-      default:
-        this.$element.append($elm);
+    case 'chapter':
+    {
+      let $position = this.$element.find('#chapter-' + this.position);
+      let $last = $position.nextUntil('.js-task-manage-chapter').last();
+      if (0 == $last.length) {
+        $position.after($elm);
+      } else {
+        $last.after($elm);
+      }
+      break;
+    }
+    case 'task':
+    {
+      this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
+      let container = $elm.parents('.js-lesson-container');
+      this._triggerAsTaskNumUpdated(container);
+      break;
+    }
+    case 'lesson':
+    {
+      let $unit = this.$element.find('#chapter-' + this.position);
+      let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+      if (0 == $lesson.length) {
+        $unit.after($elm);
+      } else {
+        $lesson.after($elm);
+      }
+      break;
+    }
+    default:
+      this.$element.append($elm);
     }
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -232,7 +232,7 @@ export default class Manage {
 
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]'];
+    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]'];
     for (let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     }

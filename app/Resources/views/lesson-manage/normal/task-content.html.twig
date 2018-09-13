@@ -10,10 +10,16 @@
   <span class="js-task-title">
     {{ task.title|sub_text(30) }}
   </span>
-{% endif %} 
+{% endif %}
 
-{% if customTitle|default('') != '' %}
-  {{customTitle|raw}}
+<span class="display-text {% if isShowText %}hidden{% endif %}">
+  {% if displayText|default('') != '' %}
+    {{displayText|raw}}
+  {% endif %}
+</span>
+
+{% if displayText|default('') != '' %}
+  {{lessonTitle|sub_text(30)}}
 {% endif %}
 
 <span class="{{isLesson|default(false)?'js-display-when-single-task':''}}">
