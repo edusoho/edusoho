@@ -59,6 +59,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'updateClassroomCopyCourseEnableAudio',
             'addActivityColumn',
+            'addChapterColumn',
+            'addIsHideUnPublish',
             'updateHomeworkAndExercise',
             'updatePpt',
             'updateLive',
@@ -103,6 +105,28 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    protected function addChapterColumn()
+    {
+        if (!$this->isFieldExist('course_chapter', 'published_number')) {
+            $this->getConnection()->exec("ALTER TABLE `course_chapter` ADD COLUMN `published_number` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '已发布的章节编号';");
+        }
+
+        return 1;
+    }
+
+    protected function addIsHideUnPublish()
+    {
+        if (!$this->isFieldExist('course_v8', 'isHideUnpublish')) {
+            $this->getConnection()->exec("ALTER TABLE `course_v8` ADD `isHideUnpublish` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '学员端是否隐藏未发布课时';");
+        }
+
+        if ($this->isFieldExist('course_v8', 'isShowUnpublish')) {
+            $this->getConnection()->exec("ALTER TABLE `course_v8` DROP COLUMN `isShowUnpublish`;");
+        }
+
+        return 1;
     }
 
 
