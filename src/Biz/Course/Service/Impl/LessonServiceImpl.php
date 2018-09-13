@@ -271,7 +271,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $batchHelper->flush();
 
         foreach ($sortedLessons as $lesson) {
-            $this->dispatchEvent('course.lesson.publish', new Event($lesson));
+            $this->dispatchEvent('course.lesson.update', new Event($lesson));
         }
     }
 
