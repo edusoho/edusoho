@@ -1,10 +1,14 @@
- <li id="chapter-{{lesson.id}}" class="js-lesson-container task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}} clearfix">
+{% set isHideUnpublish = course['isHideUnpublish']|default(false) %}
+{% set isShowText = lesson.isOptional or (isHideUnpublish and lesson.status != 'published') %}
+
+<li id="chapter-{{lesson.id}}" class="js-lesson-container task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}} clearfix"
+    show-num="{% if isShowText %}0{% else %}1{% endif %}">
   <!-- 单任务课时，不显示任务 -->
   {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %} 
   <div class="chapter-item clearfix">
     <div class="item-line"></div>
     {% include 'lesson-manage/normal/lesson-manage.html.twig' with {
-      tasks: lesson.tasks|default(), shouldDisplayTask: shouldDisplayTask } %}
+      tasks: lesson.tasks|default(), shouldDisplayTask: shouldDisplayTask, isShowText: isShowText } %}
   </div>
   
   <ul class="js-lesson-box task-manage-lesson-tasks {{shouldDisplayTask?'':'hidden'}}">
