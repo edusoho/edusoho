@@ -32,6 +32,7 @@ class CourseSetCoursesCopy extends AbstractCopy
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
             $newCourse['courseSetId'] = $newCourseSet['id'];
+            $newCourse['courseSetTitle'] = $newCourseSet['title'];
             $newCourse['creator'] = $user['id'];
             $newCourse['parentId'] = $originCourse['id'];
             $newCourse['price'] = $originCourse['originPrice'];
