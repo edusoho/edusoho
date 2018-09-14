@@ -125,6 +125,8 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                         'startTime' => 123123123,
                         'endTime' => 123123124,
                         'fromCourseId' => 3330,
+                        'finishType' => 'time',
+                        'finishData' => 1,
                     ),
                 ),
                 array(
@@ -142,6 +144,8 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                             'startTime' => 123123123,
                             'endTime' => 123123124,
                             'copyId' => 44443,
+                            'finishType' => 'time',
+                            'finishData' => 1,
                         ),
                     ),
                 ),
@@ -171,6 +175,8 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                 'startTime' => 123123123,
                 'endTime' => 123123124,
                 'fromCourseId' => 3330,
+                'finishType' => 'time',
+                'finishData' => 1,
             ),
             $mockedText->getCopiedActivity()
         );
