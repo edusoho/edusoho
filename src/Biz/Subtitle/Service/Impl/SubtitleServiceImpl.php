@@ -86,17 +86,19 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
 
     public function setSubtitlesUrls($lesson, $ssl = false)
     {
-        $subtitles = $this->findSubtitlesByMediaId($lesson['mediaId'], $ssl);
+        if (!empty($lesson['mediaId'])) {
+            $subtitles = $this->findSubtitlesByMediaId($lesson['mediaId'], $ssl);
 
-        $subtitlesUrls = array();
-        foreach ($subtitles as $subtitle) {
-            if ('success' == $subtitle['convertStatus']) {
-                $subtitlesUrls[] = $subtitle['url'];
+            $subtitlesUrls = array();
+            foreach ($subtitles as $subtitle) {
+                if ('success' == $subtitle['convertStatus']) {
+                    $subtitlesUrls[] = $subtitle['url'];
+                }
             }
-        }
 
-        if (!empty($subtitlesUrls)) {
-            $lesson['subtitlesUrls'] = $subtitlesUrls;
+            if (!empty($subtitlesUrls)) {
+                $lesson['subtitlesUrls'] = $subtitlesUrls;
+            }
         }
 
         return $lesson;

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Picture and text task display page</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="/activities/text/static-dist/css/text.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script src="/static-dist/libs/ltc-sdk-client.js"></script>
+    
+    <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ setting('course.copy_enabled') }}">
+      <div class="text-activity-content cke_editable cke_contents_ltr">
+      </div>
+    </div>
+    <script src="/activities/text/static-dist/js/show/index.js"></script>
+  </body>
+</html>

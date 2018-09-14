@@ -3,6 +3,10 @@ homepage:
     defaults: { _controller: AppBundle:Default:index }
     h5: true
 
+ltc:
+    path:  /ltc/{endpoint}
+    defaults: { _controller: AppBundle:LTC/Runtime:entryPoint }
+
 crontab_web:
     path:  /anon/crontab
     defaults: { _controller: AppBundle:Common:crontab }
@@ -1571,10 +1575,22 @@ course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
 
-course_text_activity_auto_save:
-    path: /course/{courseId}/activity/{activityId}/text/auto_save
-    defaults: { _controller: AppBundle:Activity/Text:autoSave }
+course_manage_activity_manage_custom_route:
+    path: /course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}
+    defaults: { _controller: AppBundle:Activity/Activity:customManageRoute }
     methods: [POST]
+
+course_manage_activity_content_modal:
+    path: /course/{courseId}/manage/activity_{type}/{activityId}/content_modal
+    defaults: { _controller: AppBundle:Activity/Activity:contentModal }
+
+course_manage_activity_finish_modal:
+    path: /course/{courseId}/manage/activity_{type}/{activityId}/finish_modal
+    defaults: { _controller: AppBundle:Activity/Activity:finishModal }
+
+course_activity_learning_custom_route:
+    path: /course/{courseId}/task/{taskId}/learning
+    defaults: { _controller: AppBundle:Activity/Activity:customLearningRoute }
 
 #task
 course_task_show:
@@ -1615,7 +1631,7 @@ course_manage_task_pre_create_check:
     methods: [POST]
 
 course_manage_task_pre_update_check:
-    path:  /course/{courseId}/task/{taskId}/pre_update_check
+    path:  /course/{courseId}/activity/{activityId}/pre_update_check
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 

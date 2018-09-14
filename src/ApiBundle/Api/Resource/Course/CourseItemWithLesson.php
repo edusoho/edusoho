@@ -2,47 +2,70 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use AppBundle\Common\ArrayToolkit;
+
 class CourseItemWithLesson extends CourseItem
 {
-    protected function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
+    protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $result = array();
         $lessonInfos = array();
         foreach ($originItems as $item) {
             if ('lesson' == $item['type']) {
+                unset($item['tasks']);
                 $lessonInfos[$item['id']] = $item;
             }
         }
 
-        foreach ($originItems as $item) {
-            if ('task' == $item['itemType']) {
-                $lessonInfos[$item['categoryId']]['tasks'][] = $item;
+        $convertedItems = parent::convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask);
+        foreach ($convertedItems as $key => $item) {
+            if ('task' == $item['type']) {
+                $lessonId = $item['task']['categoryId'];
+                $lessonInfos[$lessonId]['tasks'][] = $item['task'];
             }
         }
+        $lessonInfos = $onlyPublishTask ? $this->filterUnPublishLesson($lessonInfos) : $this->isHiddenUnpublishTasks($lessonInfos, $course['id']);
+        $lessonInfos = ArrayToolkit::index($lessonInfos, 'id');
 
-        foreach ($originItems as $item) {
-            if ('lesson' == $item['type']) {
-                $result[] = $lessonInfos[$item['id']];
-            } elseif ('chapter' == $item['itemType']) {
+        $result = array();
+        $lessonNum = 1;
+        foreach ($convertedItems as $key => $item) {
+            if ('task' == $item['type']) {
+                $lessonId = $item['task']['categoryId'];
+                if (!empty($lessonInfos[$lessonId])) {
+                    $lessonItem = $lessonInfos[$lessonId];
+                    $lessonItem['number'] = $lessonNum;
+                    $result[] = $lessonItem;
+                    ++$lessonNum;
+                    unset($lessonInfos[$item['task']['categoryId']]);
+                }
+            } else {
                 $result[] = $item;
             }
         }
 
-        return $onlyPublishTask ? $this->filterUnPublishTask($result) : $this->isHiddenUnpublishTasks($result, $course['id']);
+        return $result;
     }
 
-    protected function filterUnPublishTask($items)
+    protected function filterUnPublishLesson($lessonInfos)
     {
-        foreach ($items as $itemKey => $item) {
-            if ('lesson' == $item['type']) {
-                foreach ($item['tasks'] as $taskKey => $task) {
-                    if ('published' != $task['status']) {
-                        unset($items[$itemKey]['tasks'][$taskKey]);
-                    }
-                }
+        foreach ($lessonInfos as $itemKey => $item) {
+            if ('published' != $item['status']) {
+                unset($lessonInfos[$itemKey]);
             }
         }
 
-        return array_values($items);
+        return $lessonInfos;
+    }
+
+    protected function isHiddenUnpublishTasks($lessonInfos, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if ($course['isHideUnpublish']) {
+            return $this->filterUnPublishLesson($lessonInfos);
+        }
+
+        return $lessonInfos;
     }
 }

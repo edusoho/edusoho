@@ -18,7 +18,7 @@ class TargetlogServiceProvider implements ServiceProviderInterface
         };
 
         $biz['targetlog.options'] = array(
-            'cache_directory' => ''
+            'cache_directory' => '',
         );
 
         $biz['service_targetlog.annotation_reader'] = function ($biz) {

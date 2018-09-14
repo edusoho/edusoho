@@ -130,11 +130,15 @@ class TaskServiceTest extends BaseTestCase
      */
     public function testTaskFinish()
     {
+        $user = $this->getCurrentUser();
         $task = $this->mockTask();
         $task = $this->getTaskService()->createTask($task);
 
         $this->getTaskService()->startTask($task['id']);
-        $this->getActivityLearnLogService()->createLog($task['activity'], 'finish', array('task' => $task, 'learnedTime' => 1));
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+        $this->getTaskResultService()->updateTaskResult($taskResult['id'], array(
+            'time' => 2000,
+        ));
         $this->getTaskService()->finishTask($task['id']);
 
         $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
@@ -160,7 +164,10 @@ class TaskServiceTest extends BaseTestCase
 
         //finish firstTask;
         $this->getTaskService()->startTask($firstTask['id']);
-        $this->getActivityLearnLogService()->createLog($firstTask['activity'], 'finish', array('task' => $firstTask, 'learnedTime' => 1));
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($firstTask['id']);
+        $this->getTaskResultService()->updateTaskResult($taskResult['id'], array(
+            'time' => 2000,
+        ));
         $this->getTaskService()->finishTask($firstTask['id']);
 
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
@@ -913,6 +920,7 @@ class TaskServiceTest extends BaseTestCase
             'fromCourseId' => $course['id'],
             'fromCourseSetId' => 1,
             'finishType' => 'time',
+            'finishData' => '1',
             'status' => 'published',
         );
 

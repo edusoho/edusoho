@@ -13,6 +13,7 @@ use Biz\User\Service\TokenService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use AppBundle\Common\ArrayToolkit;
 
 class TaskController extends BaseController
 {
@@ -84,6 +85,13 @@ class TaskController extends BaseController
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
+
+        if ($course['isHideUnpublish']) {
+            $chapter = $this->getCourseService()->getChapter($courseId, $task['categoryId']);
+            //需要8.3.7重构
+            $number = explode('-', $task['number']);
+            $task['number'] = $chapter['published_number'].'-'.$number[1];
+        }
 
         return $this->render(
             'task/show.html.twig',
@@ -166,7 +174,7 @@ class TaskController extends BaseController
         $taskCanTryLook = false;
         if ($course['tryLookable'] && 'video' == $task['type']) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                 $taskCanTryLook = true;
             }
         }
@@ -384,9 +392,27 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activityConfigManage = $this->get('activity_config_manager');
+        $installedActivity = $activityConfigManage->getInstalledActivity($activity['mediaType']);
+
+        if ($activityConfigManage->isLtcActivity($activity['mediaType'])) {
+            if (!empty($installedActivity['routes']['finish_tip'])) {
+                $container = $this->get('activity_runtime_container');
+
+                return $container->renderRoute($activity, 'finish_tip');
+            }
+
+            $conditions = empty($installedActivity['finish_condition']) ? array() : ArrayToolkit::index($installedActivity['finish_condition'], 'type');
+
+            return $this->render('task/finish-tip.html.twig', array(
+                'activity' => $activity,
+                'conditions' => $conditions,
+            ));
+        }
+
         $config = $this->getActivityConfig();
         $action = $config[$task['type']]['controller'].':finishCondition';
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->forward($action, array('activity' => $activity));
     }

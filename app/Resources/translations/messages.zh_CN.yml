@@ -1464,7 +1464,6 @@ course.tab.notes: '笔记'
 course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
-course.activity.text: '图文'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -1476,6 +1475,7 @@ course.activity.testpaper: 考试
 course.activity.homework: 作业
 course.activity.exercise: 练习
 course.activity.download: 下载资料
+course.activity.text: 图文
 course.task_toolbar.tasks: 目录
 course.task_toolbar.notes: 笔记
 course.task_toolbar.questions: 问答
@@ -1804,6 +1804,13 @@ course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
 
 # activity-活动
+activity_manage.finish_tips:
+  <p class="gray-darker mbs">满足以下条件:</p>
+activity_manage.finish_tips_time: >
+  至少学习%finishDetail%分钟。
+activity_manage.finish_select_tips_time: 学习时长
+activity_manage.finish_select_tips_end: 学习到最后
+
 course.plan_task.activity_manage.finished_condition: 完成条件
 course.plan_task.activity_manage.audio: 音频
 course.plan_task.activity_manage.audio.converting: 正在转码，请稍后尝试。
@@ -1820,8 +1827,6 @@ course.plan_task.activity_manage.discuss.content: 讨论主题
 course.plan_task.activity_manage.doc: 文档
 course.plan_task.activity_manage.doc.watch_time: 观看时长
 course.plan_task.activity_manage.doc.watch_time_at_least: 至少观看
-course.plan_task.activity_manage.doc.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少观看%finishDetail%分钟。
 course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
@@ -1861,9 +1866,9 @@ course.plan_task.activity_manage.exercise.info_tips: >
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
+course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
-course.plan_task.activity_manage.homework.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>提交作业
+course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
@@ -1877,8 +1882,7 @@ course.plan_task.activity_manage.homework.question_total: >
   作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.live.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
+course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
@@ -1888,8 +1892,6 @@ course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
 course.plan_task.activity_manage.ppt.lear_at_least_time: 至少学习
-course.plan_task.activity_manage.ppt.finished_condition_tips.time: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.ppt.finished_condition_tips.end: >
   <p class="gray-darker mbs">满足以下条件:</p>需要学习到最后一页。
 course.plan_task.activity_manage.testpaper.finished_condition_tips: >
@@ -1931,16 +1933,12 @@ course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
-course.plan_task.activity_manage.text: 内容
-course.plan_task.activity_manage.text_tips: 您有一段自动保存内容，请点击继续编辑
 course.plan_task.activity_manage.video: 视频
 course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
 course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
 course.plan_task.activity_manage.video.code_convert_tips: >
   字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
-course.plan_task.activity_manage.video.time_finish_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.video.last_finish_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>学习到最后。
 course.plan_task.activity_manage.video.failed_tips: 您的视频观看时长已达限制，无法继续观看！

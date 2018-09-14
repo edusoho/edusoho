@@ -8,5 +8,6 @@ api-login: true
 api-url-editable: true
 
 {
-    "onlyPublished": "1"  // 是否只显示发布课时
+    "onlyPublished": "1",  // 是否只显示发布课时
+    "fetchSubtitlesUrls" : "1" //是否获取字幕
 }

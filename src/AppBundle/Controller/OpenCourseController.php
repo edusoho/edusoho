@@ -716,7 +716,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $conditions = array('status' => 'published');
 
-        if (!empty($queryParam['fliter']['type']) && $queryParam['fliter']['type'] != 'all') {
+        if (!empty($queryParam['fliter']['type']) && 'all' != $queryParam['fliter']['type']) {
             $conditions['type'] = $queryParam['fliter']['type'];
         }
 

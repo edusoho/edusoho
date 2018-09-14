@@ -1,0 +1,20 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['pptactivity/js/show/index.js']) %}
+{% set ppt = activity.ext|default(null) %}
+{% set file = ppt.file|default(null) %}
+{% set pptPlayer = ppt_player(ppt, app.request.secure) %}
+
+{% block body %}
+  <div class="iframe-parent-content" id="activity-ppt-content"
+    data-finish-type="{{ activity.ext.finishType }}"
+    data-finish-detail="{{ activity.ext.finishDetail }}"
+    data-slides="{{ pptPlayer.result.images|default()|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
+  {% if not pptPlayer.error is empty %}
+    <div class="alert alert-danger mv20 mh20">
+      <i class="es-icon es-icon-info"></i>{{ pptPlayer.error.message|raw }}
+    </div>
+  {% endif %}
+  </div>
+{% endblock %}
+
