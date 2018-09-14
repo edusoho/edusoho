@@ -120,15 +120,12 @@ class CourseItem extends AbstractResource
         return $result;
     }
 
-    /**
-     * @return CourseService
-     */
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->service('Course:CourseService');
     }
 
-    private function getSubtitleService()
+    protected function getSubtitleService()
     {
         return $this->service('Subtitle:SubtitleService');
     }
