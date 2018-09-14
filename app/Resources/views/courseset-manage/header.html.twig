@@ -41,7 +41,7 @@
       </div>
       {% block courseType %}
         {% if is_un_multi_courseset(courseSet.id) %}
-          <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
+          <span class="cd-tag cd-tag-orange">{{ dict('courseType')[courseSet.type] }}</span>
         {% endif %}
       {% endblock %}
       <div class="courseset-manage-header-info__price color-danger">

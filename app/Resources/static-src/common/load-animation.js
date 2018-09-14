@@ -1,7 +1,11 @@
 const loadAnimation = (fn, $element) => {
-  let $loading = $('<div class="load-animation"></div>');
-  $loading.prependTo($element).nextAll().hide();
-  $element.append();
+  let $loading = $element.find('.load-animation');
+  if ($loading.length == 0) {
+    $loading = $('<div class="load-animation"></div>');
+    $loading.prependTo($element).nextAll().hide();
+  } else {
+    $loading.show();
+  }
   let arr = [], l = fn.length;
   return (x) => {
     arr.push(x);

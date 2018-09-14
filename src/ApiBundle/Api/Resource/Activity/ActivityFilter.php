@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType',
     );
 
     protected function publicFields(&$data)
@@ -16,21 +16,16 @@ class ActivityFilter extends Filter
             $data['replayStatus'] = $data['ext']['replayStatus'];
         }
 
-        if (!empty($data['ext']) && !empty($data['ext']['finishType'])) {
-            $data['finishType'] = $data['ext']['finishType'];
-        }
-
-        if (!empty($data['ext']) && !empty($data['ext']['finishDetail'])) {
-            $data['finishDetail'] = $data['ext']['finishDetail'];
-        }
-
-        if (!empty($data['ext']) && !empty($data['ext']['finishCondition'])) {
-            $data['finishDetail'] = $data['ext']['finishCondition']['finishScore'];
-            $data['finishType'] = $data['ext']['finishCondition']['type'];
+        if (!empty($data['finishData'])) {
+            $data['finishDetail'] = $data['finishData'];
         }
 
         if (!empty($data['ext']) && !empty($data['ext']['file'])) {
             $data['mediaStorage'] = $data['ext']['file']['storage'];
+        }
+
+        if (!empty($data['ext']) && !empty($data['ext']['finishCondition'])) {
+            $data['finishDetail'] = (string) $data['ext']['finishCondition']['finishScore'];
         }
 
         //testpaper module
@@ -42,6 +37,17 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
                 $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
             }
+        }
+
+        // 老数据 以下三种类型不返回 完成条件
+        $finishConditionWhiteList = array('audio', 'download', 'live');
+        if (in_array($data['mediaType'], $finishConditionWhiteList)) {
+            unset($data['finishDetail']);
+            unset($data['finishType']);
+        }
+        // 老数据文档
+        if (in_array($data['mediaType'], array('text', 'doc'))) {
+            unset($data['finishType']);
         }
 
         unset($data['ext']);

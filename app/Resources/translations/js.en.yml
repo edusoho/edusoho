@@ -55,6 +55,8 @@ site.form.submit_error: Form submit error
 
 site.cancel: Cancel
 site.confirm: Confirm
+site.yes: Yes
+site.no: No
 site.close: Close
 site.delete: Delete
 
@@ -400,6 +402,7 @@ course.buy.price_free_hint: Go study
 
 course.chapter: '%chapter_name% %number% : %title%'
 course.unit: '%part_name% %number% : %title%'
+course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%TaskName%.%taskNumber%:%taskTitle%'
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
@@ -761,6 +764,9 @@ page.video_sd.message: SD
 page.video_shd.message: SHD
 page.video_hd.message: HD
 
+confirm.oper.tip: 操作确认
+confirm.lesson.hidden.tip.off: 关闭该功能后，未发布的课时将在学员前台进行展示。请确认是否关闭此项功能。
+confirm.lesson.hidden.tip.on: 开启该功能后，未发布的课时将不在学员前台进行展示，课时序号排列将不包含这部分未发布课时。请确认是否开启此项功能。
 confirm.private_message_delete.message: Are you determined to deleted this private message?
 notify.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
 confirm.last_private_message_delete.message: This message for the last one, really want to delete the private message?

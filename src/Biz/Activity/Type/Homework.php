@@ -52,7 +52,6 @@ class Homework extends Activity
             'description' => $homework['description'],
             'questionIds' => $questionIds,
             'passedCondition' => $homework['passedCondition'],
-            'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'fromCourseSetId' => $newActivity['fromCourseSetId'],
             'copyId' => $config['isCopy'] ? $homework['id'] : 0,
@@ -81,8 +80,6 @@ class Homework extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
-        $fields['passedCondition'] = $homework['passedCondition'];
-
         $filterFields = $this->filterFields($fields);
 
         return $this->getTestpaperService()->updateTestpaper($homework['id'], $filterFields);
@@ -105,7 +102,7 @@ class Homework extends Activity
             return false;
         }
 
-        if ('submit' === $homework['passedCondition']['type'] && in_array($result['status'], array('reviewing', 'finished'))) {
+        if ('submit' === $activity['finishType'] && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -114,26 +111,17 @@ class Homework extends Activity
 
     protected function filterFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array(
-            'finishCondition',
-        ))
-        ) {
-            throw $this->createInvalidArgumentException('homework fields is invalid');
-        }
-
         $filterFields = ArrayToolkit::parts($fields, array(
             'title',
             'description',
             'questionIds',
-            'passedCondition',
-            'finishCondition',
             'fromCourseId',
             'fromCourseSetId',
             'copyId',
+            'passedCondition',
         ));
-
-        if (!empty($filterFields['finishCondition'])) {
-            $filterFields['passedCondition']['type'] = $filterFields['finishCondition'];
+        if (!empty($fields['finishType'])) {
+            $filterFields['passedCondition']['type'] = $fields['finishType'];
         }
 
         $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];

@@ -32,6 +32,72 @@ class SubtitleServiceTest extends BaseTestCase
         $this->assertEquals(true, $result);
     }
 
+    public function testSetSubtitlesUrls()
+    {
+        $this->mockBiz(
+            'Subtitle:SubtitleDao',
+            array(
+                array(
+                    'functionName' => 'findSubtitlesByMediaId',
+                    'withParams' => array(222),
+                    'returnValue' => array(
+                        array(
+                            'subtitleId' => 2221,
+                        ),
+                        array(
+                            'subtitleId' => 2222,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $this->mockBiz(
+            'File:UploadFileService',
+            array(
+                array(
+                    'functionName' => 'findFilesByIds',
+                    'withParams' => array(array(2221, 2222), true, array('resType' => 'sub')),
+                    'returnValue' => array(
+                        array(
+                            'type' => 'subtitle',
+                            'id' => 2221,
+                            'convertStatus' => 'success',
+                        ),
+                        array(
+                            'type' => 'subtitle',
+                            'id' => 2222,
+                            'convertStatus' => 'failed',
+                        ),
+                    ),
+                ),
+                array(
+                    'functionName' => 'getDownloadMetas',
+                    'withParams' => array(2221, false),
+                    'returnValue' => array(
+                        'type' => 'subtitle',
+                        'url' => 'url1',
+                    ),
+                ),
+                array(
+                    'functionName' => 'getDownloadMetas',
+                    'withParams' => array(2222, false),
+                    'returnValue' => array(
+                        'type' => 'subtitle',
+                        'url' => 'url2',
+                    ),
+                ),
+            )
+        );
+
+        $result = $this->getSubtitleService()->setSubtitlesUrls(
+            array('type' => 'video', 'mediaId' => 222),
+            false
+        );
+
+        $this->assertArrayEquals(array('url1'), $result['subtitlesUrls']);
+    }
+
     protected function mockUploadFileService()
     {
         $fakeFile = array(

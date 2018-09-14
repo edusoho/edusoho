@@ -4,11 +4,11 @@
   {% if taskPerDay|default(false) %}
   {{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}
   {% endif %}
-  <span class="cd-dark-assist cd-mr8 cd-ml8 hidden">
-    {{ 'course.plan_lesson.hidden'|trans }}
-  </span>
-  <label class="cd-switch task-list-header__switch hidden {% if course.isShowUnpublish == 0 %}checked{% endif %}">
-    <input type="checkbox" class="js-switch" name="isShowPublish" id="isShowPublish" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
+  {#<span class="cd-dark-assist cd-mr8 cd-ml8">#}
+    {#{{ 'course.plan_lesson.hidden'|trans }}#}
+  {#</span>#}
+  <label id="isHideUnPublish" class="cd-switch task-list-header__switch {% if course.isHideUnpublish == 1 %}checked{% endif %} hidden">
+    <input type="checkbox" class="js-switch" name="isHideUnpublish" id="isHideUnpublish" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
   </label>
 
   <div class="pull-right">

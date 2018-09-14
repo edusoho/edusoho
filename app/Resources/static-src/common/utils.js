@@ -105,6 +105,16 @@ const arrayToJson = (formArray) => {
   return dataArray;
 };
 
+const arrayIndex = function(data, index){
+  let newData = {};
+
+  for(var i in data) {
+    newData[data[i][index]] = data[i];
+  }
+
+  return newData;
+};
+
 const strToBase64 = (str) => {
   return (typeof btoa === 'undefined') ? $.base64.encode(str) : btoa(str);
 };
@@ -121,5 +131,6 @@ export {
   time2Sec,
   arrayToJson,
   isEmpty,
-  strToBase64
+  strToBase64,
+  arrayIndex
 };

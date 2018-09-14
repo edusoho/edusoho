@@ -1,14 +1,19 @@
 <div class="form-group">
-  <label for="" class="col-sm-2 control-label">{{'course.plan_setup.mode'|trans}}</label>
-  <div class="col-sm-8 form-control-static">
-      {% if course.learnMode|default('freeMode') == 'freeMode' %}
-        <span class="cd-dark-major">{{'course.plan_setup.mode.free'|trans}}</span><a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.free_tips'|trans}}"></a>
-      {% else %}
-        <span class="cd-dark-major">{{'course.plan_setup.mode.locked'|trans}}</span><a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'course.plan_setup.mode.locked_tips'|trans}}"></a>
-      {% endif %}
+  <label for="" class="col-sm-2 control-label">{{'course.plan_setup.mode'|trans}}
+    <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
+       data-content="{{ 'course.plan_setup.mode.tips'|trans }}">
+    </a></label>
+  <div class="col-sm-8 cd-radio-group mb0">
+    {% set courseDraft = course.status|default('draft') == 'draft' %}
+    {{ cd_radios('learnMode',
+    { 'freeMode': 'course.plan_setup.mode.free'|trans,
+      'lockMode':'course.plan_setup.mode.locked'|trans },
+    course.learnMode|default('freeMode'), courseDraft ? '' : 'disabled') }}
   </div>
 </div>
+
 {% include 'course-manage/marketing/set-rule.html.twig' %}
+
 <div class="form-group">
   <label for="" class="col-sm-2 control-label mbs">{{'course.plan_setup.finish_rule'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</label>
   <div class="col-sm-8 cd-radio-group mb0">

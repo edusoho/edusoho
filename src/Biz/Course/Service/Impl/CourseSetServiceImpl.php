@@ -825,7 +825,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSetDefaultCourseId($id)
     {
-        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        $course = $this->getCourseService()->getSeqMaxPublishedCourseByCourseSetId($id);
         //如果计划都尚未发布，则获取第一个创建的
         if (empty($course)) {
             $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
@@ -834,6 +834,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
         $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
+        $this->getCourseService()->setDefaultCourse($id, $course['id']);
     }
 
     public function updateMaxRate($id, $maxRate)

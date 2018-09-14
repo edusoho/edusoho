@@ -48,7 +48,11 @@ define(function(require, exports, module) {
         $.post(
           $url, { 'data': $postData },
           function(data) {
-            $('.result').html(JSON.stringify(data));
+            if (typeof data.result.detailedMsg == 'undefined') {
+              $('.result').html(JSON.stringify(data));
+            } else {
+              $('.result').html(data.result.detailedMsg);
+            }
 
             if ($('.doc').val().indexOf('api-authorized: true') != -1) {
               $('.generatedToken').html('');

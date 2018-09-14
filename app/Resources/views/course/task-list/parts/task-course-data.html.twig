@@ -9,7 +9,8 @@
     "learnMode": "{{course.learnMode}}",
     "isMember": "{{member.id|default('')}}",
     "status": "{{course.status}}",
-    "currentTaskId": "{{currentTaskId|default('')}}"
+    "currentTaskId": "{{currentTaskId|default('')}}",
+    "isHideUnpublish": "{{course.isHideUnpublish}}"
   }
 </div>
 
@@ -19,11 +20,12 @@
   {
     "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
     "i18nUnitName": "{{course_chapter_alias('part')|trans}}",
+    "i18nLessonName": "{{'site.data.lesson'|trans}}",
     "i18nTaskName":"{{ course_chapter_alias('task')|trans}}"
   }
 </div>
 
-<div class="hidden js-hidden-data">
+<div class="hidden js-hidden-cached-data">
   {{ task_list_json_data(courseItems, showOptional|default(false)) }}
 </div>
 

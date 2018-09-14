@@ -28,6 +28,8 @@ class Viewer
             );
         }
 
-        return new JsonResponse($result, $status);
+        $response = new JsonResponse($result, $status);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 }

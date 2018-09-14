@@ -299,6 +299,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->beginTransaction();
         try {
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+            $this->updateTaskName($task);
 
             $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
@@ -947,9 +948,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         $toLearnTaskCount = 3;
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
         $toLearnTasks = array();
+        $course = $this->getCourseService()->getCourse($courseId);
+        $taskConditions = array('courseId' => $courseId);
+        if ($course['isHideUnpublish']) {
+            $taskConditions['status'] = 'published';
+        }
+
         //取出所有的任务
-        $taskCount = $this->countTasksByCourseId($courseId);
-        $tasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
+        $tasks = $this->getTaskDao()->search($taskConditions, array('seq' => 'ASC'), 0, PHP_INT_MAX);
         if (empty($taskResult)) {
             $toLearnTasks = $this->getTaskDao()->search(
                 array('courseId' => $courseId, 'status' => 'published'),
@@ -1296,5 +1302,19 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /*
+     * 所属课时只有一个任务时，修改任务名称，改为课时名称
+     */
+    private function updateTaskName($task)
+    {
+        $leftTaskCount = $this->countTasks(array('categoryId' => $task['categoryId']));
+        if (1 == $leftTaskCount) {
+            $leftTasks = $this->searchTasks(array('categoryId' => $task['categoryId']), array('id' => 'asc'), 0, 1);
+            $actualTask = $leftTasks[0];
+            $chapter = $this->getCourseService()->getChapter($task['courseId'], $task['categoryId']);
+            $this->getTaskDao()->update($actualTask['id'], array('title' => $chapter['title']));
+        }
     }
 }

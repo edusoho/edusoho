@@ -14,6 +14,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Util\CourseTitleUtils;
 
 class CourseController extends CourseBaseController
 {
@@ -201,6 +202,8 @@ class CourseController extends CourseBaseController
         }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
+
+        $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
 
         return $this->render(
             'course/course-show.html.twig',

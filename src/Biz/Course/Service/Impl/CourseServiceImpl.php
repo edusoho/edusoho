@@ -80,6 +80,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getDefaultCoursesByCourseSetIds($courseSetIds);
     }
 
+    public function setDefaultCourse($courseSetId, $id)
+    {
+        $course = $this->getDefaultCourseByCourseSetId($courseSetId);
+        $this->getCourseDao()->update($course['id'], array('isDefault' => 0, 'courseType' => 'normal'));
+        $this->getCourseDao()->update($id, array('isDefault' => 1, 'courseType' => 'default'));
+    }
+
+    public function getSeqMaxPublishedCourseByCourseSetId($courseSetId)
+    {
+        $courses = $this->searchCourses(
+            array(
+                'courseSetId' => $courseSetId,
+                'status' => 'published',
+            ),
+            array('seq' => 'DESC'),
+            0,
+            1
+        );
+
+        return array_shift($courses);
+    }
+
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
         $courses = $this->searchCourses(
@@ -232,6 +254,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'enableFinish',
                 'vipLevelId',
                 'buyExpiryTime',
+                'learnMode',
                 'buyable',
                 'expiryStartDate',
                 'expiryEndDate',
@@ -251,6 +274,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
+
+        if ('draft' == $oldCourse['status']) {
+            $fields['learnMode'] = isset($fields['learnMode']) ? $fields['learnMode'] : $oldCourse['learnMode'];
+        } else {
+            $fields['learnMode'] = $oldCourse['learnMode'];
         }
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
@@ -977,6 +1006,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $this->beginTransaction();
             $this->createCourseStrategy($course)->accept(new CourseItemSortingVisitor($this->biz, $courseId, $ids));
+            $this->getLessonService()->updateLessonNumbers($courseId);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -2155,7 +2185,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $tasks = ArrayToolkit::index($tasks, 'activityId');
 
             $activities = array_filter($activities, function ($activity) use ($tasks) {
-                return $tasks[$activity['id']]['status'] === 'published';
+                return 'published' === $tasks[$activity['id']]['status'];
             });
             //返回有云视频任务的课程
             $activities = ArrayToolkit::index($activities, 'fromCourseId');
@@ -2272,12 +2302,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
-    public function changeShowPublishLesson($courseId, $status)
+    public function changeHidePublishLesson($courseId, $status)
     {
         $this->tryManageCourse($courseId);
-
-        $course = $this->getCourseDao()->update($courseId, array('isShowUnpublish' => $status));
-
+        $course = $this->getCourseDao()->update($courseId, array('isHideUnpublish' => $status));
+        $this->getLessonService()->updateLessonNumbers($courseId);
         $this->dispatch('course.change.showPublishLesson', new Event($course));
     }
 
@@ -2406,6 +2435,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getNoteService()
     {
         return $this->createService('Course:CourseNoteService');
+    }
+
+    protected function getLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 
     /**

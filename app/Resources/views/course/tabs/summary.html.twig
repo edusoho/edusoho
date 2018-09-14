@@ -15,36 +15,6 @@
   </div>
 </div>
 
-<div class="es-piece {% if course.goals|default(courseSet.goals) is empty %} hidden {% endif %}">
-  <div class="piece-header">{{ 'course.introduction.course_target'|trans }}</div>
-  <div class="piece-body">
-    <ul class="piece-body-list">
-      {% for  goal in course.goals|default(courseSet.goals) %}
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          {{ goal }}
-        </li>
-      {% else %}
-        <span class="empty">{{ 'course.introduction.course_target_empty'|trans }}</span>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-
-<div class="es-piece {% if course.audiences|default(courseSet.audiences) is empty %} hidden {% endif %}">
-  <div class="piece-header">{{ 'course.introduction.audiences'|trans }}</div>
-  <div class="piece-body">
-    <ul class="piece-body-list">
-      {% for  audience in course.audiences|default(courseSet.audiences) %}
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          {{ audience }}
-        </li>
-      {% else %}
-        <span class="empty">{{ 'course.introduction.audiences_empty'|trans }}</span>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-
 </section>
 
 

@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\User\Service\UserService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use Biz\System\SettingException;
 use Biz\Sensitive\SensitiveException;

@@ -1,0 +1,42 @@
+{% import "macro.html.twig" as web_macro %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html> <!--<![endif]-->
+
+{% set lang = app.request.getLocale() %}
+{% set mobile = is_show_mobile_page() %}
+
+<html lang="{{ lang }}" class="{% if lang == 'en' %}es-en{% endif %}">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
+  <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
+  <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open"/>
+
+  {% block stylesheets %}
+    {% include 'css_loader.html.twig' %}
+  {% endblock %}
+
+  {% block head_scripts %}{% endblock %}
+</head>
+<body class="{% block bodyClass %}{% if bodyClass|default('') %}{{ bodyClass }}{% endif %}{% endblock %}">
+  {% block body %}
+
+  {% endblock %}
+  {% block footer_script %}
+    {% include 'script_boot.html.twig' %}
+  {% endblock %}
+</body>
+</html>
