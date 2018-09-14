@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\LTC;
 
-class Api {
-
+class Api
+{
     public function getCourse($courseId)
     {
         return $this->request('get', 'http://www.esdev.com/api/courses/'.$courseId);
@@ -73,4 +73,3 @@ class Api {
         return $body;
     }
 }
-

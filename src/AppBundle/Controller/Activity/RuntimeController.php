@@ -9,6 +9,5 @@ class RuntimeController extends BaseController
 {
     public function entryPointAction(Request $request, $activityType, $action)
     {
-
     }
 }

@@ -2,13 +2,9 @@
 
 namespace AppBundle\Listener\Security;
 
-use ApiBundle\ApiBundle;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseManageRequestListener
 {
