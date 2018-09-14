@@ -8,6 +8,5 @@ class ActivityRuntimeContainerV1Test extends BaseTestCase
 {
     public function testConstruct()
     {
-
     }
 }
