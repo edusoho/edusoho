@@ -14,10 +14,14 @@
         <div :class="['directory-list__item-unit',
           {'unit-show': item.show}]"
           v-for="task in tasks[index]">
-          <div class="lesson-cell__unit" v-if="task.type === 'unit'">
-            第{{ task.number }}节：{{ task.title }}
+          <div class="lesson-cell__unit" v-if="task.type === 'unit'" @click="item.show = !item.show">
+            <span class="text-overflow">第{{ task.number }}节：{{ task.title }}</span>
+            <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"></i>
           </div>
-
+          <div class="lesson-cell__hour text-overflow" v-if="task.type === 'task'">
+            <i class="h5-icon h5-icon-dot color-primary text-18"></i>
+            课时1：词性和基本句型上
+          </div>
           <div :class="['box', {'show-box': item.show}]"
             v-if="task.type === 'task'">
             <div class="lesson-cell">
@@ -65,7 +69,8 @@
       return {
         directoryArray: [],
         chapters: [],
-        tasks: []
+        tasks: [],
+        hour: [],
       }
     },
     filters:{

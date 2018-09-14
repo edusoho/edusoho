@@ -57,6 +57,10 @@ a {
   font-size: vw(16);
 }
 
+.text-18 {
+  font-size: vw(18);
+}
+
 // title
 .title-18 {
   font-family: PingFangSC-Medium;
@@ -87,6 +91,9 @@ a {
 }
 
 // color
+.color-primary {
+  color: $primary-color;
+}
 .red {
   color: #ff5353;
 }

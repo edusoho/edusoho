@@ -39,7 +39,7 @@
             height: auto;
             margin:0 vw(10);
             + .unit-show {
-              border-top: 1px solid #EEE;
+              border-bottom: 1px solid #EEE;
               margin-top: 5px;
               padding-top: 15px;
             }
@@ -51,8 +51,18 @@
 
           font-size: vw(14);
           &__unit {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: vw(12);
+            padding-right: vw(5);
             @extend .title-16;
+            i {
+              margin-top: vw(5);
+            }
+          }
+          &__hour {
+            margin-bottom: vw(20);
+            color: #71777D;
           }
           &__content {
             @extend .flex-column;
