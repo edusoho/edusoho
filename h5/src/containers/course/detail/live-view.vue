@@ -2,7 +2,7 @@
   <div class="web-view">
     <e-loading v-if="isLoading"></e-loading>
     <!-- web-view -->
-    <iframe id="player" :src="playUrl" width="100%" height="100%" frameborder="0"></iframe>
+    <iframe id="player" :src="playUrl" width="100%" frameborder="0"></iframe>
   </div>
 </template>
 <script>
