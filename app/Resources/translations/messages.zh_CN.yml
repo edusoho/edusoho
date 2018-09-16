@@ -7083,6 +7083,7 @@ admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
 admin.developer_xapi_address: XAPI 推送地址
+admin.developer_face_address: 人脸识别API地址
 admin.developer_setting.cloud_api_server_address: 云服务API地址
 admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址

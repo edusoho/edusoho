@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f20035ccf84ab234f2fb955acf15bac6",
+    "content-hash": "a6fa71cd14631c6ac22a3dd21beaa982",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -469,16 +469,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.2.26",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c"
+                "reference": "bfe3d6fd2d10faaa11d647cff9b9059556e4ff6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
-                "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/bfe3d6fd2d10faaa11d647cff9b9059556e4ff6b",
+                "reference": "bfe3d6fd2d10faaa11d647cff9b9059556e4ff6b",
                 "shasum": ""
             },
             "require": {
@@ -508,7 +508,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-07-31T11:48:03+00:00"
+            "time": "2018-09-14T01:29:19+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -3049,6 +3049,7 @@
             "keywords": [
                 "microframework"
             ],
+            "abandoned": "symfony/flex",
             "time": "2016-08-22T17:50:21+00:00"
         },
         {

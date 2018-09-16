@@ -5795,6 +5795,7 @@ admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_xapi_address: XAPI address
+admin.developer_face_address: AI Face API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
 admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
