@@ -8431,6 +8431,7 @@ log.action.system.update_settings.siteTrace: 更新站点追踪设置
 log.action.system.update_settings.xapi: 更新数据实验室设置
 log.action.system.update_settings.mobile: 更新移动客户端设置
 log.action.system.update_settings.wap: 更新WAP设置
+log.action.system.update_settings.developer: 更新开发者设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -8690,6 +8691,7 @@ log.action.template.system.update_settings.siteTrace: 更新了<strong class="co
 log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
 log.action.template.system.update_settings.mobile: 更新了<strong class="color-success">系统设置</strong>的移动客户端设置
 log.action.template.system.update_settings.wap: 更新了<strong class="color-success">系统设置</strong>的WAP设置
+log.action.template.system.update_settings.developer: 更新了<strong class="color-success">系统设置</strong>的开发者设置
 log.action.template.live.update_live_activity: 更新了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
 log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》
