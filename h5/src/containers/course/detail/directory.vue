@@ -73,9 +73,6 @@
       .then((data) => {
         this.courseList = data;
       })
-      .catch((err) => {
-        console.log(this.selectedPlanId);
-      })
     },
     data() {
       return {
