@@ -1,0 +1,36 @@
+import PptPlayer from 'app/common/ppt-player.js';
+import ActivityEmitter from 'app/js/activity/activity-emitter.js';
+
+
+let emitter = new ActivityEmitter();
+let $content = $('#activity-ppt-content');
+let watermarkUrl = $content.data('watermarkUrl');
+
+let createPPT = (watermark) => {
+  let ppt = new PptPlayer({
+    element: '#activity-ppt-content',
+    slides: $content.data('slides').split(','),
+    watermark: watermark
+  });
+
+
+  if ($content.data('finishType') === 'end') {
+    ppt.once('end', (data) => {
+      emitter.emit('finish',data);
+    });
+  }
+
+  return ppt;
+};
+
+if (watermarkUrl === undefined) {
+  let ppt = createPPT();
+} else {
+  $.get(watermarkUrl)
+    .then((watermark) => {
+      let ppt = createPPT(watermark);
+    })
+    .fail(error => {
+      console.error(error);
+    });
+}

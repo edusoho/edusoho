@@ -169,10 +169,20 @@ class SystemCrontabInitializer
                 'expression' => '0 23 * * *',
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\DeleteFiredLogJob',
             ),
+            'CheckConvertStatusJob' => array(
+                'expression' => '*/15 * * * *',
+                'class' => 'Biz\File\Job\VideoMediaStatusUpdateJob',
+                'misfire_threshold' => 300,
+            ),
             'updateCourseSetHotSeq' => array(
                 'expression' => '47 4 * * *',
                 'class' => 'Biz\Course\Job\UpdateCourseSetHotSeqJob',
                 'misfire_threshold' => 0,
+            ),
+            'UpdateLiveStatusJob' => array(
+                'expression' => '*/10 * * * *',
+                'class' => 'Biz\Live\Job\UpdateLiveStatusJob',
+                'misfire_threshold' => 300,
             ),
         );
         $defaultJob = array(

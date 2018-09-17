@@ -24,7 +24,7 @@ define(function(require, exports, module) {
         $blockHistory.on('click', '.btn-recover-content', function() {
             var html = $(this).parents('tr').find('.data-role-content').text();
             $("#blockContent").val(html);
-            Notify.success('已经恢复了编辑区的内容，请保存 ! ','10');
+            Notify.success(Translator.trans('admin.block.history_recover_hint','10'));
         });
 
     }

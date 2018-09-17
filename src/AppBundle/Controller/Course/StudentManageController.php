@@ -22,6 +22,7 @@ use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\TimeMachine;
+use Biz\Course\Util\CourseTitleUtils;
 
 class StudentManageController extends BaseController
 {
@@ -188,6 +189,8 @@ class StudentManageController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($ids);
         $default = $this->getSettingService()->get('default', array());
+
+        $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
 
         return $this->render(
             'course-manage/student/set-deadline-modal.html.twig',

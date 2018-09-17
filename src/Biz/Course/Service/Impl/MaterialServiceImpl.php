@@ -180,6 +180,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $this->getMaterialDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function findMaterialsByIds($ids)
+    {
+        return $this->getMaterialDao()->findMaterialsByIds($ids);
+    }
+
     public function countMaterials($conditions)
     {
         return $this->getMaterialDao()->count($conditions);

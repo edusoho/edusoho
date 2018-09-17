@@ -493,6 +493,8 @@ order.refunded_cash_amount: 已退现金
 order.use_coupon: 使用优惠券
 order.refund_feedback: 反馈信息
 order.refund.id: 退款号
+order.refund.equal: 等于
+order.refund.discount: 折
 order.created_time: 创建时间
 order.pay_time: 付款时间
 order.closed_time: 关闭时间
@@ -737,6 +739,8 @@ question.answer_correct: 正确
 question.answer_wrong: 错误
 question.fill.content_title: 填空题
 question.correct_answer_tips: 正确答案
+question.correct_rate: 正确率
+question.selection_rate: 选择率
 question.fill_correct_answer: 填空(%index%):正确答案
 question.compelete: 完成
 question.next: 下一题
@@ -903,6 +907,10 @@ course.price.show: 课程价格
 course.minimum_price.unit: %price%%unit%起
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
+course.price.range: >
+  价格 : %minPrice%元 - %maxPrice%元
+course.price.fixed: >
+  价格 : %minPrice%元
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
 course.chapter: '第%number%%chapter_name%: %title%'
@@ -916,6 +924,7 @@ course.course_member_count: %studentsNum%人
 course.activity: %taskName%
 course.praise: 好评课程
 course.plan: 课程计划
+course.teaching_plan.access_denied_hint: 无权限管理
 course.teaching_plan: 教学计划
 course.teaching_plan.free: 自由式学习
 course.teaching_plan.locked: 解锁式学习
@@ -970,10 +979,9 @@ course.plan_base_info: 基础设置
 course.plan_setup.name: 计划名称
 course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 学习模式
-course.plan_setup.mode.free: 自由式学习
-course.plan_setup.mode.locked: 解锁式学习
-course.plan_setup.mode.locked_tips: 根据既定顺序逐个解锁学习
-course.plan_setup.mode.free_tips: 学习过程自由安排
+course.plan_setup.mode.free: 自由式
+course.plan_setup.mode.locked: 解锁式
+course.plan_setup.mode.tips: 自由式：学习过程自由安排<br>解锁式：根据既定顺序逐个解锁学习
 course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
@@ -989,7 +997,8 @@ courseset.setup: 课程设置
 course.base_setup.rules: 基础规则
 course.base_info: 基础信息
 course.base_plan_intro: 计划使用指南
-course.marketing_setup: 营销信息
+course.marketing_setup.reward: 积分
+course.marketing_setup: 营销设置
 course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
@@ -1172,6 +1181,20 @@ course.homework_check.need_check_item: >
 
 course.question_marker_statistics: 弹题统计
 
+course.question_marker.no_task: 无任务
+course.question_marker.make_time: 时间点
+course.question_marker.stem: 题干
+course.question_marker.join_num: 参与人数
+course.question_marker.answer_num: 答题次数
+course.question_marker.right_num: 正确次数
+course.question_marker.operation: 操作
+course.question_marker.btn_question_distribution: 答题分布
+course.question_marker.empty_question_marker_hint: 该任务下无驻点弹题
+course.question_marker.total_answer_num: >
+  共计<span class="color-primary text-success pls prs">%totalAnswerNum%</span>次答题
+course.question_marker.total_user_num: >
+  <span class="color-primary pls prs">%totalUserNum%</span>人参与答题
+
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
@@ -1212,6 +1235,7 @@ course.dashboard.task_detail: %taskName%详情
 course.dashboard.student_chart.time_select_all: 全部
 course.dashboard.student_chart.time_select_unFinished: 未完成
 course.dashboard.student_chart.time_select_seven_days: 7天未学
+course.dashboard.student_chart.name_or_mobile_placeholder: 用户名/手机号
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
@@ -1277,6 +1301,8 @@ course.buy_expiry_date.buy_expiry_time: >
   <span class="course-detail-title ">购买截止日期</span>
   <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
 
+course.joined: 已加入
+course.not_joined: 未加入
 course.showServices: 承诺服务
 course.showServices.empty: 暂未提供
 course.status.followed: 已收藏
@@ -1353,11 +1379,17 @@ course.note.all_task: 全部%taskName%
 course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
-course.task: %taskName%
-course.task.progress: %taskName%进度
+course.optional_task: 选修
+course.task: 任务
+course.task.user_all_task: %nickname%的全部任务
+course.task.completion_degree: 完成度
+course.task.start_time: 任务开始时间
+course.task.finish_time: 任务完成时间
+course.task.progress: 任务进度
 course.task.rate.finish: 完成率
-course.task.lock_tips: 需要解锁上一个%taskName%才能学习
-course.task.learning: %taskName%学习
+course.task.lock_tips: 需要解锁上一个任务才能学习
+course.task.learning: 任务学习
+course.task.learning.learning_hint: 请先学完当前课程
 course.task.learning.back_course_btn: 返回课程
 course.task.learning.finish_condition: %taskName%完成条件
 course.task.learning.finish_btn: %taskName%完成
@@ -1432,7 +1464,6 @@ course.tab.notes: '笔记'
 course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
-course.activity.text: '图文'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -1444,6 +1475,7 @@ course.activity.testpaper: 考试
 course.activity.homework: 作业
 course.activity.exercise: 练习
 course.activity.download: 下载资料
+course.activity.text: 图文
 course.task_toolbar.tasks: 目录
 course.task_toolbar.notes: 笔记
 course.task_toolbar.questions: 问答
@@ -1772,6 +1804,13 @@ course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
 
 # activity-活动
+activity_manage.finish_tips:
+  <p class="gray-darker mbs">满足以下条件:</p>
+activity_manage.finish_tips_time: >
+  至少学习%finishDetail%分钟。
+activity_manage.finish_select_tips_time: 学习时长
+activity_manage.finish_select_tips_end: 学习到最后
+
 course.plan_task.activity_manage.finished_condition: 完成条件
 course.plan_task.activity_manage.audio: 音频
 course.plan_task.activity_manage.audio.converting: 正在转码，请稍后尝试。
@@ -1788,8 +1827,6 @@ course.plan_task.activity_manage.discuss.content: 讨论主题
 course.plan_task.activity_manage.doc: 文档
 course.plan_task.activity_manage.doc.watch_time: 观看时长
 course.plan_task.activity_manage.doc.watch_time_at_least: 至少观看
-course.plan_task.activity_manage.doc.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少观看%finishDetail%分钟。
 course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
@@ -1829,9 +1866,9 @@ course.plan_task.activity_manage.exercise.info_tips: >
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
+course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
-course.plan_task.activity_manage.homework.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>提交作业
+course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
@@ -1845,8 +1882,7 @@ course.plan_task.activity_manage.homework.question_total: >
   作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.live.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
+course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
@@ -1856,8 +1892,6 @@ course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
 course.plan_task.activity_manage.ppt.lear_at_least_time: 至少学习
-course.plan_task.activity_manage.ppt.finished_condition_tips.time: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.ppt.finished_condition_tips.end: >
   <p class="gray-darker mbs">满足以下条件:</p>需要学习到最后一页。
 course.plan_task.activity_manage.testpaper.finished_condition_tips: >
@@ -1899,16 +1933,12 @@ course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
-course.plan_task.activity_manage.text: 内容
-course.plan_task.activity_manage.text_tips: 您有一段自动保存内容，请点击继续编辑
 course.plan_task.activity_manage.video: 视频
 course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
 course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
 course.plan_task.activity_manage.video.code_convert_tips: >
   字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
-course.plan_task.activity_manage.video.time_finish_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.video.last_finish_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>学习到最后。
 course.plan_task.activity_manage.video.failed_tips: 您的视频观看时长已达限制，无法继续观看！
@@ -1997,6 +2027,8 @@ course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.task.learning.remaining.watch_time: 剩余观看时长
 course.btn.pay_tips: 正在创建订单...
+
+course.export: 导出课时数据
 
 # 文件
 file_chooser.empty: 没有资源...
@@ -2920,6 +2952,8 @@ user.settings.security.password_reset.mobile: 手机号码
 user.settings.security.password_reset.success: 重设密码成功
 user.settings.security.password_reset.success.content_title: 重设密码成功
 user.settings.security.password_reset.success.tips: 新密码设置成功，请重新登录。
+user.settings.security.password_reset.success_hint: >
+  你已经通过手机重置密码成功。请前往 <a class="link-primary" href="%loginUrl%">登录</a>
 
 user.settings.security.pay_password_set: 设置支付密码
 user.settings.security.pay_password_set.find_pay_password: 找回支付密码
@@ -4360,6 +4394,18 @@ admin.course_copy.course_copying.btn: 正在复制
 admin.course_copy.success.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制完成！
 admin.course_copy.failure.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制失败！
 
+admin.queue.failed_detail: 失败详情
+admin.queue.queue_label: 队列
+admin.queue.class_label: 任务类型
+admin.queue.priority_label: 优先级
+admin.queue.timeout_label: 超时时间
+admin.queue.body_label: 消息体
+admin.queue.failed_reason_label: 错误原因
+admin.queue.error_time_label: 错误时间
+admin.queue.failed_time_label: 失败时间
+admin.queue.name: 对列名
+admin.queue.type: 类型
+
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志
@@ -4430,6 +4476,7 @@ course.block_grid.learn_time: 学习总时长：%learnTime%
 course.block_grid.live_finish: 直播结束
 course.block_grid.live_back: 回放
 course.block_grid.from_classroom: 来自班级：
+course.block_grid.empty_hint: 找不到相关课程！
 
 # course/header
 course.header.vip: 会员
@@ -4805,6 +4852,30 @@ admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
 admin.user.statistics.data_detail.task_progress_tip: %taskName%完成比为已完成%taskName%数比总%taskName%数
 admin.user.statistics.data_detail.from_classroom: 来自班级
+admin.user.statistics.sync_info.upgrade_time: 升级时间
+admin.user.statistics.sync_info.history_data_range: 历史数据生成范围
+admin.user.statistics.sync_info.table_total_history_data_sync_status: total表历史数据同步状态
+admin.user.statistics.sync_info.table_daily_history_data_sync_status: daily表历史数据同步状态
+admin.user.statistics.sync_info.table_daily_create_status: 新增daily表状态
+admin.user.statistics.sync_info.history_data_range_days: %days%天
+admin.user.statistics.sync_info.sync_user_id: 目前同步到的用户Id
+admin.user.statistics.sync_info.sync_complete: 是否同步完成
+admin.user.statistics.sync_info.sync_time: 目前同步到的时间
+admin.user.statistics.sync_info.sync_total: 总数
+admin.user.statistics.sync_info.not_sync_total: 未同步到总表的条数
+admin.user.statistics.sync_info.true: 是
+admin.user.statistics.sync_info.false: 否
+
+## 用户在线模块
+admin.user.online.operate_system: 操作系统
+admin.user.online.client: 客户端
+admin.user.online.device: 设备
+admin.user.online.last_access_time: 最后访问时间
+admin.user.online.empty: 暂无记录!
+admin.user.online.visitor: 游客
+admin.user.online.registed_user: 注册用户
+admin.user.online.all_visitors: 全部访客
+admin.user.online.online_user_count: 共查询到 %count% 位符合条件的在线用户（15分钟以内有活动）
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
@@ -6283,6 +6354,7 @@ admin.edu_cloud.edu_video.delete_ok_confirm: 恭喜，您的云视频全部为�
 admin.edu_cloud.edu_video.delete_ok_btn: 好
 admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
 admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video.h5_enable_label: H5播放：
 
 # 云直播
 admin.edu_cloud.edu_live.student_num: 参与直播人数（最近7天）
@@ -7003,6 +7075,8 @@ admin.setting_course.classroom.course_discount.help_block: 购买班级时，如
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin.setting_course.custom_chapter_name: 设置章节名称
+admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
 
 #开发者设置
 admin.developer_setting.content_title: 开发者设置
@@ -7029,6 +7103,7 @@ admin.developer_setting.tips: >
       「HLS加密视频」：　开启
     </li>
   </ul>
+admin.developer_setting.mp_service_url_label: 小程序服务平台地址
 admin.magic_setting.need_careful_tips: 注意事项
 admin.magic_setting.developer_use_tips: 此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！
 admin.magic_setting.video_fingerprint: 视频指纹
@@ -7128,6 +7203,34 @@ admin.crontab_job.task_object_classroom: 班级
 admin.crontab_job.task_object_open_course: 公开课
 admin.crontab_job.task_object_lesson: 课时
 admin.crontab_job.empty: 无定时任务记录
+admin.crontab_job.error_hint: >
+  Windows 系统不可在此页面配置，请参考<a href="http://edusoho.pages.codeages.net/edusoho-develop-guide/biz-framework/scheduler.html#windows" target="__blank">此地址</a>在您的 EduSoho 服务器上进行配置。
+admin.crontab_job.command_label: 命令
+admin.crontab_job.status_label: 状态
+admin.crontab_job.enabled_label: 开启
+admin.crontab_job.disabled_label: 禁用
+admin.crontab_job.resotre_btn: 点击重新初始化
+admin.crontab_job.name: 名称
+admin.crontab_job.class: 类名
+admin.crontab_job.resource: 来源
+admin.crontab_job.operation: 操作
+admin.crontab_job.status: 状态
+admin.crontab_job.execution_time: 执行时间
+admin.crontab_job.time: 时间
+admin.crontab_job.enable_status: 启用状态
+admin.crontab_job.empty_hint: 暂无任务信息!
+admin.crontab_job.next_time: 下一次时间
+admin.crontab_job.last_time: 上一次时间
+admin.crontab_job.log_title: 任务日志
+admin.crontab_job.log_empty_hint: 暂无日志信息!
+admin.crontab_job.log_name: 名称
+admin.crontab_job.log_time: 时间
+admin.crontab_job.log_resource: 来源
+admin.crontab_job.log_status: 状态
+admin.crontab_job.run_log_title: 任务运行日志
+admin.crontab_job.log_show_btn: 日志查看
+admin.crontab_job.enable: 启用
+admin.crontab_job.disable: 禁用
 
 #　ip黑名单
 admin.ip_black_list.titile: IP黑名单
@@ -7392,7 +7495,16 @@ admin.invite_setting.coupon_deadline: 优惠券有效时间
 admin.invite_setting.discount_coupon_setting: 元面值抵价优惠券 （可用于全站消费）
 
 admin.wap_setting: 手机微网校
+admin.wap_setting.find: 发现页设置
+admin.wap_setting.site: 站点设置
+admin.wap_setting.online: 功能正式上线
+admin.wap_setting.open: 去开启新版微网校
+admin.wap_setting.function: >
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>
 admin.wap_setting.hint: >
+  <p class="help-block">新版微网校可使用发现页设置功能。</p>
   <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
   <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
 admin.wap_setting.version_select: 版本选择
@@ -7776,6 +7888,34 @@ admin.org_manage.modal.org_description: 描述
 admin.org_manage.modal.org_description.help_block: 非必填
 admin.org_manage.modal.delete.tips: 会同时删除下辖组织机构
 
+admin.wechat_app.banner_title: 网校小程序，招生学习更便捷
+admin.wechat_app.banner_introduce: 网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
+admin.wechat_app.access_btn: 立即开通
+admin.wechat_app.install_btn: 立即安装
+admin.wechat_app.fast_access_introduction_title: 快速接入
+admin.wechat_app.fast_access_introduction_content: 只需一键授权，无需任何开发，即可拥有自己的网校小程序
+admin.wechat_app.data_sync_introduction_title: 数据同步
+admin.wechat_app.data_sync_introduction_content: 小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理
+admin.wechat_app.flow_entrance_introduction_title: 自带流量
+admin.wechat_app.flow_entrance_introduction_content: 微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户
+admin.wechat_app.easy_promotion_introduction_title: 超轻推广
+admin.wechat_app.easy_promotion_introduction_content: 流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化
+
+admin.xapi.title: 推送详情
+admin.xapi.id: 推送id
+admin.xapi.status: 推送状态
+admin.xapi.version: xAPI版本
+admin.xapi.body: 推送主体
+admin.xapi.status: 推送状态
+admin.xapi.verb: 推送行为
+admin.xapi.target_type: 推送类型
+admin.xapi.time: 推送时间
+admin.xapi.created_time: 创建时间
+admin.xapi.operation: 操作
+admin.xapi.enable_label: 开启xAPI
+admin.xapi.push_url_label: 设置xAPI地址
+admin.xapi.default_url: 默认地址是：https://lrs.qiqiuyun.net/v1/xapi/
+
 user.card_show_following: 关注
 user.card_show_followed: 已关注
 user.card_show_message: 私信
@@ -7802,6 +7942,15 @@ open_course.my_other_courses: 我的其它课程
 open_course.my_all_course: 所有课程
 open_course.lesson_empty_tips: 暂无课时记录
 open_course.select_course: 选择课程
+open_course.choose_again: 重新选择
+open_course.chooser_from_material: 从资料库中选择
+open_course.upload_form_course_file: 从课程文件中选择
+open_course.link: 网络链接
+open_course.coursematerial.tips: 支持常见文档、图片、音视频、压缩包文件格式。
+open_course.coursematerial.cloud_tips: >
+  <li>文件将上传到<strong>云服务器</strong></li>
+open_course.empty_file_hint: 暂无文件，请先上传。
+open_course.material_link: 资料链接地址
 
 clean_search: 清除搜索
 
@@ -8068,6 +8217,7 @@ my.reward_point.product_detail_permissions: 抱歉，您无权查看%name%商品
 my.reward_point.record.permissions: 抱歉，您无权查看%name%兑换记录页面，如有需要请联系网站管理员！
 my.reward_point.rule.permissions: 抱歉，您无权查看%name%规则页面，如有需要请联系网站管理员！
 my.reward_point.mall.permissions: 抱歉，您无权查看%name%商城，如有需要请联系网站管理员！
+my.reward_point: 我的%name%
 reward_point.mall.search_empty: 没有搜到相关商品，请换个关键词试试！
 
 reward_point.reply_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天
@@ -8221,7 +8371,6 @@ log.action.user.password-security-answers: 设置安全问题
 log.action.user.verifiedMobile-changed: 重置手机
 log.action.user.email-changed: 重置邮箱
 log.action.user.avatar-changed: 修改头像
-log.action.user.change_role: 修改用户组
 log.action.user.change_role: 修改角色
 log.action.user.unbind: 解绑用户
 log.action.user.login_success: 登录成功
@@ -9206,7 +9355,6 @@ exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
 
-
 exception.file.not_found: 文件不存在
 exception.file.group_invalid: 文件组无效
 exception.file.not_upload: 文件未上传
@@ -9215,7 +9363,7 @@ exception.file.handle_error: 文件处理
 exception.user.update_nickname_error: 昵称修改异常
 exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
-
+exception.user.permission_denied: 暂无权限访问
 exception.user_lock: 账户被封禁，请联系管理员
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
@@ -9229,3 +9377,7 @@ lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 course.unname_title: 未命名计划
 
+admin.index.course_order: 课程订单
+admin.index.classroom_order: 班级订单
+admin.index.vip_order: 会员订单
+admin.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】

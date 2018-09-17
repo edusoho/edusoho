@@ -10,11 +10,11 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
 define('RUNTIME_ENV', 'API');
-define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '/../app');
+define('ROOT_DIR', __DIR__.DIRECTORY_SEPARATOR.'/../app');
 
 if (API_ENV == 'prod') {
     $kernel = new AppKernel('prod', false);
-}else{
+} else {
     $kernel = new AppKernel('dev', true);
 }
 
@@ -24,8 +24,8 @@ $kernel->setRequest($request);
 $kernel->boot();
 
 $parameters = include __DIR__.'/config/paramaters.php';
-if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
+if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $parameters['host'] = 'https://'.$_SERVER['HTTP_HOST'];
-}else{
+} else {
     $parameters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 }

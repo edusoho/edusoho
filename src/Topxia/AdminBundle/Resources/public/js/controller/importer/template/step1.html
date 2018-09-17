@@ -3,23 +3,23 @@
 </div>
 
 <div class="page-header clearfix">
-    <h1 class="pull-left"><%= Translator.trans('步骤1') %></h1>
+    <h1 class="pull-left"><%= Translator.trans('site.step_one') %></h1>
 </div>
 
 <div class="row">
     <form method="post" enctype="multipart/form-data" class="form-horizontal" >
 
         <div class="form-group">
-            <div class="col-md-3 col-md-offset-1"><b><%= Translator.trans('选择要导入的文件') %></b></div>
+            <div class="col-md-3 col-md-offset-1"><b><%= Translator.trans('importer.import_file_pick_hint') %></b></div>
             <div class="col-md-8">
                 <div class="uploader blue">
                     <input type="text" class="filename" readonly="readonly" />
-                    <input type="button" name="excel-btn" class=" button" value="<%= Translator.trans('浏览...') %>"/>
+                    <input type="button" name="excel-btn" class=" button" value="<%= Translator.trans('importer.import_file_view') %>"/>
                     <input type="file" size="30" name="excel"/>
                 </div>
-                &nbsp;&nbsp;<a href="<%= exampleUrl %>"><%= Translator.trans('点击下载示例说明文件') %></a>
+                &nbsp;&nbsp;<a href="<%= exampleUrl %>"><%= Translator.trans('importer.download_sample_file') %></a>
                 <br>
-                <%= Translator.trans('支持从Excel文件导入') %>
+                <%= Translator.trans('importer.import_tip') %>
             </div>
         </div>
         <br>
@@ -27,7 +27,7 @@
         <div class="form-group">
             <div class="col-md-3 col-md-offset-1"></div>
             <div class="col-md-8 controls">
-                <button type="submit" class="btn btn-primary" id="start-import-btn"><%= Translator.trans('开始校验数据') %></button>
+                <button type="submit" class="btn btn-primary" id="start-import-btn"><%= Translator.trans('importer.start_verifying_data_tip') %></button>
             </div>
         </div>
 

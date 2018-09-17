@@ -60,7 +60,7 @@ class CourseTaskMedia extends AbstractResource
         $taskCanTryLook = false;
         if ($course['tryLookable'] && 'video' == $task['type']) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                 $taskCanTryLook = true;
             }
         }

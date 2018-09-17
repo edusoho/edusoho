@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 
         $.each(datas, function(i, item) {
             steps.push({
-                 title: Translator.trans('已经导入：%progressNum%',{progressNum:progressNum}),
+                 title: Translator.trans('admin.user.import_progress_hint',{progressNum:progressNum}),
                  url: importUrl,
                  data:{'data': JSON.stringify(item),'checkType':checkType},
                  progressRange: [i*100/progress.length, (i+1)*100/progress.length]
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 
         progressBar.on('completed', function() {
             progressBar.deactive();
-            progressBar.text(Translator.trans('导入完成！'));
+            progressBar.text(Translator.trans('admin.user.import_finish_hint'));
             $("#updating-hint").hide();
             $("#finish-import-btn").show();
         });
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
             type: 'POST'
         }).done(function(data, textStatus, jqXHR) {
             if (data.status == 'error') {
-                progressBar.error(makeErrorsText(Translator.trans('%title%失败：',{title:title}), data.errors));
+                progressBar.error(makeErrorsText(Translator.trans('admin.user.import_fail_hint',{title:title}), data.errors));
             } else if (typeof(data.index) != "undefined") {
                 if (url.indexOf('index') < 0) {
                     url = url+'&index=0';
@@ -74,16 +74,16 @@ define(function(require, exports, module) {
                 if (endProgress > 100) {
                     endProgress = 100;
                 }
-                progressBar.setProgress(endProgress, Translator.trans('%data%完成',{data:data.message}));
+                progressBar.setProgress(endProgress, Translator.trans('admin.user.import_finish_hint',{title:data.message}));
                 startProgress = endProgress;
                 title =  data.message;
                 exec(title, url, progressBar, startProgress, endProgress);
             } else {
-                progressBar.setProgress(endProgress, Translator.trans('%title%完成',{title:title}));
+                progressBar.setProgress(endProgress, Translator.trans('admin.user.import_finish_hint',{title:title}));
                 $(document).dequeue('update_step_queue');
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            progressBar.error(Translator.trans('%title%时，发生了未知错误。',{title:title}));
+            progressBar.error(Translator.trans('admin.user.import_error_hint',{title:title}));
             $(document).clearQueue('update_step_queue');
         });
     }

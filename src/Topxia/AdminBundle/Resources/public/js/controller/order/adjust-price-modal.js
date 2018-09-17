@@ -29,16 +29,16 @@ define(function(require, exports, module) {
       element: 'input[name=adjust-by-price]',
       required: false,
       rule: 'currency',
-      display: '优惠价格',
-      errormessageCurrency: '请输入正确的价格,最多保留两位小数'
+      display: Translator.trans('admin.order.validate_old.adjust_price.display'),
+      errormessageCurrency: Translator.trans('admin.order.validate_old.valid_price_input.message')
     });
 
     validator.addItem({
       element: 'input[name=adjust-by-discount]',
       required: false,
       rule: 'currency max{max: 10}',
-      display: '折扣',
-      errormessageCurrency: '请输入正确的折扣,最多保留两位小数'
+      display: Translator.trans('admin.order.validate_old.discount.display'),
+      errormessageCurrency: Translator.trans('admin.order.validate_old.valid_discount_input.message')
     });
 
     var originPayAmount = $form.find('.js-origin-pay-amount').data('originAmount');

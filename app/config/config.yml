@@ -49,6 +49,7 @@ twig:
         "%kernel.root_dir%/../web/themes": theme
         "%kernel.root_dir%/../plugins": plugins
         "%kernel.root_dir%/../" : root
+        "%kernel.root_dir%/../web/activities": activity
 
 # Swiftmailer Configuration
 # swiftmailer:
@@ -65,6 +66,7 @@ twig:
 parameters:
     app.locales: en|zh_CN
 
+    edusoho.activities_dir: "%kernel.root_dir%/../web/activities"
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
     topxia.disk.upgrade_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.update_dir: "%kernel.root_dir%/data/upgrade"

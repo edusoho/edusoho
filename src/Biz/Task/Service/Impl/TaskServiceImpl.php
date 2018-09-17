@@ -948,9 +948,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         $toLearnTaskCount = 3;
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
         $toLearnTasks = array();
+        $course = $this->getCourseService()->getCourse($courseId);
+        $taskConditions = array('courseId' => $courseId);
+        if ($course['isHideUnpublish']) {
+            $taskConditions['status'] = 'published';
+        }
+
         //取出所有的任务
-        $taskCount = $this->countTasksByCourseId($courseId);
-        $tasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
+        $tasks = $this->getTaskDao()->search($taskConditions, array('seq' => 'ASC'), 0, PHP_INT_MAX);
         if (empty($taskResult)) {
             $toLearnTasks = $this->getTaskDao()->search(
                 array('courseId' => $courseId, 'status' => 'published'),

@@ -3,6 +3,10 @@ homepage:
     defaults: { _controller: AppBundle:Default:index }
     h5: true
 
+ltc:
+    path:  /ltc/{endpoint}
+    defaults: { _controller: AppBundle:LTC/Runtime:entryPoint }
+
 crontab_web:
     path:  /anon/crontab
     defaults: { _controller: AppBundle:Common:crontab }
@@ -189,7 +193,7 @@ attachment_list:
 
 attachment_form_fields:
     path: /attachment/{targetType}/{targetId}/formFields
-    defaults: { _controller: AppBundle:Attachment:formFields , targetId:0}
+    defaults: { _controller: AppBundle:Attachment:formFields , targetId: 0}
     methods: [GET]
 
 uploader_entry:
@@ -1136,7 +1140,7 @@ thread_post_reply:
 
 thread_post_subposts:
     path:  /thread/{threadId}/post/{postId}/subposts
-    defaults: { _controller: AppBundle:Thread:subposts, threadId:0 }
+    defaults: { _controller: AppBundle:Thread:subposts, threadId: 0 }
 
 article_post_subposts:
     path:  /article/{targetId}/post/{postId}/subposts
@@ -1571,10 +1575,22 @@ course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
 
-course_text_activity_auto_save:
-    path: /course/{courseId}/activity/{activityId}/text/auto_save
-    defaults: { _controller: AppBundle:Activity/Text:autoSave }
+course_manage_activity_manage_custom_route:
+    path: /course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}
+    defaults: { _controller: AppBundle:Activity/Activity:customManageRoute }
     methods: [POST]
+
+course_manage_activity_content_modal:
+    path: /course/{courseId}/manage/activity_{type}/{activityId}/content_modal
+    defaults: { _controller: AppBundle:Activity/Activity:contentModal }
+
+course_manage_activity_finish_modal:
+    path: /course/{courseId}/manage/activity_{type}/{activityId}/finish_modal
+    defaults: { _controller: AppBundle:Activity/Activity:finishModal }
+
+course_activity_learning_custom_route:
+    path: /course/{courseId}/task/{taskId}/learning
+    defaults: { _controller: AppBundle:Activity/Activity:customLearningRoute }
 
 #task
 course_task_show:
@@ -1615,7 +1631,7 @@ course_manage_task_pre_create_check:
     methods: [POST]
 
 course_manage_task_pre_update_check:
-    path:  /course/{courseId}/task/{taskId}/pre_update_check
+    path:  /course/{courseId}/activity/{activityId}/pre_update_check
     defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
     methods: [POST]
 
@@ -1790,7 +1806,7 @@ course_manage_lesson_unset_optional:
 
 course_manage_change_lesson_show_status:
     path:  /course/{courseId}/manage/change/lesson/show/status
-    defaults: { _controller: AppBundle:Course/CourseManage:showPublish }
+    defaults: { _controller: AppBundle:Course/CourseManage:hidePublish }
     methods: [POST]
 
 #course

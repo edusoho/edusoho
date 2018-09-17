@@ -92,6 +92,15 @@ class TimeMachine
         return array($startTime, $endTime);
     }
 
+    public static function getTimeRangeByDays($days)
+    {
+        if (!is_numeric($days) || $days <= 0) {
+            throw new BadRequestHttpException('days is error', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        return array('startTime' => strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
+    }
+
     public function diffDays($timestamp1, $timestamp2)
     {
         $datetime1 = new DateTime(null, new DateTimeZone($this->timezone));

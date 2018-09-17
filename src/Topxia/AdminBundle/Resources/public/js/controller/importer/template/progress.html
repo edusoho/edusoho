@@ -1,7 +1,7 @@
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title"><%= Translator.trans('批量导入') %></h4>
+            <h4 class="modal-title"><%= Translator.trans('importer.batch_import_title') %></h4>
         </div>
         <div class="modal-body">
             <div id="import-progress" class="package-update-progress">
@@ -14,8 +14,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a data-loading-text="<%= Translator.trans('正在完成导入, 请稍等...') %>" class="btn btn-primary hidden js-finish-import-btn" href="javascript:;"><%= Translator.trans('完成导入') %></a>
-            <span class="text-danger js-import-progress-text hidden"><%= Translator.trans('正在导入, 请勿关闭当前窗口...') %></span>
+            <a data-loading-text="<%= Translator.trans('importer.importing_finish_hint') %>" class="btn btn-primary hidden js-finish-import-btn" href="javascript:;"><%= Translator.trans('importer.importing_finished') %></a>
+            <span class="text-danger js-import-progress-text hidden"><%= Translator.trans('importer.importing_loading_hint') %></span>
         </div>
     </div>
 </div>

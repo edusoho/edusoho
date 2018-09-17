@@ -249,7 +249,7 @@ class Lesson extends BaseResource
                     }
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                        if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
 
                             if ($headLeaderInfo) {
@@ -291,6 +291,7 @@ class Lesson extends BaseResource
                         }
 
                         $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
+                        $lesson = $this->getSubtitleService()->setSubtitlesUrls($lesson, $this->isSsl());
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
@@ -454,5 +455,10 @@ class Lesson extends BaseResource
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    protected function getSubtitleService()
+    {
+        return $this->createService('Subtitle:SubtitleService');
     }
 }

@@ -27,7 +27,7 @@
     <td width="25%" class="color-gray cd-pl32">{{ 'user.account.my_coin.pay_coin'|trans({'%coin_name%' : setting('coin.coin_name')|default("finance.coin"|trans)}) }}</td>
     <td width="75%"><span class="color-danger">
       {{ order.paid_coin_amount|to_coin(0) }}</span>
-      (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }})
+      ({{ 'order.refund.equal'|trans }} <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }})
     </td>
   </tr>
   <tr>

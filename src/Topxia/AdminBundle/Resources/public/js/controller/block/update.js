@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: 'image/*',
                 error: function(file) {
-                    Notify.danger(Translator.trans('上传图片失败，请重试！'))
+                    Notify.danger(Translator.trans('admin.block.upload_failed_hint'))
                 },
                 success: function(response) {
                     response = $.parseJSON(response);
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
                     $(el).siblings('a').show();
                     $(el).siblings('input').val(response.url);
                     $(el).siblings('button').show();
-                    Notify.success(Translator.trans('上传图片成功！'));
+                    Notify.success(Translator.trans('admin.block.upload_success_hint'));
                 }
             });
 
@@ -40,7 +40,7 @@ define(function(require, exports, module) {
                 $(this).siblings('input').val('');
                 $(this).hide();
                 $(this).siblings('a').hide();
-                Notify.success(Translator.trans('删除图片成功！'));
+                Notify.success(Translator.trans('admin.block.delete_picture_success_hint'));
             });
         });
 
@@ -51,10 +51,10 @@ define(function(require, exports, module) {
                     var $html = $(response.html);
                     if ($table.find('#' + $html.attr('id')).length > 0) {
                         $('#' + $html.attr('id')).replaceWith($html);
-                        Notify.success(Translator.trans('更新成功！'));
+                        Notify.success(Translator.trans('admin.block.edit_success_hint'));
                     } else {
                         $table.find('tbody').prepend(response.html);
-                        Notify.success(Translator.trans('提交成功!'));
+                        Notify.success(Translator.trans('admin.block.submit_success_hint'));
                     }
                     $modal.modal('hide');
                 }
@@ -68,7 +68,7 @@ define(function(require, exports, module) {
 
             var file = $uploadForm.find('[name=file]').val();
             if (!file) {
-                Notify.danger(Translator.trans('请先选择要上传的图片'));
+                Notify.danger(Translator.trans('admin.block.select_picture_hint'));
                 return false;
             }
 
@@ -78,10 +78,10 @@ define(function(require, exports, module) {
                 success: function(response){
                     var html = '<img src="' + response.url + '">';
                     $("#blockContent").val($("#blockContent").val() + '\n' + html);
-                    Notify.success(Translator.trans('插入图片成功！'));
+                    Notify.success(Translator.trans('admin.block.upload_picture_success_hint'));
                 },
                 error: function(response) {
-                    Notify.danger(Translator.trans('上传图片失败，请重试！'));
+                    Notify.danger(Translator.trans('admin.block.upload_failed_hint'));
                 }
             });
 

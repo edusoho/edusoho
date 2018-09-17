@@ -52,6 +52,7 @@ class DefaultStrategyTest extends BaseTestCase
                     'returnValue' => array(
                         'id' => 2,
                         'status' => 'publishTask',
+                        'isOptional' => '0',
                     ),
                     'whitParams' => array(2),
                 ),

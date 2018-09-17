@@ -4,17 +4,16 @@
 <i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
 
 {% if displayAllInfo|default(false) %}
-  {% if not task.isOptional %}
     {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
-  {% endif %}
-  <span class="js-task-title">
-    {{ task.title|sub_text(30) }}
-  </span>
-{% endif %} 
-
-{% if customTitle|default('') != '' %}
-  {{customTitle|raw}}
 {% endif %}
+
+<span class="display-text {% if isShowText %}hidden{% endif %}">
+  {% if displayText|default('') != '' %}
+    {{displayText|raw}}
+  {% endif %}
+</span>
+
+  {{task.title|sub_text(30)}}
 
 <span class="{{isLesson|default(false)?'js-display-when-single-task':''}}">
   {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}

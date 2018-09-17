@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 
         defaultCoursePicUploader.on('uploadSuccess', function(file, response ) {
             var url = $("#default-course-picture-btn").data("gotoUrl");
-            Notify.success(Translator.trans('上传成功！'), 1);
+            Notify.success(Translator.trans('admin.setting.course.upload_default_pic_success_hint'), 1);
             document.location.href = url;
         });
 

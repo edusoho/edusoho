@@ -11,9 +11,9 @@
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{question['stem']|plain_text(40) }}
     <div class="color-gray text-sm">
-      {{'从属：'|trans}}
+      {{'course.question_manage.manage.belong'|trans}}：
       {% if question.target == 'course-' ~ courseSet.id %}
-        {{'本课程'|trans}}
+        {{'course.question_manage.manage.default_belong'|trans}}
       {% else %}
         {{ targets[question.target].simple_name|default('--') }}
       {% endif %}
@@ -29,9 +29,9 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:courseSet.id}) }}" class="notMoveHandle mrm">{{'预览'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle mrm item-delete-btn">{{'删除'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle " data-role="pick-item" data-url="{{ path('course_manage_testpaper_item_picker', {courseId:courseSet.id, testpaperId:testpaper.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:courseSet.id}) }}" class="notMoveHandle mrm">{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
+        <a href="javascript:" class="notMoveHandle mrm item-delete-btn">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</a>
+        <a href="javascript:" class="notMoveHandle " data-role="pick-item" data-url="{{ path('course_manage_testpaper_item_picker', {courseId:courseSet.id, testpaperId:testpaper.id, replace: question.id }) }}" >{{'course.testpaper_manage.question.operation.replace_btn'|trans}}</a>
       {% endif %}
     </div>
   </td>

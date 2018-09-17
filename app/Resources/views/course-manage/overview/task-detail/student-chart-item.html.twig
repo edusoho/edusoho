@@ -9,10 +9,10 @@
          data-content="
                     <div><p class='mbs'>{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }} : {{ task.title }}</p>
                     {% if taskResult.createdTime|default() %}
-                        任务开始时间 : {{ taskResult.createdTime|date('Y-m-d H:i:s') }}<br/>
+                        {{ 'course.task.start_time'|trans }} : {{ taskResult.createdTime|date('Y-m-d H:i:s') }}<br/>
                     {% endif %}
                     {% if taskResult.finishedTime|default() %}
-                        任务完成时间 : {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}<br/>
+                        {{ 'course.task.finish_time'|trans }} : {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}<br/>
                     {% endif %}
                     </div>">
         {% if taskResult %}

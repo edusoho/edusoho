@@ -31,6 +31,10 @@ interface CourseService
 
     public function getDefaultCoursesByCourseSetIds($courseSetIds);
 
+    public function setDefaultCourse($courseSetId, $id);
+
+    public function getSeqMaxPublishedCourseByCourseSetId($courseSetId);
+
     public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
     public function getFirstCourseByCourseSetId($courseSetId);
@@ -228,13 +232,19 @@ interface CourseService
 
     public function searchCourses($conditions, $sort, $start, $limit, $columns = array());
 
-    public function searchWithJoinTableConditions($conditions, $sort, $start, $limit, $columns = array());
+    public function searchWithJoinCourseSet($conditions, $sort, $start, $limit, $columns = array());
+
+    public function searchBySort($conditions, $sort, $start, $limit);
+
+    public function searchByStudentNumAndTimeZone($conditions, $start, $limit);
+
+    public function searchByRatingAndTimeZone($conditions, $start, $limit);
+
+    public function searchByRecommendedSeq($conditions, $sort, $offset, $limit);
 
     public function searchCourseCount($conditions);
 
-    public function countWithJoinTableConditions($conditions);
-
-    public function searchCourseByRecommendedSeq($conditions, $sort, $offset, $limit);
+    public function countWithJoinCourseSet($conditions);
 
     public function sortCourseItems($courseId, $ids);
 
@@ -306,7 +316,7 @@ interface CourseService
 
     public function findLiveCourse($conditions, $userId, $role);
 
-    public function changeShowPublishLesson($courseId, $status);
+    public function changeHidePublishLesson($courseId, $status);
 
     public function countCoursesByCourseSetId($courseSetId);
 

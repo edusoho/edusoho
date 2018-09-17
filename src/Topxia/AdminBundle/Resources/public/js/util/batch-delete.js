@@ -15,17 +15,17 @@ define(function(require, exports, module) {
             });
 
             if (ids.length == 0) {
-                Notify.danger(Translator.trans('未选中任何%name%',{name:name}));
+                Notify.danger(Translator.trans('admin.util.batch_delete.checked_empty_hint',{name:name}));
                 return ;
             }
 
-            if (!confirm(Translator.trans('确定要删除选中的%ids%条%name%吗？',{ids:ids.length,name:name}))) {
+            if (!confirm(Translator.trans('admin.util.batch_delete.delete_hint',{ids:ids.length,name:name}))) {
                 return ;
             }
 
             $element.find('.btn').addClass('disabled');
 
-            Notify.info(Translator.trans('正在删除%name%，请稍等。',{name:name}), 60);
+            Notify.info(Translator.trans('admin.util.batch_delete.deleting_hint',{name:name}), 60);
 
             $.post($btn.data('url'), {ids:ids}, function(){
             	window.location.reload();

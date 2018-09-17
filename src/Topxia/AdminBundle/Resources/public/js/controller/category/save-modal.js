@@ -10,16 +10,16 @@ define(function(require, exports, module) {
         var $table = $('#category-table');
 
         $("#category-icon-delete").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除图标吗？'))) return false;
+            if (!confirm(Translator.trans('admin.category.icon_delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#category-icon-field").html('');
                 $form.find('[name=icon]').val('');
                 $btn.hide();
                 $('#category-icon-field').removeClass('mbm');
-                Notify.success(Translator.trans('删除分类图标成功！'));
+                Notify.success(Translator.trans('admin.category.icon_delete_success_hint'));
             }).error(function(){
-                Notify.danger(Translator.trans('删除分类图标失败！'));
+                Notify.danger(Translator.trans('admin.category.icon_delete_fail_hint'));
             });
         });
 
@@ -35,11 +35,11 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize()).done(function(html) {
                     $modal.modal('hide');
-                    Notify.success(Translator.trans('保存分类成功！'));
+                    Notify.success(Translator.trans('admin.category.save_success_hint'));
                     // $table.find('tbody').replaceWith(html);
                     window.location.reload();
 				}).fail(function() {
-                    Notify.danger(Translator.trans('添加分类失败，请重试！'));
+                    Notify.danger(Translator.trans('admin.category.save_fail_hint'));
                 });
 
             }
@@ -58,7 +58,7 @@ define(function(require, exports, module) {
         });
 
         $modal.find('.delete-category').on('click', function() {
-            if (!confirm(Translator.trans('真的要删除该分类及其子分类吗？'))) {
+            if (!confirm(Translator.trans('admin.category.delete_hint'))) {
                 return ;
             }
 

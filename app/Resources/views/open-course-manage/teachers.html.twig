@@ -12,7 +12,7 @@
   <form id="teachers-form" class="form-horizontal" method="post" >
     {{ web_macro.flash_messages() }}
     <div class="form-group" id="teachers-form-group">
-      <div class="col-md-2 control-label"><label>{{'已添加教师'|trans}}</label></div>
+      <div class="col-md-2 control-label"><label>{{'course.teacher_setup.exist_teacher'|trans}}</label></div>
       <div class="col-md-8 controls">
         <div id="course-teachers" data-field-name="teachers" data-init-value="{{teacherIds|json_encode}}" data-query-url="{{path('open_course_manage_teachers_match', {id:course.id})}}"></div>
         <div class="help-block">{{'my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER'|trans}}</div>

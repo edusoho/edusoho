@@ -221,9 +221,18 @@ export default class Manage {
     this.sortablelist();
   }
 
+  setShowNum($parentLi) {
+    if ($parentLi.attr('show-num') == 0) {
+      $parentLi.attr('show-num', 1);
+    } else {
+      $parentLi.attr('show-num', 0);
+    }
+  }
+
+
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item:not(.js-optional-task)'];
+    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]'];
     for (let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     }
@@ -252,22 +261,24 @@ export default class Manage {
   }
 
   _publish() {
+    let self = this;
     const info = {
       class: '.js-publish-item, .js-delete, .js-lesson-unpublish-status',
       oppositeClas: '.js-unpublish-item',
+      isHideUnPublish: $('#isHideUnPublish').hasClass('checked'),
       flag: false
     };
     this.$element.on('click', '.js-unpublish-item', (event) => {
       const $target = $(event.target);
-      info.success = Translator.trans('course.manage.task_unpublish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':',
+      info.success = Translator.trans('course.manage.task_unpublish_success_hint');
+      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':';
       this.toggleOptional($target, self, info);
     });
 
     this.$element.on('click', '.js-publish-item', (event) => {
       const $target = $(event.target);
-      info.success = Translator.trans('course.manage.task_publish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':',
+      info.success = Translator.trans('course.manage.task_publish_success_hint');
+      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':';
       this.toggleOptional($target, self, info);
     });
   }
@@ -332,24 +343,22 @@ export default class Manage {
 
     for (const displayedEleClass in btnRelations) {
       let actualClickedEleClass = btnRelations[displayedEleClass];
-      $('.' + displayedEleClass).click(
-        function() {
-          let container = $(this).parents('.js-lesson-container');
+      $('#sortable-list').on('click', '.' + displayedEleClass, function() {
+        let container = $(this).parents('.js-lesson-container');
 
-          let taskIdStr = container.find('.js-task-manage-item').attr('id');
-          //格式为 task-{taskId}
+        let taskIdStr = container.find('.js-task-manage-item').attr('id');
+        //格式为 task-{taskId}
 
-          let taskId = taskIdStr.split('-')[1]; // 第二部分即为taskId
-          let jsActionBtn = container.find('.' + actualClickedEleClass);
-          let updatedUrl = jsActionBtn.data('url').replace('%7BtaskId%7D', taskId);
-          jsActionBtn.data('url', updatedUrl);
-          if (jsActionBtn.data('toggle')) {
-            jsActionBtn.click();
-          } else {
-            window.open(jsActionBtn.data('url'), '_blank');
-          }
+        let taskId = taskIdStr.split('-')[1]; // 第二部分即为taskId
+        let jsActionBtn = container.find('.' + actualClickedEleClass);
+        let updatedUrl = jsActionBtn.data('url').replace('%7BtaskId%7D', taskId);
+        jsActionBtn.data('url', updatedUrl);
+        if (jsActionBtn.data('toggle')) {
+          jsActionBtn.click();
+        } else {
+          window.open(jsActionBtn.data('url'), '_blank');
         }
-      );
+      });
     }
   }
 
@@ -357,16 +366,68 @@ export default class Manage {
     const $parentLi = $target.closest('.task-manage-item');
     const $dom = $parentLi.find(info.class);
     const $oppositeDom = $parentLi.find(info.oppositeClas);
+    let isHideUnPublish = $('#isHideUnPublish').hasClass('checked');
     $.post($target.data('url'), (data) => {
+      let setProperty = true;
+
+      if (isHideUnPublish) {
+        setProperty = self.checkShouldSetProperty($target, $parentLi);
+      }
+
       $dom.toggleClass('hidden');
       $oppositeDom.toggleClass('hidden');
-      if (info.flag) {
-        self.sortList();
+
+      if (isHideUnPublish) {
+        if (setProperty) {
+          const $displayTextDom = $parentLi.find('.display-text');
+          $displayTextDom.toggleClass('hidden');
+          self.setShowNum($parentLi);
+          self.sortList();
+        }
+      } else {
+        if (info.flag) {
+          const $displayTextDom = $parentLi.find('.display-text');
+          $displayTextDom.toggleClass('hidden');
+          self.setShowNum($parentLi);
+          self.sortList();
+        }
       }
+
       cd.message({ type: 'success', message: info.success });
     }).fail(function(data) {
       cd.message({ type: 'danger', message: info.danger + data.responseJSON.error.message });
     });
+  }
+
+  checkShouldSetProperty($target, $parentLi) {
+    const $publish = $parentLi.find('.js-publish-item');
+    const $setOptional = $parentLi.find('.js-set-optional');
+
+    let hiddenPublish = $publish.hasClass('hidden');
+    let hiddenOptional = $setOptional.hasClass('hidden');
+
+    let setProperty = true;
+
+    if ($target.hasClass('js-unpublish-item')) {
+      if (hiddenOptional) {
+        setProperty = false;
+      }
+    } else if ($target.hasClass('js-publish-item')) {
+      if (hiddenOptional) {
+        setProperty = false;
+      }
+    } else if ($target.hasClass('js-set-optional')) {
+      if (!hiddenPublish) {
+        setProperty = false;
+      }
+    } else if ($target.hasClass('js-unset-optional')) {
+      if (!hiddenPublish) {
+        setProperty = false;
+      }
+    }
+
+    return setProperty;
+
   }
 
   afterAddItem($elm) {
@@ -403,7 +464,12 @@ export default class Manage {
       classList = lessonIconBtn[0].classList;
     } else {
       //单任务时，课时节点上显示任务的图标
-      classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
+      let esIcon = container.find('.js-lesson-box').find('.es-icon');
+      if (esIcon.length == 0) {
+        classList = [];
+      } else {
+        classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
+      }
     }
 
     for (let index = 0; index < classList.length; index++) {

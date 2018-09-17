@@ -1333,9 +1333,6 @@ admin_app_package_update_begin_upgrade:
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-
-    permissions: [admin_course_category_manage]
-
 admin_app_package_update_check_newest:
     path: /app/package_update/check/newest/code/{code}
     defaults: { _controller: AppBundle:Admin/AppPackageUpdate:checkNewest }

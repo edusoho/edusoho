@@ -32,13 +32,13 @@ const main = {
       var isFavorited = self.parent().hasClass('active');
       var url, action, text;
       if (isFavorited) {
-        text = '收藏';
+        text = Translator.trans('open_course.collect');
         url = self.data('cancelFavoriteUrl');
         action = 'removeClass';
       } else {
         url = self.data('favoriteUrl');
         action = 'addClass';
-        text = '已收藏';
+        text = Translator.trans('open_course.collected');
       }
 
       $.post(url, function (data) {

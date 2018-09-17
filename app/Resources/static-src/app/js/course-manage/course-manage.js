@@ -115,6 +115,7 @@ export default class CourseManage {
       cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
       this.sortList = sort;
       this._toggleSortStatus();
+      window.location.reload();
     }).error(function(e) {
       cd.message({ type: 'danger', message: e.responseText });
     });

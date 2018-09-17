@@ -3,7 +3,7 @@
 {% set menu = menu|default('admin_block') %}
 {% set currentPage = 'admin_block_visual_edit' %}
 
-{% block page_title %} {{'编辑内容'|trans}} {% endblock %}
+{% block page_title %} {{'admin.block_manage.visual_edit.title'|trans}} {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
 
@@ -28,7 +28,7 @@
     }
   </style>
   {% if app.debug %}
-    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'查看JSON配置'|trans}}</a>
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'admin.block_manage.visual_edit.watch_json_config'|trans}}</a>
   {% endif %}
 
     <!-- 以下是简墨新版的样式 -->

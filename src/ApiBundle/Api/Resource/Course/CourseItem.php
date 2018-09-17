@@ -22,10 +22,16 @@ class CourseItem extends AbstractResource
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
-        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $course, $request->query->get('onlyPublished', 0));
+        return $this->convertToLeadingItems(
+            $this->getCourseService()->findCourseItems($courseId),
+            $course,
+            $request->getHttpRequest()->isSecure(),
+            $request->query->get('fetchSubtitlesUrls', 0),
+            $request->query->get('onlyPublished', 0)
+        );
     }
 
-    private function convertToLeadingItems($originItems, $course, $onlyPublishTask = false)
+    protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $courseId = $course['id'];
         $newItems = array();
@@ -69,10 +75,12 @@ class CourseItem extends AbstractResource
             $newItems[] = $item;
         }
 
-        return $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
+        $result = $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $this->isHiddenUnpublishTasks($newItems, $courseId);
+
+        return $fetchSubtitlesUrls ? $this->afterDeal($result, $isSsl) : $result;
     }
 
-    private function filterUnPublishTask($items)
+    protected function filterUnPublishTask($items)
     {
         foreach ($items as $key => $item) {
             if ('task' == $item['type'] && 'published' != $item['task']['status']) {
@@ -83,15 +91,33 @@ class CourseItem extends AbstractResource
         return array_values($items);
     }
 
-    private function isHiddenUnpublishTasks($items, $courseId)
+    protected function isHiddenUnpublishTasks($items, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if (!$course['isShowUnpublish']) {
+        if ($course['isHideUnpublish']) {
             return $this->filterUnPublishTask($items);
         }
 
         return $items;
+    }
+
+    protected function afterDeal($result, $isSsl)
+    {
+        foreach ($result as $key => $taskItem) {
+            if (!empty($taskItem['task']) && !empty($taskItem['task']['activity'])) {
+                $updatedTaskInfo = $this->getSubtitleService()->setSubtitlesUrls(
+                    $taskItem['task']['activity']['ext'],
+                    $isSsl
+                );
+
+                if (!empty($updatedTaskInfo['subtitlesUrls'])) {
+                    $result[$key]['task']['subtitlesUrls'] = $updatedTaskInfo['subtitlesUrls'];
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -100,5 +126,10 @@ class CourseItem extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    private function getSubtitleService()
+    {
+        return $this->service('Subtitle:SubtitleService');
     }
 }

@@ -22,8 +22,10 @@
         <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
       </li>
      {% endif %}
+
+    {% include 'default/switch-language.html.twig' with {isAdapt: 1} %}
   </ul>
 </li>
 
-<li class="visitor-li visitor-login-li hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
+<li class="visitor-li hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
 <li class="visitor-li hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>

@@ -87,18 +87,19 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             if ('task' == $item['itemType']) {
                 $lessonId = $item['categoryId'];
                 $lessonInfo = $lessonInfos[$lessonId];
-                if ($lessonInfo['isSingleTaskLesson']) {
+                if (!empty($lessonInfo['isSingleTaskLesson'])) {
                     $currentLesson = $lessonInfo['lesson'];
                     $item['isSingleTaskLesson'] = true;
                     $item['seq'] = $currentLesson['seq'];
                     $item['number'] = $currentLesson['number'];
                     $item['title'] = $currentLesson['title'];
+                    $item['published_number'] = $currentLesson['published_number'];
                 } else {
                     $item['isSingleTaskLesson'] = false;
                 }
             } elseif ('lesson' == $item['itemType']) {
                 $lessonInfo = $lessonInfos[$item['id']];
-                if ($lessonInfo['isSingleTaskLesson']) {
+                if (!empty($lessonInfo['isSingleTaskLesson'])) {
                     unset($items[$key]);
                 }
             }
@@ -263,7 +264,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     {
         $course = $this->getCourseService()->getCourse($this->courseId);
 
-        return !$course['isShowUnpublish'];
+        return $course['isHideUnpublish'];
     }
 
     /**
