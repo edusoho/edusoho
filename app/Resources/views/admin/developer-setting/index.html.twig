@@ -155,6 +155,15 @@
   </div>
 
   <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.default_locale'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('default_locale', {'zh_CN':'admin.developer_setting.default_locale.zh_CN'|trans, 'en':'admin.developer_setting.default_locale.en'|trans}, developerSetting.default_locale|default('zh_CN')) }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
       <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
     </div>

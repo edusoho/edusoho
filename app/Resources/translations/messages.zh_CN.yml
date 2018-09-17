@@ -7091,6 +7091,9 @@ admin.developer_setting.hls_encrypted: HLS加密视频
 admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
+admin.developer_setting.default_locale: 默认语言
+admin.developer_setting.default_locale.zh_CN: 中文
+admin.developer_setting.default_locale.en: English
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
   <ul>
