@@ -68,6 +68,7 @@ class KernelH5RequestListener
         if ('course_set_explore' == $route['_route']) {
             return $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
+
         return $pathInfo;
     }
 
