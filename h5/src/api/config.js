@@ -143,7 +143,13 @@ const config = [
     name: 'saveDraftDate',
     url: '/pages/h5/settings/{type}/draft',
     method: 'GET'
+  }, {
+    // 获取计划目录
+    name: 'getCoursePlan',
+    url: '/courses/{id}/item_with_lessons',
+    method: 'GET'
   }
+
 ];
 
 export default config;

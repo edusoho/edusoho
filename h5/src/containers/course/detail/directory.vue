@@ -45,6 +45,7 @@
   import { Toast } from 'vant';
   import * as types from '@/store/mutation-types';
   import redirectMixin from '@/mixins/saveRedirect';
+  import Api from '@/api';
 
   export default {
     mixins: [redirectMixin],
@@ -63,6 +64,17 @@
         joinStatus: state => state.joinStatus,
         selectedPlanId: state => state.selectedPlanId,
         details: state => state.details
+      }),
+    },
+    created () {
+      Api.getCoursePlan({
+        id: this.selectedPlanId
+      })
+      .then((data) => {
+        this.courseList = data;
+      })
+      .catch((err) => {
+        console.log(this.selectedPlanId);
       })
     },
     data() {
@@ -71,6 +83,7 @@
         chapters: [],
         tasks: [],
         hour: [],
+        courseList: []
       }
     },
     filters:{
