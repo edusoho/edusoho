@@ -15,16 +15,16 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $method = "get${type}";
 
-        return $this->$method();
+        return $this->$method($request);
     }
 
-    public function getSite()
+    public function getSite($request)
     {
         $siteSetting = $this->getSettingService()->get('site');
 
@@ -35,7 +35,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getWap()
+    public function getWap($request)
     {
         $wapSetting = $this->getSettingService()->get('wap', array('version' => 0));
 
@@ -44,7 +44,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getRegister()
+    public function getRegister($request)
     {
         $registerSetting = $this->getSettingService()->get('auth', array('register_mode' => 'closed', 'email_enabled' => 'closed'));
         $registerMode = $registerSetting['register_mode'];
@@ -65,7 +65,7 @@ class Setting extends AbstractResource
      * @return array
      * @ApiConf(isRequiredAuth=false)
      */
-    public function getPayment()
+    public function getPayment($request)
     {
         $paymentSetting = $this->getSettingService()->get('payment', array());
 
@@ -77,7 +77,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getVip()
+    public function getVip($request)
     {
         $vipSetting = $this->getSettingService()->get('vip', array());
 
@@ -107,7 +107,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getMagic()
+    public function getMagic($request)
     {
         $magicSetting = $this->getSettingService()->get('magic', array());
         $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
@@ -119,7 +119,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getCdn()
+    public function getCdn($request)
     {
         $cdn = $this->getSettingService()->get('cdn');
 
@@ -131,7 +131,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getCourse()
+    public function getCourse($request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -141,6 +141,20 @@ class Setting extends AbstractResource
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
             'show_student_num_enabled' => '1',
         );
+    }
+
+    public function getWeixinConfig($request)
+    {
+        $params = $request->query->all();
+        if (empty($params['url'])) {
+            return array();
+        }
+        $result = $this->container->get('web.twig.extension')->weixinConfig($params['url']);
+        if (is_array($result) || empty($result)) {
+            return $result;
+        }
+
+        return json_decode($result, true);
     }
 
     /**

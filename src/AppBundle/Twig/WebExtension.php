@@ -340,7 +340,7 @@ class WebExtension extends \Twig_Extension
         return $content;
     }
 
-    public function weixinConfig()
+    public function weixinConfig($url = '')
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
         if (!(bool) $weixinmob_enabled) {
@@ -372,7 +372,7 @@ class WebExtension extends \Twig_Extension
         );
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
-        $url = $this->container->get('request')->getUri();
+        $url = empty($url) ? $this->container->get('request')->getUri() : $url;
         $string = 'jsapi_ticket='.$jsapi_ticket.'&noncestr='.$config['nonceStr'].'&timestamp='.$config['timestamp'].'&url='.$url;
         $config['string'] = $string;
         $config['signature'] = sha1($string);
