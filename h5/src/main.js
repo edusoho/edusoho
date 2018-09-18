@@ -22,7 +22,6 @@ import {
   SwipeItem,
   List,
   Field,
-  Loading,
   Uploader,
   Popup
 } from 'vant';
@@ -37,7 +36,6 @@ Vue.component('van-button', Button);
 Vue.component('van-tab', Tab);
 Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
-Vue.component('van-loading', Loading);
 Vue.component('van-uploader', Uploader);
 
 Vue.use(filters);
