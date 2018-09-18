@@ -60,7 +60,11 @@ class Biz extends Container
             return function ($namespace, $name) use ($biz) {
                 $className = "{$namespace}\\Service\\Impl\\{$name}Impl";
 
-                return new ServiceProxy($biz, $className);
+                if (!empty($biz['service_proxy_enabled'])) {
+                    return new ServiceProxy($biz, $className);
+                }
+
+                return new $className($biz);
             };
         };
 

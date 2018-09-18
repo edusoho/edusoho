@@ -81,6 +81,7 @@ parameters:
     permission.path_regular_expression: ['/^\/admin/']
     router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
     security.authentication.provider.dao.class: AppBundle\Handler\AuthenticationProvider
+    service_proxy_enabled: true
 
 services:
 

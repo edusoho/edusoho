@@ -31,7 +31,7 @@ class TargetlogServiceProvider implements ServiceProviderInterface
             return new LogReader($cacheDirectory);
         };
 
-        if (!empty($biz['targetlog.interceptor_enable'])) {
+        if (!empty($biz['service_proxy_enabled']) && !empty($biz['targetlog.interceptor_enable'])) {
             $biz['interceptors']['target_log'] = '\Codeages\Biz\Framework\Targetlog\Interceptor\AnnotationInterceptor';
         }
     }
