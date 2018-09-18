@@ -19,7 +19,7 @@ class User extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
-     * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter", mode="public")
      */
     public function get(ApiRequest $request, $identify)
     {
