@@ -61,8 +61,12 @@ class KernelH5RequestListener
 
     protected function transfer($route, $pathInfo)
     {
-        if ('my_course_show' == $route['_route']) {
+        if (in_array($route['_route'], array('my_course_show', 'course_show'))) {
             return $this->container->get('router')->generate('course_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
+        }
+
+        if ('course_set_explore' == $route['_route']) {
+            return $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
 
         return $pathInfo;

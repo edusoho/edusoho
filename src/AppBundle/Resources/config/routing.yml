@@ -38,6 +38,7 @@ live_jump:
 login:
     path:  /login
     defaults: { _controller: AppBundle:Login:index }
+    h5: true
 
 login_check:
     path:  /login_check
