@@ -24,7 +24,7 @@ class Setting extends AbstractResource
         return $this->$method($request);
     }
 
-    public function getSite($request)
+    public function getSite($request = null)
     {
         $siteSetting = $this->getSettingService()->get('site');
 
@@ -35,7 +35,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getWap($request)
+    public function getWap($request = null)
     {
         $wapSetting = $this->getSettingService()->get('wap', array('version' => 0));
 
@@ -44,7 +44,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getRegister($request)
+    public function getRegister($request = null)
     {
         $registerSetting = $this->getSettingService()->get('auth', array('register_mode' => 'closed', 'email_enabled' => 'closed'));
         $registerMode = $registerSetting['register_mode'];
@@ -65,7 +65,7 @@ class Setting extends AbstractResource
      * @return array
      * @ApiConf(isRequiredAuth=false)
      */
-    public function getPayment($request)
+    public function getPayment($request = null)
     {
         $paymentSetting = $this->getSettingService()->get('payment', array());
 
@@ -77,7 +77,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getVip($request)
+    public function getVip($request = null)
     {
         $vipSetting = $this->getSettingService()->get('vip', array());
 
@@ -107,7 +107,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getMagic($request)
+    public function getMagic($request = null)
     {
         $magicSetting = $this->getSettingService()->get('magic', array());
         $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
@@ -119,7 +119,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getCdn($request)
+    public function getCdn($request = null)
     {
         $cdn = $this->getSettingService()->get('cdn');
 
@@ -131,7 +131,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getCourse($request)
+    public function getCourse($request = null)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
