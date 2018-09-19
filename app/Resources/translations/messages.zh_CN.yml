@@ -7095,6 +7095,7 @@ admin.developer_setting.default_locale: 默认语言
 admin.developer_setting.default_locale.zh_CN: 中文
 admin.developer_setting.default_locale.en: English
 admin.developer_setting.default_locale.tips: >
+  <h5>默认分类与默认标签名为后台->课程->分类管理和标签管理。</h5>
   <h5>首页多处内容需设置手动设置为相应的语言。</h5>
     <li>顶部导航栏位于后台->系统->站点设置->基础信息和顶部导航。</li>
     <li>轮播图位于后台->运营->编辑区管理。</li>
