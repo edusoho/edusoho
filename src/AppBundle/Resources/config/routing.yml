@@ -1694,6 +1694,7 @@ course_manage_student_learn_detail_modal:
 task_live_entry:
   path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+  h5: true
 
 live_activity_replay_entry:
   path: /course/{courseId}/activity/{activityId}/replay/{replayId}/entry

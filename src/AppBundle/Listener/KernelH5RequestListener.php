@@ -68,6 +68,18 @@ class KernelH5RequestListener
         if ('course_set_explore' == $route['_route']) {
             return $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
+        if ('task_live_entry' == $route['_route']) {
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($route['courseId'], $route['activityId']);
+            $params = array(
+                'courseId' => $route['courseId'],
+                'taskId' => $task['id'],
+                'type' => $task['type'],
+                'title' => $task['title'],
+            );
+            $query = http_build_query($params);
+
+            return '/live?'.$query;
+        }
 
         return $pathInfo;
     }
@@ -75,6 +87,11 @@ class KernelH5RequestListener
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     protected function trans($id, array $parameters = array())
