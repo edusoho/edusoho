@@ -14,30 +14,52 @@
         <div :class="['directory-list__item-unit',
           {'unit-show': item.show}]"
           v-for="(lesson, lessonIndex) in tasks[chapterIndex]">
+
           <div class="lesson-cell__unit" v-if="lesson.type === 'unit'">
-            <span class="text-overflow">第{{ lesson.number }}节：{{ lesson.title }}</span>
+            <span class="lesson-cell__unit-title text-overflow">第{{ lesson.number }}节：{{ lesson.title }}</span>
             <i :class="[ unitShow[`${chapterIndex}-${lessonIndex}`] ? 'icon-packup': 'icon-unfold']" @click="lessonToggle(chapterIndex, lessonIndex)"></i>
           </div>
+
           <div class="lesson-cell__hour text-overflow" v-if="lesson.type === 'lesson'"
             :class="{'lesson-show': unitShow[lesson.show]}">
-            <div class="lesson-cell__lesson text-overflow">
-              <i class="h5-icon h5-icon-dot color-primary text-18"></i>
-              <span>课时{{ lesson.number }}：{{ lesson.title }}</span>
-            </div>
-            <div :class="['box', 'show-box']"
-              v-for="(task, taskIndex) in lesson.tasks">
-              <div class="lesson-cell">
-                <span class="lesson-cell__number">{{ filterNumber(task, taskIndex) }}</span>
-                <div class="lesson-cell__content" @click="lessonCellClick(task)">
-                  <span>{{ task.title }}</span>
-                  <span>{{ task | taskType }}{{ task | filterTask }}</span>
+            <div v-if="lesson.tasks.length > 1">
+              <div class="lesson-cell__lesson text-overflow"">
+                <i class="h5-icon h5-icon-dot color-primary text-18"></i>
+                <span>课时{{ lesson.number }}：{{ lesson.title }}</span>
+              </div>
+              <div :class="['box', 'show-box']"
+                v-for="(task, taskIndex) in lesson.tasks">
+                <div class="lesson-cell">
+                  <span class="lesson-cell__number">{{ filterNumber(task, taskIndex) }}</span>
+                  <div class="lesson-cell__content" @click="lessonCellClick(task, lesson)">
+                    <span>{{ task.title }}</span>
+                    <span>{{ task | taskType }}{{ task | filterTask }}</span>
+                  </div>
+                  <div :class="['lesson-cell__status', details.member ? '' : lesson.status]">
+                    {{ filterTaskStatus(lesson) }}
+                  </div>
                 </div>
-                <div :class="['lesson-cell__status', details.member ? '' : task.status]">
-                  {{ filterTaskStatus(task) }}
+              </div>
+            </div>
+
+            <div v-if="lesson.tasks.length === 1">
+              <div class="lesson-cell__lesson text-overflow"">
+                <i class="h5-icon h5-icon-dot color-primary text-18"></i>
+                <span>课时{{ lesson.number }}：{{ lesson.tasks[0].title }}</span>
+
+                <div class="lesson-cell">
+                  <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
+                  <div class="lesson-cell__content ml3" @click="lessonCellClick(lesson.tasks[0], lesson)">
+                    <span>{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
+                  </div>
+                  <div :class="['lesson-cell__status', details.member ? '' : lesson.status]">
+                    {{ filterTaskStatus(lesson) }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -71,6 +93,7 @@
         directoryArray: [],
         chapters: [],
         tasks: [],
+        unit: [],
         unitShow: {},
       }
     },
@@ -84,20 +107,16 @@
           let chapter = 0;
           this.directoryArray = this.courseLessons.map(item => { //后续可考虑 getTasks 方法的遍历可以合并成一个？
             task ++;
+            this.$set(item, 'show', true);
             if (item.type === 'chapter') {
               chapter ++;
               task = 0;
-              this.$set(item, 'show', true);
             }
             if (item.type === 'unit') {
               unit = task - 1;
             }
             if (item.type === 'lesson') {
-              this.$set(item, 'show', `${chapter - 1}-${unit}`);
-            }
-
-            if (item.type == 'task') {
-              item['status'] = this.getCurrentStatus(item.task);
+              this.$set(item, 'show', `${Math.max(chapter - 1, 0)}-${unit}`);
             }
 
             return item;
@@ -113,24 +132,25 @@
       }),
       lessonToggle(chapterIndex, lessonIndex) {
         const index = `${chapterIndex}-${lessonIndex}`;
-        console.log(index)
         this.$set(this.unitShow, index, !this.unitShow[index]);
       },
-      lessonShow(chapterIndex, lessonIndex) {
-        return
-      },
-      filterNumber(task, index) {
+      filterNumber(task, index, single) {
+        if (single) {
+          return task.isOptional === '1' ? '选修' : '';
+        }
         return task.isOptional === '1' ? '选修' : (index + 1);
       },
       getTasks (data) {
         let temp = [];
         this.chapters = [];
         this.tasks = [];
+        this.unit = [];
 
         data.forEach(item => {
           if (item.type !== 'chapter') {
             if (item.type === 'unit') {
-              this.$set(this.unitShow, `${this.chapters.length - 1}-${temp.length}`, true)
+              this.$set(this.unitShow, `${this.chapters.length - 1}-${temp.length}`, true);
+              this.unit.push(item);
             }
             temp.push(item);
           } else {
@@ -143,7 +163,17 @@
 
             this.chapters.push(item);
           }
+
+          if (item.type == 'lesson') {
+            item.tasks.forEach(task => {
+              item['status'] = this.getCurrentStatus(task);
+            })
+          }
         })
+
+        if (!this.unit.length) {
+          this.$set(this.unitShow, `${0}-${0}`, true);
+        }
 
         const last = data.length - 1;
 
@@ -165,17 +195,16 @@
         }
         return '';
       },
-      filterTaskStatus (task){
-        if (!this.details.member && task.status === 'is-tryLook') {
+      filterTaskStatus (lesson){
+        if (!this.details.member && lesson.status === 'is-tryLook') {
           return '试看';
-        } else if (!this.details.member && task.status === 'is-free') {
+        } else if (!this.details.member && lesson.status === 'is-free') {
           return '免费';
         }
 
         return '';
       },
-      lessonCellClick (data) {
-        const task = data.task;
+      lessonCellClick (task, lesson) {
         const details = this.details;
 
         !details.allowAnonymousPreview && this.$route.push({
@@ -184,10 +213,9 @@
             redirect: this.redirect
           }
         });
-
         if (!this.joinStatus
           && Number(details.tryLookable)
-          && ['is-tryLook', 'is-free'].includes(data.status)) {
+          && ['is-tryLook', 'is-free'].includes(lesson.status)) {
         // trylook and free video click
           switch (task.type) {
             case 'video':
