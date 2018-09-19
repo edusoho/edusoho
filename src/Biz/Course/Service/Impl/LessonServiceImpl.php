@@ -186,8 +186,6 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
             $this->getLogService()->info('course', 'lesson_set_optional', "课时设置选修《{$lesson['title']}》", $lesson);
 
-            $this->updateLessonNumbers($courseId);
-
             $this->commit();
 
             return $lesson;
@@ -219,7 +217,6 @@ class LessonServiceImpl extends BaseService implements LessonService
                 'title' => $lesson['title'],
             );
             $this->getLogService()->info('course', 'lesson_unset_optional', "课时设置必修《{$lesson['title']}》", $infoData);
-            $this->updateLessonNumbers($courseId);
 
             $this->commit();
 
