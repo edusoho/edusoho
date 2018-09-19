@@ -76,11 +76,16 @@
     }
   }
   .box {
+    position: relative;
+    padding-top: vw(15);
+    padding-bottom: vw(15);
     opacity: 0;
     transform: translateY(-50%);
     transition: all 0.3s;
-    position: relative;
 
+    &:not(:last-child){
+      border-bottom: 1px solid #EEE;
+    }
     &.show-box {
       transform: translateY(0);
       opacity: 1;

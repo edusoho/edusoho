@@ -27,8 +27,7 @@
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
-    <directory ref="directory"
-      :courseItems="details.courseItems"></directory>
+    <directory ref="directory"></directory>
     <e-footer @click.native="handleJoin">
       {{details.access.code | filterJoinStatus}}</e-footer>
   </div>

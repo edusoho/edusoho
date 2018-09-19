@@ -1,9 +1,9 @@
 <template>
   <e-panel title="课程目录" class="directory" :hidde-title="hiddeTitle">
     <!-- 暂无学习任务 -->
-    <div v-if="courseItems.length == 0" class="empty">暂无学习任务</div>
+    <div v-if="courseLessons.length == 0" class="empty">暂无学习任务</div>
     <div class="directory-list" v-else>
-      <div class="directory-list__item" v-for="(item, index) in chapters">
+      <div class="directory-list__item" v-for="(item, chapterIndex) in chapters">
         <div class="directory-list__item-chapter"
           @click="item.show = !item.show"
           v-if="item.type === 'chapter'">
@@ -13,25 +13,28 @@
 
         <div :class="['directory-list__item-unit',
           {'unit-show': item.show}]"
-          v-for="task in tasks[index]">
-          <div class="lesson-cell__unit" v-if="task.type === 'unit'" @click="item.show = !item.show">
-            <span class="text-overflow">第{{ task.number }}节：{{ task.title }}</span>
-            <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"></i>
+          v-for="(lesson, lessonIndex) in tasks[chapterIndex]">
+          <div class="lesson-cell__unit" v-if="lesson.type === 'unit'">
+            <span class="text-overflow">第{{ lesson.number }}节：{{ lesson.title }}</span>
+            <i :class="[ unitShow[`${chapterIndex}-${lessonIndex}`] ? 'icon-packup': 'icon-unfold']" @click="lessonToggle(chapterIndex, lessonIndex)"></i>
           </div>
-          <div class="lesson-cell__hour text-overflow" v-if="task.type === 'task'">
-            <i class="h5-icon h5-icon-dot color-primary text-18"></i>
-            课时1：词性和基本句型上
-          </div>
-          <div :class="['box', {'show-box': item.show}]"
-            v-if="task.type === 'task'">
-            <div class="lesson-cell">
-              <span class="lesson-cell__number">{{ task | filterNumber }}</span>
-              <div class="lesson-cell__content" @click="lessonCellClick(task)">
-                <span>{{ task.title }}</span>
-                <span>{{ task.task | taskType }}{{ task.task | filterTask }}</span>
-              </div>
-              <div :class="['lesson-cell__status', details.member ? '' : task.status]">
-                {{ filterTaskStatus(task) }}
+          <div class="lesson-cell__hour text-overflow" v-if="lesson.type === 'lesson'"
+            :class="{'lesson-show': unitShow[lesson.show]}">
+            <div class="lesson-cell__lesson text-overflow">
+              <i class="h5-icon h5-icon-dot color-primary text-18"></i>
+              <span>课时{{ lesson.number }}：{{ lesson.title }}</span>
+            </div>
+            <div :class="['box', 'show-box']"
+              v-for="(task, taskIndex) in lesson.tasks">
+              <div class="lesson-cell">
+                <span class="lesson-cell__number">{{ filterNumber(task, taskIndex) }}</span>
+                <div class="lesson-cell__content" @click="lessonCellClick(task)">
+                  <span>{{ task.title }}</span>
+                  <span>{{ task | taskType }}{{ task | filterTask }}</span>
+                </div>
+                <div :class="['lesson-cell__status', details.member ? '' : task.status]">
+                  {{ filterTaskStatus(task) }}
+                </div>
               </div>
             </div>
           </div>
@@ -50,10 +53,6 @@
   export default {
     mixins: [redirectMixin],
     props: {
-      courseItems: {
-        type: Array,
-        default: () => ([])
-      },
       hiddeTitle: {
         type: Boolean,
         default: false
@@ -61,43 +60,41 @@
     },
     computed: {
       ...mapState('course', {
+        details: state => state.details,
         joinStatus: state => state.joinStatus,
+        courseLessons: state => state.courseLessons,
         selectedPlanId: state => state.selectedPlanId,
-        details: state => state.details
       }),
-    },
-    created () {
-      Api.getCoursePlan({
-        id: this.selectedPlanId
-      })
-      .then((data) => {
-        this.courseList = data;
-      })
     },
     data() {
       return {
         directoryArray: [],
         chapters: [],
         tasks: [],
-        hour: [],
-        courseList: []
-      }
-    },
-    filters:{
-      filterNumber(task) {
-        return task.task.isOptional === '1' ? '选修' : task.task.number
+        unitShow: {},
       }
     },
     watch: {
       selectedPlanId: {
         immediate: true,
         handler(v) {
-          if (!this.details.courseItems.length) return;
-
-          this.directoryArray =
-            this.details.courseItems.map(item => {
-
-            this.$set(item, 'show', true);
+          if (!this.courseLessons.length) return;
+          let task = 0;
+          let unit = 0;
+          let chapter = 0;
+          this.directoryArray = this.courseLessons.map(item => { //后续可考虑 getTasks 方法的遍历可以合并成一个？
+            task ++;
+            if (item.type === 'chapter') {
+              chapter ++;
+              task = 0;
+              this.$set(item, 'show', true);
+            }
+            if (item.type === 'unit') {
+              unit = task - 1;
+            }
+            if (item.type === 'lesson') {
+              this.$set(item, 'show', `${chapter - 1}-${unit}`);
+            }
 
             if (item.type == 'task') {
               item['status'] = this.getCurrentStatus(item.task);
@@ -114,6 +111,17 @@
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
+      lessonToggle(chapterIndex, lessonIndex) {
+        const index = `${chapterIndex}-${lessonIndex}`;
+        console.log(index)
+        this.$set(this.unitShow, index, !this.unitShow[index]);
+      },
+      lessonShow(chapterIndex, lessonIndex) {
+        return
+      },
+      filterNumber(task, index) {
+        return task.isOptional === '1' ? '选修' : (index + 1);
+      },
       getTasks (data) {
         let temp = [];
         this.chapters = [];
@@ -121,12 +129,15 @@
 
         data.forEach(item => {
           if (item.type !== 'chapter') {
+            if (item.type === 'unit') {
+              this.$set(this.unitShow, `${this.chapters.length - 1}-${temp.length}`, true)
+            }
             temp.push(item);
           } else {
             if (temp.length > 0) {
               this.tasks.push([].concat(temp));
               temp = [];
-            }else if (this.chapters.length > 0) {
+            } else if (this.chapters.length > 0) {
               this.tasks.push([]);
             }
 

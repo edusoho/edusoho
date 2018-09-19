@@ -38,17 +38,17 @@
           &.unit-show {
             height: auto;
             margin:0 vw(10);
-            + .unit-show {
-              border-bottom: 1px solid #EEE;
-              margin-top: 5px;
-              padding-top: 15px;
-            }
+            // + .unit-show {
+            //   margin-top: vw(5);
+            //   padding-top: vw(5);
+            // }
           }
         }
         .lesson-cell {
           @extend .flex-row;
           @extend .font-family-PFM;
 
+          margin-left: vw(20);
           font-size: vw(14);
           &__unit {
             display: flex;
@@ -61,13 +61,27 @@
             }
           }
           &__hour {
-            margin-bottom: vw(20);
+            margin-top: vw(5);
+            padding-top: vw(5);
+            margin-bottom: vw(5);
             color: #71777D;
+            &.lesson-show {
+              height: 0;
+              padding-top: 0;
+              margin-top: 0;
+              margin-bottom: 0;
+            }
+          }
+          &__lesson {
+            margin-bottom: vw(5);
+            .h5-icon {
+              position: relative;
+              left: vw(-1);
+            }
           }
           &__content {
             @extend .flex-column;
             margin-left: vw(10);
-            margin-bottom: vw(15);
             flex: 1;
             span {
               color: #2B333B;
