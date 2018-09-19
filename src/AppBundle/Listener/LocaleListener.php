@@ -21,13 +21,19 @@ class LocaleListener extends AbstractSecurityDisabledListener implements EventSu
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+        if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
 
         $request = $event->getRequest();
         if (!$request->hasPreviousSession() || $this->isSecurityDisabledRequest($this->container, $request)) {
             return;
+        }
+
+        $settingService = $this->getSettingService();
+        $developer = $settingService->get('developer');
+        if (isset($developer['default_locale'])) {
+            $this->defaultLocale = $developer['default_locale'];
         }
 
         $locale = $request->getSession()->get('_locale', $request->cookies->get('_last_logout_locale') ?: $this->defaultLocale);
@@ -40,5 +46,15 @@ class LocaleListener extends AbstractSecurityDisabledListener implements EventSu
             // must be registered after the default Locale listener
             KernelEvents::REQUEST => array(array('onKernelRequest', 15)),
         );
+    }
+
+    protected function getBiz()
+    {
+        return $this->container->get('biz');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }
