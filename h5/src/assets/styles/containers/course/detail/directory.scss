@@ -64,6 +64,8 @@
             }
           }
           &__hour {
+            position: relative;
+            left: vw(-3);
             height: 0;
             padding-top: 0;
             margin-top: 0;
@@ -78,10 +80,6 @@
           }
           &__lesson {
             margin-bottom: vw(5);
-            .h5-icon {
-              position: relative;
-              left: vw(-1);
-            }
           }
           &__content {
             @extend .flex-column;
