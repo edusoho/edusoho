@@ -36,7 +36,24 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "login" */ '@/containers/login/index.vue')
-  }, {
+  },
+  {
+    path: '/sts',
+    name: 'sts',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "login" */ '@/containers/discovery/index.vue')
+  },
+  {
+    path: '/photo',
+    name: 'photo',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "login" */ '@/containers/discovery/photo.vue')
+  },
+  {
     path: '/register',
     name: 'register',
     meta: {

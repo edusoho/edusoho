@@ -17,7 +17,9 @@
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
+     <router-link to="sts">人脸识别</router-link>
   </div>
+
 </template>
 <script>
 import { mapActions } from 'vuex';
