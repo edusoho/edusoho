@@ -48,7 +48,7 @@ export default {
       const { taskId, replay, title } = this.$route.query;
       this.setNavbarTitle(title)
 
-      if (replay) {
+      if (replay == 'true') { // query boolean 被转成字符串了
         this.getReplayUrl(taskId)
         return;
       }
