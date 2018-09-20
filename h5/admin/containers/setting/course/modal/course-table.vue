@@ -94,6 +94,7 @@ export default {
         return;
       }
       this.courseSets.splice(index, 1);
+      this.courseSets = this.courseSets; // 触发 courseSets 的 set 事件，向父组件抛出事件
     },
     getContext(course, label) {
       if (label === 'price') {
