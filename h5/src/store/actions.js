@@ -81,7 +81,9 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
         type
       }
     }).then(res => {
-      document.title = res.name;
+      if (type === 'site') {
+        document.title = res.name;
+      }
       commit(types.GET_SETTINGS, {
         key,
         setting: res
