@@ -135,16 +135,24 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+  if (!Object.keys(store.state.courseSettings).length) {
+    store.dispatch('getGlobalSettings', {
+      type: 'course',
+      key: 'courseSettings'
+    });
+  }
 
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
-    store.dispatch('getGlobalSettings', { type: 'site' })
-      .then(res => {
-        if (shouldUpdateMetaTitle) {
-          to.meta.title = res.name;
-        }
-        next();
-      });
+    store.dispatch('getGlobalSettings', {
+      type: 'site',
+      key: 'settings'
+    }).then(res => {
+      if (shouldUpdateMetaTitle) {
+        to.meta.title = res.name;
+      }
+      next();
+    });
   } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
     next();
