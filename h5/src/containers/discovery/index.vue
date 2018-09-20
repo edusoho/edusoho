@@ -62,7 +62,7 @@ export default {
 
         if (res.faceRegistered === '0') {
           this.faceRegistered = res.faceRegistered;
-          Toast.fail({
+          Toast({
             duration: 2000,
             message: '初次使用请验证密码'
           });
@@ -74,7 +74,7 @@ export default {
             console.log(res);
             const upload = res.upload.form;
             this.$router.push({
-              name: 'photo',
+              name: 'verification',
               params: {
                 sessionId: res.id,
                 uploadUrl: upload.action,
@@ -101,7 +101,7 @@ export default {
         }).then(res => {
           const upload = res.upload.form;
           this.$router.push({
-            name: 'photo',
+            name: 'verification',
             params: {
               sessionId: res.id,
               uploadUrl: upload.action,
