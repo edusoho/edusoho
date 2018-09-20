@@ -61,8 +61,7 @@ export default {
           return;
         };
 
-        // faceRegistered字段更新
-        if (!res.faceRegistered) {
+        if (res.faceRegistered === '0') {
           this.faceRegistered = res.faceRegistered;
           Toast.fail({
             duration: 2000,
