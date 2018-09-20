@@ -294,7 +294,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
         $fields = array(
             'seq' => $seq,
             'published_number' => 0,
-    );
+        );
 
         if ($needResetUnitNumber) {
             $unitNumber = 1;
