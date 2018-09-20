@@ -31,12 +31,12 @@
                 v-for="(task, taskIndex) in lesson.tasks">
                 <div class="lesson-cell">
                   <span class="lesson-cell__number" v-if="!Number(lesson.isOptional)">{{ filterNumber(task, taskIndex) }}</span>
-                  <div class="lesson-cell__content" @click="lessonCellClick(task, lesson)">
+                  <div class="lesson-cell__content" @click="lessonCellClick(task)">
                     <span>{{ task.title }}</span>
                     <span>{{ task | taskType }}{{ task | filterTask }}</span>
                   </div>
-                  <div :class="['lesson-cell__status', details.member ? '' : lesson.status]">
-                    {{ filterTaskStatus(lesson) }}
+                  <div :class="['lesson-cell__status', details.member ? '' : task.tagStatus]">
+                    {{ filterTaskStatus(task) }}
                   </div>
                 </div>
               </div>
@@ -52,8 +52,8 @@
                   <div class="lesson-cell__content ml3" @click="lessonCellClick(lesson.tasks[0], lesson)">
                     <span>{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
                   </div>
-                  <div :class="['lesson-cell__status', details.member ? '' : lesson.status]">
-                    {{ filterTaskStatus(lesson) }}
+                  <div :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">
+                    {{ filterTaskStatus(lesson.tasks[0]) }}
                   </div>
                 </div>
               </div>
@@ -152,6 +152,15 @@
         this.optionalMap = [];
 
         data.forEach(item => {
+          if (item.type == 'lesson') {
+            lessonIndex ++;
+            optionalNum = Number(item.isOptional) ? (++optionalNum) : optionalNum;
+            this.optionalMap[lessonIndex] = optionalNum;
+            item.tasks.forEach(task => {
+              task['tagStatus'] = this.getCurrentStatus(task);
+            })
+          }
+
           if (item.type !== 'chapter') {
             if (item.type === 'unit') {
               this.$set(this.unitShow, `${this.chapters.length - 1}-${temp.length}`, true);
@@ -169,14 +178,6 @@
             this.chapters.push(item);
           }
 
-          if (item.type == 'lesson') {
-            lessonIndex ++;
-            optionalNum = Number(item.isOptional) ? (++optionalNum) : optionalNum;
-            this.optionalMap[lessonIndex] = optionalNum;
-            item.tasks.forEach(task => {
-              item['status'] = this.getCurrentStatus(task);
-            })
-          }
         })
 
         if (!this.unit.length) {
@@ -204,16 +205,16 @@
         }
         return '';
       },
-      filterTaskStatus (lesson){
-        if (!this.details.member && lesson.status === 'is-free') {
+      filterTaskStatus (task){
+        if (!this.details.member && task.tagStatus === 'is-free') {
           return '免费';
         }
-        if (!this.details.member && lesson.status === 'is-tryLook') {
+        if (!this.details.member && task.tagStatus === 'is-tryLook') {
           return '试看';
         }
         return '';
       },
-      lessonCellClick (task, lesson) {
+      lessonCellClick (task) {
         const details = this.details;
 
         !details.allowAnonymousPreview && this.$route.push({
@@ -224,7 +225,7 @@
         });
         if (!this.joinStatus
           && (Number(details.tryLookable)
-              || ['is-tryLook', 'is-free'].includes(lesson.status))) {
+              || ['is-tryLook', 'is-free'].includes(task.tagStatus))) {
         // trylook and free video click
           switch (task.type) {
             case 'video':
