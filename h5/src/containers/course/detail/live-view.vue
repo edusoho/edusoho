@@ -10,7 +10,7 @@ import Api from '@/api';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
-
+import redirectMixin from '@/mixins/saveRedirect';
 
 export default {
   data () {
@@ -19,6 +19,7 @@ export default {
       requestCount: 0
     }
   },
+  mixins: [redirectMixin],
   computed: {
     ...mapState('course', {
       joinStatus: state => state.joinStatus
@@ -28,6 +29,15 @@ export default {
     })
   },
   async mounted () {
+    if (!this.$store.state.token) {
+      this.$router.push({
+        name: 'login',
+        query: {
+          redirect: this.redirect
+        }
+      });
+      return;
+    }
     this.handleLive();
   },
   methods: {
@@ -38,7 +48,7 @@ export default {
       const { taskId, replay, title } = this.$route.query;
       this.setNavbarTitle(title)
 
-      if (replay) {
+      if (replay == 'true') { // query boolean 被转成字符串了
         this.getReplayUrl(taskId)
         return;
       }
@@ -111,6 +121,6 @@ export default {
         Toast.fail(err.message);
       })
     }
-  }
+  },
 }
 </script>

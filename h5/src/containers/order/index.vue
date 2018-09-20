@@ -96,7 +96,7 @@ export default {
       const couponRate = this.itemData.rate;
       const totalNumber = this.course.totalPrice;
       if (minusType) {
-        return Math.max(totalNumber - couponRate, 0);
+        return Math.max(totalNumber - couponRate, 0).toFixed(2);
       }
       return Number(totalNumber - totalNumber * couponRate * 0.1).toFixed(2);
     },
