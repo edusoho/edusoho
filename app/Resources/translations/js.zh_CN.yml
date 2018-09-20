@@ -1315,3 +1315,6 @@ admin.util.item_delete.delete_hint: 真的要删除该%name%吗？
 admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
+
+task_show.user_login_protect_tip: 该账号未登录或已被踢
+
