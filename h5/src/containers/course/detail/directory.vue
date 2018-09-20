@@ -97,6 +97,7 @@
         unit: [],
         optionalMap: [],
         unitShow: {},
+        firstLesson: '',
       }
     },
     watch: {
@@ -108,6 +109,9 @@
           let unit = 0;
           let chapter = 0;
           this.directoryArray = this.courseLessons.map(item => { //后续可考虑 getTasks 方法的遍历可以合并成一个？
+            if (!this.firstLesson) {
+              this.firstLesson = item.type;
+            }
             task ++;
             this.$set(item, 'show', true);
             if (item.type === 'chapter') {
@@ -118,7 +122,10 @@
               unit = task - 1;
             }
             if (item.type === 'lesson') {
-              this.$set(item, 'show', `${Math.max(chapter - 1, 0)}-${unit}`);
+              const chaptersIndex = this.firstLesson === 'chapter'
+                ? Math.max(chapter - 1, 0) : Math.max(chapter, 0);
+              const unitIndex = unit;
+              this.$set(item, 'show', `${chaptersIndex}-${unitIndex}`);
             }
 
             return item;
@@ -163,7 +170,10 @@
 
           if (item.type !== 'chapter') {
             if (item.type === 'unit') {
-              this.$set(this.unitShow, `${this.chapters.length - 1}-${temp.length}`, true);
+              const chaptersIndex = this.firstLesson === 'chapter'
+                ? this.chapters.length - 1 : this.chapters.length;
+              const unitIndex = temp.length;
+              this.$set(this.unitShow, `${chaptersIndex}-${unitIndex}`, true);
               this.unit.push(item);
             }
             temp.push(item);
@@ -180,7 +190,7 @@
 
         })
 
-        if (!this.unit.length) {
+        if (!this.unit.length || this.firstLesson !== 'chapter') {
           this.$set(this.unitShow, `${0}-${0}`, true);
         }
 
