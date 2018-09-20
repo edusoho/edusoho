@@ -7,7 +7,10 @@
     {% else %}
       {% include 'default/header/part/visitor-login.html.twig' %}
     {% endif %}
-    {#{% include 'default/switch-language.html.twig' %}#}
+    {% set show_switch_locale = setting('developer.show_switch_locale')|default(0) %}
+    {% if show_switch_locale == 1 %}
+      {% include 'default/switch-language.html.twig' %}
+    {% endif %}
   </ul>
   <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
     <div class="form-group">

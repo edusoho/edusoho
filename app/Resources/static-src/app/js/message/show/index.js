@@ -10,7 +10,7 @@ $('#message-reply-form').on('click', '#course-reply-btn', function (e) {
   }
 
   if ($.trim($('#message_reply_content').val()).length == 0) {
-    notify('danger',Translator.trans('请输入内容!'));
+    notify('danger',Translator.trans('validate.empty_content_hint'));
     $replyBtn.removeClass('disabled').attr('disabled', false);
     return false;
   }

@@ -3,9 +3,6 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Order\Service\OrderService;
-use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CashierH5Controller extends BaseController

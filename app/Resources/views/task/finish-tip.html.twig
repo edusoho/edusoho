@@ -1,0 +1,9 @@
+{% set condition = conditions[activity.finishType]|default() %}
+
+{% if activity.finishType == 'time' %}
+  {{'activity_manage.finish_tips_time'|trans({'%finishDetail%':activity.finishData})|raw}}
+{% elseif condition.describe|default() %}
+  {{ condition.describe|trans }}
+{% else %}
+    {{ 'activity_manage.finish_select_tips_end'|trans }}
+{% endif %}

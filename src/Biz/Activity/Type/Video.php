@@ -18,6 +18,13 @@ class Video extends Activity
         return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');
     }
 
+    /**
+     * @param $fields
+     *
+     * @return array|mixed
+     *
+     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
     public function create($fields)
     {
         if (empty($fields['media'])) {
@@ -57,6 +64,17 @@ class Video extends Activity
         return $this->getVideoActivityDao()->update($video['id'], $video);
     }
 
+    /**
+     * @param int   $activityId
+     * @param array $fields
+     * @param array $activity
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
     public function update($activityId, &$fields, $activity)
     {
         if (empty($fields['media'])) {
@@ -64,12 +82,6 @@ class Video extends Activity
         }
 
         $video = $this->handleFields($fields);
-
-        if ('time' == $fields['finishType']) {
-            if (empty($fields['finishDetail'])) {
-                throw $this->createAccessDeniedException('finish time can not be empty');
-            }
-        }
         $videoActivity = $this->getVideoActivityDao()->get($activity['mediaId']);
         if (empty($videoActivity)) {
             throw new \Exception('教学活动不存在');
@@ -77,26 +89,6 @@ class Video extends Activity
         $videoActivity = $this->getVideoActivityDao()->update($activity['mediaId'], $video);
 
         return $videoActivity;
-    }
-
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        if ('time' === $video['finishType']) {
-            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-            $result /= 60;
-
-            return !empty($result) && $result >= $video['finishDetail'];
-        }
-
-        if ('end' === $video['finishType']) {
-            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
-
-            return !empty($log);
-        }
-
-        return false;
     }
 
     public function get($id)

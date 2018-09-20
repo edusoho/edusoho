@@ -21,6 +21,7 @@ class CourseSetCoursesCopeTest extends BaseTestCase
         $options = array(
             'newCourseSet' => array(
                 'id' => 2,
+                'title' => 2,
             ),
         );
 

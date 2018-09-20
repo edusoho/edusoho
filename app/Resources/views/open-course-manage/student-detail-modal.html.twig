@@ -1,14 +1,14 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'个人详细信息'|trans}}{% endblock %}
+{% block title %}{{'student.profile'|trans}}{% endblock %}
 
 {% block body %}
 
 <table class="table table-striped table-condenseda table-bordered">
   <tr>
-    <th width="25%">{{'用户名'|trans}}</th>
+    <th width="25%">{{'student.user_name'|trans}}</th>
     <td width="75%">
-      <a class="pull-right link-primary" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'个人主页'|trans}}</a>
+      <a class="pull-right link-primary" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'student.user_show'|trans}}</a>
       {{ user.nickname }}
     </td>
   </tr>
@@ -20,132 +20,132 @@
         {% if emailArr[1] != 'edusoho.net' %}
           {{ user.email }}
         {% else %}
-          {{'暂无'|trans}}
+          {{'student.profile.field.empty'|trans}}
         {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'姓名'|trans}}</th>
+    <th>{{'student.profile.truename'|trans}}</th>
     <td>
       {% if profile.truename %}
         {{ profile.truename }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'性别'|trans}}</th>
+    <th>{{'student.profile.gender'|trans}}</th>
     <td>
       {% if profile.gender == 'mail' %}
-        {{'男'|trans}}
+        {{'student.profile.gender.male'|trans}}
       {% elseif profile.gender == 'femail' %}
-        {{'女'|trans}}
+        {{'student.profile.gender.female'|trans}}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'公司'|trans}}</th>
+    <th>{{'student.profile.company'|trans}}</th>
     <td>
       {% if profile.company %}
         {{ profile.company }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'职业'|trans}}</th>
+    <th>{{'student.profile.job'|trans}}</th>
     <td>
       {% if profile.job %}
         {{ profile.job }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'头衔'|trans}}</th>
+    <th>{{'student.profile.title'|trans}}</th>
     <td>
     {% if profile.title %}
         {{ profile.title }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'电话'|trans}}</th>
+    <th>{{'user.fields.phone_label'|trans}}</th>
     <td>
     {% if profile.mobile %}
         {{ profile.mobile }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'个人签名'|trans}}</th>
+    <th>{{'student.profile.signature'|trans}}</th>
     <td>
     {% if profile.signature %}
         {{ profile.signature }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'自我介绍'|trans}}</th>
+    <th>{{'student.profile.about'|trans}}</th>
     <td>
     {% if profile.about %}
         <div class="editor-text">
         {{ profile.about|cdn|raw }}
         </div>
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'个人网站'|trans}}</th>
+    <th>{{'student.profile.site'|trans}}</th>
     <td>
       {% if profile.site %}
         {{ profile.site }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'微博'|trans}}</th>
+    <th>{{'student.profile.weibo'|trans}}</th>
     <td>
       {% if profile.weibo %}
         {{ profile.weibo }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th>{{'微信'|trans}}</th>
+    <th>{{'student.profile.weixin'|trans}}</th>
     <td>
       {% if profile.weixin %}
         {{ profile.weixin }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
@@ -156,7 +156,7 @@
       {% if profile.qq %}
         {{ profile.qq }}
       {% else %}
-        {{'暂无'|trans}}
+        {{'student.profile.field.empty'|trans}}
       {% endif %}
     </td>
   </tr>
@@ -172,7 +172,7 @@
             {{ profile[userField.fieldName] }}
           {% endif %}
         {% else %}
-          {{'暂无'|trans}}
+          {{'student.profile.field.empty'|trans}}
         {% endif %}
       </td>
     </tr>
@@ -184,5 +184,5 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
 {% endblock %}

@@ -39,7 +39,7 @@ define(function(require, exports, module) {
 
         $("#batch-update-org").on('click', function(e) {
             if (getCheckstatus(true)) {
-                Notify.warning(Translator.trans('请先选择数据'));
+                Notify.warning(Translator.trans('admin.org.batch_select_check_hint'));
                 e.stopImmediatePropagation();
             }
         })

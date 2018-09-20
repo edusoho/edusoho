@@ -274,6 +274,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $task['status'] = $chapter['status'];
+        $task['isOptional'] = $chapter['isOptional'];
 
         return parent::createTask($task);
     }

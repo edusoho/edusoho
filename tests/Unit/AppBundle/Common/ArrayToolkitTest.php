@@ -286,6 +286,24 @@ class ArrayToolkitTest extends BaseTestCase
         );
     }
 
+    public function testSortPerArrayValue()
+    {
+        $sortedBefore = array(
+            array('id' => 1, 'title' => 'course1'),
+            array('id' => 2, 'title' => 'course3'),
+            array('id' => 3, 'title' => 'course2'),
+        );
+
+        $result = ArrayToolkit::sortPerArrayValue($sortedBefore, 'title');
+
+        $this->assertEquals('course1', $result[0]['title']);
+        $this->assertEquals('course3', $result[2]['title']);
+
+        $result = ArrayToolkit::sortPerArrayValue($sortedBefore, 'title', false);
+        $this->assertEquals('course3', $result[0]['title']);
+        $this->assertEquals('course1', $result[2]['title']);
+    }
+
     public function testIsSameValues()
     {
         $compared = array('a', 'b', 'c');

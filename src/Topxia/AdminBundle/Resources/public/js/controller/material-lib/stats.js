@@ -47,39 +47,39 @@ define(function(require, exports, module) {
                 this.spacePieChart = new PieChart({
                     element: '#space-pie-chart',
                     data: this.$('#space-pie-chart').data('data'),
-                    title: Translator.trans('存储空间使用分布')
+                    title: Translator.trans('admin.material_lib.space_pie_chart_title')
                 });
 
                 this.flowPieChart = new PieChart({
                     element: '#flow-pie-chart',
                     data: this.$('#flow-pie-chart').data('data'),
-                    title: Translator.trans('流量使用分布')
+                    title: Translator.trans('admin.material_lib.flow_pie_chart_title')
                 });
 
                 this.totalLineChart = new BarChart({
                     element: '#total-line-chart',
-                    title: Translator.trans('空间/流量详情')
+                    title: Translator.trans('admin.material_lib.total_line_chart_title')
                 });
             }
 
             if (id == '#video-chart' && !this.videoLineChart ) {
                 this.videoLineChart = new LineChart({
                     element: '#video-line-chart',
-                    title: Translator.trans('视频详情')
+                    title: Translator.trans('admin.material_lib.video_line_chart_title')
                 });
             }
 
             if (id == '#audio-chart' && !this.audioLineChart) {
                 this.audioLineChart = new LineChart({
                     element: '#audio-line-chart',
-                    title: Translator.trans('音频详情')
+                    title: Translator.trans('admin.material_lib.audio_line_chart_title')
                 });
             }
 
             if (id == '#document-chart' && !this.docLineChart) {
                 this.docLineChart = new LineChart({
                     element: '#document-line-chart',
-                    title: Translator.trans('文档详情')
+                    title: Translator.trans('admin.material_lib.document_line_chart_title')
                 });
             }
         }

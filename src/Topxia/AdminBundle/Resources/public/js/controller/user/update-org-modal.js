@@ -14,10 +14,10 @@ define(function(require, exports, module) {
                 $('#edit-user-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function() {
-                    Notify.success(Translator.trans('修改用户所属机构成功'));
+                    Notify.success(Translator.trans('admin.user.update_org_success_hint'));
                     window.location.reload();
                 }).error(function() {
-                    Notify.danger(Translator.trans('操作失败'));
+                    Notify.danger(Translator.trans('admin.user.update_org_fail_hint'));
                 });
             }
         });

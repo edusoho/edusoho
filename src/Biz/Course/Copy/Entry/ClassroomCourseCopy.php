@@ -42,7 +42,7 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['creator'] = $user['id'];
         $newCourse['status'] = 'published';
         $newCourse['teacherIds'] = array($user['id']);
-        $newCourse['isShowUnpublish'] = $course['isShowUnpublish'];
+        $newCourse['isHideUnpublish'] = $course['isHideUnpublish'];
         $newCourse['lessonNum'] = $course['lessonNum'];
         $newCourse['publishLessonNum'] = $course['publishLessonNum'];
         $newCourse['taskNum'] = $course['taskNum'];

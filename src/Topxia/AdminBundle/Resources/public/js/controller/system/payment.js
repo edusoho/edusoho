@@ -33,12 +33,12 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="alipay_secret"]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入Key')
+                    errormessageRequired: Translator.trans('admin.system.payment.alipay_secret_input.message')
                 });
                 validator.addItem({
                     element: '[name=alipay_key]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入PID')
+                    errormessageRequired: Translator.trans('admin.system.payment.alipay_key_input.message')
                 });
             } else {
                 subItem.addClass('hidden');
@@ -57,27 +57,27 @@ define(function(require, exports, module) {
                 validator.addItem({
                   element: '[name="wxpay_appid"]',
                   required: true,
-                  errormessageRequired: Translator.trans('请输入AppID')
+                  errormessageRequired: Translator.trans('admin.system.payment.wxpay_appid_input.message')
                 });
                 validator.addItem({
                     element: '[name="wxpay_secret"]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入AppSecret')
+                    errormessageRequired: Translator.trans('admin.system.payment.wxpay_secret_input.message')
                 });
                 validator.addItem({
                   element: '[name="wxpay_mp_secret"]',
                   required: true,
-                  errormessageRequired: Translator.trans('请输入MP文件验证码')
+                  errormessageRequired: Translator.trans('admin.system.payment.wxpay_mp_secret_input.message')
                 });
                 validator.addItem({
                     element: '[name=wxpay_account]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入商户号')
+                    errormessageRequired: Translator.trans('admin.system.payment.wxpay_account_input.message')
                 });
                 validator.addItem({
                     element: '[name=wxpay_key]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入商户平台Key')
+                    errormessageRequired: Translator.trans('admin.system.payment.wxpay_key_input.message')
                 });
             } else {
                 subItem.addClass('hidden');
@@ -153,17 +153,17 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="llpay_key"]',
                     required: true,
-                    errormessageRequired: '请输入商户帐号'
+                    errormessageRequired: Translator.trans('admin.system.payment.llpay_key_input.message')
                 });
                 validator.addItem({
                     element: '[name=llpay_accessKey]',
                     required: true,
-                    errormessageRequired: '请输入公钥'
+                    errormessageRequired: Translator.trans('admin.system.payment.llpay_accessKey_input.message')
                 });
                 validator.addItem({
                     element: '[name=llpay_secretKey]',
                     required: true,
-                    errormessageRequired: '请输入密钥'
+                    errormessageRequired: Translator.trans('admin.system.payment.llpay_secretKey_input.message')
                 });
             } else {
                 subItem.addClass('hidden');

@@ -20,7 +20,7 @@
             $form.find('[name=banner1]').val(responseData.path);
             $("#mobile-banner1-remove").show();
             $form.find('div[role="banner1-setting"]').show();
-            Notify.success(Translator.trans('上传轮播图1成功！'));
+            Notify.success(Translator.trans('admin.operation.upload_carousel_one_success_hint'));
           });
 
         });
@@ -103,16 +103,16 @@
 
 
         $("#mobile-banner1-remove").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            if (!confirm(Translator.trans('admin.operation.delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#mobile-banner1-container").html('');
                 $form.find('[name=banner1]').val('');
                 $btn.hide();
                 $form.find('div[role="banner1-setting"]').hide();
-                Notify.success(Translator.trans('删除轮播图1成功！'));
+                Notify.success(Translator.trans('admin.operation.delete_carousel_one_success_hint'));
             }).error(function(){
-                Notify.danger(Translator.trans('删除轮播图1失败！'));
+                Notify.danger(Translator.trans('admin.operation.delete_carousel_one_fail_hint'));
             });
         });
 
@@ -128,7 +128,7 @@
             $form.find('[name=banner2]').val(responseData.path);
             $("#mobile-banner2-remove").show();
             $form.find('div[role="banner2-setting"]').show();
-            Notify.success(Translator.trans('上传轮播图2成功！'));
+            Notify.success(Translator.trans('admin.operation.upload_carousel_two_success_hint'));
           })
 
         });
@@ -143,16 +143,16 @@
         })
 
         $("#mobile-banner2-remove").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            if (!confirm(Translator.trans('admin.operation.delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#mobile-banner2-container").html('');
                 $form.find('[name=banner2]').val('');
                 $btn.hide();
                 $form.find('div[role="banner2-setting"]').hide();
-                Notify.success(Translator.trans('删除轮播图2成功！'));
+                Notify.success(Translator.trans('dmin.operation.delete_carousel_two_success_hint'));
             }).error(function(){
-                Notify.danger(Translator.trans('删除轮播图2失败！'));
+                Notify.danger(Translator.trans('admin.operation.delete_carousel_two_fail_hint'));
             });
         });
 
@@ -168,7 +168,7 @@
             $form.find('[name=banner3]').val(responseData.path);
             $("#mobile-banner3-remove").show();
             $form.find('div[role="banner3-setting"]').show();
-            Notify.success(Translator.trans('上传轮播图3成功！'));
+            Notify.success(Translator.trans('admin.operation.upload_carousel_three_success_hint'));
           })
 
         });
@@ -182,16 +182,16 @@
         })
 
         $("#mobile-banner3-remove").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            if (!confirm(Translator.trans('admin.operation.delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#mobile-banner3-container").html('');
                 $form.find('[name=banner3]').val('');
                 $btn.hide();
                 $form.find('div[role="banner3-setting"]').hide();
-                Notify.success(Translator.trans('删除轮播图3成功！'));
+                Notify.success(Translator.trans('admin.operation.delete_carousel_three_success_hint'));
             }).error(function(){
-                Notify.danger(Translator.trans('删除轮播图3失败！'));
+                Notify.danger(Translator.trans('admin.operation.delete_carousel_three_fail_hint'));
             });
         });
 
@@ -207,7 +207,7 @@
             $form.find('[name=banner4]').val(responseData.path);
             $("#mobile-banner4-remove").show();
             $form.find('div[role="banner4-setting"]').show();
-            Notify.success(Translator.trans('上传轮播图4成功！'));
+            Notify.success(Translator.trans('admin.operation.upload_carousel_four_success_hint'));
           })
 
         });
@@ -221,16 +221,16 @@
         })
 
         $("#mobile-banner4-remove").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            if (!confirm(Translator.trans('admin.operation.delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#mobile-banner4-container").html('');
                 $form.find('[name=banner4]').val('');
                 $btn.hide();
                 $form.find('div[role="banner4-setting"]').hide();
-                Notify.success(Translator.trans('删除轮播图4成功！'));
+                Notify.success(Translator.trans('admin.operation.delete_carousel_four_success_hint'));
             }).error(function(){
-                Notify.danger(Translator.trans('删除轮播图4失败！'));
+                Notify.danger(Translator.trans('admin.operation.delete_carousel_four_fail_hint'));
             });
         });
 
@@ -246,7 +246,7 @@
             $form.find('[name=banner5]').val(responseData.path);
             $("#mobile-banner5-remove").show();
             $form.find('div[role="banner5-setting"]').show();
-            Notify.success(Translator.trans('上传轮播图5成功！'));
+            Notify.success(Translator.trans('admin.operation.upload_carousel_five_success_hint'));
           })
         });
 
@@ -259,16 +259,16 @@
         })
 
         $("#mobile-banner5-remove").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            if (!confirm(Translator.trans('admin.operation.delete_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#mobile-banner5-container").html('');
                 $form.find('[name=banner5]').val('');
                 $btn.hide();
                 $form.find('div[role="banner5-setting"]').hide();
-                Notify.success(Translator.trans('删除轮播图5成功！'));
+                Notify.success(Translator.trans('admin.operation.delete_carousel_five_success_hint'));
             }).error(function(){
-                Notify.danger(Translator.trans('删除轮播图5失败！'));
+                Notify.danger(Translator.trans('admin.operation.delete_carousel_five_fail_hint'));
             });
         });
 

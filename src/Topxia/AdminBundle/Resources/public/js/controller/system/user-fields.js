@@ -19,13 +19,13 @@ define(function(require, exports, module) {
             }
 		});
 
-        var titleArr = [Translator.trans('真实姓名'),Translator.trans('手机号码'),Translator.trans('QQ'),Translator.trans('所在公司'),Translator.trans('身份证号码'),Translator.trans('性别'),Translator.trans('职业'),Translator.trans('微博'),Translator.trans('微信')];
+        var titleArr = [Translator.trans('admin.system.user_fields.truename'),Translator.trans('admin.system.user_fields.mobile'),Translator.trans('QQ'),Translator.trans('admin.system.user_fields.company'),Translator.trans('admin.system.user_fields.idcard'),Translator.trans('admin.system.user_fields.gender'),Translator.trans('admin.system.user_fields.career'),Translator.trans('admin.system.user_fields.weibo'),Translator.trans('admin.system.user_fields.wechat')];
         $('#add-btn').on('click', function() {
             var field_title = $('input[name="field_title"]').val();
             
             if($.inArray(field_title, titleArr) >= 0 )
             {
-                Notify.danger(Translator.trans('请勿添加与默认字段相同的自定义字段！'))
+                Notify.danger(Translator.trans('admin.system.user_fields.add_field_title_error_hint'))
                 return false;
             }
         });
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="field_type"]',
             required: true,
-            errormessageRequired: Translator.trans('请选择字段类型')
+            errormessageRequired: Translator.trans('admin.system.user_fields.field_type_input.message')
         });
 
 

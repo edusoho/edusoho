@@ -9,14 +9,14 @@ define(function(require, exports, module) {
             },
             tooltip: {},
             legend: {
-                data:['时间']
+                data:[Translator.trans('site.time')]
             },
             xAxis: {
                 data: spaceItems.date
             },
             yAxis: {},
             series: [{
-                name: '容量(G)',
+                name: Translator.trans('site.capacity'),
                 type: 'bar',
                 data: spaceItems.amount
             }],
@@ -37,14 +37,14 @@ define(function(require, exports, module) {
         },
         tooltip: {},
         legend: {
-            data:['时间']
+            data:[Translator.trans('site.time')]
         },
         xAxis: {
             data: flowItems.date
         },
         yAxis: {},
         series: [{
-            name: '容量(G)',
+            name: Translator.trans('site.capacity'),
             type: 'bar',
             data: flowItems.amount
         }],

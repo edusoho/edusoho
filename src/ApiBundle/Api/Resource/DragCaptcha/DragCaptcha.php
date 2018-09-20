@@ -3,10 +3,8 @@
 namespace ApiBundle\Api\Resource\DragCaptcha;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use AppBundle\Common\ArrayToolkit;
 
 class DragCaptcha extends AbstractResource
@@ -26,7 +24,7 @@ class DragCaptcha extends AbstractResource
     {
         $fields = $request->request->all();
         $fields = ArrayToolkit::parts($fields, array(
-            'times'
+            'times',
         ));
 
         $limitType = $request->request->get('limitType');

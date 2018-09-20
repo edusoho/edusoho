@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             },
             tooltip: {},
             legend: {
-                data:['时间']
+                data:[Translator.trans('site.time')]
             },
             xAxis: {
                 data: chartData.date

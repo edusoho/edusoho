@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Echats\EchartsBuilder;
+use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
 {
@@ -79,7 +80,7 @@ class DefaultController extends BaseController
         if ($currentHost != str_replace($filter, '', $siteSetting['url'])) {
             return array(
                 'status' => 'warning',
-                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'errorMessage' => ServiceKernel::instance()->trans('admin.domain_error_hint'),
                 'except' => $siteSetting['url'],
                 'actually' => $currentHost,
                 'settingUrl' => $settingUrl,
@@ -306,7 +307,7 @@ class DefaultController extends BaseController
         $orderDatas = ArrayToolkit::index($orderDatas, 'targetType');
         $orderDatas = array_merge($defaults, $orderDatas);
 
-        $names = array('course' => '课程订单', 'vip' => '会员订单', 'classroom' => '班级订单');
+        $names = array('course' => ServiceKernel::instance()->trans('admin.index.course_order'), 'vip' => ServiceKernel::instance()->trans('admin.index.vip_order'), 'classroom' => ServiceKernel::instance()->trans('admin.index.classroom_order'));
         array_walk($orderDatas, function (&$orderData) use ($names) {
             $orderData['name'] = $names[$orderData['targetType']];
             unset($orderData['targetType']);

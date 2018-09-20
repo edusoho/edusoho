@@ -149,7 +149,7 @@ function generateCoverageNodeInfos($xmls)
                     }
 
                     $nodeInfos[$fileName]['num_'.$lineNum]['count'] += $count;
-                    $nodeInfos[$fileName]['num_'.$lineNum]['existedCount'] += 1;
+                    ++$nodeInfos[$fileName]['num_'.$lineNum]['existedCount'];
                 }
             }
         }

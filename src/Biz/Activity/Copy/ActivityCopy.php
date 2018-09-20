@@ -83,6 +83,8 @@ class ActivityCopy extends AbstractCopy
             'length',
             'startTime',
             'endTime',
+            'finishType',
+            'finishData',
         );
     }
 

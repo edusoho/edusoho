@@ -21,16 +21,16 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     location.reload();
                     if ($form.data('flag') == 'edit') {
-                        Notify.success(Translator.trans('更新栏目成功！'));
+                        Notify.success(Translator.trans('admin.dictionary.update_success_hint'));
                     } else {
-                        Notify.success(Translator.trans('添加栏目成功！'));
+                        Notify.success(Translator.trans('admin.dictionary.create_success_hint'));
                     }
 
                 }).fail(function() {
                     if ($foem.data('flag') == 'edit') {
-                        Notify.danger(Translator.trans('更新栏目成功失败，请重试！'));
+                        Notify.danger(Translator.trans('admin.dictionary.update_fail_hint'));
                     } else {
-                        Notify.danger(Translator.trans('添加栏目成功失败，请重试！'));
+                        Notify.danger(Translator.trans('admin.dictionary.create_fail_hint'));
                     }
 
                 });

@@ -1,0 +1,27 @@
+{
+  "name": "course.activity.live",
+  "type": "live",
+  "description": "",
+  "authors": [
+    {
+      "name": "EduSoho",
+      "email": "edusoho@howzhi.com"
+    }
+  ],
+  "version": "1.0.0",
+  "ltc_version": "1.0.0",
+  "icon": {
+    "type": "font",
+    "value": "es-icon es-icon-graphicclass"
+  },
+  "routes": {
+    "content": "create_or_update_body.html.twig",
+    "show": "show.html.twig"
+  },
+  "finish_condition": [
+    {
+      "type": "join",
+      "describe": "course.plan_task.activity_manage.live.finished_condition_tips"
+    }
+  ]
+}

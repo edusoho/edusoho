@@ -39,11 +39,11 @@ define(function(require, exports, module) {
 
                   $uploadBtn.siblings('.logo-container-js').html('<img src="' + result.url + '">');
 
-                  Notify.success(Translator.trans('上传LOGO成功！'), 1);
+                  Notify.success(Translator.trans('admin.setting.upload_live_logo_success_hint'), 1);
                   
               })
               .error(function(){
-                  Notify.danger(Translator.trans('上传LOGO失败！'), 1);
+                  Notify.danger(Translator.trans('admin.setting.upload_live_logo_fail_hint'), 1);
               })
           });
 

@@ -49,7 +49,6 @@ if ($('.group-post-list').length > 0) {
 
     }
 
-		
     $(this).hide();
     $('#unreply-' + postId).show();
     $('.reply-' + postId).css('display', '');

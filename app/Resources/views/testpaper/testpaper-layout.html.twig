@@ -45,11 +45,11 @@
                     </h1>
                     <div class="testpaper-status">
                       {% if paperResult.status|default('doing') == 'doing' %}
-                        <div class="label label-primary">{{'答题中'|trans}}</div>
+                        <div class="label label-primary">{{'testpaper.answer.status.dong'|trans}}</div>
                       {% elseif paperResult.status|default('doing') == 'reviewing' %}
-                        <div class="label label-info">{{'批阅中'|trans}}</div>
+                        <div class="label label-info">{{'testpaper.answer.status.reviewing'|trans}}</div>
                       {% else %}
-                        <div class="label label-success">{{'批阅完成'|trans}}</div>
+                        <div class="label label-success">{{'testpaper.answer.status.finish'|trans}}</div>
                       {% endif %}
                     </div>
                   </div>
@@ -87,7 +87,7 @@
                   </div>
                 </div>
                 <div class="text-right mt20">
-                  <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
+                  <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
                   {% block finish_dialog_btn %}
                     <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}.." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
                     {{'testpaper.answer.confirm_hand_in_btn'|trans}}</button>

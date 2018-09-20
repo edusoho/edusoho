@@ -50,7 +50,7 @@ define(function(require, exports, module) {
                 this.info.destroy();
                 this.cover && this.cover.destroy();
                 this.destroy();
-                $('.panel-heading').html(Translator.trans('教学资料库'));
+                $('.panel-heading').html(Translator.trans('material_lib.content_title'));
             }
     });
 

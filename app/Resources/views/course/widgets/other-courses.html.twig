@@ -17,12 +17,12 @@
                                 href="{{ path('course_show', {id: course.id}) }}"
                             {% endif %}
                         >
-                            {% if course.status  != 'published'%}<span class="text-sm">(未发布)</span>{% endif %} {{ course.title }}
+                            {% if course.status  != 'published'%}<span class="text-sm">({{ 'course.status.unpublished'|trans }})</span>{% endif %} {{ course.title }}
                         </a>
                         {% if course.id in purchasedCourseIds %}
-                            <span class="label label-primary color-white text-sm">已加入</span>
+                            <span class="label label-primary color-white text-sm">{{ 'course.joined'|trans }}</span>
                         {% else %}
-                            <span class="label label-default color-white text-sm">未加入</span>
+                            <span class="label label-default color-white text-sm">{{ 'course.not_joined' }}</span>
                         {% endif %}
                     </li>
                 {% endfor %}

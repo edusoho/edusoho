@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}失败详情{% endblock %}
+{% block title %}{{ 'admin.queue.failed_detail'|trans }}{% endblock %}
 
 {% block body %}
   <div class="row mbm">
@@ -8,31 +8,31 @@
     <div class="col-md-9">{{ failedJob.id }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">队列</div>
+    <div class="col-md-3">{{ 'admin.queue.queue_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.queue }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">任务类型</div>
+    <div class="col-md-3">{{ 'admin.queue.class_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.class }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">优先级</div>
+    <div class="col-md-3">{{ 'admin.queue.priority_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.priority }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">超时时间</div>
+    <div class="col-md-3">{{ 'admin.queue.timeout_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.timeout }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">消息体</div>
+    <div class="col-md-3">{{ 'admin.queue.body_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.body|json_encode }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">错误原因</div>
+    <div class="col-md-3">{{ 'admin.queue.failed_reason_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.reason }}</div>
   </div>
   <div class="row mbm">
-    <div class="col-md-3">错误时间</div>
+    <div class="col-md-3">{{ 'admin.queue.error_time_label'|trans }}</div>
     <div class="col-md-9">{{ failedJob.failed_time|date('Y-m-d H:i:s') }}</div>
   </div>
 {% endblock %}

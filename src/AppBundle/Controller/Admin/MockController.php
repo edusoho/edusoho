@@ -86,7 +86,25 @@ class MockController extends BaseController
         $this->validate();
 
         $params = $request->request->get('data');
-        $result = $this->sendApiVersion3($params);
+
+        if ('generateToken' == $params['apiUrl']) {
+            $apiUserId = empty($params['apiUserId']) ? null : $params['apiUserId'];
+
+            if (!empty($apiUserId)) {
+                $user = $this->getUserService()->getUser($apiUserId);
+                if (empty($user)) {
+                    throw new \RuntimeException('User not found');
+                }
+                $token = $this->getUserService()->makeToken(
+                    MobileBaseController::TOKEN_TYPE,
+                    $user['id'],
+                    time() + 3600 * 24 * 30
+                );
+            }
+            $result = array('X-Auth-Token' => $token);
+        } else {
+            $result = $this->sendApiVersion3($params);
+        }
 
         return $this->createJsonResponse(array('result' => $result));
     }
@@ -213,8 +231,6 @@ class MockController extends BaseController
             $headers[] = 'User-Agent: CERN-LineMode/2.15 libwww/2.17b3';
         }
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
         if ('POST' == $apiMethod) {
             curl_setopt($curl, CURLOPT_POST, 1);
             //TODO
@@ -228,12 +244,14 @@ class MockController extends BaseController
         } elseif ('PATCH' == $apiMethod) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+            $headers[] = 'Content-Type: application/json-patch+json';
         } else {
             if (!empty($params)) {
                 $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
 
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
@@ -252,10 +270,13 @@ class MockController extends BaseController
         if (isset($conditions['contentType']) && 'plain' == $conditions['contentType']) {
             return $body;
         }
+        $result = json_decode($body, true);
 
-        $body = json_decode($body, true);
+        if (empty($result)) {
+            $result = array('detailedMsg' => $body);
+        }
 
-        return $body;
+        return $result;
     }
 
     private function post($url, $bodyStr, $token)

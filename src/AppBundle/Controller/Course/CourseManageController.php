@@ -480,6 +480,7 @@ class CourseManageController extends BaseController
         $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], array('live', 'reservation')) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
@@ -1013,10 +1014,10 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function showPublishAction(Request $request, $courseId)
+    public function hidePublishAction(Request $request, $courseId)
     {
         $status = $request->request->get('status', 1);
-        $this->getCourseService()->changeShowPublishLesson($courseId, $status);
+        $this->getCourseService()->changeHidePublishLesson($courseId, $status);
 
         return $this->createJsonResponse(true);
     }

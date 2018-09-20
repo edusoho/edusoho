@@ -6,13 +6,13 @@ define(function(require, exports, module) {
 		var $table = $('#course-recommend-table');
 
 		$table.on('click', '.cancel-recommend-course', function() {
-			if (!confirm(Translator.trans('真的要取消该课程推荐吗？'))) {
+			if (!confirm(Translator.trans('admin.course.cancel_recommend_hint'))) {
 				return;
 			}
 
 			var $tr = $(this).parents('tr');
 			$.post($(this).data('url'), function() {
-				Notify.success(Translator.trans('课程推荐已取消！'));
+				Notify.success(Translator.trans('admin.course.cancel_recommend_success_hint'));
 				$tr.remove();
 			});
 

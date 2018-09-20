@@ -21,9 +21,9 @@ define(function(require, exports, module) {
 
                     $.post($form.attr('action'), $form.serialize(), function(html) {
                         $modal.modal('hide');
-                        Notify.success(Translator.trans('密码修改成功'));
+                        Notify.success(Translator.trans('admin.user.password_modify_success_hint'));
                     }).error(function(){
-                        Notify.danger(Translator.trans('操作失败'));
+                        Notify.danger(Translator.trans('admin.user.password_modify_error_hint'));
                     });
                 });
             }

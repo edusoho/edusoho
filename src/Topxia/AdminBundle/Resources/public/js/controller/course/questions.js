@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
          $('.tbody').on('click', 'a.remind-teachers', function() {
             $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
+                Notify.success(Translator.trans('admin.course.remind_teacher_success_hint'));
             });
         });
 
