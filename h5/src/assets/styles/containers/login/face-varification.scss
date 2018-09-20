@@ -1,0 +1,14 @@
+.login-face-verification {
+  text-align: center;
+  padding: vw(200) 0;
+  .btn-open-camera {
+    display: inline-block;
+    padding: vw(10) vw(30);
+    margin-top: vw(30);
+    border: none;
+    background-color: #ffa51f;
+    border-radius: 0;
+    color: #fff;
+    font-size: vw(14);
+  }
+}

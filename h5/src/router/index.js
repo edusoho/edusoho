@@ -118,6 +118,13 @@ const routes = [
       title: '预览'
     },
     component: () => import(/* webpackChunkName: "preview" */'@/containers/preview/index.vue')
+  }, {
+    path: '/face_verification',
+    name: 'verification',
+    meta: {
+      title: '人脸认证'
+    },
+    component: () => import(/* webpackChunkName: "preview" */'@/containers/login/face-verification.vue')
   }
 ];
 
