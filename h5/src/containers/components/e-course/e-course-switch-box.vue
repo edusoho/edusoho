@@ -14,7 +14,7 @@
     <!-- order -->
     <div class="switch-box" v-if="type === 'order'">
       <span class="switch-box__price">
-        <p class="free" v-show_student_num_enabledif="isFree">免费</p>
+        <p class="free" v-if="isFree">免费</p>
         <p class="price" v-if="!isFree">¥ {{ order.pay_amount/100 }}</p>
       </span>
       <span class="switch-box__state">
