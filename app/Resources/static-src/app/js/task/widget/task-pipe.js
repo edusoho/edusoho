@@ -83,7 +83,12 @@ export default class TaskPipe {
           }
         }
       })
-      .fail(() => {
+      .fail((error) => {
+        if (error.status == 403) {
+          this._clearInterval();
+          cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
+          window.location.href = '/logout';
+        }
       });
 
     return ajax;
