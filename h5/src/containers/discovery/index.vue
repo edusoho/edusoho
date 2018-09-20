@@ -53,7 +53,7 @@ export default {
           identifyType: 'nickname',
         }
       }).then(res => {
-        if (res === {}) {
+        if (!res.uuid) {
           Toast.fail({
             duration: 2000,
             message: '用户不存在'
