@@ -25,12 +25,12 @@
             <div v-if="lesson.tasks.length > 1">
               <div class="lesson-cell__lesson text-overflow"">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
-                <span>课时{{ lesson.number }}：{{ lesson.title }}</span>
+                <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.title }}</span>
               </div>
               <div :class="['box', 'show-box']"
                 v-for="(task, taskIndex) in lesson.tasks">
                 <div class="lesson-cell">
-                  <span class="lesson-cell__number">{{ filterNumber(task, taskIndex) }}</span>
+                  <span class="lesson-cell__number" v-if="!Number(lesson.isOptional)">{{ filterNumber(task, taskIndex) }}</span>
                   <div class="lesson-cell__content" @click="lessonCellClick(task, lesson)">
                     <span>{{ task.title }}</span>
                     <span>{{ task | taskType }}{{ task | filterTask }}</span>
@@ -45,7 +45,7 @@
             <div v-if="lesson.tasks.length === 1">
               <div class="lesson-cell__lesson text-overflow"">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
-                <span>课时{{ lesson.number }}：{{ lesson.tasks[0].title }}</span>
+                <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
 
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
@@ -95,6 +95,7 @@
         chapters: [],
         tasks: [],
         unit: [],
+        optionalMap: [],
         unitShow: {},
       }
     },
@@ -137,15 +138,18 @@
       },
       filterNumber(task, index, single) {
         if (single) {
-          return task.isOptional === '1' ? '选修' : '';
+          return '';
         }
         return task.isOptional === '1' ? '选修' : (index + 1);
       },
       getTasks (data) {
         let temp = [];
+        let optionalNum = 0;
+        let lessonIndex = 0;
         this.chapters = [];
         this.tasks = [];
         this.unit = [];
+        this.optionalMap = [];
 
         data.forEach(item => {
           if (item.type !== 'chapter') {
@@ -166,6 +170,9 @@
           }
 
           if (item.type == 'lesson') {
+            lessonIndex ++;
+            optionalNum = Number(item.isOptional) ? (++optionalNum) : optionalNum;
+            this.optionalMap[lessonIndex] = optionalNum;
             item.tasks.forEach(task => {
               item['status'] = this.getCurrentStatus(task);
             })
