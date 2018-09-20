@@ -1977,7 +1977,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function setFaceRegistered($id)
     {
-        return $this->getUserDao()->update($userId, array('faceRegistered' => 1));
+        return $this->getUserDao()->update($id, array('faceRegistered' => 1));
     }
 
     protected function _prepareApprovalConditions($conditions)
