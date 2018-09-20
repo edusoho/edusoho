@@ -17,7 +17,7 @@
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
-     <router-link to="sts">人脸识别</router-link>
+     <router-link v-if="faceSetting" to="sts">人脸识别</router-link>
   </div>
 
 </template>
@@ -33,7 +33,8 @@ export default {
       password: '',
       errorMessage: {
         password: ''
-      }
+      },
+      faceSetting: 0
     }
   },
   async created () {
@@ -79,6 +80,13 @@ export default {
         name: 'register'
       })
     }
-  }
+  },
+
+  mounted() {
+    Api.settingsFace({}).then(res => {
+      this.faceSetting = res.h5_enabled;
+    });
+  },
+
 }
 </script>

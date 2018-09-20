@@ -9,6 +9,9 @@ const statusCode = {
 };
 
 axios.interceptors.request.use(config => {
+  if (config.interceptor === 'end') {
+    return config;
+  }
   if (config.name.indexOf('Live') === -1) {
     config.headers.Accept = 'application/vnd.edusoho.v2+json';
   }
@@ -23,6 +26,9 @@ axios.interceptors.request.use(config => {
 }, error => Promise.reject(error));
 
 axios.interceptors.response.use(res => {
+  if (res.data.hash) {
+    return res;
+  }
   store.commit('UPDATE_LOADING_STATUS', false);
   return res.data;
 }, error => {
