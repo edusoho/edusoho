@@ -100,11 +100,12 @@
             color: #b0bdc9;
           }
           &__status {
-            border-radius: 2px;
             height: vw(18);
-            color: white;
-            font-size: vw(12);
             padding: vw(2) vw(10);
+            border-radius: 2px;
+            color: white;
+            line-height: vw(18);
+            font-size: vw(12);
             &.is-free {
               background: $primary-color;
             }
