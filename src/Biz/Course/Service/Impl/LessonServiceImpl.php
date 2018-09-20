@@ -219,7 +219,6 @@ class LessonServiceImpl extends BaseService implements LessonService
                 'title' => $lesson['title'],
             );
             $this->getLogService()->info('course', 'lesson_unset_optional', "课时设置必修《{$lesson['title']}》", $infoData);
-
             $this->updateLessonNumbers($courseId);
 
             $this->commit();
