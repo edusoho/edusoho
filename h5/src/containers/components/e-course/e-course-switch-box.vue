@@ -7,7 +7,7 @@
         <p class="price" v-if="!isFree">¥ {{ course.price }}</p>
       </span>
       <span class="switch-box__state">
-        <p>{{ course.studentNum }}人在学</p>
+        <p v-if="Number(courseSettings.show_student_num_enabled)">{{ course.studentNum }}人在学</p>
       </span>
     </div>
 
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+
   export default {
     props: {
       type: {
@@ -68,6 +70,7 @@
       };
     },
     computed: {
+      ...mapState(['courseSettings']),
       rate() {
         if (!parseInt(this.course.publishedTaskNum)) return 0;
         return parseInt(this.course.progress.percent)

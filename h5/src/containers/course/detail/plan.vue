@@ -3,7 +3,7 @@
     <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
         <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
-        <span>{{ details.studentNum }}人在学</span>
+        <span v-if="Number(courseSettings.show_student_num_enabled)" class="plan-price__student-num">{{ details.studentNum }}人在学</span>
       </div>
     </e-panel>
 
@@ -73,6 +73,7 @@ export default {
       details: state => state.details,
       selectedPlanId: state => state.selectedPlanId
     }),
+    ...mapState(['courseSettings']),
     learnExpiry() {
       const memberInfo = this.details.member;
       const learnExpiryData = this.details.learningExpiryDate;

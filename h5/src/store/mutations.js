@@ -37,8 +37,8 @@ export default {
     state.user = payload;
     localStorage.setItem('user', JSON.stringify(payload));
   },
-  [types.GET_SETTINGS](state, payload) {
-    state.settings = payload;
+  [types.GET_SETTINGS](state, { key, setting }) {
+    state[key] = setting;
   },
   [types.SET_NAVBAR_TITLE](state, payload) {
     state.title = payload;

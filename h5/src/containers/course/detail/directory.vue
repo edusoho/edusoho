@@ -7,7 +7,7 @@
         <div class="directory-list__item-chapter"
           @click="item.show = !item.show"
           v-if="item.type === 'chapter'">
-          <span class="text-overflow">第{{ item.number }}章：{{ item.title }}</span>
+          <span class="text-overflow">第{{ item.number }}{{ courseSettings.chapter_name }}：{{ item.title }}</span>
           <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"></i>
         </div>
 
@@ -16,7 +16,7 @@
           v-for="(lesson, lessonIndex) in tasks[chapterIndex]">
 
           <div class="lesson-cell__unit" v-if="lesson.type === 'unit'">
-            <span class="lesson-cell__unit-title text-overflow">第{{ lesson.number }}节：{{ lesson.title }}</span>
+            <span class="lesson-cell__unit-title text-overflow">第{{ lesson.number }}{{ courseSettings.part_name }}：{{ lesson.title }}</span>
             <i :class="[ unitShow[`${chapterIndex}-${lessonIndex}`] ? 'icon-packup': 'icon-unfold']" @click="lessonToggle(chapterIndex, lessonIndex)"></i>
           </div>
 
@@ -87,6 +87,7 @@
         courseLessons: state => state.courseLessons,
         selectedPlanId: state => state.selectedPlanId,
       }),
+      ...mapState(['courseSettings']),
     },
     data() {
       return {
