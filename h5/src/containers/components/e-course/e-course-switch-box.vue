@@ -7,14 +7,14 @@
         <p class="price" v-if="!isFree">¥ {{ course.price }}</p>
       </span>
       <span class="switch-box__state">
-        <p>{{ course.studentNum }}人在学</p>
+        <p v-if="Number(courseSettings.show_student_num_enabled)">{{ course.studentNum }}人在学</p>
       </span>
     </div>
 
     <!-- order -->
     <div class="switch-box" v-if="type === 'order'">
       <span class="switch-box__price">
-        <p class="free" v-if="isFree">免费</p>
+        <p class="free" v-show_student_num_enabledif="isFree">免费</p>
         <p class="price" v-if="!isFree">¥ {{ order.pay_amount/100 }}</p>
       </span>
       <span class="switch-box__state">
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+
   export default {
     props: {
       type: {
@@ -68,6 +70,7 @@
       };
     },
     computed: {
+      ...mapState(['courseSettings']),
       rate() {
         if (!parseInt(this.course.publishedTaskNum)) return 0;
         return parseInt(this.course.progress.percent)
