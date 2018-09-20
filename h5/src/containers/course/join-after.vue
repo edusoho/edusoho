@@ -24,8 +24,7 @@
         <directory
           :hiddeTitle=true
           class="join-after-dirctory"
-          :tryLookable="details.tryLookable"
-          :courseItems="details.courseItems"></directory>
+          :tryLookable="details.tryLookable"></directory>
       </template>
 
       <template v-else>
