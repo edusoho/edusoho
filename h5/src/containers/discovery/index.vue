@@ -9,7 +9,9 @@
       class="login-input e-input"
       :error-message="errorMessage.password"
       placeholder="请输入密码" />
-    <van-button type="default" class="primary-btn mb20">下一步</van-button>
+    <van-button v-if="faceRegistered" type="default" class="primary-btn mb20" @click="onCheckExisted" :disabled="btnDisable">下一步</van-button>
+    <van-button v-else type="default" class="primary-btn mb20" @click="onSubmitInfo" :disabled="btnSubmitDisable">下一步</van-button>
+      <router-link to="photo">测试</router-link>
   </div>
 
 </template>
@@ -29,10 +31,69 @@ export default {
       }
     }
   },
+  computed: {
+    btnSubmitDisable() {
+      return !(this.username);
+    },
+    btnDisable() {
+      return !(this.username && this.password);
+    }
+  },
   methods: {
     ...mapActions([
-      'userLogin'
+      'userLogin',
     ]),
+
+    onSubmitInfo() {
+      Api.getUserIsExisted({
+        query: {
+          type: this.username,
+        },
+        params: {
+          identifyType: 'nickname',
+        }
+      }).then(res => {
+        if (res === {}) {
+          Toast.fail({
+            duration: 2000,
+            message: '用户不存在'
+          });
+          return;
+        };
+
+        // faceRegistered字段更新
+        if (!res.faceRegistered) {
+          this.faceRegistered = res.faceRegistered;
+          Toast.fail({
+            duration: 2000,
+            message: '初次使用请验证密码'
+          });
+        } else {
+          Api.getSessions({
+            type: 'compare',
+            loginField: this.username,
+          }).then(res => {
+            console.log(res);
+          });
+        }
+      });
+    },
+
+    onCheckExisted() {
+      this.userLogin({
+        username: this.username,
+        password: this.password
+      }).then(res => {
+        Api.getSessions({
+          type: 'register',
+        }).then(res => {
+          console.log(res.upload);
+        });
+
+      }).catch(err => {
+        Toast.fail(err.message);
+      })
+    }
   }
 }
 </script>
