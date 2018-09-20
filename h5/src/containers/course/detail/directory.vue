@@ -194,22 +194,23 @@
         }
       },
       getCurrentStatus (task) {
+        if (Number(task.isFree)) {
+          return 'is-free';
+        }
         if (Number(this.details.tryLookable)
           && task.type === 'video'
           && task.activity.mediaStorage) {
           return 'is-tryLook';
-        } else if (Number(task.isFree)) {
-          return 'is-free';
         }
         return '';
       },
       filterTaskStatus (lesson){
-        if (!this.details.member && lesson.status === 'is-tryLook') {
-          return '试看';
-        } else if (!this.details.member && lesson.status === 'is-free') {
+        if (!this.details.member && lesson.status === 'is-free') {
           return '免费';
         }
-
+        if (!this.details.member && lesson.status === 'is-tryLook') {
+          return '试看';
+        }
         return '';
       },
       lessonCellClick (task, lesson) {
@@ -222,8 +223,8 @@
           }
         });
         if (!this.joinStatus
-          && Number(details.tryLookable)
-          && ['is-tryLook', 'is-free'].includes(lesson.status)) {
+          && (Number(details.tryLookable)
+              || ['is-tryLook', 'is-free'].includes(lesson.status))) {
         // trylook and free video click
           switch (task.type) {
             case 'video':

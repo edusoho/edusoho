@@ -49,9 +49,13 @@ export default {
       }
     }
   },
+  /*
+  * 试看需要传preview=1
+  * eg: /api/courses/1/task_medias/1?preview=1
+  */
   methods: {
     getParams () {
-      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+      const canTryLookable = !this.joinStatus
       return canTryLookable ? {
         query: {
           courseId: this.selectedPlanId,
