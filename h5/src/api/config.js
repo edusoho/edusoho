@@ -12,9 +12,21 @@ const config = [
     method: 'GET'
   },
   {
+    // 判断是否设置了人脸识别
+    name: 'settingsFace',
+    url: '/settings/face',
+    method: 'GET'
+  },
+  {
     // 创建register的session接口
     name: 'getSessions',
     url: '/plugins/face/sessions',
+    method: 'POST'
+  },
+  {
+    // 人脸识别 确认上传图片结果
+    name: 'finishUploadResult',
+    url: '/plugins/face/sessions/{sessionId}/finish_upload_results',
     method: 'POST'
   },
   {

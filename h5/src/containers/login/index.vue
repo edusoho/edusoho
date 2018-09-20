@@ -35,7 +35,8 @@ export default {
       password: '',
       errorMessage: {
         password: ''
-      }
+      },
+      faceSetting: 0
     }
   },
   async created () {
@@ -80,7 +81,14 @@ export default {
       this.$router.push({
         name: 'register'
       })
-    },
-  }
+    }
+  },
+
+  mounted() {
+    Api.settingsFace({}).then(res => {
+      this.faceSetting = res.h5_enabled;
+    });
+  },
+
 }
 </script>

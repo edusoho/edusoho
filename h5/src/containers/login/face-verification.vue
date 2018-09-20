@@ -21,11 +21,13 @@ export default {
     }
   },
   created() {
-    Api.createSessions ({
-      type: 'register'
-    }).then(res => {
-      console.log(res)
-    })
+    // Api.createSessions ({
+    //   query: {
+    //     type: 'register'
+    //   }
+    // }).then(res => {
+    //   console.log(res)
+    // })
   },
   methods: {
     openCamera() {
