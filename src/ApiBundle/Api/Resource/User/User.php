@@ -37,7 +37,7 @@ class User extends AbstractResource
                 $user = $this->getUserService()->getUserByVerifiedMobile($identify);
                 break;
             case 'nickname':
-                $user = $this->getUserService()->getUserByNickname($identify);
+                $user = $this->getUserService()->getUserByNickname(urldecode($identify));
                 break;
             case 'token':
                 $user = $this->getUserService()->getUserByUUID($identify);
