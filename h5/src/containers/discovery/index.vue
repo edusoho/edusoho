@@ -10,9 +10,6 @@
       :error-message="errorMessage.password"
       placeholder="请输入密码" />
     <van-button v-if="faceRegistered" type="default" class="primary-btn mb20" @click="onCheckExisted" :disabled="btnDisable">下一步</van-button>
-    <!-- <router-link to="face_verification" v-else class="login-btn-next"> -->
-      <!-- <van-button type="default" class="primary-btn mb20" @click="onSubmitInfo" :disabled="btnSubmitDisable">下一步</van-button> -->
-    <!-- </router-link> -->
     <van-button v-else type="default" class="primary-btn mb20" @click="onSubmitInfo" :disabled="btnSubmitDisable">下一步</van-button>
   </div>
 
@@ -65,7 +62,7 @@ export default {
 
         if (res.faceRegistered === '0') {
           this.faceRegistered = res.faceRegistered;
-          Toast.fail({
+          Toast({
             duration: 2000,
             message: '初次使用请验证密码'
           });
@@ -77,7 +74,7 @@ export default {
             console.log(res);
             const upload = res.upload.form;
             this.$router.push({
-              name: 'photo',
+              name: 'verification',
               params: {
                 sessionId: res.id,
                 uploadUrl: upload.action,
@@ -104,7 +101,7 @@ export default {
         }).then(res => {
           const upload = res.upload.form;
           this.$router.push({
-            name: 'photo',
+            name: 'verification',
             params: {
               sessionId: res.id,
               uploadUrl: upload.action,

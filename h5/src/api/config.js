@@ -168,11 +168,6 @@ const config = [
     name: 'saveDraftDate',
     url: '/pages/h5/settings/{type}/draft',
     method: 'GET'
-  }, {
-    // 创建人脸识别session接口
-    name: 'createSessions',
-    url: '/plugins/face/sessions',
-    method: 'POST'
   }
 ];
 

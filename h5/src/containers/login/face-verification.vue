@@ -11,7 +11,6 @@
 <script>
 import { mapActions } from 'vuex';
 import { Toast } from 'vant';
-import Api from '@/api'
 
 export default {
   data() {
@@ -20,19 +19,9 @@ export default {
       faceImg: ''
     }
   },
-  created() {
-    // Api.createSessions ({
-    //   query: {
-    //     type: 'register'
-    //   }
-    // }).then(res => {
-    //   console.log(res)
-    // })
-  },
   methods: {
     openCamera() {
       var faceImg = document.getElementById('cameraItem').files;
-      console.log('',faceImg)
       if (faceImg.length) {
         this.faceImg = faceImg[0];
       }
