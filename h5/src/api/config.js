@@ -4,7 +4,20 @@ const config = [
     name: 'login',
     url: '/tokens',
     method: 'POST'
-  }, {
+  },
+  {
+    // 判断用户是否存在
+    name: 'getUserIsExisted',
+    url: '/users/{type}',
+    method: 'GET'
+  },
+  {
+    // 创建register的session接口
+    name: 'getSessions',
+    url: '/plugins/face/sessions',
+    method: 'POST'
+  },
+  {
     // 新增用户短信验证码
     name: 'getSmsCenter',
     url: '/sms_center',

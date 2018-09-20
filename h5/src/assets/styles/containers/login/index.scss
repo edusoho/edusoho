@@ -72,6 +72,12 @@
     width: vw(30);
     height: vw(30);
   }
+  .login-btn-next {
+    width: 100%;
+    > button {
+      width: 100%;
+    }
+  }
 }
 
 .e-input {
