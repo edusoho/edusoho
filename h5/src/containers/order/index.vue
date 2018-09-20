@@ -107,7 +107,8 @@ export default {
       const minusType = (this.itemData.type === 'discount');
       let money = this.itemData.rate;
       if (minusType) {
-        money = Number(this.course.totalPrice - this.course.totalPrice * this.itemData.rate * 0.1).toFixed(2);
+        money = Number(this.course.totalPrice
+          - this.course.totalPrice * this.itemData.rate * 0.1).toFixed(2);
       }
       this.couponNumber = money;
       return money;
