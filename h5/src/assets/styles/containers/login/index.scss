@@ -6,7 +6,6 @@
   align-items: center;
 
   &-img {
-    height: vw(130);
     width: vw(120);
     margin-top: 21vh;
   }
@@ -68,12 +67,12 @@
     }
   }
   .face-icon img {
+    position: absolute;
+    bottom: vw(50);
+    left: 50%;
+    width: vw(40);
+    height: vw(40);
     margin-top: vw(30);
-    width: vw(30);
-    height: vw(30);
+    margin-left: vw(-20);
   }
-}
-
-.e-input {
-
 }
