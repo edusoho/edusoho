@@ -90,3 +90,9 @@ services:
     api.field.filter.factory:
         class: ApiBundle\Api\Resource\FieldFilterFactory
         arguments: ['@annotation_reader']
+
+    api.util.item_helper:
+        class: ApiBundle\Api\Util\ItemHelper
+        arguments: ['@biz']
+
+

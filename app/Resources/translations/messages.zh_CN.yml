@@ -1674,7 +1674,7 @@ course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
 course.plan_task.publish_btn: 发布
-course.plan_task.manage: 教训计划管理
+course.plan_task.manage: 教学计划管理
 course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: %taskName%未解锁
 course.plan_task.task: %taskName%学习

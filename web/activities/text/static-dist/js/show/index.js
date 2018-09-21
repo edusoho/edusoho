@@ -21,10 +21,12 @@ load.then(function(){
     };
     if (window.sidebar) {
       document.onmousedown =
-      document.onclick =
       document.oncut = 
       document.oncopy = function() {
         return false;
+      };
+      document.onclick = function() {
+        return true;
       };
     }
   

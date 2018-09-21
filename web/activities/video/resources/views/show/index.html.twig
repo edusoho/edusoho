@@ -1,5 +1,5 @@
 {% do script(['videoactivity/js/show/index.js']) %}
-{% set video = activity.ext %}
+{% set video = activity.ext|prepare_video_media_uri %}
 
 {% if video.mediaSource|default('self') == 'self' %}
   {% if video.file|default(null) %}
