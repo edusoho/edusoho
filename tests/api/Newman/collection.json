@@ -12035,7 +12035,7 @@
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
 									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"get task info success !\"] = (jsonData.id === data.doingTaskId)&(responseBody.has(\"seq\"))&responseBody.has(\"title\")&responseBody.has(\"isFree\")&responseBody.has(\"status\")&responseBody.has(\"type\")&responseBody.has(\"type\")&responseBody.has(\"mediaSource\")&responseBody.has(\"length\")&responseBody.has(\"mediaId\")&responseBody.has(\"finishType\")&responseBody.has(\"result\");"
+									"tests[\"get task info success !\"] = (jsonData.id === data.doingTaskId)&(responseBody.has(\"seq\"))&responseBody.has(\"title\")&responseBody.has(\"isFree\")&responseBody.has(\"status\")&responseBody.has(\"type\")&responseBody.has(\"type\")&responseBody.has(\"mediaSource\")&responseBody.has(\"length\")&responseBody.has(\"mediaId\")&responseBody.has(\"result\");"
 								]
 							}
 						}
