@@ -33,8 +33,6 @@ export default {
     }
   },
   mounted() {
-    const type = this.$route.params.type;
-    const username = this.$route.params.loginField;
     const data = this.$route.params;
     Api.getSessions({
       data: data
