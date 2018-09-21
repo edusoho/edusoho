@@ -20,6 +20,7 @@ import { mapActions } from 'vuex';
 import { Toast } from 'vant';
 import axios from 'axios';
 import Api from '@/api';
+import * as types from '@/store/mutation-types';
 
 export default {
   data() {
@@ -49,6 +50,7 @@ export default {
       Toast.fail(err.message);
     });
   },
+
   methods: {
     polling() {
       const self = this;
@@ -67,6 +69,20 @@ export default {
             duration: 2000,
             message: '人脸识别成功'
           });
+          if (res.login) {
+            const avatarData = {
+              avatar: {
+                large: res.login.largeAvatar,
+                medium: res.login.mediumAvatar,
+                small: res.login.smallAvatar,
+              }
+            }
+            const loginUser = Object.assign(res.login.user, avatarData);
+            this.$store.commit(types.USER_LOGIN, {
+              token: res.login.token,
+              user: loginUser,
+            });
+          }
           const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
           const jumpAction = () => {
             this.$router.push({name: redirect});
