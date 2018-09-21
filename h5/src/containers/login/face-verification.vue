@@ -22,8 +22,6 @@ export default {
     }
   },
   mounted() {
-    const type = this.$route.params.type;
-    const username = this.$route.params.loginField;
     const data = this.$route.params;
     Api.getSessions({
       data: data
@@ -59,7 +57,7 @@ export default {
             message: '人脸识别成功'
           });
           const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-          var jumpAction = () => {
+          const jumpAction = () => {
             this.$router.push({name: redirect});
           }
           setTimeout(jumpAction, 2000);
