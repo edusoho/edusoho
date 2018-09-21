@@ -62,18 +62,29 @@ export default {
 
         if (res.faceRegistered === '0') {
           this.faceRegistered = res.faceRegistered;
-          Toast.fail({
+          Toast({
             duration: 2000,
             message: '初次使用请验证密码'
           });
         } else {
-          this.$router.push({
-            name: 'photo',
-            params: {
-              type: 'compare',
-              loginField: this.username
-            }
-          })
+          Api.getSessions({
+            type: 'compare',
+            loginField: this.username,
+          }).then(res => {
+            console.log(res);
+            const upload = res.upload.form;
+            this.$router.push({
+              name: 'verification',
+              params: {
+                sessionId: res.id,
+                uploadUrl: upload.action,
+                uploadKey: upload.params.key,
+                uploadToken: upload.params.token,
+              }
+            })
+          }).catch(err => {
+            Toast.fail(err.message);
+          });
         }
       }).catch(err => {
         Toast.fail(err.message);
@@ -85,12 +96,22 @@ export default {
         username: this.username,
         password: this.password
       }).then(res => {
-        this.$router.push({
-          name: 'photo',
-          params: {
-            type: 'register',
-          }
-        })
+        Api.getSessions({
+          type: 'register',
+        }).then(res => {
+          const upload = res.upload.form;
+          this.$router.push({
+            name: 'verification',
+            params: {
+              sessionId: res.id,
+              uploadUrl: upload.action,
+              uploadKey: upload.params.key,
+              uploadToken: upload.params.token,
+            }
+          })
+        }).catch(err => {
+          Toast.fail(err.message);
+        });
       }).catch(err => {
         Toast.fail(err.message);
       })
