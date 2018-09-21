@@ -5,7 +5,7 @@
       <div class="mt5">请将面部正对摄像头</div>
     </div>
     <div v-show="imgShow">
-      <img id="imgContent" alt="">
+      <img id="imgContent" class="img-content" alt="人脸照片">
       <div>认证中，请稍后...</div>
     </div>
     <div v-show="failText">人脸识别多次认证不通过<div class="mt5">请改用其它方式认证或联系管理员</div></div>
