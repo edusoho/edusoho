@@ -17,7 +17,7 @@
 <script>
   import { mapActions } from 'vuex';
   import { Toast } from 'vant';
-  import Api from '@/api'
+  import Api from '@/api';
 
 export default {
   data() {
