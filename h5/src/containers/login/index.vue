@@ -17,7 +17,7 @@
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
-    <router-link to="/sts" class="face-icon" v-if="faceSetting">
+    <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
       <img src="static/images/face.png" alt="">
     </router-link>
   </div>

@@ -75,6 +75,9 @@ export default {
             const upload = res.upload.form;
             this.$router.push({
               name: 'verification',
+              query: {
+                redirect: this.$route.query.redirect || ''
+              },
               params: {
                 sessionId: res.id,
                 uploadUrl: upload.action,
@@ -102,6 +105,9 @@ export default {
           const upload = res.upload.form;
           this.$router.push({
             name: 'verification',
+            query: {
+              redirect: this.$route.query.redirect || ''
+            },
             params: {
               sessionId: res.id,
               uploadUrl: upload.action,
@@ -112,7 +118,6 @@ export default {
         }).catch(err => {
           Toast.fail(err.message);
         });
-
       }).catch(err => {
         Toast.fail(err.message);
       })
