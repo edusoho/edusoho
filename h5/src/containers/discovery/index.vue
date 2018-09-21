@@ -67,26 +67,15 @@ export default {
             message: '初次使用请验证密码'
           });
         } else {
-          Api.getSessions({
-            type: 'compare',
-            loginField: this.username,
-          }).then(res => {
-            console.log(res);
-            const upload = res.upload.form;
-            this.$router.push({
-              name: 'verification',
-              query: {
-                redirect: this.$route.query.redirect || ''
-              },
-              params: {
-                sessionId: res.id,
-                uploadUrl: upload.action,
-                uploadKey: upload.params.key,
-                uploadToken: upload.params.token,
-              }
-            })
-          }).catch(err => {
-            Toast.fail(err.message);
+          this.$router.push({
+            name: 'verification',
+            query: {
+              redirect: this.$route.query.redirect || ''
+            },
+            params: {
+              type: 'compare',
+              loginField: this.username
+            }
           });
         }
       }).catch(err => {
@@ -99,24 +88,14 @@ export default {
         username: this.username,
         password: this.password
       }).then(res => {
-        Api.getSessions({
-          type: 'register',
-        }).then(res => {
-          const upload = res.upload.form;
-          this.$router.push({
-            name: 'verification',
-            query: {
+        this.$router.push({
+          name: 'verification',
+          query: {
               redirect: this.$route.query.redirect || ''
-            },
-            params: {
-              sessionId: res.id,
-              uploadUrl: upload.action,
-              uploadKey: upload.params.key,
-              uploadToken: upload.params.token,
-            }
-          })
-        }).catch(err => {
-          Toast.fail(err.message);
+          },
+          params: {
+            type: 'register',
+          }
         });
       }).catch(err => {
         Toast.fail(err.message);
