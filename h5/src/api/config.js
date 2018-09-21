@@ -6,25 +6,31 @@ const config = [
     method: 'POST'
   },
   {
-    // 判断用户是否存在
+    // 人脸识别 判断用户是否存在
     name: 'getUserIsExisted',
     url: '/users/{type}',
     method: 'GET'
   },
   {
-    // 判断是否设置了人脸识别
+    // 人脸识别 判断是否设置了人脸识别
     name: 'settingsFace',
     url: '/settings/face',
     method: 'GET'
   },
   {
-    // 创建register的session接口
+    // 人脸识别 创建register的session接口
     name: 'getSessions',
     url: '/plugins/face/sessions',
     method: 'POST'
   },
   {
-    // 人脸识别 确认上传图片结果
+    // 人脸识别 获取register的session，确认人脸识别认证结果, 轮询
+    name: 'faceSession',
+    url: '/plugins/face/sessions/{sessionId}',
+    method: 'GET'
+  },
+  {
+    // 人脸识别 图片上传最终的结果
     name: 'finishUploadResult',
     url: '/plugins/face/sessions/{sessionId}/finish_upload_results',
     method: 'POST'
