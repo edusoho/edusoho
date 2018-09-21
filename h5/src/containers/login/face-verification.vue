@@ -5,7 +5,7 @@
       <div class="mt5">请将面部正对摄像头</div>
     </div>
     <div v-show="imgShow">
-      <img id="imgContent" class="img-content" alt="人脸照片">
+      <img class="img-content" :src="imgAddress" alt="人脸照片">
       <div>认证中，请稍后...</div>
     </div>
     <div v-show="failText">人脸识别多次认证不通过<div class="mt5">请改用其它方式认证或联系管理员</div></div>
@@ -29,6 +29,7 @@ export default {
       btnShow: true,
       imgShow: false,
       failText: false,
+      imgAddress: '',
       btnText: '立即开启摄像头',
       uploadParams: {},
     }
@@ -125,7 +126,7 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend= (e) => {
-        document.getElementById('imgContent').src = e.target.result;
+        this.imgAddress = e.target.result;
         this.tipShow = false;
         this.btnShow = false;
       };
