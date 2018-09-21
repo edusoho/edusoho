@@ -136,10 +136,6 @@ export default {
         };
         Api.finishUploadResult(data).then(res => {
           if (res.success) {
-            // Toast.success({
-            //   duration: 2000,
-            //   message: '认证中，请稍候...'
-            // });
             this.imgShow = true;
             this.btnShow = false;
             this.polling();
