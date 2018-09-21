@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <span class='login-title'>确认账号</span>
-    <van-field v-model="username"
+    <van-field v-model.trim="username"
       class="login-input e-input"
       placeholder="请输入邮箱/手机/用户名"/>
     <van-field v-if="faceRegistered" v-model="password"
@@ -44,12 +44,22 @@ export default {
     ]),
 
     onSubmitInfo() {
+      const reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      const reg_mobile = /^1\d{10}$/;
+      let type;
+      if (reg_mobile.test(this.username)) {
+        type = 'mobile';
+      } else if (reg_email.test(this.username)) {
+        type = 'email';
+      } else {
+        type = 'nickname';
+      }
       Api.getUserIsExisted({
         query: {
           type: this.username,
         },
         params: {
-          identifyType: 'nickname',
+          identifyType: type,
         }
       }).then(res => {
         if (!res.id) {
