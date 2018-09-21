@@ -23,7 +23,15 @@ class PageCourse extends AbstractResource
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
-        $course['courseItems'] = $this->getCourseService()->findCourseItems($courseId);
+
+        $course['courseItems'] = $this->container->get('api.util.item_helper')->convertToLeadingItemsV2(
+            $this->getCourseService()->findCourseItems($courseId),
+            $course,
+            $request->getHttpRequest()->isSecure(),
+            $request->query->get('fetchSubtitlesUrls', 0),
+            $request->query->get('onlyPublished', 0)
+        );
+
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
