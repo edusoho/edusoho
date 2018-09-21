@@ -6,7 +6,7 @@
     </div>
     <div v-show="imgShow">
       <img class="img-content" :src="imgAddress" alt="人脸照片">
-      <div>认证中，请稍后...</div>
+      <div>认证中，请稍候...</div>
     </div>
     <div v-show="failText">人脸识别多次认证不通过<div class="mt5">请改用其它方式认证或联系管理员</div></div>
     <div v-show="btnShow">
