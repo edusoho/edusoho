@@ -24,13 +24,13 @@ const config = [
     method: 'POST'
   },
   {
-    // 人脸识别 确认上传图片结果
+    // 人脸识别 获取register的session，确认人脸识别认证结果, 轮询
     name: 'faceSession',
     url: '/plugins/face/sessions/{sessionId}',
     method: 'GET'
   },
   {
-    // 人脸识别 获取register的session 轮询
+    // 人脸识别 图片上传最终的结果
     name: 'finishUploadResult',
     url: '/plugins/face/sessions/{sessionId}/finish_upload_results',
     method: 'POST'
