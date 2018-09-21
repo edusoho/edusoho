@@ -11,6 +11,6 @@ class LessonException extends AbstractException
     const LESSON_NUM_LIMIT = 4031301;
 
     public $messages = array(
-        40311301 => 'lesson_count_no_more_than_300',
+        4031301 => 'lesson_count_no_more_than_300',
     );
 }
