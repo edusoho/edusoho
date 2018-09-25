@@ -65,7 +65,7 @@ export default {
           message: '登录成功'
         });
         const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-        var jumpAction = () => {
+        const jumpAction = () => {
           this.$router.push({name: redirect});
         }
         setTimeout(jumpAction, 2000);
