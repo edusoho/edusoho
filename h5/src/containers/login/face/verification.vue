@@ -30,6 +30,7 @@ export default {
       imgAddress: '',
       btnText: '立即开启摄像头',
       uploadParams: {},
+      seconds: 60
     }
   },
   mounted() {
@@ -49,7 +50,6 @@ export default {
       Toast.fail(err.message);
     });
   },
-
   methods: {
     polling() {
       const self = this;
@@ -63,6 +63,15 @@ export default {
           setTimeout(() => {
             self.polling();
           }, 2000);
+          var timer = window.setInterval(function () {
+            if (self.seconds > 0) {
+              self.seconds = self.seconds - 1
+            } else {
+              self.recognitionFail();
+              window.clearInterval(timer);
+            }
+          },1000);
+
         } else if (res.status === 'successed') {
           Toast.success({
             duration: 2000,
@@ -89,21 +98,7 @@ export default {
           setTimeout(jumpAction, 3000);
         } else {
           if (res.lastFailed === 1) {
-            Toast.fail({
-              duration: 2000,
-              message: '人脸识别认证失败，多次不通过'
-            });
-            this.failTextShow = true;
-            this.tipShow = false;
-            const toLogin = () => {
-              this.$router.push({
-                name: 'login',
-                query: {
-                  redirect: this.$route.query.redirect || ''
-                }
-              });
-            }
-            setTimeout(toLogin, 2000);
+            this.recognitionFail();
           } else {
             Toast.fail({
               duration: 2000,
@@ -114,6 +109,23 @@ export default {
           }
         }
       })
+    },
+    recognitionFail() {
+      Toast.fail({
+        duration: 1500,
+        message: '人脸识别认证失败，多次不通过'
+      });
+      this.failTextShow = true;
+      this.tipShow = false;
+      const toLogin = () => {
+        this.$router.push({
+          name: 'login',
+          query: {
+            redirect: this.$route.query.redirect || ''
+          }
+        });
+      }
+      setTimeout(toLogin, 3000);
     },
     openCamera(e) {
       const file = e.target.files[0];
