@@ -787,6 +787,12 @@ admin:
                             router_name: admin_cloud_data_lab
                         admin_cloud_data_lab_setting:
                             name: admin.cloud.data_lab_setting
+                admin_cloud_face_identify_manage:
+                    name: admin.cloud.face_identify
+                    visible: (setting('feature_lab.face_identify'))
+                    children:
+                        admin_cloud_face_identify:
+                            name: admin.cloud.face_identify
                 admin_cloud_feature_lab_manage:
                     name: admin.cloud.feature_lab
                     visible: (cloudStatus())

@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 				data.face_identify = $(this).val();
 			}
 			$.post(document.location.href, data, function(data){
-				
+				document.location.reload();
 			})
 		})
 	}

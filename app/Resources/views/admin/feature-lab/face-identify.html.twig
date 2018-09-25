@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_face_identify' %}
+
+{% set script_controller = 'feature_lab/face-identify' %}
+
+{% block main %}
+
+	<form id="face_identify">
+		<div>总开关</div><input type="checkbox" name="enabled" value="1" {% if setting('face_identify.enabled') %}checked{% endif %}>
+
+		<div>App端开启</div><input type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.app_enabled') %}checked{% endif %}>
+
+		<div>微信端开启</div><input type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
+
+		<div>PC端开启</div><input type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
+	</form>
+{% endblock %}
