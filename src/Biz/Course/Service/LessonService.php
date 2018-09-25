@@ -20,7 +20,7 @@ interface LessonService
 
     public function updateLesson($lessonId, $fields);
 
-    public function publishLesson($courseId, $lessonId);
+    public function publishLesson($courseId, $lessonId, $updateLessonNum = true);
 
     public function publishLessonByCourseId($courseId);
 
@@ -44,4 +44,9 @@ interface LessonService
     public function setOptional($courseId, $lessonId);
 
     public function unsetOptional($courseId, $lessonId);
+
+    /**
+     * 重新计算 课时的 number 和 published_number
+     */
+    public function updateLessonNumbers($courseId);
 }

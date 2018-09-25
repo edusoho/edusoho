@@ -2,7 +2,7 @@
   
   <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
     <div class="item-content js-item-content text-overflow">
-      {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: loop.index, displayAllInfo: true} %}
+      {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: loop.index, displayAllInfo: true, isShowText: false} %}
     </div>
     <div class="item-actions">
       <a class="cd-mr24" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}">

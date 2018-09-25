@@ -51,26 +51,46 @@ class KernelH5RequestListener
         if (!DeviceToolkit::isMobileClient()) {
             return;
         }
-        $pathInfo = $this->transfer($route, $pathInfo);
-        $params = $request->query->all();
-        $query = http_build_query($params);
-        $url = empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
+        $url = $this->transfer($route, $pathInfo, $request);
         $response = new RedirectResponse($url);
         $event->setResponse($response);
     }
 
-    protected function transfer($route, $pathInfo)
+    protected function transfer($route, $pathInfo, $request)
     {
-        if ('my_course_show' == $route['_route']) {
-            return $this->container->get('router')->generate('course_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
+        $params = $request->query->all();
+        $query = http_build_query($params);
+        if (in_array($route['_route'], array('my_course_show', 'course_show'))) {
+            $pathInfo = $this->container->get('router')->generate('course_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
 
-        return $pathInfo;
+        if ('course_set_explore' == $route['_route']) {
+            $query = array();
+            $pathInfo = $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
+        }
+        if ('task_live_entry' == $route['_route']) {
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($route['courseId'], $route['activityId']);
+            $params = array(
+                'courseId' => $route['courseId'],
+                'taskId' => $task['id'],
+                'type' => $task['type'],
+                'title' => $task['title'],
+            );
+            $query = http_build_query($params);
+            $pathInfo = '/live';
+        }
+
+        return empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
     }
 
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     protected function trans($id, array $parameters = array())

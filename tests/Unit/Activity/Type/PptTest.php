@@ -122,21 +122,6 @@ class PptTest extends BaseTypeTestCase
         $this->assertTrue(empty($result['id']));
     }
 
-    public function testIsFinished()
-    {
-        $field = $this->mockField();
-        $type = $this->getActivityConfig(self::TYPE);
-        $pptActivity = $type->create($field);
-        $activity = $this->mockSimpleActivity($pptActivity['id']);
-
-        $this->mockBiz('Activity:ActivityService', array(
-            array('functionName' => 'getActivity', 'returnValue' => $activity),
-        ));
-
-        $result = $type->isFinished(1);
-        $this->assertFalse($result);
-    }
-
     public function testRegisterListeners()
     {
         $type = $this->getActivityConfig(self::TYPE);

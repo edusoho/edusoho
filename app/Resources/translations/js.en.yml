@@ -426,7 +426,7 @@ course.buy.price_free_hint: Go study
 course.chapter: '%chapter_name% %number% : %title%'
 course.unit: '%part_name% %number% : %title%'
 course.lesson: '%part_name% %number% : %title%'
-course.catalogue.task_status.task: '%TaskName%.%taskNumber%:%taskTitle%'
+course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
@@ -964,6 +964,7 @@ admin.article_setting.choose_category: 'Choose column'
 
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
+
 Bad credentials.: Bad credentials
 User account is locked.: The account is blocked.
 
@@ -1372,3 +1373,5 @@ admin.util.item_delete.delete_hint: Really want to delete the %name%?
 admin.util.item_delete.delete_success_hint: Delete %name% successfully
 admin.shortcut_add_success_hint: The current page has been added as a popular link!
 admin.shortcut_delete_success_hint: Delete frequently used links successfully!
+
+task_show.user_login_protect_tip: User unLogin

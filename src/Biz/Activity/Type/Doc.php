@@ -82,19 +82,17 @@ class Doc extends Activity
         return $this->getDocActivityDao()->update($doc['id'], $doc);
     }
 
-    public function isFinished($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
-
-        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
-        $result /= 60;
-
-        return !empty($result) && $result >= $doc['finishDetail'];
-    }
-
     public function update($targetId, &$fields, $activity)
     {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $media = json_decode($fields['media'], true);
+
+        if (empty($media['id'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $fields['mediaId'] = $media['id'];
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
@@ -114,7 +112,6 @@ class Doc extends Activity
     public function get($targetId)
     {
         $activity = $this->getDocActivityDao()->get($targetId);
-
         $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
 
         return $activity;

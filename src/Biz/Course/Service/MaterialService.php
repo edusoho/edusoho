@@ -59,4 +59,6 @@ interface MaterialService
     public function findUsedCourseSetMaterials($fileIds, $courseSetId);
 
     public function findFullFilesAndSort($materials);
+
+    public function findMaterialsByIds($ids);
 }

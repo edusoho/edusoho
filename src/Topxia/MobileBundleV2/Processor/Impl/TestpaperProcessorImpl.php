@@ -171,7 +171,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             } else {
                 $results[$key]['beginTime'] = date('Y-m-d H:i:s', $value['beginTime']);
                 $results[$key]['endTime'] = date('Y-m-d H:i:s', $value['endTime']);
-                if ($results[$key]['updateTime'] != 0) {
+                if (0 != $results[$key]['updateTime']) {
                     $results[$key]['updateTime'] = date('Y-m-d H:i:s', $value['updateTime']);
                 }
                 $results[$key]['checkedTime'] = date('Y-m-d H:i:s', $value['checkedTime']);

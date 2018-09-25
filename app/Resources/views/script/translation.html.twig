@@ -1,6 +1,6 @@
 <script src="{{ asset('bundles/translations/translator.min.js') }}"></script>
 
-{% set locales = app.request.session.get('_locale',app.request.locale)|default('zh_CN') %}
+{% set locales = app.request.session ? app.request.session.get('_locale',app.request.locale) : app.request.locale %}
 {% if app.debug %}
   <script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales={{ locales }}"></script>
 {% else %}

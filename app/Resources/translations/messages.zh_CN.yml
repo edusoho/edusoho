@@ -1464,7 +1464,6 @@ course.tab.notes: '笔记'
 course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
-course.activity.text: '图文'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -1476,6 +1475,7 @@ course.activity.testpaper: 考试
 course.activity.homework: 作业
 course.activity.exercise: 练习
 course.activity.download: 下载资料
+course.activity.text: 图文
 course.task_toolbar.tasks: 目录
 course.task_toolbar.notes: 笔记
 course.task_toolbar.questions: 问答
@@ -1707,7 +1707,7 @@ course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
 course.plan_task.publish_btn: 发布
-course.plan_task.manage: 教训计划管理
+course.plan_task.manage: 教学计划管理
 course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: %taskName%未解锁
 course.plan_task.task: %taskName%学习
@@ -1804,6 +1804,13 @@ course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
 
 # activity-活动
+activity_manage.finish_tips:
+  <p class="gray-darker mbs">满足以下条件:</p>
+activity_manage.finish_tips_time: >
+  至少学习%finishDetail%分钟。
+activity_manage.finish_select_tips_time: 学习时长
+activity_manage.finish_select_tips_end: 学习到最后
+
 course.plan_task.activity_manage.finished_condition: 完成条件
 course.plan_task.activity_manage.audio: 音频
 course.plan_task.activity_manage.audio.converting: 正在转码，请稍后尝试。
@@ -1820,8 +1827,6 @@ course.plan_task.activity_manage.discuss.content: 讨论主题
 course.plan_task.activity_manage.doc: 文档
 course.plan_task.activity_manage.doc.watch_time: 观看时长
 course.plan_task.activity_manage.doc.watch_time_at_least: 至少观看
-course.plan_task.activity_manage.doc.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少观看%finishDetail%分钟。
 course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
@@ -1861,9 +1866,9 @@ course.plan_task.activity_manage.exercise.info_tips: >
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
+course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
-course.plan_task.activity_manage.homework.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>提交作业
+course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
@@ -1877,8 +1882,7 @@ course.plan_task.activity_manage.homework.question_total: >
   作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.live.finished_condition_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
+course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
@@ -1888,8 +1892,6 @@ course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
 course.plan_task.activity_manage.ppt.lear_at_least_time: 至少学习
-course.plan_task.activity_manage.ppt.finished_condition_tips.time: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.ppt.finished_condition_tips.end: >
   <p class="gray-darker mbs">满足以下条件:</p>需要学习到最后一页。
 course.plan_task.activity_manage.testpaper.finished_condition_tips: >
@@ -1931,16 +1933,12 @@ course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
-course.plan_task.activity_manage.text: 内容
-course.plan_task.activity_manage.text_tips: 您有一段自动保存内容，请点击继续编辑
 course.plan_task.activity_manage.video: 视频
 course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
 course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
 course.plan_task.activity_manage.video.code_convert_tips: >
   字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
-course.plan_task.activity_manage.video.time_finish_tips: >
-  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.video.last_finish_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>学习到最后。
 course.plan_task.activity_manage.video.failed_tips: 您的视频观看时长已达限制，无法继续观看！
@@ -7093,6 +7091,19 @@ admin.developer_setting.hls_encrypted: HLS加密视频
 admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
+admin.developer_setting.default_locale: 默认语言
+admin.developer_setting.default_locale.zh_CN: 中文
+admin.developer_setting.default_locale.en: English
+admin.developer_setting.default_locale.tips: >
+  <h5>默认分类与默认标签名为后台->课程->分类管理和标签管理。</h5>
+  <h5>首页多处内容需设置手动设置为相应的语言。</h5>
+    <li>顶部导航栏位于后台->系统->站点设置->基础信息和顶部导航。</li>
+    <li>轮播图位于后台->运营->编辑区管理。</li>
+    <li>中间模块位于后台->系统->站点设置->主题->相应的主题管理。</li>
+    <li>轮播图位于后台->运营->编辑区管理->首页底部。</li>
+admin.developer_setting.show_switch_locale: 是否开启首页切换语言
+admin.developer_setting.show_switch_locale.0: 关闭
+admin.developer_setting.show_switch_locale.1: 开启
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
   <ul>
@@ -8430,6 +8441,7 @@ log.action.system.update_settings.siteTrace: 更新站点追踪设置
 log.action.system.update_settings.xapi: 更新数据实验室设置
 log.action.system.update_settings.mobile: 更新移动客户端设置
 log.action.system.update_settings.wap: 更新WAP设置
+log.action.system.update_settings.developer: 更新开发者设置
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -8689,6 +8701,7 @@ log.action.template.system.update_settings.siteTrace: 更新了<strong class="co
 log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
 log.action.template.system.update_settings.mobile: 更新了<strong class="color-success">系统设置</strong>的移动客户端设置
 log.action.template.system.update_settings.wap: 更新了<strong class="color-success">系统设置</strong>的WAP设置
+log.action.template.system.update_settings.developer: 更新了<strong class="color-success">系统设置</strong>的开发者设置
 log.action.template.live.update_live_activity: 更新了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
 log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》

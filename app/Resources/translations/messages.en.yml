@@ -1301,7 +1301,6 @@ course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
-course.activity.text: 'Text'
 course.activity.video: 'Video'
 course.activity.audio: Audio
 course.activity.live: Live
@@ -1552,14 +1551,14 @@ course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
 course.plan_task.preparation_tips: 'Students can learn to learn by looking at %taskName% such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
-course.plan_task.empty: 'It's empty, add a lesson now'
+course.plan_task.empty: 'It is empty, add a lesson now'
 course.plan_task.task_unpublished: （unpublish）
 course.plan_task.is_optional_task: Optional
 course.plan_task.edit_tips: 'Create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
-course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n"
+course.plan_task.which_chapter: '</i>No.<span class="number">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n'
 course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.question_placeholder: 'Ask a question'
@@ -1711,8 +1710,6 @@ course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span c
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
-course.plan_task.activity_manage.text: Content
-course.plan_task.activity_manage.text_tips: 'You have an automatic save of content, please click to continue editing'
 course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
 course.plan_task.activity_manage.video.subtitle: 'Subtitles'
@@ -5806,6 +5803,9 @@ admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
 admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
+admin.developer_setting.default_locale: language
+admin.developer_setting.default_locale.zh_CN: 中文
+admin.developer_setting.default_locale.en: English
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.developer_setting.mp_service_url_label: Applet service platform address
 admin.magic_setting.need_careful_tips: Attention
@@ -6137,13 +6137,14 @@ admin.wap_setting.find: '发现页设置'
 admin.wap_setting.site: '站点设置'
 admin.wap_setting.online: '功能正式上线'
 admin.wap_setting.open: '去开启新版微网校'
-admin.wap_setting.function:
-  '<li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
+admin.wap_setting.function: >
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
-  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>'
-admin.wap_setting.hint:  '<p class="help-block">新版微网校可使用发现页设置功能。</p>
-                          <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
-                          <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>'
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>
+admin.wap_setting.hint: >
+  <p class="help-block">新版微网校可使用发现页设置功能。</p>
+  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
+  <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
@@ -7177,6 +7178,7 @@ log.action.system.update_settings.siteTrace: 更新站点追踪设置
 log.action.system.update_settings.xapi: 更新数据实验室设置
 log.action.system.update_settings.mobile: 更新移动客户端设置
 log.action.system.update_settings.wap: 更新WAP设置
+log.action.system.update_settings.developer: 更新开发者设置
 log.action.system.questions_settings: 'Question Bank Settings'
 log.action.system.customerServiceSetting: 'Customer service'
 log.action.system.setting_userCenter: 'User center settings'
@@ -7439,6 +7441,7 @@ log.action.template.system.update_settings.siteTrace: 更新了<strong class="co
 log.action.template.system.update_settings.xapi: 更新了<strong class="color-success">系统设置</strong>的数据实验室设置
 log.action.template.system.update_settings.mobile: 更新了<strong class="color-success">系统设置</strong>的移动客户端设置
 log.action.template.system.update_settings.wap: 更新了<strong class="color-success">系统设置</strong>的WAP设置
+log.action.template.system.update_settings.developer: 更新了<strong class="color-success">系统设置</strong>的开发者设置
 log.action.template.live.update_live_activity: 更新了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
 log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》

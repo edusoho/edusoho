@@ -29,7 +29,9 @@ module.exports = {
     'echarts': ['echarts'],
     'select2': ['libs/select2/index.js'],
     'handlebars': ['handlebars'],
-    'fullcalendar': ['libs/fullcalendar/index.js']
+    'fullcalendar': ['libs/fullcalendar/index.js'],
+    'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
+    'ltc-sdk-server': ['libs/ltc-sdk-server/index.js']
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
@@ -70,7 +72,31 @@ module.exports = {
     },
     {
       name: 'easy-pie-chart/dist/jquery.easypiechart.js',
+    },
+    {
+      name: 'jquery/dist/jquery.min.js',
+    },
+    {
+      name: 'codeages-design',
+      ignore: [
+        'node_modules/**',
+        'src/**',
+      ]
+    },
+    {
+      name: 'jquery-validation/dist/jquery.validate.js'
+    },
+    {
+      name: 'bootstrap',
+      ignore: [
+        'grunt/**',
+        'js/**',
+        'less/**',
+      ]
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin}',
+  isESlint: false,
+  baseName: 'libs/base,libs/ltc-sdk',
+  activitiesDir: 'web/activities',
 };

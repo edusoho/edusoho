@@ -170,8 +170,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onCourseLessonDelete(Event $event)
     {
-        $context = $event->getSubject();
-        $lesson = $context['lesson'];
+        $lesson = $event->getSubject();
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
@@ -295,7 +294,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $liveActivity = $event->getSubject();
         $fields = $event->getArgument('fields');
 
-        if (isset($fields['replayStatus']) && $fields['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+        if (isset($fields['replayStatus']) && LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $fields['replayStatus']) {
             $this->getUploadFileService()->waveUsedCount($fields['mediaId'], 1);
         }
     }

@@ -510,7 +510,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                     $lesson['mediaConvertStatus'] = $file['status'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                        if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
 
                             if ($headLeaderInfo) {

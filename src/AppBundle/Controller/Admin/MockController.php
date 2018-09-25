@@ -270,10 +270,13 @@ class MockController extends BaseController
         if (isset($conditions['contentType']) && 'plain' == $conditions['contentType']) {
             return $body;
         }
+        $result = json_decode($body, true);
 
-        $body = json_decode($body, true);
+        if (empty($result)) {
+            $result = array('detailedMsg' => $body);
+        }
 
-        return $body;
+        return $result;
     }
 
     private function post($url, $bodyStr, $token)
