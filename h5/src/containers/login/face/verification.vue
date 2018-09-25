@@ -30,7 +30,10 @@ export default {
       imgAddress: '',
       btnText: '立即开启摄像头',
       uploadParams: {},
-      seconds: 60
+      seconds: 60,
+      requestCount: 0,
+      requestStartT: '',
+      requestEndT: '',
     }
   },
   mounted() {
@@ -60,15 +63,21 @@ export default {
       }).then(res => {
         console.log(res.status);
         if (res.status === 'processing') {
-          self.polling();
-          var timer = window.setInterval(function () {
-            if (self.seconds > 0) {
-              self.seconds = self.seconds - 1
-            } else {
-              self.recognitionFail();
-              window.clearInterval(timer);
-            }
-          }, 1000);
+          if (!this.requestStartT) {
+            this.requestStartT = new Date();
+          } else {
+            this.requestEndT = new Date();
+          }
+
+          const duration = this.requestEndT ? this.requestEndT - this.requestStartT : 0
+          if (duration > 58000) {
+            self.recognitionFail();
+            return;
+          }
+
+          setTimeout(() => {
+            self.polling();
+          }, 2000);
 
         } else if (res.status === 'successed') {
           Toast.success({
