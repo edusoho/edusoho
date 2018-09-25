@@ -18,7 +18,7 @@
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
     <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
-      <img src="static/images/face.png" alt="">
+      <img src="static/images/face.png" alt="人脸识别登录图标">
     </router-link>
   </div>
 
