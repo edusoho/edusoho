@@ -18,7 +18,8 @@ class PagedCourseLesson {
   }
 
   _init(options) {
-    let finalOptions = $.extend(this._getDefaultOptions(), options);
+    let finalOptions = $.extend(this._getDefaultOptions(options), options);
+    finalOptions.wrapDom = options.wrapTarget;
     new ESInfiniteCachedScroll(finalOptions);
 
     if (this._displayAllImmediately) {
@@ -26,18 +27,23 @@ class PagedCourseLesson {
     }
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(options) {
+    const $hiddenCachedData = this._wrapTarget(options.wrapTarget, '.js-hidden-cached-data');
+    const $hiddenCourseInfo = this._wrapTarget(options.wrapTarget, '.js-hidden-course-info');
+    const $hiddenI18n = this._wrapTarget(options.wrapTarget, '.js-hidden-i18n');
+    const $hiddenActivityMetas = this._wrapTarget(options.wrapTarget, '.js-hidden-activity-metas');
+    const $hiddenCurrentTimestamp = this._wrapTarget(options.wrapTarget, '.js-hidden-current-timestamp');
     return {
-      'data': this._toJson($('.js-hidden-cached-data').html()),
+      'data': this._toJson($hiddenCachedData.html()),
 
       'context': {
-        'course': this._toJson($('.js-hidden-course-info').html()),
+        'course': this._toJson($hiddenCourseInfo.html()),
 
-        'i18n': this._toJson($('.js-hidden-i18n').html()),
+        'i18n': this._toJson($hiddenI18n.html()),
 
-        'metas': this._toJson($('.js-hidden-activity-metas').html()),
+        'metas': this._toJson($hiddenActivityMetas.html()),
 
-        'currentTimeStamp': parseInt($('.js-hidden-current-timestamp').html(), 10),
+        'currentTimeStamp': parseInt($hiddenCurrentTimestamp, 10),
 
         'isChapter': function(data, context) {
           return 'chapter' == data.itemType;
@@ -209,6 +215,11 @@ class PagedCourseLesson {
 
       'dataTemplateNode': '.js-infinite-item-template'
     };
+  }
+
+  _wrapTarget($target, className) {
+    const $dom = $target ? $target.find(className): $(className);
+    return $dom;
   }
 
   _destroyPaging() {
