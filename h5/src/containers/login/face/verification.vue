@@ -4,12 +4,12 @@
       <div>即将进行人脸识别认证</div>
       <div class="mt5">请将面部正对摄像头</div>
     </div>
-    <div v-show="imgShow">
+    <div v-if="!failTextShow" v-show="!tipShow">
       <img class="img-content" :src="imgAddress" alt="人脸照片">
       <div>认证中，请稍候...</div>
     </div>
-    <div v-show="failText">人脸识别多次认证不通过<div class="mt5">请改用其它方式认证或联系管理员</div></div>
-    <div v-show="btnShow">
+    <div v-show="failTextShow">人脸识别多次认证不通过<div class="mt5">请改用其它方式认证或联系管理员</div></div>
+    <div v-show="tipShow">
       <label for="cameraItem" class="btn-open-camera">{{ btnText }}</label>
       <input id="cameraItem" class="hide" type="file" accept="image/*" @change="openCamera" capture="user">
     </div>
@@ -26,9 +26,7 @@ export default {
   data() {
     return {
       tipShow: true,
-      btnShow: true,
-      imgShow: false,
-      failText: false,
+      failTextShow: false,
       imgAddress: '',
       btnText: '立即开启摄像头',
       uploadParams: {},
@@ -95,9 +93,8 @@ export default {
               duration: 2000,
               message: '人脸识别认证失败，多次不通过'
             });
-            this.failText = true;
-            this.btnShow = false;
-            this.imgShow = false;
+            this.failTextShow = true;
+            this.tipShow = false;
             const toLogin = () => {
               this.$router.push({
                 name: 'login',
@@ -112,23 +109,19 @@ export default {
               duration: 2000,
               message: '人脸识别认证失败'
             });
-            this.btnShow = true;
             this.tipShow = true;
             this.btnText = '重新认证';
-            this.imgShow = false;
           }
         }
       })
     },
     openCamera(e) {
-      this.imgShow = true;
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend= (e) => {
         this.imgAddress = e.target.result;
         this.tipShow = false;
-        this.btnShow = false;
       };
 
       const url = this.uploadParams.uploadUrl;
@@ -153,8 +146,7 @@ export default {
         };
         Api.finishUploadResult(data).then(res => {
           if (res.success) {
-            this.imgShow = true;
-            this.btnShow = false;
+            this.tipShow = false;
             this.polling();
           } else {
             console.log(res.error.message);

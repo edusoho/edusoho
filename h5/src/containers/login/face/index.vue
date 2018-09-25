@@ -101,7 +101,7 @@ export default {
         this.$router.push({
           name: 'verification',
           query: {
-              redirect: this.$route.query.redirect || ''
+            redirect: this.$route.query.redirect || ''
           },
           params: {
             type: 'register',
