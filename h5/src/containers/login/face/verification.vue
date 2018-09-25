@@ -98,34 +98,34 @@ export default {
           setTimeout(jumpAction, 3000);
         } else {
           if (res.lastFailed === 1) {
-            this.recognitionFail();
-          } else {
             Toast.fail({
               duration: 2000,
-              message: '人脸识别认证失败'
+              message: '人脸识别认证失败，多次不通过'
             });
-            this.tipShow = true;
-            this.btnText = '重新认证';
+            this.failTextShow = true;
+            this.tipShow = false;
+            const toLogin = () => {
+              this.$router.push({
+                name: 'login',
+                query: {
+                  redirect: this.$route.query.redirect || ''
+                }
+              });
+            }
+            setTimeout(toLogin, 3000);
+          } else {
+            this.recognitionFail();
           }
         }
       })
     },
     recognitionFail() {
       Toast.fail({
-        duration: 1500,
-        message: '人脸识别认证失败，多次不通过'
+        duration: 2000,
+        message: '人脸识别认证失败'
       });
-      this.failTextShow = true;
-      this.tipShow = false;
-      const toLogin = () => {
-        this.$router.push({
-          name: 'login',
-          query: {
-            redirect: this.$route.query.redirect || ''
-          }
-        });
-      }
-      setTimeout(toLogin, 3000);
+      this.tipShow = true;
+      this.btnText = '重新认证';
     },
     openCamera(e) {
       const file = e.target.files[0];
