@@ -15,9 +15,15 @@ let createPPT = (watermark) => {
 
 
   if ($content.data('finishType') === 'end') {
-    ppt.once('end', (data) => {
-      emitter.emit('finish',data);
-    });
+    if (ppt.total === 1) {
+      setTimeout(() => {
+        emitter.emit('finish', {page: 1});
+      }, 1000);
+    } else {
+      ppt.once('end', (data) => {
+        emitter.emit('finish',data);
+      });
+    }
   }
 
   return ppt;
