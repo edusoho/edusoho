@@ -270,7 +270,7 @@ class WebExtension extends \Twig_Extension
             return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => round($time / 60)));
         }
 
-        return $this->trans('site.twig.extension.time_interval.hour_minute', array('%diff_hour%' => round($time / 3600), '%diff_minute%' => round($time % 3600 / 60)));
+        return $this->trans('site.twig.extension.time_interval.hour_minute', array('%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)));
     }
 
     public function pluginUpdateNotify()
