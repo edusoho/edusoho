@@ -69,7 +69,7 @@ export default {
             this.requestEndT = new Date();
           }
 
-          const duration = this.requestEndT ? this.requestEndT - this.requestStartT : 0
+          const duration = this.requestEndT ? this.requestEndT - this.requestStartT : 0;
           if (duration > 58000) {
             self.recognitionFail();
             return;
