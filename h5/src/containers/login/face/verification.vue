@@ -30,8 +30,6 @@ export default {
       imgAddress: '',
       btnText: '立即开启摄像头',
       uploadParams: {},
-      seconds: 60,
-      requestCount: 0,
       requestStartT: '',
       requestEndT: '',
     }
