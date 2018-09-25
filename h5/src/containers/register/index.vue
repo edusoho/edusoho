@@ -162,7 +162,7 @@ export default {
           duration: 2000,
           message: '注册成功'
         });
-        var jumpToLogin = () => {
+        const jumpToLogin = () => {
           this.$router.push({name: 'find'});
         }
         setTimeout(jumpToLogin, 2000);
