@@ -60,9 +60,7 @@ export default {
       }).then(res => {
         console.log(res.status);
         if (res.status === 'processing') {
-          setTimeout(() => {
-            self.polling();
-          }, 2000);
+          self.polling();
           var timer = window.setInterval(function () {
             if (self.seconds > 0) {
               self.seconds = self.seconds - 1
@@ -70,7 +68,7 @@ export default {
               self.recognitionFail();
               window.clearInterval(timer);
             }
-          },1000);
+          }, 1000);
 
         } else if (res.status === 'successed') {
           Toast.success({
