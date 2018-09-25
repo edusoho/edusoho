@@ -38,14 +38,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '@/containers/login/index.vue')
   },
   {
-    path: '/sts',
-    name: 'sts',
-    meta: {
-      title: ''
-    },
-    component: () => import(/* webpackChunkName: "login" */ '@/containers/discovery/index.vue')
-  },
-  {
     path: '/register',
     name: 'register',
     meta: {
@@ -128,12 +120,19 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "preview" */'@/containers/preview/index.vue')
   }, {
+    path: '/sts',
+    name: 'sts',
+    meta: {
+      title: '人脸识别登录'
+    },
+    component: () => import(/* webpackChunkName: "login" */ '@/containers/login/face/index.vue')
+  }, {
     path: '/face_verification',
     name: 'verification',
     meta: {
       title: '人脸认证'
     },
-    component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face-verification.vue')
+    component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face/verification.vue')
   }
 ];
 
