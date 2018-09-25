@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/echo-js.js','libs/jquery-countdown.js',
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
 'app/js/courseset/show/index.js']) %}
 
 {% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}

@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{'cloud_search.content_title'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'cloud_search.all_courses'|trans}}{% endif %} - {{ parent() }}{% endblock %}
-{% do script(['libs/echo-js.js', 'app/js/search/cloud/index.js']) %}
+{% do script(['app/js/search/cloud/index.js']) %}
 {% set cloudSearch = setting('cloud_search')  %}
 
 {% block top_content %}
