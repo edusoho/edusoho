@@ -24,9 +24,10 @@
               :show-file-list="false">
               <div class="image-uploader">
                 <img v-show="copyModuleData.image.uri" :src="copyModuleData.image.uri" class="poster-img">
-                <div class="uploader-mask" v-show="!copyModuleData.image.uri">
+                <div class="add-img" v-show="!copyModuleData.image.uri">
                   <span><i class="text-18">+</i> 添加图片</span>
                 </div>
+                <div class="uploader-mask" v-show="copyModuleData.image.uri">更换图片</div>
               </div>
             </el-upload>
           </div>

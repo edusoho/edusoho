@@ -15,8 +15,6 @@
         :poster="part.data"
         :feedback="feedback"></e-poster>
     </div>
-    <!-- 垫底的 -->
-    <div class="mt50"></div>
   </div>
 </template>
 

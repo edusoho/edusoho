@@ -76,7 +76,8 @@ export default {
         data: {
           targetType: 'course',
           targetId: id,
-          isOrderCreate: 1
+          isOrderCreate: 1,
+          couponCode: this.$route.params.couponCode
         }
       }).then(res => {
         this.detail = Object.assign({}, res)

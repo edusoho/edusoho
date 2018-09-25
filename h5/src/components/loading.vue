@@ -1,22 +1,58 @@
 <template>
   <div class="loading">
-    <van-loading type="spinner" color="white" size="40px" />
+    <div class="es-loading" :class="classList" :style="sizeStyle">
+      <span class="spot"></span>
+      <span class="spot"></span>
+      <span class="spot"></span>
+    </div>
+    <div class="loading-mask" @touchstart="stopMove"></div>
   </div>
 </template>
-<style lang="scss">
-  .loading {
-    position: fixed;
-    height: 100vh;
-    width: 100vw;
-    z-index: 1000;    
-    .van-loading--white {
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, .5);
-      padding: 15px;
-      border-radius: 3px;
+
+<script>
+export default {
+  props:{
+    type: {
+      type: String,
+      default: 'default',
+    },
+    color: {
+      type: String,
+      default: 'primary',
+    },
+    size: {
+      type: String,
+      default: '56px',
+    }
+  },
+  data() {
+    return {
+      colorList: ['primary'],
+      typeList: ['default']
+    }
+  },
+  computed: {
+    classList() {
+      let list = '';
+      const colorExists = this.colorList.includes(this.color)
+      const typeExists = this.typeList.includes(this.type)
+
+      list = colorExists ? list += ` ${this.color}` : list;
+      list = typeExists ? list += ` ${this.type}` : list;
+
+      return list;
+    },
+    sizeStyle() {
+      return {
+        width: this.size,
+        height: this.size,
+      };
+    },
+  },
+  methods: {
+    stopMove(e) {
+      e.preventDefault();
     }
   }
-</style>
+}
+</script>

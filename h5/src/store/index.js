@@ -14,6 +14,7 @@ const state = {
   user: {},
   smsToken: '',
   settings: {},
+  courseSettings: {},
   title: ''
 };
 

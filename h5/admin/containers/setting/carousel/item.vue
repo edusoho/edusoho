@@ -9,6 +9,7 @@
       :show-file-list="false"
       >
       <img class="carousel-img" :src="item.image.uri" v-show="item.image.uri">
+      <div class="carousel-img-mask" v-show="item.image.uri">更换图片</div>
       <span v-show="!item.image.uri"><i class="text-xlarge">+</i> 添加图片</span>
     </el-upload>
 
@@ -21,13 +22,11 @@
           ref="cropper"
           v-show="option.img"
           :img="option.img"
-          :outputSize="option.size"
-          :outputType="option.outputType"
-          :autoCrop="true"
-          :autoCropWidth="375"
-          :autoCropHeight="200"
-          :fixedBox="true"
-          :maxImgSize="500"
+          :fixed="option.fixed"
+          :autoCrop="option.autoCrop"
+          :fixedNumber="option.fixedNumber"
+          :autoCropWidth="option.autoCropWidth"
+          :autoCropHeight="option.autoCropHeight"
         ></vueCropper>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -70,9 +69,10 @@
         option: {
           img: '',
           autoCrop: true,
-          fixedNumber: 375 / 200,
-          centerBox: true,
-          autoCrop: true,
+          autoCropWidth: 375,
+          autoCropHeight: 200,
+          fixedNumber: [375, 200],
+          fixed: true,
         },
         imageCropped: false,
         dialogVisible: false,

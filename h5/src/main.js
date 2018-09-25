@@ -22,8 +22,8 @@ import {
   SwipeItem,
   List,
   Field,
-  Loading,
-  Uploader
+  Uploader,
+  Popup
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -36,10 +36,10 @@ Vue.component('van-button', Button);
 Vue.component('van-tab', Tab);
 Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
-Vue.component('van-loading', Loading);
 Vue.component('van-uploader', Uploader);
 
 Vue.use(filters);
+Vue.use(Popup);
 Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
