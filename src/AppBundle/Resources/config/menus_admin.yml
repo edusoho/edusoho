@@ -787,6 +787,12 @@ admin:
                             router_name: admin_cloud_data_lab
                         admin_cloud_data_lab_setting:
                             name: admin.cloud.data_lab_setting
+                admin_cloud_feature_lab_manage:
+                    name: admin.cloud.feature_lab
+                    visible: (cloudStatus())
+                    children:
+                        admin_cloud_feature_lab:
+                            name: admin.cloud.feature_lab
                 admin_setting_cloud:
                     name: admin.cloud.cloud_setting_menu
                     children:

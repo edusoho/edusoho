@@ -1,0 +1,11 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_feature_lab' %}
+
+{% set script_controller = 'feature_lab/setting' %}
+
+{% block main %}
+
+	<div>人脸识别</div><input type="checkbox" name="face_identify" value="1" {% if setting('feature_lab.face_identify') %}checked{% endif %}>
+
+{% endblock %}

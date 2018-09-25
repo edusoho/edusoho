@@ -2337,6 +2337,10 @@ admin_cloud_data_lab:
     path: /data/lab
     defaults: { _controller: AppBundle:Admin/DataLab:data }
 
+admin_cloud_feature_lab:
+    path: /feature/lab
+    defaults: { _controller: AppBundle:Admin/FeatureLab:setting }
+
 admin_cloud_data_lab_setting:
     path: /data/lab/setting
     defaults: { _controller: AppBundle:Admin/DataLab:settting }
