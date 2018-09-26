@@ -9,7 +9,7 @@
         <table class="table cd-table table-striped order-detail-table">
           <tr>
             <td width="25%">{{ 'admin.edu_cloud.edu_video.check.storage'|trans }}</td>
-            <td width="75%">{{ renewVideo.freeSpace }}    {{ 'admin.edu_cloud.edu_video.check.storage.unit'|trans }}</td>
+            <td width="75%">{{ renewVideo.freeSpace|default('') }}    {{ 'admin.edu_cloud.edu_video.check.storage.unit'|trans }}</td>
           </tr>
         </table>
       </div>
@@ -20,7 +20,7 @@
         <table class="table cd-table table-striped order-detail-table">
           <tr>
             <td width="25%">{{ 'admin.edu_cloud.edu_video.check.flow'|trans }}</td>
-            <td width="75%">{{ renewVideo.freeTransfer }}    {{ 'admin.edu_cloud.edu_video.check.flow.unit'|trans }}</td>
+            <td width="75%">{{ renewVideo.freeTransfer|default('') }}    {{ 'admin.edu_cloud.edu_video.check.flow.unit'|trans }}</td>
           </tr>
         </table>
       </div>
@@ -31,7 +31,7 @@
         <table class="table cd-table table-striped order-detail-table">
           <tr>
             <td width="25%">{{ 'admin.edu_cloud.edu_video.check.service_life'|trans }}</td>
-            <td width="75%">{{renewVideo.startDate}} ~ {{renewVideo.endDate}}</td>
+            <td width="75%">{{renewVideo.startDate|default('')}} ~ {{renewVideo.endDate|default('')}}</td>
           </tr>
         </table>
       </div>
