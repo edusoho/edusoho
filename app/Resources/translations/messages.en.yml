@@ -5221,6 +5221,14 @@ admin.edu_cloud.edu_video.what_year_flow: 'What is the annual flow package?'
 admin.edu_cloud.edu_video.flow: Traffic
 admin.edu_cloud.edu_video.surplus_flow: '(Remaining %amount% GB)'
 admin.edu_cloud.edu_video.service_time: 'Service Term'
+admin.edu_cloud.edu_video.effective_service: 即将生效服务
+admin.edu_cloud.edu_video.check: 查看
+admin.edu_cloud.edu_video.check.title: 查看云视频内容
+admin.edu_cloud.edu_video.check.storage: 存储空间
+admin.edu_cloud.edu_video.check.storage.unit: GB
+admin.edu_cloud.edu_video.check.flow: 流量
+admin.edu_cloud.edu_video.check.flow.unit: GB/月
+admin.edu_cloud.edu_video.check.service_life: 服务年限
 admin.edu_cloud.edu_video.video_service_provider: 'Video hosting services are provided by the ES Cloud'
 admin.edu_cloud.edu_video.know_detail: 'Learn More'
 admin.edu_cloud.edu_video.cloud_buy_tips: "<a class=\"\" href=\"%buyUrl%\" target=\"_blank\"> Buy </a> cloud video packages for more enjoyable video hosting \n"
