@@ -42,11 +42,9 @@ class Announcement extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
-
         if (!$announcement) {
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
-
         return $announcement;
     }
 
