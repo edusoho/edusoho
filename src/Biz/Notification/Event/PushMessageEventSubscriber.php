@@ -1823,7 +1823,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     public function onBatchNotificationPublish(Event $event)
     {
         $batchNotification = $event->getSubject();
-
         if ($this->isIMEnabled()) {
             $from = array(
                 'type' => 'batch_notification',
@@ -1840,6 +1839,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'batchNotificationId' => $batchNotification['id'],
                 'title' => $batchNotification['title'],
                 'message' => $this->plainText($this->convertHtml($batchNotification['content']), 50),
+                'source' => 'notification'
             );
 
             $this->createPushJob($from, $to, $body);
