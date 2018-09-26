@@ -27,14 +27,29 @@ export default class CourseList {
     }
     const $hideDom = $parent.siblings().find('.es-icon-keyboardarrowup');
     this._lessonListShow($hideDom.parents('.media').siblings('.js-course-detail-content'));
+    const $findAllLink = $parent.find('.js-all-courses-link');
+    const $otherAllLink = $parent.siblings().find('.js-all-courses-link');
+    if ($findAllLink.length) {
+      $findAllLink.removeClass('hidden');
+    }
+
+    this.showLink($otherAllLink);
     $hideDom.removeClass('es-icon-keyboardarrowup').addClass('es-icon-keyboardarrowdown');
     $target.addClass('es-icon-keyboardarrowup').removeClass('es-icon-keyboardarrowdown');
   }
 
   onCollapseCourse(e) {
     const $target = $(e.currentTarget);
+    const $findAllLink = $target.parents('.course-item').find('.js-all-courses-link');
+    this.showLink($findAllLink);
     this._lessonListShow($target.parents('.media').siblings('.js-course-detail-content'));
     $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
+  }
+
+  showLink($dom) {
+    if ($dom.length) {
+      $dom.addClass('hidden');
+    }
   }
 
   _lessonListShow($list) {
