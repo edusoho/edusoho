@@ -82,6 +82,27 @@ class ClassroomMemberImporter extends Importer
         $this->getClassroomService()->tryManageClassroom($classroomId);
     }
 
+    public function check(Request $request)
+    {
+        $file = $request->files->get('excel');
+        $danger = $this->validateExcelFile($file);
+        if (!empty($danger)) {
+            return $danger;
+        }
+
+        $importData = $this->getUserData();
+
+        if (!empty($importData['errorInfo'])) {
+            return $this->createErrorResponse($importData['errorInfo']);
+        }
+
+        return $this->createSuccessResponse(
+            $importData['allUserData'],
+            $importData['checkInfo'],
+            $request->request->all()
+        );
+    }
+
     /**
      * @return \Biz\Classroom\Service\ClassroomService
      */
