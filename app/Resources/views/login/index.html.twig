@@ -15,7 +15,7 @@
       <a class="active">{{ 'user.login.login_account'|trans }}</a>
       <a href="{{ path('register', {goto:_target_path}) }}">{{ 'user.register.register_account'|trans }}</a>
     </div>
-    <div class="login-main">
+    <div class="login-main js-login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
 
         {% if error %}
@@ -74,6 +74,10 @@
         </div>
       {% endif %}
     </div>
+
+    {% if setting('login_bind.enabled') %}
+      {% include 'login/sts-logins-block.htm.twig' %}
+    {% endif %}
   </div>
 
 {% endblock %}
