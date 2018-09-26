@@ -723,6 +723,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'id' => $announcement['id'],
                 'type' => 'announcement.create',
+                'targetType' => 'announcement',
+                'targetId' => $announcement['id'],
                 'title' => $this->plainText(strip_tags($announcement['content']), 50),
             );
 
@@ -1836,7 +1838,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'batch_notification.publish',
-                'batchNotificationId' => $batchNotification['id'],
+                'targetType' => 'batch_notification',
+                'targetId' => $batchNotification['id'],
                 'title' => $batchNotification['title'],
                 'message' => $this->plainText(strip_tags($batchNotification['content']), 50),
                 'source' => 'notification'
