@@ -1838,7 +1838,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'batch_notification.publish',
                 'batchNotificationId' => $batchNotification['id'],
                 'title' => $batchNotification['title'],
-                'message' => $this->plainText($this->convertHtml($batchNotification['content']), 50),
+                'message' => $this->plainText(strip_tags($batchNotification['content']), 50),
                 'source' => 'notification'
             );
 
