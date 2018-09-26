@@ -33,7 +33,7 @@ export default class CourseList {
       $findAllLink.removeClass('hidden');
     }
 
-    this.showLink($otherAllLink);
+    this.hideLink($otherAllLink);
     $hideDom.removeClass('es-icon-keyboardarrowup').addClass('es-icon-keyboardarrowdown');
     $target.addClass('es-icon-keyboardarrowup').removeClass('es-icon-keyboardarrowdown');
   }
@@ -41,12 +41,12 @@ export default class CourseList {
   onCollapseCourse(e) {
     const $target = $(e.currentTarget);
     const $findAllLink = $target.parents('.course-item').find('.js-all-courses-link');
-    this.showLink($findAllLink);
+    this.hideLink($findAllLink);
     this._lessonListShow($target.parents('.media').siblings('.js-course-detail-content'));
     $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
   }
 
-  showLink($dom) {
+  hideLink($dom) {
     if ($dom.length) {
       $dom.addClass('hidden');
     }
