@@ -13,6 +13,11 @@ class AnnouncementFilter extends Filter
     protected function publicFields(&$data)
     {
         $data['content'] = $this->convertAbsoluteUrl($data['content']);
-        $data['simpleContent'] = strip_tags($data['content']);
+        $data['simpleContent'] = $this->plainText(strip_tags($data['content']), 50);
+    }
+
+    protected function plainText($text, $count)
+    {
+        return mb_substr($text, 0, $count, 'utf-8');
     }
 }
