@@ -5,6 +5,7 @@ import utils from '@/utils';
 import store from '@/store';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
+import whiteList from '@/router/config/white-list';
 
 import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
@@ -53,16 +54,20 @@ Api.getSettings({
     type: 'wap'
   }
 }).then(res => {
-  if (parseInt(res.version, 10) !== 2) {
-    // 如果没有开通微网校，则跳回老版本网校 TODO
-    const hashStr = location.hash;
-    const getPathNameByHash = hash => {
-      const hasQuery = hash.indexOf('?');
-      if (hasQuery === -1) return hash.slice(1);
-      return hash.match(/#.*\?/g)[0].slice(1, -1);
-    };
-    window.location.href = location.origin + getPathNameByHash(hashStr);
-    return;
+  const hashStr = location.hash;
+  const getPathNameByHash = hash => {
+    const hasQuery = hash.indexOf('?');
+    if (hasQuery === -1) return hash.slice(1);
+    return hash.match(/#.*\?/g)[0].slice(1, -1);
+  };
+  const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));
+  console.log(getPathNameByHash(hashStr));
+  if (!isWhiteList) {
+    if (parseInt(res.version, 10) !== 2) {
+      // 如果没有开通微网校，则跳回老版本网校 TODO
+      window.location.href = location.origin + getPathNameByHash(hashStr);
+      return;
+    }
   }
 
   new Vue({
