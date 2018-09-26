@@ -723,7 +723,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'id' => $announcement['id'],
                 'type' => 'announcement.create',
-                'title' => $this->plainText($announcement['content'], 50),
+                'title' => $this->plainText(strip_tags($announcement['content']), 50),
             );
 
             $this->createPushJob($from, $to, $body);
