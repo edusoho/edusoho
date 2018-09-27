@@ -5,9 +5,37 @@ namespace AppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Endroid\QrCode\QrCode;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends BaseController
 {
+    public function qrcodeAction(Request $request)
+    {
+        $host = $request->getSchemeAndHttpHost();
+        $token = $this->getTokenService()->makeToken(
+            'face_login',
+            array(
+                'userId' => 0,
+                'data' => array(),
+                'times' => 2,
+                'duration' => 60,
+            )
+        );
+        $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'];
+
+        $qrCode = new QrCode();
+        $qrCode->setText($url);
+        $qrCode->setSize(150);
+        $qrCode->setPadding(10);
+        $img = $qrCode->get('png');
+
+        $headers = array('Content-Type' => 'image/png',
+                         'Content-Disposition' => 'inline; filename="image.png"', );
+
+        return new Response($img, 200, $headers);
+    }
+
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -88,7 +116,7 @@ class LoginController extends BaseController
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if (strpos($targetPath, '/app.php') === 0) {
+        if (0 === strpos($targetPath, '/app.php')) {
             $targetPath = str_replace('/app.php', '', $targetPath);
         }
 
@@ -98,5 +126,13 @@ class LoginController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

@@ -49,6 +49,10 @@ login_ajax:
     path:  /login/ajax
     defaults: { _controller: AppBundle:Login:ajax }
 
+login_qrcode:
+    path: /login/qrcode
+    defaults: { _controller: AppBundle:Login:qrcode }
+
 login_bind:
     path:  /login/bind/{type}
     defaults: { _controller: AppBundle:LoginBind:index }
