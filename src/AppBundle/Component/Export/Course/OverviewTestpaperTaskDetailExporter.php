@@ -31,7 +31,7 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
         return array(
             'task.learn_data_detail.nickname',
             'task.learn_data_detail.createdTime',
-            'task.learn_data_detail.finishedTime',
+            'course.task.finish_time',
             'task.learn_data_detail.testpaper_firstUsedTime',
             'task.learn_data_detail.testpaper_firstScore',
             'task.learn_data_detail.testpaper_maxScore',
@@ -40,7 +40,8 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $activity = $this->getActivityService()->getActivity($this->parameter['courseTaskId'], true);
+        $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
 
         $taskResults = $this->getTaskResultService()->searchTaskResults(
