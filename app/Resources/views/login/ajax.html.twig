@@ -52,7 +52,7 @@
     <span>
       <a class="sts-login-link js-sts-login-link" href="javascript:;">
         <img src="{{ asset('static-dist/app/img/face.png') }}"
-          srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="人脸识别"/>
+          srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="{{'user.login.sts_discovery'|trans}}"/>
       </a>
       {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
     </span>
