@@ -14,6 +14,7 @@ class LoginController extends BaseController
 
     const FACE_TOKEN_STATUS_SUCCESS = 'successed';
     const FACE_TOKEN_STATUS_CREATED = 'created';
+    const FACE_TOKEN_STATUS_EXPIRED = 'expired';
 
     public function qrcodeAction(Request $request)
     {
@@ -45,25 +46,25 @@ class LoginController extends BaseController
     {
         $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
         if (!$faceLoginToken) {
-            throw $this->createResourceNotFoundException('face_login_token', $token);
+            $response = array(
+                'status' => self::FACE_TOKEN_STATUS_EXPIRED,
+            );
+        } elseif (empty($faceLoginToken['data'])) {
+            $response = array(
+                'status' => self::FACE_TOKEN_STATUS_CREATED,
+            );
         } else {
-            if (empty($faceLoginToken['data'])) {
-                $response = array(
-                    'status' => self::FACE_TOKEN_STATUS_CREATED,
-                );
-            } else {
-                $response = array(
-                    'status' => $faceLoginToken['data']['status'],
-                );
-                if (self::FACE_TOKEN_STATUS_SUCCESS == $faceLoginToken['data']['status']) {
-                    $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto')));
-                }
-                if (!empty($faceLoginToken['data']['lastFailed'])) {
-                    $response['lastFailed'] = $faceLoginToken['data']['lastFailed'];
-                }
+            $response = array(
+                'status' => $faceLoginToken['data']['status'],
+            );
+            if (self::FACE_TOKEN_STATUS_SUCCESS == $faceLoginToken['data']['status']) {
+                $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto')));
             }
-            return $this->createJsonResponse($response);
+            if (!empty($faceLoginToken['data']['lastFailed'])) {
+                $response['lastFailed'] = $faceLoginToken['data']['lastFailed'];
+            }
         }
+        return $this->createJsonResponse($response);
     }
 
     public function parseFaceTokenAction(Request $request, $token)
