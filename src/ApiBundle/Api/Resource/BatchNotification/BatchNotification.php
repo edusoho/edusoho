@@ -12,8 +12,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\BatchNotificationService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use ApiBundle\Api\Exception\ErrorCode;
+use Biz\Notification\NotificationException;
 
 class BatchNotification extends AbstractResource
 {
@@ -24,8 +23,9 @@ class BatchNotification extends AbstractResource
     {
         $batchNotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (!$batchNotification) {
-            throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw NotificationException::NOTIFICATION_NOT_FOUND();
         }
+
         return $batchNotification;
     }
 

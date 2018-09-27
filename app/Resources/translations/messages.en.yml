@@ -7918,6 +7918,9 @@ exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
 exception.parser.not.support: 不支持该视频类型
 
+exception.announcement.notfound: announcement not found
+exception.notification.notfound: notification not found
+
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 

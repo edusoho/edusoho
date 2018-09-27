@@ -6,8 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Announcement\Service\AnnouncementService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use ApiBundle\Api\Exception\ErrorCode;
+use Biz\Announcement\AnnouncementException;
 
 class Announcement extends AbstractResource
 {
@@ -43,8 +42,9 @@ class Announcement extends AbstractResource
     {
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
         if (!$announcement) {
-            throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw AnnouncementException::ANNOUNCEMENT_NOT_FOUND();
         }
+
         return $announcement;
     }
 
