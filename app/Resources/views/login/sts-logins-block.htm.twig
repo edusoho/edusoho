@@ -4,9 +4,7 @@
   <div class="sts-login__qrcode js-sts-login-qrcode">
     <img src="{{ path('login_qrcode') }}" alt="qrcode">
       <div class="sts-login-mask hidden">
-        {# 认证等待中 #}
         <div class="cd-text-medium color-success sts-login-mask__tip">{{ 'user.login.sts_discovery_wait'|trans }}</div>
-        {# 失效刷新 #}
         <div class="sts-login-mask__operation">
           <div class="cd-text-medium cd-dark-major">{{ 'user.login.sts_qrcode_invalid'|trans }}</div>
           <button class="cd-btn cd-btn-primary cd-mt16">{{ 'user.login.sts_qrcode.refresh'|trans }}</button>
@@ -23,7 +21,6 @@
     </div>
     <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_success'|trans }}</div>
 
-    {# 认证失败 #}
     <div class="es-feedback-icon es-feedback-danger cd-mb24">
       <div class="es-feedback-icon__inner">
         <i class="cd-icon cd-icon-close"></i>

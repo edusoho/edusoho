@@ -26,14 +26,11 @@ $('.js-btn-login').click((event) => {
 $('.receive-modal').click();
 
 
-$('.js-login-main').on('click', '.js-sts-login-link', (event) => {
-  $('.js-login-main').toggleClass('hidden');
-  $('.js-sts-login').toggleClass('hidden');
+$('.js-login-main').on('click', '.js-sts-login-link', () => {
+  $('.js-login-main, .js-sts-login').toggleClass('hidden');
 });
 
 
-$('.js-sts-login').on('click', '.js-login-back', (event) => {
-  $('.js-login-main').toggleClass('hidden');
-  $('.js-sts-login').toggleClass('hidden');
+$('.js-sts-login').on('click', '.js-login-back', () => {
+  $('.js-login-main, .js-sts-login').toggleClass('hidden');
 });
-

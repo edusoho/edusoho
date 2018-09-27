@@ -25,13 +25,11 @@ $btn.click((event) => {
 });
 
 
-$('.js-login-modal').on('click', '.js-sts-login-link', (event) => {
-  $('.modal-footer, .js-login-main').toggleClass('hidden');
-  $('.js-sts-login').toggleClass('hidden');
+$('.js-login-modal').on('click', '.js-sts-login-link', () => {
+  $('.js-login-modal .modal-footer, .js-login-main, .js-sts-login').toggleClass('hidden');
 });
 
 
-$('.js-sts-login').on('click', '.js-login-back', (event) => {
-  $('.modal-footer, .js-login-main').toggleClass('hidden');
-  $('.js-sts-login').toggleClass('hidden');
+$('.js-sts-login').on('click', '.js-login-back', () => {
+  $('.js-login-modal .modal-footer, .js-login-main, .js-sts-login').toggleClass('hidden');
 });
