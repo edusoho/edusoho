@@ -3,16 +3,15 @@
     <span class='login-title'>确认账号</span>
     <van-field v-model.trim="username"
       class="login-input e-input"
-      placeholder="请输入邮箱/手机/用户名"/>
+      placeholder="请输入邮箱/手机/用户名"v-on:input="checkName"/>
     <van-field v-if="faceRegistered" v-model="password"
       type="password"
       class="login-input e-input"
       :error-message="errorMessage.password"
-      placeholder="请输入密码" />
+      placeholder="请输入密码"/>
     <van-button v-if="faceRegistered" type="default" class="primary-btn mb20" @click="onCheckExisted" :disabled="btnDisable">下一步</van-button>
     <van-button v-else type="default" class="primary-btn mb20" @click="onSubmitInfo" :disabled="btnSubmitDisable">下一步</van-button>
   </div>
-
 </template>
 <script>
   import { mapActions } from 'vuex';
@@ -91,6 +90,10 @@ export default {
       }).catch(err => {
         Toast.fail(err.message);
       });
+    },
+
+    checkName() {
+      this.faceRegistered = 0;
     },
 
     onCheckExisted() {
