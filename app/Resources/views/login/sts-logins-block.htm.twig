@@ -24,19 +24,19 @@
     <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_success'|trans }}</div>
 
     {# 认证失败 #}
-    {# <div class="es-feedback-icon es-feedback-danger cd-mb24"> #}
-      {# <div class="es-feedback-icon__inner">
+    <div class="es-feedback-icon es-feedback-danger cd-mb24">
+      <div class="es-feedback-icon__inner">
         <i class="cd-icon cd-icon-close"></i>
       </div>
     </div>
-    <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_failed'|trans }}</div> #}
-    {# <button class="cd-btn cd-btn-warning cd-mt24">{{ 'user.login.sts_discovery_again'|trans }}</button> #}
-    {# {% if type|default('') == 'page' %}
+    <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_failed'|trans }}</div>
+    <button class="cd-btn cd-btn-warning cd-mt24">{{ 'user.login.sts_discovery_again'|trans }}</button>
+    {% if type|default('') == 'page' %}
       <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
     {% else %}
       <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}</div>
       <div class="cd-text-sm es-dark-assist cd-mt8">{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
-    {% endif %} #}
+    {% endif %}
   </div>
   <div class="sts-login-tip">
     <img src="{{ asset('static-dist/app/img/face.png') }}"
