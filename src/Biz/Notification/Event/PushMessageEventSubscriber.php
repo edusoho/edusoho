@@ -1842,7 +1842,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'targetId' => $batchNotification['id'],
                 'title' => $batchNotification['title'],
                 'message' => $this->plainText(strip_tags($batchNotification['content']), 50),
-                'source' => 'notification'
+                'source' => 'notification',
             );
 
             $this->createPushJob($from, $to, $body);
