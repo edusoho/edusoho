@@ -56,7 +56,7 @@ class LoginController extends BaseController
                     'status' => $faceLoginToken['data']['status'],
                 );
                 if (self::FACE_TOKEN_STATUS_SUCCESS == $faceLoginToken['data']['status']) {
-                    $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token));
+                    $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto')));
                 }
                 if (!empty($faceLoginToken['data']['lastFailed'])) {
                     $response['lastFailed'] = $faceLoginToken['data']['lastFailed'];
