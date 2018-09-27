@@ -1,18 +1,18 @@
-<div class="sts-login js-sts-login hidden" data-url="{{ path('classroom_qrcode',{id: 1}) }}">
+<div class="sts-login js-sts-login hidden">
   <a class="sts-login-back cd-link-minor js-login-back" href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a>
   <div class="sts-login__title">人脸识别，安全登录</div>
   <div class="sts-login__qrcode js-sts-login-qrcode">
-    <img src="" alt="qrcode">
-      <div class="sts-login-mask">
+    <img src="{{ path('login_qrcode') }}" alt="qrcode">
+      {# <div class="sts-login-mask"> #}
         {# 认证等待中 #}
         {# <div class="cd-text-medium color-success sts-login-mask__tip">认证中…</div> #}
 
         {# 失效刷新 #}
-        <div class="sts-login-mask__operation">
+        {# <div class="sts-login-mask__operation">
           <div class="cd-text-medium cd-dark-major">二维码已失效</div>
           <button class="cd-btn cd-btn-primary cd-mt16">点击刷新</button>
-        </div>
-      </div>
+        </div> #}
+      {# </div> #}
   </div>
 
 

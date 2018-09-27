@@ -27,18 +27,8 @@ $('.receive-modal').click();
 
 
 $('.js-login-main').on('click', '.js-sts-login-link', (event) => {
-  const $currentTarget = event.currentTarget;
-  const $qrcodeWrap = $('.js-sts-login');
-  $.ajax({
-    type: 'post',
-    url: $qrcodeWrap.data('url'),
-    dataType: 'json',
-    success: (data) => {
-      $qrcodeWrap.find('.js-sts-login-qrcode img').attr('src', data.img);
-      $('.js-login-main').toggleClass('hidden');
-      $('.js-sts-login').toggleClass('hidden');
-    }
-  });
+  $('.js-login-main').toggleClass('hidden');
+  $('.js-sts-login').toggleClass('hidden');
 });
 
 
