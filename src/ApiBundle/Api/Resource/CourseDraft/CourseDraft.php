@@ -17,7 +17,7 @@ class CourseDraft extends AbstractResource
      * @param int        $draftId
      *
      * @return mixed
-     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     * @Access(roles="ROLE_USER")
      */
     public function get(ApiRequest $request, $draftId)
     {
@@ -37,7 +37,7 @@ class CourseDraft extends AbstractResource
 
     /**
      * @param ApiRequest $request
-     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     * @Access(roles="ROLE_USER")
      */
     public function add(ApiRequest $request)
     {
