@@ -33,7 +33,7 @@ interface CourseService
 
     public function setDefaultCourse($courseSetId, $id);
 
-    public function getSeqMaxPublishedCourseByCourseSetId($courseSetId);
+    public function getSeqMinPublishedCourseByCourseSetId($courseSetId);
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId);
 

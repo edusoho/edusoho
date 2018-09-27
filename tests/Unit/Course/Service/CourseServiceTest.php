@@ -24,8 +24,8 @@ class CourseServiceTest extends BaseTestCase
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->sortCourse($courseSet['id'], array(2, 1));
         $courses = $this->getCourseService()->findCoursesByIds(array(1, 2));
-        $this->assertEquals(2, $courses[2]['seq']);
-        $this->assertEquals(1, $courses[1]['seq']);
+        $this->assertEquals(1, $courses[2]['seq']);
+        $this->assertEquals(2, $courses[1]['seq']);
     }
 
     /**
@@ -386,7 +386,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($newCourse['id'], $defaultCourse['id']);
     }
 
-    public function testGetSeqMaxPublishedCourseByCourseSetId()
+    public function testGetSeqMinPublishedCourseByCourseSetId()
     {
         $courseSet = $this->createNewCourseSet();
         $course = $this->defaultCourse('course title 1', $courseSet, 0);
@@ -401,13 +401,13 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getCourseService()->sortCourse($courseSet['id'], array(3, 2, 1));
         $courses = $this->getCourseService()->findCoursesByIds(array(1, 2, 3));
-        $this->assertEquals(3, $courses[3]['seq']);
+        $this->assertEquals(1, $courses[3]['seq']);
         $this->assertEquals(2, $courses[2]['seq']);
-        $this->assertEquals(1, $courses[1]['seq']);
+        $this->assertEquals(3, $courses[1]['seq']);
 
-        $maxPublishedCourse = $this->getCourseService()->getSeqMaxPublishedCourseByCourseSetId($courseSet['id']);
+        $minPublishedCourse = $this->getCourseService()->getSeqMinPublishedCourseByCourseSetId($courseSet['id']);
 
-        $this->assertEquals(3, $maxPublishedCourse['id']);
+        $this->assertEquals(3, $minPublishedCourse['id']);
     }
 
     public function testCreateCourse()
