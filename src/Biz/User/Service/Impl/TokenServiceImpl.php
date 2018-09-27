@@ -48,7 +48,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         }
 
         if (!empty($data)) {
-            $token = $this->getTokenDao()->update($token['id'], ['data' => $data]);
+            $token = $this->getTokenDao()->update($token['id'], array('data' => $data));
         }
 
         $this->_gcToken($token);

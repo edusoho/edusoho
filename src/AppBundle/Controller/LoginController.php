@@ -99,7 +99,10 @@ class LoginController extends BaseController
             $this->getTokenService()->destoryToken($token);
         }
 
-        $goto = empty($request->query->get('goto')) ? $this->generateUrl('homepage', array(), true) : $request->query->get('goto');
+        $goto = $request->query->get('goto');
+        if (empty($goto)) {
+            $goto = $this->generateUrl('homepage', array(), true);
+        }
         return $this->redirect($goto);
     }
 
