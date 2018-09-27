@@ -3,15 +3,14 @@
   <div class="sts-login__title">人脸识别，安全登录</div>
   <div class="sts-login__qrcode js-sts-login-qrcode">
     <img src="{{ path('login_qrcode') }}" alt="qrcode">
-      <div class="sts-login-mask">
+      <div class="sts-login-mask hidden">
         {# 认证等待中 #}
         <div class="cd-text-medium color-success sts-login-mask__tip">认证中…</div>
-
         {# 失效刷新 #}
-        {# <div class="sts-login-mask__operation">
+        <div class="sts-login-mask__operation">
           <div class="cd-text-medium cd-dark-major">二维码已失效</div>
           <button class="cd-btn cd-btn-primary cd-mt16">点击刷新</button>
-        </div> #}
+        </div>
       </div>
   </div>
 
@@ -25,18 +24,23 @@
     <div class="cd-text-lg cd-text-medium cd-dark-major">人脸识别认证成功!</div>
 
     {# 认证失败 #}
-    {# <div class="es-feedback-icon es-feedback-danger cd-mb24">
-      <div class="es-feedback-icon__inner">
+    {# <div class="es-feedback-icon es-feedback-danger cd-mb24"> #}
+      {# <div class="es-feedback-icon__inner">
         <i class="cd-icon cd-icon-close"></i>
       </div>
     </div>
-    <div class="cd-text-lg cd-text-medium cd-dark-major">人脸识别认证失败!</div>
-    <button class="cd-btn cd-btn-warning cd-mt24">重新认证</button> #}
-    {# {# <div class="cd-text-sm es-dark-assist cd-mt16">人脸识别多次认证不通过，请改用其他方式认证或联系管理员!</div> #}
+    <div class="cd-text-lg cd-text-medium cd-dark-major">人脸识别认证失败!</div> #}
+    {# <button class="cd-btn cd-btn-warning cd-mt24">重新认证</button> #}
+    {# {% if type|default('') == 'page' %}
+      <div class="cd-text-sm es-dark-assist cd-mt16">人脸识别多次认证不通过，请改用其他方式认证或联系管理员!</div>
+    {% else %}
+      <div class="cd-text-sm es-dark-assist cd-mt16">人脸识别多次认证不通过，</div>
+      <div class="cd-text-sm es-dark-assist cd-mt8">请改用其他方式认证或联系管理员!</div>
+    {% endif %} #}
   </div>
   <div class="sts-login-tip">
-    <img class="sts-login-icon" src="{{ asset('static-dist/app/img/face.png') }}"
-    srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="人脸识别"/>
+    <img src="{{ asset('static-dist/app/img/face.png') }}"
+        srcset="{{ asset('static-dist/app/img/face.png') }} 1x, {{ asset('static-dist/app/img/face@2x.png') }} 2x" alt="人脸识别"/>
     <span class="sts-login-tip__text">为保证帐号安全，请打开微信或APP，扫一扫二维码完成人脸识别认证。</span>
   </div>
 </div>

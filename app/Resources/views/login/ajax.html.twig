@@ -33,7 +33,8 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
   {% if setting('login_bind.enabled') %}
-    {% include 'login/sts-logins-block.htm.twig' %}
+    {% set type = 'modal' %}
+    {% include 'login/sts-logins-block.htm.twig'  with { type: type } %}
   {% endif %}
 
 {% endblock %}

@@ -70,7 +70,7 @@
         <span>
           <a class="sts-login-link js-sts-login-link" href="javascript:;">
             <img src="{{ asset('static-dist/app/img/face.png') }}"
-              srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="人脸识别"/>
+              srcset="{{ asset('static-dist/app/img/face.png') }} 1x, {{ asset('static-dist/app/img/face@2x.png') }} 2x" alt="人脸识别"/>
           </a>
           {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
         </span>
@@ -80,7 +80,8 @@
     </div>
 
     {% if setting('login_bind.enabled') %}
-      {% include 'login/sts-logins-block.htm.twig' %}
+      {% set type = 'page' %}
+      {% include 'login/sts-logins-block.htm.twig'  with { type: type } %}
     {% endif %}
   </div>
 
