@@ -7,9 +7,14 @@ use Symfony\Component\Security\Core\Security;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Response;
+use Biz\User\CurrentUser;
 
 class LoginController extends BaseController
 {
+
+    const FACE_TOKEN_STATUS_SUCCESS = 'successed';
+    const FACE_TOKEN_STATUS_CREATED = 'created';
+
     public function qrcodeAction(Request $request)
     {
         $host = $request->getSchemeAndHttpHost();
@@ -18,11 +23,11 @@ class LoginController extends BaseController
             array(
                 'userId' => 0,
                 'data' => array(),
-                'times' => 2,
+                'times' => 0,
                 'duration' => 60,
             )
         );
-        $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'];
+        $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'].'&host='.$host;
 
         $qrCode = new QrCode();
         $qrCode->setText($url);
@@ -34,6 +39,68 @@ class LoginController extends BaseController
                          'Content-Disposition' => 'inline; filename="image.png"', );
 
         return new Response($img, 200, $headers);
+    }
+
+    public function faceTokenAction(Request $request, $token)
+    {
+        $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
+        if (!$faceLoginToken) {
+            throw $this->createResourceNotFoundException('face_login_token', $token);
+        } else {
+            if (empty($faceLoginToken['data'])) {
+                $response = array(
+                    'status' => self::FACE_TOKEN_STATUS_CREATED,
+                );
+            } else {
+                $response = array(
+                    'status' => $faceLoginToken['data']['status'],
+                );
+                if (self::FACE_TOKEN_STATUS_SUCCESS == $faceLoginToken['data']['status']) {
+                    $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token));
+                }
+                if (!empty($faceLoginToken['data']['lastFailed'])) {
+                    $response['lastFailed'] = $faceLoginToken['data']['lastFailed'];
+                }
+            }
+            return $this->createJsonResponse($response);
+        }
+    }
+
+    public function parseFaceTokenAction(Request $request, $token)
+    {
+        $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
+        if (empty($faceLoginToken)) {
+            $content = $this->renderView('default/message.html.twig', array(
+                'type' => 'error',
+                'goto' => $this->generateUrl('homepage', array(), true),
+                'duration' => 1,
+                'message' => '二维码已失效，正跳转到首页',
+            ));
+
+            return new Response($content, '302');
+        } elseif (empty($faceLoginToken['data']['status']) || self::FACE_TOKEN_STATUS_SUCCESS != $faceLoginToken['data']['status']) {
+            $content = $this->renderView('default/message.html.twig', array(
+                'type' => 'error',
+                'goto' => $this->generateUrl('homepage', array(), true),
+                'duration' => 1,
+                'message' => '人脸认证未成功，正跳转到首页',
+            ));
+
+            return new Response($content, '302');
+        }
+
+        $currentUser = $this->getCurrentUser();
+
+        if (!empty($faceLoginToken['data']['user']['id']) && (!$currentUser->isLogin() || $currentUser['id'] != $faceLoginToken['data']['user']['id'])) {
+            $user = $this->getUserService()->getUser($faceLoginToken['data']['user']['id']);
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray($user);
+            $this->switchUser($request, $currentUser);
+            $this->getTokenService()->destoryToken($token);
+        }
+
+        $goto = empty($request->query->get('goto')) ? $this->generateUrl('homepage', array(), true) : $request->query->get('goto');
+        return $this->redirect($goto);
     }
 
     public function indexAction(Request $request)

@@ -27,7 +27,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $this->_makeTokenValue($length);
     }
 
-    public function verifyToken($type, $value)
+    public function verifyToken($type, $value, array $data = array())
     {
         $token = $this->getTokenDao()->getByToken($value);
 
@@ -45,6 +45,10 @@ class TokenServiceImpl extends BaseService implements TokenService
 
         if ($token['remainedTimes'] > 1) {
             $this->getTokenDao()->wave(array($token['id']), array('remainedTimes' => -1));
+        }
+
+        if (!empty($data)) {
+            $token = $this->getTokenDao()->update($token['id'], ['data' => $data]);
         }
 
         $this->_gcToken($token);
