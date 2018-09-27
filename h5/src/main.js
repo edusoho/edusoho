@@ -61,7 +61,6 @@ Api.getSettings({
     return hash.match(/#.*\?/g)[0].slice(1, -1);
   };
   const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));
-  console.log(getPathNameByHash(hashStr));
   if (!isWhiteList) {
     if (parseInt(res.version, 10) !== 2) {
       // 如果没有开通微网校，则跳回老版本网校 TODO
