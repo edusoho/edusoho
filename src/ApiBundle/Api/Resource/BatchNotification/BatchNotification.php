@@ -23,7 +23,7 @@ class BatchNotification extends AbstractResource
     {
         $batchNotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (!$batchNotification) {
-            throw NotificationException::NOTIFICATION_NOT_FOUND();
+            throw NotificationException::BATCH_NOTIFICATION_NOT_FOUND();
         }
 
         return $batchNotification;
