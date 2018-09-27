@@ -1142,7 +1142,7 @@ class UserServiceImpl extends BaseService implements UserService
     protected function typeInOAuthClient($type)
     {
         $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind', 'marketing'));
+        $types = array_merge($types, array('discuz', 'phpwind', 'marketing', 'wechat_app'));
 
         return in_array($type, $types);
     }
