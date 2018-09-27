@@ -3,16 +3,16 @@
   <div class="sts-login__title">人脸识别，安全登录</div>
   <div class="sts-login__qrcode js-sts-login-qrcode">
     <img src="{{ path('login_qrcode') }}" alt="qrcode">
-      {# <div class="sts-login-mask"> #}
+      <div class="sts-login-mask">
         {# 认证等待中 #}
-        {# <div class="cd-text-medium color-success sts-login-mask__tip">认证中…</div> #}
+        <div class="cd-text-medium color-success sts-login-mask__tip">认证中…</div>
 
         {# 失效刷新 #}
         {# <div class="sts-login-mask__operation">
           <div class="cd-text-medium cd-dark-major">二维码已失效</div>
           <button class="cd-btn cd-btn-primary cd-mt16">点击刷新</button>
         </div> #}
-      {# </div> #}
+      </div>
   </div>
 
 
@@ -32,7 +32,7 @@
     </div>
     <div class="cd-text-lg cd-text-medium cd-dark-major">人脸识别认证失败!</div>
     <button class="cd-btn cd-btn-warning cd-mt24">重新认证</button> #}
-    {# <div class="cd-text-sm es-dark-assist cd-mt16">人脸识别多次认证不通过，请改用其他方式认证或联系管理员!</div> #}
+    {# {# <div class="cd-text-sm es-dark-assist cd-mt16">人脸识别多次认证不通过，请改用其他方式认证或联系管理员!</div> #}
   </div>
   <div class="sts-login-tip">
     <img class="sts-login-icon" src="{{ asset('static-dist/app/img/face.png') }}"

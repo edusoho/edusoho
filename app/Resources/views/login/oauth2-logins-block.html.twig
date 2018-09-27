@@ -1,12 +1,6 @@
 {% set settings = setting('login_bind', []) %}
 {% set otherClients = [] %}
 
-{% if settings.enabled|default(0) %}
-<a class="sts-login-link js-sts-login-link" href="javascript:;">
-  <img src="{{ asset('static-dist/app/img/face.png') }}"
-    srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="人脸识别"/>
-</a>
-{% endif %}
 {% for type, client in clients if (settings[type ~ '_enabled']|default(false) and type != 'weixinmob' and client.icon_class|default(null)) %}
   {% if type in ['weibo', 'renren', 'qq', 'weixinweb'] %}
     <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}" class="social-icon social-{{ client.icon_class }}">

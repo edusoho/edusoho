@@ -68,6 +68,10 @@
       {% if setting('login_bind.enabled') %}
         <div class="social-login">
         <span>
+          <a class="sts-login-link js-sts-login-link" href="javascript:;">
+            <img src="{{ asset('static-dist/app/img/face.png') }}"
+              srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="人脸识别"/>
+          </a>
           {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
         </span>
           <div class="line"></div>
