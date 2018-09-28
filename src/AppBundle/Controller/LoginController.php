@@ -12,9 +12,11 @@ use Biz\User\CurrentUser;
 class LoginController extends BaseController
 {
 
-    const FACE_TOKEN_STATUS_SUCCESS = 'successed';
-    const FACE_TOKEN_STATUS_CREATED = 'created';
-    const FACE_TOKEN_STATUS_EXPIRED = 'expired';
+    const FACE_TOKEN_STATUS_SUCCESS = 'successed'; //认证成功
+    const FACE_TOKEN_STATUS_CREATED = 'created'; //已创建
+    const FACE_TOKEN_STATUS_EXPIRED = 'expired'; //已过期
+    const FACE_TOKEN_STATUS_PROCESSING = 'processing'; //认证中
+    const FACE_TOKEN_STATUS_FAILURES = 'failures'; //多次认证失败
 
     public function qrcodeAction(Request $request)
     {
@@ -36,10 +38,10 @@ class LoginController extends BaseController
         $qrCode->setPadding(10);
         $img = $qrCode->get('png');
 
-        $headers = array('Content-Type' => 'image/png',
-                         'Content-Disposition' => 'inline; filename="image.png"', );
-
-        return new Response($img, 200, $headers);
+        return $this->createJsonResponse([
+            'qrcode' => 'data:image/png;base64,' . base64_encode($img),
+            'token' => $token['token'],
+        ]);
     }
 
     public function faceTokenAction(Request $request, $token)
@@ -53,15 +55,22 @@ class LoginController extends BaseController
             $response = array(
                 'status' => self::FACE_TOKEN_STATUS_CREATED,
             );
-        } else {
+        } elseif (self::FACE_TOKEN_STATUS_CREATED == $faceLoginToken['data']['status']) {
             $response = array(
-                'status' => $faceLoginToken['data']['status'],
+                'status' => self::FACE_TOKEN_STATUS_PROCESSING,
             );
+        } else {
+            if (!empty($faceLoginToken['data']['lastFailed'])) {
+                $response = array(
+                    'status' => self::FACE_TOKEN_STATUS_FAILURES
+                );
+            } else {
+                $response = array(
+                    'status' => $faceLoginToken['data']['status'],
+                );
+            }
             if (self::FACE_TOKEN_STATUS_SUCCESS == $faceLoginToken['data']['status']) {
                 $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto')));
-            }
-            if (!empty($faceLoginToken['data']['lastFailed'])) {
-                $response['lastFailed'] = $faceLoginToken['data']['lastFailed'];
             }
         }
         return $this->createJsonResponse($response);
