@@ -29,8 +29,8 @@ $btn.click((event) => {
 
 if ($('.js-sts-login-link').length) {
   new Face({
-    wrap: $('.js-login-modal'),
-    element: '.js-login-form, .js-sts-login'
+    element: $('.js-login-modal'),
+    target: '.js-login-form, .modal-footer',
   });
 }
 

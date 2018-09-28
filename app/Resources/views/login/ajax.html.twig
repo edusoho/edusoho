@@ -34,7 +34,7 @@
 </form>
   {% if setting('login_bind.enabled') %}
     {% set type = 'modal' %}
-    {% include 'login/sts-logins-block.htm.twig'  with { type: type } %}
+    {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
   {% endif %}
 
 {% endblock %}

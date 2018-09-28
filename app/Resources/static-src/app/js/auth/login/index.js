@@ -30,7 +30,6 @@ $('.receive-modal').click();
 
 if ($('.js-sts-login-link').length) {
   new Face({
-    wrap: $('.js-login-main'),
-    element: '.js-login-main, .js-sts-login'
+    element: $('.js-login-main'),
   });
 }
