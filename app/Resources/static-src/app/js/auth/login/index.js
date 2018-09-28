@@ -27,7 +27,17 @@ $('.receive-modal').click();
 
 
 $('.js-login-main').on('click', '.js-sts-login-link', () => {
-  $('.js-login-main, .js-sts-login').toggleClass('hidden');
+  const $qrcodeWrap = $('.js-sts-login');
+  $.ajax({
+    type: 'post',
+    url: $qrcodeWrap.data('url'),
+    dataType: 'json',
+    success: (data) => {
+      console.log(data);
+      $qrcodeWrap.find('.js-sts-login-qrcode img').attr('src', data.qrcode);
+      $('.js-login-main, .js-sts-login').toggleClass('hidden');
+    }
+  });
 });
 
 

@@ -26,9 +26,18 @@ $btn.click((event) => {
 
 
 $('.js-login-modal').on('click', '.js-sts-login-link', () => {
-  $('.js-login-modal .modal-footer, .js-login-main, .js-sts-login').toggleClass('hidden');
+  const $qrcodeWrap = $('.js-sts-login');
+  $.ajax({
+    type: 'post',
+    url: $qrcodeWrap.data('url'),
+    dataType: 'json',
+    success: (data) => {
+      console.log(data);
+      $qrcodeWrap.find('.js-sts-login-qrcode img').attr('src', data.qrcode);
+      $('.js-login-modal .modal-footer, .js-login-main, .js-sts-login').toggleClass('hidden');
+    }
+  });
 });
-
 
 $('.js-sts-login').on('click', '.js-login-back', () => {
   $('.js-login-modal .modal-footer, .js-login-main, .js-sts-login').toggleClass('hidden');
