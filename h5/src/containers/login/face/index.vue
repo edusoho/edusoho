@@ -82,7 +82,8 @@ export default {
               redirect: this.$route.query.redirect || '',
               loginToken: this.$route.query.loginToken,
               type: 'compare',
-              faceRegistered: 1
+              faceRegistered: 1,
+              loginField: this.username
             }
           });
         }

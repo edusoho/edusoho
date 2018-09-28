@@ -47,6 +47,7 @@ export default {
     }
     const data = {
       'type': this.$route.query.type,
+      'loginField': this.$route.query.loginField,
       'loginToken': this.$route.query.loginToken
     }
     Api.getSessions({
