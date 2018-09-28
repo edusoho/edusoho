@@ -90,7 +90,7 @@ class FaceSession extends AbstractResource
             $user = $this->getUserService()->getUserByLoginField($loginField);
 
             if (empty($user) || !$user['faceRegistered']) {
-                throw new BadRequestHttpException('System error', ErrorCode::INVALID_ARGUMENT);
+                throw new BadRequestHttpException('System error', null, ErrorCode::INVALID_ARGUMENT);
             }
         }
 
