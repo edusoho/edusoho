@@ -105,7 +105,8 @@ export default {
           name: 'verification',
           query: {
             redirect: this.$route.query.redirect || '',
-            loginToken: this.$route.query.loginToken
+            loginToken: this.$route.query.loginToken,
+            faceRegistered: 1
           },
           params: {
             type: 'register',

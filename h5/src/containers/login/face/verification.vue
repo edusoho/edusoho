@@ -1,14 +1,14 @@
 <template>
   <div class="login-face-verification">
     <div v-show="tipShow" class="verification-tips">
-      <div>即将进行人脸识别认证</div>
+      <div>即将进行人脸识别{{ verifiedText }}</div>
       <div class="mt5">请将面部正对摄像头</div>
     </div>
     <div v-if="!failTextShow" v-show="!tipShow">
       <img class="img-content" :src="imgAddress" alt="人脸照片">
-      <div>认证中，请稍候...</div>
+      <div>{{ verifiedText }}中，请稍候...</div>
     </div>
-    <div v-show="failTextShow">人脸识别多次认证不通过<div class="mt5">请改用其它方式认证或联系管理员</div></div>
+    <div v-show="failTextShow">人脸识别多次{{ verifiedText }}不通过<div class="mt5">请改用其它方式{{ verifiedText }}或联系管理员</div></div>
     <div v-show="tipShow">
       <label for="cameraItem" class="btn-open-camera">{{ btnText }}</label>
       <input id="cameraItem" class="hide" type="file" accept="image/*" @change="openCamera" capture="user">
@@ -32,9 +32,13 @@ export default {
       uploadParams: {},
       requestStartT: '',
       requestEndT: '',
+      verifiedText: '认证'
     }
   },
   mounted() {
+    if (this.$route.query.faceRegistered == 1) {
+      this.verifiedText = '设置';
+    }
     const data = this.$route.params;
     Api.getSessions({
       data: data
@@ -108,7 +112,7 @@ export default {
           if (res.lastFailed === 1) {
             Toast.fail({
               duration: 2000,
-              message: '人脸识别认证失败，多次不通过'
+              message: `人脸识别${this.verifiedText}失败，多次不通过`
             });
             this.failTextShow = true;
             this.tipShow = false;
@@ -130,10 +134,10 @@ export default {
     recognitionFail() {
       Toast.fail({
         duration: 2000,
-        message: '人脸识别认证失败'
+        message: `人脸识别${this.verifiedText}失败`
       });
       this.tipShow = true;
-      this.btnText = '重新认证';
+      this.btnText = `重新${this.verifiedText}`
     },
     openCamera(e) {
       const file = e.target.files[0];
