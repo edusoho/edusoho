@@ -1,3 +1,5 @@
+import Face from './face';
+
 let $form = $('#login-form');
 let validator = $form.validate({
   rules: {
@@ -26,11 +28,9 @@ $('.js-btn-login').click((event) => {
 $('.receive-modal').click();
 
 
-$('.js-login-main').on('click', '.js-sts-login-link', () => {
-  $('.js-login-main, .js-sts-login').toggleClass('hidden');
-});
-
-
-$('.js-sts-login').on('click', '.js-login-back', () => {
-  $('.js-login-main, .js-sts-login').toggleClass('hidden');
-});
+if ($('.js-sts-login-link').length) {
+  new Face({
+    wrap: $('.js-login-main'),
+    element: '.js-login-main, .js-sts-login'
+  });
+}

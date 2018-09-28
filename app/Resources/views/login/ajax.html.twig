@@ -4,7 +4,7 @@
 {% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
 
 {% block body %}
-<form id="login-ajax-form" class="form-vertical form-vertical-small js-login-main" method="post" action="{{ path('login_check') }}">
+<form id="login-ajax-form" class="form-vertical form-vertical-small js-login-form" method="post" action="{{ path('login_check') }}">
 
   <div class="alert alert-danger" style="display:none;"></div>
 

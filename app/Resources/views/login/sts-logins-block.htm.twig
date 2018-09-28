@@ -1,8 +1,8 @@
-<div class="sts-login js-sts-login hidden">
+<div class="sts-login js-sts-login hidden" data-url="{{ path('login_qrcode') }}">
   <a class="sts-login-back cd-link-minor js-login-back" href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a>
   <div class="sts-login__title">{{ 'user.login.sts_discovery_title'|trans }}</div>
   <div class="sts-login__qrcode js-sts-login-qrcode">
-    <img src="{{ path('login_qrcode') }}" alt="qrcode">
+    <img src="" alt="qrcode">
       <div class="sts-login-mask hidden">
         <div class="cd-text-medium color-success sts-login-mask__tip">{{ 'user.login.sts_discovery_wait'|trans }}</div>
         <div class="sts-login-mask__operation">
