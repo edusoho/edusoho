@@ -3,6 +3,7 @@ export default class Face {
     this.$loginDom = $('.js-sts-login');
     this.$wrap = options.wrap;
     this.element = options.element;
+    this.$qrcode = this.$loginDom.find('.js-sts-login-qrcode img');
     this.init();
   }
   init() {
@@ -19,14 +20,13 @@ export default class Face {
   }
 
   showQrcode(element) {
-    const $qrcodeWrap = $('.js-sts-login');
     $.ajax({
       type: 'post',
-      url: $qrcodeWrap.data('url'),
+      url: this.$loginDom.data('url'),
       dataType: 'json',
       success: (data) => {
         console.log(data);
-        $qrcodeWrap.find('.js-sts-login-qrcode img').attr('src', data.qrcode);
+        this.$qrcode.attr('src', data.qrcode);
         this.toggleShow();
       }
     });
