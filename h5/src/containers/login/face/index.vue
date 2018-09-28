@@ -106,11 +106,9 @@ export default {
           query: {
             redirect: this.$route.query.redirect || '',
             loginToken: this.$route.query.loginToken,
+            type: 'register',
             faceRegistered: 1
           },
-          params: {
-            type: 'register',
-          }
         });
       }).catch(err => {
         Toast.fail(err.message);
