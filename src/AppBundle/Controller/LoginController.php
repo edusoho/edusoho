@@ -27,7 +27,7 @@ class LoginController extends BaseController
                 'userId' => 0,
                 'data' => array(),
                 'times' => 0,
-                'duration' => 60,
+                'duration' => 300,
             )
         );
         $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'].'&host='.$host;
@@ -47,6 +47,7 @@ class LoginController extends BaseController
     public function faceTokenAction(Request $request, $token)
     {
         $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
+
         if (!$faceLoginToken) {
             $response = array(
                 'status' => self::FACE_TOKEN_STATUS_EXPIRED,
@@ -55,22 +56,30 @@ class LoginController extends BaseController
             $response = array(
                 'status' => self::FACE_TOKEN_STATUS_CREATED,
             );
-        } elseif (self::FACE_TOKEN_STATUS_CREATED == $faceLoginToken['data']['status']) {
+        } elseif (!empty($faceLoginToken['data']['lastFailed'])) {
             $response = array(
-                'status' => self::FACE_TOKEN_STATUS_PROCESSING,
+                'status' => self::FACE_TOKEN_STATUS_FAILURES
             );
         } else {
-            if (!empty($faceLoginToken['data']['lastFailed'])) {
-                $response = array(
-                    'status' => self::FACE_TOKEN_STATUS_FAILURES
-                );
-            } else {
-                $response = array(
-                    'status' => $faceLoginToken['data']['status'],
-                );
-            }
-            if (self::FACE_TOKEN_STATUS_SUCCESS == $faceLoginToken['data']['status']) {
-                $response['url'] = $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto')));
+            switch ($faceLoginToken['data']['status']) {
+                case self::FACE_TOKEN_STATUS_CREATED:
+                    $response = array(
+                        'status' => self::FACE_TOKEN_STATUS_PROCESSING,
+                    );
+                    break;
+
+                case self::FACE_TOKEN_STATUS_SUCCESS:
+                    $response = array(
+                        'status' => $faceLoginToken['data']['status'],
+                        'url' => $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto'))),
+                    );
+                    break;
+
+                default:
+                    $response = array(
+                        'status' => $faceLoginToken['data']['status'],
+                    );
+                    break;
             }
         }
         return $this->createJsonResponse($response);
