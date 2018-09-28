@@ -26,8 +26,8 @@
 .login {
   display: flex;
   flex-direction: column;
-  margin: vw(50) vw(15);
-  align-items: center; 
+  padding: vw(50) vw(15);
+  align-items: center;
   &-title {
     font-size: vw(20);
     -webkit-text-fill-color: #2b333b;
@@ -66,13 +66,15 @@
       font-size: vw(15);
     }
   }
-  .face-icon img {
+  .face-icon {
     position: absolute;
     bottom: vw(50);
     left: 50%;
-    width: vw(40);
-    height: vw(40);
     margin-top: vw(30);
     margin-left: vw(-20);
+    img {
+      width: vw(40);
+      height: vw(40);
+    }
   }
 }

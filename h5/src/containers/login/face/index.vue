@@ -104,11 +104,11 @@ export default {
         this.$router.push({
           name: 'verification',
           query: {
-            redirect: this.$route.query.redirect || ''
-          },
-          params: {
+            redirect: this.$route.query.redirect || '',
+            loginToken: this.$route.query.loginToken,
             type: 'register',
-          }
+            faceRegistered: 1
+          },
         });
       }).catch(err => {
         Toast.fail(err.message);
