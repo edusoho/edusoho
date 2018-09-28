@@ -36,8 +36,14 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "login" */ '@/containers/login/index.vue')
-  },
-  {
+  }, {
+    path: '/login/qrcode',
+    name: 'login_qrcode',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "login" */ '@/containers/login/face/index.vue')
+  }, {
     path: '/register',
     name: 'register',
     meta: {

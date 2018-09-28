@@ -58,6 +58,9 @@ export default {
         query: {
           sessionId: this.uploadParams.sessionId,
         },
+        params: {
+          loginToken: this.$route.query.loginToken
+        }
       }).then(res => {
         console.log(res.status);
         if (res.status === 'processing') {
@@ -155,6 +158,9 @@ export default {
         const data = {
           query: {
             sessionId: this.uploadParams.sessionId,
+          },
+          params: {
+            loginToken: this.$route.query.loginToken
           },
           data: {
             response_body: JSON.stringify(res.data),

@@ -20,19 +20,19 @@ const config = [
   {
     // 人脸识别 创建register的session接口
     name: 'getSessions',
-    url: '/plugins/face/sessions',
+    url: '/face_sessions',
     method: 'POST'
   },
   {
     // 人脸识别 获取register的session，确认人脸识别认证结果, 轮询
     name: 'faceSession',
-    url: '/plugins/face/sessions/{sessionId}',
+    url: '/face_sessions/{sessionId}',
     method: 'GET'
   },
   {
     // 人脸识别 图片上传最终的结果
     name: 'finishUploadResult',
-    url: '/plugins/face/sessions/{sessionId}/finish_upload_results',
+    url: '/face_sessions/{sessionId}/finish_upload_results',
     method: 'POST'
   },
   {
