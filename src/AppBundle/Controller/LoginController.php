@@ -38,10 +38,10 @@ class LoginController extends BaseController
         $qrCode->setPadding(10);
         $img = $qrCode->get('png');
 
-        return $this->createJsonResponse([
+        return $this->createJsonResponse(array(
             'qrcode' => 'data:image/png;base64,' . base64_encode($img),
             'token' => $token['token'],
-        ]);
+        ));
     }
 
     public function faceTokenAction(Request $request, $token)
