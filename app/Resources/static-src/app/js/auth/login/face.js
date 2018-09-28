@@ -56,6 +56,7 @@ export default class Face {
     const self = this;
     const token = this.token;
     const goto = this.$loginDom.data('goto');
+    const $failStatus = $('.js-fail-feedback');
     if (this.$loginDom.hasClass('hidden') || this.flag) {
       return;
     }
@@ -66,33 +67,30 @@ export default class Face {
         break;
 
       case 'processing':
-        $('.js-approve-ing').removeClass('hidden');
+        $('.js-approve-ing, .js-approve-ing-tip').removeClass('hidden');
         setTimeout(self.pollStatus(), 2000);
         break;
 
       case 'expired':
         $('.js-approve-ing, .js-invalid-btn').removeClass('hidden');
-        $('.js-approve-ing-tip').addClass('hidden');
         break;
 
       case 'successed':
-        $('.js-login-section, .js-sts-tip').addClass('hidden');
+        self.statusShow();
         $('.js-success-feedback').siblings().addClass('hidden');
-        $('.js-feedback').removeClass('hidden');
         window.location.href = res.url;
         break;
 
       case 'failed':
-        $('.js-login-section, .js-sts-tip, .js-fail-tip').addClass('hidden');
-        $('.js-fail-feedback').prev().addClass('hidden');
-        $('.js-feedback').removeClass('hidden');
+        self.statusShow();
+        $('.js-fail-tip').addClass('hidden');
+        $failStatus.prev().addClass('hidden');
         break;
 
       case 'failures':
-        $('.js-login-section, .js-sts-tip').addClass('hidden');
-        $('.js-fail-feedback').prev().addClass('hidden');
-        $('.js-fail-feedback').next().addClass('hidden');
-        $('.js-feedback').removeClass('hidden');
+        self.statusShow();
+        $failStatus.prev().addClass('hidden');
+        $failStatus.next().addClass('hidden');
         break;
       }
     });
@@ -111,5 +109,10 @@ export default class Face {
     } else {
       this.$element.addClass('hidden');
     }
+  }
+
+  statusShow() {
+    $('.js-login-section, .js-sts-tip').addClass('hidden');
+    $('.js-feedback').removeClass('hidden');
   }
 }
