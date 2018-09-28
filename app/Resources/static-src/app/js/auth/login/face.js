@@ -56,7 +56,6 @@ export default class Face {
     const self = this;
     const token = this.token;
     const goto = this.$loginDom.data('goto');
-    console.log(this.flag);
     if (this.$loginDom.hasClass('hidden') || this.flag) {
       return;
     }
