@@ -81,7 +81,7 @@ export default {
             query: {
               redirect: this.$route.query.redirect || '',
               loginToken: this.$route.query.loginToken,
-              type: 'register',
+              type: 'compare',
               faceRegistered: 1
             }
           });
