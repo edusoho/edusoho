@@ -1,3 +1,5 @@
+import Face from './face';
+
 let $form = $('#login-form');
 let validator = $form.validate({
   rules: {
@@ -26,21 +28,9 @@ $('.js-btn-login').click((event) => {
 $('.receive-modal').click();
 
 
-$('.js-login-main').on('click', '.js-sts-login-link', () => {
-  const $qrcodeWrap = $('.js-sts-login');
-  $.ajax({
-    type: 'post',
-    url: $qrcodeWrap.data('url'),
-    dataType: 'json',
-    success: (data) => {
-      console.log(data);
-      $qrcodeWrap.find('.js-sts-login-qrcode img').attr('src', data.qrcode);
-      $('.js-login-main, .js-sts-login').toggleClass('hidden');
-    }
+if ($('.js-sts-login-link').length) {
+  new Face({
+    wrap: $('.js-login-main'),
+    element: '.js-login-main, .js-sts-login'
   });
-});
-
-
-$('.js-sts-login').on('click', '.js-login-back', () => {
-  $('.js-login-main, .js-sts-login').toggleClass('hidden');
-});
+}
