@@ -77,6 +77,7 @@ class ItemHelper
         foreach ($convertedItems as $key => $item) {
             if ('task' == $item['type']) {
                 $lessonId = $item['task']['categoryId'];
+                unset($item['task']['activity']['content']);
                 $lessonInfos[$lessonId]['tasks'][] = $item['task'];
             }
         }
