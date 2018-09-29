@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Face\Service;
 
 interface FaceService
