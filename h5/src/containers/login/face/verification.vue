@@ -151,16 +151,12 @@ export default {
         }
       })
     },
-    is_weixn(){
+    isWeixin(){
       const ua = navigator.userAgent.toLowerCase();
-      if(ua.match(/MicroMessenger/i) == "micromessenger") {
-        return true;
-      } else {
-        return false;
-      }
+      return (ua.match(/MicroMessenger/i) == 'micromessenger') ? true : false;
     },
     feedbackAction() {
-      if (!this.is_weixn()) {
+      if (!this.isWeixin()) {
         this.$router.back(-1);
         return;
       }
