@@ -6,22 +6,24 @@ define(function(require, exports, module) {
       var $parent = $this.parent();
       var faceIdentify = $this.val();
       var reverseFaceIdentify = faceIdentify == 1 ? 0 : 1;
-
-      console.log(formData);
-      var data = {}; 
-      for (var i = formData.length - 1; i >= 0; i--) {
-        data[formData[i].name] = formData[i].value;
-      }
+      var data = {};
+      $('.js-sts-checkbox').each(function() {
+        if ($(this).is(':checked')) {
+          data[$(this).attr('name')] = $(this).val();
+        }
+      })
       data.enabled = reverseFaceIdentify;
       console.log(data);
       $.post(document.location.href, data, function(data) { 
         if ($parent.hasClass('checked')) {
           $parent.removeClass('checked');
+          $('.js-sts-checkbox').prop('disabled', true);
         } else {
           $parent.addClass('checked');
+          $('.js-sts-checkbox').prop('disabled', false);
         }
         $this.val(reverseFaceIdentify);
-        document.location.reload();
+        // document.location.reload();
       });
     });
 
