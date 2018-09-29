@@ -18,9 +18,7 @@ class Members extends BaseResource
         $role = $request->query->get('role', '');
 
         if (!empty($role)) {
-            if ('student' == $role || 'teacher' == $role) {
-                $conditions['role'] = $role;
-            }
+            $conditions['role'] = $role;
         }
 
         $total = $this->getClassroomService()->searchMemberCount($conditions);
