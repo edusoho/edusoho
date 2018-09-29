@@ -16,7 +16,7 @@
       </div>
     </div>
     <div v-if="errorShow">
-      二维码已失效，请返回重试
+      此链接已失效<div class="mt5">请确认后再操作</div>
     </div>
   </div>
 </template>
@@ -47,6 +47,7 @@ export default {
     }
     const data = {
       'type': this.$route.query.type,
+      'loginField': this.$route.query.loginField,
       'loginToken': this.$route.query.loginToken
     }
     Api.getSessions({
@@ -62,7 +63,6 @@ export default {
       console.log(this.uploadParams);
     }).catch(err => {
       this.errorShow = true;
-      Toast.fail('二维码已失效');
     });
   },
   methods: {
@@ -120,6 +120,10 @@ export default {
           setTimeout(jumpAction, 3000);
         } else {
           if (res.lastFailed === 1) {
+            if (this.$route.query.loginToken) {
+              this.errorShow = true;
+              return;
+            }
             Toast.fail({
               duration: 2000,
               message: `人脸识别${this.verifiedText}失败，多次不通过`
@@ -142,6 +146,10 @@ export default {
       })
     },
     recognitionFail() {
+      if (this.$route.query.loginToken) {
+        this.errorShow = true;
+        return;
+      }
       Toast.fail({
         duration: 2000,
         message: `人脸识别${this.verifiedText}失败`

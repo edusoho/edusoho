@@ -79,10 +79,10 @@ export default {
           this.$router.push({
             name: 'verification',
             query: {
-              redirect: this.$route.query.redirect || ''
-            },
-            params: {
+              redirect: this.$route.query.redirect || '',
+              loginToken: this.$route.query.loginToken || '',
               type: 'compare',
+              faceRegistered: 0,
               loginField: this.username
             }
           });
@@ -105,7 +105,7 @@ export default {
           name: 'verification',
           query: {
             redirect: this.$route.query.redirect || '',
-            loginToken: this.$route.query.loginToken,
+            loginToken: this.$route.query.loginToken || '',
             type: 'register',
             faceRegistered: 1
           },
