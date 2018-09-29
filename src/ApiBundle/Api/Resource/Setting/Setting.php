@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'face'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -31,7 +31,7 @@ class Setting extends AbstractResource
         return array(
             'name' => $siteSetting['name'],
             'url' => $siteSetting['url'],
-            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'] . '/' . $siteSetting['logo'],
         );
     }
 
@@ -140,6 +140,17 @@ class Setting extends AbstractResource
             'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
             'show_student_num_enabled' => '1',
+        );
+    }
+
+    public function getFace()
+    {
+        $faceSetting = $this->getSettingService()->get('face', array());
+        return array(
+            'enabled' => isset($faceSetting['enabled']) ? $faceSetting['enabled'] : 0,
+            'app_enabled' => isset($faceSetting['app_enabled']) ? $faceSetting['app_enabled'] : 0,
+            'pc_enabled' => isset($faceSetting['pc_enabled']) ? $faceSetting['pc_enabled'] : 0,
+            'h5_enabled' => isset($faceSetting['h5_enabled']) ? $faceSetting['h5_enabled'] : 0,
         );
     }
 

@@ -1,10 +1,10 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{ 'user.login.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
-{% set modal_class = 'login-modal' %}
+{% set modal_class = 'login-modal js-login-modal' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
 
 {% block body %}
-<form id="login-ajax-form" class="form-vertical form-vertical-small" method="post" action="{{ path('login_check') }}">
+<form id="login-ajax-form" class="form-vertical form-vertical-small js-login-form" method="post" action="{{ path('login_check') }}">
 
   <div class="alert alert-danger" style="display:none;"></div>
 
@@ -32,6 +32,10 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
+  {% if setting('login_bind.enabled') %}
+    {% set type = 'modal' %}
+    {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
+  {% endif %}
 
 {% endblock %}
 
@@ -46,6 +50,10 @@
 {% if setting('login_bind.enabled') %}
   <div class="social-login">
     <span>
+      <a class="sts-login-link js-sts-login-link" href="javascript:;">
+        <img src="{{ asset('static-dist/app/img/face.png') }}"
+          srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="{{'user.login.sts_discovery'|trans}}"/>
+      </a>
       {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
     </span>
     <div class="line"></div>

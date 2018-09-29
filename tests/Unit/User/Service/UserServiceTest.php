@@ -522,6 +522,25 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(1, $foundUser['emailVerified']);
     }
 
+    public function testSetFaceRegistered()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $this->assertEquals(0, $registeredUser['faceRegistered']);
+
+        $this->getUserService()->setFaceRegistered($registeredUser['id']);
+        $foundUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals(1, $foundUser['faceRegistered']);
+
+        $this->getUserService()->setFaceRegistered($registeredUser['id']);
+        $foundUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals(1, $foundUser['faceRegistered']);
+    }
+
     public function testChangeNickname()
     {
         $userInfo = array(
@@ -963,6 +982,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     public function testFollowOnce() //touser 是被关注者
+
     {
         $fromUser = $this->createFromUser();
         $toUser = $this->createToUser();
@@ -1100,7 +1120,7 @@ class UserServiceTest extends BaseTestCase
     public function testChangeAvatarFromImgUrl()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
             'mock' => true,
         ));
         $this->assertEquals($user1['id'], $result['id']);
@@ -1109,7 +1129,7 @@ class UserServiceTest extends BaseTestCase
     public function testChangeAvatarFromImgUrlWithDeleteOriginFile()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
             'mock' => true,
             'deleteOriginFile' => 0,
         ));
@@ -1130,7 +1150,7 @@ class UserServiceTest extends BaseTestCase
     public function testGetSimpleUser()
     {
         $user1 = $this->createUser('user1');
-        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
+        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
             'mock' => true,
         ));
 
@@ -1557,10 +1577,10 @@ class UserServiceTest extends BaseTestCase
     public function testApplyUserApprovalTwice()
     {
         $file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            __DIR__.'/../Fixtures/test.gif',
+            __DIR__ . '/../Fixtures/test.gif',
             'original.gif',
             'image/gif',
-            filesize(__DIR__.'/../Fixtures/test.gif'),
+            filesize(__DIR__ . '/../Fixtures/test.gif'),
             null
         );
 
@@ -2244,7 +2264,7 @@ class UserServiceTest extends BaseTestCase
     public function testMarkLoginInfo()
     {
         $user = $this->biz['user'];
-        $user['currentIp'] = '127.2.1.'.rand(1, 255);
+        $user['currentIp'] = '127.2.1.' . rand(1, 255);
         $this->biz['user'] = $user;
         $this->getUserService()->markLoginInfo();
 
@@ -2916,9 +2936,9 @@ class UserServiceTest extends BaseTestCase
 
     protected function createApproval($userId, $approval = array())
     {
-        $sourceFile = __DIR__.'/../Fixtures/test.gif';
-        $test1File = __DIR__.'/../Fixtures/test_test1.gif';
-        $test2File = __DIR__.'/../Fixtures/test_test2.gif';
+        $sourceFile = __DIR__ . '/../Fixtures/test.gif';
+        $test1File = __DIR__ . '/../Fixtures/test_test1.gif';
+        $test2File = __DIR__ . '/../Fixtures/test_test2.gif';
 
         copy($sourceFile, $test1File);
         copy($sourceFile, $test2File);
@@ -2941,7 +2961,7 @@ class UserServiceTest extends BaseTestCase
 
         $faceImg = $file1;
         $backImg = $file2;
-        $directory = $this->getContainer()->getParameter('topxia.upload.private_directory').'/approval';
+        $directory = $this->getContainer()->getParameter('topxia.upload.private_directory') . '/approval';
 
         return $this->getUserService()->applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
     }
