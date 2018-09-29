@@ -48,7 +48,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return array('success' => false, 'text' => $text);
 
         last :
-        $bannedKeyword = $this->getSensitiveDao()->getByName($match[1]);
+        $keyword = $this->flagReplaceReverse($match[1]);
+
+        $bannedKeyword = $this->getSensitiveDao()->getByName($keyword);
 
         if (empty($bannedKeyword)) {
             return array('success' => false, 'text' => $text);
@@ -109,6 +111,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $user = $this->getUserService()->getUser($currentUser->id);
         $env = $this->getEnvVariable();
         foreach ($keywords as $key => $value) {
+            $value = $this->flagReplaceReverse($value);
             $keyword = $this->getSensitiveDao()->getByName($value);
             $banlog = array(
                 'keywordId' => $keyword['id'],
@@ -155,7 +158,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return false;
 
         last :
-        $bannedKeyword = $this->getSensitiveDao()->getByName($match[1]);
+        $keyword = $this->flagReplaceReverse($match[1]);
+
+        $bannedKeyword = $this->getSensitiveDao()->getByName($keyword);
 
         if (empty($bannedKeyword)) {
             return false;
@@ -193,6 +198,8 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function addKeyword($keyword, $state)
     {
+        $keyword = $this->flagReplaceReverse($keyword);
+
         $conditions = array(
             'name' => $keyword,
             'state' => $state,
@@ -309,6 +316,16 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         );
         //true 全角->半角
         return $flag ? str_replace($fullangle, $semiangle, $text) : str_replace($semiangle, $fullangle, $text);
+    }
+
+    private function flagReplaceReverse($content)
+    {
+        $flagArray = array('\\', '$', '(', ')', '*', '+', '.', '[', ']', '?', '^', '{', '}', '|');
+        $filterArray = array('\\\\', '\$', '\(', '\)', '\*', '\+', '\.', '\[', '\]', '\?', '\^', '\{', '\}', '\|');
+
+        $contentFilter = str_replace($flagArray, $filterArray, $content);
+
+        return $contentFilter;
     }
 
     private function getEnvVariable()
