@@ -121,9 +121,9 @@ export default class Face {
     $('.js-feedback').removeClass('hidden');
   }
 
-  feedbackShow($stauts, $show, $hide) {
+  feedbackShow($status, $show, $hide) {
     this.statusShow();
-    $stauts.removeClass('hidden').siblings().addClass('hidden');
+    $status.removeClass('hidden').siblings().addClass('hidden');
     $show.removeClass('hidden');
     $hide.addClass('hidden');
   }
