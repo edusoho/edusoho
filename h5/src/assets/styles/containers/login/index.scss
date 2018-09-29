@@ -24,8 +24,10 @@
 }
 
 .login {
+  position: relative;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   padding: vw(50) vw(15);
   align-items: center;
   &-title {
@@ -38,9 +40,6 @@
     -webkit-text-fill-color: #bdc2c6;
     font-family: PingFangSC-Regular;
     margin-top: vw(20);
-  }
-  &-avatarimg {
-
   }
   &-input {
     margin-top: vw(30);
@@ -70,7 +69,6 @@
     position: absolute;
     bottom: vw(50);
     left: 50%;
-    margin-top: vw(30);
     margin-left: vw(-20);
     img {
       width: vw(40);

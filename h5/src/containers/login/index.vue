@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" :style="{ height: bodyHeight + 'px'}">
     <span class='login-title'>登录账号</span>
     <img class='login-avatarimg' src="" />
     <van-field v-model="username"
@@ -36,7 +36,8 @@ export default {
       errorMessage: {
         password: ''
       },
-      faceSetting: 0
+      faceSetting: 0,
+      bodyHeight: 520
     }
   },
   async created () {
@@ -85,6 +86,7 @@ export default {
   },
 
   mounted() {
+    this.bodyHeight = document.documentElement.clientHeight - 46;
     Api.settingsFace({}).then(res => {
       this.faceSetting = res.h5_enabled;
     });
