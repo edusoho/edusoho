@@ -76,6 +76,7 @@ export default class Face {
         break;
 
       case 'expired':
+        $('.js-approve-ing-tip').addClass('hidden');
         $('.js-approve-ing, .js-invalid-btn').removeClass('hidden');
         break;
 
