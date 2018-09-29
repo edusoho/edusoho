@@ -1,3 +1,5 @@
+import Face from '../login/face';
+
 let $form = $('#login-ajax-form');
 let $btn = $('.js-submit-login-ajax');
 let validator = $form.validate({
@@ -23,3 +25,12 @@ $btn.click((event) => {
     });
   }
 });
+
+
+if ($('.js-sts-login-link').length) {
+  new Face({
+    element: $('.js-login-modal'),
+    target: '.js-login-form, .modal-footer',
+  });
+}
+

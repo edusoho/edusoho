@@ -10,6 +10,7 @@ class SmsService extends BaseService
     protected $host = 'sms-service.qiqiuyun.net';
     protected $leafHost = array('sms-service-leaf1.qiqiuyun.net', 'sms-service-leaf2.qiqiuyun.net');
 
+
     /**
      * 单发文本短信
      *

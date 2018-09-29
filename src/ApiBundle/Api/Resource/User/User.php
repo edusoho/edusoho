@@ -6,20 +6,20 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Common\BizSms;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\MathToolkit;
-use AppBundle\Common\DeviceToolkit;
-use Biz\System\SettingException;
+use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Sms\SmsException;
+use Biz\System\SettingException;
 
 class User extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
-     * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter", mode="simple")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter", mode="public")
      */
     public function get(ApiRequest $request, $identify)
     {
@@ -37,7 +37,7 @@ class User extends AbstractResource
                 $user = $this->getUserService()->getUserByVerifiedMobile($identify);
                 break;
             case 'nickname':
-                $user = $this->getUserService()->getUserByNickname($identify);
+                $user = $this->getUserService()->getUserByNickname(urldecode($identify));
                 break;
             case 'token':
                 $user = $this->getUserService()->getUserByUUID($identify);

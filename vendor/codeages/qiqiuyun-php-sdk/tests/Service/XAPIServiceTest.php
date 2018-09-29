@@ -201,8 +201,9 @@ class XAPIServiceTest extends BaseTestCase
             'display' => array(
                 'zh-CN' => '注册了',
                 'en-US' => 'registered',
-            ),
+            )
         ), $statement['verb']);
+
     }
 
     public function testRated()
@@ -218,15 +219,15 @@ class XAPIServiceTest extends BaseTestCase
                 'tags' => '|摄影|光圈|',
                 'price' => 99.8,
                 'description' => '与摄影相关的知识和操作课程，适合刚入门的摄影爱好者。',
-            ),
+            )
         );
         $result = array(
             'score' => array(
                 'raw' => 4,
                 'max' => 5,
-                'min' => 0,
+                'min' => 0
             ),
-            'response' => '这个是值得购买到课程',
+            'response' => '这个是值得购买到课程'
         );
         $httpClient = $this->mockHttpClient(array(
             'actor' => $actor,
@@ -242,7 +243,7 @@ class XAPIServiceTest extends BaseTestCase
             'display' => array(
                 'zh-CN' => '评分了',
                 'en-US' => 'rated',
-            ),
+            )
         ), $statement['verb']);
 
         $this->assertEquals('http://adlnet.gov/expapi/activities/course',
@@ -267,7 +268,7 @@ class XAPIServiceTest extends BaseTestCase
                 'tags' => '|摄影|光圈|',
                 'price' => 99.8,
                 'description' => '与摄影相关的知识和操作课程，适合刚入门的摄影爱好者。',
-            ),
+            )
         );
 
         $httpClient = $this->mockHttpClient(array(
@@ -278,12 +279,13 @@ class XAPIServiceTest extends BaseTestCase
         $service = $this->createXAPIService($httpClient);
         $statement = $service->bookmarked($actor, $object, null, null, null, false);
 
+
         $this->assertEquals(array(
             'id' => 'https://w3id.org/xapi/adb/verbs/bookmarked',
             'display' => array(
                 'zh-CN' => '收藏了',
                 'en-US' => 'bookmarked',
-            ),
+            )
         ), $statement['verb']);
 
         $this->assertEquals('http://adlnet.gov/expapi/activities/course',
@@ -315,7 +317,7 @@ class XAPIServiceTest extends BaseTestCase
             'display' => array(
                 'zh-CN' => '分享了',
                 'en-US' => 'shared',
-            ),
+            )
         ), $statement['verb']);
         $this->assertEquals('https://w3id.org/xapi/acrossx/activities/class-online',
             $statement['object']['definition']['type']);

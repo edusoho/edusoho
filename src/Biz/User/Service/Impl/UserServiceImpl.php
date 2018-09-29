@@ -2,41 +2,41 @@
 
 namespace Biz\User\Service\Impl;
 
-use Biz\BaseService;
-use Biz\User\Dao\UserDao;
-use Biz\User\Dao\TokenDao;
-use Biz\User\Dao\FriendDao;
-use Biz\Coupon\Dao\CouponDao;
-use Biz\User\Dao\UserBindDao;
-use Biz\Org\Service\OrgService;
-use Biz\User\Dao\UserProfileDao;
-use AppBundle\Common\FileToolkit;
-use Biz\Card\Service\CardService;
-use Biz\Role\Service\RoleService;
-use Biz\User\Dao\UserApprovalDao;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
-use AppBundle\Common\StringToolkit;
-use Biz\User\Dao\UserFortuneLogDao;
-use Biz\Content\Service\FileService;
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\StringToolkit;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\BaseService;
+use Biz\Card\Service\CardService;
+use Biz\Content\FileException;
+use Biz\Content\Service\FileService;
+use Biz\Coupon\Dao\CouponDao;
 use Biz\Coupon\Service\CouponService;
-use Biz\User\Dao\UserPayAgreementDao;
+use Biz\Org\Service\OrgService;
+use Biz\Role\Service\RoleService;
+use Biz\System\Service\IpBlacklistService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Biz\User\Service\BlacklistService;
+use Biz\User\Dao\FriendDao;
+use Biz\User\Dao\TokenDao;
+use Biz\User\Dao\UserApprovalDao;
+use Biz\User\Dao\UserBindDao;
+use Biz\User\Dao\UserDao;
+use Biz\User\Dao\UserFortuneLogDao;
+use Biz\User\Dao\UserPayAgreementDao;
+use Biz\User\Dao\UserProfileDao;
 use Biz\User\Dao\UserSecureQuestionDao;
-use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\BlacklistService;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
-use Biz\System\Service\IpBlacklistService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\File\File;
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Biz\Content\FileException;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -1926,9 +1926,9 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $registerSetting = $this->getSettingService()->get('auth', array());
         if (!empty($registerSetting['register_mode']) &&
-                in_array($registerSetting['register_mode'], array('mobile', 'email_or_mobile'))) {
+            in_array($registerSetting['register_mode'], array('mobile', 'email_or_mobile'))) {
             $registerProtective = empty($registerSetting['register_protective']) ?
-                    'none' : $registerSetting['register_protective'];
+            'none' : $registerSetting['register_protective'];
             if (in_array($registerProtective, array('middle', 'low'))) {
                 $factory = $this->biz->offsetGet('ratelimiter.factory');
                 $rateLimiter = $factory('sms_registration_captcha_code', 1, 3600);
@@ -1973,6 +1973,11 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $this->getUserDao()->update($id, $fields);
+    }
+
+    public function setFaceRegistered($id)
+    {
+        return $this->getUserDao()->update($id, array('faceRegistered' => 1));
     }
 
     protected function _prepareApprovalConditions($conditions)

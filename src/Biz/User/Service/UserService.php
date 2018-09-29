@@ -2,8 +2,8 @@
 
 namespace Biz\User\Service;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\System\Annotation\Log;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UserService
 {
@@ -379,4 +379,9 @@ interface UserService
      * 用户首次登录修改密码.
      */
     public function initPassword($id, $newPassword);
+
+    /**
+     * 人脸识别采集状态修改
+     */
+    public function setFaceRegistered($id);
 }
