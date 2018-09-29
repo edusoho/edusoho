@@ -64,8 +64,7 @@ export default {
       console.log(this.uploadParams);
     }).catch(err => {
       this.errorShow = true;
-      setTimeout(this.goBack, 3000);
-      setTimeout(this.closeWxWindow, 3000);
+      setTimeout(this.feedbackAction, 3000);
     })
   },
   methods: {
@@ -103,8 +102,7 @@ export default {
             message: '人脸识别成功'
           });
           if (this.scanCode) {
-            setTimeout(this.goBack, 3000);
-            setTimeout(this.closeWxWindow, 3000);
+            setTimeout(this.feedbackAction, 3000);
             return;
           }
           if (res.login) {
@@ -133,8 +131,7 @@ export default {
               message: `人脸识别${this.verifiedText}失败，多次不通过`
             });
             if (this.scanCode) {
-              setTimeout(this.goBack, 3000);
-              setTimeout(this.closeWxWindow, 3000);
+              setTimeout(this.feedbackAction, 3000);
               return;
             }
             this.failTextShow = true;
@@ -154,11 +151,20 @@ export default {
         }
       })
     },
-    closeWxWindow() {
-      WeixinJSBridge.call('closeWindow');
+    is_weixn(){
+      const ua = navigator.userAgent.toLowerCase();
+      if(ua.match(/MicroMessenger/i)=="micromessenger") {
+        return true;
+      } else {
+        return false;
+      }
     },
-    goBack() {
-      this.$router.back(-1);
+    feedbackAction() {
+      if (!this.is_weixn()) {
+        this.$router.back(-1);
+        return;
+      }
+      WeixinJSBridge.call('closeWindow');
     },
     recognitionFail() {
       Toast.fail({
@@ -166,8 +172,7 @@ export default {
         message: `人脸识别${this.verifiedText}失败`
       });
       if (this.scanCode) {
-        setTimeout(this.goBack, 3000);
-        setTimeout(this.closeWxWindow, 3000);
+        setTimeout(this.feedbackAction, 3000);
         return;
       }
       this.tipShow = true;
