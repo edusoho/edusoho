@@ -30,8 +30,8 @@ class FaceLog extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("
+        $connection->exec('
             DROP TABLE IF EXISTS `face_log`;
-        ");
+        ');
     }
 }

@@ -11,7 +11,6 @@ use Biz\User\CurrentUser;
 
 class LoginController extends BaseController
 {
-
     const FACE_TOKEN_STATUS_SUCCESS = 'successed'; //认证成功
     const FACE_TOKEN_STATUS_CREATED = 'created'; //已创建
     const FACE_TOKEN_STATUS_EXPIRED = 'expired'; //已过期
@@ -39,7 +38,7 @@ class LoginController extends BaseController
         $img = $qrCode->get('png');
 
         return $this->createJsonResponse(array(
-            'qrcode' => 'data:image/png;base64,' . base64_encode($img),
+            'qrcode' => 'data:image/png;base64,'.base64_encode($img),
             'token' => $token['token'],
         ));
     }
@@ -58,7 +57,7 @@ class LoginController extends BaseController
             );
         } elseif (!empty($faceLoginToken['data']['lastFailed'])) {
             $response = array(
-                'status' => self::FACE_TOKEN_STATUS_FAILURES
+                'status' => self::FACE_TOKEN_STATUS_FAILURES,
             );
         } else {
             switch ($faceLoginToken['data']['status']) {
@@ -82,6 +81,7 @@ class LoginController extends BaseController
                     break;
             }
         }
+
         return $this->createJsonResponse($response);
     }
 
@@ -122,6 +122,7 @@ class LoginController extends BaseController
         if (empty($goto)) {
             $goto = $this->generateUrl('homepage', array(), true);
         }
+
         return $this->redirect($goto);
     }
 

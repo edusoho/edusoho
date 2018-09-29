@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Face\Service\Impl;
 
 use Biz\BaseService;
@@ -23,7 +24,7 @@ class FaceServiceImpl extends BaseService implements FaceService
             array(
                 'userId',
                 'status',
-                'sessionId'
+                'sessionId',
             )
         );
 

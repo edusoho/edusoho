@@ -6,5 +6,4 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface FaceLogDao extends GeneralDaoInterface
 {
-
 }
