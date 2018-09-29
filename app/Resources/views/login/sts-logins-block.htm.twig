@@ -30,16 +30,15 @@
         </div>
       </div>
       <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_failed'|trans }}</div>
-    </div>
-
-    <button class="cd-btn cd-btn-warning cd-mt24 js-approve-again-btn">{{ 'user.login.sts_discovery_again'|trans }}</button>
-    <div class="js-fail-tip">
-      {% if type|default('') == 'page' %}
-        <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
-      {% else %}
-        <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}</div>
-        <div class="cd-text-sm es-dark-assist cd-mt8">{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
-      {% endif %}
+      <button class="cd-btn cd-btn-warning cd-mt24 js-approve-again-btn">{{ 'user.login.sts_discovery_again'|trans }}</button>
+      <div class="js-fail-tip">
+        {% if type|default('') == 'page' %}
+          <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
+        {% else %}
+          <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}</div>
+          <div class="cd-text-sm es-dark-assist cd-mt8">{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
+        {% endif %}
+      </div>
     </div>
   </div>
 
