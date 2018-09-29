@@ -16,23 +16,23 @@
     </div>
     <div class="pull-right admin-common-switch">
       <label class="switch switch-lg switch-green js-switch {% if setting('face_identify.enabled') == 1 %}checked{% endif %}">
-        <input type="checkbox" name="enabled" value="{{ setting('face_identify.enabled') }}">
+        <input class="js-switch-input" type="checkbox" name="enabled"  value="{{ setting('face_identify.enabled') }}">
       </label>
     </div>
-
+ 
     <form class="pull-right sts-switch" id="face_identify">
       <div class="text-center sts-switch__item">
         <div>App端开启</div>
-        <input type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.app_enabled') %}checked{% endif %}>
+        <input class="js-sts-checkbox" type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.enabled') == 0 %}disabled {% endif %} {% if setting('face_identify.app_enabled') %}checked{% endif %}>
       </div>
 
       <div class="text-center sts-switch__item"><div>微信端开启</div>
-      <input type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
+      <input class="js-sts-checkbox" type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.enabled') == 0 %}disabled {% endif %} {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
       </div>
 
       <div class="text-center sts-switch__item">
         <div>PC端开启</div>
-        <input type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
+        <input class="js-sts-checkbox" type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.enabled') == 0 %}disabled {% endif %}  {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
       </div>
     </form>
 

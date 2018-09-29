@@ -6,9 +6,16 @@ define(function(require, exports, module) {
       var $parent = $this.parent();
       var faceIdentify = $this.val();
       var reverseFaceIdentify = faceIdentify == 1 ? 0 : 1;
-      $.post(document.location.href, { enabled: reverseFaceIdentify }, function(data) { 
+
+      console.log(formData);
+      var data = {}; 
+      for (var i = formData.length - 1; i >= 0; i--) {
+        data[formData[i].name] = formData[i].value;
+      }
+      data.enabled = reverseFaceIdentify;
+      console.log(data);
+      $.post(document.location.href, data, function(data) { 
         if ($parent.hasClass('checked')) {
-          
           $parent.removeClass('checked');
         } else {
           $parent.addClass('checked');
@@ -32,6 +39,8 @@ define(function(require, exports, module) {
           data[formData[i].name] = formData[i].value;
         }
       }
+      console.log(data);
+      data.enabled = $('.js-switch-input').val();
 
       $.post(document.location.href, data, function(data){
         //document.location.reload();
