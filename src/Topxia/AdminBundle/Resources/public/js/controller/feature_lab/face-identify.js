@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 			var data={
 				enabled: 0,
 				app_enabled: 0,
-				wechat_enabled: 0,
+				h5_enabled: 0,
 				pc_enabled: 0
 			};
 			var formData = $('#face_identify').serializeArray();

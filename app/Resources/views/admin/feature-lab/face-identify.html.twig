@@ -7,12 +7,12 @@
 {% block main %}
 
 	<form id="face_identify">
-		<div>总开关</div><input type="checkbox" name="enabled" value="1" {% if setting('face_identify.enabled') %}checked{% endif %}>
+		<div>总开关</div><input type="checkbox" name="enabled" value="1" {% if setting('face.enabled') %}checked{% endif %}>
 
-		<div>App端开启</div><input type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.app_enabled') %}checked{% endif %}>
+		<div>App端开启</div><input type="checkbox" name="app_enabled" value="1" {% if setting('face.app_enabled') %}checked{% endif %}>
 
-		<div>微信端开启</div><input type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
+		<div>微信端开启</div><input type="checkbox" name="h5_enabled" value="1" {% if setting('face.h5_enabled') %}checked{% endif %}>
 
-		<div>PC端开启</div><input type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
+		<div>PC端开启</div><input type="checkbox" name="pc_enabled" value="1" {% if setting('face.pc_enabled') %}checked{% endif %}>
 	</form>
 {% endblock %}
