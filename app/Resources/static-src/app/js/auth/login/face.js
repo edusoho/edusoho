@@ -57,10 +57,14 @@ export default class Face {
     const token = this.token;
     const goto = this.$loginDom.data('goto');
     const $failStatus = $('.js-fail-feedback');
+    const $successStatus = $('.js-success-feedback');
+    const $failTip = $('.js-fail-tip');
+    const $failBtn = $('.js-approve-again-btn');
     if (this.$loginDom.hasClass('hidden') || this.flag) {
       return;
     }
     $.get(`/login/face_token/${token}`, { goto: goto }, (res) => {
+      res.status = 'failures';
       switch (res.status) {
       case 'created':
         setTimeout(() => {
@@ -83,20 +87,16 @@ export default class Face {
 
       case 'successed':
         self.statusShow();
-        $('.js-success-feedback').siblings().addClass('hidden');
+        $successStatus.removeClass('hidden').siblings().addClass('hidden');
         window.location.href = res.url;
         break;
 
       case 'failed':
-        self.statusShow();
-        $('.js-fail-tip').addClass('hidden');
-        $failStatus.prev().addClass('hidden');
+        self.feedbackShow($failStatus, $failBtn, $failTip);
         break;
 
       case 'failures':
-        self.statusShow();
-        $failStatus.prev().addClass('hidden');
-        $failStatus.next().addClass('hidden');
+        self.feedbackShow($failStatus, $failTip, $failBtn);
         break;
       }
     });
@@ -120,5 +120,12 @@ export default class Face {
   statusShow() {
     $('.js-login-section, .js-sts-tip').addClass('hidden');
     $('.js-feedback').removeClass('hidden');
+  }
+
+  feedbackShow($stauts, $show, $hide) {
+    this.statusShow();
+    $stauts.removeClass('hidden').siblings().addClass('hidden');
+    $show.removeClass('hidden');
+    $hide.addClass('hidden');
   }
 }
