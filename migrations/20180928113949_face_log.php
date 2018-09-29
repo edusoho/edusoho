@@ -18,7 +18,8 @@ class FaceLog extends Migration
                 `status` varchar(32) NOT NULL DEFAULT '',
                 `createdTime` int(10) NOT NULL DEFAULT '0',
                 `sessionId` varchar(64) NOT NULL DEFAULT '' COMMENT '人脸识别sessionId',
-                PRIMARY KEY (`id`)
+                PRIMARY KEY (`id`),
+                KEY `idx_userId_status_createdTime` (`userId`,`createdTime`,`status`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
     }

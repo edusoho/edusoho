@@ -27,7 +27,7 @@ class LoginController extends BaseController
                 'userId' => 0,
                 'data' => array(),
                 'times' => 0,
-                'duration' => 300,
+                'duration' => 240,
             )
         );
         $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'].'&host='.$host;
@@ -92,8 +92,8 @@ class LoginController extends BaseController
             $content = $this->renderView('default/message.html.twig', array(
                 'type' => 'error',
                 'goto' => $this->generateUrl('homepage', array(), true),
-                'duration' => 1,
-                'message' => '二维码已失效，正跳转到首页',
+                'duration' => 1000,
+                'message' => 'user.login.sts_qrcode_invalid',
             ));
 
             return new Response($content, '302');
@@ -101,8 +101,8 @@ class LoginController extends BaseController
             $content = $this->renderView('default/message.html.twig', array(
                 'type' => 'error',
                 'goto' => $this->generateUrl('homepage', array(), true),
-                'duration' => 1,
-                'message' => '人脸认证未成功，正跳转到首页',
+                'duration' => 1000,
+                'message' => 'user.login.sts_discovery_failed',
             ));
 
             return new Response($content, '302');

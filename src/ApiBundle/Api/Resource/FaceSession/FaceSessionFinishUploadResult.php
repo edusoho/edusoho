@@ -25,7 +25,7 @@ class FaceSessionFinishUploadResult extends AbstractResource
             $token = $this->getTokenService()->verifyToken('face_login', $loginToken, $session);
             
             if (!$token) {
-                throw new BadRequestHttpException('Token error', null, ErrorCode::INVALID_CREDENTIAL);
+                throw new BadRequestHttpException('Token error', null, ErrorCode::EXPIRED_CREDENTIAL);
             }
         }
         return $result;
