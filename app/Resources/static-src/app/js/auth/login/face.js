@@ -63,12 +63,16 @@ export default class Face {
     $.get(`/login/face_token/${token}`, { goto: goto }, (res) => {
       switch (res.status) {
       case 'created':
-        setTimeout(self.pollStatus(), 2000);
+        setTimeout(() => {
+          self.pollStatus();
+        }, 2000);
         break;
 
       case 'processing':
         $('.js-approve-ing, .js-approve-ing-tip').removeClass('hidden');
-        setTimeout(self.pollStatus(), 2000);
+        setTimeout(() => {
+          self.pollStatus();
+        }, 2000);
         break;
 
       case 'expired':
