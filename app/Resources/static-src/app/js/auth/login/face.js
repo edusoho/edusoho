@@ -70,6 +70,7 @@ export default class Face {
 
       case 'processing':
         $('.js-approve-ing, .js-approve-ing-tip').removeClass('hidden');
+        $('.js-invalid-btn').addClass('hidden');
         setTimeout(() => {
           self.pollStatus();
         }, 2000);
