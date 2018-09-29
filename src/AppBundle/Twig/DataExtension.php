@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use Biz\CloudPlatform\CloudAPIFactory;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\ExtensionManager;
 
@@ -34,7 +35,14 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
             new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
+            new \Twig_SimpleFunction('cloud_info', array($this, 'getCloudInfo'), $options),
         );
+    }
+
+    public function getCloudInfo()
+    {
+        $api = CloudAPIFactory::create('leaf');
+        return $api->get('/me');
     }
 
     public function getData($name, $arguments)
