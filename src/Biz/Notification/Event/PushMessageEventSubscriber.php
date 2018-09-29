@@ -1841,7 +1841,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'batch_notification.publish',
                 'targetType' => 'batch_notification',
                 'targetId' => $batchNotification['id'],
-                'title' => $batchNotification['title'],
+                'title' => StringToolkit::specialCharsFilter($batchNotification['title']),
                 'message' => StringToolkit::specialCharsFilter($content),
                 'source' => 'notification',
             );
