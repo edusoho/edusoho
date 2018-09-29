@@ -25,6 +25,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use AppBundle\Common\StringToolkit;
 
 class PushMessageEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -719,11 +720,13 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'id' => $target['id'],
                 'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
             );
-
+            $content = $this->plainText(strip_tags($announcement['content']), 50);
             $body = array(
                 'id' => $announcement['id'],
                 'type' => 'announcement.create',
-                'title' => $this->plainText($announcement['content'], 50),
+                'targetType' => 'announcement',
+                'targetId' => $announcement['id'],
+                'title' => StringToolkit::specialCharsFilter($content),
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1823,7 +1826,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     public function onBatchNotificationPublish(Event $event)
     {
         $batchNotification = $event->getSubject();
-
         if ($this->isIMEnabled()) {
             $from = array(
                 'type' => 'batch_notification',
@@ -1834,12 +1836,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'global',
                 'convNo' => $this->getConvNo(),
             );
-
+            $content = $this->plainText(strip_tags($batchNotification['content']), 50);
             $body = array(
                 'type' => 'batch_notification.publish',
-                'batchNotificationId' => $batchNotification['id'],
-                'title' => $batchNotification['title'],
-                'message' => $this->plainText($this->convertHtml($batchNotification['content']), 50),
+                'targetType' => 'batch_notification',
+                'targetId' => $batchNotification['id'],
+                'title' => StringToolkit::specialCharsFilter($batchNotification['title']),
+                'message' => StringToolkit::specialCharsFilter($content),
+                'source' => 'notification',
             );
 
             $this->createPushJob($from, $to, $body);

@@ -9395,6 +9395,9 @@ exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
 exception.parser.not.support: 不支持该视频类型
 
+exception.announcement.notfound: 公告不存在
+exception.batch_notification.notfound: 全站通知不存在
+
 lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 

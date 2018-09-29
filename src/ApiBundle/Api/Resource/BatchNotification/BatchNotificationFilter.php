@@ -1,21 +1,20 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Announcement;
+namespace ApiBundle\Api\Resource\BatchNotification;
 
 use ApiBundle\Api\Resource\Filter;
 
-class AnnouncementFilter extends Filter
+class BatchNotificationFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'userId', 'targetType', 'targetId', 'url', 'startTime', 'endTime', 'content', 'createdTime', 'updatedTime',
+        'id', 'type', 'title', 'fromId', 'content', 'targetType', 'targetId', 'createdTime', 'published', 'sendedTime',
     );
 
     protected function publicFields(&$data)
     {
         $data['content'] = $this->convertAbsoluteUrl($data['content']);
         $data['simpleContent'] = $this->plainText(strip_tags($data['content']), 50);
-        $data['startTime'] = empty($data['startTime']) ? 0 : date('c', $data['startTime']);
-        $data['endTime'] = empty($data['endTime']) ? 0 : date('c', $data['endTime']);
+        $data['sendedTime'] = empty($data['sendedTime']) ? 0 : date('c', $data['sendedTime']);
     }
 
     protected function plainText($text, $count)
