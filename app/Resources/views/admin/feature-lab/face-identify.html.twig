@@ -6,13 +6,37 @@
 
 {% block main %}
 
-	<form id="face_identify">
-		<div>总开关</div><input type="checkbox" name="enabled" value="1" {% if setting('face_identify.enabled') %}checked{% endif %}>
+  <h5>应用场景启用</h5>
 
-		<div>App端开启</div><input type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.app_enabled') %}checked{% endif %}>
+  <div class="clearfix sts-setting-item">
+    <div class="pull-left">
+      <h5 class="sts-setting-item__title">人脸识别登录</h5>
+      <div class="text-sm text-muted">开启后，用户在任意位置登录，可选使用人脸识别方式进行身份认证。</div>
+      <div class="text-sm text-muted">若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。</div>
+    </div>
+    <div class="pull-right admin-common-switch">
+      <label class="switch switch-lg switch-green js-switch {% if setting('face_identify.enabled') == 1 %}checked{% endif %}">
+        <input type="checkbox" name="enabled" value="{{ setting('face_identify.enabled') }}">
+      </label>
+    </div>
 
-		<div>微信端开启</div><input type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
+    <form class="pull-right sts-switch" id="face_identify">
+      <div class="text-center sts-switch__item">
+        <div>App端开启</div>
+        <input type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.app_enabled') %}checked{% endif %}>
+      </div>
 
-		<div>PC端开启</div><input type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
-	</form>
+      <div class="text-center sts-switch__item"><div>微信端开启</div>
+      <input type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
+      </div>
+
+      <div class="text-center sts-switch__item">
+        <div>PC端开启</div>
+        <input type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
+      </div>
+    </form>
+
+
+  </div
+
 {% endblock %}
