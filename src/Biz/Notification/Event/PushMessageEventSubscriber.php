@@ -25,6 +25,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use AppBundle\Common\StringToolkit;
 
 class PushMessageEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -719,13 +720,13 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'id' => $target['id'],
                 'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
             );
-
+            $content = $this->plainText(strip_tags($announcement['content']), 50);
             $body = array(
                 'id' => $announcement['id'],
                 'type' => 'announcement.create',
                 'targetType' => 'announcement',
                 'targetId' => $announcement['id'],
-                'title' => $this->plainText(strip_tags($announcement['content']), 50),
+                'title' => StringToolkit::specialCharsFilter($content),
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1835,14 +1836,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'global',
                 'convNo' => $this->getConvNo(),
             );
-
+            $content = $this->plainText(strip_tags($batchNotification['content']), 50);
             $body = array(
                 'type' => 'batch_notification.publish',
                 'targetType' => 'batch_notification',
                 'targetId' => $batchNotification['id'],
                 'title' => $batchNotification['title'],
-                'message' => $this->plainText(strip_tags($batchNotification['content']), 50),
-                'source' => 'notification'
+                'message' => StringToolkit::specialCharsFilter($content),
+                'source' => 'notification',
             );
 
             $this->createPushJob($from, $to, $body);
