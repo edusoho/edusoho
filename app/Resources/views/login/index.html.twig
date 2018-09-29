@@ -15,7 +15,7 @@
       <a class="active">{{ 'user.login.login_account'|trans }}</a>
       <a href="{{ path('register', {goto:_target_path}) }}">{{ 'user.register.register_account'|trans }}</a>
     </div>
-    <div class="login-main">
+    <div class="login-main js-login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
 
         {% if error %}
@@ -68,12 +68,21 @@
       {% if setting('login_bind.enabled') %}
         <div class="social-login">
         <span>
+          <a class="sts-login-link js-sts-login-link" href="javascript:;">
+            <img src="{{ asset('static-dist/app/img/face.png') }}"
+              srcset="{{ asset('static-dist/app/img/face.png') }} 1x, {{ asset('static-dist/app/img/face@2x.png') }} 2x" alt="{{'user.login.sts_discovery'|trans}}"/>
+          </a>
           {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
         </span>
           <div class="line"></div>
         </div>
       {% endif %}
     </div>
+
+    {% if setting('login_bind.enabled') %}
+      {% set type = 'page' %}
+      {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
+    {% endif %}
   </div>
 
 {% endblock %}
