@@ -38,7 +38,8 @@ export default {
       requestStartT: '',
       requestEndT: '',
       verifiedText: '认证',
-      errorShow: false
+      errorShow: false,
+      scanCode: this.$route.query.loginToken
     }
   },
   mounted() {
@@ -48,7 +49,7 @@ export default {
     const data = {
       'type': this.$route.query.type,
       'loginField': this.$route.query.loginField,
-      'loginToken': this.$route.query.loginToken
+      'loginToken': this.scanCode
     }
     Api.getSessions({
       data: data
@@ -63,7 +64,8 @@ export default {
       console.log(this.uploadParams);
     }).catch(err => {
       this.errorShow = true;
-    });
+      setTimeout(this.closeWxWindow, 3000);
+    })
   },
   methods: {
     polling() {
@@ -73,7 +75,7 @@ export default {
           sessionId: this.uploadParams.sessionId,
         },
         params: {
-          loginToken: this.$route.query.loginToken
+          loginToken: this.scanCode
         }
       }).then(res => {
         console.log(res.status);
@@ -99,6 +101,10 @@ export default {
             duration: 2000,
             message: '人脸识别成功'
           });
+          if (this.scanCode) {
+            setTimeout(this.closeWxWindow, 3000);
+            return;
+          }
           if (res.login) {
             const avatarData = {
               avatar: {
@@ -120,14 +126,14 @@ export default {
           setTimeout(jumpAction, 3000);
         } else {
           if (res.lastFailed === 1) {
-            if (this.$route.query.loginToken) {
-              this.errorShow = true;
-              return;
-            }
             Toast.fail({
               duration: 2000,
               message: `人脸识别${this.verifiedText}失败，多次不通过`
             });
+            if (this.scanCode) {
+              setTimeout(this.closeWxWindow, 3000);
+              return;
+            }
             this.failTextShow = true;
             this.tipShow = false;
             const toLogin = () => {
@@ -145,15 +151,18 @@ export default {
         }
       })
     },
+    closeWxWindow() {
+      WeixinJSBridge.call('closeWindow');
+    },
     recognitionFail() {
-      if (this.$route.query.loginToken) {
-        this.errorShow = true;
-        return;
-      }
       Toast.fail({
         duration: 2000,
         message: `人脸识别${this.verifiedText}失败`
       });
+      if (this.scanCode) {
+        setTimeout(this.closeWxWindow, 3000);
+        return;
+      }
       this.tipShow = true;
       this.btnText = `重新${this.verifiedText}`
     },
@@ -182,7 +191,7 @@ export default {
             sessionId: this.uploadParams.sessionId,
           },
           params: {
-            loginToken: this.$route.query.loginToken
+            loginToken: this.scanCode
           },
           data: {
             response_body: JSON.stringify(res.data),
