@@ -8095,3 +8095,9 @@ admin.index.course_order: "course order"
 admin.index.classroom_order: "classroom order"
 admin.index.vip_order: vip order
 admin.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【Site Setting】-【Basic Info】-【Site Domain】
+
+admin.sts_discovery_use_range: 应用场景启用
+admin.sts_discovery_function_tip: 开启后，你可以使用基于人脸识别服务的一系列应用，比如人脸识别登录等。
+admin.sts_discovery_use_tip: 开启后，用户在任意位置登录，可选使用人脸识别方式进行身份认证。
+admin.sts_discovery.login: 人脸识别登录
+admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。

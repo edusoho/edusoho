@@ -8,8 +8,8 @@
 
 	<div class="clearfix lab-setting-item">
     <div class="pull-left">
-      <h4>人脸识别</h4>
-      <div class="text-sm text-muted">开启后，你可以使用基于人脸识别服务的一系列应用，比如人脸识别登录等。</div>
+      <h4>{{ 'user.login.sts_discovery'|trans }}</h4>
+      <div class="text-sm text-muted">{{ 'admin.sts_discovery_function_tip'|trans }}</div>
     </div>
     <div class="text-right admin-common-switch mtm">
       <label class="switch switch-lg switch-green js-switch {% if setting('feature_lab.face_identify') == 1 %}checked{% endif %}">

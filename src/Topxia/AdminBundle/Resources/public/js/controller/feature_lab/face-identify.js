@@ -42,7 +42,6 @@ define(function(require, exports, module) {
         }
       }
       data.enabled = $('.js-switch-input').val();
-      console.log(document.location.href);
       $.post(document.location.href, data, function(data){
         //document.location.reload();
       });
