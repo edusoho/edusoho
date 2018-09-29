@@ -6623,17 +6623,17 @@ classroom.upload_picture_btn: 'Upload an image'
 user.fields.fan_empty: 'No followers'
 user.fields.following_empty: 'No followers'
 
-user.login.sts_discovery: 人脸识别
-user.login.sts_discovery_title: 人脸识别，安全登录
-user.login.sts_discovery_wait: 认证中…
-user.login.sts_discovery_success: 人脸识别认证成功!
-user.login.sts_discovery_failed: 人脸识别认证失败!
-user.login.sts_discovery_again: 重新认证
-user.login.sts_discovery_tip: 为保证帐号安全，请打开微信或APP，扫一扫二维码完成人脸识别认证。
-user.login.sts_discovery_more_fail_first_tip: 人脸识别多次认证不通过，
-user.login.sts_discovery_more_fail_second_tip: 请改用其他方式认证或联系管理员!
-user.login.sts_qrcode_invalid: 二维码已失效
-user.login.sts_qrcode.refresh: 点击刷新
+user.login.sts_discovery: Facial recognition
+user.login.sts_discovery_title: Facial recognition, login security
+user.login.sts_discovery_wait: In certification...
+user.login.sts_discovery_success: Facial recognition authentication Successfully!
+user.login.sts_discovery_failed: Facial recognition authentication failed!
+user.login.sts_discovery_again: Recertification
+user.login.sts_discovery_tip: Please open WeChat or APP and scan the QR code to complete facial recognition authentication to ensure the security of the account.
+user.login.sts_discovery_more_fail_first_tip: Facial recognition authentication failed repeatedly,
+user.login.sts_discovery_more_fail_second_tip: please use another method to authenticate or contact the administrator!
+user.login.sts_qrcode_invalid: QR code has expired
+user.login.sts_qrcode.refresh: Click to refresh
 
 group.thread.post_empty_reply: 'No reply yet'
 my.teaching.open_course.live_label: Live
