@@ -1,6 +1,5 @@
 import 'jquery.cycle2';
 import Swiper from 'swiper';
-echo.init();
 
 if ($('.es-live-poster .swiper-slide').length > 1) {
   var swiper = new Swiper('.es-live-poster.swiper-container', {

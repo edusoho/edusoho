@@ -13,7 +13,7 @@
 {% block title %}{{ categoryArray.name|default('category.all_category'|trans)  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
 {% endblock %}
 
-{% do script(['libs/echo-js.js', 'app/js/classroom/explore/index.js']) %}
+{% do script(['app/js/classroom/explore/index.js']) %}
 
 {% block top_content %}
 

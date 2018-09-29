@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Player\Service\PlayerService;
 use Codeages\Biz\Framework\Context\Biz;
@@ -31,6 +32,7 @@ class ActivityExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat')),
             new \Twig_SimpleFilter('convert_minute_and_second', array($this, 'convertMinuteAndSecond')),
+            new \Twig_SimpleFilter('prepare_video_media_uri', array($this, 'prepareVideoMediaUri')),
         );
     }
 
@@ -46,6 +48,13 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('ppt_player', array($this, 'pptPlayer')),
             new \Twig_SimpleFunction('activity_visible', array($this, 'isActivityVisible')),
         );
+    }
+
+    public function prepareVideoMediaUri($video)
+    {
+        $type = $this->getActivityService()->getActivityConfig('video');
+
+        return $type->prepareMediaUri($video);
     }
 
     public function convertMinuteAndSecond($second)
@@ -230,6 +239,14 @@ class ActivityExtension extends \Twig_Extension
     protected function getPlayerService()
     {
         return $this->biz->service('Player:PlayerService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 
     /**

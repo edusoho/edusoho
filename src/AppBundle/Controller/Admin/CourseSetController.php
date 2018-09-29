@@ -289,10 +289,10 @@ class CourseSetController extends BaseController
         $classrooms = array();
 
         if ('classroom' == $filter) {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(
+            $classrooms = $this->getClassroomService()->findClassroomsByCourseSetIds(
                 ArrayToolkit::column($courseSets, 'id')
             );
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);

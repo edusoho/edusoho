@@ -158,6 +158,15 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function showRenewVideoAction(Request $request)
+    {
+        $renewVideo = $request->query->get('renewVideo');
+
+        return $this->render('admin/edu-cloud/video/video-renew-modal.html.twig', array(
+            'renewVideo' => $renewVideo,
+        ));
+    }
+
     public function videoSwitchAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

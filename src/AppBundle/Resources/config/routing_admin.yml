@@ -715,6 +715,10 @@ admin_cloud_video_overview:
     path:  /cloud/video/overview
     defaults: { _controller: AppBundle:Admin/EduCloud:videoOverview }
 
+admin_cloud_video_overview_renew:
+    path:  /cloud/video/renew
+    defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
+
 admin_cloud_setting_video:
     path:  /setting/cloud/video
     defaults: { _controller: AppBundle:Admin/EduCloud:videoSetting }
