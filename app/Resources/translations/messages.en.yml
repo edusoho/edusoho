@@ -6632,7 +6632,7 @@ user.login.sts_discovery_again: Recertification
 user.login.sts_discovery_tip: Please open WeChat or APP and scan the QR code to complete facial recognition authentication to ensure the security of the account.
 user.login.sts_discovery_more_fail_first_tip: Facial recognition authentication failed repeatedly,
 user.login.sts_discovery_more_fail_second_tip: please use another method to authenticate or contact the administrator!
-user.login.sts_qrcode_invalid: QR code has expired
+user.login.sts_qrcode_invalid: QR code has expired!
 user.login.sts_qrcode.refresh: Click to refresh
 
 group.thread.post_empty_reply: 'No reply yet'
