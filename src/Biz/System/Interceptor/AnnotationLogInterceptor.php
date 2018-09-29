@@ -203,9 +203,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             $module = $log['module'];
             $action = $log['action'];
 
-            $e = $this->exceptionToArray($exception);
-
-            $this->getLogService()->warning($module, $action, '调用前置方法错误', $e);
+            $this->getLogService()->warning($module, $action, '调用前置方法错误', array($exception->getMessage()));
         }
 
         return $formatReturn;

@@ -14,13 +14,21 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     public function set($name, $value)
     {
-        $this->getSettingDao()->deleteByName($name);
-        $setting = array(
-            'name' => $name,
-            'value' => serialize($value),
-        );
-        $this->getSettingDao()->create($setting);
-        $this->clearCache();
+        $this->beginTransaction();
+        try {
+            $this->getSettingDao()->deleteByName($name);
+            $setting = array(
+                'name' => $name,
+                'value' => serialize($value),
+            );
+            $this->getSettingDao()->create($setting);
+            $this->clearCache();
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     /**
