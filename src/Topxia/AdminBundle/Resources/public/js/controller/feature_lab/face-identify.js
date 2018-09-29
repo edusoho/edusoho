@@ -11,39 +11,38 @@ define(function(require, exports, module) {
         if ($(this).is(':checked')) {
           data[$(this).attr('name')] = $(this).val();
         }
-      })
+      });
       data.enabled = reverseFaceIdentify;
-      console.log(data);
       $.post(document.location.href, data, function(data) { 
         if ($parent.hasClass('checked')) {
           $parent.removeClass('checked');
           $('.js-sts-checkbox').prop('disabled', true);
+          $('.js-sts-label').addClass('text-muted');
         } else {
           $parent.addClass('checked');
+          $('.js-sts-label').removeClass('text-muted');
           $('.js-sts-checkbox').prop('disabled', false);
         }
+
         $this.val(reverseFaceIdentify);
-        // document.location.reload();
       });
     });
 
 
-    $('#face_identify input[type=checkbox]').click(function() {
+    $('.js-sts-switch input[type=checkbox]').click(function() {
       var data={
         app_enabled: 0,
         wechat_enabled: 0,
         pc_enabled: 0
       };
       var formData = $('#face_identify').serializeArray();
-      console.log(formData);
       if (formData) {
         for (var i = formData.length - 1; i >= 0; i--) {
           data[formData[i].name] = formData[i].value;
         }
       }
-      console.log(data);
       data.enabled = $('.js-switch-input').val();
-
+      console.log(document.location.href);
       $.post(document.location.href, data, function(data){
         //document.location.reload();
       });
