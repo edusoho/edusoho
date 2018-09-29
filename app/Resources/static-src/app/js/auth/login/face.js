@@ -64,7 +64,6 @@ export default class Face {
       return;
     }
     $.get(`/login/face_token/${token}`, { goto: goto }, (res) => {
-      res.status = 'failures';
       switch (res.status) {
       case 'created':
         setTimeout(() => {
