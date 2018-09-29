@@ -64,6 +64,7 @@ export default {
       console.log(this.uploadParams);
     }).catch(err => {
       this.errorShow = true;
+      setTimeout(this.goBack, 3000);
       setTimeout(this.closeWxWindow, 3000);
     })
   },
@@ -102,6 +103,7 @@ export default {
             message: '人脸识别成功'
           });
           if (this.scanCode) {
+            setTimeout(this.goBack, 3000);
             setTimeout(this.closeWxWindow, 3000);
             return;
           }
@@ -131,6 +133,7 @@ export default {
               message: `人脸识别${this.verifiedText}失败，多次不通过`
             });
             if (this.scanCode) {
+              setTimeout(this.goBack, 3000);
               setTimeout(this.closeWxWindow, 3000);
               return;
             }
@@ -154,12 +157,16 @@ export default {
     closeWxWindow() {
       WeixinJSBridge.call('closeWindow');
     },
+    goBack() {
+      this.$router.back(-1);
+    },
     recognitionFail() {
       Toast.fail({
         duration: 2000,
         message: `人脸识别${this.verifiedText}失败`
       });
       if (this.scanCode) {
+        setTimeout(this.goBack, 3000);
         setTimeout(this.closeWxWindow, 3000);
         return;
       }
