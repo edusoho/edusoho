@@ -17,25 +17,25 @@
 
     <form class="pull-right sts-switch" id="face_identify">
       <div class="admin-common-switch pull-right">
-        <label class="switch switch-lg switch-green js-switch {% if setting('face_identify.enabled') == 1 %}checked{% endif %}">
-          <input class="js-switch-input" type="checkbox" name="enabled" value="{{ setting('face_identify.enabled') }}">
+        <label class="switch switch-lg switch-green js-switch {% if setting('face.enabled') == 1 %}checked{% endif %}">
+          <input class="js-switch-input" type="checkbox" name="enabled" value="{{ setting('face.enabled') }}">
         </label>
       </div>
 
       <div class="clearfix pull-left js-sts-switch">
         <div class="text-center sts-switch__item">
-          <div class="js-sts-label {% if setting('face_identify.enabled') == 0 %}text-muted{% endif %}">App端开启</div>
-          <input class="js-sts-checkbox" type="checkbox" name="app_enabled" value="1" {% if setting('face_identify.enabled') == 0 %}disabled {% endif %} {% if setting('face_identify.app_enabled') %}checked{% endif %}>
+          <div class="js-sts-label {% if setting('face.enabled') == 0 %}text-muted{% endif %}">App端开启</div>
+          <input class="js-sts-checkbox" type="checkbox" name="app_enabled" value="1" {% if setting('face.enabled') == 0 %}disabled {% endif %} {% if setting('face.app_enabled') %}checked{% endif %}>
         </div>
 
         <div class="text-center sts-switch__item">
-          <div class="js-sts-label {% if setting('face_identify.enabled') == 0 %}text-muted{% endif %}">微信端开启</div>
-          <input class="js-sts-checkbox" type="checkbox" name="wechat_enabled" value="1" {% if setting('face_identify.enabled') == 0 %}disabled {% endif %} {% if setting('face_identify.wechat_enabled') %}checked{% endif %}>
+          <div class="js-sts-label {% if setting('face.enabled') == 0 %}text-muted{% endif %}">微信端开启</div>
+          <input class="js-sts-checkbox" type="checkbox" name="h5_enabled" value="1" {% if setting('face.enabled') == 0 %}disabled {% endif %} {% if setting('face.h5_enabled') %}checked{% endif %}>
         </div>
 
         <div class="text-center sts-switch__item">
-          <div class="js-sts-label {% if setting('face_identify.enabled') == 0 %}text-muted{% endif %}">PC端开启</div>
-          <input class="js-sts-checkbox" type="checkbox" name="pc_enabled" value="1" {% if setting('face_identify.enabled') == 0 %}disabled {% endif %}  {% if setting('face_identify.pc_enabled') %}checked{% endif %}>
+          <div class="js-sts-label {% if setting('face.enabled') == 0 %}text-muted{% endif %}">PC端开启</div>
+          <input class="js-sts-checkbox" type="checkbox" name="pc_enabled" value="1" {% if setting('face.enabled') == 0 %}disabled {% endif %}  {% if setting('face.pc_enabled') %}checked{% endif %}>
         </div>
       </div>
     </form>
