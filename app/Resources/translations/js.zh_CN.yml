@@ -288,6 +288,7 @@ activity.testpaper_manage.normal_percentage: 一般%normalPercentage%%
 activity.testpaper_manage.difficulty_percentage: 困难%difficultyPercentage%%
 activity.testpaper_manage.required_error_hint: 请输入分数
 activity.testpaper_manage.question_options: 选项
+activity.testpaper_manage.questions_length_hint: 题目数量最多为2000
 
 activity.text_manage.save_draft_hint: (草稿已于%createdTime%保存)
 activity.text_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
