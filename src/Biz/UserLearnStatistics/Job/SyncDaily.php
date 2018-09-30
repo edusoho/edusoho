@@ -17,7 +17,7 @@ class SyncDaily extends AbstractJob
             return;
         }
 
-        while (date('Y-m-d', $nextCursor) != date("Y-m-d", strtotime("+1 day"))) {
+        while (date('Y-m-d', $nextCursor) != date('Y-m-d', strtotime('+1 day'))) {
             $job = array(
                 'name' => 'SyncDailyChildrenJob',
                 'source' => 'MAIN',
