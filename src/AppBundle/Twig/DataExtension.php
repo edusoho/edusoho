@@ -41,9 +41,9 @@ class DataExtension extends \Twig_Extension
 
     public function getCloudInfo()
     {
-        $api = CloudAPIFactory::create('leaf');
-
-        return $api->get('/me');
+        $api = CloudAPIFactory::create('root');
+        $me  = $api->get('/me');
+        return $me;
     }
 
     public function getData($name, $arguments)

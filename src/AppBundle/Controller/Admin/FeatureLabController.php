@@ -10,7 +10,7 @@ class FeatureLabController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $settings = $request->request->all();
-            $this->getSettingService()->set('face', $settings);
+            $this->getSettingService()->set('feature', $settings);
 
             return $this->createJsonResponse(array('success' => 1));
         }

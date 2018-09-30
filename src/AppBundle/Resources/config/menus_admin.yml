@@ -789,7 +789,7 @@ admin:
                             name: admin.cloud.data_lab_setting
                 admin_cloud_face_identify_manage:
                     name: admin.cloud.face_identify
-                    visible: (cloudStatus() and cloud_info()['ai.face']|default(0) and setting('face.enabled'))
+                    visible: (cloudStatus() and cloud_info()['ai.face']|default(0) and setting('feature.face_enabled'))
                     children:
                         admin_cloud_face_identify:
                             name: admin.cloud.face_identify
