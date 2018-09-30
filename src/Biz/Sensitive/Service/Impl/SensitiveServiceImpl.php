@@ -188,6 +188,8 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function getKeywordByName($name)
     {
+        $name = $this->flagReplaceReverse($name);
+
         return $this->getSensitiveDao()->getByName($name);
     }
 
@@ -218,9 +220,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $result;
     }
 
-    public function updateKeyword($id, $conditions)
+    public function updateKeyword($id, $fields)
     {
-        $result = $this->getSensitiveDao()->update($id, $conditions);
+        $result = $this->getSensitiveDao()->update($id, $fields);
 
         return $result;
     }
@@ -320,10 +322,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     private function flagReplaceReverse($content)
     {
-        $flagArray = array('\\', '$', '(', ')', '*', '+', '.', '[', ']', '?', '^', '{', '}', '|');
-        $filterArray = array('\\\\', '\$', '\(', '\)', '\*', '\+', '\.', '\[', '\]', '\?', '\^', '\{', '\}', '\|');
-
-        $contentFilter = str_replace($flagArray, $filterArray, $content);
+        $contentFilter = preg_quote($content, '/');
 
         return $contentFilter;
     }
