@@ -81,7 +81,7 @@
       {% endif %}
     </div>
 
-    {% if setting('login_bind.enabled') or (setting('face.enabled') and setting('face.pc_enabled')) %}
+    {% if setting('face.enabled') and setting('face.pc_enabled') %}
       {% set type = 'page' %}
       {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
     {% endif %}
