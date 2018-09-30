@@ -25,7 +25,7 @@ class FeatureLabController extends BaseController
             $settings = $request->request->all();
             $savedSetting = $this->getSettingService()->get('face');
             $savedSetting = array_merge($savedSetting, $settings);
-            $this->getSettingService()->set('face', $settings);
+            $this->getSettingService()->set('face', $savedSetting);
 
             return $this->createJsonResponse(array('success' => 1));
         }
