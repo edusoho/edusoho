@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -348,7 +349,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            throw new NotFoundException("testpaper#{$testpaperId} not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
@@ -368,7 +369,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            throw new NotFoundException("testpaper#{$testpaperId} not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);

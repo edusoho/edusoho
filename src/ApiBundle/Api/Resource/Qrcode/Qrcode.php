@@ -4,13 +4,14 @@ namespace ApiBundle\Api\Resource\Qrcode;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 
 class Qrcode extends AbstractResource
 {
     public function get(ApiRequest $request, $route)
     {
         if (!in_array($route, array('homepage'))) {
-            throw new BadRequestHttpException('Route is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
         $params = $this->fillParams($request->query->all());
         $user = $this->getCurrentUser();

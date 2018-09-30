@@ -2,6 +2,7 @@
 
 namespace Biz\File\FireWall;
 
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
@@ -24,7 +25,7 @@ class FireWallFactory
     public function create($targetType)
     {
         if (empty($targetType)) {
-            throw new InvalidArgumentException('Resource  targetType  argument missing.');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $targetTypes = explode('.', $targetType);

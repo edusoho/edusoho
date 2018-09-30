@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TestpaperResult extends AbstractResource
@@ -25,7 +26,7 @@ class TestpaperResult extends AbstractResource
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($data['resultId']);
 
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            throw new AccessDeniedHttpException('试卷已经做完，不能重复提交!');
+            throw TestpaperException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
         $testpaperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $data);
@@ -36,7 +37,7 @@ class TestpaperResult extends AbstractResource
         }
 
         if (empty($course) && $testpaperResult['userId'] != $user['id']) {
-            throw new AccessDeniedHttpException('不可以访问其他学生的试卷哦!');
+            throw TestpaperException::FORBIDDEN_ACCESS_OTHER_STUDENT_TESTPAPER();
         }
 
         $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
@@ -64,7 +65,7 @@ class TestpaperResult extends AbstractResource
         $user = $this->getCurrentUser();
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
         if (!$testpaperResult || $testpaperResult['userId'] != $user['id']) {
-            throw new AccessDeniedHttpException('不可以访问其他学生的试卷哦!');
+            throw TestpaperException::FORBIDDEN_ACCESS_OTHER_STUDENT_TESTPAPER();
         }
 
         //客观题自动批阅完后先显示答案解析
@@ -79,7 +80,7 @@ class TestpaperResult extends AbstractResource
         }
 
         if (empty($course) && $testpaperResult['userId'] != $user['id']) {
-            throw new AccessDeniedHttpException('不可以访问其他学生的试卷哦!');
+            throw TestpaperException::FORBIDDEN_ACCESS_OTHER_STUDENT_TESTPAPER();
         }
 
         $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);

@@ -5,6 +5,7 @@ namespace Biz\Task\Strategy\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\TaskException;
 use Biz\Task\Visitor\CourseStrategyVisitorInterface;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -245,7 +246,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($task['categoryId'], 'lesson');
 
         if (empty($lessonTask)) {
-            throw new NotFoundException('lesson task is not found');
+            throw TaskException::NOTFOUND_TASK();
         }
 
         $task['isOptional'] = $lessonTask['isOptional'];

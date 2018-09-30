@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -143,7 +144,7 @@ class MobileController extends BaseController
         $targetVersion = $request->request->get('targetVersion');
 
         if (empty($currentVersion) || empty($targetVersion)) {
-            throw new \RuntimeException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $api = CloudAPIFactory::create('root');

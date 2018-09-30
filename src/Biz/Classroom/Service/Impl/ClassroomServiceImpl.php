@@ -4,6 +4,7 @@ namespace Biz\Classroom\Service\Impl;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
+use Biz\Classroom\ClassroomException;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Exception\UnableJoinException;
 use Biz\OrderFacade\Service\OrderFacadeService;
@@ -11,6 +12,7 @@ use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
 use Biz\Content\Service\FileService;
@@ -1267,17 +1269,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         if ('published' != $classroom['status']) {
-            throw $this->createServiceException('不能加入未发布班级');
+            $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1317,13 +1319,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $fields = array(
@@ -1356,19 +1358,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         if (!empty($userId)) {
             $user = $this->getUserService()->getUser($userId);
 
             if (empty($user)) {
-                throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
         } else {
             $user = $this->getCurrentUser();
             if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_ADMIN', $user['roles'])) {
-                throw $this->createServiceException('Access denied!');
+                $this->createNewException(UserException::PERMISSION_DENIED());
             }
         }
 
@@ -1488,7 +1490,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryManageClassroom($id, $actionPermission = null)
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
-            throw $this->createAccessDeniedException('Unauthorized');
+            $this->createNewException(ClassroomException::FORBIDDEN_MANAGE_CLASSROOM());
         }
     }
 
@@ -1606,7 +1608,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryLookClassroom($id)
     {
         if (!$this->canLookClassroom($id)) {
-            throw $this->createAccessDeniedException('您无权操作！');
+            $this->createNewException(ClassroomException::FORBIDDEN_LOOK_CLASSROOM());
         }
     }
 
@@ -1616,7 +1618,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $chain = $this->biz['classroom.join_chain'];
 
         if (empty($chain)) {
-            throw $this->createServiceException('Chain Not Registered');
+            $this->createNewException(ClassroomException::CHAIN_NOT_REGISTERED());
         }
 
         return $chain->process($classroom);
@@ -1628,7 +1630,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $chain = $this->biz['classroom.learn_chain'];
 
         if (empty($chain)) {
-            throw $this->createServiceException('Chain Not Registered');
+            $this->createNewException(ClassroomException::CHAIN_NOT_REGISTERED());
         }
 
         return $chain->process($classroom);
@@ -1717,7 +1719,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1742,7 +1744,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#{$classroomId})不存在，解封学员失败。");
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1803,17 +1805,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $user = $this->getCurrentUser();
 
         if (empty($user->id)) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
-            throw $this->createAccessDeniedException('您不是管理员，无权操作！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $classroom;

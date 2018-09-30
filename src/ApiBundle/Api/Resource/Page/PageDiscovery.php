@@ -17,7 +17,7 @@ class PageDiscovery extends AbstractResource
     public function search(ApiRequest $request, $portal)
     {
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $params = $request->query->all();
         $mode = 'published';

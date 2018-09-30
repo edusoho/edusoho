@@ -3,9 +3,8 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Biz\Course\CourseSetException;
 
 class MeCourseSetCourseMember extends AbstractResource
 {
@@ -14,7 +13,7 @@ class MeCourseSetCourseMember extends AbstractResource
         $courseSet = $this->service('Course:CourseSetService')->getCourseSet($courseSetId);
 
         if (!$courseSet) {
-            throw new NotFoundHttpException('课程不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw CourseSetException::NOTFOUND_COURSESET();
         }
 
         $conditions['courseSetId'] = $courseSetId;

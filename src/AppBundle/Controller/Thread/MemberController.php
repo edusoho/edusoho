@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Thread;
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\PHPExcelToolkit;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MemberController extends BaseController
@@ -84,7 +85,7 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户还未登录!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $thread = $this->getThreadService()->getThread($threadId);

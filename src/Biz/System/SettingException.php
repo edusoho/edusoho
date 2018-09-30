@@ -14,9 +14,15 @@ class SettingException extends AbstractException
 
     const FORBIDDEN_NICKNAME_UPDATE = 4030803;
 
+    const NOTFOUND_THIRD_PARTY_AUTH_CONFIG = 4040804;
+
+    const FORBIDDEN_THIRD_PARTY_AUTH = 4030805;
+
     public $messages = array(
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enbale',
         4030803 => 'exception.setting.forbidden_setting_nickname',
+        4040804 => 'exception.setting.third_party_auth_not_found',
+        4030805 => 'exception.setting.forbidden_third_party_auth',
     );
 }

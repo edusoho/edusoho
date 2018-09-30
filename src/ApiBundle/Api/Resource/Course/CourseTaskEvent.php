@@ -6,10 +6,12 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,7 +27,7 @@ class CourseTaskEvent extends AbstractResource
     public function update(ApiRequest $request, $courseId, $taskId, $eventName)
     {
         if (!in_array($eventName, array(self::EVENT_DOING, self::EVENT_FINISH))) {
-            throw new BadRequestHttpException('Event name mismatch', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
@@ -89,7 +91,7 @@ class CourseTaskEvent extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
 
         if ('published' != $task['status']) {
-            throw new NotFoundHttpException('Task not publish', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw TaskException::UNPUBLISHED_TASK();
         }
 
         $result = $this->getTaskService()->finishTaskResult($taskId);

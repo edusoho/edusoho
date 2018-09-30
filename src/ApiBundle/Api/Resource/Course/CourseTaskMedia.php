@@ -6,13 +6,18 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
+use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\User\UserException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,7 +49,7 @@ class CourseTaskMedia extends AbstractResource
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $method = 'get'.$activity['mediaType'];
         if (!method_exists($this, $method)) {
-            throw new \BadMethodCallException(sprintf('Unknown property "%s" on TaskMedia "%s".', $activity['mediaType'], get_class($this)));
+            throw CommonException::NOTFOUND_METHOD();
         }
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
@@ -67,7 +72,7 @@ class CourseTaskMedia extends AbstractResource
 
         if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
-                throw new AccessDeniedHttpException('user must be login');
+                throw UserException::UN_LOGIN();
             }
             if ($course['parentId'] > 0) {
                 throw new AccessDeniedHttpException('must join classroom');
@@ -82,7 +87,7 @@ class CourseTaskMedia extends AbstractResource
         $allowAnonymousPreview = $this->getSettingService()->node('course.allowAnonymousPreview', 1);
 
         if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-            throw new AccessDeniedHttpException('user must be login');
+            throw UserException::UN_LOGIN();
         }
     }
 
@@ -92,7 +97,7 @@ class CourseTaskMedia extends AbstractResource
         $video = $config->get($activity['mediaId']);
         $watchStatus = $config->getWatchStatus($activity);
         if ('error' === $watchStatus['status']) {
-            throw new AccessDeniedHttpException('您的视频观看时长已达限制，无法继续观看！');
+            throw ActivityException::WATCH_LIMIT();
         }
 
         $video = $config->prepareMediaUri($video);
@@ -103,10 +108,10 @@ class CourseTaskMedia extends AbstractResource
 
         $file = $this->getUploadFileService()->getFullFile($video['mediaId']);
         if (empty($file)) {
-            throw new NotFoundHttpException('file not found');
+            throw UploadFileException::NOTFOUND_FILE();
         }
         if (!in_array($file['type'], array('audio', 'video'))) {
-            throw new AccessDeniedHttpException("player does not support  file type: {$file['type']}");
+            throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -146,10 +151,10 @@ class CourseTaskMedia extends AbstractResource
         $audio = $config->get($activity['mediaId']);
         $file = $this->getUploadFileService()->getFullFile($audio['mediaId']);
         if (empty($file)) {
-            throw new NotFoundHttpException('file not found');
+            throw UploadFileException::NOTFOUND_FILE();
         }
         if (!in_array($file['type'], array('audio', 'video'))) {
-            throw new AccessDeniedHttpException("player does not support  file type: {$file['type']}");
+            throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);

@@ -4,9 +4,8 @@ namespace ApiBundle\Api\Resource\Setting;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class Setting extends AbstractResource
 {
@@ -16,7 +15,7 @@ class Setting extends AbstractResource
     public function get(ApiRequest $request, $type)
     {
         if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";

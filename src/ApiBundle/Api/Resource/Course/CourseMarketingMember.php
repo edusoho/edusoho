@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\CourseException;
 use Biz\Marketing\Service\MarketingService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ApiBundle\Api\Annotation\ResponseFilter;
@@ -20,7 +21,7 @@ class CourseMarketingMember extends AbstractResource
     {
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
-            throw new NotFoundHttpException('课程不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         $user = $this->getUserService()->getUserByVerifiedMobile($phoneNumber);

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class ThreadMemberController extends BaseController
@@ -13,7 +14,7 @@ class ThreadMemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录!不能加入活动!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);

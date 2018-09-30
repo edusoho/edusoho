@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\LiveActivityService;
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class Live extends Activity
@@ -20,7 +21,7 @@ class Live extends Activity
     public function preCreateCheck($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
-            throw new InvalidArgumentException('activity.missing_params');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
@@ -41,7 +42,7 @@ class Live extends Activity
         }
 
         if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
-            throw new InvalidArgumentException('activity.missing_params');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use Biz\Thread\Service\ThreadService;
 use Biz\System\Service\SettingService;
@@ -49,7 +50,7 @@ class ClassroomThreadController extends BaseController
     public function createAction(Request $request, $classroomId, $type)
     {
         if (!in_array($type, array('discussion', 'question', 'event'))) {
-            throw $this->createAccessDeniedException('类型参数有误!');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $user = $this->getCurrentUser();

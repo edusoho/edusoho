@@ -3,10 +3,9 @@
 namespace ApiBundle\Api\Resource\Captcha;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class Captcha extends AbstractResource
 {
@@ -32,7 +31,7 @@ class Captcha extends AbstractResource
     public function get(ApiRequest $request, $captchaId)
     {
         if (!($phrase = $request->query->get('phrase'))) {
-            throw new BadRequestHttpException('Missing Params', ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         return array(

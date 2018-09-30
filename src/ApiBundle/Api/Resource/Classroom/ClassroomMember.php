@@ -3,12 +3,11 @@
 namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Exception\UnableJoinException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ClassroomMember extends AbstractResource
 {
@@ -17,7 +16,7 @@ class ClassroomMember extends AbstractResource
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if (!$classroom) {
-            throw new NotFoundHttpException('classroom.not_found', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw ClassroomException::NOTFOUND_CLASSROOM();
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
@@ -37,11 +36,7 @@ class ClassroomMember extends AbstractResource
 
     private function tryJoin($classroom)
     {
-        try {
-            $this->getClassroomService()->tryFreeJoin($classroom['id']);
-        } catch (UnableJoinException $e) {
-            throw new BadRequestHttpException($e->getMessage(), $e, $e->getCode());
-        }
+        $this->getClassroomService()->tryFreeJoin($classroom['id']);
 
         return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
     }

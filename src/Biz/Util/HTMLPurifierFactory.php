@@ -2,6 +2,7 @@
 
 namespace Biz\Util;
 
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class HTMLPurifierFactory
@@ -16,7 +17,7 @@ class HTMLPurifierFactory
     public function create($trusted = false)
     {
         if (!isset($this->config['cacheDir'])) {
-            throw new ServiceException('Please give `cacheDir` argument.');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $this->warmUp($this->config['cacheDir']);
 

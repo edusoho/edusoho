@@ -7,6 +7,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
+use Biz\Common\CommonException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Biz\System\SettingException;
 
@@ -31,7 +32,7 @@ class SmsCenter extends AbstractResource
 
         if (!($type = $request->request->get('type'))
             || !($mobile = $request->request->get('mobile'))) {
-            throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $type = $this->convertType($type);
@@ -47,7 +48,7 @@ class SmsCenter extends AbstractResource
     private function convertType($type)
     {
         if (!array_key_exists($type, $this->smsType)) {
-            throw new BadRequestHttpException('Params error', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
 
         return $this->smsType[$type];

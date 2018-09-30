@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
@@ -18,7 +19,7 @@ class Order extends AbstractResource
 
         if (empty($params['targetId'])
             || empty($params['targetType'])) {
-            throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $this->filterParams($params);

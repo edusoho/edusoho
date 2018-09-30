@@ -6,6 +6,8 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -19,13 +21,13 @@ class CourseTrialTask extends AbstractResource
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         if ($indicator == 'first') {
             return $this->getFirstTrailTask($course);
         } else {
-            throw new BadRequestHttpException('Incorrect indicator', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
     }
 

@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
@@ -97,7 +98,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                         'referenceType' => true,
                     );
                 } else {
-                    throw new \RuntimeException('当前视频格式不能被播放！');
+                    $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
                 }
             } else {
                 $result = array();

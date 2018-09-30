@@ -6,9 +6,14 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
+use Biz\User\UserException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,7 +31,7 @@ class TestpaperAction extends AbstractResource
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
         $method = $action.'Testpaper';
         if (!method_exists($this, $method)) {
-            throw new \BadMethodCallException(sprintf('Unknown property "%s" on TestpaperAction "%s".', $action, get_class($this)));
+            throw CommonException::NOTFOUND_METHOD();
         }
 
         return $this->$method($request, $testpaper);
@@ -39,26 +44,26 @@ class TestpaperAction extends AbstractResource
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw new AccessDeniedHttpException('您尚未登录，不能查看该课时');
+            throw UserException::UN_LOGIN();
         }
 
         $task = $this->getTaskService()->getTask($targetId);
         if (!$task) {
-            throw new NotFoundHttpException('试卷所属课时不存在！');
+            throw TaskException::NOTFOUND_TASK();
         }
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
-            throw new NotFoundHttpException('试卷所属课程不存在！');
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            throw new AccessDeniedHttpException('不是试卷所属课程老师或学生');
+            throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
         if (empty($testpaper)) {
-            throw new NotFoundHttpException('试卷不存在！或已删除!');
+            throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -71,10 +76,10 @@ class TestpaperAction extends AbstractResource
         $testpaper['metas']['question_type_seq'] = array_keys($items);
         if (empty($testpaperResult)) {
             if ('draft' == $testpaper['status']) {
-                throw new AccessDeniedHttpException('该试卷未发布，如有疑问请联系老师！!');
+                throw TestpaperException::DRAFT_TESTPAPER();
             }
             if ('closed' == $testpaper['status']) {
-                throw new AccessDeniedHttpException('该试卷已关闭，如有疑问请联系老师！!');
+                throw TestpaperException::CLOSED_TESTPAPER();
             }
 
             $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $testpaperActivity['limitedTime']));
@@ -94,7 +99,7 @@ class TestpaperAction extends AbstractResource
                 'isShowTestResult' => 1,
             );
         } else {
-            throw new AccessDeniedHttpException('试卷正在批阅！不能重新考试!');
+            throw TestpaperException::REVIEWING_TESTPAPER();
         }
     }
 
@@ -105,34 +110,34 @@ class TestpaperAction extends AbstractResource
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw new AccessDeniedHttpException('您尚未登录，不能查看该课时');
+            throw UserException::UN_LOGIN();
         }
 
         $task = $this->getTaskService()->getTask($targetId);
         if (!$task) {
-            throw new NotFoundHttpException('试卷所属课时不存在！');
+            throw TaskException::NOTFOUND_TASK();
         }
 
         if (empty($testpaper)) {
-            throw new NotFoundHttpException('试卷不存在！或已删除!');
+            throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
         if ('draft' == $testpaper['status']) {
-            throw new NotFoundHttpException('该试卷未发布，如有疑问请联系老师！!');
+            throw TestpaperException::DRAFT_TESTPAPER();
         }
 
         if ('closed' == $testpaper['status']) {
-            throw new NotFoundHttpException('该试卷已关闭，如有疑问请联系老师！!');
+            throw TestpaperException::CLOSED_TESTPAPER();
         }
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
-            throw new NotFoundHttpException('试卷所属课程不存在！');
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            throw new AccessDeniedHttpException('不是试卷所属课程老师或学生');
+            throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -142,7 +147,7 @@ class TestpaperAction extends AbstractResource
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activity['id'], $testpaper['type']);
 
         if ($testpaperActivity['doTimes'] && $testpaperResult && 'finished' == $testpaperResult['status']) {
-            throw new AccessDeniedHttpException('该试卷只能考一次，不能再考！');
+            throw TestpaperException::FORBIDDEN_RESIT();
         } elseif ($testpaperActivity['redoInterval']) {
             $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
             if ($nextDoTime > time()) {

@@ -4,6 +4,7 @@ namespace Biz\Sms\Event;
 
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -70,7 +71,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 $api = CloudAPIFactory::create('root');
                 $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\Exception $e) {
-                throw new ServiceException('发送失败！');
+                throw SmsException::FAILED_SEND();
             }
         }
     }

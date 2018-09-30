@@ -3,6 +3,7 @@
 namespace Biz\Activity\Type;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
 use Biz\Course\Service\CourseService;
@@ -84,7 +85,7 @@ class Video extends Activity
         $video = $this->handleFields($fields);
         $videoActivity = $this->getVideoActivityDao()->get($activity['mediaId']);
         if (empty($videoActivity)) {
-            throw new \Exception('教学活动不存在');
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
         $videoActivity = $this->getVideoActivityDao()->update($activity['mediaId'], $video);
 

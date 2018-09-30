@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\TimeMachine;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
@@ -93,7 +94,7 @@ class MockController extends BaseController
             if (!empty($apiUserId)) {
                 $user = $this->getUserService()->getUser($apiUserId);
                 if (empty($user)) {
-                    throw new \RuntimeException('User not found');
+                    $this->createNewException(UserException::NOTFOUND_USER());
                 }
                 $token = $this->getUserService()->makeToken(
                     MobileBaseController::TOKEN_TYPE,
@@ -197,7 +198,7 @@ class MockController extends BaseController
         if (!empty($apiUserId)) {
             $user = $this->getUserService()->getUser($apiUserId);
             if (empty($user)) {
-                throw new \RuntimeException('User not found');
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
             $token = $this->getUserService()->makeToken(
                 MobileBaseController::TOKEN_TYPE,

@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Strategy;
 
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
@@ -30,7 +31,7 @@ class StrategyContext
     public function __call($name, $arguments)
     {
         if (!method_exists($this, $name)) {
-            throw new \Exception('method not exists.');
+            throw CommonException::NOTFOUND_METHOD();
         }
 
         return call_user_func_array(array($this, $name), $arguments);

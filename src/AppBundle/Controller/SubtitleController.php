@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
 use Biz\Subtitle\Service\SubtitleService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\ResourceNotFoundException;
@@ -21,7 +22,7 @@ class SubtitleController extends BaseController
 
         $media = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
-            throw new ResourceNotFoundException('uploadFile', $mediaId);
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         return $this->render('media-manage/subtitle/manage.html.twig', array(

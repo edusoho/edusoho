@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ReportService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,7 +18,7 @@ class CourseReport extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         $this->getCourseService()->tryManageCourse($courseId);

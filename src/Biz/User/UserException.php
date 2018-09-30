@@ -34,6 +34,14 @@ class UserException extends AbstractException
 
     const PERMISSION_DENIED = 4030114;
 
+    const LOCKED_USER = 4030115;
+
+    const ERROR_PASSWORD = 4030116;
+
+    const NOTFOUND_TOKEN = 4040117;
+
+    const NO_USER_PROVIDER = 4040118;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -48,5 +56,9 @@ class UserException extends AbstractException
         5000112 => 'exception.user.nickname_invalid',
         5000113 => 'exception.user.nickname_existed',
         4030114 => 'exception.user.permission_denied',
+        4030115 => 'exception.user.lock',
+        4030116 => 'exception.user.error_password',
+        4040117 => 'exception.user.token_not_found',
+        4040118 => 'exception.user.no_user_provider',
     );
 }

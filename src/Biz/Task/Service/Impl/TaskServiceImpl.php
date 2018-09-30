@@ -12,6 +12,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\TaskException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
@@ -132,7 +133,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($taskId);
         if (!$task) {
-            throw new NotFoundException('task.not_found');
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         $this->getActivityService()->preUpdateCheck($task['activityId'], $fields);

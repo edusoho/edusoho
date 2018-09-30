@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseController extends BaseController
@@ -95,7 +96,7 @@ class OpenCourseController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->isSuperAdmin()) {
-            throw $this->createAccessDeniedException('您不是超级管理员！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $course = $this->getOpenCourseService()->getCourse($courseId);

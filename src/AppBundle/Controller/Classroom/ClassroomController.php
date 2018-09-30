@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Classroom\ClassroomException;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\ArrayToolkit;
@@ -644,7 +645,7 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if (!$classroom) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         if ('published' != $classroom['status']) {

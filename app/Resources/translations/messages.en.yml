@@ -8081,6 +8081,20 @@ exception.parser.not.support: 不支持该视频类型
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
+exception.course.not_found: The course plan doesn't exist
+
+exception.courseset.not_found: The course doesn't exist
+
+exception.classroom.not_found: The classroom doesn't exist
+
+exception.course.member.not_found: The course doesn't have this student
+
+exception.page.error_mode: Parameter 'mode' is error
+exception.page.error_type: Parameter 'type' is error
+exception.page.error_portal: Parameter 'portal' is error
+
+exception.category.not_found: The category doesn't exist
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"

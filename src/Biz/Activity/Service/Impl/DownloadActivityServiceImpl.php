@@ -7,6 +7,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Dao\DownloadFileRecordDao;
 use Biz\Activity\Service\DownloadActivityService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class DownloadActivityServiceImpl extends BaseService implements DownloadActivityService
@@ -15,7 +16,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw new AccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
         $record = array(
             'downloadActivityId' => $activity['id'],

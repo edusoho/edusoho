@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Common\CommonException;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -279,7 +280,7 @@ class BaseController extends Controller
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
     {
         if (!in_array($type, array('info', 'warning', 'error'))) {
-            throw new \RuntimeException('type error');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $this->render('default/message.html.twig', array(

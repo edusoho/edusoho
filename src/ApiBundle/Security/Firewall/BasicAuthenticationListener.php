@@ -3,6 +3,7 @@
 namespace ApiBundle\Security\Firewall;
 
 use ApiBundle\Api\Exception\ErrorCode;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -28,15 +29,15 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
     {
         $user = $this->getUserService()->getUserByLoginField($username);
         if (empty($user)) {
-            throw new UnauthorizedHttpException('Basic', '用户帐号不存在', null, ErrorCode::INVALID_CREDENTIAL);
+            throw UserException::NOTFOUND_USER();
         }
 
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            throw new UnauthorizedHttpException('Basic', '帐号密码不正确', null, ErrorCode::INVALID_CREDENTIAL);
+            throw UserException::ERROR_PASSWORD();
         }
 
         if ($user['locked']) {
-            throw new UnauthorizedHttpException('Basic','用户已锁定，请联系网校管理员', null, ErrorCode::BANNED_CREDENTIAL);
+            throw UserException::LOCKED_USER();
         }
 
         return $user;

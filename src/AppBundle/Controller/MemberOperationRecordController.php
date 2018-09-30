@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MemberOperationRecordController extends BaseController
@@ -12,7 +13,7 @@ class MemberOperationRecordController extends BaseController
     {
         $function = 'tryManage'.ucfirst($targetType);
         if (!method_exists($this, $function)) {
-            throw new \RuntimeException("{$function} not exsit");
+            $this->createNewException(CommonException::NOTFOUND_METHOD());
         }
 
         $product = call_user_func(array($this, 'tryManage'.ucfirst($targetType)), $targetId);

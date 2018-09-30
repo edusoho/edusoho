@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\CachedReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class ResourceKernel
 {
@@ -84,7 +85,7 @@ class ResourceKernel
         $batchArgsRaw = $request->request->get('batch');
 
         if (!$batchArgsRaw) {
-            throw new BadRequestHttpException('缺少参数', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $jsonRequests = json_decode($batchArgsRaw, true);
@@ -121,12 +122,12 @@ class ResourceKernel
     private function validateJsonRequests($jsonRequests)
     {
         if (!is_array($jsonRequests)) {
-            throw new BadRequestHttpException('batch参数不正确', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
 
         foreach ($jsonRequests as $jsonRequest) {
             if (empty($jsonRequest['method']) || empty($jsonRequest['relative_url'])) {
-                throw new BadRequestHttpException('batch参数不正确', null, ErrorCode::INVALID_ARGUMENT);
+                throw CommonException::ERROR_PARAMETER();
             }
         }
     }
@@ -153,7 +154,7 @@ class ResourceKernel
         $resMethod = $pathMeta->getResMethod();
 
         if (!is_callable(array($resource, $resMethod))) {
-            throw new BadRequestHttpException('Method does not exist', null, ErrorCode::BAD_REQUEST);
+            throw CommonException::NOTFOUND_METHOD();
         }
 
         $params = array_merge(array($apiRequest), $pathMeta->getSlugs());

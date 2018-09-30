@@ -9359,11 +9359,19 @@ exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝�
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: 云短信相关设置未开启!
 exception.sms.code_invalid: 短信验证码错误
+exception.sms.type_error: sms类型错误
+exception.sms.send_failed: 发送失败！
+exception.sms.bind_mobile_not_found: 用户没有被绑定的手机号
+exception.sms.mobile_username_not_match: 手机与用户名不匹配
+exception.sms.error_mobile: 手机号错误
+exception.sms.need_wait: 请等待120秒再申请!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
 exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
+exception.setting.third_party_auth_not_found: 第三方登录系统参数尚未配置，请先配置。
+exception.setting.forbidden_third_party_auth: 第三方登录未开启
 
 exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
@@ -9379,7 +9387,7 @@ exception.user.update_nickname_error: 昵称修改异常
 exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
-exception.user_lock: 账户被封禁，请联系管理员
+exception.user.lock: 账户被封禁，请联系管理员
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
@@ -9389,6 +9397,35 @@ exception.parser.not.support: 不支持该视频类型
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
+
+exception.course.not_found: 教学计划不存在
+
+exception.courseset.not_found: 课程不存在
+
+exception.classroom.not_found: 班级不存在
+
+exception.course.member.not_found: 课程中没有该学员
+
+exception.page.error_mode: 错误的参数'mode'
+exception.page.error_type: 错误的参数'type'
+exception.page.error_portal: 错误的参数'portal'
+
+exception.category.not_found: 类别不存在
+
+exception.testpaper.not_found: 试卷不存在
+exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
+exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
+exception.testpaper.forbidden_resit: 该试卷只能考一次，不能再考！
+exception.testpaper.forbidden_access_other_student_testpaper: 不可以访问其他学生的试卷哦!
+exception.testpaper.forbidden_duplicate_commit_testpaper: 试卷已经做完，不能重复提交!
+exception.testpaper.reviewing: 试卷正在批阅！不能重新考试!
+
+exception.uploadfile.file_not_found: 文件不存在
+
+exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
+exception.activity.not_found: 教学活动不存在
+
+exception.player.not_support_type: 播放器不支持该文件类型
 
 course.unname_title: 未命名计划
 

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\User\UserException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use ApiBundle\Api\Exception\ErrorCode;
@@ -22,15 +23,15 @@ class PageSetting extends AbstractResource
         $mode = $request->query->get('mode', 'published');
 
         if (!in_array($mode, array('draft', 'published'))) {
-            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_MODE();
         }
         $type = 'course' == $type ? 'courseCondition' : $type;
         if (!in_array($type, array('courseCondition', 'discovery'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_TYPE();
         }
 
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $method = 'get'.ucfirst($type);
 
@@ -44,15 +45,15 @@ class PageSetting extends AbstractResource
     {
         $mode = $request->query->get('mode');
         if (!in_array($mode, array('draft', 'published'))) {
-            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_MODE();
         }
         $type = $request->query->get('type');
         if (!in_array($type, array('discovery'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_TYPE();
         }
 
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $content = $request->request->all();
         $method = 'add'.ucfirst($type);
@@ -67,14 +68,14 @@ class PageSetting extends AbstractResource
     {
         $mode = $request->query->get('mode');
         if ('draft' != $mode) {
-            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_MODE();
         }
         if (!in_array($type, array('discovery'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_TYPE();
         }
 
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $method = 'remove'.ucfirst($type);
 
@@ -99,7 +100,7 @@ class PageSetting extends AbstractResource
     {
         $user = $this->getCurrentUser();
         if ('draft' == $mode && !$user->isAdmin()) {
-            throw new AccessDeniedHttpException();
+            throw UserException::PERMISSION_DENIED();
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {

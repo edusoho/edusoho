@@ -15,16 +15,16 @@ class CoinCheckCommand extends OrderPayCheckCommand
         }
 
         if ($params['coinAmount'] < 0) {
-            throw new OrderPayCheckException('order.pay_check_msg.coin_amount_error', 2010);
+            throw OrderPayCheckException::ERROR_COIN_AMOUNT();
         }
 
         $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $params['coinAmount']);
         if (isset($params['gateway']) && 'Coin' == $params['gateway'] && $cashAmount > 0) {
-            throw new OrderPayCheckException('order.pay_check_msg.coin_amount_error', 2010);
+            throw OrderPayCheckException::ERROR_COIN_AMOUNT();
         }
 
         if (!isset($params['payPassword'])) {
-            throw new OrderPayCheckException('order.pay_check_msg.missing_pay_password', 2000);
+            throw OrderPayCheckException::MISSING_PAY_PASSWORD();
         }
 
         $user = $this->biz['user'];
@@ -32,24 +32,24 @@ class CoinCheckCommand extends OrderPayCheckCommand
         $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
 
         if ($balance['amount'] < $params['coinAmount']) {
-            throw new OrderPayCheckException('order.pay_check_msg.balance_not_enough', 2001);
+            throw OrderPayCheckException::NOT_ENOUGH_BALANCE();
         }
 
         if (!$this->getAccountService()->isPayPasswordSetted($user->getId())) {
-            throw new OrderPayCheckException('order.pay_check_msg.pay_password_not_set', 2008);
+            throw OrderPayCheckException::NOTFOUND_PAY_PASSWORD();
         }
 
         $isCorrect = $this->getAccountService()->validatePayPassword($user->getId(), $params['payPassword']);
 
         if (!$isCorrect) {
-            throw new OrderPayCheckException('order.pay_check_msg.incorrect_pay_password', 2002);
+            throw OrderPayCheckException::ERROR_PAY_PASSWORD();
         }
 
         $products = $this->orderPayChecker->getProducts($order);
         foreach ($products as $product) {
             /** @var $product Product */
             if ($params['coinAmount'] > $product->getMaxCoinAmount()) {
-                throw new OrderPayCheckException('order.pay_check_msg.out_of_max_coin', 2009);
+                throw OrderPayCheckException::OUT_OF_MAX_COIN();
             }
         }
     }

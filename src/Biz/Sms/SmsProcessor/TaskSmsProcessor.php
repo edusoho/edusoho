@@ -13,6 +13,7 @@ use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -76,7 +77,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
     {
         $task = $this->getTaskService()->getTask($targetId);
         if (empty($task)) {
-            throw new NotFoundException('学习任务不存在');
+            throw TaskException::NOTFOUND_TASK();
         }
 
         global $kernel;
