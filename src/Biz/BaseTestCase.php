@@ -93,6 +93,7 @@ class BaseTestCase extends TestCase
         $this
             ->initDevelopSetting()
             ->initCurrentUser();
+        self::$db->rollback();
     }
 
     /**
