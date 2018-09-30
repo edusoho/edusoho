@@ -32,12 +32,14 @@
         </div>
     </div>
 {% endfor %}
-{% if not members %}
+{% if not members or not tasks %}
     <div class="empty">
         {{ 'site.datagrid.empty'|trans }}
     </div>
 {% endif %}
 
-<div class="pull-right mtm">
-    {{ web_macro.paginator(paginator) }}
-</div>
+{% if tasks %}
+    <div class="pull-right mtm">
+      {{ web_macro.paginator(paginator) }}
+    </div>
+{% endif %}
