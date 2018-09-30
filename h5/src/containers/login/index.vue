@@ -88,7 +88,7 @@ export default {
   mounted() {
     this.bodyHeight = document.documentElement.clientHeight - 46;
     Api.settingsFace({}).then(res => {
-      this.faceSetting = res.h5_enabled;
+      this.faceSetting = Number(res.h5_enabled);
     });
   },
 
