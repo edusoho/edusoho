@@ -56,9 +56,15 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
-        $funcNames = array(
-            1 => 'updateCourseSeq',
+        $definedFuncNames = array(
+            'updateCourseSeq',
+            'addTableIndex',
         );
+
+        $funcNames = array();
+        foreach ($definedFuncNames as $key => $funcName) {
+            $funcNames[$key + 1] = $funcName;
+        }
 
         if ($index == 0) {
             $this->logger( 'info', '开始执行升级脚本');
@@ -104,6 +110,15 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
 
+        return 1;
+    }
+
+    public function addTableIndex()
+    {
+        $jobs = $this->getSchedulerService()->searchJobs(array('name'=> 'AddTableIndexJob'),array(),0,PHP_INT_MAX);
+        if(empty($jobs)){
+            $this->getTableIndexService()->register();
+        }
         return 1;
     }
 
@@ -185,6 +200,14 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getUserDao()
     {
         return $this->createDao('User:UserDao');
+    }
+
+    /**
+     * @return \Biz\TableIndex\Service\TableIndexService
+     */
+    protected function getTableIndexService()
+    {
+        return $this->createService('TableIndex:TableIndexService');
     }
 
     /**
