@@ -3,6 +3,7 @@
 {% set modal_class = 'login-modal js-login-modal' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
 
+{% set ai_face_enabled = (cloud_info()['ai.face'] and setting('feature.face_enabled') and setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
 {% block body %}
 <form id="login-ajax-form" class="form-vertical form-vertical-small js-login-form" method="post" action="{{ path('login_check') }}">
 
@@ -32,7 +33,8 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-  {% if (setting('face.enabled') and setting('face.pc_enabled')) %}
+
+  {% if ai_face_enabled %}
     {% set type = 'modal' %}
     {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
   {% endif %}
@@ -47,10 +49,10 @@
   <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{'user.login.go_register'|trans}}</a>
 </div>
 
-{% if setting('login_bind.enabled') or (setting('face.enabled') and setting('face.pc_enabled')) %}
+{% if setting('login_bind.enabled') or ai_face_enabled %}
   <div class="social-login">
     <span>
-      {% if setting('face.enabled') and setting('face.pc_enabled') %}
+      {% if ai_face_enabled %}
         <a class="sts-login-link js-sts-login-link" href="javascript:;">
           <img src="{{ asset('static-dist/app/img/face.png') }}"
             srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="{{'user.login.sts_discovery'|trans}}"/>

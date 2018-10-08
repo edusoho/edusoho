@@ -6,6 +6,7 @@
 
 {% block main %}
 
+  {% if cloud_info()['ai.face'] %}
 	<div class="clearfix lab-setting-item">
     <div class="pull-left">
       <h4>{{ 'user.login.sts_discovery'|trans }}</h4>
@@ -16,6 +17,15 @@
         <input type="checkbox" name="face_enabled" value="1" {% if setting('feature.face_enabled') == 1 %}checked{% endif %}>
       </label>
     </div>
-  </div
+  </div>
+  {% endif %}
+
+  <div class="text-center">
+    <div class="error-content" style="padding: 50px 50px">
+      <h4>
+        {{ 'admin.sts_discovery_feature_tip'|trans }}
+      </h4>
+    </div>
+  </div>
 
 {% endblock %}

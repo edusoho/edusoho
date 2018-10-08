@@ -8118,3 +8118,4 @@ admin.sts_discovery_function_tip: 开启后，你可以使用基于人脸识别�
 admin.sts_discovery_use_tip: 开启后，用户在任意位置登录，可选使用人脸识别方式进行身份认证。
 admin.sts_discovery.login: 人脸识别登录
 admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
+admin.sts_discovery_feature_tip: 更多功能敬请期待。。。

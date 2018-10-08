@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login/index.js']) %}
 {% set bodyClass = 'login' %}
-
+{% set ai_face_enabled = (cloud_info()['ai.face'] and setting('feature.face_enabled') and setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
 {% block title %}{{ 'user.login.content_title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
@@ -65,10 +65,10 @@
         <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{ 'user.login.go_register'|trans }}</a>
       </div>
 
-      {% if setting('login_bind.enabled') or (setting('face.enabled') and setting('face.pc_enabled')) %}
+      {% if setting('login_bind.enabled') or ai_face_enabled %}
         <div class="social-login">
             <span>
-              {% if setting('face.enabled') and setting('face.pc_enabled') %}
+              {% if ai_face_enabled %}
                 <a class="sts-login-link js-sts-login-link" href="javascript:;">
                   <img src="{{ asset('static-dist/app/img/face.png') }}"
                     srcset="{{ asset('static-dist/app/img/face.png') }} 1x, {{ asset('static-dist/app/img/face@2x.png') }} 2x" alt="{{'user.login.sts_discovery'|trans}}"/>
@@ -81,7 +81,7 @@
       {% endif %}
     </div>
 
-    {% if setting('face.enabled') and setting('face.pc_enabled') %}
+    {% if ai_face_enabled %}
       {% set type = 'page' %}
       {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
     {% endif %}
