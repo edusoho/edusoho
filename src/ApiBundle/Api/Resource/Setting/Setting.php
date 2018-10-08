@@ -142,16 +142,31 @@ class Setting extends AbstractResource
             'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
         );
     }
-
+    
     public function getFace()
     {
         $faceSetting = $this->getSettingService()->get('face', array());
-        return array(
-            'enabled' => isset($faceSetting['enabled']) ? $faceSetting['enabled'] : 0,
-            'app_enabled' => isset($faceSetting['app_enabled']) ? $faceSetting['app_enabled'] : 0,
-            'pc_enabled' => isset($faceSetting['pc_enabled']) ? $faceSetting['pc_enabled'] : 0,
-            'h5_enabled' => isset($faceSetting['h5_enabled']) ? $faceSetting['h5_enabled'] : 0,
+        $featureSetting = $this->getSettingService()->get('feature', array());
+        $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
+
+        $default = array(
+            'login' => array(
+                'enabled' => 0,
+                'app_enabled' => 0,
+                'pc_enabled' => 0,
+                'h5_enabled' => 0,
+            )
         );
+
+        if (isset($cloudInfo['ai.face']) && 1 == $cloudInfo['ai.face']) {
+            if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
+                $default['login']['enabled'] = isset($faceSetting['login']['enabled']) ? $faceSetting['login']['enabled'] : 0;
+                $default['login']['app_enabled'] = isset($faceSetting['login']['app_enabled']) ? $faceSetting['login']['app_enabled'] : 0;
+                $default['login']['pc_enabled'] = isset($faceSetting['login']['pc_enabled']) ? $faceSetting['login']['pc_enabled'] : 0;
+                $default['login']['h5_enabled'] = isset($faceSetting['login']['h5_enabled']) ? $faceSetting['login']['h5_enabled'] : 0;
+            }
+        }
+        return $default;
     }
 
     public function getWeixinConfig($request)
