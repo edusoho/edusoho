@@ -795,7 +795,7 @@ admin:
                             name: admin.cloud.face_identify
                 admin_cloud_feature_lab_manage:
                     name: admin.cloud.feature_lab
-                    visible: (cloudStatus() and cloud_info()['ai.face']|default(0))
+                    visible: (cloudStatus())
                     children:
                         admin_cloud_feature_lab:
                             name: admin.cloud.feature_lab
