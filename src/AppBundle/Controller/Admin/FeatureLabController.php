@@ -21,6 +21,12 @@ class FeatureLabController extends BaseController
 
     public function faceIdentifyAction(Request $request)
     {
+        $featureSetting = $this->getSettingService()->get('feature', array());
+        $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
+        if (!isset($cloudInfo['ai.face']) || !$cloudInfo['ai.face'] || !isset($featureSetting['face_enabled']) || !$featureSetting['face_enabled']) {
+            throw $this->createAccessDeniedException();
+        }
+
         if ('POST' == $request->getMethod()) {
             $settings = $request->request->all();
             $savedSetting = $this->getSettingService()->get('face');
