@@ -103,7 +103,7 @@ class EduSohoUpgrade extends AbstractUpdater
     }
 
     protected function addFaceLog(){
-        if (!$this->isTableExist('question_lesson_tmp')) {
+        if (!$this->isTableExist('face_log')) {
             $this->getConnection()->exec("
             CREATE TABLE `face_log` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
