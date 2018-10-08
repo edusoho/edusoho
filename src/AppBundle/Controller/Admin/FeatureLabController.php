@@ -18,7 +18,6 @@ class FeatureLabController extends BaseController
         $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
 
         return $this->render('admin/feature-lab/setting.html.twig', array(
-            'ai_face' => isset($cloudInfo['ai.face']) ? $cloudInfo['ai.face'] : 0
         ));
     }
 

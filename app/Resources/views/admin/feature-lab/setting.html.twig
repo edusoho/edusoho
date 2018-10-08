@@ -6,7 +6,7 @@
 
 {% block main %}
 
-  {% if ai_face == 1 %}
+  {% if cloud_info()['ai.face'] %}
 	<div class="clearfix lab-setting-item">
     <div class="pull-left">
       <h4>{{ 'user.login.sts_discovery'|trans }}</h4>
