@@ -95,7 +95,7 @@ class EduSohoUpgrade extends AbstractUpdater
     }
 
     protected function addUserAddFaceRegister(){
-        if (!$this->isFieldExist('course_chapter', 'published_number')) {
+        if (!$this->isFieldExist('user', 'faceRegistered')) {
             $this->getConnection()->exec("ALTER TABLE `user` ADD `faceRegistered` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否人脸注册过';");
         }
 
