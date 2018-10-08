@@ -15,7 +15,10 @@ class FeatureLabController extends BaseController
             return $this->createJsonResponse(array('success' => 1));
         }
 
+        $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
+
         return $this->render('admin/feature-lab/setting.html.twig', array(
+            'ai_face' => isset($cloudInfo['ai.face']) ? $cloudInfo['ai.face'] : 0
         ));
     }
 
@@ -23,6 +26,7 @@ class FeatureLabController extends BaseController
     {
         $featureSetting = $this->getSettingService()->get('feature', array());
         $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
+        
         if (!isset($cloudInfo['ai.face']) || !$cloudInfo['ai.face'] || !isset($featureSetting['face_enabled']) || !$featureSetting['face_enabled']) {
             throw $this->createAccessDeniedException();
         }
