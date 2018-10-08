@@ -1,0 +1,153 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form class="form-horizontal" id="create-database-form" method="post">
+    <div class="alert alert-danger bootstrap-notify-bar init-error" style="display:none;">
+    </div>
+    <div class="form-group">
+      <label for="database-host-field" class="col-sm-4 control-label">数据库服务器</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="database-host-field" name="database_host" value="{{ post.database_host|default('127.0.0.1') }}">
+        <div class="help-block">数据库服务器地址，一般为localhost或者127.0.0.1</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-port-field" class="col-sm-4 control-label">数据库端口号</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="database-port-field" name="database_port" value="{{ post.database_port|default('3306') }}">
+        <div class="help-block">数据库端口号，默认为3306</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-user-field" class="col-sm-4 control-label">数据库用户名</label>
+      <div class="controls col-sm-5">
+        <input type="text" id="database-user-field" name="database_user" class="form-control" value="{{ post.database_user|default('root') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-password-field" class="col-sm-4 control-label">数据库密码</label>
+      <div class="controls col-sm-5">
+        <input type="password" class="form-control" id="database-password-field" name="database_password"  value="{{ post.database_password|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-name-field" class="col-sm-4 control-label">数据库名</label>
+      <div class="controls col-sm-5">
+        <input type="text" id="database-name-field" name="database_name" class="form-control" value="{{ post.database_name|default('edusoho') }}">
+      </div>
+    </div> 
+  
+    <div class="form-group">
+       <div class="controls col-sm-offset-4 col-sm-5">
+         <div class="checkbox">
+           <label>
+            <input type="checkbox" name="database_replace" value="1" checked> 覆盖现有数据库
+           </label>
+         </div>
+      </div>
+    </div>
+
+    <div id="package-update-progress" class="package-update-progress" style="display:none;">
+      <div class="progress progress-striped active">
+        <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+      </div>
+      <div class="text-danger progress-text hidden"></div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="create-database-btn" class="btn btn-primary btn-lg">创建数据库</button>
+    </div>
+
+  </form>
+{% endblock %}
+
+{% block bottom_scripts %}
+<script>
+  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules','bootstrap'], function($, Validator){
+    window.$ = $;
+    var $form = $("#create-database-form");
+    var validator = new Validator({
+        element: $form,
+        autoSubmit: false
+    });
+
+    validator.on('formValidated', function(error, msg, $form) {
+        if (error) {
+            return;
+        }
+        $('.init-error').hide();
+        var checked = $form.find('[name=database_replace]').is(':checked');
+
+        if (checked) {
+            if (!confirm('覆盖数据库，会删除原有的数据。您真的要覆盖当前数据库吗？')) {
+                return false;
+            }
+        }
+
+        checked = $form.find('[name=database_init]').is(':checked');
+        if (checked) {
+            $('#package-update-progress').show();
+        }
+        $('#create-database-btn').addClass('disabled').html('正在创建数据库');
+        $('.progress-bar').css({width: '10%'});
+        exec('start-install.php?step=2', $form.serialize(), 10);
+    });
+
+    function exec (url, data, progress) {
+        progress = progress+9;
+        $.ajax(url, {
+            async: true,
+            data: data,
+            dataType: 'json',
+            type: 'POST'
+        }).done(function(response, textStatus, jqXHR) {
+            if (typeof(response.index) != 'undefined') {
+                $('#create-database-btn').html('正在生成演示数据');
+                $('.progress-bar').css({width: progress+'%'});
+
+                if (url.indexOf('index') < 0) {
+                    url = url+'&index='+response.index;
+                }
+                url = url.replace(/index=\d+/g,'index='+response.index);
+                exec(url, data, progress);
+            } else if (typeof(response.success) != 'undefined') {
+                window.location.href = 'start-install.php?step=3';
+            } else {
+                $('.init-error').show().html(response);
+                $('.progress-bar').css({width: '0%'});
+                $('#create-database-btn').removeClass('disabled').html('创建数据库');
+            }
+        }).fail(function(){
+            $('.init-error').show().html('创建数据库失败，查看<a href="http://www.qiqiuyu.com/faq/585/detail" target="_blank">解决方案</a>');
+            $('.progress-bar').css({width: '0%'});
+            $('#create-database-btn').removeClass('disabled').html('创建数据库');
+        });
+    }
+    
+
+    validator.addItem({
+        element: '#database-host-field',
+        required: true
+    });
+
+    validator.addItem({
+        element: '#database-user-field',
+        required: true
+    });
+
+    validator.addItem({
+        element: '#database-name-field',
+        required: true
+    });
+
+  });
+</script>
+{% endblock %}
