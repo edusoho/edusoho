@@ -715,6 +715,10 @@ admin_cloud_video_overview:
     path:  /cloud/video/overview
     defaults: { _controller: AppBundle:Admin/EduCloud:videoOverview }
 
+admin_cloud_video_overview_renew:
+    path:  /cloud/video/renew
+    defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
+
 admin_cloud_setting_video:
     path:  /setting/cloud/video
     defaults: { _controller: AppBundle:Admin/EduCloud:videoSetting }
@@ -1332,9 +1336,6 @@ admin_app_package_update_begin_upgrade:
     defaults: { _controller: AppBundle:Admin/AppPackageUpdate:beginUpgrade }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
-
-
-    permissions: [admin_course_category_manage]
 
 admin_app_package_update_check_newest:
     path: /app/package_update/check/newest/code/{code}
@@ -2339,6 +2340,14 @@ admin_user_learn_statistics_info:
 admin_cloud_data_lab:
     path: /data/lab
     defaults: { _controller: AppBundle:Admin/DataLab:data }
+
+admin_cloud_feature_lab:
+    path: /feature/lab
+    defaults: { _controller: AppBundle:Admin/FeatureLab:setting }
+
+admin_cloud_face_identify:
+    path: /face_identify/setting
+    defaults: { _controller: AppBundle:Admin/FeatureLab:faceIdentify }
 
 admin_cloud_data_lab_setting:
     path: /data/lab/setting

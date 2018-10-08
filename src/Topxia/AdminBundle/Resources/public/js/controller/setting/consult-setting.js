@@ -51,7 +51,7 @@ define(function(require, exports, module) {
                 $("#consult-container").html('<img src="' + data.url + '">');
                 $form.find('[name=webchatURI]').val(data.path);
                 $("#consult-webchat-del").show();
-                Notify.success(Translator.trans('上传微信二维码成功！'));
+                Notify.success(Translator.trans('admin.setting.consult_setting.upload_qrcode_success_hint'));
             });    
         });
 
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
             var nextIndex = $(this).attr('data-length');
             nextIndex = parseInt(nextIndex); 
             if( nextIndex > 9 ) {
-                Notify.danger(Translator.trans('最多设置10个..'));
+                Notify.danger(Translator.trans('admin.setting.consult_setting.setting_max_num_hint'));
                 return;
             }
             var $parent = $('#'+$(this).attr('data-parentId'));
@@ -99,7 +99,7 @@ define(function(require, exports, module) {
             var nextIndex = $(this).attr('data-length');
             nextIndex = parseInt(nextIndex); 
             if( nextIndex > 9 ) {
-                Notify.danger(Translator.trans('最多设置10个..'));
+                Notify.danger(Translator.trans('admin.setting.consult_setting.setting_max_num_hint'));
                 return;
             }
             var $parent = $('#'+$(this).attr('data-parentId'));
@@ -129,7 +129,7 @@ define(function(require, exports, module) {
             var nextIndex = $(this).attr('data-length');
             nextIndex = parseInt(nextIndex);
             if( nextIndex > 9 ) {
-                Notify.danger(Translator.trans('最多设置10个..'));
+                Notify.danger(Translator.trans('admin.setting.consult_setting.setting_max_num_hint'));
                 return;
             }
             var $parent = $('#'+$(this).attr('data-parentId'));
@@ -168,7 +168,7 @@ define(function(require, exports, module) {
         });
 
         $('#consult-webchat-del').on('click',function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            if (!confirm(Translator.trans('admin.setting.consult_setting.delete_hint'))) return false;
             $.post($(this).data('url'),function(response){
                $("#consult-container").html('');
                $('[name=webchatURI]').val('');

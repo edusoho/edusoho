@@ -29,14 +29,14 @@ define(function (require, exports, module) {
         _onProgress: function (model) {
             var progress = model.get('__progress') + '%';
             this.$el.find('.progress-bar-success').css('width', progress);
-            this.$el.find('.progress-text').text('已经导入: ' + model.get('__quantity'));
+            this.$el.find('.progress-text').text(Translator.trans('importer.imported_data') + model.get('__quantity'));
             this.$el.find('.js-import-progress-text').removeClass('hidden');
         },
 
         _onComplete: function (model) {
             this.$el.find('.progress-bar').css('width', "100%");
             this.$el.find('a').removeClass('hidden');
-            this.$el.find('.progress-text').text('导入成功, 总共导入: ' + model.get('__quantity'));
+            this.$el.find('.progress-text').text(Translator.trans('importer.imported_success_data') + model.get('__quantity'));
             this.$el.find('.js-import-progress-text').addClass('hidden');
         },
 
@@ -46,8 +46,8 @@ define(function (require, exports, module) {
                 .removeClass('progress-bar-success')
                 .addClass('progress-bar-danger')
             ;
-            this.$el.find('.progress-text').text('发生未知错误').removeClass('text-success').addClass('text-danger');
-            this.$el.find('a').removeClass('hidden').text('重新导入');
+            this.$el.find('.progress-text').text(Translator.trans('site.unknow_server_error')).removeClass('text-success').addClass('text-danger');
+            this.$el.find('a').removeClass('hidden').text(Translator.trans('importer.import_reselect_btn'));
         },
 
         _onFinishImport: function (event) {

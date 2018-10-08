@@ -1,7 +1,7 @@
 {% extends 'course-set/live/layout.html.twig' %}
 
 {% block title %}{{'course_set.live.title'|trans}} - {{ parent() }}{% endblock %}
-{% do script(['libs/echo-js.js','app/js/live-course/explore/index.js'])%}
+{% do script(['app/js/live-course/explore/index.js'])%}
 
 {% block top_content %}
   {% cache 'live/top/banner' 600 %}

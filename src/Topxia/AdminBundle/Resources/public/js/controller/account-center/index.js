@@ -76,7 +76,7 @@ define(function (require, exports, module) {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['现金收入', '虚拟币收入']
+                    data: [Translator.trans('admin.account_center.cash_income'), Translator.trans('admin.account_center.coin_income')]
                 },
                 grid: {
                     left: '3%',
@@ -99,12 +99,12 @@ define(function (require, exports, module) {
                 },
                 series: [
                     {
-                        name: '现金收入',
+                        name: Translator.trans('admin.account_center.cash_income'),
                         type: 'line',
                         data: datas.series.cashAmounts
                     },
                     {
-                        name: '虚拟币收入',
+                        name: Translator.trans('admin.account_center.coin_income'),
                         type: 'line',
                         data: datas.series.coinAmounts
                     }

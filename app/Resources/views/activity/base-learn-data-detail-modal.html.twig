@@ -10,7 +10,7 @@
 {% if task.isOptional == 0 %}
   {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }}:
 {% else %}
-  选修{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}:
+  {{ 'course.optional_task'|trans }}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}:
 {% endif %}
   {{ task.title }}{% block taskType %}{% endblock %}
   {% include 'export/export-btn.html.twig' with

@@ -50,6 +50,18 @@ login_ajax:
     path:  /login/ajax
     defaults: { _controller: AppBundle:Login:ajax }
 
+login_qrcode:
+    path: /login/qrcode
+    defaults: { _controller: AppBundle:Login:qrcode }
+
+login_face_token:
+    path: /login/face_token/{token}
+    defaults: { _controller: AppBundle:Login:faceToken }
+
+login_parse_face_token:
+    path: /login/face_token/parse/{token}
+    defaults: { _controller: AppBundle:Login:parseFaceToken }
+
 login_bind:
     path:  /login/bind/{type}
     defaults: { _controller: AppBundle:LoginBind:index }
@@ -194,7 +206,7 @@ attachment_list:
 
 attachment_form_fields:
     path: /attachment/{targetType}/{targetId}/formFields
-    defaults: { _controller: AppBundle:Attachment:formFields , targetId:0}
+    defaults: { _controller: AppBundle:Attachment:formFields , targetId: 0}
     methods: [GET]
 
 uploader_entry:
@@ -1141,7 +1153,7 @@ thread_post_reply:
 
 thread_post_subposts:
     path:  /thread/{threadId}/post/{postId}/subposts
-    defaults: { _controller: AppBundle:Thread:subposts, threadId:0 }
+    defaults: { _controller: AppBundle:Thread:subposts, threadId: 0 }
 
 article_post_subposts:
     path:  /article/{targetId}/post/{postId}/subposts

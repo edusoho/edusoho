@@ -6,7 +6,6 @@ import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 
 new PagedCourseLesson();
 
-echo.init();
 chapterAnimate();
 initTaskLearnChart();
 triggerMemberExpired();

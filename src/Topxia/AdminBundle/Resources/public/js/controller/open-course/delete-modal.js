@@ -17,27 +17,27 @@ define(function(require, exports, module) {
             
             {
 
-                title: '删除成员',
+                title: Translator.trans('admin.open_course.member_delete_title'),
                 url: urls.memberDeleteUrl,              
                 progressRange: [3, 20]
             },
             {
-                title: '删除相关推荐课程',
+                title: Translator.trans('admin.open_course.recommend_delete_title'),
                 url: urls.recommendDeleteUrl,               
                 progressRange: [21, 40]
             },
             {
-                title: '删除课时资料',
+                title: Translator.trans('admin.open_course.material_delete_title'),
                 url: urls.materialDeleteUrl,
                 progressRange: [41,60]
             }, 
             {
-                title: '删除课时',
+                title: Translator.trans('admin.open_course.lesson_delete_title'),
                 url: urls.lessonDeleteUrl,
                 progressRange: [61,80]
             },      
             {
-                title: '删除课程',
+                title: Translator.trans('admin.open_course.course_delete_title'),
                 url: urls.courseDeleteUrl,
                 progressRange: [81, 100]
             }
@@ -54,7 +54,7 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     
                     if(response.success){
-                        $('.modal-title').text('删除课程');
+                        $('.modal-title').text('admin.open_course.course_delete_title');
                         $('#delete-form').addClass('hidden');
                         $('.progress').removeClass('hidden');
                         $('#delete-hint').show();
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
                         $(document).dequeue('delete_step_queue');
                     }else{
                         $('#delete-form').children('div').addClass('has-error');
-                        $('#delete-form').find('.help-block').show().text('验证密码错误');
+                        $('#delete-form').find('.help-block').show().text('admin.course.delete_course.check_password_fail_hint');
                     }
                 });
             }
@@ -79,12 +79,12 @@ define(function(require, exports, module) {
             element: '[name=password]',
             required: true,
             rule: 'minlength{min:5} maxlength{max:20}',
-            display:'密码'
+            display:Translator.trans('admin.course.validate_old.password_required_hint')
         });
 
         progressBar.on('completed', function() {
             progressBar.deactive();
-            progressBar.text('课程删除成功');
+            progressBar.text(Translator.trans('admin.course.delete_success_hint'));
             $("#delete-hint").hide();
             $("#finish-delete-btn").show();
             var courseId = $("input[name='courseId']").val();
@@ -94,7 +94,7 @@ define(function(require, exports, module) {
 
     function exec(title, url, progressBar, startProgress, endProgress) {
 
-            progressBar.setProgress(startProgress, '正在' + title);
+            progressBar.setProgress(startProgress, Translator.trans('admin.open_course.delete_exec_hint', {title:title}));
             $.ajax(url, {
                 async: true,
                 dataType: 'json',
@@ -105,11 +105,11 @@ define(function(require, exports, module) {
                     title =  data.message;
                     exec(title, url, progressBar, startProgress, endProgress);
                 }else{
-                    progressBar.setProgress(endProgress, title + '完成');
+                    progressBar.setProgress(endProgress, title + Translator.trans('admin.open_course.delete_finish'));
                     $(document).dequeue('delete_step_queue');
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                progressBar.error( title +  '时，发生了未知错误。');
+                progressBar.error(Translator.trans('admin.open_course.delete_unknow_error_hint', {title:title}));
                 $(document).clearQueue('delete_step_queue');
             });
     }

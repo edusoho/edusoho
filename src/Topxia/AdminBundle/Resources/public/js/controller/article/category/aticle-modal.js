@@ -56,7 +56,7 @@ define(function(require, exports, module) {
                 width: 'off',
                 multiple: true,
                 maximumSelectionSize: 20,
-                placeholder: Translator.trans('请输入标签'),
+                placeholder: Translator.trans('validate.tag_required_hint'),
                 width: 'off',
                 multiple: true,
                 createSearchChoice: function() { return null; },

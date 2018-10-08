@@ -5,7 +5,7 @@ function getRoomUrl() {
   if (tryCount > 10) {
     clearInterval(intervalId);
 
-    let html = Translator.trans('进入直播教室错误，请联系管理员，')+'<a href=\'javascript:document.location.reload()\'>'+Translator.trans('重试')+'</a>'+Translator.trans('或')+'<a href=\'javascript:window.close();\'>'+Translator.trans('关闭')+'</a>';
+    let html = Translator.trans('classroom.live_room.entry_error_hint');
     
     $('#classroom-url').html(html);
     return;
@@ -16,7 +16,7 @@ function getRoomUrl() {
       if (data.error) {
         clearInterval(intervalId);
 
-        let html = data.error+Translator.trans('，')+'<a href=\'javascript:document.location.reload()\'>'+Translator.trans('重试')+'</a>'+Translator.trans('或')+'<a href=\'javascript:window.close();\'>'+Translator.trans('关闭')+'</a>';
+        let html = data.error+Translator.trans('，')+Translator.trans('classroom.live_room.retry_or_close');
         
         $('#classroom-url').html(html);
         return;

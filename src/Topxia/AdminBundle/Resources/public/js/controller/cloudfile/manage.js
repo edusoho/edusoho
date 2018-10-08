@@ -52,7 +52,7 @@ define(function(require, exports, module) {
         validator.addItem({
           element: '#tags',
           required: true,
-          display: Translator.trans('标签')
+          display: Translator.trans('admin.cloud_file.tag_required_hint')
         });
       },
       onClickUseTypeNav: function(event) {
@@ -101,7 +101,7 @@ define(function(require, exports, module) {
         }).done(function(resp) {
           self.element.hide();
           self.element.prev().hide();
-          self.element.parent().prev().html(Translator.trans('资源详情'));
+          self.element.parent().prev().html(Translator.trans('material_lib.detail.content_title'));
           self.element.parent().append(resp);
           new DetailWidget({
             element: '#material-detail',
@@ -114,7 +114,7 @@ define(function(require, exports, module) {
           });
         }).fail(function() {
           $target.button('reset');
-          Notify.danger(Translator.trans('Opps,出错了!'));
+          Notify.danger(Translator.trans('admin.cloud_file.detail_show_error_hint') + '!');
         });
       },
       onClickDeleteBtn: function(event) {
@@ -139,10 +139,10 @@ define(function(require, exports, module) {
           type: 'POST',
           url: $target.data('url'),
         }).done(function(response) {
-          Notify.success(Translator.trans('重新转码成功!'));
+          Notify.success(Translator.trans('admin.cloud_file.re_transcode_success_hint'));
           $target.parents('tr').replaceWith(response);
         }).fail(function() {
-          Notify.danger(Translator.trans('重新转码失败!'));
+          Notify.danger(Translator.trans('admin.cloud_file.re_transcode_fail_hint'));
         }).always(function() {
           $target.button('reset');
         });
@@ -156,10 +156,10 @@ define(function(require, exports, module) {
           type: 'POST',
           url: $target.data('url'),
         }).done(function() {
-          Notify.success(Translator, trans('重新转码成功!'));
+          Notify.success(Translator, trans('admin.cloud_file.re_transcode_success_hint'));
           self.renderTable();
         }).fail(function() {
-          Notify.danger(Translator.trans('重新转码失败!'));
+          Notify.danger(Translator.trans('admin.cloud_file.re_transcode_fail_hint'));
         }).always(function() {
           $target.button('reset');
         });
@@ -213,7 +213,7 @@ define(function(require, exports, module) {
           $target.siblings('.btn').show();
           $target.siblings('[data-role=batch-manage]').show();
           $('#materials-table').find('.batch-item').show();
-          $target.html(Translator.trans('完成管理'));
+          $target.html(Translator.trans('meterial_lib.complete_manage'));
         } else {
           this.set('model', 'normal');
           var self = this;
@@ -221,7 +221,7 @@ define(function(require, exports, module) {
           $target.siblings('.btn').hide();
           $target.siblings('[data-role=batch-manage]').hide();
           $('#materials-table').find('.batch-item').hide();
-          $target.html(Translator.trans('批量管理'));
+          $target.html(Translator.trans('meterial_lib.batch_manage'));
         }
       },
       onClickDeleteBatchBtn: function(event) {
@@ -232,7 +232,7 @@ define(function(require, exports, module) {
           ids.push(this.value);
         });
         if (ids == "") {
-          Notify.danger(Translator.trans('请先选择你要删除的资源!'));
+          Notify.danger(Translator.trans('meterial_lib.select_resource_delete_hint') + '!');
           return;
         }
 
@@ -244,7 +244,7 @@ define(function(require, exports, module) {
 
       },
       onClickShareBatchBtn: function(event) {
-        if (confirm(Translator.trans('确定要分享这些资源吗？'))) {
+        if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
           var self = this;
           var $target = $(event.currentTarget);
           var ids = [];
@@ -252,7 +252,7 @@ define(function(require, exports, module) {
             ids.push($(this).data('fileId'));
           });
           if (ids == "") {
-            Notify.danger(Translator.trans('请先选择你要分享的资源!'));
+            Notify.danger(Translator.trans('meterial_lib.select_share_resource_hint') + '!');
             return;
           }
 
@@ -260,10 +260,10 @@ define(function(require, exports, module) {
             "ids": ids
           }, function(data) {
             if (data) {
-              Notify.success(Translator.trans('分享资源成功'));
+              Notify.success(Translator.trans('meterial_lib.share_resource_success_hint'));
               self.renderTable();
             } else {
-              Notify.danger(Translator.trans('分享资源失败'));
+              Notify.danger(Translator.trans('meterial_lib.share_resource_erroe_hint'));
               self.renderTable();
             }
             this.element.find('[data-role=batch-item]').show();
@@ -279,7 +279,7 @@ define(function(require, exports, module) {
           ids.push($(this).data('fileId'));
         });
         if (ids == "") {
-          Notify.danger(Translator.trans('请先选择你要操作的资源!'));
+          Notify.danger(Translator.trans('meterial_lib.select_resource_operate_hint') + '!');
           return;
         }
 
@@ -287,12 +287,12 @@ define(function(require, exports, module) {
         $("#tag-modal").modal('show');
       },
       _loading: function() {
-        var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('正在加载，请等待......') + '</td></tr>';
+        var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('admin.cloud_file.detail_loading_hints') + '</td></tr>';
         var $table = this.element.find('#materials-table');
         $table.find('tbody').html(loading);
       },
       _loaded_error: function() {
-        var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('Opps,出错了......') + '</td></tr>';
+        var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('admin.cloud_file.detail_show_error_hint') + '......' + '</td></tr>';
         var $table = this.element.find('#materials-table');
         $table.find('tbody').html(loading);
       },
@@ -342,7 +342,7 @@ define(function(require, exports, module) {
           },
           width: 400,
           multiple: true,
-          placeholder: Translator.trans('请输入标签'),
+          placeholder: Translator.trans('validate.tag_required_hint'),
           multiple: true,
           createSearchChoice: function() {
             return null;
@@ -351,7 +351,7 @@ define(function(require, exports, module) {
         });
 
         $("#js-course-search").select2({
-          placeholder: Translator.trans('选择课程'),
+          placeholder: Translator.trans('admin.cloud_file.select_course_placeholder'),
           minimumInputLength: 1,
           ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
             url: $("#js-course-search").data('url'),
@@ -408,7 +408,7 @@ define(function(require, exports, module) {
         });
 
         $("#js-user-search").select2({
-          placeholder: Translator.trans('选择用户'),
+          placeholder: Translator.trans('admin.cloud_file.select_user_placeholder'),
           minimumInputLength: 1,
           ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
             url: $("#js-user-search").data('url'),
@@ -498,7 +498,7 @@ define(function(require, exports, module) {
       $.post($form.attr('action'), $form.serialize(), function(data) {
         if (data) {
           $('#modal').modal('hide');
-          Notify.success(Translator.trans('删除资源成功'));
+          Notify.success(Translator.trans('meterial_lib.delete_resource_success_hint'));
           materialWidget.renderTable(true);
           $("input[name = 'batch-select']").attr("checked", false);
         }

@@ -160,7 +160,6 @@ Api Test With 5.5:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
     - develop
-
 # 5.5 with js-test-unit:
 #   stage: test
 #   image: tianshengjie/codeage-node

@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                 },
                 width: 'off',
                 multiple: true,
-                placeholder: Translator.trans('请输入标签'),
+                placeholder: Translator.trans('validate.tag_required_hint'),
                 multiple: true,
                 createSearchChoice: function() {
                     return null;
@@ -74,9 +74,9 @@ define(function(require, exports, module) {
                 url:$target.attr('action'),
                 data:this.$('#info-form').serialize()
             }).done(function(){
-                Notify.success(Translator.trans('保存成功！'));
+                Notify.success(Translator.trans('site.save_success_hint') + '!');
             }).fail(function(){
-                Notify.danger(Translator.trans('保存失败！'));
+                Notify.danger(Translator.trans('site.save_error_hint') + '!');
             }).always(function(){
                 $target.find('#info-save-btn').button('reset');
             });

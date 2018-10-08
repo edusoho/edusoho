@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $(".uninstall-btn").click(function() {
-            if (!confirm(Translator.trans('真的要卸载此应用？'))) {
+            if (!confirm(Translator.trans('admin.app.uninstall_hint'))) {
                 return ;
             }
             $.post($(this).data('url'), function(response) {

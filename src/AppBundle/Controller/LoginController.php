@@ -5,9 +5,127 @@ namespace AppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Endroid\QrCode\QrCode;
+use Symfony\Component\HttpFoundation\Response;
+use Biz\User\CurrentUser;
 
 class LoginController extends BaseController
 {
+    const FACE_TOKEN_STATUS_SUCCESS = 'successed'; //认证成功
+    const FACE_TOKEN_STATUS_CREATED = 'created'; //已创建
+    const FACE_TOKEN_STATUS_EXPIRED = 'expired'; //已过期
+    const FACE_TOKEN_STATUS_PROCESSING = 'processing'; //认证中
+    const FACE_TOKEN_STATUS_FAILURES = 'failures'; //多次认证失败
+
+    public function qrcodeAction(Request $request)
+    {
+        $host = $request->getSchemeAndHttpHost();
+        $token = $this->getTokenService()->makeToken(
+            'face_login',
+            array(
+                'userId' => 0,
+                'data' => array(),
+                'times' => 0,
+                'duration' => 240,
+            )
+        );
+        $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'].'&host='.$host;
+
+        $qrCode = new QrCode();
+        $qrCode->setText($url);
+        $qrCode->setSize(150);
+        $qrCode->setPadding(10);
+        $img = $qrCode->get('png');
+
+        return $this->createJsonResponse(array(
+            'qrcode' => 'data:image/png;base64,'.base64_encode($img),
+            'token' => $token['token'],
+        ));
+    }
+
+    public function faceTokenAction(Request $request, $token)
+    {
+        $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
+
+        if (!$faceLoginToken) {
+            $response = array(
+                'status' => self::FACE_TOKEN_STATUS_EXPIRED,
+            );
+        } elseif (empty($faceLoginToken['data'])) {
+            $response = array(
+                'status' => self::FACE_TOKEN_STATUS_CREATED,
+            );
+        } elseif (!empty($faceLoginToken['data']['lastFailed'])) {
+            $response = array(
+                'status' => self::FACE_TOKEN_STATUS_FAILURES,
+            );
+        } else {
+            switch ($faceLoginToken['data']['status']) {
+                case self::FACE_TOKEN_STATUS_CREATED:
+                    $response = array(
+                        'status' => self::FACE_TOKEN_STATUS_PROCESSING,
+                    );
+                    break;
+
+                case self::FACE_TOKEN_STATUS_SUCCESS:
+                    $response = array(
+                        'status' => $faceLoginToken['data']['status'],
+                        'url' => $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto'))),
+                    );
+                    break;
+
+                default:
+                    $response = array(
+                        'status' => $faceLoginToken['data']['status'],
+                    );
+                    break;
+            }
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function parseFaceTokenAction(Request $request, $token)
+    {
+        $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
+        if (empty($faceLoginToken)) {
+            $content = $this->renderView('default/message.html.twig', array(
+                'type' => 'error',
+                'goto' => $this->generateUrl('homepage', array(), true),
+                'duration' => 1000,
+                'message' => 'user.login.sts_qrcode_invalid',
+            ));
+
+            return new Response($content, '302');
+        } elseif (empty($faceLoginToken['data']['status']) || self::FACE_TOKEN_STATUS_SUCCESS != $faceLoginToken['data']['status']) {
+            $content = $this->renderView('default/message.html.twig', array(
+                'type' => 'error',
+                'goto' => $this->generateUrl('homepage', array(), true),
+                'duration' => 1000,
+                'message' => 'user.login.sts_discovery_failed',
+            ));
+
+            return new Response($content, '302');
+        }
+
+        $currentUser = $this->getCurrentUser();
+
+        if (!empty($faceLoginToken['data']['user']['id']) && (!$currentUser->isLogin() || $currentUser['id'] != $faceLoginToken['data']['user']['id'])) {
+            $user = $this->getUserService()->getUser($faceLoginToken['data']['user']['id']);
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray($user);
+            $this->switchUser($request, $currentUser);
+            $this->getTokenService()->destoryToken($token);
+        }
+
+        $goto = $request->query->get('goto');
+        if (empty($goto)) {
+            $goto = $this->generateUrl('homepage', array(), true);
+        }
+
+        return $this->redirect($goto);
+    }
+
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -88,7 +206,7 @@ class LoginController extends BaseController
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if (strpos($targetPath, '/app.php') === 0) {
+        if (0 === strpos($targetPath, '/app.php')) {
             $targetPath = str_replace('/app.php', '', $targetPath);
         }
 
@@ -98,5 +216,13 @@ class LoginController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

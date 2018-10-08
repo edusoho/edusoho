@@ -6,14 +6,14 @@ define(function(require, exports, module) {
     exports.run = function() {
         $('.js-self-test').on('click', function () {
             var $this = $(this);
-            $this.text('验证中..');
+            $this.text(Translator.trans('admin.system.mailer.in_verify_hint'));
             $.get($this.data('url')).done(function (response) {
                 if(response.status){
-                    Notify.success("邮件已发送, 请注意查收", 3);
+                    Notify.success(Translator.trans('admin.system.mailer.mail_sent_hint'), 3);
                 }else {
-                    Notify.danger("邮件发送失败，请检查邮箱服务器配置", 3);
+                    Notify.danger(Translator.trans('admin.system.mailer.mail_send_fail_hint'), 3);
                 }
-                $this.text('验证');
+                $this.text(Translator.trans('admin.system.mailer.verify_hint'));
             });
         });
 
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="name"]',
                 required: true,
-                errormessageRequired: Translator.trans('请输入发信人名称')
+                errormessageRequired: Translator.trans('admin.system.mailer.sender_name_input.message')
             });
         }
 
@@ -39,41 +39,41 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="host"]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入SMTP服务器地址')
+                    errormessageRequired: Translator.trans('admin.system.mailer.smtp_server_host_input.message')
                 });
                 validator.addItem({
                     element: '[name="port"]',
                     required: true,
                     rule:'integer',
-                    errormessageRequired: Translator.trans('请输入SMTP端口号')
+                    errormessageRequired: Translator.trans('admin.system.mailer.smtp_server_port_input_message')
                 });
                 validator.addItem({
                     element: '[name="username"]',
                     required: true,
                     rule: 'email',
-                    errormessageRequired: Translator.trans('请输入SMTP用户名')
+                    errormessageRequired: Translator.trans('admin.system.mailer.smtp_server_username_input_message')
                 });
                 validator.addItem({
                     element: '[name="password"]',
                     required: true,
                     rule:'password',
-                    errormessageRequired: Translator.trans('请输入SMTP密码')
+                    errormessageRequired: Translator.trans('admin.system.mailer.smtp_server_password_input.message')
                 });
                 validator.addItem({
                     element: '[name="from"]',
                     required: true,
                     rule: 'email',
-                    errormessageRequired: Translator.trans('请输入发信人地址')
+                    errormessageRequired: Translator.trans('admin.system.mailer.sender_address_input.messages')
                 });
                 validator.addItem({
                     element: '[name="name"]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入发信人名称')
+                    errormessageRequired: Translator.trans('admin.system.mailer.sender_name_input.message')
                 });
             } else {
                 if (app.arguments.registerEmailVerified == 'opened') {
                     var emailSetUrl = $('#mailer-form').data('userSetting');
-                    Notify.danger('您开启了用户注册模式下的邮箱验证登录，请先关闭<a href="'+emailSetUrl+'">邮箱验证登录</a>功能！');
+                    Notify.danger(Translator.trans('admin.system.mailer.close_email_verify_hint', {emailSetUrl: emailSetUrl}));
                     
                     $('[name=enabled][value="0"]').prop('checked',false);
                     $('[name=enabled][value="1"]').prop('checked',true);

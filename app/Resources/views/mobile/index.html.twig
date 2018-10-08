@@ -19,18 +19,14 @@
         {% endif %}
       </div>
       <div class="mobile-content">
-        <div class="title">
+        <div class="title clearfix">
           {% if setting('mobile.applogo') %}
             <img src="{{asset(setting('mobile.applogo'))}}" alt="">
           {% else %}
             <img src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
           {% endif %}
-
-          {% if not isEsApp %}
-            {{mobileSetting.appname|default('mobile.app_name'|trans)}}
-          {% else %}
-            {{'mobile.app_name'|trans}}
-          {% endif %}
+          <span class="visible-xs-inline-block">{% if not isEsApp %}{{mobileSetting.appname|default('mobile.app_name'|trans)}}{% else %}{{'mobile.app_name'|trans}}{% endif %}</span>
+          <div class="title__text hidden-xs">{% if not isEsApp %}{{mobileSetting.appname|default('mobile.app_name'|trans)}}{% else %}{{'mobile.app_name'|trans}}{% endif %}</div>
         </div>
         <div class="subtitle">
           {% if not isEsApp %}

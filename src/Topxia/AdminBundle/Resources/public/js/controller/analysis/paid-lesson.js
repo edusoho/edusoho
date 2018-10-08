@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('购买课程数')],
+                      labels: [Translator.trans('admin.analysis.paid_lesson_num')],
                       xLabels:"day"
                     });
         }

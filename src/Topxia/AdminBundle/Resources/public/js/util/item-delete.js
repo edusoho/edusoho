@@ -9,7 +9,7 @@ define(function(require, exports, module) {
                 message = $btn.data('message');
 
             if (!message) {
-                message = Translator.trans('真的要删除该%name%吗？',{name:name});
+                message = Translator.trans('admin.util.item_delete.delete_hint',{name:name});
             }
 
             if (!confirm(message)) {
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                     onSuccess.call($element, $item);
                 } else {
                     $btn.parents('[data-role=item]').remove();
-                    Notify.success(Translator.trans('删除%name%成功',{name:name}));
+                    Notify.success(Translator.trans('admin.util.item_delete.delete_success_hint',{name:name}));
                 }
             });
 

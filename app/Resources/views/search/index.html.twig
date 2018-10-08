@@ -3,7 +3,7 @@
 {% block title %}{{'search.content_title'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'search.all_courses'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 {% set bodyClass = 'bg-blank' %}
 
-{% do script(['libs/echo-js.js','app/js/search/index.js']) %}
+{% do script(['app/js/search/index.js']) %}
 
 {% block top_content %}
   <div class="course-banner es-banner">

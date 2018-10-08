@@ -22,13 +22,13 @@ define(function(require, exports, module) {
 			var $courseIds = $('input[name="courseIds"]');
 			var courseIdArray = $courseIds.val().split(",");
 			if(courseIdArray.length>3){
-				Notify.danger(Translator.trans('每周精品栏目只能设置三门课程！'))
+				Notify.danger(Translator.trans('admin.course.week_excellent_courses.setting_hint'))
 				return;
 			}
 
 			for (var i = courseIdArray.length - 1; i >= 0; i--) {
 				if(courseIdArray[i]==$(this).data("courseId")) {
-					Notify.danger(Translator.trans('每周精品栏目中已经存在此门课程！'));
+					Notify.danger(Translator.trans('admin.course.week_excellent_courses.setting_error_hint'));
 					return;
 				}
 			};
