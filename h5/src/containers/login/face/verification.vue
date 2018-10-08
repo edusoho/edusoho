@@ -39,7 +39,7 @@ export default {
       requestEndT: '',
       verifiedText: '认证',
       errorShow: false,
-      scanCode: this.$route.query.loginToken
+      scanCode: this.$route.query.loginToken || ''
     }
   },
   mounted() {

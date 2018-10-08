@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <van-nav-bar :title="title"
-      class="nav-bar"
+      :class="[{hide: isQrcode}, 'nav-bar']"
       :left-arrow="showLeftArrow"
       @click-left="$router.go(-1)"/>
     <router-view></router-view>
@@ -15,7 +15,8 @@ import { mapMutations, mapState } from 'vuex';
 export default {
   data() {
     return  {
-      showLeftArrow: false
+      showLeftArrow: false,
+      isQrcode: false
     }
   },
   methods: {
@@ -30,6 +31,8 @@ export default {
     '$route': {
       handler(to) {
         const redirect = to.query.redirect || '';
+
+        this.isQrcode = to.query.loginToken ? true : false;
 
         this.showLeftArrow = !['my', 'find', 'learning', 'prelogin', 'preview'].includes(to.name);
 
