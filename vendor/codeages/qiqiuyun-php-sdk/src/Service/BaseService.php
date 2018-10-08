@@ -72,6 +72,7 @@ abstract class BaseService
         if (!empty($this->options['leafHost'])) {
             $this->leafHost = $options['leafHost'];
         }
+
     }
 
     protected function createClient()
@@ -132,7 +133,7 @@ abstract class BaseService
         try {
             $result = SDK\json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            throw new SDKException($e->getMessage()."(response: {$response->getBody()}");
+            throw new SDKException($e->getMessage(). "(response: {$response->getBody()}");
         }
 
         $responseCode = $response->getHttpResponseCode();
@@ -154,17 +155,18 @@ abstract class BaseService
      */
     protected function getRequestUri($uri, $protocol = 'http', $node = 'root')
     {
+        
         if (!in_array($protocol, array('http', 'https', 'auto'))) {
             throw new SDKException("The protocol parameter must be in 'http', 'https', 'auto', your value is '{$protocol}'.");
         }
-
+        
         $host = $this->getHostByNode($node);
         if (is_array($host)) {
             shuffle($host);
             reset($host);
             $host = current($host);
         }
-
+        
         $host = (string) $host;
 
         if (!$host) {
@@ -172,7 +174,6 @@ abstract class BaseService
         }
 
         $uri = ('/' !== substr($uri, 0, 1) ? '/' : '').$uri;
-
         return ('auto' == $protocol ? '//' : $protocol.'://').$host.$uri;
     }
 
@@ -185,7 +186,7 @@ abstract class BaseService
 
     private function getHostByNode($node)
     {
-        if ('leaf' == $node) {
+        if ($node == 'leaf') {
             return empty($this->leafHost) ? $this->host : $this->leafHost;
         }
 

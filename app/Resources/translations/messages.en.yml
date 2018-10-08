@@ -5221,6 +5221,14 @@ admin.edu_cloud.edu_video.what_year_flow: 'What is the annual flow package?'
 admin.edu_cloud.edu_video.flow: Traffic
 admin.edu_cloud.edu_video.surplus_flow: '(Remaining %amount% GB)'
 admin.edu_cloud.edu_video.service_time: 'Service Term'
+admin.edu_cloud.edu_video.effective_service: 即将生效服务
+admin.edu_cloud.edu_video.check: 查看
+admin.edu_cloud.edu_video.check.title: 查看云视频内容
+admin.edu_cloud.edu_video.check.storage: 存储空间
+admin.edu_cloud.edu_video.check.storage.unit: GB
+admin.edu_cloud.edu_video.check.flow: 流量
+admin.edu_cloud.edu_video.check.flow.unit: GB/月
+admin.edu_cloud.edu_video.check.service_life: 服务年限
 admin.edu_cloud.edu_video.video_service_provider: 'Video hosting services are provided by the ES Cloud'
 admin.edu_cloud.edu_video.know_detail: 'Learn More'
 admin.edu_cloud.edu_video.cloud_buy_tips: "<a class=\"\" href=\"%buyUrl%\" target=\"_blank\"> Buy </a> cloud video packages for more enjoyable video hosting \n"
@@ -5795,6 +5803,7 @@ admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_xapi_address: XAPI address
+admin.developer_face_address: AI Face API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
 admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
@@ -6625,6 +6634,19 @@ course.plan_task.exercise.submit_btn: Submit
 classroom.upload_picture_btn: 'Upload an image'
 user.fields.fan_empty: 'No followers'
 user.fields.following_empty: 'No followers'
+
+user.login.sts_discovery: Facial recognition
+user.login.sts_discovery_title: Facial recognition, login security
+user.login.sts_discovery_wait: In certification...
+user.login.sts_discovery_success: Facial recognition authentication Successfully!
+user.login.sts_discovery_failed: Facial recognition authentication failed!
+user.login.sts_discovery_again: Recertification
+user.login.sts_discovery_tip: Please open WeChat or APP and scan the QR code to complete facial recognition authentication to ensure the security of the account.
+user.login.sts_discovery_more_fail_first_tip: Facial recognition authentication failed repeatedly,
+user.login.sts_discovery_more_fail_second_tip: please use another method to authenticate or contact the administrator!
+user.login.sts_qrcode_invalid: QR code has expired!
+user.login.sts_qrcode.refresh: Click to refresh
+
 group.thread.post_empty_reply: 'No reply yet'
 my.teaching.open_course.live_label: Live
 my.teaching.open_course.files.use_status.unused: Using
@@ -8078,6 +8100,9 @@ exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
 exception.parser.not.support: 不支持该视频类型
 
+exception.announcement.notfound: Announcement not found
+exception.batch_notification.notfound: Site notification not found
+
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
@@ -8087,3 +8112,10 @@ admin.index.course_order: "course order"
 admin.index.classroom_order: "classroom order"
 admin.index.vip_order: vip order
 admin.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【Site Setting】-【Basic Info】-【Site Domain】
+
+admin.sts_discovery_use_range: 应用场景启用
+admin.sts_discovery_function_tip: 开启后，你可以使用基于人脸识别服务的一系列应用，比如人脸识别登录等。
+admin.sts_discovery_use_tip: 开启后，用户在任意位置登录，可选使用人脸识别方式进行身份认证。
+admin.sts_discovery.login: 人脸识别登录
+admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
+admin.sts_discovery_feature_tip: 更多功能敬请期待。。。

@@ -2,7 +2,7 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% set nav = 'course' %}
-{% do script(['libs/echo-js.js','app/js/classroom/course-list/index.js'])%}
+{% do script(['app/js/classroom/course-list/index.js'])%}
 
 {% block main %}
 

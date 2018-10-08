@@ -65,6 +65,11 @@ class StringToolkit
         return $text;
     }
 
+    public static function specialCharsFilter($text)
+    {
+        return str_replace(array(' ', '&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;', '&lsquo;', '&rsquo;'), array('∵', ' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…', '‘', '’'), $text);
+    }
+
     public static function createRandomString($length)
     {
         $start = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

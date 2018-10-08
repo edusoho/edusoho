@@ -1,0 +1,51 @@
+<div class="sts-login js-sts-login hidden" data-url="{{ path('login_qrcode') }}" data-goto="{{_target_path}}">
+  <a class="sts-login-back cd-link-minor js-login-back" href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a>
+  <div class="js-login-section">
+    <div class="sts-login__title">{{ 'user.login.sts_discovery_title'|trans }}</div>
+    <div class="sts-login__qrcode js-sts-login-qrcode">
+      <img src="" alt="qrcode">
+        <div class="sts-login-mask js-approve-ing hidden">
+          <div class="cd-text-medium color-success sts-login-mask__tip js-approve-ing-tip hidden">{{ 'user.login.sts_discovery_wait'|trans }}</div>
+          <div class="sts-login-mask__operation js-invalid-btn hidden">
+            <div class="cd-text-medium cd-dark-major">{{ 'user.login.sts_qrcode_invalid'|trans }}</div>
+            <button class="cd-btn cd-btn-primary cd-mt16">{{ 'user.login.sts_qrcode.refresh'|trans }}</button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="sts-login__feedback js-feedback hidden">
+    <div class="js-success-feedback">
+      <div class="es-feedback-icon es-feedback-success cd-mb24">
+        <div class="es-feedback-icon__inner">
+          <i class="cd-icon cd-icon-check"></i>
+        </div>
+      </div>
+      <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_success'|trans }}</div>
+    </div>
+    <div class="js-fail-feedback">
+      <div class="es-feedback-icon es-feedback-danger cd-mb24">
+        <div class="es-feedback-icon__inner">
+          <i class="cd-icon cd-icon-close"></i>
+        </div>
+      </div>
+      <div class="cd-text-lg cd-text-medium cd-dark-major">{{ 'user.login.sts_discovery_failed'|trans }}</div>
+      <button class="cd-btn cd-btn-warning cd-mt24 js-approve-again-btn">{{ 'user.login.sts_discovery_again'|trans }}</button>
+      <div class="js-fail-tip">
+        {% if type|default('') == 'page' %}
+          <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
+        {% else %}
+          <div class="cd-text-sm es-dark-assist cd-mt16">{{ 'user.login.sts_discovery_more_fail_first_tip'|trans }}</div>
+          <div class="cd-text-sm es-dark-assist cd-mt8">{{ 'user.login.sts_discovery_more_fail_second_tip'|trans }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="sts-login-tip js-sts-tip">
+    <img src="{{ asset('static-dist/app/img/face.png') }}"
+        srcset="{{ asset('static-dist/app/img/face.png') }} 1x, {{ asset('static-dist/app/img/face@2x.png') }} 2x" alt="{{ 'user.login.sts_discovery'|trans }}"/>
+    <span class="sts-login-tip__text">{{ 'user.login.sts_discovery_tip'|trans }}</span>
+  </div>
+</div>
+

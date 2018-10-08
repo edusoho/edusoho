@@ -16,5 +16,3 @@ $('.unfollow-btn').on('click', function() {
 });
 
 $('.user-center-header').blurr({height:220});
-
-echo.init();

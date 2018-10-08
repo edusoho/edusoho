@@ -19,6 +19,7 @@ class QiQiuYunSDKTest extends BaseTestCase
             ),
         ));
 
+        $this->assertInstanceOf('QiQiuYun\\SDK\\Service\\AiService', $sdk->getAiService());
         $this->assertInstanceOf('QiQiuYun\\SDK\\Service\\SmsService', $sdk->getSmsService());
         $this->assertInstanceOf('QiQiuYun\\SDK\\Service\\PlayService', $sdk->getPlayService());
         $this->assertInstanceOf('QiQiuYun\\SDK\\Service\\XAPIService', $sdk->getXAPIService());

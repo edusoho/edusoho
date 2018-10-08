@@ -200,7 +200,8 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
 
   _generateSingleCachedData(data) {
-    let clonedHtml = $(this._options['dataTemplateNode']).html();
+    const templateClass = this._options['dataTemplateNode'];
+    let clonedHtml = this._options.wrapDom ? this._options.wrapDom.find(templateClass).html() : $(templateClass).html();
 
     let currentData = data;
     const self = this;
@@ -224,8 +225,8 @@ export default class ESInfiniteCachedScroll extends Emitter {
     let tempNode = $('<div>').append(replacedHtml);
 
     this._removeUnNeedNodes(tempNode);
-
-    $('.infinite-container').append(tempNode.html());
+    let $infiniteContainer = this._options.wrapDom ? this._options.wrapDom.find('.infinite-container'): $('.infinite-container');
+    $infiniteContainer.append(tempNode.html());
   }
 
   _getStartIndex() {

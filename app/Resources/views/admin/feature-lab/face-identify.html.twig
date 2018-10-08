@@ -1,0 +1,45 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_face_identify' %}
+
+{% set script_controller = 'feature_lab/face-identify' %}
+
+{% block main %}
+
+  <h5>{{ 'admin.sts_discovery_use_range'|trans }}</h5>
+
+  <div class="clearfix sts-setting-item">
+    <div class="pull-left">
+      <h5 class="sts-setting-item__title">{{ 'admin.sts_discovery.login'|trans }}</h5>
+      <div class="text-sm text-muted">{{ 'admin.sts_discovery_use_tip'|trans }}</div>
+      <div class="text-sm text-muted">{{ 'admin.sts_discovery.pc_use_tip'|trans }}</div>
+    </div>
+    <form class="pull-right sts-switch" id="face_identify">
+      <div class="admin-common-switch pull-right">
+        <label class="switch switch-lg switch-green js-switch {% if setting('face.login.enabled') == 1 %}checked{% endif %}">
+          <input class="js-switch-input" type="checkbox" name="login[enabled]" value="{{ setting('face.login.enabled', 0) }}">
+        </label>
+      </div>
+
+      <div class="clearfix pull-left js-sts-switch">
+        <div class="text-center sts-switch__item">
+          <div class="js-sts-label {% if setting('face.login.enabled') == 0 %}text-muted{% endif %}">App端开启</div>
+          <input class="js-sts-checkbox" type="checkbox" name="login[app_enabled]" value="1" {% if setting('face.login.enabled') == 0 %}disabled {% endif %} {% if setting('face.login.app_enabled') %}checked{% endif %}>
+        </div>
+
+        <div class="text-center sts-switch__item">
+          <div class="js-sts-label {% if setting('face.login.enabled') == 0 %}text-muted{% endif %}">微信端开启</div>
+          <input class="js-sts-checkbox" type="checkbox" name="login[h5_enabled]" value="1" {% if setting('face.login.enabled') == 0 %}disabled {% endif %} {% if setting('face.login.h5_enabled') %}checked{% endif %}>
+        </div>
+
+        <div class="text-center sts-switch__item">
+          <div class="js-sts-label {% if setting('face.login.enabled') == 0 %}text-muted{% endif %}">PC端开启</div>
+          <input class="js-sts-checkbox" type="checkbox" name="login[pc_enabled]" value="1" {% if setting('face.login.enabled') == 0 %}disabled {% endif %}  {% if setting('face.login.pc_enabled') %}checked{% endif %}>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+
+{% endblock %}

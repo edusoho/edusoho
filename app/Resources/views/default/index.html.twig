@@ -1,5 +1,5 @@
 {% extends 'default/base-index.html.twig' %}
-{% do script(['libs/echo-js.js', 'app/js/index/index.js']) %}
+{% do script(['app/js/index/index.js']) %}
 
 {% block content %}
     {% cache 'jianmo/home/top/banner' 600 %}
