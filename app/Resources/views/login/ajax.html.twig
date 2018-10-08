@@ -50,7 +50,7 @@
 {% if setting('login_bind.enabled') or setting('feature.face_enabled') %}
   <div class="social-login">
     <span>
-      {% if (setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
+      {% if (setting('feature.face_enabled') and setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
         <a class="sts-login-link js-sts-login-link" href="javascript:;">
           <img src="{{ asset('static-dist/app/img/face.png') }}"
             srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="{{'user.login.sts_discovery'|trans}}"/>
