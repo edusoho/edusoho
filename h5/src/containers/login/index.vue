@@ -90,6 +90,8 @@ export default {
     Api.settingsFace({}).then(res => {
       if (Number(res.login.enabled)) {
         this.faceSetting = Number(res.login.h5_enabled);
+      } else {
+        this.faceSetting = 0;
       }
     });
   },
