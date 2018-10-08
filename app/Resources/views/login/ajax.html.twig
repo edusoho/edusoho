@@ -32,7 +32,7 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-  {% if (setting('face.enabled') and setting('face.pc_enabled')) %}
+  {% if (setting('feature.face_enabled') and setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
     {% set type = 'modal' %}
     {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
   {% endif %}
@@ -47,10 +47,10 @@
   <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{'user.login.go_register'|trans}}</a>
 </div>
 
-{% if setting('login_bind.enabled') or (setting('face.enabled') and setting('face.pc_enabled')) %}
+{% if setting('login_bind.enabled') or setting('feature.face_enabled') %}
   <div class="social-login">
     <span>
-      {% if setting('face.enabled') and setting('face.pc_enabled') %}
+      {% if (setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
         <a class="sts-login-link js-sts-login-link" href="javascript:;">
           <img src="{{ asset('static-dist/app/img/face.png') }}"
             srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="{{'user.login.sts_discovery'|trans}}"/>
