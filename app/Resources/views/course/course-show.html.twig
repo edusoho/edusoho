@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block description %}{{ description|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
-{% block format-detection %}{{ 'telephone=no' }}{% endblock %}
+{% block format_detection %}{{ 'telephone=no' }}{% endblock %}
 {% block full_content %}
     {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
     {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
