@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login/index.js']) %}
 {% set bodyClass = 'login' %}
-{% set ai_face_enabled = (cloud_info()['ai.face'] and setting('feature.face_enabled') and setting('face.login.enabled') and setting('face.login.pc_enabled')) %}
+{% set ai_face_enabled = (setting('feature.face_enabled')|default(0) and setting('face.login.enabled')|default(0) and setting('face.login.pc_enabled')|default(0)) %}
 {% block title %}{{ 'user.login.content_title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
