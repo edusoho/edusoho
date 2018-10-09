@@ -1,5 +1,5 @@
 <section class="feature-banner" style="background: {{middleBackground[0].value}}">
-	{% if middleImg[0].href|default(false) %}
+  {% if middleImg[0].href|default(false) %}
     <a href="{{ asset(middleImg[0].href|default('')) }}" target="{{ middleImg[0].target|default('') }}">
   {% endif %}
   {% if (middleImg[0].src|default('')) %}
