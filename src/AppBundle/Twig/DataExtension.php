@@ -97,7 +97,10 @@ class DataExtension extends \Twig_Extension
             $cloudConsult['cloud_consult_expired_time'] = time() + 60 * 60 * 1;
             $cloudConsult['cloud_consult_code'] = empty($account['code']) ? 0 : $account['code'];
 
-            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+            try {
+                $this->getSettingService()->set('cloud_consult', $cloudConsult);
+            } catch (\Exception $e) {
+            }
         }
         $cloudConsultEnable = empty($cloudConsult['cloud_consult_code']) && $cloudConsult['cloud_consult_setting_enabled'] && $cloudConsult['cloud_consult_is_buy'];
 
