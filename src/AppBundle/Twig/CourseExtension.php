@@ -198,7 +198,17 @@ class CourseExtension extends \Twig_Extension
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $discountPlugin = $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Discount');
 
-        return $discountPlugin && $courseSet['discountId'] > 0 && ($course['price'] < $course['originPrice']) && 0 == $course['parentId'];
+        $isDiscount = false;
+        if ($discountPlugin && $courseSet['discountId'] > 0) {
+            $discount = $this->getDiscountService()->getDiscount($courseSet['discountId']);
+            if (!empty($discount)) {
+                if (($course['price'] < $course['originPrice']) && 0 == $course['parentId']) {
+                    $isDiscount = true;
+                }
+            }
+        }
+
+        return $isDiscount;
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
@@ -413,5 +423,10 @@ class CourseExtension extends \Twig_Extension
     private function isOptionalTaskLesson($item)
     {
         return in_array($item['itemType'], array('task', 'lesson')) && $item['isOptional'];
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->biz->service('DiscountPlugin:Discount:DiscountService');
     }
 }
