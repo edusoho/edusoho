@@ -1,6 +1,6 @@
 <template>
   <div class="login-face-verification">
-    <div v-if="!errorShow">
+    <div v-if="!errorShow" v-show="regular">
       <div v-show="tipShow" class="verification-tips">
         <div>即将进行人脸识别{{ verifiedText }}</div>
         <div class="mt5">请将面部正对摄像头</div>
@@ -30,6 +30,7 @@ import * as types from '@/store/mutation-types';
 export default {
   data() {
     return {
+      regular: false,
       tipShow: true,
       failTextShow: false,
       imgAddress: '',
@@ -54,6 +55,7 @@ export default {
     Api.getSessions({
       data: data
     }).then(res => {
+      this.regular = true;
       const upload = res.upload.form;
       this.uploadParams = {
         sessionId: res.id,
@@ -61,7 +63,6 @@ export default {
         uploadKey: upload.params.key,
         uploadToken: upload.params.token,
       }
-      console.log(this.uploadParams);
     }).catch(err => {
       this.errorShow = true;
       setTimeout(this.feedbackAction, 3000);
@@ -149,6 +150,12 @@ export default {
             this.recognitionFail();
           }
         }
+      }).catch(err => {
+        console.log(err);
+        if (err.code == 5) {
+          this.errorShow = true;
+          setTimeout(this.feedbackAction, 3000);
+        }
       })
     },
     isWeixin(){
@@ -214,7 +221,11 @@ export default {
             console.log(res.error.message);
           }
         }).catch(err => {
-          console.log(err);
+          console.log(err)
+          if (err.code == 5) {
+            this.errorShow = true;
+            setTimeout(this.feedbackAction, 3000);
+          }
         });
       }).catch(err => {
         console.log(err);
