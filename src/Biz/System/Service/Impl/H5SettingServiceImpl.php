@@ -121,32 +121,38 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function getDefaultDiscovery($portal)
     {
-        $posters = $this->getBlockService()->getPosters();
-        $slides = array();
-        foreach ($posters as $poster) {
-            $slide = array(
-                'title' => '',
-                'image' => array(
-                    'id' => 0,
-                    'uri' => $poster['image'],
-                    'size' => '',
-                    'createdTime' => 0,
-                ),
-                'link' => array(
-                    'type' => 'url',
-                    'target' => null,
-                    'url' => $poster['link']['url'],
+        $result = array();
+        if ('h5' == $portal) {
+            $posters = $this->getBlockService()->getPosters();
+            $slides = array();
+            foreach ($posters as $poster) {
+                $slide = array(
+                    'title' => '',
+                    'image' => array(
+                        'id' => 0,
+                        'uri' => $poster['image'],
+                        'size' => '',
+                        'createdTime' => 0,
+                    ),
+                    'link' => array(
+                        'type' => 'url',
+                        'target' => null,
+                        'url' => $poster['link']['url'],
+                    ),
+                );
+                $slides[] = $slide;
+            }
+
+            $result = array(
+                'slide-1' => array(
+                    'type' => 'slide_show',
+                    'moduleType' => 'slide-1',
+                    'data' => $slides,
                 ),
             );
-            $slides[] = $slide;
         }
 
-        $result = array(
-            'slide-1' => array(
-                'type' => 'slide_show',
-                'moduleType' => 'slide-1',
-                'data' => $slides,
-            ),
+        return array_merge($result, array(
             'courseList-1' => array(
                 'type' => 'course_list',
                 'moduleType' => 'courseList-1',
@@ -173,9 +179,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     'items' => array(),
                 ),
             ),
-        );
-
-        return $result;
+        ));
     }
 
     protected function getCourseService()
