@@ -147,9 +147,8 @@ class Setting extends AbstractResource
     {
         $faceSetting = $this->getSettingService()->get('face', array());
         $featureSetting = $this->getSettingService()->get('feature', array());
-        $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
 
-        $default = array(
+        $settings = array(
             'login' => array(
                 'enabled' => 0,
                 'app_enabled' => 0,
@@ -158,15 +157,14 @@ class Setting extends AbstractResource
             )
         );
 
-        if (isset($cloudInfo['ai.face']) && 1 == $cloudInfo['ai.face']) {
-            if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
-                $default['login']['enabled'] = isset($faceSetting['login']['enabled']) ? $faceSetting['login']['enabled'] : 0;
-                $default['login']['app_enabled'] = isset($faceSetting['login']['app_enabled']) ? $faceSetting['login']['app_enabled'] : 0;
-                $default['login']['pc_enabled'] = isset($faceSetting['login']['pc_enabled']) ? $faceSetting['login']['pc_enabled'] : 0;
-                $default['login']['h5_enabled'] = isset($faceSetting['login']['h5_enabled']) ? $faceSetting['login']['h5_enabled'] : 0;
-            }
+        if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
+            $settings['login']['enabled'] = isset($faceSetting['login']['enabled']) ? $faceSetting['login']['enabled'] : 0;
+            $settings['login']['app_enabled'] = isset($faceSetting['login']['app_enabled']) ? $faceSetting['login']['app_enabled'] : 0;
+            $settings['login']['pc_enabled'] = isset($faceSetting['login']['pc_enabled']) ? $faceSetting['login']['pc_enabled'] : 0;
+            $settings['login']['h5_enabled'] = isset($faceSetting['login']['h5_enabled']) ? $faceSetting['login']['h5_enabled'] : 0;
         }
-        return $default;
+        
+        return $settings;
     }
 
     public function getWeixinConfig($request)
