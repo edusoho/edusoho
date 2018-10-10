@@ -249,15 +249,14 @@ export default class Manage {
   }
 
   _sortUnitNumber() {
-    $('.js-lesson-container').each(
-      function() {
-        $(this).find('.js-lesson-box .number').each(
-          function(index) {
-            $(this).text((index + 1));
-          }
-        );
-      }
-    );
+    let num;
+    this.$element.find('.js-task-manage-chapter').each(function() {
+      let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
+      num = 1;
+      $unit.each(function() {
+        $(this).find('.number').text(num++);
+      });
+    });
   }
 
   _publish() {
