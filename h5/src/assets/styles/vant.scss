@@ -9,7 +9,7 @@
   border-bottom-width: 0;
 }
 .van-tabbar--fixed {
-  z-index: 10
+  z-index: 1001;
 }
 
 .van-swipe__indicators {
@@ -19,4 +19,9 @@
       background-color: $primary-color;
     }
   }
+}
+
+.van-popup{
+  max-height: 100%;
+  overflow: auto;
 }

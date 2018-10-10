@@ -162,8 +162,9 @@ export default {
           duration: 2000,
           message: '注册成功'
         });
-        const jumpToLogin = () => {
-          this.$router.push({name: 'find'});
+        const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
+        var jumpToLogin = () => {
+          this.$router.replace({path: redirect});
         }
         setTimeout(jumpToLogin, 2000);
       })

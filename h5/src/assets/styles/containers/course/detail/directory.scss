@@ -38,26 +38,52 @@
           &.unit-show {
             height: auto;
             margin:0 vw(10);
-            + .unit-show {
-              border-top: 1px solid #EEE;
-              margin-top: 5px;
-              padding-top: 15px;
-            }
+            // + .unit-show {
+            //   margin-top: vw(5);
+            //   padding-top: vw(5);
+            // }
           }
         }
         .lesson-cell {
           @extend .flex-row;
           @extend .font-family-PFM;
 
+          margin-left: vw(20);
           font-size: vw(14);
           &__unit {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: vw(12);
+            padding-right: vw(5);
             @extend .title-16;
+            i {
+              margin-top: vw(5);
+            }
+            &-title {
+              max-width: 90%;
+            }
+          }
+          &__hour {
+            position: relative;
+            left: vw(-3);
+            height: 0;
+            padding-top: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #71777D;
+            &.lesson-show {
+              height: auto;
+              margin-top: vw(5);
+              padding-top: vw(5);
+              margin-bottom: vw(5);
+            }
+          }
+          &__lesson {
+            margin-bottom: vw(5);
           }
           &__content {
             @extend .flex-column;
             margin-left: vw(10);
-            margin-bottom: vw(15);
             flex: 1;
             span {
               color: #2B333B;
@@ -72,11 +98,12 @@
             color: #b0bdc9;
           }
           &__status {
-            border-radius: 2px;
             height: vw(18);
-            color: white;
-            font-size: vw(12);
             padding: vw(2) vw(10);
+            border-radius: 2px;
+            color: white;
+            line-height: vw(18);
+            font-size: vw(12);
             &.is-free {
               background: $primary-color;
             }

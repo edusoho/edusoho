@@ -58,11 +58,13 @@ const config = [
     method: 'GET'
   },
   {
+    // 获取滑动验证参数
     name: 'dragCaptcha',
     url: '/drag_captcha',
     method: 'POST'
   },
   {
+    // 滑动验证吗数据验证
     name: 'dragValidate',
     url: '/drag_captcha/{token}',
     method: 'GET'
@@ -116,6 +118,11 @@ const config = [
     // 课程详情页
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
+    method: 'GET'
+  }, {
+    // 获取计划目录
+    name: 'getCourseLessons',
+    url: '/courses/{courseId}/item_with_lessons',
     method: 'GET'
   }, {
     // 我的学习

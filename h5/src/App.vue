@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <van-nav-bar :title="title"
+    <van-nav-bar
+      style="z-index: 1001;"
       :class="[{hide: isQrcode}, 'nav-bar']"
+      :title="title"
       :left-arrow="showLeftArrow"
       @click-left="$router.go(-1)"/>
     <router-view></router-view>
