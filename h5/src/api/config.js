@@ -4,7 +4,38 @@ const config = [
     name: 'login',
     url: '/tokens',
     method: 'POST'
-  }, {
+  },
+  {
+    // 人脸识别 判断用户是否存在
+    name: 'getUserIsExisted',
+    url: '/users/{type}',
+    method: 'GET'
+  },
+  {
+    // 人脸识别 判断是否设置了人脸识别
+    name: 'settingsFace',
+    url: '/settings/face',
+    method: 'GET'
+  },
+  {
+    // 人脸识别 创建register的session接口
+    name: 'getSessions',
+    url: '/face_sessions',
+    method: 'POST'
+  },
+  {
+    // 人脸识别 获取register的session，确认人脸识别认证结果, 轮询
+    name: 'faceSession',
+    url: '/face_sessions/{sessionId}',
+    method: 'GET'
+  },
+  {
+    // 人脸识别 图片上传最终的结果
+    name: 'finishUploadResult',
+    url: '/face_sessions/{sessionId}/finish_upload_results',
+    method: 'POST'
+  },
+  {
     // 新增用户短信验证码
     name: 'getSmsCenter',
     url: '/sms_center',

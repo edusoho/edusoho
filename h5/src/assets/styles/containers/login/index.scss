@@ -6,7 +6,6 @@
   align-items: center;
 
   &-img {
-    height: vw(130);
     width: vw(120);
     margin-top: 21vh;
   }
@@ -25,10 +24,12 @@
 }
 
 .login {
+  position: relative;
   display: flex;
   flex-direction: column;
-  margin: vw(50) vw(15);
-  align-items: center; 
+  box-sizing: border-box;
+  padding: vw(50) vw(15);
+  align-items: center;
   &-title {
     font-size: vw(20);
     -webkit-text-fill-color: #2b333b;
@@ -39,9 +40,6 @@
     -webkit-text-fill-color: #bdc2c6;
     font-family: PingFangSC-Regular;
     margin-top: vw(20);
-  }
-  &-avatarimg {
-
   }
   &-input {
     margin-top: vw(30);
@@ -67,8 +65,14 @@
       font-size: vw(15);
     }
   }
-}
-
-.e-input {
-
+  .face-icon {
+    position: absolute;
+    bottom: vw(50);
+    left: 50%;
+    margin-left: vw(-20);
+    img {
+      width: vw(40);
+      height: vw(40);
+    }
+  }
 }

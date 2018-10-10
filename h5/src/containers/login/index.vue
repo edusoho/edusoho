@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" :style="{ height: bodyHeight + 'px'}">
     <span class='login-title'>登录账号</span>
     <img class='login-avatarimg' src="" />
     <van-field v-model="username"
@@ -19,7 +19,11 @@
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
+    <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
+      <img src="static/images/face.png" alt="人脸识别登录图标">
+    </router-link>
   </div>
+
 </template>
 <script>
 import { mapActions } from 'vuex';
@@ -34,6 +38,8 @@ export default {
       errorMessage: {
         password: ''
       },
+      faceSetting: 0,
+      bodyHeight: 520
     }
   },
   async created () {
@@ -62,7 +68,7 @@ export default {
           message: '登录成功'
         });
         const redirect = this.$route.query.redirect || 'find';
-        var jumpAction = () => {
+        const jumpAction = () => {
           this.$router.replace({path: redirect});
         }
         setTimeout(jumpAction, 2000);
@@ -82,6 +88,17 @@ export default {
         }
       })
     }
+  },
+
+  mounted() {
+    this.bodyHeight = document.documentElement.clientHeight - 46;
+    Api.settingsFace({}).then(res => {
+      if (Number(res.login.enabled)) {
+        this.faceSetting = Number(res.login.h5_enabled);
+      } else {
+        this.faceSetting = 0;
+      }
+    });
   },
 }
 </script>
