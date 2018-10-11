@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Classroom\ClassroomException;
+use Biz\Order\OrderException;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\ArrayToolkit;
@@ -21,6 +22,7 @@ use Biz\User\Service\UserFieldService;
 use AppBundle\Controller\BaseController;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
@@ -143,7 +145,7 @@ class ClassroomController extends BaseController
         $previewAs = '';
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $user = $this->getCurrentUser();
@@ -336,7 +338,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('不允许未登录访问');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $this->getClassroomService()->removeStudent($classroomId, $user['id']);
@@ -466,7 +468,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if ($this->getClassroomService()->isClassroomOverDue($id)) {
@@ -489,7 +491,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
-            throw $this->createAccessDeniedException('您不是班级的学员。');
+            $this->createNewException(ClassroomException::FORBIDDEN_TAKE_CLASSROOM());
         }
 
         $reason = $request->request->get('reason');
@@ -722,13 +724,13 @@ class ClassroomController extends BaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException('订单不存在!');
+            $this->createNewException(OrderException::NOTFOUND_ORDER());
         }
 
         $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException('找不到要购买的班级!');
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         return $this->render('classroom/classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));

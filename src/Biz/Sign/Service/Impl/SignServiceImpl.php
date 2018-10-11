@@ -6,6 +6,8 @@ use Biz\BaseService;
 use Biz\Sign\Dao\SignTargetStatisticsDao;
 use Biz\Sign\Dao\SignUserLogDao;
 use Biz\Sign\Dao\SignUserStatisticsDao;
+use Biz\Sign\SignException;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Sign\Service\SignService;
 
@@ -16,13 +18,13 @@ class SignServiceImpl extends BaseService implements SignService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException('用户不存在.', 404);
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $isSignedToday = $this->isSignedToday($userId, $targetType, $targetId);
 
         if ($isSignedToday) {
-            throw $this->createServiceException('今日已签到!', 403);
+            $this->createNewException(SignException::DUPLICATE_SIGN());
         }
 
         $sign = array();

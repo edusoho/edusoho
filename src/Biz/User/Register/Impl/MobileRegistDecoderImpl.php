@@ -2,7 +2,7 @@
 
 namespace Biz\User\Register\Impl;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Biz\User\UserException;
 use AppBundle\Common\SimpleValidator;
 
 class MobileRegistDecoderImpl extends RegistDecoder
@@ -10,11 +10,11 @@ class MobileRegistDecoderImpl extends RegistDecoder
     protected function validateBeforeSave($registration)
     {
         if (!empty($registration['mobile']) && !SimpleValidator::mobile($registration['mobile'])) {
-            throw new InvalidArgumentException('Invalid Mobile');
+            throw UserException::MOBILE_INVALID();
         }
 
         if (!$this->getUserService()->isMobileAvaliable($registration['mobile'])) {
-            throw new InvalidArgumentException('Mobile Occupied');
+            throw UserException::MOBILE_EXISTED();
         }
     }
 

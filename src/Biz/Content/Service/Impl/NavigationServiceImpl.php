@@ -3,6 +3,7 @@
 namespace Biz\Content\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Content\Dao\NavigationDao;
 use Biz\Content\Service\NavigationService;
 use Biz\System\Service\LogService;
@@ -184,7 +185,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if (!in_array($keyOfFields, $keysArray)) {
-                throw $this->createInvalidArgumentException('添加的字段有问题！');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
         }
 

@@ -27,9 +27,9 @@ class UserProvider implements UserProviderInterface
         $user = $this->getUserService()->getUserByLoginField($username);
 
         if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         } elseif (isset($user['type']) && 'system' == $user['type']) {
-            throw UserException::NOTFOUND_USER();
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
         $request = $this->container->get('request');

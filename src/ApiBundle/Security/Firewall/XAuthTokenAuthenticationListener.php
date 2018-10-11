@@ -2,10 +2,8 @@
 
 namespace ApiBundle\Security\Firewall;
 
-use ApiBundle\Api\Exception\ErrorCode;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
 {

@@ -50,7 +50,7 @@ class ClassroomThreadController extends BaseController
     public function createAction(Request $request, $classroomId, $type)
     {
         if (!in_array($type, array('discussion', 'question', 'event'))) {
-            throw CommonException::ERROR_PARAMETER();
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $user = $this->getCurrentUser();

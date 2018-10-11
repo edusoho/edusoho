@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
@@ -88,7 +89,7 @@ class Testpaper extends Activity
         $activity = $this->get($targetId);
 
         if (!$activity) {
-            throw $this->createNotFoundException('教学活动不存在');
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
         //引用传递，当考试时间设置改变时，时间值也改变

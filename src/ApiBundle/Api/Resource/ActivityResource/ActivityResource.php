@@ -9,8 +9,6 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use ApiBundle\Api\Annotation\Access;
 
 class ActivityResource extends AbstractResource
 {

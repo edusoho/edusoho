@@ -3,13 +3,11 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use ApiBundle\Api\Annotation\ResponseFilter;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MeCourseMember extends AbstractResource
 {

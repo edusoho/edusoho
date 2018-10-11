@@ -3,7 +3,6 @@
 namespace AppBundle\Component\OAuthClient;
 
 use Biz\Common\CommonException;
-use InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 
 class OAuthClientFactory

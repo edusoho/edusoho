@@ -3,9 +3,12 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\User\BlacklistException;
 use Biz\User\Dao\BlacklistDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\BlacklistService;
+use Biz\User\UserException;
 
 class BlacklistServiceImpl extends BaseService implements BlacklistService
 {
@@ -22,7 +25,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     public function findBlacklistsByUserId($userId)
     {
         if (!$this->canTakeBlacklist($userId)) {
-            throw $this->createAccessDeniedException('Access Denied');
+            $this->createNewException(BlacklistException::FORBIDDEN_TAKE_BLACKLIST());
         }
 
         return $this->getBlacklistDao()->findByUserId($userId);
@@ -31,21 +34,21 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     public function addBlacklist($blacklist)
     {
         if (!ArrayToolkit::requireds($blacklist, array('userId', 'blackId'))) {
-            throw $this->createInvalidArgumentException('userId and blackId required');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (!$this->canTakeBlacklist($blacklist['userId'])) {
-            throw $this->createAccessDeniedException('Access Denied');
+            $this->createNewException(BlacklistException::FORBIDDEN_TAKE_BLACKLIST());
         }
 
         $blackUser = $this->getUserService()->getUser($blacklist['blackId']);
         if (empty($blackUser)) {
-            throw $this->createNotFoundException('User Not Found');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $black = $this->getByUserIdAndBlackId($blacklist['userId'], $blackUser['id']);
         if (!empty($black)) {
-            throw $this->createAccessDeniedException('User has been added');
+            $this->createNewException(BlacklistException::DUPLICATE_ADD());
         }
 
         $blacklist['createdTime'] = time();
@@ -56,11 +59,11 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     public function deleteBlacklistByUserIdAndBlackId($userId, $blackId)
     {
         if (!$this->canTakeBlacklist($userId)) {
-            throw $this->createAccessDeniedException('Access Denied');
+            $this->createNewException(BlacklistException::FORBIDDEN_TAKE_BLACKLIST());
         }
         $black = $this->getBlacklistByUserIdAndBlackId($userId, $blackId);
         if (empty($black)) {
-            throw $this->createNotFoundException('Blacklist Not Found');
+            $this->createNewException(BlacklistException::NOTFOUND_BLACKLIST());
         }
 
         return $this->getBlacklistDao()->deleteByUserIdAndBlackId($userId, $blackId);
@@ -70,7 +73,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     {
         $owner = $this->getUserService()->getUser($userId);
         if (empty($owner['id'])) {
-            throw $this->createNotFoundException('Blacklist Owner Not Found');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
         $user = $this->getCurrentUser();
         if ($user['id'] == $userId || $user->isAdmin()) {

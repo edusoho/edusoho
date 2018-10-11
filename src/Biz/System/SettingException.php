@@ -18,11 +18,17 @@ class SettingException extends AbstractException
 
     const FORBIDDEN_THIRD_PARTY_AUTH = 4030805;
 
+    const NOT_SET_CLOUD_ACCESS_KEY = 5000806;
+
+    const ERROR_CLOUD_ACCESS_KEY = 5000807;
+
     public $messages = array(
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enbale',
         4030803 => 'exception.setting.forbidden_setting_nickname',
         4040804 => 'exception.setting.third_party_auth_not_found',
         4030805 => 'exception.setting.forbidden_third_party_auth',
+        5000806 => 'exception.setting.cloud_access_key_not_set',
+        5000807 => 'exception.setting.cloud_access_key_error',
     );
 }

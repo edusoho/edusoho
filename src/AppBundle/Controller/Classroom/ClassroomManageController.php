@@ -4,13 +4,16 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
+use Biz\Activity\ActivityException;
 use Biz\Classroom\Service\LearningDataAnalysisService;
+use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
+use Biz\Testpaper\TestpaperException;
 use Biz\Thread\Service\ThreadService;
 use AppBundle\Common\ClassroomToolkit;
 use Biz\System\Service\SettingService;
@@ -21,6 +24,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
@@ -515,7 +519,7 @@ class ClassroomManageController extends BaseController
     public function studentShowAction(Request $request, $classroomId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $this->forward('AppBundle:Student:show', array(
@@ -548,7 +552,7 @@ class ClassroomManageController extends BaseController
             $fields = $request->request->all();
 
             if (empty($fields['deadline'])) {
-                throw $this->createNotFoundException('缺少相关参数');
+                $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
             }
 
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
@@ -997,12 +1001,12 @@ class ClassroomManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $activity = $this->getActivityService()->getActivity($activityId);
         if (!$activity) {
-            throw $this->createResourceNotFoundException('activity', $activityId);
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         return $this->render(

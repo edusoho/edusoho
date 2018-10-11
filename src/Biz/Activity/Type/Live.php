@@ -3,11 +3,11 @@
 namespace Biz\Activity\Type;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Common\CommonException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class Live extends Activity
 {
@@ -31,7 +31,7 @@ class Live extends Activity
         );
 
         if ($overlapTimeActivities) {
-            throw new InvalidArgumentException('activity.live.overlap_time');
+            throw ActivityException::LIVE_OVERLAP_TIME();
         }
     }
 
@@ -53,7 +53,7 @@ class Live extends Activity
         );
 
         if ($overlapTimeActivities) {
-            throw new InvalidArgumentException('activity.live.overlap_time');
+            throw ActivityException::LIVE_OVERLAP_TIME();
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace Biz\OpenCourse\Event;
 
+use Biz\OpenCourse\OpenCourseException;
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -56,7 +57,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId'], true);
 
         if (empty($course)) {
-            throw new \RuntimeException('添加课时失败，课程不存在。');
+            throw OpenCourseException::NOTFOUND_OPENCOURSE();
         }
 
         if ('draft' === $course['status'] || 'liveOpen' === $lesson['type']) {

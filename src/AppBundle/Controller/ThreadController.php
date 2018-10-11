@@ -6,6 +6,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
+use Biz\Thread\ThreadException;
 use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\PostFilter\Service\TokenBucketService;
@@ -344,7 +345,7 @@ class ThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
@@ -358,7 +359,7 @@ class ThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $post = $this->getThreadService()->getPost($postId);

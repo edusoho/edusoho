@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Order;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderRefundService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,7 +14,7 @@ class OrderRefundController extends BaseController
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
         $this->getOrderRefundService()->cancelRefund($orderId);
 

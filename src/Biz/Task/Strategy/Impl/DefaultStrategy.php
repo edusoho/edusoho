@@ -7,8 +7,6 @@ use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
 use Biz\Task\Visitor\CourseStrategyVisitorInterface;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class DefaultStrategy extends BaseStrategy implements CourseStrategy
 {
@@ -138,7 +136,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 array('preparation', 'lesson', 'exercise', 'homework', 'extraClass')
             )
         ) {
-            throw new InvalidArgumentException('task mode  Invalid');
+            throw TaskException::ERROR_TASK_MODE();
         }
     }
 
@@ -263,7 +261,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         if (!array_key_exists($taskMode, $taskModes)) {
-            throw new InvalidArgumentException('task mode is invalid');
+            throw TaskException::ERROR_TASK_MODE();
         }
 
         return $chapterSeq + $taskModes[$taskMode];

@@ -5,6 +5,7 @@ namespace Biz\Activity\Type;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\AudioActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Common\CommonException;
 use Biz\File\Service\UploadFileService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -16,12 +17,12 @@ class Audio extends Activity
     public function create($fields)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media['mediaId'] = $media['id'];
         $audio = ArrayToolkit::parts($media, array('mediaId'));
@@ -55,12 +56,12 @@ class Audio extends Activity
     public function update($targetId, &$fields, $activity)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $audioActivityFields = array(

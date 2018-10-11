@@ -50,7 +50,7 @@ class HTMLPurifierFactory
     public function createSimple()
     {
         if (!isset($this->config['cacheDir'])) {
-            throw new ServiceException('Please give `cacheDir` argument.');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $this->warmUp($this->config['cacheDir']);
 

@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
@@ -12,8 +11,6 @@ use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseTaskEvent extends AbstractResource
 {
@@ -44,7 +41,7 @@ class CourseTaskEvent extends AbstractResource
             return $this->finish($request, $courseId, $taskId, $eventName);
         }
 
-        throw new BadRequestHttpException('Bad request', null, ErrorCode::INVALID_ARGUMENT);
+        throw CommonException::ERROR_PARAMETER();
     }
 
     private function start(ApiRequest $request, $courseId, $taskId, $eventName)

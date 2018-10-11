@@ -61,7 +61,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
      *
      * @return TokenInterface|null
      *
-     * @throws \RuntimeException
+     * @throws UserException
      */
     protected function refreshUser(TokenInterface $token)
     {

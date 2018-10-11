@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Util\AvatarAlert;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class BuyFlowController extends BaseController
@@ -101,7 +102,7 @@ abstract class BuyFlowController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
     }
 

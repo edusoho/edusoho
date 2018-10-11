@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use Biz\Common\CommonException;
+
 class TagDataTag extends BaseDataTag implements DataTag
 {
     /**
@@ -26,7 +28,7 @@ class TagDataTag extends BaseDataTag implements DataTag
     protected function checkTagId(array $arguments)
     {
         if (empty($arguments['tagId'])) {
-            throw new \InvalidArgumentException($this->getServiceKernel()->trans('参数缺失'));
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
     }
 

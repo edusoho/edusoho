@@ -4,7 +4,6 @@ namespace Biz\File\FireWall;
 
 use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class FireWallFactory
 {
@@ -20,7 +19,7 @@ class FireWallFactory
      *
      * @return FireWallInterface
      *
-     * @throws InvalidArgumentException
+     * @throws CommonException
      */
     public function create($targetType)
     {

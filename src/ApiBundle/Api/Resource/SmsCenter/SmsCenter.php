@@ -3,12 +3,10 @@
 namespace ApiBundle\Api\Resource\SmsCenter;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Biz\System\SettingException;
 
 class SmsCenter extends AbstractResource

@@ -2,15 +2,11 @@
 
 namespace ApiBundle\Api\Resource\Category;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Taxonomy\CategoryException;
 use Biz\Taxonomy\Service\CategoryService;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Category extends AbstractResource
 {
@@ -29,7 +25,7 @@ class Category extends AbstractResource
 
         $group = $this->getCategoryService()->getGroupByCode($groupCode);
         if (!$group) {
-            throw CategoryException::NOTFOUND_CATEGORY();
+            throw CategoryException::NOTFOUND_GROUP();
         }
 
         return $this->getCategoryService()->getCategoryStructureTree($group['id']);

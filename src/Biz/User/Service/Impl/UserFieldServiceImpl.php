@@ -5,6 +5,7 @@ namespace Biz\User\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserFieldService;
+use Biz\User\UserFieldException;
 
 class UserFieldServiceImpl extends BaseService implements UserFieldService
 {
@@ -16,20 +17,20 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
     public function addUserField($fields)
     {
         if (empty($fields['field_title'])) {
-            throw $this->createInvalidArgumentException('field_title Required');
+            $this->createNewException(UserFieldException::TITLE_REQUIRED());
         }
 
         if (empty($fields['field_seq'])) {
-            throw $this->createInvalidArgumentException('field_seq Required');
+            $this->createNewException(UserFieldException::SEQ_REQUIRED());
         }
 
         if (!intval($fields['field_seq'])) {
-            throw $this->createInvalidArgumentException('field_seq Invalid');
+            $this->createNewException(UserFieldException::SEQ_INVALID());
         }
 
         $fieldName = $this->checkType($fields['field_type']);
         if ($fieldName == false) {
-            throw $this->createInvalidArgumentException('field_type Invalid');
+            $this->createNewException(UserFieldException::TYPE_INVALID());
         }
 
         $field['fieldName'] = $fieldName;
@@ -88,15 +89,15 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         ));
 
         if (isset($fields['title']) && empty($fields['title'])) {
-            throw $this->createInvalidArgumentException('title Required');
+            $this->createNewException(UserFieldException::TITLE_REQUIRED());
         }
 
         if (isset($fields['seq']) && empty($fields['seq'])) {
-            throw $this->createInvalidArgumentException('seq Required');
+            $this->createNewException(UserFieldException::SEQ_REQUIRED());
         }
 
         if (isset($fields['seq']) && !intval($fields['seq'])) {
-            throw $this->createInvalidArgumentException('seq Invalid');
+            $this->createNewException(UserFieldException::SEQ_INVALID());
         }
 
         return $this->getUserFieldDao()->update($id, $fields);

@@ -2,8 +2,10 @@
 
 namespace Biz\Live\Service\Impl;
 
+use Biz\Common\CommonException;
 use Biz\Live\Service\LiveService;
 use Biz\BaseService;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\AthenaLiveToolkit;
@@ -57,7 +59,7 @@ class LiveServiceImpl extends BaseService implements LiveService
     protected function filterCreateParams($params)
     {
         if (!ArrayToolkit::requireds($params, array('startTime', 'endTime', 'speakerId', 'type'))) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $liveParams = array(
@@ -156,7 +158,7 @@ class LiveServiceImpl extends BaseService implements LiveService
         $user = $this->getUserService()->getUser($speakerId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException('Speaker not found');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         return $user['nickname'];

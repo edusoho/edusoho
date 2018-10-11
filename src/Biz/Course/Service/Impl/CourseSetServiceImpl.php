@@ -4,6 +4,8 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Course\CourseSetException;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
@@ -35,7 +37,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $this->tryManageCourseSet($id);
         if (!is_numeric($number)) {
-            throw $this->createAccessDeniedException('recommend seq must be number!');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $fields = array(
@@ -144,7 +146,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user is not log in');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $favorite = $this->getFavoriteDao()->getByUserIdAndCourseSetId($user['id'], $courseSet['id'], 'course');
@@ -171,13 +173,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $courseSet = $this->getCourseSetDao()->get($id);
 
         if (empty($courseSet)) {
-            throw $this->createNotFoundException("CourseSet#{$id} Not Found");
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
         }
 
         if ($courseSet['parentId'] > 0) {
@@ -191,7 +193,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
         }
         if (!$this->hasCourseSetManageRole($id)) {
-            throw $this->createAccessDeniedException('can not access');
+            $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
         return $courseSet;
@@ -373,7 +375,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function createCourseSet($courseSet)
     {
         if (!$this->hasCourseSetManageRole()) {
-            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+            $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
         $created = $this->addCourseSet($courseSet);
@@ -427,10 +429,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function updateCourseSet($id, $fields)
     {
         if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         if (!in_array($fields['serializeMode'], array('none', 'serialized', 'finished'))) {
-            throw $this->createInvalidArgumentException('Invalid Param: serializeMode');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $courseSet = $this->tryManageCourseSet($id);
@@ -532,7 +534,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function changeCourseSetCover($id, $coverArray)
     {
         if (empty($coverArray)) {
-            throw $this->createInvalidArgumentException('Invalid Param: cover');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
         $courseSet = $this->tryManageCourseSet($id);
         $covers = array();
@@ -553,7 +555,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->tryManageCourseSet($id);
         $subCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($id, 1);
         if (!empty($subCourseSets)) {
-            throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
+            $this->createNewException(CourseSetException::SUB_COURSESET_EXIST());
         }
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
 
@@ -598,7 +600,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function updateCourseSetStatistics($id, array $fields)
     {
         if (empty($fields)) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $updateFields = array();
@@ -629,7 +631,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->tryManageCourseSet($id);
 
         if (empty($courseSet)) {
-            throw $this->createNotFoundException('course set not found');
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
         }
 
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
@@ -645,7 +647,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 //对于直播课程，有且仅有一个教学计划
                 $course = $courses[0];
                 if (empty($course['maxStudentNum'])) {
-                    throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
+                    $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
                 }
                 $this->getCourseService()->publishCourse($course['id']);
                 $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
@@ -658,7 +660,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                     //如果普通课程下仅有一个教学计划且未发布，则级联发布该教学计划
                     $this->getCourseService()->publishCourse($courses[0]['id']);
                 } else {
-                    throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+                    $this->createNewException(CourseSetException::PUBLISHED_COURSE_REQUIRED());
                 }
             }
 
@@ -677,7 +679,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
         if ('published' !== $courseSet['status']) {
-            throw $this->createAccessDeniedException('CourseSet has not bean published');
+            $this->createNewException(CourseSetException::UNPUBLISHED_COURSESET());
         }
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
@@ -769,7 +771,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if ($courseSet['parentId'] <= 0 || 0 == $courseSet['locked']) {
-            throw $this->createAccessDeniedException('Invalid Operation');
+            $this->createNewException(CourseSetException::UNLOCK_ERROR());
         }
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
@@ -831,7 +833,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
         }
         if (empty($course)) {
-            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
+            $this->createNewException(CourseSetException::NO_COURSE());
         }
         $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
         $this->getCourseService()->setDefaultCourse($id, $course['id']);
@@ -853,7 +855,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->getCourseSet($id);
 
         if (empty($courseSet)) {
-            throw $this->createNotFoundException('course set not found');
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
         }
 
         return $this->getCourseSetDao()->wave(array($courseSet['id']), array('hitNum' => 1));
@@ -862,10 +864,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
-            throw $this->createInvalidArgumentException('Lack of Required Fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
-            throw $this->createInvalidArgumentException('Invalid Param: type');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
     }
 
@@ -1135,12 +1137,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      *
      * @return mixed
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @throws CommonException
+     * @throws \Exception
      */
     protected function addCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $courseSet = ArrayToolkit::parts(

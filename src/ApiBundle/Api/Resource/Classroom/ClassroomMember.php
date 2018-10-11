@@ -6,8 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Exception\UnableJoinException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ClassroomMember extends AbstractResource
 {

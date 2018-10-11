@@ -15,7 +15,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class ManageController extends BaseController
 {
@@ -167,7 +166,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId'], $result['type']);
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $result['id']);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if ('reviewing' !== $result['status']) {
@@ -216,7 +215,7 @@ class ManageController extends BaseController
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $status = $request->query->get('status', 'finished');

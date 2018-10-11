@@ -2,6 +2,7 @@
 
 namespace Biz\User\Register\Impl;
 
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use AppBundle\Common\SimpleValidator;
@@ -73,11 +74,11 @@ abstract class BaseRegister
     protected function validate($registration)
     {
         if (!SimpleValidator::nickname($registration['nickname'])) {
-            throw new InvalidArgumentException('Invalid nickname');
+            throw UserException::NICKNAME_INVALID();
         }
 
         if (!$this->getUserService()->isNicknameAvaliable($registration['nickname'])) {
-            throw new InvalidArgumentException('Nickname Occupied');
+            throw UserException::NICKNAME_EXISTED();
         }
 
         if (!empty($registration['idcard']) && !SimpleValidator::idcard($registration['idcard'])) {

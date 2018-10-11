@@ -144,7 +144,7 @@ class MobileController extends BaseController
         $targetVersion = $request->request->get('targetVersion');
 
         if (empty($currentVersion) || empty($targetVersion)) {
-            throw CommonException::ERROR_PARAMETER();
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $api = CloudAPIFactory::create('root');

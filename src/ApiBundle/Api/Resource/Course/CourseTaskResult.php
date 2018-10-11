@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\CourseException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseTaskResult extends AbstractResource
 {

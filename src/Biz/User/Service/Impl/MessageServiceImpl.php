@@ -4,6 +4,8 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
+use Biz\User\MessageException;
 use Biz\User\Service\MessageService;
 
 class MessageServiceImpl extends BaseService implements MessageService
@@ -25,15 +27,15 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
     {
         if (empty($fromId) || empty($toId)) {
-            throw $this->createNotFoundException('Sender or Receiver Not Found');
+            $this->createNewException(MessageException::NOTFOUND_SENDER_OR_RECEIVER());
         }
 
         if ($fromId == $toId) {
-            throw $this->createAccessDeniedException('You\'re not allowed to send message to yourself');
+            $this->createNewException(MessageException::SEND_TO_SELF());
         }
 
         if (empty($content)) {
-            throw $this->createInvalidArgumentException('Message is Empty');
+            $this->createNewException(MessageException::EMPTY_MESSAGE());
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
@@ -75,7 +77,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function deleteMessagesByIds(array $ids = null)
     {
         if (empty($ids)) {
-            throw $this->createInvalidArgumentException('Invalid Argument');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
         foreach ($ids as $id) {
             $message = $this->getMessageDao()->get($id);
@@ -139,7 +141,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     {
         $conversation = $this->getConversationDao()->get($conversationId);
         if (empty($conversation)) {
-            throw $this->createNotFoundException("Conversation#{$conversationId} Not Found");
+            $this->createNewException(MessageException::NOTFOUND_CONVERSATION());
         }
         $updatedConversation = $this->getConversationDao()->update($conversation['id'], array('unreadNum' => 0));
         $this->getRelationDao()->updateByConversationId($conversationId, array('isRead' => 1));

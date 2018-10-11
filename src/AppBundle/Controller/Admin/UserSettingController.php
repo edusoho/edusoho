@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
@@ -291,7 +292,7 @@ class UserSettingController extends BaseController
         $field = $this->getUserFieldService()->getField($id);
 
         if (empty($field)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserFieldException::NOTFOUND_USERFIELD());
         }
 
         if (strstr($field['fieldName'], 'textField')) {
@@ -339,7 +340,7 @@ class UserSettingController extends BaseController
         $field = $this->getUserFieldService()->getField($id);
 
         if (empty($field)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserFieldException::NOTFOUND_USERFIELD());
         }
 
         if ('POST' == $request->getMethod()) {

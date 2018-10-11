@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\File\UploadFileException;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
@@ -111,7 +112,7 @@ class CourseSetFileManageController extends BaseController
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException('File Not Found');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         return $this->forward('AppBundle:UploadFile:download', array('fileId' => $file['id']));
@@ -124,7 +125,7 @@ class CourseSetFileManageController extends BaseController
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException('File Not Found');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
@@ -143,7 +144,7 @@ class CourseSetFileManageController extends BaseController
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException('File Not Found');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if (in_array($file['audioConvertStatus'], array('none', 'error'))) {

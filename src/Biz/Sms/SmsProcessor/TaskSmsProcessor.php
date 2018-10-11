@@ -15,7 +15,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class TaskSmsProcessor extends BaseSmsProcessor

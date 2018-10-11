@@ -3,12 +3,10 @@
 namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\Access;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\CourseException;
 use Biz\Marketing\Service\MarketingService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ApiBundle\Api\Annotation\ResponseFilter;
 
 class CourseMarketingMember extends AbstractResource

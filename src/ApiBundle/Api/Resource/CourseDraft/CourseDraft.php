@@ -9,7 +9,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseDraftService;
 use Biz\Course\Service\CourseService;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class CourseDraft extends AbstractResource
 {

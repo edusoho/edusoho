@@ -3,11 +3,13 @@
 namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\BaseService;
+use Biz\CloudPlatform\AppException;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Biz\CloudPlatform\Dao\CloudAppDao;
 use Biz\CloudPlatform\Dao\CloudAppLogDao;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\CloudPlatform\UpgradeLock;
+use Biz\Common\CommonException;
 use Biz\Role\Service\RoleService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -84,7 +86,7 @@ class AppServiceImpl extends BaseService implements AppService
     public function registerApp($app)
     {
         if (!ArrayToolkit::requireds($app, array('code', 'name', 'version'))) {
-            throw $this->createInvalidArgumentException('参数缺失,注册APP失败!');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version', 'type'));
@@ -188,7 +190,7 @@ class AppServiceImpl extends BaseService implements AppService
         $package = $this->getCenterPackageInfo($packageId);
 
         if (empty($package)) {
-            throw $this->createServiceException(sprintf('获取应用包#%s信息失败', $packageId));
+            $this->createNewException(AppException::GET_PACKAGE_FAILED());
         }
 
         $log = $this->getAppLogDao()->getLastLogByCodeAndToVersion($package['product']['code'], $package['toVersion']);
@@ -478,7 +480,7 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $package = $this->getCenterPackageInfo($packageId);
             if (empty($package)) {
-                throw $this->createServiceException(sprintf('应用包#%s不存在或网络超时，读取包信息失败', $packageId));
+                $this->createNewException(AppException::GET_PACKAGE_FAILED());
             }
 
             $filepath = $this->createAppClient()->downloadPackage($packageId);
@@ -519,7 +521,7 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $package = $this->getCenterPackageInfo($packageId);
             if (empty($package)) {
-                throw $this->createServiceException(sprintf('应用包#%s不存在或网络超时，读取包信息失败', $packageId));
+                $this->createNewException(AppException::GET_PACKAGE_FAILED());
             }
 
             $packageDir = $this->makePackageFileUnzipDir($package);
@@ -620,7 +622,7 @@ class AppServiceImpl extends BaseService implements AppService
     protected function deleteCache($tryCount = 0)
     {
         if ($tryCount >= 5) {
-            throw $this->createServiceException('cannot delete cache.');
+            $this->createNewException(AppException::DELETE_CACHE_FAILED());
         }
 
         sleep($tryCount * 2);
@@ -652,7 +654,7 @@ class AppServiceImpl extends BaseService implements AppService
         $app = $this->getAppDao()->getByCode($code);
 
         if (empty($app)) {
-            throw $this->createServiceException("App {$code} is not exist.");
+            $this->createNewException(AppException::NOTFOUND_APP());
         }
 
         if ('plugin' == $app['type']) {
@@ -682,7 +684,7 @@ class AppServiceImpl extends BaseService implements AppService
         $app = $this->getAppDao()->get($id);
 
         if (empty($app)) {
-            throw $this->createServiceException(sprintf('App #%s不存在，更新版本失败！', $id));
+            $this->createNewException(AppException::NOTFOUND_APP());
         }
 
         $this->getLogService()->info('system', 'update_app_version', sprintf('强制更新应用「%s」版本为「%s」', $app['name'], $version));
@@ -835,7 +837,7 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem->rename($tmpUnzipFullDir, $unzipDir);
             $filesystem->remove($tmpUnzipDir);
         } else {
-            throw new \Exception('无法解压缩安装包！');
+            $this->createNewException(AppException::EXTRACT_FAILED());
         }
     }
 

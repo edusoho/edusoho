@@ -22,6 +22,32 @@ class ClassroomException extends AbstractException
 
     const CHAIN_NOT_REGISTERED = 5001807;
 
+    const UN_JOIN = 4031808;
+
+    const EMPTY_TITLE = 5001809;
+
+    const FORBIDDEN_UPDATE_EXPIRY_DATE = 4031810;
+
+    const FORBIDDEN_DELETE_NOT_DRAFT = 4031811;
+
+    const NOTFOUND_MEMBER = 4041812;
+
+    const FORBIDDEN_BECOME_AUDITOR = 4031813;
+
+    const FORBIDDEN_BECOME_STUDENT = 4031814;
+
+    const EXPIRY_VALUE_LIMIT = 5001815;
+
+    const FORBIDDEN_NOT_STUDENT = 4031816;
+
+    const FORBIDDEN_WAVE = 5001817;
+
+    const FORBIDDEN_STUDENT = 4031818;
+
+    const RECOMMEND_REQUIRED_NUMERIC = 5001819;
+
+    const MEMBER_LEVEL_LIMIT = 5001820;
+
     public $messages = array(
         4041801 => 'exception.classroom.not_found',
         4031802 => 'exception.classroom.forbidden_manage_classroom',
@@ -30,5 +56,18 @@ class ClassroomException extends AbstractException
         4031805 => 'exception.classroom.forbidden_look_classroom',
         5001806 => 'exception.classroom.unpublished_classroom',
         5001807 => 'exception.classroom.chain_not_registered',
+        4031808 => 'exception.classroom.unjoin',
+        5001809 => 'exception.classroom.empty_title',
+        4031810 => 'exception.classroom.forbidden_update_expiry_date',
+        4031811 => 'exception.classroom.forbidden_delete_not_draft',
+        4041812 => 'exception.classroom.not_found_member',
+        4031813 => 'exception.classroom.forbidden_become_auditor',
+        4031814 => 'exception.classroom.forbidden_become_student',
+        5001815 => 'exception.classroom.expiry_earlier_than_current',
+        4031816 => 'exception.classroom.forbidden_not_student',
+        5001817 => 'exception.classroom.forbidden_wave',
+        4031818 => 'exception.classroom.forbidden_student',
+        5001819 => 'exception.classroom.recommend_required_numeric',
+        5001820 => 'exception.classroom.member_level_limit',
     );
 }

@@ -2,13 +2,14 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use Biz\Activity\ActivityException;
 use Biz\BaseService;
+use Biz\Course\MaterialException;
 use Biz\Course\Service\MaterialService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Dao\DownloadFileRecordDao;
 use Biz\Activity\Service\DownloadActivityService;
 use Biz\User\UserException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class DownloadActivityServiceImpl extends BaseService implements DownloadActivityService
 {
@@ -33,7 +34,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
     {
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         if ($courseId != $activity['fromCourseId']) {
@@ -43,7 +44,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         $material = $this->getMaterialService()->getMaterial($activity['fromCourseId'], $materialId);
 
         if (empty($material)) {
-            throw $this->createNotFoundException('file not found');
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         $downloadAvtivity = $activity['ext'];

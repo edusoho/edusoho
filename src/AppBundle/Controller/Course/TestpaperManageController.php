@@ -7,6 +7,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
 
@@ -62,7 +63,7 @@ class TestpaperManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $activity = $this->getActivityService()->getActivity($activityId);

@@ -10,7 +10,10 @@ class MemberException extends AbstractException
 
     const NOTFOUND_MEMBER = 4041901;
 
+    const FORBIDDEN_NOT_MEMBER = 4031902;
+
     public $messages = array(
         4041901 => 'exception.course.member.not_found',
+        4031902 => 'exception.course.member.not_member',
     );
 }

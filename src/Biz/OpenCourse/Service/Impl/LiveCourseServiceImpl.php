@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\AthenaLiveToolkit;
 use Biz\BaseService;
 use Biz\OpenCourse\Service\LiveCourseService;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -74,7 +75,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         if (!$user->isLogin() && $lesson['type'] == 'liveOpen') {
             return 'student';
         } elseif (!$user->isLogin() && $lesson['type'] != 'liveOpen') {
-            throw $this->createServiceException('您还未登录，不能参加直播！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $user['id']);

@@ -4,11 +4,14 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Course\MaterialException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
 use Codeages\Biz\Framework\Event\Event;
 
 class MaterialServiceImpl extends BaseService implements MaterialService
@@ -17,7 +20,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $argument = $material;
         if (!ArrayToolkit::requireds($material, array('courseSetId', 'courseId', 'fileId'))) {
-            throw $this->createServiceException('参数缺失，上传失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $fields = $this->_getMaterialFields($material);
@@ -75,7 +78,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->get($materialId);
         if (empty($material)) {
-            throw $this->createNotFoundException('课程资料不存在，删除失败。');
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         $this->getMaterialDao()->delete($materialId);
@@ -306,7 +309,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         if (empty($material['fileId'])) {
             if (empty($material['link'])) {
-                throw $this->createServiceException('资料链接地址不能为空，添加资料失败！');
+                $this->createNewException(MaterialException::LINK_REQUIRED());
             }
             $fields['fileId'] = 0;
             $fields['link'] = $material['link'];
@@ -315,7 +318,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['fileId'] = (int) $material['fileId'];
             $file = $this->getUploadFileService()->getFile($material['fileId']);
             if (empty($file)) {
-                throw $this->createServiceException('文件不存在，上传资料失败！');
+                $this->createNewException(UploadFileException::NOTFOUND_FILE());
             }
             $fields['link'] = '';
             $fields['title'] = $file['filename'];

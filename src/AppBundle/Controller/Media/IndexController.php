@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Media;
 
 use AppBundle\Controller\BaseController;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
 use Symfony\Component\HttpFoundation\Request;
 
 class IndexController extends BaseController
@@ -13,7 +14,7 @@ class IndexController extends BaseController
         $context = $request->query->get('context');
 
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException('没有权限管理资源');
+            $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
         }
 
         return $this->forward('AppBundle:Player:show', array('id' => $mediaId, 'context' => $context));

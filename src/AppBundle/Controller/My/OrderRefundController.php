@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\Order\OrderException;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -70,7 +71,7 @@ class OrderRefundController extends BaseController
         $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if ($user->getId() != $order['user_id']) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(OrderException::BEYOND_AUTHORITY());
         }
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();

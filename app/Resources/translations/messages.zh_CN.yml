@@ -9345,6 +9345,16 @@ exception.common_parameter_error: 参数错误，请重试！
 exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
 
 exception.article.notfound: 资讯不存在!
+exception.article.not_found_category: 文章分类不存在,操作失败！
+exception.article.error_property: 属性不存在，更新失败！
+exception.article.duplicate_like: 不可重复对一条资讯点赞！
+exception.article.error_source_url: 来源地址不正确！
+exception.article.empty: 文章内容为空，创建文章失败！
+exception.article.error_sort: 参数sort不正确。
+exception.article.category_empty_name: 名称不能为空，保存栏目失败
+exception.article.category_empty_code: 编码不能为空，保存栏目失败
+exception.article.category_code_invalid: 编码含有非法字符，保存栏目失败
+exception.article.category_numeric_code: 编码不能全为数字，保存栏目失败
 exception.user.unlogin: 未登陆，请登陆后操作!
 exception.user.message_forbidden: 不支持向该用户发送私信!
 exception.user.discuz_user_reset_password: 请通过论坛找回密码！
@@ -9355,6 +9365,13 @@ exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.thread.not_found: 话题不存在
+exception.thread.not_found_post: 发布不存在
+exception.thread.title_required: 标题不能为空
+exception.thread.content_required: 内容不能为空
+exception.thread.targetid_required:
+exception.thread.member_existed: 成员已经存在
+exception.thread.member_number_limit: 成员人数限制
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: 云短信相关设置未开启!
@@ -9372,6 +9389,8 @@ exception.user.reset_password_email_send: 重设密码邮件发送失败，请�
 exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
 exception.setting.third_party_auth_not_found: 第三方登录系统参数尚未配置，请先配置。
 exception.setting.forbidden_third_party_auth: 第三方登录未开启
+exception.setting.cloud_access_key_not_set: 未设置教育云授权码！
+exception.setting.cloud_access_key_error: AccessKey不正确！
 
 exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
@@ -9382,6 +9401,10 @@ exception.file.not_found: 文件不存在
 exception.file.group_invalid: 文件组无效
 exception.file.not_upload: 文件未上传
 exception.file.handle_error: 文件处理
+exception.file.upload_not_allowed: 该文件格式，不允许上传。
+exception.file.parse_uri_failed: 解析文件URI失败！
+exception.file.directory_un_writable: 文件上传路径不可写，文件上传失败。
+exception.file.ext_parse_failed: 获取文件扩展名失败！
 
 exception.user.update_nickname_error: 昵称修改异常
 exception.user.nickname_invalid: 昵称格式错误
@@ -9394,38 +9417,153 @@ exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
 exception.parser.not.support: 不支持该视频类型
-
 lesson_count_no_more_than_300: 课时总数不能超过300个
+exception.lesson.not_found: 课时不存在
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
-
+exception.task.not_found: 任务不存在
+exception.task.unpublished_task: 任务未发布
+exception.task.task_mode_error: 任务模式错误
+exception.task.can_not_do: 不能做任务
+exception.task.can_not_finish: 不能完成任务
+exception.task.task_is_locked: 任务未解锁
+exception.task.forbidden_create_task: 无权创建任务
+exception.task.forbidden_update_task: 无权更新任务
+exception.task.forbidden_publish_task: 无权发布任务
+exception.task.forbidden_unpublish_task: 无权取消发布任务
+exception.task.forbidden_delete_task: 无权删除任务
+exception.task.lessonid_invalid: 错误的课时id
 exception.course.not_found: 教学计划不存在
-
+exception.course.count_no_more_than_10: 计划数不得超过10个！
+exception.course.forbidden_delete_published: 不能删除已发布的教学计划
+exception.course.have_sub_courses: 该教学计划被班级引用，请先移除班级计划
+exception.course.count_no_less_than_1: 课程下至少需保留一个教学计划
+exception.course.course_not_published: 教学计划未发布
+exception.course.not_match_courseset: 教学计划不在课程中
 exception.courseset.not_found: 课程不存在
-
+exception.courseset.forbidden_manage: 无权管理课程
+exception.courseset.sub_courseset_exist: 该课程在班级下引用，请先删除引用课程！
+exception.courseset.live_student_num_required: 直播课程发布前需要在计划设置中设置课程人数
+exception.courseset.published_course_required: 发布课程时请确保课程下至少有一个已发布的教学计划
+exception.courseset.unpublished: 课程未发布
+exception.courseset.no_course: 课程中没有可用的教学计划
+exception.courseset.unlock_failed: 解锁课程失败
 exception.classroom.not_found: 班级不存在
-
-exception.course.member.not_found: 课程中没有该学员
-
+exception.classroom.forbidden_manage_classroom: 没有管理班级的权限
+exception.classroom.forbidden_take_classroom: 不能在这个班级学习
+exception.classroom.forbidden_handle_classroom: 不能批阅这个班级的作业
+exception.classroom.forbidden_look_classroom: 不能查看这个班级
+exception.classroom.unpublished_classroom: 班级未发布
+exception.classroom.chain_not_registered:
+exception.classroom.unjoin: 未加入班级
+exception.classroom.empty_title: 班级名称不能为空！
+exception.classroom.forbidden_update_expiry_date: 已发布的班级不允许修改班级原先的有效期模式
+exception.classroom.forbidden_delete_not_draft: 只有未发布班级可以删除，操作失败。
+exception.classroom.not_found_member: 学员不存在
+exception.classroom.forbidden_become_auditor: 该用户不能成为该班级的旁听生！
+exception.classroom.forbidden_become_student: 该用户不能成为该班级学员！
+exception.classroom.expiry_earlier_than_current: 设置的有效期小于当前时间！
+exception.classroom.forbidden_not_student: 用户不是该班级的学员
+exception.classroom.forbidden_wave: 存在不允许增减的字段
+exception.classroom.forbidden_student: 用户已经是学员，不能添加！
+exception.classroom.recommend_required_numeric: 推荐班级序号只能为数字！
+exception.classroom.member_level_limit: 用户不能以会员身份加入班级！
+exception.course.member.not_found: 课程中没有该成员
+exception.course.member.not_member: 不是课程成员
 exception.page.error_mode: 错误的参数'mode'
 exception.page.error_type: 错误的参数'type'
 exception.page.error_portal: 错误的参数'portal'
-
 exception.category.not_found: 类别不存在
-
+exception.category.not_found_group: 类别组不存在
+exception.category.empty_name: 名称不能为空
+exception.category.empty_code: 编码不能为空
+exception.category.code_invalid: 编码含有非法字符，保存分类失败
+exception.category.code_digit_invalid: 编码不能全为数字，保存分类失败
+exception.category.code_unavailable: 编码不可用，保存分类失败
+exception.category.not_found_parent_category: 父分类不存在，保存分类失败
 exception.testpaper.not_found: 试卷不存在
 exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
 exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
 exception.testpaper.forbidden_resit: 该试卷只能考一次，不能再考！
-exception.testpaper.forbidden_access_other_student_testpaper: 不可以访问其他学生的试卷哦!
+exception.testpaper.forbidden_access_testpaper: 不可以访问其他学生的试卷!
 exception.testpaper.forbidden_duplicate_commit_testpaper: 试卷已经做完，不能重复提交!
 exception.testpaper.reviewing: 试卷正在批阅！不能重新考试!
-
+exception.testpaper.not_testpaper_task: 试卷不属于当前任务！
+exception.testpaper.not_found_exercise: 练习不存在
+exception.testpaper.status_invalid: 试卷状态不合法!
+exception.testpaper.not_found_result: 试卷结果不存在
+exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修改!
 exception.uploadfile.file_not_found: 文件不存在
-
+exception.uploadfile.forbidden_manage_file: 没有权限管理资源
+exception.uploadfile.error_status: 状态不正确
+exception.uploadfile.permission_denied: 您无权访问此文件！
+exception.uploadfile.failed: 完成上传失败
+exception.uploadfile.globalId_required: 缺少globalId
+exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
+exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
-
 exception.player.not_support_type: 播放器不支持该文件类型
+exception.question.not_found: 题目不存在
+exception.userfield.not_found: 用户字段不存在
+exception.material.not_found: 教学资料不存在
+exception.material.link_required: 资料链接地址不能为空
+exception.tag.not_found: 标签不存在
+exception.tag.empty_name: 标签名不能为空
+exception.tag.duplicate_name: 该标签名已存在
+exception.tag.empty_group_name: 标签组名字未填写，请添加
+exception.tag.duplicate_group_name: 标签组名字已存在，请重新填写
+exception.conversation.not_found: 会话不存在
+exception.org.not_found: 组织机构不存在
+exception.card.type_required: 缺少必要字段，请明确卡的类型
+exception.card.error_type: 卡的类型不存在
+exception.group.not_found: 小组不存在
+exception.group.duplicate_join: 已在小组内，不要重复加入
+exception.group.not_found_member: 成员不存在
+exception.group.title_required: 缺少标题
+exception.comment.not_found: 评论不存在
+exception.comment.forbidden_delete: 无权限删除评论！
+exception.comment.objecttype_invalid: 不存在当前这种评论对象
+exception.group.thread.not_found: 话题不存在
+exception.group.thread.title_required: 缺少标题
+exception.group.thread.content_required: 缺少内容
+exception.group.thread.groupid_required: 缺少小组id
+exception.group.thread.userid_required: 缺少用户id
+exception.group.thread.sort_invalid: 错误的排序方式
+exception.group.thread.collect_own_thread: 不能收藏自己的话题
+exception.group.thread.already_collect: 已经收藏这个话题了
+exception.group.thread.not_found_collection: 你没有收藏这个话题
+exception.block.not_found: 此编辑区不存在
+exception.block.not_found_template: 此编辑区模板不存在
+exception.block.empty_history: 此编辑区数据不存在，更新失败
+exception.block.empty_codes: 获取内容失败，不允许查询空编号所对应的内容!
+exception.opencourse.not_found: 课程不存在
+exception.opencourse.not_found_lesson: 课时不存在
+exception.opencourse.lesson_type_invalid: 课时类型不正确
+exception.opencourse.favor_unpublished: 不能收藏未发布课程
+exception.opencourse.duplicate_favor: 该收藏已经存在，请不要重复收藏!
+exception.opencourse.cancel_unfavor: 你未收藏本课程，取消收藏失败!
+exception.opencourse.status_invalid: 非法状态
+exception.opencourse.forbidden_manage_course: 您不是课程的教师或管理员，无权操作！
+exception.opencourse.itemids_invalid: 课时数错误
+exception.blacklist.forbidden_take: 没有权限
+exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
+exception.blacklist.not_found: 黑名单不能存在
+exception.course.note.not_found: 笔记不存在
+exception.course.note.no_permission: 没有权限
+exception.course.note.duplicate_like: 不可重复对一条笔记点赞！
+exception.review.not_found: 课程评价不存在
+exception.message.not_found_sender_or_receiver: 发送方或接收方不存在
+exception.message.send_to_self: 不能给自己发消息
+exception.message.empty_message: 消息为空
+exception.message.not_found_conversation: 会话不存在
+exception.coupon.not_found: 优惠券不存在
+exception.coupon.status_invalid: 非法的优惠券状态
+exception.sign.duplicate_sign: 今日已签到!
+exception.search.failed: 搜索失败，请稍后再试.
+exception.app.get_package_failed: 应用包不存在或网络超时，读取包信息失败
+exception.app.not_found: App不存在
+exception.app.delete_cache_failed: 删除缓存失败
+exception.app.extract_failed: 无法解压缩安装包！
 
 course.unname_title: 未命名计划
 

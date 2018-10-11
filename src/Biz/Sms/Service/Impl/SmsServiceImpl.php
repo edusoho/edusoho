@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\SettingException;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Biz\Sms\SmsException;
 use Biz\User\UserException;
 

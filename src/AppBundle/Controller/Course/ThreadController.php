@@ -3,8 +3,10 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\MemberException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Thread\ThreadException;
 use Topxia\Api\Resource\Classroom;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
@@ -20,7 +22,7 @@ class ThreadController extends CourseBaseController
     {
         $courseMember = $this->getCourseMember($request, $course);
         if (empty($courseMember)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
@@ -94,7 +96,7 @@ class ThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('话题不存在，或已删除。');
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $paginator = new Paginator(
@@ -223,7 +225,7 @@ class ThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $user = $this->getCurrentUser();
@@ -522,7 +524,7 @@ class ThreadController extends CourseBaseController
         $post = $this->getThreadService()->getPost($courseId, $postId);
 
         if (empty($post)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         $user = $this->getCurrentUser();

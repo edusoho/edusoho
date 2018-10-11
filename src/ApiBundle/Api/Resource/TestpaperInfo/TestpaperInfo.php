@@ -11,8 +11,6 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\UserException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TestpaperInfo extends AbstractResource
 {
@@ -58,7 +56,7 @@ class TestpaperInfo extends AbstractResource
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         if ('testpaper' != $activity['mediaType'] || $activity['ext']['mediaId'] != $testpaper['id']) {
-            throw new AccessDeniedHttpException('试卷不属于当前任务！');
+            throw TestpaperException::NOT_TESTPAPER_TASK();
         }
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(

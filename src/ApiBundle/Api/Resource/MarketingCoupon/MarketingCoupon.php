@@ -9,7 +9,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Coupon\Service\CouponService;
 use Biz\User\Service\UserService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MarketingCoupon extends AbstractResource
 {
@@ -24,7 +23,7 @@ class MarketingCoupon extends AbstractResource
         $postData = $request->request->all();
 
         if (empty($postData['mobile'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $user = $this->getUserService()->getUserByVerifiedMobile($postData['mobile']);

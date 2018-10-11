@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api;
 
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\Util\ExceptionUtil;
 use ApiBundle\ApiBundle;
@@ -10,7 +9,6 @@ use Codeages\Biz\Framework\Context\Biz;
 use Doctrine\Common\Annotations\CachedReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Biz\Common\CommonException;
 
 class ResourceKernel

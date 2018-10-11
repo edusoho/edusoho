@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsException;
 use Biz\System\Service\SettingService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
@@ -94,7 +95,7 @@ class SmsController extends BaseController
         }
 
         if (!$this->getSmsService()->isOpen($smsType)) {
-            throw new \RuntimeException('请先开启相关设置!');
+            $this->createNewException(SmsException::FORBIDDEN_SMS_SETTING());
         }
 
         $parameters['url'] = $url.' ';

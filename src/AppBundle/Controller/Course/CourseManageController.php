@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Common\CommonException;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
@@ -693,12 +694,12 @@ class CourseManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             if (empty($data) || !isset($data['teachers'])) {
-                throw new InvalidArgumentException('Empty Data');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
             $teachers = json_decode($data['teachers'], true);
             if (empty($teachers)) {
-                throw new InvalidArgumentException('Empty Data');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);

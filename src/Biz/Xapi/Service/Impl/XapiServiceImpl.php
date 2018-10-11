@@ -3,7 +3,6 @@
 namespace Biz\Xapi\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
 use Biz\User\UserException;

@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\CloudPlatform\Client\FailoverCloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Search\Adapter\SearchAdapterFactory;
+use Biz\Search\SearchException;
 use Biz\Search\Service\SearchService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -37,7 +38,7 @@ class SearchServiceImpl extends BaseService implements SearchService
             $result = $api->get('/search', $conditions);
 
             if (empty($result['success'])) {
-                throw new \RuntimeException('搜索失败，请稍后再试.', 1);
+                $this->createNewException(SearchException::SEARCH_FAILED());
             }
         } catch (\RuntimeException $e) {
             $this->getSettingService()->set('_cloud_search_restore_time', time() + 60 * 10);

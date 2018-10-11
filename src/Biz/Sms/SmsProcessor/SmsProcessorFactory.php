@@ -15,7 +15,7 @@ class SmsProcessorFactory
      *
      * @return BaseSmsProcessor
      *
-     * @throws InvalidArgumentException
+     * @throws SmsException
      */
     public static function create($targetType)
     {

@@ -8,7 +8,9 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
+use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
@@ -18,9 +20,7 @@ use Biz\Player\Service\PlayerService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\UserException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseTaskMedia extends AbstractResource
 {
@@ -75,11 +75,11 @@ class CourseTaskMedia extends AbstractResource
                 throw UserException::UN_LOGIN();
             }
             if ($course['parentId'] > 0) {
-                throw new AccessDeniedHttpException('must join classroom');
+                throw ClassroomException::UN_JOIN();
             }
 
             if (!$this->getCourseMemberService()->isCourseMember($course['id'], $user['id'])) {
-                throw new AccessDeniedHttpException('you are not course member');
+                throw MemberException::FORBIDDEN_NOT_MEMBER();
             }
         }
 

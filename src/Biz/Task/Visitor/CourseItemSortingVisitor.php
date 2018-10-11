@@ -3,6 +3,7 @@
 namespace Biz\Task\Visitor;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
@@ -102,7 +103,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
                     $this->chapterBatchUpdateHelper->add('id', $chapterId, $fields);
                     break;
                 default:
-                    throw new InvalidArgumentException();
+                    throw CommonException::ERROR_PARAMETER();
             }
         }
 
@@ -226,7 +227,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
                     ++$seq;
                     break;
                 default:
-                    throw new InvalidArgumentException();
+                    throw CommonException::ERROR_PARAMETER();
             }
         }
 

@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\MaterialException;
+use Biz\Course\MemberException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MaterialController extends CourseBaseController
@@ -12,7 +14,7 @@ class MaterialController extends CourseBaseController
     {
         $courseMember = $this->getCourseMember($request, $course);
         if (empty($courseMember)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -80,7 +82,7 @@ class MaterialController extends CourseBaseController
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
 
         if (empty($material)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         if ($material['source'] == 'courseactivity' || !$material['lessonId']) {

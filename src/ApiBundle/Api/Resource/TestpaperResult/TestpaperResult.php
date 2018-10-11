@@ -10,7 +10,6 @@ use Biz\Question\Service\QuestionService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TestpaperResult extends AbstractResource
 {
@@ -37,7 +36,7 @@ class TestpaperResult extends AbstractResource
         }
 
         if (empty($course) && $testpaperResult['userId'] != $user['id']) {
-            throw TestpaperException::FORBIDDEN_ACCESS_OTHER_STUDENT_TESTPAPER();
+            throw TestpaperException::FORBIDDEN_ACCESS_TESTPAPER();
         }
 
         $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
@@ -65,7 +64,7 @@ class TestpaperResult extends AbstractResource
         $user = $this->getCurrentUser();
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
         if (!$testpaperResult || $testpaperResult['userId'] != $user['id']) {
-            throw TestpaperException::FORBIDDEN_ACCESS_OTHER_STUDENT_TESTPAPER();
+            throw TestpaperException::FORBIDDEN_ACCESS_TESTPAPER();
         }
 
         //客观题自动批阅完后先显示答案解析
@@ -80,7 +79,7 @@ class TestpaperResult extends AbstractResource
         }
 
         if (empty($course) && $testpaperResult['userId'] != $user['id']) {
-            throw TestpaperException::FORBIDDEN_ACCESS_OTHER_STUDENT_TESTPAPER();
+            throw TestpaperException::FORBIDDEN_ACCESS_TESTPAPER();
         }
 
         $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);

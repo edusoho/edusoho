@@ -5,9 +5,7 @@ namespace ApiBundle\Api\Resource\StudentLiveCourse;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Exception\ErrorCode;
 use Biz\Common\CommonException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class StudentLiveCourse extends AbstractResource
 {

@@ -4,9 +4,12 @@ namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\ClassroomException;
+use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Classroom\Dao\ClassroomReviewDao;
 use Biz\Classroom\Service\ClassroomService;
@@ -41,7 +44,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException('Classroom is not Exist!');
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         return $this->getClassroomReviewDao()->getByUserIdAndClassroomId($userId, $classroomId);
@@ -69,7 +72,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     public function saveReview($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('classroomId', 'userId', 'rating'))) {
-            throw $this->createInvalidArgumentException('参数不正确，评价失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if ($fields['rating'] > 5) {
@@ -83,13 +86,13 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $userId = $this->getCurrentUser()->id;
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException(sprintf('班级(%s)不存在，评价失败！', $fields['classroomId']));
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createNotFoundException(sprintf('用户(%s)不存在,评价失败!', $fields['userId']));
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
@@ -142,7 +145,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $review = $this->getReview($id);

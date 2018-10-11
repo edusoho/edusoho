@@ -3,10 +3,14 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Course\Dao\FavoriteDao;
 use AppBundle\Common\ArrayToolkit;
+use Biz\File\UploadFileException;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\System\Service\LogService;
 use Biz\OpenCourse\Dao\OpenCourseDao;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
@@ -46,7 +50,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->tryCreateCourse();
 
         if (!ArrayToolkit::requireds($course, array('title'))) {
-            throw $this->createServiceException('缺少必要字段，创建课程失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $course = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId'));
@@ -72,7 +76,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin() || !($user->isTeacher() || $user->isAdmin() || $user->isSuperAdmin())) {
-            throw $this->createAccessDeniedException('Unauthorized');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
     }
 
@@ -213,7 +217,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $course = $this->getCourse($id);
         if (empty($course)) {
-            throw $this->createServiceException('课程不存在，更新失败！');
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $updatedCourse = $this->updateOpenCourse($course, $fields);
@@ -271,7 +275,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->tryManageOpenCourse($id);
 
         if (empty($course)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $this->dispatchEvent('open.course.close', $course);
@@ -297,17 +301,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         if (!$this->hasOpenCourseManagerRole($courseId, $user['id'])) {
-            throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+            $this->createNewException(OpenCourseException::FORBIDDEN_MANAGE_COURSE());
         }
 
         return $course;
@@ -318,17 +322,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $user = $this->getCurrentUser();
 
         if (empty($user->id)) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
-            throw $this->createAccessDeniedException('您不是管理员，无权操作！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $course;
@@ -339,7 +343,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException('课程不存在，图标更新失败！');
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $fileIds = ArrayToolkit::column($data, 'id');
@@ -368,23 +372,23 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $user = $this->getCurrentUser();
 
         if (empty($user['id'])) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException('该课程不存在,收藏失败!');
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         if ('published' != $course['status']) {
-            throw $this->createServiceException('不能收藏未发布课程');
+            $this->createNewException(OpenCourseException::FAVOR_UNPUBLISHED());
         }
 
         $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
 
         if ($favorite) {
-            throw $this->createServiceException('该收藏已经存在，请不要重复收藏!');
+            $this->createNewException(OpenCourseException::DUPLICATE_FAVOR());
         }
 
         //添加动态
@@ -413,19 +417,19 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $user = $this->getCurrentUser();
 
         if (empty($user['id'])) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException('该课程不存在,收藏失败!');
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
 
         if (empty($favorite)) {
-            throw $this->createServiceException('你未收藏本课程，取消收藏失败!');
+            $this->createNewException(OpenCourseException::CANCEL_UN_FAVOR());
         }
 
         $this->getFavoriteDao()->delete($favorite['id']);
@@ -518,21 +522,21 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson['replayStatus'] = 'ungenerated';
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
-            throw $this->createServiceException('参数缺失，创建课时失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (empty($lesson['courseId'])) {
-            throw $this->createServiceException('添加课时失败，课程ID为空。');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $course = $this->getCourse($lesson['courseId'], true);
 
         if (empty($course)) {
-            throw $this->createServiceException('添加课时失败，课程不存在。');
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         if (!in_array($lesson['type'], array('video', 'liveOpen', 'open'))) {
-            throw $this->createServiceException('课时类型不正确，添加失败！');
+            $this->createNewException(OpenCourseException::LESSON_TYPE_INVALID());
         }
 
         $this->fillLessonMediaFields($lesson);
@@ -567,13 +571,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException("课程(#{$courseId})不存在！");
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         $fields = ArrayToolkit::filter($fields, array(
@@ -645,12 +649,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         $file = $this->getUploadFileService()->getFile($fileId);
         if (!$file) {
-            throw $this->createServiceException('文件不存在');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $lessonFields = array(
@@ -683,7 +687,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         $conditions = array(
@@ -703,7 +707,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException("课时#{$lessonId}不存在");
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         $publishedLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('status' => 'published'));
@@ -720,7 +724,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson = $this->getCourseLesson($course['id'], $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException("课时#{$lessonId}不存在");
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         $lesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('status' => 'unpublished'));
@@ -748,13 +752,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $existedItemIds = array_keys($items);
 
         if (count($itemIds) != count($existedItemIds)) {
-            throw $this->createServiceException('itemdIds参数不正确');
+            $this->createNewException(OpenCourseException::ITEMIDS_INVALID());
         }
 
         $diffItemIds = array_diff($itemIds, array_keys($items));
 
         if (!empty($diffItemIds)) {
-            throw $this->createServiceException('itemdIds参数不正确');
+            $this->createNewException(OpenCourseException::ITEMIDS_INVALID());
         }
 
         $lessonNum = $seq = 0;
@@ -778,7 +782,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException('此课程不存在！');
+            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
         $thisStartTime = $thisEndTime = 0;
@@ -825,7 +829,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(OpenCourseException::STATUS_INVALID());
         }
 
         $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('progressStatus' => $status));
@@ -878,13 +882,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
-                throw $this->createServiceException("教师ID不能为空，设置课程(#{$courseId})教师失败");
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
             $user = $this->getUserService()->getUser($teacher['id']);
 
             if (empty($user)) {
-                throw $this->createServiceException("用户不存在或没有教师角色，设置课程(#{$courseId})教师失败");
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
 
             $teacherMembers[] = array(

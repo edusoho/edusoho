@@ -5,10 +5,13 @@ namespace Biz\Testpaper\Service\Impl;
 use Biz\BaseService;
 use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Testpaper\Dao\TestpaperItemDao;
+use Biz\Testpaper\TestpaperException;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Dao\TestpaperResultDao;
@@ -59,7 +62,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (!$testpaper) {
-            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $argument = $fields;
@@ -84,7 +87,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 return 0;
             }
 
-            throw $this->createServiceException("Testpaper #{$id} is not found, delete testpaper failure.");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
@@ -214,11 +217,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException("Testpaper(#{$id}) not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if (!in_array($testpaper['status'], array('closed', 'draft'))) {
-            throw $this->createServiceException('试卷状态不合法!');
+            $this->createNewException(TestpaperException::STATUS_INVALID());
         }
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
@@ -234,11 +237,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException("Testpaper(#{$id}) not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if (!in_array($testpaper['status'], array('open'))) {
-            throw $this->createServiceException('试卷状态不合法!');
+            $this->createNewException(TestpaperException::STATUS_INVALID());
         }
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
@@ -378,11 +381,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperResult($resultId);
 
         if ($result['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+            $this->createNewException(TestpaperException::FORBIDDEN_ACCESS_TESTPAPER());
         }
 
         if (in_array($result['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException('已经交卷的试卷不能修改!');
+            $this->createNewException(TestpaperException::MODIFY_COMMITTED_TESTPAPER());
         }
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
@@ -446,7 +449,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function startTestpaper($id, $fields)
     {
         if (!ArrayToolkit::parts($fields, array('lessonId', 'courseId'))) {
-            throw $this->createInvalidArgumentException(' Invalid Argument');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $testpaper = $this->getTestpaper($id);
@@ -681,7 +684,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $argument = $fields;
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException("Testpaper(#{$testpaperId}) not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $existItems = $this->findItemsByTestId($testpaperId);
@@ -835,23 +838,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $paperResult = $this->getTestpaperResult($resultId);
 
         if (!$paperResult) {
-            throw $this->createNotFoundException('试卷结果不存在!');
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
         $paper = $this->getTestpaper($paperResult['testId']);
 
         if (!$paper) {
-            throw $this->createNotFoundException('试卷不存在!');
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if ('doing' === $paperResult['status'] && ($paperResult['userId'] != $user['id'])) {
-            throw $this->createNotFoundException('无权查看此试卷');
+            $this->createNewException(TestpaperException::FORBIDDEN_ACCESS_TESTPAPER);
         }
 
         if ($user->isAdmin()) {

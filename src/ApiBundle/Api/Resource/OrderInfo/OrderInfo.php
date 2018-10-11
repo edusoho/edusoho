@@ -3,7 +3,6 @@
 namespace ApiBundle\Api\Resource\OrderInfo;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\MathToolkit;
 use Biz\Common\CommonException;

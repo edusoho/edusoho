@@ -3,13 +3,11 @@
 namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseSet extends AbstractResource
 {

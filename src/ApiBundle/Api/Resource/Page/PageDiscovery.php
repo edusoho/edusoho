@@ -4,9 +4,7 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Biz\User\UserException;
 
 class PageDiscovery extends AbstractResource
