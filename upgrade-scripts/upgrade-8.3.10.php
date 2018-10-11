@@ -67,7 +67,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if ($index == 0) {
-            $this->logger( 'info', '开始执行升级脚本');
+            $this->logger('info', '开始执行升级脚本');
             $this->deleteCache();
 
             return array(
@@ -115,10 +115,47 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function addTableIndex()
     {
-        $jobs = $this->getSchedulerService()->searchJobs(array('name'=> 'AddTableIndexJob'),array(),0,PHP_INT_MAX);
-        if(empty($jobs)){
-            $this->getTableIndexService()->register();
+        if ($this->isJobExist('AddTableIndexJob')) {
+            return 1;
         }
+
+        $currentTime = time();
+        $today = strtotime(date('Y-m-d', $currentTime).'02:00:00');
+
+        if ($currentTime > $today) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')).'02:00:00');
+        }
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'AddTableIndexJob',
+              '',
+              'Biz\\\\TableIndex\\\\\Job\\\\AddTableIndexJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务AddTableIndexJob');
         return 1;
     }
 
