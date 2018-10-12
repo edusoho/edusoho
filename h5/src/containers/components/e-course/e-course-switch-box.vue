@@ -7,7 +7,7 @@
         <p class="price" v-if="!isFree">¥ {{ course.price }}</p>
       </span>
       <span class="switch-box__state">
-        <p v-if="Number(courseSettings.show_student_num_enabled)">{{ course.studentNum }}人在学</p>
+        <p v-if="showStudent">{{ course.studentNum }}人在学</p>
       </span>
     </div>
 
@@ -74,7 +74,10 @@
       rate() {
         if (!parseInt(this.course.publishedTaskNum)) return 0;
         return parseInt(this.course.progress.percent)
-      }
+      },
+      showStudent() {
+        return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true;
+      },
     },
     methods: {
       goToPay() {

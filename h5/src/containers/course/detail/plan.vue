@@ -3,7 +3,7 @@
     <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
         <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
-        <span v-if="Number(courseSettings.show_student_num_enabled)" class="plan-price__student-num">{{ details.studentNum }}人在学</span>
+        <span v-if="showStudent" class="plan-price__student-num">{{ details.studentNum }}人在学</span>
       </div>
     </e-panel>
 
@@ -107,7 +107,10 @@ export default {
           : '永久有效'
         );
       }
-    }
+    },
+    showStudent() {
+      return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true;
+    },
   },
   methods: {
     ...mapActions ('course', [
