@@ -18,7 +18,8 @@ import { Toast } from 'vant';
 export default {
   data () {
     return {
-      media: ''
+      media: '',
+      isPreview: this.$route.query.preview,
     }
   },
   computed: {
@@ -53,7 +54,7 @@ export default {
     */
     getParams () {
       const { courseId, taskId, type } = this.$route.query;
-      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable || true)
+      const canTryLookable = !this.joinStatus && this.isPreview
       this.media = type;
 
       return canTryLookable ? {

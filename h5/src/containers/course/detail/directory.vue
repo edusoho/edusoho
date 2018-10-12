@@ -234,8 +234,7 @@
           }
         });
         if (!this.joinStatus
-          && (Number(details.tryLookable)
-              || ['is-tryLook', 'is-free'].includes(task.tagStatus))) {
+          && ['is-tryLook', 'is-free'].includes(task.tagStatus)) {
         // trylook and free video click
           switch (task.type) {
             case 'video':
@@ -258,6 +257,7 @@
                   courseId: this.selectedPlanId,
                   taskId: task.id,
                   type: task.type,
+                  preview: 1
                 }
               })
               break;
