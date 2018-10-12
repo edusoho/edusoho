@@ -51,9 +51,9 @@
         portal: pathName2Portal[this.from],
         type: 'discovery',
         mode: 'draft',
-      }).then((res) => {
+      }).then(res => {
         this.parts = Object.values(res);
-      }).catch((err) => {
+      }).catch(err => {
         console.log(err, 'error');
       });
     },

@@ -168,7 +168,7 @@ export default {
         portal: pathName2Portal[this.pathName],
         type: 'discovery',
         mode,
-      }).then((res) => {
+      }).then(res => {
         this.modules = Object.values(res);
         this.moduleCountInit();
       })
@@ -179,7 +179,7 @@ export default {
         portal: pathName2Portal[this.pathName],
         type: 'discovery',
         mode: 'draft',
-      }).then((res) => {
+      }).then(res => {
         this.$message({
           message: '重置成功',
           type: 'success'

@@ -170,14 +170,14 @@ export default {
       Api.uploadFile({
           data: formData
         })
-        .then((data) => {
+        .then(data => {
           this.copyModuleData.image = data;
           this.$message({
             message: '图片上传成功',
             type: 'success'
           });
         })
-        .catch((err) => {
+        .catch(err => {
           this.$message({
             message: err.message,
             type: 'error'

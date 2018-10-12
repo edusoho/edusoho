@@ -151,7 +151,7 @@
         Api.uploadFile({
           data: formData
         })
-        .then((data) => {
+        .then(data => {
           this.item.image = data;
           this.$emit('selected',
           {
