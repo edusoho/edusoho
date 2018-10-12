@@ -26,7 +26,6 @@ use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseManageController extends BaseController
 {

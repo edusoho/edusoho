@@ -3,7 +3,6 @@
 namespace Biz\Sms\SmsProcessor;
 
 use Biz\Sms\SmsException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 
 class SmsProcessorFactory

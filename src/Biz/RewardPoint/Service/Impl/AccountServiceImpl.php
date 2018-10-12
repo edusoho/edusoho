@@ -3,6 +3,7 @@
 namespace Biz\RewardPoint\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -10,6 +11,7 @@ use Biz\RewardPoint\Dao\AccountDao;
 use Biz\RewardPoint\Service\AccountFlowService;
 use Biz\RewardPoint\Service\AccountService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\UserException;
 
 class AccountServiceImpl extends BaseService implements AccountService
 {
@@ -83,7 +85,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $this->checkAccountExist($id);
 
         if (!is_numeric($value)) {
-            throw $this->createInvalidArgumentException('The value must be an integer!');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $balanceFields = array(
@@ -99,7 +101,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $this->checkAccountExist($id);
 
         if (!is_numeric($value)) {
-            throw $this->createInvalidArgumentException('The value must be an integer!');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $balanceFields = array(
@@ -201,7 +203,7 @@ class AccountServiceImpl extends BaseService implements AccountService
     protected function validateFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('userId'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
     }
 
@@ -210,7 +212,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("user {$userId} not exist！");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
     }
 

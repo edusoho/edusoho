@@ -13,7 +13,6 @@ use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 {

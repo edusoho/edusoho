@@ -7,7 +7,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Question\QuestionException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {

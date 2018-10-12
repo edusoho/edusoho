@@ -5,7 +5,6 @@ namespace Biz\Article\Dao\Impl;
 use Biz\Article\Dao\ArticleDao;
 use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
 {
