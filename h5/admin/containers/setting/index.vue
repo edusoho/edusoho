@@ -184,7 +184,6 @@ export default {
           message: '重置成功',
           type: 'success'
         });
-      }).then(() => {
         this.load();
       }).catch(err => {
         this.$message({
