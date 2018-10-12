@@ -1,12 +1,12 @@
 <template>
   <div class="preview-container">
     <div class="image-container clearfix">
-      <div class="phone-img">
+      <div class="phone-img" :class="{'phone-img-mp': isMiniprogramSetting}">
         <img  src="static/images/phone_shell.png">
         <mobile-preview class="preview-iframe" :feedback="false"></mobile-preview>
       </div>
-      <div class="code-container">
-        <div class="code-item" v-if="qrcode">
+      <div class="code-container" :class="{'code-container-mp': isMiniprogramSetting}">
+        <div class="code-item" v-if="!isMiniprogramSetting">
           <div class="code-img-container"><img class="code-image" :src="qrcode"></div>
           <div class="help-text">扫描二维码在手机端预览<div>二维码60分钟内首次扫描有效</div></div>
         </div>
@@ -33,13 +33,15 @@ export default {
     mobilePreview
   },
   computed: {
-    ...mapState(['draft'])
+    ...mapState(['draft']),
+    isMiniprogramSetting() {
+      return this.from === 'miniprogramSetting';
+    }
   },
   created() {
     const { preview, times, duration } = this.$route.query;
-    console.log(this.from, 999)
 
-    if (this.from === 'miniprogramSetting') {
+    if (this.isMiniprogramSetting) {
       return;
     }
 
