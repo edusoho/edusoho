@@ -8,7 +8,7 @@
   <div class="chapter-item clearfix">
     <div class="item-line"></div>
     {% include 'lesson-manage/normal/lesson-manage.html.twig' with {
-      tasks: lesson.tasks|default(), shouldDisplayTask: shouldDisplayTask, isShowText: isShowText } %}
+      tasks: lesson.tasks|default(), lesson: lesson|default(), shouldDisplayTask: shouldDisplayTask, isShowText: isShowText } %}
   </div>
   
   <ul class="js-lesson-box task-manage-lesson-tasks {{shouldDisplayTask?'':'hidden'}}">

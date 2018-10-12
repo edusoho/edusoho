@@ -164,13 +164,16 @@ export default class QuestionManage{
     if ($('input[name="passedScore"]:visible').length > 0) {
       passedScore = $('input[name="passedScore"]').val();
     }
-
-    $target.button('loading').addClass('disabled');
-
-    $.post(this.$element.attr('action'),{questions:this.questions,passedScore:passedScore},function(result){
-      if (result.goto) {
-        window.location.href = result.goto;
+      if(this.questions.length>2000){
+          notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
+      }else{
+          $target.button('loading').addClass('disabled');
+          $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore},function(result){
+            if (result.goto) {
+              window.location.href = result.goto;
+            }
+          });
       }
-    });
+
   }
 }

@@ -4,8 +4,8 @@ namespace Biz;
 
 use AppBundle\System;
 use Codeages\Biz\Framework\Context\Biz;
-use Pimple\ServiceProviderInterface;
 use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 class DefaultSdkProvider implements ServiceProviderInterface
 {
@@ -57,6 +57,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $sdk = $that->generateSdk($biz, $that->getMpConfig($biz));
             if (!empty($sdk)) {
                 $service = $sdk->getMpService();
+            }
+
+            return $service;
+        };
+
+        $biz['qiQiuYunSdk.aiface'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, $that->getAIFaceConfig($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getAiService();
             }
 
             return $service;
@@ -159,5 +169,23 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('mp' => array('host' => $hostUrl));
+    }
+
+    public function getAIFaceConfig(Biz $biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (isset($developerSetting['ai_face_url']) && !empty($developerSetting['ai_face_url'])) {
+            $urlSegs = explode('://', $developerSetting['ai_face_url']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return array('ai' => array('host' => $hostUrl));
     }
 }

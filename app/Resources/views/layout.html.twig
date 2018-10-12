@@ -35,6 +35,8 @@
 {% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}"/>
     <meta name="description"
           content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}"/>
+    <meta name="format-detection"
+          content="{% spaceless %}{% block format_detection %}{% endblock %}{% endspaceless %}"/>
     <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
     <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
     <meta content="{{ wechat_login_bind_enabled()|default(0) }}" name="wechat_login_bind"/>

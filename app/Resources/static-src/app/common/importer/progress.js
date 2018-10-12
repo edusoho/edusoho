@@ -4,6 +4,7 @@ class Progress {
       importData: [],
       $container: null,
       quantity: 0,
+      successCount:0,
       total: 0,
       checkType: 'ignore',
       chunkSize: 8,
@@ -65,7 +66,7 @@ class Progress {
 
   onComplate() {
     this.$container.find('.progress-bar').css('width', '100%');
-    this.$container.find('.progress-text').text(Translator.trans('importer.import_finish_data', {'number': this.quantity}));
+    this.$container.find('.progress-text').text(Translator.trans('importer.import_finish_data', {'number': this.successCount}));
     this.$container.find('.js-import-progress-text').addClass('hidden');
     this.$container.find('.js-import-finish-btn').removeClass('hidden');
   }
@@ -78,6 +79,9 @@ class Progress {
 
     this.data.importData = this.chunkData[index];
     $.post(this.$container.data('importUrl'), this.data).then((res) => {
+      if(res.successCount){
+          this.successCount = this.successCount + res.successCount;
+      }
       this.quantity = this.quantity + this.chunkData[index].length;
       this.onProgress();
       this.import(index + 1);

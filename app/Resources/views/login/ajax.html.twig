@@ -1,10 +1,11 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{ 'user.login.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
-{% set modal_class = 'login-modal' %}
+{% set modal_class = 'login-modal js-login-modal' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
 
+{% set ai_face_enabled = (setting('feature.face_enabled')|default(0) and setting('face.login.enabled')|default(0) and setting('face.login.pc_enabled')|default(0)) %}
 {% block body %}
-<form id="login-ajax-form" class="form-vertical form-vertical-small" method="post" action="{{ path('login_check') }}">
+<form id="login-ajax-form" class="form-vertical form-vertical-small js-login-form" method="post" action="{{ path('login_check') }}">
 
   <div class="alert alert-danger" style="display:none;"></div>
 
@@ -33,6 +34,11 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
+  {% if ai_face_enabled %}
+    {% set type = 'modal' %}
+    {% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}
+  {% endif %}
+
 {% endblock %}
 
 {% block footer %}
@@ -43,9 +49,15 @@
   <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{'user.login.go_register'|trans}}</a>
 </div>
 
-{% if setting('login_bind.enabled') %}
+{% if setting('login_bind.enabled') or ai_face_enabled %}
   <div class="social-login">
     <span>
+      {% if ai_face_enabled %}
+        <a class="sts-login-link js-sts-login-link" href="javascript:;">
+          <img src="{{ asset('static-dist/app/img/face.png') }}"
+            srcset="{{ asset('static-dist/app/img/face.png') }} 1x" alt="{{'user.login.sts_discovery'|trans}}"/>
+        </a>
+      {% endif %}
       {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
     </span>
     <div class="line"></div>

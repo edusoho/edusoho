@@ -10,6 +10,9 @@ import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import notify from 'common/notify';
 import './alert';
+import 'echo-js';
+
+echo.init();
 
 let rpn = new RewardPointNotify();
 rpn.display();

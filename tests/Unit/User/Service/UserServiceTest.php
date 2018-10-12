@@ -522,6 +522,25 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(1, $foundUser['emailVerified']);
     }
 
+    public function testSetFaceRegistered()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $this->assertEquals(0, $registeredUser['faceRegistered']);
+
+        $this->getUserService()->setFaceRegistered($registeredUser['id']);
+        $foundUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals(1, $foundUser['faceRegistered']);
+
+        $this->getUserService()->setFaceRegistered($registeredUser['id']);
+        $foundUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals(1, $foundUser['faceRegistered']);
+    }
+
     public function testChangeNickname()
     {
         $userInfo = array(

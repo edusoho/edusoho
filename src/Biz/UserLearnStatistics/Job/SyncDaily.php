@@ -9,34 +9,31 @@ class SyncDaily extends AbstractJob
     public function execute()
     {
         //每天生成学习数据
-        try {
-            $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
-            $cursor = $this->getSyncTime($learnSetting);
-            $nextCursor = $cursor + 24 * 60 * 60;
+        $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
+        $cursor = $this->getSyncTime($learnSetting);
+        $nextCursor = $cursor + 24 * 60 * 60;
 
-            if (time() < $nextCursor) {
-                return;
-            }
-
-            $this->biz['db']->beginTransaction();
-            $conditions = array(
-                'createdTime_GE' => $cursor,
-                'createdTime_LT' => $nextCursor,
-                'event_EQ' => 'doing',
-            );
-
-            if ($cursor == $learnSetting['currentTime']) {
-                //当天升级的数据为了准确性，不统计加入退出课程数
-                $conditions['skipSyncCourseSetNum'] = true;
-            }
-            $this->getLearnStatisticsService()->batchCreateDailyStatistics($conditions);
-
-            $jobArgs['cursor'] = $nextCursor;
-            $this->getJobDao()->update($this->id, array('args' => $jobArgs));
-            $this->biz['db']->commit();
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
+        if (time() < $nextCursor) {
+            return;
         }
+
+        while (date('Y-m-d', $nextCursor) != date('Y-m-d', strtotime('+1 day'))) {
+            $job = array(
+                'name' => 'SyncDailyChildrenJob',
+                'source' => 'MAIN',
+                'expression' => intval(time()),
+                'class' => 'Biz\UserLearnStatistics\Job\SyncDailyChildrenJob',
+                'args' => array('cursor' => $cursor, 'nextCursor' => $nextCursor, 'learnStatisticsTime' => $learnSetting['currentTime']),
+                'misfire_policy' => 'executing',
+            );
+            $this->getSchedulerService()->register($job);
+
+            $cursor = $nextCursor;
+            $nextCursor += 24 * 60 * 60;
+        }
+
+        $jobArgs['cursor'] = $cursor;
+        $this->getJobDao()->update($this->id, array('args' => $jobArgs));
     }
 
     private function getSyncTime($learnSetting)
@@ -54,6 +51,9 @@ class SyncDaily extends AbstractJob
         return $this->biz->service('Scheduler:SchedulerService');
     }
 
+    /**
+     * @return \Biz\UserLearnStatistics\Service\Impl\LearnStatisticsServiceImpl
+     */
     protected function getLearnStatisticsService()
     {
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');

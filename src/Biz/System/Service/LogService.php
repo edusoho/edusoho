@@ -11,7 +11,7 @@ interface LogService
      * @param string $action  操作
      * @param string $message 记录的详情
      */
-    public function info($module, $action, $message, array $data = null);
+    public function info($module, $action, $message, $data = null);
 
     /**
      * 记录警告日志.
@@ -20,7 +20,7 @@ interface LogService
      * @param string $action  操作
      * @param string $message 记录的详情
      */
-    public function warning($module, $action, $message, array $data = null);
+    public function warning($module, $action, $message, $data = null);
 
     /**
      * 记录错误日志.
@@ -29,7 +29,7 @@ interface LogService
      * @param string $action  操作
      * @param string $message 记录的详情
      */
-    public function error($module, $action, $message, array $data = null);
+    public function error($module, $action, $message, $data = null);
 
     /**
      * 日志搜索

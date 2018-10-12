@@ -14,7 +14,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -30,7 +30,7 @@ class Setting extends AbstractResource
         return array(
             'name' => $siteSetting['name'],
             'url' => $siteSetting['url'],
-            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'] . '/' . $siteSetting['logo'],
         );
     }
 
@@ -140,6 +140,30 @@ class Setting extends AbstractResource
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
             'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
         );
+    }
+    
+    public function getFace()
+    {
+        $faceSetting = $this->getSettingService()->get('face', array());
+        $featureSetting = $this->getSettingService()->get('feature', array());
+
+        $settings = array(
+            'login' => array(
+                'enabled' => 0,
+                'app_enabled' => 0,
+                'pc_enabled' => 0,
+                'h5_enabled' => 0,
+            )
+        );
+
+        if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
+            $settings['login']['enabled'] = isset($faceSetting['login']['enabled']) ? $faceSetting['login']['enabled'] : 0;
+            $settings['login']['app_enabled'] = isset($faceSetting['login']['app_enabled']) ? $faceSetting['login']['app_enabled'] : 0;
+            $settings['login']['pc_enabled'] = isset($faceSetting['login']['pc_enabled']) ? $faceSetting['login']['pc_enabled'] : 0;
+            $settings['login']['h5_enabled'] = isset($faceSetting['login']['h5_enabled']) ? $faceSetting['login']['h5_enabled'] : 0;
+        }
+        
+        return $settings;
     }
 
     public function getWeixinConfig($request)

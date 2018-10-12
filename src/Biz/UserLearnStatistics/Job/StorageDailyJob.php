@@ -18,6 +18,9 @@ class StorageDailyJob extends AbstractJob
         }
     }
 
+    /**
+     * @return \Biz\UserLearnStatistics\Service\Impl\LearnStatisticsServiceImpl
+     */
     protected function getLearnStatisticsService()
     {
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');

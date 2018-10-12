@@ -172,14 +172,14 @@ class CourseSetController extends CourseBaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $courses = ArrayToolkit::index($courses, 'id');
-
+        $tasks = ArrayToolkit::group($tasks, 'courseId');
         $newCourseSets = array();
         if (!empty($courseSets)) {
             foreach ($tasks as $key => &$task) {
-                $course = $courses[$task['courseId']];
+                $course = $courses[$key];
                 $courseSetId = $course['courseSetId'];
                 $newCourseSets[$courseSetId] = $courseSets[$courseSetId];
-                $newCourseSets[$courseSetId]['task'] = $task;
+                $newCourseSets[$courseSetId]['task'] = $task[0];
             }
         }
 

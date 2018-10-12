@@ -1,5 +1,10 @@
-{% set activity = task.activity|default() %}
-{% set file = task.activity.ext.file|default(null) %}
+{% if task.tasks|default() %}
+  {% set activity = task.tasks[0].activity|default() %}
+  {% set file = task.tasks[0].activity.ext.file|default(null) %}
+{% else %}
+  {% set activity = task.activity|default() %}
+  {% set file = task.activity.ext.file|default(null) %}
+{% endif %}
 
 <i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
 
@@ -13,7 +18,7 @@
   {% endif %}
 </span>
 
-  {{task.title|sub_text(30)}}
+<span class="{% if task.tasks|default() %}title{% endif %}">{{task.title|sub_text(30)}}</span>
 
 <span class="{{isLesson|default(false)?'js-display-when-single-task':''}}">
   {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
