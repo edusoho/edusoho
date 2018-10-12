@@ -97,6 +97,12 @@
         }
       }
     },
+    created() {
+      if (this.item.link.type === 'course') {
+        return;
+      }
+      this.item.link.type = 'course'; // 修复默认数据中type为 url 的bug
+    },
     methods: {
       beforeUpload(file) {
         const type = file.type;
