@@ -105,7 +105,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testTaskFinishWhenUserNotGetTask()
     {
@@ -235,7 +235,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testPreUpdateTaskCheck()
     {
@@ -255,7 +255,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testPublishTaskWithAccessDeniedException1()
     {
@@ -298,7 +298,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testUnpublishTaskWithAccessDeniedException1()
     {
@@ -317,7 +317,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testUnpublishTaskWithAccessDeniedException2()
     {
@@ -840,7 +840,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testUpdateTasksOptionalByLessonIdException()
     {

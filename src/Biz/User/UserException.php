@@ -50,6 +50,34 @@ class UserException extends AbstractException
 
     const MOBILE_EXISTED = 5000122;
 
+    const PASSWORD_INVALID = 5000123;
+
+    const MOBILE_OR_EMAIL_INVALID = 5000124;
+
+    const GENDER_INVALID = 5000125;
+
+    const BIRTHDAY_INVALID = 5000126;
+
+    const QQ_INVALID = 5000127;
+
+    const SITE_INVALID = 5000128;
+
+    const WEIBO_INVALID = 5000129;
+
+    const BLOG_INVALID = 5000130;
+
+    const CLIENT_TYPE_INVALID = 5000131;
+
+    const FOLLOW_SELF = 5000132;
+
+    const FOLLOW_BLACK = 5000133;
+
+    const DUPLICATE_FOLLOW = 5000134;
+
+    const ROLES_INVALID = 5000135;
+
+    const UNFOLLOW_ERROR = 5000136;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -72,5 +100,19 @@ class UserException extends AbstractException
         5000120 => 'exception.user.email_existed',
         5000121 => 'exception.user.mobile_invalid',
         5000122 => 'exception.user.mobile_existed',
+        5000123 => 'exception.user.password_invalid',
+        5000124 => 'exception.user.mobile_or_email_invalid',
+        5000125 => 'exception.user.gender_invalid',
+        5000126 => 'exception.user.birthday_invalid',
+        5000127 => 'exception.user.qq_invalid',
+        5000128 => 'exception.user.site_invalid',
+        5000129 => 'exception.user.weibo_invalid',
+        5000130 => 'exception.user.blog_invalid',
+        5000131 => 'exception.user.client_type_invalid',
+        5000132 => 'exception.user.follow_self',
+        5000133 => 'exception.user.follow_black',
+        5000134 => 'exception.user.duplicate_follow',
+        5000135 => 'exception.user.roles_invalid',
+        5000136 => 'exception.user.unfollow_error',
     );
 }

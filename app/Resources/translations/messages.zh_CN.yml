@@ -9411,6 +9411,27 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
 exception.user.lock: 账户被封禁，请联系管理员
+exception.user.error_password: 密码错误
+exception.user.token_not_found: token不存在
+exception.user.no_user_provider:
+exception.user.email_invalid: 邮箱地址格式错误
+exception.user.email_existed: 邮箱地址已被注册
+exception.user.mobile_invalid: 非法的手机号
+exception.user.mobile_existed: 手机号已被注册
+exception.user.password_invalid: 密码校验失败
+exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
+exception.user.gender_invalid: 性别不正确
+exception.user.birthday_invalid: 生日格式错误
+exception.user.qq_invalid: qq不正确
+exception.user.site_invalid: 个人空间不正确
+exception.user.weibo_invalid: 微博地址不正确
+exception.user.blog_invalid: 博客地址不正确
+exception.user.client_type_invalid: 类型不正确
+exception.user.follow_self: 不能关注自己
+exception.user.follow_black: 不能关注黑名单中的用户
+exception.user.duplicate_follow: 已经关注过了，不要重复关注
+exception.user.roles_invalid: 角色不正确
+exception.user.unfollow_error: 不能对没有关注过的用户取消关注
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败

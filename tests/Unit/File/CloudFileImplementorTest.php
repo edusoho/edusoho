@@ -94,8 +94,8 @@ class CloudFileImplementorTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 参数缺失，添加用户文件失败!
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testAddFileWithError1()
     {
@@ -108,8 +108,8 @@ class CloudFileImplementorTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage 添加云文件，缺少globalId
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.globalId_required
      */
     public function testAddFileWithError2()
     {
@@ -538,8 +538,8 @@ class CloudFileImplementorTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage 文件不存在0，完成上传失败！
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.globalId_required
      */
     public function testFinishedUploadWithNoGlobalId()
     {

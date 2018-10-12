@@ -52,8 +52,8 @@ class LocalFileImplementorTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 该文件格式，不允许上传。
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.extension_not_allowed
      */
     public function testAddFileWithServiceException()
     {
@@ -74,8 +74,8 @@ class LocalFileImplementorTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 本地文件暂不支持转换
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.local_convert_not_support
      */
     public function testConvertFile()
     {
@@ -145,8 +145,8 @@ class LocalFileImplementorTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 该文件格式，不允许上传。
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.extension_not_allowed
      */
     public function testMoveFileWithServiceException()
     {

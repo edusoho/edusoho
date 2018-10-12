@@ -1131,6 +1131,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      * @param  $courseId
      *
      * @throws CourseException
+     * @throws \Exception
      *
      * @return CourseStrategy
      */

@@ -42,7 +42,7 @@ class UserFieldServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\User\UserFieldException
      */
     public function testAddUserFieldWithErrorType()
     {
@@ -57,7 +57,7 @@ class UserFieldServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\User\UserFieldException
      */
     public function testAddUserFieldWithEmptyTitle()
     {
@@ -72,7 +72,7 @@ class UserFieldServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\User\UserFieldException
      */
     public function testAddUserFieldWithErrorSeq()
     {

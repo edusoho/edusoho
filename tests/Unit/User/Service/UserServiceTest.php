@@ -100,7 +100,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithErrorEmail()
     {
@@ -113,7 +113,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithRegistedNickname()
     {
@@ -133,7 +133,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithRegistedEmail()
     {
@@ -153,7 +153,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithErrorNickname1()
     {
@@ -165,7 +165,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithErrorNickname2()
     {
@@ -320,7 +320,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testChangeRawPasswordWithEmptyRawPassword()
     {
@@ -330,7 +330,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeRawPasswordWithEmptyUser()
     {
@@ -536,7 +536,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeNicknameOne()
     {
@@ -545,7 +545,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeNicknameTwo()
     {
@@ -559,7 +559,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeNicknameThree()
     {
@@ -587,7 +587,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeEmailWithErrorEmailFormat1()
     {
@@ -601,7 +601,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeEmailWithErrorEmailFormat2()
     {
@@ -615,7 +615,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeEmailWithExistEmail()
     {
@@ -681,7 +681,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testChangePasswordTwice()
     {
@@ -695,7 +695,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testChangePayPasswordOne()
     {
@@ -754,7 +754,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testChangeMobileTwice()
     {
@@ -790,7 +790,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testVerifyPayPasswordTwice()
     {
@@ -817,7 +817,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testParseRegistrationThird()
     {
@@ -828,7 +828,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testParseRegistrationForth()
     {
@@ -848,7 +848,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testParseRegistrationSixth()
     {
@@ -859,7 +859,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testParseRegistrationSeventh()
     {
@@ -907,7 +907,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testChangePasswordWithEmptyPassword()
     {
@@ -921,7 +921,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testChangePasswordWithNotExistUserId()
     {
@@ -929,7 +929,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testVerifyPasswordTwice()
     {
@@ -937,7 +937,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testVerifyPasswordWithNotExistUser()
     {
@@ -1251,7 +1251,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testVerifyPayPasswordWithNonExistUser()
     {
@@ -1260,7 +1260,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testValidateNickname()
     {
@@ -1387,7 +1387,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testFollowTwice()
     {
@@ -1397,7 +1397,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Biz\User\UserException
      */
     public function testFollowThird()
     {
@@ -1406,7 +1406,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException  \Biz\User\UserException
      */
     public function testFollowForth()
     {
@@ -1446,7 +1446,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnFollowTwcie()
     {
@@ -1456,7 +1456,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnFollowThird()
     {
@@ -1468,7 +1468,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  follow.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnFollowNotExistUser()
     {
@@ -1480,7 +1480,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  follow.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnFollowWithoutFollowed()
     {
@@ -1505,7 +1505,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  follow.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testIsFollowedTwice()
     {
@@ -1517,7 +1517,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  follow.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testIsFollowedThird()
     {
@@ -1552,7 +1552,7 @@ class UserServiceTest extends BaseTestCase
     // }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testApplyUserApprovalTwice()
     {
@@ -1573,7 +1573,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testPassApprovalTwice()
     {
@@ -1595,7 +1595,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testRejectApprovalTwice()
     {
@@ -1628,7 +1628,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testRememberLoginSessionIdTwice()
     {
@@ -1662,7 +1662,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *   follow.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testIsFollowWithNotExistToId()
     {
@@ -1673,7 +1673,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *   follow.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testIsFollowWithNotExistFromId()
     {
@@ -1748,7 +1748,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  profile.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUpdateUserProfileWithNotExistUser()
     {
@@ -1764,7 +1764,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  profile.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testUpdateUserProfileWithErrorGender()
     {
@@ -1780,7 +1780,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  profile.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testUpdateUserProfileWithErrorBirthday()
     {
@@ -1796,7 +1796,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  profile.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testUpdateUserProfileWithErrorMobile()
     {
@@ -1812,7 +1812,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  profile.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testUpdateUserProfileWithErrorQQ()
     {
@@ -1855,7 +1855,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  roles.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Biz\User\UserException
      */
     public function testChangeUserRolesWithEmptyRoles()
     {
@@ -1871,7 +1871,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  roles.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testChangeUserRolesWithNotExistUser()
     {
@@ -1887,7 +1887,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  roles.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testChangeUserRolesWithIllegalRoles()
     {
@@ -2062,7 +2062,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *   lock.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testLockUserTwice()
     {
@@ -2073,7 +2073,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  lock.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testLockNotExistUser()
     {
@@ -2099,7 +2099,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnLockUserTwice()
     {
@@ -2122,7 +2122,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testPromoteUserTwice()
     {
@@ -2147,7 +2147,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testCancelPromoteUserTwice()
     {
@@ -2186,7 +2186,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testWaveUserCounterTwice()
     {
@@ -2218,7 +2218,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  lock.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnLockNotExistUser()
     {
@@ -2294,7 +2294,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testBindNotExistUser()
     {
@@ -2304,7 +2304,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testBindUserWithTypeNotInWeiboQQRenren()
     {
@@ -2413,7 +2413,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testGetUserBindByTypeAndUserIdTwice()
     {
@@ -2424,7 +2424,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testGetUserBindByTypeAndUserIdThird()
     {
@@ -2441,7 +2441,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testGetUserBindWithInvalidateUserId()
     {
@@ -2458,7 +2458,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testGetUserBindByTypeAndUserIdWithTypeNotInWeiboQQRenren()
     {
@@ -2499,7 +2499,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testFindBindsByUserIdTwice()
     {
@@ -2510,7 +2510,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testFindBindsByErrorUserId()
     {
@@ -2550,7 +2550,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnBindUserByTypeAndToIdTwice()
     {
@@ -2562,7 +2562,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testUnBindUserByTypeAndToIdThird()
     {
@@ -2648,7 +2648,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Biz\User\UserException
      */
     public function testUnBindUserByTypeAndToIdWithErrorUserId()
     {
@@ -2665,7 +2665,7 @@ class UserServiceTest extends BaseTestCase
     /**
      *  bind.
      *
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testUnBindUserByTypeAndToIdWithErrorType()
     {

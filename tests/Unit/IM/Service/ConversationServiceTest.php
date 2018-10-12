@@ -90,7 +90,7 @@ class ConversationServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\IM\ConversationException
      */
     public function testCreateCloudConversation()
     {
