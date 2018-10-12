@@ -8,9 +8,9 @@ Vue.use(Router);
 const routes = [
   {
     path: '/',
-    name: 'admin',
+    name: 'h5Setting',
     meta: {
-      title: '后台配置'
+      title: 'h5后台配置'
     },
     component: () => import(/* webpackChunkName: "setting" */'@admin/containers/setting/index.vue')
   },
@@ -21,6 +21,14 @@ const routes = [
       title: '发现页预览'
     },
     component: () => import(/* webpackChunkName: "preview" */'@admin/containers/preview/index.vue')
+  },
+  {
+    path: '/miniprogram',
+    name: 'miniprogramSetting',
+    meta: {
+      title: '小程序后台配置'
+    },
+    component: () => import(/* webpackChunkName: "miniprogramSetting" */'@admin/containers/setting/index.vue')
   }
 ];
 
@@ -28,7 +36,6 @@ const env = process.env.NODE_ENV;
 console.log('process.env', env);
 // csrfToken 赋值
 if (!store.state.csrfToken && env === 'production') {
-  console.log(window.parent.document)
   const csrfTag = window.parent.document.getElementsByTagName('meta')['csrf-token'];
   if (csrfTag && csrfTag.content) {
     store.commit(types.GET_CSRF_TOKEN, csrfTag.content);

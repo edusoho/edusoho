@@ -59,6 +59,7 @@ import Api from '@admin/api';
 import * as types from '@admin/store/mutation-types';
 import moduleDefault from '@admin/utils/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
+import pathName2Portal from '@admin/utils/api-portal-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
@@ -93,6 +94,7 @@ export default {
         }
       ],
       typeCount: {},
+      pathName: this.$route.name,
     }
   },
   computed: {
@@ -163,7 +165,7 @@ export default {
       const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
 
       this.getDraft({
-        portal: 'h5',
+        portal: pathName2Portal[this.pathName],
         type: 'discovery',
         mode,
       }).then((res) => {
@@ -174,7 +176,7 @@ export default {
     reset() {
       // 删除草稿配置配置
       this.deleteDraft({
-        portal: 'h5',
+        portal: pathName2Portal[this.pathName],
         type: 'discovery',
         mode: 'draft',
       }).then((res) => {
@@ -212,7 +214,7 @@ export default {
         this.saveDraft({
           data,
           mode,
-          portal: 'h5',
+          portal: pathName2Portal[this.pathName],
           type: 'discovery',
         }).then(() => {
 
@@ -231,6 +233,7 @@ export default {
               times: 10,
               preview: isPublish ? 0 : 1,
               duration: 60 * 5,
+              from: this.pathName,
             }
           });
         }).catch(err => {

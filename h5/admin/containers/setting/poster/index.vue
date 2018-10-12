@@ -36,7 +36,7 @@
           <p class="pull-left section-left">链接：</p>
           <div class="section-right">
             <el-radio v-model="copyModuleData.link.type" label="course">站内课程</el-radio>
-            <el-radio v-model="copyModuleData.link.type" label="url">自定义链接</el-radio>
+            <el-radio v-if="pathName === 'h5Setting'" v-model="copyModuleData.link.type" label="url">自定义链接</el-radio>
           </div>
         </div>
         <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'course'">
@@ -93,6 +93,7 @@ export default {
         'responsive',
         'size-fit',
       ],
+      pathName: this.$route.name,
     }
   },
   props: {

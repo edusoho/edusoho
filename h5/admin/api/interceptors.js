@@ -14,9 +14,7 @@ axios.interceptors.request.use(config => {
   const env = process.env.NODE_ENV;
 
   if (env !== 'production') {
-    // config.headers['X-Auth-Token'] = 'kj1fbzhktw0c0osccgg8sswkcgks08g';
-    config.headers['X-Requested-With'] = 'XMLHttpRequest';
-    config.headers['X-CSRF-Token'] = 'JKD_i-vtvTDeFlPeGkTOYz0y-zHfZtBtr6etG6DwZ5A';
+    config.headers['X-Auth-Token'] = '1wwzn20st55wwcww40ossss0ckg8g4s';
   } else {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
     config.headers['X-CSRF-Token'] = store.state.csrfToken;

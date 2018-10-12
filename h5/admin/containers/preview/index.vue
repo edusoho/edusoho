@@ -6,7 +6,7 @@
         <mobile-preview class="preview-iframe" :feedback="false"></mobile-preview>
       </div>
       <div class="code-container">
-        <div class="code-item">
+        <div class="code-item" v-if="qrcode">
           <div class="code-img-container"><img class="code-image" :src="qrcode"></div>
           <div class="help-text">扫描二维码在手机端预览<div>二维码60分钟内首次扫描有效</div></div>
         </div>
@@ -20,11 +20,13 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import mobilePreview from './mobile'
+import pathName2Portal from '@admin/utils/api-portal-config';
 
 export default {
   data() {
     return  {
       qrcode: '',
+      from: this.$route.query.from,
     }
   },
   components: {
@@ -35,6 +37,11 @@ export default {
   },
   created() {
     const { preview, times, duration } = this.$route.query;
+    console.log(this.from, 999)
+
+    if (this.from === 'miniprogramSetting') {
+      return;
+    }
 
     this.getQrcode({
       preview,
@@ -52,7 +59,7 @@ export default {
     ]),
     edit() {
       this.$router.push({
-        name: 'admin',
+        name: this.from,
         query: {
           draft: 1
         },
@@ -62,7 +69,7 @@ export default {
       this.saveDraft({
         data: this.draft,
         mode: 'published',
-        portal: 'h5',
+        portal: pathName2Portal[this.from],
         type: 'discovery',
       }).then(() => {
         this.$message({
@@ -70,7 +77,7 @@ export default {
           type: 'success'
         });
         this.$router.push({
-          name: 'admin',
+          name: this.from,
         });
       }).catch(err => {
         this.$message({

@@ -35,7 +35,7 @@ export default {
         target: {},
         url: ''
       },
-      responsive: '1',
+      responsive: '1'
     }
   }
-}
+};

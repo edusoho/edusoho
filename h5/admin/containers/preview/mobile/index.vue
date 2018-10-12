@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  import pathName2Portal from '@admin/utils/api-portal-config';
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
@@ -42,11 +43,12 @@
           'responsive',
           'size-fit',
         ],
+        from: this.$route.query.from,
       };
     },
     created() {
       this.getDraft({
-        portal: 'h5',
+        portal: pathName2Portal[this.from],
         type: 'discovery',
         mode: 'draft',
       }).then((res) => {
