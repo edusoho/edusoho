@@ -8,7 +8,7 @@ use AppBundle\Extensions\DataTag\TaskDataTag;
 class TaskDataTagTest extends BaseTestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testEmptyArguments()
     {

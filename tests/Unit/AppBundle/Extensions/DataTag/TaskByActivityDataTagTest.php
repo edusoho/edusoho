@@ -8,7 +8,7 @@ use AppBundle\Extensions\DataTag\TaskByActivityDataTag;
 class TaskByActivityDataTagTest extends BaseTestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testGetDataCourseIdEmpty()
     {
@@ -17,7 +17,7 @@ class TaskByActivityDataTagTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testGetDataActivityEmpty()
     {

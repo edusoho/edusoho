@@ -8,7 +8,7 @@ use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 class LoginFailRateLimiterTest extends BaseTestCase
 {
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testHandleWithTooManyRequestsHttpException()
     {
@@ -52,7 +52,7 @@ class LoginFailRateLimiterTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testHandleWithNoUserName()
     {
