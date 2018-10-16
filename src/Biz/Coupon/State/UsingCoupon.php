@@ -48,7 +48,7 @@ class UsingCoupon extends Coupon implements CouponInterface
 
     public function cancelUsing()
     {
-        $this->getCouponService()->updateCoupon($this->coupon['id'], array(
+        $coupon = $this->getCouponService()->updateCoupon($this->coupon['id'], array(
             'status' => 'receive',
         ));
 
