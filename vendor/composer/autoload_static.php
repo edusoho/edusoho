@@ -345,15 +345,18 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         ),
         'Codeages\\Biz\\Pay\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Pay',
+            0 => __DIR__ . '/../..' . '/biz-order-pay/src/Pay',
+            1 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Pay',
         ),
         'Codeages\\Biz\\Order\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Order',
+            0 => __DIR__ . '/../..' . '/biz-order-pay/src/Order',
+            1 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Order',
         ),
         'Codeages\\Biz\\Invoice\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Invoice',
+            0 => __DIR__ . '/../..' . '/biz-order-pay/src/Invoice',
+            1 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Invoice',
         ),
         'Codeages\\Biz\\Framework\\' => 
         array (

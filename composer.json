@@ -11,7 +11,10 @@
     },
     "psr-4": {
       "Topxia\\Api\\": "api/src/Topxia/Api",
-      "Tests\\": "tests"
+      "Tests\\": "tests",
+      "Codeages\\Biz\\Invoice\\": "biz-order-pay/src/Invoice",
+      "Codeages\\Biz\\Pay\\": "biz-order-pay/src/Pay",
+      "Codeages\\Biz\\Order\\": "biz-order-pay/src/Order"
     },
     "files": [
       "app/AppKernel.php"

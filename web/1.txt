@@ -1,0 +1,1 @@
+{"enabled":"0","types":["electronic","paper","vat"],"time_limit":"0","freight_type":"cash","free_freight_money":"0","content":""}
