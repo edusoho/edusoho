@@ -85,11 +85,12 @@
     },
     watch: {
       courseSets(sets) {
-        console.log(sets, 'courseSets')
+        console.log(sets[0], 'courseSets')
         if (sets.length) {
           this.item.link.target = {
             id: sets[0].id,
             title: sets[0].title,
+            courseSetId: sets[0].courseSetId,
             displayedTitle: sets[0].displayedTitle
           }
         } else {

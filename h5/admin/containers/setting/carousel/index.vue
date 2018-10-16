@@ -129,6 +129,7 @@ export default {
     getUpdatedCourses(courses) {
       this.courseSets[this.activeItemIndex] = [{
         id: courses[0].id,
+        courseSetId: courses[0].courseSet.id,
         title: courses[0].title || courses[0].courseSetTitle,
         displayedTitle: courses[0].displayedTitle,
       }];

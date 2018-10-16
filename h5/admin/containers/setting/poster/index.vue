@@ -197,6 +197,7 @@ export default {
       this.moduleData.data.link.target = {
         id: courses[0].id,
         title: courses[0].title || courses[0].courseSetTitle,
+        courseSetId: courses[0].courseSet.id,
       };
     },
     removeCourseLink() {
