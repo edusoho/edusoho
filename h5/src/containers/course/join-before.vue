@@ -69,7 +69,7 @@
         details: state => state.details
       }),
       summary () {
-        return  this.details.summary ? this.details.summary : this.details.courseSet.summary;
+        return this.details.summary || this.details.courseSet.summary;
       }
     },
     mounted() {
