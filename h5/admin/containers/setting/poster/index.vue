@@ -171,6 +171,9 @@ export default {
           data: formData
         })
         .then(data => {
+          if (this.pathName !== 'h5Setting') {
+            data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://');
+          }
           this.copyModuleData.image = data;
           this.$message({
             message: '图片上传成功',

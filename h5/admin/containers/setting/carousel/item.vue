@@ -76,6 +76,7 @@
         },
         imageCropped: false,
         dialogVisible: false,
+        pathName: this.$route.name,
       };
     },
     computed: {
@@ -153,6 +154,9 @@
           data: formData
         })
         .then(data => {
+          if (this.pathName !== 'h5Setting') {
+            data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://');
+          }
           this.item.image = data;
           this.$emit('selected',
           {
