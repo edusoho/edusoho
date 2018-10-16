@@ -51,6 +51,14 @@ class UsingCoupon extends Coupon implements CouponInterface
         $this->getCouponService()->updateCoupon($this->coupon['id'], array(
             'status' => 'receive',
         ));
+
+        $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
+
+        if (!empty($card)) {
+            $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
+                'status' => 'receive',
+            ));
+        }
     }
 
     /**
