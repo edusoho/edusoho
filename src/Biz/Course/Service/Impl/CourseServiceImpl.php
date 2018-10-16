@@ -2315,7 +2315,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
-        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
     public function changeHidePublishLesson($courseId, $status)
