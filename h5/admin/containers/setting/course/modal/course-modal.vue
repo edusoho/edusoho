@@ -134,7 +134,7 @@ export default {
         return;
       }
       this.courseListIds.push(item.id)
-      // 不使用push 操作, 避免改变props, 父组件导致页面更新
+      // 不使用push 操作, 避免改变props在父组件中的引用，导致父页面数据更新
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
