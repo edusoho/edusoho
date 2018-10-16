@@ -155,6 +155,7 @@
         })
         .then(data => {
           if (this.pathName !== 'h5Setting') {
+            // 小程序后台替换图片协议
             data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://');
           }
           this.item.image = data;

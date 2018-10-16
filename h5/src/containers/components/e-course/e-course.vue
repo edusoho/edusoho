@@ -44,9 +44,15 @@
         default: true,
       }
     },
+    data() {
+      return {
+        pathName: this.$route.name,
+      };
+    },
     computed: {
       imgSrc() {
-        return this.course.courseSet ? this.course.courseSet.cover.middle : this.order.cover.middle
+        const courseSet = this.course.courseSet;
+        return courseSet ? courseSet.cover.middle : this.order.cover.middle;
       },
       title() {
         return this.course.courseSetTitle
@@ -59,6 +65,22 @@
         } else {
           return false
         }
+      }
+    },
+    watch: {
+      course: {
+        handler(course) {
+          // 小程序后台替换图片协议
+          const courseSet = course.courseSet;
+
+          if (this.pathName !== 'h5Setting' && courseSet) {
+            const keys = Object.keys(courseSet.cover);
+            for (var i = 0; i < keys.length; i++) {
+              courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(/^(\/\/)|(http:\/\/)/, 'https://');
+            }
+          }
+        },
+        immediate: true,
       }
     },
     methods: {
