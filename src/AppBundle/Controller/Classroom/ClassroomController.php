@@ -66,7 +66,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if(empty($user['id'])){
+        if (empty($user['id'])) {
             $checkMemberLevelResult = 'not_login';
         }
 
