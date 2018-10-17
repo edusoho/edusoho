@@ -1,7 +1,10 @@
 <template>
   <div class="find-page">
     <div class="find-page__part" v-for="part in parts">
-      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
+      <e-swipe
+        v-if="part.type == 'slide_show'"
+        :slides="part.data"
+        :feedback="feedback"></e-swipe>
       <e-course-list
         v-if="part.type == 'course_list'"
         :courseList="part.data"
