@@ -129,9 +129,13 @@ export default {
       set() {}
     },
     courseLinkText() {
-      if (!this.courseSets[0]) return
-
-      return this.courseSets[0].displayedTitle;
+      if (this.courseSets[0]) {
+        return this.courseSets[0].displayedTitle;
+      }
+      if (this.copyModuleData.link.target.title) {
+        return this.copyModuleData.link.target.title;
+      }
+      return;
     }
   },
   watch: {
@@ -206,10 +210,10 @@ export default {
     },
     removeCourseLink() {
       this.courseSets = [];
+      this.$set(this.copyModuleData.link, 'target', {});
     },
     handleClose() {
       this.removeCourseLink();
-      this.linkTextShow = false;
     },
   }
 }
