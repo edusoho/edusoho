@@ -1,0 +1,29 @@
+.setting-groupon {
+  .groupon {
+    &-allocate {
+    }
+    &-item-setting {
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #e1e1e1;
+
+      &__section{
+        margin-top: 15px;
+        &:first-child {
+          margin-top: 0;
+        }
+        .section-left {
+          display: inline;
+          margin: 0;
+          line-height: 28px;
+          font-size: 14px;
+        }
+        .section-right {
+          display: inline-block;
+          width: 212px;
+          line-height: 28px;
+        }
+      }
+    }
+  }
+}
