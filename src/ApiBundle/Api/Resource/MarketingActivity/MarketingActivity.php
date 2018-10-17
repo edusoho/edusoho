@@ -8,7 +8,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
-use Biz\Marketing\Util\MarketingUtils;
 
 class MarketingActivity extends AbstractResource
 {
@@ -22,31 +21,14 @@ class MarketingActivity extends AbstractResource
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         //搜索条件：学校id,type,name,status,itemType
-        // $activities = array(
-        //     array(
-        //         'id' => 1,
-        //         'name' => '活动名称',
-        //         'type' => 'groupon',
-        //         'status' => 'ongoing',
-        //         'originPrice' => 100,
-        //         'price' => 1,
-        //         'itemId' => 19,
-        //         'itemType' => 'course',
-        //         'createdTime' => time(),
-        //     ),
-        // );
-        $siteInfo = MarketingUtils::getSiteInfo($this->getSettingService(), $this->getWebExtension());
+        $user = $this->getCurrentUser();
+
         $client = $this->createMarketingClient();
-        $activities = $client->get('/activities', array(
-            'site' => $siteInfo,
-            'url' => $merchantUrl,
-            'user_id' => $user['id'],
-            'user_name' => $user['nickname'],
-            'user_avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
-            'entry' => $entry,
-        ));
-        var_dump($activities);
+        $entry = $request->query->get('entry');
+        $activities = $client->get('/activities?merchant_user_id='.$user['id'], array());
+
         exit();
+
         $activityGroups = ArrayToolkit::group($activities, 'itemType');
         $activities = array();
         foreach ($activityGroups as $key => &$groups) {
