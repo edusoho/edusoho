@@ -42,7 +42,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateBlockTemplateWithoutCode()
     {
@@ -133,7 +133,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testUpdateTemplateContentWithEmptyTemplate()
     {
@@ -183,7 +183,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testRecoveryWithEmptyBlock()
     {
@@ -201,7 +201,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testRecoveryWithTemplateModeAndEmptyData()
     {
@@ -415,7 +415,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testUpdateBlockTemplateWithEmptyTemplate()
     {
@@ -464,7 +464,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testGetBlockWithNotExistId()
     {
@@ -657,7 +657,7 @@ class BlockServiceTest extends BaseTestCase
 
     /**
      * @group create
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateBlockWithIncompleteFields()
     {
@@ -696,7 +696,7 @@ class BlockServiceTest extends BaseTestCase
 
     /**
      * @group update
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testUpdateBlockWithNotExistId()
     {
@@ -753,7 +753,7 @@ class BlockServiceTest extends BaseTestCase
 
     /**
      * @group  updateBlock
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testUpdateContentWithNotExistBlockId()
     {
@@ -786,7 +786,7 @@ class BlockServiceTest extends BaseTestCase
 
     /**
      * @group getContentsByCodes
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Content\BlockException
      */
     public function testGetContentsByCodesWithEmpty()
     {

@@ -128,7 +128,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Classroom\ClassroomException
      */
     public function testGetUserClassroomReviewWithNotExistId()
     {
@@ -178,7 +178,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testSaveReviewWithoutUserId()
     {
@@ -205,8 +205,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 班级(123)不存在，评价失败！
+     * @expectedException \Biz\Classroom\ClassroomException
+     * @expectedExceptionMessage exception.classroom.not_found
      */
     public function testSaveReviewWithNotExistClassroom()
     {
@@ -234,7 +234,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testSaveReviewWithNotExistUser()
     {
@@ -315,8 +315,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage not login
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testDeleteReviewUserUnlogin()
     {

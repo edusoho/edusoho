@@ -469,8 +469,8 @@ class ClassroomServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage Classroom#999 Not Found
+     * @expectedException \Biz\Classroom\ClassroomException
+     * @expectedExceptionMessage exception.classroom.not_found
      */
     public function testUpdateClassroomNotFound()
     {
