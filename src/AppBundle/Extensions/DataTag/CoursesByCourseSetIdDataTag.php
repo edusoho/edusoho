@@ -26,7 +26,7 @@ class CoursesByCourseSetIdDataTag extends CourseBaseDataTag implements DataTag
 
         $set = $this->getCourseService()->searchCourses(
             $conditions,
-            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             PHP_INT_MAX
         );

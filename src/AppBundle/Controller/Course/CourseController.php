@@ -242,7 +242,7 @@ class CourseController extends CourseBaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            array('seq' => 'DESC', 'createdTime' => 'ASC'),
+            array('seq' => 'ASC', 'createdTime' => 'ASC'),
             0,
             PHP_INT_MAX
         );
