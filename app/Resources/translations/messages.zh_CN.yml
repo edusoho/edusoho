@@ -5340,7 +5340,7 @@ admin.setting.site.logo: 网站LOGO
 admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>网校 logo 设置后将显示顶部导航左侧，
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
-admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
 admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
 admin.setting.site.seo_description: SEO描述信息

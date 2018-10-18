@@ -12,17 +12,17 @@ use AppBundle\Common\DeviceToolkit;
 
 class LogServiceImpl extends BaseService implements LogService
 {
-    public function info($module, $action, $message, array $data = null)
+    public function info($module, $action, $message, $data = null)
     {
         return $this->addLog('info', $module, $action, $message, $data);
     }
 
-    public function warning($module, $action, $message, array $data = null)
+    public function warning($module, $action, $message, $data = null)
     {
         return $this->addLog('warning', $module, $action, $message, $data);
     }
 
-    public function error($module, $action, $message, array $data = null)
+    public function error($module, $action, $message, $data = null)
     {
         return $this->addLog('error', $module, $action, $message, $data);
     }
@@ -97,16 +97,20 @@ class LogServiceImpl extends BaseService implements LogService
         return $this->getLogOldDao()->count($conditions);
     }
 
-    protected function addLog($level, $module, $action, $message, array $data = null)
+    protected function addLog($level, $module, $action, $message, $data = null)
     {
         $user = $this->getCurrentUser();
+
+        if (is_array($data)) {
+            $data = json_encode($data);
+        }
 
         return $this->getLogDao()->create(
             array(
                 'module' => $module,
                 'action' => $action,
                 'message' => $message,
-                'data' => empty($data) ? '' : json_encode($data),
+                'data' => empty($data) ? '' : $data,
                 'userId' => $user['id'],
                 'ip' => $user['currentIp'],
                 'browser' => DeviceToolkit::getBrowse(),

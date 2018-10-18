@@ -86,6 +86,7 @@ class ActivityController extends BaseController
 
     public function finishModalAction($activityId = 0, $type, $courseId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId);
         } else {
@@ -110,6 +111,7 @@ class ActivityController extends BaseController
 
     public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)
     {
+        $course = $this->getCourseService()->tryManageCourse($fromCourseId);
         $activity = array(
             'id' => $id,
             'mediaType' => $mediaType,

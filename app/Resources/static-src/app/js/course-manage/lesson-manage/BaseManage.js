@@ -232,7 +232,7 @@ export default class Manage {
 
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]'];
+    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]', '.js-task-manage-unit'];
     for (let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     }
@@ -249,15 +249,14 @@ export default class Manage {
   }
 
   _sortUnitNumber() {
-    $('.js-lesson-container').each(
-      function() {
-        $(this).find('.js-lesson-box .number').each(
-          function(index) {
-            $(this).text((index + 1));
-          }
-        );
-      }
-    );
+    let num;
+    this.$element.find('.js-task-manage-chapter').each(function() {
+      let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
+      num = 1;
+      $unit.each(function() {
+        $(this).find('.number').text(num++);
+      });
+    });
   }
 
   _publish() {

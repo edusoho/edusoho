@@ -73,7 +73,7 @@ class SimpleValidator
 
     public static function mobile($value)
     {
-        return (bool) preg_match('/^1\d{10}$/', $value);
+        return (bool) ((11 == strlen($value)) && preg_match('/^1\d{10}$/', $value));
     }
 
     public static function numbers($value)

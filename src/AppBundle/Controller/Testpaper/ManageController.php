@@ -402,6 +402,11 @@ class ManageController extends BaseController
             if (empty($fields['questions'])) {
                 return $this->createMessageResponse('error', '试卷题目不能为空！');
             }
+            $fields['questions'] = json_decode($fields['questions'], true);
+
+            if (count($fields['questions']) > 2000) {
+                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
+            }
 
             if (!empty($fields['passedScore'])) {
                 $fields['passedCondition'] = array($fields['passedScore']);

@@ -87,14 +87,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->update($id, array('isDefault' => 1, 'courseType' => 'default'));
     }
 
-    public function getSeqMaxPublishedCourseByCourseSetId($courseSetId)
+    public function getSeqMinPublishedCourseByCourseSetId($courseSetId)
     {
         $courses = $this->searchCourses(
             array(
                 'courseSetId' => $courseSetId,
                 'status' => 'published',
             ),
-            array('seq' => 'DESC'),
+            array('seq' => 'ASC'),
             0,
             1
         );
@@ -123,7 +123,21 @@ class CourseServiceImpl extends BaseService implements CourseService
             array(
                 'courseSetId' => $courseSetId,
             ),
-            array('seq' => 'ASC', 'createdTime' => 'ASC'),
+            array('createdTime' => 'ASC'),
+            0,
+            1
+        );
+
+        return array_shift($courses);
+    }
+
+    public function getLastCourseByCourseSetId($courseSetId)
+    {
+        $courses = $this->searchCourses(
+            array(
+                'courseSetId' => $courseSetId,
+            ),
+            array('seq' => 'DESC', 'createdTime' => 'DESC'),
             0,
             1
         );
@@ -171,6 +185,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryEndDate',
                 'isDefault',
                 'isFree',
+                'seq',
                 'serializeMode',
                 'courseType',
                 'type',
@@ -190,6 +205,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->validateExpiryMode($course);
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $lastCourse = $this->getLastCourseByCourseSetId($courseSet['id']);
+
+        $course['seq'] = $lastCourse['seq'] + 1;
         $course['maxRate'] = $courseSet['maxRate'];
         $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
 
@@ -2289,7 +2307,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (count($ids) != $count) {
             throw $this->createAccessDeniedException();
         }
-        $ids = array_reverse($ids);
 
         $seq = 1;
         foreach ($ids as $id) {
@@ -2298,7 +2315,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
-        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
     public function changeHidePublishLesson($courseId, $status)

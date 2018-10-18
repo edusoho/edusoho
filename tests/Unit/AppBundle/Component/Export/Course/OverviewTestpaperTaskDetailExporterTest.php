@@ -121,7 +121,7 @@ class OverviewTestpaperTaskDetailExporterTest extends BaseTestCase
         $title = array(
             'task.learn_data_detail.nickname',
             'task.learn_data_detail.createdTime',
-            'task.learn_data_detail.finishedTime',
+            'course.task.finish_time',
             'task.learn_data_detail.testpaper_firstUsedTime',
             'task.learn_data_detail.testpaper_firstScore',
             'task.learn_data_detail.testpaper_maxScore',

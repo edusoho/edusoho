@@ -13,11 +13,16 @@ class Members extends BaseResource
     public function get(Application $app, Request $request, $classroomId)
     {
         $conditions = array('classroomId' => $classroomId);
-        $start      = $request->query->get('start', 0);
-        $limit      = $request->query->get('limit', 10);
+        $start = $request->query->get('start', 0);
+        $limit = $request->query->get('limit', 10);
+        $role = $request->query->get('role', '');
 
-        $total   = $this->getClassroomService()->searchMemberCount($conditions);
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime'=> 'DESC'), $start, $limit);
+        if (!empty($role)) {
+            $conditions['role'] = $role;
+        }
+
+        $total = $this->getClassroomService()->searchMemberCount($conditions);
+        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'DESC'), $start, $limit);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
