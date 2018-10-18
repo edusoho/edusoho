@@ -167,11 +167,11 @@ export default class QuestionManage{
       passedScore = $('input[name="passedScore"]').val();
     }
 
-    if(this.questionsCount > 2000){
+    if (this.questionsCount > 2000) {
         notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
     }else{
         $target.button('loading').addClass('disabled');
-        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore},function(result){
+        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore},function(result) {
           if (result.goto) {
             window.location.href = result.goto;
           }
