@@ -34,13 +34,13 @@ class uccode
     {
         $message = htmlspecialchars($message);
         if (false !== strpos($message, '[/code]')) {
-            $message = preg_replace("/\s*\[code\](.+?)\[\/code\]\s*/ies", "\$this->codedisp('\\1')", $message);
+            $message = preg_replace_callback("/\s*\[code\](.+?)\[\/code\]\s*/is", array($this, 'complie_callback_codedisp_1'), $message);
         }
         if (false !== strpos($message, '[/url]')) {
-            $message = preg_replace("/\[url(=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast){1}:\/\/|www\.)([^\[\"']+?))?\](.+?)\[\/url\]/ies", "\$this->parseurl('\\1', '\\5')", $message);
+            $message = preg_replace_callback("/\[url(=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast){1}:\/\/|www\.)([^\[\"']+?))?\](.+?)\[\/url\]/is", array($this, 'complie_callback_parseurl_15'), $message);
         }
         if (false !== strpos($message, '[/email]')) {
-            $message = preg_replace("/\[email(=([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+))?\](.+?)\[\/email\]/ies", "\$this->parseemail('\\1', '\\4')", $message);
+            $message = preg_replace_callback("/\[email(=([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+))?\](.+?)\[\/email\]/is", array($this, 'complie_callback_parseemail_14'), $message);
         }
         $message = str_replace(array(
             '[/color]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]',
@@ -69,19 +69,39 @@ class uccode
             $message = preg_replace("/\s*\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s*/is", $this->tpl_quote(), $message);
         }
         if (false !== strpos($message, '[/img]')) {
-            $message = preg_replace(array(
-                "/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
-                "/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
-            ), array(
-                "\$this->bbcodeurl('\\1', '<img src=\"%s\" border=\"0\" alt=\"\" />')",
-                "\$this->bbcodeurl('\\3', '<img width=\"\\1\" height=\"\\2\" src=\"%s\" border=\"0\" alt=\"\" />')",
-            ), $message);
+            $message = preg_replace_callback("/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/is", array($this, 'complie_callback_bbcodeurl_1'), $message);
+            $message = preg_replace_callback("/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/is", array($this, 'complie_callback_bbcodeurl_312'), $message);
         }
         for ($i = 0; $i <= $this->uccode['pcodecount']; ++$i) {
             $message = str_replace("[\tUCENTER_CODE_$i\t]", $this->uccode['codehtml'][$i], $message);
         }
 
         return nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
+    }
+
+    public function complie_callback_codedisp_1($matches)
+    {
+        return $this->codedisp($matches[1]);
+    }
+
+    public function complie_callback_parseurl_15($matches)
+    {
+        return $this->parseurl($matches[1], $matches[5]);
+    }
+
+    public function complie_callback_parseemail_14($matches)
+    {
+        return $this->parseemail($matches[1], $matches[4]);
+    }
+
+    public function complie_callback_bbcodeurl_1($matches)
+    {
+        return $this->bbcodeurl($matches[1], '<img src="%s" border="0" alt="" />');
+    }
+
+    public function complie_callback_bbcodeurl_312($matches)
+    {
+        return $this->bbcodeurl($matches[3], '<img width="'.$matches[1].'" height="'.$matches[2].'" src="%s" border="0" alt="" />');
     }
 
     public function parseurl($url, $text)

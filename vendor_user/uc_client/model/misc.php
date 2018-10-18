@@ -82,7 +82,7 @@ class miscmodel
         $matches = parse_url($url);
         $host = $matches['host'];
         $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
-        $port = !empty($matches['port']) ? $matches['port'] : 80;
+        $port = !empty($matches['port']) ? $matches['port'] : ('https' == $matches['scheme'] ? 443 : 80);
 
         if ($post) {
             $out = "POST $path HTTP/1.0\r\n";
@@ -110,9 +110,9 @@ class miscmodel
         }
 
         if (function_exists('fsockopen')) {
-            $fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+            $fp = @fsockopen(('https' == $scheme ? 'ssl' : $scheme).'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
         } elseif (function_exists('pfsockopen')) {
-            $fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+            $fp = @pfsockopen(('https' == $scheme ? 'ssl' : $scheme).'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
         } else {
             $fp = false;
         }

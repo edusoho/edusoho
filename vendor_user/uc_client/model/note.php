@@ -124,7 +124,7 @@ class notemodel
         }
         $this->base->load('misc');
         $apifilename = isset($app['apifilename']) && $app['apifilename'] ? $app['apifilename'] : 'uc.php';
-        if ($app['extra']['apppath'] && @include $app['extra']['apppath'].'./api/'.$apifilename) {
+        if ($app['extra']['apppath'] && 'php' == substr(strrchr($apifilename, '.'), 1, 10) && @include $app['extra']['apppath'].'./api/'.$apifilename) {
             $uc_note = new uc_note();
             $method = $note['operation'];
             if (is_string($method) && !empty($method)) {
