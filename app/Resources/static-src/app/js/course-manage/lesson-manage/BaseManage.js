@@ -232,7 +232,7 @@ export default class Manage {
 
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]'];
+    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]', '.js-task-manage-unit'];
     for (let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     }

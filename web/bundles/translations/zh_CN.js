@@ -236,6 +236,7 @@ t.add("activity.testpaper_manage.normal_percentage", "\u4e00\u822c%normalPercent
 t.add("activity.testpaper_manage.difficulty_percentage", "\u56f0\u96be%difficultyPercentage%%", "js", "zh_CN");
 t.add("activity.testpaper_manage.required_error_hint", "\u8bf7\u8f93\u5165\u5206\u6570", "js", "zh_CN");
 t.add("activity.testpaper_manage.question_options", "\u9009\u9879", "js", "zh_CN");
+t.add("activity.testpaper_manage.questions_length_hint", "\u9898\u76ee\u6570\u91cf\u6700\u591a\u4e3a2000", "js", "zh_CN");
 t.add("activity.text_manage.save_draft_hint", "(\u8349\u7a3f\u5df2\u4e8e%createdTime%\u4fdd\u5b58)", "js", "zh_CN");
 t.add("activity.text_manage.finish_detail_required_error_hint", "\u8bf7\u8f93\u5165\u81f3\u5c11\u89c2\u770b\u591a\u5c11\u5206\u949f", "js", "zh_CN");
 t.add("activity.video_manage.delete_success_hint", "\u5220\u9664\u5b57\u5e55\u6210\u529f", "js", "zh_CN");

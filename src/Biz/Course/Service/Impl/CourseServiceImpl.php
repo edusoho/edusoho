@@ -123,7 +123,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             array(
                 'courseSetId' => $courseSetId,
             ),
-            array('seq' => 'ASC', 'createdTime' => 'ASC'),
+            array('createdTime' => 'ASC'),
             0,
             1
         );
@@ -2315,7 +2315,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
-        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
     }
 
     public function changeHidePublishLesson($courseId, $status)
