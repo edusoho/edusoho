@@ -1,8 +1,11 @@
+// 单独引入 h5 文件夹中的组件样式
 @import '../../../src/assets/styles/modules/e-course/index.scss';
 @import '../../../src/assets/styles/modules/e-course-lists/index.scss';
 @import '../../../src/assets/styles/modules/e-poster/index.scss';
 @import '../../../src/assets/styles/modules/e-swipe/index.scss';
+@import '../../../src/assets/styles/modules/e-marketing/index.scss';
 
+// 引入 admin 文件夹中的组件样式
 @import '../modules/module-frame/index.scss';
 @import '../modules/module-template/index.scss';
 @import '../modules/carousel/index.scss';

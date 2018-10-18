@@ -1,0 +1,59 @@
+$tag-color: #FF5722;
+
+.e-groupon {
+  margin: vw(10) vw(20);
+  border-radius: vw(4);
+  background: #FFFFFF;
+  overflow: hidden;
+  &__tag {
+    display: inline-block;
+    position: absolute;
+    top: vw(20);
+    left: vw(14);
+    padding: 0 vw(12) 0 vw(6);
+    background: $tag-color;
+    color: #FFFFFF;
+    font-size: vw(12);
+    line-height: vw(24);
+    &:after {
+      content: '';
+      position: absolute;
+      right: vw(-6);
+      border-left: vw(6) solid $tag-color;
+      border-right: vw(6) solid transparent;
+      border-top: vw(12) solid $tag-color;
+      border-bottom: vw(12) solid $tag-color;
+    }
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
+  &__context {
+    border: 1px solid #F5F5F5;
+    border-top: none;
+    padding: vw(10) vw(10) vw(20) vw(10);
+    .context-title {
+
+    }
+    .context-sale {
+      margin-top:vw(8);
+      &__sale-price {
+        color: $tag-color;
+      }
+      &__origin-price {
+        margin-left: vw(5);
+        font-size: vw(12);
+        color: #616161;
+        text-decoration: line-through;
+      }
+      &__shopping {
+        padding: vw(6) vw(16);
+        background: #FF9800;
+        color: #FFFFFF;
+        font-size: vw(14);
+        border-radius: vw(2);
+      }
+    }
+  }
+}

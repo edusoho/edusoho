@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
     <div slot="preview" class="groupon-container">
-      拼团预览
+      <groupon></groupon>
     </div>
     <div slot="setting" class="groupon-allocate">
       <header class="title">活动设置</header>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import groupon from '@/containers/components/e-marketing/e-groupon';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
 
@@ -35,7 +36,8 @@ export default {
   name: 'marketing-groupon',
   components: {
     moduleFrame,
-    courseModal
+    courseModal,
+    groupon,
   },
   props: {
     active: {
