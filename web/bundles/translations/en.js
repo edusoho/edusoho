@@ -298,6 +298,7 @@ t.add("activity.testpaper_manage.normal_percentage", "Normal %normalPercentage%%
 t.add("activity.testpaper_manage.difficulty_percentage", "Difficulty %difficultyPercentage%%", "js", "en");
 t.add("activity.testpaper_manage.required_error_hint", "Please enter the score", "js", "en");
 t.add("activity.testpaper_manage.question_options", "Option", "js", "en");
+t.add("activity.testpaper_manage.questions_length_hint", "The maximum number of questions is 2,000", "js", "en");
 t.add("activity.text_manage.save_draft_hint", "(Draft saved at %createdTime%)", "js", "en");
 t.add("activity.text_manage.finish_detail_required_error_hint", "Please enter the minimum watch time", "js", "en");
 t.add("activity.video_manage.delete_success_hint", "Delete subtitles successful", "js", "en");
