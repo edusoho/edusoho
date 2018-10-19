@@ -7,17 +7,17 @@ use ApiBundle\Api\Resource\Filter;
 class MarketingActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'play_price', 'lowest_price', 'shared_picture', 'created_time', 'start_time', 'end_time',
+        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'owner_price', 'member_price', 'shared_picture', 'created_time', 'start_time', 'end_time',
     );
 
     protected function publicFields(&$data)
     {
         $data['originPrice'] = $data['item_origin_price'];
         unset($data['item_origin_price']);
-        $data['ownerPrice'] = $data['play_price'];
-        unset($data['play_price']);
-        $data['memberPrice'] = $data['lowest_price'];
-        unset($data['lowest_price']);
+        $data['ownerPrice'] = $data['owner_price'];
+        unset($data['owner_price']);
+        $data['memberPrice'] = $data['member_price'];
+        unset($data['member_price']);
         $data['cover'] = $data['shared_picture'];
         unset($data['shared_picture']);
         $data['createdTime'] = $data['created_time'];
