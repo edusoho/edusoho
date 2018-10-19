@@ -14,10 +14,14 @@ class MarketingActivityFilter extends Filter
     {
         $data['originPrice'] = $data['item_origin_price'];
         unset($data['item_origin_price']);
-        $data['ownerPrice'] = $data['owner_price'];
-        unset($data['owner_price']);
-        $data['memberPrice'] = $data['member_price'];
-        unset($data['member_price']);
+        if (isset($data['owner_price'])) {
+            $data['ownerPrice'] = $data['owner_price'];
+            unset($data['owner_price']);
+        }
+        if (isset($data['member_price'])) {
+            $data['memberPrice'] = $data['member_price'];
+            unset($data['member_price']);
+        }
         $data['cover'] = $data['shared_picture'];
         unset($data['shared_picture']);
         $data['createdTime'] = $data['created_time'];
