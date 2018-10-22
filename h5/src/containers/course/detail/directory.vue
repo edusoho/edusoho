@@ -234,7 +234,9 @@
           }
         });
         if (!this.joinStatus
-          && ['is-tryLook', 'is-free'].includes(task.tagStatus)) {
+          && (Number(details.tryLookable)
+            || ['is-tryLook', 'is-free'].includes(task.tagStatus))) {
+          // && ['is-tryLook', 'is-free'].includes(task.tagStatus)) { 修复免费文档预览报错
         // trylook and free video click
           switch (task.type) {
             case 'video':
@@ -257,7 +259,7 @@
                   courseId: this.selectedPlanId,
                   taskId: task.id,
                   type: task.type,
-                  preview: 1
+                  // preview: 1 修复免费文档预览报错
                 }
               })
               break;
