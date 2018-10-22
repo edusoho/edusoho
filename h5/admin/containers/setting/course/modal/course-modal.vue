@@ -18,7 +18,7 @@
           v-model="keyWord"
           placeholder="搜索课程"
           class="inline-input search__input"
-          :value-key="'displayedTitle'"
+          :value-key="head[type][0].label"
           :clearable="true"
           :autofocus="true"
           :trigger-on-focus="false"
@@ -28,7 +28,7 @@
       </div>
       <div class="help-text mbs">拖动课程名称可调整排序</div>
     </div>
-    <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses"></course-table>
+    <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :type="type"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
       <el-button class="text-medium btn-border-primary" size="small" @click="modalVisible = false">取 消</el-button>
       <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import head from '@admin/config/modal-config';
 import courseTable from './course-table'
 import { mapMutations, mapState, mapActions } from 'vuex';
 
@@ -57,6 +58,10 @@ export default {
     limit: {
       default: '',
     },
+    type: {
+      type: String,
+      default: 'course',
+    },
   },
   data () {
     return {
@@ -65,6 +70,7 @@ export default {
       cacheResult: {},
       courseSets: this.courseList,
       courseListIds: [],
+      head,
     }
   },
   computed: {
@@ -95,7 +101,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getCourseList'
+      'getCourseList',
+      'getMarketingList'
     ]),
     restoreListIds() {
       this.courseListIds = [];
@@ -142,6 +149,18 @@ export default {
         cb(this.cacheResult[queryString])
         return;
       }
+      if (this.type !== 'course') {
+        this.getMarketingList({
+          name: queryString,
+          statuses: 'ongoing,unstart',
+          type: this.type,
+        }).then(res => {
+          this.cacheResult[queryString] = res.data;
+          cb(res.data);
+        })
+        return;
+      }
+
       this.getCourseList({
         courseSetTitle: queryString
       }).then(res => {

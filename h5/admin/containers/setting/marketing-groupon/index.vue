@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses">
+    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses" type="groupon">
     </course-modal>
   </module-frame>
 </template>

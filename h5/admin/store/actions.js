@@ -6,6 +6,7 @@ export const updateLoading = ({ commit }, { isLoading }) => {
   commit(types.UPDATE_LOADING_STATUS, { isLoading });
 };
 
+// 课程分类
 export const getCategories = ({ commit }) => Api.getCategories({
   query: {
     groupCode: 'course'
@@ -23,6 +24,7 @@ export const getCategories = ({ commit }) => Api.getCategories({
 });
 
 
+// 获取后台配置（草稿／正式）
 export const getDraft = ({ commit }, { portal, type, mode }) => Api.getDraft({
   query: {
     portal,
@@ -33,6 +35,7 @@ export const getDraft = ({ commit }, { portal, type, mode }) => Api.getDraft({
   }
 });
 
+// 删除后台配置（草稿／正式）
 export const deleteDraft = ({ commit }, { portal, type, mode }) => Api.deleteDraft({
   query: {
     portal,
@@ -43,6 +46,7 @@ export const deleteDraft = ({ commit }, { portal, type, mode }) => Api.deleteDra
   }
 });
 
+// 保存后台配置（草稿／正式）
 export const saveDraft = ({ commit }, { portal, type, mode, data }) => Api.saveDraft({
   params: {
     type,
@@ -52,10 +56,17 @@ export const saveDraft = ({ commit }, { portal, type, mode, data }) => Api.saveD
   data
 });
 
+// 课程搜索列表数据
 export const getCourseList = ({ commit }, params) => Api.getCourseList({
   params
 });
 
+// 营销活动搜索列表数据
+export const getMarketingList = ({ commit }, params) => Api.getMarketingList({
+  params
+});
+
+// 后台配置预览二维码
 export const getQrcode = ({ commit }, { route, preview, times, duration }) => Api.getQrcode({
   query: {
     route
