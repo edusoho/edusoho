@@ -70,6 +70,16 @@ class AddTableIndexJob extends AbstractJob
         $this->createIndex('status', 'classroomId_createdTime', 'classroomId, createdTime');
     }
 
+    protected function changeTableFiledType()
+    {
+        /*
+         *  Table  course_set_v8
+         *  Field  summary
+         *  FieldType longtext
+         */
+        $this->changeFiledType('course_set_v8', 'summary', 'longtext');
+    }
+
     protected function getConnection()
     {
         $biz = $this->getBiz();
@@ -90,6 +100,29 @@ class AddTableIndexJob extends AbstractJob
         if (!$this->isIndexExist($table, $index)) {
             $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
         }
+    }
+
+    protected function changeFiledType($table, $fieldName, $fieldType, $length = '')
+    {
+        if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
+            $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
+        }
+    }
+
+    protected function shouldFiledTypeChanged($table, $fieldName, $fieldType)
+    {
+        $sql = "show columns from `{$table}` where Field = '{$fieldName}';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        $shouldFiledTypeChanged = false;
+
+        if (!empty($result) && array_key_exists('Type', $result)) {
+            if ($result['Type'] != $fieldType) {
+                $shouldFiledTypeChanged = true;
+            }
+        }
+
+        return $shouldFiledTypeChanged;
     }
 
     protected function getBiz()
