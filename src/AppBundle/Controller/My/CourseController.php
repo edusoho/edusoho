@@ -203,7 +203,15 @@ class CourseController extends CourseBaseController
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
-        $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
+        $hasMulCoursePlans = $this->getCourseService()->hasMulCourses($course['courseSetId']);
+
+        if ($hasMulCoursePlans) {
+            $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
+        } else {
+            if (!empty($course['courseSetTitle'])) {
+                $course['title'] = $course['courseSetTitle'];
+            }
+        }
 
         return $this->render(
             'course/course-show.html.twig',
