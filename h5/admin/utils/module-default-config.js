@@ -37,5 +37,13 @@ export default {
       },
       responsive: '1'
     }
+  },
+  groupon: {
+    type: 'groupon',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: ''
+    }
   }
 };
