@@ -47,6 +47,28 @@
       background-color: #fff;
     }
   }
+  &-miniprogram {
+    .find-body {
+      padding-bottom: 270px
+    }
+    .find-section {
+      background: #FFFFFF;
+      padding: 0;
+      .section-title {
+        margin-left: 0;
+        padding: 0 15px;
+        background: #F5F5F5;
+        line-height: 38px;
+      }
+      .find-section-item {
+        float: none;
+        margin: 15px 15px 20px 0;
+        &:nth-child(4n + 2) {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
 }
 
 .setting-button-group {

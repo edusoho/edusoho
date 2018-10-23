@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="setting-page">
+    <div class="setting-page" :class="{ 'setting-page-miniprogram': portal === 'miniprogram'}">
       <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
       <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>微网校</div>
 
@@ -26,13 +26,25 @@
         </draggable>
       </div>
 
-      <!-- 底部添加组件按钮 -->
-      <div class="find-section clearfix">
+      <!-- h5配置——底部添加组件按钮 -->
+      <div class="find-section clearfix" v-if="portal === 'h5'">
         <div class="section-title">点击添加组件</div>
-        <el-button class="find-section-item" type="" size="medium"
-          v-for="(item, index) in moduleItems"
-          @click="addModule(item, index)"
-          :key="index">
+        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+          v-for="(item, index) in baseModules" :key="index">
+          {{ item.name }}
+        </el-button>
+      </div>
+
+      <!-- 小程序配置——底部添加组件按钮 -->
+      <div class="find-section clearfix" v-if="portal === 'miniprogram'">
+        <div class="section-title">基础组件</div>
+        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+          v-for="(item, index) in baseModules" :key="`base-${index}`">
+          {{ item.name }}
+        </el-button>
+        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" href="javascript:;">创建活动>></a> </div>
+        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+          v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
           {{ item.name }}
         </el-button>
       </div>
@@ -57,7 +69,7 @@
 <script>
 import Api from '@admin/api';
 import * as types from '@admin/store/mutation-types';
-import { BASE_MODULE } from '@admin/config/module-default-config';
+import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
 import pathName2Portal from '@admin/config/api-portal-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
@@ -80,7 +92,8 @@ export default {
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
-      moduleItems: BASE_MODULE,
+      baseModules: BASE_MODULE,
+      marketingModules: MARKETING_MODULE,
       typeCount: {},
       pathName: this.$route.name,
     }
@@ -89,6 +102,9 @@ export default {
     ...mapState(['isLoading']),
     stopDraggleClasses() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
+    },
+    portal() {
+      return pathName2Portal[this.pathName];
     },
   },
   created() {
@@ -142,7 +158,7 @@ export default {
       }
       this.typeCount.addByType(data.default.type);
 
-      const defaultString = JSON.stringify(this.moduleItems[index].default); // 需要一个深拷贝对象
+      const defaultString = JSON.stringify(this.baseModules[index].default); // 需要一个深拷贝对象
       const defaultCopied = JSON.parse(defaultString);
 
       this.modules.push(defaultCopied);
@@ -153,7 +169,7 @@ export default {
       const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
 
       this.getDraft({
-        portal: pathName2Portal[this.pathName],
+        portal: this.portal,
         type: 'discovery',
         mode,
       }).then(res => {
@@ -164,7 +180,7 @@ export default {
     reset() {
       // 删除草稿配置配置
       this.deleteDraft({
-        portal: pathName2Portal[this.pathName],
+        portal: this.portal,
         type: 'discovery',
         mode: 'draft',
       }).then(res => {
@@ -201,7 +217,7 @@ export default {
         this.saveDraft({
           data,
           mode,
-          portal: pathName2Portal[this.pathName],
+          portal: this.portal,
           type: 'discovery',
         }).then(() => {
 
