@@ -18,7 +18,14 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
             'course-set.update' => 'onCourseSetUpdate',
             'course-set.unlock' => 'onCourseSetUnlock',
+            'courseSet.courses.sort' => 'onCourseSetCoursesSort',
         );
+    }
+
+    public function onCourseSetCoursesSort(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSet['id']);
     }
 
     public function onCourseSetMaxRateUpdate(Event $event)
