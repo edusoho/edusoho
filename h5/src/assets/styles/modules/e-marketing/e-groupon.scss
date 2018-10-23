@@ -27,7 +27,7 @@ $tag-color: #FF5722;
   }
   &__image-container {
     width: 100%;
-    height: 188px;
+    height: vw(188);
   }
   &__image {
     width: 100%;
@@ -46,7 +46,9 @@ $tag-color: #FF5722;
     .context-sale {
       margin-top:vw(8);
       &__sale-price {
+        font-size: 16px;
         color: $tag-color;
+        font-weight: bold;
       }
       &__origin-price {
         margin-left: vw(5);
@@ -55,6 +57,7 @@ $tag-color: #FF5722;
         text-decoration: line-through;
       }
       &__shopping {
+        float: right;
         padding: vw(6) vw(16);
         background: #FF9800;
         color: #FFFFFF;
