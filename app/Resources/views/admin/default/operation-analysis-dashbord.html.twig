@@ -32,6 +32,13 @@ clearfix">
       <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalVipNum }}</p>
     </li>
   {% endif %}
+  {% if is_plugin_installed('Invoice') and setting('invoice.enabled') %}
+    <li>
+      <div class="title">{{ 'admin.invoice_import.to_invoice_num'|trans }}</div>
+      <span class="number"><a href="{{ path('admin_invoice_manage') }}" target="_blank">{{ toInvoiceNum }}</a></span>
+      <p>{{ 'admin.invoice_import.total_invoice_num'|trans }}: {{ totalInvoiceNum }}</p>
+    </li>
+  {% endif %}
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.thread_un_answer'|trans }}</div>
     <span class="number">
