@@ -9,7 +9,7 @@
         <draggable
           v-model="modules"
           :options="{
-            filter: stopDraggleDoms,
+            filter: stopDraggleClasses,
             preventOnFilter: false,
           }">
           <module-template v-for="(module, index) in modules"
@@ -57,9 +57,9 @@
 <script>
 import Api from '@admin/api';
 import * as types from '@admin/store/mutation-types';
-import moduleDefault from '@admin/utils/module-default-config';
+import { BASE_MODULE } from '@admin/config/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
-import pathName2Portal from '@admin/utils/api-portal-config';
+import pathName2Portal from '@admin/config/api-portal-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
@@ -80,26 +80,14 @@ export default {
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
-      moduleItems: [{
-          name: '轮播图',
-          default: moduleDefault.slideShow,
-        },
-        {
-          name: '课程列表',
-          default: moduleDefault.courseList,
-        },
-        {
-          name: '图片广告',
-          default: moduleDefault.poster,
-        }
-      ],
+      moduleItems: BASE_MODULE,
       typeCount: {},
       pathName: this.$route.name,
     }
   },
   computed: {
     ...mapState(['isLoading']),
-    stopDraggleDoms() {
+    stopDraggleClasses() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
     },
   },

@@ -1,4 +1,4 @@
-export default {
+const MODULE_DEFAULT = {
   slideShow: {
     type: 'slide_show',
     moduleType: '',
@@ -47,3 +47,25 @@ export default {
     }
   }
 };
+
+const BASE_MODULE = [
+  {
+    name: '轮播图',
+    default: MODULE_DEFAULT.slideShow,
+  }, {
+    name: '课程列表',
+    default: MODULE_DEFAULT.courseList,
+  }, {
+    name: '图片广告',
+    default: MODULE_DEFAULT.poster,
+  }
+];
+
+const MARKETING_MODULE = [
+  {
+    name: '拼团活动',
+    default: MODULE_DEFAULT.groupon,
+  }
+]
+
+export { MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE };

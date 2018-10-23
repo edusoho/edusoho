@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import pathName2Portal from '@admin/utils/api-portal-config';
+  import pathName2Portal from '@admin/config/api-portal-config';
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
