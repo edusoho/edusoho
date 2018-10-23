@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
     <div slot="preview" class="groupon-container">
-      <groupon></groupon>
+      <groupon :activity="copyModuleData.activity" :tag="copyModuleData.tag"></groupon>
     </div>
     <div slot="setting" class="groupon-allocate">
       <header class="title">活动设置</header>
@@ -10,14 +10,20 @@
           <p class="pull-left section-left">活动：</p>
           <div class="section-right">
             <div class="required-option">
-              <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
+              <el-button type="info" size="mini" @click="openModal" v-show="!activityName">选择课程</el-button>
+              <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="activityName">
+                <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+                  <span slot="content">{{ activityName }}</span>
+                  <span>{{ activityName }}</span>
+                </el-tooltip>
+              </el-tag>
             </div>
           </div>
         </div>
         <div class="groupon-item-setting__section clearfix">
-          <p class="pull-left section-left required-option">列表名称：</p>
+          <p class="pull-left section-left required-option">活动标签：</p>
           <div class="section-right">
-            <el-input size="mini" v-model="copyModuleData.activity.name" placeholder="请输入列表名称" clearable></el-input>
+            <el-input size="mini" v-model="copyModuleData.tag" placeholder="请输入列表名称" clearable></el-input>
           </div>
         </div>
       </div>
@@ -65,6 +71,9 @@ export default {
       },
       set() {}
     },
+    activityName() {
+      return this.moduleData.data.activity.name;
+    },
   },
   methods: {
     modalVisibleHandler(visible) {
@@ -74,14 +83,17 @@ export default {
       this.modalVisible = true;
     },
     getUpdatedCourses(courses) {
-      // this.courseSets = courses;
-      // if (!courses.length) return;
+      this.courseSets = courses;
+      if (!courses.length) return;
 
-      // this.moduleData.data.link.target = {
-      //   id: courses[0].id,
-      //   title: courses[0].title || courses[0].courseSetTitle,
-      //   courseSetId: courses[0].courseSet.id,
-      // };
+      this.copyModuleData.activity = courses[0];
+    },
+    removeActivity() {
+      this.courseSets = [];
+      this.$set(this.copyModuleData, 'activity', {});
+    },
+    handleClose() {
+      this.removeActivity();
     },
   }
 }
