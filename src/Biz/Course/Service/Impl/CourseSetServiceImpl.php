@@ -832,7 +832,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $course = $publishedCourse ?: $this->getCourseService()->getFirstCourseByCourseSetId($id);
 
         if (empty($course)) {
-            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
+            throw $this->createNotFoundException("No Available Course in CourseSet#{$id}");
         }
         $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
     }
