@@ -2,7 +2,7 @@
   <div>
     <div class="setting-page" :class="{ 'setting-page-miniprogram': portal === 'miniprogram'}">
       <img class="find-head-img" src="static/images/find_head_url.jpg" alt="">
-      <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>{{ pathName === 'miniprogramSetting' ? '小程序' : '微网校'}}</div>
+      <div class="find-navbar"><i class="h5-icon h5-icon-houtui"></i>{{ portal === 'miniprogram' ? '小程序' : '微网校' }}</div>
 
       <!-- 操作预览区域 -->
       <div class="find-body">
