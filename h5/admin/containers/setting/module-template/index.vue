@@ -1,19 +1,24 @@
 <template>
   <div class="module-template" @click="activeModule">
-    <!-- 轮播 -->
-    <carousel v-if="module.type === moduleType.slideShow"
+    <!-- 基础组件——轮播 -->
+    <carousel v-if="module.type === moduleDefault.slideShow.type"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></carousel>
 
-    <!-- 课程列表 -->
-    <course v-if="module.type === moduleType.courseList"
+    <!-- 基础组件——课程列表 -->
+    <course v-if="module.type === moduleDefault.courseList.type"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></course>
 
     <!-- 广告海报 -->
-    <poster v-if="module.type === moduleType.poster"
+    <poster v-if="module.type === moduleDefault.poster.type"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></poster>
+
+    <!-- 营销组件——拼团活动 -->
+    <marketing-groupon v-if="module.type === moduleDefault.groupon.type"
+      :active="isActive" :moduleData="module" :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"></marketing-groupon>
 
     <img class="icon-delete" src="static/images/delete.png" @click="handleRemove(module, index)" v-show="isActive">
   </div>
@@ -23,13 +28,16 @@
 import Carousel from '../carousel';
 import Course from '../course';
 import Poster from '../poster';
+import marketingGroupon from '../marketing-groupon';
 import validate from '@admin/utils/module-validator';
+import { MODULE_DEFAULT } from '@admin/config/module-default-config';
 
 export default {
   components: {
     'carousel': Carousel,
     'course': Course,
-    'poster': Poster
+    'poster': Poster,
+    'marketing-groupon': marketingGroupon,
   },
   props: {
     module: {
@@ -86,12 +94,27 @@ export default {
   },
   data () {
     return {
-      moduleType: {
-        slideShow: 'slide_show',
-        courseList: 'course_list',
-        poster: 'poster',
-        incomplete: false,
-      }
+      moduleDefault: MODULE_DEFAULT,
+      // testGroupon: {
+      //   "type": "groupon",
+      //   "moduleType": "groupon-1",
+      //   "data": {
+      //     "activity": {
+      //       "id": 1,
+      //       "name": "活动名称",
+      //       "type": "groupon",
+      //       "status": "ongoing",
+      //       "originPrice": "10.00",
+      //       "ownerPrice": "0.01",
+      //       "memberPrice": "0.02",
+      //       "cover": "https://xxx.xxx.xxx/xxx.jpg",
+      //       "createdTime": "2018-07-05T09:49:27+08:00",
+      //       "startTime": "2018-07-05T09:49:27+08:00",
+      //       "endTime": "2018-07-06T09:49:27+08:00"
+      //     },
+      //     "tag": "大甩卖"
+      //   }
+      // }
     }
   },
   methods: {

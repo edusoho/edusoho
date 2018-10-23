@@ -158,7 +158,7 @@ export default {
       }
       this.typeCount.addByType(data.default.type);
 
-      const defaultString = JSON.stringify(this.baseModules[index].default); // 需要一个深拷贝对象
+      const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
       const defaultCopied = JSON.parse(defaultString);
 
       this.modules.push(defaultCopied);
