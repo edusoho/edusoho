@@ -19,7 +19,15 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'course-set.update' => 'onCourseSetUpdate',
             'course-set.unlock' => 'onCourseSetUnlock',
             'courseSet.courses.sort' => 'onCourseSetCoursesSort',
+            'course.publish' => 'onCourseStatusChange',
+            'course.close' => 'onCourseStatusChange',
         );
+    }
+
+    public function onCourseStatusChange(Event $event)
+    {
+        $course = $event->getSubject();
+        $this->getCourseSetService()->updateCourseSetDefaultCourseId($course['courseSetId']);
     }
 
     public function onCourseSetCoursesSort(Event $event)
