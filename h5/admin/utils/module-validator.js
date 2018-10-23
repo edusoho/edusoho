@@ -45,8 +45,7 @@ export default (module, startValidate) => {
   // 营销活动——拼团
   if (module.type == 'groupon') {
     const activityExist = module.data.activity.id;
-    const tagExist = module.data.tag;
-    if (!activityExist || !tagExist) {
+    if (!activityExist) {
       if (!startValidate) return true;
       Vue.prototype.$message({
         message: '请完善拼团模块信息！',
