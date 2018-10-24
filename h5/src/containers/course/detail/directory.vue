@@ -23,7 +23,7 @@
           <div class="lesson-cell__hour text-overflow" v-if="lesson.type === 'lesson'"
             :class="{'lesson-show': unitShow[lesson.show] || tasks[chapterIndex][0].type === 'lesson'}">
             <div v-if="lesson.tasks.length > 1">
-              <div class="lesson-cell__lesson text-overflow"">
+              <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
                 <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.title }}</span>
               </div>
@@ -43,7 +43,7 @@
             </div>
 
             <div v-if="lesson.tasks.length === 1">
-              <div class="lesson-cell__lesson text-overflow"">
+              <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
                 <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
 
