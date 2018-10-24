@@ -19,6 +19,13 @@
       top: 0;
       left: 15px;
     }
+    &-miniprogram {
+      position: absolute;
+      top: 23px;
+      width: 100%;
+      line-height: 40px;
+      background: transparent;
+    }
   }
   .find-head-img {
     width: 373px;
