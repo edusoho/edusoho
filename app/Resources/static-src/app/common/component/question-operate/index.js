@@ -21,7 +21,7 @@ export default class QuestionOperate {
       containerPath: '> tr',
       containerSelector:'tbody',
       itemSelector: 'tr.is-question',
-      placeholder: '<tr class="placeholder"/>',
+      placeholder: '<tr class="placeholder test-height"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>',
       exclude: '.notMoveHandle',
       onDrop: (item, container, _super) => {
         _super(item, container);
