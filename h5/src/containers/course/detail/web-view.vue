@@ -19,7 +19,7 @@ export default {
   data () {
     return {
       media: '',
-      // isPreview: this.$route.query.preview, 修复免费文档预览报错
+      isPreview: this.$route.query.preview,
     }
   },
   computed: {
@@ -54,8 +54,7 @@ export default {
     */
     getParams () {
       const { courseId, taskId, type } = this.$route.query;
-      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable || true)
-      // const canTryLookable = !this.joinStatus && this.isPreview 修复免费文档预览报错
+      const canTryLookable = !this.joinStatus && this.isPreview;
       this.media = type;
 
       return canTryLookable ? {
