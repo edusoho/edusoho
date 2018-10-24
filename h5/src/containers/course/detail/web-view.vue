@@ -74,6 +74,7 @@ export default {
     initPlayer(player) {
       const media = player.media;
       const playerSDKUri = '//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v='
+      // const playerSDKUri = '//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=' // 测试 sdk
        + (Date.now()/1000/60);
 
       loadScript(playerSDKUri, (err) => {
@@ -81,7 +82,7 @@ export default {
 
       new window.QiQiuYun.Player({
         id: 'player',  // 用于初始化的DOM节点id
-        // playServer: 'resource-play.cg-dev.cn',
+        // playServer: 'play.test.qiqiuyun.cn', // 测试 playServer
         resNo: media.resId, // 想要播放的资源编号
         token: media.token, // 请求播放的认证token
         source: {
