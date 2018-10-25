@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\Pay\Service\Impl;
 
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Pay\Status\PaidStatus;
 use Codeages\Biz\Pay\Status\PayingStatus;
 use Codeages\Biz\Pay\Status\RefundedStatus;
@@ -91,6 +92,11 @@ class PayServiceImpl extends BaseService implements PayService
         return $trade;
     }
 
+    public function getTradeById($id)
+    {
+        return $this->getPayTradeDao()->getById($id);
+    }
+
     public function getTradeByTradeSn($tradeSn)
     {
         return $this->getPayTradeDao()->getByTradeSn($tradeSn);
@@ -120,9 +126,32 @@ class PayServiceImpl extends BaseService implements PayService
         return $trade;
     }
 
+    public function findTradesByIds($ids)
+    {
+        return $this->getPayTradeDao()->findByIds($ids);
+    }
+
     public function findTradesByOrderSns($orderSns)
     {
         return $this->getPayTradeDao()->findByOrderSns($orderSns);
+    }
+
+    public function setTradeInvoiceSnById($id, $invoiceSn)
+    {
+        $trade = $this->getTradeById($id);
+        if (empty($trade)) {
+            throw new NotFoundException('trade not found');
+        }
+
+        if (!empty($trade['invoice_sn'])) {
+            throw new NotFoundException('trade had invoice');
+        }
+
+        if ($this->biz['user']['id'] != $trade['user_id']) {
+            throw new AccessDeniedException('trade owner is invalid.');
+        }
+
+        return $this->getPayTradeDao()->update($trade['id'], array('invoice_sn' => $invoiceSn));
     }
 
     public function closeTradesByOrderSn($orderSn, $excludeTradeSns = array())
@@ -286,6 +315,11 @@ class PayServiceImpl extends BaseService implements PayService
     public function searchTrades($conditions, $orderBy, $start, $limit)
     {
         return $this->getPayTradeDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countTrades($conditions)
+    {
+        return $this->getPayTradeDao()->count($conditions);
     }
 
     protected function updateTradeToPaid($tradeId, $data)

@@ -98,7 +98,7 @@
   "repositories": {
     "packagist": {
       "type": "composer",
-      "url": "https://packagist.org"
+      "url": "https://packagist.laravel-china.org"
     }
   }
 }

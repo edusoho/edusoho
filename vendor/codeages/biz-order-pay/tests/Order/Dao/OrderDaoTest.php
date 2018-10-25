@@ -3,6 +3,9 @@
 namespace Tests;
 
 use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Dao\OrderLogDao;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class OrderDaoTest extends IntegrationTestCase
 {
