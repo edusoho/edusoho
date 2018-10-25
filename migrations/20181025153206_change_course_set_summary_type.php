@@ -12,7 +12,7 @@ class ChangeCourseSetSummaryType extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("ALTER TABLE `course_set_v8` MODIFY COLUMN `summary` longtext;");
+        $connection->exec('ALTER TABLE `course_set_v8` MODIFY COLUMN `summary` longtext;');
     }
 
     /**
@@ -22,6 +22,6 @@ class ChangeCourseSetSummaryType extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("ALTER TABLE `course_set_v8` MODIFY COLUMN `summary` text;");
+        $db->exec('ALTER TABLE `course_set_v8` MODIFY COLUMN `summary` text;');
     }
 }
