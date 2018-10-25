@@ -8,7 +8,7 @@ use AppBundle\Common\TimeMachine;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
-    public function getDiscovery($portal, $mode = 'published')
+    public function getDiscovery($portal, $mode = 'published', $usage = 'show')
     {
         $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
         if (empty($discoverySettings)) {
@@ -35,7 +35,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $discoverySetting['data']['items'] = $courses;
             }
 
-            if ('course_list' == $discoverySetting['type'] && 'custom' == $discoverySetting['data']['sourceType']) {
+            if ('course_list' == $discoverySetting['type'] && 'custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
                 $courses = $discoverySetting['data']['items'];
                 foreach ($courses as $key => $course) {
                     $existCourse = $this->getCourseService()->getCourse($course['id']);
