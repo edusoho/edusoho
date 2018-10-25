@@ -23,6 +23,7 @@ class TableCommand extends AbstractCommand
 
         $migrations = array(
             'pay',
+            'pay_trade_add_invoice_sn',
         );
 
         foreach ($migrations as $migration) {

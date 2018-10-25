@@ -10,7 +10,7 @@ class BizOrderAddInvoiceSn extends Migration
         $connection = $biz['db'];
 
         $connection->exec("
-            ALTER TABLE `biz_order` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn' "
+            ALTER TABLE `biz_pay_trade` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn' "
         );
     }
 
@@ -19,6 +19,6 @@ class BizOrderAddInvoiceSn extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec('ALTER TABLE `biz_order` DROP COLUMN `invoice_sn`;');
+        $connection->exec('ALTER TABLE `biz_pay_trade` DROP COLUMN `invoice_sn`;');
     }
 }
