@@ -17,12 +17,28 @@ export default class QuestionOperate {
   }
 
   initSortList() {
+    let adjustment;
     this.$form.find('tbody').sortable({
       containerPath: '> tr',
       containerSelector:'tbody',
       itemSelector: 'tr.is-question',
       placeholder: '<tr class="placeholder test-height"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>',
       exclude: '.notMoveHandle',
+      onDragStart: function(item, container, _super) {
+        let offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function(item, position) {
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+      },
       onDrop: (item, container, _super) => {
         _super(item, container);
         if (item.hasClass('have-sub-questions')) {
