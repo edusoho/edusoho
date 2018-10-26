@@ -75,7 +75,7 @@ class CourseTaskResult extends AbstractResource
      */
     protected function getTaskService()
     {
-        return $this->service('Task:TaskResultService');
+        return $this->service('Task:TaskService');
     }
 
     /**
