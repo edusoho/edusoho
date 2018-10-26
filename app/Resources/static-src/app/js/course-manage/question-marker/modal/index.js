@@ -73,13 +73,13 @@ class QuestionMarkerStats {
 
     let xData = [],
       seriesData = [],
-      seriesName = '选择率';
+      seriesName = Translator.trans('course.question_marker.selection_rate');
 
     $.each(stats, function(index, stat) {
 
       if (questionType === 'fill') {
-        xData.push('填空'+(index+1));
-        seriesName = '正确率';
+        xData.push(Translator.trans('course.question_marker.gap_filling')+(index+1));
+        seriesName = Translator.trans('course.question_marker.correct_rate');
       } else {
         let key = String.fromCharCode(index+65);
         xData.push(key);

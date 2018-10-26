@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 
         progressBar.on('completed', function() {
             progressBar.deactive();
-            progressBar.text(Translator.trans('应用安装/升级成功！'));
+            progressBar.text(Translator.trans('admin.app.upgrade_success_hint'));
             $("#updating-hint").hide();
             $("#finish-update-btn").show();
         });
@@ -32,7 +32,7 @@ define(function(require, exports, module) {
 
         $updateBtn.click(function() {
 
-            if(!confirm(Translator.trans('是否确认升级，升级过程中网站将进入维护状态'))) {
+            if(!confirm(Translator.trans('admin.app.upgrade_hint'))) {
                 return;
             }
 
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 
             $.post(urls.checkLastErrorUrl, function(result) {
                 if (result === true) {
-                    if(!confirm(Translator.trans('上次安装升级应用系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？'))) {
+                    if(!confirm(Translator.trans('admin.app.upgrade_roll_back_hint'))) {
                         $("#updating-hint").hide();
                         progressBar.hide();
                         $updateBtn.show();
@@ -64,14 +64,14 @@ define(function(require, exports, module) {
 
 
     function exec(title, url, progressBar, startProgress, endProgress) {
-        progressBar.setProgress(startProgress, Translator.trans('正在%title%',{title:title}));
+        progressBar.setProgress(startProgress, Translator.trans('admin.app.upgrade_exec_hint',{title:title}));
         $.ajax(url, {
             async: true,
             dataType: 'json',
             type: 'POST'
         }).done(function(data, textStatus, jqXHR) {
             if (data.status == 'error') {
-                progressBar.error(makeErrorsText(Translator.trans('%title%失败：',{title:title}), data.errors));
+                progressBar.error(makeErrorsText(Translator.trans('admin.app.upgrade_exec_failed_hint',{title:title}), data.errors));
             } else if (typeof(data.index) != "undefined") {
                 if (url.indexOf('index') < 0) {
                     url = url+'&index=0';
@@ -81,7 +81,7 @@ define(function(require, exports, module) {
                 if (endProgress > 100) {
                     endProgress = 100;
                 }
-                progressBar.setProgress(endProgress, Translator.trans('%message%完成',{message:data.message}));
+                progressBar.setProgress(endProgress, Translator.trans('admin.app.upgrade_exec_finished_hint',{title:data.message}));
                 startProgress = endProgress;
                 title =  data.message;
                 exec(title, url, progressBar, startProgress, endProgress);
@@ -97,15 +97,15 @@ define(function(require, exports, module) {
                 });
                 $(document).dequeue('update_step_queue');
             } else {
-                progressBar.setProgress(endProgress, Translator.trans('%title%完成',{title:title}));
+                progressBar.setProgress(endProgress, Translator.trans('admin.app.upgrade_exec_finished_hint',{title:title}));
                 $(document).dequeue('update_step_queue');
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
             if(title != '检查系统版本') {
-                progressBar.error(Translator.trans('%title%时，发生了未知错误。',{title:title}));
+                progressBar.error(Translator.trans('admin.app.upgrade_exec_error_hint',{title:title}));
                 $(document).clearQueue('update_step_queue');
             } else {
-                progressBar.setProgress(endProgress, title + Translator.trans('完成'));
+                progressBar.setProgress(endProgress, title + Translator.trans('admin.app.upgrade_finish'));
                 $(document).dequeue('update_step_queue');
             }
         });
@@ -124,32 +124,32 @@ define(function(require, exports, module) {
     var getQueue = function (urls){
         var steps = [
             {
-                title: Translator.trans('检查系统环境'),
+                title: Translator.trans('admin.app.upgrade_check_env_hint'),
                 url: urls.checkEnvironmentUrl,
                 progressRange: [3, 10]
             },
             {
-                title: Translator.trans('检查依赖'),
+                title: Translator.trans('admin.app.upgrade_check_dependency_hint'),
                 url: urls.checkDependsUrl,
                 progressRange: [13, 20]
             },
             {
-                title: Translator.trans('备份系统文件'),
+                title: Translator.trans('admin.app.upgrade_backup_system_file_hint'),
                 url: urls.backupFileUrl,
                 progressRange: [23, 30]
             },
             {
-                title: Translator.trans('备份数据库'),
+                title: Translator.trans('admin.app.upgrade_backup_database_hint'),
                 url: urls.backupDbUrl,
                 progressRange: [33, 40]
             },
             {
-                title: Translator.trans('检查下载权限'),
+                title: Translator.trans('admin.app.upgrade_check_download_permission'),
                 url: urls.checkDownloadExtractUrl,
                 progressRange: [43, 50]
             },
             {
-                title: Translator.trans('下载安装升级程序'),
+                title: Translator.trans('admin.app.upgrade_download_installer'),
                 url: urls.downloadExtractUrl,
                 progressRange: [53, 60]
             }
@@ -160,12 +160,12 @@ define(function(require, exports, module) {
         if(type == 'upgrade'){
             var list = [
                 {
-                    title: Translator.trans('执行安装升级程序'),
+                    title: Translator.trans('admin.app.upgrade_exec_install_hint'),
                     url: urls.beginUpgradeUrl,
                     progressRange: [62, 94]
                 },
                 {
-                    title: Translator.trans('检查系统版本'),
+                    title: Translator.trans('admin.app.upgrade_check_app_version_hint'),
                     url: urls.checkNewestUrl,
                     progressRange: [97, 100]
                 }
@@ -174,7 +174,7 @@ define(function(require, exports, module) {
             $.merge(steps,list);
         }else{
             steps.push({
-                title: Translator.trans('执行安装升级程序'),
+                title: Translator.trans('admin.app.upgrade_exec_install_hint'),
                 url: urls.beginUpgradeUrl,
                 progressRange: [62, 100]
             });

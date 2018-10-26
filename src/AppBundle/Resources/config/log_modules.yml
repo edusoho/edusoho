@@ -358,6 +358,8 @@ system:
         modalField: all
     update_settings.wap:
         modalField: all
+    update_settings.developer:
+        modalField: all
     update_settings.mobile:
         modalField:
             ["enabled", "about", "logo"]

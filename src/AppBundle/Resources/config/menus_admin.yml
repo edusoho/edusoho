@@ -642,7 +642,6 @@ admin:
                             router_params:
                                 type: coin
                             disable: true
-                            router_name: admin_order_refunds
                 admin_coin_user:
                     name: admin.finance.coin_menu
                     children:
@@ -788,6 +787,18 @@ admin:
                             router_name: admin_cloud_data_lab
                         admin_cloud_data_lab_setting:
                             name: admin.cloud.data_lab_setting
+                admin_cloud_face_identify_manage:
+                    name: admin.cloud.face_identify
+                    visible: (cloudStatus() and cloud_info()['ai.face']|default(0) and setting('feature.face_enabled'))
+                    children:
+                        admin_cloud_face_identify:
+                            name: admin.cloud.face_identify
+                admin_cloud_feature_lab_manage:
+                    name: admin.cloud.feature_lab
+                    visible: (cloudStatus())
+                    children:
+                        admin_cloud_feature_lab:
+                            name: admin.cloud.feature_lab
                 admin_setting_cloud:
                     name: admin.cloud.cloud_setting_menu
                     children:
@@ -820,15 +831,15 @@ admin:
                             name: admin.distributor.menu
                             router_name: admin_login_distributor
         admin_mobile:
-            name: 移动端
+            name: admin.nav.wechat_app
             router_name: admin_wechat_app
             children:
                 admin_wechat_app_manage:
-                    name: 小程序设置
+                    name: admin.wechat_app.menu
                     router_name: admin_wechat_app
                     children:
                         admin_wechat_app:
-                            name: 小程序设置
+                            name: admin.wechat_app.menu
                             router_name: admin_wechat_app
                             disable: true
                 admin_setting_mobile:

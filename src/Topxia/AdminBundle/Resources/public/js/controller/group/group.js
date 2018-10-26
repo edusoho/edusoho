@@ -10,15 +10,15 @@ define(function(require, exports, module) {
 
 		$table.on('click','.close-group,.open-group',function(){
 			var $trigger = $(this);
-		if (!confirm(Translator.trans('%trigger%吗？',{trigger:$trigger.attr('title')}))) {
+		if (!confirm(Translator.trans('admin.group.operating_hint',{trigger:$trigger.attr('title')}))) {
 				return ;
 			}
 		$.post($(this).data('url'), function(html){
-                Notify.success(Translator.trans('%trigger%成功！',{trigger:$trigger.attr('title')}));
+                Notify.success(Translator.trans('admin.group.operating_success_hint',{trigger:$trigger.attr('title')}));
                  var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function(){
-                Notify.danger(Translator.trans('%trigger%失败',{trigger:$trigger.attr('title')}));
+                Notify.danger(Translator.trans('admin.group.operating_fail_hint',{trigger:$trigger.attr('title')}));
             });
 
 		});

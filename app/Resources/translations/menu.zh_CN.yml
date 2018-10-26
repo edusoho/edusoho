@@ -18,6 +18,7 @@ admin.nav.operation: 运营
 admin.nav.finance: 交易
 admin.nav.cloud: 教育云
 admin.nav.system: 系统
+admin.nav.wechat_app: 移动端
 
 #用户模块
 admin.user.basic_menu: 用户管理
@@ -236,6 +237,9 @@ admin.cloud.consult_menu: 云问答
 admin.cloud.data_lab: 数据实验室
 admin.cloud.data_lab_setting: 设置
 admin.cloud.cloud_setting_menu: 授权信息
+admin.cloud.feature_lab: 功能实验室
+admin.cloud.face_identify: 人脸识别
+
 
 ##概览模块
 admin.cloud.overview.basic_tab: 教育云概览
@@ -355,6 +359,9 @@ admin.system.org.basic_tab: 组织机构
 ##营销模块
 admin.marketing.menu: 微营销
 admin.distributor.menu: 分销
+
+##微信小程序模块
+admin.wechat_app.menu: 小程序设置
 
 #web模块
 web.course: 课程管理

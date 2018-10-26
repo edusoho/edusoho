@@ -1,6 +1,7 @@
 import sortList from 'common/sortable';
 import { delHtmlTag } from 'common/utils';
 import SelectLinkage from 'app/js/question-manage/widget/select-linkage.js';
+import notify from 'common/notify';
 
 class TestpaperForm {
   constructor($form) {
@@ -199,19 +200,27 @@ class TestpaperForm {
   _submit(event) {
     let $target = $(event.currentTarget);
     let status = this.validator.form();
+    let questionNum = 0;
+    this.$form.find('[data-role="count"]').each(function () {
+        let self = $(this);
+        questionNum+=Number(self.val());
+    });
 
     if (status) {
-      $.post($target.data('checkUrl'),this.$form.serialize(),result => {
-        if (result.status == 'no') {
-          $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
-        } else {
-          $('.js-build-check').html('');
+        if(questionNum>2000){
+            notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
+        }else{
+            $.post($target.data('checkUrl'),this.$form.serialize(),result => {
+                if (result.status == 'no') {
+                    $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
+                } else {
+                    $('.js-build-check').html('');
 
-          $target.button('loading').addClass('disabled');
-          this.$form.submit();
+                    $target.button('loading').addClass('disabled');
+                    this.$form.submit();
+                }
+            });
         }
-      });
-
     }
   }
 }

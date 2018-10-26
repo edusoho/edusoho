@@ -31,6 +31,10 @@ interface CourseService
 
     public function getDefaultCoursesByCourseSetIds($courseSetIds);
 
+    public function setDefaultCourse($courseSetId, $id);
+
+    public function getSeqMinPublishedCourseByCourseSetId($courseSetId);
+
     public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
     public function getFirstCourseByCourseSetId($courseSetId);
@@ -312,7 +316,7 @@ interface CourseService
 
     public function findLiveCourse($conditions, $userId, $role);
 
-    public function changeShowPublishLesson($courseId, $status);
+    public function changeHidePublishLesson($courseId, $status);
 
     public function countCoursesByCourseSetId($courseSetId);
 

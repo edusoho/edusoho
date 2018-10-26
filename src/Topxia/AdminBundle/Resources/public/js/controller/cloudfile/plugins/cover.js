@@ -58,18 +58,18 @@ define(function(require, exports, module) {
           }, 3000);
         } else {
           $target.button('reset');
-          Notify.danger(Translator.trans('生成截图失败！'));
+          Notify.danger(Translator.trans('meterial_lib.generate_screenshots_error_hint') + '!');
         }
 
       }).fail(function() {
         $target.button('reset');
-        Notify.danger(Translator.trans('生成截图失败！'));
+        Notify.danger(Translator.trans('meterial_lib.generate_screenshots_error_hint') + '!');
       });
 
     },
     _successGeneratePic: function($btn, resp) {
       $btn.button('reset');
-      Notify.success(Translator.trans('生成截图成功!'));
+      Notify.success(Translator.trans('meterial_lib.generate_screenshots_success_hint') + '!');
       var $coverTab = $btn.closest('#cover-tab');
       $coverTab.find('.js-cover-img').attr('src', resp.url);
       $coverTab.find('#thumbNo').val(resp.no);
@@ -108,14 +108,14 @@ define(function(require, exports, module) {
           url: $target.attr('action'),
           data: $target.serialize()
         }).done(function() {
-          Notify.success(Translator.trans('保存成功！'));
+          Notify.success(Translator.trans('site.save_success_hint') + '!');
         }).fail(function() {
-          Notify.danger(Translator.trans('保存失败！'));
+          Notify.danger(Translator.trans('site.save_error_hint') + '!');
         }).always(function() {
           $target.find('#save-btn').button('reset');
         });
       } else {
-        Notify.success(Translator.trans('保存成功！'));
+        Notify.success(Translator.trans('site.save_success_hint') + '!');
         $target.find('#save-btn').button('reset');
       }
 

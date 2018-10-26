@@ -33,12 +33,12 @@ define(function(require, exports, module) {
                             }
                         }
                     }
-                    Notify.success(Translator.trans('设置推荐老师操作成功!'));
+                    Notify.success(Translator.trans('admin.teacher.set_recommend_success_hint'));
                     setTimeout(function(){ 
                      window.location.reload();
                     },2000);
                 }).error(function(){
-                    Notify.danger(Translator.trans('设置推荐老师操作失败!'));
+                    Notify.danger(Translator.trans('admin.teacher.set_recommend_fail_hint'));
                 });
             }
 

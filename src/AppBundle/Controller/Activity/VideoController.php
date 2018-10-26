@@ -141,7 +141,7 @@ class VideoController extends BaseActivityController implements ActivityActionIn
     {
         $context = array();
         $file = $activity['ext']['file'];
-        if (empty($task['isFree']) && $activity['ext']['mediaSource'] == 'self' && 'cloud' == $file['storage']) {
+        if (empty($task['isFree']) && 'self' == $activity['ext']['mediaSource'] && 'cloud' == $file['storage']) {
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
 

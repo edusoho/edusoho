@@ -184,7 +184,7 @@ class MaterialLibController extends BaseController
             $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags, 'tagId'));
             $file['tags'] = ArrayToolkit::column($tags, 'name');
 
-            return $this->render('material-lib/Web/static-detail.html.twig', array(
+            return $this->render('material-lib/web/static-detail.html.twig', array(
                 'material' => $file,
                 'thumbnails' => '',
                 'editUrl' => $this->generateUrl('material_edit', array('fileId' => $file['id'])),

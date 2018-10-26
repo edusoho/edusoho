@@ -29,7 +29,7 @@
 		    </ul>
 
 		    {% if question.testResult.status|default('noAnswer') == "right" %}
-			    <p class="color-success">{{'question.answer.part_true'|trans}}</p>
+			    <p class="color-success">{{'question.answer.true'|trans}}</p>
 			  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
 			    <p class="text-warning">{{'question.answer.part_true'|trans}}
 				    {% if showScore|default(1) %}

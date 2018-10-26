@@ -55,12 +55,29 @@ class BizTest extends TestCase
         $this->assertEquals(2, count($biz['autoload.aliases']));
     }
 
-    public function testService()
+    public function testServiceWithProxy()
+    {
+        $biz = new Biz(array(
+            'service_proxy_enabled' => true,
+        ));
+        $biz['autoload.aliases']['Example'] = 'Tests\Example';
+        $service = $biz->service('Example:ExampleService');
+        $this->assertInstanceOf('Tests\Example\Service\ExampleService', $service->getClass());
+        $this->assertEquals($service, $biz['@Example:ExampleService']);
+
+        $biz = new Biz();
+        $biz['autoload.aliases']['Example'] = 'Tests\\Example';
+        $service1 = $biz->service('Example:ExampleService');
+        $service2 = $biz->service('Example:ExampleService');
+        $this->assertEquals($service1, $service2);
+    }
+
+    public function testServiceWithoutProxy()
     {
         $biz = new Biz();
         $biz['autoload.aliases']['Example'] = 'Tests\Example';
         $service = $biz->service('Example:ExampleService');
-        $this->assertInstanceOf('Tests\Example\Service\ExampleService', $service->getClass());
+        $this->assertInstanceOf('Tests\Example\Service\ExampleService', $service);
         $this->assertEquals($service, $biz['@Example:ExampleService']);
 
         $biz = new Biz();

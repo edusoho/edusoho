@@ -3,14 +3,14 @@ define(function(require, exports, module) {
   var AutoComplete = require('autocomplete');
   exports.run = function() {
     $('body').on('click', 'button.delete-btn', function() {
-      if (!confirm(Translator.trans('确认要删除此编辑区模板吗？'))) return false;
+      if (!confirm(Translator.trans('admin.block.delete_hint'))) return false;
       var $btn = $(this);
       $.post($btn.data('url'), function(response) {
         if (response.status == 'ok') {
           $('#' + $btn.data('target')).remove();
-          Notify.success(Translator.trans('删除编辑区模板成功!'));
+          Notify.success(Translator.trans('admin.block.delete_success_hint'));
         } else {
-          alert(Translator.trans('服务器错误!'));
+          alert(Translator.trans('site.service_error_hint'));
         }
       }, 'json');
     });

@@ -77,7 +77,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
                     $classroom['allTaskNum'] = 0;
                     $classroom['learnedTaskNum'] = 0;
                     $classrooms['class-'.$classroomId] = $classroom;
-                    $classroomIndex += 1;
+                    ++$classroomIndex;
                 }
                 $classrooms['class-'.$classroomId]['allTaskNum'] += $course['taskNum'];
                 $taskData = $this->getTaskDataInClassroomCourse($course['id'], $userId);

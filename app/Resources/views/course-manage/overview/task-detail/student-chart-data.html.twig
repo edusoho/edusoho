@@ -27,17 +27,19 @@
                    data-toggle="modal"
                    data-target="#modal"
                    data-url="{{ path('course_manage_student_learn_detail_modal',{courseId:course.id, userId:user.id}) }}"
-                   href="javascript:;" >详情</a>
+                   href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
             {% endif %}
         </div>
     </div>
 {% endfor %}
-{% if not members %}
+{% if not members or not tasks %}
     <div class="empty">
         {{ 'site.datagrid.empty'|trans }}
     </div>
 {% endif %}
 
-<div class="pull-right mtm">
-    {{ web_macro.paginator(paginator) }}
-</div>
+{% if tasks %}
+    <div class="pull-right mtm">
+      {{ web_macro.paginator(paginator) }}
+    </div>
+{% endif %}

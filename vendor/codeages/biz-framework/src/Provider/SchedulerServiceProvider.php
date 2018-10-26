@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\Framework\Provider;
 
-use Codeages\Biz\Framework\Scheduler\Scheduler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

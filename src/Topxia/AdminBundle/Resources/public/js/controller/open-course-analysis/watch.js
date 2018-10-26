@@ -13,7 +13,7 @@ define(function (require, exports, module) {
         var chartsData = $lineCharts.data('chartsData');
         var options = {
             title: {
-                text: '观看统计'
+                text: Translator.trans('admin.open_course_analysis.watch.chart_title')
             },
             tooltip: {
                 trigger: 'axis'
@@ -30,7 +30,7 @@ define(function (require, exports, module) {
                 type: 'value'
             },
             series: [{
-                name: '观看数',
+                name: Translator.trans('admin.open_course_analysis.watch.chart_data_title'),
                 type: 'line',
                 data: chartsData.watchNum,
                 itemStyle: {

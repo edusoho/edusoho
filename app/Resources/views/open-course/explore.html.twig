@@ -2,7 +2,6 @@
 {% set bodyClass = 'bg-blank open-course-list' %}
 {% set mobile = is_show_mobile_page() %}
 {% set siteNav = 'open/course/explore' %}
-{% do script(['libs/echo-js.js','app/js/open-course/explore/index.js'])%}
 
 {% block title %} {{'explore.open_course.title'|trans}} - {{ parent() }}{% endblock %}
 {% block top_content %}

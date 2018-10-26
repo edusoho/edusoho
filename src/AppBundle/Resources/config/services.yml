@@ -3,6 +3,15 @@ imports:
     - { resource: oauth2.yml }
 
 services:
+
+    activity_runtime_container:
+        class: AppBundle\Component\Activity\ActivityRuntimeContainer
+        arguments: ['@service_container']
+
+    activity_config_manager:
+        class: AppBundle\Component\Activity\ActivityConfigManager
+        arguments: ['%kernel.cache_dir%', '%edusoho.activities_dir%', '%kernel.debug%']
+
     user.online_track:
         class: AppBundle\Component\Track\UserOnlineTrack
         arguments: ['@service_container', '@Biz']
@@ -78,6 +87,24 @@ services:
 
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.question_extension:
+      class: AppBundle\Twig\QuestionExtension
+      arguments:    ['@service_container', '@biz']
+      tags:
+            - { name: twig.extension }
+
+    web.twig.testpaper_extension:
+        class: AppBundle\Twig\TestpaperExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.material_extension:
+        class: AppBundle\Twig\MaterialExtension
         arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }

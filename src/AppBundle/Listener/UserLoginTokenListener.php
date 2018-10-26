@@ -19,7 +19,7 @@ class UserLoginTokenListener
 
     public function onGetUserLoginListener(GetResponseEvent $event)
     {
-        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+        if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
 
@@ -33,7 +33,7 @@ class UserLoginTokenListener
         if (!$user->islogin()) {
             return;
         }
-        if (isset($user['locked']) && $user['locked'] == 1) {
+        if (isset($user['locked']) && 1 == $user['locked']) {
             $this->container->get('security.token_storage')->setToken(null);
             setcookie('REMEMBERME');
 
@@ -44,18 +44,18 @@ class UserLoginTokenListener
         $route = $request->get('_route');
 
         if ($auth
-            && $auth['register_mode'] != 'mobile'
+            && 'mobile' != $auth['register_mode']
             && array_key_exists('email_enabled', $auth)
             && $user['createdTime'] > $auth['setting_time']
-            && $user['emailVerified'] == 0
-            && ($user['type'] == 'default' || $user['type'] == 'web_email' || $user['type'] == 'web_mobile' || $user['type'] == 'discuz' || $user['type'] == 'phpwind' || $user['type'] == 'import')
-            && ($auth['email_enabled'] == 'opened' && empty($user['verifiedMobile']))
+            && 0 == $user['emailVerified']
+            && ('default' == $user['type'] || 'web_email' == $user['type'] || 'web_mobile' == $user['type'] || 'discuz' == $user['type'] || 'phpwind' == $user['type'] || 'import' == $user['type'])
+            && ('opened' == $auth['email_enabled'] && empty($user['verifiedMobile']))
             && (isset($route))
-            && ($route != '')
-            && ($route != 'register_email_verify')
-            && ($route != 'register_submited')
-            && ($route != 'register')
-            && ($request->getMethod() != 'POST')
+            && ('' != $route)
+            && ('register_email_verify' != $route)
+            && ('register_submited' != $route)
+            && ('register' != $route)
+            && ('POST' != $request->getMethod())
         ) {
             $request->getSession()->invalidate();
             $this->container->get('security.token_storage')->setToken(null);

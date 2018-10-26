@@ -16,7 +16,7 @@ class MeLiveCourseSet extends AbstractResource
     public function search(ApiRequest $request)
     {
         $allLiveCourseSets = $this->getCourseSetService()->searchCourseSets(
-            array('status' => 'published', 'type' => 'live'),
+            array('status' => 'published', 'type' => 'live', 'parentId' => 0),
             array('createdTime' => 'DESC'),
             0,
             PHP_INT_MAX

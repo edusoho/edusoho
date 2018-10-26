@@ -248,6 +248,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             throw new NotFoundException('lesson task is not found');
         }
 
+        $task['isOptional'] = $lessonTask['isOptional'];
+
         $task = parent::createTask($task);
         if ('published' == $lessonTask['status']) {
             $this->getTaskService()->publishTask($task['id']);

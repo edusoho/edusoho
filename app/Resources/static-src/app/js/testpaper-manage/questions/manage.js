@@ -7,6 +7,7 @@ export default class QuestionManage{
     this.$modal = $('#testpaper-confirm-modal');
     this.currentType = this.$typeNav.find('.active').children().data('type');
     this.questions = [];
+    this.questionsCount = 0;
     this._initEvent();
   }
 
@@ -56,7 +57,8 @@ export default class QuestionManage{
         return ;
       }
     }
-
+    this.questionsCount = 0;
+    this.questions = [];
     let stats = this._calTestpaperStats();
 
     if($('[name="passedScore"]').length > 0){
@@ -154,7 +156,7 @@ export default class QuestionManage{
     });
 
     stats.total = total;
-
+    self.questionsCount = total.count;
     return stats;
   }
 
@@ -165,12 +167,16 @@ export default class QuestionManage{
       passedScore = $('input[name="passedScore"]').val();
     }
 
-    $target.button('loading').addClass('disabled');
+    if (this.questionsCount > 2000) {
+        notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
+    }else{
+        $target.button('loading').addClass('disabled');
+        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore},function(result) {
+          if (result.goto) {
+            window.location.href = result.goto;
+          }
+        });
+    }
 
-    $.post(this.$element.attr('action'),{questions:this.questions,passedScore:passedScore},function(result){
-      if (result.goto) {
-        window.location.href = result.goto;
-      }
-    });
   }
 }

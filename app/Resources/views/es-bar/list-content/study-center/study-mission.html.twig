@@ -41,7 +41,7 @@
               <a class="link-dark"
                 {% if not lock %} href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" {% endif %}
                  title="{{ task.title }}"
-                 target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'taskName':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</a>
+                 target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</a>
             {% endif %}
           </li>
         {% endfor %}
@@ -77,9 +77,9 @@
             {% if task_lock is empty %}
               <a class="link-dark" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}"
                  title="{{ task.title }}"
-                 target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'taskName':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</a></li>
+                 target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</a></li>
             {% else %}
-              {{ 'es_bar.study_center.mission_number_and_title'|trans({'taskName':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</li>
+              {{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</li>
             {% endif %}
           {% endfor %}
         </ul>

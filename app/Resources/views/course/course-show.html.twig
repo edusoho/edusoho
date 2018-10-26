@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/echo-js.js','libs/jquery-countdown.js',
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
 'app/js/courseset/show/index.js']) %}
 
 {% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block description %}{{ description|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
-
+{% block format_detection %}{{ 'telephone=no' }}{% endblock %}
 {% block full_content %}
     {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
     {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}

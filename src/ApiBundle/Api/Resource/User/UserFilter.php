@@ -12,7 +12,7 @@ class UserFilter extends Filter
     );
 
     protected $publicFields = array(
-        'about',
+        'about', 'faceRegistered',
     );
 
     protected $authenticatedFields = array(

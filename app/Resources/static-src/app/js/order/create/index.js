@@ -340,7 +340,6 @@ class OrderCreate {
 
       if (coinNumPay && $('[name="payPassword"]').length > 0) {
         coinNumPay = this.afterCoinPay(coinNumPay);
-
         totalPrice = utils.subtract(totalPrice, cashDiscount);
 
       } else {

@@ -298,17 +298,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.29",
-        "version_normalized": "0.9.29.0",
+        "version": "v0.9.30",
+        "version_normalized": "0.9.30.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "0c91ad520b8675dbb54affe96eb56556ca0142f4"
+            "reference": "8e28cccbd2ff93e8e9e6367e9b34b3eee220e383"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/0c91ad520b8675dbb54affe96eb56556ca0142f4",
-            "reference": "0c91ad520b8675dbb54affe96eb56556ca0142f4",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8e28cccbd2ff93e8e9e6367e9b34b3eee220e383",
+            "reference": "8e28cccbd2ff93e8e9e6367e9b34b3eee220e383",
             "shasum": ""
         },
         "require": {
@@ -334,7 +334,7 @@
         "suggest": {
             "ramsey/uuid": "Dao UUID primary key feature need this package."
         },
-        "time": "2018-08-30T10:45:46+00:00",
+        "time": "2018-09-05T09:56:57+00:00",
         "bin": [
             "bin/biz"
         ],
@@ -482,17 +482,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.2.26",
-        "version_normalized": "0.2.26.0",
+        "version": "v0.3.0",
+        "version_normalized": "0.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c"
+            "reference": "bfe3d6fd2d10faaa11d647cff9b9059556e4ff6b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
-            "reference": "58fe0c06dc7f9938355cb352e77c0ffe3842a38c",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/bfe3d6fd2d10faaa11d647cff9b9059556e4ff6b",
+            "reference": "bfe3d6fd2d10faaa11d647cff9b9059556e4ff6b",
             "shasum": ""
         },
         "require": {
@@ -504,7 +504,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2018-07-31T11:48:03+00:00",
+        "time": "2018-09-14T01:29:19+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -4312,7 +4312,8 @@
         "homepage": "http://silex.sensiolabs.org",
         "keywords": [
             "microframework"
-        ]
+        ],
+        "abandoned": "symfony/flex"
     },
     {
         "name": "swiftmailer/swiftmailer",

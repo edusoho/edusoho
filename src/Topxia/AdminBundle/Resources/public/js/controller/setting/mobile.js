@@ -19,20 +19,20 @@ define(function(require, exports, module) {
             $("#mobile-splash1-container").html('<img src="' + response.url + '">');
             $form.find('[name=splash1]').val(response.path);
             $("#mobile-splash1-remove").show();
-            Notify.success(Translator.trans('上传网校启动图1成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_startup_diagram_figure_1_success_hint'));
           });
         });
 
         $("#mobile-splash1-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#mobile-splash1-container").html('');
             $form.find('[name=splash1]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校启动图1成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_1_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校启动图1失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_1_fail_hint'));
           });
         });
       }
@@ -48,20 +48,20 @@ define(function(require, exports, module) {
             $("#mobile-splash2-container").html('<img src="' + response.url + '">');
             $form.find('[name=splash2]').val(response.path);
             $("#mobile-splash2-remove").show();
-            Notify.success(Translator.trans('上传网校启动图2成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_startup_diagram_figure_2_success_hint'));
           });
         });
 
         $("#mobile-splash2-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#mobile-splash2-container").html('');
             $form.find('[name=splash2]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校启动图2成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_2_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校启动图2失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_2_fail_hint'));
           });
         });
       }
@@ -77,20 +77,20 @@ define(function(require, exports, module) {
             $("#mobile-splash3-container").html('<img src="' + response.url + '">');
             $form.find('[name=splash3]').val(response.path);
             $("#mobile-splash3-remove").show();
-            Notify.success(Translator.trans('上传网校启动图3成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_startup_diagram_figure_3_success_hint'));
           });
         });
 
         $("#mobile-splash3-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#mobile-splash3-container").html('');
             $form.find('[name=splash3]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校启动图3成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_3_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校启动图3失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_3_fail_hint'));
           });
         });
       }
@@ -106,20 +106,20 @@ define(function(require, exports, module) {
             $("#mobile-splash4-container").html('<img src="' + response.url + '">');
             $form.find('[name=splash4]').val(response.path);
             $("#mobile-splash4-remove").show();
-            Notify.success(Translator.trans('上传网校启动图4成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_startup_diagram_figure_4_success_hint'));
           });
         });
 
         $("#mobile-splash4-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#mobile-splash4-container").html('');
             $form.find('[name=splash4]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校启动图4成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_4_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校启动图4失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint'));
           });
         });
       }
@@ -135,20 +135,20 @@ define(function(require, exports, module) {
             $("#mobile-splash5-container").html('<img src="' + response.url + '">');
             $form.find('[name=splash5]').val(response.path);
             $("#mobile-splash5-remove").show();
-            Notify.success(Translator.trans('上传网校启动图5成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_startup_diagram_figure_5_success_hint'));
           });
         });
 
         $("#mobile-splash5-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#mobile-splash5-container").html('');
             $form.find('[name=splash5]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校启动图5成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_5_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校启动图5失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint'));
           });
         });
       }
@@ -164,20 +164,20 @@ define(function(require, exports, module) {
             $("#mobile-logo-container").html('<img src="' + response.url + '">');
             $form.find('[name=logo]').val(response.path);
             $("#mobile-logo-remove").show();
-            Notify.success(Translator.trans('上传网校LOGO成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_logo_success_hint'));
           });
         });
 
         $("#mobile-logo-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#mobile-logo-container").html('');
             $form.find('[name=logo]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校LOGO成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_logo_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校LOGO失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_logo_fail_hint'));
           });
         });
 
@@ -200,20 +200,20 @@ define(function(require, exports, module) {
             $("#site-applogo-container").html('<img src="' + response.url + '">');
             $form.find('[name=applogo]').val(response.path);
             $("#mobile-applogo-remove").show();
-            Notify.success(Translator.trans('上传app图标成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_app_icon_success_hint'));
           });
         });
 
         $("#site-applogo-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#site-applogo-container").html('');
             $form.find('[name=applogo]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除网校app图标成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_app_icon_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除网校app图标失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_app_icon_fail_hint'));
           });
         });
       }
@@ -231,20 +231,20 @@ define(function(require, exports, module) {
             $("#site-appcover-container").html('<img src="' + response.url + '">');
             $form.find('[name=appcover]').val(response.path);
             $("#mobile-appcover-remove").show();
-            Notify.success(Translator.trans('上传app图标成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.upload_app_cover_success_hint'));
           });
         });
 
         $("#site-appcover-remove").on('click', function () {
-          if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+          if (!confirm(Translator.trans('admin.setting.mobile.startup_diagram_delete_hint'))) return false;
           var $btn = $(this);
           $.post($btn.data('url'), function () {
             $("#site-appcover-container").html('');
             $form.find('[name=appcover]').val('');
             $btn.hide();
-            Notify.success(Translator.trans('删除app封面成功！'));
+            Notify.success(Translator.trans('admin.setting.mobile.delete_app_cover_success_hint'));
           }).error(function () {
-            Notify.danger(Translator.trans('删除app封面失败！'));
+            Notify.danger(Translator.trans('admin.setting.mobile.delete_app_cover_fail_hint'));
           });
         });
       }

@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: [Translator.trans('会员营收额')],
+                      labels: [Translator.trans('admin.analysis.vip_income')],
                       xLabels:"day"
                     });
         }

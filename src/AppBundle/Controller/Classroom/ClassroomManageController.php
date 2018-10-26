@@ -1099,7 +1099,7 @@ class ClassroomManageController extends BaseController
             return $this->createMessageResponse('error', 'Activity not found');
         }
 
-        if ($activity['mediaType'] == 'homework') {
+        if ('homework' == $activity['mediaType']) {
             $controller = 'AppBundle:HomeworkManage:resultGraph';
         } else {
             $controller = 'AppBundle:Testpaper/Manage:resultGraph';

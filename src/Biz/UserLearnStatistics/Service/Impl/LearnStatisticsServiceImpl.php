@@ -508,6 +508,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $this->createDao('UserLearnStatistics:DailyStatisticsDao');
     }
 
+    /**
+     * @return \Biz\UserLearnStatistics\Dao\Impl\TotalStatisticsDaoImpl
+     */
     protected function getTotalStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:TotalStatisticsDao');

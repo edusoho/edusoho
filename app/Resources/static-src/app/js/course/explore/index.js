@@ -1,5 +1,3 @@
-echo.init();
-
 $('.js-search-type').on('click', event => {
   const $this = $(event.currentTarget);
   window.location.href = $this.val();

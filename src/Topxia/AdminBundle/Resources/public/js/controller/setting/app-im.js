@@ -11,10 +11,10 @@ define(function(require, exports, module) {
             $(this).button('loading');
         	$.post(url, {status:status},function(res){
         		if (res) {
-        			Notify.success(Translator.trans('操作成功！'));
+        			Notify.success(Translator.trans('admin.setting.operation_success_hint'));
         			window.location.reload();
         		} else {
-        			Notify.danger(Translator.trans('操作失败！'));
+        			Notify.danger(Translator.trans('admin.setting.operation_fail_hint'));
         		}
         		
         	})

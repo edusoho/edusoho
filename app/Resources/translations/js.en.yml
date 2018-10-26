@@ -22,10 +22,10 @@ site.data.delete_title_hint: Delete %name%
 site.data.delete_submiting_hint: Deleting ...
 site.date.year: Years
 site.date.month: Month
-site.data.get_sms_code_btn: Get SMS verification code
+site.data.get_sms_code_btn: Get verification code
 site.data.get_sms_code_again_btn: Reacquire later after
 site.data.get_sms_code_success_hint: Send SMS successful
-site.data.get_sms_code_allowance_success_hint: 发送短信成功,还有%allowance%次发送机会
+site.data.get_sms_code_allowance_success_hint: SMS sent successfully, %allowance% SMS balance reamin.
 site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
 site.data.expand: expand
 site.data.collapse: collpase
@@ -55,9 +55,16 @@ site.form.submit_error: Form submit error
 
 site.cancel: Cancel
 site.confirm: Confirm
+site.yes: Yes
+site.no: No
 site.close: Close
 site.delete: Delete
-
+site.time: Time
+site.capacity: capacity(G)
+site.step_two: Step 2
+site.step_one: Step 1
+site.information: information
+site.unknow_server_error: An unknown error has occurred
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -85,13 +92,13 @@ user.settings.email.send_success: Please verify your email address. We’ve sent
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.basic_info.nickname_change_fail: 'Nickname had changed fail'
-user.settings.login_password_success: 设置登录密码成功
+user.settings.login_password_success: set login password successfully
 
 material.share.teacher_nickname_label: Please input teacher nickname
 
-user.settings.unbind_success: 取消绑定成功
-user.settings.unbind_title: 取消绑定
-user.settings.unbind_content: 确定要取消绑定吗？
+user.settings.unbind_success: unbind successfully
+user.settings.unbind_title: unbind
+user.settings.unbind_content: Are you determined to unbind?
 
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
@@ -100,7 +107,7 @@ uploader.title: Upload
 uploader.error_hint: Upload failed, please try again!
 uploader.num_limit_hint: Add too many files!
 uploader.size_limit_hint: File is too large, please upload a smaller file!
-uploader.size_2m_limit_hint: 文件过大，请上传小于2M的文件！
+uploader.size_2m_limit_hint: File too large, please upload files under 2M.
 uploader.type_denied_limit_hint: File type is wrong!
 uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
 uploader.btn.batch_paused: Paused All
@@ -125,14 +132,25 @@ uploader.filelist.head.operation: Operating
 uploader.select_one_file: Please upload one files
 uploader.file.exist: This file exist
 
-importer.import_verify_tips_start: 校验成功！一共包含
-importer.import_verify_tips_end: 条数据
-importer.import_back_btn: 返回
-importer.import_reselect_btn: 重新导入
-importer.import_confirm_btn: 确定导入
-importer.import_error: 导入出错
-importer.import_progress_data: 已经导入%number%条数据
-importer.import_finish_data: 导入成功, 总共导入%number%条数据
+importer.import_verify_tips_start: Verified successfully. There are
+importer.import_verify_tips_end: data
+importer.import_back_btn: return
+importer.import_reselect_btn: re-import
+importer.import_confirm_btn: confirm import
+importer.import_error: import error
+importer.import_progress_data: %number% data imported
+importer.import_finish_data: import successfully and have imported %number% data
+importer.batch_import_title: batch import
+importer.importing_finish_hint: Importing is being completed, please wait...
+importer.importing_finished: Complete import
+importer.importing_loading_hint: Importing, do not close the current window...
+importer.import_file_pick_hint: Select the file to import
+importer.import_file_view: Browse...
+importer.download_sample_file: Click to download the sample documentation
+importer.import_tip: Support import from Excel file
+importer.start_verifying_data_tip: Start verifying data
+importer.imported_data: "Imported Data: "
+importer.imported_success_data: "Imported successfully, total import:"
 
 subtitle.delete_success_hint: Delete subtitle success
 subtitle.no_subtitle_hint: None subtitle
@@ -156,6 +174,13 @@ activity.live.content_title: Live description
 activity.live.entry_live_room: Enter the live classroom
 activity.live.count_down_title: Countdown
 activity.live.not_created_notice: Live classroom not yet created
+activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
+activity.live.day: day
+activity.live.hour: hour
+activity.live.minute: minute
+activity.live.second: second
+activity.live.started_tip: The live has already started
+activity.live.started_or_ended_notice: The live has already started or finshished,unable to edit
 
 activity.audio_manage.length_required_error_hint: Please enter the durations
 activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
@@ -168,11 +193,11 @@ activity.audio_manage.finish_detail_digits_error_hint: The completion condition 
 
 activity.download_manage.link_error_hint: The link address is incorrect
 activity.download_manage.materials_error_hint: Please upload or select the resource
-activity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
-activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
-activity.download_manage.materials_or_link_success: 资料添加成功
-activity.download_manage.materials_or_link_delete: 资料已删除
-activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
+activity.download_manage.materials_or_link_error_hint: Please upload file or add internet links
+activity.download_manage.materials_or_link_fail: Failed to add material, please try again.
+activity.download_manage.materials_or_link_success: Add material successfully 
+activity.download_manage.materials_or_link_delete: material deleted
+activity.download_manage.materials_or_link_confirm_delete: Are you determined to delete the material?
 activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
@@ -319,6 +344,7 @@ activity.testpaper_manage.normal_percentage: Normal %normalPercentage%%
 activity.testpaper_manage.difficulty_percentage: Difficulty %difficultyPercentage%%
 activity.testpaper_manage.required_error_hint: Please enter the score
 activity.testpaper_manage.question_options: Option
+activity.testpaper_manage.questions_length_hint: The maximum number of questions is 2,000
 
 activity.text_manage.save_draft_hint: (Draft saved at %createdTime%)
 activity.text_manage.finish_detail_required_error_hint: Please enter the minimum watch time
@@ -363,7 +389,7 @@ auth.register.email_required_error_hint: Please enter email
 auth.register.mobile_required_error_hint: Please enter your mobile number
 auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
 auth.register.number_validate_error_hint: 11 numbers, the first number can not be 1
-auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
+auth.register.drag_captcha_tips: Please drag the left block to finish the puzzle
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
@@ -385,7 +411,7 @@ classroom_manage.student_manage_remove_hint: Do you really want to remove the %u
 classroom_manage.student_manage_remove_success_hint: Remove %username% successful!
 classroom_manage.student_manage_remove_failed_hint: Remove %username% failed, please try again!
 #TODO trans
-classroom_manage.student_manage_remove_assistant_hint: '%username%是班级的助教，请先取消Ta的助教权限'
+classroom_manage.student_manage_remove_assistant_hint: '%username% is the assistant of the class.Please remove the assistant role at first.'
 
 classroom.member_signed: Checked in
 classroom.sign_keep_days: Continuous %keepDays% day
@@ -400,7 +426,8 @@ course.buy.price_free_hint: Go study
 
 course.chapter: '%chapter_name% %number% : %title%'
 course.unit: '%part_name% %number% : %title%'
-course.catalogue.task_status.task: '%TaskName%.%taskNumber%:%taskTitle%'
+course.lesson: '%part_name% %number% : %title%'
+course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
@@ -431,7 +458,7 @@ course_manage.student_remark_success_hint: Remarks %username% succeed
 course_manage.student_remark_failed_hint: Remarks %username% failed, please try again!
 
 course_manage.student_create.field_required_error_hint: Please enter student email / mobile number / username
-course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
+course_manage.student_create.price_max_error_hint: The price can not exceed the orignial price of the course.
 
 course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
 course_set.show.time_finish_hint: Activity times up. Refreshing page, please wait ...
@@ -510,7 +537,7 @@ course.manage.task_publish_fail_hint:  Publish failed
 course.manage.task_unpublish_success_hint:  Publish cancelled successful
 course.manage.task_unpublish_fail_hint: Cancel publish failed
 course.manage.live_replay_generate_success: Generated playback succeed
-course.manage.live_replay_generate_error: 未开启直播回放或视频正在转码中，请稍后再试
+course.manage.live_replay_generate_error: The replay is not on or the video is trancoding. Please try again later.
 course.manage.live_replay_upload_error_hint: Please upload the video file
 course.manage.buy_expiry_time_required_error_hint: Please enter the entry deadline
 course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
@@ -519,6 +546,10 @@ course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
 course.manage.sort_cancel: 取消当前排序
 course.manage.student.add_expiry_day.select_tips: Please select at least one item
+course.manage.reward_point_required_hint: please input the reward point
+course.manage.task_reward_point_required_hint: please input the task reward point
+course.manage.max_point_error_hint: Please input an integer from 0-10000000
+course.manage.student_expiry_day_hint: The validity period can be manually increased only by the learning expiration date set by the number of days.
 
 material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
@@ -555,9 +586,16 @@ course.question.create.choose_min_num_hint:  Maximum %minNum% options
 course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
+course.question.type.single_choice: single choice
 
 course.notebook.delete_hint: Really want to delete the note?
+course.notebook.empty_note_content_notice: please input the note content!
 
+course.question_marker.selection_rate: selection rate
+course.question_marker.correct_rate: correct rate
+course.question_marker.gap_filling: gap filling
+course.question_marker.view_analysis: view analysis
+course.question_marker.back_to_questions: back to questions
 
 classroom.manage.tag_required_hint: Please enter a tag
 classroom.manage.delete_course_hint: Do you want to remove the course from the class?
@@ -566,6 +604,10 @@ classroom.manage.delete_course_fail_hint: Course removal failed
 classroom.manage.expiry_mode_days_error_hint: Please enter the number of valid days
 classroom.manage.expiry_mode_date_error_hint: Please enter the due date
 classroom.manage.coin_price_hint: Equivalent to% coinPrice %% coinName%
+classroom.live_room.entry_error_hint: >
+  Enter the live classroom error, please contact the administrator, <a href="javascript:document.location.reload()"> retry </a> or <a href="javascript:window.close();"> off </a>
+classroom.live_room.retry_or_close: >
+  <a href="javascript:document.location.reload()"> retry </a> or <a href="javascript:window.close();"> off </a>
 
 thread.post.reply: Reply
 thread.post.reply_error_hint: Post reply failed, please try again
@@ -577,7 +619,7 @@ thread.post.like_error_hint: Favour failed, please try again!
 group.manage.delete_member_hint: Really want to delete that member?
 group.manage.delete_required_error_hint: Please select the member you want to delete
 group.manage.member_exit_hint: Really want to quit the group? Your information in this group will be deleted
-group.manage.member_exit: 退出小组
+group.manage.member_exit: Exit group
 group.manage.choose_setting_member_hint: Please select the member you want to set
 group.manage.setting_member_permission_hint: Are you sure to set the member's permission?
 group.manage.cancel_member_permission: Are you sure you want to cancel this member's permisiion?
@@ -627,9 +669,12 @@ open_course.live_time_can_not_edit_bint: 直播已经开始或者结束,无法�
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 
-order.create.minus: 抵扣
-order.create.discount.minus: 打折活动抵扣
-order.create.coupon_deduction: 优惠券抵扣
+open_course.collect: collect
+open_course.collected: collected
+
+order.create.minus: deduct
+order.create.discount.minus: discount deduction
+order.create.coupon_deduction: coupon deduction
 order.create.useless_hint: Coupon is not available
 order.create.use_discount_coupon_hint: Coupon is available, and you are currently using coupons with %rate% discount.
 order.create.use_price_coupon_hint: Coupon is available, and you are currently using coupons with %rate% yuan deduction.
@@ -743,12 +788,16 @@ validate.visible_character.message: Not allowed to enter invisible characters, s
 validate.tag_required_hint: Please input tags
 validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
-validate.mobile_or_email_message: 请输入正确的手机／邮箱
 validate.modify_date: 请输入修改日期
 validate.modify_days: 请输入修改天数
 validate.modify_day_number: 请输入不大于 7300（20年）的数值
-validate.success: 验证成功
-validate.fail: 验证失败
+validate.title_required_hint: Please enter a title, it cannot be empty.
+validate.mobile_or_email_message: please input the right mobile/email
+validate.success: Verified successfully
+validate.fail: Failed to verify
+validate.expiry_days_required_hint: please input the expiry days
+validate.empty_content_hint: please input content!
+validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -761,6 +810,9 @@ page.video_sd.message: SD
 page.video_shd.message: SHD
 page.video_hd.message: HD
 
+confirm.oper.tip: 操作确认
+confirm.lesson.hidden.tip.off: 关闭该功能后，未发布的课时将在学员前台进行展示。请确认是否关闭此项功能。
+confirm.lesson.hidden.tip.on: 开启该功能后，未发布的课时将不在学员前台进行展示，课时序号排列将不包含这部分未发布课时。请确认是否开启此项功能。
 confirm.private_message_delete.message: Are you determined to deleted this private message?
 notify.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
 confirm.last_private_message_delete.message: This message for the last one, really want to delete the private message?
@@ -787,6 +839,11 @@ notify.pay_failed.message: Payment failed！
 notify.share_success.message: Share successfully
 notify.share_fail.message: Share failed
 notify.reward_point: Reward Point
+notify.sms_send_success.message: sms sent successfully
+notify.password_reset_email_send_success.message: reset password mail has been sent
+notify.password_reset_success.message: reset password successfully
+notify.message_send_success: message sent successfully
+notify.danger_operation_message: This is a warning message <a href="http://demo.edusoho.com" class="notify-action">operation</a>
 
 json_response.nickname_can_use.message: The nickname can be used
 json_response.verification_code_error.message: Verification code error
@@ -822,7 +879,7 @@ validate_old.date_and_time_check.message: The end time can not be earlier than o
 validate_old.date_and_time.message: Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: The start time must be less than or equal to the end time
 validate_old.not_all_digital.message: %display% can not be all numbers
-validate_old.right_time_tip: 请输入正确的时间格式
+validate_old.right_time_tip: Please input the time in right format
 validate_old.es_version.message: Please input correct es version，correct is XX.XX.XX
 validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
@@ -850,7 +907,11 @@ validate_old.unsigned_integer.message: %display% must be a non-negative integer
 validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
-validate.character_maxlength: 字数不能超过%max%字！
+validate_old.server_upload_attachment_limit.message: The current server attachment size is limited to 2048MB
+validate_old.chinese_english.message: %display% must be Chinese, alphabetical
+validate_old.alpha_numeric.message: %display% must be alphabetical, numeric
+validate_old.html_tag.message: %display% should be HTML meta tag
+validate.character_maxlength: Do not exceed %max% letters.
 
 export.not_allowed: you are not allowed to download
 export.empty: Export the result is empty
@@ -863,8 +924,8 @@ notify.job_redo_warning.hint: This course is already copied, please do not repea
 notify.course_set_copy_error.hint: There was an error in the copy course
 progress.copy_course_set.message: Copy done!
 
-confirm.warn: 警告
-confirm.exit.tip: 您确定要退出学习吗？
+confirm.warn: Warning
+confirm.exit.tip: Are you determined to quit the study?
 
 cashier.wechat_pay: Wechat pay
 cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat, scan the QR code to pay
@@ -877,36 +938,441 @@ cashier.confirm.desc: |
   Please re-open the page to complete the order payment.<br>
   If you encounter problems in the payment process, please contact the website customer service solution.<br>
 
-oauth.send.validate_message: 发送验证
-oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
-oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
-oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
-oauth.refresh.captcha_code_required_tip: 请输入图形验证码
-oauth.captcha_code_length_tip: 图形码为5位数
-oauth.captcha_code_expired_tip: 图形验证码已过期
-oauth.captcha_code_error_tip: 图形验证码错误
-oauth.register.time_limit: 由于您注册次数过多，请稍后尝试
-oauth.register.error_message: 注册出现异常，请联系管理员
+oauth.send.validate_message: Send Verification
+oauth.send.error_message_tip: Too many requests, please tray again later.
+oauth.send.sms_code_error_tip: You enter the wrong verification code.
+oauth.refresh.captcha_code_tip: The captcha code is expired. Please re-input the captcha code.
+oauth.refresh.captcha_code_required_tip: Please input the captcha code.
+oauth.captcha_code_length_tip: The captcha code is five-digit number
+oauth.captcha_code_expired_tip: The captcha code is expired
+oauth.captcha_code_error_tip: The captcha code is error
+oauth.register.time_limit: Register too many times, please try again later.
+oauth.register.error_message: Register error. Please contact the admin for help.
 
 ## 用户数据统计
-admin.user.statistics.data.learn_total_time: 学习总时长
-admin.user.statistics.data.learn_time: 学习时长/分钟
-admin.user.statistics.data.time: 时长
+admin.user.statistics.data.learn_total_time: total study time
+admin.user.statistics.data.learn_time: study time/minutes
+admin.user.statistics.data.time: time
 
-course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
+course.audio.enable.biz.user: To enable the audio mode, please upgrade to business plans.
 
-admin.data.lab.setting.error: 发生异常了，请重试！
+admin.data.lab.setting.error: Error. Please try again.
 
 ## 资讯管理
-admin.article.save.success: 保存文章成功！
-admin.article.choose_column_tip: 请选择所属栏目
+admin.article.save.success: Saved.
+admin.article.choose_column_tip: Please choose column.
 admin.article_setting.choose_category: 'Choose column'
 
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
-Bad credentials.: 用户名或密码错误
-User account is locked.: 帐号被封禁
+Bad credentials.: Bad credentials
+User account is locked.: The account is blocked.
 
-cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
-message.send.not_allowed: 不允许发送私信
+cloud_search.network.error_message: Due to the poor network condition, you are switched to simple search mode. 
+message.send.not_allowed: not allowed to send messages
+
+admin.index.register_count: register count
+admin.index.active_user_count: active user count
+admin.index.lost_user_count: lost user count
+
+admin.index.new_order_count: new order count
+admin.index.new_paid_order_count: new paid order count
+
+admin.index.course_order: "course"
+admin.index.classroom_order: "classroom"
+admin.index.vip_order: vip
+admin.index.order_count: order count
+admin.index.finished_task_count: finished task count
+admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
+admin.index.upgrade_acceptance_hint: Upgrade acceptance
+admin.user.cloude_sms_enable_hint: please go to【Admin】-【ES Cloud】-【Cloud Sms】open cloud sms first.
+
+admin.account_center.cash_income: cash income
+admin.account_center.coin_income: coin income
+admin.analysis.classroom_income: classroom income
+admin.analysis.course_income: course income
+admin.analysis.course_total: total number of courses
+admin.analysis.program_total: total number of programs
+admin.analysis.add_course_total: number of new courses
+admin.analysis.exit_learning_total: number of exit learning
+admin.analysis.finished_lesson_total: number of finished lesson
+admin.analysis.income: income
+admin.analysis.join_lesson_total: number of join lesson
+admin.analysis.add_lesson_num: number of new lessons
+admin.analysis.login_num: number of visitors
+admin.analysis.paid_classroom_num: number of paid classrooms
+admin.analysis.paid_lesson_num: number of paid courses
+admin.analysis.register_num: number of registered
+admin.analysis.user_total_num: total number of users
+admin.analysis.view_num: number of views
+admin.analysis.vip_income: vip income
+admin.announcement.save_error_hint: Operation failed
+admin.announcement.delete_hint: Are you sure you want to delete this announcement?
+admin.app.uninstall_hint: Really want to uninstall this app?
+admin.app.upgrade_success_hint: Application installation / Upgrade is successful!
+admin.app.upgrade_hint: Whether to confirm the upgrade, the website will enter the maintenance state during the upgrade process.
+admin.app.upgrade_roll_back_hint: The last time you upgraded the application, you need to roll back. If you continue to install, you may have unpredictable errors. Are you sure to continue?
+admin.app.upgrade_exec_hint: In the process of %title%
+admin.app.upgrade_exec_failed_hint: "%title% failed："
+admin.app.upgrade_exec_finished_hint: "%title% finished"
+admin.app.upgrade_exec_error_hint: "An unknown error occurred while %title%."
+admin.app.upgrade_finish: finished
+admin.app.upgrade_check_env_hint: Check the system environment
+admin.app.upgrade_check_dependency_hint: Check dependency
+admin.app.upgrade_backup_system_file_hint: Backup system file
+admin.app.upgrade_backup_database_hint: Backup database
+admin.app.upgrade_check_download_permission: Check download permissions
+admin.app.upgrade_download_installer: Download the installer
+admin.app.upgrade_exec_install_hint: Perform the installation upgrade
+admin.app.upgrade_check_app_version_hint: Check system version
+admin.article.category.save_success_hint: Save category successfully！
+admin.article.category.save_fail_hint: Save category failed，please try again！
+admin.article.category.delete_hint: Really want to delete this category？
+admin.article.category.delete_failed_hint: Failed to delete the category, please try again！%error%
+admin.article.delete_hint: Really want to permanently delete the content?
+admin.article.picture_upload_success_hint: Uploaded successfully!
+admin.attachment.delete_hint: Really want to delete this attachment?
+admin.attachment.delete_success_hint: Attachment deleted
+admin.attachment.delete_failed_hint: Attachment deletion failed, please try again later
+admin.batch_notification.send_hint: Cannot be modified after sending, confirm sending?
+admin.batch_notification.delete_hint: Really want to delete the content?
+admin.batch_notification.publish_success_hint: Successfully published!
+admin.batch_notification.save_success_hint: Saved successfully!
+admin.block.history_recover_hint: The content of the block has been restored, please save!
+admin.block.delete_hint: Are you sure you want to delete this block template?
+admin.block.delete_success_hint: Delete the edit block successfully!
+admin.block.create_success_hint: Create block template successfully!
+admin.block.edit_success_hint: Update the block template successfully!
+admin.block.upload_failed_hint: Upload the picture failed, please try again!
+admin.block.upload_success_hint: Upload the picture successfully!
+admin.block.delete_picture_success_hint: Delete the picture successfully!
+admin.block.edit_success_hint: Updated successfully!
+admin.block.submit_success_hint: Submitted successfully!
+admin.block.select_picture_hint: Please select the image to upload first
+admin.block.upload_picture_success_hint: Upload the picture successfully!
+admin.block.not_saved_data_hint: There are still no saved data, do you want to leave this page?
+admin.block.add_max_num_hint: Can only add up to %panelGroup%!
+admin.block.delete_tip: Are you sure you want to delete?
+admin.block.delete_min_num_hint: There must be one!
+admin.block.uploading_hint: Uploading, please wait!
+admin.block.upload_success_hint: Uploaded successfully!
+admin.block.upload_failed_hint: Upload failed, please try again!
+admin.block.poster: poster (%index%)
+admin.category.icon_delete_hint: Are you sure you want to delete the icon?
+admin.category.icon_delete_success_hint: Delete the category icon successfully!
+admin.category.icon_delete_fail_hint: Delete the category icon failed!
+admin.category.delete_hint: Are you sure you want to delete this category and its subcategories?
+admin.classroom.choose_success_hint: Choose classroom success
+admin.classroom.operation_success_hint: successfully！
+admin.classroom.operation_fail_hint: failure
+admin.classroom.operation_hint: ？
+admin.classroom.delete_hint: Really want to delete the classroom?
+admin.classroom.delete_success_hint: successfully deleted!
+admin.classroom.cancel_recommend_hint: "%title% ?"
+admin.classroom.cancel_recommend_success_hint: "%title% successfully!"
+admin.classroom.cancel_recommend_fail_hint: "%title% failure!"
+admin.classroom.recommend_success_hint: Set the recommended classroom operation successfully!
+admin.classroom.recommend_fail_hint: Set the recommended classroom operation failed!
+admin.cloud_file.tag_required_hint: tag
+admin.cloud_file.detail_show_error_hint: Opps, something went wrong
+admin.cloud_file.re_transcode_success_hint: Retranscoding successfully!
+admin.cloud_file.re_transcode_fail_hint: Retranscoding failed!
+admin.cloud_file.detail_loading_hint: Loading, please wait...
+admin.cloud_file.select_course_placeholder: Select Course
+admin.cloud_file.select_user_placeholder: Select User
+admin.coin.edit_success_hint: operation Successful
+admin.coin.edit_fail_hint: operation failed
+admin.coin.give_success_hint: operation Successful
+admin.coin.give_fail_hint: operation failed
+admin.coin.picture_upload_fail_hint: The image format or size is incorrect. Uploading the image failed. Please check and try again!
+admin.coin.picture_upload_success_hint: Uploading coin picture successfully!
+admin.coin.picture_delete_hint: Are you sure you want to delete?
+admin.coin.picture_delete_success_hint: Delete coin picture successfully!
+admin.coin.picture_delete_fail_hint: Delete coin picture failed!
+admin.comment.delete_hint: Are you sure you want to delete the comment?
+admin.comment.delete_success_hint: successfully deleted!
+admin.comment.delete_fail_hint: "Delete failed:%response%"
+admin.content.upload_hint: Uploading the drawing, please wait for the drawing to upload successfully, then save!
+admin.content.delete_hint: Really want to permanently delete the content?
+admin.course.add_student_success_hint: Add student operation is successful!
+admin.course.add_student_fail_hint: Add student operation failed!
+admin.course.choose_success_hint: choose course success
+admin.course.copy_success_hint: Copy course successfully
+admin.course.copy_fail_hint: Copy course failed
+admin.course.delete_success_hint: Delete course successfully
+admin.course.delete_failed_hint: Delete course failed
+admin.course.delete_course.check_password_fail_hint: Verify password error
+admin.course.validate_old.password_required_hint: password
+admin.course.cancel_recommend_success_hint: Course recommendation has been cancelled!
+admin.course.close_course_hint: Are you sure you want to close this class? After the course is closed, students who are still in the validity period will be able to continue their studies.
+admin.course.close_success_hint: Course was closed successfully!
+admin.course.publish_hint: Are you sure you want to publish this course?
+admin.course.publish_success_hint: The course was published successfully!
+admin.course.unknow_error_hint: unknown mistake
+admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
+admin.course.remind_teacher_success_hint: Remind the teacher's notice and send it successfully!
+admin.course.cancel_recommend_hint: Really you want to cancel the course recommend?
+admin.course.recommend_success_hint: Setting the recommended course operation successfully!
+admin.course.recommend_fail_hint: Setting the recommended course operation failed!
+admin.course.week_excellent_courses.setting_hint: Only three courses can be set up in the weekly excellent courses!
+admin.course.week_excellent_courses.setting_error_hint: This course already exists in the weekly excellent courses!
+admin.course.copying_hint: Copying course
+admin.course.copying_progress_hint: "schedule:"
+admin.dictionary.delete_hint: Are you sure you want to delete this category display?
+admin.dictionary.delete_success_hint: successfully deleted!
+admin.dictionary.service_error_hint: Server Error!
+admin.dictionary.update_success_hint: Update the dictionary successfully!
+admin.dictionary.create_success_hint: Add the dictionary successfully!
+admin.dictionary.update_fail_hint: Update the dictionary failed, please try again!
+admin.dictionary.create_fail_hint: Add the dictionary failed, please try again!
+admin.edu_cloud.validate_old.title.message: The name of the online school can not exceed 8 Chinese characters.
+admin.edu_cloud.sms_send_num: Send amount (s)
+admin.edu_cloud.close_sms_fail_hint: You have enabled the phone registration mode, you can not turn off the SMS function!
+admin.file.delete_hint: Are you sure you want to delete this file?
+admin.group.operating_hint: %trigger% ？
+admin.group.operating_success_hint: %trigger% successfully！
+admin.group.operating_fail_hint: %trigger% failed
+admin.group.thread_delete_hint: Are you sure you want to delete the thread?
+admin.keyword.delete_hint: Are you sure you want to delete this keyword?
+admin.material_lib.video: Video
+admin.material_lib.audio: Audio
+admin.material_lib.picture: Picture
+admin.material_lib.document: Document
+admin.material_lib.other: Other
+admin.material_lib.space_pie_chart_title: Storage space usage distribution
+admin.material_lib.flow_pie_chart_title: Flow usage distribution
+admin.material_lib.total_line_chart_title: Space/flow details
+admin.material_lib.video_line_chart_title: Video details
+admin.material_lib.audio_line_chart_title: Audio details
+admin.material_lib.document_line_chart_title: Document details
+admin.navigation.save_success_hint: Save navigation successfully!
+admin.open_course.member_delete_title: Delete member
+admin.open_course.recommend_delete_title: Delete related recommended course
+admin.open_course.material_delete_title: Delete lesson material
+admin.open_course.lesson_delete_title: Delete lesson
+admin.open_course.course_delete_title: Delete course
+admin.open_course.delete_unknow_error_hint: %title%,An unknown error has occurred.
+admin.open_course.delete_exec_hint: in the process of %title%
+admin.open_course_analysis.chart_title: Access source
+admin.open_course_analysis.watch.chart_title: View statistics
+admin.open_course_analysis.watch.chart_data_title: Number of views
+admin.operation.upload_carousel_one_success_hint: Upload carousel Figure 1 successfully!
+admin.operation.delete_hint: Are you sure you want to delete?
+admin.operation.delete_carousel_one_success_hint: Delete the carousel Figure 1 successfully!
+admin.operation.delete_carousel_one_fail_hint: Delete the carousel Figure 1 failed!
+admin.operation.upload_carousel_two_success_hint: Upload carousel Figure 2 successfully!
+admin.operation.delete_carousel_two_success_hint: Delete the carousel Figure 2 successfully!
+admin.operation.delete_carousel_two_fail_hint: Delete the carousel Figure 2 failed!
+admin.operation.upload_carousel_three_success_hint: Upload carousel Figure 3 successfully!
+admin.operation.delete_carousel_three_success_hint: Delete the carousel Figure 3 successfully!
+admin.operation.delete_carousel_three_fail_hint: Delete the carousel Figure 3 failed!
+admin.operation.upload_carousel_four_success_hint: Upload carousel Figure 4 successfully!
+admin.operation.delete_carousel_four_success_hint: Delete the carousel Figure 4 successfully!
+admin.operation.delete_carousel_four_fail_hint: Delete the carousel Figure 4 failed!
+admin.operation.upload_carousel_five_success_hint: Upload carousel Figure 5 successfully!
+admin.operation.delete_carousel_five_success_hint: Delete the carousel Figure 5 successfully!
+admin.operation.delete_carousel_five_fail_hint: Delete the carousel Figure 5 failed!
+admin.optimize.check_optimize_file: Check optimization file
+admin.optimize.optimize_file_success_hint: Optimized file success
+admin.optimize.optimizing_file_hint: in the process of %title%
+admin.optimize.optimize_file_fail_message: %title% fail：
+admin.optimize.optimize_file_success_message: %title% finish
+admin.optimize.optimize_file_error_message: %title%,An unknown error has occurred.
+admin.optimize.remove_cache_success_hint: Refresh the cache successfully!
+admin.optimize.remove_cache_fail_hint: Refresh the cache failure!
+admin.optimize.remove_tmp_success_hint: Optimize disk space successfully!
+admin.optimize.remove_tmp_fail_hint: Optimize disk space failure!
+admin.optimize.remove_backup_hint: Are you sure you want to clear the system backup data?
+admin.optimize.remove_backup_success_hint: Clear the system backup data successfully!
+admin.optimize.remove_backup_fail_hint: Clear the system backup data failure!
+admin.optimize.backup_database_success_hint: Backup database is successful, please download the database and optimize disk space in time!
+admin.optimize.backup_database_fail_hint: Backup database failed!
+admin.order.validate_old.adjust_price.display: Discounted price
+admin.order.validate_old.valid_price_input.message: Please enter the correct price, up to two decimal places
+admin.order.validate_old.discount.display: Discount
+admin.order.validate_old.valid_discount_input.message: Please enter the correct discount, up to two decimal places
+admin.order.validate_old.result_input.message: Please select an audit result
+admin.order.refund_cancel_hint: Do you really want to cancel your refund application?
+admin.order.refund_cancel_success_hint: Refund application cancelled!
+admin.org.batch_select_check_hint: Please select data first
+admin.org.update_success_hint: Update organization success
+admin.org.update_fail_hint: operation failed
+admin.org_manage.save_success_hint: Save the organization successfully!
+admin.org_manage.add_org_fail_hint: Add the organization failed, please try again!
+admin.org_manage.delete_hint: Are you really going to delete the organization and its sub-organizations?
+admin.org_manage.delete_success_hint: Organization has been deleted
+admin.org_manage.contains_data.delete_fail_hint: The organization contains data
+admin.org_manage.contains_data_num: (s)
+admin.org_manage.contains_data.delete_hint: Please move to another organization and delete it!
+admin.role.update_success_hint: The role has been modified successfully!
+admin.role.add_success_hint: The role is added successfully!
+admin.role.delete_hint: Are you sure to delete this role?
+admin.role.delete_success_hint: Delete role successfully
+admin.role.delete_fail_hint: Delete role failed
+admin.setting.operation_fail_hint: operation failed!
+admin.setting.operation_success_hint: operation successfully!
+admin.setting.auth.email_verified_hint: Please verify your email before opening.
+admin.setting.cloud_key.bind_hint: Once the authorized domain name is bound, it cannot be changed. Do you really want to bind the authorized domain name?
+admin.setting.cloud.upload_cloud_video_watermark_error_hint: Upload cloud video player watermark failed, please try again!
+admin.setting.cloud.upload_cloud_video_watermark_success_hint: Upload cloud video player watermark successfully!
+admin.setting.cloud.delete_cloud_video_watermark_hint: Are you sure you want to delete the cloud video player watermark?
+admin.setting.cloud.delete_cloud_video_watermark_success_hint: Delete the cloud video player watermark successfully!
+admin.setting.cloud.delete_cloud_video_watermark_fail_hint: Delete the cloud video player watermark failed!
+admin.setting.cloud.upload_cloud_video_embed_watermark_success_hint: Upload cloud video embed watermark successfully!
+admin.setting.cloud.upload_cloud_video_embed_watermark_fail_hint: Upload cloud video embed watermark failed, please try again!
+admin.setting.cloud.delete_cloud_video_embed_watermark_hint: Are you sure you want to delete the cloud video watermark?
+admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint: Delete cloud video embed watermark successfully!
+admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint: Delete cloud video embed watermark failed!
+admin.setting.cloud.validate_old.video_fingerprint_time.display: Cloud video fingerprint display time
+admin.setting.consult_setting.upload_qrcode_success_hint: Upload WeChat QR code successfully!
+admin.setting.consult_setting.setting_max_num_hint: Set up to 10..
+admin.setting.consult_setting.delete_hint: Are you sure you want to delete?
+admin.setting.course_avatar.select_default_pic.message: Please select the default course image file to upload
+admin.setting.course.upload_live_course_logo_success_hint: Upload the live course LOGO success!
+admin.setting.course.live_course_logo_delete_hint: Are you sure you want to delete?
+admin.setting.course.live_course_logo_delete_success_hint: Delete live course LOGO success!
+admin.setting.course.live_course_logo_delete_fail_hint: Delete live course LOGO failed!
+admin.setting.course.upload_default_pic_success_hint: Uploaded successfully!
+admin.setting.default_user_avatar.upload_success_hint: Uploaded successfully!
+admin.setting.upload_live_logo_success_hint: Upload LOGO successfully!
+admin.setting.upload_live_logo_fail_hint: Upload LOGO failed!
+admin.setting.mobile_iap_delete_hint: Are you sure you want to delete?
+admin.setting.mobile_iap_delete_success_hint: delete success
+admin.setting.mobile_iap_delete_fail_hint: delete failed
+admin.setting.mobile.startup_diagram_delete_hint: Are you sure you want to delete?
+admin.setting.mobile.upload_startup_diagram_figure_1_success_hint: Uploading the network school startup diagram Figure 1 success!
+admin.setting.mobile.delete_startup_diagram_figure_1_success_hint: Delete the network school startup diagram Figure 1 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_1_fail_hint: Delete the network school startup diagram Figure 1 failed!
+admin.setting.mobile.upload_startup_diagram_figure_2_success_hint: Uploading the network school startup diagram Figure 2 success!
+admin.setting.mobile.delete_startup_diagram_figure_2_success_hint: Delete the network school startup diagram Figure 2 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_2_fail_hint: Delete the network school startup diagram Figure 2 failed!
+admin.setting.mobile.upload_startup_diagram_figure_3_success_hint: Uploading the network school startup diagram Figure 3 success!
+admin.setting.mobile.delete_startup_diagram_figure_3_success_hint: Delete the network school startup diagram Figure 3 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_3_fail_hint: Delete the network school startup diagram Figure 3 failed!
+admin.setting.mobile.upload_startup_diagram_figure_4_success_hint: Uploading the network school startup diagram Figure 4 success!
+admin.setting.mobile.delete_startup_diagram_figure_4_success_hint: Delete the network school startup diagram Figure 4 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint: Delete the network school startup diagram Figure 4 failed!
+admin.setting.mobile.upload_startup_diagram_figure_5_success_hint: Uploading the network school startup diagram Figure 5 success!
+admin.setting.mobile.delete_startup_diagram_figure_5_success_hint: Delete the network school startup diagram Figure 5 successfully!
+admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint: Delete the network school startup diagram Figure 5 failed!
+admin.setting.mobile.upload_logo_success_hint: Upload the network school LOGO success!
+admin.setting.mobile.delete_logo_success_hint: Delete the network school LOGO success!
+admin.setting.mobile.delete_logo_fail_hint: Delete the network school LOGO failed!
+admin.setting.mobile.upload_app_icon_success_hint: Upload app icon successfully!
+admin.setting.mobile.delete_app_icon_success_hint: Delete the network school app icon successfully!
+admin.setting.mobile.delete_app_icon_fail_hint: Delete the network school app icon failed!
+admin.setting.mobile.upload_app_cover_success_hint: Upload the app cover successfully!
+admin.setting.mobile.delete_app_cover_success_hint: Delete the app cover successfully!
+admin.setting.mobile.delete_app_cover_fail_hint: Delete the app cover failed!
+admin.site.upload_logo_success_hint: Upload site LOGO successfully!
+admin.site.delete_logo_success_hint: Delete site LOGO successfully!
+admin.site.delete_logo_fail_hint: Delete site LOGO failed!
+admin.site.upload_favicon_success_hint: Upload site favicon successfully!
+admin.site.delete_favicon_success_hint: Delete site favicon successfully!
+admin.site.delete_favicon_fail_hint: Delete site favicon failed!
+admin.site.delete_hint: Are you sure you want to delete?
+admin.setting.theme.upgrade_error_hint: This topic is not currently compatible with the current ES version. Please upgrade first.
+admin.setting.theme.use_hint: Do you really want to use this theme?
+admin.sms.send_success_hint: Sent successfully!
+admin.sms.sending_hint: Sending
+admin.sms.send_fail_hint: "failure:"
+admin.sms.finished: finished
+admin.sms.send_finished: Send completed
+admin.sms.send_error_hint: An unknown error has occurred in the transmission.
+admin.system.mailer.mail_sent_hint: The mail has been sent, please check it
+admin.system.mailer.mail_send_fail_hint: Mail failed to send, please check the mailbox server configuration
+admin.system.mailer.sender_name_input.message: Please input the sender name
+admin.system.mailer.smtp_server_host_input.message: Please input the SMTP server address
+admin.system.mailer.smtp_server_port_input.message: Please input the SMTP port number
+admin.system.mailer.smtp_server_username_input.message: Please input the SMTP username
+admin.system.mailer.smtp_server_password_input.message: Please input the SMTP password
+admin.system.mailer.sender_address_input.message: Please input the sender address
+admin.system.mailer.close_email_verify_hint: You have turned on the mailbox verification login in the user registration mode. Please turn off the <a href="%emailSetUrl%">mailbox verification login</a> function first!
+admin.system.mailer.verify_hint: verify
+admin.system.mailer.in_verify_hint: In verification..
+admin.system.payment.alipay_secret_input.message: Please input Key
+admin.system.payment.alipay_key_input.message: Please input PID
+admin.system.payment.wxpay_appid_input.message: Please input AppID
+admin.system.payment.wxpay_secret_input.message: Please input AppSecret
+admin.system.payment.wxpay_mp_secret_input.message: Please input MP file verification code
+admin.system.payment.wxpay_account_input.message: Please input the merchant number
+admin.system.payment.wxpay_key_input.message: Please input the merchant platform Key
+admin.system.payment.llpay_key_input.message: Please input the merchant account number
+admin.system.payment.llpay_accessKey_input.message: Please input the public key
+admin.system.payment.llpay_secretKey_input.message: Please input the secret key
+admin.system.user_fields.truename: truename
+admin.system.user_fields.mobile: mobile
+admin.system.user_fields.company: company
+admin.system.user_fields.idcard: idcard
+admin.system.user_fields.gender: gender
+admin.system.user_fields.career: career
+admin.system.user_fields.weibo: weibo
+admin.system.user_fields.wechat: wechat
+admin.system.user_fields.add_field_title_error_hint: Do not add custom fields that are the same as the default fields!
+admin.system.user_fields.field_type_input.message: Please select a field type
+admin.tag.delete_hint: Are you sure you want to delete the tag?
+admin.tag.delete_success_hint: Delete successfully
+admin.tag.delete_fail_hint: Server Error!
+admin.tag.update_tag_success_hint: The tag was updated successfully!
+admin.tag.add_tag_success_hint: The tag was added successfully!
+admin.tag.single_delete_hint: Are you sure you want to delete this tag?
+admin.tag_group.select_tag_empty_hint: tags in the tag group cannot be empty
+admin.tag_group.update_success_hint: The tag group was updated successful!
+admin.tag_group.add_success_hint: The tag group was added successfully!
+admin.tag_group.delete_hint: Are you sure you want to delete this tag group?
+admin.tag_group.tag_input_placeholder: Please input a tag
+admin.teacher.cancel_promote_hint: Really want to cancel the teacher recommendation?
+admin.teacher.cancel_recommend_success_hint: Teacher recommendation has been canceled!
+admin.teacher.set_recommend_success_hint: Set the recommended teacher successfully!
+admin.teacher.set_recommend_fail_hint: Set the recommended teacher failed!
+admin.user.approve_fail_confirm_hint: Do you confirm that the audit failed?
+admin.user.approve_success_confirm_hint: Do you confirm the approval?
+admin.user.rejection_reason_empty_hint: Please input the reason for the rejection!
+admin.user.valid_remark_length_hint: Sorry, the remarks is too long, please limit it to 100 words!
+admin.user.approve_submiting_hint: submitting...
+admin.user.cancel_approval_hint: Are you sure you want to cancel this successful approval?
+admin.user.update_avatar_success_hint: The avatar update is successful!
+admin.user.upload_avatar_success_hint: Uploaded successfully!
+admin.user.password_modify_success_hint: Password modified successfully
+admin.user.password_modify_error_hint: operation failed
+admin.user.create_new_user_success_hint: New user added successfully
+admin.user.create_new_user_fail_hint: New user added failed
+admin.user.edit_user_profile_success_hint: User profile saved successfully
+admin.user.edit_user_profile_error_hint: operation failed
+admin.user.valid_weibo_address_input.message: The website address is incorrect and must start with http://weibo.com.
+admin.user.valid_site_address_input.message: The website address is incorrect and must start with http:// or https://.
+admin.user.import_finish_hint: The import is complete!
+admin.user.import_progress_hint: Already imported：%progressNum%
+admin.user.import_fail_hint: %title% failure：
+admin.user.import_completed_hint: %title% completed
+admin.user.import_error_hint: %title%, An unknown error has occurred.
+admin.user.lock_operational_hint: Really want %title%?
+admin.user.lock_operational_success_hint: %title% successfully！
+admin.user.lock_operational_fail_hint: %title% failed
+admin.user.sending_passwordreset_email_hint: A password reset verification email is being sent, please wait a moment.
+admin.user.password_reset_email_send_success_hint: Password reset verification email, sent successfully!
+admin.user.password_reset_email_send_fail_hint: Password reset verification email, failed to send
+admin.user.sending_email_verify_email_hint: Email verification email is being sent, please wait a moment.
+admin.user.email_verify_email_send_success_hint: Email verification email, sent successfully!
+admin.user.email_verify_email_send_fail_hint: Email verification email, failed to send
+admin.user.change_user_role_fail_hint: User must have %user% role
+admin.user.cancel_user_teacher_role_hint: Cancel the teacher role of the user and will retake the teacher rights for all taught courses for that user. Do you really want to do this?
+admin.user.change_roles_success_hint: User group saved successfully
+admin.user.change_roles_fail_hint: operation failed
+admin.user.update_org_success_hint: Modify the user's organization success
+admin.user.update_org_fail_hint: operation failed
+admin.wechat_app.mp_name_input.message: Please fill in the weapp title within 10 words
+admin.wechat_app.mp_description_input.message: Please fill out the weapp introduction
+admin.wechat_app.contact_name_input.message: Please fill in the contact name
+admin.wechat_app.contact_phone_input.message: Please fill in the correct phone number
+admin.wechat_app.contact_qq_input.message: Please fill in the correct QQ number
+admin.util.batch_delete.checked_empty_hint: No %name% is selected
+admin.util.batch_delete.delete_hint: Are you sure you want to delete the selected %ids%(s) %name%?
+admin.util.batch_delete.deleting_hint: Deleting %name%, please wait a moment.
+admin.util.item_delete.delete_hint: Really want to delete the %name%?
+admin.util.item_delete.delete_success_hint: Delete %name% successfully
+admin.shortcut_add_success_hint: The current page has been added as a popular link!
+admin.shortcut_delete_success_hint: Delete frequently used links successfully!
+
+task_show.user_login_protect_tip: User unLogin

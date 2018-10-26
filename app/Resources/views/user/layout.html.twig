@@ -6,7 +6,7 @@
 {% set bodyClass = 'userpage bg-blank' %}
 {% set pageNav = pageNav|default(null) %}
 
-{% do script(['libs/echo-js.js','libs/jquery-blurr.js','app/js/user/index.js']) %}
+{% do script(['libs/jquery-blurr.js','app/js/user/index.js']) %}
 
 {% block top_content %}
   {{ render(controller('AppBundle:User:headerBlock', {user:user})) }}

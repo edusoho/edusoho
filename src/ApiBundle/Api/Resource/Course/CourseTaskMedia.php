@@ -60,7 +60,7 @@ class CourseTaskMedia extends AbstractResource
         $taskCanTryLook = false;
         if ($course['tryLookable'] && 'video' == $task['type']) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && 'cloud' === $activity['ext']['file']['storage']) {
                 $taskCanTryLook = true;
             }
         }
@@ -124,7 +124,7 @@ class CourseTaskMedia extends AbstractResource
         }
         $user = $this->getCurrentUser();
         $isCourseMember = $this->getCourseMemberService()->isCourseMember($course['id'], $user['id']);
-        if (!empty($course['tryLookable']) && !$isCourseMember) {
+        if (empty($task['isFree']) && !empty($course['tryLookable']) && !$isCourseMember) {
             $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);

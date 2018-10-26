@@ -7,7 +7,8 @@
 
 {% block main_body %}
   <div>
-    {% if isTeacher is defined and not isTeacher %}
+
+    {% if isTeacher is defined and not isTeacher and not has_permission('admin_course_manage')%}
       <span class="color-danger">{{'course.testpaper_check.no_permission_tips'|trans}}</span>
     {% endif %}
     {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,targetType:'course',type:'testpaper'})) }}

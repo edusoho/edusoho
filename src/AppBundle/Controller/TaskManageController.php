@@ -28,8 +28,11 @@ class TaskManageController extends BaseController
         }
     }
 
-    public function preUpdateCheckAction(Request $request, $courseId, $taskId)
+    public function preUpdateCheckAction(Request $request, $courseId, $activityId)
     {
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $taskId = $task['id'];
+
         $task = $request->request->all();
         $task['fromCourseId'] = $courseId;
         try {
@@ -147,6 +150,9 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
+
+        $defaultFinishCondition = $this->getDefaultFinishCondition($task['mediaType']);
+        $task = array_merge($defaultFinishCondition, $task);
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
         return $this->getTaskJsonView($task);
@@ -157,6 +163,7 @@ class TaskManageController extends BaseController
         $course = $this->tryManageCourse($courseId);
         $task = $this->getTaskService()->getTask($id);
         $taskMode = $request->query->get('type');
+        $customTitle = $request->query->get('customTitle', '');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
         }
@@ -184,6 +191,7 @@ class TaskManageController extends BaseController
             'task-manage/modal.html.twig',
             array(
                 'mode' => 'edit',
+                'customTitle' => $customTitle,
                 'currentType' => $activity['mediaType'],
                 'course' => $course,
                 'courseSet' => $courseSet,
@@ -310,6 +318,21 @@ class TaskManageController extends BaseController
     protected function createCourseStrategy($course)
     {
         return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
+    }
+
+    private function getDefaultFinishCondition($mediaType)
+    {
+        $activityConfigManager = $this->get('activity_config_manager');
+        $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
+        if (empty($activityConfig['finish_condition'])) {
+            return array();
+        }
+        $findishCondition = reset($activityConfig['finish_condition']);
+
+        return array(
+            'finishType' => $findishCondition['type'],
+            'finishData' => empty($findishCondition['value']) ? '' : $findishCondition['value'],
+        );
     }
 
     protected function parseTimeFields($fields)

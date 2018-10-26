@@ -22,10 +22,10 @@ define(function(require, exports, module) {
                     var $html = $(html);
                     if ($table.find( '#' +  $html.attr('id')).length > 0) {
                         $('#' + $html.attr('id')).replaceWith($html);
-                        Notify.success(Translator.trans('标签更新成功！'));
+                        Notify.success(Translator.trans('admin.tag.update_tag_success_hint'));
                     } else {
                         $table.find('tbody').prepend(html);
-                        Notify.success(Translator.trans('标签添加成功!'));
+                        Notify.success(Translator.trans('admin.tag.add_tag_success_hint'));
                     }
                     $modal.modal('hide');
 				});
@@ -40,7 +40,7 @@ define(function(require, exports, module) {
         });
 
         $modal.find('.delete-tag').on('click', function() {
-            if (!confirm(Translator.trans('真的要删除该标签吗？'))) {
+            if (!confirm(Translator.trans('admin.tag.single_delete_hint'))) {
                 return ;
             }
 

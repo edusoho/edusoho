@@ -10,7 +10,7 @@ let validator = $form.validate({
   },
   messages: {
     deadline: {
-      required: '请输入有效期'
+      required: Translator.trans('validate.expiry_days_required_hint')
     }
   }
 });

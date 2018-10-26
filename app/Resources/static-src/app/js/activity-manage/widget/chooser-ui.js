@@ -12,6 +12,5 @@ export const chooserUiClose = () => {
 export const showChooserType = ($item) => {
   $('#iframe-content').on('click', '.js-choose-trigger', function() {
     chooserUiOpen();
-    $item.val(null);
   });
 };

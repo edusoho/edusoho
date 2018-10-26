@@ -29,10 +29,6 @@ class HomeworkTest extends BaseTypeTestCase
         $this->assertEquals(1, $results[0]['id']);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage homework fields is invalid
-     */
     public function testCreate()
     {
         $this->_mockTestpaper();
@@ -49,8 +45,6 @@ class HomeworkTest extends BaseTypeTestCase
         $activity = $type->create($fields);
 
         $this->assertEquals(2, $activity['id']);
-
-        $type->create(array());
     }
 
     public function testCopy()
@@ -291,7 +285,7 @@ class HomeworkTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 1),
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 1, 'finishType' => 'submit', 'finishData' => ''),
             ),
         ));
     }

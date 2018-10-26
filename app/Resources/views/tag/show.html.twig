@@ -1,5 +1,4 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/echo-js.js','app/js/tag/index.js']) %}
 
 {% block title %}{{'tag'|trans}}{% if tag %}:{{ tag.name }}{% endif %} - {{ parent() }}{% endblock %}
 {% block keywords %}{% if tag %}{{ tag.name }}{% endif %},{{ setting('site.seo_keywords') }}{% endblock %}

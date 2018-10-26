@@ -18,10 +18,10 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success(Translator.trans('新用户添加成功'));
+                    Notify.success(Translator.trans('admin.user.create_new_user_success_hint'));
                     window.location.reload();
                 }).error(function(){
-                    Notify.danger(Translator.trans('新用户添加失败'));
+                    Notify.danger(Translator.trans('admin.user.create_new_user_fail_hint'));
                 });
 
             }

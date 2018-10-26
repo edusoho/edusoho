@@ -26,6 +26,7 @@ export default class Manage {
     this._publish();
     this._createTask();
     this._optional();
+    this._initLessonTaskAction();
   }
 
   _collapse() {
@@ -75,8 +76,12 @@ export default class Manage {
       break;
     }
     case 'task':
+    {
       this.$element.find('#chapter-' + this.position + ' .js-lesson-box').append($elm);
+      let container = $elm.parents('.js-lesson-container');
+      this._triggerAsTaskNumUpdated(container);
       break;
+    }
     case 'lesson':
     {
       let $unit = this.$element.find('#chapter-' + this.position);
@@ -121,8 +126,9 @@ export default class Manage {
         if ('task' == $this.data('type') && $parent.siblings().length == 0) {
           $parent.closest('.js-task-manage-lesson').remove();
         }
+        let container = $parent.parents('.js-lesson-container');
         $parent.remove();
-
+        self._triggerAsTaskNumUpdated(container);
         self.handleEmptyShow();
         self._flushTaskNumber();
         $.post($this.data('url'), function(data) {
@@ -215,9 +221,18 @@ export default class Manage {
     this.sortablelist();
   }
 
+  setShowNum($parentLi) {
+    if ($parentLi.attr('show-num') == 0) {
+      $parentLi.attr('show-num', 1);
+    } else {
+      $parentLi.attr('show-num', 0);
+    }
+  }
+
+
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item:not(.js-optional-task)'];
+    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter', '.js-task-manage-item[show-num=1]', '.js-task-manage-unit'];
     for (let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     }
@@ -234,7 +249,6 @@ export default class Manage {
   }
 
   _sortUnitNumber() {
-    // 排序 节 的序号
     let num;
     this.$element.find('.js-task-manage-chapter').each(function() {
       let $unit = $(this).nextUntil('.js-task-manage-chapter').filter('.js-task-manage-unit');
@@ -246,22 +260,24 @@ export default class Manage {
   }
 
   _publish() {
+    let self = this;
     const info = {
       class: '.js-publish-item, .js-delete, .js-lesson-unpublish-status',
       oppositeClas: '.js-unpublish-item',
+      isHideUnPublish: $('#isHideUnPublish').hasClass('checked'),
       flag: false
     };
     this.$element.on('click', '.js-unpublish-item', (event) => {
       const $target = $(event.target);
-      info.success = Translator.trans('course.manage.task_unpublish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':',
+      info.success = Translator.trans('course.manage.task_unpublish_success_hint');
+      info.danger = Translator.trans('course.manage.task_unpublish_fail_hint') + ':';
       this.toggleOptional($target, self, info);
     });
 
     this.$element.on('click', '.js-publish-item', (event) => {
       const $target = $(event.target);
-      info.success = Translator.trans('course.manage.task_publish_success_hint'),
-      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':',
+      info.success = Translator.trans('course.manage.task_publish_success_hint');
+      info.danger = Translator.trans('course.manage.task_publish_fail_hint') + ':';
       this.toggleOptional($target, self, info);
     });
   }
@@ -313,23 +329,157 @@ export default class Manage {
     });
   }
 
+  /*
+   * 单任务课时才有预览课时的功能，实际上预览的是任务，同样编辑课时的功能实际上是编辑任务
+   * 多任务课时才有重命名课时的功能
+   */
+  _initLessonTaskAction() {
+    let btnRelations = { //key为显示的按钮，点击后，实际上点击的value中的按钮
+      'js-lesson-preview-btn': 'js-hidden-lesson-preview-btn',
+      'js-lesson-edit-btn': 'js-hidden-lesson-edit-btn',
+      'js-lesson-rename-btn': 'js-hidden-lesson-rename-btn',
+    };
+
+    for (const displayedEleClass in btnRelations) {
+      let actualClickedEleClass = btnRelations[displayedEleClass];
+      $('#sortable-list').on('click', '.' + displayedEleClass, function() {
+        let container = $(this).parents('.js-lesson-container');
+
+        let taskIdStr = container.find('.js-task-manage-item').attr('id');
+        //格式为 task-{taskId}
+
+        let taskId = taskIdStr.split('-')[1]; // 第二部分即为taskId
+        let jsActionBtn = container.find('.' + actualClickedEleClass);
+        let updatedUrl = jsActionBtn.data('url').replace('%7BtaskId%7D', taskId);
+        jsActionBtn.data('url', updatedUrl);
+        if (jsActionBtn.data('toggle')) {
+          jsActionBtn.click();
+        } else {
+          window.open(jsActionBtn.data('url'), '_blank');
+        }
+      });
+    }
+  }
+
   toggleOptional($target, self, info) {
     const $parentLi = $target.closest('.task-manage-item');
     const $dom = $parentLi.find(info.class);
     const $oppositeDom = $parentLi.find(info.oppositeClas);
+    let isHideUnPublish = $('#isHideUnPublish').hasClass('checked');
     $.post($target.data('url'), (data) => {
+      let setProperty = true;
+
+      if (isHideUnPublish) {
+        setProperty = self.checkShouldSetProperty($target, $parentLi);
+      }
+
       $dom.toggleClass('hidden');
       $oppositeDom.toggleClass('hidden');
-      if (info.flag) {
-        self.sortList();
+
+      if (isHideUnPublish) {
+        if (setProperty) {
+          const $displayTextDom = $parentLi.find('.display-text');
+          $displayTextDom.toggleClass('hidden');
+          self.setShowNum($parentLi);
+          self.sortList();
+        }
+      } else {
+        if (info.flag) {
+          const $displayTextDom = $parentLi.find('.display-text');
+          $displayTextDom.toggleClass('hidden');
+          self.setShowNum($parentLi);
+          self.sortList();
+        }
       }
+
       cd.message({ type: 'success', message: info.success });
     }).fail(function(data) {
       cd.message({ type: 'danger', message: info.danger + data.responseJSON.error.message });
     });
   }
 
+  checkShouldSetProperty($target, $parentLi) {
+    const $publish = $parentLi.find('.js-publish-item');
+    const $setOptional = $parentLi.find('.js-set-optional');
+
+    let hiddenPublish = $publish.hasClass('hidden');
+    let hiddenOptional = $setOptional.hasClass('hidden');
+
+    let setProperty = true;
+
+    if ($target.hasClass('js-unpublish-item')) {
+      if (hiddenOptional) {
+        setProperty = false;
+      }
+    } else if ($target.hasClass('js-publish-item')) {
+      if (hiddenOptional) {
+        setProperty = false;
+      }
+    } else if ($target.hasClass('js-set-optional')) {
+      if (!hiddenPublish) {
+        setProperty = false;
+      }
+    } else if ($target.hasClass('js-unset-optional')) {
+      if (!hiddenPublish) {
+        setProperty = false;
+      }
+    }
+
+    return setProperty;
+
+  }
+
   afterAddItem($elm) {
     console.log('afterAddItem');
+  }
+
+  /*
+   * 如果课时下有多任务，显示任务，如果单任务，不显示任务
+   * @param container 新增或删除的任务节点所在的js-lesson-container节点
+   */
+  _triggerAsTaskNumUpdated(container) {
+    let lessonBox = container.find('.js-lesson-box');
+    let isMulTasks = lessonBox.find('.js-task-manage-item').length > 1;
+
+    if (isMulTasks) { // 多任务课时显示任务, 同时课时上会少一些按钮
+      lessonBox.removeClass('hidden');
+      container.find('.js-display-when-mul-tasks').removeClass('hidden');
+      container.find('.js-display-when-single-task').addClass('hidden');
+    } else { // 单任务课时不显示任务, 同时课时上会多一些按钮
+      lessonBox.addClass('hidden');
+      container.find('.js-display-when-mul-tasks').addClass('hidden');
+      container.find('.js-display-when-single-task').removeClass('hidden');
+      container.find('.js-task-title').html(container.find('.js-lesson-title').html());
+    }
+
+    this._triggerLessonIconAsTaskNumUpdated(container, isMulTasks);
+  }
+
+  _triggerLessonIconAsTaskNumUpdated(container, isMulTasks) {
+    let lessonIconBtn = container.find('.js-lesson-icon');
+    let classList = '';
+    if (isMulTasks) {
+      //多任务时，删除课时节点上的任务图标，如图文的图标
+      classList = lessonIconBtn[0].classList;
+    } else {
+      //单任务时，课时节点上显示任务的图标
+      let esIcon = container.find('.js-lesson-box').find('.es-icon');
+      if (esIcon.length == 0) {
+        classList = [];
+      } else {
+        classList = container.find('.js-lesson-box').find('.es-icon')[0].classList;
+      }
+    }
+
+    for (let index = 0; index < classList.length; index++) {
+      const className = classList[index];
+      if (className.startsWith('es-icon-')) {
+        if (isMulTasks) {
+          lessonIconBtn.removeClass(className);
+        } else {
+          lessonIconBtn.addClass(className);
+        }
+      }
+    }
   }
 }

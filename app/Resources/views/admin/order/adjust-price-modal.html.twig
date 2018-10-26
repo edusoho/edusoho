@@ -34,8 +34,8 @@
           <td style="vertical-align: middle;"><span class="js-origin-pay-amount" data-origin-amount="{{ adjustInfo.payAmountExcludeAdjust }}">{{ adjustInfo.payAmountExcludeAdjust|number_format(2,'.') }}</span></td>
           <td class="text-center" style="vertical-align: middle;">
             <input type="text" name="adjust-by-discount" class="js-adjust-discount adjust-price form-control" value="{{ adjustInfo.adjustDiscount }}"/>
-            折 =
-            - <input type="text" name="adjust-by-price" class="js-adjust-price adjust-price form-control" value="{{ adjustInfo.adjustPrice }}"/> 元
+            {{ 'order.refund.discount'|trans }} =
+            - <input type="text" name="adjust-by-price" class="js-adjust-price adjust-price form-control" value="{{ adjustInfo.adjustPrice }}"/> {{ 'site.currency.CNY'|trans }}
           </td>
           <td class="color-danger js-pay-amount" style="vertical-align: middle;">{{ order.pay_amount|to_cash(0) }}</td>
         </tr>

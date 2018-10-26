@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Course\LessonException;
 use Biz\Course\Service\LessonService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use AppBundle\Common\ArrayToolkit;
 
 class LessonServiceImpl extends BaseService implements LessonService
@@ -78,7 +79,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         return $lesson;
     }
 
-    public function publishLesson($courseId, $lessonId)
+    public function publishLesson($courseId, $lessonId, $updateLessonNum = true)
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $chapter = $this->getCourseChapterDao()->get($lessonId);
@@ -90,6 +91,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->publishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.publish', new Event($lesson));
+        $this->updateLessonNumbers($courseId);
 
         return $lesson;
     }
@@ -103,8 +105,10 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         foreach ($chapters as $chapter) {
-            $this->publishLesson($courseId, $chapter['id']);
+            $this->publishLesson($courseId, $chapter['id'], false);
         }
+
+        $this->updateLessonNumbers($courseId);
     }
 
     public function unpublishLesson($courseId, $lessonId)
@@ -120,6 +124,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->unpublishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
+        $this->updateLessonNumbers($courseId);
 
         return $lesson;
     }
@@ -141,6 +146,8 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getTaskService()->deleteTasksByCategoryId($lesson['courseId'], $lesson['id']);
 
         $this->dispatchEvent('course.lesson.delete', new Event($lesson));
+
+        $this->updateLessonNumbers($courseId);
 
         return true;
     }
@@ -179,6 +186,8 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
             $this->getLogService()->info('course', 'lesson_set_optional', "课时设置选修《{$lesson['title']}》", $lesson);
 
+            $this->updateLessonNumbers($courseId);
+
             $this->commit();
 
             return $lesson;
@@ -210,6 +219,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                 'title' => $lesson['title'],
             );
             $this->getLogService()->info('course', 'lesson_unset_optional', "课时设置必修《{$lesson['title']}》", $infoData);
+            $this->updateLessonNumbers($courseId);
 
             $this->commit();
 
@@ -217,6 +227,51 @@ class LessonServiceImpl extends BaseService implements LessonService
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
+        }
+    }
+
+    public function updateLessonNumbers($courseId)
+    {
+        $lessons = $this->getCourseChapterDao()->search(
+            array('courseId' => $courseId, 'type' => 'lesson'),
+            array(),
+            0,
+            10000
+        );
+
+        $publishedNum = 1;
+        $number = 1;
+
+        $sortedLessons = ArrayToolkit::sortPerArrayValue($lessons, 'seq');
+
+        $batchHelper = new BatchUpdateHelper($this->getCourseChapterDao());
+
+        foreach ($sortedLessons as $lesson) {
+            if (!$lesson['isOptional']) {
+                $displayedNum = $number;
+                ++$number;
+            } else {
+                $displayedNum = 0;
+            }
+
+            if ('published' == $lesson['status'] && !$lesson['isOptional']) {
+                $batchHelper->add('id', $lesson['id'], array(
+                    'published_number' => $publishedNum,
+                    'number' => $displayedNum,
+                ));
+                ++$publishedNum;
+            } else {
+                $batchHelper->add('id', $lesson['id'], array(
+                    'published_number' => 0,
+                    'number' => $displayedNum,
+                ));
+            }
+        }
+
+        $batchHelper->flush();
+
+        foreach ($sortedLessons as $lesson) {
+            $this->dispatchEvent('course.lesson.update', new Event($lesson));
         }
     }
 

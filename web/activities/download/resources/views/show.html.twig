@@ -1,0 +1,27 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['libs/perfect-scrollbar.js','downloadactivity/js/show/index.js']) %}
+
+{% block body %}
+    {% set materials = find_materials_by_activity_id_and_source(activity.id, 'coursematerial') %}
+    {% set download = activity.ext %}
+    <div class="iframe-parent-content iframe-parent-full" id="download-activity">
+        <ul class="download-activity-list">
+            {% for material in materials %}
+                <li>
+                    <a class="link-darker" data-file-id="{{ material.id }}"
+                       data-url="{{ path('course_activity_download', {courseId:activity.fromCourseId, activityId:material.lessonId , materialId:material.id }) }}"
+                       target="_blank">{{ material.title }}
+                        {% if material.link|default(null) %}
+                            (link)
+                        {% else %}
+                            ({{ material.fileSize|file_size }})
+                        {% endif %}
+                        <i class="es-icon es-icon-filedownload download-icon"></i>
+                        <div class="text-xs color-gray mts">{{ material.description|default('') }}</div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

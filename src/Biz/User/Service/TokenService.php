@@ -24,10 +24,11 @@ interface TokenService
      *
      * @param string $type Token类型
      * @param string $key  Token的值
+     * @param array  $data data的值(有值则更新)
      *
      * @return bool 该Token值是否OK
      */
-    public function verifyToken($type, $value);
+    public function verifyToken($type, $value, array $data = array());
 
     /**
      * 作废一个Token.

@@ -55,6 +55,14 @@ class TestpaperTest extends BaseTypeTestCase
         $result = $type->copy(array('mediaType' => 'homework', array()));
         $this->assertNull($result);
 
+        $this->mockBiz('Testpaper:TestpaperService', array(
+            array(
+                'functionName' => 'getTestpaper',
+                'returnValue' => array(
+                    'id' => 2,
+                ),
+            ),
+        ));
         $fields1 = $this->mockField(1);
         $activity1 = $type->create($fields1);
 
@@ -71,10 +79,16 @@ class TestpaperTest extends BaseTypeTestCase
 
         $copyFields = $this->mockField(2);
         $copyActivity = $type->create($copyFields);
-        $this->assertEquals($copyFields['mediaId'], $copyActivity['mediaId']);
+        $this->assertEquals($copyFields['testpaperId'], $copyActivity['mediaId']);
         $this->assertNotEquals($activity['mediaId'], $copyActivity['mediaId']);
 
         $this->mockBiz('Testpaper:TestpaperService', array(
+            array(
+                'functionName' => 'getTestpaper',
+                'returnValue' => array(
+                    'id' => 1,
+                ),
+            ),
             array(
                 'functionName' => 'getTestpaperByCopyIdAndCourseSetId',
                 'returnValue' => array('id' => 1),
@@ -99,13 +113,13 @@ class TestpaperTest extends BaseTypeTestCase
         $fields = $this->mockField(1);
         $activity = $type->create($fields);
 
-        $update = array('mediaId' => 2, 'length' => 50, 'doTimes' => 0);
+        $update = array('testpaperId' => 2, 'length' => 50, 'doTimes' => 0);
 
         $result = $type->update($activity['id'], $update, array());
 
         $activity = $type->get($result['id']);
         $this->assertEquals($update['length'], $result['limitedTime']);
-        $this->assertEquals($update['mediaId'], $result['mediaId']);
+        $this->assertEquals($update['testpaperId'], $result['mediaId']);
 
         $type->update(123, $update, array());
     }
@@ -135,7 +149,18 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
+                'returnValue' => array(
+                    'id' => 1,
+                    'mediaId' => $activity['id'],
+                    'fromCourseId' => 1,
+                    'ext' => array(
+                        'id' => 1,
+                        'testpaper' => array(
+                            'id' => 2,
+                            'score' => 10,
+                        ),
+                    ),
+                ),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
@@ -159,7 +184,19 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
+                'returnValue' => array(
+                    'id' => 1,
+                    'mediaId' => $activity['id'],
+                    'fromCourseId' => 1,
+                    'ext' => array(
+                        'id' => 1,
+                        'testpaper' => array(
+                            'id' => 2,
+                            'score' => 10,
+                        ),
+                    ),
+                    'finishType' => 'submit',
+                ),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
@@ -183,7 +220,20 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
+                'returnValue' => array(
+                    'id' => 1,
+                    'mediaId' => $activity['id'],
+                    'fromCourseId' => 1,
+                    'ext' => array(
+                        'id' => 1,
+                        'testpaper' => array(
+                            'id' => 2,
+                            'score' => 10,
+                        ),
+                    ),
+                    'finishType' => 'score',
+                    'finishData' => '0.8',
+                ),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
@@ -207,7 +257,20 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
+                'returnValue' => array(
+                    'id' => 1,
+                    'mediaId' => $activity['id'],
+                    'fromCourseId' => 1,
+                    'ext' => array(
+                        'id' => 1,
+                        'testpaper' => array(
+                            'id' => 2,
+                            'score' => 10,
+                        ),
+                    ),
+                    'finishType' => 'score',
+                    'finishData' => '0.8',
+                ),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
@@ -239,14 +302,13 @@ class TestpaperTest extends BaseTypeTestCase
     private function mockField($mediaId)
     {
         return array(
-            'mediaId' => $mediaId,
+            'testpaperId' => $mediaId,
             'doTimes' => 1,
             'redoInterval' => 0,
             'length' => 30,
             'checkType' => 'score',
             'finishCondition' => array('type' => 'submit', 'finishScore' => 0),
             'condition' => 'submit',
-            'finishScore' => 5,
         );
     }
 }
