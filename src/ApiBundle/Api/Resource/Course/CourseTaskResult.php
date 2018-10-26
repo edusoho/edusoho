@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseTaskResult extends AbstractResource
@@ -17,8 +18,20 @@ class CourseTaskResult extends AbstractResource
         if (!$course) {
             throw new NotFoundHttpException('教学计划不存在');
         }
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
-        return $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+        if (!empty($taskResult)) {
+            return $taskResult;
+        }
+        $task = $this->getTaskService()->getTask($taskId);
+        $user = $this->getCurrentUser();
+        $taskResult = array(
+            'activityId' => $task['activityId'],
+            'courseId' => $task['courseId'],
+            'courseTaskId' => $task['id'],
+            'userId' => $user['id'],
+        );
+        return $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
     public function update(ApiRequest $request, $courseId, $taskId)
@@ -53,6 +66,14 @@ class CourseTaskResult extends AbstractResource
      * @return TaskResultService
      */
     protected function getTaskResultService()
+    {
+        return $this->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
     {
         return $this->service('Task:TaskResultService');
     }
