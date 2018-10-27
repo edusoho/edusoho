@@ -6,7 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class MarketingUtils
 {
-    private $defaultDomain = 'http://wyx.edusoho.cn';
+    private static $defaultDomain = 'http://wyx.edusoho.cn';
 
     public static function getSiteInfo($settingService, $webExtension)
     {
@@ -64,6 +64,6 @@ class MarketingUtils
     {
         $settingService = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
-        return !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : self::defaultDomain;
+        return !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : self::$defaultDomain;
     }
 }
