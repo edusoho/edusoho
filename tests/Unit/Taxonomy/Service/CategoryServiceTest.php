@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Taxonomy\Service;
 
+use Biz\Article\CategoryException;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\BaseTestCase;
 
@@ -85,7 +86,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testAddCategoryWithNoParentId()
     {
@@ -103,7 +104,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testAddCategoryWithNotExistParentId()
     {
@@ -113,7 +114,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testAddCategoryWithEmptyCategoryName()
     {
@@ -123,7 +124,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testAddCategoryWithNotExistGroupId()
     {
@@ -133,7 +134,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testAddCategoryWithCodeAlreayExist()
     {
@@ -145,7 +146,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testGetCategory()
     {
@@ -224,7 +225,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testFindCategoriesWithNotExistGroupId()
     {
@@ -272,7 +273,7 @@ class CategoryServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testFindGroupRootCategoriesWithEmptyGroup()
     {
@@ -490,7 +491,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testGetCategoryTree()
     {
@@ -543,7 +544,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testGetCategoryTreeWithNotExistGroupId()
     {
@@ -583,7 +584,7 @@ class CategoryServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testUpdateCategoryWithNoCategory()
     {
@@ -596,8 +597,8 @@ class CategoryServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 参数不正确，更新分类失败！
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
      */
     public function testUpdateCategoryWithNoFields()
     {
@@ -643,7 +644,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group delete
-     * @expectedException @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testDeleteCategoryWithNotFoundException()
     {

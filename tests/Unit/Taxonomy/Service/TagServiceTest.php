@@ -196,8 +196,8 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 标签组名字未填写，请添加
+     * @expectedException \Biz\Taxonomy\TagException
+     * @expectedExceptionMessage exception.tag.empty_name
      */
     public function testAddTagGroupWithException1()
     {
@@ -216,8 +216,8 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 标签组名字已存在，请重新填写
+     * @expectedException \Biz\Taxonomy\TagException
+     * @expectedExceptionMessage exception.tag.duplicate_name
      */
     public function testAddTagGroupWithException2()
     {
@@ -258,7 +258,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\TagException
      */
     public function testUpdateTagGroupWithException()
     {
@@ -281,7 +281,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\TagException
      */
     public function testAddTagWithEmptyTagName()
     {
@@ -306,7 +306,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\TagException
      */
     public function testAddMultiTagNameTag()
     {
@@ -493,7 +493,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\TagException
      */
     public function testUpdateTagWithNotExistId()
     {
@@ -519,7 +519,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group update
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Taxonomy\TagException
      */
     public function testUpdateTagWithEmptyName()
     {

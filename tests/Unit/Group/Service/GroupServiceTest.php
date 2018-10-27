@@ -41,7 +41,7 @@ class GroupServiceTest extends BaseTestCase
 
     /**
      * @group current
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Group\GroupException
      */
     public function testAddGroupWithEmptyTitle()
     {
@@ -218,7 +218,7 @@ class GroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\GroupException
      */
     public function testExistGroupWithEmptyGroup()
     {
@@ -243,7 +243,7 @@ class GroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\GroupException
      */
     public function testExistGroupWithEmptyUser()
     {
@@ -269,7 +269,7 @@ class GroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Group\GroupException
      */
     public function testJoinGroupWithJoinGroupExist()
     {
@@ -294,7 +294,7 @@ class GroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\GroupException
      */
     public function testJoinGroupWithErrorId()
     {
@@ -563,7 +563,7 @@ class GroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testChangeGroupImgWithErrorType()
     {
@@ -605,7 +605,7 @@ class GroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\GroupException
      */
     public function testChangeGroupImgWithGroupNonExist()
     {

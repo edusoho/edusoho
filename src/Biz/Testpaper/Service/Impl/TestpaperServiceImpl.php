@@ -854,7 +854,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         if ('doing' === $paperResult['status'] && ($paperResult['userId'] != $user['id'])) {
-            $this->createNewException(TestpaperException::FORBIDDEN_ACCESS_TESTPAPER);
+            $this->createNewException(TestpaperException::FORBIDDEN_ACCESS_TESTPAPER());
         }
 
         if ($user->isAdmin()) {

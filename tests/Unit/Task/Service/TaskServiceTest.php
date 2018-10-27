@@ -49,7 +49,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateTaskWhenInvalidArgument()
     {
