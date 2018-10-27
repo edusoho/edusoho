@@ -17,6 +17,7 @@ class MarketingController extends BaseController
 
         $siteInfo = MarketingUtils::getSiteInfo($this->getSettingService(), $this->getWebExtension());
         $entry = $request->query->get('entry');
+        $target = $request->query->get('target', 'login');
 
         try {
             $login = $client->post('/login', array(
@@ -28,7 +29,7 @@ class MarketingController extends BaseController
                 'entry' => $entry,
             ));
 
-            return  $this->redirect($login['url']);
+            return  $this->redirect($login['url'].'&target='.$target);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
