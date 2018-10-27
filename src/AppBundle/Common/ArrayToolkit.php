@@ -349,4 +349,12 @@ class ArrayToolkit
 
         return $arr1 == $arr2;
     }
+
+    public static function insert($array, $position, $insertArray)
+    {
+        $firstArray = array_splice($array, 0, $position);
+        $array = array_merge($firstArray, $insertArray, $array);
+
+        return $array;
+    }
 }
