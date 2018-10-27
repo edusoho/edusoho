@@ -222,8 +222,8 @@ class LiveCourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 您还未登录，不能参加直播！
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testCheckCourseUserRoleUnLogin()
     {
