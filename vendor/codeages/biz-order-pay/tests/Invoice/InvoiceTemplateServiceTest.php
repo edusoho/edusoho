@@ -41,7 +41,7 @@ class InvoiceTemplateServiceTest extends IntegrationTestCase
 
         $newtemplate = $this->getInvoiceTemplateService()->updateInvoiceTemplate($template['id'], array(
             'title' => 'bar',
-            'type' => 'company',
+            'type' => 'vat',
             'taxpayer_identity' => $template['taxpayer_identity'],
             'address' => $template['address'],
             'phone' => $template['phone'],
@@ -141,7 +141,7 @@ class InvoiceTemplateServiceTest extends IntegrationTestCase
     {
         return array(
             'title' => 'foo',
-            'type' => 'company',
+            'type' => 'vat',
             'taxpayer_identity' => '131313131313',
             'content' => '培训费',
             'comment' => 'comment eg',

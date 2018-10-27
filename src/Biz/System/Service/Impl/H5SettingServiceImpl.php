@@ -8,7 +8,7 @@ use AppBundle\Common\TimeMachine;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
-    public function getDiscovery($portal, $mode = 'published')
+    public function getDiscovery($portal, $mode = 'published', $usage = 'show')
     {
         $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
         if (empty($discoverySettings)) {
@@ -33,6 +33,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
                 $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
                 $discoverySetting['data']['items'] = $courses;
+            }
+
+            if ('course_list' == $discoverySetting['type'] && 'custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+                $courses = $discoverySetting['data']['items'];
+                foreach ($courses as $key => $course) {
+                    $existCourse = $this->getCourseService()->getCourse($course['id']);
+                    if (empty($existCourse) || 'published' != $existCourse['status']) {
+                        unset($discoverySetting['data']['items'][$key]);
+                    }
+                }
             }
 
             if (in_array($discoverySetting['type'], array('poster', 'slide_show')) && !empty($discoverySetting['data']['link']) && 'target' == $discoverySetting['data']['link']['type']) {

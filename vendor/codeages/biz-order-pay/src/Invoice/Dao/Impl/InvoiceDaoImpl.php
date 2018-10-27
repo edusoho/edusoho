@@ -10,6 +10,11 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
 {
     protected $table = 'biz_invoice';
 
+    public function getBySn($sn)
+    {
+        return $this->getByFields(array('sn' => $sn));
+    }
+
     public function declares()
     {
         return array(
@@ -28,8 +33,8 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
                 'status = :status',
                 'user_id IN ( :userIds)',
                 'sn = :sn',
+                'sn LIKE :likeSn',
             ),
         );
-
     }
 }
