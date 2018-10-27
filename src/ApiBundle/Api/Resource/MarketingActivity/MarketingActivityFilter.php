@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\MarketingActivity;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Util\Converter;
 
 class MarketingActivityFilter extends Filter
 {
@@ -24,11 +25,11 @@ class MarketingActivityFilter extends Filter
         }
         $data['cover'] = $data['shared_picture'];
         unset($data['shared_picture']);
-        $data['createdTime'] = $data['created_time'];
+        $data['createdTime'] = Converter::timestampToDate($data['created_time']);
         unset($data['created_time']);
-        $data['startTime'] = $data['start_time'];
+        $data['startTime'] = Converter::timestampToDate($data['start_time']);
         unset($data['start_time']);
-        $data['endTime'] = $data['end_time'];
+        $data['endTime'] = Converter::timestampToDate($data['end_time']);
         unset($data['end_time']);
     }
 }
