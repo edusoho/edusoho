@@ -33,6 +33,6 @@ class MarketingActivityFilter extends Filter
         $data['endTime'] = Converter::timestampToDate($data['end_time']);
         unset($data['end_time']);
         $marketingDomain = MarketingUtils::getMarketingDomain();
-        $data['url'] = $marketingDomain.'/a/groupon/show/'.$data['id'];
+        $data['url'] = $marketingDomain.'/h5/a/groupon/show/'.$data['id'];
     }
 }
