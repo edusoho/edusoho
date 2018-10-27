@@ -49,7 +49,7 @@
 
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
-                  <div class="lesson-cell__content ml3" @click="lessonCellClick(lesson.tasks[0], lesson)">
+                  <div class="lesson-cell__content ml3" @click="lessonCellClick(lesson.tasks[0])">
                     <span>{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
                   </div>
                   <div :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">
