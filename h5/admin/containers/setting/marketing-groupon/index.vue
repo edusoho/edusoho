@@ -10,7 +10,7 @@
           <p class="pull-left section-left">活动：</p>
           <div class="section-right">
             <div class="required-option">
-              <el-button type="info" size="mini" @click="openModal" v-show="!activityName">选择课程</el-button>
+              <el-button type="info" size="mini" @click="openModal" v-show="!activityName">选择活动</el-button>
               <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="activityName">
                 <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
                   <span slot="content">{{ activityName }}</span>

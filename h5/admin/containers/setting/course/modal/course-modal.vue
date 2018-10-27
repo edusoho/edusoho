@@ -5,18 +5,18 @@
     :before-close="beforeCloseHandler"
     :close-on-click-modal="false">
     <div class="course-modal__header" slot="title">
-      <span class="header__title">选择课程</span>
-      <span class="header__subtitle">仅显示已发布课程</span>
+      <span class="header__title">选择{{ unitType }}</span>
+      <span class="header__subtitle">仅显示已发布{{ unitType }}</span>
     </div>
     <div class="course-modal__body">
       <div class="search__container">
-        <span class="search__label">选择课程：</span>
+        <span class="search__label">选择{{ unitType }}：</span>
 
         <!-- 接口字段 courseSetTitle -->
         <el-autocomplete
           size="medium"
           v-model="keyWord"
-          placeholder="搜索课程"
+          :placeholder="'搜索' + unitType"
           class="inline-input search__input"
           :value-key="head[type][0].label"
           :clearable="true"
@@ -26,7 +26,7 @@
           @select="selectHandler"
         ></el-autocomplete>
       </div>
-      <div class="help-text mbs">拖动课程名称可调整排序</div>
+      <div class="help-text mbs">拖动{{ unitType }}名称可调整排序</div>
     </div>
     <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :type="type"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
@@ -81,7 +81,10 @@ export default {
       set(visible) {
         this.$emit('visibleChange', visible);
       }
-    }
+    },
+    unitType() {
+      return this.type === 'course' ? '课程' : '活动';
+    },
   },
   watch: {
     visible(val) {
@@ -128,7 +131,7 @@ export default {
 
       if (exccedLimit) {
         this.$message({
-          message: `当前最多可选 ${this.limit} 个课程`,
+          message: `当前最多可选 ${this.limit} 个{{ this.unitType }}`,
           type: 'warning'
         });
         return;
