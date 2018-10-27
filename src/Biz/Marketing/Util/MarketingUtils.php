@@ -63,6 +63,7 @@ class MarketingUtils
     public static function getMarketingDomain()
     {
         $settingService = ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        $developerSetting = $settingService->get('developer', array());
 
         return !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : self::$defaultDomain;
     }
