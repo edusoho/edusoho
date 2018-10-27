@@ -64,6 +64,6 @@ class MarketingUtils
     {
         $settingService = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
-        return !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : $defaultDomain;
+        return !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : $this->defaultDomain;
     }
 }
