@@ -5,6 +5,7 @@ namespace Biz\Marketing;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
+use Biz\Marketing\Util\MarketingUtils;
 
 class MarketingAPIFactory
 {
@@ -14,7 +15,7 @@ class MarketingAPIFactory
         $storage = $settingService->get('storage', array());
         $developerSetting = $settingService->get('developer', array());
 
-        $marketingDomain = !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
+        $marketingDomain = MarketingUtils::getMarketingDomain();
 
         $config = array(
             'accessKey' => $storage['cloud_access_key'],

@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\MarketingActivity;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Util\Converter;
+use Biz\Marketing\Util\MarketingUtils;
 
 class MarketingActivityFilter extends Filter
 {
@@ -31,5 +32,7 @@ class MarketingActivityFilter extends Filter
         unset($data['start_time']);
         $data['endTime'] = Converter::timestampToDate($data['end_time']);
         unset($data['end_time']);
+        $marketingDomain = MarketingUtils::getMarketingDomain();
+        $data['url'] = $marketingDomain.'/a/groupon/show/'.$data['id'];
     }
 }
