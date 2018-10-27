@@ -671,10 +671,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'site' => $this->getSiteInfo($this->request, $version),
         );
 
-        $this->log('user_login', '用户二维码登录', array(
-            'qrCodeToken' => $oldToken,
-            'loginToken' => $newToken,
-        ));
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('qrCodeToken' => $oldToken, 'loginToken' => $newToken));
 
         return $result;
     }
