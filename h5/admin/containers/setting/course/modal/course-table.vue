@@ -41,20 +41,6 @@ import draggable from 'vuedraggable';
 import head from '@admin/config/modal-config';
 import { formatTime } from '@/utils/date-toolkit';
 
-// 营销活动
-// {
-//   about: "<p>测试</p>"
-//   cover: "item/2018/10-22/09570511d995281719.jpg"
-//   createdTime: "1540173425"
-//   endTime: "0"
-//   id: "436"
-//   memberPrice: "1"
-//   name: "《测试》多人拼团"
-//   originPrice: "200"
-//   ownerPrice: "1"
-//   startTime: "0"
-//   status: "ongoing"
-// }
 export default {
   name: 'course-table',
   components: {
@@ -98,8 +84,14 @@ export default {
     },
     getContext(course, label) {
       if (label.toLocaleLowerCase().includes('price')) {
+        if (!course[label]) {
+          return '未设置';
+        }
         return `${course[label]}元`;
       } else if (label === 'createdTime') {
+        if (!course[label]) {
+          return '未知日期'
+        }
         const date = new Date(course[label]);
         return formatTime(date);
       } else if (label === 'delete') {

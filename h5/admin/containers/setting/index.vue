@@ -44,7 +44,7 @@
           v-for="(item, index) in baseModules" :key="`base-${index}`">
           {{ item.name }}
         </el-button>
-        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" href="javascript:;">创建活动>></a> </div>
+        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" href="/admin/login/marketing?target=activity_create" target="_blank">创建活动&gt;&gt;</a> </div>
         <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
           v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
           {{ item.name }}
