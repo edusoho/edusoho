@@ -4,17 +4,21 @@ namespace ApiBundle\Api\Resource\Token;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 
 class Token extends AbstractResource
 {
     public function add(ApiRequest $request)
     {
+        $type = $request->request->get('type');
         $user = $this->getCurrentUser()->toArray();
 
         $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
         $this->appendUser($user);
+
+        $this->getLogService()->info('mobile', 'login', "通过{$type}登录");
 
         return array(
             'token' => $token,
@@ -51,5 +55,13 @@ class Token extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 }
