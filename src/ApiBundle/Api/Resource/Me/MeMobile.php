@@ -32,7 +32,7 @@ class MeMobile extends AbstractResource
             throw UserException::PASSWORD_ERROR();
         }
 
-        $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);
+        $result = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $fields['smsToken'], $fields['smsCode']);
         if (BizSms::STATUS_SUCCESS != $result) {
             throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
