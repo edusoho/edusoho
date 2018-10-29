@@ -9,6 +9,7 @@ use Biz\Common\CommonException;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\BizSms;
 use Biz\Sms\SmsException;
+use Biz\User\UserException;
 
 class MeMobile extends AbstractResource
 {
@@ -25,12 +26,12 @@ class MeMobile extends AbstractResource
 
         $user = $this->getCurrentUser();
         if (!empty($user['verifyMobile'])) {
-            //已经绑定手机号异常
+            throw UserException::ERROR_MOBILE_REGISTERED();
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
-        if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
-            //密码错误异常
+        if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
+            throw UserException::PASSWORD_ERROR();
         }
 
         $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);
@@ -48,8 +49,8 @@ class MeMobile extends AbstractResource
         return $this->biz['biz_sms'];
     }
 
-    protected function getAuthService()
+    protected function getUserService()
     {
-        return $this->service('User:AuthService');
+        return $this->service('User:UserService');
     }
 }
