@@ -37,7 +37,7 @@ class MeMobile extends AbstractResource
             throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
 
-        $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
+        $this->getUserService()->changeMobile($user['id'], $mobile);
 
         return $this->getUserService()->get($user['id']);
     }
