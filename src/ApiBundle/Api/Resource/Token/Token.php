@@ -18,7 +18,9 @@ class Token extends AbstractResource
 
         $this->appendUser($user);
 
-        $this->getLogService()->info('mobile', 'login', "通过{$type}登录");
+        if ($type) {
+            $this->getLogService()->info('mobile', 'login', "通过{$type}登录");
+        }
 
         return array(
             'token' => $token,
