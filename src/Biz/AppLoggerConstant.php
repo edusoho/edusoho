@@ -454,7 +454,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             ),
             self::MOBILE => array(
                 'face_login',
-            )
+            ),
         );
     }
 
