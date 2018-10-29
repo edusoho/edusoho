@@ -514,6 +514,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     'registeredWay' => $registeredWay,
                     'createdIp' => $this->request->getClientIp(),
                 ));
+
+                $this->getLogService()->info('mobile', 'register', '用户{$nickname}通过手机注册成功', array('userId' => $user['id']));
             } catch (\Exception $e) {
                 return $this->createErrorResponse('register_invalid', $e->getMessage());
             }
