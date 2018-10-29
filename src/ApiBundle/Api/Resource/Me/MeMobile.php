@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\EncryptionToolkit;
 use Biz\Common\CommonException;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\BizSms;
@@ -19,7 +18,7 @@ class MeMobile extends AbstractResource
         if (!ArrayToolkit::requireds($fields, array(
             'smsToken',
             'smsCode',
-            'encrypt_password',
+            'password',
         ))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
@@ -29,8 +28,7 @@ class MeMobile extends AbstractResource
             throw UserException::ERROR_MOBILE_REGISTERED();
         }
 
-        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
-        if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
+        if (!$this->getUserService()->verifyPassword($user['id'], $fields['password'])) {
             throw UserException::PASSWORD_ERROR();
         }
 
