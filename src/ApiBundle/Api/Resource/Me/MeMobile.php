@@ -39,7 +39,7 @@ class MeMobile extends AbstractResource
 
         $this->getUserService()->changeMobile($user['id'], $mobile);
 
-        return $this->getUserService()->get($user['id']);
+        return $this->getUserService()->getUser($user['id']);
     }
 
     private function getBizSms()
