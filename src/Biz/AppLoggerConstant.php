@@ -173,6 +173,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const LIVE = 'live';
 
+    /**
+     * [$MOBILE 手机客户端]
+     *
+     * @var string
+     */
+    const MOBILE = 'mobile';
+
     public function getActions()
     {
         return array(
@@ -228,6 +235,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'publish_course',
                 'close_course',
                 'update_draft',
+                'join_course',
             ),
 
             self::USER => array(
@@ -322,6 +330,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'publish',
                 'close',
                 'update_head_teacher',
+                'join_classroom',
             ),
             self::ARTICLE => array(
                 'update_settings',
@@ -443,6 +452,9 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'generate_live_replay',
                 'delete_live_activity',
             ),
+            self::MOBILE => array(
+                'face_login',
+            )
         );
     }
 
@@ -469,6 +481,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::NOTIFY,
             self::CRONTAB,
             self::LIVE,
+            self::MOBILE,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,

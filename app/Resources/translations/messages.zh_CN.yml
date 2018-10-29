@@ -8393,6 +8393,7 @@ log.action.course.delete_course: 删除教学计划
 log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
+log.action.course.join_course: 加入教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -8482,6 +8483,7 @@ log.action.classroom.cancel_recommend: 取消推荐
 log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
+log.action.classroom.join_classroom: 加入班级
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -8575,6 +8577,7 @@ log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成录播回放
 log.action.live.delete_live_activity: 删除直播活动
+log.action.mobile.face_login: 人脸识别登录
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
