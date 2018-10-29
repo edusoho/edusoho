@@ -18,11 +18,14 @@ export default class QuestionOperate {
 
   initSortList() {
     let adjustment;
-    this.$form.find('tbody').sortable({
+    const $tbody = this.$form.find('tbody');
+    const td = $tbody.hasClass('js-homework-table') ? '': '<td></td>';
+    const tdHtml = `<tr class="question-placehoder"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>${td}</tr>`;
+    $tbody.sortable({
       containerPath: '> tr',
       containerSelector:'tbody',
       itemSelector: 'tr.is-question',
-      placeholder: '<tr class="placeholder test-height"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>',
+      placeholder: tdHtml,
       exclude: '.notMoveHandle',
       onDragStart: function(item, container, _super) {
         let offset = item.offset(),
@@ -38,6 +41,7 @@ export default class QuestionOperate {
           left: position.left - adjustment.left,
           top: position.top - adjustment.top
         });
+
       },
       onDrop: (item, container, _super) => {
         _super(item, container);
