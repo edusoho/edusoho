@@ -5,7 +5,6 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  REPOSITORY: 'custom'
 
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
