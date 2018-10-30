@@ -17,13 +17,16 @@
 
 .is-question {
   width: 100%;
-  height: 100%;
+
   &.dragged {
     background-color: #fff;
     position: absolute;
     z-index: 2000;
     .es-box-shadow;
     &.is-question--homework {
+      td:nth-child(1) {
+        width: 1%;
+      }
       td:nth-child(3) {
         width: 10%;
       }
