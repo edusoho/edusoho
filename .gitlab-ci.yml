@@ -9,6 +9,12 @@ variables:
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
+  - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
+  - "echo '    redis_host: redis:6379' >> app/config/parameters_test.yml"
+  - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
+  - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
+  - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
@@ -44,9 +50,9 @@ before_script:
     variables:
       - $REPOSITORY == "main"
 
-7.0 with php-cs-fixer only for custom:
+7.1 with php-cs-fixer only for custom:
   stage: test
-  image: codeages/ci-php71:latest
+  image: codeages/ci-php71:6
   services:
     - mysql:5.5
     - redis:latest
@@ -122,6 +128,9 @@ AT With Java And Selenium:
     - mysql:5.7
     - selenium/standalone-chrome:latest
   script:
+    # 修改配置文件
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     # 启动web服务
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
@@ -155,6 +164,9 @@ Api Test With 5.5:
     - mysql:5.5
     - redis:latest
   script:
+    # 修改配置文件
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
