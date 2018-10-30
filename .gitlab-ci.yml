@@ -8,9 +8,6 @@ variables:
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 before_script:
-  - if [[ "${$REPOSITORY}" == "main" ]]&&[[ "${$REPOSITORY}" == "custom" ]];then
-  - exit 1
-  - fi
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
@@ -22,6 +19,14 @@ before_script:
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
+
+check env:
+  before_script:
+  script:
+    - if [[ "${$REPOSITORY}" == "main" ]]&&[[ "${$REPOSITORY}" == "custom" ]];then
+    - echo "必须在Gitlab中设置REPOSITORY"
+    - exit 1
+    - fi
 
 5.3 with nothing:
   stage: test
