@@ -25,12 +25,13 @@ check env:
   image: codeages/ci-php:5.3-2
   script:
     - if [[ "${REPOSITORY}" != "main" ]]&&[[ "${REPOSITORY}" != "custom" ]];then
-    - echo "必须在Gitlab中设置REPOSITORY"
+    - echo "必须在Gitlab中设置REPOSITORY,当前的设置为：${REPOSITORY}"
     - exit 1
     - fi
   only:
     variables:
-      - $REPOSITORY == null
+      - $REPOSITORY != "main"
+      - $REPOSITORY != "custom"
 
 5.3 with nothing:
   stage: test
