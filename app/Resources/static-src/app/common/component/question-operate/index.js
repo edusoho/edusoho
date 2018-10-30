@@ -17,12 +17,32 @@ export default class QuestionOperate {
   }
 
   initSortList() {
-    this.$form.find('tbody').sortable({
+    let adjustment;
+    const $tbody = this.$form.find('tbody');
+    const td = $tbody.hasClass('js-homework-table') ? '': '<td></td>';
+    const tdHtml = `<tr class="question-placehoder"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>${td}</tr>`;
+    $tbody.sortable({
       containerPath: '> tr',
       containerSelector:'tbody',
       itemSelector: 'tr.is-question',
-      placeholder: '<tr class="placeholder"/>',
+      placeholder: tdHtml,
       exclude: '.notMoveHandle',
+      onDragStart: function(item, container, _super) {
+        let offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function(item, position) {
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+
+      },
       onDrop: (item, container, _super) => {
         _super(item, container);
         if (item.hasClass('have-sub-questions')) {
