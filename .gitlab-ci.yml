@@ -8,6 +8,9 @@ variables:
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 before_script:
+  - if [[ "${$REPOSITORY}" == "main" ]]&&[[ "${$REPOSITORY}" == "custom" ]];then
+  - exit 1
+  - fi
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
