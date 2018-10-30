@@ -46,11 +46,13 @@ $tag-color: #FF5722;
     .context-sale {
       margin-top:vw(8);
       &__sale-price {
+        display: inline-block;
         font-size: 16px;
         color: $tag-color;
         font-weight: bold;
       }
       &__origin-price {
+        display: inline-block;
         margin-left: vw(5);
         font-size: vw(12);
         color: #616161;

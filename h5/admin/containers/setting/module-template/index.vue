@@ -95,26 +95,6 @@ export default {
   data () {
     return {
       moduleDefault: MODULE_DEFAULT,
-      // testGroupon: {
-      //   "type": "groupon",
-      //   "moduleType": "groupon-1",
-      //   "data": {
-      //     "activity": {
-      //       "id": 1,
-      //       "name": "活动名称",
-      //       "type": "groupon",
-      //       "status": "ongoing",
-      //       "originPrice": "10.00",
-      //       "ownerPrice": "0.01",
-      //       "memberPrice": "0.02",
-      //       "cover": "https://xxx.xxx.xxx/xxx.jpg",
-      //       "createdTime": "2018-07-05T09:49:27+08:00",
-      //       "startTime": "2018-07-05T09:49:27+08:00",
-      //       "endTime": "2018-07-06T09:49:27+08:00"
-      //     },
-      //     "tag": "大甩卖"
-      //   }
-      // }
     }
   },
   methods: {

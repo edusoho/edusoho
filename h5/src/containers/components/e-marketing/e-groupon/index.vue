@@ -7,8 +7,8 @@
     <div class="e-groupon__context">
       <div class="context-title text-overflow">{{ activity.name || '拼团活动' }}</div>
       <div class="context-sale">
-        <span class="context-sale__sale-price">{{ activity.memberPrice || '00.00' }} 元</span>
-        <span v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</span>
+        <div class="context-sale__sale-price">{{ activity.memberPrice || '00.00' }} 元</div>
+        <div v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</div>
         <a class="context-sale__shopping" href="javascript:;">去拼团</a>
       </div>
     </div>
