@@ -54,7 +54,7 @@ class CourseBuyController extends BuyFlowController
         $member = $this->getCourseMemberService()->getCourseMember($id, $user['id']);
         if (!empty($member)) {
             $course = $this->getCourseService()->getCourse($id);
-            $this->getLogService()->info('course', 'join_course', "加入 教学计划《{$course['title']}》", array('userId' => $user['id'], 'courseId' => $course['id'], 'title' => $course['title']));
+            $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", array('userId' => $user['id'], 'id' => $course['id'], 'title' => $course['title'], 'courseSetTitle' => $course['courseSetTitle']));
         }
 
         return $member;

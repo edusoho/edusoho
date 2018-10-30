@@ -8615,6 +8615,7 @@ log.action.template.course.update_task: 更新了任务《%title%》
 log.action.template.course.update_draft: 更新了草稿《%title%》
 log.action.template.course.recommend: 推荐了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.cancel_recommend: 取消了推荐<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.join_course: 加入教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》
@@ -8628,6 +8629,7 @@ log.action.template.classroom.add_student: 在<strong class="color-success">班�
 log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
+log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.delete: 删除了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.update: 修改了<strong class="color-success">分类</strong> 《%title%》
