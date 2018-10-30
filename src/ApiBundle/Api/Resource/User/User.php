@@ -100,9 +100,7 @@ class User extends AbstractResource
         );
         $user = $this->getAuthService()->register($user);
         $user['token'] = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
-        if ($user) {
-            $this->getLogService()->info('mobile', 'register', "用户{$user['nickname']}通过手机注册成功", array('userId' => $user['id']));
-        }
+        $this->getLogService()->info('mobile', 'register', "用户{$user['nickname']}通过手机注册成功", array('userId' => $user['id']));
 
         return $user;
     }
