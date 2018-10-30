@@ -27,10 +27,10 @@ before_script:
   script:
     - bin/phpunit-diff
   only:
-    refs:
-      - develop
-      - master
-      - trigger
+#    refs:
+#      - develop
+#      - master
+#      - trigger
     variables:
       - $REPOSITORY == "custom"
 #
