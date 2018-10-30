@@ -7356,6 +7356,8 @@ log.action.template.course.recommend: 推荐了<strong class="color-success">课
 log.action.template.course.cancel_recommend: 取消了推荐<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_lesson: 新建了课时《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.join_course: 加入教学计划《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》

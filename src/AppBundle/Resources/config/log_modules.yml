@@ -389,4 +389,7 @@ live:
     generate_live_replay:
         templateParam:
             %title%: 0.subject
+mobile:
+    regist_device:
+        notDisplay: 1
 
