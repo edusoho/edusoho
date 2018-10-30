@@ -74,7 +74,7 @@ class CourseProduct extends Product implements OrderStatusCallback
 
             if (isset($member)) {
                 $course = $this->getCourseService()->getCourse($orderItem['target_id']);
-                $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", array('userId' => $orderItem['user_id'], 'id' => $course['id'], 'title' => $course['title'], 'courseSetTitle' => $course['courseSetTitle']));
+                $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", array('userId' => $orderItem['user_id'], 'courseId' => $course['id'], 'title' => ($course['title']) ? $course['title'] : $course['courseSetTitle']));
             }
 
             return OrderStatusCallback::SUCCESS;

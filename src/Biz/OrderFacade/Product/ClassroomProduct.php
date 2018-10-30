@@ -68,7 +68,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
             if (isset($member)) {
                 $classroom = $this->getClassroomService()->getClassroom($orderItem['target_id']);
-                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", array('userId' => $orderItem['user_id'], 'id' => $classroom['id'], 'title' => $classroom['title']));
+                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", array('userId' => $orderItem['user_id'], 'classroomId' => $classroom['id'], 'title' => $classroom['title']));
             }
 
             return OrderStatusCallback::SUCCESS;
