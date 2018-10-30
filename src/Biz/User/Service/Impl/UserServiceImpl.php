@@ -1888,7 +1888,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function updateUserNewMessageNum($id, $num)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser($id);
         $newMessageNum = $user['newMessageNum'] - 1;
         if ($newMessageNum >= 0 && $num > 0) {
             $this->getUserDao()->update($id, array('newMessageNum' => $newMessageNum));
