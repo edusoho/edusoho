@@ -84,6 +84,13 @@ course:
                 param:
                     id: courseId
             %nickname%: nickname
+    join_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
     publish:
         templateParam:
             %url%:
@@ -160,6 +167,13 @@ classroom:
                 param:
                     id: classroomId
             %nickname%: nickname
+    join_classroom:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
     add_course:
         templateParam:
             %url%:

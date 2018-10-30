@@ -51,8 +51,13 @@ class CourseBuyController extends BuyFlowController
     protected function isJoined($id)
     {
         $user = $this->getUser();
+        $member = $this->getCourseMemberService()->getCourseMember($id, $user['id']);
+        if (!empty($member)) {
+            $course = $this->getCourseService()->getCourse($id);
+            $this->getLogService()->info('course', 'join_course', "加入 教学计划《{$course['title']}》", array('userId' => $user['id'], 'courseId' => $course['id'], 'title' => $course['title']));
+        }
 
-        return $this->getCourseMemberService()->getCourseMember($id, $user['id']);
+        return $member;
     }
 
     /**
