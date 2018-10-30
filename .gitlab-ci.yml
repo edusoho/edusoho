@@ -1,4 +1,4 @@
-#注意：定制项目请在GitlabCI 设置里面添加变量 REPOSITORY 为 "custom"
+#注意：定制项目请在GitlabCI 设置里面添加变量 REPOSITORY 为 "custom" ;设置非法值或者未设置都会报警
 stages:
   - automation
   - test
