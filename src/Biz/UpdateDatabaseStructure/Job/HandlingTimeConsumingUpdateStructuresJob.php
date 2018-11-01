@@ -76,7 +76,7 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
         $this->createIndex('status', 'classroomId_createdTime', 'classroomId, createdTime');
 
         /*
-         *  Table  status
+         *  Table  user
          *  Index  verifiedMobile
          *  Column verifiedMobile
          */
