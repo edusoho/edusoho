@@ -131,9 +131,11 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function deleteConversation($conversationId)
     {
         $this->getRelationDao()->deleteByConversationId($conversationId);
-
-        $user = $this->getCurrentUser();
-        $this->getUserService()->updateUserNewMessageNum($user['id'], 1);
+        $messageConversation = $this->getConversationDao()->get($conversationId);
+        if ($messageConversation && $messageConversation['unreadNum'] > 0) {
+            $user = $this->getCurrentUser();
+            $this->getUserService()->updateUserNewMessageNum($user['id'], 1);
+        }
 
         return $this->getConversationDao()->delete($conversationId);
     }
