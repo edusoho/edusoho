@@ -1,11 +1,17 @@
 <?php
 
-namespace Biz\TableIndex\Job;
+namespace Biz\UpdateDatabaseStructure\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class AddTableIndexJob extends AbstractJob
+class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 {
+    /*
+     * HandlingTimeConsumingUpdateStructuresJob使用范围：
+     * 1.因为表过大导致执行时间不可控的加索引sql语句
+     * 2.表量级很大，想要添加和业务代码没有强关联的添加字段或者修改字段属性的sql语句，字段的缺失会导致业务报错的语句，严禁在JOB执行
+     *
+     */
     public function execute()
     {
         $this->addTableIndex();
@@ -68,6 +74,13 @@ class AddTableIndexJob extends AbstractJob
          *  Column classroomId, createdTime
          */
         $this->createIndex('status', 'classroomId_createdTime', 'classroomId, createdTime');
+
+        /*
+         *  Table  user
+         *  Index  verifiedMobile
+         *  Column verifiedMobile
+         */
+        $this->createIndex('user', 'verifiedMobile', 'verifiedMobile');
     }
 
     protected function getConnection()
