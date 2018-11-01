@@ -19,9 +19,9 @@ define(function(require, exports, module) {
                 var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function(e, textStatus, errorThrown) {
-                var json = jQuery.parseJSON(e.responseText);
-                if(json.error.message){
-                    Notify.danger(json.error.message,{title:$trigger.attr('title')});
+                var $json = jQuery.parseJSON(e.responseText);
+                if($json.error.message){
+                    Notify.danger($json.error.message,{title:$trigger.attr('title')});
                 }else{
                     Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
                 }
