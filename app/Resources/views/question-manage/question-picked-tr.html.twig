@@ -1,6 +1,6 @@
 {% set questionTypesDict = getQuestionTypes() %}
 
-<tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId > 0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
+<tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId > 0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions js-have-sub{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
   <td>{% if not question.parentId %}<span class="glyphicon glyphicon-resize-vertical sort-handle"></span>{% endif %}</td>
   <td>
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
