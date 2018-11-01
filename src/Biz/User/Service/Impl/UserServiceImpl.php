@@ -1344,7 +1344,10 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createNotFoundException("User#{$id} Not Found");
         }
-
+        $currentUser = $this->getCurrentUser();
+        if (in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+            throw $this->createAccessDeniedException('没有封禁该角色的权限');
+        }
         $this->getUserDao()->update($user['id'], array('locked' => 1));
         $this->dispatchEvent('user.lock', new Event($user));
 

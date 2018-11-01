@@ -18,8 +18,13 @@ define(function(require, exports, module) {
                 Notify.success(Translator.trans('admin.user.lock_operational_success_hint',{title:$trigger.attr('title')}));
                 var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
-            }).error(function() {
-                Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
+            }).error(function(e, textStatus, errorThrown) {
+                var json = jQuery.parseJSON(e.responseText);
+                if(json.error.message){
+                    Notify.danger(json.error.message,{title:$trigger.attr('title')});
+                }else{
+                    Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
+                }
             });
         });
 
