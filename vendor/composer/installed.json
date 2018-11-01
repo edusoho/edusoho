@@ -398,17 +398,17 @@
     },
     {
         "name": "codeages/biz-order-pay",
-        "version": "v0.1.25",
-        "version_normalized": "0.1.25.0",
+        "version": "v0.1.26",
+        "version_normalized": "0.1.26.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "412320fb6f31afe434ef293caa22a3af7f3fbf3c"
+            "reference": "c6747df7f87b224429a24f16675338c68171289c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/412320fb6f31afe434ef293caa22a3af7f3fbf3c",
-            "reference": "412320fb6f31afe434ef293caa22a3af7f3fbf3c",
+            "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/c6747df7f87b224429a24f16675338c68171289c",
+            "reference": "c6747df7f87b224429a24f16675338c68171289c",
             "shasum": "",
             "mirrors": [
                 {
@@ -426,7 +426,7 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "4.8.36"
         },
-        "time": "2018-10-24T16:05:57+00:00",
+        "time": "2018-11-01T07:45:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
