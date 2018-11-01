@@ -18,6 +18,30 @@ export default class Audio {
     window.ltc.on('getValidate', (msg) => {
       window.ltc.emit('returnValidate', { valid: this.validate.form() });
     });
+
+    $('input[name=withText]').on('change', event => {
+      let $target = $(event.currentTarget);
+      if($target.val() == 0) {
+        
+      }
+    });
+  }
+  initCkeditor(validator) {
+    // group: 'course'
+    var editor = CKEDITOR.replace('audio-content-field', {
+      toolbar: 'Simple',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $('#audio-content-field').data('imageUploadUrl')
+    });
+  
+    editor.on('change', () => {
+      $('#audio-content-field').val(editor.getData());
+      validator.form();
+    });
+    editor.on('blur', () => {
+      $('#audio-content-field').val(editor.getData());
+      validator.form();
+    });
   }
 
   initStep2Form() {
