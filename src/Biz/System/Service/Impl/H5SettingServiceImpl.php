@@ -41,6 +41,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     $existCourse = $this->getCourseService()->getCourse($course['id']);
                     if (empty($existCourse) || 'published' != $existCourse['status']) {
                         unset($discoverySetting['data']['items'][$key]);
+                        continue;
+                    }
+                    $existCourseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                    if (empty(existCourseSet) || 'published' != $existCourseSet['status']) {
+                        unset($discoverySetting['data']['items'][$key]);
                     }
                 }
             }
@@ -201,6 +206,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 
     protected function getCategoryService()
