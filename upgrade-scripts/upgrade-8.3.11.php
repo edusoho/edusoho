@@ -129,7 +129,7 @@ class EduSohoUpgrade extends AbstractUpdater
           ");
         }
 
-        if (!$this->isTableExist('biz_invoice')) {
+        if (!$this->isTableExist('biz_invoice_template')) {
             $this->getConnection()->exec("
             CREATE TABLE IF NOT EXISTS `biz_invoice_template`(
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
