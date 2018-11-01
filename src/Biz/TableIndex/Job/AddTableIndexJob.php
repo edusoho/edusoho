@@ -14,6 +14,13 @@ class AddTableIndexJob extends AbstractJob
     protected function addTableIndex()
     {
         /*
+         *  Table  biz_pay_trade
+         *  Index  user_id
+         *  Column user_id
+         */
+        $this->createIndex('biz_pay_trade', 'user_id', 'user_id');
+
+        /*
          *  Table  course_member
          *  Index  userid
          *  Column userId
