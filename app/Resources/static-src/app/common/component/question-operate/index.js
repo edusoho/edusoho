@@ -20,7 +20,7 @@ export default class QuestionOperate {
     let adjustment;
     const $tbody = this.$form.find('tbody');
     const td = $tbody.hasClass('js-homework-table') ? '': '<td></td>';
-    const tdHtml = `<tr class="question-placehoder"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>${td}</tr>`;
+    const tdHtml = `<tr class="question-placehoder js-placehoder"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>${td}</tr>`;
     $tbody.sortable({
       containerPath: '> tr',
       containerSelector:'tbody',
@@ -28,6 +28,9 @@ export default class QuestionOperate {
       placeholder: tdHtml,
       exclude: '.notMoveHandle',
       onDragStart: function(item, container, _super) {
+        if (!item.hasClass('have-sub-questions')) {
+          $('.js-have-sub').removeClass('is-question');
+        }
         let offset = item.offset(),
           pointer = container.rootGroup.pointer;
         adjustment = {
@@ -37,11 +40,15 @@ export default class QuestionOperate {
         _super(item, container);
       },
       onDrag: function(item, position) {
+        const height = item.height();
         item.css({
           left: position.left - adjustment.left,
           top: position.top - adjustment.top
         });
 
+        $('.js-placehoder').css({
+          'height': height,
+        });
       },
       onDrop: (item, container, _super) => {
         _super(item, container);
@@ -51,6 +58,8 @@ export default class QuestionOperate {
             let $tr = $(this);
             $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
           });
+        } else {
+          $('.js-have-sub').addClass('is-question');
         }
         this.refreshSeqs();
       }
