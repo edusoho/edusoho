@@ -9,7 +9,7 @@ use Biz\Marketing\Util\MarketingUtils;
 
 class MarketingAPIFactory
 {
-    public static function create()
+    public static function create($endpoint = '/merchant')
     {
         $settingService = ServiceKernel::instance()->getBiz()->service('System:SettingService');
         $storage = $settingService->get('storage', array());
@@ -20,7 +20,7 @@ class MarketingAPIFactory
         $config = array(
             'accessKey' => $storage['cloud_access_key'],
             'secretKey' => $storage['cloud_secret_key'],
-            'endpoint' => $marketingDomain.'/merchant',
+            'endpoint' => $marketingDomain.$endpoint,
         );
         $spec = new JsonHmacSpecification2('sha1');
         $client = new RestApiClient($config, $spec);
