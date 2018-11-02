@@ -54,6 +54,10 @@ class DataLabController extends BaseController
             'enable' => $enable,
         ));
 
+        $magic = $this->getSettingService()->get('magic', array());
+
+        $enable = isset($magic['site_trace_enable']) ? $magic['site_trace_enable'] : $enable;
+
         $siteTraceSetting = array(
             'enabled' => $enable,
             'script' => $result['script'],
