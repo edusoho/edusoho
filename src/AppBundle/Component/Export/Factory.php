@@ -40,6 +40,7 @@ class Factory
             'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
             'user-learn-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter',
             'course-students' => 'AppBundle\Component\Export\Course\StudentExporter',
+            'invoice-records' => 'InvoicePlugin\Component\Export\Invoice\InvoiceRecordsExporter',
         );
 
         $names = explode(':', $name);

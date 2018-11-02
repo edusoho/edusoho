@@ -20,6 +20,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
     protected function addTableIndex()
     {
         /*
+         *  Table  biz_pay_trade
+         *  Index  user_id
+         *  Column user_id
+         */
+        $this->createIndex('biz_pay_trade', 'user_id', 'user_id');
+
+        /*
          *  Table  course_member
          *  Index  userid
          *  Column userId
@@ -83,6 +90,16 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
         $this->createIndex('user', 'verifiedMobile', 'verifiedMobile');
     }
 
+    protected function changeTableFiledType()
+    {
+        /*
+         *  Table  course_set_v8
+         *  Field  summary
+         *  FieldType longtext
+         */
+        $this->changeFiledType('course_set_v8', 'summary', 'longtext');
+    }
+
     protected function getConnection()
     {
         $biz = $this->getBiz();
@@ -103,6 +120,29 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
         if (!$this->isIndexExist($table, $index)) {
             $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
         }
+    }
+
+    protected function changeFiledType($table, $fieldName, $fieldType, $length = '')
+    {
+        if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
+            $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
+        }
+    }
+
+    protected function shouldFiledTypeChanged($table, $fieldName, $fieldType)
+    {
+        $sql = "show columns from `{$table}` where Field = '{$fieldName}';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        $shouldFiledTypeChanged = false;
+
+        if (!empty($result) && array_key_exists('Type', $result)) {
+            if ($result['Type'] != $fieldType) {
+                $shouldFiledTypeChanged = true;
+            }
+        }
+
+        return $shouldFiledTypeChanged;
     }
 
     protected function getBiz()

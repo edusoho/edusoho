@@ -20,7 +20,7 @@ class CourseSetController extends BaseController
         $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
         $previewAs = $request->query->get('previewAs');
         if (empty($course)) {
-            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
+            throw $this->createNotFoundException("No Available Course in CourseSet#{$id}");
         }
 
         $this->getCourseSetService()->hitCourseSet($id);

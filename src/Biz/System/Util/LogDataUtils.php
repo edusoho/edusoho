@@ -79,6 +79,7 @@ class LogDataUtils
                 'filename',
                 'stem',
                 'subject',
+                'nickname',
             ),
         );
 
