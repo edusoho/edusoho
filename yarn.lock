@@ -2597,10 +2597,10 @@ es-abstract@^1.7.0:
     is-callable "^1.1.3"
     is-regex "^1.0.4"
 
-es-ckeditor@4.7.2-patch6:
-  version "4.7.2-patch6"
-  resolved "http://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch6.tgz#234a84b35ee49bc2eb13844f23abc910281b71a0"
-  integrity sha1-I0qEs17km8LrE4RPI6vJECgbcaA=
+es-ckeditor@4.7.2-patch7:
+  version "4.7.2-patch7"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch7.tgz#b7ce229e667a9b18277afc561a6353f68448a0a4"
+  integrity sha512-7XaTAo46KaSGAGUFJlYRMd9KrAce1hr9f1sY4tAlRyBAECfiILscMd7a1HIGpTrC8fKMpeqL1YH/+6oLFAGJPg==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"

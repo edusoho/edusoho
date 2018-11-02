@@ -8,7 +8,7 @@ use AppBundle\Common\TimeMachine;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
-    public function getDiscovery($portal, $mode = 'published')
+    public function getDiscovery($portal, $mode = 'published', $usage = 'show')
     {
         $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
         if (empty($discoverySettings)) {
@@ -35,6 +35,21 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $discoverySetting['data']['items'] = $courses;
             }
 
+            if ('course_list' == $discoverySetting['type'] && 'custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+                $courses = $discoverySetting['data']['items'];
+                foreach ($courses as $key => $course) {
+                    $existCourse = $this->getCourseService()->getCourse($course['id']);
+                    if (empty($existCourse) || 'published' != $existCourse['status']) {
+                        unset($discoverySetting['data']['items'][$key]);
+                        continue;
+                    }
+                    $existCourseSet = $this->getCourseSetService()->getCourseSet($existCourse['courseSetId']);
+                    if (empty($existCourseSet) || 'published' != $existCourseSet['status']) {
+                        unset($discoverySetting['data']['items'][$key]);
+                    }
+                }
+            }
+
             if (in_array($discoverySetting['type'], array('poster', 'slide_show')) && !empty($discoverySetting['data']['link']) && 'target' == $discoverySetting['data']['link']['type']) {
                 $link = $discoverySetting['data']['link'];
                 $course = $this->getCourseService()->getCourse($link['target']['id']);
@@ -42,6 +57,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     $link['target'] = null;
                     $link['url'] = '';
                 }
+            }
+
+            if (in_array($discoverySetting['type'], array('groupon'))) {
+                $developerSetting = $this->getSettingService()->get('developer', array());
+                $marketingDomain = !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
+                $discoverySetting['data']['url'] = $marketingDomain.'/h5/a/groupon/show/'.$discoverySetting['data']['activity']['id'];
             }
         }
 
@@ -121,32 +142,38 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function getDefaultDiscovery($portal)
     {
-        $posters = $this->getBlockService()->getPosters();
-        $slides = array();
-        foreach ($posters as $poster) {
-            $slide = array(
-                'title' => '',
-                'image' => array(
-                    'id' => 0,
-                    'uri' => $poster['image'],
-                    'size' => '',
-                    'createdTime' => 0,
-                ),
-                'link' => array(
-                    'type' => 'url',
-                    'target' => null,
-                    'url' => $poster['link']['url'],
+        $result = array();
+        if ('h5' == $portal) {
+            $posters = $this->getBlockService()->getPosters();
+            $slides = array();
+            foreach ($posters as $poster) {
+                $slide = array(
+                    'title' => '',
+                    'image' => array(
+                        'id' => 0,
+                        'uri' => $poster['image'],
+                        'size' => '',
+                        'createdTime' => 0,
+                    ),
+                    'link' => array(
+                        'type' => 'url',
+                        'target' => null,
+                        'url' => $poster['link']['url'],
+                    ),
+                );
+                $slides[] = $slide;
+            }
+
+            $result = array(
+                'slide-1' => array(
+                    'type' => 'slide_show',
+                    'moduleType' => 'slide-1',
+                    'data' => $slides,
                 ),
             );
-            $slides[] = $slide;
         }
 
-        $result = array(
-            'slide-1' => array(
-                'type' => 'slide_show',
-                'moduleType' => 'slide-1',
-                'data' => $slides,
-            ),
+        return array_merge($result, array(
             'courseList-1' => array(
                 'type' => 'course_list',
                 'moduleType' => 'courseList-1',
@@ -173,14 +200,17 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     'items' => array(),
                 ),
             ),
-        );
-
-        return $result;
+        ));
     }
 
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 
     protected function getCategoryService()
