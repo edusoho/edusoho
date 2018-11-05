@@ -1,4 +1,5 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
+import { initEditor } from 'app/js/activity-manage/editor.js';
 import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
@@ -8,6 +9,7 @@ export default class Audio {
     this.autoValidatorLength();
     this.initFileChooser();
     this.initEvent();
+    this.initCkeditor(this.validate);
   }
 
   initEvent() {
@@ -19,10 +21,13 @@ export default class Audio {
       window.ltc.emit('returnValidate', { valid: this.validate.form() });
     });
 
-    $('input[name=withText]').on('change', event => {
+    $('input[name="hasText"]').on('change', event => {
       let $target = $(event.currentTarget);
-      if($target.val() == 0) {
-        
+      if ($target.val() == 0) {
+        $('.js-content').hide();
+      }
+      if ($target.val() == 1) {
+        $('.js-content').show();
       }
     });
   }

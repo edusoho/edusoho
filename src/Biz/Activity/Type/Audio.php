@@ -15,16 +15,17 @@ class Audio extends Activity
      */
     public function create($fields)
     {
-        if (empty($fields['media'])) {
+        if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
             throw $this->createInvalidArgumentException('参数不正确');
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw $this->createInvalidArgumentException('media参数不正确');
         }
         $media['mediaId'] = $media['id'];
         $audio = ArrayToolkit::parts($media, array('mediaId'));
+        $audio['hasText'] = $fields['hasText'];
         $audioActivity = $this->getAudioActivityDao()->create($audio);
 
         return $audioActivity;
@@ -35,6 +36,7 @@ class Audio extends Activity
         $audio = $this->getAudioActivityDao()->get($activity['mediaId']);
         $newAudio = array(
             'mediaId' => $audio['mediaId'],
+            'hasText' => $audio['hasText'],
         );
 
         return $this->getAudioActivityDao()->create($newAudio);
@@ -45,6 +47,7 @@ class Audio extends Activity
         $sourceAudio = $this->getAudioActivityDao()->get($sourceActivity['mediaId']);
         $audio = $this->getAudioActivityDao()->get($activity['mediaId']);
         $audio['mediaId'] = $sourceAudio['mediaId'];
+        $audio['hasText'] = $sourceAudio['hasText'];
 
         return $this->getAudioActivityDao()->update($audio['id'], $audio);
     }
@@ -54,17 +57,19 @@ class Audio extends Activity
      */
     public function update($targetId, &$fields, $activity)
     {
-        if (empty($fields['media'])) {
+        if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
             throw $this->createInvalidArgumentException('参数不正确');
         }
+
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw $this->createInvalidArgumentException('media参数不正确');
         }
 
         $audioActivityFields = array(
             'mediaId' => $media['id'],
+            'hasText' => $fields['hasText'],
         );
         $audioActivity = $this->getAudioActivityDao()->get($activity['mediaId']);
         if (empty($audioActivity)) {
