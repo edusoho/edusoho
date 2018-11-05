@@ -1,5 +1,5 @@
 // 转换子元素的空数组
-const treeDigger = (tree, handler, originTree=undefined, first=undefined) => {
+const treeDigger = (tree, handler, originTree = undefined, first = undefined) => {
   const isFirst = first === undefined ? true : first;
   if (!tree) return tree;
 

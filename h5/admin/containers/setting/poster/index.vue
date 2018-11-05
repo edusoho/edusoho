@@ -36,7 +36,7 @@
           <p class="pull-left section-left">链接：</p>
           <div class="section-right">
             <el-radio v-model="copyModuleData.link.type" label="course">站内课程</el-radio>
-            <el-radio v-model="copyModuleData.link.type" label="url">自定义链接</el-radio>
+            <el-radio v-if="pathName === 'h5Setting'" v-model="copyModuleData.link.type" label="url">自定义链接</el-radio>
           </div>
         </div>
         <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'course'">
@@ -93,6 +93,7 @@ export default {
         'responsive',
         'size-fit',
       ],
+      pathName: this.$route.name,
     }
   },
   props: {
@@ -128,9 +129,13 @@ export default {
       set() {}
     },
     courseLinkText() {
-      if (!this.courseSets[0]) return
-
-      return this.courseSets[0].displayedTitle;
+      if (this.courseSets[0]) {
+        return this.courseSets[0].displayedTitle;
+      }
+      if (this.copyModuleData.link.target.title) {
+        return this.copyModuleData.link.target.title;
+      }
+      return;
     }
   },
   watch: {
@@ -169,14 +174,18 @@ export default {
       Api.uploadFile({
           data: formData
         })
-        .then((data) => {
+        .then(data => {
+          if (this.pathName !== 'h5Setting') {
+            // 小程序后台替换图片协议
+            data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://');
+          }
           this.copyModuleData.image = data;
           this.$message({
             message: '图片上传成功',
             type: 'success'
           });
         })
-        .catch((err) => {
+        .catch(err => {
           this.$message({
             message: err.message,
             type: 'error'
@@ -196,14 +205,15 @@ export default {
       this.moduleData.data.link.target = {
         id: courses[0].id,
         title: courses[0].title || courses[0].courseSetTitle,
+        courseSetId: courses[0].courseSet.id,
       };
     },
     removeCourseLink() {
       this.courseSets = [];
+      this.$set(this.copyModuleData.link, 'target', {});
     },
     handleClose() {
       this.removeCourseLink();
-      this.linkTextShow = false;
     },
   }
 }

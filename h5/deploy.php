@@ -10,7 +10,7 @@ set('git_tty', false); // [Optional] Allocate tty for git on first deployment
 set('writable_mode', 'acl');
 
 
-host('115.231.100.54')
+host('124.160.104.77')
     ->stage('dev')
     ->user('deployer')
     ->identityFile('~/.ssh/deployerkey')

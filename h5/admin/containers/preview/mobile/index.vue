@@ -1,7 +1,10 @@
 <template>
   <div class="find-page">
     <div class="find-page__part" v-for="part in parts">
-      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
+      <e-swipe
+        v-if="part.type == 'slide_show'"
+        :slides="part.data"
+        :feedback="feedback"></e-swipe>
       <e-course-list
         v-if="part.type == 'course_list'"
         :courseList="part.data"
@@ -18,6 +21,7 @@
 </template>
 
 <script>
+  import pathName2Portal from '@admin/utils/api-portal-config';
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
@@ -42,16 +46,17 @@
           'responsive',
           'size-fit',
         ],
+        from: this.$route.query.from,
       };
     },
     created() {
       this.getDraft({
-        portal: 'h5',
+        portal: pathName2Portal[this.from],
         type: 'discovery',
         mode: 'draft',
-      }).then((res) => {
+      }).then(res => {
         this.parts = Object.values(res);
-      }).catch((err) => {
+      }).catch(err => {
         console.log(err, 'error');
       });
     },

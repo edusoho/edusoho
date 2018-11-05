@@ -76,6 +76,7 @@
         },
         imageCropped: false,
         dialogVisible: false,
+        pathName: this.$route.name,
       };
     },
     computed: {
@@ -85,17 +86,24 @@
     },
     watch: {
       courseSets(sets) {
-        console.log(sets, 'courseSets')
+        console.log(sets[0], 'courseSets')
         if (sets.length) {
           this.item.link.target = {
             id: sets[0].id,
             title: sets[0].title,
+            courseSetId: sets[0].courseSetId,
             displayedTitle: sets[0].displayedTitle
           }
         } else {
           this.item.link.target = {};
         }
       }
+    },
+    created() {
+      if (this.item.link.type === 'course') {
+        return;
+      }
+      this.item.link.type = 'course'; // 修复默认数据中type为 url 的bug
     },
     methods: {
       beforeUpload(file) {
@@ -145,7 +153,11 @@
         Api.uploadFile({
           data: formData
         })
-        .then((data) => {
+        .then(data => {
+          if (this.pathName !== 'h5Setting') {
+            // 小程序后台替换图片协议
+            data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://');
+          }
           this.item.image = data;
           this.$emit('selected',
           {

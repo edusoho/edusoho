@@ -122,7 +122,7 @@ export default {
           }
           const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
           const jumpAction = () => {
-            this.$router.push({name: redirect});
+            this.$router.push({path: redirect});
           }
           setTimeout(jumpAction, 3000);
         } else {

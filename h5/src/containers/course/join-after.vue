@@ -34,7 +34,7 @@
         <div class="segmentation"></div>
         <!-- 课程介绍 -->
         <e-panel title="课程介绍">
-          <div v-html="details.courseSet.summary"></div>
+          <div v-html="summary"></div>
         </e-panel>
         <div class="segmentation"></div>
 
@@ -62,14 +62,17 @@ export default {
     }
   },
   computed: {
+    ...mapState('course', {
+      selectedPlanId: state => state.selectedPlanId,
+    }),
     progress () {
       if(!Number(this.details.publishedTaskNum)) return '0%';
 
       return parseInt(this.details.progress.percent)+'%';
     },
-    ...mapState('course', {
-      selectedPlanId: state => state.selectedPlanId,
-    })
+    summary () {
+      return  this.details.summary || this.details.courseSet.summary;
+    }
   },
   watch: {
     selectedPlanId: (val, oldVal) => {

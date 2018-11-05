@@ -7,16 +7,16 @@ const config = [
   }, {
     // 后台配置保存
     name: 'saveDraft',
-    headers:{
+    headers: {
       'Content-Type': 'application/json'
     },
     url: '/pages/{portal}/settings',
-    method: 'POST',
+    method: 'POST'
   }, {
     // 删除后台配置
     name: 'deleteDraft',
     url: '/pages/{portal}/settings/{type}',
-    method: 'DELETE',
+    method: 'DELETE'
   }, {
     // 上传文件
     name: 'uploadFile',
@@ -31,12 +31,12 @@ const config = [
     // 获取课程列表数据
     name: 'getCourseList',
     url: '/courses',
-    method: 'GET',
+    method: 'GET'
   }, {
     // 获得二维码
     name: 'getQrcode',
     url: '/qrcode/{route}',
-    method: 'GET',
+    method: 'GET'
     // noPrefix: true,
   }
 ];

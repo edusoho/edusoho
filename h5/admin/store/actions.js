@@ -10,46 +10,46 @@ export const getCategories = ({ commit }) => Api.getCategories({
   query: {
     groupCode: 'course'
   }
-}).then((res) => {
-  res.unshift({id: '0', children: undefined, name: '全部'});
-  const formatedRes = treeDigger(res, (children) => {
+}).then(res => {
+  res.unshift({ id: '0', children: undefined, name: '全部' });
+  const formatedRes = treeDigger(res, children => {
     if (!children.length) {
       children = undefined;
     }
     return children;
-  })
+  });
   commit(types.GET_CATEGORIES, formatedRes);
   return formatedRes;
-})
+});
 
 
 export const getDraft = ({ commit }, { portal, type, mode }) => Api.getDraft({
   query: {
     portal,
-    type,
+    type
   },
   params: {
-    mode,
+    mode
   }
 });
 
 export const deleteDraft = ({ commit }, { portal, type, mode }) => Api.deleteDraft({
   query: {
     portal,
-    type,
+    type
   },
   params: {
-    mode,
+    mode
   }
 });
 
 export const saveDraft = ({ commit }, { portal, type, mode, data }) => Api.saveDraft({
   params: {
     type,
-    mode,
+    mode
   },
   query: { portal },
-  data,
+  data
 });
 
 export const getCourseList = ({ commit }, params) => Api.getCourseList({
@@ -58,11 +58,11 @@ export const getCourseList = ({ commit }, params) => Api.getCourseList({
 
 export const getQrcode = ({ commit }, { route, preview, times, duration }) => Api.getQrcode({
   query: {
-    route,
+    route
   },
   params: {
     preview,
     times,
-    duration,
-  },
+    duration
+  }
 });
