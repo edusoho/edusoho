@@ -17,7 +17,6 @@ class MarketingController extends BaseController
             throw new BadRequestHttpException('params missed', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getUserService()->getUser($params['userId']);
-        $user['verifiedMobile'] = '15068832319';
         if (empty($user) || empty($user['verifiedMobile'])) {
             throw $this->createNotFoundException('user or mobile not found');
         }

@@ -55,9 +55,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             }
 
             if (in_array($discoverySetting['type'], array('groupon'))) {
-                $developerSetting = $this->getSettingService()->get('developer', array());
-                $marketingDomain = !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
-                $discoverySetting['data']['url'] = $marketingDomain.'/h5/a/groupon/show/'.$discoverySetting['data']['activity']['id'];
+                $activity = $discoverySetting['data']['activity'];
+                global $kernel;
+                $url = $kernel->getContainer()->get('router')->generate('marketing_activity', array('activityId' => $activity['id']), true);
+                $discoverySetting['data']['url'] = $url;
             }
         }
 
