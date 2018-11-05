@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\Converter;
 class MarketingActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'owner_price', 'member_price', 'shared_picture', 'created_time', 'start_time', 'end_time',
+        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'owner_price', 'member_price', 'item_cover', 'created_time', 'start_time', 'end_time',
     );
 
     protected function publicFields(&$data)
@@ -23,8 +23,8 @@ class MarketingActivityFilter extends Filter
             $data['memberPrice'] = $data['member_price'];
             unset($data['member_price']);
         }
-        $data['cover'] = $data['shared_picture'];
-        unset($data['shared_picture']);
+        $data['cover'] = $data['item_cover'];
+        unset($data['item_cover']);
         $data['createdTime'] = Converter::timestampToDate($data['created_time']);
         unset($data['created_time']);
         $data['startTime'] = Converter::timestampToDate($data['start_time']);
