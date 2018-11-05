@@ -25,11 +25,11 @@ class MarketingActivityFilter extends Filter
         }
         $data['cover'] = $data['item_cover'];
         unset($data['item_cover']);
-        $data['createdTime'] = Converter::timestampToDate($data['created_time']);
+        $data['createdTime'] = Converter::timestampToDate((int) $data['created_time']);
         unset($data['created_time']);
-        $data['startTime'] = Converter::timestampToDate($data['start_time']);
+        $data['startTime'] = Converter::timestampToDate((int) $data['start_time']);
         unset($data['start_time']);
-        $data['endTime'] = Converter::timestampToDate($data['end_time']);
+        $data['endTime'] = Converter::timestampToDate((int) $data['end_time']);
         unset($data['end_time']);
     }
 }
