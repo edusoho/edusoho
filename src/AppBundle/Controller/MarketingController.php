@@ -13,7 +13,7 @@ class MarketingController extends BaseController
     public function activityAction(Request $request, $activityId)
     {
         $params = $request->query->all();
-        if (!ArrayToolkit::requireds($params, array('userId', 'domainUri'))) {
+        if (!ArrayToolkit::requireds($params, array('userId', 'domainUri', 'source'))) {
             throw new BadRequestHttpException('params missed', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getUserService()->getUser($params['userId']);
@@ -27,6 +27,7 @@ class MarketingController extends BaseController
                 'activityId' => $activityId,
                 'mobile' => $user['verifiedMobile'],
                 'domainUri' => $params['domainUri'],
+                'source' => $params['source'],
             )
         );
 
