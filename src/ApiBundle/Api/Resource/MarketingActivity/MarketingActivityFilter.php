@@ -13,14 +13,14 @@ class MarketingActivityFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        $data['originPrice'] = $data['item_origin_price'];
+        $data['originPrice'] = $data['item_origin_price']/100;
         unset($data['item_origin_price']);
         if (isset($data['owner_price'])) {
-            $data['ownerPrice'] = $data['owner_price'];
+            $data['ownerPrice'] = $data['owner_price']/100;
             unset($data['owner_price']);
         }
         if (isset($data['member_price'])) {
-            $data['memberPrice'] = $data['member_price'];
+            $data['memberPrice'] = $data['member_price']/100;
             unset($data['member_price']);
         }
         $data['cover'] = $data['item_cover'];
