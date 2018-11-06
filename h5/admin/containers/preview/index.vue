@@ -20,7 +20,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import mobilePreview from './mobile'
-import pathName2Portal from '@admin/utils/api-portal-config';
+import pathName2Portal from '@admin/config/api-portal-config';
 
 export default {
   data() {

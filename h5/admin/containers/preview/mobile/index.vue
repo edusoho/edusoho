@@ -14,6 +14,10 @@
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
         :feedback="feedback"></e-poster>
+      <e-groupon
+        v-if="part.type == 'groupon'"
+        :tag="part.data.tag"
+        :activity="part.data.activity"></e-groupon>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"></div>
@@ -21,10 +25,11 @@
 </template>
 
 <script>
-  import pathName2Portal from '@admin/utils/api-portal-config';
+  import pathName2Portal from '@admin/config/api-portal-config';
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
+  import groupon from '@/containers/components/e-marketing/e-groupon';
   import { mapActions } from 'vuex';
 
   export default {
@@ -32,6 +37,7 @@
       'e-course-list': courseList,
       'e-swipe': swipe,
       'e-poster': poster,
+      'e-groupon': groupon,
     },
     props: {
       feedback: {

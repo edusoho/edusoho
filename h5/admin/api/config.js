@@ -33,6 +33,11 @@ const config = [
     url: '/courses',
     method: 'GET'
   }, {
+    // 微营销活动列表数据
+    name: 'getMarketingList',
+    url: '/marketing_activities',
+    methods: 'GET'
+  }, {
     // 获得二维码
     name: 'getQrcode',
     url: '/qrcode/{route}',
