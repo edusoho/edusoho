@@ -7162,6 +7162,7 @@ admin.magic_setting.learn_time_sec: 学习时长上报周期
 admin.magic_setting.learn_time_sec_tip: 秒为单位
 admin.magic_setting.watch_time_sec: 视频观看时长上报周期
 admin.magic_setting.watch_time_sec_tip: 秒为单位
+admin.magic_setting.site_trace_enable: piwik跟踪的开关
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭

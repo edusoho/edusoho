@@ -5841,6 +5841,7 @@ admin.magic_setting.learn_time_sec: learn time report cycle
 admin.magic_setting.learn_time_sec_tip: second
 admin.magic_setting.watch_time_sec: watch time report cycle
 admin.magic_setting.watch_time_sec_tip: second
+admin.magic_setting.site_trace_enable: enable site trace
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
