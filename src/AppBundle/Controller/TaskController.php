@@ -333,6 +333,8 @@ class TaskController extends BaseController
             $data['valid'] = 0;
         }
 
+        $this->getTaskResultService()->updateTaskResult($result['id'], array('lastLearnTime' => isset($data['lastLearnTime']) ?: 0));
+
         return $this->createJsonResponse(
             array(
                 'result' => $result,

@@ -4,9 +4,19 @@ import 'postal.xframe';
 
 export default class TaskPipe {
   constructor(element) {
+    const iframeDom = document.getElementById('task-content-iframe');
+    iframeDom.onload = () => {
+        const $target = $('#task-content-iframe').contents().find('#lesson-video-content');
+        this.userId = $target.data('userId');
+        this.fileId = $target.data('fileId');
+    };
     this.element = $(element);
     this.eventUrl = this.element.data('eventUrl');
     this.learnTimeSec = this.element.data('learnTimeSec');
+    if (parseInt(this.element.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
+        DurationStorage.set(this.userId, this.fileId, this.element.data('lastLearnTime'));
+    }
+    this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -68,7 +78,7 @@ export default class TaskPipe {
   }
 
   _flush() {
-    let ajax = $.post(this.eventUrl, {data: {lastTime: this.lastTime, events: this.eventDatas}})
+    let ajax = $.post(this.eventUrl, {data: {lastTime: this.lastTime, lastLearnTime: this.lastLearnTime, events: this.eventDatas}})
       .done((response) => {
         this._publishResponse(response);
         this.eventDatas = {};
