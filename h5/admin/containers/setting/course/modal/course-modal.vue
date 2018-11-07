@@ -154,7 +154,7 @@ export default {
       }
       if (this.type !== 'course') {
         this.getMarketingList({
-          name_like: queryString,
+          name: queryString,
           statuses: 'ongoing,unstart',
           type: this.type,
         }).then(res => {
