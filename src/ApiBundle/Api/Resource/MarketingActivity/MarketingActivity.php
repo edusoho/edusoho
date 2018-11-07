@@ -31,6 +31,10 @@ class MarketingActivity extends AbstractResource
     public function fillParams($request)
     {
         $conditions = $request->query->all();
+        if (isset($conditions['name'])) {
+            $conditions['name_like'] = $conditions['name'];
+            unset($conditions['name']);
+        }
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions['page'] = ceil(($offset + 1) / $limit);
         $conditions['limit'] = $limit;
