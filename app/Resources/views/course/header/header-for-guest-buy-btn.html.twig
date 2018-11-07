@@ -10,8 +10,14 @@
     {% if isLearnExpired %} {# 如果超过课程学习有效期 #}
       {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
     {% else %} {# 如果未超过课程学习有效期 #}
-      {% if course.buyable|default(true) == false %}
-      {% else %}
+      {% if course.buyable|default(true) == false %} {# 如果课程关闭了购买加入 #}
+        {% if not isVipInstalled or course.vipLevelId == 0 %} {# 如果没有装Vip插件 或者 课程没有开启会员免费加入 #}
+          {{ 'course.course_limited_tips'|trans }}
+        {% else %} {# 如果装了Vip插件 并且 课程开启了会员免费加入 #}
+          {% set canRenderJoinAndBuy =  true %}
+        {% endif %}
+      {% else %}{# 如果课程允许购买加入 #}
+        {% set canRenderJoinAndBuy =  true %}
       {% endif %}
     {% endif %}
   {% endif %} 
@@ -19,6 +25,21 @@
   {{ 'course.unbuyable.unpublished_tips'|trans }}
 {% endif %}
 
+{% if canRenderJoinAndBuy|default(false) == true %}
+  {{ slot('course.purchase.extension', {'course':course}) }} {# 会员免费学引导引导 #}
+  {% if slot('course.buy-btn.extension', {'course': course})|trim %}
+    {% set btnText = slot('course.buy-btn.extension', {'course': course}) %}
+  {% elseif course.originPrice == 0 or course.isFree %}
+    {% set btnText = 'course.btn.join' %}
+  {% else  %}
+    {% set btnText = 'course.btn.buy' %}
+  {% endif %}
+  {% if btnText is not empty %}
+    <a class="cd-btn cd-btn-primary js-buy-btn {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
+      {{ btnText|trans }}
+    </a>
+  {% endif %}
+{% endif %}
 
 
 
@@ -35,7 +56,7 @@
 {% elseif (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %}
   {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
 {% else %}
-  {{ slot('course.purchase.extension', {'course':course}) }}
+  {{ slot('course.purchase.extension', {'course':course}) }} {# 会员免费学引导引导 #}
 
 
   {% set noVipText = 1  %}
