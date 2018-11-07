@@ -1,3 +1,31 @@
+{% set isVipInstalled = is_plugin_installed('Vip') %} {# 是否安装了会员插件 #}
+{% set isCoursePublished = (course.status == 'published' and courseSet.status == 'published') %} {# 计划（course）是否已经是发布的 #}
+{% set isBuyExpired = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) %} {# 计划是否已经超过加入购买时效 #}
+{% set isLearnExpired = (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %} {# 是否已经超过学习有效期 #}
+
+{% if isCoursePublished %} {# 如果课程发布 #}
+  {% if isBuyExpired %} {# 如果超过课程加入有效期 #}
+    {{ 'course.unbuyable.over_buy_expiry_time_tips'|trans }}
+  {% else %} {# 如果未超过课程加入有效期 #}
+    {% if isLearnExpired %} {# 如果超过课程学习有效期 #}
+      {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
+    {% else %} {# 如果未超过课程学习有效期 #}
+      {% if course.buyable|default(true) == false %}
+      {% else %}
+      {% endif %}
+    {% endif %}
+  {% endif %} 
+{% else %} {# 如果课程未发布 #}
+  {{ 'course.unbuyable.unpublished_tips'|trans }}
+{% endif %}
+
+
+
+
+
+
+
+
 {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId == 0) %}
   {{ 'course.course_limited_tips'|trans }}
 {% elseif course.status != 'published' or courseSet.status != 'published' %}
