@@ -93,11 +93,11 @@ class LogReader
 
         file_put_contents($filePath, $content);
     }
-    
+
     protected function initCacheDir()
     {
         $cacheDirectory = $this->cacheDirectory;
-        if ($cacheDirectory && is_dir($cacheDirectory)) {
+        if ($cacheDirectory && !is_dir($cacheDirectory)) {
             $fs = new Filesystem();
             $fs->mkdir($cacheDirectory);
         }
