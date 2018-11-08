@@ -643,13 +643,16 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroomByCourseId($id);
-        $param = ($classroom) ? array('id' => $id, 'classroomId' => $classroom['id']) : array('id' => $id);
+        $params = array('id' => $id);
+        if ($classroom) {
+            $params['classroomId'] = $classroom['id'];
+        }
 
-        $url = $this->generateUrl('course_show', $param, true);
+        $url = $this->generateUrl('course_show', $params, true);
         if ($user->isLogin()) {
             $courseMember = $this->getMemberService()->getCourseMember($id, $user['id']);
             if ($courseMember) {
-                $url = $this->generateUrl('my_course_show', $param, true);
+                $url = $this->generateUrl('my_course_show', $params, true);
             }
         }
 
