@@ -108,12 +108,12 @@ class LogReader
     {
         $array = explode('\\', $nameSpace);
         foreach ($array as $key => $value) {
-            if ('Service' == $value) {
-                return $array[$key - 1];
+            if ('Service' == $value || 'Biz' == $value) {
+                unset($array[$key]);
             }
         }
 
-        return $nameSpace;
+        return implode(':', $array);
     }
 
     protected function getServiceName($name)
