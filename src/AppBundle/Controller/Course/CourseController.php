@@ -642,7 +642,7 @@ class CourseController extends CourseBaseController
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $host = $request->getSchemeAndHttpHost();
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($id);
 
         $url = $this->generateUrl('course_show', array('id' => $id), true);
         if ($user->isLogin()) {
@@ -652,13 +652,13 @@ class CourseController extends CourseBaseController
             }
         }
 
+        $url = ($classroom) ? $url.'?classroomId='."{$classroom['id']}" : $url;
         $token = $this->getTokenService()->makeToken(
             'qrcode',
             array(
                 'userId' => $user['id'],
                 'data' => array(
                     'url' => $url,
-                    'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}",
                 ),
                 'times' => 1,
                 'duration' => 3600,
