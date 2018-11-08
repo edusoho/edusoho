@@ -69,6 +69,10 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
+        if (empty($user['id'])) {
+            $checkMemberLevelResult = 'not_login';
+        }
+
         if ($user['id'] && $this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
@@ -567,13 +571,11 @@ class ClassroomController extends BaseController
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $host = $request->getSchemeAndHttpHost();
 
         $token = $this->getTokenService()->makeToken('qrcode', array(
             'userId' => $user['id'],
             'data' => array(
                 'url' => $this->generateUrl('classroom_show', array('id' => $id), true),
-                'appUrl' => "{$host}/mapi_v2/mobile/main#/classroom/{$id}",
             ),
             'times' => 1,
             'duration' => 3600,

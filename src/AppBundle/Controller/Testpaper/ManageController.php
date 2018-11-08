@@ -426,7 +426,11 @@ class ManageController extends BaseController
 
         $hasEssay = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
 
-        $passedScoreDefault = empty($testpaper['passedCondition']) ? ceil($testpaper['score'] * 0.6) : $testpaper['passedCondition'][0];
+        if ($hasEssay) {
+            $passedScoreDefault = empty($testpaper['passedCondition']) ? ceil($testpaper['score'] * 0.6) : $testpaper['passedCondition'][0];
+        } else {
+            $passedScoreDefault = ceil($testpaper['score'] * 0.6);
+        }
 
         $user = $this->getUser();
         $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);

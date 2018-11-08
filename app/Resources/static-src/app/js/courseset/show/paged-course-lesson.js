@@ -43,7 +43,7 @@ class PagedCourseLesson {
 
         'metas': this._toJson($hiddenActivityMetas.html()),
 
-        'currentTimeStamp': parseInt($hiddenCurrentTimestamp, 10),
+        'currentTimeStamp': parseInt($hiddenCurrentTimestamp.html(), 10),
 
         'isChapter': function(data, context) {
           return 'chapter' == data.itemType;

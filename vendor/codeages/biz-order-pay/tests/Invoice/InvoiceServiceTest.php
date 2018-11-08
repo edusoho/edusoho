@@ -2,6 +2,9 @@
 
 namespace Tests;
 
+use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Pay\Service\Impl\PayServiceImpl;
+
 class InvoiceServiceTest extends IntegrationTestCase
 {
     public function setUp()
@@ -21,8 +24,9 @@ class InvoiceServiceTest extends IntegrationTestCase
         $this->assertEquals($mockInvoice['title'], $invoice['title']);
         $this->assertEquals('unchecked', $invoice['status']);
 
-        $default = $this->getInvoiceTemplateService()->getDefaultTemplate($invoice['user_id']);
-        $this->assertNotNull($default);
+        $default = $this->getInvoiceTemplateService()->getDefaultTemplate($this->biz['user']['id']);
+
+        $this->assertNull($default);
     }
 
     /**
@@ -31,7 +35,7 @@ class InvoiceServiceTest extends IntegrationTestCase
     public function testApplyInvoiceWithWrongMoney()
     {
         $mockInvoice = $this->mockInvoice();
-        $mockInvoice['money'] = 1;
+        $mockInvoice['money'] = 2;
 
         $invoice = $this->getInvoiceService()->applyInvoice($mockInvoice);
     }
@@ -43,7 +47,7 @@ class InvoiceServiceTest extends IntegrationTestCase
     {
         $mockInvoice = $this->mockInvoice();
         $this->biz['user'] = array(
-            'id' => 2
+            'id' => 7
         );
 
         $invoice = $this->getInvoiceService()->applyInvoice($mockInvoice);
@@ -77,14 +81,15 @@ class InvoiceServiceTest extends IntegrationTestCase
         $invoice = $this->getInvoiceService()->applyInvoice($mockInvoice);
 
         $result = $this->getInvoiceService()->finishInvoice($invoice['id'], array(
+            'status' => 'sent',
             'post_number' => 'foo',
-            'review_comment' => 'bar'
+            'refuse_comment' => 'bar'
         ));
 
         $this->assertEquals($mockInvoice['title'], $result['title']);
         $this->assertEquals('sent', $result['status']);
         $this->assertEquals('foo', $result['post_number']);
-        $this->assertEquals('bar', $result['review_comment']);
+        $this->assertEquals('bar', $result['refuse_comment']);
     }
 
     public function testCountInvoices()
@@ -100,6 +105,7 @@ class InvoiceServiceTest extends IntegrationTestCase
     public function testSearchInvoices()
     {
         $mockInvoice = $this->mockInvoice();
+
         $invoice = $this->getInvoiceService()->applyInvoice($mockInvoice);
 
         $invoices = $this->getInvoiceService()->searchInvoices([], [], 0, PHP_INT_MAX);
@@ -110,11 +116,11 @@ class InvoiceServiceTest extends IntegrationTestCase
 
     protected function mockInvoice()
     {
-        $order = $this->createOrder();
+        $trades = $this->createTrade();
 
         return array(
             'title' => 'foo',
-            'type' => 'company',
+            'type' => 'vat',
             'taxpayer_identity' => '131313131313',
             'content' => '培训费',
             'comment' => 'comment eg',
@@ -122,89 +128,28 @@ class InvoiceServiceTest extends IntegrationTestCase
             'address' => 'hangzhou zhejiang',
             'phone' => '15700081111',
             'receiver' => 'tinyyywood',
-            'orderIds' => $order['id'],
-            'money' => $order['pay_amount']/100,
+            'ids' => $trades['id'],
+            'money' => 1,
         );
     }
 
-    protected function createOrder()
+    protected function createTrade()
     {
-        $mockedOrderItems = $this->mockOrderItems();
-        $mockOrder = $this->mockOrder();
-        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
-
-        return $order;
-    }
-
-    protected function mockOrderItems()
-    {
-        return array(
-            array(
-                'title' => '人工智能神经网络',
-                'detail' => '<div>独创的教学</div>',
-                'price_amount' => 100,
-                'target_id' => 1,
-                'target_type' => 'course',
-                'create_extra' => array(
-                    'xxx' => 'xxx'
-                ),
-                'deducts' => array(
-                    array(
-                        'deduct_id' => 1,
-                        'deduct_type' => 'discount',
-                        'deduct_amount' => 10,
-                        'detail' => '打折活动扣除10元'
-                    ),
-                    array(
-                        'deduct_id' => 2,
-                        'deduct_type' => 'coupon',
-                        'deduct_amount' => 8,
-                        'detail' => '使用优惠码扣除8元'
-                    )
-                )
-            ),
-            array(
-                'title' => 'F1驾驶技术',
-                'detail' => '<div>F1任丘人发生的发个</div>',
-                'price_amount' => 110,
-                'target_id' => 2,
-                'target_type' => 'course',
-                'create_extra' => array(
-                    'xxx' => 'xxx'
-                ),
-                'deducts' => array(
-                    array(
-                        'deduct_id' => 3,
-                        'deduct_type' => 'discount',
-                        'deduct_amount' => 10,
-                        'detail' => '打折活动扣除10元'
-                    ),
-                    array(
-                        'deduct_id' => 5,
-                        'deduct_type' => 'coupon',
-                        'deduct_amount' => 4,
-                        'detail' => '使用优惠码扣除4元'
-                    )
-                )
-            )
+        $data = array(
+            'title' => '人工智能神经网络1',
+            'platform' => 'alipay',
+            'trade_sn' => '2018101015062919708',
+            'order_sn' => '2018101015054845150',
+            'status' => 'paid',
+            'cash_amount' => 100,
+            'amount' => 100,
+            'type' => 'purchase',
+            'user_id' => 1,
+            'platform_sn' => '2018101022001471650587146649',
+            'price_type' => 'money',
         );
-    }
 
-    protected function mockOrder()
-    {
-        return array(
-            'title' => '购买商品',
-            'callback' => array('url'=>'http://try6.edusoho.cn/'),
-            'source' => 'custom',
-            'price_type' => 'coin',
-            'user_id' => $this->biz['user']['id'],
-            'created_reason' => '购买',
-            'create_extra' => array(
-                'xxx' => 'xxx'
-            ),
-            'device' => 'wap',
-            'expired_refund_days' => 5
-        );
+        return $this->getPayTradeDao()->create($data);
     }
 
     protected function getInvoiceService()
@@ -220,5 +165,18 @@ class InvoiceServiceTest extends IntegrationTestCase
     protected function getInvoiceTemplateService()
     {
         return $this->biz->service('Invoice:InvoiceTemplateService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Pay\Service\Impl\PayServiceImpl
+     */
+    protected function getPayService()
+    {
+        return $this->biz->service('Pay:PayService');
+    }
+
+    protected function getPayTradeDao()
+    {
+        return $this->biz->dao('Pay:PayTradeDao');
     }
 }

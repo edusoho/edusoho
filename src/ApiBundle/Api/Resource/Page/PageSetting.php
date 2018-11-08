@@ -99,7 +99,7 @@ class PageSetting extends AbstractResource
         if ('draft' == $mode && !$user->isAdmin()) {
             throw UserException::PERMISSION_DENIED();
         }
-        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode, 'setting');
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));

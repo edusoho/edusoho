@@ -86,6 +86,7 @@ class CashflowDaoImpl extends GeneralDaoImpl implements CashflowDao
                 'amount <= :amount_LTE',
                 'currency = :currency',
                 'order_sn = :order_sn',
+                'trade_sn IN (:trade_sns)',
                 'trade_sn = :trade_sn',
                 'platform = :platform',
                 'amount_type = :amount_type',

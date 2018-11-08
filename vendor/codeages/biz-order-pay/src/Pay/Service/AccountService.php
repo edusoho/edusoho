@@ -2,28 +2,12 @@
 
 namespace Codeages\Biz\Pay\Service;
 
-use Biz\System\Annotation\Log;
-
 interface AccountService
 {
-    /**
-     * @param $userId
-     * @param $password
-     *
-     * @return mixed
-     * @Log(module="user",action="pay-password-changed",serviceName="User:UserService",funcName="getUser",param="userId")
-     */
     public function setPayPassword($userId, $password);
 
     public function validatePayPassword($userId, $password);
 
-    /**
-     * @param $userId
-     * @param $answers
-     *
-     * @return mixed
-     * @Log(module="user",action="password-security-answers",serviceName="User:UserService",funcName="getUser",param="userId")
-     */
     public function setSecurityAnswers($userId, $answers);
 
     public function findSecurityAnswersByUserId($userId);
@@ -45,7 +29,7 @@ interface AccountService
     public function lockCoin($userId, $coinAmount);
 
     public function releaseCoin($userId, $coinAmount);
-
+    
     public function transferCoin($fields);
 
     public function transferCash($fields);

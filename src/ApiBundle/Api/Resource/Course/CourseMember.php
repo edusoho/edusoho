@@ -79,7 +79,20 @@ class CourseMember extends AbstractResource
             throw new BadRequestHttpException($e->getMessage(), $e, $e->getCode());
         }
 
-        return $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
+        $member = $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
+        if (!empty($member)) {
+            $this->getLogService()->info('course', 'join_course', "加入 教学计划《{$course['title']}》", array('courseId' => $course['id'], 'title' => $course['title']));
+        }
+
+        return $member;
+    }
+
+    /**
+     * @return \Biz\System\Service\Impl\LogServiceImpl
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 
     /**

@@ -827,14 +827,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSetDefaultCourseId($id)
     {
-        //获取第一个创建的
-        $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
+        //获取发布课程中排序第一位的教学计划
+        $publishedCourse = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+
+        //如果不存在则取第一个未发布的课程
+        $course = $publishedCourse ?: $this->getCourseService()->getFirstCourseByCourseSetId($id);
 
         if (empty($course)) {
             $this->createNewException(CourseSetException::NO_COURSE());
         }
         $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
-        $this->getCourseService()->setDefaultCourse($id, $course['id']);
     }
 
     public function updateMaxRate($id, $maxRate)

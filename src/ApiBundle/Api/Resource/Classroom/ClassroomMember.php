@@ -36,7 +36,20 @@ class ClassroomMember extends AbstractResource
     {
         $this->getClassroomService()->tryFreeJoin($classroom['id']);
 
-        return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
+        if (!empty($member)) {
+            $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", array('classroomId' => $classroom['id'], 'title' => $classroom['title']));
+        }
+
+        return $member;
+    }
+
+    /**
+     * @return \Biz\System\Service\Impl\LogServiceImpl
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 
     /**

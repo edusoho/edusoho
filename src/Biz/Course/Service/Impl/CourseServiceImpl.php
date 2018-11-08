@@ -2297,7 +2297,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return;
         }
 
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $count = $this->searchCourseCount(
             array(
                 'courseSetId' => $courseSetId,
@@ -2316,7 +2316,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
-        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
+        $this->dispatch('courseSet.courses.sort', new Event($courseSet, array(
+            'courseIds' => $ids,
+        )));
     }
 
     public function changeHidePublishLesson($courseId, $status)
