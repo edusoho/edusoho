@@ -15,12 +15,14 @@ class MeMarketingActivity extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $this->fillParams($request);
+        $systemUser = $this->getUserService()->getUserByType('system');
+        $this->getMarketingPlatformService()->simpleLogin($systemUser['id']);
         $client = MarketingAPIFactory::create();
 
         return $client->get(
             '/user_activities',
             $conditions,
-            array('MERCHANT-USER-ID: 2')
+            array('MERCHANT-USER-ID: '.$systemUser['id'])
         );
     }
 
@@ -34,5 +36,15 @@ class MeMarketingActivity extends AbstractResource
         $conditions['mobile'] = $user['verifiedMobile'];
 
         return $conditions;
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
+    protected function getMarketingPlatformService()
+    {
+        return $this->service('Marketing:MarketingPlatformService');
     }
 }
