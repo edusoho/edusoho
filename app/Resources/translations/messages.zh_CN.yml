@@ -7162,6 +7162,7 @@ admin.magic_setting.learn_time_sec: 学习时长上报周期
 admin.magic_setting.learn_time_sec_tip: 秒为单位
 admin.magic_setting.watch_time_sec: 视频观看时长上报周期
 admin.magic_setting.watch_time_sec_tip: 秒为单位
+admin.magic_setting.site_trace_enable: piwik跟踪的开关
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8393,6 +8394,7 @@ log.action.course.delete_course: 删除教学计划
 log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
+log.action.course.join_course: 加入教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -8482,6 +8484,7 @@ log.action.classroom.cancel_recommend: 取消推荐
 log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
+log.action.classroom.join_classroom: 加入班级
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -8575,6 +8578,7 @@ log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%
 log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成录播回放
 log.action.live.delete_live_activity: 删除直播活动
+log.action.mobile.face_login: 人脸识别登录
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -8612,6 +8616,7 @@ log.action.template.course.update_task: 更新了任务《%title%》
 log.action.template.course.update_draft: 更新了草稿《%title%》
 log.action.template.course.recommend: 推荐了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.cancel_recommend: 取消了推荐<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.join_course: 加入教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》
@@ -8625,6 +8630,7 @@ log.action.template.classroom.add_student: 在<strong class="color-success">班�
 log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
+log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.category.create: 新建了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.delete: 删除了<strong class="color-success">分类</strong> 《%title%》
 log.action.template.category.update: 修改了<strong class="color-success">分类</strong> 《%title%》

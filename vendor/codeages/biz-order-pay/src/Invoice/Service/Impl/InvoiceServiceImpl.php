@@ -7,7 +7,6 @@ use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Invoice\Service\InvoiceService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
-
 class InvoiceServiceImpl extends BaseService implements InvoiceService
 {
     public function getInvoice($id)
@@ -15,26 +14,24 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $this->getInvoiceDao()->get($id);
     }
 
+    public function getInvoiceBySn($sn)
+    {
+        return $this->getInvoiceDao()->getBySn($sn);
+    }
+
     public function applyInvoice($apply)
     {
         $apply = $this->prepareApply($apply);
 
-        $orders = $this->tryApplyInvoice($apply);
+        $trades = $this->tryApplyInvoice($apply);
 
         try {
             $this->biz['db']->beginTransaction();
 
-            //update my invoice template
-            if (!empty($apply['templateId'])) {
-                $this->getInvoiceTemplateService()->updateInvoiceTemplate($apply['templateId'], $apply);
-            } else {
-                $this->getInvoiceTemplateService()->createInvoiceTemplate($apply);
-            }
-
             $apply = $this->createInvoice($apply);
 
-            foreach ($orders as $order) {
-                $this->getOrderService()->updateOrderInvoiceSnByOrderId($order['id'], $apply['sn']);
+            foreach ($trades as $trade) {
+                $this->getPayTradeService()->setTradeInvoiceSnById($trade['id'], $apply['sn']);
             }
 
             $this->biz['db']->commit();
@@ -51,7 +48,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         $user = $this->biz['user'];
         $apply['user_id'] = $user['id'];
 
-        $apply['orderIds'] = explode('|', $apply['orderIds']);
+        $apply['ids'] = explode(',', $apply['ids']);
 
         $apply['money'] *= 100;
 
@@ -67,37 +64,37 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
 
     protected function tryApplyInvoice($apply)
     {
-        $orders = $this->getOrderService()->findOrdersByIds($apply['orderIds']);
+        $trades = $this->getPayTradeService()->findTradesByIds($apply['ids']);
 
         $user = $this->biz['user'];
 
         $money = 0;
-        foreach ($orders as $key => $order) {
-            if ($user['id'] != $order['user_id'] ) {
+        foreach ($trades as $key => $trade) {
+            if ($user['id'] != $trade['user_id']) {
                 throw new AccessDeniedException('order owner is invalid');
             }
 
-            if (!empty($order['invoice_sn'])) {
+            if (!empty($trade['invoice_sn'])) {
                 throw new AccessDeniedException('order invoiced');
             }
 
-            $money += $order['pay_amount'];
+            $money += $trade['cash_amount'];
         }
 
         if ($apply['money'] != $money) {
             throw new AccessDeniedException('The application amount does not match the order amount');
         }
 
-        return $orders;
+        return $trades;
     }
 
     protected function createInvoice($apply)
     {
-        if (!ArrayToolkit::requireds($apply, array('title', 'type', 'address', 'phone', 'email', 'receiver', 'money', 'sn'))) {
+        if (!ArrayToolkit::requireds($apply, array('title', 'type', 'money', 'sn'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
-        $apply = ArrayToolkit::parts($apply, array('title', 'type', 'taxpayer_identity', 'comment', 'address', 'phone', 'email', 'receiver', 'money', 'user_id', 'sn'));
+        $apply = ArrayToolkit::parts($apply, array('title', 'type', 'taxpayer_identity', 'content', 'comment', 'address', 'company_address', 'company_mobile', 'email', 'phone', 'receiver', 'money', 'user_id', 'sn', 'bank', 'account'));
 
         $apply = $this->getInvoiceDao()->create($apply);
 
@@ -107,7 +104,6 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
     public function finishInvoice($id, $fields)
     {
         $finishFields = array(
-            'status' => 'sent',
             'review_user_id' => $this->biz['user']['id'],
         );
 
@@ -129,7 +125,12 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'review_user_id' => 0,
             'number' => '',
             'post_number' => '',
-            'review_comment' => ''
+            'post_name' => '',
+            'refuse_comment' => '',
+            'company_address' => '',
+            'company_mobile' => '',
+            'bank' => '',
+            'account' => ','
         ));
 
         $invoice = $this->getInvoiceDao()->update($id, $fields);
@@ -152,11 +153,22 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $this->biz->service('Order:OrderService');
     }
 
+    /**
+     * @return \Codeages\Biz\Pay\Service\Impl\PayServiceImpl
+     */
+    protected function getPayTradeService()
+    {
+        return $this->biz->service('Pay:PayService');
+    }
+
     protected function getInvoiceDao()
     {
         return $this->biz->dao('Invoice:InvoiceDao');
     }
 
+    /**
+     * @return \Codeages\Biz\Invoice\Service\Impl\InvoiceTemplateServiceImpl
+     */
     protected function getInvoiceTemplateService()
     {
         return $this->biz->service('Invoice:InvoiceTemplateService');
