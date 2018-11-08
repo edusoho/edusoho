@@ -1,6 +1,7 @@
 import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
+import DurationStorage from '../../../common/duration-storage';
 
 export default class TaskPipe {
   constructor(element) {
