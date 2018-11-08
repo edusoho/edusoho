@@ -42,7 +42,7 @@
                 <th width="25%">{{'course.testpaper_manage.question.operation'|trans}}</th>
               </tr>
               </thead>
-              <tbody id="question-table-tbody" >
+              <tbody class="js-homework-table" id="question-table-tbody">
               {% if questions|default(null) %}
                 {% for key,questionItem in questionItems %}
                   {% set questionId = questionItem.questionId %}

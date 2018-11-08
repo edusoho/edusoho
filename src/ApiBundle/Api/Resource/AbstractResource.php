@@ -44,6 +44,11 @@ abstract class AbstractResource
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
+    public function getWebExtension()
+    {
+        return $this->container->get('web.twig.extension');
+    }
+
     public function renderView($view, array $parameters = array())
     {
         return $this->container->get('templating')->render($view, $parameters);

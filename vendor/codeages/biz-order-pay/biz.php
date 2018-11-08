@@ -26,6 +26,7 @@ $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
 $biz->register(new \Codeages\Biz\Order\OrderServiceProvider());
 $biz->register(new \Codeages\Biz\Pay\PayServiceProvider());
+$biz->register(new \Codeages\Biz\Invoice\InvoiceServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), [
     'monolog.logfile' => $biz['log_dir'].'/biz.log',
 ]);
