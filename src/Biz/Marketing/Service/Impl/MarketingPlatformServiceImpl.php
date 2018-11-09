@@ -27,6 +27,19 @@ class MarketingPlatformServiceImpl extends BaseService implements MarketingPlatf
         );
     }
 
+    public function getActivity($activityId)
+    {
+        $systemUser = $this->getUserService()->getUserByType('system');
+        $this->simpleLogin($systemUser['id']);
+        $client = $this->getMarketingAPIClient();
+
+        return $client->get(
+            '/activities/'.$activityId,
+            array(),
+            array('MERCHANT-USER-ID: '.$systemUser['id'])
+        );
+    }
+
     protected function getMarketingAPIClient()
     {
         return MarketingAPIFactory::create();
