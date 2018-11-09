@@ -163,6 +163,7 @@ class SystemInitializerTest extends BaseTestCase
             'CheckConvertStatusJob',
             'updateCourseSetHotSeq',
             'UpdateLiveStatusJob',
+            'CloudConsultFreshJob',
             ), ArrayToolkit::column($result, 'name'));
     }
 
