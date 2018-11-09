@@ -233,6 +233,6 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     protected function getMarketingPlatformService()
     {
-        return $this->service('Marketing:MarketingPlatformService');
+        return $this->biz->service('Marketing:MarketingPlatformService');
     }
 }
