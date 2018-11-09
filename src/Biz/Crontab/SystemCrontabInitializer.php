@@ -92,6 +92,7 @@ class SystemCrontabInitializer
         $xapiRandNum2 = rand(1, 59);
         $xapiRandNum3 = rand(1, 59);
         $consultRandNum = rand(1, 59);
+        $consultHourRandNum = rand(0, 6);
         $jobMap = array(
             'Order_FinishSuccessOrdersJob' => array(
                 'expression' => '20 * * * *',
@@ -186,7 +187,7 @@ class SystemCrontabInitializer
                 'misfire_threshold' => 300,
             ),
             'CloudConsultFreshJob' => array(
-                'expression' => "{$consultRandNum} 0 * * *",
+                'expression' => "{$consultRandNum} {$consultHourRandNum} * * *",
                 'class' => 'Biz\CloudPlatform\Job\CloudConsultFreshJob',
                 'misfire_policy' => 'executing',
             ),
