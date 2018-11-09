@@ -38,6 +38,7 @@ class MarketingActivity extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions['page'] = ceil(($offset + 1) / $limit);
         $conditions['limit'] = $limit;
+        $conditions['is_set_rule'] = 1;
 
         return $conditions;
     }
