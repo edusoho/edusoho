@@ -37,6 +37,7 @@ class Show {
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
+    this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
 
     this.initView();
     this.initEvent();
@@ -86,7 +87,8 @@ class Show {
         resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
-        autoplay: this.autoplay
+        autoplay: this.autoplay,
+        lastlearntime:this.lastLearnTime
       }
     );
   }
@@ -149,6 +151,8 @@ class Show {
       }
     });
 
+   
+
     player.on('answered', (data) => {
       let regExp = /course\/(\d+)\/task\/(\d+)\//;
       let matches = regExp.exec(window.location.href);
@@ -176,6 +180,8 @@ class Show {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
         }
+      } else {
+        DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
       }
     });
 

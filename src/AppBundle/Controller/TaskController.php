@@ -327,13 +327,12 @@ class TaskController extends BaseController
 
         if (!empty($data['events']) || $this->validTaskLearnStat($request, $id)) {
             $result = $this->getTaskService()->trigger($id, $eventName, $data);
+            $result = $this->getTaskResultService()->updateTaskResult($result['id'], array('lastLearnTime' => isset($data['lastLearnTime']) ? $data['lastLearnTime'] : 0));
             $data['valid'] = 1;
         } else {
             $result = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
             $data['valid'] = 0;
         }
-
-        $this->getTaskResultService()->updateTaskResult($result['id'], array('lastLearnTime' => isset($data['lastLearnTime']) ?: 0));
 
         return $this->createJsonResponse(
             array(

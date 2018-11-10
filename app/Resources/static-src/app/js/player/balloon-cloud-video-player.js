@@ -102,6 +102,10 @@ class BalloonCloudVideoPlayer extends Emitter {
       self.emit('timechange', e);
     });
 
+    player.on('firstplay', function (e) {
+      player.setCurrentTime(self.options.lastlearntime);
+    });
+
     player.on('ended', function(e) {
       self.emit('ended', e);
     });
