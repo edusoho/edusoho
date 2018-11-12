@@ -9,7 +9,7 @@
       <div class="context-sale">
         <div class="context-sale__sale-price">{{ activity.memberPrice || '00.00' }} 元</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</div>
-        <a class="context-sale__shopping" href="javascript:;">去拼团</a>
+        <a class="context-sale__shopping" :class="activity.status" href="javascript:;">{{ grounponStatus[activity.status] }}</a>
       </div>
     </div>
   </div>
@@ -30,7 +30,11 @@ export default {
   },
   data () {
     return {
-
+      grounponStatus: {
+        unstart: '活动未开始',
+        ongoing: '去拼团',
+        closed: '活动已结束'
+      }
     }
   }
 }

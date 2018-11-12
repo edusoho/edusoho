@@ -61,10 +61,19 @@ $tag-color: #FF5722;
       &__shopping {
         float: right;
         padding: vw(6) vw(16);
-        background: #FF9800;
         color: #FFFFFF;
         font-size: vw(14);
         border-radius: vw(2);
+        &.unstart {
+          background: #FF9800;
+          opacity: 0.4;
+        }
+        &.ongoing {
+          background: #FF9800;
+        }
+        &.closed {
+          background: #E1E1E1;
+        }
       }
     }
   }
