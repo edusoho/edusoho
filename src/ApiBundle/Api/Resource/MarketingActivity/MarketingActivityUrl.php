@@ -21,17 +21,22 @@ class MarketingActivityUrl extends AbstractResource
             throw $this->createNotFoundException('mobile not found');
         }
         $client = MarketingAPIFactory::create('/h5');
+        try {
+            $activityUrl = $client->post(
+                '/activity_by_mobile',
+                array(
+                    'activityId' => $activityId,
+                    'mobile' => $user['verifiedMobile'],
+                    'domainUri' => $params['domainUri'],
+                    'itemUri' => $params['itemUri'],
+                    'source' => $params['source'],
+                    'grouponId' => $params['grouponId'],
+                )
+            );
+        } catch (\Exception $e) {
+            throw $this->createNotFoundException($e->getMessage());
+        }
 
-        return $client->post(
-            '/activity_by_mobile',
-            array(
-                'activityId' => $activityId,
-                'mobile' => $user['verifiedMobile'],
-                'domainUri' => $params['domainUri'],
-                'itemUri' => $params['itemUri'],
-                'source' => $params['source'],
-                'grouponId' => $params['grouponId'],
-            )
-        );
+        return $activityUrl;
     }
 }
