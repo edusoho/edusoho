@@ -23,6 +23,7 @@
           v-show="option.img"
           :img="option.img"
           :fixed="option.fixed"
+          :enlarge="option.enlarge"
           :autoCrop="option.autoCrop"
           :fixedNumber="option.fixedNumber"
           :autoCropWidth="option.autoCropWidth"
@@ -56,7 +57,7 @@
 
 <script>
   import Api from '@admin/api';
-  import VueCropper from 'vue-cropper';
+  import { VueCropper } from 'vue-cropper';
 
   export default {
     components: {
@@ -73,6 +74,8 @@
           autoCropHeight: 200,
           fixedNumber: [375, 200],
           fixed: true,
+          high: false,
+          enlarge: 2,
         },
         imageCropped: false,
         dialogVisible: false,
