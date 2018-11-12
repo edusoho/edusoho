@@ -88,6 +88,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
       remeberLastPos: true,
+      customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
       autoplay: self.options.autoplay
     });
@@ -103,7 +104,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     });
 
     player.on('firstplay', function (e) {
-      player.setCurrentTime(self.options.lastlearntime);
+      player.setCurrentTime(self.options.customPos);
     });
 
     player.on('ended', function(e) {

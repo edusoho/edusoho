@@ -89,7 +89,7 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        lastlearntime:this.lastLearnTime
+        customPos:this.lastLearnTime
       }
     );
   }
