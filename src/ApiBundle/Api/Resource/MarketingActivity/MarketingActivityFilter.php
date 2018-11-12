@@ -9,13 +9,19 @@ use Biz\Marketing\Util\MarketingUtils;
 class MarketingActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'owner_price', 'member_price', 'item_cover', 'created_time', 'start_time', 'end_time',
+        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'owner_price', 'member_price', 'item_cover', 'created_time', 'start_time', 'end_time',
     );
 
     protected function publicFields(&$data)
     {
         $data['originPrice'] = $data['item_origin_price'] / 100;
         unset($data['item_origin_price']);
+
+        $data['itemType'] = $data['item_type'];
+        unset($data['item_type']);
+        $data['itemSourceId'] = $data['item_source_id'];
+        unset($data['item_source_id']);
+
         if (isset($data['owner_price'])) {
             $data['ownerPrice'] = $data['owner_price'] / 100;
             unset($data['owner_price']);
