@@ -8,7 +8,7 @@
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}
 
-  {% if member.role|default('student') == 'teacher' %}
+  {% if member.role|default('') != 'student' %}
     {% set preview = true %}
   {% endif %}
 
