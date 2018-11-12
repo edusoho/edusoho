@@ -78,6 +78,10 @@ class UserException extends AbstractException
 
     const UNFOLLOW_ERROR = 5000136;
 
+    const IDCARD_INVALID = 5000137;
+
+    const TRUENAME_INVALID = 5000138;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -114,5 +118,7 @@ class UserException extends AbstractException
         5000134 => 'exception.user.duplicate_follow',
         5000135 => 'exception.user.roles_invalid',
         5000136 => 'exception.user.unfollow_error',
+        5000137 => 'exception.user.idcard_invalid',
+        5000138 => 'exception.user.truename_invalid',
     );
 }

@@ -49,7 +49,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Common\CommonException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testCreateTaskWhenInvalidArgument()
     {
@@ -255,7 +255,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Task\TaskException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testPublishTaskWithAccessDeniedException1()
     {
@@ -298,7 +298,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Task\TaskException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testUnpublishTaskWithAccessDeniedException1()
     {

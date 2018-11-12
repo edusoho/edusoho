@@ -114,7 +114,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Biz\Taxonomy\CategoryException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testAddCategoryWithEmptyCategoryName()
     {
@@ -128,7 +128,7 @@ class CategoryServiceTest extends BaseTestCase
      */
     public function testAddCategoryWithNotExistGroupId()
     {
-        $category = array('name' => 'name', 'code' => 'code', 'weight' => 100, 'groupId' => 100000);
+        $category = array('name' => 'name', 'code' => 'code', 'weight' => 100, 'groupId' => 100000, 'parentId' => 1);
         $this->getCategoryService()->createCategory($category);
     }
 
@@ -138,9 +138,9 @@ class CategoryServiceTest extends BaseTestCase
      */
     public function testAddCategoryWithCodeAlreayExist()
     {
-        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1);
+        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1, 'parentId' => 1);
         $this->getCategoryService()->createCategory($categoryA);
-        $categoryB = array('name' => '测试分类1', 'code' => 'code', 'weight' => 50, 'groupId' => 1);
+        $categoryB = array('name' => '测试分类1', 'code' => 'code', 'weight' => 50, 'groupId' => 1, 'parentId' => 1);
         $this->getCategoryService()->createCategory($categoryB);
     }
 
@@ -150,7 +150,7 @@ class CategoryServiceTest extends BaseTestCase
      */
     public function testGetCategory()
     {
-        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1);
+        $categoryA = array('name' => '测试分类1', 'code' => 'code', 'weight' => 100, 'groupId' => 1, 'parentId' => 1);
         $createdCategory = $this->getCategoryService()->createCategory($categoryA);
         $foundCategory = $this->getCategoryService()->getCategory($createdCategory['id']);
         $this->assertEquals($createdCategory, $foundCategory);
@@ -495,7 +495,7 @@ class CategoryServiceTest extends BaseTestCase
      */
     public function testGetCategoryTree()
     {
-        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'weight' => 100, 'groupId' => 1);
+        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'weight' => 100, 'groupId' => 1, 'parentId' => 1);
         $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
         $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'weight' => 10, 'groupId' => 1, 'parentId' => $createdCategoryA['id']);
         $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);

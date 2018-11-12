@@ -988,7 +988,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $isStudent = $this->isClassroomStudent($classroom['id'], $user['id']);
         if ($isStudent) {
-            $this->createNewException(ClassroomException::FORBIDDEN_STUDENT());
+            $this->createNewException(ClassroomException::DUPLICATE_JOIN());
         }
 
         try {

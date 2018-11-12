@@ -48,6 +48,18 @@ class CourseException extends AbstractException
 
     const FORBIDDEN_MANAGE_COURSE = 4031620;
 
+    const DUPLICATE_MEMBER = 4031621;
+
+    const CLOSED_COURSE = 5001622;
+
+    const UNBUYABLE_COURSE = 4031623;
+
+    const EXPIRED_COURSE = 5001624;
+
+    const BUY_EXPIRED = 5001625;
+
+    const REACH_MAX_STUDENT = 4031626;
+
     public $messages = array(
         4041601 => 'exception.course.not_found',
         4031602 => 'exception.course.forbidden_take_course',
@@ -69,5 +81,11 @@ class CourseException extends AbstractException
         5001618 => 'exception.course.not_match_courseset',
         5001619 => 'exception.course.chapter_type_invalid',
         4031620 => 'exception.course.forbidden_manage_course',
+        4031621 => 'exception.course.duplicate_member',
+        5001622 => 'exception.course.closed_course',
+        4031623 => 'exception.course.unbuyable_course',
+        5001624 => 'exception.course.expired_course',
+        5001625 => 'exception.course.buy_expired',
+        4031626 => 'exception.course.reach_max_student_num',
     );
 }
