@@ -61,7 +61,7 @@
       },
       teachPlan() {
         if (this.course.title) {
-          return this.course.title
+          return this.$route.query.planTitle || this.course.title
         } else {
           return false
         }

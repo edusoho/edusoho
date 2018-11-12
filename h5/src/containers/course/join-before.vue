@@ -136,13 +136,17 @@
 
         if (Number(this.details.buyable) && isPast) {
           if (+this.details.price) {
+            let expiryMode = this.details.learningExpiryDate.expiryMode;
+            let expiryScopeStr = `${this.startDateStr} — ${this.endDateStr}`;
+            let expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
             this.$router.push({
               name: 'order',
               params: {
                 id: this.details.id,
               },
               query: {
-                expiryScope: `${this.startDateStr} — ${this.endDateStr}`
+                expiryScope: expiryStr,
+                planTitle: this.details.title
               }
             });
           } else {
