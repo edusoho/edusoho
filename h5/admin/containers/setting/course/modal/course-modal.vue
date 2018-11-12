@@ -131,7 +131,7 @@ export default {
 
       if (exccedLimit) {
         this.$message({
-          message: `当前最多可选 ${this.limit} 个{{ this.unitType }}`,
+          message: `当前最多可选 ${this.limit} 个${ this.unitType }`,
           type: 'warning'
         });
         return;
@@ -154,7 +154,7 @@ export default {
       }
       if (this.type !== 'course') {
         this.getMarketingList({
-          name_like: queryString,
+          name: queryString,
           statuses: 'ongoing,unstart',
           type: this.type,
         }).then(res => {
