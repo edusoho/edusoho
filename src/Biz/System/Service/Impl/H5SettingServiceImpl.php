@@ -63,9 +63,6 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $activity = $discoverySetting['data']['activity'];
                 $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
                 $discoverySetting['data']['activity']['status'] = empty($remoteActvity) ? $discoverySetting['data']['activity']['status'] : $remoteActvity['status'];
-                global $kernel;
-                $url = $kernel->getContainer()->get('router')->generate('marketing_activity', array('activityId' => $activity['id']), true);
-                $discoverySetting['data']['url'] = $url;
             }
         }
 

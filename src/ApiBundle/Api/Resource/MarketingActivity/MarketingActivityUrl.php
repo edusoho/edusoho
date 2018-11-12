@@ -16,7 +16,6 @@ class MarketingActivityUrl extends AbstractResource
             throw new BadRequestHttpException('params missed', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getCurrentUser();
-        $user['verifiedMobile'] = '15068832319';
         if (empty($user['verifiedMobile'])) {
             throw $this->createNotFoundException('mobile not found');
         }

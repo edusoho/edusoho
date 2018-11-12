@@ -116,7 +116,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
 
     /**
      * @return array(
-     *                'defaultUrl' => 'http://wyx.marketing.com',
+     *                'defaultUrl' => 'https://wyx.marketing.com',
      *                'developerSettingName' => 'marketing_domain',
      *                );
      *                如果 developer setting 内有 相应属性，则使用该属性，否则，使用defaultUrl
@@ -124,7 +124,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
     protected function getServerUrlConfig()
     {
         return array(
-            'defaultUrl' => 'http://wyx.marketing.com',
+            'defaultUrl' => 'https://wyx.marketing.com',
             'developerSettingName' => 'marketing_domain',
         );
     }
