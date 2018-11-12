@@ -230,7 +230,7 @@
          
           {% block course_member_exit %}{% endblock %}
         </ul>
-        <div class="text-right buy-btn-group course-operation-btn">
+        <div class="text-right buy-btn-group course-operation-btn {% if classroom|default(null) %} course-classroom-tip{% endif %}">
           {% if member | default(false) %}
             {% if course.expiryMode == 'date' and course.expiryStartDate >= timestamp() %}
               {{ 'course.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':course.expiryStartDate|date('date.format'|trans)})|raw }}
@@ -240,7 +240,7 @@
               </a>
             {% endif %}
           {% else %}
-            {% if classroom | default(null) %}
+            {% if classroom|default(null) %}
               {% include 'course/header/header-for-classroom-info.html.twig' %}
             {% else %}
               {% include 'course/header/header-for-guest-buy-btn.html.twig' %}

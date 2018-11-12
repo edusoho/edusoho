@@ -551,6 +551,22 @@
     right: 10px;
     bottom: 15px;
   }
+  &.course-classroom-tip {
+    @media (max-width: @screen-xs-min) {
+      right: 4px !important;
+      bottom: 0 !important;
+      width: calc(80% - 10);
+      margin-right: 0 !important;
+      padding-left: 10px;
+      line-height: 14px !important;
+      text-align: left !important;
+      .classroom-tip-wrap {
+        height: 80px;
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
   .btn-lg {
     padding: 10px 35px;
     @media(max-width:500px) and (min-width:400px){
