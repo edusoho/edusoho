@@ -37,6 +37,11 @@ class Show {
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
+    let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
+    if (parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
+      DurationStorage.del(this.userId, this.fileId);
+      DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
+    }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
 
     this.initView();
@@ -89,7 +94,7 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos:this.lastLearnTime
+        customPos: this.lastLearnTime
       }
     );
   }
