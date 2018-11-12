@@ -36,7 +36,7 @@
     </el-dialog>
 
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove($event, index, itemNum)">
-    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input>
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" maxLength="15" clearable></el-input>
     </div>
     <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
       <el-tag
