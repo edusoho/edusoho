@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ResponseFilter;
+use AppBundle\Common\ArrayToolkit;
 
 class PageCourse extends AbstractResource
 {
@@ -34,6 +35,7 @@ class PageCourse extends AbstractResource
 
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
+        $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
 
         return $course;

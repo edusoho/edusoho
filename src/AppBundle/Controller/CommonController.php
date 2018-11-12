@@ -43,10 +43,6 @@ class CommonController extends BaseController
             return new Response($content, '302');
         }
 
-        if (strpos(strtolower($request->headers->get('User-Agent')), 'kuozhi') > -1) {
-            return $this->redirect($token['data']['appUrl']);
-        }
-
         $currentUser = $this->getCurrentUser();
 
         if (!empty($token['userId']) && !$currentUser->isLogin() && $currentUser['id'] != $token['userId']) {

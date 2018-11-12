@@ -549,7 +549,7 @@ class CourseController extends CourseBaseController
         }
 
         $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
-        $purchasedCourse = $this->getCourseService()->sortByCourses($purchasedCourse);
+        $purchasedCourse = ArrayToolkit::sortPerArrayValue($purchasedCourse, 'seq');
         $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(
@@ -642,13 +642,17 @@ class CourseController extends CourseBaseController
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $host = $request->getSchemeAndHttpHost();
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($id);
+        $params = array('id' => $id);
+        if ($classroom) {
+            $params['classroomId'] = $classroom['id'];
+        }
 
-        $url = $this->generateUrl('course_show', array('id' => $id), true);
+        $url = $this->generateUrl('course_show', $params, true);
         if ($user->isLogin()) {
             $courseMember = $this->getMemberService()->getCourseMember($id, $user['id']);
             if ($courseMember) {
-                $url = $this->generateUrl('my_course_show', array('id' => $id), true);
+                $url = $this->generateUrl('my_course_show', $params, true);
             }
         }
 
@@ -658,7 +662,6 @@ class CourseController extends CourseBaseController
                 'userId' => $user['id'],
                 'data' => array(
                     'url' => $url,
-                    'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}",
                 ),
                 'times' => 1,
                 'duration' => 3600,

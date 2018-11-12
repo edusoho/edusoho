@@ -1,11 +1,11 @@
 {
   "name": "es-ckeditor",
-  "version": "4.7.2-patch6",
+  "version": "4.7.2-patch7",
   "description": "CKEditor-based implementation and add some plugins, For example kityformula etc.",
   "main": "ckeditor.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ketuzhong/es-ckeditor.git"
+    "url": "git+https://github.com/cd-fez/es-ckeditor.git"
   },
   "keywords": [
     "ckeditor",

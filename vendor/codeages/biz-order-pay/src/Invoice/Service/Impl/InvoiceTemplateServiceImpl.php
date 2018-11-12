@@ -79,10 +79,6 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
                 'title',
                 'type',
                 'taxpayer_identity',
-                'address',
-                'phone',
-                'email',
-                'receiver',
             ))
         ) {
             throw $this->createInvalidArgumentException('Lack of required fields');
@@ -105,6 +101,10 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
                 'comment',
                 'user_id',
                 'is_default',
+                'company_address',
+                'bank',
+                'account',
+                'company_mobile',
             )
         );
     }

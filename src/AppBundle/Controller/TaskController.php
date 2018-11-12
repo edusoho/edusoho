@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
@@ -250,13 +251,11 @@ class TaskController extends BaseController
     public function qrcodeAction(Request $request, $courseId, $id)
     {
         $user = $this->getCurrentUser();
-        $host = $request->getSchemeAndHttpHost();
 
-        //TODO 移动端学习 api 重构
-        if ($user->isLogin()) {
-            $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$id}";
-        } else {
-            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$courseId}";
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
+        $params = array('courseId' => $courseId, 'id' => $id);
+        if ($classroom) {
+            $params['classroomId'] = $classroom['id'];
         }
 
         $token = $this->getTokenService()->makeToken(
@@ -264,8 +263,7 @@ class TaskController extends BaseController
             array(
                 'userId' => $user['id'],
                 'data' => array(
-                    'url' => $this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $id), true),
-                    'appUrl' => $appUrl,
+                    'url' => $this->generateUrl('course_task_show', $params, true),
                 ),
                 'times' => 1,
                 'duration' => 3600,
@@ -535,6 +533,14 @@ class TaskController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**

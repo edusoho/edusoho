@@ -102,7 +102,19 @@ class FaceSession extends AbstractResource
                 throw new BadRequestHttpException('Token error', null, ErrorCode::EXPIRED_CREDENTIAL);
             }
         }
+
+        $user = $this->getUserService()->getUser($session['user']['id']);
+        $this->getLogService()->info('mobile', 'face_login', "{$user['nickname']}通过人脸识别登录");
+
         return $session;
+    }
+
+    /**
+     * @return \Biz\System\Service\Impl\LogServiceImpl
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 
     protected function getUserService()
