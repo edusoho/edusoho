@@ -51,6 +51,8 @@
         active: 0,
         tabsClass: '',
         learnExpiry: '永久有效',
+        startDateStr: '',
+        endDateStr: '',
         tops: {
           tabsTop: 0,
           teacherTop: 0,
@@ -140,7 +142,7 @@
                 id: this.details.id,
               },
               query: {
-                expiry: this.learnExpiry
+                expiryScope: `${this.startDateStr} — ${this.endDateStr}`
               }
             });
           } else {
@@ -150,8 +152,10 @@
           }
         }
       },
-      getLearnExpiry(val) {
-        this.learnExpiry = val;
+      getLearnExpiry(data) {
+        this.learnExpiry = data.val;
+        this.startDateStr = data.startDateStr;
+        this.endDateStr = data.endDateStr;
       }
     },
     destroyed () {

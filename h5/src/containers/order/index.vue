@@ -36,7 +36,7 @@
       </div>
       <div class="order-goods-item">
         <span>学习有效期</span>
-        <span class="gray-dark">{{ getValidity }}</span>
+        <span class="gray-dark" v-html="getValidity"></span>
       </div>
     </div>
     <div class="order-accounts" v-show="itemData">
@@ -120,7 +120,7 @@ export default {
       return '-￥' + this.couponNumber;
     },
     getValidity() {
-      return this.$route.query.expiry || '永久有效';
+      return this.$route.query.expiryScope || '永久有效';
     }
   },
   created () {
