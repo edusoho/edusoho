@@ -4,6 +4,7 @@ import router from '@admin/router';
 import utils from '@/utils';
 import store from '@admin/store';
 
+import 'vant/lib/vant-css/index.css';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@admin/styles/main.scss';
 import Admin from '@admin/App-admin';

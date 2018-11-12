@@ -72,12 +72,14 @@
         handler(course) {
           // 小程序后台替换图片协议
           const courseSet = course.courseSet;
+          const mpSettingPath = this.pathName === 'miniprogramSetting' && courseSet
 
-          if (this.pathName !== 'h5Setting' && courseSet) {
-            const keys = Object.keys(courseSet.cover);
-            for (var i = 0; i < keys.length; i++) {
-              courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(/^(\/\/)|(http:\/\/)/, 'https://');
-            }
+          if (!mpSettingPath) {
+            return;
+          }
+          const keys = Object.keys(courseSet.cover);
+          for (var i = 0; i < keys.length; i++) {
+            courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(/^(\/\/)|(http:\/\/)/, 'https://');
           }
         },
         immediate: true,
