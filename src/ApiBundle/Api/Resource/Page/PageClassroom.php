@@ -39,6 +39,7 @@ class PageClassroom extends AbstractResource
             0,
             5
         );
+        $this->getOCUtil()->multiple($classroom['reviews'], array('userId'));
 
         return $classroom;
     }

@@ -10,6 +10,7 @@ use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 use ApiBundle\Api\Resource\Classroom\ClassroomMemberFilter;
+use ApiBundle\Api\Resource\Classroom\ClassroomReviewFilter;
 
 class PageClassroomFilter extends Filter
 {
@@ -52,9 +53,14 @@ class PageClassroomFilter extends Filter
         $courseFilter = new CourseFilter();
         $courseFilter->setMode(Filter::PUBLIC_MODE);
         $courseFilter->filters($data['courses']);
+
         $memberFilter = new ClassroomMemberFilter();
         $memberFilter->setMode(Filter::PUBLIC_MODE);
         $memberFilter->filter($data['member']);
+
+        $reviewFilter = new ClassroomReviewFilter();
+        $reviewFilter->setMode(Filter::PUBLIC_MODE);
+        $reviewFilter->filters($data['reviews']);
     }
 
     private function transformCover(&$data)
