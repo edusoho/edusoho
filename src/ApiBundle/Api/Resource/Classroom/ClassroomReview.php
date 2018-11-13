@@ -26,6 +26,11 @@ class ClassroomReview extends AbstractResource
             $limit
         );
         $this->getOCUtil()->multiple($reviews, array('userId'));
+        foreach ($reviews as &$review) {
+            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, 5);
+            $this->getOCUtil()->multiple($reviewPosts, array('userId'));
+            $review['posts'] = $reviewPosts;
+        }
 
         return $this->makePagingObject($reviews, $total, $offset, $limit);
     }
