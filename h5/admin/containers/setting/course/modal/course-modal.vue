@@ -157,6 +157,7 @@ export default {
           name: queryString,
           statuses: 'ongoing,unstart',
           type: this.type,
+          itemType: 'course'
         }).then(res => {
           this.cacheResult[queryString] = res.data;
           cb(res.data);
