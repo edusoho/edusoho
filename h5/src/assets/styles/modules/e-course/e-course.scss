@@ -27,6 +27,10 @@
   color: #2B333B;
 }
 
+.course-confirm-title {
+  @include text-overflow-multi(2);
+}
+
 .e-course__project {
   margin-top: vw(6.5);
   // margin-bottom: vw(5);

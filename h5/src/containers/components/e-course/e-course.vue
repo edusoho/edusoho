@@ -6,7 +6,7 @@
       </div>
       <div class="e-course__right pull-left">
         <div v-if="type === 'confirmOrder'">
-          <div class="e-course__title">{{ title }}</div>
+          <div class="e-course__title course-confirm-title">{{ title }}</div>
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
