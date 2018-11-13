@@ -1,0 +1,64 @@
+<?php
+
+namespace ApiBundle\Api\Resource\Page;
+
+use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Resource\AbstractResource;
+
+class PageClassroom extends AbstractResource
+{
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $portal, $classroomId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+        if (empty($classroom)) {
+            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+        }
+
+        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+
+        if (!empty($classroom['headTeacher'])) {
+            $this->mergeProfile($classroom['headTeacher']);
+        }
+
+        $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
+        $classroom['courses'] = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+
+        $this->getOCUtil()->multiple($classroom['courses'], array('courseSetId'), 'courseSet');
+        $this->getOCUtil()->multiple($classroom['courses'], array('creator', 'teacherIds'));
+
+        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(
+            array('classroomId' => $classroomId, 'parentId' => 0),
+            array('createdTime' => 'DESC'),
+            0,
+            5
+        );
+
+        return $classroom;
+    }
+
+    private function mergeProfile(&$user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = array_merge($profile, $user);
+    }
+
+    private function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
+    }
+
+    private function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
+    private function getClassroomReviewService()
+    {
+        return $this->service('Classroom:ClassroomReviewService');
+    }
+}
