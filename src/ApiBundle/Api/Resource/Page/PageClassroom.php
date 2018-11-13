@@ -33,12 +33,12 @@ class PageClassroom extends AbstractResource
         $this->getOCUtil()->multiple($classroom['courses'], array('courseSetId'), 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], array('creator', 'teacherIds'));
 
-        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(
-            array('classroomId' => $classroomId, 'parentId' => 0),
-            array('createdTime' => 'DESC'),
-            0,
-            5
-        );
+        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(array('classroomId' => $classroomId, 'parentId' => 0), array('createdTime' => 'DESC'), 0, 5);
+        foreach ($classroom['reviews'] as &$review) {
+            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, 5);
+            $this->getOCUtil()->multiple($reviewPosts, array('userId'));
+            $review['posts'] = $reviewPosts;
+        }
         $this->getOCUtil()->multiple($classroom['reviews'], array('userId'));
 
         return $classroom;
