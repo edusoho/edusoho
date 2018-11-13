@@ -9,6 +9,7 @@ use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
+use ApiBundle\Api\Resource\Classroom\ClassroomMemberFilter;
 
 class PageClassroomFilter extends Filter
 {
@@ -20,7 +21,7 @@ class PageClassroomFilter extends Filter
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews',
+        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member',
     );
 
     protected function simpleFields(&$data)
@@ -51,6 +52,9 @@ class PageClassroomFilter extends Filter
         $courseFilter = new CourseFilter();
         $courseFilter->setMode(Filter::PUBLIC_MODE);
         $courseFilter->filters($data['courses']);
+        $memberFilter = new ClassroomMemberFilter();
+        $memberFilter->setMode(Filter::PUBLIC_MODE);
+        $memberFilter->filter($data['member']);
     }
 
     private function transformCover(&$data)
