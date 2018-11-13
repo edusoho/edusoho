@@ -35,6 +35,12 @@ class MarketingActivity extends AbstractResource
             $conditions['name_like'] = $conditions['name'];
             unset($conditions['name']);
         }
+
+        if (isset($conditions['itemType'])) {
+            $conditions['item_type'] = $conditions['itemType'];
+            unset($conditions['itemType']);
+        }
+
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions['page'] = ceil(($offset + 1) / $limit);
         $conditions['limit'] = $limit;
