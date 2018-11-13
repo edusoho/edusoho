@@ -7,6 +7,7 @@ class Show {
   constructor(element) {
     let container = $(element);
     this.htmlDom = $(element);
+    this.content = container.data('content');
     this.userId = container.data('userId');
     this.userName = container.data('userName');
     this.fileId = container.data('fileId');
@@ -51,7 +52,7 @@ class Show {
         html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
       }
     } else if (this.fileType == 'audio') {
-      html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
+      html += '<div id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
     this.htmlDom.html(html);
     this.htmlDom.show();
@@ -62,6 +63,7 @@ class Show {
       this.playerType, {
         element: '#lesson-player',
         url: this.url,
+        content: this.content,
         mediaType: this.fileType,
         fingerprint: this.fingerprint,
         fingerprintSrc: this.fingerprintSrc,

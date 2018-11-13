@@ -20,6 +20,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
+use ApiBundle\Api\Util\AssetHelper;
 
 class WebExtension extends \Twig_Extension
 {
@@ -82,6 +83,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
             new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
+            new \Twig_SimpleFilter('convert_absolute_url', array($this, 'convertAbsoluteUrl')),
         );
     }
 
@@ -167,6 +169,23 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
         );
+    }
+
+    public function convertAbsoluteUrl($html)
+    {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) {
+            $cdn = new CdnUrl();
+            $cdnUrl = $cdn->get('content');
+            if (!empty($cdnUrl)) {
+                $absoluteUrl = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($matches[1], '/');
+            } else {
+                $absoluteUrl = AssetHelper::uriForPath('/'.ltrim($matches[1], '/'));
+            }
+
+            return "src=\"{$absoluteUrl}\"";
+        }, $html);
+
+        return $html;
     }
 
     public function parseUserAgent($userAgent)

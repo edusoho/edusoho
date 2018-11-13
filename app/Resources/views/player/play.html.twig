@@ -13,6 +13,7 @@
     {% else %}
       <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
         <div id="lesson-video-content"
+          data-content="{{context.content|default('')}}"
           data-user-id="{{app.user.id|default(0)}}"
           data-user-name="{{app.user.username|default('')}}"
           data-file-global-id="{{file.globalId}}"
@@ -58,6 +59,7 @@
       </div>
       {% do script(['libs/base.js','app/js/common.js'], 1000) %}
       <script src="{{ cloud_sdk_url('video') }}"></script>
+      <script src="{{ '//service-cdn.cg-dev.cn/js-sdk/audio-player/sdk-v1.js?1.1.0.89' }}"></script>
       {% do script(['app/js/player/index.js']) %}
     {% endif %}
     {% include 'script_boot.html.twig' %}
