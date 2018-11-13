@@ -33,7 +33,7 @@ class MeMarketingActivity extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions['page'] = ceil(($offset + 1) / $limit);
         $conditions['limit'] = $limit;
-        $conditions['mobile'] = $user['verifiedMobile'];
+        $conditions['mobile'] = 12312345678;//$user['verifiedMobile'];
 
         return $conditions;
     }

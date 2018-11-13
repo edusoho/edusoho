@@ -9,7 +9,7 @@ use Biz\Marketing\Util\MarketingUtils;
 class MarketingActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'owner_price', 'member_price', 'item_cover', 'created_time', 'start_time', 'end_time',
+        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'owner_price', 'member_price', 'order', 'item_cover', 'created_time', 'start_time', 'end_time',
     );
 
     protected function publicFields(&$data)
@@ -43,5 +43,9 @@ class MarketingActivityFilter extends Filter
         unset($data['end_time']);
         $marketingDomain = MarketingUtils::getMarketingDomain();
         $data['url'] = $marketingDomain.'/h5/a/groupon/show/'.$data['id'];
+        if (isset($data['order'])) {
+            $data['payAmount'] = $data['order']['pay_amount']/100;
+            unset($data['order']);
+        }
     }
 }
