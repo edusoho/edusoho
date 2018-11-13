@@ -58,7 +58,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Order\OrderException
      */
     public function testCheckOrderBeforePay()
     {
