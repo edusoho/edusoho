@@ -6,7 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class MarketingUtils
 {
-    private static $defaultDomain = 'http://wyx.edusoho.cn';
+    private static $defaultDomain = 'https://wyx.edusoho.cn';
 
     public static function getSiteInfo($settingService, $webExtension)
     {
