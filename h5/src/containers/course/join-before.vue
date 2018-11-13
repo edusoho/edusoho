@@ -136,17 +136,16 @@
 
         if (Number(this.details.buyable) && isPast) {
           if (+this.details.price) {
-            let expiryMode = this.details.learningExpiryDate.expiryMode;
-            let expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
-            let expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
+            const expiryMode = this.details.learningExpiryDate.expiryMode;
+            const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
+            const expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
             this.$router.push({
               name: 'order',
               params: {
                 id: this.details.id,
               },
               query: {
-                expiryScope: expiryStr,
-                planTitle: this.details.title
+                expiryScope: expiryStr
               }
             });
           } else {
