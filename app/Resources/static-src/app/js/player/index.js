@@ -64,7 +64,6 @@ class Show {
   }
 
   initPlayer() {
-    alert(this.lastLearnTime);
     return PlayerFactory.create(
       this.playerType, {
         element: '#lesson-player',
