@@ -22,7 +22,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithInvalidNickname()
     {
@@ -35,7 +35,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithExistedNickname()
     {

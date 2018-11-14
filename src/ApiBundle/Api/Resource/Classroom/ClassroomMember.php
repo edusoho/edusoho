@@ -6,6 +6,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Exception\UnableJoinException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ClassroomMember extends AbstractResource
 {
@@ -34,7 +36,11 @@ class ClassroomMember extends AbstractResource
 
     private function tryJoin($classroom)
     {
-        $this->getClassroomService()->tryFreeJoin($classroom['id']);
+        try {
+            $this->getClassroomService()->tryFreeJoin($classroom['id']);
+        } catch (UnableJoinException $e) {
+            throw new BadRequestHttpException($e->getMessage(), $e);
+        }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
         if (!empty($member)) {
