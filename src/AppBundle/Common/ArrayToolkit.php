@@ -305,16 +305,20 @@ class ArrayToolkit
     /**
      * 根据所给的二维数组进行排序, 按照二维数组内的指定属性排序
      *
-     * @param $arr  必须为二维数据
-     * @param $attrName 二维数组内指定的属性
-     * @param $ascending  默认为升序
+     * @param $arr
+     * @param $attrName
+     * @param $ascending
      *
-     * @return
-     *  如$arr 为
-     *  array(
-     *      array('id' => 1, 'name' => 'hello1'),
-     *      array('id' => 2, 'name' => 'hello2'),
-     *  )
+     * $arr 必须为二维数据
+     * $attrName 二维数组内指定的属性
+     * $ascending  默认为升序
+     *
+     * @return array
+     *               如$arr 为
+     *               array(
+     *               array('id' => 1, 'name' => 'hello1'),
+     *               array('id' => 2, 'name' => 'hello2'),
+     *               )
      *
      *  $attrName 为 name, $ascending = false
      *

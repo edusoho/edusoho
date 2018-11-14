@@ -2266,6 +2266,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    /**
+     * @deprecated 即将废弃，不要使用：函数名不合理；本质上静态函数不需要写到业务层
+     */
     public function sortByCourses($courses)
     {
         usort($courses, function ($a, $b) {
@@ -2296,7 +2299,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return;
         }
 
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $count = $this->searchCourseCount(
             array(
                 'courseSetId' => $courseSetId,
@@ -2315,7 +2318,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
         $this->getCourseDao()->batchUpdate($ids, $fields, 'id');
-        $this->getCourseSetService()->updateCourseSetDefaultCourseId($courseSetId);
+        $this->dispatch('courseSet.courses.sort', new Event($courseSet, array(
+            'courseIds' => $ids,
+        )));
     }
 
     public function changeHidePublishLesson($courseId, $status)

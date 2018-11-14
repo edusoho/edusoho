@@ -5841,6 +5841,7 @@ admin.magic_setting.learn_time_sec: learn time report cycle
 admin.magic_setting.learn_time_sec_tip: second
 admin.magic_setting.watch_time_sec: watch time report cycle
 admin.magic_setting.watch_time_sec_tip: second
+admin.magic_setting.site_trace_enable: enable site trace
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -7132,6 +7133,7 @@ log.action.course.delete_course: 删除教学计划
 log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
+log.action.course.join_course: 加入教学计划
 log.action.user.exportCsv: 'Export'
 log.action.user.add: 'Add'
 log.action.user.edit: 'Edit'
@@ -7221,6 +7223,7 @@ log.action.classroom.cancel_recommend: 'Cancel recommend'
 log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
+log.action.classroom.join_classroom: 加入班级
 log.action.article.update_settings: 'Update settings'
 log.action.article.create: 'Create'
 log.action.article.update: 'Update'
@@ -7314,6 +7317,7 @@ log.message.order_adjust_price.success: 'The order (#%title%) price is adjusted 
 log.action.live.update_live_activity: 'Update activity'
 log.action.live.generate_live_replay: 'Generate playback'
 log.action.live.delete_live_activity: 'Delete activity'
+log.action.mobile.face_login: 人脸识别登录
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -7353,6 +7357,8 @@ log.action.template.course.recommend: 推荐了<strong class="color-success">课
 log.action.template.course.cancel_recommend: 取消了推荐<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_lesson: 新建了课时《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.join_course: 加入教学计划《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: 新建了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete: 删除了<strong class="color-success">班级</strong>《%title%》
@@ -8119,3 +8125,4 @@ admin.sts_discovery_use_tip: 开启后，用户在任意位置登录，可选使
 admin.sts_discovery.login: 人脸识别登录
 admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
 admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
+admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限

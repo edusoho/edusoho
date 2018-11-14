@@ -180,7 +180,7 @@ function install_step3($init_data = 0)
                 $biz['db']->exec('update user set roles ="|ROLE_USER|ROLE_TEACHER|" where id = 1');
             }
             $admin = $initializer->initAdminUser($_POST);
-
+            _init_setting($admin);
             $service = ServiceKernel::instance()->createService('System:SettingService');
             $settings = $service->get('storage', array());
             if (!empty($settings['cloud_key_applied'])) {

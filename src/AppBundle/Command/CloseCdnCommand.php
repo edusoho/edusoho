@@ -31,11 +31,11 @@ class CloseCdnCommand extends BaseCommand
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return $this->getServiceKernel()->createService('System:LogService');
     }
 }

@@ -87,8 +87,8 @@ class DeviceToolkit
             preg_match("/MSIE\s+([^;)]+)+/i", $agent, $version);
             $exp[0] = 'IE';
             $exp[1] = $version[1];  //获取IE的版本号
-        } elseif (false !== stripos($agent, 'OPR')) {
-            preg_match("/OPR\/([\d\.]+)/", $agent, $version);
+        } elseif (false !== stripos($agent, 'Opera')) {
+            preg_match("/Opera\/([\d\.]+)/", $agent, $version);
             $exp[0] = 'Opera';
             $exp[1] = $version[1];
         } elseif (false !== stripos($agent, 'Edge')) {

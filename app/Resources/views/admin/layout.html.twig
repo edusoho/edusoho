@@ -155,6 +155,7 @@
 
     {% block scriptBoot %}
       {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+      {% include 'admin/default/script-webpack.html.twig' %}
     {% endblock %}
     
     <div id="modal" class="modal" ></div>

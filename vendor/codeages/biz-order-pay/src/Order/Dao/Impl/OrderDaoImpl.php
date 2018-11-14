@@ -222,6 +222,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 $this->table.'.title LIKE :title_like',
                 $this->table.'.updated_time >= :updated_time_GE',
                 $this->table.'.refund_deadline < :refund_deadline_LT',
+                $this->table.'.refund_deadline >= :refund_deadline_GE',
                 $this->table.'.invoice_sn = :invoice_sn',
             ),
         );

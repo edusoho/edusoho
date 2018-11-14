@@ -3,9 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\RestApiClient\RestApiClient;
-use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
 use Biz\Marketing\Util\MarketingUtils;
+use Biz\Marketing\MarketingAPIFactory;
 
 class MarketingController extends BaseController
 {
@@ -14,7 +13,7 @@ class MarketingController extends BaseController
         $merchantUrl = $request->getSchemeAndHttpHost();
         $user = $this->getCurrentUser();
 
-        $client = $this->createMarketingClient();
+        $client = MarketingAPIFactory::create();
 
         $siteInfo = MarketingUtils::getSiteInfo($this->getSettingService(), $this->getWebExtension());
         $entry = $request->query->get('entry');
@@ -48,25 +47,6 @@ class MarketingController extends BaseController
         return $this->render('admin/marketing/login.html.twig', array(
             'form' => $form,
         ));
-    }
-
-    private function createMarketingClient()
-    {
-        $storage = $this->getSettingService()->get('storage', array());
-        $developerSetting = $this->getSettingService()->get('developer', array());
-
-        $marketingDomain = !empty($developerSetting['marketing_domain']) ?
-            $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
-
-        $config = array(
-            'accessKey' => $storage['cloud_access_key'],
-            'secretKey' => $storage['cloud_secret_key'],
-            'endpoint' => $marketingDomain.'/merchant',
-        );
-        $spec = new JsonHmacSpecification2('sha1');
-        $client = new RestApiClient($config, $spec);
-
-        return $client;
     }
 
     protected function getSettingService()

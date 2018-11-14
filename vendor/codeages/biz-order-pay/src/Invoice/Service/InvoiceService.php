@@ -5,6 +5,8 @@ interface InvoiceService
 {
     public function getInvoice($id);
 
+    public function getInvoiceBySn($sn);
+
     public function countInvoices($conditions);
 
     public function searchInvoices($conditions, $orderBy, $start, $limit);
