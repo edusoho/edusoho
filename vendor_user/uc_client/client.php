@@ -203,9 +203,10 @@ function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false,
     !isset($matches['path']) && $matches['path'] = '';
     !isset($matches['query']) && $matches['query'] = '';
     !isset($matches['port']) && $matches['port'] = '';
+    $scheme = $matches['scheme'];
     $host = $matches['host'];
     $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
-    $port = !empty($matches['port']) ? $matches['port'] : ('https' == $matches['scheme'] ? 443 : 80);
+    $port = !empty($matches['port']) ? $matches['port'] : ('https' == $scheme ? 443 : 80);
     if ($post) {
         $out = "POST $path HTTP/1.0\r\n";
         $out .= "Accept: */*\r\n";
@@ -231,9 +232,9 @@ function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false,
     }
 
     if (function_exists('fsockopen')) {
-        $fp = @fsockopen(('https' == $scheme ? 'ssl' : $scheme).'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
+        $fp = @fsockopen(('https' == $scheme ? 'https' : 'http').'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
     } elseif (function_exists('pfsockopen')) {
-        $fp = @pfsockopen(('https' == $scheme ? 'ssl' : $scheme).'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
+        $fp = @pfsockopen(('https' == $scheme ? 'https' : 'http').'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
     } else {
         $fp = false;
     }

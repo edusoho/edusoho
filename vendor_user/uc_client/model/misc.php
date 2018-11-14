@@ -80,6 +80,7 @@ class miscmodel
         //error_log("[uc_client]\r\nurl: $url\r\npost: $post\r\n\r\n", 3, 'c:/log/php_fopen.txt');
         $return = '';
         $matches = parse_url($url);
+        $scheme = $matches['scheme'];
         $host = $matches['host'];
         $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
         $port = !empty($matches['port']) ? $matches['port'] : ('https' == $matches['scheme'] ? 443 : 80);
