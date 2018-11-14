@@ -197,7 +197,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Taxonomy\TagException
-     * @expectedExceptionMessage exception.tag.empty_name
+     * @expectedExceptionMessage exception.tag.empty_group_name
      */
     public function testAddTagGroupWithException1()
     {
@@ -217,7 +217,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Taxonomy\TagException
-     * @expectedExceptionMessage exception.tag.duplicate_name
+     * @expectedExceptionMessage exception.tag.duplicate_group_name
      */
     public function testAddTagGroupWithException2()
     {

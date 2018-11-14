@@ -27,7 +27,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testCreateAccountWithoutUserId()
     {
@@ -36,7 +36,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testCreateAccountNotExistUser()
     {
@@ -169,7 +169,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testWaveBalanceWithErrorNum()
     {
@@ -203,7 +203,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testWaveDownBalanceWithErrorNum()
     {

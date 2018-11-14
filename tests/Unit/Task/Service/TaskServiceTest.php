@@ -49,7 +49,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Common\CommonException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testCreateTaskWhenInvalidArgument()
     {
@@ -255,9 +255,9 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Task\TaskException
+     * @expectedException \Biz\Course\CourseException
      */
-    public function testPublishTaskWithAccessDeniedException1()
+    public function testPublishTaskWithAccessDeniedException()
     {
         $courseSet = $this->createNewCourseSet();
         $course = $this->createNewCourse($courseSet['id']);
@@ -298,9 +298,9 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Task\TaskException
+     * @expectedException \Biz\Course\CourseException
      */
-    public function testUnpublishTaskWithAccessDeniedException1()
+    public function testUnpublishTaskWithAccessDeniedException()
     {
         $courseSet = $this->createNewCourseSet();
         $course = $this->createNewCourse($courseSet['id']);

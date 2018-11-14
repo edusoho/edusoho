@@ -81,7 +81,7 @@ class QuestionServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \AppBundle\Common\Exception\ResourceNotFoundException
+     * @expectedException \Biz\Question\QuestionException
      */
     public function testUpdate()
     {
