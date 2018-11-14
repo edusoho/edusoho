@@ -21,7 +21,7 @@ define(function(require, exports, module) {
             }).error(function(e, textStatus, errorThrown) {
                 var $json = jQuery.parseJSON(e.responseText);
                 if($json.error.message){
-                    Notify.danger($json.error.message,{title:$trigger.attr('title')});
+                    Notify.danger(Translator.trans($json.error.message));
                 }else{
                     Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
                 }
