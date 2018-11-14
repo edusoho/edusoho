@@ -9,9 +9,13 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Common\BizSms;
 use Biz\Sms\SmsException;
 use Biz\User\UserException;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeMobile extends AbstractResource
 {
+    /**
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Me\MeFilter", mode="simple")
+     */
     public function update(ApiRequest $request, $mobile)
     {
         $fields = $request->request->all();
