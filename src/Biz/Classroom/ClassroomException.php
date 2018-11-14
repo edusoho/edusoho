@@ -54,6 +54,10 @@ class ClassroomException extends AbstractException
 
     const EXPIRED_CLASSROOM = 5001823;
 
+    const FORBIDDEN_AUDITOR_LEARN = 4031824;
+
+    const EXPIRED_MEMBER = 5001825;
+
     public $messages = array(
         4041801 => 'exception.classroom.not_found',
         4031802 => 'exception.classroom.forbidden_manage_classroom',
@@ -78,5 +82,7 @@ class ClassroomException extends AbstractException
         5001821 => 'exception.classroom.closed_classroom',
         5001822 => 'exception.classroom.unbuyable_classroom',
         5001823 => 'exception.classroom.expired_classroom',
+        4031824 => 'exception.classroom.forbidden_auditor_learn',
+        5001825 => 'exception.classroom.expired_member',
     );
 }

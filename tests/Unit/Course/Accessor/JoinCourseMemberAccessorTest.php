@@ -52,7 +52,7 @@ class JoinCourseMemberAccessorTest extends BaseTestCase
         $accessor = new JoinCourseMemberAccessor($this->getBiz());
 
         $result = $accessor->access(array());
-        $this->assertEquals('user.not_login', $result['code']);
+        $this->assertEquals('UN_LOGIN', $result['code']);
     }
 
     public function testAccessWithLockedUser()
@@ -71,7 +71,7 @@ class JoinCourseMemberAccessorTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $result = $accessor->access(array());
-        $this->assertEquals('user.locked', $result['code']);
+        $this->assertEquals('LOCKED_USER', $result['code']);
     }
 
     public function testAccessWithExistedMember()
@@ -99,6 +99,6 @@ class JoinCourseMemberAccessorTest extends BaseTestCase
             )
         );
         $result = $accessor->access(array('id' => 111));
-        $this->assertEquals('member.member_exist', $result['code']);
+        $this->assertEquals('DUPLICATE_MEMBER', $result['code']);
     }
 }

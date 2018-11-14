@@ -9492,12 +9492,12 @@ exception.course.have_sub_courses: 该教学计划被班级引用，请先移除
 exception.course.count_no_less_than_1: 课程下至少需保留一个教学计划
 exception.course.course_not_published: 教学计划未发布
 exception.course.not_match_courseset: 教学计划不在课程中
-exception.course.duplicate_member: 用户已加入教学计划
 exception.course.closed_course: 教学计划已关闭
 exception.course.unbuyable_course: 教学计划未开放购买
 exception.course.expired_course: 教学计划已过期
 exception.course.buy_expired: 教学计划已过购买期限
 exception.course.reach_max_student_num: 不达到最大人数限制，不可加入
+exception.course.not_arrive: 教学计划还未开始
 exception.courseset.not_found: 课程不存在
 exception.courseset.forbidden_manage: 无权管理课程
 exception.courseset.sub_courseset_exist: 该课程在班级下引用，请先删除引用课程！
@@ -9529,8 +9529,12 @@ exception.classroom.member_level_limit: 用户不能以会员身份加入班级�
 exception.classroom.closed_classroom: 班级已关闭
 exception.classroom.unbuyable_classroom: 班级不可购买
 exception.classroom.expired_classroom: 班级已过期
+exception.classroom.forbidden_auditor_learn: 旁听生无权学习
+exception.classroom.expired_member: 学员已到有效期
 exception.course.member.not_found: 课程中没有该成员
 exception.course.member.not_member: 不是课程成员
+exception.course.member.duplicate_member: 用户已加入教学计划
+exception.course.member.expired_member: 学员已过期
 exception.page.error_mode: 错误的参数'mode'
 exception.page.error_type: 错误的参数'type'
 exception.page.error_portal: 错误的参数'portal'

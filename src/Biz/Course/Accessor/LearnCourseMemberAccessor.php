@@ -3,7 +3,9 @@
 namespace Biz\Course\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
+use Biz\Course\MemberException;
 use Biz\Course\Service\MemberService;
+use Biz\User\UserException;
 
 class LearnCourseMemberAccessor extends AccessorAdapter
 {
@@ -16,21 +18,21 @@ class LearnCourseMemberAccessor extends AccessorAdapter
         }
 
         if (null === $user || !$user->isLogin()) {
-            return $this->buildResult('user.not_login');
+            return $this->buildResult('UN_LOGIN', array(), UserException::EXCEPTION_MODUAL);
         }
 
         if ($user['locked']) {
-            return $this->buildResult('user.locked', array('userId' => $user['id']));
+            return $this->buildResult('LOCKED_USER', array('userId' => $user['id']), UserException::EXCEPTION_MODUAL);
         }
 
         $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
 
         if (empty($member)) {
-            return $this->buildResult('member.not_found');
+            return $this->buildResult('NOTFOUND_MEMBER', array(), MemberException::EXCEPTION_MODUAL);
         }
 
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
-            return $this->buildResult('member.expired', array('userId' => $user['id']));
+            return $this->buildResult('EXPIRED_MEMBER', array('userId' => $user['id']), MemberException::EXCEPTION_MODUAL);
         }
 
         return null;

@@ -8186,12 +8186,12 @@ exception.course.have_sub_courses:
 exception.course.count_no_less_than_1:
 exception.course.course_not_published:
 exception.course.not_match_courseset:
-exception.course.duplicate_member: 用户已加入教学计划
 exception.course.closed_course: 教学计划已关闭
 exception.course.unbuyable_course: 教学计划未开放购买
 exception.course.expired_course: 教学计划已过期
 exception.course.buy_expired: 教学计划已过购买期限
 exception.course.reach_max_student_num: 不达到最大人数限制，不可加入
+exception.course.not_arrive: 教学计划还未开始
 exception.courseset.not_found: The course doesn't exist
 exception.courseset.forbidden_manage:
 exception.courseset.sub_courseset_exist:
@@ -8223,8 +8223,12 @@ exception.classroom.member_level_limit: You can not join as a vip
 exception.classroom.closed_classroom: Classroom is closed
 exception.classroom.unbuyable_classroom: 班级不可购买
 exception.classroom.expired_classroom: 班级已过期
+exception.classroom.forbidden_auditor_learn: 旁听生无权学习
+exception.classroom.expired_member: 学员已到有效期
 exception.course.member.not_found: The course doesn't have this student
 exception.course.member.not_member: The user is not a member of this course
+exception.course.member.duplicate_member: 用户已加入教学计划
+exception.course.member.expired_member: 学员已过期
 exception.page.error_mode: Parameter 'mode' is error
 exception.page.error_type: Parameter 'type' is error
 exception.page.error_portal: Parameter 'portal' is error

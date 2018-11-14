@@ -10,30 +10,30 @@ class JoinCourseAccessor extends AccessorAdapter
     public function access($course)
     {
         if (empty($course)) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'NOTFOUND_COURSE');
+            return $this->buildResult('NOTFOUND_COURSE', array(), CourseException::EXCEPTION_MODUAL);
         }
 
         if ('draft' === $course['status']) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'UNPUBLISHED_COURSE', array('courseId' => $course['id']));
+            return $this->buildResult('UNPUBLISHED_COURSE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
         }
 
         if ('closed' === $course['status']) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'CLOSED_COURSE', array('courseId' => $course['id']));
+            return $this->buildResult('CLOSED_COURSE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
         }
 
         if (!$course['buyable']) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'UNBUYABLE_COURSE', array('courseId' => $course['id']));
+            return $this->buildResult('UNBUYABLE_COURSE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
         }
 
         if ($this->isExpired($course)) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'EXPIRED_COURSE', array('courseId' => $course['id']));
+            return $this->buildResult('EXPIRED_COURSE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
         }
         if ($course['buyExpiryTime'] && time() > $course['buyExpiryTime']) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'BUY_EXPIRED', array('courseId' => $course['id']));
+            return $this->buildResult('BUY_EXPIRED', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
         }
 
         if ($course['maxStudentNum'] && $course['maxStudentNum'] <= $course['studentNum']) {
-            return $this->buildResult(CourseException::EXCEPTION_MODUAL, 'REACH_MAX_STUDENT', array('courseId' => $course['id']));
+            return $this->buildResult('REACH_MAX_STUDENT', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
         }
 
         return null;

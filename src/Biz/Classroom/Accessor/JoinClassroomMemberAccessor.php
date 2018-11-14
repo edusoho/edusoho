@@ -13,11 +13,11 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
     {
         $user = $this->getCurrentUser();
         if (null === $user || !$user->isLogin()) {
-            return $this->buildResult(UserException::EXCEPTION_MODUAL, 'UN_LOGIN');
+            return $this->buildResult('UN_LOGIN', array(), UserException::EXCEPTION_MODUAL);
         }
 
         if ($user['locked']) {
-            return $this->buildResult(UserException::EXCEPTION_MODUAL, 'LOCKED_USER', array('userId' => $user['id']));
+            return $this->buildResult('LOCKED_USER', array('userId' => $user['id']), UserException::EXCEPTION_MODUAL);
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
@@ -25,7 +25,7 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
             return null;
         }
 
-        return $this->buildResult(ClassroomException::EXCEPTION_MODUAL, 'DUPLICATE_JOIN', array('userId' => $user['id']));
+        return $this->buildResult('DUPLICATE_JOIN', array('userId' => $user['id']), ClassroomException::EXCEPTION_MODUAL);
     }
 
     /**
