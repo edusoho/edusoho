@@ -4,7 +4,11 @@ const courseListData = (data, type) => {
     return {
       id: data.id,
       targetId: data.targetId,
-      imgSrc: data.cover.middle,
+      imgSrc: {
+        url: data.cover.middle,
+        width: '140px',
+        height: '93px',
+      },
       title: data.title,
       price: data.price,
       courseNum: data.courseNum,
@@ -12,7 +16,11 @@ const courseListData = (data, type) => {
     }
   } else if (type === 'course_list') {
     return{
-      imgSrc: data.courseSet.cover.middle,
+      imgSrc: {
+        url: data.courseSet.cover.middle,
+        width: '140px',
+        height: '79px',
+      },
       title: data.courseSetTitle,
       teachPlan: data.title,
       price: data.price,

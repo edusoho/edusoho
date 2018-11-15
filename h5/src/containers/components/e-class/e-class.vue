@@ -2,12 +2,12 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img class="e-course__img" v-bind:src="course.imgSrc">
+        <img v-bind:src="course.imgSrc.url" :style="{width: course.imgSrc.width, height: course.imgSrc.height}">
       </div>
       <div class="e-course__right pull-left">
         <div class="e-course__title text-overflow">{{ course.title }}</div>
-        <div class="e-course__count" v-if="course.courseNum">
-          共 {{course.courseNum}} 门课程
+        <div class="e-course__count">
+          <span v-if="course.courseNum">共 {{course.courseNum}} 门课程</span>
         </div>
         <div class="e-course__project text-overflow" v-if="course.teachPlan">
           <span v-if="teachPlan">{{ course.teachPlan }}</span>

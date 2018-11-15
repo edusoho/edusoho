@@ -1,5 +1,5 @@
 <template>
-  <div class="e-course-list ">
+  <div class="e-course-list">
     <div class="e-course-list__header">
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
@@ -9,28 +9,28 @@
       </div>
     </div>
     <div class="e-course-list__body">
-<!--       <e-class v-for="item in courseList.items"
+      <e-class v-for="item in courseList.items"
         :key="item.id"
         :course="item | courseListData(typeList)"
         :typeList="typeList"
         :feedback="feedback">
-      </e-class> -->
-      <e-course
+      </e-class>
+    <!--   <e-course
         v-for="item in courseList.items"
         :key="item.id"
         :course="item"
         :type="type"
         :typeList="typeList"
         :feedback="feedback">
-      </e-course>
+      </e-course> -->
     </div>
     <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
   </div>
 </template>
 
 <script>
-import course from '../e-course/e-course';
-// import eClass from '../e-class/e-class';
+// import course from '../e-course/e-course';
+import eClass from '../e-class/e-class';
 import courseListData from '@admin/utils/filter-course.js';
 
   export default {
@@ -53,8 +53,8 @@ import courseListData from '@admin/utils/filter-course.js';
       }
     },
     components: {
-      'e-course': course,
-      // 'e-class': eClass,
+      // 'e-course': course,
+      'e-class': eClass,
     },
     data() {
       return {

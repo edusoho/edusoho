@@ -60,18 +60,9 @@
 // h5 组件 vw 单位复写
 .e-course {
   padding: 0 20px 30px;
-  &__left {
-    .e-course__img {
-      width: 140px;
-      height: 79px;
-    }
-    .e-class__img {
-      width: 140px;
-      height: 93px;
-    }
-  }
   &__count {
     font-size: 12px;
+    height: 17px;
   }
   &__right {
     margin-left: 10px;

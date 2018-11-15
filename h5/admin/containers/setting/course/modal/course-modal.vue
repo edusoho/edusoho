@@ -18,7 +18,7 @@
           v-model="keyWord"
           :placeholder="`搜索${typeText}`"
           class="inline-input search__input"
-          :value-key="'title'"
+          :value-key="valueKey"
           :clearable="true"
           :autofocus="true"
           :trigger-on-focus="false"
@@ -69,6 +69,7 @@ export default {
       cacheResult: {},
       courseSets: this.courseList,
       courseListIds: [],
+      valueKey: this.typeText === '班级' ? 'title' : 'displayedTitle'
     }
   },
   computed: {
@@ -151,7 +152,6 @@ export default {
         this.getClassList({
           courseSetTitle: queryString
         }).then(res => {
-          console.log(res,7777)
           this.cacheResult[queryString] = res.data;
           cb(res.data);
         })

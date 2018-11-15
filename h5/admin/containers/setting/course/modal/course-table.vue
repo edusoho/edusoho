@@ -62,7 +62,7 @@ export default {
         {
           col: 5,
           title: `${this.typeText}名称`,
-          label: 'title',
+          label:  this.typeText === '班级' ? 'title' : 'displayedTitle',
         }, {
           col: 3,
           title: '商品价格',
