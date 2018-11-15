@@ -10,16 +10,14 @@
     </a>
   </label>
   <div class="col-sm-10 cd-radio-group mbm">
-
     {% set coursePublished = course.status|default('draft') == 'published' %}
     {% set courseClosed = course.status|default('draft') == 'closed' %}
     {% set courseSetPublished = courseSet.status|default('draft') == 'published' %}
     {% set courseSetClosed = courseSet.status|default('draft') == 'closed' %}
-
     {{ cd_radios('expiryMode',
     { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
-    course.expiryMode|default('days'), courseSetPublished and coursePublished ? 'disabled' : '') }}
-
+    course.expiryMode|default('days'), coursePublished or courseClosed ? 'disabled' : '') }}
+    
     {% if courseClosed or (courseSetClosed and course.expiryMode|default('days') == 'days') and course.status|default('draft') != 'draft' %}
       <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
     {% endif %}
@@ -28,9 +26,9 @@
       <span class="caret"></span>
       {{ cd_radios('deadlineType',
       { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans},
-      course.deadlineType|default('days'),  coursePublished and courseSetPublished ? 'disabled' : '') }}
+      course.deadlineType|default('days'),  coursePublished or courseClosed ? 'disabled' : '') }}
 
-      {% if coursePublished %}
+      {% if coursePublished or courseClosed %}
         <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
       {% endif %}
 
