@@ -314,7 +314,7 @@ define(function(require, exports, module) {
             var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   'data[posters][' + index + ']');
             $(this).replaceWith(replace);
           });
-          $(this).find('.poster-btn').html('<span class="js-move-icon mrs"><i class="es-icon es-icon-yidong"></i></span>'+Translator.trans('admin.block.poster',{index:index+1}));
+          $(this).find('.poster-btn').html('<span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">'+Translator.trans('admin.block.poster',{index:index+1})+'</span>');
           $(this).find('input[type=hidden]').val(Translator.trans('admin.block.poster',{index:index+1}));
           var nameReplace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   'data[posters][' + index + ']');
           $(this).replaceWith(nameReplace);
