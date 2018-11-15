@@ -43,7 +43,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
             throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
         }
 
-        if ($access['code'] !== AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS !== $access['code']) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
     }
@@ -63,7 +63,12 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         try {
             $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
             if (!$isStudent) {
-                $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+                $member = $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+            }
+
+            if (isset($member)) {
+                $classroom = $this->getClassroomService()->getClassroom($orderItem['target_id']);
+                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", array('userId' => $orderItem['user_id'], 'classroomId' => $classroom['id'], 'title' => $classroom['title']));
             }
 
             return OrderStatusCallback::SUCCESS;

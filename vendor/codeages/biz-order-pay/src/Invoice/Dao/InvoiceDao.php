@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface InvoiceDao extends GeneralDaoInterface
 {
-
+    public function getBySn($sn);
 }

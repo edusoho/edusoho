@@ -186,6 +186,13 @@ class DefaultController extends BaseController
             $todayVipNum = $this->getMemberOperationService()->countUserIdsByConditions(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'vip', 'operate_type' => 'join'));
         }
 
+        $toInvoiceNum = 0;
+        $totalInvoiceNum = 0;
+        if ($this->isPluginInstalled('Invoice')) {
+            $totalInvoiceNum = $this->getInvoiceService()->countInvoices(array());
+            $toInvoiceNum = $this->getInvoiceService()->countInvoices(array('status' => 'unchecked'));
+        }
+
         $todayThreadUnAnswerNum = $this->getThreadService()->countThreads(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
         $totalThreadNum = $this->getThreadService()->countThreads(array('postNum' => 0, 'type' => 'question'));
 
@@ -207,6 +214,9 @@ class DefaultController extends BaseController
 
             'todayThreadUnAnswerNum' => $todayThreadUnAnswerNum,
             'totalThreadNum' => $totalThreadNum,
+
+            'totalInvoiceNum' => $totalInvoiceNum,
+            'toInvoiceNum' => $toInvoiceNum,
         ));
     }
 
@@ -612,6 +622,14 @@ class DefaultController extends BaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Invoice\Service\Impl\InvoiceServiceImpl
+     */
+    protected function getInvoiceService()
+    {
+        return $this->createService('Invoice:InvoiceService');
     }
 
     protected function getTaskResultService()

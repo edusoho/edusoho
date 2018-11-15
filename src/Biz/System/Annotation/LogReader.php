@@ -10,10 +10,7 @@ class LogReader
     public function __construct($cacheDirectory = null)
     {
         $this->cacheDirectory = $cacheDirectory;
-        if ($cacheDirectory) {
-            $fs = new Filesystem();
-            $fs->mkdir($cacheDirectory);
-        }
+        $this->initCacheDir();
     }
 
     public function read($service)
@@ -87,6 +84,7 @@ class LogReader
         if (!$this->cacheDirectory) {
             return;
         }
+        $this->initCacheDir();
 
         $metadata['cached_time'] = time();
 
@@ -94,6 +92,15 @@ class LogReader
         $content = "<?php \n return ".var_export($interceptorData, true).';';
 
         file_put_contents($filePath, $content);
+    }
+
+    protected function initCacheDir()
+    {
+        $cacheDirectory = $this->cacheDirectory;
+        if ($cacheDirectory && !is_dir($cacheDirectory)) {
+            $fs = new Filesystem();
+            $fs->mkdir($cacheDirectory);
+        }
     }
 
     protected function getCacheFilePath($cacheDirectory, $service)
@@ -108,12 +115,12 @@ class LogReader
     {
         $array = explode('\\', $nameSpace);
         foreach ($array as $key => $value) {
-            if ('Service' == $value) {
-                return $array[$key - 1];
+            if ('Service' == $value || 'Biz' == $value) {
+                unset($array[$key]);
             }
         }
 
-        return $nameSpace;
+        return implode(':', $array);
     }
 
     protected function getServiceName($name)
