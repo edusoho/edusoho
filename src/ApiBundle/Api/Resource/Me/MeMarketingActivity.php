@@ -34,6 +34,10 @@ class MeMarketingActivity extends AbstractResource
         $conditions['page'] = ceil(($offset + 1) / $limit);
         $conditions['limit'] = $limit;
         $conditions['mobile'] = $user['verifiedMobile'];
+        if (isset($conditions['itemType'])) {
+            $conditions['item_type'] = $conditions['itemType'];
+            unset($conditions['itemType']);
+        }
 
         return $conditions;
     }
