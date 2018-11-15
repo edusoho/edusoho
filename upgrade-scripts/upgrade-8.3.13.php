@@ -54,6 +54,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCrontabJobNum',
+            'addTableIndex',
         );
 
         $funcNames = array();
@@ -93,6 +94,52 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         \Biz\Crontab\SystemCrontabInitializer::init();
 
+        return 1;
+    }
+
+    protected function addTableIndex()
+    {
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
+        }
+
+        $currentTime = time();
+        $today = strtotime(date('Y-m-d', $currentTime).'02:00:00');
+
+        if ($currentTime > $today) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')).'02:00:00');
+        }
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
     }
 
@@ -174,14 +221,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getUserDao()
     {
         return $this->createDao('User:UserDao');
-    }
-
-    /**
-     * @return \Biz\TableIndex\Service\TableIndexService
-     */
-    protected function getTableIndexService()
-    {
-        return $this->createService('TableIndex:TableIndexService');
     }
 
     /**
