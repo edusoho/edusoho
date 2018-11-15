@@ -54,6 +54,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCrontabJobNum',
+            'addCourseTaskResultAddLastLearnTime',
             'addTableIndex',
         );
 
@@ -88,6 +89,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function addCourseTaskResultAddLastLearnTime()
+    {
+        if (!$this->isFieldExist('course_task_result', 'lastLearnTime')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `course_task_result` ADD `lastLearnTime` int(10) DEFAULT 0 COMMENT '最后学习时间' AFTER `status`
+            ");
+        }
+
+        return 1;
     }
 
     protected function resetCrontabJobNum()
