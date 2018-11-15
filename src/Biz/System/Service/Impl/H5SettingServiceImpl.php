@@ -19,7 +19,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
-        foreach ($discoverySettings as &$discoverySetting) {
+        foreach ($discoverySettings as $key => &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 if (!empty($discoverySetting['data']['lastDays'])) {
                     $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
@@ -58,13 +58,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     $link['url'] = '';
                 }
             }
-
             if (in_array($discoverySetting['type'], array('groupon'))) {
                 $activity = $discoverySetting['data']['activity'];
                 $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
-                $discoverySetting['data']['activity']['status'] = empty($remoteActvity) ? $discoverySetting['data']['activity']['status'] : $remoteActvity['status'];
-                $discoverySetting['data']['activity']['name'] = empty($remoteActvity) ? $discoverySetting['data']['activity']['name'] : $remoteActvity['name'];
-                $discoverySetting['data']['activity']['about'] = empty($remoteActvity) ? $discoverySetting['data']['activity']['about'] : $remoteActvity['about'];
+                if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+                    unset($discoverySettings[$key]);
+                    continue;
+                }
+                $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
+                $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
+                $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
             }
         }
 
