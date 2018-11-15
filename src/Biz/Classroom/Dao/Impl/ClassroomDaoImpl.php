@@ -21,11 +21,13 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
     {
         if (array_key_exists('studentNum', $orderBy) && array_key_exists('lastDays', $conditions) && $conditions['lastDays'] > 0) {
             $timeRange = TimeMachine::getTimeRangeByDays($conditions['lastDays']);
+
             return $this->searchByStudentNumAndTimeRange($conditions, $timeRange, $orderBy['studentNum'], $start, $limit);
         }
 
         if (array_key_exists('rating', $orderBy) && array_key_exists('lastDays', $conditions) && $conditions['lastDays'] > 0) {
             $timeRange = TimeMachine::getTimeRangeByDays($conditions['lastDays']);
+
             return $this->searchByRatingAndTimeRange($conditions, $timeRange, $orderBy['rating'], $start, $limit);
         }
 
@@ -34,7 +36,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
 
     /**
      *  根据一段时间内的加入人数排序
-     *  
+     *
         SELECT classroom_member.studentNumCount, classroom.*
         FROM (classroom classroom)
             LEFT JOIN (
@@ -74,7 +76,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        $classrooms = $builder->execute()->fetchAll() ? : array();
+        $classrooms = $builder->execute()->fetchAll() ?: array();
         foreach ($classrooms as &$classroom) {
             $classroom['studentNum'] = empty($classroom['studentNumCount']) ? 0 : $classroom['studentNumCount'];
         }
@@ -124,7 +126,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        $classrooms = $builder->execute()->fetchAll() ? : array();
+        $classrooms = $builder->execute()->fetchAll() ?: array();
         foreach ($classrooms as &$classroom) {
             $classroom['rating'] = empty($classroom['rating_avg']) ? 0 : $classroom['rating_avg'];
         }
