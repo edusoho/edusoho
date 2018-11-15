@@ -93,6 +93,7 @@
               {% for review in reviews %}
               {% set author = review.User|default(null) %}
               {% set course = review.course|default(null) %}
+              {% set courseSet = review.courseSet|default(null) %}
               {% if author and course %}
             <div class="media media-dynamic">
               <div class="media-left">
@@ -102,7 +103,7 @@
                 <div class="title text-sm">
                   {{ web_macro.user_link(author,'link-dark') }}
                   <span class="score">{{web_macro.star(review.rating) }}</span>
-                    {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|plain_text(10) })|raw }}
+                    {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|default(courseSet.title)|plain_text(10) })|raw }}
                 </div>
                 <div class="content gray-darker">
                   {{ review.content|plain_text(30) }}

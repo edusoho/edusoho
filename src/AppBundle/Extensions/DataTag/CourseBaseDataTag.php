@@ -247,14 +247,17 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     {
         $userIds = array();
         $courseIds = array();
+        $courseSetIds = array();
 
         foreach ($courseRelations as &$courseRelation) {
             $userIds[] = $courseRelation['userId'];
             $courseIds[] = $courseRelation['courseId'];
+            $courseSetIds[] = $courseRelation['courseSetId'];
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         foreach ($courseRelations as &$courseRelation) {
             $userId = $courseRelation['userId'];
@@ -266,6 +269,10 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $courseId = $courseRelation['courseId'];
             $course = $courses[$courseId];
             $courseRelation['course'] = $course;
+
+            $courseSetId = $courseRelation['courseSetId'];
+            $courseSet = $courseSets[$courseSetId];
+            $courseRelation['courseSet'] = $courseSet;
         }
 
         return $courseRelations;
