@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\Impl\TagServiceImpl;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Common\ArrayToolkit;
@@ -51,6 +52,7 @@ class CourseSetController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
         $courseSetStatusNum = $this->getDifferentCourseSetsNum($conditions);
+        $courseSets = $this->buildCourseTags($courseSets);
 
         return $this->render(
             'admin/course-set/index.html.twig',
@@ -61,6 +63,7 @@ class CourseSetController extends BaseController
                 'paginator' => $paginator,
                 'classrooms' => $classroomCourses,
                 'filter' => $filter,
+                'tag' => empty($conditions['tagId']) ? array() : $this->getTagService()->getTag($conditions['tagId']),
                 'courseSetStatusNum' => $courseSetStatusNum,
                 'coursesCount' => $coursesCount,
             )
@@ -607,6 +610,16 @@ class CourseSetController extends BaseController
         ));
     }
 
+    public function courseTagMatchAction(Request $request)
+    {
+        $queryString = $request->query->get('q');
+        $page_limit = $request->query->get('page_limit');
+
+        $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, empty($page_limit) ? 10 : $page_limit);
+
+        return $this->createJsonResponse($tags);
+    }
+
     protected function filterCourseSetConditions($filter, $conditions)
     {
         if ('classroom' == $filter) {
@@ -626,6 +639,11 @@ class CourseSetController extends BaseController
             $categorIds[] = $conditions['categoryId'];
             $conditions['categoryIds'] = $categorIds;
             unset($conditions['categoryId']);
+        }
+
+        if (!empty($conditions['tagId'])) {
+            $conditions['tagIds'] = array($conditions['tagId']);
+            $conditions = $this->getCourseConditionsByTags($conditions);
         }
 
         return $conditions;
@@ -683,6 +701,55 @@ class CourseSetController extends BaseController
         }
 
         return $conditions;
+    }
+
+    protected function getCourseConditionsByTags($conditions)
+    {
+        if (empty($conditions['tagIds'])) {
+            return $conditions;
+        }
+
+        $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
+
+        $conditions['ids'] = empty($tagOwnerIds) ? array() : $tagOwnerIds;
+        unset($conditions['tagIds']);
+
+        return $conditions;
+    }
+
+    protected function buildCourseTags($courseSets)
+    {
+        foreach ($courseSets as &$courseSet) {
+            if (!empty($courseSet['tags'])) {
+                $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
+                $tags = array_values($tags);
+                $courseSet['tag'] = $tags[0]['name'];
+                if (count($courseSet['tags']) > 1) {
+                    $courseSet['tagNames'] = $this->buildTagsNames(ArrayToolkit::column($tags, 'id'), $tags);
+                }
+            }
+        }
+
+        return $courseSets;
+    }
+
+    protected function buildTagsNames(array $tagIds, array $tags, $delimiter = '/')
+    {
+        $tagsNames = '';
+
+        if (empty($tagIds) || empty($tags)) {
+            return $tagsNames;
+        }
+
+        $tags = ArrayToolkit::index($tags, 'id');
+
+        foreach ($tagIds as $tagId) {
+            if (!empty($tags[$tagId])) {
+                $tagsNames = $tagsNames.$delimiter.$tags[$tagId]['name'];
+            }
+        }
+
+        return trim($tagsNames, $delimiter);
     }
 
     /**
@@ -787,6 +854,14 @@ class CourseSetController extends BaseController
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return TagServiceImpl
+     */
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
     }
 
     /**

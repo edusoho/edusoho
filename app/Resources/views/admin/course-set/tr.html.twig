@@ -30,11 +30,17 @@
       {{ courseSet.minCoursePrice|default() }}-{{ courseSet.maxCoursePrice|default() }}
     {% endif %}
   </td>
+
   {% if filter == 'normal' %}
     <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum|default(0) }}</a></td>
   {% endif %}
-  <td>{{ dict_macro.courseStatus( courseSet.status) }}</td>
-
+  <td>
+    {{ courseSet.tag|default('--') }}
+    {% if count(courseSet.tags)>1 %}
+      <i class="es-icon es-icon-more ft-xsm" data-toggle="popover" data-container="body" data-trigger="hover"
+         data-placement="top" data-content="{{ courseSet.tagNames|default() }}"></i>
+    {% endif %}
+  </td>
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode} %}
   {% if filter != 'open' and filter != 'liveOpen' %}
     {% if filter == 'classroom' %}
@@ -69,11 +75,11 @@
     <br>
     <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
   </td>
-  {% if filter != 'open' and filter != 'liveOpen' %}
-    <td>
-      <span class="text-info">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
-    </td>
-  {% endif %}
+  <td>{{ dict_macro.courseStatus( courseSet.status) }}<br>
+    {% if filter != 'open' and filter != 'liveOpen' %}
+      <span class="text-muted text-sm">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
+    {% endif %}
+  </td>
   <td>
     <div class="btn-group">
 
