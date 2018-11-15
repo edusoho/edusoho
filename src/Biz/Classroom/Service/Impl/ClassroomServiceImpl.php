@@ -91,9 +91,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function getClassroom($id)
     {
-        $classroom = $this->getClassroomDao()->get($id);
-
-        return $classroom;
+        return $this->getClassroomDao()->get($id);
     }
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
