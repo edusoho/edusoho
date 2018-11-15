@@ -44,7 +44,7 @@
           v-for="(item, index) in baseModules" :key="`base-${index}`">
           {{ item.name }}
         </el-button>
-        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" href="/admin/login/marketing?target=activity_create" target="_blank">创建活动&gt;&gt;</a> </div>
+        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a> </div>
         <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
           v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
           {{ item.name }}
@@ -75,6 +75,7 @@ import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-conf
 import ModuleCounter from '@admin/utils/module-counter';
 import pathName2Portal from '@admin/config/api-portal-config';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
+import marketingMixins from '@admin/mixins/marketing';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
 import draggable from 'vuedraggable';
@@ -86,6 +87,7 @@ export default {
     draggable,
     findFooter
   },
+  mixins: [marketingMixins],
   data() {
     return {
       title: 'EduSoho 微网校',

@@ -7,6 +7,7 @@
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{ unitType }}</span>
       <span class="header__subtitle">仅显示已发布{{ unitType }}</span>
+      <a v-if="type === 'groupon'" class="color-primary pull-right fsn mrl" :href="createMarketingUrl" target="_blank">创建拼团活动</a>
     </div>
     <div class="course-modal__body">
       <div class="search__container">
@@ -37,12 +38,14 @@
 </template>
 
 <script>
+import marketingMixins from '@admin/mixins/marketing';
 import head from '@admin/config/modal-config';
-import courseTable from './course-table'
+import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'course-modal',
+  mixins: [marketingMixins],
   components: {
     courseTable,
   },
