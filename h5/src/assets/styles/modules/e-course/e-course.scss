@@ -6,10 +6,19 @@
 }
 
 .e-course__left {
- img {
-  width: vw(140);
-  height: vw(79);
- }
+  .e-course__img {
+    width: vw(140);
+    height: vw(79);
+  }
+  .e-class__img {
+    width: vw(140);
+    height: vw(93);
+  }
+}
+
+.e-course__count {
+  font-size: vw(12);
+  color: #71777D;
 }
 
 .e-course__right {

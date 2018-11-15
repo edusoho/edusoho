@@ -10,6 +10,11 @@
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></course>
 
+    <!-- 班级列表 -->
+    <course v-if="module.type === moduleType.classList"
+      :active="isActive" :moduleData="module" :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"></course>
+
     <!-- 广告海报 -->
     <poster v-if="module.type === moduleType.poster"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
@@ -89,6 +94,7 @@ export default {
       moduleType: {
         slideShow: 'slide_show',
         courseList: 'course_list',
+        classList: 'class_list',
         poster: 'poster',
         incomplete: false,
       }

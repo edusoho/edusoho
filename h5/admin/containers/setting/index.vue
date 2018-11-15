@@ -91,6 +91,10 @@ export default {
           default: moduleDefault.courseList,
         },
         {
+          name: '班级列表',
+          default: moduleDefault.classList,
+        },
+        {
           name: '图片广告',
           default: moduleDefault.poster,
         }
@@ -160,7 +164,7 @@ export default {
       const defaultCopied = JSON.parse(defaultString);
 
       this.modules.push(defaultCopied);
-      this.currentModuleIndex =  Math.max(this.modules.length - 1, 0);
+      this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
     },
     load() {
       // 读取草稿配置

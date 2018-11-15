@@ -5,20 +5,20 @@
     :before-close="beforeCloseHandler"
     :close-on-click-modal="false">
     <div class="course-modal__header" slot="title">
-      <span class="header__title">选择课程</span>
-      <span class="header__subtitle">仅显示已发布课程</span>
+      <span class="header__title">选择{{typeText}}</span>
+      <span class="header__subtitle">仅显示已发布{{typeText}}</span>
     </div>
     <div class="course-modal__body">
       <div class="search__container">
-        <span class="search__label">选择课程：</span>
+        <span class="search__label">选择{{typeText}}：</span>
 
         <!-- 接口字段 courseSetTitle -->
         <el-autocomplete
           size="medium"
           v-model="keyWord"
-          placeholder="搜索课程"
+          :placeholder="`搜索${typeText}`"
           class="inline-input search__input"
-          :value-key="'displayedTitle'"
+          :value-key="'title'"
           :clearable="true"
           :autofocus="true"
           :trigger-on-focus="false"
@@ -26,9 +26,9 @@
           @select="selectHandler"
         ></el-autocomplete>
       </div>
-      <div class="help-text mbs">拖动课程名称可调整排序</div>
+      <div class="help-text mbs">拖动{{typeText}}名称可调整排序</div>
     </div>
-    <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses"></course-table>
+    <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :typeText="typeText"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
       <el-button class="text-medium btn-border-primary" size="small" @click="modalVisible = false">取 消</el-button>
       <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
@@ -57,6 +57,10 @@ export default {
     limit: {
       default: '',
     },
+    typeText: {
+      type: String,
+      default: '课程'
+    }
   },
   data () {
     return {
@@ -95,7 +99,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getCourseList'
+      'getCourseList',
+      'getClassList'
     ]),
     restoreListIds() {
       this.courseListIds = [];
@@ -121,7 +126,7 @@ export default {
 
       if (exccedLimit) {
         this.$message({
-          message: `当前最多可选 ${this.limit} 个课程`,
+          message: `当前最多可选 ${this.limit} 个${this.typeText}`,
           type: 'warning'
         });
         return;
@@ -140,6 +145,16 @@ export default {
     searchHandler(queryString, cb) {
       if (this.cacheResult[queryString]) {
         cb(this.cacheResult[queryString])
+        return;
+      }
+      if (this.typeText === '班级') {
+        this.getClassList({
+          courseSetTitle: queryString
+        }).then(res => {
+          console.log(res,7777)
+          this.cacheResult[queryString] = res.data;
+          cb(res.data);
+        })
         return;
       }
       this.getCourseList({

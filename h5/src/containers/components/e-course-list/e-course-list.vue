@@ -1,5 +1,5 @@
 <template>
-  <div class="e-course-list">
+  <div class="e-course-list ">
     <div class="e-course-list__header">
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
@@ -9,7 +9,19 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type" :feedback="feedback">
+<!--       <e-class v-for="item in courseList.items"
+        :key="item.id"
+        :course="item | courseListData(typeList)"
+        :typeList="typeList"
+        :feedback="feedback">
+      </e-class> -->
+      <e-course
+        v-for="item in courseList.items"
+        :key="item.id"
+        :course="item"
+        :type="type"
+        :typeList="typeList"
+        :feedback="feedback">
       </e-course>
     </div>
     <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
@@ -17,7 +29,9 @@
 </template>
 
 <script>
-  import course from '../e-course/e-course';
+import course from '../e-course/e-course';
+// import eClass from '../e-class/e-class';
+import courseListData from '@admin/utils/filter-course.js';
 
   export default {
     props: {
@@ -32,15 +46,23 @@
       index: {
         type: Number,
         default: -1,
+      },
+      typeList: {
+        type: String,
+        default: 'course_list'
       }
     },
     components: {
       'e-course': course,
+      // 'e-class': eClass,
     },
     data() {
       return {
-        type: 'price',
+        type: 'price'
       };
+    },
+    filters: {
+      courseListData,
     },
     computed: {
       sourceType: {
@@ -116,12 +138,22 @@
       fetchCourse() {
         if (this.sourceType === 'custom') return;
 
-        const params = {
+        let params = {
           sort: this.sort,
           limit: this.limit,
           lastDays: this.lastDays,
           categoryId: this.categoryId,
         };
+
+        if (this.typeList === 'class_list') {
+          params = {
+            sort: 'recommendedSeq',
+            limit: this.limit,
+            lastDays: 'studentNum',
+            categoryId: this.categoryId,
+          };
+        }
+
         this.$emit('fetchCourse', {
           index: this.index,
           params,

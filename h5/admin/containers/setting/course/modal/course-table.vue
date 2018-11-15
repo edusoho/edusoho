@@ -51,14 +51,18 @@ export default {
       type: Array,
       default: [],
     },
+    typeText: {
+      type: String,
+      default: '课程'
+    }
   },
   data () {
     return {
       head: [
         {
           col: 5,
-          title: '课程名称',
-          label: 'displayedTitle',
+          title: `${this.typeText}名称`,
+          label: 'title',
         }, {
           col: 3,
           title: '商品价格',

@@ -45,7 +45,6 @@ Vue.use(Dialog);
 Vue.use(Tag);
 Vue.use(Autocomplete);
 Vue.use(Tooltip);
-
 Vue.use(utils);
 
 Vue.prototype.$message = Message;

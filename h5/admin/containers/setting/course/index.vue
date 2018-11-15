@@ -1,10 +1,14 @@
 <template>
   <module-frame containerClass="setting-course" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part">
-      <e-course-list :courseList="copyModuleData.data" :feedback="false" @fetchCourse="fetchCourse"></e-course-list>
+      <e-course-list
+      	:courseList="copyModuleData.data"
+      	:feedback="false"
+      	:typeList="type"
+      	@fetchCourse="fetchCourse"></e-course-list>
     </div>
     <div slot="setting" class="course-allocate">
-      <header class="title">课程列表设置</header>
+      <header class="title">{{typeLabel}}列表设置</header>
       <div class="course-item-setting clearfix">
         <!-- 列表名称 -->
         <div class="course-item-setting__section clearfix">
@@ -15,25 +19,25 @@
         </div>
         <!-- 课程来源 -->
         <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left">课程来源：</p>
+          <p class="pull-left section-left">{{typeLabel}}来源：</p>
           <div class="section-right">
-            <el-radio v-model="sourceType" label="condition">课程分类</el-radio>
+            <el-radio v-model="sourceType" label="condition">{{typeLabel}}名称</el-radio>
             <el-radio v-model="sourceType" label="custom">自定义</el-radio>
           </div>
         </div>
         <!-- 课程分类 -->
         <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left">课程分类：</p>
+          <p class="pull-left section-left">{{typeLabel}}分类：</p>
           <div class="section-right">
             <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
             </el-input>
             <div class="required-option" v-show="sourceType === 'custom'">
-              <el-button type="info" size="mini" @click="openModal">选择课程</el-button>
+              <el-button type="info" size="mini" @click="openModal">选择{{typeLabel}}</el-button>
             </div>
           </div>
           <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">
             <div class="section__course-item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
-              <div class="section__course-item__title text-overflow">{{ courseItem.displayedTitle }}</div>
+              <div class="section__course-item__title text-overflow">{{ courseItem.displayedTitle || courseItem.title }}</div>
               <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
             </div>
           </draggable>
@@ -72,6 +76,7 @@
     <course-modal slot="modal"
       :visible="modalVisible"
       :limit="limit"
+      :typeText="typeLabel"
       :courseList="copyModuleData.data.items"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses"></course-modal>
@@ -85,6 +90,10 @@ import moduleFrame from '../module-frame'
 import { mapMutations, mapState, mapActions } from 'vuex';
 import treeDigger from '@admin/utils/tree-digger';
 
+const optionLabel = {
+  'course_list': '课程',
+  'class_list': '班级'
+}
 
 export default {
   components: {
@@ -111,6 +120,7 @@ export default {
     return {
       modalVisible: false,
       limitOptions: [1, 2, 3, 4, 5, 6, 7, 8],
+      type: this.moduleData.type,
       sortOptions: [{
         value: '-studentNum',
         label: '加入最多'
@@ -122,7 +132,7 @@ export default {
         label: '评分最高',
       }, {
         value: 'recommendedSeq',
-        label: '推荐课程',
+        label: `推荐${optionLabel[this.moduleData.type]}`,
       }],
       cascaderProps: {
         label: 'name',
@@ -142,11 +152,14 @@ export default {
       }, {
         value: '0',
         label: '历史所有',
-      }],
+      }]
     }
   },
   computed: {
     ...mapState(['categories']),
+    typeLabel() {
+      return optionLabel[this.type];
+    },
     isActive: {
       get() {
         return this.active;
@@ -216,7 +229,7 @@ export default {
       set(value) {
         this.copyModuleData.data.categoryId = value;
       },
-    },
+    }
   },
   watch: {
     copyModuleData: {
@@ -257,7 +270,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getCourseList']),
+    ...mapActions(['getCourseList', 'getClassList']),
     getUpdatedCourses(courses) {
       this.copyModuleData.data.items = courses;
     },
@@ -272,9 +285,14 @@ export default {
       this.copyModuleData.data.items.splice(index, 1);
     },
     fetchCourse({params, index}) {
-      this.getCourseList(params).then(res => {
-        if (this.sourceType === 'custom') return;
-
+    	if (this.sourceType === 'custom') return;
+    	if (this.type === 'course_list') {
+	      this.getCourseList(params).then(res => {
+	        this.moduleData.data.items = res.data;
+	      })
+	      return;
+      }
+    	this.getClassList(params).then(res => {
         this.moduleData.data.items = res.data;
       })
     }

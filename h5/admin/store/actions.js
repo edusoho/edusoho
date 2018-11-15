@@ -56,6 +56,10 @@ export const getCourseList = ({ commit }, params) => Api.getCourseList({
   params
 });
 
+export const getClassList = ({ commit }, params) => Api.getClassList({
+  params
+});
+
 export const getQrcode = ({ commit }, { route, preview, times, duration }) => Api.getQrcode({
   query: {
     route

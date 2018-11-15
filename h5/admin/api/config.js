@@ -33,6 +33,11 @@ const config = [
     url: '/courses',
     method: 'GET'
   }, {
+    // 获取班级列表数据
+    name: 'getClassList',
+    url: '/classrooms',
+    method: 'GET'
+  }, {
     // 获得二维码
     name: 'getQrcode',
     url: '/qrcode/{route}',

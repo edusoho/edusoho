@@ -25,6 +25,19 @@ export default {
       items: []
     }
   },
+  classList: {
+    type: 'class_list',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '0',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      items: []
+    }
+  },
   poster: {
     type: 'poster',
     moduleType: '',

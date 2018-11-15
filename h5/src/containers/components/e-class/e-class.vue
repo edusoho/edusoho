@@ -2,15 +2,15 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img :class="[typeList==='course_list' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
+        <img class="e-course__img" v-bind:src="course.imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ title }}</div>
-        <div v-if="typeList==='class_list'" class="e-course__count">
+        <div class="e-course__title text-overflow">{{ course.title }}</div>
+        <div class="e-course__count" v-if="course.courseNum">
           共 {{course.courseNum}} 门课程
         </div>
-        <div class="e-course__project text-overflow" v-if="typeList==='course_list'">
-          <span v-if="teachPlan">{{ teachPlan }}</span>
+        <div class="e-course__project text-overflow" v-if="course.teachPlan">
+          <span v-if="teachPlan">{{ course.teachPlan }}</span>
         </div>
         <switchBox :type="type" :course="course" :order="order" :studentNum="course.studentNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
       </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import switchBox from './e-course-switch-box.vue';
+  import switchBox from '../e-course/e-course-switch-box.vue';
 
   export default {
     components: {
