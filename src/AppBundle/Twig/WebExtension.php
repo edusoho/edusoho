@@ -166,6 +166,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
+            new \Twig_SimpleFunction('get_key', array($this, 'getKey')),
         );
     }
 
@@ -1792,6 +1793,17 @@ class WebExtension extends \Twig_Extension
         }
 
         return $arrays;
+    }
+
+    public function getKey($array, $targetValue, $default)
+    {
+        foreach ($array as $key => $value) {
+            if ($value == $targetValue) {
+                return $key;
+            }
+        }
+
+        return $default;
     }
 
     /**
