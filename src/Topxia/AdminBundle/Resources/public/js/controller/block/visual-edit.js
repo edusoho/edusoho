@@ -289,7 +289,7 @@ define(function(require, exports, module) {
 
   function bindSortPoster(){
     var $group = $('#btn-tabs');
-    let adjustment;
+    var adjustment;
     $('#btn-tabs').sortable({
       handle: '.js-move-icon',
       itemSelector : '.poster-table',
@@ -325,7 +325,7 @@ define(function(require, exports, module) {
         $('.colorpicker-input').colorpicker();
       },
       onDragStart: function(item, container, _super) {
-        let offset = item.offset(),
+        var offset = item.offset(),
           pointer = container.rootGroup.pointer;
         adjustment = {
           left: pointer.left - offset.left,
