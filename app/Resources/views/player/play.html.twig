@@ -57,10 +57,10 @@
           style="height:100%"
         ></div>
       </div>
-      {% do script(['libs/base.js','app/js/common.js'], 1000) %}
-      <script src="{{ cloud_sdk_url('video') }}"></script>
-      <script src="{{ '//service-cdn.cg-dev.cn/js-sdk/audio-player/sdk-v1.js?1.1.0.89' }}"></script>
-      {% do script(['app/js/player/index.js']) %}
+      {% if cloudSdk %}
+        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
+      {% endif %}
+      {% do script(['libs/base.js','app/js/common.js','app/js/player/index.js'], 1000) %}
     {% endif %}
     {% include 'script_boot.html.twig' %}
   {% else %}

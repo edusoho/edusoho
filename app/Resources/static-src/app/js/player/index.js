@@ -131,8 +131,12 @@ class Show {
     });
   }
 
-  isCloudPalyer() {
+  isCloudVideoPalyer() {
     return 'balloon-cloud-video-player' == this.playerType;
+  }
+
+  isCloudAudioPlayer() {
+    return 'audio-player' == this.playerType;
   }
 
   initEvent() {
@@ -143,13 +147,14 @@ class Show {
         pause: true,
         currentTime: player.getCurrentTime()
       });
-      if (!this.isCloudPalyer()) {
+      if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         let time = DurationStorage.get(this.userId, this.fileId);
         if (time > 0) {
           player.setCurrentTime(time);
         }
         player.play();
-      } else if (this.isCloudPalyer()) {
+      } 
+      if (this.isCloudVideoPalyer()) {
         if (this.markerUrl) {
           $.getJSON(this.markerUrl, function(questions) {
             player.setQuestions(questions);
@@ -183,7 +188,7 @@ class Show {
         pause: true,
         currentTime: player.getCurrentTime()
       });
-      if (!this.isCloudPalyer()) {
+      if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
         }
@@ -210,7 +215,7 @@ class Show {
       messenger.sendToParent('ended', {
         stop: true
       });
-      if (!this.isCloudPalyer()) {
+      if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         DurationStorage.del(this.userId, this.fileId);
       }
     });

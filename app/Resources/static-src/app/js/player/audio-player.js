@@ -16,34 +16,6 @@ class AudioPlayer extends Emitter {
 
     let extConfig = {};
 
-    if (self.options.timelimit) {
-      extConfig = Object.assign(extConfig, {
-        pluck: {
-          timelimit: self.options.timelimit,
-          text: Translator.trans('activity.video.try_watch_finish_hint'),
-          display: true
-        }
-      });
-    }
-
-    if (self.options.enablePlaybackRates) {
-      extConfig = Object.assign(extConfig, {
-        playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0']
-      });
-    }
-
-    if (self.options.videoH5) {
-      extConfig = Object.assign(extConfig, {
-        h5: true
-      });
-    }
-
-    if (self.options.controlBar) {
-      extConfig = Object.assign(extConfig, {
-        controlBar: self.options.controlBar
-      });
-    }
-
     if (self.options.statsInfo) {
       var statsInfo = self.options.statsInfo;
       extConfig = Object.assign(extConfig, {
@@ -58,13 +30,11 @@ class AudioPlayer extends Emitter {
 
     extConfig = Object.assign(extConfig, {
       id: 'lesson-player',
-      disableControlBar: self.options.disableControlBar,
-      disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
       template: self.options.content,
-      // remeberLastPos: true,
-    //   videoHeaderLength: self.options.videoHeaderLength,
-      // autoplay: self.options.autoplay
+      autoplay: true, //音频自动播放开启
+      remeberLastPos: true,
+      playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0'],
     });
     var player = new AudioPlayerSDK(extConfig);
 
@@ -72,10 +42,10 @@ class AudioPlayer extends Emitter {
       self.emit('ready', e);
     });
 
-    // player.on('timeupdate', function(e) {
-    //   //    player.__events get all the event;
-    //   self.emit('timechange', e);
-    // });
+    player.on('timeupdate', function(e) {
+      //    player.__events get all the event;
+      self.emit('timechange', e);
+    });
 
     player.on('ended', function(e) {
       self.emit('ended', e);
