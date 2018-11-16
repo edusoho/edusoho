@@ -29,7 +29,7 @@ class DurationStorage {
         var index = durationTmpArray[i].indexOf(userId + '-' + fileId);
         if (index > -1) {
           var key = durationTmpArray[i];
-          return parseFloat(key.split(':')[1]) - 5;
+          return parseFloat(key.split(':')[1]);
         }
       }
     }

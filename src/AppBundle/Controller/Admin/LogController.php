@@ -252,6 +252,10 @@ class LogController extends BaseController
 
     private function deleteHTMLCode($str)
     {
+        if (!is_string($str)) {
+            $str = json_encode($str);
+        }
+
         return strip_tags($str);
     }
 
