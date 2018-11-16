@@ -13,6 +13,7 @@
     {% else %}
       <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
         <div id="lesson-video-content"
+          data-content="{{context.content|default('')}}"
           data-user-id="{{app.user.id|default(0)}}"
           data-user-name="{{app.user.username|default('')}}"
           data-file-global-id="{{file.globalId}}"
@@ -56,9 +57,10 @@
           style="height:100%"
         ></div>
       </div>
-      {% do script(['libs/base.js','app/js/common.js'], 1000) %}
-      <script src="{{ cloud_sdk_url('video') }}"></script>
-      {% do script(['app/js/player/index.js']) %}
+      {% if cloudSdk %}
+        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
+      {% endif %}
+      {% do script(['libs/base.js','app/js/common.js','app/js/player/index.js'], 1000) %}
     {% endif %}
     {% include 'script_boot.html.twig' %}
   {% else %}
