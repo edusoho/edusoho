@@ -88,6 +88,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
       remeberLastPos: true,
+      customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
       autoplay: self.options.autoplay
     });
@@ -100,6 +101,10 @@ class BalloonCloudVideoPlayer extends Emitter {
     player.on('timeupdate', function(e) {
       //    player.__events get all the event;
       self.emit('timechange', e);
+    });
+
+    player.on('firstplay', function (e) {
+      player.setCurrentTime(self.options.customPos);
     });
 
     player.on('ended', function(e) {
