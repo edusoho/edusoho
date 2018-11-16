@@ -6,7 +6,6 @@ use AppBundle\DependencyInjection\Compiler\ActivityRuntimeContainerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use AppBundle\DependencyInjection\Compiler\ExtensionPass;
 use AppBundle\Common\ExtensionalBundle;
-use ApiBundle\Api\Util\AssetHelper;
 
 class AppBundle extends ExtensionalBundle
 {
@@ -32,16 +31,10 @@ class AppBundle extends ExtensionalBundle
                 $biz['migration.directories'][] = $migrationsDir;
             }
         }
-        $this->initEnv();
     }
 
     public function getEnabledExtensions()
     {
         return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
-    }
-
-    private function initEnv()
-    {
-        AssetHelper::setContainer($this->container);
     }
 }
