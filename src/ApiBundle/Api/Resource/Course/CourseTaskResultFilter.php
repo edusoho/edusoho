@@ -11,6 +11,13 @@ class CourseTaskResultFilter extends Filter
     );
 
     protected $publicFields = array(
-        'activityId', 'courseId', 'courseTaskId', 'createdTime', 'finishedTime', 'updatedTime', 'userId',
+        'activityId',
+        'courseId',
+        'courseTaskId',
+        'createdTime',
+        'lastLearnTime',
+        'finishedTime',
+        'updatedTime',
+        'userId'
     );
 }

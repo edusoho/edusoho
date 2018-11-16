@@ -41,7 +41,7 @@ class UsingCoupon extends Coupon implements CouponInterface
         $this->getLogService()->info(
             'coupon',
             'use',
-            "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}",
+            "使用了优惠券 {$coupon['code']}",
             $coupon
         );
     }

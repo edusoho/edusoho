@@ -51,13 +51,32 @@
 
 .poster-placehoder {
   background-color: #fcffc0 !important;;
-  width: 100px;
+  width: 110px;
   height: 40px;
 }
 
 .poster-table {
   &.dragged {
-    width: 100px !important;
+    width: 112px !important;
     background-color: #eee !important;
+  }
+  &.active {
+    i:after {
+      background-color: #fff;
+    }
+  }
+  i {
+    position: relative;
+    vertical-align: text-bottom;
+    cursor: move;
+    &:after {
+     content: '';
+     width: 1px;
+     position: absolute;
+     top: 1px;
+     right: -10px;
+     height: 14px;
+     background-color: #428bca;
+    }
   }
 }

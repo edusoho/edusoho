@@ -5,7 +5,7 @@
   {% set testpaperResult = data('TestPaperResult', {activityId: activity.id ,testpaperId: activity.mediaId}) %}
   {% if not testpaperResult  or (testpaperResult.status == 'doing' and  not testpaperResult.updateTime) %}
     {% include('@activity/exercise/resources/views/show/index.html.twig') %}
-  {% elseif testpaperResult and  testpaperResult.status == 'finished' %}
+  {% else %}
     {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}
   {% endif %}
 {% endif %}
