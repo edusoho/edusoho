@@ -38,7 +38,7 @@ class Show {
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
-    if (parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
+    if ($iframe.length > 0 && parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
       DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
     }
