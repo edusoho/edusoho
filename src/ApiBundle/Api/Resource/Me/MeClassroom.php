@@ -27,15 +27,15 @@ class MeClassroom extends AbstractResource
         if (isset($querys['limit']) && isset($querys['offset'])) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-            $classrooms = $this->getClassRooms($conditions, array(), $offset, $limit);
+            $classrooms = $this->getClassrooms($conditions, array(), $offset, $limit);
 
             return $this->makePagingObject($classrooms, $total, $offset, $limit);
         } else {
-            return $this->getClassRooms($conditions, array(), 0, $total);
+            return $this->getClassrooms($conditions, array(), 0, $total);
         }
     }
 
-    private function getClassRooms($conditions, $orderBy, $offset, $limit)
+    private function getClassrooms($conditions, $orderBy, $offset, $limit)
     {
         $classroomIds = ArrayToolkit::column(
             $this->getClassroomService()->searchMembers($conditions, array(), $offset, $limit),
