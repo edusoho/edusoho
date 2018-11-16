@@ -37,6 +37,12 @@ class Show {
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
+    let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
+    if ($iframe.length > 0 && parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
+      DurationStorage.del(this.userId, this.fileId);
+      DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
+    }
+    this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
 
     this.initView();
     this.initEvent();
@@ -86,7 +92,8 @@ class Show {
         resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
-        autoplay: this.autoplay
+        autoplay: this.autoplay,
+        customPos: this.lastLearnTime
       }
     );
   }
@@ -149,6 +156,8 @@ class Show {
       }
     });
 
+   
+
     player.on('answered', (data) => {
       let regExp = /course\/(\d+)\/task\/(\d+)\//;
       let matches = regExp.exec(window.location.href);
@@ -176,6 +185,8 @@ class Show {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
         }
+      } else {
+        DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
       }
     });
 
