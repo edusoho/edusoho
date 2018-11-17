@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 class EduSohoUpgrade extends AbstractUpdater
 {
     private $userUpdateHelper = null;
+    private $perPageCount = 10000;
 
     public function __construct($biz)
     {
@@ -54,6 +55,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCrontabJobNum',
+            'addCourseTaskResultAddLastLearnTimeTempTable',
             'addCourseTaskResultAddLastLearnTime',
             'addTableIndex',
         );
@@ -78,6 +80,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $method = $funcNames[$step];
         $page = $this->$method($page);
 
+        echo $method.$page;
+
         if ($page == 1) {
             $step++;
         }
@@ -91,14 +95,88 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function addCourseTaskResultAddLastLearnTime()
+    protected function addCourseTaskResultAddLastLearnTimeTempTable()
     {
-        if (!$this->isFieldExist('course_task_result', 'lastLearnTime')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `course_task_result` ADD `lastLearnTime` int(10) DEFAULT 0 COMMENT '最后学习时间' AFTER `status`
-            ");
+        if ($this->isFieldExist('course_task_result', 'lastLearnTime')) {
+            return 1;
         }
 
+        $count = $this->getTableCount('course_task_result');
+        if ($count > 100000) {
+            $this->getConnection()->exec("
+                ALTER TABLE `course_task_result` ADD `lastLearnTime` int(10) DEFAULT 0 COMMENT '最后学习时间' AFTER `status`;
+            ");
+            return 1;
+        }
+        $this->getConnection()->exec("DROP TABLE IF EXISTS `course_task_result_temp`;");
+        $this->getConnection()->exec("
+              CREATE TABLE `course_task_result_temp` (
+                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动的id',
+                  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属课程的id',
+                  `courseTaskId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程的任务id',
+                  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+                  `status` varchar(255) NOT NULL DEFAULT 'start' COMMENT '任务状态，start，finish',
+                  `lastLearnTime` int(10) DEFAULT '0' COMMENT '最后学习时间',
+                  `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成时间',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  `time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务进行时长（分钟）',
+                  `watchTime` int(10) unsigned NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`id`),
+                  KEY `courseTaskId_activityId` (`courseTaskId`,`activityId`),
+                  KEY `taskid_userid` (`userId`,`courseTaskId`),
+                  KEY `idx_userId_courseId` (`userId`,`courseId`),
+                  KEY `finishedTime` (`finishedTime`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        return 1;
+    }
+
+    protected function addCourseTaskResultAddLastLearnTime($page)
+    {
+        if ($this->isFieldExist('course_task_result', 'lastLearnTime')) {
+            return 1;
+        }
+
+        $table = 'course_task_result';
+        $count = $this->getTableCount($table);
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $this->getConnection()->exec("
+                INSERT INTO `course_task_result_temp` 
+                  (
+                   `id`, 
+                   `activityId`,
+                   `courseId`,
+                   `courseTaskId`,
+                   `userId`,
+                   `status`,
+                   `lastLearnTime`,
+                   `finishedTime`,
+                   `createdTime`,
+                   `updatedTime`,
+                   `time`,
+                   `watchTime`
+                   ) select * from course_task_result limit {$start},{$this->perPageCount};
+            ");
+
+            $page = $page + 1;
+            return $page;
+
+        } else {
+            return 1;
+        }
+    }
+
+    protected function addCourseTaskResultAddLastLearnTimeReNameTable()
+    {
+        if ($this->isFieldExist('course_task_result', 'lastLearnTime')) {
+            return 1;
+        }
+
+        $this->getConnection()->exec("RENAME TABLE `course_task_result` TO `course_task_result_origin`;");
+        $this->getConnection()->exec("RENAME TABLE `course_task_result_temp` TO `course_task_result`;");
         return 1;
     }
 
@@ -210,6 +288,14 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isIndexExist($table, $column, $index)) {
             $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
         }
+    }
+
+    protected function getTableCount($table)
+    {
+        $sql = "select count(*) from `{$table}`;";
+
+        return $this->getConnection()->fetchColumn($sql) ?: 0;
+
     }
 
     protected function isJobExist($code)
