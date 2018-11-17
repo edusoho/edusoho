@@ -123,7 +123,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Biz\Common\CommonException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testAddCategoryWithNotExistGroupId()
     {
@@ -133,7 +133,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Biz\Common\CommonException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testAddCategoryWithCodeAlreayExist()
     {
@@ -145,7 +145,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Biz\Common\CommonException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testGetCategory()
     {
@@ -490,7 +490,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Biz\Common\CommonException
+     * @expectedException \Biz\Taxonomy\CategoryException
      */
     public function testGetCategoryTree()
     {
