@@ -17,7 +17,7 @@ class CouponCheckCommand extends OrderPayCheckCommand
                 $coupon = $this->getCouponService()->getCoupon($deduct['deduct_id']);
 
                 if ($coupon['status'] !== 'using') {
-                    throw OrderPayCheckException::USED_COUPON();
+                    throw OrderPayCheckException::COUPON_HAD_BEEN_USED();
                 }
             }
         }

@@ -22,7 +22,7 @@ class CourseProductTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Biz\OrderFacade\Exception\OrderPayCheckException;
+     * @expectedException  \Biz\OrderFacade\Exception\OrderPayCheckException
      */
     public function testValidateOnErrorWhenCourseUnPurchasable()
     {
@@ -30,9 +30,11 @@ class CourseProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('buyable' => false)),
+            array('functionName' => 'getCourse', 'returnValue' => array()),
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
+
+        $courseProduct->validate();
     }
 
     /**

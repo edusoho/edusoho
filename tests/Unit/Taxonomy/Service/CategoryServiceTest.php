@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Taxonomy\Service;
 
-use Biz\Article\CategoryException;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\BaseTestCase;
 
@@ -124,7 +123,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Biz\Taxonomy\CategoryException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testAddCategoryWithNotExistGroupId()
     {
@@ -134,7 +133,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException \Biz\Taxonomy\CategoryException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testAddCategoryWithCodeAlreayExist()
     {
@@ -146,7 +145,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Biz\Taxonomy\CategoryException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testGetCategory()
     {
@@ -491,7 +490,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
-     * @expectedException \Biz\Taxonomy\CategoryException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testGetCategoryTree()
     {
