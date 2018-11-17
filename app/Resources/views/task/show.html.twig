@@ -44,13 +44,12 @@
           </iframe>
         </div>
       </div>
-
-      <div class="dashboard-footer">
-        <div class="pull-left js-audio-convert-box">
+      <div class="dashboard-footer {% if media is not empty and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' and setting('mobile.enabled')|default(false) and media.type == 'video' and media.storage == 'cloud' and media.audioConvertStatus == 'success' and not app.request.cookies.get('close-convert-audio-ad', false) %} dashboard-footer--audio{% endif %}">
+        <div class="pull-left js-audio-convert-box audio-convert-tip">
           {% if media is not empty and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' and setting('mobile.enabled')|default(false) and media.type == 'video' and media.storage == 'cloud' and media.audioConvertStatus == 'success' and not app.request.cookies.get('close-convert-audio-ad', false) %}
             {{ 'course.task.show.video.convert.client.try'|trans }}
             <a href="{{ path('mobile') }}" target="_blank">{{ 'course.video.convert.client.try'|trans }}</a>
-            <a class="js-audio-convert-ad" href="javascript:;" data-cookie="close-convert-audio-ad"><i class="es-icon es-icon-icon_close_circle text-xlg"></i>{{ 'course.task.show.video.convert.client.notify'|trans }}</a>
+            <a class="js-audio-convert-ad hidden-xs" href="javascript:;" data-cookie="close-convert-audio-ad"><i class="es-icon es-icon-icon_close_circle text-xlg"></i>{{ 'course.task.show.video.convert.client.notify'|trans }}</a>
           {% endif %}
         </div>
         <div class="btn-group pull-left visible-xs js-mobile-btn" role="group">
