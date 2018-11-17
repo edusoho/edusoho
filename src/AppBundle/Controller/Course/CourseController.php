@@ -553,7 +553,7 @@ class CourseController extends CourseBaseController
         }
 
         $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
-        $purchasedCourse = $this->getCourseService()->sortByCourses($purchasedCourse);
+        $purchasedCourse = ArrayToolkit::sortPerArrayValue($purchasedCourse, 'seq');
         $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(

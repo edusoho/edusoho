@@ -43,9 +43,9 @@
         <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
       </li>
     {% endif %}
-
-    {% include 'default/switch-language.html.twig' with {isAdapt: 1} %}
-
+    {% if show_switch_locale == 1 %}
+      {% include 'default/switch-language.html.twig' with { langClass: 'text-center user-nav-li-logout' } %}
+    {% endif %}
     <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
   </ul>
 </li>
