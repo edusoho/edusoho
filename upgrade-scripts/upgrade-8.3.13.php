@@ -57,6 +57,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'resetCrontabJobNum',
             'addCourseTaskResultAddLastLearnTimeTempTable',
             'addCourseTaskResultAddLastLearnTime',
+            'addCourseTaskResultAddLastLearnTimeReNameTable',
             'addTableIndex',
         );
 
@@ -80,8 +81,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $method = $funcNames[$step];
         $page = $this->$method($page);
 
-        echo $method.$page;
-
         if ($page == 1) {
             $step++;
         }
@@ -102,7 +101,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $count = $this->getTableCount('course_task_result');
-        if ($count > 100000) {
+        if ($count < 100000) {
             $this->getConnection()->exec("
                 ALTER TABLE `course_task_result` ADD `lastLearnTime` int(10) DEFAULT 0 COMMENT '最后学习时间' AFTER `status`;
             ");
@@ -152,13 +151,12 @@ class EduSohoUpgrade extends AbstractUpdater
                    `courseTaskId`,
                    `userId`,
                    `status`,
-                   `lastLearnTime`,
                    `finishedTime`,
                    `createdTime`,
                    `updatedTime`,
                    `time`,
                    `watchTime`
-                   ) select * from course_task_result limit {$start},{$this->perPageCount};
+                   ) SELECT * FROM course_task_result ORDER BY id limit {$start},{$this->perPageCount};
             ");
 
             $page = $page + 1;
