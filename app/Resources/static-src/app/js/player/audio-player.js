@@ -10,7 +10,6 @@ class AudioPlayer extends Emitter {
 
   setup() {
     let element = this.options.element;
-    console.log(this.options);
 
     var self = this;
 
@@ -33,6 +32,7 @@ class AudioPlayer extends Emitter {
       playlist: self.options.url,
       template: self.options.content,
       autoplay: true, //音频自动播放开启
+      customPos: self.options.customPos,
       remeberLastPos: true,
       playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0'],
     });
@@ -40,6 +40,10 @@ class AudioPlayer extends Emitter {
 
     player.on('ready', function(e) {
       self.emit('ready', e);
+    });
+
+    player.on('firstplay', function (e) {
+      player.setCurrentTime(self.options.customPos);
     });
 
     player.on('timeupdate', function(e) {

@@ -1732,7 +1732,7 @@ class WebExtension extends \Twig_Extension
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
-            'audio' => 'js-sdk/audio-player/sdk-v1.js?1.0.2',
+            'audio' => 'js-sdk/audio-player/sdk-v1.js?1.0.3',
         );
 
         if (isset($paths[$type])) {
