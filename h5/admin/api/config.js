@@ -18,9 +18,14 @@ const config = [
     url: '/pages/{portal}/settings/{type}',
     method: 'DELETE'
   }, {
+    // 获取网校、插件版本
+    name: 'getMPVersion',
+    url: '/settings/miniprogram',
+    method: 'GET'
+  }, {
     // 上传文件
     name: 'uploadFile',
-    url: '/api/files',
+    url: '/files',
     method: 'POST'
   }, {
     // 获取分类配置

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram'}">
+    <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportGrouponVersion}">
       <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
       <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">
         <i class="h5-icon h5-icon-houtui"></i>{{ portal === 'miniprogram' ? '小程序' : '微网校'}}
@@ -29,7 +29,7 @@
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-      <div class="find-section clearfix" v-if="portal === 'h5'">
+      <div class="find-section clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
         <div class="section-title">点击添加组件</div>
         <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
           v-for="(item, index) in baseModules" :key="index">
@@ -38,7 +38,7 @@
       </div>
 
       <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="find-section clearfix" v-if="portal === 'miniprogram'">
+      <div class="find-section clearfix" v-if="portal === 'miniprogram' && supportGrouponVersion">
         <div class="section-title">基础组件</div>
         <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
           v-for="(item, index) in baseModules" :key="`base-${index}`">
@@ -73,9 +73,10 @@ import Api from '@admin/api';
 import * as types from '@admin/store/mutation-types';
 import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
+import needUpgrade from '@admin/utils/version-compare';
 import pathName2Portal from '@admin/config/api-portal-config';
-import ObjectArray2ObjectByKey from '@/utils/array2object';
 import marketingMixins from '@admin/mixins/marketing';
+import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
 import draggable from 'vuedraggable';
@@ -100,6 +101,7 @@ export default {
       marketingModules: MARKETING_MODULE,
       typeCount: {},
       pathName: this.$route.name,
+      currentMPVersion: '0.0.0',
     }
   },
   computed: {
@@ -110,10 +112,18 @@ export default {
     portal() {
       return pathName2Portal[this.pathName];
     },
+    supportGrouponVersion() {
+      return this.supportVersion('1.4.0');
+    },
   },
   created() {
-    this.load();
+    // 获取小程序版本号
+    Api.getMPVersion().then(res => {
+      this.currentMPVersion = res.current_version.version
+    });
 
+    // 请求发现页配置
+    this.load();
     // 获得课程分类列表
     this.getCategories();
   },
@@ -124,6 +134,9 @@ export default {
       'saveDraft',
       'getDraft',
     ]),
+    supportVersion(version) {
+      return !needUpgrade(version, this.currentMPVersion)
+    },
     moduleCountInit() {
       // 模块类型计数初始化
       const typeCount = new ModuleCounter();
