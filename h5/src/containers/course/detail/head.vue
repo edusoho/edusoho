@@ -1,5 +1,8 @@
 <template>
   <div class="course-detail__head">
+    <div class="course-detail__nav--btn" @click="viewAudioDoc">
+      文稿
+    </div>
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
@@ -19,7 +22,8 @@ import { Toast } from 'vant';
 export default {
   data() {
     return {
-      isEncryptionPlus: false
+      isEncryptionPlus: false,
+      mediaOpts: {}
     };
   },
   props: {
@@ -54,6 +58,14 @@ export default {
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
+    viewAudioDoc() {
+       this.$router.push({
+        name: 'course_audioview',
+        query: {
+          ...this.mediaOpts
+        },
+      })
+    },
     getParams () {
       const canTryLookable = !this.joinStatus
       return canTryLookable ? {
@@ -87,10 +99,12 @@ export default {
         id: 'course-detail__head--video',
         user: this.user,
         playlist: media.url,
-        autoplay: true
+        autoplay: true,
+        disableFullscreen: this.sourceType === 'audio'
         // resId: media.resId,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
+      this.mediaOpts = options;
 
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.loadPlayerSDK().then(SDK => {

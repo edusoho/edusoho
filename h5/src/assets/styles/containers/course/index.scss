@@ -93,6 +93,34 @@
   }
 
   // head component
+  &__nav--btn {
+    position: absolute;
+    right: vw(10);
+    top: vw(12);
+    width: vw(40);
+    height: vw(20);
+    line-height: vw(20);
+    text-align: center;
+    font-size: vw(14);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    z-index: 9999;
+    cursor: pointer;
+  }
+
+  &__audio {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 46px;
+    margin: auto;
+    &--content {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   &__head {
     height: vw(210);
     background-color: #DCDBDC;

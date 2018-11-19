@@ -1,12 +1,9 @@
 <template>
-  <div class="course-detail__head">
-    <div class="course-detail__head--img"
-      v-show="sourceType === 'img' || isEncryptionPlus">
-      <img :src="courseSet.cover.large" alt="">
-    </div>
-    <div id="course-detail__head--audio"
+  <div class="course-detail__audio">
+    <div id="course-detail__audio--content"
+      class="course-detail__audio--content"
       ref="audio"
-      v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
+      v-show="!isEncryptionPlus">
     </div>
   </div>
 </template>
@@ -22,12 +19,6 @@ export default {
       isEncryptionPlus: false
     };
   },
-  props: {
-    courseSet: {
-      type: Object,
-      default: {}
-    }
-  },
   computed: {
     ...mapState('course', {
       sourceType: state => state.sourceType,
@@ -38,16 +29,8 @@ export default {
       user: state => state.user,
     })
   },
-  watch: {
-    taskId: {
-      immediate: true,
-      handler(v, oldVal) {
-        if (['audio', 'audio'].includes(this.sourceType)) {
-          window.scrollTo(0, 0);
-          this.initPlayer();
-        }
-      }
-    }
+  created() {
+    this.initPlayer();
   },
   /*
   * 试看需要传preview=1
@@ -73,21 +56,21 @@ export default {
     async initPlayer (){
       this.$refs.audio && (this.$refs.audio.innerHTML = '');
 
-      const player = await Api.getMedia(this.getParams())
+      const player = this.$route.query;
+      console.error(this.$route);
       // 试看判断
       // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
 
-      this.isEncryptionPlus = player.media.isEncryptionPlus;
-      if (player.media.isEncryptionPlus) {
+      this.isEncryptionPlus = player.isEncryptionPlus;
+      if (player.isEncryptionPlus) {
         Toast('该浏览器不支持云视频播放，请下载App')
         return;
       }
-      const media = player.media;
       const options = {
-        id: 'course-detail__head--audio',
+        id: 'course-detail__audio--content',
         user: this.user,
-        playlist: media.url,
-        template: media.text,
+        playlist: player.url,
+        template: player.text,
         autoplay: true,
         simpleMode: true
         // resId: media.resId,

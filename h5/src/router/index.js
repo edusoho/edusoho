@@ -80,6 +80,10 @@ const routes = [
     name: 'course_web',
     component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
   }, {
+    path: '/course/audioview',
+    name: 'course_audioview',
+    component: () => import(/* webpackChunkName: "audioDoc" */ '@/containers/course/detail/audio-doc.vue')
+  }, {
     path: '/live',
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
@@ -156,6 +160,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+  console.error(4);
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {
       type: 'course',
@@ -165,10 +170,12 @@ router.beforeEach((to, from, next) => {
 
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
+    console.error(23);
     store.dispatch('getGlobalSettings', {
       type: 'site',
       key: 'settings'
     }).then(res => {
+      console.error(1);
       if (shouldUpdateMetaTitle) {
         to.meta.title = res.name;
       }
