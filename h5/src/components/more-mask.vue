@@ -20,7 +20,7 @@ export default {
       default: '',
     },
     paddingTop: {
-      default: 100,
+      default: 125,
     },
     asyncLoaded: {
       default: false,
