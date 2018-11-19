@@ -8096,7 +8096,7 @@ exception.user.update_nickname_error: 昵称修改异常
 exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
-exception.user.password_error: 用户名密码错误
+exception.user.password_error: 用户名或密码错误
 
 exception.user_lock: User account is locked, please contact system administrator.
 
