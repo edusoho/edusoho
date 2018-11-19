@@ -28,6 +28,11 @@ class SearchKeywordServiceImpl extends BaseService implements SearchKeywordServi
         return $this->getSearchKeywordDao()->get($id);
     }
 
+    public function getSearchKeywordByName($name)
+    {
+        return $this->getSearchKeywordDao()->getByName($name);
+    }
+
     public function searchSearchKeywords($conditions, $orderBy, $start, $limit)
     {
         return $this->getSearchKeywordDao()->search($conditions, $orderBy, $start, $limit);
@@ -41,6 +46,11 @@ class SearchKeywordServiceImpl extends BaseService implements SearchKeywordServi
     public function deleteSearchKeyword($id)
     {
         return $this->getSearchKeywordDao()->delete($id);
+    }
+
+    public function addSearchKeywordTimes($id)
+    {
+        return $this->getSearchKeywordDao()->wave(array($id), array('times' => 1));
     }
 
     /**

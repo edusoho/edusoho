@@ -9,11 +9,16 @@ class SearchKeywordDaoImpl extends GeneralDaoImpl implements SearchKeywordDao
 {
     protected $table = 'search_keyword';
 
+    public function getByName($name)
+    {
+        return $this->getByFields(array('name' => $name));
+    }
+
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime'),
-            'orderbys' => array('id', 'createdTime', 'updatedTime'),
+            'timestamps' => array('createdTime', 'updateTime'),
+            'orderbys' => array('id', 'times', 'createdTime', 'updateTime'),
             'conditions' => array(
                 'name = :name',
                 'name LIKE :likeName',
