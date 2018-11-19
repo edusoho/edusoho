@@ -124,7 +124,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `watchTime` int(10) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`),
                   KEY `courseTaskId_activityId` (`courseTaskId`,`activityId`),
-                  KEY `taskid_userid` (`userId`,`courseTaskId`),
+                  UNIQUE KEY `courseTaskId_userId` (`courseTaskId`,`userId`),
                   KEY `idx_userId_courseId` (`userId`,`courseId`),
                   KEY `finishedTime` (`finishedTime`)
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -143,7 +143,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = ($page -1) * $this->perPageCount;
         if ($count > $start) {
             $this->getConnection()->exec("
-                INSERT INTO `course_task_result_temp` 
+                INSERT IGNORE INTO `course_task_result_temp` 
                   (
                    `id`, 
                    `activityId`,
