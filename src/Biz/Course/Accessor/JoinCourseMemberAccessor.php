@@ -3,7 +3,6 @@
 namespace Biz\Course\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Course\CourseException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\MemberService;
 use Biz\User\UserException;

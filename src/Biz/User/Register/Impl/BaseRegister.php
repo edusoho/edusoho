@@ -4,7 +4,6 @@ namespace Biz\User\Register\Impl;
 
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use AppBundle\Common\SimpleValidator;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
