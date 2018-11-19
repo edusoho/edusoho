@@ -54,6 +54,26 @@ class SearchKeywordServiceTest extends BaseTestCase
         $this->assertEquals(1, $num);
     }
 
+    public function testGetSearchKeyword()
+    {
+        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
+
+        $keyword = $this->getSearchKeywordService()->getSearchKeyword($keyword['id']);
+
+        $this->assertEquals('test', $keyword['name']);
+    }
+
+    public function testAddSearchKeywordTimes()
+    {
+        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
+        $this->getSearchKeywordService()->addSearchKeywordTimes($keyword['id']);
+
+        $keyword = $this->getSearchKeywordService()->getSearchKeyword($keyword['id']);
+        $this->assertEquals(2, $keyword['times']);
+    }
+
     /**
      * @return \Biz\SearchKeyword\Service\Impl\SearchKeywordServiceImpl
      */

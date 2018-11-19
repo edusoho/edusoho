@@ -10,9 +10,13 @@ interface SearchKeywordService
 
     public function getSearchKeyword($id);
 
+    public function getSearchKeywordByName($name);
+
     public function searchSearchKeywords($conditions, $orderBy, $start, $limit);
 
     public function countSearchKeywords($conditions);
 
     public function deleteSearchKeyword($id);
+
+    public function addSearchKeywordTimes($id);
 }
