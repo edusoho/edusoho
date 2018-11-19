@@ -95,8 +95,6 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column courseTaskId, userId
          */
         $this->createUniqueIndex('course_task_result', 'courseTaskId_userId', 'courseTaskId, userId');
-
-
     }
 
     protected function changeTableFiledType()

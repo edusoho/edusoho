@@ -31,14 +31,14 @@ class CourseTaskResultAddUniqueKey extends Migration
     protected function createUniqueIndex()
     {
         if (!$this->isIndexExist()) {
-            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD UNIQUE INDEX `courseTaskId_userId` (`courseTaskId`, `userId`);");
+            $this->getConnection()->exec('ALTER TABLE `course_task_result` ADD UNIQUE INDEX `courseTaskId_userId` (`courseTaskId`, `userId`);');
         }
     }
 
     protected function dropUniqueIndex()
     {
         if ($this->isIndexExist()) {
-            $this->getConnection()->exec("DROP INDEX `courseTaskId_userId` ON `course_task_result`;");
+            $this->getConnection()->exec('DROP INDEX `courseTaskId_userId` ON `course_task_result`;');
         }
     }
 
