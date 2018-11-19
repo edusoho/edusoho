@@ -2,37 +2,27 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img v-bind:src="course.imgSrc.url" :style="{width: course.imgSrc.width, height: course.imgSrc.height}">
+        <img :class="course.imgSrc.className" v-bind:src="course.imgSrc.url">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ course.title }}</div>
-        <div class="e-course__count">
-          <span v-if="course.courseNum">共 {{course.courseNum}} 门课程</span>
+        <!-- header -->
+        <div class="e-course__header text-overflow">{{ course.header }}</div>
+        <!-- middle -->
+        <div class="e-course__middle">
+          <div v-if="course.middle.value" v-html="course.middle.html"></div>
         </div>
-        <div class="e-course__project text-overflow" v-if="course.teachPlan">
-          <span v-if="teachPlan">{{ course.teachPlan }}</span>
-        </div>
-        <switchBox :type="type" :course="course" :order="order" :studentNum="course.studentNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
+        <!-- bottom -->
+        <div class="e-course__bottom" v-html="course.bottom.html"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import switchBox from '../e-course/e-course-switch-box.vue';
 
   export default {
-    components: {
-      switchBox,
-    },
     props: {
       course: {
-        type: Object,
-        default() {
-          return {}
-        }
-      },
-      order: {
         type: Object,
         default() {
           return {}
@@ -45,40 +35,12 @@
       feedback: {
         type: Boolean,
         default: true,
-      },
-      typeList: {
-        type: String,
-        default: 'course_list'
       }
     },
     data() {
       return {
         pathName: this.$route.name,
       };
-    },
-    computed: {
-      imgSrc() {
-        if (this.typeList === 'class_list') {
-          return this.course.cover.middle;
-        }
-        const courseSet = this.course.courseSet;
-        return courseSet ? courseSet.cover.middle : this.order.cover.middle;
-      },
-      title() {
-        if (this.typeList === 'class_list') {
-          return this.course.title
-        }
-        return this.course.courseSetTitle
-          || (this.course.courseSet ? this.course.courseSet.title : '')
-          || this.order.title;
-      },
-      teachPlan() {
-        if (this.course.title) {
-          return this.course.title
-        } else {
-          return false
-        }
-      }
     },
     watch: {
       course: {

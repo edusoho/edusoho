@@ -2,7 +2,7 @@
   <div class="order">
     <div class="goods-info">
       <e-loading v-if="isLoading"></e-loading>
-      <e-course type="confirmOrder" :order="course" :course="course" v-if="Object.keys(course).length >0"></e-course>
+      <e-class type="confirmOrder" :order="course" :course="course | courseListData('confirmOrder')" v-if="Object.keys(course).length >0"></e-class>
       <div class="order-coupon">
         <div class="coupon-column"
           :chosen-coupon="activeItemIndex"
@@ -62,12 +62,13 @@
 <script>
 import { mapState } from 'vuex';
 import coupon from './coupon.vue';
-import eCourse from '@/containers/components/e-course/e-course.vue';
+import eClass from '@/containers/components/e-class/e-class.vue';
+import courseListData from '../../utils/filter-course.js';
 import Api from '@/api';
 
 export default {
   components: {
-    eCourse,
+    eClass,
     coupon
   },
   data () {
@@ -83,6 +84,9 @@ export default {
       itemData: null,
       couponNumber: 0
     }
+  },
+  filters: {
+    courseListData,
   },
   computed: {
     ...mapState({

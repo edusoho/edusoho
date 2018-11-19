@@ -4,8 +4,9 @@
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
       <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
-        v-if="part.type == 'course_list'"
+        v-if="['class_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
+        :typeList="part.type"
         :feedback="feedback"
         :index="index"
         @fetchCourse="fetchCourse"></e-course-list>
@@ -82,7 +83,14 @@
         });
     },
     methods: {
-      fetchCourse({params, index}) {
+      fetchCourse({params, index, typeList}) {
+        if (typeList === 'class_list') {
+          Api.getClassList({params}).then(res => {
+            if (this.sourceType === 'custom') return;
+
+            this.parts[index].data.items = res.data;
+          })
+        }
         Api.getCourseList({params}).then(res => {
           if (this.sourceType === 'custom') return;
 

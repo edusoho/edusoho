@@ -11,27 +11,19 @@
     <div class="e-course-list__body">
       <e-class v-for="item in courseList.items"
         :key="item.id"
-        :course="item | courseListData(typeList)"
+        :course="item | courseListData(type, typeList)"
         :typeList="typeList"
+        :type="type"
         :feedback="feedback">
       </e-class>
-    <!--   <e-course
-        v-for="item in courseList.items"
-        :key="item.id"
-        :course="item"
-        :type="type"
-        :typeList="typeList"
-        :feedback="feedback">
-      </e-course> -->
     </div>
     <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
   </div>
 </template>
 
 <script>
-// import course from '../e-course/e-course';
 import eClass from '../e-class/e-class';
-import courseListData from '@admin/utils/filter-course.js';
+import courseListData from '../../../utils/filter-course.js';
 
   export default {
     props: {
@@ -53,7 +45,6 @@ import courseListData from '@admin/utils/filter-course.js';
       }
     },
     components: {
-      // 'e-course': course,
       'e-class': eClass,
     },
     data() {
@@ -145,18 +136,10 @@ import courseListData from '@admin/utils/filter-course.js';
           categoryId: this.categoryId,
         };
 
-        if (this.typeList === 'class_list') {
-          params = {
-            sort: 'recommendedSeq',
-            limit: this.limit,
-            lastDays: 'studentNum',
-            categoryId: this.categoryId,
-          };
-        }
-
         this.$emit('fetchCourse', {
           index: this.index,
           params,
+          typeList: this.typeList
         });
       }
     },

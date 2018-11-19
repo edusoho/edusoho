@@ -5,7 +5,8 @@
       	:courseList="copyModuleData.data"
       	:feedback="false"
       	:typeList="type"
-      	@fetchCourse="fetchCourse"></e-course-list>
+      	@fetchCourse="fetchCourse">
+      </e-course-list>
     </div>
     <div slot="setting" class="course-allocate">
       <header class="title">{{typeLabel}}列表设置</header>
