@@ -9,7 +9,7 @@ use Biz\Marketing\Util\MarketingUtils;
 class MarketingActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'owner_price', 'member_price', 'order', 'item_cover', 'created_time', 'start_time', 'end_time',
+        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'owner_price', 'member_price', 'order', 'item_cover', 'created_time', 'start_time', 'end_time', 'groupon_id',
     );
 
     protected function publicFields(&$data)
@@ -30,6 +30,10 @@ class MarketingActivityFilter extends Filter
             $data['memberPrice'] = $data['member_price'] / 100;
             unset($data['member_price']);
         }
+        if (isset($data['groupon_id'])) {
+            $data['grouponId'] = $data['groupon_id'];
+            unset($data['groupon_id']);
+        }
         $data['cover'] = $data['item_cover'];
         unset($data['item_cover']);
         Converter::timestampToDate($data['created_time']);
@@ -44,7 +48,7 @@ class MarketingActivityFilter extends Filter
         $marketingDomain = MarketingUtils::getMarketingDomain();
         $data['url'] = $marketingDomain.'/h5/a/groupon/show/'.$data['id'];
         if (isset($data['order'])) {
-            $data['payAmount'] = $data['order']['pay_amount']/100;
+            $data['payAmount'] = $data['order']['pay_amount'] / 100;
             unset($data['order']);
         }
     }
