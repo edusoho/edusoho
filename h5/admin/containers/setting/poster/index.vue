@@ -42,7 +42,14 @@
         <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'course'">
           <p class="pull-left section-left">课程名称：</p>
           <div class="section-right">
-            <el-button type="info" size="mini" @click="openModal" v-show="!courseLinkText">选择课程</el-button>
+            <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
+              <span class="el-dropdown-link">
+                {{linkText}}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="item" v-for="item in linkOptions" :key="item.value">{{item.label}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
               <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
                 <span slot="content">{{courseLinkText}}</span>
@@ -67,7 +74,14 @@
       </div>
     </div>
 
-    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses">
+    <course-modal
+      slot="modal"
+      :visible="modalVisible"
+      :typeText="typeText"
+      limit=1
+      :courseList="courseSets"
+      @visibleChange="modalVisibleHandler"
+      @updateCourses="getUpdatedCourses">
     </course-modal>
   </module-frame>
 </template>
@@ -93,7 +107,16 @@ export default {
         'responsive',
         'size-fit',
       ],
+      linkOptions: [{
+        value: '课程',
+        label: '选择课程',
+      }, {
+        value: '班级',
+        label: '选择班级',
+      }],
       pathName: this.$route.name,
+      typeText: '课程',
+      linkText: '选择课程'
     }
   },
   props: {
@@ -195,9 +218,6 @@ export default {
     modalVisibleHandler(visible) {
       this.modalVisible = visible;
     },
-    openModal() {
-      this.modalVisible = true;
-    },
     getUpdatedCourses(courses) {
       this.courseSets = courses;
       if (!courses.length) return;
@@ -215,6 +235,11 @@ export default {
     handleClose() {
       this.removeCourseLink();
     },
+    insideLinkHandle(commands) {
+      this.modalVisible = true;
+      this.typeText = commands.value;
+      this.linkText = commands.label;
+    }
   }
 }
 

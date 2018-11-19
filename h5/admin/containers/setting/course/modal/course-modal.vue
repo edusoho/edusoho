@@ -66,10 +66,8 @@ export default {
     return {
       tableKey: 0,
       keyWord: '',
-      cacheResult: {},
       courseSets: this.courseList,
-      courseListIds: [],
-      valueKey: this.typeText === '班级' ? 'title' : 'displayedTitle'
+      courseListIds: []
     }
   },
   computed: {
@@ -80,6 +78,12 @@ export default {
       set(visible) {
         this.$emit('visibleChange', visible);
       }
+    },
+    valueKey: {
+      get() {
+        return this.typeText === '班级' ? 'title' : 'displayedTitle';
+      },
+      set() {}
     }
   },
   watch: {
@@ -91,9 +95,8 @@ export default {
       this.tableKey ++;
       this.courseSets = this.courseList;
       this.restoreListIds();
-
       this.keyWord = '';
-    },
+    }
   },
   created() {
     this.restoreListIds();
@@ -144,15 +147,10 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
-      if (this.cacheResult[queryString]) {
-        cb(this.cacheResult[queryString])
-        return;
-      }
       if (this.typeText === '班级') {
         this.getClassList({
           courseSetTitle: queryString
         }).then(res => {
-          this.cacheResult[queryString] = res.data;
           cb(res.data);
         })
         return;
@@ -160,7 +158,6 @@ export default {
       this.getCourseList({
         courseSetTitle: queryString
       }).then(res => {
-        this.cacheResult[queryString] = res.data;
         cb(res.data);
       })
     }

@@ -38,7 +38,15 @@
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove($event, index, itemNum)">
     <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input>
     </div>
-    <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
+    <div >链接：
+      <el-dropdown @command="insideLinkHandle" v-show="!linkTextShow">
+        <span class="el-dropdown-link">
+          {{linkText}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item :command="item" v-for="item in linkOptions" :key="item.value">{{item.label}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <el-tag
         class="courseLink"
         closable
@@ -74,9 +82,17 @@
           fixedNumber: [375, 200],
           fixed: true,
         },
+        linkOptions: [{
+          value: '课程',
+          label: '选择课程',
+        }, {
+          value: '班级',
+          label: '选择班级',
+        }],
         imageCropped: false,
         dialogVisible: false,
         pathName: this.$route.name,
+        linkText: '选择课程'
       };
     },
     computed: {
@@ -202,12 +218,13 @@
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      openModal() {
-        this.$emit('chooseCourse');
-      },
       handleClose() {
         this.$emit('removeCourseLink', this.index);
       },
+      insideLinkHandle(commands) {
+        this.linkText = commands.label;
+        this.$emit('chooseCourse', commands.value);
+      }
     }
   }
 
