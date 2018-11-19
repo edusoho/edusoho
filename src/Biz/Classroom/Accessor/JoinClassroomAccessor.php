@@ -3,29 +3,30 @@
 namespace Biz\Classroom\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
+use Biz\Classroom\ClassroomException;
 
 class JoinClassroomAccessor extends AccessorAdapter
 {
     public function access($classroom)
     {
         if (empty($classroom)) {
-            return $this->buildResult('classroom.not_found');
+            return $this->buildResult('NOTFOUND_CLASSROOM', array(), ClassroomException::EXCEPTION_MODUAL);
         }
 
         if ('draft' === $classroom['status']) {
-            return $this->buildResult('classroom.unpublished', array('classroomId' => $classroom['id']));
+            return $this->buildResult('UNPUBLISHED_CLASSROOM', array('classroomId' => $classroom['id']), ClassroomException::EXCEPTION_MODUAL);
         }
 
         if ('closed' === $classroom['status']) {
-            return $this->buildResult('classroom.closed', array('classroomId' => $classroom['id']));
+            return $this->buildResult('CLOSED_CLASSROOM', array('classroomId' => $classroom['id']), ClassroomException::EXCEPTION_MODUAL);
         }
 
         if (!$classroom['buyable']) {
-            return $this->buildResult('classroom.not_buyable', array('classroomId' => $classroom['id']));
+            return $this->buildResult('UNBUYABLE_CLASSROOM', array('classroomId' => $classroom['id']), ClassroomException::EXCEPTION_MODUAL);
         }
 
         if ($this->isExpired($classroom)) {
-            return $this->buildResult('classroom.expired', array('classroomId' => $classroom['id']));
+            return $this->buildResult('EXPIRED_CLASSROOM', array('classroomId' => $classroom['id']), ClassroomException::EXCEPTION_MODUAL);
         }
 
         return null;

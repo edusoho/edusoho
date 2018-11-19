@@ -44,7 +44,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithInvalidIdCard()
     {
@@ -57,7 +57,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithInvalidTruename()
     {
@@ -71,7 +71,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithInvalidEmail()
     {
@@ -85,7 +85,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testRegisterWithExistedEmail()
     {

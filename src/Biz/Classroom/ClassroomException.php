@@ -42,13 +42,23 @@ class ClassroomException extends AbstractException
 
     const FORBIDDEN_WAVE = 5001817;
 
-    const FORBIDDEN_STUDENT = 4031818;
+    const DUPLICATE_JOIN = 4031818;
 
     const RECOMMEND_REQUIRED_NUMERIC = 5001819;
 
     const MEMBER_LEVEL_LIMIT = 5001820;
 
     const MEMBER_NOT_IN_CLASSROOM = 4031821;
+
+    const CLOSED_CLASSROOM = 5001821;
+
+    const UNBUYABLE_CLASSROOM = 5001822;
+
+    const EXPIRED_CLASSROOM = 5001823;
+
+    const FORBIDDEN_AUDITOR_LEARN = 4031824;
+
+    const EXPIRED_MEMBER = 5001825;
 
     public $messages = array(
         4041801 => 'exception.classroom.not_found',
@@ -68,9 +78,14 @@ class ClassroomException extends AbstractException
         5001815 => 'exception.classroom.expiry_earlier_than_current',
         4031816 => 'exception.classroom.forbidden_not_student',
         5001817 => 'exception.classroom.forbidden_wave',
-        4031818 => 'exception.classroom.forbidden_student',
+        4031818 => 'exception.classroom.duplicate_join',
         5001819 => 'exception.classroom.recommend_required_numeric',
         5001820 => 'exception.classroom.member_level_limit',
         4031821 => 'exception.classroom.member_not_in_classroom',
+        5001821 => 'exception.classroom.closed_classroom',
+        5001822 => 'exception.classroom.unbuyable_classroom',
+        5001823 => 'exception.classroom.expired_classroom',
+        4031824 => 'exception.classroom.forbidden_auditor_learn',
+        5001825 => 'exception.classroom.expired_member',
     );
 }

@@ -12,16 +12,16 @@ class LearnCourseAccessorTest extends BaseTestCase
     {
         $accessor = new LearnCourseAccessor($this->getBiz());
         $result = $accessor->access(array());
-        $this->assertEquals('course.not_found', $result['code']);
+        $this->assertEquals('NOTFOUND_COURSE', $result['code']);
 
         $result = $accessor->access(array('status' => 'draft', 'id' => 1));
-        $this->assertEquals('course.unpublished', $result['code']);
+        $this->assertEquals('UNPUBLISHED_COURSE', $result['code']);
 
         $result = $accessor->access(array('status' => 'published', 'expiryMode' => 'date', 'expiryEndDate' => 0, 'id' => 1));
-        $this->assertEquals('course.expired', $result['code']);
+        $this->assertEquals('EXPIRED_COURSE', $result['code']);
 
         $result = $accessor->access(array('status' => 'published', 'expiryMode' => 'date', 'expiryStartDate' => time() + 5000, 'expiryEndDate' => time() + 5000, 'id' => 1));
-        $this->assertEquals('course.not_arrive', $result['code']);
+        $this->assertEquals('UN_ARRIVE', $result['code']);
 
         $result = $accessor->access(array('status' => 'published', 'expiryMode' => 'date', 'expiryStartDate' => 0, 'expiryEndDate' => time() + 5000, 'id' => 1));
         $this->assertNull($result);

@@ -42,6 +42,7 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Thread\ThreadException
+     * @expectedExceptionMessage exception.thread.content_required
      */
     public function testCreatedThreadWithNoneContentException()
     {
@@ -54,6 +55,7 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Thread\ThreadException
+     * @expectedExceptionMessage exception.thread.targetid_required
      */
     public function testCreatedThreadWithNoneTargetIdException()
     {

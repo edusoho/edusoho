@@ -257,6 +257,10 @@ class WebExtension extends \Twig_Extension
 
     public function arrayIndex($array, $key)
     {
+        if (empty($array) || !is_array($array)) {
+            return array();
+        }
+
         return ArrayToolkit::index($array, $key);
     }
 

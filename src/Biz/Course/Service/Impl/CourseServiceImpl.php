@@ -2267,6 +2267,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    /**
+     * @deprecated 即将废弃，不要使用：函数名不合理；本质上静态函数不需要写到业务层
+     */
     public function sortByCourses($courses)
     {
         usort($courses, function ($a, $b) {

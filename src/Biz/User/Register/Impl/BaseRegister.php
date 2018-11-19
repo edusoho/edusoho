@@ -82,11 +82,11 @@ abstract class BaseRegister
         }
 
         if (!empty($registration['idcard']) && !SimpleValidator::idcard($registration['idcard'])) {
-            throw new InvalidArgumentException('Invalid ID number');
+            throw UserException::IDCARD_INVALID();
         }
 
         if (!empty($registration['truename']) && !SimpleValidator::truename($registration['truename'])) {
-            throw new InvalidArgumentException('Invalid truename');
+            throw UserException::TRUENAME_INVALID();
         }
     }
 

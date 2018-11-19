@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\CourseSetException;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 
@@ -23,7 +24,7 @@ class CourseSetCourse extends AbstractResource
         }
 
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
-        $courses = $this->getCourseService()->sortByCourses($courses);
+        $courses = ArrayToolkit::sortPerArrayValue($courses, 'seq');
 
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');

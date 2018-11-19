@@ -80,6 +80,10 @@ class UserException extends AbstractException
 
     const USER_NOT_MATCH_AUTH = 5000137;
 
+    const IDCARD_INVALID = 5000138;
+
+    const TRUENAME_INVALID = 5000139;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -117,5 +121,7 @@ class UserException extends AbstractException
         5000135 => 'exception.user.roles_invalid',
         5000136 => 'exception.user.unfollow_error',
         5000137 => 'exception.user.not_match_auth',
+        5000138 => 'exception.user.idcard_invalid',
+        5000139 => 'exception.user.truename_invalid',
     );
 }

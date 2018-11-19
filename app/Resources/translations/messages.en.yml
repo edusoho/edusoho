@@ -8157,6 +8157,8 @@ exception.user.follow_black:
 exception.user.duplicate_follow:
 exception.user.roles_invalid:
 exception.user.unfollow_error:
+exception.user.idcard_invalid: ID number is invalid
+exception.user.truename_invalid: Truename is invalid
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
@@ -8190,6 +8192,12 @@ exception.course.have_sub_courses:
 exception.course.count_no_less_than_1:
 exception.course.course_not_published:
 exception.course.not_match_courseset:
+exception.course.closed_course: 教学计划已关闭
+exception.course.unbuyable_course: 教学计划未开放购买
+exception.course.expired_course: 教学计划已过期
+exception.course.buy_expired: 教学计划已过购买期限
+exception.course.reach_max_student_num: 不达到最大人数限制，不可加入
+exception.course.not_arrive: 教学计划还未开始
 exception.courseset.not_found: The course doesn't exist
 exception.courseset.forbidden_manage:
 exception.courseset.sub_courseset_exist:
@@ -8216,11 +8224,18 @@ exception.classroom.forbidden_become_student:
 exception.classroom.expiry_earlier_than_current:
 exception.classroom.forbidden_not_student:
 exception.classroom.forbidden_wave:
-exception.classroom.forbidden_student:
+exception.classroom.duplicate_join: you have been a student in this classroom
 exception.classroom.recommend_required_numeric:
-exception.classroom.member_level_limit:
+exception.classroom.member_level_limit: You can not join as a vip
+exception.classroom.closed_classroom: Classroom is closed
+exception.classroom.unbuyable_classroom: 班级不可购买
+exception.classroom.expired_classroom: 班级已过期
+exception.classroom.forbidden_auditor_learn: 旁听生无权学习
+exception.classroom.expired_member: 学员已到有效期
 exception.course.member.not_found: The course doesn't have this student
 exception.course.member.not_member: The user is not a member of this course
+exception.course.member.duplicate_member: 用户已加入教学计划
+exception.course.member.expired_member: 学员已过期
 exception.page.error_mode: Parameter 'mode' is error
 exception.page.error_type: Parameter 'type' is error
 exception.page.error_portal: Parameter 'portal' is error
@@ -8332,3 +8347,4 @@ admin.sts_discovery_use_tip: 开启后，用户在任意位置登录，可选使
 admin.sts_discovery.login: 人脸识别登录
 admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
 admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
+admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限

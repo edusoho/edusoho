@@ -9464,7 +9464,8 @@ exception.user.follow_black: 不能关注黑名单中的用户
 exception.user.duplicate_follow: 已经关注过了，不要重复关注
 exception.user.roles_invalid: 角色不正确
 exception.user.unfollow_error: 不能对没有关注过的用户取消关注
-
+exception.user.idcard_invalid: 身份证号错误
+exception.user.truename_invalid: 真实姓名错误
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
@@ -9497,6 +9498,12 @@ exception.course.have_sub_courses: 该教学计划被班级引用，请先移除
 exception.course.count_no_less_than_1: 课程下至少需保留一个教学计划
 exception.course.course_not_published: 教学计划未发布
 exception.course.not_match_courseset: 教学计划不在课程中
+exception.course.closed_course: 教学计划已关闭
+exception.course.unbuyable_course: 教学计划未开放购买
+exception.course.expired_course: 教学计划已过期
+exception.course.buy_expired: 教学计划已过购买期限
+exception.course.reach_max_student_num: 不达到最大人数限制，不可加入
+exception.course.not_arrive: 教学计划还未开始
 exception.courseset.not_found: 课程不存在
 exception.courseset.forbidden_manage: 无权管理课程
 exception.courseset.sub_courseset_exist: 该课程在班级下引用，请先删除引用课程！
@@ -9523,11 +9530,18 @@ exception.classroom.forbidden_become_student: 该用户不能成为该班级学�
 exception.classroom.expiry_earlier_than_current: 设置的有效期小于当前时间！
 exception.classroom.forbidden_not_student: 用户不是该班级的学员
 exception.classroom.forbidden_wave: 存在不允许增减的字段
-exception.classroom.forbidden_student: 用户已经是学员，不能添加！
+exception.classroom.duplicate_join: 用户已经是学员，不能添加！
 exception.classroom.recommend_required_numeric: 推荐班级序号只能为数字！
 exception.classroom.member_level_limit: 用户不能以会员身份加入班级！
+exception.classroom.closed_classroom: 班级已关闭
+exception.classroom.unbuyable_classroom: 班级不可购买
+exception.classroom.expired_classroom: 班级已过期
+exception.classroom.forbidden_auditor_learn: 旁听生无权学习
+exception.classroom.expired_member: 学员已到有效期
 exception.course.member.not_found: 课程中没有该成员
 exception.course.member.not_member: 不是课程成员
+exception.course.member.duplicate_member: 用户已加入教学计划
+exception.course.member.expired_member: 学员已过期
 exception.page.error_mode: 错误的参数'mode'
 exception.page.error_type: 错误的参数'type'
 exception.page.error_portal: 错误的参数'portal'
@@ -9638,3 +9652,4 @@ admin.sts_discovery_use_tip: 开启后，用户在任意位置登录，可选使
 admin.sts_discovery.login: 人脸识别登录
 admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
 admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
+admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限

@@ -38,7 +38,7 @@ class CourseProductTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testValidateWithError()
     {
@@ -47,7 +47,7 @@ class CourseProductTest extends BaseTestCase
 
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('buyable' => true)),
-            array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => 'error', 'msg' => 'wrong')),
+            array('functionName' => 'canJoinCourse', 'returnValue' => array('class' => 'Biz\Course\CourseException', 'code' => 'UNBUYABLE_COURSE', 'msg' => 'wrong')),
         ));
 
         $courseProduct->validate();

@@ -3,6 +3,8 @@
 namespace AppBundle\Twig;
 
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\EduCloud\Service\ConsultService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\ExtensionManager;
 
@@ -101,16 +103,6 @@ class DataExtension extends \Twig_Extension
             return false;
         }
 
-        if (!isset($cloudConsult['cloud_consult_expired_time']) || time() > $cloudConsult['cloud_consult_expired_time']) {
-            $account = $this->getConsultService()->getAccount();
-            $cloudConsult['cloud_consult_expired_time'] = time() + 60 * 60 * 1;
-            $cloudConsult['cloud_consult_code'] = empty($account['code']) ? 0 : $account['code'];
-
-            try {
-                $this->getSettingService()->set('cloud_consult', $cloudConsult);
-            } catch (\Exception $e) {
-            }
-        }
         $cloudConsultEnable = empty($cloudConsult['cloud_consult_code']) && $cloudConsult['cloud_consult_setting_enabled'] && $cloudConsult['cloud_consult_is_buy'];
 
         if (!$cloudConsultEnable) {
@@ -125,11 +117,17 @@ class DataExtension extends \Twig_Extension
         return $this->biz->service('CloudPlatform:EduCloudService');
     }
 
+    /**
+     * @return ConsultService
+     */
     protected function getConsultService()
     {
         return $this->biz->service('EduCloud:MicroyanConsultService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
