@@ -16,7 +16,7 @@
 
       <!-- 班级介绍 -->
       <e-panel title="班级介绍" ref="about" class="about">
-        <more-mask :asyncLoaded="details.summary">
+        <more-mask :asyncLoaded="details.summary" :disabled="loadMoreAbout" @maskLoadMore="loadMoreAbout = true">
           <div v-html="details.summary"></div>
         </more-mask>
       </e-panel>
@@ -103,6 +103,7 @@
           price: '0',
           studentNum: 0,
         },
+        loadMoreAbout: false,
       }
     },
     computed: {
@@ -181,7 +182,7 @@
             return;
           }
         }, 400)
-      }
+      },
     },
   }
 </script>

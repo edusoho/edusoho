@@ -1,9 +1,7 @@
 .more-mask {
   position: relative;
   &__body {
-    &.hidden {
-      overflow: hidden;
-    }
+    overflow: hidden;
   }
   &__footer {
     width: 100%;

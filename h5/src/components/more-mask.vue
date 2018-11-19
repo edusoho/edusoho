@@ -1,9 +1,9 @@
 <template>
   <div class="more-mask">
-    <div class="more-mask__body" :class="bodyClass" :style="heightStyle">
+    <div class="more-mask__body" :style="heightStyle">
       <slot></slot>
     </div>
-    <div class="more-mask__footer" v-show="bodyClass" :style="paddingStyle" @touchstart="maskLoadMore">
+    <div v-if="!disabled" class="more-mask__footer" v-show="exccedHeight" :style="paddingStyle" @touchstart="maskLoadMore">
       {{ textContent || '点击查看更多' }}
     </div>
   </div>
@@ -24,6 +24,9 @@ export default {
     },
     asyncLoaded: {
       default: false,
+    },
+    disabled: {
+      default: false,
     }
   },
   data() {
@@ -32,12 +35,12 @@ export default {
     };
   },
   computed: {
-    bodyClass() {
-      return this.realHeight > this.maxHeight ? 'hidden' : '';
+    exccedHeight() {
+      return this.realHeight > this.maxHeight;
     },
     heightStyle() {
-      if (!this.bodyClass) {
-        return;
+      if (!this.exccedHeight || this.disabled) {
+        return { maxHeight: 'none'};
       }
       return { maxHeight: `${this.maxHeight}px`};
     },
@@ -52,12 +55,10 @@ export default {
   watch: {
     asyncLoaded: {
       handler(value) {
-        if (value) {
-          this.$nextTick(function () {
-            //dom已更新
-            this.realHeight = this.$el.getBoundingClientRect().height;
-          })
-        }
+        this.$nextTick(function () {
+          //dom已更新
+          this.realHeight = this.$el.getBoundingClientRect().height;
+        })
       }
     }
   },
