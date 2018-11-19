@@ -151,13 +151,29 @@ class EduSohoUpgrade extends AbstractUpdater
                    `courseTaskId`,
                    `userId`,
                    `status`,
+                   `lastLearnTime`,
                    `finishedTime`,
                    `createdTime`,
                    `updatedTime`,
                    `time`,
                    `watchTime`
-                   ) SELECT * FROM course_task_result ORDER BY id limit {$start},{$this->perPageCount};
+                   ) SELECT 
+                    `id`, 
+                   `activityId`,
+                   `courseId`,
+                   `courseTaskId`,
+                   `userId`,
+                   `status`,
+                   0,
+                   `finishedTime`,
+                   `createdTime`,
+                   `updatedTime`,
+                   `time`,
+                   `watchTime`
+                    FROM course_task_result ORDER BY id limit {$start},{$this->perPageCount};
             ");
+
+            $this->logger('info', "复制到临时数据库，当前第{$page}页，从{$start}条开始");
 
             $page = $page + 1;
             return $page;
