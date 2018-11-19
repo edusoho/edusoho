@@ -43,7 +43,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
             throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
         }
 
-        if ($access['code'] !== AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS !== $access['code']) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
     }

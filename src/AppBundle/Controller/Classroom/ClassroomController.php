@@ -568,13 +568,11 @@ class ClassroomController extends BaseController
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $host = $request->getSchemeAndHttpHost();
 
         $token = $this->getTokenService()->makeToken('qrcode', array(
             'userId' => $user['id'],
             'data' => array(
                 'url' => $this->generateUrl('classroom_show', array('id' => $id), true),
-                'appUrl' => "{$host}/mapi_v2/mobile/main#/classroom/{$id}",
             ),
             'times' => 1,
             'duration' => 3600,

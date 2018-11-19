@@ -8,7 +8,6 @@
     {{'order.confirm.coupon.hint'|trans}}
   </span>
 </div>
-
 <div class="order-center-coupon" id="order-coupon">
   <div class="order-center-coupon__select" id="order-center-coupon__select">
     <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="coupon-form-group">
@@ -20,7 +19,7 @@
       <div id="coupon-error-message" class="form-error-message" style="display:none"></div>
     </div>
     {% if product.availableDeducts.coupon|default() %}
-      <a href="javascript:;" id="select-coupon-btn" class="cd-link-minor cd-text-sm" data-toggle="popover" data-placement="right" data-html="true" data-content='
+      <a href="javascript:;" id="select-coupon-btn" class="cd-link-minor cd-text-sm" data-toggle="popover" data-placement="{% if is_mobile_client()|default(null) == 1 %}top{% else %}right{% endif %}" data-html="true" data-content='
         {% for deduct in product.availableDeducts.coupon %}
           <label for="existing-coupon-{{ loop.index }}" class="cd-radio cd-radio-sm cd-mv16">
             <input id="existing-coupon-{{ loop.index }}" type="radio" class="js-existing-coupon" data-code="{{ deduct.code }}" data-deduct-amount="{{ deduct.deduct_amount|price_format }}">
