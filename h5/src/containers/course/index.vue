@@ -9,7 +9,6 @@
 <script>
   import joinAfter from './join-after.vue';
   import joinBefore from './join-before.vue';
-  import Api from '@/api';
   import { mapState, mapActions, mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
 

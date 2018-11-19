@@ -28,7 +28,6 @@
 <script>
 import * as types from '@/store/mutation-types';
 import { mapMutations, mapState, mapActions } from 'vuex';
-import tryVue from '../try.vue';
 
 export default {
   data() {

@@ -1,0 +1,27 @@
+.e-review {
+  position: relative;
+  padding: vw(25) 0 vw(15) 0;
+  &:not(:first-child) {
+    border-top: vw(1) solid #EEEEEE;
+  }
+  &-avatar {
+    position: absolute;
+  }
+  &-body {
+    padding-left: vw(42);
+    margin-left: vw(10);
+    min-height: vw(42);
+  }
+  &-rating {
+    float: right;
+  }
+  &-nickname {
+    color: #2B333B;
+    line-height: 1;
+    font-weight: bold;
+  }
+  &-time {
+    color: #B0BDC9;
+    padding: 8px 0;
+  }
+}

@@ -98,6 +98,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "course" */'@/containers/course/index.vue')
   }, {
+    path: '/classroom/:id',
+    name: 'classroom',
+    meta: {
+      title: '班级详情'
+    },
+    component: () => import(/* webpackChunkName: "classroom" */'@/containers/classroom/index.vue')
+  }, {
     path: '/order/:id',
     name: 'order',
     meta: {

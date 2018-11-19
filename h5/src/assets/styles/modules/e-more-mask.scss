@@ -1,0 +1,17 @@
+.more-mask {
+  position: relative;
+  &__body {
+    &.hidden {
+      overflow: hidden;
+    }
+  }
+  &__footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    font-size: vw(12);
+    color: #9BA5B0;
+    background-image: linear-gradient(-180deg ,rgba(255,255,255,0) 0%,#fff 70%);
+  }
+}
