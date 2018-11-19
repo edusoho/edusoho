@@ -16,6 +16,7 @@ class OrderPayCheckException extends AbstractException
     const OUT_OF_MAX_COIN = 5002606;
     const UNPURCHASABLE_PRODUCT = 5002607;
     const COUPON_HAD_BEEN_USED = 5002608;
+    const NOTFOUND_PRODUCT = 4042609;
 
     public $messages = array(
         5002601 => 'order.pay_check_msg.coin_amount_error',
@@ -26,5 +27,6 @@ class OrderPayCheckException extends AbstractException
         5002606 => 'order.pay_check_msg.out_of_max_coin',
         5002607 => 'order.pay_check_msg.unpurchasable_product',
         5002608 => 'order.pay_check_msg.coupon_had_been_used',
+        4042609 => 'order.pay_check_msg.product_not_found',
     );
 }

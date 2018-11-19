@@ -78,6 +78,8 @@ class UserException extends AbstractException
 
     const UNFOLLOW_ERROR = 5000136;
 
+    const USER_NOT_MATCH_AUTH = 5000137;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -114,5 +116,6 @@ class UserException extends AbstractException
         5000134 => 'exception.user.duplicate_follow',
         5000135 => 'exception.user.roles_invalid',
         5000136 => 'exception.user.unfollow_error',
+        5000137 => 'exception.user.not_match_auth',
     );
 }

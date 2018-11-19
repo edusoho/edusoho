@@ -7025,6 +7025,7 @@ admin.cashflow.keyword_default: --Choose Type--
 
 order.pay_check_msg.parameters_error: parameters_error
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.product_not_found: This type product is not found.
 order.pay_check_msg.unpurchasable_product: Unpurchasable Product
 order.pay_check_msg.order_not_exist: Order not exist
 order.pay_check_msg.user_not_login: User not login
@@ -8061,7 +8062,9 @@ exception.common_drag_captcha_required: 'Missing captcha!'
 exception.common_frequent_operation: 'Operate too many times, please try again later!'
 exception.common_parameter_missing: 'Missing parameters, please try again!'
 exception.common_parameter_error: 'Parameters is invalid, please try again!'
-exception.common_drag_captcha_frequent: 'Request too many times, please try again later!' 
+exception.common_drag_captcha_frequent: 'Request too many times, please try again later!'
+exception.common_method_not_found: 'Method not found'
+exception.common_plugin_is_not_install: 'Plugin is not installed'
 
 exception.article.notfound: 'The article doesn''t exist'
 exception.article.not_found_category: Category is not exist
@@ -8082,6 +8085,7 @@ exception.form.expire: 'Timeout, please commit again!'
 exception.user.register_error: 'User data is wrong, and failed to register!'
 exception.user.mobile_registered: 'This number has been used.'
 exception.user.register_limit: 注册次数已达最大限制!
+exception.user.not_match_auth: 'User is not match auth'
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found:
@@ -8115,6 +8119,7 @@ exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+exception.order.vip_order_not_exist: 孭s s f
 
 exception.file.not_found: 文件不存在
 exception.file.group_invalid: 文件组无效
@@ -8177,6 +8182,7 @@ exception.task.forbidden_publish_task: You can not publish task
 exception.task.forbidden_unpublish_task: You can not unpublish task
 exception.task.forbidden_delete_task: You can not delete task
 exception.task.lessonid_invalid: Lesson id is invalid
+exception.task.access_denied: Task access denied
 exception.course.not_found: The course plan doesn't exist
 exception.course.count_no_more_than_10:
 exception.course.forbidden_delete_published:
@@ -8192,6 +8198,7 @@ exception.courseset.published_course_required:
 exception.courseset.unpublished:
 exception.courseset.no_course:
 exception.courseset.unlock_failed:
+exception.classroom.member_not_in_classroom: Student not in classroom
 exception.classroom.not_found: The classroom doesn't exist
 exception.classroom.forbidden_manage_classroom:
 exception.classroom.forbidden_take_classroom:
@@ -8259,6 +8266,7 @@ exception.tag.duplicate_name: 该标签名已存在
 exception.tag.empty_group_name: 标签组名字未填写，请添加
 exception.tag.duplicate_group_name: 标签组名字已存在，请重新填写
 exception.conversation.not_found: 会话不存在
+exception.conversation.is_full: 会话人数已满
 exception.org.not_found: 组织机构不存在
 exception.card.type_required: 缺少必要字段，请明确卡的类型
 exception.card.error_type: 卡的类型不存在

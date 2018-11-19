@@ -48,6 +48,8 @@ class ClassroomException extends AbstractException
 
     const MEMBER_LEVEL_LIMIT = 5001820;
 
+    const MEMBER_NOT_IN_CLASSROOM = 4031821;
+
     public $messages = array(
         4041801 => 'exception.classroom.not_found',
         4031802 => 'exception.classroom.forbidden_manage_classroom',
@@ -69,5 +71,6 @@ class ClassroomException extends AbstractException
         4031818 => 'exception.classroom.forbidden_student',
         5001819 => 'exception.classroom.recommend_required_numeric',
         5001820 => 'exception.classroom.member_level_limit',
+        4031821 => 'exception.classroom.member_not_in_classroom',
     );
 }

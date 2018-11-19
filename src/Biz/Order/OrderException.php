@@ -16,10 +16,13 @@ class OrderException extends AbstractException
 
     const UNKNOWN_ACTION = 5000904;
 
+    const VIP_ORDER_NOT_EXIST = 4030905;
+
     public $messages = array(
         4040901 => 'exception.order.not_found',
         4030902 => 'exception.order.beyond_authority',
         5000903 => 'exception.order.closed_order',
         5000904 => 'exception.order.unknown_action',
+        4030905 => 'exception.order.vip_order_not_exist',
     );
 }

@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\OrderFacade\Service\ProductDealerService;
@@ -179,7 +180,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
             return $product;
         } else {
-            throw $this->createServiceException("The {$targetType} product not found");
+            throw OrderPayCheckException::NOTFOUND_PRODUCT();
         }
     }
 
@@ -196,7 +197,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
             return $product;
         } else {
-            throw $this->createServiceException("The {$orderItem['target_type']} product not found");
+            throw OrderPayCheckException::NOTFOUND_PRODUCT();
         }
     }
 

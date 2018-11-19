@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
@@ -57,7 +58,7 @@ class Order extends AbstractResource
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
         if (!$order) {
-            return null;
+            throw OrderException::NOTFOUND_ORDER();
         }
         $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
         $order['platform_sn'] = $paymentTrade['platform_sn'];

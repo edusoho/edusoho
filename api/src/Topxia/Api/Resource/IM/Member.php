@@ -2,6 +2,9 @@
 
 namespace Topxia\Api\Resource\IM;
 
+use Biz\Classroom\ClassroomException;
+use Biz\Course\MemberException;
+use Biz\IM\ConversationException;
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,15 +45,16 @@ class Member extends BaseResource
 
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
-                return $this->error('700003', '学员未加入课程');
+                throw MemberException::NOTFOUND_MEMBER();
             }
 
             if ($this->getConversationService()->isImMemberFull($convNo, 500)) {
-                return $this->error('700008', '会话人数已满');
+                throw ConversationException::CONVERSATION_IS_FULL();
             }
 
             try {
                 $convMember = $this->getConversationService()->joinConversation($convNo, $user['id']);
+
                 return array('convNo' => $convMember['convNo']);
             } catch (\Exception $e) {
                 return $this->error($e->getCode(), $e->getMessage());
@@ -58,7 +62,7 @@ class Member extends BaseResource
         } else {
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
-                return $this->error('700003', '学员未加入课程');
+                throw MemberException::NOTFOUND_MEMBER();
             }
 
             $conversation = $this->getConversationService()->createConversation($course['title'], 'course', $course['id'], array($user));
@@ -83,15 +87,16 @@ class Member extends BaseResource
 
             $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
             if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
-                return $this->error('700013', '学员未加入班级');
+                throw ClassroomException::MEMBER_NOT_IN_CLASSROOM();
             }
 
             if ($this->getConversationService()->isImMemberFull($convNo, 500)) {
-                return $this->error('700008', '会话人数已满');
+                throw ConversationException::CONVERSATION_IS_FULL();
             }
 
             try {
                 $this->getConversationService()->joinConversation($convNo, $user['id']);
+
                 return array('convNo' => $convNo);
             } catch (\Exception $e) {
                 return $this->error($e->getCode(), $e->getMessage());
@@ -99,7 +104,7 @@ class Member extends BaseResource
         } else {
             $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
             if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
-                return $this->error('700013', '学员未加入班级');
+                throw ClassroomException::MEMBER_NOT_IN_CLASSROOM();
             }
 
             $conversation = $this->getConversationService()->createConversation($classroom['title'], 'classroom', $classroom['id'], array($user));

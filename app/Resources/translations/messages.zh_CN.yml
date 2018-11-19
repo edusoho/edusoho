@@ -9294,6 +9294,7 @@ admin.cashflow.keyword_default: --选择类型--
 order.pay_check_msg.parameters_error: 参数错误
 order.pay_check_msg.coin_amount_error: 金额错误
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.product_not_found: 该类型产品找不到
 order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
 order.pay_check_msg.user_not_login: 用户未登录，不能支付
@@ -9370,6 +9371,8 @@ exception.common_frequent_operation: 操作过于频繁，请稍后再试！
 exception.common_parameter_missing: 参数缺失，请重试！
 exception.common_parameter_error: 参数错误，请重试！
 exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
+exception.common_method_not_found: 方法不存在
+exception.common_plugin_is_not_install: 插件未安装
 
 exception.article.notfound: 资讯不存在!
 exception.article.not_found_category: 文章分类不存在,操作失败！
@@ -9390,6 +9393,7 @@ exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
 exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
+exception.user.not_match_auth: 用户不匹配
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -9423,6 +9427,7 @@ exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+exception.order.vip_order_not_exist: 开通会员的订单不存在，开通会员失败。
 
 exception.file.not_found: 文件不存在
 exception.file.group_invalid: 文件组无效
@@ -9484,6 +9489,7 @@ exception.task.forbidden_publish_task: 无权发布任务
 exception.task.forbidden_unpublish_task: 无权取消发布任务
 exception.task.forbidden_delete_task: 无权删除任务
 exception.task.lessonid_invalid: 错误的课时id
+exception.task.access_denied: 没有权限
 exception.course.not_found: 教学计划不存在
 exception.course.count_no_more_than_10: 计划数不得超过10个！
 exception.course.forbidden_delete_published: 不能删除已发布的教学计划
@@ -9499,6 +9505,7 @@ exception.courseset.published_course_required: 发布课程时请确保课程下
 exception.courseset.unpublished: 课程未发布
 exception.courseset.no_course: 课程中没有可用的教学计划
 exception.courseset.unlock_failed: 解锁课程失败
+exception.classroom.member_not_in_classroom: 学员未加入班级
 exception.classroom.not_found: 班级不存在
 exception.classroom.forbidden_manage_classroom: 没有管理班级的权限
 exception.classroom.forbidden_take_classroom: 不能在这个班级学习
@@ -9565,6 +9572,7 @@ exception.tag.duplicate_name: 该标签名已存在
 exception.tag.empty_group_name: 标签组名字未填写，请添加
 exception.tag.duplicate_group_name: 标签组名字已存在，请重新填写
 exception.conversation.not_found: 会话不存在
+exception.conversation.is_full: 会话人数已满
 exception.org.not_found: 组织机构不存在
 exception.card.type_required: 缺少必要字段，请明确卡的类型
 exception.card.error_type: 卡的类型不存在
