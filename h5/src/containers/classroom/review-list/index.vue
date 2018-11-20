@@ -1,19 +1,35 @@
 <template>
   <e-panel :title="title" :needFlex="false">
-    <template v-for="item in reviews">
-      <review :review="item"></review>
-    </template>
+    <moreMask @maskLoadMore="loadMore" :forceShow="reviews.length >= maxShowNum">
+      <template v-for="item in reviews">
+        <review :review="item"></review>
+      </template>
+    </moreMask>
   </e-panel>
 </template>
 <script>
 import review from '@/containers/components/e-review';
+import moreMask from '@/components/more-mask';
 
 export default {
   name: 'reviewList',
   components: {
-    review
+    review,
+    moreMask
   },
-  props: ['reviews', 'title'],
+  props: ['reviews', 'title', 'classId'],
+  data() {
+    return {
+      maxShowNum: 5,
+    };
+  },
+  methods: {
+    loadMore() {
+      this.$router.push({
+        path: `/comment/${this.classId}`,
+      });
+    }
+  }
 }
 </script>
 

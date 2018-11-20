@@ -6,8 +6,12 @@ export default [
     method: 'GET'
   }, {
     // 加入班级
-    name: 'joinCourse',
-    url: '/classrooms/{id}/members',
+    name: 'joinClass',
+    url: '/classrooms/{classroomId}/members',
     method: 'POST'
+  }, {
+    name: 'getReviews',
+    url: '/classrooms/{classroomId}/reviews',
+    method: 'GET'
   }
 ];

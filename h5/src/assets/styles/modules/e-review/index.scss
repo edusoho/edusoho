@@ -1,6 +1,6 @@
 .e-review {
   position: relative;
-  padding: vw(25) 0 vw(15) 0;
+  padding: vw(25) 0 0 0;
   &:not(:first-child) {
     border-top: vw(1) solid #EEEEEE;
   }
@@ -12,6 +12,10 @@
     margin-left: vw(10);
     min-height: vw(42);
   }
+  &-content {
+    margin-top: vw(8);
+    padding-bottom: vw(15);
+  }
   &-rating {
     float: right;
   }
@@ -22,6 +26,21 @@
   }
   &-time {
     color: #B0BDC9;
-    padding: 8px 0;
+    margin-top: vw(8);
+  }
+  &__post {
+    padding: vw(15) 0;
+    border-top: vw(1) solid #EEEEEE;
+    &-avatar {
+      width: vw(24);
+      height: vw(24);
+    }
+    &-body {
+      padding: 0 vw(24);
+      margin-left: vw(10);
+      .e-review-content {
+        padding-bottom: 0;
+      }
+    }
   }
 }

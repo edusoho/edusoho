@@ -20,12 +20,16 @@ export default {
       default: '',
     },
     paddingTop: {
-      default: 125,
+      default: 100,
     },
     asyncLoaded: {
       default: false,
     },
     disabled: {
+      default: false,
+    },
+    forceShow: {
+      type: Boolean,
       default: false,
     }
   },
@@ -36,13 +40,14 @@ export default {
   },
   computed: {
     exccedHeight() {
-      return this.realHeight > this.maxHeight;
+      return this.realHeight > this.maxHeight || this.forceShow;
     },
     heightStyle() {
-      if (!this.exccedHeight || this.disabled) {
-        return { maxHeight: 'none'};
-      }
-      return { maxHeight: `${this.maxHeight}px`};
+      const maxHeight = (!this.exccedHeight || this.disabled || this.forceShow) ?
+        'none' : `${this.maxHeight}px`;
+      const paddingBottom = this.forceShow || (this.exccedHeight && !this.disabled) ?
+        '25px' : '0';
+      return { maxHeight, paddingBottom };
     },
     paddingStyle() {
       return { paddingTop: `${this.paddingTop}px`};

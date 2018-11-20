@@ -37,8 +37,7 @@
       <div class="segmentation"></div>
 
       <!-- 学员评价 -->
-      <review-list ref="review" :reviews="details.reviews" title="学员评价"></review-list>
-      <div class="segmentation"></div>
+      <review-list ref="review" :classId="details.classId" :reviews="[...details.reviews, ...details.reviews, ...details.reviews,]" title="学员评价"></review-list>
 
       <e-footer v-if="!details.joinStatus" @click.native="handleJoin">{{details.access.code | filterJoinStatus}}</e-footer>
     </div>
@@ -96,6 +95,7 @@
           },
           cover: '',
           reviews: [],
+          classId: 0,
         },
         planDetails: {
           title: '',
@@ -135,6 +135,7 @@
           const access = res.access;
           const cover = res.cover.large;
           const reviews = res.reviews;
+          const classId = res.id;
           const planDetails = {
             title: res.title,
             service: res.service,
@@ -144,7 +145,7 @@
 
           this.planDetails = planDetails;
           this.details = {
-            summary, joinStatus, isEmpty, courses,
+            summary, joinStatus, isEmpty, courses, classId,
             teachers, assistants, headTeacher, access, cover, reviews,
           }
         }

@@ -105,6 +105,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "classroom" */'@/containers/classroom/index.vue')
   }, {
+    path: '/comment/:id',
+    name: 'comment',
+    meta: {
+      title: '学员评价'
+    },
+    component: () => import(/* webpackChunkName: "comment" */'@/containers/comment/index.vue')
+  }, {
     path: '/order/:id',
     name: 'order',
     meta: {
