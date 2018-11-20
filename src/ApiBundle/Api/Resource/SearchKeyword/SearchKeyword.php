@@ -8,14 +8,16 @@ use ApiBundle\Api\Resource\AbstractResource;
 
 class SearchKeyword extends AbstractResource
 {
-    const MAX_KEYWORD_NUM = 8;
-
     /**
      * @ApiConf(isRequiredAuth=false)
      */
-    public function search()
+    public function search(ApiRequest $request)
     {
-        $keywords = $this->getSearchKeywordService()->searchSearchKeywords(array(), array('times' => 'DESC'), 0, self::MAX_KEYWORD_NUM);
+        $name = $request->query->get('name');
+        $limit = $request->query->get('limit');
+
+        $keywords = $this->getSearchKeywordService()->searchSearchKeywords(array('likeName' => $name), array('times' => 'DESC'), 0, $limit);
+        $keywords = ($keywords) ? $this->filterKeyword($keywords) : array();
 
         return $keywords;
     }
@@ -33,6 +35,16 @@ class SearchKeyword extends AbstractResource
             $result = $this->getSearchKeywordService()->getSearchKeyword($keyword['id']);
         } else {
             $result = $this->getSearchKeywordService()->createSearchKeyword(array('name' => $name));
+        }
+
+        return $result;
+    }
+
+    protected function filterKeyword($keywords)
+    {
+        $result = array();
+        foreach ($keywords as $keyword) {
+            array_push($result, $keyword['name']);
         }
 
         return $result;
