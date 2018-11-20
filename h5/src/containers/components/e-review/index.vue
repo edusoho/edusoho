@@ -54,20 +54,10 @@ export default {
   },
   filters: {
     userName(user) {
-      try {
-        return user.nickname;
-      } catch (e) {
-        console.error('userName', e)
-        return '匿名用户';
-      }
+      return user && user.nickname || '匿名用户';
     },
     avatar(user) {
-      try {
-        return user.avatar.middle;
-      } catch (e) {
-        console.error('avatar', e)
-        return '';
-      }
+      return user && user.avatar && user.avatar.middle;
     },
     time(time) {
       const date = new Date(time);
@@ -76,12 +66,7 @@ export default {
   },
   computed: {
     posts() {
-      try {
-        return this.review.posts;
-      } catch (e) {
-        console.error(e)
-        return [];
-      }
+      return this.review && this.review.posts || [];
     },
     rating: {
       get() {

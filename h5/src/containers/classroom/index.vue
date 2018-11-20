@@ -29,7 +29,7 @@
       <div class="segmentation"></div>
 
       <teacher
-        class="teacher" title="班主任" :teacherInfo="[details.headTeacher]"></teacher>
+        class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"></teacher>
       <div class="segmentation"></div>
 
       <!-- 班级课程 -->
@@ -37,7 +37,7 @@
       <div class="segmentation"></div>
 
       <!-- 学员评价 -->
-      <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价"></review-list>
+      <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价"></review-list>
 
       <e-footer v-if="!details.joinStatus" @click.native="handleJoin">{{details.access.code | filterJoinStatus}}</e-footer>
     </div>
@@ -56,6 +56,7 @@
   import moreMask from '@/components/more-mask';
   import { mapState } from 'vuex';
   import Api from '@/api';
+  import { Toast } from 'vant';
 
   const TAB_HEIGHT = 44;
 
@@ -112,8 +113,9 @@
       }),
     },
     created(){
+      const classroomId = this.$route.params.id;
       Api.getClassroomDetail({
-        query: { classroomId: 1 }
+        query: { classroomId, }
       }).then(res => {
         this.getDetails(res);
       })
@@ -184,6 +186,17 @@
           }
         }, 400)
       },
+      handleJoin() {
+        Api.joinClass({
+          params: {
+            classroomId: this.details.classId
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          Toast.fail(err.message);
+        });
+      }
     },
   }
 </script>

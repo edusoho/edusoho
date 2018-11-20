@@ -3,7 +3,7 @@
     <div class="more-mask__body" :style="heightStyle">
       <slot></slot>
     </div>
-    <div v-if="!disabled" class="more-mask__footer" v-show="exccedHeight" :style="textStyle" @touchstart="maskLoadMore">
+    <div v-if="!disabled" class="more-mask__footer" v-show="exccedHeight" :style="textStyle" @touchstart.prevent="maskLoadMore">
       {{ text.content || '点击查看更多' }}
     </div>
   </div>
@@ -41,6 +41,8 @@ export default {
   data() {
     return {
       realHeight: 0,
+      intervalTime: 5 * 1000,
+      intervalId: undefined,
     };
   },
   computed: {
@@ -70,8 +72,18 @@ export default {
     asyncLoaded: {
       handler(value) {
         this.$nextTick(function () {
-          //dom已更新
-          this.realHeight = this.$el.getBoundingClientRect().height;
+          //dom异步更新，但不能保证异步dom 中图片等资源加载完成，这里取最长5秒内的结果
+          if (this.intervalId) return;
+
+          const segmentTime = 500
+          this.intervalId = setInterval(() => {
+            this.intervalTime -= segmentTime;
+            if (this.intervalTime < 0) {
+              clearInterval(this.intervalId);
+              return;
+            }
+            this.realHeight = this.$el.getBoundingClientRect().height;
+          }, segmentTime)
         })
       }
     }

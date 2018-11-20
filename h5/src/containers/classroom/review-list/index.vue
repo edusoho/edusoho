@@ -1,6 +1,6 @@
 <template>
-  <e-panel :title="title" :needFlex="false">
-    <moreMask @maskLoadMore="loadMore" :forceShow="reviews.length >= maxShowNum">
+  <e-panel :title="title" :needFlex="false" :defaulValue="defaulValue">
+    <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :forceShow="reviews.length >= maxShowNum">
       <template v-for="item in reviews">
         <review :review="item"></review>
       </template>
@@ -17,7 +17,7 @@ export default {
     review,
     moreMask
   },
-  props: ['reviews', 'title', 'classId'],
+  props: ['reviews', 'title', 'classId', 'defaulValue'],
   data() {
     return {
       maxShowNum: 5,
