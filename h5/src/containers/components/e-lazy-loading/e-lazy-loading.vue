@@ -7,13 +7,14 @@
     <courseItem v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
-      :course="course"
+      :course="course | courseListData(courseItemType, typeList)"
     ></courseItem>
   </van-list>
 </template>
 
 <script>
-  import courseItem from '../e-course/e-course.vue';
+  import courseItem from '../e-class/e-class.vue';
+  import courseListData from '../../../utils/filter-course.js';
 
   export default {
     components: {
@@ -33,6 +34,10 @@
       isMorePage: {
         type: Boolean,
         default: false
+      },
+      typeList: {
+        type: String,
+        default: 'course_list'
       }
     },
 
@@ -41,6 +46,10 @@
         list: [],
         finished: false,
       };
+    },
+
+    filters: {
+      courseListData,
     },
 
     computed: {

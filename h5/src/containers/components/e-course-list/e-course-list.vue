@@ -121,9 +121,9 @@ import courseListData from '../../../utils/filter-course.js';
         if (!this.feedback) {
           return;
         }
+        let routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
         this.$router.push({
-          name: 'more',
-          query: {...this.source}
+          name: routeName
         });
       },
       fetchCourse() {

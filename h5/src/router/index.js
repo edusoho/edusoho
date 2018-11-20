@@ -85,11 +85,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
   }, {
     path: '/course/explore',
-    name: 'more',
+    name: 'more_course',
     meta: {
       title: ''
     },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/more/index.vue')
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/course/index.vue')
+  }, {
+    path: '/class/explore',
+    name: 'more_class',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/class/index.vue')
   }, {
     path: '/course/:id',
     name: 'course',

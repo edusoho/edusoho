@@ -148,6 +148,10 @@ const config = [
     name: 'getCourseList',
     url: '/courses'
   }, {
+    // 获取班级列表数据
+    name: 'getClassList',
+    url: '/classrooms'
+  }, {
     // 获取课程搜索列表
     name: 'getCourseSets',
     url: '/course_sets'
