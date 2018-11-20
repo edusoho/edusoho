@@ -14,20 +14,6 @@ class MeMarketingActivity extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $conditions = $this->fillParams($request);
-        $systemUser = $this->getUserService()->getUserByType('system');
-        $this->getMarketingPlatformService()->simpleLogin($systemUser['id']);
-        $client = MarketingAPIFactory::create();
-
-        return $client->get(
-            '/user_activities',
-            $conditions,
-            array('MERCHANT-USER-ID: '.$systemUser['id'])
-        );
-    }
-
-    public function fillParams($request)
-    {
         $user = $this->getCurrentUser();
         $conditions = $request->query->all();
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -39,7 +25,17 @@ class MeMarketingActivity extends AbstractResource
             unset($conditions['itemType']);
         }
 
-        return $conditions;
+        $systemUser = $this->getUserService()->getUserByType('system');
+        $this->getMarketingPlatformService()->simpleLogin($systemUser['id']);
+        $client = MarketingAPIFactory::create();
+
+        $pages = $client->get(
+            '/user_activities',
+            $conditions,
+            array('MERCHANT-USER-ID: '.$systemUser['id'])
+        );
+
+        return $this->makePagingObject($pages['data'], $pages['paging']['total'], $offset, $limit);
     }
 
     protected function getUserService()
