@@ -31,7 +31,7 @@
       <div class="segmentation"></div>
 
       <!-- 班级课程 -->
-      <course-set-list ref="course" :courseSets="details.courses" title="班级课程" defaulValue="暂无课程"></course-set-list>
+      <course-set-list ref="course" :courseSets="details.courses" title="班级课程" defaulValue="暂无课程" :disableMask.sync="disableMask"></course-set-list>
       <div class="segmentation"></div>
 
       <!-- 学员评价 -->
@@ -52,14 +52,13 @@
   import detailPlan from './plan';
   import directory from '../course/detail/directory';
   import moreMask from '@/components/more-mask';
-  import { mapState } from 'vuex';
   import Api from '@/api';
   import { Toast } from 'vant';
 
   const TAB_HEIGHT = 44;
 
   export default {
-    name: 'classroom',
+    name: 'join-before',
     components: {
       directory,
       detailHead,
@@ -82,6 +81,7 @@
         tabs: ['班级介绍', '课程列表', '学员评价'],
         tabsClass: '',
         loadMoreAbout: false,
+        disableMask: false,
       }
     },
     computed: {

@@ -1,7 +1,7 @@
 <template>
   <e-panel :title="title" :needFlex="false" :defaulValue="defaulValue">
     <template v-if="courseSets.length">
-      <moreMask v-if="!disableMask && (courseSets.length > 5)" :forceShow="true" @maskLoadMore="disableMask = true">
+      <moreMask v-if="!disableMask && (courseSets.length > 5)" :forceShow="true" @maskLoadMore="loadMore">
         <template v-for="item in partCourseSets">
           <course :course="item" style="padding-left: 0;padding-right: 0;"></course>
         </template>
@@ -24,16 +24,28 @@ export default {
     course,
     moreMask
   },
-  props: ['courseSets', 'title', 'defaulValue'],
+  props: {
+    courseSets: null,
+    title: '',
+    defaulValue: '',
+    disableMask: {
+      type: Boolean,
+      default: false,
+    }
+  },
   data() {
     return {
       maxShowNum: 5,
-      disableMask: false,
     };
   },
   computed: {
     partCourseSets() {
       return this.courseSets.slice(0, 5);
+    }
+  },
+  methods: {
+    loadMore() {
+      this.$emit('update:disableMask', true);
     }
   }
 }
