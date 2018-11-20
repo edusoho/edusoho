@@ -4,13 +4,15 @@ namespace AppBundle\Common;
 
 class JWTAuth
 {
-    const ALG = 'HS256';
+    const ALG = 'sha1';
 
     const TYP = 'JWT';
 
     protected $publicKey;
 
     protected $privateKey;
+
+    protected $token;
 
     public function __construct($publicKey, $privateKey)
     {
@@ -20,8 +22,10 @@ class JWTAuth
     }
 
     /**
-     * @param $payload '自定义payload'
-     * @param $options '配置选项'
+     * @param $payload
+     * @param array $options
+     *
+     * @return string
      */
     public function auth($payload, $options = array())
     {
@@ -31,9 +35,9 @@ class JWTAuth
         $payload = $this->makePayload($payload);
         $header = $this->makeHeader();
         $token = $this->token;
-        $jwtContent = self::urlSafeBase64Encode(json_encode($header)).'.'.self::urlSafeBase64Encode(json_decode($payload));
+        $jwtContent = self::urlSafeBase64Encode(json_encode($header)).'.'.self::urlSafeBase64Encode(json_encode($payload));
 
-        return $jwtContent.self::signature($jwtContent, $token, $header['alg']);
+        return $jwtContent.'.'.self::signature($jwtContent, $token, $header['alg']);
     }
 
     public function valid($jwt)
@@ -45,14 +49,13 @@ class JWTAuth
             return false;
         }
 
-        list($header64, $payload64, $sign) = $tokens;
+        list($header64, $payload64, $sign) = $jwtArray;
 
         $header = json_decode(self::urlSafeBase64Decode($header64), JSON_OBJECT_AS_ARRAY);
         if (empty($header['alg'])) {
             return false;
         }
-
-        $expectSign = self::signature($header64.$payload64, $header['alg']);
+        $expectSign = self::signature($header64.'.'.$payload64, $token, $header['alg']);
 
         if ($expectSign !== $sign) {
             return false;
@@ -72,7 +75,7 @@ class JWTAuth
         return $payload;
     }
 
-    public static function signature(string $jwtContent, string $token, string $alg)
+    public static function signature($jwtContent, $token, $alg)
     {
         return hash_hmac($alg, $jwtContent, $token);
     }
@@ -99,19 +102,20 @@ class JWTAuth
             'jti' => '',
         );
 
-        return array_merge($defaultPayload, $headers);
+        return array_merge($defaultPayload, $payload);
     }
 
     /**
-     * URL base64解码
+     * @param $base64String
+     * URL base64解码
      * '-' -> '+'
      * '_' -> '/'
      * 字符串长度%4的余数，补'='
-     * @param $string
-     */
-    public static function urlSafeBase64Decode($string)
+     * @return bool|string
+     */
+    public static function urlSafeBase64Decode($base64String)
     {
-        $data = str_replace(array('-', '_'), array('+', '/'), $string);
+        $data = str_replace(array('-', '_'), array('+', '/'), $base64String);
         $mod4 = strlen($data) % 4;
         if ($mod4) {
             $data .= substr('====', $mod4);
@@ -121,15 +125,13 @@ class JWTAuth
     }
 
     /**
-     * URL base64编码
-     * '+' -> '-'
-     * '/' -> '_'
-     * '=' -> ''
-     * @param $string
-     */
-    public static function urlSafeBase64Encode($string)
+     * @param $originString
+     *
+     * @return mixed|string
+     */
+    public static function urlSafeBase64Encode($originString)
     {
-        $data = base64_encode($string);
+        $data = base64_encode($originString);
         $data = str_replace(array('+', '/', '='), array('-', '_', ''), $data);
 
         return $data;
