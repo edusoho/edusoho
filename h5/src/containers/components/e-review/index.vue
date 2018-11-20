@@ -11,7 +11,11 @@
       </div>
       <div class="e-review-time text-12">{{ review.createdTime | time }}</div>
 
-      <div class="e-review-content text-14">{{ review.content }}</div>
+      <div v-if="disableMask" class="e-review-content text-14">{{ review.content }}</div>
+      <more-mask v-else :text="textOption" :maxHeight="100" :disabled="loadAllReview"
+        @maskLoadMore="loadAllReview = true">
+        <div class="e-review-content text-14">{{ review.content }}</div>
+      </more-mask>
 
       <div class="e-review__post" v-for="post in posts">
         <img class="e-review-avatar e-review__post-avatar avatar-img" :src="post.user | avatar" alt="">
@@ -25,6 +29,7 @@
 </template>
 
 <script>
+import moreMask from '@/components/more-mask';
 import { formatSimpleTime } from '@/utils/date-toolkit.js';
 
 export default {
@@ -33,7 +38,19 @@ export default {
     review: {
       type: Object,
       default: {}
+    },
+    disableMask: {
+      type: Boolean,
+      default: true,
     }
+  },
+  data() {
+    return {
+      loadAllReview: false,
+    };
+  },
+  components: {
+    moreMask,
   },
   filters: {
     userName(user) {
@@ -78,7 +95,9 @@ export default {
       },
       set() {},
     },
-
+    textOption() {
+      return { paddingTop:70, lineHeight:25, align: 'right', content: '显示全部' };
+    }
   }
 }
 </script>

@@ -3,8 +3,8 @@
     <div class="more-mask__body" :style="heightStyle">
       <slot></slot>
     </div>
-    <div v-if="!disabled" class="more-mask__footer" v-show="exccedHeight" :style="paddingStyle" @touchstart="maskLoadMore">
-      {{ textContent || '点击查看更多' }}
+    <div v-if="!disabled" class="more-mask__footer" v-show="exccedHeight" :style="textStyle" @touchstart="maskLoadMore">
+      {{ text.content || '点击查看更多' }}
     </div>
   </div>
 </template>
@@ -16,12 +16,6 @@ export default {
     maxHeight: {
       default: 288,
     },
-    textContent: {
-      default: '',
-    },
-    paddingTop: {
-      default: 100,
-    },
     asyncLoaded: {
       default: false,
     },
@@ -31,6 +25,17 @@ export default {
     forceShow: {
       type: Boolean,
       default: false,
+    },
+    text: {
+      type: Object,
+      default: () => {
+        return {
+          content: '',
+          lineHeight: 17,
+          paddingTop: 100,
+          align: 'center'
+        }
+      }
     }
   },
   data() {
@@ -49,8 +54,12 @@ export default {
         '25px' : '0';
       return { maxHeight, paddingBottom };
     },
-    paddingStyle() {
-      return { paddingTop: `${this.paddingTop}px`};
+    textStyle() {
+      return {
+        paddingTop: `${this.text.paddingTop}px`,
+        lineHeight: `${this.text.lineHeight}px`,
+        textAlign: `${this.text.align}`,
+      };
     }
   },
   mounted() {

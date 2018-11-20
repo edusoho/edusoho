@@ -37,7 +37,7 @@
       <div class="segmentation"></div>
 
       <!-- 学员评价 -->
-      <review-list ref="review" :classId="details.classId" :reviews="[...details.reviews, ...details.reviews, ...details.reviews,]" title="学员评价"></review-list>
+      <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价"></review-list>
 
       <e-footer v-if="!details.joinStatus" @click.native="handleJoin">{{details.access.code | filterJoinStatus}}</e-footer>
     </div>

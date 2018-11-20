@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <template v-for="item in reviews">
-      <review :review="item"></review>
+      <review :review="item" :disableMask="false"></review>
     </template>
   </div>
 </template>
@@ -9,8 +9,7 @@
 <script>
 import Api from '@/api';
 import review from '@/containers/components/e-review';
-import moreMask from '@/components/more-mask';
-import { Toast, Loading } from 'vant';
+import { Toast } from 'vant';
 
 export default {
   name: 'comment',
