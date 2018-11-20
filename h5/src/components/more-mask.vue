@@ -16,9 +16,6 @@ export default {
     maxHeight: {
       default: 288,
     },
-    asyncLoaded: {
-      default: false,
-    },
     disabled: {
       default: false,
     },
@@ -65,28 +62,16 @@ export default {
     }
   },
   mounted() {
-    //dom已更新
-    this.realHeight = this.$el.getBoundingClientRect().height;
-  },
-  watch: {
-    asyncLoaded: {
-      handler(value) {
-        this.$nextTick(function () {
-          //dom异步更新，但不能保证异步dom 中图片等资源加载完成，这里取最长5秒内的结果
-          if (this.intervalId) return;
-
-          const segmentTime = 500
-          this.intervalId = setInterval(() => {
-            this.intervalTime -= segmentTime;
-            if (this.intervalTime < 0) {
-              clearInterval(this.intervalId);
-              return;
-            }
-            this.realHeight = this.$el.getBoundingClientRect().height;
-          }, segmentTime)
-        })
+    //dom异步更新，但不能保证异步dom 中图片等资源加载完成，这里取最长5秒内的结果
+    const segmentTime = 500;
+    this.intervalId = setInterval(() => {
+      this.intervalTime -= segmentTime;
+      if (this.intervalTime < 0) {
+        clearInterval(this.intervalId);
+        return;
       }
-    }
+      this.realHeight = this.$el.getBoundingClientRect().height;
+    }, segmentTime);
   },
   methods: {
     maskLoadMore() {

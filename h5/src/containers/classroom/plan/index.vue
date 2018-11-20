@@ -15,7 +15,6 @@ import service from '../service';
 export default {
   props: {
     details: {},
-    type: '',
   },
   components: {
     service,
