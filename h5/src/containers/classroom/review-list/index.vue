@@ -1,6 +1,6 @@
 <template>
   <e-panel :title="title" :needFlex="false" :defaulValue="defaulValue">
-    <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :forceShow="reviews.length >= maxShowNum">
+    <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :disabled="diableMask" :forceShow="!diableMask">
       <template v-for="item in reviews">
         <review :review="item"></review>
       </template>
@@ -28,6 +28,11 @@ export default {
       this.$router.push({
         path: `/comment/${this.classId}`,
       });
+    }
+  },
+  computed: {
+    diableMask() {
+      return this.reviews.length < this.maxShowNum;
     }
   }
 }
