@@ -17,19 +17,6 @@ class MarketingActivity extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $conditions = $this->fillParams($request);
-        $user = $this->getCurrentUser();
-        $client = MarketingAPIFactory::create();
-
-        return $client->get(
-            '/activities',
-            $conditions,
-            array('MERCHANT-USER-ID: '.$user['id'])
-        );
-    }
-
-    public function fillParams($request)
-    {
         $conditions = $request->query->all();
         if (isset($conditions['name'])) {
             $conditions['name_like'] = $conditions['name'];
@@ -47,6 +34,15 @@ class MarketingActivity extends AbstractResource
         // 微营销接口传递的参数，表明搜索的活动是已经设置了规则的数据
         $conditions['is_set_rule'] = 1;
 
-        return $conditions;
+        $user = $this->getCurrentUser();
+        $client = MarketingAPIFactory::create();
+
+        $pages = $client->get(
+            '/activities',
+            $conditions,
+            array('MERCHANT-USER-ID: '.$user['id'])
+        );
+
+        return $this->makePagingObject($pages['data'], $pages['paging']['total'], $offset, $limit);
     }
 }
