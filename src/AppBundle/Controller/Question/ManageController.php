@@ -13,7 +13,6 @@ use Biz\Course\Service\CourseSetService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class ManageController extends BaseController
 {

@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Role\RoleException;
 use Biz\Role\Service\RoleService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Biz\Role\Util\PermissionBuilder;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Tree;

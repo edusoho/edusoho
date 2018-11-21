@@ -9,7 +9,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Question\Service\QuestionService;
 use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class BaseQuestionController extends BaseController
 {

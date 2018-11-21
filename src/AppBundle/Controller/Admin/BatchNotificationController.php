@@ -6,7 +6,6 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Notification\NotificationException;
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class BatchNotificationController extends BaseController
 {
