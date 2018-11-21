@@ -4,6 +4,7 @@ namespace Biz\Role\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Role\RoleException;
 use Biz\Role\Service\RoleService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Biz\Role\Util\PermissionBuilder;
@@ -173,7 +174,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = $this->getRoleDao()->get($id);
         $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
         if (in_array($role['code'], $notUpdateRoles)) {
-            throw new AccessDeniedException('该权限不能修改！');
+            $this->createNewException(RoleException::FORBIDDEN_MODIFY());
         }
 
         return $role;

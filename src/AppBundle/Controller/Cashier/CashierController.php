@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
@@ -10,7 +11,6 @@ use Codeages\Biz\Pay\Service\AccountService;
 use Codeages\Biz\Pay\Service\PayService;
 use Codeages\Biz\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;
 
 class CashierController extends BaseController
@@ -27,7 +27,7 @@ class CashierController extends BaseController
         );
 
         if (!$order || $this->getUser()->getId() !== $order['user_id']) {
-            throw new NotFoundHttpException();
+            $this->createNewException(OrderException::NOTFOUND_ORDER());
         }
 
         if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {

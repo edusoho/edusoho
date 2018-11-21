@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Notification\NotificationException;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
@@ -58,7 +59,7 @@ class BatchNotificationController extends BaseController
         $user = $this->getUser();
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
-            throw new NotFoundException('Notification not found!');
+            $this->createNewException(NotificationException::BATCH_NOTIFICATION_NOT_FOUND());
         }
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -97,7 +98,7 @@ class BatchNotificationController extends BaseController
     {
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
-            throw new NotFoundException('Notification not found!');
+            $this->createNewException(NotificationException::BATCH_NOTIFICATION_NOT_FOUND());
         }
 
         return $this->render('admin/notification/notification-modal.html.twig', array(

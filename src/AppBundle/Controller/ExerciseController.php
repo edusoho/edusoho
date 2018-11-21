@@ -46,7 +46,7 @@ class ExerciseController extends BaseController
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
         if (!$result) {
-            throw new ResourceNotFoundException('exerciseResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
@@ -90,7 +90,7 @@ class ExerciseController extends BaseController
         $canLookExercise = $this->getTestpaperService()->canLookTestpaper($exerciseResult['id']);
 
         if (!$canLookExercise) {
-            throw $this->createAccessDeniedException('无权查看作业！');
+            $this->createNewException(TestpaperException::FORBIDDEN_ACCESS_TESTPAPER());
         }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);

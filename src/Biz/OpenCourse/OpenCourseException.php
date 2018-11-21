@@ -26,6 +26,8 @@ class OpenCourseException extends AbstractException
 
     const ITEMIDS_INVALID = 5004009;
 
+    const IS_NOT_MEMBER = 5004010;
+
     public $messages = array(
         4044001 => 'exception.opencourse.not_found',
         4044002 => 'exception.opencourse.not_found_lesson',
@@ -36,5 +38,6 @@ class OpenCourseException extends AbstractException
         5004007 => 'exception.opencourse.status_invalid',
         4034008 => 'exception.opencourse.forbidden_manage_course',
         5004009 => 'exception.opencourse.itemids_invalid',
+        5004010 => 'exception.opencourse.is_not_member',
     );
 }

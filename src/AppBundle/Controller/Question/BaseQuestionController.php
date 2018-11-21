@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Question;
 
+use Biz\Question\QuestionException;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
@@ -18,7 +19,7 @@ class BaseQuestionController extends BaseController
         $question = $this->getQuestionService()->get($questionId);
 
         if ($question['courseSetId'] != $courseSetId) {
-            throw new NotFoundException('question#{$questionId} not found');
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         return array($courseSet, $question);

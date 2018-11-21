@@ -2,7 +2,9 @@
 
 namespace Biz\Announcement\Service\Impl;
 
+use Biz\Announcement\AnnouncementException;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
 use Biz\Announcement\Dao\AnnouncementDao;
 use Biz\Announcement\Service\AnnouncementService;
@@ -30,7 +32,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function createAnnouncement($announcement)
     {
         if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'), true)) {
-            throw $this->createInvalidArgumentException('Arguments invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (isset($announcement['notify'])) {
@@ -53,7 +55,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function updateAnnouncement($id, $announcement)
     {
         if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'), true)) {
-            throw $this->createInvalidArgumentException('Arguments invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $announcement = $this->fillOrgId($announcement);
@@ -70,7 +72,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $announcement = $this->getAnnouncement($id);
         if (empty($announcement)) {
-            throw $this->createNotFoundException(sprintf('公告#%s不存在。', $id));
+            $this->createNewException(AnnouncementException::ANNOUNCEMENT_NOT_FOUND());
         }
 
         $this->getAnnouncementDao()->delete($id);

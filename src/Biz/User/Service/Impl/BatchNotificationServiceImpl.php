@@ -4,6 +4,8 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
+use Biz\Notification\NotificationException;
 use Biz\User\Service\BatchNotificationService;
 
 class BatchNotificationServiceImpl extends BaseService implements BatchNotificationService
@@ -11,7 +13,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     public function createBatchNotification($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('title', 'content'))) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $mode = empty($fields['mode']) ? '' : $fields['mode'];
@@ -40,10 +42,10 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     {
         $batchNotification = $this->getBatchNotificationDao()->get($id);
         if (empty($batchNotification)) {
-            throw $this->createNotFoundException('Notification Not Found');
+            $this->createNewException(NotificationException::BATCH_NOTIFICATION_NOT_FOUND());
         }
         if ($batchNotification['published'] == 1) {
-            throw $this->createAccessDeniedException('Notification has been sent');
+            $this->createNewException(NotificationException::PUBLISHED_BATCH_NOTIFICATION());
         }
         $batchNotification['published'] = 1;
         $batchNotification['sendedTime'] = time();
@@ -107,7 +109,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     {
         $batchNotification = $this->getBatchNotificationDao()->get($id);
         if (!$batchNotification) {
-            throw $this->createNotFoundException('Notification Not Found');
+            $this->createNewException(NotificationException::BATCH_NOTIFICATION_NOT_FOUND());
         }
 
         $this->getBatchNotificationDao()->delete($id);

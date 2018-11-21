@@ -9428,6 +9428,7 @@ exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
 exception.order.vip_order_not_exist: 开通会员的订单不存在，开通会员失败。
+exception.order.not_found_order_items: 订单商品不存在
 
 exception.file.not_found: 文件不存在
 exception.file.group_invalid: 文件组无效
@@ -9474,6 +9475,7 @@ exception.parser.not.support: 不支持该视频类型
 
 exception.announcement.notfound: 公告不存在
 exception.batch_notification.notfound: 全站通知不存在
+exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
@@ -9575,6 +9577,7 @@ exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
 exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
+exception.activity.not_in_course: 教学计划中没有该教学活动
 exception.player.not_support_type: 播放器不支持该文件类型
 exception.question.not_found: 题目不存在
 exception.userfield.not_found: 用户字段不存在
@@ -9619,6 +9622,7 @@ exception.opencourse.cancel_unfavor: 你未收藏本课程，取消收藏失败!
 exception.opencourse.status_invalid: 非法状态
 exception.opencourse.forbidden_manage_course: 您不是课程的教师或管理员，无权操作！
 exception.opencourse.itemids_invalid: 课时数错误
+exception.opencourse.is_not_member: 您不是课程成员
 exception.blacklist.forbidden_take: 没有权限
 exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
 exception.blacklist.not_found: 黑名单不能存在
@@ -9638,6 +9642,13 @@ exception.app.get_package_failed: 应用包不存在或网络超时，读取包�
 exception.app.not_found: App不存在
 exception.app.delete_cache_failed: 删除缓存失败
 exception.app.extract_failed: 无法解压缩安装包！
+exception.role.forbidden_modify: 该权限不能修改！
+exception.content.not_found: 内容不存在
+exception.content.type_required: 内容类型不能为空
+exception.content.title_required: 内容标题不能为空
+exception.livecourse.create_liveroom_failed: 创建直播间失败
+exception.download_activity.not_download_activity: 不是下载资料活动
+exception.download_activity.file_not_in_activity: 不是该活动的文件
 
 course.unname_title: 未命名计划
 
