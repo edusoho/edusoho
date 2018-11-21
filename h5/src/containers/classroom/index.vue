@@ -64,7 +64,7 @@
       getDetails(res) {
         const isEmpty = Object.keys(res).length === 0;
         const summary = res.about;
-        const joinStatus = res.member && !isEmpty;
+        const joinStatus = !isEmpty && res.member;
         const {
           courses, teachers, assistants,
           headTeacher, access, reviews, expiryMode,

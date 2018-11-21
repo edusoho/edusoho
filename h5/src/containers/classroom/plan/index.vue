@@ -38,10 +38,6 @@ export default {
       const isFree = Number(price) === 0;
       return isFree ? '免费' : `¥${price}`;
     },
-    filterTime(time) {
-      time = new Date(time * 1000);
-      return formatFullTime(time).slice(0, 10);
-    },
   },
   computed: {
     learnExpiry() {
