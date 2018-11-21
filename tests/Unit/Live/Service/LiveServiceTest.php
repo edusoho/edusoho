@@ -224,6 +224,7 @@ class LiveServiceTest extends BaseTestCase
             time() + 3600,
             1,
             'course',
+            1,
         );
         $results = ReflectionUtils::invokeMethod($this->getLiveService(), 'buildCallbackUrl', $params);
 
