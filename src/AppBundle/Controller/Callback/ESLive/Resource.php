@@ -39,8 +39,11 @@ class Resource extends ESLiveBase
         if ($fileType && in_array($fileType, array('video'))) {
             $conditions['type'] = $fileType;
         }
+        $cloudFiles = array(
+            'data' => array(),
+        );
         if (empty($sourceFrom) || 'open_course' == $sourceFrom || !in_array($sourceFrom, $context['sources'])) {
-            return array();
+            goto end;
         }
 
         switch ($sourceFrom) {
@@ -75,8 +78,6 @@ class Resource extends ESLiveBase
             PHP_INT_MAX,
             array('id', 'nickname')
         );
-
-        $cloudFiles = array();
         foreach ($files as $file) {
             $cloudFile['filename'] = $file['filename'];
             $cloudFile['type'] = $file['type'];
@@ -95,8 +96,9 @@ class Resource extends ESLiveBase
 
             $cloudFiles['data'][] = $cloudFile;
         }
+        end:
         $cloudFiles['paging'] = array(
-            'total' => count($files),
+            'total' => isset($files) ? count($files) : 0,
             'start' => $start,
             'limit' => $limit,
         );

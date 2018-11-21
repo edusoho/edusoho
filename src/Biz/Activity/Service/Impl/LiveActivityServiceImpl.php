@@ -336,9 +336,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getJWTAuth()
     {
         $setting = $this->getSettingService()->get('storage', array());
-        if (empty($setting['cloud_access_key']) || empty($setting['cloud_secret_key'])) {
-            throw new \Exception('Access Denied');
-        }
 
         return new JWTAuth($setting['cloud_access_key'], $setting['cloud_secret_key']);
     }
