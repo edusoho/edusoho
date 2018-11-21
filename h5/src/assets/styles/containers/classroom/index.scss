@@ -7,19 +7,10 @@
   }
 }
 
-.classroom-service {
-  padding: vw(27) 0;
-  margin: 0 vw(20);
-  border-top: 1px solid #EEEEEE;
-  font-size: vw(12);
-  color: #71777D;
-  line-height: vw(14);
-  &-icon {
-    padding: vw(4);
-    margin-right: vw(10);
-    border-radius: vw(2);
-    background: $primary-color;
-    color: #FFFFFF;
-    font-size: vw(10);
+.classroom-plan {
+  &__detail {
+    border-top: 1px solid #EEEEEE;
+    padding: vw(25) 0;
+    margin: 0 vw(20);
   }
 }

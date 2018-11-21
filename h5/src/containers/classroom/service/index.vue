@@ -1,8 +1,8 @@
 <template>
-  <div class="classroom-service">
+  <div class="course-detail__service">
     <span>承诺服务：</span>
     <template v-for="service in services">
-      <span class="classroom-service-icon">{{ service.shortName }}</span>
+      <span class="course-detail__service-icon">{{ service.shortName }}</span>
     </template>
   </div>
 </template>

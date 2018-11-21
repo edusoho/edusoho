@@ -25,9 +25,15 @@ export default {
     moreMask
   },
   props: {
-    courseSets: null,
-    title: '',
-    defaulValue: '',
+    courseSets: {
+      default: null
+    },
+    title: {
+      default: '',
+    },
+    defaulValue: {
+      default: '',
+    },
     disableMask: {
       type: Boolean,
       default: false,

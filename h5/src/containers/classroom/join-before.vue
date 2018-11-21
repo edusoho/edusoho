@@ -4,7 +4,7 @@
       <detail-head :cover="details.cover"></detail-head>
 
       <template>
-        <detail-plan :details="planDetails"></detail-plan>
+        <detail-plan :details="planDetails" :joinStatus="details.joinStatus"></detail-plan>
         <div class="segmentation"></div>
       </template>
 
@@ -37,7 +37,7 @@
       <!-- 学员评价 -->
       <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价"></review-list>
 
-      <e-footer @click.native="handleJoin">{{details.access.code | filterJoinStatus}}</e-footer>
+      <e-footer @click.native="handleJoin">{{details.access.code | filterJoinStatus('classroom')}}</e-footer>
     </div>
 
 

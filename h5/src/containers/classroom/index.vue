@@ -1,10 +1,10 @@
 <template>
   <div class="course-detail">
     <e-loading v-if="isLoading"></e-loading>
-    <join-before v-if="!details.joinStatus && !details.isEmpty"
+    <join-before v-if="!details.joinStatus"
       :details="details" :planDetails="planDetails"></join-before>
 
-    <join-after v-if="details.joinStatus && !details.isEmpty"
+    <join-after v-if="details.joinStatus"
       :details="details" :planDetails="planDetails"></join-after>
   </div>
 </template>
@@ -31,7 +31,7 @@
           assistants: [],
           headTeacher: {},
           access: {
-            code: '获取课程失败'
+            code: '加载中'
           },
           cover: '',
           reviews: [],
@@ -42,6 +42,8 @@
           service: [],
           price: '0',
           studentNum: 0,
+          expiryMode: 'forever',
+          expiryValue: '0',
         },
       };
     },
@@ -63,20 +65,16 @@
         const isEmpty = Object.keys(res).length === 0;
         const summary = res.about;
         const joinStatus = res.member && !isEmpty;
-        const courses = res.courses;
-        const price = res.price;
-        const teachers = res.teachers;
-        const assistants = res.assistants;
-        const headTeacher = res.headTeacher;
-        const access = res.access;
+        const {
+          courses, teachers, assistants,
+          headTeacher, access, reviews, expiryMode,
+          expiryValue, title, price, studentNum, service
+        } = res;
         const cover = res.cover.large;
-        const reviews = res.reviews;
         const classId = res.id;
         const planDetails = {
-          title: res.title,
-          service: res.service,
-          price: res.price,
-          studentNum: res.studentNum,
+          title, service, price, studentNum,
+          expiryMode, expiryValue,
         };
 
         this.planDetails = planDetails;

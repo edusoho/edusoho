@@ -42,6 +42,10 @@ export default {
     disableMask: {
       type: Boolean,
       default: true,
+    },
+    isClass: {
+      type: Boolean,
+      default: true,
     }
   },
   data() {

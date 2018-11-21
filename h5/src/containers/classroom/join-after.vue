@@ -8,7 +8,7 @@
 
       <!-- 班级介绍 -->
       <div v-if="active == 0" style="margin-top: 44px;">
-        <detail-plan :details="planDetails"></detail-plan>
+        <detail-plan :details="planDetails" :joinStatus="details.joinStatus"></detail-plan>
         <div class="segmentation"></div>
 
         <e-panel title="班级介绍" ref="about" class="about">
@@ -28,7 +28,7 @@
 
       <!-- 班级课程 -->
       <div v-if="active == 1" style="margin-top: 44px;">
-        <course-set-list ref="course" :courseSets="[...details.courses,...details.courses,...details.courses]" title="班级课程" defaulValue="暂无课程" :disableMask="true"></course-set-list>
+        <course-set-list ref="course" :courseSets="details.courses" title="班级课程" defaulValue="暂无课程" :disableMask="true"></course-set-list>
       </div>
 
       <!-- 学员评价 -->
@@ -85,7 +85,6 @@
         // 滚动节流
         setTimeout(() => {
           this.headBottom = refs['head'].$el.getBoundingClientRect().bottom
-          console.log(refs['head'].$el.getBoundingClientRect().bottom - TAB_HEIGHT)
           this.scrollFlag = false;
           this.tabsClass = this.headBottom <= 0 ? 'van-tabs--fixed' : '';
         }, 400)
