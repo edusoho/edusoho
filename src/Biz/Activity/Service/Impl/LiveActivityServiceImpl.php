@@ -298,6 +298,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $args = array(
             'courseId' => $activity['fromCourseId'],
+            'sources' => array('course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
+            'userId' => $activity['fromUserId'],
         );
 
         $jwtToken = $this->getJWTAuth()->auth($args, array(

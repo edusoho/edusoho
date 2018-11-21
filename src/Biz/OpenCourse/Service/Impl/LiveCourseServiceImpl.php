@@ -210,7 +210,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $baseUrl = $this->biz['env']['base_url'];
 
         $args = array(
+            'sources' => array('open_course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
             'courseId' => $lesson['courseId'],
+            'userId' => $lesson['userId'],
         );
 
         $jwtToken = $this->getJWTAuth()->auth($args, array(

@@ -76,7 +76,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
         if (!empty($params['isCallback'])) {
             $liveParams['callback'] = $this->buildCallbackUrl($params[
-                'startTime'], $params['targetId'], $params['targetType']);
+                'startTime'], $params['targetId'], $params['targetType'], $params['speakerId']);
         }
 
         if (!empty($params['roomType']) && $this->isRoomType($params['roomType'])) {
@@ -119,11 +119,13 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $liveLogoUrl;
     }
 
-    protected function buildCallbackUrl($startTime, $targetId, $targetType)
+    protected function buildCallbackUrl($startTime, $targetId, $targetType, $speakerId)
     {
         $baseUrl = $this->getBaseUrl();
         $args = array(
+            'sources' => array('my', 'public', $targetType), //支持课程资料读取，还有我的资料库读取
             'courseId' => $targetId,
+            'userId' => $speakerId,
         );
 
         $jwtToken = $this->getJWTAuth()->auth($args, array(
