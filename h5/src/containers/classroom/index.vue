@@ -66,9 +66,9 @@
         const summary = res.about;
         const joinStatus = !isEmpty && res.member;
         const {
-          courses, teachers, assistants,
+          courses, teachers, assistants, buyable,
           headTeacher, access, reviews, expiryMode,
-          expiryValue, title, price, studentNum, service
+          expiryValue, title, price, studentNum, service,
         } = res;
         const cover = res.cover.large;
         const classId = res.id;
@@ -79,7 +79,7 @@
 
         this.planDetails = planDetails;
         this.details = {
-          summary, joinStatus, isEmpty, courses, classId,
+          summary, joinStatus, isEmpty, courses, classId, buyable,
           teachers, assistants, headTeacher, access, cover, reviews,
         }
       },

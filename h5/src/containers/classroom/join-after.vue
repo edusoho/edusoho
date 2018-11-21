@@ -51,7 +51,6 @@
   const TAB_HEIGHT = 44;
 
   export default {
-    name: 'join-after',
     components: {
       directory,
       detailHead,

@@ -4,7 +4,7 @@
       <detail-head :cover="details.cover"></detail-head>
 
       <template>
-        <detail-plan :details="planDetails" :joinStatus="details.joinStatus"></detail-plan>
+        <detail-plan :details="planDetails" :joinStatus="details.joinStatus" @getLearnExpiry="getLearnExpiry"></detail-plan>
         <div class="segmentation"></div>
       </template>
 
@@ -52,13 +52,13 @@
   import detailPlan from './plan';
   import directory from '../course/detail/directory';
   import moreMask from '@/components/more-mask';
+  import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
-  import { Toast } from 'vant';
 
   const TAB_HEIGHT = 44;
 
   export default {
-    name: 'join-before',
+    mixins: [redirectMixin],
     components: {
       directory,
       detailHead,
@@ -82,6 +82,7 @@
         tabsClass: '',
         loadMoreAbout: false,
         disableMask: false,
+        learnExpiry: '永久有效',
       }
     },
     mounted() {
@@ -123,15 +124,49 @@
         }, 400)
       },
       handleJoin() {
+        const details = this.details;
+        const planDetails = this.planDetails;
+        const canJoinIn = details.access.code === 'success'
+          || Number(details.buyable ) === 1 || (+planDetails.price) === 0;
+
+        if (!this.$store.state.token) {
+          this.$router.push({
+            name: 'login',
+            query: {
+              redirect: this.redirect
+            }
+          });
+          return;
+        }
+
+        if (!canJoinIn) return;
+
+        if (+planDetails.price) {
+          this.$router.push({
+            name: 'order',
+            params: {
+              id: details.classId,
+            },
+            query: {
+              expiry: this.learnExpiry,
+              type: 'classroom',
+            }
+          });
+          return;
+        }
+
         Api.joinClass({
-          params: {
-            classroomId: this.details.classId
+          query: {
+            classroomId: details.classId
           }
         }).then(res => {
-          console.log(res)
+          this.details.joinStatus = res;
         }).catch(err => {
-          Toast.fail(err.message);
+          console.error(err.message);
         });
+      },
+      getLearnExpiry(val) {
+        this.learnExpiry = val;
       }
     },
   }

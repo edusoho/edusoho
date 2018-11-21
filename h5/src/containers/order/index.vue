@@ -81,7 +81,9 @@ export default {
       activeItemIndex: -1,
       showList: false,
       itemData: null,
-      couponNumber: 0
+      couponNumber: 0,
+      targetType: this.$route.query.type || 'course',
+      targetId: this.$route.params.id,
     }
   },
   computed: {
@@ -126,8 +128,8 @@ export default {
   created () {
     Api.confirmOrder({
       data: {
-        targetType: 'course',
-        targetId: this.$route.params.id
+        targetType: this.targetType,
+        targetId: this.targetId
       }
     }).then(res => {
       this.course = res
@@ -135,18 +137,17 @@ export default {
   },
   methods: {
     handleSubmit () {
-      const courseId = this.$route.params.id;
       if (this.total == 0) {
         Api.createOrder({
           data: {
-            targetType: 'course',
-            targetId: courseId,
+            targetType: this.targetType,
+            targetId: this.targetId,
             isOrderCreate: 1,
             couponCode: this.itemData ? this.itemData.code : '',
           }
         }).then(() => {
           this.$router.push({
-            path: `/course/${courseId}`
+            path: `/${this.targetType}/${this.targetId}`
           })
         })
         return;
@@ -154,7 +155,7 @@ export default {
       this.$router.push({
         name: 'pay',
         query: {
-          id: courseId,
+          id: this.targetId,
         },
         params: {
           couponCode: this.itemData ? this.itemData.code : ''
