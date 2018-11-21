@@ -1,17 +1,15 @@
 <template>
   <div class="course-detail classroom-detail">
     <div class="join-after">
-      <detail-head :cover="details.cover"></detail-head>
-      <van-tabs v-model="active" class="after-tabs">
+      <detail-head ref="head" :cover="details.cover"></detail-head>
+      <van-tabs v-model="active" :class="tabsClass">
         <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
       </van-tabs>
 
       <!-- 班级介绍 -->
-      <template v-if="active == 0">
-        <template>
-          <detail-plan :details="planDetails"></detail-plan>
-          <div class="segmentation"></div>
-        </template>
+      <div v-if="active == 0" style="margin-top: 44px;">
+        <detail-plan :details="planDetails"></detail-plan>
+        <div class="segmentation"></div>
 
         <e-panel title="班级介绍" ref="about" class="about">
           <div v-html="details.summary"></div>
@@ -26,17 +24,17 @@
 
         <teacher
           class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"></teacher>
-      </template>
+      </div>
 
       <!-- 班级课程 -->
-      <template v-if="active == 1">
+      <div v-if="active == 1" style="margin-top: 44px;">
         <course-set-list ref="course" :courseSets="[...details.courses,...details.courses,...details.courses]" title="班级课程" defaulValue="暂无课程" :disableMask="true"></course-set-list>
-      </template>
+      </div>
 
       <!-- 学员评价 -->
-      <template v-if="active == 2">
+      <div v-if="active == 2" style="margin-top: 44px;">
         <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价"></review-list>
-      </template>
+      </div>
     </div>
 
   </div>
@@ -50,6 +48,7 @@
   import detailPlan from './plan';
   import directory from '../course/detail/directory';
   import moreMask from '@/components/more-mask';
+  const TAB_HEIGHT = 44;
 
   export default {
     name: 'join-after',
@@ -65,21 +64,32 @@
     props: ['details', 'planDetails'],
     data() {
       return {
-        tops: {
-          aboutTop: 0,
-          courseTop: 0,
-          reviewTop: 0,
-        },
+        headBottom: 0,
         active: 0,
         scrollFlag: false,
         tabs: ['班级介绍', '课程列表', '学员评价'],
         tabsClass: '',
-        loadMoreAbout: false,
       }
     },
-    computed: {
+    mounted() {
+      window.addEventListener('scroll', this.handleScroll);
     },
     methods: {
+      handleScroll() {
+        if (this.scrollFlag) {
+          return;
+        }
+        this.scrollFlag = true;
+        const refs = this.$refs;
+
+        // 滚动节流
+        setTimeout(() => {
+          this.headBottom = refs['head'].$el.getBoundingClientRect().bottom
+          console.log(refs['head'].$el.getBoundingClientRect().bottom - TAB_HEIGHT)
+          this.scrollFlag = false;
+          this.tabsClass = this.headBottom <= 0 ? 'van-tabs--fixed' : '';
+        }, 400)
+      },
     },
   }
 </script>
