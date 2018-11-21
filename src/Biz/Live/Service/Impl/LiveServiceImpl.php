@@ -2,11 +2,13 @@
 
 namespace Biz\Live\Service\Impl;
 
+use AppBundle\Common\ESLiveToolkit;
+use AppBundle\Common\JWTAuth;
 use Biz\Live\Service\LiveService;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
 
 class LiveServiceImpl extends BaseService implements LiveService
 {
@@ -74,7 +76,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
         if (!empty($params['isCallback'])) {
             $liveParams['callback'] = $this->buildCallbackUrl($params[
-                'endTime'], $params['targetId'], $params['targetType']);
+                'startTime'], $params['targetId'], $params['targetType']);
         }
 
         if (!empty($params['roomType']) && $this->isRoomType($params['roomType'])) {
@@ -117,21 +119,21 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $liveLogoUrl;
     }
 
-    protected function buildCallbackUrl($endTime, $targetId, $targetType)
+    protected function buildCallbackUrl($startTime, $targetId, $targetType)
     {
-        $duration = $endTime + 86400 - time();
-        $args = array(
-            'duration' => $duration,
-            'data' => array(
-                'courseId' => $targetId,
-                'type' => $targetType,
-            ),
-        );
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
-
         $baseUrl = $this->getBaseUrl();
+        $args = array(
+            'courseId' => $targetId,
+        );
 
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $targetId);
+        $jwtToken = $this->getJWTAuth()->auth($args, array(
+            'lifetime' => 60 * 60 * 4,
+            'effect_time' => $startTime,
+        ));
+
+        $callbackUrl = ESLiveToolkit::generateCallback($baseUrl, $jwtToken);
+
+        return $callbackUrl;
     }
 
     public function canUpdateRoomType($liveStartTime)
@@ -172,6 +174,9 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $this->biz['educloud.live_client'];
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -185,5 +190,20 @@ class LiveServiceImpl extends BaseService implements LiveService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return JWTAuth
+     *
+     * @throws \Exception
+     */
+    protected function getJWTAuth()
+    {
+        $setting = $this->getSettingService()->get('storage', array());
+        if (empty($setting['cloud_access_key']) || empty($setting['cloud_secret_key'])) {
+            throw new \Exception('Access Denied');
+        }
+
+        return new JWTAuth($setting['cloud_access_key'], $setting['cloud_secret_key']);
     }
 }

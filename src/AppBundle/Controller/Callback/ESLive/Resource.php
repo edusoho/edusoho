@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Callback\ESLive;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class CourseWare extends ESLiveBase
+class Resource extends ESLiveBase
 {
     public function fetch(Request $request)
     {

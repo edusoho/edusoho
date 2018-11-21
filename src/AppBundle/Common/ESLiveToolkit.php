@@ -4,15 +4,10 @@ namespace AppBundle\Common;
 
 class ESLiveToolkit
 {
-    public static function generateCallback($baseUrl, $token, $courseId)
+    public static function generateCallback($baseUrl, $token)
     {
-        //members.fetch的callback云平台这块已删除
-        $memberUrl = "{$baseUrl}/callback/ESLive?ac=members.fetch&dataType={$dataType}&source={$source}&mediaType={$mediaType}&courseId={$courseId}";
+        $courseWareUrl = "{$baseUrl}/callback/ESLive?ac=courseWare.fetch&jwtToken={$token}";
 
-        return array(
-            array('type' => 'member', 'url' => $memberUrl),
-            array('type' => 'media', 'url' => $mediaUrl),
-            array('type' => 'upload', 'url' => $uploadUrl),
-        );
+        return $courseWareUrl;
     }
 }
