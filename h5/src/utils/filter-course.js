@@ -65,6 +65,21 @@ const courseListData = (data, type, typeList) => {
         }
       };
     case 'rank':
+      if (typeList === 'class_list') {
+        return {
+          id: data.id,
+          imgSrc: {
+            url: data.cover.middle || '',
+            className: 'e-class__img'
+          },
+          header: data.title,
+          middle: '',
+          bottom: {
+            value: data.courseNum,
+            html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`
+          }
+        };
+      }
       return {
         id: data.id,
         imgSrc: {

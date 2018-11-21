@@ -2,7 +2,7 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img :class="[typeList==='course_list' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
+        <img :class="[typeList==='course' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
         <div class="e-course__title text-overflow">{{ title }}</div>

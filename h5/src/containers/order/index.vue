@@ -2,7 +2,12 @@
   <div class="order">
     <div class="goods-info">
       <e-loading v-if="isLoading"></e-loading>
-      <e-class type="confirmOrder" :order="course" :course="course | courseListData('confirmOrder')" v-if="Object.keys(course).length >0"></e-class>
+      <e-class
+        v-if="Object.keys(course).length >0"
+        type="confirmOrder"
+        :order="course"
+        :course="course | courseListData('confirmOrder')">
+      </e-class>
       <div class="order-coupon">
         <div class="coupon-column"
           :chosen-coupon="activeItemIndex"

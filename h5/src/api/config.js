@@ -125,9 +125,14 @@ const config = [
     url: '/courses/{courseId}/item_with_lessons',
     method: 'GET'
   }, {
-    // 我的学习
-    name: 'myStudyState',
+    // 我的学习-我的课程
+    name: 'myStudyCourses',
     url: '/me/courses',
+    method: 'GET'
+  }, {
+    // 我的学习-我的班级
+    name: 'myStudyClasses',
+    url: '/me/classrooms',
     method: 'GET'
   }, {
     // 加入课程

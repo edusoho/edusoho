@@ -7,6 +7,7 @@
     <courseItem v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
+      :typeList="typeList"
       :course="course | courseListData(courseItemType, typeList)"
     ></courseItem>
   </van-list>

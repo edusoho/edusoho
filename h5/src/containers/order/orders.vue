@@ -8,7 +8,7 @@
 
     <div class="order" v-else>
       <e-course v-for="order in orderList" :key="order.id" :order="order"
-       type="order"></e-course>
+       type="order" :typeList="order.targetType"></e-course>
     </div>
   </div>
 </template>

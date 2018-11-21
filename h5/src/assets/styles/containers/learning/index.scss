@@ -1,5 +1,14 @@
 @import './emptyCourse/index.scss';
 
 .e-learn {
+  .van-tabs__line {
+    background-color: $primary-color;
+  }
+  .van-tab--active {
+    color: $primary-color;
+  }
+}
+
+.van-list {
   margin-top: vw(20);
 }

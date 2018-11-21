@@ -35,6 +35,10 @@
       feedback: {
         type: Boolean,
         default: true,
+      },
+      typeList: {
+        type: String,
+        default: 'course_list'
       }
     },
     data() {
@@ -66,7 +70,6 @@
         const isOrder = this.type === 'order';
         const id = this.course.id || this.course.targetId;
         if (e.target.tagName === 'SPAN') {
-          console.log(e.target.tagName);
           return;
         }
         if (isOrder) {
@@ -74,7 +77,7 @@
           return;
         }
         this.$router.push({
-          path: `/course/${id}`,
+          path: (this.typeList === 'course_list') ? `/course/${id}` : `/classroom/${id}`,
         });
       }
     }

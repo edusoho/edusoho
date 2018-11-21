@@ -62,7 +62,7 @@
       order: {
         type: Object,
         default: {},
-      },
+      }
     },
     data() {
       return {
