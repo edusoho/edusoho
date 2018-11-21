@@ -84,10 +84,7 @@ class JWTAuth
 
     /**
      * @param $base64String
-     * URL base64解码
-     * '-' -> '+'
-     * '_' -> '/'
-     * 字符串长度%4的余数，补'='
+     *
      * @return bool|string
      */
     public static function urlSafeBase64Decode($base64String)
