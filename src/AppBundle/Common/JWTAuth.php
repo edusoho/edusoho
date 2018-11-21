@@ -82,31 +82,6 @@ class JWTAuth
         return hash_hmac($alg, $jwtContent, $token);
     }
 
-    protected function makeHeader()
-    {
-        return array(
-            'alg' => self::ALG,
-            'typ' => self::TYP,
-        );
-    }
-
-    protected function makePayload(array $payload)
-    {
-        $currentTime = time();
-
-        $defaultPayload = array(
-            'iss' => 'edusoho',
-            'iat' => $currentTime,
-            'exp' => $currentTime + 3600,
-            'aud' => '',
-            'sub' => '',
-            'nbf' => '',
-            'jti' => '',
-        );
-
-        return array_merge($defaultPayload, $payload);
-    }
-
     /**
      * @param $base64String
      * URL base64解码
@@ -137,5 +112,30 @@ class JWTAuth
         $data = str_replace(array('+', '/', '='), array('-', '_', ''), $data);
 
         return $data;
+    }
+
+    protected function makePayload(array $payload)
+    {
+        $currentTime = time();
+
+        $defaultPayload = array(
+            'iss' => 'edusoho',
+            'iat' => $currentTime,
+            'exp' => $currentTime + 3600,
+            'aud' => '',
+            'sub' => '',
+            'nbf' => '',
+            'jti' => '',
+        );
+
+        return array_merge($defaultPayload, $payload);
+    }
+
+    protected function makeHeader()
+    {
+        return array(
+            'alg' => self::ALG,
+            'typ' => self::TYP,
+        );
     }
 }
